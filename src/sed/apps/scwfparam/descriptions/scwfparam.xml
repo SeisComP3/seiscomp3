@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scwfparam" category="Processing">
+		<description>Waveform parametrization module.</description>
+		<configuration>
+			<group name="wfparam">
+				<group name="streams">
+					<description>
+					Defines the white- and blacklist of data streams to be used. The
+					rules to decide if a stream is used or not are the following:
+
+					1. if whitelist is not empty and the stream is not on the whitelist,
+					   don't use it, ok otherwise
+
+					2. if blacklist is not empty and the stream is on the blacklist,
+					   don't use it, ok otherwise
+
+					Both checks are made and combined with AND. Either whitelist or
+					blacklist contains a list of patterns (wildcard allowed as * and ?),
+					eg GE.*.*.*, *, GE.MORC.*.BH? Each stream id (NET.STA.LOC.CHA) will
+					be checked against the defined patterns.
+					</description>
+					<parameter name="whitelist" type="list:string">
+						<description>The stream whitelist</description>
+					</parameter>
+					<parameter name="blacklist" type="list:string">
+						<description>The stream blacklist</description>
+					</parameter>
+				</group>
+				<parameter name="totalTimeWindowLength" type="int" unit="s" default="360">
+					<description>
+					Default value of total time window length in seconds if
+					wfparam.magnitudeTimeWindowTable is not specified. This times window
+					includes wfparam.preEventWindowLength.
+					</description>
+				</parameter>
+				<parameter name="magnitudeTimeWindowTable" type="list:string">
+					<description>
+					Magnitude dependent time window table. The format is
+					&quot;mag1:secs1, mag2:secs2, mag3:secs3&quot;. If a magnitude falls
+					between two configured magnitudes the time window of the lower
+					magnitude is used then. No interpolation is performed. Magnitude
+					outside the configured range are clipped to the lowest/highest value.
+					Example: &quot;3:100, 4:200, 5:300&quot;
+					</description>
+				</parameter>
+				<parameter name="preEventWindowLength" type="int" unit="s" default="60">
+					<description>
+					The pre event time window length in seconds.
+					</description>
+				</parameter>
+				<parameter name="maximumEpicentralDistance" type="int" unit="km" default="400">
+					<description>
+					The maximum epicentral distance in km of a station being considered
+					for processing. This value is used if wfparam.magnitudeDistanceTable
+					is not specified.
+					</description>
+				</parameter>
+				<parameter name="magnitudeDistanceTable" type="list:string" >
+					<description>
+					Analogue to wfparam.magnitudeTimeWindowTable but instead giving a
+					time window, the distance in km is specified.
+					Example: &quot;3:400, 4:450, 5:500&quot;
+					</description>
+				</parameter>
+				<parameter name="saturationThreshold" type="double" unit="%" default="80">
+					<description>
+					Relative saturation threshold in percent. If the absolute raw amplitude
+					exceeds X% of 2**23 counts the station will be excluded from
+					processing. This assumes a 24bit datalogger.
+					</description>
+				</parameter>
+				<parameter name="STAlength" type="double" unit="s" default="1">
+					<description>
+					Specifies the STA length in seconds of the applied STA/LTA check.
+					</description>
+				</parameter>
+				<parameter name="LTAlength" type="double" unit="s" default="60">
+					<description>
+					Specifies the LTA length in seconds of the applied STA/LTA check.
+					</description>
+				</parameter>
+				<parameter name="STALTAratio" type="double" default="3">
+					<description>
+					Specifies the minimum STALTA ratio to be reached to further process
+					a station.
+					</description>
+				</parameter>
+				<parameter name="STALTAmargin" type="double" unit="s" default="5">
+					<description>
+					Specifies the number of seconds around P to be used to check the STA/LTA ratio.
+					</description>
+				</parameter>
+				<parameter name="dampings" type="list:double" unit="%" default="5">
+					<description>
+					Specifies a list of damping values (in percent) for computation of
+					the relative displacement elastic response spectrum.
+					Example: &quot;5,10,15&quot;
+					</description>
+				</parameter>
+				<parameter name="naturalPeriods" type="int" default="100">
+					<description>
+					Specifies the number of natural periods for computation of the
+					relative displacement elastic response spectrum between Tmin and Tmax.
+					If fixed is given then a fixed list of periods is used.
+					</description>
+				</parameter>
+				<group name="naturalPeriods">
+					<parameter name="log" type="boolean" default="false">
+						<description>
+						Defines if a linear spacing or logarithmic spacing between Tmin and
+						Tmax is used. The default is a linear spacing. The logarithmic
+						spacing will fail if either Tmin or Tmax is 0.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="Tmin" type="double" unit="s" default="0">
+					<description>
+					Specifies the minimum period (Tmin) in seconds for computation of the
+					relative displacement lastic response spectrum.
+					</description>
+				</parameter>
+				<parameter name="Tmax" type="double" unit="s" default="5">
+					<description>
+					Specifies the maximum period (Tmax) in seconds for computation of the
+					relative displacement elastic response spectrum.
+					</description>
+				</parameter>
+				<parameter name="afterShockRemoval" type="boolean" default="true">
+					<description>
+					Enables/disables aftershock removal (Figini, 2006; Paolucci et al., 2008)
+					</description>
+				</parameter>
+				<parameter name="eventCutOff" type="boolean" default="true">
+					<description>
+					Enables/disables pre-event cut-off. A hardcoded sta/lta algorithm
+					(with sta=0.1s, lta=2s, sta/lta threshold=1.2) is run on the time
+					window defined by (expected_P_arrival_time - 15 s). The pre-event
+					window is hence defined as
+					[t(sta/lta =1.2) - 15.5s, t(sta/lta =1.2) - 0.5s].
+					</description>
+				</parameter>
+				<parameter name="magnitudeFilterTable" type="list:string" default="0:0.2;0.8fNyquist,3:0.1;0.8fNyquist,5:0.05;0.8fNyquist,7:0.025;0.8fNyquist">
+					Magnitude dependent filter table. The format is
+					&quot;mag1:fmin1;fmax1, mag2:fmin2;fmax2, mag3:fmin3;fmax3&quot;.
+					If a magnitude falls between two configured magnitudes the filter of
+					the lower magnitude is then used. No interpolation takes place.
+					Magnitude outside the configured range are clipped to the
+					lowest/highest value.
+					Frequency values are given as simple positive doubles (Hz is assumed)
+					or with suffix &quot;fNyquist&quot; which is then multiplied by the
+					Nyquist frequency of the data to get the final corner frequency.
+				</parameter>
+				<group name="filter">
+					<description>
+					Parameters of the 1st stage filter.
+					</description>
+					<parameter name="order" type="int" default="4">
+						<description>
+						Specifies the order of the 1st stage filter.
+						</description>
+					</parameter>
+					<parameter name="loFreq" type="double" default="0.025">
+						<description>
+						Specifies the frequency of the 1st stage hi-pass filter. If this
+						parameter is equal to 0 the hi-pass filter is not used.
+						If suffix &quot;fNyquist&quot; is used then the value is multiplied
+						by the Nyquist frequency of the data to get the final corner
+						frequency of the filter.
+						</description>
+					</parameter>
+					<parameter name="hiFreq" type="double" default="40">
+						<description>
+						Specifies the frequency of the 1st stage lo-pass filter. If this
+						parameter is equal to 0 the lo-pass filter is not used.
+						If suffix &quot;fNyquist&quot; is used then the value is multiplied
+						by the Nyquist frequency of the data to get the final corner
+						frequency of the filter.
+						</description>
+					</parameter>
+				</group>
+				<group name="sc">
+					<description>
+					Parameters of the 2nd stage (sensitivity correction) filter.
+					</description>
+					<parameter name="order" type="int" default="4">
+						<description>
+						Specifies the order of the 2nd stage filter.
+						</description>
+					</parameter>
+					<parameter name="loFreq" type="double" default="0.025">
+						<description>
+						Specifies the frequency of the 2nd stage hi-pass filter. If this
+						parameter is equal to 0 the hi-pass filter is not used.
+						If suffix &quot;fNyquist&quot; is used then the value is multiplied
+						by the Nyquist frequency of the data to get the final corner
+						frequency of the filter.
+						</description>
+					</parameter>
+					<parameter name="hiFreq" type="double" default="40">
+						<description>
+						Specifies the frequency of the 2nd stage lo-pass filter. If this
+						parameter is equal to 0 the lo-pass filter is not used.
+						If suffix &quot;fNyquist&quot; is used then the value is multiplied
+						by the Nyquist frequency of the data to get the final corner
+						frequency of the filter.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="deconvolution" type="boolean" default="true">
+					<description>
+					Enables/disables deconvolution. If a channel does not provide full
+					response information it is not used for processing.
+					</description>
+				</parameter>
+				<group name="filtering">
+					<parameter name="noncausal" type="boolean" default="false">
+						<description>
+						Enables non-causal filtering in the frequency domain.
+						</description>
+					</parameter>
+					<parameter name="taperLength" type="double" unit="s" default="-1">
+						<description>
+						Defines the cosine taper length in seconds if non-causal filters
+						are activated applied on either side of the waveform. If a
+						negative length is given 10 percent of the pre-event window length
+						is used on either side of the waveform.
+						</description>
+					</parameter>
+					<parameter name="padLength" type="double" unit="s" default="-1">
+						<description>
+						The length of the zero padding window in seconds applied on either
+						side of the waveform if non-causal filters are activated. If
+						negative, it is computed following Boore (2005) as
+						1.5*order/corner_freq and applied half at the beginning and half at
+						the end of the waveform.
+						</description>
+					</parameter>
+				</group>
+				<group name="cron">
+					<parameter name="wakeupInterval" type="int" unit="s" default="10">
+						<description>
+						Specifies the interval in seconds to check/start scheduled operations.
+						</description>
+					</parameter>
+					<parameter name="eventMaxIdleTime" type="int" unit="s" default="3600">
+						<description>
+						Specifies the maximum allowed idle time of a process before removed.
+						The idle time is calculated if no further processing is scheduled
+						and computes as: [now]-lastRun.
+						</description>
+					</parameter>
+					<parameter name="logging" type="boolean" default="true">
+						<description>
+						Enables/disables updating of a cron log file. This file will be
+						created at ~/.seiscomp3/log/[appname].sched
+						and contains information about the scheduled events and the
+						processing queue. The file is updated each n seconds,
+						where n = wfparam.cron.wakeupInterval.
+						</description>
+					</parameter>
+					<parameter name="updateDelay" type="int" default="60">
+						<description>
+						Specifies the delay in seconds to delay processing if a new
+						authoritative origin arrives for an event.
+						</description>
+					</parameter>
+					<parameter name="delayTimes" type="list:int">
+						<description>
+						Specifies a list of delay times in seconds relative to event time
+						to trigger the processing. When the first origin of an event arrives
+						this list is used to construct the crontab for this event.
+						Example: &quot;60, 120, 300, 3600&quot;
+						</description>
+					</parameter>
+				</group>
+				<group name="acquisition">
+					<parameter name="initialTimeout" type="int" unit="s" default="30">
+						<description>
+						Specifies the initial acquisition timeout. If the acquisition
+						source (e.g. Arclink) does not respond within this threshold with
+						waveforms, the request is discarded.
+						</description>
+					</parameter>
+					<parameter name="runningTimeout" type="int" unit="s" default="2">
+						<description>
+						Specifies the acquisition timeout when waveforms are being
+						transfered. If no new waveforms arrive within this threshold, the
+						request is aborted. This is important if a Seedlink connection is
+						configured which can block the application for a very long time if
+						at least one requested channel has no data. Seedlink does not
+						finished the request until all data has been sent. When data will
+						arrive for a particular channel is not known.
+						</description>
+					</parameter>
+				</group>
+				<group name="output">
+					<parameter name="messaging" type="boolean" default="false">
+						<description>
+						Enables messaging output which creates objects of the
+						StrongMotionParameters data model extension (defined by SED) and
+						sends them to scmaster. In order to save the objects to the database,
+						scmaster needs to load the dmsm plugin and the corresponding database
+						schema must be applied.
+						The default message group is AMPLITUDE. To change this group redefine
+						connection.primaryGroup.
+						</description>
+					</parameter>
+					<parameter name="shortEventID" type="boolean" default="false">
+						<description>
+						Uses short event ids when an event output directory needs to be
+						created. The default pattern is [eventtime]_[mag]_[lat]_[lon]_[updatetime].
+						The short format just contains the first part, namely [eventtime] in
+						the format YEARmmddHHMMSS.
+						</description>
+					</parameter>
+					<group name="waveforms">
+						<parameter name="enable" type="boolean" default="false">
+							<description>
+							Enables/disables the output of processed waveforms.
+							</description>
+						</parameter>
+						<parameter name="path" type="string" default="@LOGDIR@/shakemaps/waveforms">
+							<description>
+							Specifies the waveform output path. This parameter is only used if
+							wfparam.output.waveforms.enable is true.
+							</description>
+						</parameter>
+						<parameter name="withEventDirectory" type="boolean" default="false">
+							<description>
+							Enables/disables the creation of an event directory (named with
+							eventID) when storing the processed waveforms. This parameter is
+							only used if wfparam.output.waveforms.enable is true.
+							</description>
+						</parameter>
+					</group>
+					<group name="spectra">
+						<parameter name="enable" type="boolean" default="false">
+							<description>
+							Enables/disables the output of spectra (psa, drs). The output
+							format is a simple ASCII file where the first column is the
+							period and the second column the corresponding value.
+							</description>
+						</parameter>
+						<parameter name="path" type="string" default="@LOGDIR@/shakemaps/spectra">
+							<description>
+							Specifies the spectra output path. This parameter is only used if
+							wfparam.output.spectra.enable is true.
+							</description>
+						</parameter>
+						<parameter name="withEventDirectory" type="boolean" default="false">
+							<description>
+							Enables/disables the creation of an event directory (named with
+							eventID) when storing the spectra. This parameter is only used if
+							wfparam.output.spectra.enable is true.
+							</description>
+						</parameter>
+					</group>
+					<group name="shakeMap">
+						<parameter name="enable" type="boolean" default="true">
+							<description>
+							Enables/disables ShakeMap XML output.
+							</description>
+						</parameter>
+						<parameter name="path" type="string" default="@LOGDIR@/shakemaps">
+							<description>
+							Specifies the ShakeMap XML output path. This is only used if
+							wfparam.output.shakeMap.enable is set to true.
+							</description>
+						</parameter>
+						<parameter name="script" type="string">
+							<description>
+							Specifies the path to a script that is called whenever a new
+							ShakeMap XML is available. The script is called with 3 parameters:
+							EventID, modified ShakeMap eventID, path to event directory (where
+							input/event.xml and input/event_dat.xml lives).
+							The event files are not deleted by the application. The ownership
+							goes to the called script.
+							</description>
+						</parameter>
+						<parameter name="synchronous" type="boolean" default="true">
+							<description>
+							Enables/disables synchronous or asynchronous script calls. If
+							enabled, be careful to not spend too much time in the script.
+							The application is blocked while the script is running.
+							</description>
+						</parameter>
+						<parameter name="maximumOfHorizontals" type="boolean" default="false">
+							<description>
+							If enabled the maximum PGV, PGA, PSA03, PSA10 and PSA30 of both
+							horizontal components is used in the final output. Otherwise each
+							component is saved.
+							</description>
+						</parameter>
+					</group>
+				</group>
+				<parameter name="magnitudeTolerance" type="double" default="0.5">
+					<description>
+					Defines the magnitude tolerance to completely reprocess an event with
+					respect to the last state.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+				<option long-flag="expiry" flag="x" argument="hours">
+					<description>Time span in hours after which objects expire</description>
+				</option>
+				<option long-flag="event-id" flag="E" argument="arg">
+					<description>EventID to calculate amplitudes for</description>
+				</option>
+				<option long-flag="ep" argument="arg">
+					<description>EventParameters (XML) to load</description>
+				</option>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+				<option long-flag="test">
+					<description>Test mode, no messages are sent</description>
+				</option>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Mode">
+				--dump-records        Dumps all received records (binary) to recs.in
+				--dump-config         Dump the configuration and exit
+				<option long-flag="order" argument="arg">
+					<description>Filter order</description>
+				</option>
+				<option long-flag="lo-filter" argument="freq">
+					<description>High-pass filter frequency</description>
+				</option>
+				<option long-flag="hi-filter" argument="freq">
+					<description>Low-pass filter frequency</description>
+				</option>
+				<option long-flag="sc-order" argument="arg">
+					<description>Sensitivity correction filter order</description>
+				</option>
+				<option long-flag="sc-lo-filter" argument="freq">
+					<description>Sensitivity correction high-pass filter frequency</description>
+				</option>
+				<option long-flag="sc-hi-filter" argument="freq">
+					<description>Sensitivity correction low-pass filter frequency</description>
+				</option>
+				<option long-flag="offline">
+					<description>Do not connect to the messaging and to the database</description>
+				</option>
+				<option long-flag="dump-config">
+					<description>Dump the configuration and exit</description>
+				</option>
+				<option long-flag="dump-records">
+					<description>Dumps all received records (binary) to [eventd].recs</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

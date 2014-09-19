@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!-- Generated from Seiscomp Schema, do not edit -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:inv="http://geofon.gfz-potsdam.de/ns/inventory/0.2/" targetNamespace="http://geofon.gfz-potsdam.de/ns/inventory/0.2/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:complexType name="blob">
+    <xs:simpleContent>
+      <xs:extension base="xs:string"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:simpleType name="float_array">
+    <xs:list itemType="xs:double"/>
+  </xs:simpleType>
+  <xs:simpleType name="complex_array">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*\(\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*,\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*\)\s*)*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="null_string">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="datetime">
+    <xs:union memberTypes="xs:dateTime inv:null_string"/>
+  </xs:simpleType>
+  <xs:simpleType name="double">
+    <xs:union memberTypes="xs:double inv:null_string"/>
+  </xs:simpleType>
+  <xs:complexType name="resp_paz">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="zeros" type="inv:complex_array" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="poles" type="inv:complex_array" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="gain" type="xs:double" use="required"/>
+    <xs:attribute name="norm_fac" type="xs:double" use="required"/>
+    <xs:attribute name="norm_freq" type="xs:double" use="required"/>
+    <xs:attribute name="nzeros" type="xs:integer" use="required"/>
+    <xs:attribute name="npoles" type="xs:integer" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="aux_stream">
+    <xs:attribute name="code" type="xs:string" use="required"/>
+    <xs:attribute name="start" type="xs:dateTime" use="required"/>
+    <xs:attribute name="end" type="inv:datetime" use="required"/>
+    <xs:attribute name="loc_code" type="xs:string" use="required"/>
+    <xs:attribute name="device" type="xs:string" use="required"/>
+    <xs:attribute name="device_id" type="xs:string" use="required"/>
+    <xs:attribute name="source_id" type="xs:string" use="required"/>
+    <xs:attribute name="format" type="xs:string" use="required"/>
+    <xs:attribute name="flags" type="xs:string" use="required"/>
+    <xs:attribute name="restricted" type="xs:boolean" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="component">
+    <xs:attribute name="code" type="xs:string" use="required"/>
+    <xs:attribute name="channel" type="xs:integer" use="required"/>
+    <xs:attribute name="azimuth" type="xs:double" use="required"/>
+    <xs:attribute name="dip" type="xs:double" use="required"/>
+    <xs:attribute name="gain" type="xs:double" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="seis_stream">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="component" type="inv:component"/>
+    </xs:choice>
+    <xs:attribute name="code" type="xs:string" use="required"/>
+    <xs:attribute name="start" type="xs:dateTime" use="required"/>
+    <xs:attribute name="end" type="inv:datetime" use="required"/>
+    <xs:attribute name="loc_code" type="xs:string" use="required"/>
+    <xs:attribute name="datalogger" type="xs:string" use="required"/>
+    <xs:attribute name="datalogger_id" type="xs:string" use="required"/>
+    <xs:attribute name="clock_id" type="xs:string" use="required"/>
+    <xs:attribute name="seismometer" type="xs:string" use="required"/>
+    <xs:attribute name="seismometer_id" type="xs:string" use="required"/>
+    <xs:attribute name="sample_rate" type="xs:integer" use="required"/>
+    <xs:attribute name="sample_rate_div" type="xs:integer" use="required"/>
+    <xs:attribute name="gain_freq" type="xs:double" use="required"/>
+    <xs:attribute name="depth" type="xs:double" use="required"/>
+    <xs:attribute name="format" type="xs:string" use="required"/>
+    <xs:attribute name="flags" type="xs:string" use="required"/>
+    <xs:attribute name="restricted" type="xs:boolean" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="station">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="aux_stream" type="inv:aux_stream"/>
+        <xs:element name="seis_stream" type="inv:seis_stream"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:string" use="required"/>
+    <xs:attribute name="start" type="xs:dateTime" use="required"/>
+    <xs:attribute name="end" type="inv:datetime" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="latitude" type="xs:double" use="required"/>
+    <xs:attribute name="longitude" type="xs:double" use="required"/>
+    <xs:attribute name="elevation" type="xs:double" use="required"/>
+    <xs:attribute name="depth" type="inv:double" use="required"/>
+    <xs:attribute name="place" type="xs:string" use="required"/>
+    <xs:attribute name="country" type="xs:string" use="required"/>
+    <xs:attribute name="affiliation" type="xs:string" use="required"/>
+    <xs:attribute name="restricted" type="xs:boolean" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="network">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="station" type="inv:station"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="code" type="xs:string" use="required"/>
+    <xs:attribute name="start" type="xs:dateTime" use="required"/>
+    <xs:attribute name="end" type="inv:datetime" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="institutions" type="xs:string" use="required"/>
+    <xs:attribute name="region" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="net_class" type="xs:string" use="required"/>
+    <xs:attribute name="archive" type="xs:string" use="required"/>
+    <xs:attribute name="restricted" type="xs:boolean" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="datalogger_gain">
+    <xs:attribute name="channel" type="xs:integer" use="required"/>
+    <xs:attribute name="value" type="xs:double" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="datalogger_calibration">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="gain" type="inv:datalogger_gain"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="device_id" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="decimation">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="analogue_filter_chain" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="digital_filter_chain" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+    </xs:choice>
+    <xs:attribute name="sample_rate" type="xs:integer" use="required"/>
+    <xs:attribute name="sample_rate_div" type="xs:integer" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="datalogger">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="calibration" type="inv:datalogger_calibration"/>
+        <xs:element name="decimation" type="inv:decimation"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="digitizer_model" type="xs:string" use="required"/>
+    <xs:attribute name="digitizer_manufacturer" type="xs:string" use="required"/>
+    <xs:attribute name="recorder_model" type="xs:string" use="required"/>
+    <xs:attribute name="recorder_manufacturer" type="xs:string" use="required"/>
+    <xs:attribute name="clock_model" type="xs:string" use="required"/>
+    <xs:attribute name="clock_manufacturer" type="xs:string" use="required"/>
+    <xs:attribute name="clock_type" type="xs:string" use="required"/>
+    <xs:attribute name="sample_rate" type="xs:integer" use="required"/>
+    <xs:attribute name="sample_rate_div" type="xs:integer" use="required"/>
+    <xs:attribute name="gain" type="xs:double" use="required"/>
+    <xs:attribute name="max_clock_drift" type="xs:double" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="resp_fir">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="coefficients" type="inv:float_array" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="gain" type="xs:double" use="required"/>
+    <xs:attribute name="deci_fac" type="xs:integer" use="required"/>
+    <xs:attribute name="delay" type="xs:double" use="required"/>
+    <xs:attribute name="correction" type="xs:double" use="required"/>
+    <xs:attribute name="ncoeff" type="xs:integer" use="required"/>
+    <xs:attribute name="symmetry" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="seismometer_gain">
+    <xs:attribute name="channel" type="xs:integer" use="required"/>
+    <xs:attribute name="value" type="xs:double" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="seismometer_calibration">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="gain" type="inv:seismometer_gain"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="device_id" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="seismometer">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="calibration" type="inv:seismometer_calibration"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="model" type="xs:string" use="required"/>
+    <xs:attribute name="manufacturer" type="xs:string" use="required"/>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="low_freq" type="inv:double" use="required"/>
+    <xs:attribute name="high_freq" type="inv:double" use="required"/>
+    <xs:attribute name="response" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="aux_source">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+    </xs:choice>
+    <xs:attribute name="source_id" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="unit" type="xs:string" use="required"/>
+    <xs:attribute name="conversion" type="xs:string" use="required"/>
+    <xs:attribute name="sample_rate" type="xs:integer" use="required"/>
+    <xs:attribute name="sample_rate_div" type="xs:integer" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="aux_device">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="remark" type="inv:blob" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="source" type="inv:aux_source"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+    <xs:attribute name="model" type="xs:string" use="required"/>
+    <xs:attribute name="manufacturer" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:element name="inventory">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="aux_device" type="inv:aux_device"/>
+        <xs:element name="seismometer" type="inv:seismometer"/>
+        <xs:element name="resp_paz" type="inv:resp_paz"/>
+        <xs:element name="datalogger" type="inv:datalogger"/>
+        <xs:element name="resp_fir" type="inv:resp_fir"/>
+        <xs:element name="network" type="inv:network"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

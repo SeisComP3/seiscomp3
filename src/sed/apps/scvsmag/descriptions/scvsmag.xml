@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scvsmag" category="Processing" author="Swiss Seismological Service">
+		<description>
+		Computes VS magnitudes based on envelopes calculated by scenvelope.
+		</description>
+		<configuration>
+			<group name="vsmag">
+				<parameter name="siteEffect" type="boolean" default="false">
+					<description>
+					Choose whether to use Vs30 base site effect corrections
+					(see also the option 'vsmag.vs30filename').
+					</description>
+				</parameter>
+				<parameter name="vs30filename" type="string" default="your-vs30-gridfile.txt">
+					<description>
+					A ascii grid file of Vs30 values conforming to the standard ShakeMap format.
+					Each line contains a comma separated list of longitude, latitude and the
+					VS30 value for one grid point. Longitude and latitude have to got from lower
+					to higher values and longitudes increase faster than latitudes.
+					</description>
+				</parameter>
+				<parameter name="vs30default" type="double" default="910">
+					<description>
+					Define a default Vs30 value for points not covered by the grid file given with
+					'vsmag.vs30filename'.
+					</description>
+				</parameter>
+				<parameter name="eventExpirationTime" type="int" default="45">
+					<description>
+					This defines the time-span after an event's origin time during which the VS
+					magnitude is re-evaluated every second. After origin-time + eventExpirationTime
+					the evaluation will stop.
+					</description>
+				</parameter>
+				<parameter name="ExpirationTimeReference" type="string" default="ct">
+					<description>
+					Choose whether to time the event expiration time with respect to the origin
+					time ('ot') or the time of the first VS estimates creation time ('ct').
+					</description>
+				</parameter>
+				<parameter name="clipTimeout" type="int" default="30">
+					<description>
+					Define the number of seconds following a clipped record that a stream is not
+					used for magnitude estimation.
+					</description>
+				</parameter>
+				<parameter name="twstarttime" type="int" default="4">
+					<description>
+					These two parameters define the timewindow around picks in which scvsmag
+					looks for maximum amplitudes. twstarttime defines the time before the pick
+					and twendtime the time after the pick
+					</description>
+				</parameter>
+				<parameter name="twendtime" type="int" default="35">
+					<description>
+					These two parameters define the timewindow around picks in which scvsmag
+					looks for maximum amplitudes. twstarttime defines the time before the pick
+					and twendtime the time after the pick
+					</description>
+				</parameter>
+				<parameter name="mode" type="string" default="realtime">
+					<description>
+					You can choose between 'realtime' and 'playback' mode. In 'realtime' mode VS
+					magnitudes are evaluated based on a realtime timer. In 'playback' mode the
+					timing is determined by incoming envelope values (i.e. the internal timing is
+					always set to the latest envelope arrival.
+					</description>
+				</parameter>
+				<parameter name="backslots" type="int" default="6000">
+					<description>
+					Time in seconds with respect to the current Time that envelope values are kept
+					in memory. Envelope values with a timestamp that is older
+					than current Time - vsmag.backslots will be deleted/rejected.
+					</description>
+				</parameter>
+				<parameter name="headslots" type="int" default="65">
+					<description>
+					Time in seconds in the future with respect to the current Time that envelope
+					values are kept in memory. This feature can be of interest if scenvelope and
+					scvsmag do not run on the same machine. A difference between the internal
+					clocks can generate envelope messages with a timestamp in the future
+					relative to the receiving machine.
+					</description>
+				</parameter>
+				<parameter name="maxepicdist" type="double" default="200">
+					<description>
+					This defines a cutoff epicentral distance in kilometers; stations further than that
+					won't be used for magnitude computation; a negative value means no cutoff is
+					applied.
+					</description>
+				</parameter>
+				<parameter name="logenvelopes" type="boolean" default="false">
+					<description>
+					This toggles envelope logging. Note that this will produce very large files and
+					may fill up your disk if left on for too long.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+				<option long-flag="test">
+					<description>Test mode, no messages are sent</description>
+				</option>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

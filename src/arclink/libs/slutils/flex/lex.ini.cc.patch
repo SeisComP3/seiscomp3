@@ -1,0 +1,16 @@
+--- lex.ini.cc.orig	Sat Apr  8 19:43:57 2000
++++ lex.ini.cc	Sat Apr  8 19:44:58 2000
+@@ -1,3 +1,5 @@
++#include <iostream>
++using namespace std;
+ #define yyFlexLexer INIFlexLexer
+ 
+ #line 4 "lex.ini.cc"
+@@ -24,7 +26,6 @@
+ #ifdef __cplusplus
+ 
+ #include <stdlib.h>
+-class istream;
+ #include <unistd.h>
+ 
+ /* Use prototypes in function declarations. */

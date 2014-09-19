@@ -1,0 +1,50 @@
+.TH SL_SAVESTATE 3 2003/11/03
+.SH NAME
+sl_savestate, sl_recoverstate \- Save and recover connection state information
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_savestate\fP (SLCD *" slconn ", char *" statefile ");
+.sp
+.BI "int \fBsl_recoverstate\fP (SLCD *" slconn ", char *" statefile ");
+.fi
+.SH DESCRIPTION
+\fBsl_savestate\fP saves the sequence numbers and time stamps for each
+entry in the stream chain associated with \fIslconn\fP to a file
+\fIstatefile\fP.  Any existing file is overwritten.  The file is
+created if necessary.
+
+\fBsl_recoverstate\fP recovers sequence numbers and time stamps from a
+file \fIstatefile\fP and inserts them into the appropriate entries of
+the stream chain associated with \fIslconn\fP.
+
+Using these two functions a SeedLink client program can be re-started
+without loss of continuous data.
+
+.SH RETURN VALUES
+These functions return 0 on success and -1 on error.
+\fBsl_recoverstate\fP will return 1 if the specified file could not be
+found.
+
+.SH NOTES
+The \fBsl_collect\fP function will automatically keep updated sequence
+numbers and time stamps for the last packet received for each stream.
+If, for some crazy reason, the client program is not using
+\fBsl_collect\fP and the values in the stream chain are not otherwise
+maintained these functions will not do you much good.
+
+It is highly recommended to implement signal handling to properly
+handle the shutdown of the client program which might include the
+saving of state information.
+
+.SH SEE ALSO
+\fBsl_collect(3)\fP
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

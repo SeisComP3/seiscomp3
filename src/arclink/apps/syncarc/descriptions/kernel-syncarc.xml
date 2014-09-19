@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="syncarc">
+		<extends>kernel</extends>
+		<description>SeisComP EIDA inventory synchronization component.</description>
+		<configuration>
+			<group name="inventory">
+				<parameter name="syncOnUpdate" type="boolean" default="false">
+					<description>
+						Enables/disables the synchronization of the inventory
+						after a update-config is called. When enabled this will
+						call the sync_arc program everytime that the seiscomp 
+						update-config is used
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

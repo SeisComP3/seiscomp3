@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="email">
+		<extends>scm</extends>
+		<description>
+			Email plugin for scm which sends emails based on client status.
+		</description>
+		<configuration>
+			<group name="memailplugin">
+				<parameter name="recipients" type="list:string">
+					<description>
+					Defines a comma separated list of email addresses to send
+					notifications to.
+					</description>
+				</parameter>
+				<parameter name="template" type="string">
+					<description>
+					Configures a custom message text that is appended to each message
+					when clients passed the filter.
+					</description>
+				</parameter>
+				<parameter name="filter" type="string">
+					<description>
+					Defines the filter for each client status. A filter is an expression
+					that can be constructed with all available status tags (scm --print-tags)
+					and logical and numerical operators. See scm for more information.
+					</description>
+				</parameter>
+				<parameter name="requiredClients" type="list:string">
+				</parameter>
+				<parameter name="reportSilentClients" type="boolean" default="true">
+				</parameter>
+				<parameter name="reportSilentClientsTimeSpan" type="double" unit="min" default="1">
+				</parameter>
+				<parameter name="reportRequiredClients" type="double" unit="min" default="10">
+				</parameter>
+				<parameter name="filterMeanInterval" type="double" unit="min" default="10">
+				</parameter>
+				<parameter name="sendEmail" type="boolean" default="false">
+					<description>
+					Enables sending of emails using mailx shell command.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

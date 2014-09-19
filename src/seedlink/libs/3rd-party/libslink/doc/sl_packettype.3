@@ -1,0 +1,54 @@
+.TH SL_PACKETTYPE 3 2003/11/03
+.SH NAME
+sl_packettype, sl_sequence \- determine packet type and sequence
+number of a SeedLink packet
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_packettype\fP (SLpacket *" slpack ");
+.sp
+.BI "int \fBsl_sequence\fP (SLpacket *" slpack ");
+.fi
+.SH DESCRIPTION
+\fBsl_packettype\fP and \fBsl_sequence\fP are used to determine the
+type and sequence number of the SeedLink packet \fIslpack\fP.
+
+.SH RETURN VALUES
+\fBsl_packettype\fP returns one of the packet types defined in
+libslink.h:
+
+.nf
+#define SLDATA 0     /* waveform data record */
+#define SLDET  1     /* detection record */
+#define SLCAL  2     /* calibration record */
+#define SLTIM  3     /* timing record */
+#define SLMSG  4     /* message record */
+#define SLBLK  5     /* general record */
+#define SLNUM  6     /* used as the error indicator (same as SLCHA) */
+#define SLCHA  6     /* for requesting channel info or detectors */
+#define SLINF  7     /* a non-terminating XML formatted message in a miniSEED
+                        log record, used for INFO responses */
+#define SLINFT 8     /* a terminating XML formatted message in a miniSEED log
+                        record, used for INFO responses */
+#define SLKEEP 9     /* an XML formatted message in a miniSEED log
+                        record, used for keepalive/heartbeat responses */
+.fi
+
+\fBsl_sequence\fP returns the packet sequence number if it exists, 0
+for INFO packets or -1 on error.
+
+.SH NOTES
+The SLKEEP packet type will never be returned, it is kept internal to
+the \fBsl_collect\fP family of functions.
+
+.SH SEE ALSO
+\fBsl_collect\fP(3), libslink Users Guide
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

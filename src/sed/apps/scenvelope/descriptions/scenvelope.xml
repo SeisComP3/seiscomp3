@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scenvelope" category="Processing" author="Swiss Seismological Service">
+		<description>Computes continuous envelope values used by scvsmag.</description>
+		<configuration>
+			<group name="envelope">
+				<group name="streams">
+					<description>
+					Defines the white- and blacklist of data streams to be used. The
+					rules to decide if a stream is used or not are the following:
+
+					1. if whitelist is not empty and the stream is not on the whitelist,
+					   don't use it, ok otherwise
+
+					2. if blacklist is not empty and the stream is on the blacklist,
+					   don't use it, ok otherwise
+
+					Both checks are made and combined with AND. Either whitelist or
+					blacklist contains a list of patterns (wildcard allowed as * and ?),
+					eg GE.*.*.*, *, GE.MORC.*.BH? Each stream id (NET.STA.LOC.CHA) will
+					be checked against the defined patterns.
+					</description>
+					<parameter name="whitelist" type="list:string">
+						<description>The stream whitelist</description>
+					</parameter>
+					<parameter name="blacklist" type="list:string">
+						<description>The stream blacklist</description>
+					</parameter>
+				</group>
+				<parameter name="saturationThreshold" type="double" unit="percent" default="80">
+					<description>
+					This parameter defines the relative saturation threshold in percent.
+					If the absolute raw amplitude exceeds X% of 2^23 counts, the
+					station will be flagged as clipped. This assumes a 24-bit datalogger.
+					</description>
+				</parameter>
+				<parameter name="baselineCorrectionBuffer" type="int" unit="s" default="60">
+					<description>
+					This parameter defines the length of the buffer (in seconds)
+					that is used to compute a real-time average for baseline correction.
+					</description>
+				</parameter>
+				<parameter name="useSC3Filter" type="boolean" default="false">
+					<description>
+					This is for internal testing purposes only. true will cause the
+					SeisComp3 filter routines to be used. If false the filter routines
+					from the Earthworm based CISN/ETH implementation of VS will be
+					employed.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+				<option long-flag="test">
+					<description>Test mode, no messages are sent</description>
+				</option>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Offline">
+				<option long-flag="ts" argument="arg">
+					<description>
+					Start time of data acquisition time window,
+					requires also --te.
+					</description>
+				</option>
+				<option long-flag="te" argument="arg">
+					<description>
+					End time of data acquisition time window, requires also
+					--ts.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

@@ -1,0 +1,41 @@
+.TH FL_more_msgs 3 "Dec 2000" "Flush Spread" "User Manuals"
+.SH NAME
+FL_more_msgs \- returns the number of complete messages buffered and
+ready to be received on a connection.
+.SH SYNOPSIS
+.B #include <fl.h>
+
+.BI "int FL_more_msgs(mailbox " mbox ");"
+.SH DESCRIPTION
+.B FL_more_msgs
+allows an application to check to see if any complete messages are
+already buffered and ready to be received on the connection represented by
+.IR mbox .
+
+.BR NOTE , 
+that this function 
+.B CANNOT 
+be used as an I/O polling function to check if a receive call should
+be done.  If this function returns zero there still might be a message
+ready to receive on the connection: FL_poll, and file descriptor
+selects/polls can detect if there is activity (not necessarily a
+message) on a connection, while DONT_BLOCK receive semantics can
+detect whether or not there is a message on the connection and
+FL_more_msgs can only answer if there are any buffered messages
+already on the connection.
+
+This function is merely a helper function to re-get the current status
+of the
+.I more_messes
+parameter returned from a call to 
+.BR FL_receive .
+.SH "RETURN VALUES"
+Returns the number of complete buffered messages ready to be received,
+or one of the following errors ( < 0):
+.TP
+.B ILLEGAL_SESSION
+The connection represented by 
+.I mbox
+is illegal, usually because it is not active.
+.SH AUTHOR
+John Schultz <jschultz@cnds.jhu.edu>

@@ -1,0 +1,11 @@
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/sync_arc.cfg)
+        INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config/sync_arc.cfg
+                DESTINATION ${SC3_PACKAGE_CONFIG_DIR})
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/sync_arc.cfg)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})
+
+SC_INSTALL_INIT(syncarc config/syncarc.py)
+
+INSTALL(PROGRAMS sync_arc.py RENAME sync_arc DESTINATION ${SC3_PACKAGE_BIN_DIR})

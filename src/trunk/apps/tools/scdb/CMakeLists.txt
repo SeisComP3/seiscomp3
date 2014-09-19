@@ -1,0 +1,11 @@
+SET(
+    DBTOOL_SOURCES
+	main.cpp
+)
+
+SC_ADD_EXECUTABLE(DBTOOL scdb)
+SC_LINK_LIBRARIES_INTERNAL(scdb client)
+SC_INSTALL_INIT(scdb ../../templates/initd.py)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

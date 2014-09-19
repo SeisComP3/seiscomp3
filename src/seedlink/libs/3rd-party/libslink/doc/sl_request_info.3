@@ -1,0 +1,40 @@
+.TH SL_REQUEST_INFO 3 2004/06/16
+.SH NAME
+sl_request_info \- add INFO request to SeedLink Connection Description
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_request_info\fP (SLCD *" slconn ", char *" infostr ");
+.fi
+.SH DESCRIPTION
+Designed to work in conjuntion with \fBsl_collect\fP, the
+\fBsl_request_info\fP function adds an INFO request to the connection
+description \fIslconn\fP.  The INFO request specified with
+\fIinfostr\fP will be sent to the server during the next iteration of
+\fBsl_collect\fP.  Important: this function simply redirects the
+\fIslconn->info\fP pointer to the \fIinfostr\fP pointer; this means
+that the content of the string pointed to by \fIinfostr\fP must not be
+destroyed or changed until the INFO request has been sent.
+
+Only one request can be "queued up" at a time, \fBsl_request_info\fP
+will complain if it is used while a previous request is still waiting
+to be sent.  The \fIslconn->info\fP pointer will be NULL if no
+requests are pending.
+
+.SH RETURN VALUES
+Returns 0 on success and -1 on error.
+
+.SH EXAMPLE
+See \fBsl_collect\fP(3) for an example.
+
+.SH SEE ALSO
+\fBsl_collect\fP(3), libslink Users Guide
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

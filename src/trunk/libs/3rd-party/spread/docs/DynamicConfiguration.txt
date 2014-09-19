@@ -1,0 +1,203 @@
+Motivation:
+
+Spread prior to version 4 required a configuration file specifying all
+of the daemons who would ever be part of the spread configuration and
+to make changes to the set of potential daemons required that all of
+the daemons be shut down and restarted once the configuration file was
+edited to include the changes. This made adding servers to a pool or
+changing the name or IP of an existing server require a full restart
+of the system which can be disruptive.
+
+Solution:
+
+Spread in version 4 can now handle changes to the spread.conf daemon
+configuration without shutting down and restarting all of the
+daemons. Daemons can be added to segments or removed without existing
+clients losing their spread connections. Some changes to the spread
+configuration (such as changing the name of an existing daemon) will
+cause the clients to receive a view change message showing a temporary
+change in the membership. This feature is called Dynamic
+Configuration.
+
+Equal Configuration Enforcement:
+
+The Spread system has always had a requirement that the daemon
+configurations specified in spread.conf at all of the node were
+identical. However earlier versions of Spread did not enforce that
+requirement automatically. Now Spread enforces that all participating
+daemons are using an identical configuration.
+
+Spread enforces this property by having all packets sent between
+daemons contain an identification code in the message header for the
+configuration that was active when they were sent. When a packet is
+received, if the packet configuration code does not match the current
+configuration code of the receiving daemon, then the packet is
+discarded. If one daemon switches configurations, it cannot
+communicate with any other daemon that still uses the old
+configuration. If the other daemons do not also switch, then they will
+be partitioned until the configuration error is repaired.
+
+The identification code is implemented as a 32 bit hash of the
+relevant sections of the Spread.conf file.
+
+Dynamic Configuration Client Experience:
+
+When a new configuration is loaded, application groups may experience
+a membership change. The change may appear spurious, meaning no actual
+change in the list of members occurs, but a new group_id or view_id is
+generated and a membership message is received. The application may
+also see a membership change that shows all non-local clients (those
+connected to a different daemon) leaving the group and then a second
+membership messages showing all of the clients rejoining the group
+(possibly with some missing if they were connected to a daemon that is
+no longer valid in the new configuration file).
+
+No changes to any user-visible data structures or functions are
+necessary for this.
+
+
+How to activate a Dynamic Configuration Change:
+
+The process of executing a configuration changes is as follows:
+
+1) The admin runs the spmonitor program.  It is necessary to do this
+   first so that the spmonitor program reads in the list of possible
+   daemons from the old spread.conf file. It needs to know what
+   daemons were in the old configuration in order to send them the
+   notification to reread the spread.conf file.
+
+2) The admin updates the Spread.conf file on disk with the new
+   contents. They then copy that updated file to all of the hosts
+   running daemons who are in the old or new configuration.
+
+3) The admin chooses the spmonitor option "Reload Configuration".
+   This causes a command packet to be sent by the spmonitor program to
+   all daemons in the old configuration file. The command packet
+   triggers the daemon to start the reload process. The internal
+   details of the daemon algorithm are described below. At this point
+   all of the daemons will switch to the new configuration.
+
+4) Once the reload is done, all client applications may receive a
+   membership change notification message.  The message will be
+   generated if any groups the client is in have changed the set of
+   members (because a daemon is no longer in the membership and had
+   clients in that group) or, for certain types of configuration
+   changes, all groups with members connected to more then one daemon
+   will receive a membership change showing all group members from
+   remote daemons leaving the group, and then a second membership
+   showing the group with all clients still connected to running
+   daemons back together.
+
+
+Semantics of a Dynamic Configuration Change:
+
+For the basic case, the algorithm looks like a regular membership in
+which certain daemons have crashed or partitioned (those who are in
+the old configuration and not in the new configuration) and some
+daemons have started up or are remerging (those in the new
+configuration but not in the old).
+
+Crashed/partitioned daemons do not have any group state we need to
+track since we will remove all of their group members from the current
+membership view. Therefore, we can just ignore them as in a normal
+membership. The new daemons that have been added to the configuration
+will merge any group state they have during the normal Extended
+Virtual Synchrony protocol as if they had only been partitioned
+away. Since group members are identified with the daemons they are
+connected to, there cannot be any inconsistent state between two
+daemons, as they will each represent their own state in the group
+membership protocol.
+
+A special case occurs if the same IP address is in two different
+configuration files with an inconsistency (different name, changed
+broadcast address, etc.) When that case is identified, a singleton
+partition is created. The partition will separate each daemon from all
+other daemons and cause their group state to shrink to only the
+locally connected client applications. Then, when the singleton
+partition is removed, they will merge with all of the other
+daemons. Since each daemon will only know its own locally connected
+client group members, merging the partitions will bring the system to
+a consistent state.
+
+Any daemon whose network specification has changed between the old and
+new configuration files will have to shut down and be restarted. This
+is because the Spread daemon does not re-bind to changed broadcast,
+multicast or IP unicast addresses after starting up. So changing the
+IP address of a machine will require the daemon on that machine to be
+shut down and then restarted with the new configuration, however other
+daemons who are active will not shut down and will continue to work
+over the configuration change. Only the machine with the changed
+network configuration will shut down.
+
+Daemon Algorithm Details:
+
+When a spmonitor command to reload configuration is received, if 
+the daemon is in OP state, the function Prot_initiate_conf_reload()
+executes the following steps to reload the configuration. If the
+daemon not in OP state (i.e it is already working on a membership), a
+flag is set and when the membership completes (by moving into OP state)
+the Prot_initiate_conf_reload() function is then executed.
+
+1) Call function in configuration code to load new configuration file
+   and examine the type of changes to the configuration. If the
+   configuration changes in the new file require a singleton partition
+   (see below for details) then indicate that to protocol code.
+
+2) Inform all subsystems in the daemon that a configuration change is
+   in progress and any caches or data structures that are storing the
+   current state of the daemon configuration should be
+   reloaded/updated with the new information. The old configuration
+   can still be accessed through a different name until the reload is
+   complete. This is done by a calling functions called
+   "*_signal_conf_reload()" where the * is replaced by the name of the
+   subsystem. For example "Net_signal_conf_reload()" and
+   "Memb_signal_conf_reload()".
+
+3a) If no partition is needed, then initiate a membership change (with
+    token_loss) and return. The membership protocol will run to 
+    completion as normal by probing for all active daemons and forming 
+    a new membership including any new daemons and removing any daemons 
+    who are no longer in the configuration file.
+
+3b) If a partition is needed, then a singleton partition is created,
+    the Conf_reload_state variable is set so other parts of the daemon
+    know a configuration reload is in progress, and a membership change 
+    is triggered (by a scheduled token_loss).
+
+4) When membership completes in the Discard_packets() function, if a
+   configuration reload state is active, then the partition is removed
+   and a probe for new members (to find all of the now
+   'non-partitioned' daemons) is started. Once this second membership
+   change takes place, then the configuration reload is complete.
+
+   The test for whether a partition is needed for a new configuration is
+   below. See function Conf_reload_initiate() in configuration.c for the
+   implementation details.
+
+   a) If any of the following are true then the daemon process will quit
+   as it should no longer be executing in the new configuration file.
+
+	 1) I am no longer in the configuration.
+
+	 2) My IP/Name has changed.
+
+	 3) My broadcast/netmask has changed.
+
+   b) Otherwise examine all entries that are both in the new
+   configuration and in the old configuration (matching based on IP
+   address).  If the same IP address is in both configurations then if
+   any of the following differs between the old and new configuration,
+   then a partition is required. If they are the same for ALL hosts that
+   are in both files, then no partition is needed.
+
+	 1) Name.
+
+	 2) Number of interfaces.
+
+	 3) Broadcast address or netmask.
+
+	 4) Any interface specifications have changed.
+
+   Note that in the common cases of simply adding and removing daemons,
+   no partition is needed.
+ 

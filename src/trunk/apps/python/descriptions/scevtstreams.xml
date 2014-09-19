@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scevtstreams" category="Utilities">
+		<description>Extracts stream information and time windows from an event.</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Dump">
+				<option flag="E" long-flag="event" argument="arg">
+					<description>Specifies the event id.</description>
+				</option>
+				<option flag="m" long-flag="margin" argument="arg">
+					<description>
+					Time margin in seconds added to the final stream time window, default 300.
+					</description>
+				</option>
+				<option flag="S" long-flag="streams" argument="arg">
+					<description>
+					Comma separated list of streams per station to add, e.g. BH,SH,HH.
+					</description>
+				</option>
+				<option flag="C" long-flag="all-components" argument="flag">
+					<description>
+					Specifies whether to use all components (0) or just the picked one (1), default 1.
+					</description>
+				</option>
+				<option flag="L" long-flag="all-locations" argument="flag">
+					<description>
+					Specifies whether to use all location codes (0) or just the picked one (1), default 1.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

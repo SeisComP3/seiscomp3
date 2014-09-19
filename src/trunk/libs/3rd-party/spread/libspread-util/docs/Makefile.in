@@ -1,0 +1,107 @@
+.SUFFIXES: .lo .to .tlo
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+libdir=@libdir@
+includedir=@includedir@
+mandir=@mandir@
+mansubdir=@mansubdir@
+sysconfdir=@sysconfdir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+docdir=@docdir@
+piddir=@piddir@
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+buildtoolsdir=$(top_srcdir)/buildtools
+
+DESTDIR=
+VPATH=@srcdir@
+
+PATHS= 
+
+INSTALL=@INSTALL@
+SOFTLINK=@LN_S@
+PERL=@PERL@
+
+MANPAGES	= E_get_time.3.out libspread-util.3.out
+MANPAGES_IN	= E_get_time.3 libspread-util.3 
+
+PAGENAMES = E_get_time libspread-util
+
+# Misc documentation files in docs/ directory that should be installed
+DOCFILES = Readme.txt license.txt
+
+MANTYPE		= @MANTYPE@
+
+
+all: $(MANPAGES)
+
+$(MANPAGES): $(MANPAGES_IN)
+	@if test "$(MANTYPE)" = "cat"; then \
+		manpage=$(srcdir)/`echo $@ | sed 's/\.[1-9]\.out$$/\.0/'`; \
+	else \
+		manpage=$(srcdir)/`echo $@ | sed 's/\.out$$//'`; \
+	fi; \
+	if test "$(MANTYPE)" = "man"; then \
+		cat $${manpage} | $(PERL) $(buildtoolsdir)/mdoc2man.pl > $@; \
+	else \
+		cat $${manpage} > $@; \
+	fi
+
+clean:
+	rm -f *.out 
+
+distclean: clean
+	rm -f Makefile config.h config.status *~
+
+mrproper: distclean
+
+veryclean: distclean
+	rm -f configure
+
+catman-do:
+	@for f in $(MANPAGES_IN) ; do \
+		base=`echo $$f | sed 's/\..*$$//'` ; \
+		echo "$$f -> $$base.0" ; \
+		nroff -mandoc $$f | cat -v | sed -e 's/.\^H//g' \
+			>$$base.0 ; \
+	done
+
+distprep: catman-do
+	autoreconf
+
+install: install-files install-man
+
+install-man:
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(mandir)
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(mandir)/$(mansubdir)3
+	for page in $(PAGENAMES); \
+	do \
+	  $(INSTALL) -m 644 $$page.3.out $(DESTDIR)$(mandir)/$(mansubdir)3/$$page.3; \
+	done
+
+install-files:
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(docdir)
+	for docfile in $(DOCFILES); \
+	do \
+	  $(INSTALL) -m 644 $(srcdir)/$$docfile $(DESTDIR)$(docdir)/$$docfile; \
+	done
+
+uninstallall:	uninstall
+	-rmdir $(DESTDIR)$(sysconfdir)
+	-rmdir $(DESTDIR)$(docdir)
+	-rmdir $(DESTDIR)$(mandir)/$(mansubdir)3
+	-rmdir $(DESTDIR)$(mandir)
+
+uninstall: 
+	for page in $(PAGENAMES); \
+	do \
+	  rm -f $(DESTDIR)$(mandir)/$(mansubdir)3/$$page.3; \
+	done
+	for docfile in $(DOCFILES); \
+	do \
+	  rm -f $(DESTDIR)$(docdir)/$$docfile; \
+	done

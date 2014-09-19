@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="fs_mseed" category="sources">
+		<description>Mini-SEED file plugin</description>
+		<configuration>
+			<parameter name="input_type" type="string" default="ddb">
+				<description></description>
+			</parameter>
+			<parameter name="data_format" type="string" default="mseed">
+				<description></description>
+			</parameter>
+			<parameter name="location" type="path" default="@ROOTDIR@/var/lib/seedlink/indata">
+				<description></description>
+			</parameter>
+			<parameter name="pattern" type="string">
+				<description>
+				&quot;pattern&quot; is a POSIX extended regular expression that
+				must match input file names (useful for filtering out non-data
+				files). For example &quot;BH[NEZ]&quot; would match any files
+				that contained &quot;BHE&quot;, &quot;BHN&quot; or &quot;BHZ&quot;.
+				If no pattern is specified all files will be processed.
+				</description>
+			</parameter>
+			<parameter name="scan_level" type="int" default="2">
+				<description>
+				Look for data files at the 1st or 2nd directory level.
+				</description>
+			</parameter>
+			<parameter name="move_files" type="boolean" default="true">
+				<description>
+				Move file to subdirectory "processed" before starting to read it.
+				</description>
+			</parameter>
+			<parameter name="delete_files" type="boolean" default="false">
+				<description>
+				Delete processed files.
+				</description>
+			</parameter>
+			<parameter name="use_timestamp" type="boolean" default="false">
+				<description>
+				Look only for files that are newer than the last file processed.
+				</description>
+			</parameter>
+			<parameter name="timestamp_file" type="path" default="@ROOTDIR@/var/run/seedlink/fs_mseed.tim">
+				<description>
+				Timestamp file is used to save the modification time of the last
+				file processed.
+				</description>
+			</parameter>
+			<parameter name="polltime" type="int" unit="s" default="10">
+				<description>
+				New files are searched for every &quot;polltime&quot; seconds.
+				</description>
+			</parameter>
+			<parameter name="delay" type="int" unit="s" default="30">
+				<description>
+				Wait until the file is at least n seconds old, before trying to
+				read it.
+				</description>
+			</parameter>
+			<parameter name="verbosity" type="int" default="1">
+				<description>
+				Tells how many debugging messages are printed.
+				</description>
+			</parameter>
+			<parameter name="zero_sample_limit" type="int" default="10">
+				<description>
+				Maximum number of consecutive zeros in datastream before data
+				gap will be declared (-1 = disabled).
+				</description>
+			</parameter>
+			<parameter name="default_timing_quality" type="int" default="-1">
+				<description>
+				If timing quality is not available, use this value as default
+				(-1 = disabled).
+				</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<group name="channels">
+				<description>
+				Channel definitions (Mini-SEED streams are defined in streams.xml,
+				look for &lt;proc name=&quot;generic_3x50&quot;&gt;).
+				</description>
+				<struct type="ChannelMapping">
+					<parameter name="source_id" type="string"/>
+				</struct>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

@@ -1,0 +1,32 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_EQUAL_GROUP_IDS 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_equal_group_ids \- checks amount of data ready to be read
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_equal_group_ids( group_id " g1 ", group_id " g2 );
+.SH DESCRIPTION
+.B SP_equal_group_ids
+allows an application to determine if two specific instantiations of
+a group are identical. This is not just if the memberships are identical, but rather
+whether the two group ids represent the exact same group membership view at the same 
+point in time in the history of the group.
+.B SP_equal_group_ids
+returns true (i.e. not 0) if the two group ids passed to it are equal. 
+It returns false if they are not equal.
+.SH "RETURN VALUES"
+Returns true (not 0 ) if they are equal and false if they are different.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

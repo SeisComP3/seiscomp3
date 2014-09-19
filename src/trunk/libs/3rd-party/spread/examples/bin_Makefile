@@ -1,0 +1,52 @@
+.SUFFIXES: .to 
+
+# This is a basic Makefile to document how to build the sample Spread applications
+# This is NOT a full-featured Makefile that supports all platforms, for that get the
+# source release. This file is just meant to give you the idea of what is required
+# when compiling Spread applications.
+
+# The core requirements can be listed briefly as:
+#    1) compile your app with -D_REENTRANT and -lpthread if you use threads.
+#    2a) link with the lib/myarch/libspread.a for flush or general applications
+#    2b) link with the lib/myarch/libspread-core.a for non-threaded, non-flush, applications
+#    2c) link with the lib/myarch/libtspread-core.a for threaded, non-flush applications
+
+CC=gcc
+LD=gcc
+CFLAGS=-g -O2
+CPPFLAGS=-I. -I../include
+LDFLAGS=-L../lib/
+# Change this define to whatever platform name you are building. 
+# The available choices can be found by listing the ../lib directory.
+HOSTARCH=i686-pc-linux-gnu
+SP_LIBRARY_DIR=../lib/${HOSTARCH}
+#If platform needs libraries for basic networking (like solaris -lnsl -lsocket) include them here
+LIBS=
+#If platform needs libraries to support threads (like pthread) include them here
+THLIBS= -lpthread
+
+
+
+all: spuser spflooder sptuser flush_user
+
+.c.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
+
+.c.to:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -D_REENTRANT -c $< -o $*.to
+
+spuser: $(SP_LIBRARY_DIR)/libspread-core.a user.o
+	$(LD) -o $@ user.o $(SP_LIBRARY_DIR)/libspread-core.a $(LIBS)
+
+spflooder:  $(SP_LIBRARY_DIR)/libspread-core.a flooder.o
+	$(LD) -o $@ flooder.o $(LDFLAGS)  $(SP_LIBRARY_DIR)/libspread-core.a $(LIBS)
+
+sptuser: user.to  $(SP_LIBRARY_DIR)/libtspread-core.a
+	$(LD) $(THLDFLAGS) -o $@ user.to  $(SP_LIBRARY_DIR)/libtspread-core.a $(LDFLAGS) $(LIBS) $(THLIBS)
+
+flush_user: $(SP_LIBRARY_DIR)/libspread.a fl_user.to
+	$(LD) $(LDFLAGS) -o flush_user fl_user.to $(SP_LIBRARY_DIR)/libspread.a $(LIBS) $(THLIBS)
+
+clean:
+	rm -f *.to *.o spuser spflooder sptuser flush_user
+

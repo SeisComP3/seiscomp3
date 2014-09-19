@@ -1,0 +1,55 @@
+
+slinktool, the all-in-one SeedLink client.
+
+For usage information see the slinktool(1) man page in the 'doc'
+directory.
+
+-- Building and Installation --
+
+Requirements:
+
+1) ANSI C compiler
+
+2) libxml2 version 2.4.23 or greater (www.xmlsoft.org)
+
+
+In most environments a simple 'make' will compile the program.
+ 
+Using GCC under Linux or Solaris, running 'make static' will compile a
+static version if the appropriate libraries are present.
+ 
+GCC can be explicitly used by running 'make gcc'.
+
+SunOS/Solaris:
+ 
+In order to compile under Solaris the 'src/Makefile' needs to be edited.
+See the Makefile for instructions.
+ 
+ 
+For further installation simply copy the resulting binary and man page
+(in the 'doc' directory) to appropriate system directories.
+
+
+LibXML2:
+
+This package requires libxml2 version 2.4.23 or greater
+(www.xmlsoft.org).  If the compile process fails with messages about
+not being able to find <libxml/xmlerror.h> or <libxml/parser.h> and it
+is certain that libxml2 is installed on the system the 'src/Makefile'
+will have to be edited to include the proper directory on the CFLAGS
+line where the libxml2 headers can be found.
+
+
+-- Licensing --
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License (GNU-GPL) for more details.  The GNU-GPL and
+further information can be found here: http://www.gnu.org/
+

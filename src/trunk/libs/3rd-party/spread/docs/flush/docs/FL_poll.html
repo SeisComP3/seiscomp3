@@ -1,0 +1,68 @@
+<HTML><HEAD><TITLE>Manpage of FL_poll</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_poll</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_poll - returns the amount, in bytes, of activity on a connection.
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_poll(mailbox </B><I>mbox</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_poll</B>
+
+is a way to poll the connection represented by
+<I>mbox</I>
+
+to see if there is any activity on that connection.  
+<P>
+<B>NOTE</B>,
+
+however that activity does
+<B>NOT</B>
+
+necessarily mean that a message is available to be read, as in Spread.
+Only a call to FL_more_msgs that returns a positive number of buffered
+messages or a DONT_BLOCK receive call can check for sure to see if a
+message is now available to be read.  If you don't use either of these
+semantics, then you may enter into a blocking receive call, which can
+sometimes be dangerous (see FL_flush).
+<H2>RETURN VALUES</H2>
+
+Returns the number of bytes of activity currently on the connection,
+or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+is illegal, usually because it is not active.
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

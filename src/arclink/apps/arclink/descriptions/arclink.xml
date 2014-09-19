@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="arclink" category="Acquisition" standalone="true">
+		<description>ArcLink complements SeedLink by providing a longer store of data that can be queried.</description>
+		<configuration>
+
+			<parameter name="request_dir" type="dir" default = "@ROOTDIR@/var/lib/arclink/requests">
+				<description>
+					Path to the directory where the
+					request files are temporarily created and stored until purged.
+				</description>
+			</parameter>
+
+			<parameter name="contact_email" type="string" default="">
+				<description>Contact e-mail address of the operator.</description>
+			</parameter>
+
+			<parameter name="connections" type="int" default="500">
+				<description>Maximum number of parallel TCP connections (0 - no limit).</description>
+			</parameter>
+
+			<parameter name="connections_per_ip" type="int" default="20">
+				<description>Maximum number of parallel TCP connections for a single IP address (0 - no limit).</description>
+			</parameter>
+
+			<parameter name="request_queue" type="int" default="500">
+				<description>
+					Maximum number of requests waiting to be processed. When the
+					request queue is full, no more requests are accepted (0 - no limit).
+				</description>
+			</parameter>
+
+			<parameter name="request_queue_per_user" type="int" default="10">
+				<description>
+					Maximum number of queued requests per user (0 - no limit).
+				</description>
+			</parameter>
+
+			<parameter name="request_size" type="int" default="1000">
+				<description>Maximum request size in lines.</description>
+			</parameter>
+
+			<parameter name="handler_cmd" type="string" default="@ROOTDIR@/share/plugins/arclink/reqhandler -s">
+				<description>Request handler command to run.</description>
+			</parameter>
+
+			<parameter name="handlers_soft" type="int" default="4">
+				<description>Number of request handler instances to keep running even if they are idle.</description>
+			</parameter>
+
+			<parameter name="handlers_hard" type="int" default="10">
+				<description>
+					Maximum numbers of request handler instances, e.g., the maximum number of
+					requests that are processed in parallel.
+				</description>
+			</parameter>
+
+			<parameter name="handler_timeout" type="int" default="10">
+				<description>
+					If a request handler blocks the input for more than the given time period
+					in seconds, then the ArcLink server shuts down the request handler (0 - no timeout check).
+				</description>
+			</parameter>
+
+			<parameter name="handler_start_retry" type="int" default="60">
+				<description>
+					Restart terminated request handlers after this time period in seconds (0 - never
+					re-start terminated request handlers). A request handler may terminate itself
+					because of some internal error or it can be shut down by ArcLink if timeout occurs
+					or an invalid response was received.
+				</description>
+			</parameter>
+
+			<parameter name="handler_shutdown_wait" type="int" default="10">
+				<description>
+					Wait this time period in seconds for a request handler to terminate the connection
+					itself, then send the TERM signal (0 - wait forever). If a request handler does
+					not terminate on its own within this time period, the KILL signal will be sent.
+				</description>
+			</parameter>
+
+			<parameter name="port" type="int" default="18001">
+				<description>TCP port used by the server.</description>
+			</parameter>
+
+			<parameter name="lockfile" type="dir">
+				<description>Path to the lock file; used by the seiscomp utility to check if ArcLink is running.</description>
+			</parameter>
+
+			<parameter name="statefile" type="dir">
+				<description>
+					The state of requests is dumped into this file when ArcLink exits. If this parameter is defined,
+					but the file does not exist (e.g., because ArcLink crashed), then ArcLink reads the *.desc files
+					in the request directory to restore state. If "statefile" is not defined, then ArcLink does not
+					restore the state after restart.
+				</description>
+			</parameter>
+
+			<parameter name="admin_password" type="string" default="test123">
+				<description>
+					Password of user "admin" (special user that can view requests of all users).
+				</description>
+			</parameter>
+
+			<parameter name="handlers_waveform" type="int" default="2">
+				<description>
+					Maximum number of simultaneous request handler instances for waveform requests.
+				</description>
+			</parameter>
+
+			<parameter name="handlers_response" type="int" default="2">
+				<description>
+					Maximum number of simultaneous request handler instances for response requests.
+				</description>
+			</parameter>
+
+			<parameter name="handlers_inventory" type="int" default="2">
+				<description>
+					Maximum number of simultaneous request handler instances for inventory requests.
+				</description>
+			</parameter>
+
+			<parameter name="handlers_routing" type="int" default="2">
+				<description>
+					Maximum number of simultaneous request handler instances for routing requests.
+				</description>
+			</parameter>
+
+			<parameter name="handlers_qc" type="int" default="2">
+				<description>
+					Maximum number of simultaneous request handler instances for quality control requests.
+				</description>
+			</parameter>
+
+			<parameter name="handlers_greensfunc" type="int" default="1">
+				<description>
+					Maximum number of simultaneous request handler instances for Green's function requests.
+				</description>
+			</parameter>
+
+			<parameter name="swapout_time" type="int" default="600">
+				<description>
+					Delete completed requests from RAM when not used (STATUS, DOWNLOAD or BDOWNLOAD commands)
+					after the given time span in seconds (0 - never delete requests).
+				</description>
+			</parameter>
+
+			<parameter name="purge_time" type="int" default="864000">
+				<description>
+					Delete finished requests and data products also from the request directory when not
+					used (STATUS, DOWNLOAD or BDOWNLOAD commands) after the given time span in
+					seconds (0 - never delete requests).
+				</description>
+			</parameter>
+
+			<parameter name="encryption" type="boolean" default="false">
+				<description>
+					Enable the use of encryption to deliver restricted network data volumes.
+				</description>
+			</parameter>
+
+			<parameter name="password_file" type="dir" default="@ROOTDIR@/var/lib/arclink/password.txt">
+				<description>
+					File containing a list of users (e-mail addresses) and passwords separated
+					by &quot;:&quot;. Each password in this file is encrypted using the *admin_password*
+					of the server. For increased security make sure that this file is only readable by
+					the user running the Arclink server. Before changing *admin_password* don't forget
+					to migrate this file using the [arclinkpass] tool.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+
+	<module name="arclink-access" category="Acquisition" standalone="true">
+		<description>
+			Access module for Arclink.
+		</description>
+	</module>
+
+	<binding module="arclink">
+		<description>
+			Arclink station parameters.
+		</description>
+		<configuration>
+			<parameter name="routes" type="list:string" default="">
+				<description>
+					List of routes.
+				</description>
+			</parameter>
+			<group name="routes">
+				<struct type="routes" link="routes">
+					<parameter name="streams" type="list:string" default="">
+						<description>
+							List of streams this route applies to (optional, wildcarded). When indicated the streamCode will be generated in the routing entries.
+						</description>
+					</parameter>
+					<parameter name="disableStationCode" type="boolean" default="false">
+						<description>
+							When disableStationCode is true the routings entries for this block are generated only for the network level (and optionally stream level), no station code will be filled. (This optional entry can potentially reduce the number of entries on the routing table.)
+						</description>
+					</parameter>
+
+					<group name="arclink">
+						<description>
+							Defines an Arclink route.
+						</description>
+						<parameter name="address" type="string" default="">
+							<description>
+								host:port of Arclink server (required to enable the binding block).
+							</description>
+						</parameter>
+						<parameter name="start" type="datetime" default="">
+							<description>
+								Start of validity (optional).
+							</description>
+						</parameter>
+						<parameter name="end" type="datetime" default="">
+							<description>
+								End of validity (optional).
+							</description>
+						</parameter>
+						<parameter name="priority" type="int" default="">
+							<description>
+								Route priority (1=highest, optional).
+							</description>
+						</parameter>
+					</group>
+
+					<group name="seedlink">
+						<description>
+						Defines an SeedLink route.
+						</description>
+						<parameter name="address" type="string" default="">
+							<description>
+								host:port of Seedlink server (required to enable the binding block).
+							</description>
+						</parameter>
+						<parameter name="priority" type="int" default="">
+							<description>
+								Route priority (1=highest, optional).
+							</description>
+						</parameter>
+					</group>
+
+				</struct>
+			</group>
+		</configuration>
+	</binding>
+
+	<binding module="arclink-access">
+		<description>
+			Arclink station access.
+		</description>
+		<configuration>
+			<group name="access">
+				<description>
+					Defines access to restricted data. When defined it will add the listed users to the list of authorized users to access certain restricted data give the parameters on this binding.
+				</description>
+				<parameter name="users" type="list:string" default="">
+					<description>
+						List of users (e-mail addresses) allowed to access the restricted data.
+					</description>
+				</parameter>
+				<parameter name="disableStationCode" type="boolean" default="false">
+					<description>
+						When disableStationCode option is set to true the access entries will be generated only for the network level (and optionally stream level), no station code will be filled (this can potentially reduce the number of entries on the access table, and save memory on the request handler when used).
+					</description>
+				</parameter>
+				<parameter name="streams" type="list:string" default="">
+					<description>
+						List of locations.streams this access rule applies to. The location code is optional (optional, allow wildcards).
+					</description>
+				</parameter>
+				<parameter name="start" type="datetime" default="">
+					<description>
+						Start of validity (optional).
+					</description>
+				</parameter>
+				<parameter name="end" type="datetime" default="">
+					<description>
+						End of validity (optional).
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

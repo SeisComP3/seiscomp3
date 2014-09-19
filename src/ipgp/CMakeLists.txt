@@ -1,0 +1,13 @@
+SC_BEGIN_PACKAGE(IPGP)
+
+OPTION(SC_IPGP_HYPO71 "Build Hypo71 which requires a fortran compiler" ON)
+
+SET(SC3_TRUNK_SRC_DIR ${CMAKE_SOURCE_DIR}/src/trunk)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/trunk/libs)
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/src/trunk/libs)
+
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/system/libs)
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/src/system/libs)
+
+SUBDIRS(apps plugins)

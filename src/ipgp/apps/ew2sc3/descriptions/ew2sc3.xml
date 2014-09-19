@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="ew2sc3" category="Processing">
+		<description>
+		Earthworm hypo2000_arc messages importer
+		</description>
+		<configuration>
+			<group name="ew2sc3">
+				<parameter name="configPath" type="string">
+					<description>
+					Folder to store logs and achives of hypo2000_arc files from Earthworm export_genericer
+					</description>
+				</parameter>
+				<parameter name="senderPort" type="int">
+					<description>
+					Earthworm export_generic's socket to listen to
+					</description>
+				</parameter>
+				<parameter name="modID" type="int">
+					<description>
+					Expected Earthworm Module ID (ew2sc3 will read the message only if its ModID is correct).
+					Set to 0 (MOD_WILDCARD) to accept any Earthworm Module ID.
+					</description>
+				</parameter>
+				<parameter name="instID" type="int">
+					<description>
+					Expected Earthworm Institute ID (ew2sc3 will read the message only if its InstID is correct)
+					Set to 0 (INST_WILDCARD) to accept any Earthworm Institute ID.
+					</description>
+				</parameter>
+				<parameter name="customAgencyID" type="string">
+					<description>
+                                        Institute name to use when storing origin into database.
+                                        If blank, the origin will have the system AgencyID. If specified, the origin will have the given AgencyID.
+                                        </description>
+				</parameter>
+				<parameter name="author" type="string">
+					<description>Author name to use when storing origin into database.</description>
+				</parameter>
+				<parameter name="hostname" type="string">
+					<description>
+					Earthworm export_generic IP address to connect to
+					</description>
+				</parameter>
+				<parameter name="defaultLatitude" type="string">
+					<description>
+					Default event latitude to use if hypo2000_arc location is null (space filled)
+					</description>
+				</parameter>
+				<parameter name="defaultLongitude" type="string">
+					<description>
+					Default event longitude to use if hypo2000_arc location is null (space filled)
+					</description>
+				</parameter>
+				<parameter name="locatorProfile" type="string">
+					<description>
+					Name of the earth model used by Earthworm location process
+					</description>
+				</parameter>
+				<parameter name="enableArchiving" type="bool">
+					<description>
+					Enable/Disable hypo2000_arc message file archiving (usefull for troobleshooting)
+					</description>
+				</parameter>
+				<parameter name="myAliveInt" type="int">
+					<description>
+					Time interval (in sec) between two heartbeats messages sent by SeisComP3.
+					This parameter should be lower than Earthworm export_generic RcvAliveInt parameter
+					</description>
+				</parameter>
+				<parameter name="senderTimeout" type="int">
+					<description>
+					Maximum time (in millisecond) before the connection to Earthworm export_generic times out.
+					This parameter has to be set accordingly to Earthworm export_generic parameters
+					</description>
+				</parameter>
+				<parameter name="maxMsgSize" type="int">
+					<description>
+					Maximum message size (in char) between the Earthworm export_generic and ew2sc3.
+					This parameter has to be set accordingly to Earthworm export_generic MaxMsgSize parameter
+					</description>
+				</parameter>
+				<parameter name="myAliveString" type="string">
+					<description>
+					Alive string to send to Earthworm export_generic in order to keep the connection alive.
+					This string should be identical as Earthworm export_generic RcvAliveText string
+					</description>
+				</parameter>
+				<parameter name="senderAliveString" type="string">
+					<description>
+					Alive string expected from Earthworm export_generic in order to keep the connection alive.
+					This string should be identical as Earthworm export_generic SendAliveText string
+					</description>
+				</parameter>
+				<parameter name="enableUncertainties" type="bool">
+					<description>
+					Enable/Disable uncertainties conversions.
+					Earthworm doesn't have uncertainties but weight from 0 to 4.
+					If enabled, ew2sc3 will convert pick weight to uncertainties followind a simple mapping between weight and pickerUncertainties list.
+					</description>
+				</parameter>
+				<parameter name="pickerUncertainties" type="list:double">
+					<description>
+					Uncertainty values (in sec) to use when enableUncertainties is enabled.
+					Refer to scolv document for syntax.
+					</description>
+				</parameter>
+				<parameter name="maxUncertainty" type="double">
+					<description>
+					Maximum weight value from Earthworm corresponding to maximum uncertainty
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

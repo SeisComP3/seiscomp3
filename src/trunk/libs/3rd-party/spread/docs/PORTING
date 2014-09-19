@@ -1,0 +1,55 @@
+SPREAD: A Reliable Multicast and Group Communication Toolkit
+-----------------------------------------------------------
+
+PORTING GUIDE:
+--------------
+
+This is definitely a work in progress, so email me any comments you have 
+at jonathan@cs.jhu.edu.
+
+Basically Spread requires a BSD sockets networking API, and a few fairly 
+standard Posix API calls. It was some work to port to Windows, but not 
+much in comparison with porting graphical software.
+
+Each supported architecture has an entry in the arch.h file which defines
+all necessary info about each architecture. The arch.h file has three major
+sections. First there is detection code which detects what platform is 
+currently being built. Second there is the setting of capability flags 
+depending on the built architecture. Third there are some general definitions
+used by all the architectures. For example, the Linux entry looks like this:
+
+/* detect linux */
+#ifdef __linux__
+#define ARCH_PC_LINUX
+#endif
+
+/* Set flags for linux */
+#ifdef ARCH_PC_LINUX
+#define         INTSIZE32
+#define		ARCH_SCATTER_CONTROL /* should be control if supported */
+#define		ARCH_ENDIAN	0x80000080
+#define         LOC_INLINE      __inline__
+#include        <sys/uio.h>
+#define         ARCH_SCATTER_SIZE       UIO_MAXIOV
+#define         HAVE_GOOD_VARGS
+typedef         int     sockopt_len_t;
+#endif /* ARCH_PC_LINUX */
+
+Essentially all that is required is some knowledge about the sizes of the
+basic C types int and short, what endianness the machine is, and whether
+{recv/send}msg calls use the POSIX msg_control structure or the Solaris like
+acc_rights structure. For endianness, if a machine is little-endian then
+the ARCH_ENDIAN should be set to 0x80000080, if it is big-endian then 
+ARCH_ENDIAN should be 0x00000000. The #include is used to grab the definition
+of how large scatters (iovecs) are for each architecture. Since each one stores
+the value in a different variable and in a different include file, we have
+to do this per architecture. If your platform has <stdarg.h> and a working 
+implementation of variable arguments (va_list, va_start, va_end) then 
+define HAVE_GOOD_VARGS, otherwise we use a different method that works 
+everywhere.
+
+The makefile for each architecture are very similar. The main differences
+occur if we can't use gcc on that platform (like IRIX) or if additional
+libraries are required for sockets programs (like Solaris)
+
+

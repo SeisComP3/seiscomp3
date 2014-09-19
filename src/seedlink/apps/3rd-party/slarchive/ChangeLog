@@ -1,0 +1,180 @@
+2009.240/AH: version 1.7-sc3
+	- Batchmode support.
+
+2009.116/AH:
+	- Improve performance with large number of streams.
+
+2007.205/AH:
+	- Update to libslink 1.7
+
+2006.213: 1.7
+	- Release without changes after testing.
+
+2005.237:
+	- Search for a matching file name (glob) when opening archive
+	files using non-defining flags.  The problem was that stream
+        timeouts or slarchive re-starts cause files to be re-opened
+	generating new files using the non-defining flags as if they were
+	defining.
+
+2005.147: version 1.6
+	- Update to libslink 1.5.
+	- Add version to usage messages.
+	- Update man page.
+
+2004.222: version 1.5
+	- Update to libslink 1.4.
+	- Either host or port is optional when specifying the
+        SeedLink server (libslink parses the string now).
+	- Remove the dummy signal handler as it was useless.
+
+2004.197: version 1.4
+	- Update to libslink 1.3 including redirection of most library
+	output to stderr.
+	- Do not adjust ppackets flag based on verbose flag.  If packet
+        details are desired they must specifically be requested.
+
+2004.184:
+	- Migrate all standard I/O (fopen, fwrite, etc.) to the raw
+	interfaces (open, write, etc.) in order to be able to open more
+	files at once; standard I/O is limited to 256 descriptors.
+	- Agressively deal with the situation where the maximum open files
+	limit has been reached.  First, try to increase the "soft" limit
+	to the "hard" limit.  Second, close open stream files with
+	decreasing idle timeouts until some file descriptors are freed.
+	The result is that slarchive should almost always be able to open
+	files (and save data) even if the number of incoming streams is
+	large.  If the open file limit is low versus the number of
+	incoming streams there might be lots of opening and closing of
+	files.  This change involved the addition of the ds_openfile and
+	ds_closeidle functions to dsarchive.c.
+	- If '-v' is used only set '-p' to level 1 unless it's already
+	set, this allows diagnostics to be seen without the output being
+	flooded with info about the received packets.
+
+2004.170: version 1.3
+	- Update to libslink 1.2a including more flexible support for
+        implementations of the SeedLink protocol other than the reference
+        implementation by Andres Heinloo.
+	- Handle case of corrupt miniSEED records in existing files when
+	checking for the last sample received (initial future check) by
+	disabling check when the last sample time could not be determined.
+	- Add high verbosity log message when reading the last record from
+	 existing file.
+	
+2004.125: version 1.2
+	- Update to libslink 1.1 allowing usage under Mac OS X (Darwin).
+	- Fix up the usage of '-v' and '-p' to be consistent.
+	- Better argument list processing to catch silly user errors when
+        options do not have required values.	
+	- Consolidate INSTALL and README into README.
+
+2004.026: version 1.1
+	- No comments (no users?), bumping version to 1.1
+
+2004.016: version 1.1beta3
+	- Prefix all log messages with a local time stamp.
+	- Set stdout (where log messages go) to always flush after a
+	newline.
+
+2004.014: version 1.1beta2
+	- Log messages reporting that overlap limits are exeeded with the
+	new '-Fi' and '-Fc' options are supressed after the first message
+	as long as the overlap is continuous in the same file.
+
+2004.013:
+	- Generalized data stream structures more.  Allows for future grow
+	possibilities.  As a side benefit any number of archive
+	definitions can now be given, i.e. muliple uses of '-A', '-SDS',
+	'-BUD', '-DLOG', or any combination thereof.
+	- Fix the missing initilization that caused every other record to
+	be skipped when using the new '-F' options.
+	- Changed the single '-F' option to two different options, '-Fi'
+	and '-Fc'.  The first sets an acceptable overlap for data in the
+	future that is checked when data streams are initialized and
+	existing data files are opened.  The second sets an acceptable 
+	overlap for data in the future that is continuously checked.
+	
+2003.315: version 1.1beta
+	- Add '-F' option to only archive data in the future by keeping
+	track of the time of the last sample and skipping any records that
+	start before that.  Read the last record from any existing files
+	when a datastream is opened so that this will work even through
+	a shutdown.  This only makes sense to use for archive formats where
+	each unique data stream is archived in a separate file.
+	- Add a missing statement for cleanly flushing the
+	file buffers of a DLOG archive on shutdown.
+	- Fix main description in man page.
+	
+2003.309: version 1.0
+	- Update to libslink 1.0
+
+2003.307: version 1.0pre1
+	- Update to libslink 1.0pre1
+	- Add an exception to packet_handler() to not archive
+	end-of-detection records.
+	
+2003.304: version 0.9.5
+	- Minor update to the man page.
+
+2003.280: version 0.9.4
+	- Update to libslink 0.9.6.
+	- Make changes to msr_print and msr_parse calls.
+
+2003.276: version 0.9.3
+	- Update to libslink 0.9.5.
+	- Make changes to msr_print and msr_parse calls.
+	- Add comments about non-GCC compilers to src/Makefile.
+
+2003.275: version 0.9.2
+	- Update to libslink 0.9.4.
+	- Use gcc by default, the library uses it anyway.
+	- Add -O2 and -Wall to the cflags and fix the warnings.
+
+2003.273: version 0.9.1
+	- Check that statefile is specified before using strchr().
+
+2003.272: version 0.9
+	- Update to libslink 0.9.2.
+	- Add interval for statefile usage, the statefile will be
+	written every interval number of packets received.
+	- Add -lrt to the Solaris LDLIBS line to get nanosleep()
+
+2003.262: version 0.8
+	- Update to libslink 0.9.1.
+	- Add a warning message if no archiving method was specified.
+	- Change flags to standard usage and more flexibility.
+
+2003.255: version 0.7
+	- Only call msr_print() on when verbose is > 0.
+
+2003.182: version 0.6
+	- Update to libslink 0.9 and use new termination sequence
+	that has no possibility to lose packets.
+
+2003.181: version 0.5
+	- Update to libslink 0.8.3 (includes renaming of structures).
+	Updates from Andres (thanks):
+	- Parse data records even when not doing BUD archiving, oops!
+	- Add a setvbuf call to make the writing of records into the
+	archive unbuffered.
+	- Change checking of archive directory to existence instead of
+	writable.
+	
+2003.157: version 0.4
+	- Update to libslink 0.7
+
+2003.092: version 0.3
+	- Make the idle stream timeout a command line option
+	- Fix memory leak in ds_getstream() when closing streams
+
+2003.083: version 0.2
+	- Fixed memory leak in ds_streamproc() when parsing format
+	- Fixed memory leak in arch_streamproc() when passing format
+	- Updated to libslink 0.6 including memory leak fixes
+	
+2003.080: version 0.1
+	- Split from slinktool-3.2 and stripped out everything that was
+	  not needed for slarchive.
+	- Added the -DLOG option to archive data into the old
+	  SeisComP/datalog structure for backward compatibility.

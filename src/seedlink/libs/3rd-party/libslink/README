@@ -1,0 +1,85 @@
+
+                libslink: the SeedLink client library
+
+This package contains the source code, documentation and example code
+for libslink, the SeedLink client library.  For further information
+regarding the library interface and usage see the documentation in the
+'doc' directory, including a Users Guide and man pages.
+
+Installation instructions for libslink: the SeedLink client library.
+
+-- Building --
+
+Linux/Unix: The easiest way to compile the library is to simply run
+'make'.  The included Makefile should work for most Unix-like
+environments; a special target of 'gcc' will explicitly use gcc with
+'-02' optimization and more warnings.  By default a statically linked
+version of the library is built 'libslink.a'.  Using gcc it is
+possible to build a shared library with 'make shared'.
+
+Mac OSX (Darwin): A static library can be compiled using the above
+Linux/Unix instructions, just run 'make'.  A dynamic library can be
+built with 'make dynamic'.
+
+Windows: On a WIN32 platform the library can be compiled by using the
+Nmake compatible Makefile.win (e.g. 'nmake -f Makefile.win') or Open
+Watcom's Wmake with Makefile.wat (e.g. 'wmake -f Makefile.wat'). The
+default target is a static library 'libslink.lib'.  The library has
+been tested with Microsoft Visual Studio 6 and Open Watcom 1.1.
+
+For non-WIN32 platforms the POSIX nanosleep() function is used.  This
+function may not be implemented on older Solaris or Linux platforms.
+It is known to be available under Solaris 8 or later and recent
+versions of Glibc2.
+
+-- Installing --
+
+For installation into the system development environment simply copy
+the library (libslink.a, libslink.so* and/or libslink.*.dylib) into a
+system library directory and copy the associated header file
+(libslink.h) into a system include directory.  Otherwise the library
+and include file can be used directly from the build directory.
+
+-- Extras --
+
+The 'example' directory includes an example SeedLink client that uses
+libslink.
+
+The 'doc' directory includes all associated documentation including
+a Users Guide and man pages for library functions.
+
+-- Threading --
+
+The library is thread-safe under Unix-like environments with the
+condition that each connection descriptor (SLCD) is handled by a
+single thread.  Thread independent logging schemes are possible.
+Under WIN32 the library is not thread-safe.
+
+-- Pronunciation --
+
+lib = 'l' + [eye] + 'b'  (as in library, long 'i')
+s = [es]   (like the beginning of 'esta' in como esta?)
+link = link   (rhymes with the color pink)
+
+all together: 'l' [eye] 'b' [es] link
+
+-- Licensing --
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public License
+as published by the Free Software Foundation; either version 2 of
+the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License (GNU-LGPL) for more details.  The
+GNU-LGPL and further information can be found here:
+http://www.gnu.org/
+
+-- Author --
+
+Chad Trabant
+Initial development at the ORFEUS Data Center/EC MEREDIAN Project
+Continuing maintenance at the IRIS Data Management Center
+

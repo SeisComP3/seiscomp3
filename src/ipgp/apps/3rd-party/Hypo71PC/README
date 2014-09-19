@@ -1,0 +1,18 @@
+For references, see http://jclahr.com/science/software/hypo71/ web page.
+
+This is a slightly modified of Hypo71PC, USGS location program used in several observatories since more than 30 years.
+Those modifications have been introduced by Alexandre Nercessian (IPGP - France) and are used successfully on French volcanoes for many years.
+
+Modifications includes :
+	- up to 250 stations are possibles in the station cards;
+	- stations altitudes are taken into account for the location process;
+	- earthquakes above stations are possible;
+	- stations below sea level are possible.
+
+Added Test values from original Hypo71PC :
+	- TEST(15) is the maximum altitude to expect earthquake in km (negative number);
+	- TEST(20) is the coefficient by which Hypo71PC multiply altitude readings to obtain then in m.
+
+RESET TEST(15)=-2	-> no earthquakes are expected above 2km above sea level.
+RESET TEST(20)=1	-> altitude readings are in meters.
+RESET TEST(20)=10	-> altitude readings are in 10'th of meters. This allow to have sea bottom station (altitude of -245 is a seismometer at 2450m below sea level).

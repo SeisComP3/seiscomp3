@@ -1,0 +1,273 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MvMainWindow</class>
+ <widget class="QMainWindow" name="MvMainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>824</width>
+    <height>596</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>1</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>MapView</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item row="0" column="0" >
+     <widget class="QSplitter" name="splitter" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QTabWidget" name="tabWidget" >
+       <property name="currentIndex" >
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="gmTab" >
+        <attribute name="title" >
+         <string>ground motion</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="eventTab" >
+        <property name="enabled" >
+         <bool>true</bool>
+        </property>
+        <attribute name="title" >
+         <string>event</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="qcTab" >
+        <attribute name="title" >
+         <string>qc</string>
+        </attribute>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>824</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMenu" >
+    <property name="title" >
+     <string>&amp;Menu</string>
+    </property>
+    <widget class="QMenu" name="menuQC" >
+     <property name="title" >
+      <string>QC</string>
+     </property>
+     <addaction name="qcDelayAction" />
+     <addaction name="qcLatencyAction" />
+     <addaction name="qcTimingQualityAction" />
+     <addaction name="qcGapsIntervalAction" />
+     <addaction name="qcGapsLengthAction" />
+     <addaction name="qcOverlapsIntervalAction" />
+     <addaction name="qcAvailabilityAction" />
+     <addaction name="qcOffsetAction" />
+     <addaction name="qcRmsAction" />
+    </widget>
+    <addaction name="showEventTableWidgetAction" />
+    <addaction name="showWaveformPropagationAction" />
+    <addaction name="showStationIdAction" />
+    <addaction name="showMapLegendAction" />
+    <addaction name="showHistoricOriginsAction" />
+    <addaction name="separator" />
+    <addaction name="centerOriginForLatestEventAction" />
+    <addaction name="separator" />
+    <addaction name="menuQC" />
+    <addaction name="searchStationAction" />
+    <addaction name="separator" />
+    <addaction name="resetAction" />
+    <addaction name="separator" />
+    <addaction name="quitAction" />
+   </widget>
+   <addaction name="menuMenu" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>573</y>
+     <width>824</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="showEventTableWidgetAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Show Event Table</string>
+   </property>
+   <property name="shortcut" >
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="showWaveformPropagationAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Waveform Propagation</string>
+   </property>
+   <property name="shortcut" >
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="showStationIdAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Station Annotation</string>
+   </property>
+   <property name="shortcut" >
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="showMapLegendAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Map Legend</string>
+   </property>
+   <property name="shortcut" >
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="showHistoricOriginsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Historic Origins</string>
+   </property>
+   <property name="shortcut" >
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="searchStationAction" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Search Station</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="resetAction" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Reset</string>
+   </property>
+  </action>
+  <action name="quitAction" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Quit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="qcDelayAction" >
+   <property name="text" >
+    <string>Delay</string>
+   </property>
+  </action>
+  <action name="qcLatencyAction" >
+   <property name="text" >
+    <string>Latency</string>
+   </property>
+  </action>
+  <action name="qcTimingQualityAction" >
+   <property name="text" >
+    <string>Timing Quality</string>
+   </property>
+  </action>
+  <action name="qcGapsIntervalAction" >
+   <property name="text" >
+    <string>Gaps Interval</string>
+   </property>
+  </action>
+  <action name="qcGapsLengthAction" >
+   <property name="text" >
+    <string>Gaps Length</string>
+   </property>
+  </action>
+  <action name="qcOverlapsIntervalAction" >
+   <property name="text" >
+    <string>Overlaps Interval</string>
+   </property>
+  </action>
+  <action name="qcAvailabilityAction" >
+   <property name="text" >
+    <string>Availability</string>
+   </property>
+  </action>
+  <action name="qcOffsetAction" >
+   <property name="text" >
+    <string>Offset</string>
+   </property>
+  </action>
+  <action name="qcRmsAction" >
+   <property name="text" >
+    <string>RMS</string>
+   </property>
+  </action>
+  <action name="centerOriginForLatestEventAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Center Latest Origin</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

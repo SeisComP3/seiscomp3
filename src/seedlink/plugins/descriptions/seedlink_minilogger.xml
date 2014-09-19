@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="minilogger" category="sources">
+		<description>SEP064 USB Seismometer Interface</description>
+		<configuration>
+			<parameter name="port_path_hint" type="string" default="/dev/ttyACM0">
+				<description>
+				Device path and name of port for USB Seismometer Interface.
+				If the specified port cannot be opened or is not a USB Seismometer
+				Interface device, all available ports will be scanned.
+				</description>
+			</parameter>
+			<parameter name="allow_set_interface_attribs" type="int" default="1">
+				<description>
+				Allow low-level setting of port interface attributes when available
+				ports are scanned to find a USB Seismometer Interface device, 0=NO, 1=Yes.
+				Setting 1 (=Yes) may help successful detection and correct reading of the
+				USB Seismometer Interface device, particularly for the RasberryPi, but can
+				have adverse effects on other devices, terminals, etc. open on the system.
+				</description>
+			</parameter>
+			<parameter name="mswrite_header_sample_rate" type="double" default="-1">
+				<description>
+				Sets a fixed sample rate to report in the miniseed file header.
+				The default (-1) sets an estimated sample rate based on recent packet start
+				times. This estimated sample rate will vary slightly over time, potentially
+				producing errors in some software when reading the miniseed files.
+				See also: nominal_sample_rate
+				</description>
+			</parameter>
+			<parameter name="mswrite_data_encoding_type" type="string" default="STEIM2">
+				<description>
+				SEED data encoding type for writing miniseed files.
+				Supported values are: INT16, INT32, STEIM1, STEIM2
+				</description>
+			</parameter>
+			<parameter name="channel_prefix" type="string" default="SH">
+				<description>
+				The initial letters to set for the miniseed header 'channel', will be
+				prepended to the component.
+				</description>
+			</parameter>
+			<parameter name="component" type="string" default="Z">
+				<description>
+				Component of seismogram, one of Z, N or E.
+				</description>
+			</parameter>
+			<parameter name="do_settings_sep064" type="int" default="1">
+				<description>
+				Set sample rate and gain on SEP 064 device, 0=NO, 1=Yes.
+				</description>
+			</parameter>
+			<parameter name="nominal_sample_rate" type="int" default="80">
+				<description>
+				Nominal sample rate per second, one of 20, 40 or 80.
+				</description>
+			</parameter>
+			<parameter name="nominal_gain" type="int" default="4">
+				<description>
+				Nominal gain, one of 1, 2 or 4.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

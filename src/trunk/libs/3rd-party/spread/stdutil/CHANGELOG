@@ -1,0 +1,14 @@
+v1.1.0, May 2009
+
+Changed the build so that the functions in stdthread.h are always defined, but most will simply 
+return error codes when not built in a reentrant manner.  Added a "null mutex" that does nothing 
+to allow user programs to always successfully call at least the mutex functions even in a 
+non-reentrant build.
+
+v1.0.1, November 2007
+
+Fixed a few minor bugs.
+
+v1.0.0, November 2006
+
+First major release of StdUtil library.

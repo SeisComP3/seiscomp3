@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scchkcfg" category="Utilities" standalone="true">
+		<description>Checks a module configuration.</description>
+		<command-line>
+			<synopsis>
+				scchkcfg {mod-name} [standalone]
+			</synopsis>
+			<description>
+				Reads the configuration of {mod-name} and checks for case-sensitivity
+				issues. If standalone is not given, it checks all 6 configurations
+				files (including global.cfg), 3 otherwise.
+			</description>
+		</command-line>
+	</module>
+</seiscomp>

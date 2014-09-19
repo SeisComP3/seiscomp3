@@ -1,0 +1,59 @@
+<HTML><HEAD><TITLE>Manpage of FL_disconnect</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_disconnect</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_disconnect - destroy a Flush Spread connection between an application and a Spread daemon.
+
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_disconnect(mailbox </B><I>mbox</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_disconnect</B>
+
+should be called when the application is finished
+with a connection to a Spread daemon.  The application may have
+other connections still open to the daemon and may open a new
+connection after disconnecting. Any data that was available on
+the connection will be lost after the call returns.
+<P>
+The 
+<I>mbox </I>
+
+should be for the connection you wish to close.
+<H2>RETURN VALUES</H2>
+
+Returns 0 on success or 
+<B>ILLEGAL_SESSION</B>
+
+when the
+<I>mbox</I>
+
+given does not represent a valid connection.
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

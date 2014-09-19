@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="seedlink" category="Acquisition" standalone="true">
+		<description>Real-time waveform server implementing the SeedLink protocol.</description>
+		<configuration>
+			<parameter name="port" type="int" default="18000">
+				<description>
+					Defines the Seedlink port to accept requests. If this port
+					is changed and other modules depend on it (slarchive, processing)
+					those ports must be updated as well!
+				</description>
+			</parameter>
+			<parameter name="filebase" type="dir">
+				<description>
+					Path to the base directory of SeedLink data files (disk buffer).
+				</description>
+			</parameter>
+			<parameter name="network" type="string">
+				<description>
+					Default network code. Used when a network code is omitted by a client
+					in STATION request. Should be set to the network code of the majority
+					of configured stations. 1 or 2 characters long, uppercase.
+				</description>
+			</parameter>
+			<parameter name="trusted" type="list:string" default="127.0.0.0/8">
+				<description>
+					List of trusted addresses.
+				</description>
+			</parameter>
+			<parameter name="stream_check" type="boolean" default="true">
+				<description>
+					Check start and end times of streams.
+				</description>
+			</parameter>
+			<parameter name="gap_check_pattern" type="string" default="XXXXX">
+				<description>
+					If stream_check = enabled, also check for gaps in all channels that
+					match given pattern. Register all gaps that are larger than +-0.5 seconds.
+					gap_check_pattern = [EBLV][HLNG][ZNE]|S[NG][ZNE].
+					Disabled to save memory.
+				</description>
+			</parameter>
+			<parameter name="gap_treshold" type="int" default="500000">
+				<description>
+					Time difference between records (microseconds) above which a gap is declared.
+				</description>
+			</parameter>
+			<parameter name="window_extraction" type="boolean" default="true">
+				<description>
+					Can be enabled or disabled. Required for slinktool option -tw.
+				</description>
+			</parameter>
+			<parameter name="window_extraction_trusted" type="boolean" default="true">
+				<description>
+					Same as window_extraction for trusted IP addresses.
+				</description>
+			</parameter>
+			<parameter name="msrtsimul" type="boolean" default="false">
+				<description>
+					If activated Seedlink uses the mseedfifo to read records and
+					only the mseedfifo_plugin is started. This command is useful
+					to playback historic data by eg msrtsimul.
+				</description>
+			</parameter>
+			<parameter name="inventory_connection" type="string" default="">
+				<description>
+					Defines a database read connection to be used for Seedlink
+					station descriptions. If no database is to be used (the default;
+					configure with "") then the station code will be used. Example:
+					"mysql://sysop:sysop@localhost/seiscomp3". If a remote host is
+					specified, ensure that its database server is reachable from
+					this computer.
+				</description>
+			</parameter>
+			<parameter name="info" type="string" default="streams">
+				<description>
+					Info level provided to arbitrary hosts.
+				</description>
+			</parameter>
+			<parameter name="info_trusted" type="string" default="all">
+				<description>
+					Info level provided to trusted hosts.
+				</description>
+			</parameter>
+			<parameter name="request_log" type="boolean" default="true">
+				<description>
+					Whether requests should be logged.
+				</description>
+			</parameter>
+			<parameter name="proc_gap_warn" type="int" default="10">
+				<description>
+					Give warning if an input channel has time gap larger than this (microseconds).
+				</description>
+			</parameter>
+			<parameter name="proc_gap_flush" type="int" default="100000">
+				<description>
+					Flush streams if an input channel has time gap larger than this (microseconds).
+				</description>
+			</parameter>
+			<parameter name="proc_gap_reset" type="int" default="1000000">
+				<description>
+					Reset FIR filters if an input channel has time gap larger than this (microseconds).
+				</description>
+			</parameter>
+			<parameter name="backfill_buffer" type="float" default="0" unit="s">
+				<description>
+					Enable backfilling buffer for out-of-order records.
+					This values defines its capacity in seconds.
+				</description>
+			</parameter>
+			<parameter name="seq_gap_limit" type="int" default="100000">
+				<description>
+					Maximum allowed deviation from the sequence number of oldest packet if
+					packet with requested sequence number is not found. If seq_gap_limit is
+					exceeded, data flow starts from the next packet coming in, otherwise
+					from the oldest packet in buffer.
+				</description>
+			</parameter>
+			<parameter name="connections" type="int" default="500">
+				<description>
+					Total number of TCP/IP connections allowed.
+				</description>
+			</parameter>
+			<parameter name="connections_per_ip" type="int" default="20">
+				<description>
+					Maximum number of TCP/IP connections per IP.
+				</description>
+			</parameter>
+			<parameter name="bytespersec" type="int" default="0">
+				<description>
+					Maximum speed per connection (0: throttle disabled).
+				</description>
+			</parameter>
+			<parameter name="lockfile" type="string" default="@ROOTDIR@/var/run/seedlink.pid">
+				<description>
+					Path to lockfile to prevent multiple instances.
+				</description>
+			</parameter>
+			<parameter name="buffers" type="int" default="100">
+				<description>
+					Size of memory buffer (number of recent Mini-SEED records kept in RAM).
+				</description>
+			</parameter>
+			<parameter name="segments" type="int" default="50">
+				<description>
+					Number of disk buffer segments (files under &lt;dir&gt;/station/segments/
+					where &lt;dir&gt; is the directory given by the filebase parameter).
+				</description>
+			</parameter>
+			<parameter name="segsize" type="int" default="1000">
+				<description>
+					Size of one disk buffer segment in the records (512-byte units).
+				</description>
+			</parameter>
+			<parameter name="blanks" type="int" default="10">
+				<description>
+					Number of blank records to insert after the re-scan of disk buffer
+					if &lt;dir&gt;/station/buffer.xml is not found (assuming the server
+					did not terminate correctly).
+				</description>
+			</parameter>
+			<parameter name="encoding" type="string" default="steim2">
+				<description>
+				Encoding of Mini-SEED records created by SeedLink. The value must be
+				steim1 or steim2. If omitted, the global encoding parameter is used.
+				</description>
+			</parameter>
+			<parameter name="sequence_file_cleanup" type="int" default="0" unit="min">
+				<description>
+				If configured with a value greater than zero then all sequence files
+				created by the chain plugin are deleted which are older than X minutes
+				before Seedlink is started.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+
+	<binding module="seedlink">
+		<description>
+			Configures general station parameters irrespective of a configured plugin.
+
+			If stream_check, gap_check_pattern or gap_treshold is changed it is necessary
+			to remove the files &lt;dir&gt;/*/buffer.xml, where &lt;dir&gt; is the directory
+			given by the filebase parameter. In this case the disk buffer is re-scanned when
+			SeedLink is started (which will take some time).
+		</description>
+		<configuration>
+			<parameter name="access" type="list:string" default="0.0.0.0/0">
+				<description>
+					List of IP addresses or IP/mask pairs (in ipchains/iptables syntax).
+					Only if a client's IP address
+					matches one of those the station is shown (slinktool -L, etc.) and
+					accessible. If omitted, the global access parameter is used.
+					If the global access parameter is not set any client can access the station.
+				</description>
+			</parameter>
+			<parameter name="buffers" type="int" default="100">
+				<description>
+					Size of memory buffer (number of recent Mini-SEED records kept in RAM).
+				</description>
+			</parameter>
+			<parameter name="segments" type="int" default="50">
+				<description>
+					Number of disk buffer segments (files under &lt;dir&gt;/station/segments/
+					where &lt;dir&gt; is the directory given by the filebase parameter).
+				</description>
+			</parameter>
+			<parameter name="segsize" type="int" default="1000">
+				<description>
+					Size of one disk buffer segment in the records (512-byte units).
+				</description>
+			</parameter>
+			<parameter name="blanks" type="int" default="10">
+				<description>
+					Number of blank records to insert after the re-scan of disk buffer
+					if &lt;dir&gt;/station/buffer.xml is not found (assuming the server
+					did not terminate correctly).
+				</description>
+			</parameter>
+			<parameter name="encoding" type="string">
+				<description>
+					Encoding of Mini-SEED records created by SeedLink. The value must be
+					steim1 or steim2. If omitted, the global encoding parameter is used.
+				</description>
+			</parameter>
+			<parameter name="backfill_buffer" type="float" default="0" unit="s">
+				<description>
+					Enable backfilling buffer for out-of-order records when raw samples
+					are transmitted. This values defines its capacity in seconds.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

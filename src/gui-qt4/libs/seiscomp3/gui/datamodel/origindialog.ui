@@ -1,0 +1,647 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>OriginDialog</class>
+ <widget class="QDialog" name="OriginDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>238</width>
+    <height>122</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>1</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Artificial Origin</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Origin</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Depth:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="QDoubleSpinBox" name="depthDoubleSpinBox" >
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> km</string>
+        </property>
+        <property name="decimals" >
+         <number>0</number>
+        </property>
+        <property name="maximum" >
+         <double>1000</double>
+        </property>
+        <property name="minimum" >
+         <double>-100</double>
+        </property>
+        <property name="singleStep" >
+         <double>10</double>
+        </property>
+        <property name="value" >
+         <double>10</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lonLabel" >
+        <property name="text" >
+         <string>Lon:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QDoubleSpinBox" name="lonDoubleSpinBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>130</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> deg</string>
+        </property>
+        <property name="decimals" >
+         <number>4</number>
+        </property>
+        <property name="maximum" >
+         <double>180</double>
+        </property>
+        <property name="minimum" >
+         <double>-180</double>
+        </property>
+        <property name="value" >
+         <double>0</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="latLabel" >
+        <property name="text" >
+         <string>Lat:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Time:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="latDoubleSpinBox" >
+        <property name="minimumSize" >
+         <size>
+          <width>130</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="suffix" >
+         <string> deg</string>
+        </property>
+        <property name="decimals" >
+         <number>4</number>
+        </property>
+        <property name="maximum" >
+         <double>90</double>
+        </property>
+        <property name="minimum" >
+         <double>-90</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QDateTimeEdit" name="dateTimeEdit" >
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="currentSection" >
+         <enum>QDateTimeEdit::YearSection</enum>
+        </property>
+        <property name="displayFormat" >
+         <string>yyyy-MM-dd hh:mm:ss</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="advancedGB" >
+     <property name="enabled" >
+      <bool>true</bool>
+     </property>
+     <property name="title" >
+      <string>Advanced</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <property name="checked" >
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="magSB" >
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="maximum" >
+         <double>10</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.2</double>
+        </property>
+        <property name="value" >
+         <double>5</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="magTypeLabel" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Magnitude Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QComboBox" name="magTypeCB" >
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+        <property name="maxVisibleItems" >
+         <number>30</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="magLabel" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>Magnitude</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="phaseCountLabel" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>4</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text" >
+         <string>PhaseCount</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QDoubleSpinBox" name="phaseCountSB" >
+        <property name="alignment" >
+         <set>Qt::AlignRight</set>
+        </property>
+        <property name="decimals" >
+         <number>0</number>
+        </property>
+        <property name="maximum" >
+         <double>10000</double>
+        </property>
+        <property name="value" >
+         <double>10</double>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sendButton" >
+       <property name="palette" >
+        <palette>
+         <active>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>221</red>
+           <green>223</green>
+           <blue>228</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>85</red>
+           <green>85</green>
+           <blue>85</blue>
+          </color>
+          <color>
+           <red>199</red>
+           <green>199</green>
+           <blue>199</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>239</red>
+           <green>239</green>
+           <blue>239</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>103</red>
+           <green>141</green>
+           <blue>178</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>238</blue>
+          </color>
+          <color>
+           <red>82</red>
+           <green>24</green>
+           <blue>139</blue>
+          </color>
+          <color>
+           <red>232</red>
+           <green>232</green>
+           <blue>232</blue>
+          </color>
+         </active>
+         <inactive>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>221</red>
+           <green>223</green>
+           <blue>228</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>85</red>
+           <green>85</green>
+           <blue>85</blue>
+          </color>
+          <color>
+           <red>199</red>
+           <green>199</green>
+           <blue>199</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>239</red>
+           <green>239</green>
+           <blue>239</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>103</red>
+           <green>141</green>
+           <blue>178</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>238</blue>
+          </color>
+          <color>
+           <red>82</red>
+           <green>24</green>
+           <blue>139</blue>
+          </color>
+          <color>
+           <red>232</red>
+           <green>232</green>
+           <blue>232</blue>
+          </color>
+         </inactive>
+         <disabled>
+          <color>
+           <red>128</red>
+           <green>128</green>
+           <blue>128</blue>
+          </color>
+          <color>
+           <red>221</red>
+           <green>223</green>
+           <blue>228</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>85</red>
+           <green>85</green>
+           <blue>85</blue>
+          </color>
+          <color>
+           <red>199</red>
+           <green>199</green>
+           <blue>199</blue>
+          </color>
+          <color>
+           <red>199</red>
+           <green>199</green>
+           <blue>199</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>128</red>
+           <green>128</green>
+           <blue>128</blue>
+          </color>
+          <color>
+           <red>239</red>
+           <green>239</green>
+           <blue>239</blue>
+          </color>
+          <color>
+           <red>239</red>
+           <green>239</green>
+           <blue>239</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+          <color>
+           <red>86</red>
+           <green>117</green>
+           <blue>148</blue>
+          </color>
+          <color>
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>238</blue>
+          </color>
+          <color>
+           <red>82</red>
+           <green>24</green>
+           <blue>139</blue>
+          </color>
+          <color>
+           <red>232</red>
+           <green>232</green>
+           <blue>232</blue>
+          </color>
+         </disabled>
+        </palette>
+       </property>
+       <property name="text" >
+        <string>Create</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>dateTimeEdit</tabstop>
+  <tabstop>latDoubleSpinBox</tabstop>
+  <tabstop>lonDoubleSpinBox</tabstop>
+  <tabstop>depthDoubleSpinBox</tabstop>
+  <tabstop>sendButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>sendButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OriginDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>278</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>96</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OriginDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>369</x>
+     <y>253</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>179</x>
+     <y>282</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

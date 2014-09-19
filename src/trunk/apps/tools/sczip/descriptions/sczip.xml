@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="sczip" category="Utilities">
+		<description>Compress or expand files with ZIP algorithm</description>
+		<command-line>
+			<synopsis>
+			sczip file.dat -o file.zip
+			sczip file.dat -d -o file.zip
+			</synopsis>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option flag="d" long-flag="decompress">
+					<description>
+					Decompress.
+					</description>
+				</option>
+				<option flag="o" long-flag="output" argument="file">
+					<description>
+					Output file name. Default is stdout.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

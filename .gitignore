@@ -1,0 +1,270 @@
+
+# /
+/build*
+/latex
+/xml
+/html
+/seiscomp3.tag
+/*.kdev4
+/*.config
+/*.creator
+/*.files
+/*.includes
+/*.user
+
+# /doc/
+/doc/base/api-python.rst
+
+# /src/arclink/apps/misc/
+/src/arclink/apps/misc/.pydevproject
+/src/arclink/apps/misc/.project
+
+# /src/arclink/libs/codegen/
+/src/arclink/libs/codegen/*.pyc
+/src/arclink/libs/codegen/*.pyc
+
+# /src/arclink/libs/python/seiscomp/db/generic/
+/src/arclink/libs/python/seiscomp/db/generic/inventory.py
+/src/arclink/libs/python/seiscomp/db/generic/genwrap.py
+/src/arclink/libs/python/seiscomp/db/generic/qc.py
+/src/arclink/libs/python/seiscomp/db/generic/routing.py
+
+# /src/arclink/libs/python/seiscomp/db/seiscomp3/
+/src/arclink/libs/python/seiscomp/db/seiscomp3/sc3wrap.py
+
+# /src/arclink/libs/python/seiscomp/db/xmlio/
+/src/arclink/libs/python/seiscomp/db/xmlio/xmlwrap.py
+
+# /src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/
+/src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/makestamp
+
+# /src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/
+/src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/*.a
+
+# /src/seedlink/plugins/libgcf2-2.3.2/
+/src/seedlink/plugins/libgcf2-2.3.2/config.log
+/src/seedlink/plugins/libgcf2-2.3.2/libgcf2-config.src
+/src/seedlink/plugins/libgcf2-2.3.2/Makefile
+/src/seedlink/plugins/libgcf2-2.3.2/config.status
+/src/seedlink/plugins/libgcf2-2.3.2/libtool
+/src/seedlink/plugins/libgcf2-2.3.2/*.cache
+
+# /src/seedlink/plugins/libgcf2-2.3.2/examples/
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2net
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2block
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2time
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2serialp
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2serialcli
+/src/seedlink/plugins/libgcf2-2.3.2/examples/application
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2ints
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2file
+/src/seedlink/plugins/libgcf2-2.3.2/examples/.deps
+/src/seedlink/plugins/libgcf2-2.3.2/examples/Makefile
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2misc
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2cmos
+/src/seedlink/plugins/libgcf2-2.3.2/examples/g2serial
+/src/seedlink/plugins/libgcf2-2.3.2/examples/.libs
+/src/seedlink/plugins/libgcf2-2.3.2/examples/*.o
+
+# /src/seedlink/plugins/libgcf2-2.3.2/gcftool/
+/src/seedlink/plugins/libgcf2-2.3.2/gcftool/svn-prop.tmp
+/src/seedlink/plugins/libgcf2-2.3.2/gcftool/.deps
+/src/seedlink/plugins/libgcf2-2.3.2/gcftool/gcftool
+/src/seedlink/plugins/libgcf2-2.3.2/gcftool/Makefile
+/src/seedlink/plugins/libgcf2-2.3.2/gcftool/*.o
+
+# /src/seedlink/plugins/libgcf2-2.3.2/src/
+/src/seedlink/plugins/libgcf2-2.3.2/src/config.h
+/src/seedlink/plugins/libgcf2-2.3.2/src/.deps
+/src/seedlink/plugins/libgcf2-2.3.2/src/Makefile
+/src/seedlink/plugins/libgcf2-2.3.2/src/gcf2.h
+/src/seedlink/plugins/libgcf2-2.3.2/src/stamp-h1
+/src/seedlink/plugins/libgcf2-2.3.2/src/*.a
+/src/seedlink/plugins/libgcf2-2.3.2/src/*.la
+/src/seedlink/plugins/libgcf2-2.3.2/src/.libs
+/src/seedlink/plugins/libgcf2-2.3.2/src/*.lo
+/src/seedlink/plugins/libgcf2-2.3.2/src/*.o
+
+# /src/seedlink/plugins/reftek_libs/reftek/
+/src/seedlink/plugins/reftek_libs/reftek/*.a
+/src/seedlink/plugins/reftek_libs/reftek/*.o
+
+# /src/seedlink/plugins/reftek_libs/rtp/
+/src/seedlink/plugins/reftek_libs/rtp/*.a
+/src/seedlink/plugins/reftek_libs/rtp/*.o
+
+# /src/seedlink/plugins/reftek_libs/util/
+/src/seedlink/plugins/reftek_libs/util/*.a
+/src/seedlink/plugins/reftek_libs/util/*.o
+
+# /src/trunk/libs/3rd-party/spread/
+/src/trunk/libs/3rd-party/spread/config.log
+/src/trunk/libs/3rd-party/spread/config.status
+/src/trunk/libs/3rd-party/spread/Makefile
+
+# /src/trunk/libs/3rd-party/spread/daemon/
+/src/trunk/libs/3rd-party/spread/daemon/config.h
+/src/trunk/libs/3rd-party/spread/daemon/Makefile
+/src/trunk/libs/3rd-party/spread/daemon/spmonitor
+/src/trunk/libs/3rd-party/spread/daemon/spread
+/src/trunk/libs/3rd-party/spread/daemon/*.o
+
+# /src/trunk/libs/3rd-party/spread/docs/
+/src/trunk/libs/3rd-party/spread/docs/*.out
+/src/trunk/libs/3rd-party/spread/docs/Makefile
+
+# /src/trunk/libs/3rd-party/spread/examples/
+/src/trunk/libs/3rd-party/spread/examples/flush_user
+/src/trunk/libs/3rd-party/spread/examples/fl_user.to
+/src/trunk/libs/3rd-party/spread/examples/spuser
+/src/trunk/libs/3rd-party/spread/examples/spflooder
+/src/trunk/libs/3rd-party/spread/examples/user.to
+/src/trunk/libs/3rd-party/spread/examples/sptuser
+/src/trunk/libs/3rd-party/spread/examples/Makefile
+/src/trunk/libs/3rd-party/spread/examples/*.o
+
+# /src/trunk/libs/3rd-party/spread/libspread/
+/src/trunk/libs/3rd-party/spread/libspread/*.to
+/src/trunk/libs/3rd-party/spread/libspread/*.tlo
+/src/trunk/libs/3rd-party/spread/libspread/Makefile
+/src/trunk/libs/3rd-party/spread/libspread/*.a
+/src/trunk/libs/3rd-party/spread/libspread/*.lo
+/src/trunk/libs/3rd-party/spread/libspread/*.o
+/src/trunk/libs/3rd-party/spread/libspread/*.so
+
+# /src/trunk/libs/3rd-party/spread/stdutil/
+/src/trunk/libs/3rd-party/spread/stdutil/config.log
+/src/trunk/libs/3rd-party/spread/stdutil/config.status
+/src/trunk/libs/3rd-party/spread/stdutil/lib
+
+# /src/trunk/libs/3rd-party/spread/stdutil/src/
+/src/trunk/libs/3rd-party/spread/stdutil/src/*.to
+/src/trunk/libs/3rd-party/spread/stdutil/src/*.lto
+/src/trunk/libs/3rd-party/spread/stdutil/src/Makefile
+
+# /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
+
+# /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/stdarch_autoconf.h
+
+# /src/trunk/libs/codegen/
+/src/trunk/libs/codegen/*.pyc
+
+# /src/trunk/libs/seiscomp3/datamodel/
+/src/trunk/libs/seiscomp3/datamodel/*.cpp
+/src/trunk/libs/seiscomp3/datamodel/*.h
+/src/trunk/libs/seiscomp3/datamodel/CMakeLists.generated
+
+# /src/trunk/libs/seiscomp3/datamodel/share/
+/src/trunk/libs/seiscomp3/datamodel/share/*.sql
+
+# /src/trunk/libs/swig/
+/src/trunk/libs/swig/DataModel.i
+
+# Enable only known src subdirectories
+/src/*/
+!/src
+!/src/arclink/
+!/src/CMakeLists.txt/
+!/src/gfz/
+!/src/gui-qt4/
+!/src/ipgp/
+!/src/nettab/
+!/src/sed/
+!/src/seedlink/
+!/src/system/
+!/src/trunk/
+!/src/utils/
+
+
+# Libspread builds
+/src/trunk/libs/3rd-party/spread/libspread-util/Makefile
+/src/trunk/libs/3rd-party/spread/libspread-util/config.log
+/src/trunk/libs/3rd-party/spread/libspread-util/config.status
+/src/trunk/libs/3rd-party/spread/libspread-util/docs/E_get_time.3.out
+/src/trunk/libs/3rd-party/spread/libspread-util/docs/Makefile
+/src/trunk/libs/3rd-party/spread/libspread-util/docs/libspread-util.3.out
+/src/trunk/libs/3rd-party/spread/libspread-util/include/Makefile
+/src/trunk/libs/3rd-party/spread/libspread-util/lib/libspread-util.a
+/src/trunk/libs/3rd-party/spread/libspread-util/lib/libspread-util.sa
+/src/trunk/libs/3rd-party/spread/libspread-util/lib/x86_64-unknown-linux-gnu/
+/src/trunk/libs/3rd-party/spread/libspread-util/src/Makefile
+/src/trunk/libs/3rd-party/spread/libspread-util/src/alarm.lo
+/src/trunk/libs/3rd-party/spread/libspread-util/src/alarm.o
+/src/trunk/libs/3rd-party/spread/libspread-util/src/config.h
+/src/trunk/libs/3rd-party/spread/libspread-util/src/data_link.lo
+/src/trunk/libs/3rd-party/spread/libspread-util/src/data_link.o
+/src/trunk/libs/3rd-party/spread/libspread-util/src/events.lo
+/src/trunk/libs/3rd-party/spread/libspread-util/src/events.o
+/src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.a
+/src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.sa
+/src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.so
+/src/trunk/libs/3rd-party/spread/libspread-util/src/memory.lo
+/src/trunk/libs/3rd-party/spread/libspread-util/src/memory.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdcarr.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stddll.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stderror.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdfd.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdhash.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdit.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdskl.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdthread.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdtime.tdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.do
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.ldo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.lo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.ltdo
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.o
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil.tdo

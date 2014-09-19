@@ -1,0 +1,10 @@
+2009.040:
+	- Update my_getaddrinfo() to fall back to the system getaddrinfo()
+	so compiling is not limited to Solaris and Linux.
+	- Add packet start time when printing details of TRACEBUF packets.
+	- Increase maximum log message length from 100 to 200 bytes.
+	- Convert usage of longs to ints so 64-bit build works, the program
+	does not particularly benefit from being a 64-bit executable.
+	- Many small typos.
+
+2004.016: Apparently no change log until this point.

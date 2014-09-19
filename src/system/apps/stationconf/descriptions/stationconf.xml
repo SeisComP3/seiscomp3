@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="stationconf" category="Inventory" standalone="true">
+		<description>Station metadata configurator the old way.</description>
+	</module>
+</seiscomp>

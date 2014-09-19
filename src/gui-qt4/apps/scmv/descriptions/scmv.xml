@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scmv" category="GUI">
+		<description>Map view.</description>
+		<configuration>
+			<parameter name="displaymode" type="string">
+				<description>Set one of the available displaymodes: groundmotion or qualitycontrol</description>
+			</parameter>
+			<parameter name="groundMotionRecordLifeSpan" type="int" default="300" unit="s">
+				<description>Sets the maximum latency in seconds of the ground motion records to be valid.</description>
+			</parameter>
+			<parameter name="removeEventDataOlderThan" type="double" default="43200" unit="s">
+				<description>Sets the time span in seconds to keep events.</description>
+			</parameter>
+			<parameter name="readEventsNotOlderThan" type="double" default="0" unit="s">
+				<description>Sets the time span in seconds to read events initially from database.</description>
+			</parameter>
+			<parameter name="centerOrigins" type="boolean" default="false">
+				<description>
+					If a new origin/event is set/selected this option defines if the map is centered
+					or not at the origin location.
+				</description>
+			</parameter>
+			<parameter name="eventActivityLifeSpan" type="double" default="900" unit="s">
+				<description>
+					Time span of which an event is active after origin time to show blinking associated
+					stations.
+				</description>
+			</parameter>
+			<parameter name="legend" type="boolean" default="true">
+				<description>Enables/disabled the display of the legend at startup.</description>
+			</parameter>
+			<group name="stations">
+				<parameter name="groundMotionFilter" type="string">
+					<description>Sets the filter applied to determine ground motion.</description>
+				</parameter>
+			</group>
+			<group name="display">
+				<description>Allows to define an initial rectangular region for the map.</description>
+				<parameter name="latmin" type="double" default="-90" unit="deg">
+					<description>Minimum latitude in degrees.</description>
+				</parameter>
+				<parameter name="lonmin" type="double" default="-180" unit="deg">
+					<description>Minimum longitude in degrees.</description>
+				</parameter>
+				<parameter name="latmax" type="double" default="90" unit="deg">
+					<description>Maximum latitude in degrees.</description>
+				</parameter>
+				<parameter name="lonmax" type="double" default="180" unit="deg">
+					<description>Maximum longitude in degrees.</description>
+				</parameter>
+			</group>
+		</configuration>
+	</module>
+</seiscomp>

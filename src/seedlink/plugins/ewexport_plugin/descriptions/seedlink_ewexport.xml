@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="ewexport" category="sources">
+		<description>Earthworm export server (TCP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string">
+				<description>
+					Hostname or IP of the Earthworm export server.
+				</description>
+			</parameter>
+			<parameter name="port" type="int">
+				<description>Port of the Earthworm export server.</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<group name="heartbeat">
+				<parameter name="message" type="string" default="alive">
+					<description>
+						Text for heartbeat to server.
+					</description>
+				</parameter>
+				<parameter name="rate" type="int" default="120">
+					<description>
+						Rate at which to expect heartbeats from server in seconds.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

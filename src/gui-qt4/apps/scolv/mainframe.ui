@@ -1,0 +1,309 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainFrame</class>
+ <widget class="QMainWindow" name="MainFrame" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>712</width>
+    <height>684</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>OriginLocator</string>
+  </property>
+  <property name="iconSize" >
+   <size>
+    <width>16</width>
+    <height>16</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QHBoxLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="frameSummary" >
+      <property name="frameShape" >
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <widget class="QWidget" name="tabLocation" >
+       <attribute name="title" >
+        <string>Location</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabMagnitudes" >
+       <attribute name="title" >
+        <string>Magnitudes</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabEventList" >
+       <attribute name="title" >
+        <string>Events</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>663</y>
+     <width>712</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>712</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSettings" >
+    <property name="title" >
+     <string>&amp;Settings</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_File" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen" />
+    <addaction name="actionSave" />
+    <addaction name="separator" />
+    <addaction name="actionQuit" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionShowSummary" />
+    <addaction name="actionShowStations" />
+    <addaction name="actionShowEventList" />
+   </widget>
+   <widget class="QMenu" name="menuEdit" >
+    <property name="title" >
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionUndo" />
+    <addaction name="actionRedo" />
+    <addaction name="separator" />
+    <addaction name="actionCreateArtificialOrigin" />
+   </widget>
+   <addaction name="menu_File" />
+   <addaction name="menuEdit" />
+   <addaction name="menuView" />
+   <addaction name="menuSettings" />
+  </widget>
+  <widget class="QToolBar" name="toolBarEdit" >
+   <property name="windowTitle" >
+    <string>Edit</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionUndo" />
+   <addaction name="actionRedo" />
+  </widget>
+  <action name="actionShowStations" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show stations</string>
+   </property>
+   <property name="iconText" >
+    <string>Show stations</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show stations</string>
+   </property>
+   <property name="shortcut" >
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionShowEventList" >
+   <property name="text" >
+    <string>Show event list</string>
+   </property>
+   <property name="iconText" >
+    <string>Show event list</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show event list</string>
+   </property>
+   <property name="shortcut" >
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionAutoSelect" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>(DEBUG) Auto select incoming origin</string>
+   </property>
+   <property name="iconText" >
+    <string>Auto select incoming origin</string>
+   </property>
+   <property name="toolTip" >
+    <string>Auto select incoming origin</string>
+   </property>
+   <property name="shortcut" >
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionUndo" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="../../libs/seiscomp3/gui/datamodel/icons.qrc" >:/icons/icons/undo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Undo</string>
+   </property>
+   <property name="iconText" >
+    <string>Undo</string>
+   </property>
+   <property name="toolTip" >
+    <string>Undo modifications on the current origin</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="../../libs/seiscomp3/gui/datamodel/icons.qrc" >:/icons/icons/redo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Redo</string>
+   </property>
+   <property name="iconText" >
+    <string>Redo</string>
+   </property>
+   <property name="toolTip" >
+    <string>Redo the most recent undone origin modifications</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+Z</string>
+   </property>
+  </action>
+  <action name="actionShowSummary" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show summary</string>
+   </property>
+   <property name="iconText" >
+    <string>Show summary</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show summary</string>
+   </property>
+   <property name="shortcut" >
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionQuit" >
+   <property name="text" >
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionOpen" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionToolbars" >
+   <property name="text" >
+    <string>Toolbars</string>
+   </property>
+  </action>
+  <action name="actionCreateArtificialOrigin" >
+   <property name="text" >
+    <string>Create artificial origin</string>
+   </property>
+   <property name="iconText" >
+    <string>Create artificial origin</string>
+   </property>
+   <property name="toolTip" >
+    <string>Create artificial origin</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../../../libs/seiscomp3/gui/datamodel/icons.qrc" />
+  <include location="../../libs/seiscomp3/gui/datamodel/icons.qrc" />
+ </resources>
+ <connections/>
+</ui>

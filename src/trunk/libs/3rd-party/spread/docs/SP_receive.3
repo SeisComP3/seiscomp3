@@ -1,0 +1,404 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_RECEIVE 3 "February 2006" Spread "User Manuals"
+.SH NAME
+SP_receive, SP_scat_receive \- Receive message from Spread
+.SH SYNOPSIS
+.B #include <sp.h>
+.sp
+.BI "int SP_receive( mailbox " mbox ", service *" service_type ", char " sender "[MAX_GROUP_NAME], int " max_groups ", int *" num_groups ", char " groups "[][MAX_GROUP_NAME], int16 *" mess_type ", int *" endian_mismatch ", int " max_mess_len ", char *" mess );
+.sp
+.BI "int SP_scat_receive( mailbox " mbox ", service *" service_type ", char " sender "[MAX_GROUP_NAME], int " max_groups ", int *" num_groups ", char " groups "[][MAX_GROUP_NAME], int16 *" mess_type ", int *" endian_mismatch ", scatter *" scat_mess );
+.SH DESCRIPTION
+.B SP_receive
+is the general purpose receive function for the
+toolkit.  This receives not only data messages but also membership
+messages for the connection.  Messages for all groups joined on
+this connection will arrive to the same mailbox so a call to 
+.B SP_receive
+will get a single 'message' from any one of the 
+groups. After the receive completes a number of fields are set to 
+values indicating meta information about the message (such as groups,
+mess_type, endianness, type, etc).
+
+This function is the most complex used in Spread because it is the 
+only way for the system to return information to the application. The
+meaning of many of the fields changes depending on whether the message
+is a data message or a membership message.
+
+The 
+.B SP_receive 
+function will block if no messages are available.
+
+The
+.I mbox
+gives which connection to receive a message on.
+.I Service_type
+is a pointer to a variable of type 'service' which will be set 
+to the message type of the message just received.  This
+will be either a REG_MESSAGE or MEMBERSHIP_MESS, and the specific type.
+The variable that service_type points to is also an input parameter and should be set
+to either 0, for normal semantics,  or DROP_RECV (a defined constant) if you want to
+receive the 'non-reliable' semantics that will truncate messages if the
+provided buffers for message data and group lists are too small. More information
+about DROP_RECV semantics are provided later in this man page.
+
+The rest of the parameters differ in meaning depending on the 
+.I service_type. 
+If the
+.I service_type
+is a REG_MESSAGE (i.e. data message) then:
+
+The
+.I sender
+is a pointer to an array of characters of at least MAX_GROUP_NAME size.  
+This will be set to the name of the sending connection(its private group name).
+
+The 
+.I max_groups
+is the maximum number of groups you have allocated space for in 
+the 'groups' array passed to the receive function.
+
+.I Num_groups
+is a pointer to an int which will be set to the number of groups 
+set in the 'groups' array.
+
+The 
+.I groups
+array holds upto
+.I max_groups
+group names, each of which is a string of at most MAX_GROUP_NAME characters. All
+of the groups which are receiving this message will be listed here, unless the array
+is too small and then as many as can fit will be listed and the 
+.I num_groups
+value will be set to be negative. For example, if your groups array could store 5 
+group names, but a message for 7 groups arrived, the first five group names would
+appear in the
+.I groups
+array and  
+.I num_groups
+would be set to \-7.
+
+The 
+.I mess_type
+field will be set to the message type field the application sent with the 
+original message, this is only a short int (16bits). This value is already
+endian corrected before the application receives it.
+
+.I Endian_mismatch
+will be set to true (1) if the endianness of the sending machine 
+differs from that of this receiving machine. If the 
+.B BUFFER_TOO_SHORT 
+error is returned then the endian_mismatch field will be set to the size of 
+the incoming message as a negative value. So if the message requires 300 bytes
+of buffer space and only 200 bytes was provided in the 
+.I mess 
+buffer, 
+.I endian_mismatch 
+will be set to \-300.
+
+The actual message body being received will be passed into the buffer given by
+.I mess
+which is at least 
+.I max_mess_len 
+bytes in size. If the message being received is larger then this buffer the default
+behaivor will be to return a 
+.B BUFFER_TOO_SHORT 
+error and provide the required length in the 
+.I endian_mismatch 
+field. If the DROP_RECV flag was passed in the 
+.I service_type
+field, then as much data as possible will be returned and the extra
+data will be discarded by the system and the return value of 
+.B SP_receive
+will indictate an error.
+If the
+.B SP_scat_receive
+form is used then instead of the
+.I mess
+buffer and length fields, a single 
+.I scat_mess
+scatter structure should be passed to receive filled in with whatever buffers
+you wish to receive into and their lengths. These buffers must be valid memory areas.
+They will be filled in by the receive call in the order they are listed.
+
+If this is a MEMB_MESSAGE (i.e. membership message) and it 
+specifically is a TRANS_MESS, then:
+
+The 
+.I sender
+char array will be set to the name of the group for which the membership change is occurring.
+
+The 
+.I max_groups
+and 
+.I max_mess_len
+fields are not used and the
+.I num_groups
+is 0 and 
+.I groups
+since there are no normal groups for a transitional membership, the sender field is used instead. 
+The 
+.I mess_type
+field is set to -1. The
+.I endian_mismatch
+field will be zero since the transitional does not have any endian issues. The
+.I mess
+field contains only the group id of the group for which the transitional
+message applies. So the layout of the message body is
+
+.RS
+.TP
+.B group_id;
+.RE
+
+
+So in essence the only information you get is about what group the signal applies to which 
+is provided by the 
+.I sender
+field and the group_id value.
+
+The importance
+of the TRANS_MEMB_MESS is that it tells the application that all messages received
+after it and before the REG_MEMB_MESS for the same group are 'clean up' messages to
+put the messages in a consistant state before actually changing memberships.  For more
+explanations of this please see other documentation and research papers.
+
+If This is a MEMB_MESSAGE (i.e. membership message) and it 
+specifically is a REG_MEMB_MESS, then:
+
+The 
+.I sender
+char array will be set to the name of the group for which the membership change is occuring.
+
+The 
+.I max_groups
+and
+.I max_mess_len
+fields have the same meaning as before, and the 
+.I mess_type
+field will be set to the index of this process in the array of group members. The
+.I endian_mismatch
+field will again be set to 0 since there are no endian issues with regular memberships.
+
+The
+.I groups
+array and
+.I mess
+body are used to provide two kinds of membership information about the change that just
+occured in this group.  The 
+.I num_groups
+field will be set to the number of members in the group in the 
+.B new
+membership (i.e. after the change occured). Correspondingly the 
+.I groups
+array will be set to the private group names of all members of this group
+in the 
+.B new
+membership.  This list of names is always in the same order at all receipients
+and thus can be used to deterministically pick a group representative if
+one is needed by the application. The actual ordering has changed with different
+versions of Spread, but is currently ordered first by the daemon the member is
+connected to and then by their private name. The ordering of the daemons is the
+same as the order they are listed in the spread.conf file. 
+
+The second set of information is stored in the message body and provides a list
+of all the private group names of those processes which came together 
+from the old group membership into this new membership. 
+
+
+All fields are contiguous in the message buffer. 
+Since
+the layout of the membership message can change between versions, the
+best way to process them is to use the functions we provide that translate the
+message body into well-defined structures of membership information. The parsing
+functions have two variants, one for regular message bodies that are one contiguous
+array of bytes, and one for message bodies set up as scatters.
+
+.RS
+.TP
+.B SP_get_memb_info
+.br
+.TP
+.B SP_get_vs_sets_info
+.br
+.TP
+.B SP_get_vs_set_members
+.RE
+
+.RS
+.TP
+.B SP_scat_get_memb_info
+.br
+.TP
+.B SP_scat_get_vs_sets_info
+.br
+.TP
+.B SP_scat_get_vs_set_members
+.RE
+
+These three functions fill in standard structures that the application provides with all of the gid and vs set 
+information about the membership. 
+
+So if an application wants only to know about it's 
+own vs_set (identical to the information Spread provided prior to version 4) then 
+that can be achieved by two function calls. First to 
+.B SP_get_memb_info
+and then to
+.B SP_get_vs_set_members.
+
+Each vs_set is defined as a number of members and a character array of the members names. The type
+for the array is
+.I char members[][MAX_GROUP_NAME].
+
+
+Each membership message may contain a number of vs_sets, as when a network merge occurs, several different
+partitions could be merging at the same time, with each partition having it's own set of members who came
+together between the old and new memberships. 
+
+If you want to parse the contents of the membership message body yourself, the following paragraphs
+specify the current layout of the fields. This layout can definitely change (and has several times in
+the past) and we make not guarantees about future changes. So if you choose to parse it yourself you may
+have to update your code when new Spread releases are made. 
+
+The membership message body includes the
+following fields in order. Each is either a defined structure or if it is an integer, then it is an unsigned 32 bit integer. The vs sets are defined below. 
+
+.RS
+.TP
+.B group_id gid;
+.TP
+.B unsigned int num_vs_sets;
+.TP
+.B unsigned int local_vs_set_offset;
+.TP
+and a list of
+.B vs_sets;
+.RE
+
+All of the vs_sets are stored continuously in the membership messages body, 
+so after reading one vs_set, the next vs_set begins at the next byte. Each vs_set starts with
+the integer num_vs_members value so that the application can determine the length of the members array to read. 
+
+.RS
+.TP
+.B unsigned int num_vs_members;
+.TP
+.B char members[][MAX_GROUP_NAME]
+.RE
+
+The vs_set members array will have num_vs_members group names, each of which is
+a fixed length string.  The content of the vs_set members array is dependent 
+upon the type of the membership change:
+
+.RS
+.TP 0.8i
+.B CAUSED_BY_JOIN:
+vs_set contains the private group of the joining process.
+.TP
+.B CAUSED_BY_LEAVE:
+vs_set contains the private group of the leaving process.
+.TP
+.B CAUSED_BY_DISCONNECT:
+vs_set contains the private group of the disconnecting process.
+.TP
+.B CAUSED_BY_NETWORK:
+vs_set contains the group names of the members of the new membership who came 
+together  
+to the new membership. For each set of members who came together an additional
+vs_set will exist. The vs_set containing the local application private group name
+will contain those members who came with 
+.B me.
+.RE
+
+If this is a MEMB_MESSAGE (i.e. membership message) and it is
+.B neither
+a REG_MEMB_MESS or a TRANS_MEMB_MESS, then it represents exactly the 
+situtation where the member receiving this message has left a group and
+this is notification that the leave has occured, thus it is sometimes called 
+a 
+.B self-leave
+message.  The simplest test for this is if a message is CAUSED_BY_LEAVE and 
+REG_MEMB_MESS is FALSE then it is a 
+.B self-leave
+message.  TRANS_MEMB_MESS never have a CAUSED_BY_ type because they only serve
+to signal upto where SAFE delivery and AGREED delivery (with no holes) is guaranteed
+in the complete 
+.B old
+group membership.
+
+The other members of the group this member just left will receive a normal TRANS_MEMB_MESS, 
+REG_MEMB_MESS pair as described above showing the membership change.
+
+The fields of SP_receive in this case will be as follows:
+
+The 
+.I sender
+char array will be set to the name of the group for which the membership change is occuring.
+
+The 
+.I max_groups
+and
+.I max_mess_len
+fields have the same meaning as before, and the 
+.I mess_type
+and 
+.I endian_mismatch
+fields will again be set to 0.
+
+The
+.I groups
+array and
+.I mess
+body are used to provide two kinds of membership information about the change that just
+occured in this group.  The 
+.I num_groups
+field will be set to 0 and the 
+.I groups
+array will be empty, since this member is no longer part of the group and thus has
+no knowledge of it. The
+.I mess
+body will also be empty. 
+
+.SH "RETURN VALUES"
+Returns the size of the message received 
+on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_SESSION
+The 
+.I mbox
+given to receive on was illegal.
+.TP
+.B ILLEGAL_MESSAGE
+The message had an illegal structure, like a scatter not filled out correctly.
+.TP
+.B CONNECTION_CLOSED
+During communication to receive the message communication errors occured
+and the receive could not be completed.
+.TP
+.B GROUPS_TOO_SHORT
+If the 
+.I groups
+array is too short to hold the entire list of groups this message was sent to 
+then this error is returned and the 
+.I num_groups 
+field will be set to the negative of the number of groups needed.
+.TP
+.B BUFFER_TOO_SHORT
+If the message body buffer
+.I mess
+is too short to hold the message being received then this error is returned and the 
+.I endian_mismatch 
+field is set to the negative value of the required buffer length.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

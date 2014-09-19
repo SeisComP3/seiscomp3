@@ -1,0 +1,7 @@
+INSTALL(
+	DIRECTORY .
+	DESTINATION ${SC3_PACKAGE_SHARE_DIR}/templates/arclink
+	PATTERN ".svn" EXCLUDE
+	PATTERN "CMakeLists.txt" EXCLUDE
+)
+

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scinv" category="Inventory">
+		<description>Inventory database synchronisation.</description>
+		<command-line>
+			<synopsis>
+			scinv command [options] [files]
+			</synopsis>
+			<description>
+			Command is one of: sync, merge, apply, keys, ls and check.
+			</description>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+
+			<group name="Manager">
+				<option long-flag="filebase" argument="dir">
+					<description>
+					Filebase to check for XML files. If not given, all XML files passed
+					are checked.
+					</description>
+				</option>
+				<option long-flag="rc-dir" argument="dir">
+					<description>
+					If given, rc (resource) files will be created in this directory for
+					each station. The station descriptions will be from the last available
+					epoch.
+					</description>
+				</option>
+				<option long-flag="key-dir" argument="dir">
+					<description>
+					If given this directory is used to synchronise key files.
+					</description>
+				</option>
+				<option flag="o" long-flag="output" argument="file">
+					<description>
+					Output file.
+					</description>
+				</option>
+				<option long-flag="level" argument="int">
+					<description>
+					Information level reported by ls. One of "net", "sta",
+					"cha" or "resp". Default is "cha".
+					</description>
+				</option>
+				<option long-flag="compact">
+					<description>
+					Enable compact output for ls: each object one line.
+					</description>
+				</option>
+			</group>
+			<group name="Merge">
+				<option long-flag="strip">
+					<description>
+					Remove unreferenced objects (dataloggers, sensors, ...).
+					</description>
+				</option>
+			</group>
+			<group name="Sync">
+				<option long-flag="create-notifier">
+					<description>
+					If an output file is given then all notifiers will be saved and not
+					the result set itself.
+					</description>
+				</option>
+				<option long-flag="no-keys">
+					<description>
+					Do not synchronise key files.
+					</description>
+				</option>
+				<option long-flag="no-rc">
+					<description>
+					Do not synchronise rc files.
+					</description>
+				</option>
+				<option long-flag="purge-keys">
+					<description>
+					(default) Delete key files if a station does not exist in inventory.
+					</description>
+				</option>
+				<option long-flag="no-purge-keys">
+					<description>
+					Do not delete key files if a station does not exist in inventory.
+					</description>
+				</option>
+				<option long-flag="test">
+					<description>
+					Do not send any notifiers and just output resulting operations and
+					conflicts.
+					</description>
+				</option>
+			</group>
+		</command-line>
+		<configuration>
+			<parameter name="syncKeys" type="boolean" default="true">
+				<description>
+					Synchronise key files.
+				</description>
+			</parameter>
+			<parameter name="purgeKeys" type="boolean" default="true">
+				<description>
+					Delete key files if a station does not exist in inventory.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+</seiscomp>

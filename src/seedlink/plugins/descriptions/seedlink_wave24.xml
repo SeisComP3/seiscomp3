@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="wave24" category="sources">
+		<description>Wave24</description>
+		<configuration>
+			<parameter name="comport" type="string" default="/dev/data">
+				<description>Serial port.</description>
+			</parameter>
+			<parameter name="baudrate" type="int" default="57600">
+				<description>Baud rate.</description>
+			</parameter>
+			<parameter name="proc" type="string" default="wave24bb">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

@@ -1,0 +1,17 @@
+SET(PACKAGE_NAME QL2SC)
+SET(APP_NAME ql2sc)
+
+SET(
+	${PACKAGE_NAME}_SOURCES
+		app.cpp
+		config.cpp
+		main.cpp
+		quakelink.cpp
+)
+
+SC_ADD_EXECUTABLE(${PACKAGE_NAME} ${APP_NAME})
+SC_LINK_LIBRARIES_INTERNAL(${APP_NAME} client)
+SC_INSTALL_INIT(${APP_NAME} ../../templates/initd.py)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scconfig" category="Utilities" standalone="true">
+		<description>
+			Configuration and system managment frontend.
+		</description>
+	</module>
+</seiscomp>

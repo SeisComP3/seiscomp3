@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="diskmon" category="System" standalone="true">
+		<description>Monitors a disk and sends notifications.</description>
+		<configuration>
+			<parameter name="threshold" type="int" default="95">
+				<description>
+					Disk usage threshold in percent. Each time when the disk usage exceeds this level,
+					an alert e-mail is send to the user. Note that disk usage is only checked when a
+					cron job of seiscomp check is installed or seiscomp check is called
+					regularly by other means.
+				</description>
+			</parameter>
+			<parameter name="emails" type="list:string" default="">
+				<description>
+					Comma-separated list of e-mail addresses to notify when disk usage
+					threshold is exceeded.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+</seiscomp>

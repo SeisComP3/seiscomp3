@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scimex" category="Utilities">
+		<description>SeisComP3 event exchange between two systems.</description>
+		<configuration>
+			<parameter name="mode" type="string">
+				<description>
+				Mode of operation. Options are IMPORT or EXPORT.
+				</description>
+			</parameter>
+			<parameter name="cleanupinterval" type="double" unit="s">
+				<description>Cache lifetime for objects.</description>
+			</parameter>
+			<parameter name="subscriptions" type="list:string">
+				<description>
+				Only used in export mode. A list of message groups to subscribe.
+				</description>
+			</parameter>
+			<parameter name="conversion" type="string">
+				<description>
+				Used only in import mode. It defines the source format of the
+				messages that need to be converted. Currently the import of
+				SeisComP3 datamodel version 0.51 (imexscdm0.51)
+				is supported which was used in release Barcelona (2008).
+				</description>
+			</parameter>
+			<parameter name="exportHosts" type="string">
+				<description>
+				A list of names of recipients. These are used in hosts.$name directives
+				(see below) to define addresses, filter criteria, etc.
+				applicable to each recipient.
+				</description>
+			</parameter>
+
+			<parameter name="importHosts" type="string">
+				<description>
+				List of names of suppliers from which to export. These are used with hosts.$name directives similarly to exportHosts.
+				</description>
+			</parameter>
+			<group name="criteria">
+				<struct type="Filter type">
+					<description>A definition of an event filter.</description>
+					<parameter name="latitude" type="tuple:double">
+						<description>
+						Pair of doubles that defines the latitude range, e.g. -90:90.
+						</description>
+					</parameter>
+					<parameter name="longitude" type="tuple:double">
+						<description>
+						Pair of doubles that defines the longitude range, e.g. -180:180.
+						</description>
+					</parameter>
+					<parameter name="magnitude" type="tuple:double">
+						<description>
+						Pair of doubles that defines the magnitude range, e.g. 3:10.
+						</description>
+					</parameter>
+					<parameter name="arrivalcount" type="int">
+						<description>
+						Number of minimum arrivals.
+						</description>
+					</parameter>
+					<parameter name="agencyID" type="list:string">
+						<description>
+						White list of AgencyIDs (the agency identifier which
+						appears in the objects sent over the export-import link).
+						</description>
+					</parameter>
+				</struct>
+			</group>
+			<group name="hosts">
+				<struct type="Host system type">
+					<description>
+					A sink definition used for either import or export.
+					</description>
+					<parameter name="address" type="string">
+						<description>
+						Address of a sink, as a host name with an optional port
+						number e.g. 'address = 192.168.1.1' or
+						'address = somewhere.com:4803'
+						</description>
+					</parameter>
+					<parameter name="criteria" type="string">
+						<description>
+						Defining filter criteria name for sink, e.g. criteria = world-xxl.
+						The criteria must be defined in the criteria.* configuration lines.
+						</description>
+					</parameter>
+					<parameter name="filter" type="boolean" default="true">
+						<description>
+						Enables/disables filtering based on defined criteria.
+						If set to false, all events will pass, even if one
+						or more criteria are defined.
+						</description>
+					</parameter>
+					<parameter name="conversion" type="string">
+						<description>
+						Optional target format for export.
+						</description>
+					</parameter>
+					<parameter name="useDefinedRoutingTable" type="boolean" default="false">
+						<description>
+						Enables/disables defined routing tables.
+						</description>
+					</parameter>
+					<parameter name="routingTable" type="list:string">
+						<description>
+						Defining routing tables in the meaning of mapping objects to message
+						groups. E.g. Pick:NULL, StationAmplitude:NULL, Origin:LOCATION,
+						StationMagnitude: MAGNITUDE, NetworkMagnitude:MAGNITUDE,
+						MagnitudeReference:MAGNITUDE, OriginReference:EVENT,
+						Event:EVENT. Specifying NULL for the message group causes
+						messages to be thrown away/dropped/discarded.
+						</description>
+					</parameter>
+				</struct>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="SCIMEX">
+				<option long-flag="print-default-routingtable">
+					<description>
+					Print the default object routing table.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

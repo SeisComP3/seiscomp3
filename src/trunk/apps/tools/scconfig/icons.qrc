@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>icons/add.png</file>
+        <file>icons/remove.png</file>
+        <file>icons/lock.png</file>
+        <file>icons/unlock.png</file>
+        <file>icons/trace.png</file>
+        <file>icons/config.png</file>
+        <file>icons/info.png</file>
+        <file>icons/inventory.png</file>
+        <file>icons/bindings.png</file>
+        <file>icons/document.png</file>
+        <file>icons/document_link.png</file>
+        <file>icons/document_folder.png</file>
+        <file>icons/system.png</file>
+        <file>icons/autostart_add.png</file>
+        <file>icons/autostart_remove.png</file>
+        <file>icons/user-settings.png</file>
+        <file>icons/system-settings.png</file>
+        <file>icons/info_small.png</file>
+        <file>icons/success_small.png</file>
+        <file>icons/warning_small.png</file>
+        <file>icons/error_small.png</file>
+        <file>icons/update-config.png</file>
+    </qresource>
+</RCC>

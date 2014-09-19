@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="orb" category="sources">
+		<description>Antelope ORB (TCP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string">
+				<description>Hostname or IP of the Antelope ORB.</description>
+			</parameter>
+			<parameter name="port" type="int" default="39136">
+				<description>Port of the Antelope ORB.</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

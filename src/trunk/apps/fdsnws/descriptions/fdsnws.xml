@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="fdsnws" category="Utilities">
+		<description>
+		Provides FDSN Web Services
+		</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+		</command-line>
+		<configuration>
+			<parameter name="listenAddress" type="IP" default="0.0.0.0">
+				<description>
+				Defines the bind address of the server. &quot;0.0.0.0&quot; allows
+				any interface to connect to this server whereas &quot;127.0.0.0&quot;
+				only allows connections from localhost.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="8080">
+				<description>
+				Server port to listen for incoming requests. Note: The FDSN Web
+				service specification defines the service port 80. Please refer
+				to the documentation on how to serve on privileged ports.
+				</description>
+			</parameter>
+			<parameter name="connections" type="int" default="5">
+				<description>
+				Number of maximum simultaneous requests.
+				</description>
+			</parameter>
+			<parameter name="queryObjects" type="int" default="10000">
+				<description>
+				Maximum number of objects per query, used in fdsnws-station and
+				fdsnws-event to limit main memory consumption.
+				</description>
+			</parameter>
+			<parameter name="realtimeGap" type="int">
+				<description>
+				Restricts end time of requests to current time - realtimeGap
+				seconds. Negative values allowed. Used in fdsnws-dataselect.
+				WARNING: If this value is unset and a realtime recordsource
+				(e.g. slink) is used, requests may block if end time in future
+				is requested.
+				</description>
+			</parameter>
+			<parameter name="samplesM" type="float">
+				<description>
+				Maximum number of samples (in units of million) per query, used
+				in fdsnws-dataselect to prevent a single user to block one
+				connection with a large request.
+				</description>
+			</parameter>
+			<parameter name="htpasswd" type="string" default="@CONFIGDIR@/fdsnws.htpasswd">
+				<description>
+				Path to password file used in fdsnws-station/queryauth. The
+				format is 'username:password' separated by lines. Because of the
+				HTTP digest authentication method required by the FDSN
+				specification, the passwords have to be stored in plain text.
+				</description>
+			</parameter>
+			<parameter name="accessLog" type="string">
+				<description>
+				Path to access log file. If unset no access log is created.
+				</description>
+			</parameter>
+			<parameter name="allowRestricted" type="boolean" default="true">
+				<description>
+				Enables/disables access to restricted inventory data
+				</description>
+			</parameter>
+			<parameter name="serveDataSelect" type="boolean" default="true">
+				<description>
+				Enables/disables the DataSelect service.
+				</description>
+			</parameter>
+			<parameter name="serveEvent" type="boolean" default="true">
+				<description>
+				Enables/disables the Event service.
+				</description>
+			</parameter>
+			<parameter name="serveStation" type="boolean" default="true">
+				<description>
+				Enables/disables the Station service.
+				</description>
+			</parameter>
+			<parameter name="fileNamePrefix" type="string" default="fdsnws">
+				<description>
+				Defines the prefix for the default filenames if downloading and saving data from within a browser.
+				For data loaded using dataselect, it is thus fdsnws.mseed by default.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+</seiscomp>

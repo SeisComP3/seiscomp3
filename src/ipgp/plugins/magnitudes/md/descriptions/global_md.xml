@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+        <plugin name="Md">
+                <extends>global</extends>
+                <description>
+                Duration magnitude plugin
+                </description>
+	</plugin>
+	<binding name="Md" module="global">
+		<description>
+		Duration magnitude plugin
+		</description>
+		<configuration>
+			<group name="md">
+				<parameter name="seismo" type="int" default="9">
+					<description>
+					Default filter type to use before processing and after deconvolution. It's possible to set :
+					1 for a Wood-Anderson seismometer
+					2 for a 5sec generic Seismometer
+					3 for a WWSSN LP seismometer
+					4 for a WSSN SP seismometer
+					5 for a Generic Seismometer
+					6 for a Butterworth Low pass filter
+					7 for a Butterworth High pass filter
+					8 for a Butterworth Band pass filter
+					9 for a 1Hz eigen-frequency L4C seismometer
+					</description>
+				</parameter>
+				<parameter name="butterworth" type="string" default="&quot;3,1.5&quot;">
+					<description>
+					Butterworth filter parameter applied to the signal
+					</description>
+				</parameter>
+				<parameter name="depthmax" type="double" default="200" unit="km">
+					<description>
+					Maximum depth at which duration magnitude is valid
+					</description>
+				</parameter>
+				<parameter name="deltamax" type="double" default="400" unit="km">
+					<description>
+					Maximum distance between earthquake and station at which duration magnitude is valid
+					</description>
+				</parameter>
+				<parameter name="snrmin" type="double" default="1.2">
+					<description>
+					Signal to noise ratio below which the coda is reached
+					</description>
+				</parameter>
+				<parameter name="mdmax" type="double" default="5.0">
+					<description>
+					Maximum expected duration magnitude value
+					This is used to find how much data should be loaded for a given station by reversing the formula
+					</description>
+				</parameter>
+				<parameter name="fma" type="double" default="-0.87">
+					<description>
+					FMA regional coefficient
+					See Hypo2000 manual
+					</description>
+				</parameter>
+				<parameter name="fmb" type="double" default="2.0">
+					<description>
+					FMB regional coefficient
+					See Hypo2000 manual
+					</description>
+				</parameter>
+				<parameter name="fmd" type="double" default="0.0035">
+					<description>
+					FMD regional coefficient
+					See Hypo2000 manual
+					</description>
+				</parameter>
+				<parameter name="fmf" type="double" default="0.0">
+					<description>
+					FMF regional coefficient
+					See Hypo2000 manual
+					</description>
+				</parameter>
+				<parameter name="fmz" type="double" default="0.0">
+					<description>
+					FMZ regional coefficient
+					See Hypo2000 manual
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

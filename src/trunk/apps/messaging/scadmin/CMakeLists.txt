@@ -1,0 +1,16 @@
+SET(SCADMIN_TARGET scadmin)
+
+SET(
+    SCADMIN_HEADERS
+    admin.h
+)
+
+SET(
+    SCADMIN_SOURCES
+    admin.cpp
+    scadmin.cpp
+)
+
+SC_ADD_EXECUTABLE(SCADMIN ${SCADMIN_TARGET})
+TARGET_LINK_LIBRARIES(${SCADMIN_TARGET} ${Boost_program_options_LIBRARY} )
+SC_LINK_LIBRARIES_INTERNAL(${SCADMIN_TARGET} client)

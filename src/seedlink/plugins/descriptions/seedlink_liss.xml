@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="liss" category="sources">
+		<description>LISS server (TCP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string" default="&quot;$STATION.$NET.liss.org&quot;">
+				<description>
+					Hostname or IP of the LISS server.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="4000">
+				<description>Port of the LISS server</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

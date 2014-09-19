@@ -1,0 +1,377 @@
+#include "encryptpasswordhandle.h"
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+namespace SSLWrapper {
+
+// Creators
+EncryptPasswordHandle::EncryptPasswordHandle() {
+	throw EncryptError("Cannot create a password handle without parameters.");
+}
+
+EncryptPasswordHandle::EncryptPasswordHandle(std::string filename, std::string masterpassword, std::string dcid, std::string dcname, std::string dcemail) {
+	
+	this->letters = "abcdefghijkmnopqrstuvxwyz[]{}+#!&%023456789ABCDEFGHIJKLMNOPQRSTUVXWYZ";
+	
+	if (filename.empty ()){
+		throw EncryptError("password file is invalid");
+	}
+	
+	if (masterpassword.empty ()){
+		throw EncryptError("master password should not be empty");
+	}
+	
+	if (!dcid.empty ()) 
+		this->dcid = dcid;
+	else 
+		this->dcid = "None";
+	
+	if (!dcname.empty ()) 
+		this->dcname = dcname;
+	else 
+		this->dcname = "None";
+	
+	if (!dcemail.empty ()) 
+		this->dcemail = dcemail;
+	else 
+		this->dcemail = "None";
+	
+	this->filename = filename;
+	this->masterpassword = masterpassword;
+}
+
+// Helpers
+unsigned char* EncryptPasswordHandle::h2b(std::string s, int *len) {
+	unsigned char *bin;
+	unsigned int number; 
+	int size = s.size () / 2;
+	
+	if ((bin = (unsigned char*)malloc(sizeof(char)*size)) == NULL) 
+		return NULL;
+	
+	for(int i=0; i< size; i++){
+		std::istringstream(s.substr (2*i,2)) >> std::hex >> number;
+		bin[i] = (int) number;
+	}
+	
+	*len = size;
+	
+	return bin;
+}
+
+std::string EncryptPasswordHandle::b2h(const unsigned char *buf, int len) {
+	std::ostringstream sbuf;
+	for(int i=0; i < len; i++){
+		sbuf.fill ('0');
+		sbuf.width (2);
+		sbuf << std::hex << (int)buf[i];
+	}
+	return sbuf.str ();
+}
+
+EVP_CIPHER_CTX* EncryptPasswordHandle::makeContext(int direction){
+	EVP_CIPHER_CTX *ctx;
+	unsigned char *key = NULL;
+	unsigned char *iv = NULL;
+	int key_size, result; 
+	
+	// Key & Iv generation
+	key = (unsigned char *) calloc(sizeof(unsigned char), EVP_MAX_KEY_LENGTH);
+	iv = (unsigned char *) calloc(sizeof(unsigned char), EVP_MAX_IV_LENGTH);
+
+	key_size = EVP_BytesToKey(EVP_des_cbc(),
+						  EVP_md5(),
+						  NULL,
+						  (const unsigned char*)this->masterpassword.c_str (),
+						  this->masterpassword.size (),
+						  1,
+						  key,
+						  iv);
+	
+	// Context Initialization
+	ctx = (EVP_CIPHER_CTX*) calloc(sizeof(EVP_CIPHER_CTX),1);
+
+	if (direction == 0)
+		result = EVP_EncryptInit (ctx, EVP_des_cbc (), key, iv);
+	else
+		result = EVP_DecryptInit (ctx, EVP_des_cbc (), key, iv);
+		
+	if (result != 1){
+		if (ctx != NULL) {
+			free(ctx);
+			ctx = NULL;
+		}
+	}
+	
+	if (key != NULL)
+		free(key);
+	key = NULL;
+	
+	if (iv!= NULL)
+		free(iv);
+	iv = NULL;
+	
+	return ctx;
+}
+
+std::string EncryptPasswordHandle::encrypt(std::string input){
+	EVP_CIPHER_CTX *ctx = NULL;
+	std::string output;
+
+	ctx = makeContext (0);
+	if (ctx != NULL){
+		int bSize = EVP_CIPHER_CTX_block_size (ctx);
+		std::vector<unsigned char> buf(input.size ()+bSize);
+		int n = 0, aux = 0;
+		
+		EVP_EncryptUpdate (ctx, &buf[0], &n, (unsigned char*)input.c_str (), input.size ());
+		EVP_EncryptFinal (ctx, &buf[n], &aux);
+		EVP_CIPHER_CTX_cleanup(ctx);
+		n += aux;
+		output = this->b2h (&buf[0], n);
+		
+		free(ctx);
+		ctx = NULL;
+	} else {
+		throw EncryptError("cannot get context to encrypt password.");
+	}
+	
+	return output;
+}
+
+std::string EncryptPasswordHandle::decrypt(std::string input){
+	std::string output = "";
+	EVP_CIPHER_CTX *ctx = NULL;
+	unsigned char* buf = NULL;
+	int n = 0, on = 0, aux = 0;
+	int bSize = 0; 
+	
+	ctx = makeContext (1);
+	buf = this->h2b (input, &n);
+	
+	if (ctx == NULL){
+		if (buf != NULL){
+			free(buf);
+			buf = NULL;
+		}
+		throw EncryptError("cannot get context to decrypt password");
+	}
+	
+	if (buf == NULL){
+		if (ctx != NULL){
+			EVP_CIPHER_CTX_cleanup(ctx);
+			free(ctx);
+			ctx = NULL;
+		}
+		throw EncryptError("cannot parse password HEX >> BINARY");
+	}
+	
+	bSize = EVP_CIPHER_CTX_block_size (ctx);
+	{
+		std::vector<unsigned char> outbuf(n+bSize);
+		EVP_DecryptUpdate (ctx, &outbuf[0], &on, buf, n);
+		EVP_DecryptFinal (ctx, &outbuf[on], &aux);
+		on += aux;
+		for(int i=0; i < on; i++)
+			output.push_back ((char)outbuf[i]);
+	}
+	
+	if (buf != NULL){
+		free(buf);
+		buf = NULL;
+	}
+	
+	if (ctx != NULL){
+		EVP_CIPHER_CTX_cleanup(ctx);
+		free(ctx);
+		ctx = NULL;
+	}
+	
+	if (!isGood(output)){
+		throw EncryptError("bad master password.");
+	}
+	
+	return output;
+}
+
+std::string EncryptPasswordHandle::tReplace(std::string input, std::string pattern, std::string value){
+	size_t s = input.find (pattern);
+	while( s != std::string::npos)	{
+		input.erase (s, pattern.length ());
+		input.insert (s, value);
+		s = input.find (pattern);
+	}
+	return input;
+}
+
+int EncryptPasswordHandle::Email(std::string username, std::string password){
+	int r = 0;
+	std::string message;
+	std::string filename = "/tmp/ArclinkTEMP";
+	FILE *file = NULL;
+	
+	file = fopen(filename.c_str (),"w");
+	if (file == NULL){
+		return 1;
+	}
+	
+	
+	message = "Dear User,\n\n";
+	message += "This is an automatic message generated by the ArcLink Server at the #dcname# datacenter. You appear to have requested a seismological data volume that contains restricted data from here for the first time. From now on, all volumes that you request from this data center containing restricted data will be encrypted using the following password:\n\n";
+	message += "Your password: #password#\n";
+	message += "Our data center ID (dcid): #dcid#\n\n";
+	message += "Please keep it safe for further reference, and prevent other people from seeing it. Otherwise they will be able to use your identity to obtain restricted data from our server.\n\n";
+	message += "If you use the arclink_fetch tool, please update your dcidpasswords.txt file, by adding the following line to this file: \n\n";
+	message += "#dcid# #password#\n\n";
+	message += "If you encounter any problems please contact us at: #email#. Also, for the correct download of this data make sure you are using arclink_fetch version 2011.221 or newer.\n\n";
+	message += "More information at:\n\n";
+	message += " * http://geofon.gfz-potsdam.de/\n";
+	message += " * http://www.seiscomp3.org/\n";
+	message += " * http://www.seiscomp3.org/wiki/doc/applications/arclink_fetch\n\n";
+	message += "Sincerely\n\n";
+	message += "#dcname# Team\n";
+	
+	message = tReplace(message, "#dcname#", this->dcname);
+	message = tReplace(message, "#dcid#", this->dcid);
+	message = tReplace(message, "#password#", password);
+	message = tReplace(message, "#email#", this->dcemail);
+	
+	fwrite(message.c_str (), 1, message.size (), file);
+	
+	fclose(file);
+	
+	std::string cmdLine;
+	cmdLine =  "cat " + filename;
+	cmdLine += " | /usr/bin/formail -I'From: " + this->dcemail + "' ";
+	cmdLine += "-I'To: " + username + "' ";
+	cmdLine += "-I'Subject: New password for restricted data from Arclink @ " + this->dcname + " [" + this->dcid + "]' -a'Message-ID:' ";
+	cmdLine += " | /usr/sbin/sendmail -f" + this->dcemail;
+	cmdLine += " " + username;
+
+	// Execute
+	r = system(cmdLine.c_str ());
+	// std::cerr << cmdLine << std::endl;
+	
+	remove(filename.c_str ());
+	return r;
+}
+
+bool EncryptPasswordHandle::isGood(std::string password){
+	for(int unsigned i = 0; i < password.size (); i++)
+		if (this->letters.find (password[i]) == std::string::npos)
+			return false;
+
+	return true;
+}
+
+std::string EncryptPasswordHandle::newPassword(int max) {
+	struct timeval tv;
+	struct timezone tz;
+	unsigned int seed = 0;
+	std::string password;
+	
+	gettimeofday (&tv,&tz);
+	seed = tv.tv_usec*+tv.tv_sec*100;
+	
+	srand(seed);
+	
+	for(;max>0;max--) {
+		int which = rand() % this->letters.size ();
+		password += (this->letters[which]);
+	}
+	
+	return password;
+}
+
+// Public
+std::vector< std::pair<std::string, std::string> > EncryptPasswordHandle::loadIds() {
+	std::vector< std::pair<std::string, std::string> > ulist;
+	std::ifstream InputFile;
+	std::string line;
+
+	if (this->filename.empty ()){
+		throw EncryptError("password file not properly set");
+	}
+
+	InputFile.open (this->filename.c_str ());
+	if(InputFile.is_open ()){
+		InputFile >> line;
+		while(InputFile.good ()){
+			std::vector<std::string> strs;
+			boost::split(strs, line, boost::is_any_of(":"));
+			if (strs.size () != 2)
+				throw EncryptError("format error on password file");
+			ulist.push_back(std::pair<std::string, std::string>(strs[0], decrypt(strs[1])));
+			InputFile >> line;
+		}
+		InputFile.close ();
+	}
+
+	return ulist;
+}
+
+std::string EncryptPasswordHandle::findPassword(std::string username, bool cancreate, bool emailpassword) {
+	std::ifstream InputFile;
+	std::string line;
+	
+	if (this->filename.empty ()){
+		throw EncryptError("password file not properly set");
+	}
+	
+	InputFile.open (this->filename.c_str ());
+	if(InputFile.is_open ()){
+		InputFile >> line;
+		while(InputFile.good ()){
+			std::vector<std::string> strs;
+			boost::split(strs, line, boost::is_any_of(":"));
+			
+			if (strs.size () != 2) {
+				throw EncryptError("format error on password file");
+			} else {
+				if (boost::iequals(strs[0], username)) {
+					InputFile.close ();
+					return decrypt(strs[1]);
+				}
+			}
+			
+			InputFile >> line;
+		}
+		InputFile.close ();
+	}
+	
+	if (!cancreate)
+		throw EncryptError("cannot find password for user: " + username);
+	
+	std::string password = newPassword(8);
+	std::ofstream OutputFile;
+	
+	OutputFile.open (this->filename.c_str (), std::ios::app);
+	if (!OutputFile.is_open ()){
+		throw EncryptError("cannot create password file");
+	}
+	
+	if (OutputFile.is_open ()) {
+		if (OutputFile.good ()){
+			int status = 0;
+			
+			if (emailpassword) 
+				status = Email(username,password);
+			
+			if (status == 0){
+				std::string ePassword = encrypt(password);
+				OutputFile.write (username.c_str (), username.size ());
+				OutputFile.write (":",1);
+				OutputFile.write (ePassword.c_str (), ePassword.size ());
+				OutputFile.write ("\n",1);
+			} else {
+				OutputFile.close ();
+				throw EncryptError("cannot send email to user: " + username);
+			}
+		}
+		OutputFile.close ();
+	}
+	
+	return password;
+}
+}

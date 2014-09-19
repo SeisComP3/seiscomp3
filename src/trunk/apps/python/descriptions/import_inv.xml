@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="import_inv" category="Inventory">
+		<description>Imports inventory information from various sources.</description>
+		<command-line>
+			<synopsis>
+				import_inv {FORMAT} input [output]
+				import_inv help {topic}
+			</synopsis>
+			<description>
+				The first form takes the format as first parameter and the input
+				and output location. The input location is either a file or directory
+				depending on the format and its converter. If the output is not
+				given it defaults to seiscomp3/etc/inventory/{input}.xml. To write
+				the output to stdout, &quot;-&quot; must be used.
+
+				The second form provides help on a particular topic. The only topic
+				currently supported is "formats" which prints all available input
+				formats.
+			</description>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+			
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

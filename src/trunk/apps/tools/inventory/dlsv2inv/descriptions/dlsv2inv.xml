@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="dlsv2inv" category="Inventory">
+		<description>Converts dataless SEED to SeisComP3 inventory XML.</description>
+		<command-line>
+			<synopsis>
+				dlsv2inv [OPTIONS] input [output=stdout]
+			</synopsis>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="ArcLink">
+				<option long-flag="dcid" argument="arg">
+					<description>
+						Overrides the datacenter ID which is read from the datacenterID
+						configuration parameter and written to the network and
+						station archive attribute.
+					</description>
+				</option>
+				<option long-flag="net-description" argument="arg">
+					<description>
+						Sets the network description. It supports the following
+						placeholders: ${code}, ${start}, ${end}, ${class} and ${archive}.
+					</description>
+				</option>
+				<option long-flag="net-start" argument="arg">
+					<description>
+						Set network start time. Format is %Y-%m-%d.
+					</description>
+				</option>
+				<option long-flag="net-end" argument="arg">
+					<description>
+						Set network end time. Format is %Y-%m-%d.
+					</description>
+				</option>
+				<option long-flag="net-type" argument="arg">
+					<description>
+						Sets the network type (VBB, SM, etc.).
+					</description>
+				</option>
+				<option long-flag="temporary">
+					<description>
+						Sets the network temporary flag to true.
+					</description>
+				</option>
+				<option long-flag="restricted">
+					<description>
+						Sets the network restricted flag to true.
+					</description>
+				</option>
+				<option long-flag="private">
+					<description>
+						Sets the network private flag to true.
+					</description>
+				</option>
+			</group>
+			<group name="Convert">
+				<option flag="f" long-flag="formatted">
+					<description>Enables formatted XML output.</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

@@ -1,0 +1,1631 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>PickerSettings</class>
+ <widget class="QDialog" name="PickerSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>359</width>
+    <height>506</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>4</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Settings</string>
+  </property>
+  <property name="toolTip" >
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QToolBox" name="toolBox" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="pageLocator" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>341</width>
+        <height>294</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground" >
+       <bool>true</bool>
+      </property>
+      <attribute name="label" >
+       <string>Global settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_4" >
+           <property name="toolTip" >
+            <string>Reduction velocity used by the move out curve.</string>
+           </property>
+           <property name="text" >
+            <string>Reduction velocity:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="spinPVel" >
+           <property name="toolTip" >
+            <string>Reduction velocity used by the move out curve.</string>
+           </property>
+           <property name="minimum" >
+            <double>0.1</double>
+           </property>
+           <property name="singleStep" >
+            <double>0.5</double>
+           </property>
+           <property name="value" >
+            <double>6</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6" >
+           <property name="text" >
+            <string>km/s</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbComputeMagnitudesAfterRelocate" >
+         <property name="toolTip" >
+          <string>If enabled, magnitudes are computed automatically after relocate.</string>
+         </property>
+         <property name="text" >
+          <string>Compute magnitudes after relocate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="cbComputeMagnitudesSilently" >
+           <property name="text" >
+            <string>Compute magnitudes silently</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbAskForMagnitudeTypes" >
+         <property name="text" >
+          <string>Enable selection of magnitudes to be computed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbComputeMissingTakeOffAngles" >
+         <property name="toolTip" >
+          <string>Computes missing take-off angles to be used in the first motion plot.</string>
+         </property>
+         <property name="text" >
+          <string>Compute missing take-off angles</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbPlotGridlines" >
+         <property name="toolTip" >
+          <string>Enables/disables drawing of grid lines in plots</string>
+         </property>
+         <property name="text" >
+          <string>Draw grid lines</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_5" >
+           <property name="text" >
+            <string>Data source:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="editRecordSource" />
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_9" >
+           <property name="text" >
+            <string>Default distance for "add stations":</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="spinAddStationsDistance" >
+           <property name="maximum" >
+            <double>180</double>
+           </property>
+           <property name="value" >
+            <double>15</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelDefaultDistanceUnit" >
+           <property name="text" >
+            <string>deg</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cbHideStationsWithoutData" >
+         <property name="toolTip" >
+          <string>If enabled additional stations are initially hidden and only become visible if data is available.</string>
+         </property>
+         <property name="text" >
+          <string>Hide station traces without data</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>71</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pagePickSettings" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>96</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground" >
+       <bool>true</bool>
+      </property>
+      <attribute name="label" >
+       <string>Picker settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="cbShowCrossHair" >
+         <property name="toolTip" >
+          <string>If checked a cross hair cursor is shown when in picking mode whith the configured uncertainty widths.</string>
+         </property>
+         <property name="text" >
+          <string>Show cross hair cursor</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelPickUncertainties" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>4</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>Uncertainties:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="listPickUncertainties" >
+           <property name="toolTip" >
+            <string>Selects the current set of predefined pick uncertainties.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_5" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="cbAllComponents" >
+           <property name="toolTip" >
+            <string>When enabled, all components (Z,N,E) are going to be loaded initially. Otherwise the components are loaded on demand.</string>
+           </property>
+           <property name="text" >
+            <string>Load all components</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbLoadAllPicks" >
+           <property name="toolTip" >
+            <string>When enabled all picks in the resulting timewindow will fetched from the database.</string>
+           </property>
+           <property name="text" >
+            <string>Load all picks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbStrongMotion" >
+           <property name="toolTip" >
+            <string>When enabled strong motion data will be transfered additionally for every station that has a strong motion sensor and where no strong motion pick exists.</string>
+           </property>
+           <property name="text" >
+            <string>Load strong motion data</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="cbLimitStationCount" >
+             <property name="text" >
+              <string>Limit acquistion to first</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinLimitStationCount" >
+             <property name="maximum" >
+              <number>1000000</number>
+             </property>
+             <property name="value" >
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLimitStations" >
+             <property name="text" >
+              <string>stations</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbShowAllComponents" >
+           <property name="toolTip" >
+            <string>When enabled all components are displayed in the trace widget up to a configurable station distance.</string>
+           </property>
+           <property name="text" >
+            <string>Show all components</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="frameMaximumDistance" >
+           <property name="frameShape" >
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow" >
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Maximum</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7" >
+              <property name="text" >
+               <string>Maximum distance:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="maximumDistanceEdit" >
+              <property name="toolTip" >
+               <string>The maximum station distance used to display all components (in degree).</string>
+              </property>
+              <property name="maximum" >
+               <double>360</double>
+              </property>
+              <property name="value" >
+               <double>10</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8" >
+              <property name="text" >
+               <string>deg</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbRemoveAllAutomaticStationPicks" >
+           <property name="toolTip" >
+            <string>Removes all automatic picks of a station for which manual picks exist.</string>
+           </property>
+           <property name="text" >
+            <string>Remove automatic station picks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelRemoveStationPicksInfo" >
+           <property name="text" >
+            <string>If checked all automatic picks of a station with manual picks are removed once the manual review is confirmed.</string>
+           </property>
+           <property name="wordWrap" >
+            <bool>true</bool>
+           </property>
+           <property name="indent" >
+            <number>22</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="cbRemoveAllAutomaticPicks" >
+           <property name="text" >
+            <string>Remove all automatic picks</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelRemoveAllPicksInfo" >
+           <property name="text" >
+            <string>If checked all automatic picks are removed once the manual review is confirmed.</string>
+           </property>
+           <property name="wordWrap" >
+            <bool>true</bool>
+           </property>
+           <property name="indent" >
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_3" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10" >
+         <property name="text" >
+          <string>Repicker</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="cbRepickerStart" >
+           <property name="toolTip" >
+            <string>Sets a custom signal start time to override the default of the selected repicker.</string>
+           </property>
+           <property name="text" >
+            <string>Signal start time</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="editRepickerStart" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight</set>
+           </property>
+           <property name="prefix" >
+            <string/>
+           </property>
+           <property name="suffix" >
+            <string>s</string>
+           </property>
+           <property name="maximum" >
+            <double>100</double>
+           </property>
+           <property name="minimum" >
+            <double>-100</double>
+           </property>
+           <property name="value" >
+            <double>-10</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="cbRepickerEnd" >
+           <property name="toolTip" >
+            <string>Sets a custom signal end time to override the default of the selected repicker.</string>
+           </property>
+           <property name="text" >
+            <string>Signal end time</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="editRepickerEnd" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight</set>
+           </property>
+           <property name="suffix" >
+            <string>s</string>
+           </property>
+           <property name="maximum" >
+            <double>100</double>
+           </property>
+           <property name="minimum" >
+            <double>-100</double>
+           </property>
+           <property name="value" >
+            <double>30</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_6" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="cbUsePerStreamTimeWindow" >
+           <property name="text" >
+            <string>Use per stream timewindows</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label" >
+           <property name="text" >
+            <string>Offset before first (P) pick:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Maximum</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>16</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSlider" name="slPreOffset" >
+             <property name="maximum" >
+              <number>60</number>
+             </property>
+             <property name="sliderPosition" >
+              <number>1</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTimeEdit" name="preTimeEdit" >
+             <property name="frame" >
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols" >
+              <enum>QAbstractSpinBox::PlusMinus</enum>
+             </property>
+             <property name="time" >
+              <time>
+               <hour>0</hour>
+               <minute>1</minute>
+               <second>0</second>
+              </time>
+             </property>
+             <property name="currentSection" >
+              <enum>QDateTimeEdit::HourSection</enum>
+             </property>
+             <property name="displayFormat" >
+              <string>HH:mm:ss</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2" >
+           <property name="text" >
+            <string>Offset after last (P) pick:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Maximum</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>16</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSlider" name="slPostOffset" >
+             <property name="maximum" >
+              <number>60</number>
+             </property>
+             <property name="sliderPosition" >
+              <number>2</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTimeEdit" name="postTimeEdit" >
+             <property name="frame" >
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols" >
+              <enum>QAbstractSpinBox::PlusMinus</enum>
+             </property>
+             <property name="time" >
+              <time>
+               <hour>0</hour>
+               <minute>2</minute>
+               <second>0</second>
+              </time>
+             </property>
+             <property name="currentSection" >
+              <enum>QDateTimeEdit::HourSection</enum>
+             </property>
+             <property name="displayFormat" >
+              <string>HH:mm:ss</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3" >
+           <property name="toolTip" >
+            <string>The length of the timewindow is the maximum of the resulting length of the above offsets and this value.</string>
+           </property>
+           <property name="text" >
+            <string>Minimum length of data after origin time:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Maximum</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>16</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSlider" name="slMinimumLength" >
+             <property name="maximum" >
+              <number>60</number>
+             </property>
+             <property name="value" >
+              <number>30</number>
+             </property>
+             <property name="sliderPosition" >
+              <number>30</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTimeEdit" name="minimumLengthTimeEdit" >
+             <property name="frame" >
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols" >
+              <enum>QAbstractSpinBox::PlusMinus</enum>
+             </property>
+             <property name="time" >
+              <time>
+               <hour>0</hour>
+               <minute>30</minute>
+               <second>0</second>
+              </time>
+             </property>
+             <property name="currentSection" >
+              <enum>QDateTimeEdit::HourSection</enum>
+             </property>
+             <property name="displayFormat" >
+              <string>HH:mm:ss</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pagePickFilters" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>96</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="autoFillBackground" >
+       <bool>true</bool>
+      </property>
+      <attribute name="label" >
+       <string>Picker filters</string>
+      </attribute>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QTableView" name="tableFilter" >
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode" >
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="btnAddPickFilter" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip" >
+            <string>Add a new filter</string>
+           </property>
+           <property name="text" >
+            <string>+</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnRemovePickFilter" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip" >
+            <string>Remove current filter</string>
+           </property>
+           <property name="text" >
+            <string>-</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>10</width>
+             <height>131</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnMovePickFilterUp" >
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="icon" >
+            <iconset resource="icons.qrc" >:/icons/icons/arrow_up.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <property name="default" >
+            <bool>false</bool>
+           </property>
+           <property name="flat" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnMovePickFilterDown" >
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="icon" >
+            <iconset resource="icons.qrc" >:/icons/icons/arrow_down.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <property name="flat" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pageAmplitudeSettings" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>96</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <attribute name="label" >
+       <string>Amplitude settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_11" >
+         <property name="text" >
+          <string>Waveform time window pre offset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Maximum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>16</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSlider" name="slAmplitudePreOffset" >
+           <property name="maximum" >
+            <number>60</number>
+           </property>
+           <property name="sliderPosition" >
+            <number>1</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTimeEdit" name="preAmplitudeTimeEdit" >
+           <property name="frame" >
+            <bool>true</bool>
+           </property>
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="time" >
+            <time>
+             <hour>0</hour>
+             <minute>5</minute>
+             <second>0</second>
+            </time>
+           </property>
+           <property name="currentSection" >
+            <enum>QDateTimeEdit::HourSection</enum>
+           </property>
+           <property name="displayFormat" >
+            <string>HH:mm:ss</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12" >
+         <property name="text" >
+          <string>Waveform time window post offset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Maximum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>16</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSlider" name="slAmplitudePostOffset" >
+           <property name="maximum" >
+            <number>60</number>
+           </property>
+           <property name="sliderPosition" >
+            <number>2</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTimeEdit" name="postAmplitudeTimeEdit" >
+           <property name="frame" >
+            <bool>true</bool>
+           </property>
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::PlusMinus</enum>
+           </property>
+           <property name="time" >
+            <time>
+             <hour>0</hour>
+             <minute>5</minute>
+             <second>0</second>
+            </time>
+           </property>
+           <property name="currentSection" >
+            <enum>QDateTimeEdit::HourSection</enum>
+           </property>
+           <property name="displayFormat" >
+            <string>HH:mm:ss</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pageAmplitudeFilters" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>96</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <attribute name="label" >
+       <string>Amplitude filters</string>
+      </attribute>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QTableView" name="tableAFilter" />
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>2</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="btnAddAmplitudeFilter" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip" >
+            <string>Add a new filter</string>
+           </property>
+           <property name="text" >
+            <string>+</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnRemoveAmplitudeFilter" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip" >
+            <string>Remove current filter</string>
+           </property>
+           <property name="text" >
+            <string>-</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>10</width>
+             <height>131</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnMoveAmplitudeFilterUp" >
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="icon" >
+            <iconset resource="icons.qrc" >:/icons/icons/arrow_up.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <property name="default" >
+            <bool>false</bool>
+           </property>
+           <property name="flat" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnMoveAmplitudeFilterDown" >
+           <property name="maximumSize" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="icon" >
+            <iconset resource="icons.qrc" >:/icons/icons/arrow_down.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <property name="flat" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="saveButton" >
+       <property name="text" >
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>115</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>spinPVel</tabstop>
+  <tabstop>cbComputeMagnitudesAfterRelocate</tabstop>
+  <tabstop>cbPlotGridlines</tabstop>
+  <tabstop>spinAddStationsDistance</tabstop>
+  <tabstop>cbShowCrossHair</tabstop>
+  <tabstop>cbAllComponents</tabstop>
+  <tabstop>cbLoadAllPicks</tabstop>
+  <tabstop>cbStrongMotion</tabstop>
+  <tabstop>cbLimitStationCount</tabstop>
+  <tabstop>spinLimitStationCount</tabstop>
+  <tabstop>cbShowAllComponents</tabstop>
+  <tabstop>maximumDistanceEdit</tabstop>
+  <tabstop>cbRemoveAllAutomaticStationPicks</tabstop>
+  <tabstop>cbRemoveAllAutomaticPicks</tabstop>
+  <tabstop>cbUsePerStreamTimeWindow</tabstop>
+  <tabstop>slPreOffset</tabstop>
+  <tabstop>preTimeEdit</tabstop>
+  <tabstop>slPostOffset</tabstop>
+  <tabstop>postTimeEdit</tabstop>
+  <tabstop>slMinimumLength</tabstop>
+  <tabstop>minimumLengthTimeEdit</tabstop>
+  <tabstop>tableFilter</tabstop>
+  <tabstop>btnAddPickFilter</tabstop>
+  <tabstop>btnRemovePickFilter</tabstop>
+  <tabstop>btnMovePickFilterUp</tabstop>
+  <tabstop>btnMovePickFilterDown</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="icons.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>okButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PickerSettings</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>255</x>
+     <y>866</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>96</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PickerSettings</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>348</x>
+     <y>866</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>179</x>
+     <y>282</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbUsePerStreamTimeWindow</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>slMinimumLength</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>83</x>
+     <y>530</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>148</x>
+     <y>692</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbUsePerStreamTimeWindow</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>minimumLengthTimeEdit</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>125</x>
+     <y>530</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>338</x>
+     <y>695</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbUsePerStreamTimeWindow</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_3</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>102</x>
+     <y>530</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>125</x>
+     <y>665</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbShowAllComponents</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frameMaximumDistance</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>72</x>
+     <y>287</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>61</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cbLimitStationCount</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinLimitStationCount</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>46</x>
+     <y>256</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>257</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scautopick" category="Processing" inherit-global-bindings="true">
+		<description>Makes picks on waveforms.</description>
+		<configuration>
+			<parameter name="filter" type="string">
+				<description>
+					Defines the default filter used for picking. Station specific configurations
+					will override this value.
+				</description>
+			</parameter>
+			<parameter name="timeCorrection" type="double" default="-0.8">
+				<description>
+					Time correction applied for each pick made. Station specific
+					values override this value.
+				</description>
+			</parameter>
+			<parameter name="ringBufferSize" type="int" default="300">
+				<description>
+					Defined the record ringbuffer size in seconds.
+				</description>
+			</parameter>
+			<parameter name="leadTime" type="int" default="60">
+				<description>
+					The leadTime defines the time in seconds to start picking on
+					waveforms before current time.
+				</description>
+			</parameter>
+			<parameter name="initTime" type="int" default="60">
+				<description>
+					The initTime defines a timespan in seconds for that the picker
+					is blind after initialization. This time is needed to initialize
+					the filter and depends on it.
+				</description>
+			</parameter>
+			<parameter name="gapInterpolation" type="boolean" default="false">
+				<description>
+					Interpolate gaps linearily? This is valid for gaps shorter
+					than thresholds.maxGapLength.
+				</description>
+			</parameter>
+			<parameter name="amplitudes" type="list:string" default="MLv, mb, mB">
+				<description>
+					Defines the amplitude types to be computed by the picker as well.
+				</description>
+			</parameter>
+			<parameter name="picker" type="string">
+				<description>
+					Configures the picker to use. By default only a simple detections
+					are emitted as picks. To enable real picking on a time window around
+					the detection, an algorithm (plugin) can be defined with this parameter.
+				</description>
+			</parameter>
+			<parameter name="spicker" type="string">
+				<description>
+					Configures the secondary picker to use.
+				</description>
+			</parameter>
+			<parameter name="useAllStreams" type="boolean" default="true">
+				<description>
+					If enabled the all streams are used for picking that are received by the picker.
+					This option has only effect if a file is used as input which contains more data than
+					the picker requests. If connected to a waveform server such as SeedLink the picker
+					will only receive the data it subscribed to.
+				</description>
+			</parameter>
+			<parameter name="sendDetections" type="boolean" default="false">
+				<description>
+					If enabled and a :confval:`picker` is configured then detections are sent as well.
+					To distinguish between detections and picks the evaluation mode of the pick is set
+					to manual. This is meant to be a debug option which can be used to compare detections
+					and picks by their evaluation mode.
+				</description>
+			</parameter>
+			<group name="thresholds">
+				<parameter name="triggerOn" type="double" default="3">
+					<description>
+						For which value on the filtered waveforms is a pick
+						detected. Station specific values override this value.
+					</description>
+				</parameter>
+				<parameter name="triggerOff" type="double" default="1.5">
+					<description>
+						The value the filtered waveforms must reach to enable
+						detection again. Between triggerOn and triggerOff the
+						picker is blind and does not produce picks. Station
+						specific values ovveride this value.
+					</description>
+				</parameter>
+				<parameter name="maxGapLength" type="double" default="4.5">
+					<description>
+						The maximum gap length in seconds to handle.
+						Gaps larger than this will cause the picker to be resettet.
+					</description>
+				</parameter>
+				<parameter name="amplMaxTimeWindow" type="double" default="10">
+					<description>
+						The time window used to compute a maximum (snr) amplitude
+						on the filtered waveforms.
+					</description>
+				</parameter>
+				<parameter name="deadTime" type="double" default="30">
+					<description>
+						The dead time in seconds.
+					</description>
+				</parameter>
+				<parameter name="minAmplOffset" type="double" default="3"/>
+			</group>
+			<group name="connection">
+				<parameter name="amplitudeGroup" type="string" default="AMPLITUDE">
+					<description>
+						Group used to send amplitudes to.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option flag="" long-flag="offline">
+					<description>Do not connect to a messaging server and do not use the database.</description>
+				</option>
+				<option flag="" long-flag="amplitudes" argument="arg" default="1">
+					<description>Enables or disables computation of amplitudes.</description>
+				</option>
+				<option flag="" long-flag="test">
+					<description>
+					Runs the picker as usual but does not send any messages. This can be useful to
+					test the picker within a running system.
+					</description>
+				</option>
+				<option flag="" long-flag="dump-config">
+					<description>
+					Dumps the current configuration and exits. Station configuration is only read if
+					the picker connects to the messaging and the database. In offline mode it will
+					only dump the application specific setting unless a station.conf file is provided.
+					</description>
+				</option>
+				<option flag="" long-flag="dump-records">
+					<description>
+					This option only works in combination with :option:`--offline`. It will dump
+					the data of an amplitude processor if it completed processing successfully
+					and a new amplitude is available. The output format is a simple ASCII format.
+					</description>
+				</option>
+			</group>
+
+			<group name="Settings">
+				<option long-flag="filter" argument="filter" param-ref="filter"/>
+				<option long-flag="time-correction" argument="time" param-ref="timeCorrection"/>
+				<option long-flag="buffer-size" argument="timespan" param-ref="ringBufferSize"/>
+				<option long-flag="before" argument="timespan" param-ref="leadTime"/>
+				<option long-flag="init-time" argument="timespan" param-ref="initTime"/>
+				<option long-flag="trigger-on" argument="arg" param-ref="thresholds.triggerOn"/>
+				<option long-flag="trigger-off" argument="arg" param-ref="thresholds.triggerOff"/>
+				<option long-flag="trigger-dead-time" argument="arg" param-ref="thresholds.deadTime"/>
+				<option long-flag="ampl-max-time-window" argument="arg" param-ref="thresholds.amplMaxTimeWindow"/>
+				<option long-flag="min-ampl-offset" argument="arg" param-ref="thresholds.minAmplOffset"/>
+				<option long-flag="gap-tolerance" argument="arg" param-ref="thresholds.maxGapLength"/>
+				<option long-flag="gap-interpolation" argument="arg" param-ref="gapInterpolation"/>
+				<option long-flag="any-stream" argument="arg" param-ref="useAllStreams"/>
+				<option long-flag="send-detections" param-ref="sendDetections"/>
+			</group>
+		</command-line>
+	</module>
+
+	<!-- The basic binding description. This could also go into a separate file, but its integrated
+	     into the core description to have everything in one place. -->
+	<binding module="scautopick">
+		<description>
+			Configures a station for picking. A station without a binding assigned
+			will not be picked unless the picker is in offline mode.
+		</description>
+		<configuration>
+			<parameter name="detecEnable" type="boolean" default="true">
+				<description>
+					Enables/disables picking on a station.
+				</description>
+			</parameter>
+			<parameter name="detecFilter" type="string" default="&quot;RMHP(10)>>ITAPER(30)>>BW(4,0.7,2)>>STALTA(2,80)&quot;">
+				<description>
+					Defines the filter to be used for picking.
+				</description>
+			</parameter>
+			<parameter name="trigOn" type="double" default="3">
+				<description>
+					For which value on the filtered waveform is a pick detected.
+				</description>
+			</parameter>
+			<parameter name="trigOff" type="double" default="1.5">
+				<description>
+					The value the filtered waveform must reach to
+					enable a detection again.
+				</description>
+			</parameter>
+			<parameter name="timeCorr" type="double" default="-0.8">
+				<description>
+					The time correction applied to a detected pick.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

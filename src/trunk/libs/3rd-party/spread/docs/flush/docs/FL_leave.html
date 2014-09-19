@@ -1,0 +1,82 @@
+<HTML><HEAD><TITLE>Manpage of FL_leave</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_leave</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_leave - remove a connection from a Flush Spread group
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_leave(mailbox </B><I>mbox</I><B>, const char *</B><I>group_name</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_leave</B>
+
+removes the connection represented by
+<I>mbox</I>
+
+from a Flush Spread group with the name
+<I>group_name</I>.
+
+A connection may only leave a group after it has been installed as a
+member of the group by being included in a Flush Spread
+view/membership.  Also a connection may not leave a group if it has
+already requested to leave that group and the self-leave message has
+not yet been received.
+<H2>RETURN VALUES</H2>
+
+Returns 0 on success or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_GROUP</B>
+
+<DD>
+The 
+<I>group_name</I>
+
+given to leave was illegal for some reason. Usually because it was of
+length 0 or length &gt; MAX_GROUP_NAME.  This error is also returned if
+the connection was not a full-fledged member (i.e. - not yet included
+in a Flush membership message for that group, or already leaving) of
+the group.</p>
+
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+is illegal. Usually because it is not active.</p>
+
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+Errors occurred during communication
+and the leave could not be initiated.
+</DL>
+
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

@@ -1,0 +1,62 @@
+# $Id: Makefile.reftek 165 2005-12-23 12:34:58Z andres $
+# Makefile for archive library
+ 
+VPATH   = 
+RANLIB  = ranlib
+LIBDIR  = $(VPATH)../../../lib/$(PLATFORM)
+INCDIR  = $(VPATH)../../include
+OPTMIZ  = -g
+INCS    = -I$(INCDIR) -I$(VPATH).
+DEFS    = -D$(OSNAME) -D$(OSTYPE) -D_REENTRANT
+CFLAGS  = $(OPTMIZ) $(INCS) $(DEFS)
+ARCHIVE = libarchive.a
+OUTPUT  = $(LIBDIR)/$(ARCHIVE)
+OBJS    =
+OBJS   += $(OUTPUT)(archive.o)
+OBJS   += $(OUTPUT)(create.o)
+OBJS   += $(OUTPUT)(errors.o)
+OBJS   += $(OUTPUT)(evnfiles.o)
+OBJS   += $(OUTPUT)(find.o)
+OBJS   += $(OUTPUT)(linklist.o)
+OBJS   += $(OUTPUT)(open.o)
+OBJS   += $(OUTPUT)(purge.o)
+OBJS   += $(OUTPUT)(rate.o)
+OBJS   += $(OUTPUT)(read.o)
+OBJS   += $(OUTPUT)(recfmt.o)
+OBJS   += $(OUTPUT)(serialize.o)
+OBJS   += $(OUTPUT)(state.o)
+OBJS   += $(OUTPUT)(streams.o)
+OBJS   += $(OUTPUT)(strlist.o)
+OBJS   += $(OUTPUT)(unix.o)
+OBJS   += $(OUTPUT)(write.o)
+ 
+.PRECIOUS : $(OUTPUT)
+ 
+all: OBJS/$(PLATFORM) $(LIBDIR) FORCE
+	cd OBJS/$(PLATFORM); \
+	gmake -f ../../Makefile VPATH=../../ makestamp
+ 
+$(OUTPUT): makestamp
+ 
+makestamp: $(OBJS)
+	$(RANLIB) $(OUTPUT)
+	touch makestamp
+ 
+clean: FORCE
+	rm -f OBJS/$(PLATFORM)/*.o
+ 
+remove: FORCE
+	rm -f $(OUTPUT) OBJS/$(PLATFORM)/makestamp
+ 
+sccsinfo: FORCE
+	sccs info
+
+install: all
+
+$(LIBDIR):
+	mkdir -p $@
+
+OBJS/$(PLATFORM):
+	mkdir -p $@
+ 
+FORCE:

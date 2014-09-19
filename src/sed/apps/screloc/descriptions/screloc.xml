@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="screloc" category="Processing">
+		<description>Automatic relocator.</description>
+		<configuration>
+			<group name="reloc">
+				<parameter name="locator" type="string">
+					<description>
+					Defines the locator to be used such as NonLinLoc.
+					</description>
+				</parameter>
+				<parameter name="ignoreRejectedOrigins" type="boolean" default="false">
+					<description>
+					Ignores origins with status REJECTED.
+					</description>
+				</parameter>
+				<parameter name="allowPreliminaryOrigins" type="boolean" default="false">
+					<description>
+					Triggers processing also on origins with status PRELIMINARY.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option long-flag="test">
+					<description>test mode, do not send any message</description>
+				</option>
+			</group>
+
+			<group name="Input">
+				<option flag="O" long-flag="origin-id" argument="arg">
+					<description>reprocess the origin and send a message unless test mode is activated</description>
+				</option>
+				<option long-flag="locator" argument="arg">
+					<description>the locator type to use</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

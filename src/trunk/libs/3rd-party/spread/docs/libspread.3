@@ -1,0 +1,69 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP 3 "Februrary 2006" Spread "User Manuals"
+.SH "NAME"
+libspread \- Spread Group Communication Client Library
+.SH "SYNOPSIS"
+.SH "DESCRIPTION"
+The Spread 
+.B libspread
+library implements the client SP interface to the Spread
+group communication or multicast message bus system.
+.SH "DATA STRUCTURES"
+.SH "HEADER FILES"
+.I sp.h
+is the main header and includes necessary defines and types. It also 
+includes the other header files sp_events.h and sp_func.h.
+
+.I sp_events.h
+declares the types and functions that make up the E Event-management 
+library.
+
+.I sp_func.h
+declares the functions of the SP interface. Since sp.h includes this you
+should not include this directly.
+.SH "FILES"
+No files are required for client applications using the SP library.
+.SH "DIAGNOSTICS"
+The library will not output any debugging information except in fatal errors.
+The 
+.B SP_error(3)
+function can be used to print an informative error message when SP functions
+return an error code.
+.SH "BUGS"
+None currently known. The libspread library is thread-safe. However, 
+the libspread-core.a library is not thread-safe. The libtspread-core.a 
+library is the version to use if you need a thread-safe version of the core. 
+The non-thread-safe library is
+provided for those who are writing single-threaded applications and do not
+want to pay the minimal performance penalty for locking.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.PP
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.PP
+Spread Project <spread@spread.org>
+.SH "SEE ALSO"
+.BR spread (1)
+.BR SP_connect (3)
+.BR SP_disconnect (3)
+.BR SP_equal_group_ids (3)
+.BR SP_error (3)
+.BR SP_get_first_vs_set_offset_memb_mess (3)
+.BR SP_get_gid_offset_memb_mess (3)
+.BR SP_get_local_vs_set_offset_memb_mess (3)
+.BR SP_get_local_vs_set_offset_memb_scat (3)
+.BR SP_get_num_vs_sets_offset_memb_mess (3)
+.BR SP_get_vs_set_members_offset_vs_set (3)
+.BR SP_get_vs_set_size_offset_vs_set (3)
+.BR SP_join (3)
+.BR SP_leave (3)
+.BR SP_multicast (3)
+.BR SP_multigroup_multicast (3)
+.BR SP_multigroup_scat_multicast (3)
+.BR SP_poll (3)
+.BR SP_receive (3)
+.BR SP_scat_multicast (3)
+.BR SP_scat_receive (3)
+.BR SP_version (3)

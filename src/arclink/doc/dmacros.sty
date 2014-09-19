@@ -1,0 +1,310 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% dmacros.sty v0.4.1
+%
+% Some useful (La)TeX macros
+% 
+% (C) 1998, 2001 Andres Heinloo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{dmacros}[01/02/04 v0.4.1]
+
+\catcode`!11
+
+\newcommand{\ifstar}{}
+\newcommand{\ifoptarg}{}
+\newcommand{\bschar}{}
+\newcommand{\bsgobble}{}
+\newcommand{\gobbletwo}{}
+\newcommand{\thatsall}{}
+\newcommand{\defloop}{}
+\newcommand{\exitloop}{}
+\newcommand{\defsplit}{}
+\newcommand{\parameter}{}
+\newcommand{\<}{}
+\newcommand{\interface}{}
+\newcommand{\parameters}{}
+
+\newif\ifstar
+\newif\ifoptarg
+\newcommand*{\testopt}[1]{\let\dm!argtok#1\futurelet\dm!nexttoken\dm!peekstar}
+\def\dm!peekstar{\if\dm!nexttoken*\startrue\expandafter\dm!eatstar
+    \else\starfalse\expandafter\dm!peekopt\fi}
+\def\dm!eatstar*{\futurelet\dm!nexttoken\dm!peekopt}
+\def\dm!peekopt{\if\dm!nexttoken[\optargtrue\expandafter\dm!argtok
+    \else\optargfalse\expandafter\dm!noopt\fi}
+\def\dm!noopt{\dm!argtok[]}
+
+\bgroup\lccode`?=`\\ \lowercase{\egroup
+\def\bschar{?} \def\bsgobble?{}}
+\def\gobbletwo#1#2{}
+\def\thatsall{\noexpand\thatsall}
+
+\def\defloop#1#2<#3>{\gdef#1#2{#3\dm!endloop#1}}
+\def\exitloop#1\dm!endloop{\fi\noexpand} \let\dm!endloop\empty 
+
+\def\defsplit#1#2<#3>{{%
+    \edef\!split{\expandafter\expandafter\expandafter\noexpand\expandafter
+        \csname\expandafter\bsgobble\string#1!split\endcsname}%
+    \xdef#1##1{\noexpand\dm!splitchkend##1\expandafter\noexpand\!split##1}%
+    \expandafter\gdef\!split#2{#3\dm!endloop#1}}}
+\def\dm!splitchkend#1{\ifx#1\thatsall\expandafter\gobbletwo\fi}
+
+\newcommand*{\dolist}[1]{\let\dm!do#1\dm!dolist}
+\defloop\dm!dolist#1<\ifx#1\thatsall\exitloop\fi\dm!do#1>
+
+\newcommand*{\dosplit}[2]{%
+    \def\dm!do##1#2{#1{##1}\futurelet\dm!nexttoken\dm!dosplit}%
+    \futurelet\dm!nexttoken\dm!dosplit}
+\def\dm!dosplit{\ifx\dm!nexttoken\thatsall\expandafter\noexpand\fi\dm!do}
+
+\newcommand*{\styleparm}[2]{%
+    \dm!clsdef{#1}{true}\dm!clsdef{#1}{false}%
+    \expandafter\edef\csname dm!style!#1\endcsname{#2}}
+\def\dm!clsdef#1#2{%
+    \expandafter\edef\csname dm!cls!#1!#2\endcsname{%
+        \let\expandafter\noexpand\csname ifdm!cls!#1\endcsname
+        \expandafter\noexpand\csname if#2\endcsname}}
+
+\newcommand{\stylechoice}{\testopt\dm!stylechoice}
+\def\dm!stylechoice[#1]#2#3{%
+    \ifoptarg\def\dm!val{#1}\else\def\dm!val{#3}\fi
+    \expandafter\ifx\csname dm!sty!#3\endcsname\relax
+        \expandafter\edef\csname dm!sty!#3\endcsname{\dm!val}%
+        \expandafter\edef\csname dm!cls!#3\endcsname{\dm!clslist#2,\thatsall}%
+    \else\expandafter\ifx\csname dm!sty!#3\endcsname\dm!val
+        \toks@\expandafter\expandafter\expandafter{%
+            \csname dm!cls!#3\endcsname}
+        \expandafter\edef\csname dm!cls!#3\endcsname{%
+            \the\toks@\dm!clslist#2,\thatsall}%
+    \else
+        \PackageError{dmacros}{Value `#3' \MessageBreak
+            conflicts with the previous definition}{%
+            Type <return> to ignore this \noexpand\stylechoice command.}%
+    \fi\fi}
+\defsplit\dm!clslist#1,<\expandafter\noexpand\csname dm!cls!#1!true\endcsname>
+
+\def\dm!chkstyle#1#2#3#4{%
+    \bgroup
+    \expandafter\ifx\csname dm!style!#1\endcsname\relax
+        \PackageError{dmacros}{Style parameter `#1' \MessageBreak
+            is not defined}{#3}%
+        \egroup#4\dm!chkerror
+    \fi
+    \expandafter\ifx\csname dm!sty!#2\endcsname\relax
+        \PackageError{dmacros}{Value `#2' is not defined}{#3}%
+        \egroup#4\dm!chkerror
+    \fi
+    \csname dm!cls!#1!false\endcsname \csname dm!cls!#2\endcsname
+    \csname ifdm!cls!#1\endcsname\else
+        \PackageError{dmacros}{Style parameter `#1' \MessageBreak
+            cannot have value `#2'}{#3}%
+        \egroup#4\dm!chkerror
+    \fi
+    \egroup}
+\def\dm!chkerror#1\dm!endchk{\fi} \let\dm!endchk\empty
+
+\newcommand*{\setstyle}[2]{%
+    \dm!chkstyle{#1}{#2}{%
+        Type <return> to ignore this \noexpand\setstyle command.}{}%
+    \expandafter\edef\csname dm!style!#1\endcsname{%
+        \csname dm!sty!#2\endcsname}%
+    \dm!endchk}
+ 
+\newcommand*{\IfStyleThenElse}[4]{%
+    \dm!chkstyle{#1}{#2}{%
+        Type <return> to continue as if the condition was false.}{#4}%
+    \expandafter\expandafter\expandafter\ifx\expandafter\expandafter
+        \csname dm!style!#1\endcsname\csname dm!sty!#2\endcsname#3\else#4\fi
+    \dm!endchk}
+
+\newcommand*{\getfilename}[2]{{%
+    \toks@{}{\dosplit\toks@/#2/\thatsall\expandafter}\expandafter
+    \dm!fixunderscore\the\toks@\thatsall\expandafter}\expandafter
+    \def\expandafter#1\expandafter{\the\toks@}}
+\defloop\dm!fixunderscore#1<%
+    \ifx#1\thatsall\exitloop\fi
+    \ifx#1_\toks@\expandafter{\the\toks@ \_}%
+    \else\toks@\expandafter{\the\toks@ #1}\fi>
+
+\def\dm!makeactive#1{\catcode`#113\relax}
+\def\dm!makeother#1{\catcode`#112\relax}
+
+\def\dm!noligs#1{%
+    \dm!makeactive#1%
+    \bgroup\lccode`\~`#1\lowercase{\egroup
+    \def~{\leavevmode\kern0pt\char`#1\relax}}}
+
+\def\dm!verbsetup{%
+    \dolist\dm!makeother\\\{\}\$\&\#\^\_\%\~\"\<\thatsall
+    \dolist\dm!noligs\`\<\>\,\'\-\thatsall
+    \obeyspaces\frenchspacing}
+
+\newcommand{\mverb}{%
+    \begingroup
+    \dolist\dm!makeother\{\}\$\&\#\^\_\%\~\"\<\thatsall
+    \dolist\dm!noligs\`\<\>\,\'\-\thatsall
+    \dm!mverb}
+\def\dm!mverb#1{%
+    \dm!makeactive#1%
+    \bgroup\lccode`\~`#1\lowercase{\egroup\let~\endgroup}%
+    \verbatim@font\obeyspaces\frenchspacing}
+
+\newread\dm!infile
+
+\newcommand*{\verbinput}[1]{{%
+    \par\dm!verbsetup
+    \openin\dm!infile#1 \ifeof\dm!infile\message{^^JCannot find #1}\fi
+    \dm!readloop\closein\dm!infile}}
+\defloop\dm!readloop<%
+    \ifeof\dm!infile\exitloop\fi
+    \read\dm!infile to\!inline
+    \hbox to\hsize{\!inline\hfil}>
+
+\newlength{\listingsep} \listingsep1em
+\newlength{\listingrule} \listingrule\fboxrule
+\newcommand{\listingfont}{\normalfont\footnotesize\ttfamily}
+\newcommand{\listingstretch}{1}
+
+\newcommand{\listing}{\dm!makeactive\^^M\dm!verbsetup\dm!listing}
+\bgroup\lccode`\|=`\\ \lccode`\[=`\{ \lccode`\]=`\} \dm!makeactive\^^M
+\lowercase{\egroup
+\def\dm!listing^^M#1|end[listing]{%
+    \fboxsep\listingsep \fboxrule\listingrule
+    \listingfont \baselineskip\listingstretch\baselineskip
+    \fbox{\vbox{\dosplit\hbox^^M#1\thatsall}}\end{listing}}}
+
+\newcommand{\parameterfont}{\normalfont\itshape}
+\def\parameter#1>{{\parameterfont #1}}
+
+{\dm!makeactive\_
+\gdef\<{\begingroup\dm!makeactive\_\let_\_\dm!parameter}}
+\def\dm!parameter#1>{\endgroup\parameter#1>}
+
+\newcommand{\interfacefont}{\normalfont\ttfamily}
+
+{\dm!makeactive\< \dm!makeactive\_
+\gdef\interface{%
+    \let<\parameter \let_\_%
+    \def\item{\begingroup\dm!makeactive\<\dm!makeactive\_\dm!item}%
+    \def\dm!item##1\par{\dm!stditem\raggedright\interfacefont ##1
+        \par\endgroup\nobreak\everypar{{\setbox0\lastbox}\everypar{}}}%
+    \list{}{\labelwidth0pt\itemindent-\leftmargin}}}
+\let\endinterface\endlist
+\let\dm!stditem\item
+
+{\dm!makeactive\_
+\gdef\parameters{%
+    \let_\_%
+    \def\item{\begingroup\dm!makeactive\_\dm!item}%
+    \def\dm!item[##1]{\endgroup\dm!stditem[##1]}%
+    \list{}{\topsep0pt\partopsep0pt\labelwidth0pt\itemindent-\leftmargin
+    \let\makelabel\dm!parmlabel}}}
+\let\endparameters\endlist
+\def\dm!parmlabel#1{\hspace\labelsep\parameterfont #1}
+
+\styleparm{proofmode}{ShowAdditions}
+\stylechoice{proofmode}{ShowAdditions}
+\stylechoice{proofmode}{ShowOmissions}
+\stylechoice{proofmode}{ShowAll}
+
+\newcommand{\commentcolor}{red}
+\newcommand{\omissioncolor}{blue}
+\newcommand{\additioncolor}{green}
+
+\let\dm!ltsave=<
+
+{\dm!makeactive\<
+    \gdef<{\global\futurelet\dm!nexttoken\dm!startedit}}
+
+\def\dm!startedit{%
+    \if\dm!nexttoken*\let\dm!thing\dm!comment
+    \else\if\dm!nexttoken-\let\dm!thing\dm!omission
+    \else\if\dm!nexttoken+\let\dm!thing\dm!addition
+    \else\let\dm!thing\dm!ltsave\fi\fi\fi
+    \dm!thing}
+
+\def\dm!proofsetup{
+    \dm!makeactive\<
+    \IfStyleThenElse{proofmode}{ShowAdditions}{
+        \long\def\dm!comment*##1*>{{\nullfont##1}\ignorespaces}
+        \long\def\dm!omission-##1->{{\nullfont##1}\ignorespaces}
+        \long\def\dm!addition+##1+>{{\selectfont\ignorespaces##1}%
+            \ignorespaces}}
+    {\IfStyleThenElse{proofmode}{ShowOmissions}{
+        \long\def\dm!comment*##1*>{{\nullfont##1}\ignorespaces}
+        \long\def\dm!omission-##1->{{\selectfont\ignorespaces##1}%
+            \ignorespaces}
+        \long\def\dm!addition+##1+>{{\nullfont##1}\ignorespaces}}
+    {
+        \long\def\dm!comment*##1*>{{\color{\commentcolor}##1}%
+            \ignorespaces}
+        \long\def\dm!omission-##1->{{\color{\omissioncolor}##1}%
+            \ignorespaces}
+        \long\def\dm!addition+##1+>{{\color{\additioncolor}##1}%
+            \ignorespaces}}}}
+
+\styleparm{draftmode}{off}
+\stylechoice{draftmode}{on}
+\stylechoice{draftmode}{off}
+
+\newcommand{\draftcolor}{magenta}
+
+\bgroup\lccode`\[=`\{ \lccode`\]=`\} \lowercase{\egroup
+\long\def\dm!draft#1\end[draft]{\ignorespacesafterend\end{draft}}}
+
+\def\dm!draftsetup{
+    \IfStyleThenElse{draftmode}{on}{
+        \newcommand{\draft}{\ignorespacesafterend\color{\draftcolor}}}
+    {
+        \newcommand{\draft}{\dm!makeother\{\dm!makeother\}\dm!draft}}}
+
+\newbox\dm!footbox
+\newif\ifdm!newfootnote
+
+\newcommand*{\ReusableFootnote}[2]{{%
+    \gdef#1{{%
+        \edef\!footname{\expandafter\bsgobble\string#1}%
+        \edef\!!lastpage{\expandafter\noexpand
+            \csname dm!footpage!\!footname\endcsname}%
+        \edef\!lastpage{\expandafter\ifx\!!lastpage\relax -1
+            \else\!!lastpage\fi}%
+        \edef\!!lastmark{\expandafter\noexpand
+            \csname dm!footmark!\!footname\endcsname}%
+        \edef\!lastmark{\expandafter\ifx\!!lastmark\relax -1
+            \else\!!lastmark\fi}%
+        \edef\!!count{\expandafter\noexpand
+            \csname dm!footcount!\!footname\endcsname}%
+        \expandafter\count@\expandafter\ifx\!!count\relax 0
+            \else\!!count\fi
+        \advance\count@ by 1
+        \edef\!!page{footpage@\!footname @\romannumeral\count@}%
+        \expandafter\xdef\!!count{\the\count@}%
+        \edef\!page{\expandafter\ifx\csname\!!page\endcsname\relax 0
+            \else\csname\!!page\endcsname\fi}%
+        \edef\!mark{\thefootnote}%
+        \edef\!writeline{\write\@auxout{%
+            \gdef\bschar\!!page{\noexpand\thepage}}}%
+        \!writeline
+        \dm!newfootnotetrue
+        \ifx\!page\!lastpage\ifx\!mark\!lastmark
+            \dm!newfootnotefalse
+        \fi\fi
+        \ifdm!newfootnote
+            \global\setbox\dm!footbox\hbox{\footnotemark}%
+            \footnotetext{#2}%
+            \expandafter\xdef\!!lastpage{\!page}%
+            \expandafter\xdef\!!lastmark{\thefootnote}%
+        \fi
+        \copy\dm!footbox}}}}
+ 
+\newif\iftoc
+\addtocontents{toc}{\string\toctrue}
+\DeclareRobustCommand{\tocnl}{\iftoc\\ \fi}
+\DeclareRobustCommand{\notocnl}{\iftoc\else\\ \fi}
+
+\AtBeginDocument{
+    \dm!proofsetup
+    \dm!draftsetup}
+
+\catcode`!12
+

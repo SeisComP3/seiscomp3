@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scimport" category="Utilities">
+		<description>Forward messages across two SeisComP3 systems.</description>
+		<configuration>
+			<parameter name="sink" type="string">
+				<description>
+				Address of scmaster to sent imported messages to.
+				</description>
+			</parameter>
+			<parameter name="routingtable" type="list:string">
+				<description>
+				This option has to be set if the application runs in import mode.
+				The routing table has to be defined in the form of source_group:sink_group
+				</description>
+			</parameter>
+			<parameter name="msggroups" type="list:string">
+				<description>
+				Defines a list of message groups of the source system (connection.server).
+				If not specified the source system is queried for a list of message groups
+				which are then used to check each subscription extracted from the routing
+				table. This parameter allows to override to source query result.
+				</description>
+			</parameter>
+			<group name="filter">
+				<group name="pick">
+					<parameter name="mode" type="string">
+						<description>
+						Defines the pick mode to filter for. Allowed values are
+						&quot;automatic&quot; and &quot;manual&quot;.
+						</description>
+					</parameter>
+					<parameter name="status" type="string">
+						<description>
+						Defines the pick status to filter for. Allowed values are
+						&quot;preliminary&quot;, &quot;confirmed&quot;,
+						&quot;reviewed&quot;, &quot;final&quot;,
+						&quot;rejected&quot; and &quot;reported&quot;.
+						</description>
+					</parameter>
+					<parameter name="phase" type="string">
+						<description>
+						Defines the pick phase hint to filter for. Allowed values are
+						all possible phase codes.
+						</description>
+					</parameter>
+					<parameter name="agencyIDs" type="list:string">
+						<description>
+						Defines the pick agencyIDs to filter for. Allowed values are
+						all possible agency ids;
+						</description>
+					</parameter>
+					<parameter name="networkCode" type="string">
+						<description>
+						Defines the pick network code of the processed waveforms.
+						Allowed values are all possible network codes.
+						</description>
+					</parameter>
+				</group>
+				<group name="amplitude">
+					<parameter name="operator" type="string">
+						<description>
+						Defines the amplitude comparison operator. Allowed values are
+						&quot;eq&quot;, &quot;lt&quot;, &quot;gt&quot; and &quot;*&quot;.
+						</description>
+					</parameter>
+					<parameter name="amplitude" type="double">
+						<description>
+						Defines the amplitude threshold to filter for. The operator
+						configured with &quot;operator&quot; is used to compare this threshold with
+						the incoming value. If &quot;operator&quot; is &quot;*&quot; then
+						values will pass.
+						</description>
+					</parameter>
+					<parameter name="agencyIDs" type="list:string">
+						<description>
+						Defines the amplitude agencyIDs to filter for. Allowed values are
+						all possible agency ids.
+						</description>
+					</parameter>
+				</group>
+				<group name="origin">
+					<parameter name="latitude" type="string">
+						<description>
+						Defines the latitude range in format [min]:[max].
+						</description>
+					</parameter>
+					<parameter name="longitude" type="string">
+						<description>
+						Defines the longitude range in format [min]:[max].
+						</description>
+					</parameter>
+					<parameter name="depth" type="string">
+						<description>
+						Defines the depth range in format [min]:[max].
+						</description>
+					</parameter>
+					<parameter name="agencyIDs" type="list:string">
+						<description>
+						Defines the origin agencyIDs to filter for. Allowed values are
+						all possible agency ids;
+						</description>
+					</parameter>
+					<parameter name="mode" type="string">
+						<description>
+						Defines the origin evaluation mode to filter for. Allowed values are
+						&quot;automatic&quot; and &quot;manual&quot;.
+						</description>
+					</parameter>
+					<parameter name="status" type="string">
+						<description>
+						Defines the origin status to filter for. Allowed values are
+						&quot;preliminary&quot;, &quot;confirmed&quot;,
+						&quot;reviewed&quot;, &quot;final&quot;,
+						&quot;rejected&quot; and &quot;reported&quot;.
+						</description>
+					</parameter>
+					<parameter name="arrivalcount" type="string">
+						<description>
+						Defines the minimum number of arrivals of an origin to pass
+						the filter.
+						</description>
+					</parameter>
+				</group>
+				<group name="event">
+					<parameter name="type" type="string">
+						<description>
+						Defines the event type to filter for, e.g. &quot;earthquake&quot;,
+						&quot;explosion&quot; ...
+						</description>
+					</parameter>
+				</group>
+				<group name="stationMagnitude">
+					<parameter name="type" type="string">
+						<description>
+						Defines the station magnitude type. Allowed values are all possible
+						magnitude types such as &quot;MLv&quot;.
+						</description>
+					</parameter>
+				</group>
+				<group name="magnitude">
+					<parameter name="type" type="string">
+						<description>
+						Defines the magnitude type. Allowed values are all possible
+						magnitude types such as &quot;MLv&quot;.
+						</description>
+					</parameter>
+				</group>
+				<group name="qc">
+					<parameter name="type" type="string">
+						<description>
+						Defines the QC parameter type. Allowed values are all possible
+						types such as &quot;latency&quot;, &quot;delay&quot; ...
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Import">
+				<option flag="o" long-flag="sink" param-ref="sink"/>
+				<option flag="i" long-flag="import">
+					<description>
+					Switch to import mode (default is relay). Im import mode the routing
+					table has to be specified whereas in relay the routing table will be
+					calculated  automatically.
+					</description>
+				</option>
+				<option long-flag="no-filter">
+					<description>
+					Disable message filtering and ignore all configured filters.
+					</description>
+				</option>
+				<option long-flag="routeunknowngroup">
+					<description>
+					Route unknown groups to the default group IMPORT_GROUP.
+					</description>
+				</option>
+				<option long-flag="ignore-groups">
+					<description>
+					Ignore user specified groups.
+					</description>
+				</option>
+				<option long-flag="test">
+					<description>
+					Do not send any messages.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

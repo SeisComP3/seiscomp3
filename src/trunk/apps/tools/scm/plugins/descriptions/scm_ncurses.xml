@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="ncurses">
+		<extends>scm</extends>
+		<description>
+			Ncurses output plugin for scm which presents an interactive table of
+			processes.
+		</description>
+	</plugin>
+</seiscomp>

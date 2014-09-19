@@ -1,0 +1,717 @@
+AC_INIT(src/stdutil/stddefines.h)
+
+AC_CONFIG_AUX_DIR(buildtools)
+AC_CONFIG_HEADER(src/stdutil/private/stdarch_autoconf.h)
+
+AC_LANG_C
+
+AC_PROG_CC
+AC_PATH_PROG(AR, ar)
+AC_PROG_LN_S
+AC_PROG_INSTALL
+
+if test -z "$AR" ; then
+	AC_MSG_ERROR([*** 'ar' missing, please install or fix your \$PATH ***])
+fi
+
+if test -z "$LD" ; then
+	LD=$CC
+fi
+
+if test "$GCC" = "yes"; then 
+	CFLAGS="$CFLAGS -Wall"
+fi
+
+# Check for threading parameters (store temporarily into main vars then put into specific ones)
+
+OLDLDFLAGS=$LDFLAGS
+LDFLAGS=
+AC_PTHREAD_FREEBSD
+THLDFLAGS=$LDFLAGS
+AC_SUBST(THLDFLAGS)
+LDFLAGS=$OLDLDFLAGS
+
+OLDLIBS=$LIBS
+LIBS=
+AC_CHECK_LIB(pthread, pthread_create)
+AC_CHECK_LIB(thread, thr_create)
+AC_CHECK_LIB(posix4, sem_wait)
+AC_SEARCH_LIBS(shm_open, rt posix4, [], [])
+AC_SEARCH_LIBS(nanosleep, rt posix4, [], [])
+THLIBS=$LIBS
+AC_SUBST(THLIBS)
+LIBS=$OLDLIBS
+
+# Check on host for dynamic library building rules
+
+AC_CANONICAL_HOST
+
+case "$host" in
+*-*-darwin*)
+	SHCC=$CC
+	SHCFLAGS="$CFLAGS -fPIC"
+	SHCPPFLAGS="$CPPFLAGS"
+	SHLD="$CC -dynamiclib"
+	SHLDFLAGS="$SHLDFLAGS $LDFLAGS"
+	SHLIBS=$LIBS
+	DYNLIBEXT=dylib
+	STANDARD_LIBS="\$(STATIC_THREADED_DEBUG_LIB) \$(STATIC_THREADED_RELEASE_LIB) \$(SHARED_THREADED_DEBUG_LIB) \$(SHARED_THREADED_RELEASE_LIB)"
+	SHARED_LIBS="\$(SHARED_LIBS)"
+        ;;
+mips-sgi-irix*)
+	CC=cc
+	CFLAGS="$CFLAGS -n32 -signed"
+	DYNLIBEXT=
+	STANDARD_LIBS="\$(STATIC_THREADED_DEBUG_LIB) \$(STATIC_THREADED_RELEASE_LIB)"
+	SHARED_LIBS=
+	;;
+*-*-*)
+	SHCC=$CC
+	SHCFLAGS="$CFLAGS -fPIC"
+	SHCPPFLAGS="$CPPFLAGS"
+	SHLD="$CC -shared"
+	SHLDFLAGS="$SHLDFLAGS $LDFLAGS"
+	SHLIBS=$LIBS
+	DYNLIBEXT=so
+	STANDARD_LIBS="\$(STATIC_THREADED_DEBUG_LIB) \$(STATIC_THREADED_RELEASE_LIB) \$(SHARED_THREADED_DEBUG_LIB) \$(SHARED_THREADED_RELEASE_LIB)"
+	SHARED_LIBS="\$(SHARED_LIBS)"
+	;;
+esac
+
+AC_SUBST(SHCC)
+AC_SUBST(SHCFLAGS)
+AC_SUBST(SHCPPFLAGS)
+AC_SUBST(SHLD)
+AC_SUBST(SHLDFLAGS)
+AC_SUBST(SHLIBS)
+AC_SUBST(DYNLIBEXT)
+AC_SUBST(STANDARD_LIBS)
+AC_SUBST(SHARED_LIBS)
+
+# Check sizeof basic types and figure out endianness
+
+AC_CHECK_SIZEOF(char, 1)
+AC_CHECK_SIZEOF(short, 2)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF([long long], 8)
+AC_CHECK_SIZEOF(size_t, 4)
+AC_CHECK_SIZEOF([void *], 4)
+
+AC_MSG_CHECKING([[checking all necessary integer types are available and appropriate]])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+#if (SIZEOF_CHAR != 1)
+#  error No 1 byte integer type found!
+#endif
+
+#if (SIZEOF_SHORT != 2)
+#  error No 2 byte integer type found!
+#endif
+
+#if (SIZEOF_INT != 4 && SIZEOF_LONG != 4)
+#  error No 4 byte integer type found!
+#endif
+
+#if (!defined(_MSC_VER) && SIZEOF_LONG != 8 && SIZEOF_LONG_LONG != 8)
+#  error No 8 byte integeral type found!
+#endif
+
+#if (SIZEOF_SIZE_T != 2 && SIZEOF_SIZE_T != 4 && SIZEOF_SIZE_T != 8)
+#  error No integral type of same size as size_t!
+#endif
+
+int main() { exit(0); return 0; }
+
+], AC_MSG_RESULT(yes), 
+   AC_MSG_ERROR([[test failed!  Please fix stdutil/private/stdarch.h.in for your platform!  Please note platform must have a built in 64b integer type! Alternatively, configure.in could be broken!]]),
+   AC_MSG_WARN([[Unable to check due to cross compiling!  ASSUMING NECESSARY INTEGER TYPES EXIST!  Please check that stdutil/private/stdarch.h is correct for your target platform!]]))
+
+AC_MSG_CHECKING([[if NULL pointers are represented as all zeroes in memory]])
+
+AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct test_struct {
+  void *               r;
+  int                  y;
+  double               x;
+  long                 z;
+  char                 str[348];
+  struct test_struct * next;
+  struct test_struct * prev;
+
+} test_struct;
+
+int main()
+{
+  void *        voidp   = NULL;
+  char *        charp   = NULL;
+  short *       shortp  = NULL;
+  int *         intp    = NULL;
+  long *        longp   = NULL;  
+  float *       floatp  = NULL;
+  double *      doublep = NULL;
+  test_struct * structp = NULL;
+  char          zeroes[sizeof(test_struct)];
+
+  memset(zeroes, 0, sizeof(zeroes));
+
+  if (memcmp(&voidp, zeroes, sizeof(voidp))     != 0 ||
+      memcmp(&charp, zeroes, sizeof(charp))     != 0 ||
+      memcmp(&shortp, zeroes, sizeof(shortp))   != 0 ||
+      memcmp(&intp, zeroes, sizeof(intp))       != 0 ||
+      memcmp(&longp, zeroes, sizeof(longp))     != 0 ||
+      memcmp(&floatp, zeroes, sizeof(floatp))   != 0 ||
+      memcmp(&doublep, zeroes, sizeof(doublep)) != 0 ||
+      memcmp(&structp, zeroes, sizeof(structp)) != 0) {
+    exit(100);
+  }
+
+  exit(0);
+  return 0;
+}
+],
+[AC_DEFINE(STDARCH_NULL_IS_ZERO) AC_MSG_RESULT(yes)],
+[
+if test $? -eq 100; then 
+  AC_MSG_RESULT([[no ... weird platform]])
+else
+  AC_MSG_ERROR([[failed! Please fix configure.in!]])
+fi
+],
+AC_MSG_WARN([[Unable to check due to cross compiling!  ASSUMING ALL NULLs ARE REPRESENTED AS ALL ZERO IN MEMORY! To change this please correct stdutil/private/stdarch.h!]]))
+
+AC_MSG_CHECKING([[byte alignment requirements]])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+#include <stddef.h>
+
+struct {
+  char x;
+  long y;
+
+} long_test;
+
+struct {
+  char x;
+#if defined(_MSC_VER)
+  __int64 y;
+#elif (SIZEOF_LONG == 8)
+  long y;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long y;
+#endif
+
+} int64_test;
+
+struct {
+  char        x;
+  long double y;
+
+} long_double_test;
+
+struct {
+  char   x;
+  void * y;
+
+} voidp_test;
+
+int main()
+{
+  ptrdiff_t max = (char*) &long_test.y - (char*) &long_test.x;
+  ptrdiff_t tmp;
+
+  tmp = (char*) &int64_test.y - (char*) &int64_test.x;
+
+  if (tmp > max) {
+    max = tmp;
+  }
+
+  tmp = (char*) &voidp_test.y - (char*) &voidp_test.x;
+
+  if (tmp > max) {
+    max = tmp;
+  }
+
+  tmp = (char*) &long_double_test.y - (char*) &long_double_test.x;
+
+  if (tmp > max) {
+    max = tmp;
+  }
+
+  exit(100 + (int) max);
+  return 100 + (int) max;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)! Please fix configure.in!]]), 
+[
+tmp=$?
+if test $tmp -gt 100 && test $tmp -le 116; then 
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDARCH_MAX_BYTE_ALIGNMENT, $tmp)
+  AC_MSG_RESULT($tmp)
+else
+  AC_MSG_ERROR([[test failed (invalid/unexpected return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE(STDARCH_MAX_BYTE_ALIGNMENT, 4)
+ AC_MSG_WARN([[Unable to check due to cross compiling!  ASSUMING ALIGNMENT TO 4 BYTE BOUNDARY IS GOOD ENOUGH (32 bit arch)! To change this please correct stdutil/private/stdarch.h!]])])
+
+AC_MSG_CHECKING(endianness of architecture)
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+  short  x    = 0x1;
+  char * xptr = (char*) &x;
+
+  exit(100 + (xptr[0] == 1));  /* return 101 if bytes are opposite of network order, else 100 */
+  return 100 + (xptr[0] == 1);
+}
+], 
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 101; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN16_SWAP, $tmp)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+AC_DEFINE(STDENDIAN16_SWAP, 1))
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if (SIZEOF_INT == 4)
+  int x = 0x1;
+#elif (SIZEOF_LONG == 4)
+  long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 24;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 103; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN32_NET0_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN32_HOST${tmp}_FROM_NET, 0)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN32_NET0_FROM_HOST, 3) AC_DEFINE_UNQUOTED(STDENDIAN32_HOST3_FROM_NET, 0)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if (SIZEOF_INT == 4)
+  int x = 0x1;
+#elif (SIZEOF_LONG == 4)
+  long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 16;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 103; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN32_NET1_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN32_HOST${tmp}_FROM_NET, 1)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN32_NET1_FROM_HOST, 2) AC_DEFINE_UNQUOTED(STDENDIAN32_HOST2_FROM_NET, 1)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if (SIZEOF_INT == 4)
+  int x = 0x1;
+#elif (SIZEOF_LONG == 4)
+  long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 8;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 103; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN32_NET2_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN32_HOST${tmp}_FROM_NET, 2)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN32_NET2_FROM_HOST, 1) AC_DEFINE_UNQUOTED(STDENDIAN32_HOST1_FROM_NET, 2)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if (SIZEOF_INT == 4)
+  int x = 0x1;
+#elif (SIZEOF_LONG == 4)
+  long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 0;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 103; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN32_NET3_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN32_HOST${tmp}_FROM_NET, 3)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN32_NET3_FROM_HOST, 0) AC_DEFINE_UNQUOTED(STDENDIAN32_HOST0_FROM_NET, 3)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 56;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET0_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 0)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET0_FROM_HOST, 7) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST7_FROM_NET, 0)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 48;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET1_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 1)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET1_FROM_HOST, 6) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST6_FROM_NET, 1)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 40;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET2_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 2)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET2_FROM_HOST, 5) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST5_FROM_NET, 2)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 32;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET3_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 3)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET3_FROM_HOST, 4) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST4_FROM_NET, 3)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 24;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET4_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 4)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET4_FROM_HOST, 3) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST3_FROM_NET, 4)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 16;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET5_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 5)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET5_FROM_HOST, 2) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST2_FROM_NET, 5)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 8;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET6_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 6)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET6_FROM_HOST, 1) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST1_FROM_NET, 6)])
+
+AC_TRY_RUN([
+#include <stdlib.h>
+
+int main() 
+{
+#if defined(_MSC_VER)
+  __int64 x = 0x1;
+#elif (SIZEOF_LONG == 8)
+  long x = 0x1;
+#elif (SIZEOF_LONG_LONG == 8)
+  long long x = 0x1;
+#endif
+  char * xptr = (char*) &x;
+  int        i;
+
+  x <<= 0;
+
+  for (i = 0; i < sizeof(x) && xptr[i] == 0; ++i);
+
+  exit(100 + i);
+  return 100 + i;
+}
+],
+AC_MSG_ERROR([[test failed (returned 0)!  Please fix configure.in!]]),
+[
+tmp=$?
+if test $tmp -ge 100 && test $tmp -le 107; then
+  tmp=$(($tmp - 100))
+  AC_DEFINE_UNQUOTED(STDENDIAN64_NET7_FROM_HOST, $tmp) 
+  AC_DEFINE_UNQUOTED(STDENDIAN64_HOST${tmp}_FROM_NET, 7) 
+  AC_MSG_RESULT(done)
+else
+  AC_MSG_ERROR([[test failed (invalid return value)!  Please fix configure.in!]])
+fi
+],
+[AC_DEFINE_UNQUOTED(STDENDIAN64_NET7_FROM_HOST, 0) AC_DEFINE_UNQUOTED(STDENDIAN64_HOST0_FROM_NET, 7) AC_MSG_WARN([[Unable to check due to cross compiling!  ASSUMING LITTLE ENDIAN ARCHITECTURE! To change please fix stdutil/private/stdarch.h!]])])
+
+AC_OUTPUT(src/Makefile)

@@ -1,0 +1,92 @@
+SET(GUI_DATAMODEL_SOURCES
+	eventlistview.cpp
+	eventsummaryview.cpp
+	eventsummary.cpp
+	eventedit.cpp
+	maglistview.cpp
+	magnitudemap.cpp
+	magnitudeview.cpp
+	originlocatormap.cpp
+	originlocatorview.cpp
+	publicobjectevaluator.cpp
+	importpicks.cpp
+	originsymbol.cpp
+	origintime.cpp
+	origindialog.cpp
+	pickerview.cpp
+	pickerzoomframe.cpp
+	pickersettings.cpp
+	amplitudeview.cpp
+	stationsymbol.cpp
+	inventorylistview.cpp
+	tensorsymbol.cpp
+	ttdecorator.cpp
+	calculateamplitudes.cpp
+	selectstation.cpp
+	locatorsettings.cpp
+	utils.cpp
+)
+
+SET(GUI_DATAMODEL_HEADERS
+	originsymbol.h
+	stationsymbol.h
+	origintime.h
+	tensorsymbol.h
+	ttdecorator.h
+	utils.h
+)
+
+SET(GUI_DATAMODEL_MOC_HEADERS
+	eventlistview.h
+	eventsummaryview.h
+	eventsummary.h
+	eventedit.h
+	maglistview.h
+	magnitudemap.h
+	magnitudeview.h
+	originlocatormap.h
+	originlocatorview.h
+	publicobjectevaluator.h
+	importpicks.h
+	pickerview.h
+	pickerzoomframe.h
+	pickersettings.h
+	amplitudeview.h
+	inventorylistview.h
+	calculateamplitudes.h
+	selectstation.h
+	locatorsettings.h
+	origindialog.h
+	utils.h
+)
+
+SET(GUI_DATAMODEL_UI
+	eventlistview.ui
+	eventlistviewfilterdialog.ui
+	eventsummaryview.ui
+	eventsummaryview_hypocenter.ui
+	eventsummary.ui
+	eventedit.ui
+	maglistview.ui
+	magnitudeview.ui
+	originlocatorview.ui
+	originlocatorview_commit.ui
+	originlocatorview_comment.ui
+	origintime.ui
+	origindialog.ui
+	importpicks.ui
+	pickerview.ui
+	pickersettings.ui
+	amplitudeview.ui
+	calculateamplitudes.ui
+	selectstation.ui
+	locatorsettings.ui
+	mergeorigins.ui
+	renamephases.ui
+)
+
+SET(GUI_DATAMODEL_RESOURCES
+	icons.qrc
+)
+
+SC_SETUP_GUI_LIB_SUBDIR(GUI_DATAMODEL)

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="nmxp" category="sources">
+		<description>
+		NAQS (TCP/IP) with nmxptool. nmxptool is not part of SeisComP3 and needs to be installed
+                under $INSTALLDIR/share/plugins/seedlink/. 
+		</description>
+		<configuration>
+			<parameter name="address" type="string" default="idahub.ucsd.edu">
+				<description>Hostname or IP of the NAQS server.</description>
+			</parameter>
+			<parameter name="port" type="int" default="28000">
+				<description>TCP port of the NAQS server.</description>
+			</parameter>
+			<parameter name="max_latency" type="int" default="300">
+				<description>Max latency in seconds (time to wait for missing packets).</description>
+			</parameter>
+			<parameter name="short_term_completion" type="int" default="-1">
+				<description>
+				Short-Term-Completion (default -1).
+
+				-1 is for Raw Stream, no Short-Term-Completion.
+				Packets contain compressed data.
+
+				0 decompressed packets are received in chronological order without
+				waiting for missing packets.
+
+				[1..300] decompressed packets are received in chronological order
+				but waiting for missing packets at most SECs seconds. This requires
+				NaqsServer version greater than 1.90.
+				</description>
+			</parameter>
+			<parameter name="additional_options" type="string">
+				<description>
+				Defines additional options passed to nmxptool.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string" default="naqs_bb40_sm100">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

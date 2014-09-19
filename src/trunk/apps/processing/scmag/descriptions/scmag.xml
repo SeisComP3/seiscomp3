@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scmag" category="Processing">
+		<description>Calculates magnitudes of different types.</description>
+		<configuration>
+			<group name="connection">
+				<parameter name="sendInterval" type="int" default="1">
+					<description>Interval between 2 sending processes. The interval has influence how often information is updated.</description>
+				</parameter>
+				<parameter name="minimumArrivalWeight" type="double" default="0.5">
+					<description>The minimum weight of an arrival to be used for magnitude calculations.</description>
+				</parameter>
+			</group>
+			<group name="summaryMagnitude">
+				<description>The summary magnitude is building a weighted summary above all defined magnitude types. The single magnitude value is multiplied with the magnitude type specific weight. This is summed up for all magnitude types and the resulting sum is divided through the sum of all weights.</description>
+				<parameter name="enabled" type="boolean" default="true">
+					<description>Enables summary magnitude calculation.</description>
+				</parameter>
+				<parameter name="type" type="string" default="M">
+					<description>Define the type/name of the summary magnitude.</description>
+				</parameter>
+				<parameter name="minStationCount" type="int" default="4">
+					<description>
+						This is the minimum station magnitude required for any magnitude to contribute to
+						the summary magnitude at all. If this is set to 4 then no magnitude with less than
+						4 station magnitudes is taken into consideration even if this results in no summary
+						magnitude at all. For this reason, the default here is 1 but in a purely automatic
+						system it should be higher, at least 4 is recommended.
+					</description>
+				</parameter>
+				<parameter name="blacklist" type="list:string" default="">
+					<description>Define the magnitude types to be excluded from the summary magnitude calculation.</description>
+				</parameter>
+				<parameter name="whitelist" type="list:string" default="">
+					<description>Define the magnitude types to be included in the summary magnitude calculation.</description>
+				</parameter>
+				<group name="coefficients">
+					<description>Define the coefficients to calculate the weight of a magnitude. weight = a*magStationCount+b</description>
+					<parameter name="a" type="list:string" default="0, Mw(mB):0.4, Mw(Mwp):0.4">
+						<description>Define the coefficients a. Unnamed values define the default value.</description>
+					</parameter>
+					<parameter name="b" type="list:string" default="1, MLv:2, Mw(mB):-1, Mw(Mwp):-1">
+						<description>Define the coefficients b. Unnamed values define the default value.</description>
+					</parameter>
+				</group>
+			</group>
+			<parameter name="magnitudes" type="list:string" default="MLv, mb, mB, Mwp">
+				<description>Definition of amplitude types to be calculated.</description>
+			</parameter>
+			<group name="magnitudes">
+				<parameter name="average" type="list:string" default="default">
+					<description>
+						Defines the average method to use when computing the network magnitude.
+						To define the average method per magnitude type append the type, eg:
+						&quot;magnitudes.average = default, MLv:median&quot;
+
+						The default behaviour is to compute the mean if less than 4 contributed
+						station magnitudes exist otherwise a trimmed mean of 25 percent is used.
+						Options are &quot;default&quot;, &quot;mean&quot; and &quot;trimmedMean&quot;.</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+				<option flag="x" long-flag="expiry" argument="time">
+					<description>Time span in hours after which objects expire.</description>
+				</option>
+			</group>
+			
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+			
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

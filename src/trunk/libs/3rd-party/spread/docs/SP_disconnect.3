@@ -1,0 +1,46 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_DISCONNECT 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_disconnect \- destroy connection between app and daemon
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_disconnect( mailbox " mbox );
+.SH DESCRIPTION
+.B SP_disconnect
+should be called when the application is finished
+with a connection to the Spread daemon.  The application may have
+other connections still open to the daemon and may open a new
+connection after disconnecting.
+
+If any SP_ function returns a 
+.B CONNECTION_CLOSED
+or 
+.B NET_ERRROR_ON_SESSION
+error on any call, then the mailbox cannot be used anymore
+until it is disconnected with a call to this function and then
+reconnected by calling SP_connect(). Any other SP_ calls
+will only immediately return the same error value. 
+ 
+The 
+.I mbox 
+should be for the connection you wish to disconnect from.
+.SH "RETURN VALUES"
+Returns 0 on success or 
+.B ILLEGAL_SESSION
+when the session 
+.I mbox
+given is not a valid connection.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

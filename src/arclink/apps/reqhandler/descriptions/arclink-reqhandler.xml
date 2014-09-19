@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="reqhandler">
+		<extends>arclink</extends>
+		<description>Global options for the request handler</description>
+		<configuration>
+
+			<group name="reqhandler">
+				<parameter name="maxsize" type="int" default="500">
+					<description>Maximum request size in megabytes.</description>
+				</parameter>
+
+				<parameter name="trackdir" type="dir" default="None">
+					<description>Request tracking (log) directory.</description>
+				</parameter>
+
+				<parameter name="trackdb" type="boolean" default="false">
+					<description>Request tracking: should req_handler save request logs in a/the database?</description>
+				</parameter>
+
+				<parameter name="nrtdir" type="dir" default="@ROOTDIR@/var/lib/archive">
+					<description>Root directory of near-real time (NRT) SDS.</description>
+				</parameter>
+
+				<parameter name="archdir" type="string" default="/iso_sds">
+					<description>Root directory of SDS archive.</description>
+				</parameter>
+
+				<parameter name="isodir" type="string" default="/iso_arc">
+					<description>Root directory of ISO archive.</description>
+				</parameter>
+
+				<parameter name="gfaurl" type="string" default="helmberger:///path/to/helmberger/archive">
+					<description>Location of Green's functions archive.</description>
+				</parameter>
+
+				<parameter name="subnodelist" type="dir"  default="None">
+					<description>Path to the subnode routing table.</description>
+				</parameter>
+
+				<parameter name="filedb" type="dir" default="None">
+					<description>Path to the file index database.</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

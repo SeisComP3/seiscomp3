@@ -1,0 +1,251 @@
+************
+Installation
+************
+
+SeisComP3 is distributed in the form of tar files:
+
+* Acquisition, processing and GUIs (for each supported platform)
+* Maps
+* Station configuration files (optional)
+
+Download these from http://www.seiscomp3.org/ .
+This section describes the installation of the binary packages of SeisComP3 on
+an openSUSE 11.1 64 bit system with KDE desktop profile.
+
+Requirements
+============
+
+The hardware requirements for a seismic system depend on the size of the
+station network to be operated.
+
+Minimal requirements are:
+
++-----+----------------------------------------------------------------------------------------+
+| CPU | 1                                                                                      |
++-----+----------------------------------------------------------------------------------------+
+| RAM | 2 GB                                                                                   |
++-----+----------------------------------------------------------------------------------------+
+| HDD | 20 GB                                                                                  |
++-----+----------------------------------------------------------------------------------------+
+| OS  | SUSE 10.2/3 32/64bit, SUSE 11 32/64bit, (K)Ubuntu 7/8 32/64bit, Debian 5.0, CentOS 5.3 |
++-----+----------------------------------------------------------------------------------------+
+
+In case large networks (>100 stations) are operated, a distributed system is
+recommended. Normally a SeisComP3 system is separated in several subsystems.
+A separation of data acquisition, processing and graphical user interfaces is
+useful to permit stable performance.
+
+The minimum specifications of the system should be:
+
+Data acquisition system:
+
++-----+----------------------------------------------------------------+
+| CPU | 1                                                              |
++-----+----------------------------------------------------------------+
+| RAM | 2 GB                                                           |
++-----+----------------------------------------------------------------+
+| HDD | Raid1/5/0+1 with >= 200GB                                      |
++-----+----------------------------------------------------------------+
+
+
+Processing system:
+
++-----+----------------------------------------------------------------+
+| CPU | 2                                                              |
++-----+----------------------------------------------------------------+
+| RAM | 4 GB                                                           |
++-----+----------------------------------------------------------------+
+| HDD | Raid1/5/0+1 with >= 100GB                                      |
++-----+----------------------------------------------------------------+
+
+GUI system:
+
++-----+----------------------------------------------------------------+
+| CPU | 2                                                              |
++-----+----------------------------------------------------------------+
+| RAM | 4 GB                                                           |
++-----+----------------------------------------------------------------+
+| HDD | > 50 GB                                                        |
++-----+----------------------------------------------------------------+
+
+
+
+Installation procedure
+======================
+
+The next steps describe the installation of SeisComP3 with the prepared
+tar.gz files.
+
+* Log in as user (e.g. sysop)
+* Copy one of the :file:`seiscomp3-seattle-[version]-[OS]-[arch].tar.gz` files to
+  your home directory. Take care which is the right package (32 or 64-bit) for
+  your operating system.
+
+* Go to home directory
+     
+  .. code-block:: sh
+  
+     user@host:/tmp$ cd
+
+* Untar the SeisComP3 binary package
+   
+  .. code-block:: sh
+
+     user@host:~$ tar xzf seiscomp3-seattle-[version]-[OS]-[arch].tar.gz
+
+* Untar the SeisComP3 map package into seiscomp3/share/maps
+
+  .. code-block:: sh
+
+     user@host:~$ tar xzf seiscomp3-maps.tar.gz
+
+* If desired, untar the documentation into seiscomp3/share/doc
+
+  .. code-block:: sh
+
+     user@host:~$ tar xzf seiscomp3-seattle-[version]-doc.tar.gz
+
+Now everything is installed and the system can be configured. The :ref:`next chapter<getting-started>`
+chapter explains the first steps.
+
+
+Install dependencies
+--------------------
+
+SeisComP3 depends on a number of additional packages shipped with each Linux
+distribution. The following table gives an overview:
+
++-----------------------------+----------------------------------------+
+| Package                     | SC3 component                          |
++=============================+========================================+
+| flex                        | Seedlink (compilation only)            |
++-----------------------------+----------------------------------------+
+| libxml2                     | Seedlink, Arclink, trunk               |
++-----------------------------+----------------------------------------+
+| libboost                    | trunk                                  |
++-----------------------------+----------------------------------------+
+| libboost-dev                | trunk (compilation only)               |
++-----------------------------+----------------------------------------+
+| libncurses                  | trunk:scm (optional)                   |
++-----------------------------+----------------------------------------+
+| libncurses-dev              | trunk:scm (compilation only, optional) |
++-----------------------------+----------------------------------------+
+| libmysqlclient              | trunk (only if MYSQL is used)          |
++-----------------------------+----------------------------------------+
+| libmysqlclient-dev          | trunk (compilation only if enabled)    |
++-----------------------------+----------------------------------------+
+| mysql-server                | trunk (only if MYSQL is used locally)  |
++-----------------------------+----------------------------------------+
+| libpq5                      | trunk (only if PostgreSQL is used)     |
++-----------------------------+----------------------------------------+
+| libpq-dev                   | trunk (compilation only if enabled)    |
++-----------------------------+----------------------------------------+
+| libqt4                      | trunk (only GUI should be used)        |
++-----------------------------+----------------------------------------+
+| python-dev                  | trunk (compilation only)               |
++-----------------------------+----------------------------------------+
+| festival                    | trunk (optional voice alert)           |
++-----------------------------+----------------------------------------+
+
+
+First the environment has to be set up. The :program:`seiscomp` tool comes with
+the command :command:`install-deps` which installs required packages.
+To use MYSQL, give 'mysql-server' as parameter. If your distribution is not
+supported by :command:`install-deps`, install the above packages or contact us
+to add support for your distribution.
+
+.. code-block:: sh
+
+   user@host:~$ seiscomp3/bin/seiscomp install-deps base mysql-server
+   Distribution: Ubuntu 10.04
+   [sudo] password for sysop:
+   Reading package lists... Done
+   Building dependency tree
+   Reading state information... Done
+   ...
+
+
+SQL configuration
+-----------------
+
+* For better performance with a MYSQL database, adjust the following parameters:
+
+  * "innodb_buffer_pool_size = 64M"
+  * "innodb_flush_log_at_trx_commit = 2"
+
+  The location of the configuration can differ between distributions. For
+  OpenSUSE it is in :file:`/etc/my.cnf` whereas Ubuntu uses
+  :file:`/etc/mysql/my.cnf`  respectively :file:`/etc/mysql/conf.d/*`. Please
+  read the documentation of your distribution .
+
+  After adjusting the parameters, MYSQL needs to be restarted. If you are
+  running OpenSUSE you can run
+
+  .. code-block:: sh
+
+     $ sudo rcmysql restart
+
+  whereas Ubuntu requires
+
+  .. code-block:: sh
+
+     $ sudo restart mysql
+
+
+* To start MySQL automatically during boot set in OpenSUSE
+
+  .. code-block:: sh
+
+     user@host:~$ insserv mysql
+
+
+Directory structure
+===================
+
+The directory structure of the installed system is described with the
+following table.
+
++---------------------+--------------------------------------------------------------------+
+| Directory           | Description                                                        |
++=====================+====================================================================+
+| *bin*               | The user module binaries.                                          |
++---------------------+--------------------------------------------------------------------+
+| *lib*               | The base library directory used by all modules.                    |
++---------------------+--------------------------------------------------------------------+
+| *lib/python*        | The pyton library directory.                                       |
++---------------------+--------------------------------------------------------------------+
+| *man*               | The manual pages.                                                  |
++---------------------+--------------------------------------------------------------------+
+| *sbin*              | The system/service/server binaries such as seedlink.               |
++---------------------+--------------------------------------------------------------------+
+| *var*               | Variable files whose content is expected to continually change.    |
++---------------------+--------------------------------------------------------------------+
+| *var/log*           | Log files of started modules. Usually modules log either to syslog |
+|                     | or ~/.seiscomp3/log. This directory contains the logs of the start |
+|                     | of each module.                                                    |
++---------------------+--------------------------------------------------------------------+
+| *var/lib*           | Default directory for files created by modules such as the         |
+|                     | waveform ringbuffer of SeedLink or the waveform archive created    |
+|                     | by slarchive.                                                      |
++---------------------+--------------------------------------------------------------------+
+| *var/run*           | Contains the .run and .pid files of modules started by             |
+|                     | :program:`seiscomp`.                                               |
++---------------------+--------------------------------------------------------------------+
+| *include*           | SDK header files for all libraries.                                |
++---------------------+--------------------------------------------------------------------+
+| *share*             | Application data such as maps, cities.xml and others.              |
++---------------------+--------------------------------------------------------------------+
+| *share/templates*   | Template files used by eg SeedLink to create its native            |
+|                     | configuration.                                                     |
++---------------------+--------------------------------------------------------------------+
+| *etc*               | Configuration directory.                                           |
++---------------------+--------------------------------------------------------------------+
+| *etc/descriptions*  | Contains all XML module descriptions.                              |
++---------------------+--------------------------------------------------------------------+
+| *etc/defaults*      | The default configuration files. This directory is read as first   |
+|                     | when a module starts.                                              |
++---------------------+--------------------------------------------------------------------+
+| *etc/init*          | Module init scripts called by :program:`seiscomp`.                 |
++---------------------+--------------------------------------------------------------------+
+| *etc/key*           | Station configurations and module bindings.                        |
++---------------------+--------------------------------------------------------------------+

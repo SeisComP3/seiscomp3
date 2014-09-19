@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scbulletin" category="Utilities">
+		<description>
+		Create bulletins from SC3ML.
+		</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Dump">
+				<option flag="E" long-flag="event" argument="arg">
+					<description>
+					ID of event that is read from database and
+					transformed into a bulletin.
+					</description>
+				</option>
+				<option flag="O" long-flag="origin" argument="arg">
+					<description>
+					ID of origin that is read from database
+					and transformed into a bulletin.
+					</description>
+				</option>
+				<option flag="w" long-flag="weight" argument="arg">
+					<description>
+					Weight threshold for printed and counted picks.
+					</description>
+				</option>
+				<option flag="1" long-flag="autoloc1">
+					<description>
+					Use autoloc1 format for output. This is default.
+					</description>
+				</option>
+				<option flag="3" long-flag="autoloc3">
+					<description>
+					Use autoloc3 format for output.
+					</description>
+				</option>
+				<option flag="x" long-flag="extra">
+					<description>
+					Use a specially detailed autoloc3 format. This options works only
+					in combination with the autoloc3-flag.
+					</description>
+				</option>
+			</group>
+
+			<group name="Input">
+				<option flag="f" long-flag="format" argument="arg">
+					<description>
+					Input format to use (xml [default], zxml (zipped xml), binary).
+					</description>
+				</option>
+				<option flag="i" long-flag="input" argument="arg">
+					<description>
+					The input file. Default is stdin.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

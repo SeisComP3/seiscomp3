@@ -1,0 +1,142 @@
+.TH MSR_NEW 3 2006/12/10
+.SH NAME
+Utility routines for parsing, printing, etc. of Mini-SEED records
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.B SLMSrecord * \fBmsr_new\fP (void);
+.BI "void       \fBsl_msr_free\fP (SLMSrecord **" msr );
+.sp
+.BI "SLMSrecord * \fBsl_msr_parse\fP (SLlog *" log ", char *" msrecord ", SLMSrecord **" msr ",
+.BI "                           int " blktflag " , int " unpackflag );
+.BI "int        \fBsl_msr_print\fP (SLlog *" log ", SLMSrecord *" msr ", int " details ");
+.sp
+.BI "int        \fBsl_msr_dsamprate\fP (SLMSrecord *" msr ", double *" samprate );
+.BI "double     \fBsl_msr_dnomsamprate\fP (SLMSrecord *" msr );
+.BI "double     \fBsl_msr_depochstime\fP (SLMSrecord *" msr );
+.fi
+.SH DESCRIPTION
+\fBsl_msr_new\fP and \fBsl_msr_free\fP can be used to allocate and free the
+Mini-SEED structures used by \fBsl_msr_parse\fP and \fBsl_msr_print\fP.
+
+The SLMSrecord typedef and struct is defined as:
+
+.nf
+typedef struct SLMSrecord_s {
+  char                  *msrecord;    /* Pointer to original record */
+  struct sl_fsdh_s       fsdh;        /* Fixed Section of Data Header */
+  struct sl_blkt_100_s  *Blkt100;     /* Blockette 100, if present */
+  struct sl_blkt_1000_s *Blkt1000;    /* Blockette 1000, if present */
+  struct sl_blkt_1001_s *Blkt1001;    /* Blockette 1001, if present */
+  int32_t               *datasamples; /* Unpacked 32-bit data samples */
+  int32_t                numsamples;  /* Number of unpacked samples */
+  int8_t                 unpackerr;   /* Unpacking error flag */
+} SLMSrecord;
+.fi
+
+The substructures, FSDH and Blockettes, are defined in libslink.h
+
+\fBsl_msr_free\fP will free all memory associate with a SLMSrecord
+struct except for the original data record (msrecord).
+
+\fBsl_msr_parse\fP will parse the Mini-SEED record at \fImsrecord\fP
+into the above structure, swapping all numerical values into the host
+byte order when appropriate.  If no SLMSrecord has been allocated yet
+(i.e. *\fImsr\fP == NULL), \fBsl_msr_new\fP will be called.  Any
+values in the SLMSrecord, including the data samples, are destroyed by
+subsequent calls to this function.  The character arrays in the Fixed
+Section Data Header will NOT be null terminated strings after parsing,
+see CAVEATS below.  Log messages will be based on the logging
+parameters specified in \fIlog\fP.  Often \fIlog\fP is specified as
+the log parameters in an associated SLCD.  If \fIlog\fP is NULL global
+logging parameters will be used
+
+If \fIblktflag\fP is true \fBsl_msr_parse\fP will also parse any
+blockettes present.  Blockettes 100, 1000 and 1001 are recognized and
+parsed into structures pointed to by Blkt100, Blkt1000 and Blkt1001.
+If these blockettes are not parsed the respective pointers are NULL.
+
+If \fIunpackflag\fP is true \fBsl_msr_parse\fP will also unpack any
+waveform data present.  Currently the following encoding formats are
+recognized: INT-16, INT-32, Steim-1 and Steim-2.  The resulting 32-bit
+data samples will be available through the \fIdatasamples\fP pointer
+in the same byte order as the host. \fInumsamples\fP will be set to
+the actual number of data samples unpacked; it is possible that this
+value differs from the number of samples indicated in the record
+header.  If errors are encountered during unpacking/decompression the
+\fIunpackerr\fP flag will be set appropriately, for no errors it will
+be set to MSD_NOERROR (with a value of 0), see UNPACKING ERRORS below.
+If the waveform data is not unpacked then the pointer will be NULL and
+\fInumsamples\fP will be -1.
+
+\fBsl_msr_print\fP will print the header/blockette information in the
+given SLMSrecord at the log level (0) using the logging parameters
+specified in \fIlog\fP.  Unless the logging system messages have been
+redirected this means that this information will be printed to
+standard output.  Often \fIlog\fP is specified as the log parameters
+in an associated SLCD.  If \fIlog\fP is NULL global logging parameters
+will be used.  If the \fIdetails\fP flag is greater than zero detailed
+information (values in the fixed header and following blockettes) is
+printed.  Otherwise only a single line for each packet is printed.
+
+\fBsl_msr_dsamprate\fP, \fBsl_msr_dnomsamprate\fP and
+\fBsl_msr_depochstime\fP are helper functions for common, mundane
+calculations.  \fBsl_msr_dsamprate\fP sets \fIsamprate\fP to either
+the actual sample rate (field 3 of Blockette 100), if it is included
+and parsed, or the nominal sample rate calculated from the sample rate
+factor and multiplier in the fixed section data header.
+\fBsl_msr_dnomsamprate\fP always returns the nominal sample rate.
+\fBsl_msr_depochstime\fP returns the start time of the record as a
+double precision Unix/POSIX epoch (seconds since January 1, 1970)
+including the microseconds offset in Blockette 1001 if included.
+
+.SH RETURN VALUES
+\fBsl_msr_new\fP returns a pointer to the newly allocated SLMSrecord
+struct or NULL on error.
+
+\fBsl_msr_parse\fP returns the pointer to the SLMSrecord struct on
+success.  On error *ppmsr is set to NULL and NULL is returned.
+
+\fBsl_msr_print\fP returns non-zero on success and 0 on error.
+
+\fBsl_msr_dsamprate\fP returns 1 if \fIsamprate\fP is the actual
+sample rate, 2 if it is the nominal sample rate or 0 on error.
+
+\fBsl_msr_depochstime\fP returns a large positive double on success
+and 0 on error.
+
+.SH UNPACKING ERRORS
+If the \fIunpackflag\fP is true when calling \fBsl_msr_parse\fP the
+\fIunpackerr\fP flag will be set to one of the following:
+
+.IP MSD_NOERROR
+No errors, value is 0
+.IP MSD_UNKNOWNFORMAT
+Unknown data format
+.IP MSD_SAMPMISMATCH
+The number of samples in the header did not match the number unpacked/decompressed
+.IP MSD_BADSAMPCOUNT
+The number of samples indicated in the header is bad, negative?
+.IP MSD_STBADLASTMATCH
+Steim data integrity check failed, last sample does not match
+.IP MSD_STBADCOMPFLAG
+A bad Steim compression flag was encountered
+
+.SH CAVEATS
+The character arrays in the Fixed Section Data Header
+(sequence_number, station, location, channel and network) will NOT be
+null terminated strings after parsing.  They can easily be copied and
+"cleaned" with the included \fBsl_strncpclean(3)\fP function,
+resulting in well behaved C strings.
+
+.SH SEE ALSO
+\fBsl_strncpclean(3)\fP, libslink Users Guide
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

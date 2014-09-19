@@ -1,0 +1,23 @@
+# This is the configuration file for IP restricted access to a Spread daemon.
+# Each line represents an allowed IP address or network address
+# The keywords "unix" and "local" can be used to allow connections from
+# Unix Domain Sockets and localhost TCP connections respectively.
+# 
+# So a sample file which only allowed local connections would be as shown
+# below (but with the comment '#' characters removed.
+#
+#unix
+#local 
+#
+# A file allowing access from local clients and clients on a 
+# private network with addresses from 192.168.1.0 to 192.168.1.255 would be:
+#
+#unix
+#local
+#192.168.1.0/24
+#
+#
+# This format follows standard network address formatting where the 
+# IPv4 network address is followed by a '/' and the number of bits which
+# make up the network portion of the IP address. A '/24' corresponds
+# with what used to be called a "Class C" address and a '/16' with a "Class B".

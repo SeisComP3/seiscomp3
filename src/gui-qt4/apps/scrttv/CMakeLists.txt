@@ -1,0 +1,35 @@
+SET(PACKAGE_NAME TRACEVIEW)
+SET(APP_NAME scrttv)
+
+SET(
+    ${PACKAGE_NAME}_SOURCES
+	main.cpp
+	mainwindow.cpp
+)
+
+SET(
+    ${PACKAGE_NAME}_HEADERS
+)
+
+
+SET(
+    ${PACKAGE_NAME}_MOC_HEADERS
+	mainwindow.h
+	progressbar.h
+)
+
+SET(
+    ${PACKAGE_NAME}_UI
+	mainwindow.ui
+)
+
+
+SET(
+    ${PACKAGE_NAME}_RESOURCES
+)
+
+SC_ADD_GUI_EXECUTABLE(${PACKAGE_NAME} ${APP_NAME})
+SC_LINK_LIBRARIES_INTERNAL(${APP_NAME} qt4)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

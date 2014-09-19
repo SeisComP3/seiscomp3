@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 FDSNWS - Event</title>
+</head>
+<body>
+  <h1>SeisComP3 FDSNWS Event Web Service</h1>
+  <p>The event Web service provides access to contributed origin and magnitude
+  estimates in <a href="https://quake.ethz.ch/quakeml">QuakeML</a> format.
+  Events may be filtered e.g. by hypocenter, time and magnitude parameters. The
+  request type is <em>HTTP-GET</em> and <em>HTTP-POST</em>. Please refer to <a
+  href="http://www.fdsn.org/webservices">http://www.fdsn.org/webservice</a> for
+  a complete service description.</p>
+
+  <h2>Available URLs</h2>
+  <ul>
+    <li><a href="query">query</a></li>
+    <li><a href="catalogs">catalogs</a></li>
+    <li><a href="contributors">contributors</a></li>
+    <li><a href="version">version</a></li>
+    <li><a href="application.wadl">application.wadl</a></li>
+  </ul>
+
+  <h2>Feature Notes</h2>
+  <ul>
+    <li>back-end software: <a href="http://www.seiscomp3.org">SeisComP3</a></li>
+    <li><em>catalog</em> request parameter not implemented (information not
+      available in SeisComP)</li>
+    <li><em>contributor</em> request parameter is mapped to the
+      <em>agencyID</em></li>
+    <li><em>updatedafter</em> request parameter not implemented: The last
+      modification time in SeisComP is tracked on the object level. If a child
+      of an object is updated the update time is not propagated to all parents.
+      In order to check if a station was updated all children must be evaluated
+      recursively. This operation would be much to expensive.</li>
+    <li>additional request parameters, effective only for xml output:
+      <ul>
+        <li><em>includecomments</em>: boolean, default: <em>true</em></li>
+        <li><em>includepicks</em>: boolean, default: <em>false</em></li>
+        <li><em>formatted</em>: boolean, default: <em>false</em></li>
+      </ul>
+    </li>
+    <li>additional values of request parameters:
+      <ul>
+        <li><em>format</em>
+          <ul>
+            <li>standard: [xml, text]</li>
+            <li>additional: [qml (=xml), qml-rt, sc3ml, csv]</li>
+            <li>default: xml</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+</html>

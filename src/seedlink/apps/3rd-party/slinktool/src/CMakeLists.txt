@@ -1,0 +1,21 @@
+SET(SLINKTOOL_SOURCES
+	archive.c
+	dsarchive.c
+	slinktool.c
+	slinkxml.c
+)
+
+INCLUDE_DIRECTORIES(../../../../libs/3rd-party/libslink)
+INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+
+ADD_EXECUTABLE(slinktool ${SLINKTOOL_SOURCES})
+
+TARGET_LINK_LIBRARIES(
+	slinktool
+		${LIBXML2_LIBRARIES}
+		slink
+)
+
+INSTALL(TARGETS slinktool
+	RUNTIME DESTINATION ${SC3_PACKAGE_BIN_DIR}
+)

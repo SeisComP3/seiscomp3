@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scmaster" category="Messaging">
+		<configuration>
+			<parameter name="msgGroups" type="list:string">
+				<description>
+				Configures the available message groups. If nothing is configured, the default message
+				groups AMPLITUDE, PICK, LOCATION, MAGNITUDE, FOCMECH, EVENT, QC, PUBLICATION, GUI, INVENTORY,
+				CONFIG, LOGGING, SERVICE_REQUEST and SERVICE_PROVIDE are provided.
+				</description>
+			</parameter>
+			<parameter name="schemaVersionOverride" type="string">
+				<description>
+				Force the schema version to be reported to clients. This must be equal
+				or lower than the one the code supports otherwise scmaster will fail to
+				start. This is an expert setting and can be required if clients with
+				version equal or lower than 2013.245 connect to a master with a higher
+				schema version because of a bug on client side.
+				</description>
+			</parameter>
+			<group name="admin">
+				<parameter name="adminname" type="string">
+					<description>
+					Name of admin user used to authenticate with scadmin to manage
+					client connections.
+					</description>
+				</parameter>
+				<parameter name="password" type="string">
+					<description>
+					Password of admin user used to authenticate with scadmin to manage
+					client connections.
+					</description>
+				</parameter>
+			</group>
+			<group name="plugins">
+				<group name="dbPlugin">
+					<description>
+					Database plugin for scmaster. This plugin forwards all messages received by
+					scmaster to the configured database and garantuees that the objects in the
+					message (send within notifiers) are stored in the database before a client
+					receives the message. To load the plugin, add dbplugin to plugins in scmaster's
+					configuration.
+					</description>
+					<parameter name="dbDriver" type="string">
+						<description>
+						Selected the database driver to use. Database drivers are
+						available through plugins. The default plugin is dbmysql
+						which supports the MYSQL database server. It is activated
+						with the core.plugins parameter.
+						</description>
+					</parameter>
+					<parameter name="readConnection" type="string">
+						<description>
+						Sets the database read connection which is reported to clients
+						that connect to this server. If a remote setup should be
+						implemented, ensure that the hostname is reachable from
+						the remote computer.
+						</description>
+					</parameter>
+					<parameter name="writeConnection" type="string">
+						<description>
+						Sets the database write connection which is private to
+						scmaster. A separate write connection enables different
+						permissions on the database level for scmaster and
+						clients.
+						</description>
+					</parameter>
+					<parameter name="strictVersionCheck" type="boolean" default="true">
+						<description>
+						If enabled, the plugin will check the database schema version and refuse to start
+						if the version doesn't match the latest version. If disabled and the an object
+						needs to be stored which is incompatible with the database schema this object is
+						lost. Leave this option enabled unless you know exactly what are you doing and what
+						the consequences are.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+		<setup>
+			<group name="database">
+				<input name="enable" type="boolean" default="true">
+					<text>Enable database storage</text>
+					<description>
+						Enables/disables the database. If the database is not enabled the processed
+						data is not stored persistently. Leave this option enabled unless you know
+						what you are doing.
+					</description>
+					<option value="false"/>
+					<option value="true">
+						<input name="backend" type="string" default="mysql">
+							<text>Database backend</text>
+							<description>
+							SeisComP supports different database backends. Select
+							the one you want to use. Different backends require
+							different additional packages to be installed on your
+							host system.
+							</description>
+							<option value="mysql">
+								<description>MySQL server.</description>
+								<input name="create" type="boolean" default="true">
+									<text>Create database</text>
+									<description>
+									If you already have a database and want to reuse it, you can skip this step.
+									If you want to let setup create the database for you, check this option.
+									</description>
+									<option value="true">
+										<input name="rootpw" type="string" echo="password">
+											<text>MYSQL root password</text>
+											<description>
+											To create the database root access to the database is required. Please
+											enter the root password to the database server you are going to use.
+											The server hostname will be entered in the next steps.
+											</description>
+										</input>
+										<input name="drop" type="boolean" default="false">
+											<text>Drop existing database</text>
+											<description>
+											When a database with the same name exists already, should it be destroyed
+											and recreated? If you say no here, an error will be raised if the database
+											to be created already exists.
+											</description>
+										</input>
+									</option>
+									<option value="false"/>
+								</input>
+							</option>
+							<option value="postgresql">
+								<description>
+								Postgresql server. There is currently no support in setup to create the
+								database for you. You have to setup the database and user accounts on
+								your own. The database schema is installed under share/db/postgresql.sql.
+								Note that the database encoding should be UTF8 and that you need
+								to set the encoding to 'escape' for PostgreSQL &gt;= 9,
+								e.g. &quot;ALTER DATABASE seiscomp3 SET bytea_output TO 'escape';&quot;
+								</description>
+							</option>
+						</input>
+						<input name="db" type="string" default="seiscomp3">
+							<text>Database name</text>
+							<description>
+							Database name to use. If you want to avoid conflicts with
+							existing databases or if you have multiple installations
+							change the default name. If you are unsure, keep the default.
+							</description>
+						</input>
+						<input name="rwhost" type="string" default="localhost">
+							<text>Database hostname</text>
+							<description>
+							The hostname of the computer running the database server.
+							In most cases it is this computer (localhost). This hostname is
+							private and not published to any client connection to this
+							computer.
+							</description>
+						</input>
+						<input name="rwuser" type="string" default="sysop">
+							<text>Database read-write user</text>
+							<description>
+							The database username for read-write access to the database.
+							This account will not be visible to clients connecting to your
+							system unless read-only and read-write accounts are not separated.
+							</description>
+						</input>
+						<input name="rwpwd" type="string" default="sysop">
+							<text>Database read-write password</text>
+							<description>
+							The database user password for read-write access to the database.
+							This account will not be visible to clients connecting to your
+							system unless read-only and read-write accounts are not separated.
+							</description>
+						</input>
+						<input name="rohost" type="string" default="localhost">
+							<text>Database public hostname</text>
+							<description>
+							The hostname of the computer running the database server.
+							In most cases it is this computer (localhost). This hostname is
+							sent to all connected clients who in turn will try to resolve it.
+							If all modules run locally you can leave the defaults.
+							</description>
+						</input>
+						<input name="rouser" type="string" default="sysop">
+							<text>Database read-only user</text>
+							<description>
+							The database user that will have read-only access to the database.
+							This account will be visible to all clients connecting to your
+							system.
+							</description>
+						</input>
+						<input name="ropwd" type="string" default="sysop">
+							<text>Database read-only password</text>
+							<description>
+							The database user password for read-only access to the database.
+							This password will be visible to all clients connecting to your
+							system.
+							</description>
+						</input>
+					</option>
+				</input>
+			</group>
+		</setup>
+	</module>
+</seiscomp>

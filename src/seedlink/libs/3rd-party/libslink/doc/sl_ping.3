@@ -1,0 +1,27 @@
+.TH SL_PING 3 2004/08/06
+.SH NAME
+
+sl_ping \- Test the existence of a SeedLink server
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp 
+.BI "int \fBsl_ping\fP (SLCD * " slconn ", char *" serverid ", char *" site ");
+.fi
+.SH DESCRIPTION
+\fBsl_ping\fP connects to a SeedLink server and issues the 'HELLO'
+command.  If a valid response is received is will be parsed and copied
+into the \fIserverid\fP and \fIsite\fP strings.  Each string should have
+room for at least 100 characters.
+
+.SH RETURN VALUES
+\fBsl_ping\fP returns 0 on success, -1 when a socket connection was
+opened but no valid response to the 'HELLO' command was received and -2
+when the socket conneciton could not be opened.
+
+.SH AUTHOR
+.nf
+Chad Trabant
+IRIS Data Management Center
+.fi

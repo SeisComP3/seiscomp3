@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 FDSNWS - Station</title>
+</head>
+<body>
+  <h1>SeisComP3 FDSNWS Station Web Service</h1>
+  <p>The station Web service provides access to network, station, channel and
+  response metadata in <a href="http://www.fdsn.org/xml/station">FDSN Station
+  XML</a> format. The metadata may be filtered e.g. by geographic region and
+  time, also the information depth level is selectable. The
+  request type is <em>HTTP-GET</em>. Please refer to
+  <a href="http://www.fdsn.org/webservices">http://www.fdsn.org/webservice</a>
+  for a complete service description.</p>
+
+  <h2>Available URLs</h2>
+  <ul>
+    <li><a href="query">query</a></li>
+    <li><a href="version">version</a></li>
+    <li><a href="application.wadl">application.wadl</a></li>
+  </ul>
+
+  <h2>Feature Notes</h2>
+  <ul>
+    <li>back-end software: <a href="http://www.seiscomp3.org">SeisComP3</a></li>
+    <li><em>includeavailability</em> request parameter not implemented</li>
+    <li><em>updatedafter</em> request parameter not implemented: The last
+      modification time in SeisComP is tracked on the object level. If a child
+      of an object is updated the update time is not propagated to all parents.
+      In order to check if a station was updated all children must be evaluated
+      recursively. This operation would be much to expensive.</li>
+    <li><em>matchtimeseries</em> request parameter not implemented</li>
+    <li>additional request parameters, effective only for xml output:
+      <ul>
+        <li><em>formatted</em>: boolean, default: <em>false</em></li>
+      </ul>
+    </li>
+    <li>additional values of request parameters:
+      <ul>
+        <li><em>format</em>
+          <ul>
+            <li>standard: [xml, text]</li>
+            <li>additional: [fdsnxml (=xml), stationxml, sc3ml]</li>
+            <li>default: xml</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+</html>

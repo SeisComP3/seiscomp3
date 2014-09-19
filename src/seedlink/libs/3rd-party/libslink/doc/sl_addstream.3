@@ -1,0 +1,72 @@
+.TH SL_ADDSTREAM 3 2005/04/07
+.SH NAME
+sl_addstream, sl_setuniparams \- populate stream chain or set
+parameters for uni-station mode
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_addstream\fP (SLCD *" slconn ", char *" net ", char *" sta ",
+.BI "                  char *" selectors ", int " seqnum ", char *" timestamp );
+.sp
+.BI "int \fBsl_setuniparams\fP (SLCD *" slconn ", char *" selectors ", int " seqnum ",
+.BI "                     char *" timestamp );
+.fi
+.SH DESCRIPTION
+\fBsl_addstream\fP adds an entry to the stream chain for the SeedLink
+Connection Description specified in \fIslconn\fP.  This function
+implies multi-station mode and will set the multistation flag in the
+SLCD to true.  The helper functions \fBsl_read_streamlist\fP and
+\fBsl_parse_streamlist\fP use this function to add entries to the
+stream chain.  No checking is done for duplicate streams entries.
+
+\fBsl_setuniparams\fP sets the parameters for uni-station collection
+mode, essentially a stream chain of one entry.  The multistation flag
+in the SLCD is set to false.  If uni-station mode is desired this
+function should be used even though the sequence number or time stamp
+is unknown as it adds the needed single entry to the stream chain.
+
+If no \fIselectors\fP are to be used for the given entry the value
+should be 0.  If no \fIseqnum\fP (sequence number) is given it should
+be -1.  If no \fItimestamp\fP is given it should be 0.
+
+.SH RETURN VALUES
+On success these functions return 0, on error -1.
+
+.SH EXAMPLE
+.nf
+#include <libslink.h>
+ 
+main () {
+  SLCD * slconn;
+ 
+  ...
+
+  sl_addstream (slconn, "GE", "APE", 0, -1, 0);
+   or
+  sl_setuniparams (slconn, 0, -1, 0);
+
+  return
+}
+.fi
+
+.SH NOTES
+If multi-station mode is desired the \fBsl_parse_streamlist\fP and
+\fBsl_read_streamlist\fP functions should be evaluated for use as they
+simpify the population of the stream chain.
+
+Although it is possible to set the sequence numbers and time stamps
+for each stream entry with these functions it is much easier to use
+\fBsl_recoverstate\fP to fill in these entries from a state file.
+
+.SH SEE ALSO
+\fBsl_read_streamlist\fP(3), \fBsl_parse_streamlist\fP(3),
+\fBsl_newslcd\fP(3), \fBsl_recoverstate\fP(3)
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

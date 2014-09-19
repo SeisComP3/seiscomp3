@@ -1,0 +1,115 @@
+<html>
+<head><title>Flush Documentation</title></head>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<h2>Documentation</h2>
+
+Flush Spread is an extension to the <a href="http://www.spread.org/">Spread Wide Area Group
+Communication System</a>.  Flush Spread and Spread are extremely similiar group communication
+systems (GCSs), in the services that they provide, and in their general interface.  Therefore,
+reading Spread's <a href="http://www.spread.org/docs/docspread.html">documentation</a> before
+reading Flush Spread's documentation is highly recommended to get a general grasp of group
+communication and to fill in any holes in this documentation :).</p>
+
+There are two main differences between Spread and Flush Spread:
+(1) Spread provides <a href="http://www.cs.jhu.edu/~yairamir/dcs-94.ps ">extended virtual
+synchrony</a> GCS semantics while Flush Spread provides view synchrony GCS semantics, and (2) Spread
+provides open-group semantics while Flush Spread only provides closed-group semantics.</p>
+
+<h3>Extended Virtual Synchrony (EVS) vs. View Synchrony Semantics (VS)</h3></p>
+
+The main difference between these two models is how they handle view/membership changes.  In an EVS
+system, membership changes occur without a client's intervention, whereas in a VS system a client
+must give its permission before a new view/membership can be installed.  Of course, in "real-life" a
+VS system cannot truly hold-off membership changes (as other clients can crash, network can
+partition, etc.), but what it can do is insulate a client from these changes and not allow new
+members (who either joined or merged) or their messages to be presented to the client without its
+permission.</p>
+
+In a VS system, when an underlying membership change occurs (another member joins/leaves/disconnects,
+network parititions or merges) the GCS generates a flush request message indicating that the current
+view is out-of-date and requesting permission to install a new view.  The client is still allowed to
+send messages at this point, and they may be able to receive messages from surviving members.  When
+the client is ready, it flushes the group, which gives the GCS permission to install a new view.  
+After flushing, a client is not allowed to send any messages to the flushed group until they receive
+the new view of the group.</p>
+
+In a EVS system, when an underlying membership change occurs the GCS figures out the new membership
+and delivers a new view to the client in its normal stream of messages.</p>
+
+In both systems, using the safety guarantees of the different message types and the virtual synchrony
+property (i.e. transitional sets) the client can infer some information about what other members have
+seen without further communication.</p>
+
+Although the difference in these models seems slight, it can lead to quite astonishing differences
+in performance and ease of programming.  In general, the EVS model is faster and scales better with
+respect to membership changes, especially for simple group changes such as joins and leaves.  But
+this performance comes at a price, namely that the client has less control over what is transpiring
+and therefore in general it is harder to program algorithms under EVS than under VS.  For example,
+under EVS the sender doesn't know which other clients might receive its messages until the message
+is delivered back to the sender.  Also, membership changes can come fast and furious and your
+algorithm must be tolerant to every combination of such changes.  Under VS, the client knows exactly
+which other clients <b>might</b> receive its message when it sends -- so the application doesn't
+have to worry about some arbitrary client receiving its messages and mis-interpreting them, for
+example.  Also, membership changes only occur as fast as the applications want them to, although
+several underlying memberships may be collapsed into one.  So they are generally easier to handle
+and track.</p>
+
+<h3>Open-Group vs. Closed-Group Semantics</h3></p>
+
+Open-group semantics allows clients to perform group specific calls, such as multicasts, without
+being a member of the group in question.  Closed-group semantics requires a client to be a full
+fledged member of a group (see below) in order to perform group specific calls.  In general, a
+closed-group GCS is much more picky than an open-group system about a client's state and the
+operations they perform with respect to any particular group.</p>
+
+Under Spread, a client can call group specific calls such as join, leave, and *cast (multicast and
+its variants) pretty much whenever they want regardless of their membership in that group.  Also,
+under Spread the guarantees of multicast messages span differerent groups. For example, if a sender
+sends two FIFO messages to two different groups and a receiver receives both messages, they will
+always receive the first and then the second FIFO message.</p>
+
+Under Flush Spread, a client can make group specific calls such as join, leave, flush, and *cast
+only when in the proper membership state with respect to that group.  For example, leave, flush, and
+*cast calls can only be made when the client is a full-fledged member of the group.  A full-fledged
+member is a client that has joined a group, received a membership including them in the group and is
+not in the process of leaving the group.  Join calls can only be made when the client is not a
+member of the group (either never joined it or whose most recent membership for that group was a
+self-leave) and not already in the process of joining that group.</p>
+
+Also under Flush Spread, *cast and flush calls (i.e. FL_flush) are restricted depending on the group
+membership state.  Flush calls can only be made <b>ONCE</b> per view/membership in response to
+receiving a flush request message.  Once a client flushes a group they are not allowed to *cast to
+that group until they receive the next view/membership for that group.  Flush Spread also does not
+support cross group message semantics.  For example, if a sender sends two FIFO messages to two
+different groups and a receiver receives both messages, they may receive the first and then the
+second <b>OR</b> vice-versa.</p>
+
+<hr>
+
+<h2>C/C++ Documentation</h2>
+
+The following documentation explains the user level C interface to Flush Spread as specified in the
+header file <a href="../src/fl.h">fl.h</a>.  This documentation assumes a knowledge of the ideas,
+discussed above, of view synchronous group communication.
+
+<ol>
+<li><a href="messages.html">Message Types for Data and Membership Messages</a>
+<li><a href="access.html">Message Type Access Functions</a>
+<li><a href="error.html">Error Return Codes</a>
+<li><a href="misc.html">Miscellaneous Constants</a>
+<li><a href="functions.html">Flush Spread C Function Interface</a>
+</ol>
+
+<!--#include virtual="/includes/footer" -->
+
+</body></html>

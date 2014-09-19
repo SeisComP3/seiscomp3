@@ -1,0 +1,17 @@
+#
+#keyword         stream   network   station   channel   ID
+#
+
+ChanInfo	 PMSTZ4	  IP	   PMST	      BHZ	1
+ChanInfo	 PMSTN4	  IP	   PMST	      BHN	2
+ChanInfo	 PMSTE4	  IP   	   PMST	      BHE	3
+
+ChanInfo	 PACTZ4	  IP	   PACT	      BHZ	4
+ChanInfo	 PACTN4	  IP	   PACT	      BHN	5
+ChanInfo	 PACTE4	  IP	   PACT	      BHE	6
+
+# To take also the sysid into account prepend it to the
+# streamid separated by a dot
+#ChanInfo	 PACT.Z4   IP       PACT       BHZ       1
+#ChanInfo	 PACT.N4   IP       PACT       BHN       2
+#ChanInfo	 PACT.E4   IP       PACT       BHE       3

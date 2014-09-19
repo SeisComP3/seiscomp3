@@ -1,0 +1,46 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_GET_VS_SET_MEMBERS 3 "February 2006" SPREAD "User Manuals"
+.SH NAME
+SP_get_vs_set_members, SP_scat_get_vs_set_members \- Extract list of members of a particular VS set from membership message
+.SH SYNOPSIS
+.B #include <sp.h>
+.sp
+.BI "int SP_get_vs_set_members( const char * " memb_mess ", const vs_set_info *" vs_set ", char " member_names[][MAX_GROUP_NAME] ", int " member_names_count );
+.br
+.BI "int SP_scat_get_vs_set_members( const scatter * " memb_mess_scat ", const vs_set_info *" vs_set ", char " member_names[][MAX_GROUP_NAME] ", int " member_names_count );
+.sp
+.SH DESCRIPTION
+.B SP_get_vs_set_members
+and its scatter variant extract the list of members of a particular VS set. 
+The members are stored into an array of strings, each of which is MAX_GROUP_NAME characters in length.  
+The number of strings (names) in the array should be provided in the
+.I member_names_count
+parameter. 
+
+The 
+.I memb_mess
+field or scatter field  should be the body of a message that was returned in a previous 
+.B SP_receive 
+call for a membership message. 
+
+.SH "RETURN VALUES"
+Returns a postivive value on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B BUFFER_TOO_SHORT
+The allocated array of member names can not hold the number of
+members in this VS set. No data is parsed. Reallocate
+a larger array of member names (the required number is available
+in the corresponding vs_set_info struct) and call this function again.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

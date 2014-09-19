@@ -1,0 +1,1 @@
+SC_ADD_SUBDIRS()

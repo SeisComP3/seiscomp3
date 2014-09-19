@@ -1,0 +1,42 @@
+<html>
+<head><title>Flush Documentation: Message Type Access Macros</title></head>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<h2><em>Message Type Access Macros</em></h2>
+
+Flush Spread uses the same message type access macros as Spread. In addition to these
+<a href="http://www.spread.org/docs/access.html">common macros</a>, Flush Spread also
+adds the following message type access macros:
+
+<pre>
+#define Is_flush_req_mess(serv_type)
+#define Is_subgroup_mess(serv_type)
+</pre>
+
+<ol>
+<li><tt>Is_flush_req_mess(serv_type):</tt></p>
+
+This macro checks the message type to determine if the message is a flush request message or not.
+Flush request messages are an important part of the view synchrony GCS semantics, see <a
+href="FL_flush.html">FL_flush</a> for an in-depth discussion of them.</p>
+
+<li><tt>Is_subgroup_mess(serv_type):</tt></p>
+
+This macro checks the message type to determine if the message is a subgroup-multicast or
+not. A subgroup-multicast is a message that is only sent to a subset of a group, see
+<a href="FL_multicast.html">FL_subgroupcast</a> for a better description.</p>
+
+</ol>
+
+<!--#include virtual="/includes/footer" -->
+
+</body></html>

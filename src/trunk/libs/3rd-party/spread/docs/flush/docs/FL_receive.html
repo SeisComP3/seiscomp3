@@ -1,0 +1,525 @@
+<HTML><HEAD><TITLE>Manpage of FL_receive</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<BODY>
+<H1>FL_receive</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+Fl_receive, FL_scat_receive - receive a message on a Flush Spread connection.
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_receive(mailbox </B><I>mbox</I><B>, service *</B><I>serv_type</I><B>, char </B><I>sender</I><B>[MAX_GROUP_NAME], int </B><I>max_groups</I><B>, int *</B><I>num_groups</I><B>, char </B><I>groups</I><B>[][MAX_GROUP_NAME], int16 *</B><I>mess_type</I><B>, int *</B><I>endian_mismatch</I><B>, int </B><I>max_mess_len</I><B>, char *</B><I>mess</I><B>, int *</B><I>more_messes</I><B>);</B>
+
+<P>
+<B>int FL_scat_receive(mailbox </B><I>mbox</I><B>, service *</B><I>serv_type</I><B>, char </B><I>sender</I><B>[MAX_GROUP_NAME], int </B><I>max_groups</I><B>, int *</B><I>num_groups</I><B>, char </B><I>groups</I><B>[][MAX_GROUP_NAME], int16 *</B><I>mess_type</I><B>, int *</B><I>endian_mismatch</I><B>, scatter *</B><I>scat_mess</I><B>, int *</B><I>more_messes</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_receive</B>
+
+is the general purpose message receipt function for Flush Spread.
+Messages for all groups joined on this connection will arrive on the
+same mailbox.  A call to
+<B>FL_receive</B>
+
+will perform a receive on a connection to get a single message from
+any one of the groups to which it is joined.  
+<P>
+After a call to receive completes, a number of the passed fields are
+set to values indicating meta-information about the message (such as
+destination group, message type, endianness, etc).  The meanings of
+these different meta fields depends on the type of message received
+and the receipt services requested.
+<P>
+Input Parameters:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><I>mbox</I>
+
+<DD>
+Represents the connection on which to receive a message.</p>
+<DT><I>serv_type</I>
+
+<DD>
+A pointer to a service bit field, requesting some receive services.
+This field can have the DONT_BLOCK and/or DROP_RECV service bit flags
+flipped on.  This bit field should be zeroed out before each call if
+no special receive service is to be requested.</p>
+<DT><I>sender</I>
+
+<DD>
+A pointer to a character array with storage for at least
+MAX_GROUP_NAME characters.</p>
+<DT><I>max_groups</I>
+
+<DD>
+A non-negative int representing how many group names the application
+is willing to receive in this receive call.</p>
+<DT><I>num_groups</I>
+
+<DD>
+A pointer to an int.</p>
+<DT><I>groups</I>
+
+<DD>
+An array of group names containing storage for at least 
+<I>max_groups</I>
+
+* MAX_GROUP_NAME characters.</p>
+
+<DT><I>mess_type</I>
+
+<DD>
+A pointer to an int16.</p>
+
+<DT><I>endian_mismatch</I>
+
+<DD>
+A pointer to an int.</p>
+
+<DT><I>max_mess_len</I>
+
+<DD>
+A non-negative integer representing how many bytes of data the
+application is willing to receive in this call.</p>
+
+<DT><I>mess</I>
+
+<DD>
+A pointer to a buffer containing storage for at least
+<I>max_mess_len</I>
+
+bytes.</p>
+
+<DT><I>scat_mess</I>
+
+<DD>
+A pointer to a scatter (a cousin of an iovec) with a non-negative
+number of scatter elements that is less than or equal to
+MAX_SCATTER_ELEMENTS (that's not a typo :), and all non-negative
+buffer lengths in the indicated scatter elements to get scatter-gather
+semantics.
+</DL></DL>
+
+<P>
+Receive Semantics:
+<P>
+Normally, a call to receive will block if no messages are immediately
+available.
+<P>
+Normally, when calling a receive function if a user's buffer
+(<I>groups</I>,
+
+<I>mess</I>,
+
+or 
+<I>scat_mess</I>)
+
+is too small to contain the data to be returned, then a
+GROUPS_TOO_SHORT or BUFFER_TOO_SHORT error code will be returned.  In
+this case, the
+<I>serv_type</I>,
+
+and 
+<I>mess_type</I>
+
+of the message are filled in from the offending message and the
+parameters
+<I>num_groups</I>,
+
+and 
+<I>endian_mismatch</I>
+
+reflect information about the necessary buffers' sizes.  If
+<I>max_groups</I>
+
+was big enough, then
+*<I>num_groups</I>
+
+will be zero, otherwise it will be the negative of how many group
+names are available to be received (i.e. -7 means the 
+<I>max_groups</I>
+
+was less than 7 and 7 group names can be received).  If
+<I>max_mess_len</I>
+
+or
+<I>scat_mess</I>
+
+was big enough then
+*<I>endian_mismatch</I>
+
+will be zero, otherwise it will be the negative of how much data is
+available to be received (i.e. -32768 means the msg buffer was too
+small and 32768 bytes of data can be received).  The offending message
+is still available to be received through later calls to receive with
+appropriately sized user buffers.
+<P>
+The parameter
+<I>serv_type</I>
+
+allows the applications to request different receive services that
+affect the normal semantics of receive.  Currently, the only services
+are DONT_BLOCK and DROP_RECV.
+<P>
+The DONT_BLOCK service makes a receive call non-blocking.  With this
+service, the receive call will return quickly either with a message or
+with the error code WOULD_BLOCK if no message is available.  Using
+this service is the only way to detect if a message is ready on the
+connection in a non-blocking manner in Flush Spread.
+<P>
+The DROP_RECV service forces Flush Spread to read the current message
+off of the connection regardless of whether or not the user's buffers
+are big enough to fit all of the data.  In this case, a TOO_SHORT
+error code is still returned even though the call actually
+succeeded. Anyway, as much data as can be fit into the user's buffers
+will be stuffed into them, and that message will no longer be on the
+connection.  Also,
+*<I>num_groups</I>
+
+will still be set to the negative size of how many names were
+available (if 
+<I>groups</I>
+
+wasn't big enough), but
+*<I>endian_mismatch</I>
+
+will not reflect the size of the data that could have been received (if
+<I>mess</I>
+
+or
+<I>scat_mess</I>
+
+wasn't big enough), instead it indicates whether or not the sending
+machine had an opposite endianness or not.  Using DROP_RECV in this
+manner, when a buffer problem occurs there is no way to determine how
+big the data portion of the message actually was.  This service is
+meant to be used when a call to receive without DROP_RECV fails with a
+buffer error, but it is determined that the message isn't all that
+important, or something along those lines; otherwise reallocate your
+receive buffers appropriately and re-call receive again without
+the DROP_RECV service.
+<P>
+Output Parameters:
+<P>
+Upon a successful return from receive, 
+*<I>serv_type</I>
+
+will be filled out with the message type that was just received.  The
+specific type of message received can be tested using the different
+message and membership type access macros.  The rest of the
+parameters' meanings differ depending on the
+<I>serv_type</I>.
+
+<P>
+Regular Messages:
+<P>
+If the
+<I>serv_type</I>
+
+is a REG_MESSAGE (i.e. a data message) then:
+<P>
+The parameter
+<I>sender</I>
+
+will be filled with the private group name of the sending connection.
+<P>
+The parameter
+<I>num_groups</I>
+
+will be set to the number of group names filled into
+<I>groups</I>.
+
+<P>
+The 
+<I>groups</I>
+
+array will contain the group to which this message was sent.  If the
+message is a SUBGROUP_CAST (check the service type, see FL_multicast)
+then all of the recipients' private group names will be listed and the
+last name in the array (i.e.
+groups[*<I>num_groups</I>-1])
+
+will be the regular group to which this message was sent.
+<P>
+If DROP_RECV is being used, and 
+<I>groups</I>
+
+is too small, then as many names as can fit will be filled in as above
+described.  If the message was a SUBGROUP_CAST, then the last group in
+the array (i.e.
+groups[<I>max_groups</I>-1])
+
+will be the destination group for the message. If 
+<I>max_groups</I>
+
+is zero then even the destination group is not reported.
+<P>
+The parameter
+*<I>mess_type</I>
+
+will be set to the message type field the application sent with
+the original message, which is a restricted (see FL_multicast) 16 bit
+integer.  This value is endian corrected upon returning.
+<P>
+The parameter
+*<I>endian_mismatch</I>
+
+will be set to true (non-zero) if the endianness of the sending
+machine is the opposite of this receiving machine's.
+<P>
+The actual message body being received will be filled into either the
+<I>mess</I>
+
+or
+<I>scat_mess</I>
+
+parameter.
+<P>
+Flush Request Message:
+<P>
+If this is a FLUSH_REQ_MESS then this represents that the underlying
+membership has changed and that this application needs to flush this
+group before the new view/membership can be installed (see
+FL_flush). 
+<P>
+The
+<I>sender</I>
+
+will be filled in with the name of the group this connection needs
+to flush.  All the other fields are set to empty values.
+<P>
+Membership Messages:
+<P>
+If this is a MEMB_MESSAGE (i.e. membership message) and it
+specifically is a REG_MEMB_MESS, then:
+<P>
+The 
+<I>sender</I>
+
+will be filled with the name of the group for which the membership
+change is occuring.
+<P>
+The
+<I>mess_type</I>
+
+field will be set to the index of this process in the 
+<I>groups</I>
+
+array (see below). 
+<P>
+The
+<I>endian_mismatch</I>
+
+field will be set to 0 since there are no endian issues with regular memberships.
+<P>
+The
+<I>groups</I>
+
+array and message
+body are used to provide two kinds of membership information about the change that just
+occured in this group.  The 
+<I>num_groups</I>
+
+field will be set to the number of members in the group in the 
+<B>new</B>
+
+membership (i.e. after the change occured). Correspondingly, the 
+<I>groups</I>
+
+array will be filled in with the private group names of all members of this
+group in the
+<B>new</B>
+
+membership.  This list of names is always in the same order at all receipients
+and thus can be used to deterministically pick a group representative if
+one is needed by the application.
+<P>
+The second set of information is stored in the message body.  The data
+buffer will include the following fields:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>group_id vid;</B>
+
+<DD>
+<BR>
+
+<DT><B>int num_members;</B>
+
+<DD>
+<BR>
+
+<DT><B>char dgroups[][MAX_GROUP_NAME];</B>
+
+<DD>
+</DL></DL>
+
+<P>
+The vid and num_members parameters will already be endian corrected.
+The dgroups array will contain num_members group names.  The functions 
+FL_get_gid_offset_memb_mess(), FL_get_num_vs_offset_memb_mess() and 
+FL_get_vs_set_offset_memb_mess() provide the offsets to the associated 
+fields within the body of a membership message. The content
+of the dgroups array is dependent upon the type of the membership
+change:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>CAUSED_BY_JOIN:</B>
+
+<DD>
+dgroups contains the private group of the joining process.</p>
+<DT><B>CAUSED_BY_LEAVE:</B>
+
+<DD>
+dgroups contains the private group of the leaving process.</p>
+<DT><B>CAUSED_BY_DISCONNECT:</B>
+
+<DD>
+dgroups contains the private group of the disconnecting process.</p>
+<DT><B>CAUSED_BY_NETWORK:</B>
+
+<DD>
+dgroups contains the group names of the members of the new membership who came 
+with 
+<B>this</B>
+
+application to the new view/membership.  Using this data the previous
+membership listing and the new membership listing an application can
+determine all the members that left and were added in the NETWORK
+membership change.  Note, that a member can both leave and be added in
+a 
+<B>single</B>
+
+NETWORK change.  
+</DL></DL>
+
+<P>
+Transitional Message:
+<P>
+If this is a MEMB_MESSAGE and specifically it is a TRANSITION_MESS,
+then this means that one or more of the current members of the group
+has left and not all of the safety guarantees can be met w.r.t. all of
+the original members for the messages delivered after this signal and
+before the next view/membership.  Transitional messages never have a
+CAUSED_BY type because they only serve to signal up to where SAFE
+delivery and AGREED delivery (with no holes) is guaranteed in the
+view/membership in which they are delivered.  Only one TRANSITION_MESS
+is delivered per group view/membership per connection.
+<P>
+The 
+<I>sender</I>
+
+will be filled in with the name of the group for which the membership
+change is occurring.  All the other parameters will be set to empty values.
+<P>
+Self-Leave Message:
+<P>
+If this is a MEMB_MESSAGE (i.e. membership message) and it is neither
+a REG_MEMB_MESS or a TRANSITION_MESS, then it represents exactly the
+situtation where the member receiving this message has left a group
+and this is notification that the leave has occured, thus it is
+sometimes called a self-leave message.  The simplest test for this is
+if a message is CAUSED_BY_LEAVE and REG_MEMB_MESS is false (zero),
+then it is a self-leave message.
+<P>
+The other members of the group that this member just left will receive
+a normal TRANSITION_MESS, REG_MEMB_MESS pair as described above
+showing this connection leaving.
+<P>
+For self-leave messages the
+<I>sender</I>
+
+field will be filled in with the name of the group this connection is
+leaving.  All the other fields are set to empty values.
+<P>
+<H2>RETURN VALUES</H2>
+
+Returns the size of the data portion of the message received on
+success or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+was illegal, usually because it is not active.</p>
+
+<DT><B>ILLEGAL_PARAM</B>
+
+<DD>
+An illegal parameter was passed, like a negative array size.</p>
+
+<DT><B>ILLEGAL_MESSAGE</B>
+
+<DD>
+The msg buffer had an illegal structure, like an illegal number of
+scatter elements or a negatively sized buffer.</p>
+
+<DT><B>WOULD_BLOCK</B>
+
+<DD>
+The receive call was made with the DONT_BLOCK service and it would
+have blocked because no messages were ready to be received.</p>
+
+<DT><B>GROUPS_TOO_SHORT</B>
+
+<DD>
+The receive call was made with a groups array that was too small.  
+*<I>num_groups</I>
+
+is filled in with the negative number of names that could have been
+returned.  Note, that the msg buffer could also be too short, and this
+should be determined by examining
+<I>endian_mismatch</I>
+
+as described above. If DROP_RECV was used this error code actually
+represents success (see above).</p>
+
+<DT><B>BUFFER_TOO_SHORT</B>
+
+<DD>
+The receive call was made with a msg buffer that was too small.
+*<I>endian_mismatch</I>
+
+is filled in with the negative number of bytes that could have been
+received if DROP_RECV isn't used.  If it is used then this error code
+actually represents success and 
+<I>endian_mismatch</I>
+
+has the normal meaning (see above).  Note, that the groups buffer
+could also be too short, this should be determined by examining
+<I>num_groups</I>
+
+as described above.</p>
+
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+During communication to receive, communication errors occurred
+and the receive could not be completed.
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

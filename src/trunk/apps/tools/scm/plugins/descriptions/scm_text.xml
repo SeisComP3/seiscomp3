@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="text">
+		<extends>scm</extends>
+		<description>
+			Text output plugin for scm.
+		</description>
+		<configuration>
+			<group name="mtextplugin">
+				<parameter name="outputDir" type="string" default="@LOGDIR@/scm/">
+					<description>
+						Output directory where [client].txt is written to. Additionally
+						an file description.txt will be created to show the order of
+						tags used in the client status file.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

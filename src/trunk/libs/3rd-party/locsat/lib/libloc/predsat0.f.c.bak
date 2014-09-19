@@ -1,0 +1,749 @@
+/*  -- translated by f2c (version 20000121).
+   You must link the resulting object file with the libraries:
+	-lf2c -lm   (in that order)
+*/
+
+#include "f2c.h"
+
+/* Common Block Declarations */
+
+struct sccspredsat0_1_ {
+    char sccsid[80];
+};
+
+#define sccspredsat0_1 (*(struct sccspredsat0_1_ *) &sccspredsat0_)
+
+/* Initialized data */
+
+struct {
+    char e_1[80];
+    } sccspredsat0_ = { {'@', '(', '#', ')', 'p', 'r', 'e', 'd', 's', 'a', 
+	    't', '0', '.', 'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2',
+	     '0', '/', '9', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
+	    ' ', ' ', ' ', ' ', ' '} };
+
+
+/* Table of constant values */
+
+static integer c__1 = 1;
+static integer c__9 = 9;
+
+/* NAME */
+/* 	predsat0 -- Predict Slowness, Azimuth and Travel-time bounds. */
+/* FILE */
+/* 	predsat0.f */
+/* SYNOPSIS */
+/* 	Computes maximun and minimum bounds on the travel-time slowness, */
+/* 	and azimuth for a set of data (station-phase-datatype) based on */
+/* 	an event location, confidence ellipse and travel-time curves. */
+/* DESCRIPTION */
+/* 	Subroutine.  Information on travel-time tables, stations, event */
+/* 	and confidence parameters, the desired stations and phases are */
+/* 	passed to and from PredSAT via the argument list.  The phase and */
+/* 	station names given for each datum (dstaid,dwavid) must match in */
+/* 	the phase and station lists (staid,wavid).  If all that you desire */
+/* 	are the predictions from a point, just input 0.0 for all of the */
+/* 	confidence bounds parameters. */
+/* 	---- Indexing ---- */
+/* 	i = 1, nsta;	j = 1, nwav;	k = 1, ntbd(j);	m = 1, ntbz(j); */
+/* 	n = 1, ndata; */
+/* 	---- On entry ---- */
+/* 	nsta:		Number of stations */
+/* 	nwav:		Number of phases in list */
+/* 	maxtbd:		Maximum dimension of k'th position in tbd(), tbtt() */
+/* 	maxtbz:		Maximum dimension of m'th position in tbz(), tbtt() */
+/* 	outfile:	Output file name */
+/* 	dstaidx:	Name of station for which prediction to be made */
+/* 	dwavidx:	Name of phase for which prediction to be made */
+/* 	staid(i):	List of all station names */
+/* 	stalat(i):	Station latitudes (deg) */
+/* 	stalon(i):	Station longitudes (deg) */
+/* 	wavid(j):	List of accepted phases for arrival times */
+/* 	ntbd(j):	Number of distance samples in travel-time tables */
+/* 	ntbz(j):	Number of depth samples in travel-time tables */
+/* 	tbd(k,j):	Distance to k'th lat/lon travel-time node (deg) */
+/* 	tbz(m,j):	Depth to m'th travel-time node (km) */
+/* 	tbtt(k,m,j):	Travel-time of k'th lat/lon and m'th depth nodes (sec) */
+/* 	sloflg:		Compute slowness bounds (y or n) */
+/* 	prtflg:		Verbose printout (y or n) */
+/* 	alat:		Event latitude used for prediction (deg) */
+/* 	alon:		Event longitude used for prediction (deg) */
+/* 	zfoc:		Event focal depth used for prediction (km) */
+/* 	epmaj:		Length of semi-major axis for confidence ellipse (km) */
+/* 	epmin:		Length of semi-minor axis for confidence ellipse (km) */
+/* 	epstr:		Strike of semi-major axis for confidence ellipse (deg) */
+/* 	zfint:		Length of focal depth confidence semi-interval (km) */
+/* 	toint:		Length of O.T. confidence semi-interval (sec) */
+/* 	luout:		Output logical unit number */
+/* 	---- On return ---- */
+/* 	distmin:	Minimum distance from the ellipse to the dstaidx (deg) */
+/* 	distmax:	Maximum distance from the ellipse to the dstaidx (deg) */
+/* 	distcntr:	Distance from the center of ellipse to the dstaidx (deg) */
+/* 	ttmin:  	Minimum travel-time for dwavidx from the ellipse to the */
+/* 			dstaidx (sec) */
+/* 	ttmax:  	Maximum travel-time for dwavidx from the ellipse to the */
+/* 			dstaidx (sec) */
+/* 	ttcntr: 	Travel-time for dwavidx from the center of the */
+/* 			ellipse to the dstaidx (sec) */
+/* 	azmin:  	Minimum azimuth from dstaidx to the to the station (deg) */
+/* 	azmax:  	Maximum azimuth from dstaidx ellipse (deg) */
+/* 	azcntr: 	Maximum azimuth from dstaidx to the center of the */
+/* 			ellipse (deg) */
+/* 	slomin: 	Minimum slowness for dwavidx from the ellipse to the */
+/* 			dstaidx (sec/deg) */
+/* 	slomax: 	Maximum slowness for dwavidx from the ellipse to the */
+/* 			dstaidx (sec/deg) */
+/* 	slocntr:	Slowness for dwavidx from the center of ellipse to the */
+/* 			dstaidx (sec/deg) */
+/* 	iterrmin, iterrmax, iterrcntr: Error codes for travel-times */
+/* 	iserrmin, iserrmax, iserrcntr: Error codes for slowness */
+/* 			  =  0,	No problem, normal prediction */
+/* 			  =  1,	No station information for datum */
+/* 			  =  2,	No travel-time tables for datum */
+/* 			  = 11,	Interpolation point in hole of travel-time curve */
+/* 			  = 12,	Interpolation point less than first distance */
+/* 				point in curve */
+/* 			  = 13,	Interpolation point greater than last */
+/* 				distance point in curve */
+/* 			  = 14,	Interpolation point less than first depth */
+/* 				point in curve */
+/* 			  = 15,	Interpolation point greater than last depth */
+/* 				point in curve */
+/* 			  = 16,	Interpolation point less than first distance */
+/* 				point in curve and less than first depth */
+/* 				point in curve */
+/* 			  = 17,	Interpolation point greater than last */
+/* 				distance point in curve and less than first */
+/* 				depth point in curve */
+/* 			  = 18,	Interpolation point less than first distance */
+/* 				point in curve and greater than first depth */
+/* 				point in curve */
+/* 			  = 19,	Interpolation point greater than last */
+/* 				distance point in curve and greater than */
+/* 				first depth point in curve */
+/* 	---- Subroutines called ---- */
+/* 	Local */
+/* 		ttcal1: 	Compute travel-times and their partials */
+/* 		slocal1:	Compute horizontal slownesses and partials */
+/* 	---- Functions called ---- */
+/* 	From libgeog */
+/* 		distaz2:	Determine the distance between between two */
+/* 				lat./lon. pairs */
+/* 		latlon2:	Compute a second lat./lon. from first */
+/* 				distance and an azimuth */
+/* DIAGNOSTICS */
+/* 	Complains when input data are bad ... */
+/* FILES */
+/* 	None. */
+/* NOTES */
+/* 	None. */
+/* SEE ALSO */
+/* 	Bratt and Bache (1988) Locating events with a sparse network of */
+/*       regional arrays, BSSA, 78, 780-798. */
+/* AUTHOR */
+/* 	Steve Bratt, December 1988. */
+/* Subroutine */ int predsat0_(dstaidx, dwavidx, idaridx, staid, stalat, 
+	stalon, nsta, wavid, nwav, maxtbd, maxtbz, ntbd, ntbz, tbd, tbz, tbtt,
+	 sloflg, prtflg, luout, outfile, alat, alon, zfoc, epmaj, epmin, 
+	epstr, zfint, toint, distmin, distmax, distcntr, ttmin, ttmax, ttcntr,
+	 azmin, azmax, azcntr, slomin, slomax, slocntr, iterrmin, iterrmax, 
+	iterrcntr, iserrmin, iserrmax, iserrcntr, dstaidx_len, dwavidx_len, 
+	staid_len, wavid_len, sloflg_len, prtflg_len, outfile_len)
+char *dstaidx, *dwavidx;
+integer *idaridx;
+char *staid;
+real *stalat, *stalon;
+integer *nsta;
+char *wavid;
+integer *nwav, *maxtbd, *maxtbz, *ntbd, *ntbz;
+real *tbd, *tbz, *tbtt;
+char *sloflg, *prtflg;
+integer *luout;
+char *outfile;
+real *alat, *alon, *zfoc, *epmaj, *epmin, *epstr, *zfint, *toint, *distmin, *
+	distmax, *distcntr, *ttmin, *ttmax, *ttcntr, *azmin, *azmax, *azcntr, 
+	*slomin, *slomax, *slocntr;
+integer *iterrmin, *iterrmax, *iterrcntr, *iserrmin, *iserrmax, *iserrcntr;
+ftnlen dstaidx_len;
+ftnlen dwavidx_len;
+ftnlen staid_len;
+ftnlen wavid_len;
+ftnlen sloflg_len;
+ftnlen prtflg_len;
+ftnlen outfile_len;
+{
+    /* System generated locals */
+    integer tbz_dim1, tbz_offset, tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, 
+	    tbtt_offset, i__1;
+    doublereal d__1, d__2;
+    olist o__1;
+    cllist cl__1;
+
+    /* Builtin functions */
+    integer f_open(), s_cmp(), s_wsfe(), do_fio(), e_wsfe();
+    double d_sign(), cos(), sin();
+    integer s_wsle(), do_lio(), e_wsle(), f_clos();
+
+    /* Local variables */
+    static doublereal scal[3], tcal[3];
+    static integer ista;
+    static doublereal azim[3];
+    static real dist[3];
+    static doublereal plat[4];
+    static integer kwav;
+    static doublereal distance, plon[4];
+    static logical lprt[19];
+    static real aztt[3];
+    static doublereal azim1, dist1, e;
+    static integer i__, k, n;
+    static doublereal angle, x, y;
+    static real z__[3], dcalx;
+    static doublereal azneg, staln, a1, a2;
+    static integer iserr[3], iterr[3];
+    static doublereal stalt;
+    static integer k1, k2;
+    static doublereal azpos;
+    extern /* Subroutine */ int ttcal1_();
+    static doublereal azdiff, xp, yp;
+    extern integer lnblnk_();
+    static real radius;
+    static integer ntimes;
+    extern /* Subroutine */ int slocal1_(), latlon2_(), distaz2_();
+    static doublereal baz, epj, epn, epr;
+    static integer ios;
+    static doublereal atx[3], azimuth;
+
+    /* Fortran I/O blocks */
+    static cilist io___17 = { 0, 0, 0, "(3a)", 0 };
+    static cilist io___20 = { 0, 0, 0, "(3a)", 0 };
+    static cilist io___47 = { 0, 0, 0, "(2a)", 0 };
+    static cilist io___48 = { 0, 0, 0, "(3(a,f10.3,a))", 0 };
+    static cilist io___49 = { 0, 0, 0, "(2(a,f10.1,a))", 0 };
+    static cilist io___50 = { 0, 0, 0, "(a,f10.1,a)", 0 };
+    static cilist io___51 = { 0, 0, 0, "(2(a,f10.1,a))", 0 };
+    static cilist io___52 = { 0, 0, 0, "(2a)", 0 };
+    static cilist io___53 = { 0, 0, 0, "(a,i10,4a)", 0 };
+    static cilist io___54 = { 0, 0, 0, "(a,3f15.2)", 0 };
+    static cilist io___55 = { 0, 0, 0, "(a,3f15.2)", 0 };
+    static cilist io___56 = { 0, 0, 0, "(a,3f15.2)", 0 };
+    static cilist io___57 = { 0, 0, 0, "(a,3f15.2)", 0 };
+    static cilist io___58 = { 0, 0, 0, "(a,3i15)", 0 };
+    static cilist io___59 = { 0, 0, 0, "(a,3i15)", 0 };
+    static cilist io___60 = { 0, 0, 0, 0, 0 };
+    static cilist io___61 = { 0, 0, 0, 0, 0 };
+    static cilist io___62 = { 0, 0, 0, 0, 0 };
+    static cilist io___63 = { 0, 0, 0, 0, 0 };
+    static cilist io___64 = { 0, 0, 0, 0, 0 };
+    static cilist io___65 = { 0, 0, 0, 0, 0 };
+    static cilist io___66 = { 0, 0, 0, 0, 0 };
+    static cilist io___67 = { 0, 0, 0, 0, 0 };
+    static cilist io___68 = { 0, 0, 0, 0, 0 };
+    static cilist io___69 = { 0, 0, 0, 0, 0 };
+    static cilist io___70 = { 0, 0, 0, 0, 0 };
+    static cilist io___71 = { 0, 0, 0, 0, 0 };
+    static cilist io___72 = { 0, 0, 0, 0, 0 };
+    static cilist io___73 = { 0, 0, 0, 0, 0 };
+    static cilist io___74 = { 0, 0, 0, 0, 0 };
+
+
+/* K.S. 1-Dec-97, changed 'undefined' to 'none' */
+/*     ---- Parameter declarations ---- */
+/*     Convert degrees to kilometers for lat./lon. conversion */
+/*     Convert degrees to radians */
+/*     ---- On entry ---- */
+/*     ---- On return ---- */
+/*     ---- Internal variables ---- */
+    /* Parameter adjustments */
+    --stalon;
+    --stalat;
+    staid -= staid_len;
+    --ntbz;
+    --ntbd;
+    wavid -= wavid_len;
+    tbd_dim1 = *maxtbd;
+    tbd_offset = 1 + tbd_dim1 * 1;
+    tbd -= tbd_offset;
+    tbtt_dim1 = *maxtbd;
+    tbtt_dim2 = *maxtbz;
+    tbtt_offset = 1 + tbtt_dim1 * (1 + tbtt_dim2 * 1);
+    tbtt -= tbtt_offset;
+    tbz_dim1 = *maxtbz;
+    tbz_offset = 1 + tbz_dim1 * 1;
+    tbz -= tbz_offset;
+
+    /* Function Body */
+    radius = (float)6371.;
+    tcal[0] = (float)-999.;
+    tcal[1] = (float)999.;
+    tcal[2] = (float)-999.;
+    scal[0] = (float)-999.;
+    scal[1] = (float)999.;
+    scal[2] = (float)-999.;
+    azim[1] = (float)999.;
+    azim[2] = (float)-999.;
+    dist[1] = (float)999.;
+    dist[2] = (float)-999.;
+    *ttcntr = (float)-999.;
+    *slocntr = (float)-999.;
+    *distmin = (float)-999.;
+    *ttmin = (float)-999.;
+    *azmin = (float)-999.;
+    *slomin = (float)-999.;
+    *distmax = (float)-999.;
+    *ttmax = (float)-999.;
+    *azmax = (float)-999.;
+    *slomax = (float)-999.;
+    azneg = (float)999.;
+    azpos = (float)-999.;
+    iterr[0] = 0;
+    iterr[1] = 0;
+    iterr[2] = 0;
+    iserr[0] = 0;
+    iserr[1] = 0;
+    iserr[2] = 0;
+    n = 0;
+    a1 = *alat;
+    a2 = *alon;
+/*     Open file */
+    o__1.oerr = 1;
+    o__1.ounit = *luout;
+    o__1.ofnmlen = outfile_len;
+    o__1.ofnm = outfile;
+    o__1.orl = 0;
+    o__1.osta = "unknown";
+    o__1.oacc = "append";
+    o__1.ofm = 0;
+    o__1.oblnk = 0;
+    ios = f_open(&o__1);
+/*     Check that datum's station and phase are valid. If so, assign pointer */
+    i__1 = *nsta;
+    for (i__ = 1; i__ <= i__1; ++i__) {
+	k1 = lnblnk_(dstaidx, dstaidx_len);
+	k2 = lnblnk_(staid + i__ * staid_len, staid_len);
+	if (s_cmp(dstaidx, staid + i__ * staid_len, k1, k2) == 0) {
+	    goto L1010;
+	}
+/* L1000: */
+    }
+    io___17.ciunit = *luout;
+    s_wsfe(&io___17);
+    do_fio(&c__1, "? PredSAT: Station ", (ftnlen)19);
+    do_fio(&c__1, dstaidx, k1);
+    do_fio(&c__1, " unknown", (ftnlen)8);
+    e_wsfe();
+    iterr[0] = 1;
+    iterr[1] = 1;
+    iterr[2] = 1;
+    goto L1060;
+L1010:
+    ista = i__;
+    i__1 = *nwav;
+    for (k = 1; k <= i__1; ++k) {
+	k1 = lnblnk_(dwavidx, dwavidx_len);
+	k2 = lnblnk_(wavid + k * wavid_len, wavid_len);
+	if (s_cmp(dwavidx, wavid + k * wavid_len, k1, k2) == 0) {
+	    goto L1030;
+	}
+/* L1020: */
+    }
+    io___20.ciunit = *luout;
+    s_wsfe(&io___20);
+    do_fio(&c__1, "? PredSAT: Wave ", (ftnlen)16);
+    do_fio(&c__1, dwavidx, k1);
+    do_fio(&c__1, " unknown", (ftnlen)8);
+    e_wsfe();
+    iterr[0] = 2;
+    iterr[1] = 2;
+    iterr[2] = 2;
+    goto L1060;
+L1030:
+    kwav = k;
+/*     Compute distance and azimuth between station and event */
+    stalt = stalat[ista];
+    staln = stalon[ista];
+    distaz2_(&stalt, &staln, &a1, &a2, &dist1, &azim1, &baz);
+    *distcntr = dist1;
+    *azcntr = azim1;
+    dist[0] = *distcntr;
+    aztt[0] = *azcntr;
+    z__[0] = *zfoc;
+/*     If no confidence ellipse, compute travel-time from station to point */
+    if (*epmaj <= (float)0. || *epmin <= (float)0.) {
+	ntimes = 1;
+    } else {
+/*        Find points on confidence ellipse that are the minimum and */
+/*        maximum distance from the station.  Assume that these points */
+/*        are at one of the tips of the axes of the confidence ellipse. */
+	ntimes = 3;
+	epj = *epmaj / (float)111.195;
+	epn = *epmin / (float)111.195;
+	epr = *epstr;
+	latlon2_(&a1, &a2, &epj, &epr, plat, plon);
+	d__1 = epr + (float)180.;
+	latlon2_(&a1, &a2, &epj, &d__1, &plat[1], &plon[1]);
+	d__1 = epr + (float)90.;
+	latlon2_(&a1, &a2, &epn, &d__1, &plat[2], &plon[2]);
+	d__1 = epr + (float)270.;
+	latlon2_(&a1, &a2, &epn, &d__1, &plat[3], &plon[3]);
+	for (n = 1; n <= 4; ++n) {
+	    distaz2_(&stalt, &staln, &plat[n - 1], &plon[n - 1], &distance, &
+		    azimuth, &baz);
+/*           Find minimum and maximum distance with associated azimuth */
+	    if (distance < dist[1]) {
+		dist[1] = distance;
+		aztt[1] = azimuth;
+	    }
+	    if (distance > dist[2]) {
+		dist[2] = distance;
+		aztt[2] = azimuth;
+	    }
+/*           Find minimum and maximum azimuth */
+	    azdiff = azimuth - *azcntr;
+	    if (abs(azdiff) > (float)180.) {
+		d__1 = (float)360. - abs(azdiff);
+		azdiff = -d_sign(&d__1, &azdiff);
+	    }
+	    if (azdiff < azneg) {
+		azim[1] = azimuth;
+		azneg = azdiff;
+	    } else if (azdiff > azpos) {
+		azim[2] = azimuth;
+		azpos = azdiff;
+	    }
+/* L1040: */
+	}
+/*        If station is within ellipse, set minimum distance to 0 and */
+/*        azimuth bounds to 0 and 360 degrees */
+	if (*azcntr >= (float)0. && *azcntr <= (float)90.) {
+	    angle = (float)90. - *azcntr;
+	} else if (*azcntr > (float)90. && *azcntr <= (float)180.) {
+	    angle = *azcntr + (float)180.;
+	} else if (*azcntr > (float)180. && *azcntr <= (float)270.) {
+	    angle = *azcntr;
+	} else {
+	    angle = *azcntr - (float)180.;
+	}
+	x = *distcntr * (float)111.195 * cos(angle * (float).017453293);
+	y = *distcntr * (float)111.195 * sin(angle * (float).017453293);
+/*        Rotate into ellipsoid coordinate system and check if station is */
+/*        within ellipse */
+	angle = (float)90. - *epstr;
+	xp = x * cos(angle) + y * sin(angle);
+	yp = -x * sin(angle) + y * cos(angle);
+/* Computing 2nd power */
+	d__1 = xp / *epmaj;
+/* Computing 2nd power */
+	d__2 = yp / *epmin;
+	e = d__1 * d__1 + d__2 * d__2;
+	if (e <= (float)1.) {
+	    dist[1] = (float)0.;
+	    azim[1] = (float)0.;
+	    azim[2] = (float)360.;
+	}
+/*        Minimum time path will be the deepest epicenter for all but (a) */
+/*        depth phases, where the shallower depth will produce earlier */
+/*        arrivals, and (b) phases from events who's epicenter-station */
+/*        distance is less than its depth. */
+
+	if (*(unsigned char *)dwavidx == 'p' || *(unsigned char *)dwavidx == 
+		's' || dist[1] * (float)111.195 < *zfoc) {
+	    z__[1] = *zfoc - *zfint;
+	    z__[2] = *zfoc + *zfint;
+	} else {
+	    z__[1] = *zfoc + *zfint;
+	    z__[2] = *zfoc - *zfint;
+	}
+	if (z__[1] < (float)0.) {
+	    z__[1] = (float)0.;
+	}
+	if (z__[2] < (float)0.) {
+	    z__[2] = (float)0.;
+	}
+    }
+    i__1 = ntimes;
+    for (n = 1; n <= i__1; ++n) {
+/*        call ttime_calc (kwav, atx, aztt(n), dist(n), radius, z(n), */
+/*    &                    dcalx, iterr(n)) */
+	ttcal1_(&z__[n - 1], &radius, &dist[n - 1], &aztt[n - 1], maxtbd, 
+		maxtbz, &ntbd[kwav], &ntbz[kwav], &tbd[kwav * tbd_dim1 + 1], &
+		tbz[kwav * tbz_dim1 + 1], &tbtt[(kwav * tbtt_dim2 + 1) * 
+		tbtt_dim1 + 1], &dcalx, atx, &iterr[n - 1]);
+/*        Use only sucessfully interpolated and extrapolated results */
+/*        - Don't use if in a hole (dcalx = -1.0) */
+	if (dcalx < (float)0.) {
+	    tcal[n - 1] = (float)-999.;
+	} else {
+	    tcal[n - 1] = dcalx;
+	}
+	if (s_cmp(sloflg, "y", sloflg_len, (ftnlen)1) == 0 || s_cmp(sloflg, 
+		"Y", sloflg_len, (ftnlen)1) == 0) {
+/*           call slow_calc (kwav-1, atx, aztt(n), dist(n), radius, z(n), */
+/*    &                      dcalx, iserr(n)) */
+	    slocal1_(zfoc, &radius, &dist[n - 1], &aztt[n - 1], maxtbd, 
+		    maxtbz, &ntbd[kwav], &ntbz[kwav], &tbd[kwav * tbd_dim1 + 
+		    1], &tbz[kwav * tbz_dim1 + 1], &tbtt[(kwav * tbtt_dim2 + 
+		    1) * tbtt_dim1 + 1], &dcalx, atx, &iserr[n - 1]);
+/*           Use only sucessfully interpolated and extrapolated results */
+/*           - Don't use if in hole (dcalx = -1.0) */
+	    if (dcalx < (float)0.) {
+		scal[n - 1] = (float)-999.;
+	    } else {
+		scal[n - 1] = dcalx;
+	    }
+	}
+/* L1050: */
+    }
+/*     Load array data into arguments for return to calling routine */
+/*     Sometimes, the most distant point may not have the largest slowness */
+L1060:
+    if (s_cmp(sloflg, "y", sloflg_len, (ftnlen)1) == 0 || s_cmp(sloflg, "Y", 
+	    sloflg_len, (ftnlen)1) == 0) {
+	*slocntr = scal[0];
+	*iserrcntr = iserr[0];
+	if (scal[2] < (float)0. || scal[1] < scal[2]) {
+	    *slomin = scal[1];
+	    *slomax = scal[2];
+	    *iserrmin = iserr[1];
+	    *iserrmax = iserr[2];
+	} else {
+	    *slomin = scal[2];
+	    *slomax = scal[1];
+	    *iserrmin = iserr[2];
+	    *iserrmax = iserr[1];
+	}
+    }
+    *ttcntr = tcal[0];
+    *ttmin = tcal[1];
+    *ttmax = tcal[2];
+    *azmin = azim[1];
+    *azmax = azim[2];
+    *distmin = dist[1];
+    *distmax = dist[2];
+    *iterrcntr = iterr[0];
+    *iterrmin = iterr[1];
+    *iterrmax = iterr[2];
+/*      Print location results if desired */
+    if (s_cmp(prtflg, "y", prtflg_len, (ftnlen)1) == 0 || s_cmp(prtflg, "Y", 
+	    prtflg_len, (ftnlen)1) == 0) {
+	for (i__ = 1; i__ <= 19; ++i__) {
+/* L1070: */
+	    lprt[i__ - 1] = FALSE_;
+	}
+	io___47.ciunit = *luout;
+	s_wsfe(&io___47);
+	do_fio(&c__1, "===EVENT INFORMATION===================", (ftnlen)39);
+	do_fio(&c__1, "=======================================", (ftnlen)39);
+	e_wsfe();
+	io___48.ciunit = *luout;
+	s_wsfe(&io___48);
+	do_fio(&c__1, " Latitude:", (ftnlen)10);
+	do_fio(&c__1, (char *)&(*alat), (ftnlen)sizeof(real));
+	do_fio(&c__1, " deg,", (ftnlen)5);
+	do_fio(&c__1, " Longitude:", (ftnlen)11);
+	do_fio(&c__1, (char *)&(*alon), (ftnlen)sizeof(real));
+	do_fio(&c__1, " deg,", (ftnlen)5);
+	do_fio(&c__1, " Depth:", (ftnlen)7);
+	do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(real));
+	do_fio(&c__1, " km", (ftnlen)3);
+	e_wsfe();
+	io___49.ciunit = *luout;
+	s_wsfe(&io___49);
+	do_fio(&c__1, " Semi-major axis:", (ftnlen)17);
+	do_fio(&c__1, (char *)&(*epmaj), (ftnlen)sizeof(real));
+	do_fio(&c__1, " km,", (ftnlen)4);
+	do_fio(&c__1, " Semi-minor axis:", (ftnlen)17);
+	do_fio(&c__1, (char *)&(*epmin), (ftnlen)sizeof(real));
+	do_fio(&c__1, " km,", (ftnlen)4);
+	e_wsfe();
+	io___50.ciunit = *luout;
+	s_wsfe(&io___50);
+	do_fio(&c__1, " Major-axis strike:", (ftnlen)19);
+	do_fio(&c__1, (char *)&(*epstr), (ftnlen)sizeof(real));
+	do_fio(&c__1, " deg CW from north", (ftnlen)18);
+	e_wsfe();
+	io___51.ciunit = *luout;
+	s_wsfe(&io___51);
+	do_fio(&c__1, " Depth error:", (ftnlen)13);
+	do_fio(&c__1, (char *)&(*zfint), (ftnlen)sizeof(real));
+	do_fio(&c__1, " km,", (ftnlen)4);
+	do_fio(&c__1, " Orig. time error:", (ftnlen)18);
+	do_fio(&c__1, (char *)&(*toint), (ftnlen)sizeof(real));
+	do_fio(&c__1, " s", (ftnlen)2);
+	e_wsfe();
+	io___52.ciunit = *luout;
+	s_wsfe(&io___52);
+	do_fio(&c__1, "===PREDICTED TIME/AZIMUTH/SLOWNESS BOUNDS", (ftnlen)41)
+		;
+	do_fio(&c__1, "=====================================", (ftnlen)37);
+	e_wsfe();
+	io___53.ciunit = *luout;
+	s_wsfe(&io___53);
+	do_fio(&c__1, "  Ariv ID = ", (ftnlen)12);
+	do_fio(&c__1, (char *)&(*idaridx), (ftnlen)sizeof(integer));
+	do_fio(&c__1, "  Station = ", (ftnlen)12);
+	do_fio(&c__1, dstaidx, dstaidx_len);
+	do_fio(&c__1, "  Phase = ", (ftnlen)10);
+	do_fio(&c__1, dwavidx, dwavidx_len);
+	e_wsfe();
+	io___54.ciunit = *luout;
+	s_wsfe(&io___54);
+	do_fio(&c__1, "Min Cntr Max Azim (deg)    : ", (ftnlen)29);
+	do_fio(&c__1, (char *)&(*azmin), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*azcntr), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*azmax), (ftnlen)sizeof(real));
+	e_wsfe();
+	io___55.ciunit = *luout;
+	s_wsfe(&io___55);
+	do_fio(&c__1, "Min Cntr Max Dist (deg)    : ", (ftnlen)29);
+	do_fio(&c__1, (char *)&(*distmin), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*distcntr), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*distmax), (ftnlen)sizeof(real));
+	e_wsfe();
+	io___56.ciunit = *luout;
+	s_wsfe(&io___56);
+	do_fio(&c__1, "Min Cntr Max Time (sec)    : ", (ftnlen)29);
+	do_fio(&c__1, (char *)&(*ttmin), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*ttcntr), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*ttmax), (ftnlen)sizeof(real));
+	e_wsfe();
+	io___57.ciunit = *luout;
+	s_wsfe(&io___57);
+	do_fio(&c__1, "Min Cntr Max Slow (sec/deg): ", (ftnlen)29);
+	do_fio(&c__1, (char *)&(*slomin), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*slocntr), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*slomax), (ftnlen)sizeof(real));
+	e_wsfe();
+	io___58.ciunit = *luout;
+	s_wsfe(&io___58);
+	do_fio(&c__1, "Time Errors           : ", (ftnlen)24);
+	do_fio(&c__1, (char *)&(*iterrmin), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*iterrcntr), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*iterrmax), (ftnlen)sizeof(integer));
+	e_wsfe();
+	io___59.ciunit = *luout;
+	s_wsfe(&io___59);
+	do_fio(&c__1, "Slowness Errors       : ", (ftnlen)24);
+	do_fio(&c__1, (char *)&(*iserrmin), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*iserrcntr), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*iserrmax), (ftnlen)sizeof(integer));
+	e_wsfe();
+	if (*iterrmin > 0) {
+	    lprt[*iterrmin - 1] = TRUE_;
+	}
+	if (*iterrcntr > 0) {
+	    lprt[*iterrcntr - 1] = TRUE_;
+	}
+	if (*iterrmax > 0) {
+	    lprt[*iterrmax - 1] = TRUE_;
+	}
+	if (*iserrmin > 0) {
+	    lprt[*iserrmin - 1] = TRUE_;
+	}
+	if (*iserrcntr > 0) {
+	    lprt[*iserrcntr - 1] = TRUE_;
+	}
+	if (*iserrmax > 0) {
+	    lprt[*iserrmax - 1] = TRUE_;
+	}
+	io___60.ciunit = *luout;
+	s_wsle(&io___60);
+	do_lio(&c__9, &c__1, " =  0, No problem, normal interpolation", (
+		ftnlen)39);
+	e_wsle();
+	if (lprt[0]) {
+	    io___61.ciunit = *luout;
+	    s_wsle(&io___61);
+	    do_lio(&c__9, &c__1, " =  1, No station information", (ftnlen)29);
+	    e_wsle();
+	}
+	if (lprt[1]) {
+	    io___62.ciunit = *luout;
+	    s_wsle(&io___62);
+	    do_lio(&c__9, &c__1, " =  2, No travel-time tables", (ftnlen)28);
+	    e_wsle();
+	}
+	if (lprt[2]) {
+	    io___63.ciunit = *luout;
+	    s_wsle(&io___63);
+	    do_lio(&c__9, &c__1, " =  3, Data type unknown", (ftnlen)24);
+	    e_wsle();
+	}
+	if (lprt[3]) {
+	    io___64.ciunit = *luout;
+	    s_wsle(&io___64);
+	    do_lio(&c__9, &c__1, " =  4, S.D. <= 0.0", (ftnlen)18);
+	    e_wsle();
+	}
+	if (lprt[10]) {
+	    io___65.ciunit = *luout;
+	    s_wsle(&io___65);
+	    do_lio(&c__9, &c__1, " = 11, Distance-depth point ", (ftnlen)28);
+	    do_lio(&c__9, &c__1, "(x0,z0) in hole of travel-time curve", (
+		    ftnlen)36);
+	    e_wsle();
+	}
+	if (lprt[11]) {
+	    io___66.ciunit = *luout;
+	    s_wsle(&io___66);
+	    do_lio(&c__9, &c__1, " = 12, x0 < x(1)", (ftnlen)16);
+	    e_wsle();
+	}
+	if (lprt[12]) {
+	    io___67.ciunit = *luout;
+	    s_wsle(&io___67);
+	    do_lio(&c__9, &c__1, " = 13, x0 > x(max)", (ftnlen)18);
+	    e_wsle();
+	}
+	if (lprt[13]) {
+	    io___68.ciunit = *luout;
+	    s_wsle(&io___68);
+	    do_lio(&c__9, &c__1, " = 14, z0 < z(1)", (ftnlen)16);
+	    e_wsle();
+	}
+	if (lprt[14]) {
+	    io___69.ciunit = *luout;
+	    s_wsle(&io___69);
+	    do_lio(&c__9, &c__1, " = 15, z0 > z(max)", (ftnlen)18);
+	    e_wsle();
+	}
+	if (lprt[15]) {
+	    io___70.ciunit = *luout;
+	    s_wsle(&io___70);
+	    do_lio(&c__9, &c__1, " = 16, x0 < x(1) & z0 < z(1)", (ftnlen)28);
+	    e_wsle();
+	}
+	if (lprt[16]) {
+	    io___71.ciunit = *luout;
+	    s_wsle(&io___71);
+	    do_lio(&c__9, &c__1, " = 17, x0 > x(max) & z0 < z(1)", (ftnlen)30)
+		    ;
+	    e_wsle();
+	}
+	if (lprt[17]) {
+	    io___72.ciunit = *luout;
+	    s_wsle(&io___72);
+	    do_lio(&c__9, &c__1, " = 18, x0 < x(1) & z0 > z(max)", (ftnlen)30)
+		    ;
+	    e_wsle();
+	}
+	if (lprt[18]) {
+	    io___73.ciunit = *luout;
+	    s_wsle(&io___73);
+	    do_lio(&c__9, &c__1, " = 19, x0 > x(max) & z0 > z(max)", (ftnlen)
+		    32);
+	    e_wsle();
+	}
+	io___74.ciunit = *luout;
+	s_wsle(&io___74);
+	e_wsle();
+    }
+    cl__1.cerr = 0;
+    cl__1.cunit = *luout;
+    cl__1.csta = 0;
+    f_clos(&cl__1);
+    return 0;
+} /* predsat0_ */
+

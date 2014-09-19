@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scevtlog" category="Utilities">
+		<description>Event log preserving the history of updates.</description>
+		<configuration>
+			<parameter name="directory" type="string">
+				<description>
+				Specify the output directory. Within this directory the logging
+				directory structure and the event files are stored.
+				</description>
+			</parameter>
+			<parameter name="format" type="string" default="autoloc3">
+				<description>
+				Specify output event format (default is autoloc3). For completeness
+				it is recommended to switch to xml as storage format. The autoloc3
+				format can be easily reconstructed with scbulletin but not the other
+				way around.
+				</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Storage">
+				<option flag="o" long-flag="directory" argument="arg" param-ref="directory"/>
+				<option flag="f" long-flag="format" argument="arg" param-ref="format"/>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

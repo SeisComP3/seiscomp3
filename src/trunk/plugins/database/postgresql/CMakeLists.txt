@@ -1,0 +1,16 @@
+SET(
+    DATABASE_POSTGRESQL_SOURCES
+	postgresqldatabaseinterface.cpp
+)
+
+SET(
+    DATABASE_POSTGRESQL_HEADERS
+	postgresqldatabaseinterface.h
+)
+
+INCLUDE_DIRECTORIES(${POSTGRESQL_INCLUDE_DIR})
+
+SC_ADD_PLUGIN_LIBRARY(DATABASE_POSTGRESQL dbpostgresql "")
+
+SC_LINK_LIBRARIES(dbpostgresql ${POSTGRESQL_LIBRARIES})
+SC_LINK_LIBRARIES_INTERNAL(dbpostgresql core)

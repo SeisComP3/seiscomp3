@@ -1,0 +1,129 @@
+.SUFFIXES: .lo .to .tlo
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+datarootdir=@datarootdir@
+libdir=@libdir@
+includedir=@includedir@
+mandir=@mandir@
+mansubdir=@mansubdir@
+sysconfdir=@sysconfdir@
+piddir=@piddir@
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+buildtoolsdir=$(top_srcdir)/buildtools
+host=@host@
+
+DESTDIR=
+VPATH=@srcdir@
+SPREAD_PROGRAM=@sbindir@/spread
+SP_MAJOR_VERSION=@SP_MAJOR_VERSION@
+SP_MINOR_VERSION=@SP_MINOR_VERSION@
+SP_PATCH_VERSION=@SP_PATCH_VERSION@
+VERSION=@SP_MAJOR_VERSION@.@SP_MINOR_VERSION@.@SP_PATCH_VERSION@
+
+PATHS= 
+
+#libspread-util includes
+LIBSPREADUTIL_DIR=../libspread-util
+LIBSPREADUTIL_PATHS=-I$(LIBSPREADUTIL_DIR)/include -I$(top_srcdir)/libspread-util/include
+LIBSPREADUTIL_LDFLAGS=-rdynamic
+LIBSPREADUTIL_LIBS=-ldl
+
+CC=@CC@
+LD=@LD@
+CFLAGS=@CFLAGS@
+CPPFLAGS=-I. -I$(srcdir) -I$(top_srcdir)/include @CPPFLAGS@ $(PATHS) @DEFS@
+LDFLAGS=@LDFLAGS@ $(LIBSPREADUTIL_LDFLAGS)
+LIBS=@LIBS@ $(LIBSPREADUTIL_LIBS)
+THLDFLAGS=@THLDFLAGS@ $(LIBSPREADUTIL_LDFLAGS)
+THLIBS=@THLIBS@ $(LIBSPREADUTIL_LIBS)
+AR=@AR@
+LEX=@LEX@
+RANLIB=@RANLIB@
+INSTALL=@INSTALL@
+SOFTLINK=@LN_S@
+PERL=@PERL@
+ENT=@ENT@
+EXEEXT=@EXEEXT@
+SP_LIBRARY_DIR=../libspread
+
+TARGETS=spuser$(EXEEXT) spflooder$(EXEEXT) sptuser${EXEEXT} flush_user$(EXEEXT)
+
+all: $(TARGETS) 
+
+.c.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
+
+.c.to:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -D_REENTRANT -c $< -o $*.to
+
+.c.lo:
+	$(SHCC) $(SHCFLAGS) $(SHCPPFLAGS) -c $< -o $*.lo
+
+.c.tlo:
+	$(SHCC) $(SHCFLAGS) $(SHCPPFLAGS) -D_REENTRANT -c $< -o $*.tlo
+
+spuser$(EXEEXT): $(SP_LIBRARY_DIR)/libspread-core.a	user.o
+	$(LD) -o $@ user.o $(LDFLAGS) $(SP_LIBRARY_DIR)/libspread-core.a $(LIBS)
+
+spflooder$(EXEEXT):  $(SP_LIBRARY_DIR)/libspread-core.a flooder.o
+	$(LD) -o $@ flooder.o $(LDFLAGS)  $(SP_LIBRARY_DIR)/libspread-core.a $(LIBS)
+
+sptuser$(EXEEXT): user.to  $(SP_LIBRARY_DIR)/libtspread-core.a
+	$(LD) $(THLDFLAGS) -o $@ user.to  $(SP_LIBRARY_DIR)/libtspread-core.a $(LDFLAGS) $(LIBS) $(THLIBS)
+
+spsimple_user$(EXEEXT): simple_user.o  $(SP_LIBRARY_DIR)/libspread-core.a
+	$(LD) -o $@ $(LDFLAGS) simple_user.o $(SP_LIBRARY_DIR)/libspread-core.a $(LIBS) 
+
+flush_user$(EXEEXT): $(SP_LIBRARY_DIR)/libspread.a fl_user.to
+	$(LD) $(LDFLAGS) -o flush_user fl_user.to $(SP_LIBRARY_DIR)/libspread.a $(LIBS) $(THLIBS)
+
+sp_time_memb$(EXEEXT): $(SP_LIBRARY_DIR)/libspread.a sp_time_memb.o stats.o
+	$(LD) $(LDFLAGS) -o sp_time_memb sp_time_memb.o stats.o $(LIBS)
+
+fl_time_memb$(EXEEXT): $(SP_LIBRARY_DIR)/libspread.a fl_time_memb.o stats.o
+	$(LD) $(LDFLAGS) -o fl_time_memb fl_time_memb.o stats.o $(LIBS)
+
+clean:
+	rm -f *.lo *.tlo *.to *.o *.a *.dylib $(TARGETS) spsimple_user
+	rm -f core
+	rm -rf ../bin/$(host)
+
+distclean: clean
+	rm -f Makefile config.h config.status *~
+
+mrproper: distclean
+
+veryclean: distclean
+	rm -f configure
+
+distprep: 
+	autoreconf
+
+binrelease: $(TARGETS)
+	$(buildtoolsdir)/mkinstalldirs ../bin/$(host)
+	$(INSTALL) -m 0755 -s spuser$(EXEEXT) ../bin/$(host)/spuser$(EXEEXT)
+	$(INSTALL) -m 0755 -s sptuser$(EXEEXT) ../bin/$(host)/sptuser$(EXEEXT)
+	$(INSTALL) -m 0755 -s spflooder$(EXEEXT) ../bin/$(host)/spflooder$(EXEEXT)
+	$(INSTALL) -m 0755 -s flush_user$(EXEEXT) ../bin/$(host)/flush_user$(EXEEXT)
+
+install: $(TARGETS) install-files
+
+install-files:
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(bindir)
+	$(INSTALL) -m 0755 -s spuser$(EXEEXT) $(DESTDIR)$(bindir)/spuser$(EXEEXT)
+	$(INSTALL) -m 0755 -s sptuser$(EXEEXT) $(DESTDIR)$(bindir)/sptuser$(EXEEXT)
+	$(INSTALL) -m 0755 -s spflooder$(EXEEXT) $(DESTDIR)$(bindir)/spflooder$(EXEEXT)
+	$(INSTALL) -m 0755 -s flush_user$(EXEEXT) $(DESTDIR)$(bindir)/flush_user$(EXEEXT)
+
+uninstallall:	uninstall
+	-rmdir $(DESTDIR)$(bindir)
+
+uninstall: 
+	-rm -f $(DESTDIR)$(bindir)/spuser$(EXEEXT)
+	-rm -f $(DESTDIR)$(bindir)/spflooder$(EXEEXT)
+	-rm -f $(DESTDIR)$(bindir)/sptuser$(EXEEXT)
+	-rm -f $(DESTDIR)$(bindir)/flush_user$(EXEEXT)

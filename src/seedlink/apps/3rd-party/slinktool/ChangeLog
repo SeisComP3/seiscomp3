@@ -1,0 +1,257 @@
+2009.240/AH: version 4.1b-sc3
+	- Mod for SC3 distribution with libxml2 and batchmode support.
+
+2009.050: version 4.1b
+	- Update libslink to 2.2b which fixes for Solaris and Win32.
+
+2008.029: version 4.1
+	- Update libslink to 2.1 which includes support for building
+	with user defined CC and CFLAGS and other minor updates.
+
+2007.284: version 4.0
+	- Update libslink to 2.0 which includes support for wildcarded
+	network & station codes (when supported by the server) and 
+	extended reply/status messages.
+
+2007.218:
+	- Add 'b' to fopen mode argument so Win32 platforms write
+	output data correctly.
+
+2007.198: version 3.9
+	- Update main Makefile.wat for Watcom's wmake (Win32).
+	- Update ezxml/Makefile.wat to define EZXML_NOMAP to build.
+	- Update src/Makefile.wat with the correct path to libezxml.lib.
+
+2007.039:
+	- Add ezxml library to sources and use it instead of libxml2.
+	- Incoming INFO XML buffer limited to 10 MB.
+
+2006.355: 
+	- Update to libslink 1.7, only API naming changes.
+	- Include Makefile.wat and Makefile.win for WIN32. libxml2 is
+	required to compile, which might have other dependencies.
+	- Numerous small changes for compiling under WIN32: no signal
+	handling when WIN32 defined, etc.
+
+2006.027: version 3.8
+	- Update to libslink 1.6, no changes.
+
+2005.343: version 3.8rc1
+	- Update to libslink 1.6rc1.
+
+2005.147: version 3.7
+	- Fix a few small typos.
+
+2005.108:
+	- Printing of stream and gap lists will now report when stream
+	checking is not enabled on the server if a verbose option is used.
+
+2005.103:
+	- Update to libslink 1.5.
+	- Update Makefiles to include specific 'gcc', etc. targets.
+	- Add version information to default (no arguments) help text.
+
+2004.222: version 3.6
+	- Update to libslink 1.4.
+	- Either host or port is optional when specifying the
+	SeedLink server (libslink parses the string now).
+	- Add option '-P' to ping the server and report success/failure. 
+	- Remove the dummy signal handler as it was useless.
+
+2004.196: version 3.5
+	- Update to libslink 1.3 including redirection of libslink
+	internal diagnostic messages to stderr.
+	- Change most log messages to be at the diagnostic level, thus
+	going to stderr.  Notable exceptions are when printing details
+	of received data records (ms_print), when printing unpacked
+	samples (print_samples) and when printing INFO responses.
+	- Do not adjust ppackets flag based on verbose flag.  If packet
+	details are desired they must specifically be requested.
+	- Fix usage of '-o -', the new argument processing broke this.
+
+2004.170: version 3.4
+	- Update to libslink 1.2a including more flexible support for
+	implementations of the SeedLink protocol other than the reference
+	implementation by Andres Heinloo. 
+
+2004.125: version 3.3
+	- Update to libslink 1.1 allowing usage under Mac OS X (Darwin).
+	- Add '-u' option to to unpack samples in data packets and
+	print them.
+	- Fix up the usage of '-v' and '-p' to be consistent.
+	- Better argument list processing to catch silly user errors when
+	options do not have required values.
+	- Fix handling of multiple INFO requests, first one on the command
+	line always wins, the others are properly rejected with a message.
+	- Consolidate INSTALL and README into README.
+	
+2003.309: version 3.2
+	- Update to libslink 1.0
+
+2003.307: version 3.2pre1
+	- Update to libslink 1.0pre1
+        - Add an exception to packet_handler() to not archive
+        end-of-detection records in structured data archives.
+	These records will still be written to the dump file.
+	- Do not archive INFO packets in structured data archives.
+	These records will still be written to the dump file.
+	
+2003.304: version 3.2rc9
+	- Finish implementing the state file save-at-interval code.
+	Oops! (Thanks Joachim).
+	- Fix some typos in the man page.
+
+2003.280: version 3.2rc8
+	- Updated to libslink 0.9.6 and do needed changes.
+
+2003.276: version 3.2rc7
+	- Updated to libslink 0.9.5 and do needed changes.
+	- Removed autoconfig system, too much to maintain for too little
+	gain.  Simple Makefiles should cover most cases.
+	- Changed to standard flag usage and flexibility.
+	- Add [:interval] to statefile specification.
+	
+2003.181: version 3.2rc6
+	- Update to libslink 0.8.3 and rename functions where necessary.
+	- Update to fixes made in archiving routines for slarchive.
+	- Minor documentation update.
+
+2003.156: version 3.2rc5
+	- Update to libslink 0.7 and use the new shutdown procedure.
+	
+2003.092: version 3.2rc4
+	- Updated data stream archiving routines from the slarchive
+	  source.
+
+2003.083: version 3.2rc3
+	- Fixed memory leak in time window string parsing.
+	- Fixed memory leaks in the data stream archiving routines.
+	- Updated libslink to 0.6 with memory leak fixes.
+
+2003.077: version 3.2rc1
+	- '-s' now specifies default selectors used when none are specified
+	  for a given data stream.
+	- Added an '-d' option to use "dial-up" mode for the connection.
+	- Added an '-A' option to archive data in a user specified
+	  directory/file structure.
+	- Added an '-SDS' option to save data in an Simple Data Structure.
+	- Ported to use the new SeedLink library (libslink), this includes
+	  new features:
+	    - read a stream list from a file (with the '-l' option)
+	    - save the record start times as state information (in the
+	      state files) and use them with server versions >= 2.93.
+	
+2003.034:
+	- Fixed latency calculation when sampling rate factor/multiplier
+	  is negative.  Aaargg.
+	
+2003.013: version 3.0
+        - Added a test for a channel code of 'ERR' in an INFO response,
+	  this indicates that the requested INFO level is not enabled.
+        - Change specific INFO options to upper case for clarity.
+	- Added an option (-I) to request and parse a response to an
+	  INFO ID response.
+	- Updated man page.
+	
+2002.319:
+	- Filtered most of the source through 'indent' to have a
+	  uniform style (thus hiding the authors ugly shorthand style).
+	- Reworked the data record latency calculation for efficieny
+	  and clarity (although it was already very simple).
+	
+2002.315: version 3rc2
+	- Fix BUD output file names so they match that used by the DMC.
+	  The BUD structure and filename convention:
+	  <Net>/<Sta>/Sta.Net.Loc.Chan.Year.JDay
+	- Add a few lines to catch a return of 'ERROR\r\n' in the main
+	  loop for the response to commands that are unsupported.
+	  This is mostly for handling the server response when INFO
+	  messages are turned off.
+	- Fix a memory leak in strparse().
+	- Update up the documentation.
+
+2002.301:
+	- Moved the call to sl_sayhello() into sl_connect() instead of
+	  sl_configlink() so the version number parsing will occur even
+	  for the specific INFO requests.
+	
+2002.289: version 3rc1
+	- Add detection of server version from response to HELLO message
+	  and appropriate checks for version level before doing things
+	  like requesting INFO messages and multi-station negotiation.
+	
+2002.287:
+	- Implement BUD structure saving capability, slinktool can now
+	  save all received data records to a BUD dir/file structure.
+	
+2002.269:
+	- Implement state file capability, slinktool can now save and 
+	  recover sequence numbers from a state file.
+
+2002.266:
+	- Renamed project to slinktool
+	- Merge Andres Heinloo's updates and XML handling code, Thanks!
+	  This includes many new features for Seedlink 3.0 servers.
+	- Implemented automake/autoconf system for configuration, this is
+	  mostly to find libxml2 and determine byte order in a portable way.
+	- Re-format the most of the source for readability (hopefully)
+	- Implement keepalive using INFO level ID requests.
+	
+2002.154: version 1.7b
+	- extended a check for 'D' in the 'data header/quality indicator'
+	  field of a fixed data header as per. SEED version 2.4.  This
+	  value can now be 'D', 'R' or 'Q'.
+	
+2002.129: version 1.7a
+	- Added some logic to fail during link configuration if either no
+	  given selectors or no given stations (multi-station mode only)
+	  were accepted.  This should avoid confusion for users that 
+	  receive unexpected data because their specified selectors or
+	  stations were not accepted by the server.  Note: selectors,
+	  unlike stations, will only fail if they are malformed;
+	  acceptance does not mean that data fitting that selector mask
+	  is available.
+	- Provide separate Makefile's for Linux and Sun/Solaris just for
+	  convenience.
+
+2002.101: version 1.7
+	- Added some code to select() while reading data records from
+	  the network.  Subsequently removed the usleep() call in the main
+	  loop.  This significantly improves the data transport rate,
+	  which is not too important in this command line client but is
+	  important in the sister-project slink2orb.
+	- Re-worked the timing logic in the main loop for the network delay
+	  and timeout so it is easier to read/modify later.
+	
+2002.008:
+	- Removed some unused variables. woo hoo.
+	
+2002.007: version 1.6
+	- Fix a small memory leak and do some cleanups
+	
+2001.353: version 1.5
+	- Updated the slinkutils.c client functions with minor bugfixes
+	
+2001.346: version 1.3
+	- If host is omitted for SeedLink server address then localhost
+	is assumed, i.e. ':18000' implies 'localhost:18000'
+	- Addition of information in messages
+	- Reorganize client functions (slinkutils.c)
+	
+2001.340: version 1.2
+	- Minor code cleanups.
+
+2001.313: version 1.1
+        - Added the ability to parse blockettes 100 and 1001, in addition
+        to the 1000 blockette.
+        - Added a rough data latency calculator (based on the system clock
+	in UTC).
+
+
+2001.305: first version
+	- Connects using both uni and multi-station mode, no keep alive
+	handling as this feature does not exist in any servers yet.
+	- All received packets can be dumped to a file, no byte swapping
+	or other modification is performed.
+	- miniSEED header details are reported with two verbose flags (-vv).
+	

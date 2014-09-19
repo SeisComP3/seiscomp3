@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/map" >
+        <file>icons/zoomin.png</file>
+        <file>icons/zoomout.png</file>
+    </qresource>
+</RCC>

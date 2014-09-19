@@ -1,0 +1,26 @@
+.TH FL_disconnect 3 "Dec 2000" "Flush Spread" "User Manuals"
+.SH NAME
+FL_disconnect \- destroy a Flush Spread connection between an application and a Spread daemon.
+.SH SYNOPSIS
+.B #include <fl.h>
+
+.BI "int FL_disconnect(mailbox " mbox ");"
+.SH DESCRIPTION
+.B FL_disconnect
+should be called when the application is finished
+with a connection to a Spread daemon.  The application may have
+other connections still open to the daemon and may open a new
+connection after disconnecting. Any data that was available on
+the connection will be lost after the call returns.
+
+The 
+.I mbox 
+should be for the connection you wish to close.
+.SH "RETURN VALUES"
+Returns 0 on success or 
+.B ILLEGAL_SESSION
+when the
+.I mbox
+given does not represent a valid connection.
+.SH AUTHOR
+John Schultz <jschultz@cnds.jhu.edu>

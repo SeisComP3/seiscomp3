@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="reftek" category="sources">
+		<description>RefTek RTPD (TCP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string" default="127.0.0.1">
+				<description>Hostname or IP of the RTPD server.</description>
+			</parameter>
+			<parameter name="port" type="int" default="2543">
+				<description>Port of the RTPD server.</description>
+			</parameter>
+			<parameter name="map" type="string">
+				<description>
+				Defines an alternative unit mapping file. The default file
+				is in $INSTALLDIR/var/lib/seedlink/reftek2sl.map. If
+				this path is not an absolute path it will treated as relative
+				path to $INSTALLDIR/var/lib/seedlink. The map file is used
+				if the unit is not explictly given in the binding. Each line
+				in the file is one mapping from a unit to a station name. The
+				first column is the unit id e.g. 91F3 and the second column
+				the Seedlink station name e.g. ABCD.
+				</description>
+			</parameter>
+			<parameter name="unit" type="string" default="91F3">
+				<description>The unit id.</description>
+			</parameter>
+			<parameter name="proc" type="string" default="reftek">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<parameter name="timeout" type="int" default="60" unit="s">
+				<description>
+				Timeout length in seconds. If no data is received from a Reftek
+				unit during this period, the plugin assumes that the unit is
+				disconnected.
+				</description>
+			</parameter>
+			<parameter name="default_tq" type="int" default="40">
+				<description>
+				Default timing quality in percents. This value will be used when
+				no timing quality information is available. Can be -1 to omit
+				the blockette 1001 altogether.
+				</description>
+			</parameter>
+			<parameter name="unlock_tq" type="int" default="10">
+				<description>
+				Timing quality to use when GPS is out of lock.
+				</description>
+			</parameter>
+			<parameter name="log_soh" type="boolean" default="true">
+				<description>
+				Send Reftek state-of-health data as Mini-SEED LOG stream.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

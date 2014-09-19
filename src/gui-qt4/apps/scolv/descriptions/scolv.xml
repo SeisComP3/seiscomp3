@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scolv" category="GUI">
+		<description>Origin locator view</description>
+		<configuration>
+			<parameter name="loadEventDB" type="double" unit="days" default="1">
+				<description>
+					Number of days to preload if scolv is started.
+				</description>
+			</parameter>
+			<parameter name="magnitudes" type="list:string" default="MLv,mb,mB,Mwp">
+				<description>
+					Configures the list of magnitude types to be calculated when
+					recomputing magnitudes. This list can be altered interactivly so
+					this reflects only the default unless computeMagnitudesSilently
+					is set to true.
+				</description>
+			</parameter>
+			<group name="scripts">
+				<parameter name="export" type="string">
+					<description>
+						User defined script which enables a publish button in the
+						summary panel on the left side of scolv (activated with F8).
+					</description>
+				</parameter>
+				<group name="export">
+					<parameter name="silentTerminate" type="string" default="false">
+						<description>
+							If the publish button is clicked while another script is
+							still running, a message box pops up with a warning that
+							a script is still running and to option to terminate it. If
+							this flag is true then it will be terminated automatically
+							without user interaction and the warning message.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="script0" type="string">
+					<description>
+						User defined script0.
+					</description>
+				</parameter>
+				<parameter name="script1" type="string">
+					<description>
+						User defined script1.
+					</description>
+				</parameter>
+			</group>
+			<group name="olv">
+				<parameter name="defaultEventType" type="string">
+					<description>
+					Sets the default event type to be used when confirming a solution. If
+					not set, the event type is not changed at all unless &quot;with options&quot;
+					is used. The origin or its source must be associated with an event already.
+					</description>
+				</parameter>
+				<parameter name="defaultMagnitudeAggregation" type="string">
+					<description>
+					Sets the default magnitude aggregation method. It can be either &quot;mean&quot;,
+					&quot;trimmed mean&quot; or &quot;median&quot;. If not set the default
+					behaviour is used which computes the mean if less than 4 stations are available,
+					trimmed mean otherwise.
+					</description>
+				</parameter>
+				<parameter name="computeMagnitudesAfterRelocate" type="boolean" default="false">
+					<description>
+						Automatically starts computation of magnitudes after relocating an
+						origin.
+					</description>
+				</parameter>
+				<parameter name="computeMagnitudesSilently" type="boolean" default="false">
+					<description>
+						Starts magnitude computation without user interaction if everything
+						runs without errors. In case of errors a window pops up with
+						the current state of processing.
+					</description>
+				</parameter>
+				<parameter name="enableMagnitudeSelection" type="boolean" default="true">
+					<description>
+						If enabled a magnitude selection pop window will open in advance
+						to compute magnitudes. The default selection reflects the configuration
+						parameter &quot;magnitudes&quot;.
+					</description>
+				</parameter>
+				<parameter name="Pvel" type="double" default="6.0">
+					<description>
+						The P reduction velocity used in the &quot;move out&quot; plot.
+					</description>
+				</parameter>
+				<parameter name="drawGridLines" type="boolean" default="true">
+					<description>
+						Sets the drawing of grid lines in the plot.
+					</description>
+				</parameter>
+				<parameter name="computeMissingTakeOffAngles" type="boolean" default="false">
+					<description>
+					</description>
+				</parameter>
+				<parameter name="defaultAddStationsDistance" type="double" unit="deg" default="15">
+					<description>
+						The default value for adding unassociated stations in the picker.
+					</description>
+				</parameter>
+				<parameter name="hideStationsWithoutData" type="boolean" default="false">
+					<description>
+						If enabled then all traces without data are hidden in the picker.
+					</description>
+				</parameter>
+				<parameter name="defaultDepth" type="double" unit="km" default="10">
+					<description>
+						When creating an artificial origin this is the default depth used.
+					</description>
+				</parameter>
+				<group name="map">
+					<group name="stations">
+						<parameter name="unassociatedMaxDist" type="double" unit="deg" default="-1">
+							<description>
+								Maximum distance in degrees up to which also unassociated stations are
+								shown in the map. The default value is -1 which will not
+								show any unassociated station.
+							</description>
+						</parameter>
+					</group>
+					<group name="event">
+						<parameter name="defaultRadius" type="double" unit="deg" default="-1">
+							<description>
+								Default map radius in degrees if a new event is selected.
+								A negative value restores the default behaviour.
+							</description>
+						</parameter>
+					</group>
+				</group>
+				<group name="arrivalTable">
+					<parameter name="visibleColumns" type="list:string">
+						<description>
+							Defines the visible columns in the arrival table. Valid tokens are:
+							Used, Status, Phase, Weight, Method, Polarity, Takeoff,
+							Net, Sta, Loc/Cha, Res, Dis, Az, Time, +/-, Created, Latency.
+						</description>
+					</parameter>
+				</group>
+				<group name="locator">
+					<parameter name="minimumDepth" type="double">
+						<description>
+							Minimum depth which is set if the locator used supports fixing
+							the depth. If the depth is lower than this value the depth is then
+							fixed to this configured value and the origin is relocated again.
+						</description>
+					</parameter>
+					<parameter name="defaultProfile" type="string">
+						<description>
+							The default locator profile to use.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="locator" type="string">
+					<description>
+						The default locator interface to use.
+					</description>
+				</parameter>
+				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
+					<description>
+						Adds advanced input parameters in artificial origin dialog.
+					</description>
+				</parameter>
+			</group>
+			<group name="picker">
+				<parameter name="showCrossHairCursor" type="boolean" default="false">
+					<description>
+						Activates a cross hair cursor showing the configured uncertainties
+						when in picking mode.
+					</description>
+				</parameter>
+				<parameter name="loadAllComponents" type="boolean" default="true">
+					<description>
+						Loads all three components by default. If disabled then additional
+						components are fetched when requested.
+					</description>
+				</parameter>
+				<parameter name="loadAllPicks" type="boolean" default="true">
+					<description>
+						Loads all existing picks for the requested data time window.
+					</description>
+				</parameter>
+				<parameter name="loadStrongMotion" type="boolean" default="false">
+					<description>
+						If enabled then acceleration data is loaded for co-located
+						stations where picked on velocity data.
+					</description>
+				</parameter>
+				<parameter name="showAllComponents" type="boolean" default="false">
+					<description>
+						If enabled then all three components are shown in the picker
+						zoom trace.
+					</description>
+				</parameter>
+				<parameter name="allComponentsMaximumDistance" type="double" unit="deg" default="10">
+					<description>
+						Defines the distance limit for the showAllComponents flag.
+					</description>
+				</parameter>
+				<parameter name="usePerStreamTimeWindows" type="boolean" default="false">
+					<description>
+						If enabled data is requested around the P pick for each stations.
+						Otherwise origin time is used and the time window for all stations
+						is the same.
+					</description>
+				</parameter>
+				<parameter name="removeAutomaticPicksFromStationAfterManualReview" type="boolean" default="false">
+					<description>
+						After picking and pushing the solution back to scolv all automatic arrivals
+						are removed from a station if a manual pick exists.
+					</description>
+				</parameter>
+				<parameter name="removeAllAutomaticPicksAfterManualReview" type="boolean" default="false">
+					<description>
+						After picking and pushing the solution back to scolv all automatic arrivals
+						are removed from all stations regardless if a manual pick exists or not.
+					</description>
+				</parameter>
+				<parameter name="preOffset" type="int" unit="s" default="60">
+					<description>
+						The data time span added to the left of either origin time or
+						first arrival depending on the usePerStreamTimeWindows flag.
+					</description>
+				</parameter>
+				<parameter name="postOffset" type="int" unti="s" default="120">
+					<description>
+						The data time span added to the right of the requested time window.
+					</description>
+				</parameter>
+				<parameter name="minimumTimeWindow" type="int" unit="s" default="1800">
+					<description>
+						Minimum data time window length.
+					</description>
+				</parameter>
+				<group name="uncertainties">
+					<parameter name="preferred" type="list:string">
+						<description>
+							Defines a list of preferred pick uncertainty profiles.
+						</description>
+					</parameter>
+					<group name="profile">
+						<struct type="Uncertainty profile" link="picker.uncertainties.preferred">
+							<parameter type="list:string">
+								<description>
+									Defines a list of pick uncertainties.
+									The format of each list item is either a double value or a pair of
+									double values for asymmetric uncertainties in
+									format &quot;(val1,val2)&quot;.
+								</description>
+							</parameter>
+						</struct>
+					</group>
+				</group>
+				<parameter name="uncertainties" type="list:string">
+					<description>
+						Defines a list of predefined uncategorised uncertainties.
+						The format of each list item is either a double value or a pair of
+						double values for asymmetric uncertainties in
+						format &quot;(val1,val2)&quot;. This parameter is only used if
+						picker.uncertainties.preferred has not been defined.
+					</description>
+				</parameter>
+				<group name="phases">
+					<parameter name="favourites" type="list:string">
+						<description>
+						</description>
+					</parameter>
+				</group>
+				<parameter name="phases" type="list:string">
+					<description>
+					A list of phases that is available in the picker. This is a fallback
+					for the more complex phase group definition &quot;picker.phases.groups&quot;
+					which is not part of this module description.
+					</description>
+				</parameter>
+				<parameter name="showPhases" type="list:string">
+					<description>
+					</description>
+				</parameter>
+				<parameter name="filters" type="list:string">
+					<description>
+						List of filters available in the picker.
+					</description>
+				</parameter>
+				<parameter name="velocityChannelCodes" type="list:string">
+					<description>
+						A list of channel codes to be used when searching for
+						velocity channels. Usually this information is part of the
+						meta data. In case it is not, this list is used.
+					</description>
+				</parameter>
+				<parameter name="accelerationChannelCodes" type="list:string">
+					<description>
+						A list of channel codes to be used when searching for
+						acceleration channels. Usually this information is part of the
+						meta data. In case it is not, this list is used.
+					</description>
+				</parameter>
+			</group>
+			<group name="amplitudePicker">
+				<parameter name="preOffset" type="int" unit="s" default="300">
+					<description>
+						Time span in seconds to be added to the left of the used
+						amplitude time window.
+					</description>
+				</parameter>
+				<parameter name="postOffset" type="int" unit="s" default="300">
+					<description>
+						Time span in seconds to be added to the right of the used
+						amplitude time window.
+					</description>
+				</parameter>
+				<parameter name="filters" type="list:string">
+					<description>
+						A list of filters used for the amplitude picker.
+					</description>
+				</parameter>
+			</group>
+			<group name="display">
+				<group name="origin">
+					<parameter name="addons" type="list:string">
+						<description>
+						</description>
+					</parameter>
+					<group name="comment">
+						<parameter name="id" type="string">
+							<description>
+							</description>
+						</parameter>
+						<parameter name="default" type="string">
+							<description>
+							</description>
+						</parameter>
+						<parameter name="label" type="string">
+							<description>
+							</description>
+						</parameter>
+					</group>
+					<group name="addon">
+						<struct type="Quality addon" link="display.origin.addons">
+							<parameter name="label" type="string">
+								<description>
+								Defines the label text of the information panel in the
+								Location tab of the parameter evaluated by this addon.
+								</description>
+							</parameter>
+							<parameter name="script" type="string">
+								<description>
+								Path to script to execute.
+								</description>
+							</parameter>
+						</struct>
+					</group>
+				</group>
+			</group>
+			<parameter name="button0" type="string">
+				<description>
+					Label of button that triggers user defined script0.
+				</description>
+			</parameter>
+			<parameter name="button1" type="string">
+				<description>
+					Label of button that triggers user defined script1.
+				</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

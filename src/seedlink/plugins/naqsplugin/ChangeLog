@@ -1,0 +1,29 @@
+2006.11.6: version 2006.310
+	- Check return value of send_raw_depoch() and exit(1) if data
+	was not sent to seedlink.
+	
+2003.2.27: version 2003.057
+	- Use the send_raw_depoch() plugin funcion.  This interface
+	was introduced in SeisComP-1.1.93.2003.048 with SeedLink
+	version 2.93; it will not work in older code bases.
+	- Remove all remaining dependence on qlib2, mostly done
+	by stealing the swa8() function from qutils.c
+	
+2002.11.8: version 2002.312
+	- Changed time conversion again.  Now I believe that no leap
+	seconds should be applied.  Plus the previous changed resulted
+	in a loss of time resolution (milliseconds).
+	
+2002.10.29: version 2002.302
+	- Changed time conversion routine to the correct one that will
+	apply leap seconds (routine from qlib2).  Aaarrrggg, any data
+	before this change was 21 seconds in the future.
+	
+2002.4.11
+	- Changed log message printing to match the SeedLink log file
+	format.
+
+2002.3.22: version 2002.081
+	- First version.  Works pretty well and is pretty feature rich
+	for an initial version.
+

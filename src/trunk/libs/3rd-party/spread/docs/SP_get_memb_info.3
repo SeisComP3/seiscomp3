@@ -1,0 +1,78 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_GET_MEMB_INFO 3 "February 2006" SPREAD "User Manuals"
+.SH NAME
+SP_get_memb_info, SP_scat_get_memb_info \- Extract membership information from message
+.SH SYNOPSIS
+.B #include <sp.h>
+.sp
+.BI "int SP_get_memb_info( const char * " memb_mess ", const service " service_type ", membership_info *" memb_info );
+.br
+.BI "int SP_scat_get_memb_info( const scatter * " memb_mess_scat ", const service " service_type ", membership_info *" memb_info );
+.sp
+.SH DESCRIPTION
+.B SP_get_memb_info
+and its scatter variant all parse the contents of a message body that is received as part of a membership message and fill in the 
+.I membership_info 
+struct that is passed in as a parameter. 
+
+The
+.I service_type
+and the 
+.I memb_mess
+fields should be the same as the values returned in a previous 
+.B SP_receive 
+call for a membership message. The caller should allocate a new 
+.I membership_info
+structure and pass that into this function. When the function returns the structure will be filled in.
+
+The fields of a membership_info struct include
+.RS
+.TP
+.I group_id gid
+.br
+.TP
+.I char changed_member[MAX_GROUP_NAME]
+.br
+.TP
+.I unsigned int num_vs_set
+.br
+.TP
+.I vs_set_info my_vs_set
+.RE
+
+The 
+.I changed_member
+field is filled in with the name of the new or leaving member if the 
+membership is a Join, Leave or Disconnect. If it is a Network 
+membership event then the changed_member field is blank and 
+multiple vs_sets will be available with all of the subsets of daemons 
+coming together into the new membership. 
+
+The 
+.I my_vs_set
+field stores the number of members of my local vs set, i.e. those processes who came together with me
+and the location of the list of members. See
+.B SP_get_vs_set_members
+for how to extract the full list of members. The 
+.B SP_get_vs_sets_info
+function will return the full list of all VS sets that arrived with this membership message. 
+
+.SH "RETURN VALUES"
+Returns a postivive value on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_MESSAGE
+The message had an illegal structure, like a scatter not filled out correctly. Or it is not
+a membership message. 
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

@@ -1,0 +1,261 @@
+#!/bin/bash
+
+if [ -z "$SEISCOMP_ROOT" ]; then
+    echo "SEISCOMP_ROOT not set"
+    exit 1
+fi
+
+if [ "$SEISCOMP_LOCK" != true ]; then
+    mkdir -p "$SEISCOMP_ROOT/var/run"
+    while :; do
+        SEISCOMP_LOCK=true $SEISCOMP_ROOT/bin/run_with_lock \
+            $SEISCOMP_ROOT/var/run/scconfigkeys.pid bash -c "$0 $*"
+        if [ $? -ne 255 ]; then exit $?; fi
+        echo "...locked...trying again..."
+        sleep 1
+    done
+fi
+
+export PATH="$SEISCOMP_ROOT/bin:$PATH"
+
+if ! cd "$SEISCOMP_ROOT"; then
+    echo "Cannot change directory to $SEISCOMP_ROOT"
+    exit 1
+fi
+
+if [ ! -r "share/keys/keyutils.sh" ]; then
+    echo "Cannot read $SEISCOMP_ROOT/shares/keys/keyutils.sh"
+    exit 1
+fi
+
+source "share/keys/keyutils.sh"
+
+template_dir="share/keys/templates"
+
+network_cfg="$template_dir/network.cfg"
+if [ ! -r "$network_cfg" ]; then
+    echo "Cannot read $SEISCOMP_ROOT/$network_cfg!"
+    exit 1
+fi
+
+station_cfg="$template_dir/station.cfg"
+if [ ! -r "$station_cfg" ]; then
+    echo "Cannot read $SEISCOMP_ROOT/$station_cfg!"
+    exit 1
+fi
+
+VERSION="3.0 (2012.229)"
+KEY_VERSION="2.5"
+
+SED=sed
+gsed -e p </dev/null >/dev/null 2>&1 && SED=gsed
+
+grepq() {
+    grep "$@" >/dev/null
+}
+
+_edit_station() {
+    if [ "$(echo $key_dir/station_${NET}_*)" != "$key_dir/station_${NET}_*" ]; then
+        echo -n "Following stations are defined in network ${NET}: "
+        for k in $key_dir/station_${NET}_*; do
+            echo -n "${k##*_} "
+        done
+        echo
+    else
+        echo "No stations defined in network ${NET}"
+    fi
+
+    Ask STATION "Station code"
+    STATION="$(echo ${STATION} | tr '[:lower:]' '[:upper:]' | 
+        sed -e 's/^[^A-Z0-9]*\([A-Z0-9]\{1,5\}\).*/\1/g')"
+
+    STAT_DESC="$NET station"
+    LATITUDE=""
+    LONGITUDE=""
+    ELEVATION=""
+    DATALOGGER="Q330"
+    DATALOGGER_SN="xxxx"
+    SEISMOMETER1="STS-2N"
+    SEISMOMETER_SN1="yyyy"
+    UNIT1="M/S"
+    GAIN_MULT1="1.0"
+    SAMPLING1="100/20/1/0.1"
+    ORIENTATION1='Z 0 -90; N 0 0; E 90 0'
+    DEPTH1=""
+    SEISMOMETER2=""
+    SEISMOMETER_SN2=""
+    UNIT2="M/S**2"
+    GAIN_MULT2=""
+    SAMPLING2=""
+    ORIENTATION2='Z 0 -90; N 0 0; E 90 0'
+    DEPTH2=""
+    START_DATE="2006/001"
+    CONFIGURED="no"
+
+    if [ -z "$STATION" ]; then
+        return
+    elif [ -f "$key_dir/station_${NET}_${STATION}" ]; then
+        echo
+        echo "Editing existing station ${STATION}"
+        source "$key_dir/station_${NET}_${STATION}"
+    else
+        echo
+        echo "Adding new station ${STATION}"
+    fi
+ 
+    Ask STAT_DESC "Station description" "$STAT_DESC"
+
+    if [ "$CONFIG_STYLE" != simple ]; then
+        Ask LATITUDE "Latitude" "$LATITUDE"
+        Ask LONGITUDE "Longitude" "$LONGITUDE"
+        Ask ELEVATION "Elevation" "$ELEVATION"
+        Ask DATALOGGER "Datalogger" "$DATALOGGER"
+        Ask SEISMOMETER1 "Primary sensor" "$SEISMOMETER1"
+        Ask UNIT1 "Unit of $SEISMOMETER1" "$UNIT1"
+        Ask GAIN_MULT1 "Gain multiplier of $SEISMOMETER1" "$GAIN_MULT1"
+        Ask SAMPLING1 "Sample rates of $SEISMOMETER1" "$SAMPLING1"
+        Ask DEPTH1 "Depth of $SEISMOMETER1" "$DEPTH1"
+        
+        Ask SEISMOMETER2 "Secondary sensor (eg., strong-motion)" "$SEISMOMETER2"
+        if [ -n "$SEISMOMETER2" ]; then
+            Ask UNIT2 "Unit of $SEISMOMETER2" "$UNIT2"
+            Ask GAIN_MULT2 "Gain multiplier of $SEISMOMETER2" "$GAIN_MULT2"
+            Ask SAMPLING2 "Sample rates of $SEISMOMETER2" "$SAMPLING2"
+            Ask DEPTH2 "Depth of $SEISMOMETER2" "$DEPTH2"
+        fi
+        
+        Ask START_DATE "Start date" "$START_DATE"
+        CONFIGURED="yes"
+    fi
+
+    OutputKeys "$station_cfg" >$key_dir/station_${NET}_${STATION}
+}                
+
+_remove_station() {
+    if [ "$(echo $key_dir/station_${NET}_*)" != "$key_dir/station_${NET}_*" ]; then
+        echo -n "Following stations are defined in network ${NET}: "
+        for k in $key_dir/station_${NET}_*; do
+            echo -n "${k##*_} "
+        done
+        echo
+        Ask STATION "Station to remove"
+        STATION="$(echo ${STATION} | tr '[:lower:]' '[:upper:]' | 
+            sed -e 's/^[^A-Z0-9]*\([A-Z0-9]\{1,5\}\).*/\1/g')"
+
+        if [ -f "$key_dir/station_${NET}_${STATION}" ]; then
+            echo "Removing ${NET}_${STATION}"
+            rm -f $key_dir/station_${NET}_${STATION}
+        else
+            echo "Station ${NET}_${STATION} not found"
+        fi
+    else
+        echo "No stations defined in network ${NET}"
+    fi
+}
+
+_edit_network() {
+    if [ "$(echo $key_dir/network_*)" != "$key_dir/network_*" ]; then
+        echo -n "Following networks are defined: "
+        for k in $key_dir/network_*; do
+            echo -n "${k##*_} "
+        done
+        echo
+    else
+        echo "No networks defined"
+    fi
+ 
+    Ask NET "Network code"
+    NET="$(echo ${NET} | tr '[:lower:]' '[:upper:]' | 
+        sed -e 's/^[^A-Z0-9]*\([A-Z0-9]\{1,2\}\).*/\1/g')"
+
+    NET_DESC="$NET network"
+    NET_NAME="${NET}-Net"
+
+    if [ -z "$NET" ]; then
+        return
+    elif [ -f "$key_dir/network_${NET}" ]; then
+        echo
+        echo "Editing existing network ${NET}"
+        source "$key_dir/network_${NET}"
+    else
+        echo
+        echo "Adding new network ${NET}"
+    fi
+    
+    Ask NET_DESC "Network description" "$NET_DESC"
+    Ask NET_NAME "Network name" "$NET_NAME"
+    OutputKeys "$network_cfg" >$key_dir/network_$NET
+
+    while :; do
+        echo
+        echo "A) Add/Edit station"
+        echo "R) Remove station"
+        echo "Q) Back to main menu"
+        Ask reply "Command?" "A"
+        echo
+
+        case "$reply" in
+            A|a) _edit_station ;;
+            R|r) _remove_station ;;
+            Q|q) return ;;
+            *)   echo "invalid input" ;;
+        esac
+    done
+}
+
+_remove_network() {
+    if [ "$(echo $key_dir/network_*)" != "$key_dir/network_*" ]; then
+        echo -n "Following networks are defined: "
+        for k in $key_dir/network_*; do
+            echo -n "${k##*_} "
+        done
+        echo
+        Ask NET "Network to remove"
+        NET="$(echo $NET | tr '[:lower:]' '[:upper:]' | 
+            sed -e 's/^[^A-Z0-9]*\([A-Z0-9]\{1,2\}\).*/\1/g')"
+
+        if [ -f "$key_dir/network_$NET" ]; then
+            echo "Removing ${NET}"
+            rm -f $key_dir/network_${NET}
+            rm -f $key_dir/station_${NET}_*
+        else
+            echo "Network ${NET} not found"
+        fi
+    else
+        echo "No networks defined"
+    fi
+} 
+
+_write_conf() {
+    echo "Generating $SEISCOMP_ROOT/etc/inventory/stations-key.xml"
+    key2inv $config_dir $SEISCOMP_ROOT/etc/inventory/stations-key.xml
+    echo "Make sure to run 'seiscomp update-config [inventory]' afterwards"
+}
+
+echo "Station config version $VERSION"
+
+config_dir="etc/key-2.5"
+key_dir="$config_dir/key"
+mkdir -p $key_dir
+
+while :; do
+    echo
+    echo "A) Add/Edit network"
+    echo "R) Remove network"
+    echo "W) Write configuration and quit"
+    echo "Q) Quit without writing configuration"
+    Ask reply "Command?" "A"
+    echo
+
+    case "$reply" in
+        A|a) _edit_network ;;
+        R|r) _remove_network ;;
+        W|w) _write_conf
+             exit 0 ;;
+        Q|q) exit 0 ;;
+        *)   echo "invalid input" ;;
+    esac
+done
+
+exit 0
+

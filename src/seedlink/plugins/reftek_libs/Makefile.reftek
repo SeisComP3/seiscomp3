@@ -1,0 +1,42 @@
+# $Id: Makefile.reftek 165 2005-12-23 12:34:58Z andres $
+# Make all libraries
+
+all: archive msgq reftek rtp si util
+
+archive: FORCE
+	cd $@; $(MAKE)
+
+msgq: FORCE
+	cd $@; $(MAKE)
+
+reftek: FORCE
+	cd $@; $(MAKE)
+
+rtp: FORCE
+	cd $@; $(MAKE)
+
+si: FORCE
+	cd $@; $(MAKE)
+
+util: FORCE
+	cd $@; $(MAKE)
+
+clean: FORCE
+	cd archive; $(MAKE) $@
+	cd msgq;    $(MAKE) $@
+	cd reftek;  $(MAKE) $@
+	cd rtp;     $(MAKE) $@
+	cd si;      $(MAKE) $@
+	cd util;    $(MAKE) $@
+
+remove: FORCE
+	cd archive; $(MAKE) $@
+	cd msgq;    $(MAKE) $@
+	cd reftek;  $(MAKE) $@
+	cd rtp;     $(MAKE) $@
+	cd si;      $(MAKE) $@
+	cd util;    $(MAKE) $@
+
+install: all
+
+FORCE:

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scart" category="Utilities" standalone="true">
+		<description>
+		Import/export MiniSEED data to/from SDS archives.
+		</description>
+		<command-line>
+			<synopsis>
+			scart [options] {archive-dir}
+			</synopsis>
+			<description>
+			The last option has to be the archive directory when dump mode is enabled.
+			When no archive directory is explicitly given,
+			$SEISCOMP_ROOT/acquisition/archive or the current directory
+			is used depending on whether $SEISCOMP_ROOT has been set or not.
+			The default operation mode is import. That means that a multiplexed
+			MiniSEED file or another record source such as ArcLink is used to import
+			records into a SDS structure.
+			</description>
+			<group name="">
+				<option flag="I">
+					<description>
+					Specify the recordstream URL when in import mode.
+					When using another recordstream than a file (like ArcLink) a stream
+					list file is required (default is file://- (stdin))
+					</description>
+				</option>
+				<option flag="t" argument="timewindow">
+					<description>
+					Specify the time window (as one properly quoted string) to dump
+					records for. Times are UTC and separated by a tilde &quot;~&quot;.
+					To dump one hour of waveform data between 2008/01/01 00:00:00 and
+					2008/01/01 01:00:00 use
+					&lt;-t &quot;2008-01-01 00:00:00~2008-01-01 01:00:00&quot;&gt;.
+					</description>
+				</option>
+				<option flag="d" long-flag="dump">
+					<description>
+					Set export (dump) mode. Records are fetched from an archive and
+					stored in a file (or pipe).
+					</description>
+				</option>
+				<option flag="l" long-flag="list" argument="file">
+					<description>
+					Uses a stream list file instead of defined networks and channels
+					(-n and -c are ignored). Line format: starttime;endtime;streamID.
+					The time format is the same as described in option '-t'.
+					</description>
+				</option>
+				<option flag="s" long-flag="sort">
+					<description>
+					Sort records by [start-]time. To sort records by their endtime use -E.
+					</description>
+				</option>
+				<option flag="E">
+					<description>
+					Sort records according to their end time (default is start time).
+					</description>
+				</option>
+				<option flag="m" long-flag="modify">
+					<description>
+					Modify the record time for real time playback when in export mode.
+					The first record time is NOW. The relative time of successive records
+					to the first one are kept.
+					</description>
+				</option>
+				<option long-flag="speed">
+					<description>
+					Specify the speed to dump the records. A value of 0 means no delay
+					otherwise speed is a multiplier of the real time difference between
+					the records. When feeding the records directly into the replay pipe
+					a value of 1 (real time) is recommended.
+					</description>
+				</option>
+				<option flag="n" argument="networks">
+					<description>
+					Network list of networks to dump (comma separated) (default is *).
+					</description>
+				</option>
+				<option flag="c" argument="channels">
+					<description>
+					Specify the channel filter for the dumped streams as regular
+					expression (default is (B|S|M|H)(L|H)(Z|N|E)). To dump only the
+					BHZ, BHN and BHE streams use BH(Z|N|E).
+					</description>
+				</option>
+				<option long-flag="files" argument="count">
+					<description>
+					Specify the number of file handles to cache (default is 100).
+					</description>
+				</option>
+				<option flag="v" long-flag="verbose">
+					<description>
+					Verbose mode.
+					</description>
+				</option>
+				<option long-flag="test">
+					<description>
+					Test mode, no record output. This switch is useful for debugging.
+					</description>
+				</option>
+				<option flag="h" long-flag="help">
+					<description>
+					Display a help message.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

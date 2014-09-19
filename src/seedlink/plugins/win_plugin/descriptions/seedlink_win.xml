@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="win" category="sources">
+		<description>WIN server</description>
+		<configuration>
+			<parameter name="udpport" type="int" default="18000">
+				<description>
+					UDP port to receive data packets.
+				</description>
+			</parameter>
+			<parameter name="map" type="string">
+				<description>
+				Defines an alternative stream mapping file. The default file
+				is in $INSTALLDIR/var/lib/seedlink/win2sl.map. If
+				this path is not an absolute path it will treated as relative
+				path to $INSTALLDIR/var/lib/seedlink.
+				</description>
+			</parameter>
+			<parameter name="channels" type="list:string" default="">
+				<description>
+				List of channels (hexID:name, ...). The name can either be a single
+				channel name or a combination of station and channel separated by
+				a whitespace, e.g. &quot;ABCD BHZ&quot;. If no station name is given,
+				e.g. only BHZ is specified, the name of the station the plugin bound to
+				is used. The definition of a station name is important if the plugin
+				configuration is used as a profile and assigned to multiple stations.
+				In this case a mapping file would be the more appropriate solution.
+
+				If no channel mappings are given, the map file defined in map
+				(either default or custom) is used.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string" default="win">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

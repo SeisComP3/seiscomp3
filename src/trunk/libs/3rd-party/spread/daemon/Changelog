@@ -1,0 +1,1543 @@
+Tue Jun 11 23:40:30 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* protocol.c, flow_control.c (FC_signal_conf_reload): Reload flow control 
+	parameters when spread configuration reloaded. Patch by Amy Babay. 
+
+Thu Apr  4 20:25:58 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* Makefile.in (install-files): Fix parallel make issue where 
+	installing libraries broke the build. Reported by Johannes Wienke.
+
+Wed Mar 27 23:43:00 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* arch.h: Apply Windows portability fixes by Juan Pizzorno. 
+
+Wed Mar 27 23:15:20 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* libspread-util/: Merge libspread-util library from 4.2.0rc1 release
+	to current trunk which will be 4.3.0 release. This includes several
+	portability fixes for windows and removing a too-frequent print in events.
+
+2013-03-18 13:48:41 John Schultz <jschultz@spreadconcepts.com>
+
+	* configuration.c, ip_enum.[ch], daemon/Makefile.in: 
+	Change the way we look for the local daemon in the 
+	configuration file when no daemon name is specified.  
+	We now consult both the addresses returned by 
+	gethostbyname(gethostname()) and by directly querying 
+	the network interfaces.  
+
+	-- Thanks to Juan Pizzorno for this idea and code.
+
+2013-03-13 16:15:32 John Schultz <jschultz@spreadconcepts.com>
+
+	* configuration.[ch], config_gram.l, config_parse.y, 
+	membership.c, flow_control.c, docs/sample.spread.conf: 
+	Exported membership timeouts and flow control parameters 
+	to configuration file.  Reduced default flow control 
+	parameters.
+
+2013-03-13 14:50:12 John Schultz <jschultz@spreadconcepts.com>
+
+	* libspread-util/src/events.c: Squelched a noisy 
+	Alarm(PRINT) to be Alarm(EVENTS).
+
+2013-03-13 14:44:42 John Schultz <jschultz@spreadconcepts.com>
+
+	* SpreadConnection.java: Added an isConnected() fcn.
+
+	-- Thanks to Daniel Hirscher for this suggestion and code.
+
+2013-03-13 11:11:33 John Schultz <jschultz@spreadconcepts.com>
+
+	* configure.in: Change configure scripts to actually test 
+	clock_gettime(CLOCK_MONOTONIC) rather than just compile.
+
+	-- Thanks to Juan Pizzorno for this idea and code.
+
+2013-03-12 16:23:23 John Schultz <jschultz@spreadconcepts.com>
+
+	* stdutil/configure.in: Change to stdutil configure to 
+	append onto CFLAGS rather than setting / wiping them out.
+	Now compilation flags can be passed into stdutil's build too.
+
+	-- Thanks to Juan Pizzorno for this idea and code.
+
+2013-03-12 16:15:09 John Schultz <jschultz@spreadconcepts.com>
+
+	* membership.c: Remove optimization of long Lookup_timeout 
+	for single segment configurations.  This way, quiet daemons
+	in a single LAN will detect one another faster.
+
+2013-03-12 16:13:48 John Schultz <jschultz@spreadconcepts.com>
+
+	* membership.c: Change of default membership timeouts.
+	All default timeouts are now 25% what they were previously 
+	except the remote probing timeout, which was only halved.
+
+2013-03-12 15:58:45 John Schultz <jschultz@spreadconcepts.com>
+
+	* protocol.c: Performance bug fix to only decrement 
+	retrans_allowed when we actually request a retrans.
+
+2013-03-12 15:47:49 John Schultz <jschultz@spreadconcepts.com>
+
+	* sp.c: Cleanup and simplification of SP_connect_timeout;
+	some initialization that should only be done once moved to
+	sp_initialize.  Also changed win32 logic to automatically 
+	convert a spread name of <port> to <port>@localhost.  This 
+	is to help encourage everyone to only use the <port> format 
+	for local connections to spread.
+
+	* examples/*: Changed example programs to use a default 
+	spread name of "4803" rather than "4803@localhost" for 
+	better performance on *nix systems.
+
+2013-03-12 11:34:01 John Schultz <jschultz@spreadconcepts.com>
+
+	* network.c: Added NO_LOOP flag to DL_init_channel for 
+	broadcast / multicast sockets so that we don't get our own data 
+	messages back from network.
+
+2012-07-13 17:48:27 John Schultz <jschultz@spreadconcepts.com>
+
+	* sp.c: Changes to client library that move send/recv mutexes 
+	into sp_session structure.  This should eliminate blocking 
+	(deadlocking?) bug on Windows where mailbox collisions and 
+	contention on mutexes was too common.  Also, rather than doing 
+	a linear search for session structures, we now take the lowest 
+	order bits of the mailbox as an index into the Sessions array.
+
+	* sp.c, sp.h, sess_types.h: Added a new error return type 
+	SP_BUG to indicate an internal bug has been detected 
+	(e.g. - invariant violated).
+
+	-- Thanks to Juan Pizzorno for pushing this idea.
+
+June 18, 2012 Ver 4.2.0 RC3 (and final)
+---------------------------------------
+
+2012-06-18 13:47:23 Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* libspread-util/*: Update libspread-util to libspreadutil release 4.2.0rc1
+
+May 03, 2012 Ver 4.2.0 RC2
+--------------------------------------
+
+Thu May  3 14:58:47 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configuration.c, groups.c (G_signal_conf_reload): Rework how
+	groups handles configuration file reloads to fix crashes and 
+	other errors when a daemon configuration is changed. Also add
+	new configuration functions to support lookups of procs in 
+	different configurations. 
+
+2012-05-03  Jonathan Stanton  <jonathan@lock.int.spreadconcepts.com>
+
+	* network.c (Net_init): Fix compability problem between Spread's
+	use of DL_init_channel for multicast channels and the new semantics
+	in the new libspreadutil version of datalink. Bind to all interfaces 
+	with a INADDR_ANY for multicast groups not just the group itself. 
+
+Thu Apr 19 13:01:30 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* flow_control.c (FC_init): Increase default flow control values 
+	for the ring.
+
+March 20, 2012 Ver 4.2.0 (RC1)
+------------------------------
+
+Mon Feb 20 21:35:49 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* SpreadConnection.java: Fix deadlock in stopListener where listener
+	thread can call stopListener and deadlock calling .join on itself. 
+	Also fix Listener.run bug in the way internal_receive is called with a
+	100 ms timeout. If the timeout triggers, loop back into receive as long
+	as the Listener thread was not signaled to exit, this prevents corrupted
+	messages when a receive is timed out. 
+
+Fri Jan 13 15:39:48 2012  John Schultz <jschultz@spreadconcepts.com>
+
+	* configure.in, events.c: Added a monotonic timer based on
+	clock_gettime(CLOCK_MONOTONIC, ...).  Events will use this
+	fcn internally when available rather than wall clock time
+	which can jump backwards and forwards (e.g. - when set).
+
+Tue Jan 10 14:50:23 2012  John Schultz <jschultz@spreadconcepts.com>
+
+	* mutex.h, sp.c: Changed mutex.h to add Once_execute capabilities.
+	mutex.h now requires Windows 2000 or later to work.  Changed sp.c
+	initialization to use Once_execute rather than messy static 
+	initialization and grabbing a lock once and holding it forever.
+	An important difference remains: on POSIX platforms Mutex's are
+	non-recursive while on Windows platforms they are recursive!
+
+Tue Jan 10 12:30:48 2012  John Schultz <jschultz@spreadconcepts.com>
+
+	* session.c: Changed the way we "badger" client sessions that have 
+	blocked.  We now schedule both timeout and write-ability callbacks
+	on the client session.  This should ensure that clients usuaully 
+	don't see long delays in the delivery of their messages due to the 
+	badger timeout.  That old behavior can reassert itself during 
+	memberships where we block LOW_PRIORITY events.  It was felt that 
+	condition is so rare and we will likely block delivery of messages 
+	right around the membership regardless (until EVS closes) as to 
+	be a minimal concern versus treating writeable clients as 
+	MEDIUM or HIGH priority events, which could have unforseen negative
+	effects on Spread's event processing.
+
+Mon Jan  9 12:52:10 2012  John Schultz <jschultz@spreadconcepts.com>
+
+	* sp.c, session.c: Added SO_KEEPALIVE to client sessions.
+
+Mon Jan  9 00:35:02 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* SpreadConnection.java (run.listeners): Fix several potential
+	deadlocks and race condiditions in the Java client library handling
+	of removal of listeners and communciation between listeners and the
+	main thread. Bugs reported by Daniel Marques. 
+
+Sun Jan  8 21:55:37 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* SpreadConnection.java (disconnect): Fix bug where calling 
+	disconnect() on a java SpreadConnection did not set connected to false
+	if an exception occurred. This would prevent reconnection of the client.
+	Fix and bug report from Renee Mathur. 
+
+Fri Jan  6 22:37:59 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* SpreadMessage.java: Fix crash when add an array of groups to addGroups.
+	Patch and report by Matt Kowalczyk. 
+
+Fri Jan  6 22:33:23 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configure.in: Switch from undocumented AC_CONFIG_HEADER() macro
+	to documented AC_CONFIG_HEADERS() macro. 
+
+Fri Jan  6 22:28:53 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* monitor.c (Exit_Usage,Usage): Add Exit_Usage() function and 
+	clean up parameter handling and error checks so spmonitor does
+	not segfault on missing parameters. Patch provided by Neal Walfield. 
+
+Fri Jan  6 22:15:45 2012  John Schultz  <jschultz@spreadconcepts.com>
+
+	* alarm.h, data_link.h, data_link.c (DL_init_channel,DL_send): 
+	Add IS_MCAST_ADDR() and IS_MCAST_ADDR_NET() macros. Add IP_NET()
+	macros to print IP addresses in network byte order. Use new 
+	macros in data_link functions that print IPs. 
+	Patch provided by Juan Pizzorno. 
+
+Fri Jan  6 20:26:56 2012  John Schultz  <jschultz@spreadconcepts.com>
+
+	* sp.c (recv_nointr_timeout): Remove printf calls from libary. 
+	Error reported by customer because the prints affected 
+	application output. 
+
+Fri Jan  6 20:22:10 2012  John Schultz  <jschultz@spreadconcepts.com>
+
+	* arch.h: Protect bool definition so it is not included when a 
+	C++ compiler is used. Fix issue reported on spread-users list.
+
+Fri Jan  6 20:12:34 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* message.c (Message_Buffer_to_Message_Fragments): Add sanity check
+	that will log error and shut down if a message larger then a scatter
+	is generated. Should be impossible because client library should 
+	prevent such a message. 
+
+Fri Jan  6 19:58:12 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* protocol.c (Handle_hurry): Fix token hurry bug where one daemon
+	wanted to send, but the token entered hold state until hurry 
+	timeout expired. Prevents 2 second latency delay to send in certain
+	circumstances. 
+
+Fri Jan  6 01:01:01 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* include/sp.h, scatter.h (dummy_scat_element): Fix scatter type 
+	definition by replacing int with size_t. This fixes crash bug 
+	when compiling on 64 bit platforms. 
+
+	The public sp.h include header pulls in size_t by including 
+	<stddef.h> which is part of standard c headers and thus should 
+	work on unix systems and windows. 
+
+Fri Jan  6 00:35:00 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configure.in: Fix reported compile problem with Solaris
+	SPARC/gcc builds where library generation did not use correct
+	linker commands. 
+
+Thu Sep 02 13:10:14 2009  John Schultz  <jschultz@spreadconcepts.com>
+
+	* daemon/Makefile.in: Fix for building sprecv. It didn't link 
+	with all necessary obj files.
+
+June 18, 2009 Ver 4.1.0 
+-----------------------
+
+Thu Jun 18 16:07:43 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* config_parse.y (%): Use MAXHOSTNAMELEN instead of fixed length
+	for host name string.
+
+Thu Jun 11 13:36:11 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* config_gram.l: Define YY_NO_UNISTD_H for Windows builds so that
+	the header is not included in the parser. 
+
+Fri Jun  5 09:55:55 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* stdutil/*: Merge stdutil-1.1.0 release into Spread source. No
+	needed API changes.
+
+Mon Jun  1 10:02:13 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* protocol.c (Prot_handle_token): Make warning about token-reset 
+	because of message counter wrap more visible by always printing 
+	it (PRINT) instead of only when PROTOCOL is enabled.
+
+Mon Jun  1 09:03:46 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configuration.c, config_parse.y, config_gram.l, protocol.c: Make 
+	MaxSessionMessages a runtime configuration option in spread.conf. 
+	This allows the maximum number of messages to buffer before 
+	disconnecting a client to be set at runtime. Original request 
+	and patch by Alexey Zakhlestin. Patch revised and commited by Jonathan.
+
+Mon May  4 10:06:16 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* data_link.c (DL_recvfrom): Add DL_recvfrom() call to return sender 
+	address and port number to caller. 
+
+	* data_link.c (DL_init_channel): Fix portability bug by zeroing the 
+	soc_addr struct before filling it out and binding. 
+	Add REUSE_ADDR option to DL_init_channel() to set the REUSEADDR 
+	socket option on the underlying socket.
+
+Fri May  1 10:08:50 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* examples/user.c: Add command to send a multiline message using 
+	the test client spuser.
+
+Thu Jan 22 18:23:00 2009  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* alarm.c (Alarm, Alarmp, Alarm_enable_precise_timestamp): Add 
+	option to Spread daemon to print a very precise (microsecond) 
+	timestamp in the Alarm log records. The normal log records only
+	print a second resolution timestamp. To enable this option add
+	the string "EventPreciseTimeStamp" to the spread.conf file. 
+
+Mon Nov 17 20:12:20 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* data_link.c (DL_send): Zero the msg struct before filling it in. 
+	Remove static types from local variables in DL_send/recv so that
+	they can be called from different threads safely. Add configure.in
+	test for sockaddr.sin_len field so it can be correctly set for those
+	OS's that need it. 
+
+Fri Oct 24 02:47:10 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* aclocal.m4: Update autoconf macro (and makefiles) to improve 
+	compatibility with newer autoconf releases. Patch by Alexey Zakhlestin.
+
+Fri Oct 24 02:42:26 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* config_parse.y: Fix yacc warning on RouteVector definition. Patch
+	by Alexey Zakhlestin. 
+
+Fri Oct 24 02:40:03 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* protocol.c (Prot_initiate_conf_reload): Fix prototype of function
+	to avoid compiler warning. Patch by Alexey Zakhlestin. 
+
+Mon Oct 13 16:22:28 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* protocol.c (Prot_initiate_conf_reload, Prot_need_conf_reload): 
+	Change Prot_handle_conf_reload() to only start the reload by calling 
+	the new function Prot_initiate_conf_reload if in OP membership state. 
+	Otherwise a flag is set (Prot_Need_Conf_Reload). The flag is accessed
+	through the Prot_need_conf_reload() function and cleard by the 
+	Prot_clear_need_conf_reload() function. 
+
+	This fixes bug where if a reload is triggerd by the spmonitor when
+	the daemon is already in a membership change it causes a crash because
+	of the asserts in Memb_token_loss(). Bug was reported by Adam Grossman,
+	Clotho Tsang, Adrian Revill, Mike Perik, and others. 
+
+Mon Oct 13 16:21:03 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* membership.c (Shift_to_op): Add Shift_to_op function to capture
+	all cases when daemon membership algorithm changes state to OP.
+	This triggers a configuration reload if one has been queued up.
+
+Mon Oct 13 16:16:45 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* session.c, groups.c (G_shift_to_GOP): Add G_shift_to_GOP function 
+	to capture all cases where groups membership completes. Also remove 
+	unneeded include of prot_body.h from session layer files.
+
+Sat Oct 11 10:52:09 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* spread_params.h, protocol.c (Prot_handle_token): Trigger membership change if 
+	token sequence value gets close to wrapping around at 2^32 by
+	dropping token until membership change occurs. The change will
+	trigger when sequence reaches MAX_WRAP_SEQUENCE_VALUE defined
+	in spread_params.h. Bug with hung daemons when sequence numbers 
+	were not reset was reported by several people on spread-users 
+	including Nico Meyer.
+
+	* config_parse.y, config_gram.l, configuration.c, configuration.h: 
+	Add spread.conf parameter to debug sequence wrap by initializing
+	sequence to a value just under the wrap. Option DebugInitialSequence
+	can be enabled in spread.conf to trigger this. You never want
+	to enable this on production daemons. 
+
+Thu Oct  9 02:33:50 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* stdutil.c (stdhcode_sfh_get16bits): Fix broken compile because 
+	of #define split over two lines.
+
+Mon Mar 10 00:45:21 2008  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* configure.in, libspread/Makefile.in: Add version number 
+	support to spread libraries. Set the soname (on unix) for libspread.so, 
+	libspread-core.so, and libtspread-core.so. For Mac OS X, set the
+	install_name, current_version, and compatibility_version for each
+	library. This may change the filenames and version number of the libraries
+	on some platforms and may need tweaking to support non-gcc compilers
+	or platforms with unusual shared library approaches. 
+
+Fri Mar  7 13:32:49 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* config_gram.l, config_parse.y: Add SECURITY type of Event
+	log entries to spread.conf file format. 
+
+Fri Mar  7 13:22:18 2008  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+	* configure, daemon/config.h.in: Rerun autoconf/autoheader to
+	include new configure options.
+
+Wed Mar  5 23:19:29 2008  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* session.c (Sess_init): Make location of unix domain socket
+	configurable at compile time in spread_params.h as SP_UNIX_SOCKET.
+
+	* sp.c (SP_connect_timeout): Find unix domain socket to connect 
+	to using the compiled in default value of SP_UNIX_SOCKET.
+
+	* spread_params.h (SP_UNIX_SOCKET): Add define for unix socket directory
+	
+	* configure.in, daemon/acconfig.h: Can also be set by using the --with-unix-domain-dir=
+	configure option. If the daemon is to be run as a root user this
+	directory should be set to a root-only writable directory such
+	as /var/run. 
+
+	Configure script also updated to current autoconf/autoheader 
+	standards so all defined values are described in configure.in
+	AC_DEFINE() macros and the acconfig.h file is no longer used. 
+	It will remain in the source release until we verify no platforms
+	are still using the older autoconf packages.
+
+	* spread.c (main): Add runtime check to print warning to user
+	if daemon is running as root with an unsafe unix socket directory.
+	
+Wed Mar  5 18:43:58 2008  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_scat_receive,SP_internal_mcast): Fix locking bug 
+	with missing Mutex_unlock call for the Mbox_mutex when certain
+	errors caused a return(). Reported with initial patch by Jan 
+	on spread-users.
+
+Wed Mar  5 11:14:50 2008  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* CVS_Readme.txt: Fix commandline to checkout spread from svn
+	to specify the useraccount.
+
+Wed Mar  5 11:08:48 2008  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* libspread/Makefile.in, configure.in, stdutil/configure.in: 
+	Fix portability problem with solaris 10 not finding library
+	containing shm and nanosleep calls. Also Solaris does not 
+	support the 'o' option to ar. Patch and fix from Peter Friend.
+
+Wed Jan 24 22:41:09 2007  John Schulz  <jschultz@spreadconcepts.com>
+	* stdutil/src/stdutil.c: Fixed improper integer cast in 
+	stdhcode_sfh_get16bits in the #else definition.  This bug 
+	would cause byte alignment failures on picky architectures.
+
+November 29, 2006 Ver 4.0.0 (rc5 and final)
+-------------------------------------------
+Only change is to credits in copyright statements.
+
+Wed Nov 29 23:02:30 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* All source: Update copyright header to include Claudiu
+	Danilov.
+
+November 22, 2006 Ver 4.0.0 (rc4)
+-------------------------------------------
+Only change is to fix Windows compilation problem. 
+
+Mon Nov 20 16:06:45 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* arch.h: Windows portability. Do not define byte, as it
+	already exists as typedef. Do define MAXHOSTNAMELEN as 
+	windows does not include it. Report and fix by Jacob Green.
+
+November 19, 2006 Ver 4.0.0rc3
+------------------------------
+
+1) Fix a number of build and code bugs. See Changelog for details.
+
+2) Include updated stdutil library release with bugfixes and improved build.
+
+3) New version of Win32 VC++ project files.
+
+4) Includes workaround to break out of EVS if stuck with rotating token.
+
+5) Updates to some documentation.
+
+Sun Nov 19 16:58:13 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_scat_receive):  Add missing Mutex_unlock() calls
+	before return(ILLEGAL_MESSAGE) calls. Fix deadlock reported
+	by Massimo Feola for 3.17.3. Also present in 4.
+
+Sun Nov 19 13:10:00 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+	* libspread/fl.c, stdutil/* (many): Update to stdutil 
+	version 1.0.0beta6.
+	
+	Fixup flush library to use new stdutil stderr_output() 
+	function instead of stderr_abort() or _msg().
+
+Sun Nov 19 15:13:47 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sess_body.h, groups.h, groups.c (group,G_build_groups_buf): 
+	Fix big-endian bug caused by int->char memcpy. 
+	group->changed field is now a boolean instead of int.
+	Value sent in GROUPS message is an int16u to have fixed size.
+	Use GROUPS_BUF_* macros instead of recalcuating size.
+
+	Split into a version that returns changed status as a bool
+	and a void return for G_eliminate_partitioned_members().
+	Rename G_check_synced_set to void G_update_synced_set() and
+	bool G_update_synced_set_status().
+	Change return value of G_check_if_changed_by_cascade() to bool.
+	Use bool types for all 'changed' type variables.
+
+Fri Nov 17 13:43:42 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* network.c (Net_init): Do not bind to broadcast address
+	on windows,as it is not permitted. Sockets bound to specific
+	interfaces on windows will also receive broadcasts. Bug 
+	reported by Michael Chelnokov.
+
+Fri Nov 17 13:36:12 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* groups.c (G_mess_to_groups,G_build_groups_buf): Fix race
+	condition bug that caused group members on different daemons
+	to see different group_id's for the same group. Bug analysis,
+	testing and diagnosis by John Schultz and Ryan Caudy. Final 
+	patch by Jonathan.
+
+Wed Nov 15 10:27:33 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (connect_nointr_timeout): Move wait_timeout 
+	initialization up so it always happens, even for blocking.
+
+Tue Nov 14 03:40:43 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* arch.h, groups.c, memory.h: Make memory.h inline function
+	declarations extern. Move Alarm() in groups to after endian 
+	flip of data. Define inline correctly for non gcc platforms.
+
+Tue Nov 14 01:40:43 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_connect_timeout): Rename variables to make more 
+	readable. Define length of spread_name parameter in terms
+	of MAXHOSTNAMELEN because it is determined by how large a 
+	host name can be. 
+
+	Define the default spread connection port (4803) in terms 
+	of the DEFAULT_SPREAD_PORT to remove explicit port number
+	from source code.
+
+	* arch.h: Add Q() and QQ() macros in order to make strings 
+	from #define macros.
+	
+Tue Nov 14 00:38:14 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (connect_nointr_timeout): Fix bug where tv_sec was
+	used instead of tv_usec. Patch supplied by Daniel Savarese.
+
+Mon Nov 13 19:30:30 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* groups.c (G_compare_daemon_vs_set): Fix compile warning
+	by adding const to type of comparision variables.
+
+Mon Nov 13 19:28:33 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* arch.h: Fix byte type to correctly be defined on all 
+	platforms as an unsigned 1 byte value. Problem reported by 
+	John Schultz.
+
+Mon Nov 13 18:14:05 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sample.spread.conf: Remove {} around EventPriority value
+	as they should not be used since it is only a single value.
+	Bug reported by Matt Garmen.
+
+Mon Nov 13 16:53:13 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* defines.h: Use socklen_t for platforms that have it and
+	don't have sockopt_len_t (fixes build error on Mac OS X 10.4.)
+
+Tue Sep 12 18:06:27 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* protocol.c, membership.c, prot_body.h, spread_params.h 
+	(Prot_handle_token,Read_form2): If token rotates too many
+	times during EVS state, trigger a membership change to 
+	recover. This works-around a rare case of the daemon getting 
+	stuck in EVS state for an unknown reason. 
+	Original patch by John Schultz.
+
+Sun Jun  4 01:01:51 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* Makefile.in (SHARED_STDUTIL): Change libspread.so target
+	to merge stdutil library objects directly by including the 
+	object files rather then linking in the stdutil archive. This
+	fixes the linking problem for platforms which require -fPIC
+	for all shared library code. Specifically this fixes the build
+	failure on x86-64/linux. 
+
+March 13, 2006 Ver 4.0.0rc2
+---------------------------
+
+Improve integration of stdutil configure and build with Spread's configure
+and build environment.
+
+Fix typo bug in flush library.
+
+	
+March, 1, 2006 Ver 4.0.0rc1
+---------------------------
+Major Features:
+
+Improve High Availability:
+
+1) Dynamic configurations: You can now change the spread configuration of 
+potential daemons without restarting all of the running daemons.
+2) Improved data structures should increase performance and stability.
+
+Better Membership:
+
+1) Virtual Synchrony information for all subgroups who merge is now provided
+in each membership message. This enables more efficient application merges.
+2) Better API for extracting group id and virtual synchrony member sets
+from membership messages.
+3) Full VS/Flush API supporting View Synchrony model is now integrated with
+Spread. So you can use either the View Synchony model provided by other GCS
+or the Extended Virtual Synchrony model that Spread has always supported.
+
+Cleaner source organization:
+
+1) Updated Makefiles and Windows MSVC+ project files
+2) Reorganzied directory structure with each component separated
+	
+Wed Mar  1 08:05:32 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* libspread/sp.c, fl.c, include/sp.h, sp_func.h (SP_get_vs* memb_info()):
+	Add new membership parsing functions SP_get_memb_info(),
+	SP_get_vs_sets_info() and SP_get_vs_set_members() to analyze
+	the contents of the mesage body of membership messages. 
+	Deprecate old functions that just gave byte locations within 
+	body as they are too confusing. 
+	* examples/user.c, simple_user.c: Update example programs
+	to use new membership parsing functions.
+
+Wed Feb  8 03:44:23 2006  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* arch.h: Add HAVE_STRERROR for Windows builds. This avoids
+	a compile error with shared DLL libraries. Discovered and 
+	fixed by Jacob Green.
+
+Tue Feb 07 11:31:42 2006 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	ifdef out debugging code to avoid compile warning.
+
+Tue Jan 17 18:49:00 2006 John Schultz  <jschultz@spreadconcepts.com>
+
+	Final bugfixes for StdUtil/Flush.  Primary bugs were in
+	doubly linked list of StdUtil, passing switched parameters
+	and decrementing something and then using it rather than
+	the other way around.
+
+Fri Sep 23 13:09:01 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+	
+	Fixes for compile warnings and type misdetection in
+	configure script. Fixes type-punning dereferences caught by
+	new strict aliasing warning by using correct "struct
+	timeval" for select calls timeout.Does NOT disable new gcc
+	4.0 strict-aliasing optimization, as it might be safe with
+	these fixes.
+
+Wed Sep 21 01:00:31 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+	
+	Fix 'make install' target. Inspiration by Neil Conway's
+	patch for install.Also change default spread library (with
+	FL interface) to libspread. libtspread.* does not exist
+	anymore. The basic libspread is now threadsafe. The core
+	libraries (libspread-core and libtspread-core) still exist
+	as a single-threaded and a thread-safe version.
+
+Mon Sep 19 17:31:52 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Apply fix (with small change) from Neil Conway for
+	unnecessary char -> int cast.
+
+Mon Sep 19 17:26:32 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Apply fix from Neil Conway to change incorrect usage of
+	vsprintf to sprintf.
+
+Thu Sep 08 10:56:53 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Apply warning fix patch from Neil Conway.Add configure
+	check for pthread_atfork function so it will only be used
+	if supported by pthread library.If it does not exist, then
+	forking threaded spread client programs is not safe from
+	deadlocks.
+
+Thu Sep 01 15:27:47 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Fix to stdhash and minor changes in hash/cmp fcns in flush.
+	Still needs more work and testing.
+
+Tue Aug 30 09:19:47 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Fix for dynamic conf bug that caused crash with corrupted
+	Cn struct.Reported by Jacob Green.
+
+Wed Aug 24 10:00:15 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* All.c: Update copyright notice to include new contributors
+	and dates. Update version number for 4.0.0 release.
+	
+Wed Aug 17 10:00:15 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (sp_atfork_child,sp_atfork_parent,sp_initialize_locks): 
+	Add pthread_atfork handlers to 
+	reset mutexes when a client process is forked. They
+	also cause the Struct_mutex to be held over the fork. This 
+	currently only handles pthread based threading and not
+	Windows based threading. 
+
+Wed Aug 17 18:30:48 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Remove configure.in build of flush/Makefile as it no longer
+	exists.Add additional linker commands to build of
+	libtspread.so so stdutil is included.
+
+Tue Aug 16 16:26:52 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Finish moving flush sample programs and library info final
+	location.Build of flush is now integrated with spread
+	library build.libtspread.a now contains FL_ and SP_
+	interfaces.libspread-core.a and libtspread-core.a now
+	contain the original SP_ spread interface.
+
+Tue Aug 16 13:45:55 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Fix bugs in hash checks that prevented some memberships
+	from completing.Allow monitor messages to always pass hash
+	checks.
+
+Tue Aug 09 22:07:49 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Fixed bugs of omission in stdutil: somehow got left out in
+	last check in.	Fixed two minor bugs (that I introduced) in
+	groups.c, one was an improper skiplist erase and the other
+	was improperly reporting # of target sessions in G_analize
+	groups.  The flush change was just white space.
+
+Mon Aug  8 00:11:24 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_kill): Make SP_kill() a public function so apps
+	can close unneeded FD/mboxes without disconnecting. Also
+	change socket error handling so sockets are not closed when
+	errors occur, but app is notified and must call 
+	SP_disconnect() to clean up mbox before reusing. This helps
+	threaded apps correctly handle closed fd's without races.
+
+Sun Aug  7 19:36:54 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_get_local_vs_set_offset_memb_scat): Add function
+	to get local vs set offset if SP_receive_scat() is used
+	to get membership messages.
+
+Sun Aug 07 18:54:26 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Merge build/Makefile/configure for flush with Spread. Also
+	fixup integration withstdutil build setup. Spread, Flush
+	and Stdutil should build from a separatedirectory tree now.
+
+Fri Aug 05 19:18:38 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Added final code to flush to handle Spread's new vs_set
+	semantics.  Added FL_lib_init calls to user and
+	fl_time_memb as needed.  I still need to add documentation
+	about FL_lib_init, this will probably break most deployed
+	FL apps.  Exported an additional offset fcn in sp_func.h;
+	probably need another one for scat structs.  Updated sp.c
+	to have matching fcn prototypes.  Possible bug still in the
+	SP_get_local_vs_offset fcn.
+
+Sun Jul 31 06:51:40 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Added in flush code (still needs to conform to new Spread
+	semantics) as best I thought appropriate.  Minor comments
+	added to groups.c.
+
+Thu Jul 28 10:50:56 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Removed iterators from sess_body.h structures and
+	insert/removals.  Changed all skiplist's to function as
+	unique key sets (i.e. - no values): this requires that the
+	members used for key comparison in the referenced structs
+	are the first members of those structs.  Changed
+	grp->mboxes to be an unsorted dynamic array (stdarr). 
+	Changed G-analize_groups to be more like it was before, but
+	I "upgraded" it a bit, it should be slightly faster now
+	than before.  Added some comments for clarity and potential
+	future work in TODO and FIXME comments.
+
+Fri Jul 22 04:40:34 2005 John Schultz  <jschultz@spreadconcepts.com>
+
+	Major changes to groups.c -- converted to use stdutil
+	skiplists rather than Theo's.  Removed old skiplist code. 
+	Compiles but not tested yet.
+
+Fri Jul 15 11:46:05 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+	
+
+	Fix version configuration hash check to only check
+	major/minor versionnot patchlevel as different patchlevels
+	should interoperate.
+
+Fri Jul 15 11:42:01 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Update Java build to use new directory layout. 
+
+Fri Jul 15 10:51:21 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Update Makefiles and configure script to build John's
+	stdutil package that was merged andto set the spread
+	version number correctly.
+
+Sat Jul 09 18:49:04 2005 Jonathan Stanton <jonathan@spreadconcepts.com>
+
+	Updated Makefiles, Windows project files and configure
+	script to support new directory structure.Also update
+	CVS_Readme.txt and Readme.txt files about newstructure.
+
+	Move example programs and public include headers.Copy
+	makefiles and configure script to begin build fixes.
+
+Wed Jun  1 16:05:34 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+ 
+ 	* session.c (Sess_init): Change ACTIVATE_PORT_REUSE() from 
+ 	#define macro to regular function Sess_activate_port_reuse().
+ 
+Mon May  30 15:26:57 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+ 
+ 	* monitor.c: Add "Reload" command to menu. This sends a packet
+ 	with type RELOAD_TYPE to all daemons to trigger a conf file
+ 	reload.
+ 	
+ 	* log.c, membership.c, session.c:
+	Remove all static copies of the  My struct from Conf_my()
+ 	to avoid old .seg_index and .index_in_seg values when conf changes.
+ 	
+ 	* flow_control.c, log.c, network.c, membership.c, status.c: 
+ 	Use dynamic refs to Conf instead of static copies. 
+ 	Cleanup conf use to use functions instead of direct data
+	structure access when possible.
+ 
+ 	* configuration.c (Conf_reload_initiate): Add function to reload
+ 	configuration files and parse what type of changes were made
+ 	to the configuration to know if a singleton partition is needed.
+ 
+ 	* membership.c (Lookup_new_members): Change name to
+	Memb_lookup_new_members() and make public function.
+ 
+	* configuration.c, conf_body.h, config_parse.y: Make Config and
+ 	Config_procs pointers instead of static structures so they can be
+ 	reallocated upon config reload. 
+ 
+ 	* configuration.c (Conf_in_reload_state): Add Conf_reload_state_*() 
+ 	functions to query, set and reset the state. Should be true when
+ 	configuration is being reloaded to prevent other operations that
+ 	might interfere. 
+ 
+ 	* conf_body.h: Remove skiplist.h and unused Skiplist declarations.
+ 
+ 	* configuration.c, configuration.h (Conf_init, Conf_load_conf_file):
+ 	Change return value to void since not used. Store filename and 
+ 	hostname provided by user on command line in static buffer in 
+ 	configuration so it can be used for later reloads of conf file.
+ 	
+ 	* network.c, network.h (Net_signal_conf_reload): Add method to 
+ 	signal network layer to configuration change. 
+ 
+ 	* network.c, network.h (Net_recv): Make public Set_partition(), 
+ 	Clear_partition() interface.
+ 
+
+Thu Apr  7 23:47:37 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* groups.c (G_handle_reg_memb): Fix misplaced closing } for
+	else case. Bug introduced in october groups rewrite, but 
+	effectively benign becaues of switch/case. Fixed by Jonathan.
+
+Wed Apr  6 23:41:44 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* protocol.c (Answer_retrans,Send_new_packets,Prot_handle_token): 
+	Remove all use of Wide_delay.
+	This only added extra delay when sending if we though the network
+	was a WAN. Originally this helped deal with high loss levels on 
+	the Internet (circa 1993) However, it appears no longer needed
+	and actually hurts performance.
+
+Thu Mar 31 23:44:04 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* sp.c (SP_internal_multicast): Check for short writes on network 
+	socket sends and loop to finish full write. Bug reported by Tudor Dumitras.
+
+Sun Mar 20 17:45:49 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+ 
+ 	* spread.c (main): Only print Alarms of SPLOG_INFO or higher priority by default.
+ 
+Sun Mar 20 12:12:53 2005  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+ 
+ 	* conf_body.h, membership.c, configuration.c, protocol.c, config_parse.y, net_types.h:
+ 	Create string representation of spread.conf segment entries and compute
+ 	32 bit hash of string. Hash is stored in Config structure and is checked
+ 	when membership messages or tokens are received. received hash must equal
+ 	local hash.
+ 
+ 	* configuration.c: remove old parser code that was ifdef 0.
+ 	
+ 	* configuration.h, configuration.c: 
+ 	Split Conf_init into Conf_load_conf_file to begin dynamic conf support.
+ 	
+ 	* membership.c: Print formatted IP addresses in Memb_handle_message alarms.
+ 
+Thu Dec 02 23:50:27 2004   Ryan Caudy  <rcaudy@gmail.com>
+
+	* groups.c (G_build_groups_buf): Fix groups-state-exchange 
+	message building code, to take the message_header into account, 
+	and hence avoid a potential 48 byte buffer overflow. 
+	This bug was manifested as an overwrite of My.name.
+	Patch by Ryan Caudy.
+
+	* javalib/SpreadConnection.java (stopListener): Changed routine 
+	that removes listener thread to call join on the thread after 
+	instructing it to exit, to avoid a race-condition when disconnecting. 
+
+	* javalib/SpreadConnection.java (readAuthMethods): Also, 
+	corrected handling of one-byte return codes received with
+	InputStream.read(byte), to correctly display/examine negative 
+	numbers.
+
+Mon Nov 01 20:26:13 2004  Ryan Caudy  <rcaudy@gmail.com>
+	* groups.c (G_Build_groups_buf): Fixed bug in G_build_groups_buf 
+	where daemon iterator wasn't set properly.
+
+Fri Oct 29 01:18:05 2004  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* groups.c, groups.h,sess_body.h,objects.h,sp.c,sp.h,user.c: 
+	Apply Ryan Caudy's major Group change to support multiple VS set reporting.
+
+	* javalib/Membership.java, javaapps/User.java, javaapps/recThread.java:
+	Apply Ryan's change to java library to support VS sets. Change the
+	example code of User to print out the new membership info. 
+
+Fri May 07 10:53:03 2004  Ryan Caudy  <rcaudy@gmail.com>
+
+    * Add multiple VS (virtual synchrony) sets to regular membership messages at
+    SP interface. These show all that is known about which members were
+    virtually synchronous with one another during their previous regular
+    memberships.  ***Breaks client compatibility for regular membership
+    messages.***
+
+    * Use a representative based group message exchange.
+    This allows merging partial states if both parties are complete in
+    a cascading case. The two points this can occur are G_handle_reg_memb and
+    G_compute_and_notify.
+
+    * Stop throwing away useful information:
+      - No longer delete currently up-to-date groups state at G_Compute_notify.
+      	This allows each daemon to not process groups messages from their
+      	representative.  Allows a much better performance for large numbers of
+      	group memberships.
+      - If rep state (2) applies then do not drop groups state on cascade, but
+      	instead process the messages and proceed under a single representative.
+      As a result the GROUPS message has changed and the heavy weight client
+      membership message format has chagned.  The lightweight client membership
+      message has not changed, except small syntax changes to be consistent.
+
+    * Fixes: include last fall's group_id fixes.
+
+    * Change the order of members in membership messages to be by daemon name,
+    then member name, where daemosn are ordered as in conf file.
+
+    * Groups skiplist in memory now has 3 layers (group-daemon-member).
+
+    * Remove NEW state for groups -- it is obselete.
+
+    * Lots of cleanups and creation of X_send_mess() functions that encapsulate
+    all the common sending code.
+
+    * Send heavyweight membership messages followed by transitional membership
+    messages for leaves and disconnects from changed groups in GTRANS, instead
+    of notifying in the next heavyweight membership message.  This changes the
+    sending of these membership message types be the same as that for joins.
+
+    * The C and Java library and example code have been updated to reflect the new
+    regular membership message format.
+
+
+Fri Oct 29 10:53:03 2004  Jonathan Stanton  <jonathan@cnds.jhu.edu>
+
+	* groups.c: Move assignment of this_group out of assert() call.
+
+October 15, 2004 Ver 3.17.3
+---------------------------
+
+1) Fix memory leak in Skiplist. Reported by Taj Khattra, patch by Theo 
+   Schlossnagle.
+
+2) spuser,spflooder, and spmonitor fixed to print correct name in help. 
+   Patch by Daniel Rall.
+
+3) Fix incorrect alarm printing where WARNING messages generated by
+   older Alarm() interface were not printed.
+
+4) Modify monitor so it will run correctly on Windows. This was done
+   by modifying monitor.c so it can also build as a threaded program
+   and on windows will use multiple threads to send/recv updates and
+   get user imput. (A POSIX thread option is also added).
+
+5) Fix a bug in the Windows build using VC++ of thread-safe
+   libtspread.lib.  Bug and fix by Jacob Green.
+
+6) Fix bug in libspread where if the groups array or message body
+   passed to SP_recv* was too small, the mess_type field returned
+   would be truncated and the sender field was not returned. They are
+   both now returned correctly.  Bug report and partial fix provided
+   by John Schultz.
+
+7) Fix bug where SP_Join and SP_Leave do not report an error if a
+   group name is too long (instead they truncated it) Reported with
+   fix by David Parker.  ** Warning, this could break buggy
+   applications who use long groups and assume the name is truncated.
+
+8) Cleanup compile warnings where E_queue() used with no-parameter
+   functions (not all uses fixed) and fix incorrect use of signed int
+   with strlen().
+
+9) Fix few cases in flooder.c and user.c that did not use the defined
+   MAX_MESSLEN constant. Tested to verify that increasing
+   MAX_SCATTER_ELEMENTS in scatter.h and the MAX_MESSLEN defines in
+   user.c and flooder.c is sufficient to support arbitrarily large
+   message sizes with Spread. This is NOT recommended, but several
+   people do it anyway :-)
+
+10) Add new option to spflooder. The -n option allows a fixed "number
+    of members" to be set. This then activates a multi-sender flow
+    control algorithm to allow flooding tests with several
+    senders. All of the processes need to join the group (i.e. they
+    cannot be -wo (write-only)) but not all processes have to send.
+    This allows easy testing with differing numbers of senders (just
+    change how many spflooders start with -ro and how many do not).
+
+11) Make E_delay() work on Win32.
+
+12) Added check that a segment using localhost (i.e. 127.0.0.255) is
+    NOT in a spread.conf with any other segments using real IP
+    addresses. This configuration will not work correctly and is
+    usually because the example localhost configuration provided with
+    Spread is added to. This check will cause the daemon to exit
+    immediately after parsing the config file.
+
+13) Add new Alarm priority flag to print a line with no datestamp (for
+    multi-line output).
+
+14) Fix bug where if more then 22 daemons start at the same time, some
+    will crash or the membership will not complete correctly. This bug
+    was reported by several people including Jesse Noller.
+
+15) Fix Java spread connection problem where several threaded
+    connections from same process cause unexpected connection
+    failures. Reported by Brian Moseley, idea of fix by Ryan Caudy,
+    patch by Jonathan Stanton.
+
+16) Fix EVS bug where AGREED messages may be delivered before a
+    transitional signal on some daemons and after it on others. Bug
+    found and patch created by Ryan Caudy.
+
+17) Make SP_connect_timeout() calls non-blocking for the actual
+    'connect()' call.  This should fix the issue reported by Shlomi
+    Yaakobovich where a hung daemon causes new connections to also
+    hang in connect. Also includes slight cleanup of connect code
+    path.
+
+18) Add new Windows VC++.Net project files to
+    daemon/win32_msvc_net. The current project files in daemon/win32
+    remain as they can be used in VC++ (version 6).
+
+March 5, 2004 Ver 3.17.2:
+--------------
+1) Fix daemon quit when multiple interfaces are configured as "D" daemon 
+   interfaces in the spread.conf file. Bug reported by Orit Wasserman.
+2) Updated url for Java 'ant' build system. Patch by Daniel Rall.
+3) Fix group_id bug that causes incorrect vs_sets. Patch by Ryan Caudy.
+4) Fix spread.conf parser so it validates the machine names in segments
+   and forces them to be less then MAX_PROC_NAME. Patch by Mikhail Terekhov.
+5) Minor fix to Mac OS X compilation so library softlinks do not fail the 
+   second time make is run.
+6) Alarm() changes to support priority levels on each Alarm() call. 
+7) Fix crash by improving packet accounting when a client connected to a 
+   singleton daemon sends a large broadcast. Reported by David Shaw.
+8) Fix bus errors on Sparc & Alpha for message buffer integer assignment. 
+   Reported by Greg Shebert; tested and patched Mikhail Terekhov.
+9) Verify daemon names in spread.conf are unique. If non-unique names are
+   provided in spread.conf, configuration will be rejected and daemon will 
+   not start. Suggested by Tim Peters. 
+10) Zero buffer in c library before sending multicast. 
+    Reported by Panagiotis Kougiouris. 
+11) Send fewer lookup probe messages when only a single segment is configured.
+12) Remove extra token rotations when no messages are sent. Will decrease
+    network packet overhead. 
+13) Make mailbox and service in sp.h a typedef instead of a #define. Suggested
+    and patched by Steven Dake. 
+14) Fix small endianness error in sp.c where the mess_type field may not be
+    correctly converted for different endian platforms when the SP_*_recv calls
+    return a BUFFER_TOO_SHORT or GROUPS_TOO_SHORT error.
+15) Change alarm tag for security prints from SEC to SECURITY because of conflict
+    with sys/time.h header.
+16) Documentation fix to SP_receive man page to correct fields for self-leave
+    membership messages.
+17) Update of email addresses in copyright statements and headers.
+18) Windows binary libraries now built as libspread and libtspread like other
+    platforms. 
+
+June 20, 2003 Ver 3.17.1
+----------------------------
+Bugfixes:
+*) Fix memory corruption and crash with groups of large size.
+*) Correct make install so it installs header files.
+*) Fix syntax error in build.xml file for Java/Ant.
+*) Cleanup prototypes to remove compiler warnings.
+*) Fix parser to correctly recognize upper, lower, and mixed case command options.
+*) During make install, remove old symlinks.
+*) Change setgroups call to be more portable. (fixes MacOSX)
+*) Change name of r and s to sprecv and spsend, and add as make targets. 
+   They can be built by "make testprog" (not built by default).
+*) Work on making long group names possible. 
+*) Increase listen backlog for accepting client connections.
+*) Fix Win32 project files to have correct path to source files. 
+   (note CVS was always ok, but 3.17.0 release had incorrect path)
+*) Fix bug where large groups overflow Mess_buf in groups.c.
+*) Fix memory corruption bug when a message header is received in
+   several separate packets in session.c. Thanks to Ryan Caudy for 
+   many, many hours tracking this down.
+*) Change order of build in Makefile so binaries are built before
+   documentation.
+*) Fix Java bug where connection objects cannot be disconnected and
+   then reconnected, but must be created anew. They can now be reused.
+*) Fix compile error on AIX for struct if_info.
+*) Fix security issue with buffer checks in the C library. 
+*) Fix obscure off-by-one buffer error with the parser. 
+
+September 25, 2002 Ver 3.17.0
+----------------------
+Features:
+1) Apply Daniel Rall's SO_REUSEADDR patch. This adds a new configuration
+   option SocketPortReuse that can either force SO_REUSEADDR on or off
+   for TCP server sockets, or set it to an auto mode that uses REUSEADDR
+   if specific interfaces are specified in the spread.conf file and
+   does not use it if the default of INADDR_ANY is used. If you force
+   this on, be aware that it can open up a security risk where other
+   processes can steal Spread's traffic.
+2) Enhance the group membership algorithm so very large groups and very large
+   numbers of groups will be merged correctly during a membership. 
+   With this change Spread should correctly handle groups with thousands
+   of members and thousands of groups. This also includes a slight 
+   optimzation by sending groups messages as AGREED instead of SAFE.
+   Thanks to Ryan Caudy from JHU for doing this work.
+3) Revamped build setup using autoconf instead of manual Makefiles. Thanks
+   to Theo Schlossnagle for writing this and updating it. Some small changes
+   were made to Theo's 3.16.2 patch when I applied it.
+4) Change library name from libsp to libspread. This is both more descriptive
+   and should fix the problem with library clashes with other libsp's.
+5) Apply Daniel Rall's patch to make the spread execution directory and
+   the user and group it runs as configurable at runtime.
+
+Bugfixes: 
+6) Make sure service_type is set to 0 before using it in SP_receive calls 
+   in sample programs (spuser, spflooder, simple_user).
+7) Fix GGT bug where Spread gets stuck or crashes if you reach GGT state.
+8) Fix Mem_Alloc blocks so they can be freed without assertion failure.
+9) Fix hanging bug where token rotates, but ARU is stuck.
+
+Documentation:
+10) Split the growing changelog at the beginning of Readme.txt into a 
+    separate file.
+11) Updates to man pages. Clarify service_type handling. Add info on accessor
+    functions for membership message body.
+
+April 2, 2002 Ver 3.16.2 (The Almost April Fools Release)
+---------------------------
+Bugfixes:
+1) All recv calls in session now check for EWOULDBLOCK, EAGAIN, EINTR 
+   and retry the call later. This fixes problem on busy servers where 
+   connections would be killed erroneously. Thanks to the Zope team 
+   (Guido van Rossum, Tim Peters, and Jeremy Hylton) for discovering this
+   and helping with fixing it.
+2) log.c file operations now check for errors and handle them.
+3) Windows bugs:
+   a) close() does not close sockets, we need to call closesocket() to avoid
+      memory leak.
+   b) sockets are not consecutive fd's on windows, they can be > FD_SETSIZE.
+      So fd mapping to sessions changed to use a hash instead of array. 
+      As a side-effect it should be faster to connect/disconnect. 
+      Thanks to Marc Zyngier for discovering the problem and writing and 
+      testing a patch for it.
+   c) Raise the FD_SETSIZE for windows to 1024 by #defining it in arch.h.
+   d) Enhanced error handling to support WSAGetLastError, and define a
+      sock_strerror() function to return nice error strings on windows.
+   e) Include Visual C++ Project files to build Spread on Windows.
+4) Included improved NetBSD makefile and warning fix from Patrick Welche.
+5) Generalize the errno handling to support windows errors and other 
+   odd cases. Also see fix 3d. Thanks to Marc Zyngier, Tim Peters, and
+   David Holmer for help with this.
+6) Improve the install targets for linux. Now install include headers
+   and use standard PREFIX define for base directory.
+7) Updates to man pages. New libsp manpage.
+
+December 11, 2001 Ver 3.16.1  
+------------------------
+Bugfixes:
+1) Fix various races and bugs in the new authentication and access control 
+   code. 
+   a) Fix session establishment races with authentication
+   b) Add more info for access control hooks to use (mess_type and num_groups)
+   c) Fix so rejected messages are not still delivered to local group members.
+   d) Make reject messages honor SELF_DISCARD.
+   e) Fix bug that always allowed NULL connections.
+2) SGI now builds using signed chars and reports errors correctly.
+3) MacOSX build fixed. 
+4) Fixed race at session establishment that caused the assertion failure
+   "assert( xxxxx ) false "
+5) Add MAX_MESSAGE_BODY_LEN to spread_params.h (used in sp.c checks), move
+   MAX_PACKET_SIZE to spread_params.h from arch.h.
+6) Fixed interface restrictions for daemons. 
+7) Fixed crashes in user and flooder programs when wrong number of command
+   line parameters were passed.
+8) Added assertion check for Groups membership message with zero members in a group. (Theo)
+9) Java library fixes and enhancements (Thanks to Dan Rall and Leonard
+	Richardson )
+10) Fix bug in group name validator G_private_to_names that caused crash.
+11) Fix for reversed parameters to memset in groups.c (Thanks to Marc Zyngier)
+12) Fix bug in session connection that confused closed, but not yet deleted file 
+    descriptors with newly accepted connections. (Thanks to Dave Parker for discovering bug).
+13) Fix significant memory leak when connections are disconnected. This
+    leak has been present since at least 3.15.0. (Thanks to Dave Parker
+    for discovering this and providing lots of assistance debugging it.)
+14) Fix the binding to specific interfaces to work with broadcast packets. 
+    (Thanks to Marc Zyngier for reporting the problem)
+15) Updated man pages and Users Guide
+16) Added makefile for OpenBSD contributed by Brandon Palmer.
+17) Added makefile for Solaris 8 with Solaris cc compiler 6.1 contributed by Luc I. Suryo.
+
+
+June 25, 2001 Ver 3.16.0
+-------------------------
+Changes:
+1) Add support for configuring multiple interfaces on daemons. Each daemon
+   can now choose which interfaces to listen on for client connections, monitor
+   requests, and daemon-to-daemon communication.
+2) Added support for MacOSX. Thanks to Julien Defour and Dirk-Willem van Gulik.
+3) Agreed messages for join/leave instead of SAFE messages.
+4) Fixed bug with membership messages for more then 42 members in a group.
+5) Document how to monitor packing effectiveness.
+6) SP_connect assigns unique private name if user gives a zero length string as
+   the user name.
+7) Slightly loosen valid field checking for service_type field to allow
+   flush and secure spread libraries to work.
+8) Fix events to work with low priority events for Splash.
+9) Adds modular access control and authentication system that allows the 
+   daemon to authenticate client connections and allow or disallow various
+   actions (such as joining groups, sending messages or connecting) based
+   on the authenticated user. This changes the client-server network
+   protocol, but is backward compatible with clients linked with old libraries.
+   This also adds new functions to the API. A sample module that
+   provides access control based on the IP address of the client is 
+   included. Also a module that provides the same "allow all clients" 
+   policy as older versions of Spread. The Java API has also been 
+   updated to support the new access control framework.
+10) New license for Spread. BSD based open-source license.
+11) Updated Perl library with some bug fixes and compatibility with new C lib.
+12) Added support for 64 bit platforms (alpha, ultrasparc & ia64) Note only
+    alpha is actually tested.
+13) Fix bug in sp.c where if a message was not completely received because 
+    of a short buffer and the next call had an invalid message scatter the
+    data in the messages would get corrupted. Probably difficult to trigger 
+    unless you are trying hard.
+14) Changed names of programs included with spread to have "sp" as a prefix.
+    This should help avoid conflicts with all the other utilities called 
+    "user" or "monitor".
+15) Small bugfixes to the Java library. 
+16) Bugfix which removes a costly, and unnecessary, recalculation when 
+    several network level membership events occur in close (time) proximity.
+ 
+March 20, 2001 Ver 3.15.2
+-------------------------
+
+Changes:
+1) Bugfix to java library to fix exception caused when trying to establish
+   connection. This is a new bug in 3.15.1. Thanks to Julien Dufour.
+2) Add #define SPREAD_VERSION to sp.h so client applications can test for
+   what version of the spread API to use. This allows applications to compile
+   against multiple incompatible versions of the spread library. Specifically,
+   this can be used for an app to support both the old 'float SP_version()'
+   and new 'int SP_version(int, int, int)' functions.
+3) Fix memory leak in Perl module. Thanks to Theo Schlossnagle.
+
+February 26, 2001 Ver. 3.15.1
+-----------------------------
+Changes:
+1) Make sess_read() non-blocking so slow clients sending messages don't slow
+   or block daemon.
+2) Implement input validation on all messages received from clients. This
+   is to address the possibility of clients overflowing the servers buffers.
+   These problems were uncovered in a security audit by Olaf Kirch of Caldera.
+3) Use chroot to isolate spread and drop priveledges if spread is run by root.
+   If it is run as a normal user, then no chroot is done and it runs just as 
+   before. The user to run as and the location of the chroot jail can be 
+   configured in the spread_params.h file at compile time.
+4) Fix a bug that causes a significant memory leak when retransmissions are 
+   required. This memory leak exists in versions 3.13, 3.14 and 3.15.0.
+5) SP_version() no longer returns a float, instead it returns in 3 separate
+   parameters the 3 components of the version number.
+ 
+December 20, 2000 -- Unreleased 3.15.0
+-----------------
+Changes:
+1) New version number scheme with 3 components: Major, Minor, and Patch.
+2) Small bugfix to prevent clients from sending to too many groups and
+   crashing spread.
+3) Copyright changed to Spread Concepts LLC for code by original
+   developers.
+
+0ctober 31, 2000 
+---------------
+Changes:
+1) Bugfixes to skiplist implementation.
+2) Critical fixes to group membership that removes bugs introduced in 
+   optimization work of 3.13.
+3) Critical bugfix to membership which solves problem introduced in 3.13 
+   with using configurations of more then one segment.
+4) Changes to spread.conf parser, but nothing that should be user visable.
+5) Better error/problem reporting in a few cases.
+6) Enforce message length limit. SP_mcast* will now return an error
+   if a message body is too long.
+7) Minor memory leak at initialization fixed.
+8) Fix to events.c to prevent an illegal message bug. Bug is triggered
+   when messages are sent very fast during a membership merge.
+
+August 07, 2000
+---------------
+Changes:
+1) To compile the Linux version on systems based on glibc2.0 (such as 
+   RedHat 5.2) you need to comment out the #define of HAVE_STDINT_H in the 
+   arch.h file before compiling.
+
+2) Major scalability improvements. Should now support upto 990 connections
+   to each daemon, thousands of groups, and faster throughput with
+   small messages.
+
+3) Configuration file changes. 
+	a) The default name of the configuration file 
+	   has changed from config.dat to spread.conf. The default locations 
+	   checked if nothing is specified on the command line is 
+	   /etc/spread.conf and ./spread.conf (i.e. the current directory 
+	   where the binary is run from).
+	b) The format of the spread.conf file is improved. You no longer
+	   have to specify the number of members of a segment or the number
+	   of segments by hand. The format is also more standard and has a 
+	   lex/yacc grammer defining it. See the sample.spread.conf file 
+	   for an example or the documention for details.
+	c) More configuration variables. 
+		EventLogFile: You can now have all the Spread event messages 
+			      that print to the screen print to a file instead.
+			      To have each daemon log to a separate file use the
+			      '%h' or '%H' special characters in the log filename.
+			      Spread will replace those characters with the hostname
+			      of the machine which the daemon is running on. An 
+			      example can be found in the sample.spread.conf file.
+		DebugFlags: The event mask that determines which messages
+			    to print to the screen is now configurable at
+			    runtime.
+		EventTimeStamp: Add a timestamp in front of all logged event 
+				messages and set the format of the timestamp.
+
+		DangerousMonitor: Certain monitor commands like partition, kill
+				  and flow_control are disabled by default now.
+				  To enable them set this to true.
+
+4) Fix membership bug when under high load and a late data message arrives.
+   Also fix membership bug where the assertion 
+"spread: membership.c:1835: Backoff_membership: Assertion `pack_entry != -1' failed."
+   triggered.
+   Also fix membership bug where several machines will get trapped in 
+   State 3 (GATHER state) and will never complete the membership.
+
+5) Some documentation on how to tune Spread using some of the internal variables.
+   This is contained in the new Spread User Guide Chapter 2 which can be 
+   downloaded from www.spread.org.
+
+6) Fix bug in new No Drop semantics. When a BUFFER_TOO_SHORT error occured
+   the endian_mismatch field was incorrectly set to the size of the app buffer
+   instead of the size of the data message. So it was useless. This is fixed and
+   the semantics are extended to set the num_groups and endian_mismatch fields to 0
+   if the corresponding buffers ARE large enough, and to the needed size 
+   (as a negative) when they are NOT large enough. This allows you to know when 
+   you receive a GROUPS_TOO_SHORT whether the buffer is also too short without 
+   any calculation...Just check if endian_mismatch is 0.
+
+7) License updated to version 1.2. The only change is a small addition to the
+   attribution requirement, a capitalization of Spread, and a clarification of
+   the Spread version.
+
+May 01, 2000
+---------------
+Changes:
+1) Integrated FreeBSD port. A Big thanks to Ben Laurie <ben@algroup.co.uk>
+   for this port and a lot of compile warnings, type cleanups and 2 bugfixes.
+
+2) Removed some compile warnings.
+
+3) 2 bugs fixed. One in SP_group_ids_equal() and one in the 
+   daemon that would never trigger in reality.
+
+4) Updated java interface to most recent version.
+
+5) Updated events (E_* functions) to most recent version. This
+   adds the ability to attach to file descriptors for 
+   Exceptions and Write events as well as reads. It also 
+   adds a void* data pointer to the callback parameters.
+
+6) Change SP_recv semantics to be "No Drop" by default. The 
+   old "drop" semantics are still available by setting the 
+   service_type parameter to SP_recv to DROP_RECV before calling it.
+   *** 
+   See the file "Short_Buffer_Handling.txt" for detailed comments
+   on this change and what application modifications might be necessary
+   ***
+
+7) Documentation updates.
+
+8) Changed the way arch.h is implemented. This might require 
+   some additions for Ports that we do not support natively.
+
+9) Added Is_self_leave() macro which matches documentation for testing
+   self-leaves.
+
+10) Changed SP_* and E_* functions to use 'const' appropriately.
+
+11) Reserved fields are listed in sp.h to prevent collisions.
+
+12) Make MAX_PROC_NAME and MAX_PRIVATE_GROUP sizes available in sp.h.
+
+13) Added Perl library interface. You can now write Spread client 
+    programs in perl. Thanks to Theo Schlossnagle <theos@cnds.jhu.edu>.
+
+14) License updated to version 1.1. Main change is a reformatting and 
+    updated email addresses. 
+
+July 27, 1999 Official Release
+---------------------------------------------------
+
+1) Has new license (license.txt) and copyright notices
+
+2) New Java interface included
+
+3) Location of license has moved to: 
+	    http://www.spread.org/license/
+	    http://www.cnds.jhu.edu/spread/license/
+
+4) Minor documentation and example program improvements.
+
+5) One minor bug fixed in group handling.
+
+May 26, 1999 Release:
+---------------------
+1) Expiration Date Removed from Binary version
+   This release of the executatbles will not expire.
+
+2) New Copyright Statement
+   The copyright of Spread has been finalized. The statement at the top of 
+   this file shows it.
+
+3) Source release soon & new license
+   a) As soon as a few final issues are resolved we will release the source
+      to Spread under the CNDS Non-Commercial and Development License. 
+   b) A draft of the new license can be found at 
+      http://www.cnds.jhu.edu/spread/CNCL/.
+      Please email us any comments or concerns you have at spread@spread.org
+
+4) Bugs Fixed:
+   a) Bug fix to the SP_scatter_recv() call to make receives into 
+      scatter structures of multiple entries of different sizes work.
+   b) The Linux platform also had scatter-gather functionality enabled 
+      (now that glibc has working sendmsg, recvmsg calls)
+   c) Fixed bug where packets which are delayed a long time in the network
+      but then actually arrive at a spread daemon cause a crash.
+
+
+October 30,1998 Release:
+-----------
+1) Multi-threading:
+   Libsp.a has split into two libraries, libsp.a and libtsp.a, they
+   are identical except that libtsp.a is thread-safe and libsp.a is not.
+   Both versions are provided so that single-threaded programs who don't 
+   need a safe library can avoid the (admittedly pretty small) overhead of 
+   locking. The libtsp.a can be used identically with libsp.a with the 
+   addition that all SP_* functions can be called by multiple threads 
+   at the same time.  Thread safety in libtsp.a is provided optimally,
+   with the most possible parallelism allowed.  Threads acting on separate
+   mailboxes will never block each other, threads writing to a mailbox will
+   never block other threads reading from the same mailbox and vice versa.
+   The one time thread calls to SP_ functions will be serialzed is when 
+   multiple threads are reading the same mailbox or writing the same mailbox.
+   There is minimal locking of internal structures which can temporarily 
+   block another thread, but since a thread never blocks while in one of 
+   these structure critical sections and the duration of the lock is at 
+   most a fewinstructions the delay should be minimal.  
+   
+2) IP-Multicast:
+   Spread now allows you to specifiy IP-Multicast addresses(i.e. 224.0.0.1) 
+   as the broadcast address for a segment in the spread.conf file. This will 
+   work transparently in the same segment, and is guaranteed not to spill 
+   multicast packets beyond that segment. If multi-segment ip-multicast is 
+   desired, please contact us.
+
+3) Fixed several minor bugs.
+
+4) Included man pages for SP functions. The old html documentation is also 
+   included.
+
+5) None of these changes effect the Java version which has not changed.

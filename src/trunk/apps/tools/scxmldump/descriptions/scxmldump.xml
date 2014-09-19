@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scxmldump" category="Utilities">
+		<description>
+			Dumps database objects to XML files.
+		</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#config-db</optionReference>
+			</group>
+
+			<group name="Dump">
+				<option long-flag="listen">
+					<description>
+						Enables server mode which listens to the message server for
+						incoming events and dumps each received add/update.
+					</description>
+				</option>
+				<option flag="I" long-flag="inventory">
+					<description>
+						Dump the inventory.
+					</description>
+				</option>
+				<option long-flag="without-station-groups">
+					<description>
+						Removes all station groups from inventory.
+					</description>
+				</option>
+				<option long-flag="stations" argument="sta-list">
+					<description>
+						If inventory is exported filter the stations to export where each
+						item is in format net[.{sta|*}].
+					</description>
+				</option>
+				<option flag="C" long-flag="config">
+					<description>
+						Dump the configuration database.
+					</description>
+				</option>
+				<option flag="R" long-flag="routing">
+					<description>
+						Dump the routing database.
+					</description>
+				</option>
+				<option flag="O" long-flag="origin" argument="id">
+					<description>
+						Origin publicID(s) to dump. Multiple origins may be specified
+						as a comma-separated list.
+					</description>
+				</option>
+				<option flag="E" long-flag="event" argument="id">
+					<description>
+						Event publicID(s) to dump. Multiple events may be specified
+						as a comma-separated list.
+					</description>
+				</option>
+				<option flag="P" long-flag="with-picks">
+					<description>
+						Dump associated picks along with origins.
+					</description>
+				</option>
+				<option flag="A" long-flag="with-amplitudes">
+					<description>
+						Dump associated amplitudes along with magnitudes.
+					</description>
+				</option>
+				<option flag="M" long-flag="with-magnitudes">
+					<description>
+						Dump station magnitudes.
+					</description>
+				</option>
+				<option flag="F" long-flag="with-focal-mechanism">
+					<description>
+						Dump focal mechanisms of events.
+					</description>
+				</option>
+				<option flag="a" long-flag="ignore-arrivals">
+					<description>
+						Do not dump arrivals part of origins.
+					</description>
+				</option>
+				<option flag="p" long-flag="preferred-only">
+					<description>
+						When exporting events only the preferred origin, the preferred
+						magnitude and the preferred focal mechanism will be dumped.
+					</description>
+				</option>
+				<option flag="m" long-flag="all-magnitudes">
+					<description>
+						If only the preferred origin is exported, all magnitudes for this
+						origin will be dumped.
+					</description>
+				</option>
+				<option flag="f" long-flag="formatted">
+					<description>
+						Use formatted XML output.
+					</description>
+				</option>
+				<option long-flag="prepend-datasize">
+					<description>
+						Prepend a line with the length of the XML data.
+					</description>
+				</option>
+				<option flag="o" long-flag="output">
+					<description>
+						The output file. Default is stdout.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

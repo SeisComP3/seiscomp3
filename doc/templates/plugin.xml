@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<!--
+	Start of a plug-in definition.
+
+	-attributes-
+	  name:
+	    Name of the plug-in
+	-->   
+	<plugin name="syslogger">
+		<!-- Very important tag which defines which module this plug-in extends. -->
+		<extends>testme</extends>
+		<description>A plug-in which adds syslog logging facilities to testme.</description>
+		<!-- The configuration part corresponds to the module configuration -->
+		<configuration>
+		</configuration>
+	</plugin>
+</seiscomp>

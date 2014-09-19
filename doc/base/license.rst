@@ -1,0 +1,291 @@
+*******************************
+SeisComP User License Agreement
+*******************************
+
+**Version 1.1**
+
+This document is a legal agreement between the Helmholtz-Centre Potsdam GFZ
+German Research Centre for Geosciences (hereinafter referred to as "GFZ") and
+
+|
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+(Give institute name here)
+
+hereinafter referred to as "you".
+
+1. Foreword
+===========
+
+The SeisComP 3 Software package consists of several subpackages for which
+different licenses apply:
+
+* SeisComP Public License
+* SeisComP Binary License
+* GNU Public License
+
+For the parts of the software which are covered by the SeisComP Public License
+or GNU Public License, the program sources are provided under the terms of the
+respective license. For the parts of the software covered by the SeisComP
+Binary License, access to the program sources is restricted and granted only to
+partners actively developing these programs in cooperation with the GFZ.
+
+The subpackages and applicable licenses are listed below.
+
+2. SeisComP Licenses
+====================
+
+2.1 SeisComP Public License
+---------------------------
+
+1. With this License the copyright holder GFZ grants you permission to copy,
+   modify and distribute the Program or its Derivative Works to other licensee
+   of SeisComP3 in case no commercial gain is procured. These actions are
+   prohibited by law if you do not accept this License. Therefore, by copying,
+   modifying or distributing the Program or any work based on the Program, you
+   indicate your acceptance of this License.
+2. You may not copy, modify, sublicense, or distribute the Program except as
+   expressly provided under this License. Any attempt otherwise to copy, modify,
+   sublicense or distribute the Program is void, and will automatically terminate
+   your rights under this License.
+3. You may copy, modify and distribute the Program in object code or executable
+   form provided that you accompany it with the complete corresponding source
+   code and publish on each copy an appropriate copyright notice, this License
+   conditions and disclaimer of warranty. Redistributions of source code must
+   retain the following acknowledgement: This product uses Program developed by
+   Helmholtz Centre Potsdam GFZ German Research Centre for Geosciences. For more
+   information see http://geofon.gfz-potsdam.de. Redistributions in object code
+   or executable form must reproduce the above acknowledgement in the
+   documentation and/or other materials provided with the distribution.
+4. You must cause the modified files to carry prominent notices stating that you
+   changed the files and the date of any change. You must cause any work that
+   you distribute or publish, that in whole or in part contains or is derived
+   from the Program or any part thereof, to be licensed as a whole at no charge
+   to all third parties under the terms of this License.
+5. You are allowed to use and/or link against libraries covered by the SeisComP
+   Binary Licence and defined as in :ref:`def_prog`.
+6. All advertising materials mentioning features or use of this Program or its
+   Derivative Works must acknowledge that GFZ has developed this Program.
+7. To the extent permitted by applicable law there is no warranty for the
+   program. The program is provided "as is" without warranty of any kind, either
+   expressed or implied, including, but not limited to, the implied warranties
+   of merchantability and fitness for a particular purpose. The entire risk as
+   to the quality and performance of the program is with you. Should the program
+   prove defective, you assume the cost of all necessary servicing, repair or
+   correction.
+8. In no event unless required by applicable law or agreed to in writing will
+   articular circumstance, the balance of the License is intended to apply and
+   the License as a whole is intended to apply in other circumstances.
+9. If any portion of this License is held invalid or unenforceable under any
+   particular circumstance, the balance of the License is intended to apply and
+   the License as a whole is intended to apply in other circumstances.
+10. This License shall be governed by and construed and enforced in accordance
+    with the laws of the Federal Republic of Germany.
+
+
+2.2 SeisComP Binary License
+---------------------------
+
+1. With this License the copyright holder GFZ grants you permission to copy,
+   install and use the Program only for non-commercial purposes provided that
+   you accept this License. Therefore, by copying, installing and using of the
+   Program, you indicate your acceptance of this License. License for commercial
+   use is given on demand subject to a separate agreement.
+2. GFZ reserves all rights not expressly granted to you in this License. Any
+   attempt otherwise to copy, install and use of the Program is void, and will
+   automatically terminate your rights under this License as well as the attempt
+   to link against, modify, sublicense, distribute, rent, lease, lend or provide
+   commercial hosting services, except expressly permitted by GFZ.
+3. You may not reverse engineer, decompile, or disassemble the Program, except
+   and only to the extent that such activity is expressly permitted by GFZ or by
+   applicable law notwithstanding this limitation.
+4. To the extent permitted by applicable law there is no warranty for the Program.
+   The Program is provided "as is" without warranty of any kind, either expressed
+   or implied, including, but not limited to, the implied warranties of
+   merchantability and fitness for a particular purpose. The entire risk as to
+   the quality and performance of the program is with you. Should the program
+   prove defective, you assume the cost of all necessary servicing, repair or
+   correction.
+5. In no event unless required by applicable law or agreed to in writing will
+   any copyright holder, or any other party who may modify and/or redistribute
+   the program as permitted above, be liable to you for damages, including any
+   general, special, incidental or consequential damages arising out of the use
+   or inability to use the program (including but not limited to loss of data
+   or data being rendered inaccurate or losses sustained by you or third parties
+   or a failure of the program to operate with any other programs), even if such
+   holder or other party has been advised of the possibility of such damages.
+6. If any portion of this License is held invalid or unenforceable under any
+   particular circumstance, the balance of the License is intended to apply and
+   the License as a whole is intended to apply in other circumstances.
+7. This License shall be governed by and construed and enforced in accordance
+   with the laws of the Federal Republic of Germany.
+
+
+3. Amendment agreement for commercial usage
+===========================================
+
+3.1 Definition
+--------------
+
+Permission for commercial usage is granted neither by the SeisComP Public License
+nor the SeisComP Binary License. Examples of commercial purposes would be running
+business operations, licensing, leasing, or selling the software, distributing
+the software in a product to customers for evaluation purposes, distributing the
+software for use with commercial products, using the software in the creation or
+use of commercial products or any other activity which purpose is to procure a
+commercial gain to you or others. For avoidance of doubt Commercial Purposes
+would be also all services offered for a valuable consideration such as for
+example training, installation, maintenance and development or modification.
+All such commercial activities need the prior written authorization by GFZ.
+Users requiring commercial support have to ensure that the assigned service
+provider is holding a valid commercial license.
+
+3.2 License fee
+---------------
+
+The right for commercial use of the Program (incl. the parts covered by the
+SeiscomP Public License and the SeiscomP Binary License) is subject to a license
+fee. The amount of the license fee will be negotiated as the case arises.
+
+3.3 Third-party installations
+-----------------------------
+
+It is only allowed to install the Program at a third party in case a separate
+license agreement between Helmholtz Centre Potsdam GFZ German Research Centre
+for Geosciences and the third party exists and the service provider is holding
+a valid commercial license.
+
+
+.. _def_prog:
+
+4. Definition of the Program
+============================
+
+"Program" shall mean the following libraries and programs of SeisComP3 mentioned
+separately for the SeisComP Public License and SeisComP Binary License. In
+addition the acquisition libraries and binaries which are distributed under the
+GNU Public License (GPL) are also listed.
+
+
+4.1. SeisComP Public License package
+------------------------------------
+
+Core Programs (source code)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+scmaster, scadmin, scdb, scxmldump,
+scdispatch, sccnv, sczip, sync_dlsv,
+scamp, scautoloc, scautopick, scevent,
+scimex, scimport, scmag, scquery,
+sctestclient`
+
+Core Libraries (source code)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+libseiscomp3_client, libseiscomp3_communication,
+libseiscomp3_config, libseiscomp3_core,
+libseiscomp3_datamodel, libseiscomp3_io,
+libseiscomp3_logging, libseiscomp3_math,
+libseiscomp3_processing, libseiscomp3_utils,
+libseiscomp3_seismology.so, memailplugin.so,
+mncursesplugin.so, mtextplugin.so`
+
+QC Programs (source code)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+scqc, scwfqquery
+
+QC Libraries (source code)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+libseiscomp3_qc, libseiscomp3_qcplugin
+
+ArcLink Programs (source code)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+arclink, isomount
+
+
+4.2 SeisComP Binary License package
+-----------------------------------
+
+GUI Programs (binaries only)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+scesv, scheli, scmapcut,
+scmm, scmv, scolv,
+scqcv, scrttv
+
+GUI Libraries (binaries only)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+libseiscomp3_qtcore.so, libseiscomp3_mm_preliminaryorigin.so,
+libseiscomp3_mplugin.so, libseiscomp3_qtdatamodel.so,
+libseiscomp3_qtmap.so
+
+
+
+4.3 GNU Public License package (acquisition)
+--------------------------------------------
+
+SeedLink Binaries
+^^^^^^^^^^^^^^^^^
+
+load_timetable, seedlink, slarchive, slinktool, sync_dlsv,
+timeout, trylock, waitlock
+
+SeedLink Libraries
+^^^^^^^^^^^^^^^^^^
+
+libslink,
+libslplugin,
+libslutils
+
+
+SeedLink Plugins
+^^^^^^^^^^^^^^^^
+
+chain_plugin,
+ewexport_plugin,
+fs_plugin,
+mseedfifo_plugin,
+mseedscan_plugin,
+naqs_plugin,
+nrts_plugin,
+q330_plugin,
+reftek_plugin,
+run_with_lock,
+wave24_plugin,
+win_plugin,
+serial_plugin,
+sock_plugin,
+scream_plugin
+
+
+4.4 Derivative Works
+--------------------
+
+"Derivative Works" shall mean any work, whether in source or object form, that
+is based on (or derived from) the Program and for which the editorial revisions,
+annotations, elaborations, or other modifications represent, as a whole, an
+original work of authorship. For the purposes of this License, Derivative Works
+shall not include works that remain separable from, or merely link (or bind by
+name) to the interfaces of, the Program and Derivative Works thereof.
+
+
+|
+
+Location:                       
+
+Date:
+
+|
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+Signature
+
+Name:
+
+EMail:

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<!--
+	Start of a binding definition.
+
+	-attributes-
+	  module:
+	    The module this bindings belongs to.
+	-->   
+
+	<binding module="testme">
+		<!-- Description of the binding -->
+		<description/>
+		<!-- Configuration is the same as for a module -->
+		<configuration/>
+	</binding>
+</seiscomp>

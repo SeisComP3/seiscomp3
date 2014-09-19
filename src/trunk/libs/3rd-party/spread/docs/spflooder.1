@@ -1,0 +1,42 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SPFLOODER 1 "DECEMBER 2001" Spread "User Manuals"
+.SH NAME
+spflooder \- Spread Performance Test Client
+.SH SYNOPSIS
+.BI "spflooder [-u " connection_name "] [-s " spread_address "] [-m " num_messages "] [-b " bytes_per_message "] [-ro] [-wo]"
+.SH DESCRIPTION
+.B spflooder
+is a Spread client program that can flood messages and measure the time
+required to send a certain number of messages. This can be used to 
+test the performance of Spread and the machines it runs on.
+By default it trys to connect to a Spread
+daemon running on port 4803 of the local machine.
+
+.SH OPTIONS
+.IP "-u connection_name"
+The name this connection to the daemon will use to uniquely identify itself.
+.IP "-s spread address"
+The port number, or port number and host to which the spuser 
+program should connect in order to reach a Spread daemon.
+.IP "-m num messages"
+The number of messages to flood. 
+.IP "-b num bytes"
+The size of each message to send in bytes.
+.IP "-ro"
+This flooder process will only receive messages sent by other flooders. It will not send any messages.
+.IP "-wo"
+This flooder process will only send messages to other flooders. It will not receive any messages.
+.SH BUGS
+Some limitations on message size and number of groups are hardcoded into spflooder.
+Some changes to the code may be necessary to get maximum performance in large Spread configuarations.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+
+Spflooder is Copyright 1998-2006 Spread Concepts, LLC.
+.SH "SEE ALSO"
+.BR libspread (3)
+.BR spread (1)

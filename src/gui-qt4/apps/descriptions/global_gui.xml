@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="GUI">
+		<extends>global</extends>
+		<description>
+			The GUI configuration plugin extends the configuration of
+			graphical user interfaces to various options to adjust the look
+			and feel.
+		</description>
+		<configuration>
+			<group name="map">
+				<parameter name="location" type="string" default="@DATADIR@/maps/world%s.png">
+					<description>
+						Specified the location and the structure of the map tiles to be used. This
+						path is composed of zero or more directives and must include at least one
+						conversion specification which starts with is introduced by the character %
+						followed by a conversion specifier.  Valid specifiers are s (replaced by
+						tile ID), l (tile level), c (tile column) and r (tile row). An example for
+						using the OpenStreetMap file structure is /path/to/maps/%l/%c/%r.png.
+					</description>
+				</parameter>
+				<parameter name="format" type="string" default="rectangular">
+					<description>
+						Projection of the map tiles. Supported formats are: rectangular and mercator.
+					</description>
+				</parameter>
+				<parameter name="cacheSize" type="int" unit="bytes" default="0">
+					<description>
+						Cache size of the map tiles. If 0 is specified a default
+						cache size of 32mb is used. The higher the cache size
+						the better the performance in higher resolutions. A
+						higher cache size causes less image loader calls but
+						requires more client memory.
+					</description>
+				</parameter>
+				<parameter name="type" type="string">
+					<description>
+						Used to distinguish tile store implementations provided by plug-ins.
+					</description>
+				</parameter>
+			</group>
+			<group name="scheme">
+				<description>
+					This group defines various color and font options for SeisComp3
+					graphical user interfaces. There are various conventions
+					to define colors, fonts and gradients. A color is defined in HTML
+					convention. If rgb or rgba is used it must be quoted because the
+					comma is handled as list separator by the configuration. Gradients
+					are configured as lists of tuples where each tuple is colon separated
+					in the form value:color. Color is again a color definition and value is
+					either int or double.
+				</description>
+				<parameter name="showMenu" type="boolean" default="true">
+					<description>Show menu bar.</description>
+				</parameter>
+
+				<parameter name="showStatusBar" type="boolean" default="true">
+					<description>Show status bar.</description>
+				</parameter>
+
+				<parameter name="tabPosition" type="string">
+					<description>
+						Set position if tab bar. An unset value lets the application
+						decide where to place the tab bar. This option might not be
+						supported by all applications. Valid positions are: off, north,
+						south, east, west
+					</description>
+				</parameter>
+
+				<group name="colors">
+					<parameter name="background" type="color">
+						<description>
+							A general application background color. Can be uses to give
+							each application a different background color. An unset value
+							lets Qt decide.
+						</description>
+					</parameter>
+
+					<group name="records">
+						<parameter name="foreground" type="color" default="808080">
+							<description>The general color of records/traces.</description>
+						</parameter>
+						<parameter name="alternateForeground" type="color" default="808080">
+							<description>A general trace color of the alternate trace (eg scheli).</description>
+						</parameter>
+						<parameter name="gaps" type="color" default="FFFF0032">
+							<description>The color of data gaps in trace views.</description>
+						</parameter>
+					</group>
+
+					<group name="picks">
+						<parameter name="manual" type="color" default="00FF00">
+							<description>The color of manual picks.</description>
+						</parameter>
+						<parameter name="automatic" type="color" default="FF0000">
+							<description>The color of automatic picks.</description>
+						</parameter>
+						<parameter name="undefined" type="color" default="A0A0A4">
+							<description>The color of picks with undefined state.</description>
+						</parameter>
+						<parameter name="disabled" type="color" default="A0A0A4">
+							<description>The color of disabled picks.</description>
+						</parameter>
+					</group>
+
+					<group name="arrivals">
+						<parameter name="manual" type="color" default="00A000">
+							<description>
+								The color of manual arrivals (arrivals that bind manual picks,
+								e.g. residual plot of scolv, manual picker, ...)
+							</description>
+						</parameter>
+						<parameter name="automatic" type="color" default="A00000">
+							<description>The color of automatic arrivals,</description>
+						</parameter>
+						<parameter name="theoretical" type="color" default="0000A0">
+							<description>The color of theoretical arrivals.</description>
+						</parameter>
+						<parameter name="undefined" type="color" default="A00000">
+							<description>The color of arrivals binding picks with undefined state.</description>
+						</parameter>
+						<parameter name="disabled" type="color" default="A0A0A4">
+							<description>The color of disabled arrivals.</description>
+						</parameter>
+						<parameter name="residuals" type="gradient">
+							<description>
+							The gradient of arrivals residuals. A gradient is defined as
+							a list of tuples separated by colon where the first item is
+							the value and the second is the color. Colors can be given in
+							rgb notation or hex. when rgb is used double quotes are needed to
+							protect the comma inside the rgb definition, e.g.
+							-8:&quot;rgb(0,0,100)&quot;, -4:&quot;rgb(0,0,255)&quot;, -3:&quot;rgb(100,100,255)&quot;, ...
+							</description>
+						</parameter>
+					</group>
+
+					<group name="magnitudes">
+						<parameter name="set" type="color" default="00A000">
+							<description>The color of active magnitudes.</description>
+						</parameter>
+						<parameter name="unset" type="color" default="000000">
+							<description>The color of inactive magnitudes.</description>
+						</parameter>
+						<parameter name="disabled" type="color" default="A0A0A4">
+							<description>The color of disabled magnitudes.</description>
+						</parameter>
+						<parameter name="residuals" type="gradient">
+							<description>The gradient of magnitude residuals.</description>
+						</parameter>
+					</group>
+
+					<group name="stations">
+						<parameter name="associated" type="color" default="82AD58">
+							<description>The color of associated stations (e.g. in scmv).</description>
+						</parameter>
+						<parameter name="triggering" type="color">
+							<description>The color of triggered stations.</description>
+						</parameter>
+						<parameter name="triggered0" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="triggered1" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="triggered2" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="disabled" type="color">
+							<description>The color of disabled stations.</description>
+						</parameter>
+						<parameter name="idle" type="color">
+							<description>The color of idle stations.</description>
+						</parameter>
+					</group>
+
+					<group name="qc">
+						<description>
+							The color of QC.delay thresholds in scmv.
+						</description>
+						<parameter name="delay0" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay1" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay2" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay3" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay4" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay5" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay6" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="delay7" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="qcWarning" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="qcError" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="qcOk" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="qcNoSet" type="color">
+							<description></description>
+						</parameter>
+					</group>
+
+					<group name="gm">
+						<description>
+							The color of ground motion amplitudes in scmv.
+						</description>
+						<parameter name="gm0" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm1" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm2" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm3" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm4" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm5" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm6" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm7" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm8" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gm9" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="gmNotSet" type="color">
+							<description></description>
+						</parameter>
+					</group>
+
+					<group name="recordView">
+						<parameter name="selectedTraceZoom" type="color" default="C0C0FFC0">
+							<description>
+								The color of the selected zoom area (e.g. manual picker).
+							</description>
+						</parameter>
+					</group>
+
+					<group name="map">
+						<parameter name="lines" type="color">
+							<description>
+								The color of lines in the map (e.g. lines
+								connecting the origin and a station).
+							</description>
+						</parameter>
+						<parameter name="outlines" type="color">
+							<description>
+								The color of station outlines in the map.
+							</description>
+						</parameter>
+						<parameter name="grid" type="color">
+							<description>
+								The color grid line color of the map.
+							</description>
+						</parameter>
+						<parameter name="stationAnnotations" type="color">
+							<description>
+								The color of station annotations.
+							</description>
+						</parameter>
+						<parameter name="cityLabels" type="color">
+							<description>
+								The color of city labels.
+							</description>
+						</parameter>
+						<parameter name="cityOutlines" type="color">
+							<description>
+								The color of city outlines.
+							</description>
+						</parameter>
+						<parameter name="cityCapital" type="color">
+							<description>
+								The color of a capital.
+							</description>
+						</parameter>
+						<parameter name="cityNormal" type="color">
+							<description>
+								The color of a &quot;normal&quot; city.
+							</description>
+						</parameter>
+					</group>
+
+					<group name="legend">
+						<parameter name="background" type="color">
+							<description>
+								The map legend background color.
+							</description>
+						</parameter>
+						<parameter name="border" type="color">
+							<description>
+								The map legend border color.
+							</description>
+						</parameter>
+						<parameter name="text" type="color">
+							<description>
+								The map legend text color.
+							</description>
+						</parameter>
+						<parameter name="headerText" type="color">
+							<description>
+								 The map legend header color.
+							</description>
+						</parameter>
+					</group>
+
+					<group name="originSymbol">
+						<group name="depth">
+							<parameter name="gradient" type="gradient" default="0:FF0000,50:ffA500,100:FFFF00,250:00FF00,600:0000FF">
+								<description>The depth gradient.</description>
+							</parameter>
+							<parameter name="discrete" type="boolean" default="true">
+								<description>
+									Setting this parameter to true will not interpolate between
+									the depth steps and the color for a depth &lt;= input is used.
+								</description>
+							</parameter>
+						</group>
+					</group>
+
+					<group name="originStatus">
+						<description>
+							The origin status colors (e.g. in event list).
+						</description>
+						<parameter name="automatic" type="color">
+							<description></description>
+						</parameter>
+						<parameter name="manual" type="color">
+							<description></description>
+						</parameter>
+					</group>
+				</group>
+
+				<group name="marker">
+					<parameter name="lineWidth" type="color">
+						<description>
+							The line width of the marker (e.g. picks of manual picker).
+						</description>
+					</parameter>
+				</group>
+
+				<group name="fonts">
+					<parameter name="base" type="font">
+						<description>
+							The general base font of an application. This overrides
+							the default Qt4 application font.
+						</description>
+					</parameter>
+					<parameter name="small" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="normal" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="large" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="highlight" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="heading1" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="heading2" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="heading3" type="font">
+						<description></description>
+					</parameter>
+					<parameter name="cityLabels" type="font">
+						<description></description>
+					</parameter>
+				</group>
+
+				<group name="map">
+					<parameter name="stationSize" type="int" default="8" unit="px">
+						<description>
+							The station symbol size (e.g. in scmv).
+						</description>
+					</parameter>
+					<parameter name="originSymbolMinSize" type="int" default="9" unit="px">
+						<description>
+							The origin symbol minimum size. The formula to compute the
+							size of the origin symbol is: 4.9*(M-1.2).
+						</description>
+					</parameter>
+					<parameter name="vectorLayerAntiAlias" type="boolean" default="false">
+						<description>
+							Should the vector layer in the map use antialiasing?
+							This improves the visual quality but decreases performance.
+						</description>
+					</parameter>
+					<parameter name="bilinearFilter" type="boolean" default="true">
+						<description>
+							Should the map use a bilinear filter?
+							The bilinear filter improves the visual quality but decreases
+							performance slightly. It is only used for static map images.
+							Not while dragging.
+						</description>
+					</parameter>
+					<parameter name="showGrid" type="boolean" default="true">
+						<description>
+							Should the map display the grid?
+						</description>
+					</parameter>
+					<parameter name="showCities" type="boolean" default="true">
+						<description>
+							Should the map display the cities?
+						</description>
+					</parameter>
+					<parameter name="cityPopulationWeight" type="int" default="150">
+						<description>
+							Controls at which zoom level a city will be visible. The
+							following formula is used:
+							screen_width (km) * weight >= population
+						</description>
+					</parameter>
+					<parameter name="showLayers" type="boolean" default="true">
+						<description>
+							Should the map display the custom layers?
+						</description>
+					</parameter>
+					<parameter name="projection" type="string" default="Rectangular">
+						<description>
+							SeisComP ships with the rectangular projection build in.
+							Other projections may be provided through plug-ins.
+						</description>
+					</parameter>
+				</group>
+				<group name="precision">
+					<parameter name="depth" type="int" default="0">
+						<description>
+							The precision of depth values.
+						</description>
+					</parameter>
+					<parameter name="distance" type="int" default="1">
+						<description>
+							The precision of distance values.
+						</description>
+					</parameter>
+					<parameter name="location" type="int" default="2">
+						<description>
+							The precision of lat/lon values.
+						</description>
+					</parameter>
+					<parameter name="pickTime" type="int" default="1">
+						<description>
+							The precision of pick times.
+						</description>
+					</parameter>
+					<parameter name="traceValues" type="int" default="1">
+						<description>
+							Precision of displayed offset/amp in all trace widgets.
+						</description>
+					</parameter>
+					<parameter name="rms" type="int" default="1">
+						<description>
+							Precision of RMS values.
+						</description>
+					</parameter>
+				</group>
+				<group name="unit">
+					<parameter name="distanceInKM" type="boolean" default="false">
+						<description>
+							Display distances in km?
+						</description>
+					</parameter>
+				</group>
+			</group>
+			<group name="picker">
+				<parameter name="filters" type="list:string" default="&quot;BP 0.1 - 1 Hz  3rd order;BW(3,0.1,1)&quot;,&quot;BP 0.1 - 2 Hz  3rd order;BW(3,0.1,2)&quot;,&quot;BP 0.4 - 1 Hz  3rd order;BW(3,0.4,1)&quot;,&quot;@BP 0.7 - 2 Hz  3rd order;BW(3,0.7,2)&quot;&quot;BP 1 - 3 Hz  3rd order;BW(3,1.0,3)&quot;,&quot;BP 2 - 4 Hz  3rd order;BW(3,2.0,4)&quot;,&quot;BP 3 - 6 Hz  3rd order;BW(3,3.0,6)&quot;,&quot;BP 4 - 8 Hz  3rd order;BW(3,4.0,8)&quot;,&quot;BP 1 - 5 Hz  3rd order;BW(3,1.0,5)&quot;,&quot;BP 0.7 - 2 Hz + STA/LTA(1,50);RMHP(10)->ITAPER(30)->BW(3,0.7,2)->STALTA(1,50)&quot;">
+					<description>
+					Configures the default filters selectable in manual picker.
+					The entry with a leading &quot;@&quot; is selected as default filter.
+					</description>
+				</parameter>
+			</group>
+			<group name="eventlist">
+				<parameter name="visibleColumns" type="list:string" default="M, TP, Phases, Lat, Lon, Depth, Stat, Agency, Region, ID">
+					<description>
+					Configure the columns of the event list that are visible initially.
+					The first column containing the origin time is always visible and cannot
+					be hidden. Possible values are: Type, M, TP, Phases, Lat, Lon, Depth, Stat, FM, Agency, Region, ID.
+					</description>
+				</parameter>
+				<parameter name="regions" type="list:string">
+					<description>
+					Configured a list of regions that can be used as filter of
+					the result set.
+					</description>
+				</parameter>
+				<group name="region">
+					<struct type="eventlist filter region" link="eventlist.regions">
+						<description>
+						Defines a rectangular region that can be used as a result
+						set filter on client side.
+						</description>
+						<parameter name="name" type="string">
+							<description>
+							Defines the name of the region that shows up in the
+							listbox.
+							</description>
+						</parameter>
+						<parameter name="rect" type="list:double">
+							<description>
+							Defines a rectangular region with a list of 4 values:
+							latmin, lonmin, latmax, lonmax.
+							</description>
+						</parameter>
+					</struct>
+				</group>
+				<group name="filter">
+					<group name="agencies">
+						<parameter name="label" type="string" default="Show only own events">
+							<description>
+							Defines the text of the option &quot;Show only own events&quot;.
+							</description>
+						</parameter>
+						<parameter name="whitelist" type="list:string">
+							<description>
+							Sets a list of preferred agencies. Events from preferred
+							agencies are defined as &quot;own&quot; events.
+							</description>
+						</parameter>
+						<parameter name="type" type="string" default="events">
+							<description>
+							Sets the type of the filter. If type is &quot;events&quot; the agency
+							of the preferred origin of the event is checked.
+							If type is &quot;origins&quot; the agency of all origins of
+							an event is checked and if at least one origins agency is part
+							of the whitelist it will pass the filter. Or in other words,
+							the event is hidden if no origin is from a preferred agency.
+							</description>
+						</parameter>
+						<parameter name="enabled" type="boolean" default="false">
+							<description>
+							Sets the default state of the &quot;Show only own events&quot;
+							option.
+							</description>
+						</parameter>
+					</group>
+					<group name="types">
+						<parameter name="label" type="string" default="Hide other/fake events">
+							<description>
+							Defines the text of the option &quot;Hide other/fake events&quot;.
+							</description>
+						</parameter>
+						<parameter name="blacklist" type="list:string">
+							<description>
+							List of event type to be hidden if the &quot;Hide other/fake events&quot;
+							option is ticked.
+							</description>
+						</parameter>
+						<parameter name="enabled" type="boolean" default="false">
+							<description>
+							Sets the default state of the &quot;Hide other/fake events&quot;
+							option.
+							</description>
+						</parameter>
+					</group>
+					<group name="regions">
+						<parameter name="enabled" type="boolean" default="false">
+							<description>
+							Sets the default state of the &quot;Hide events outside&quot;
+							option.
+							</description>
+						</parameter>
+					</group>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

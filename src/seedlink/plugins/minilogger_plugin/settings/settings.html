@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen"><title>An ANSI C implementation for managing application settings</title>
+    </head>
+    <body>
+	<div class="container">
+	    <div class="top">
+		<h1><a href="index.html" style="color: #00529b; text-decoration: none">Per Ola Kristensson</a> | ANSI C application settings management</h1>
+	    </div>
+	    <div class="leftnav">
+		<p>
+		<span class="navlink">
+		    <a href="http://blog.pokristensson.com">Blog</a><br />
+		</span>
+		<span class="navlink">
+		    <a href="publications.html">Publications</a><br />
+		</span>
+		<span class="navlink">
+		    <a href="software.html">Software</a><br />
+		</span>
+		<span class="navlink">
+		    <a href="otherstuff.html">Other Stuff</a><br />
+		</span>
+		</p>
+	    </div>
+	    <div class="content">
+		<h2>Description</h2>
+		<p>
+		This is a module for managing application settings. It has the following features:
+		</p>
+		<ol>
+			<li>
+				Loading and saving application settings to/from a textual format that is easy to read and edit by humans
+			</li>
+			<li>
+				Relatively robust to corruptions in the textual format
+			</li>
+			<li>
+				Simple structure that is sufficiently expressive for most actual usage scenarios: a particular setting is a triple (section, key, value)
+			</li>
+			<li>
+				Convenient interface for accessing string, integer, long and double values
+			</li>
+			<li>
+				Convenient interface for accessing string, integer, long and double tuples of arbitrary lengths
+			</li>
+			<li>
+				Supports iteration over all key-value pairs for a particular section
+			</li>
+		</ol>
+		<h2>Source code</h2>
+		<p>
+		The API is documented in the header file (<code>settings.h</code>).
+		</p>
+		<p>
+		<a href="code/settings/settings.h">settings.h</a>
+		</p>
+		<p>
+		<a href="code/settings/settings.c">settings.c</a>
+		</p>
+		<p>
+		You will also need <a href="strmap.html">strmap</a> (an ANSI C hash table implementation for strings).
+		</p>
+		<p>
+		<a href="code/strmap/strmap.h">strmap.h</a>
+		</p>
+		<p>
+		<a href="code/strmap/strmap.c">strmap.c</a>
+		</p>
+		<h2>License</h2>
+		<p>
+		The code ("settings" and "strmap") is licensed under the <a href="http://www.gnu.org/licenses/lgpl-3.0.txt">GNU Lesser General Public License</a>.
+		</p>
+		<h2>Syntax</h2>
+		<p>
+		The structure of a settings entity is quite simple. A settings entity is a tree of depth 2. At the top level are the section nodes that represent isolated sections of application settings (e.g. general application properties, font attributes, color attributes, and so on). At the bottom level are the key-value pairs that represent set values for keys inside a particular section.
+		</p>
+		<p>
+		A settings entity is read from and written to disk using a textual format. The textual format is parsed by sequentially scanning each line. Blank lines are ignored. For all other lines, leading and trailing blanks are ignored. Sections are enclosed by square brackets ("[" and "]") on separate lines. Key-value pairs are written as the key followed by a single equal sign ("="), followed by the value, all of which must be together on one separate line. A key-value pair is associated to the last seen section. A key-value pair is not valid until at least one section has been seen. All lines that start with a hash ("#") are considered comments and are ignored. Empty sections, that is, sections that do not contain any key-value pairs, are not written to disk. Empty sections can be present in the textual format. However, they are ignored when creating a settings entity in memory.
+		</p>
+		<p>
+		A value can be a single or multi-valued. A multi-valued value is a tuple. Tuples are separated by comma and are singly-typed. This means that a tuple can only contain objects of one kind (e.g. integer tuples, double tuples, etc.).
+		</p>
+		<p>
+		The fragment below may serve as a reference:
+		</p>
+		<div class="code">
+		# This comment will be ignored<br />
+		[Section Title 1]<br />
+		# Below are two examples of key-value pairs<br />
+		Key1 = Value1<br />
+		Key2 = Value2<br />
+		# Below is an example of an integer tuple<br />
+		Key3 = 0,1,2,3<br />
+		<br />
+		[Section Title 2]<br />
+		# The key-value pair below is distinct from the one above<br />
+		Key1 = Value1<br />
+		<br />
+		[Empty Section]<br />
+		# This section is legal but empty and will be ignored<br />
+		</div>
+		<p>
+		The parser is relatively robust to leading and trailing blank characters around section names, keys, values, tuple elements, etc.
+		</p>
+		<h2>Notes</h2>
+		<p>
+		First, the code is not thread-safe. Use external synchronization.
+		</p>
+		<p>
+		Second, the implementation copies string values upon insertion and retrieval. This guarantees that no internal references are exposed to the client after the settings entity has been deleted from memory. There is one exception, however. When iterating over all key-value associations in a section, the internal strings are temporarily exposed as constant pointers to the internal string buffers. This is because it is very slow and cumbersome to copy all key-value associations to a buffer via a callback function interface. It is recommended not to keep the pointers to the internal string buffers around out of scope of the callback function. Otherwise, you risk having wild pointers in your code after you have deleted the settings entity.
+		</p>
+		<h2>Example usage</h2>
+		<p>
+		The settings file below will be used in the examples:
+		</p>
+		<div class="code">
+		[Application]<br />
+		Title = Test Title<br />
+		Version = 1.0.5<br />
+		<br />
+		[Background]<br />
+		Color = 255, 127, 127, 127<br />
+		<br />
+		[Foreground]<br />
+		Color = 255, 255, 255, 255<br />
+		Text Color = 255, 0, 0, 0<br />
+		<br />
+		[Edit Menu Options]<br />
+		C&amp;ut&nbsp;&nbsp;Ctrl+X = 1<br />
+		&amp;Copy&nbsp;&nbsp;Ctrl+C = 2<br />
+		P&amp;aste&nbsp;&nbsp;Ctrl+V = 3<br />
+		</div>
+		<p>
+		The code fragments below create a <code>Settings</code> object, insert and retrieve a couple of string associations, write out the <code>Settings</code> object to disk, and finally destroy the <code>Settings</code> object.
+		</p>
+		<div class="code">
+		#include "settings.h"<br />
+		<br />
+		...<br />
+		<br />
+		FILE *f;<br />
+		Settings *settings;<br />
+		char buf[255];<br />
+		int result;<br />
+		<br />
+		f = fopen("settings.txt", "r");<br />
+		if (f == NULL) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle error... */<br />
+		}<br />
+		settings = settings_open(f);<br />
+		fclose(f);<br />
+		if (settings == NULL) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle read error... */<br />
+		}<br />
+		/* Insert a new key-value pair */<br />
+		settings_set(settings, "Application", "Has Started", "True");<br />
+		/* Retrieve a value */<br />
+		result = settings_get(settings, "Application", "Version", buf, sizeof(buf));<br />
+		if (result == 0) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle value not found... */<br />
+		}<br />
+		printf("version of this application: %s\n", buf)<br />
+		/* Insert a key-value pair that will create a new section */<br />
+		settings_set(settings, "Window Properties", "X", "0");<br />
+		<br />
+		...<br />
+		<br />
+		/* Save the settings object to disk in textual form */<br />
+		f = fopen("settings.txt", "w");<br />
+		if (f == NULL) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle error... */<br />
+		}<br />
+		result = settings_save(settings, f);<br />
+		fclose(f);<br />
+		if (result == 0) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle write error... */<br />
+		}<br />
+		/* When done, destroy the settings object */<br />
+		settings_delete(settings);<br />
+		<br />
+		...<br />
+		<br />
+		</div>
+		<p>
+		The code fragments below demonstrate how to read a tuple:
+		</p>
+		<div class="code">
+		#include "settings.h"<br />
+		<br />
+		...<br />
+		<br />
+		Settings *settings;<br />
+		<br />
+		...<br />
+		<br />
+		int argb[4];<br />
+		int result;<br />
+		<br />
+		result = settings_get_int_tuple(settings, "Foreground",<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;"Text Color", argb, sizeof(argb));<br />
+		if (result == 0) {<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;/* Handle value not found... */<br />
+		}<br />
+		printf("alpha: %d red: %d green: %d blue: %d\n",<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;argb[0], argb[1], argb[2], argb[3]);<br />
+		<br />
+		...<br />
+		<br />
+		</div>
+		<p>
+		The code fragments below demonstrate how to iterate over all key-value associations in a section:
+		</p>
+		<div class="code">
+		#include "settings.h"<br />
+		<br />
+		...<br />
+		<br />
+		Settings *settings;<br />
+		<br />
+		...<br />
+		<br />
+		static void iter(const char *key, const char *value, const void *obj)<br />
+		{<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;printf("menu item: %s menu position: %s\n", key, value);<br />
+		}<br />
+		<br />
+		...<br />
+		<br />
+		settings_enum(settings, "Edit Menu Options", iter, NULL);<br />
+		<br />
+		...<br />
+		<br />
+		</div>
+	    </div>
+	    <div class="footer">
+		<p>
+		Copyright &copy; Per Ola Kristensson 2007-2011. All rights reserved.<br />
+		Last updated: April 22, 2011.
+		</p>
+	    </div>
+	</div>
+    </body>
+</html>

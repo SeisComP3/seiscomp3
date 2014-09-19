@@ -1,0 +1,32 @@
+.TH FL_poll 3 "Dec 2000" "Flush Spread" "User Manuals"
+.SH NAME
+FL_poll \- returns the amount, in bytes, of activity on a connection.
+.SH SYNOPSIS
+.B #include <fl.h>
+
+.BI "int FL_poll(mailbox " mbox ");"
+.SH DESCRIPTION
+.B FL_poll
+is a way to poll the connection represented by
+.I mbox
+to see if there is any activity on that connection.  
+
+.BR NOTE ,
+however that activity does
+.B NOT
+necessarily mean that a message is available to be read, as in Spread.
+Only a call to FL_more_msgs that returns a positive number of buffered
+messages or a DONT_BLOCK receive call can check for sure to see if a
+message is now available to be read.  If you don't use either of these
+semantics, then you may enter into a blocking receive call, which can
+sometimes be dangerous (see FL_flush).
+.SH "RETURN VALUES"
+Returns the number of bytes of activity currently on the connection,
+or one of the following errors ( < 0 ):
+.TP
+.B ILLEGAL_SESSION
+The connection represented by 
+.I mbox
+is illegal, usually because it is not active.
+.SH AUTHOR
+John Schultz <jschultz@cnds.jhu.edu>

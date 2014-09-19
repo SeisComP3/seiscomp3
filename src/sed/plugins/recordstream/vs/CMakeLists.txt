@@ -1,0 +1,15 @@
+SET(PACKAGE_NAME RSVS)
+SET(APP_NAME rsvs)
+
+SET(
+	 ${PACKAGE_NAME}_SOURCES
+		recordstream.cpp
+)
+
+SET(
+	${PACKAGE_NAME}_HEADERS
+		recordstream.h
+)
+
+SC_ADD_PLUGIN_LIBRARY(${PACKAGE_NAME} ${APP_NAME} "")
+SC_LINK_LIBRARIES_INTERNAL(${APP_NAME} client datamodel_vs)

@@ -1,0 +1,23 @@
+SET(EWEXPORTPLUGIN_SOURCES
+	ewexport_pasv_plugin.c
+	network.c
+	swap.c
+	util.c
+	trheadconv.c
+	../plugin.c
+)
+
+INCLUDE_DIRECTORIES(.)
+INCLUDE_DIRECTORIES(..)
+
+SET(OPTIONS -D_REENTRANT)
+
+ADD_DEFINITIONS(${OPTIONS})
+
+ADD_EXECUTABLE(ewexport_pasv_plugin ${EWEXPORTPLUGIN_SOURCES})
+TARGET_LINK_LIBRARIES(ewexport_pasv_plugin pthread)
+
+INSTALL(TARGETS ewexport_pasv_plugin RUNTIME DESTINATION ${SEEDLINK_PLUGIN_OUTPUT_DIR})
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

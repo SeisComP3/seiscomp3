@@ -1,0 +1,92 @@
+.TH SL_NEWSLCD 3 2003/11/03
+.SH NAME
+sl_newslcd, sl_freeslcd \- initialize and free SeedLink Connection Description
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "SLCD * \fBsl_newslcd\fP (void);
+.sp
+.BI "void   \fBsl_freeslcd\fP (SLCD *" slconn ");
+.fi
+.SH DESCRIPTION
+The \fBsl_newslcd\fP function will allocate a new SeedLink Connection
+Description (SLCD) struct and initialize it with default values.
+
+The \fBsl_freeslcd\fP function frees all memory associated with a SLCD
+including the stream chain.
+
+The SeedLink Connection Description typedef and struct:
+
+.RS
+.nf
+typedef struct slcd_s
+{
+  SLstream   *streams;        /* Pointer to stream chain */
+  char       *sladdr;         /* The host:port of SeedLink server */
+  char       *begin_time;     /* Beginning of time window */
+  char       *end_time;       /* End of time window */
+
+  short int   resume;         /* Boolean flag to control resuming with seq. nums */
+  short int   multistation;   /* Boolean flag to indicate multistation mode */
+  short int   dialup;         /* Boolean flag to indicate dial-up mode */
+  short int   lastpkttime;    /* Boolean flag to control last packet time usage */
+  short int   terminate;      /* Boolean flag to control connection termination */
+
+  int         keepalive;      /* Interval to send keepalive/heartbeat (s) */
+  int         netto;          /* Network timeout (s) */
+  int         netdly;         /* Network reconnect delay (s) */
+
+  float       protocol_ver;   /* Version of the SeedLink protocol in use */
+  const char *info;           /* INFO level to request */
+  int         link;           /* The network socket descriptor */
+  SLstat     *stat;           /* Internal connection state */
+  SLlog      *log;            /* Logging parameters for this connection */
+} SLCD;
+.fi
+.RE
+
+Default parameter values set by \fBsl_newslcd\fP:
+  resume       : 1 (true)
+  multistation : 0 (false)
+  dialup       : 0 (false)
+  lastpkttime  : 0 (false)
+  keepalive    : 0 (false, keepalives disabled)
+  netto        : 600 seconds
+  netdly       : 30 seconds
+
+For a full description of the SLCD parameters see the libslink Users
+Guide.
+
+.SH RETURN VALUES
+Upon successful completion \fBsl_newslcd\fP will return a pointer to a
+new SLCD struct.  If an error occurred NULL is returned.
+
+.SH EXAMPLE
+.nf
+#include <libslink.h>
+
+main () {
+  SLCD * slconn;
+
+  slconn = sl_newslcd ();
+  ...
+  sl_freeslcd (slconn);
+  return
+}
+.fi
+.SH NOTES
+Normally the SLCD only needs to be free'd when the program is closing
+and \fBsl_freeslcd\fP is seldom used as the memory will be free'd by
+the system anyway.
+
+.SH SEE ALSO
+\fBsl_collect\fP(3), libslink Users Guide
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

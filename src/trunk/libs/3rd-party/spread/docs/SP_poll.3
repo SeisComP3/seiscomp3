@@ -1,0 +1,34 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_POLL 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_poll \- checks amount of data ready to be read
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_poll( mailbox " mbox );
+.SH DESCRIPTION
+.B SP_poll
+is a way to poll a mailbox to see if any messages are
+available for receiving. The value returned will be < 0 if error,
+0 if nothing is available, and the number of bytes waiting if
+something is there.
+.SH "RETURN VALUES"
+Returns 0 if nothing is available or the number of bytes available, or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_SESSION
+The session specified by
+.I mbox
+is illegal. Usually because it is not active.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

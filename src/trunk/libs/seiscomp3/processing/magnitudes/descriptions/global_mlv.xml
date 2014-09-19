@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="MLv">
+		<extends>global</extends>
+		<description>
+		MLv is the Richter (1935) magnitude measured on the vertical component.
+		</description>
+	</plugin>
+	<binding name="MLv" module="global">
+		<description>
+		MLv is the Richter (1935) magnitude measured on the vertical component.
+		</description>
+		<configuration>
+			<group name="MLv">
+				<parameter name="logA0" type="string">
+					<description>
+					Defines the calibration function log(A0) for computing MLv.
+					Format: any number of distance-value pairs separated by semicolons
+					Example: &quot;0 -1.3;60 -2.8;400 -4.5;1000 -5.85&quot; specifies 3 distance intervals from 0...60, 60...400 and 400...1000 km distance. Within these intervals logA0 is interpolated linearly between -1.3...-2.8, -2.8...-4.5 and -4.5...-5.8, respectively
+
+					Note: The distances of the first and last sample specify the distance range within which MLv shall be computed.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

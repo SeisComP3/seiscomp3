@@ -1,0 +1,63 @@
+SET(ARCLINKPASS_SOURCES
+	arclinkpass.cc
+	encrypt.cc
+	encryptpasswordhandle.cc
+)
+
+SET(ARCLINK_SOURCES
+	arclink.cc
+	encrypt.cc
+	encryptpasswordhandle.cc
+)
+
+SET(ARCLINK_HEADERS
+	encrypt.h
+	encrypterror.h
+	encryptpasswordhandle.h
+)
+
+INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(../../libs/slutils)
+
+SET(OPTIONS -DSYSLOG_FACILITY=LOG_LOCAL0)
+ADD_DEFINITIONS(${OPTIONS})
+
+ADD_EXECUTABLE(arclinkpass ${ARCLINKPASS_SOURCES})
+ADD_EXECUTABLE(arclink ${ARCLINK_SOURCES})
+
+TARGET_LINK_LIBRARIES(
+	arclink
+		${LIBXML2_LIBRARIES}
+		slutils_arclink
+		crypto
+)
+
+TARGET_LINK_LIBRARIES(
+	arclinkpass
+		crypto
+)
+
+SC_INSTALL_INIT(arclink config/arclink.py)
+
+INSTALL(TARGETS arclink
+	RUNTIME DESTINATION ${SC3_PACKAGE_SBIN_DIR}
+	ARCHIVE DESTINATION ${SC3_PACKAGE_LIB_DIR}
+	LIBRARY DESTINATION ${SC3_PACKAGE_LIB_DIR}
+)
+
+INSTALL(TARGETS arclinkpass
+        RUNTIME DESTINATION ${SC3_PACKAGE_BIN_DIR}
+)
+
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/arclink.cfg)
+        INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config/arclink.cfg
+                DESTINATION ${SC3_PACKAGE_CONFIG_DIR})
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/arclink.cfg)
+
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/reqhandler.cfg)
+        INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config/reqhandler.cfg
+                DESTINATION ${SC3_PACKAGE_CONFIG_DIR})
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/config/reqhandler.cfg)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

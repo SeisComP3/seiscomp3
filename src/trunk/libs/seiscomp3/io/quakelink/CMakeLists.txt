@@ -1,0 +1,10 @@
+SET(QUAKELINK_SOURCES
+	connection.cpp
+)
+
+SET(QUAKELINK_HEADERS
+	connection.h
+)
+
+SC_SETUP_LIB_SUBDIR(QUAKELINK)
+

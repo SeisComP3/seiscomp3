@@ -1,0 +1,56 @@
+########################################################################
+#                                                                      #
+# Copyright (C) 2012 OVSM/IPGP                                         #
+#                                                                      #
+# This program is free software: you can redistribute it and/or modify #
+# it under the terms of the GNU General Public License as published by #
+# the Free Software Foundation, either version 3 of the License, or    #
+# (at your option) any later version.                                  #
+#                                                                      #
+# This program is distributed in the hope that it will be useful,      #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
+# GNU General Public License for more details.                         #
+#                                                                      #
+# This program is part of 'Projet TSUAREG - INTERREG IV Caraïbes'.     #
+# It has been co-financed by the European Union and le Ministère de    #
+# l'Ecologie, du Développement Durable, des Transports et du Logement. #
+#                                                                      #
+########################################################################
+#                                                                      #
+# IPGP Duration Magnitude Plugin (Md)                                  #
+#                                                                      #
+# Authors: Jean-Marie SAUREL / Stephen ROSELIA                         #
+# Emails : saurel@ipgp.fr    / stephen.roselia@supinfo.com             #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Duration magnitude applied formula:                                  #
+# MD(f-p) = FMA + FMB*log (f-p) + FMF*(f-p) + FMD*D + FMZ*Z            #
+#           + STACOR + FMGN*G                                          #
+#   http://earthquake.usgs.gov/research/software/#HYPOINVERSE          #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Configuration:                                                       #
+#                                                                      #
+# In scolv.cfg / scamp.cfg / scmag.cfg                                 #
+#                                                                      #
+# plugins = md                                                         #
+# module.trunk.global.md.seismo = 9                                    #
+# module.trunk.global.md.butterworth = "3,1.5"	                       #
+# module.trunk.global.md.deltamax = 400.0                              #
+# module.trunk.global.md.snrmin = 1.5                                  #
+# module.trunk.global.md.mdmax = 5.0                                   #
+# module.trunk.global.md.fma = -0.87                                   #
+# module.trunk.global.md.fmb = 2.0                                     #
+# module.trunk.global.md.fmd = 0.0035                                  #
+# module.trunk.global.md.fmf = 0.0                                     #
+# module.trunk.global.md.fmz = 0.0                                     #
+# module.trunk.global.md.stacor = 0.0                                  #
+# module.trunk.global.md.depthmax = 200.0                              #
+# module.trunk.global.md.signalwindowend = 30.0                        #
+# module.trunk.global.md.linearcorrection = 1.0                        #
+# module.trunk.global.md.offset = 0.0                                  #
+#                                                                      #
+########################################################################

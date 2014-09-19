@@ -1,0 +1,25 @@
+
+Documentation of the libslink interfaces can be found in the 'doc'
+directory.
+
+-- slclient.c --
+
+An example SeedLink client written in C that demonstrates general
+usage of libslink.  A Makefile is provided to build the client.  The
+client does not exercise all of the functionality of libslink.  For a
+more comprehensive example the developer is referred to the source
+code for slinktool.
+
+Solaris: to compile slclient.c the Makefile needs to be edited 
+(comments are included in the Makefile).
+
+Windows: to compile slclient.c use the Nmake compatible Makefile.win
+(e.g. >nmake -f Makefile.win) or Watcom's Wmake with Makefile.wat
+(e.g. >wmake -f Makefile.wat). 
+
+
+-- streamlist.conf --
+
+An example stream list that can be used with the -l argument of
+slclient or with the sl_read_streamlist() function from libslink.
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="inv2dlsv" category="Inventory" standalone="true">
+		<description>Converts SC3 inventory XML to dataless SEED.</description>
+		<command-line>
+			<synopsis>
+				inv2dlsv [in_xml [out_dataless]]
+			</synopsis>
+			<description>
+			If in_xml is not given, stdin is used. If out_dataless is not given,
+			stdout is used.
+			</description>
+		</command-line>
+	</module>
+</seiscomp>
+

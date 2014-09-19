@@ -1,0 +1,224 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainFrame</class>
+ <widget class="QMainWindow" name="MainFrame" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>763</width>
+    <height>663</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>7</hsizetype>
+    <vsizetype>7</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>EventSummary</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget" >
+      <property name="enabled" >
+       <bool>true</bool>
+      </property>
+      <property name="minimumSize" >
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="sizeIncrement" >
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="focusPolicy" >
+       <enum>Qt::TabFocus</enum>
+      </property>
+      <property name="contextMenuPolicy" >
+       <enum>Qt::DefaultContextMenu</enum>
+      </property>
+      <property name="layoutDirection" >
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabSummary" >
+       <attribute name="title" >
+        <string>Summary</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabEventList" >
+       <attribute name="title" >
+        <string>Events</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>643</y>
+     <width>763</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>763</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOptions" >
+    <property name="title" >
+     <string>&amp;Options</string>
+    </property>
+    <addaction name="actionAutoSelect" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionToggleWaveformPropagation" />
+    <addaction name="actionShowBeachballs" />
+    <addaction name="actionShowFullTensor" />
+    <addaction name="actionShowStations" />
+    <addaction name="actionToggleEventList" />
+   </widget>
+   <addaction name="menuOptions" />
+   <addaction name="menuView" />
+  </widget>
+  <action name="actionShowBeachballs" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Beachballs</string>
+   </property>
+   <property name="iconText" >
+    <string>Show Beachballs</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show Beachballs (F7)</string>
+   </property>
+   <property name="shortcut" >
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionShowFullTensor" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Show full tensor</string>
+   </property>
+   <property name="iconText" >
+    <string>Show full tensor</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show full tensor (Shift+F7)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+F7</string>
+   </property>
+  </action>
+  <action name="actionShowStations" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show Stations</string>
+   </property>
+   <property name="iconText" >
+    <string>Show Stations</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show Stations (F9)</string>
+   </property>
+   <property name="shortcut" >
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionToggleEventList" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Toggle EventList</string>
+   </property>
+   <property name="iconText" >
+    <string>Toggle EventList</string>
+   </property>
+   <property name="toolTip" >
+    <string>Toggle EventList (F10)</string>
+   </property>
+   <property name="shortcut" >
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionAutoSelect" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Auto update</string>
+   </property>
+   <property name="iconText" >
+    <string>Auto update</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show updated or new event automatically (F8)</string>
+   </property>
+   <property name="shortcut" >
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionToggleWaveformPropagation" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show waveform propagation</string>
+   </property>
+   <property name="shortcut" >
+    <string>F6</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

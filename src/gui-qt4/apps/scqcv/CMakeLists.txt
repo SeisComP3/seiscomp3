@@ -1,0 +1,36 @@
+SET(PACKAGE_NAME QCVIEW)
+SET(APP_NAME scqcv)
+
+SET(
+    ${PACKAGE_NAME}_SOURCES
+	main.cpp
+	mainframe.cpp
+	qcview.cpp
+	qcviewconfig.cpp
+	qcmodel.cpp
+	qcitemview.cpp
+)
+
+SET(
+    ${PACKAGE_NAME}_HEADERS
+	qcviewconfig.h
+)
+
+SET(
+    ${PACKAGE_NAME}_MOC_HEADERS
+	mainframe.h
+	qcview.h
+	qcmodel.h
+	qcitemview.h
+)
+
+SET(
+    ${PACKAGE_NAME}_UI
+	mainframe.ui
+)
+
+SC_ADD_GUI_EXECUTABLE(${PACKAGE_NAME} ${APP_NAME})
+SC_LINK_LIBRARIES_INTERNAL(${APP_NAME} qt4)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

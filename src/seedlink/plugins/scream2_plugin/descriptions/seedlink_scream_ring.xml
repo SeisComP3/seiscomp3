@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="scream_ring" category="sources">
+		<description>
+			SCREAM! server plugin that receives data via
+			the SCREAM! protocol and sends raw data to Seedlink. The mapping
+			from SCREAM! channel id's to Seedlink net.sta.loc.cha is defined
+			in $INSTALLDIR/var/lib/seedlink/config/scream2sl.map if not
+			specified otherwise (parameter 'map'). This is the second revision
+			of the scream plugin which supports buffering for short-term
+			completeness.
+		</description>
+		<configuration>
+			<parameter name="address" type="string" default="127.0.0.1">
+				<description>IP of the SCREAM! server.</description>
+			</parameter>
+			<parameter name="tcpport" type="int" default="1567">
+				<description>TCP port of the SCREAM!</description>
+			</parameter>
+			<parameter name="udpport" type="int" default="1567">
+				<description>UDP port of the SCREAM!</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<parameter name="map" type="string">
+				<description>
+					Defines an alternative stream mapping file. The default file
+					is in $INSTALLDIR/var/lib/seedlink/scream2sl.map. If
+					this path is not an absolute path it will treated as relative
+					path to $INSTALLDIR/var/lib/seedlink.
+				</description>
+			</parameter>
+			<parameter name="channels" type="list:string">
+				<description>
+					Defines the channel mappings (ID:channel, ...) from SCREAM!
+					to the channel code used in streams.xml. If no channel mappings
+					are given, the map file defined in map (either default or custom)
+					is used.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

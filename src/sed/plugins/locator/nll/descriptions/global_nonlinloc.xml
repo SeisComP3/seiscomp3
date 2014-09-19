@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="NonLinLoc">
+		<extends>global</extends>
+		<description>
+			NonLinLoc locator wrapper plugin for SeisComP.
+			NonLinLoc was written by Anthony Lomax (http://alomax.free.fr/nlloc).
+		</description>
+		<configuration>
+			<group name="NonLinLoc">
+				<parameter name="publicID" type="string" default="NLL.@time/%Y%m%d%H%M%S.%f@.@id@">
+					<description>
+						PublicID creation pattern for an origin created by NonLinLoc.
+					</description>
+				</parameter>
+
+				<parameter name="outputPath" type="path" default="/tmp/sc3.nll">
+					<description>
+						Defines the output path for all native NonLinLoc input and output files.
+					</description>
+				</parameter>
+
+				<parameter name="controlFile" type="path">
+					<description>
+						The default NonLinLoc control file to use.
+					</description>
+				</parameter>
+
+				<parameter name="defaultPickError" type="double" default="0.5">
+					<description>
+						The default pick error in seconds passed to NonLinLoc if a SC3 pick
+						object does not provide pick time uncertainties.
+					</description>
+				</parameter>
+
+				<parameter name="fixedDepthGridSpacing" type="double" default="0.1">
+					<description>
+						Since NLL does not support fixing the depth natively so this
+						feature is emulated by settings the Z grid very tight around
+						the depth to be fixed. This value sets the Z grid spacing.
+					</description>
+				</parameter>
+
+				<parameter name="profiles" type="list:string">
+					<description>
+						Defines a list of active profiles to be used by the plugin.
+					</description>
+				</parameter>
+
+				<group name="profile">
+					<struct type="NonLinLoc profile" link = "NonLinLoc.profiles">
+						<description>
+							Defines a regional profile that is used if a prelocation falls
+							inside the configured region.
+						</description>
+						<parameter name="earthModelID" type="string">
+							<description>
+								earthModelID that is stored in the created origin.
+							</description>
+						</parameter>
+						<parameter name="methodID" type="string">
+							<description>
+								methodID that is stored in the created origin.
+							</description>
+						</parameter>
+						<parameter name="tablePath" type="path">
+							<description>
+								Path to travel time tables (grids).
+							</description>
+						</parameter>
+						<parameter name="controlFile" type="path">
+							<description>
+								Control file of the current profile. If not set, the default
+								control file will be used instead.
+							</description>
+						</parameter>
+						<parameter name="transform" type="string">
+							<description>
+								Transformation type of the configured region. If not set, GLOBAL
+								is assumed.
+							</description>
+						</parameter>
+						<parameter name="region" type="list:double">
+							<description>
+								Defines the region values. If transform is GLOBAL 4 values
+								(min_lat, min_lon, max_lat, max_lon) are expected. If transform
+								is SIMPLE then 4 values are expected (xmin, ymin, xmax, ymax).
+							</description>
+						</parameter>
+						<parameter name="origin" type="list:double">
+							<description>
+								Only used for transformation SIMPLE. Expects 2 values (lat,lon).
+							</description>
+						</parameter>
+						<parameter name="rotation" type="double" unit="deg">
+							<description>
+								Only used for transformation SIMPLE. Defines the rotation around the
+								origin of the defined region.
+							</description>
+						</parameter>
+					</struct>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

@@ -1,0 +1,48 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP 3 "Februrary 2012" Spread "User Manuals"
+.SH "NAME"
+libspread-util \- Spread Group Communication Toolkit Utility Library
+.SH "SYNOPSIS"
+.SH "DESCRIPTION"
+The Spread 
+.B libspread-util
+library provides APIs that abstract system code commonly used in writing IP network servers. 
+This includes UDP and TCP communication, logging and alarming, memory management and handling
+network IO events as well as timed events. 
+.SH "DATA STRUCTURES"
+.SH "HEADER FILES"
+.I spu_alarm.h
+is the header for logging and alarms and declares the functions and types
+for the Alarm_ interface.  
+
+.I spu_events.h
+declares the types and functions that make up the E_ Event-management 
+interface.
+
+.I spu_memory.h
+declares the functions of the Mem_ interface. 
+
+.I spu_data_link.h
+declares the functions of the DL_ interface for managing UDP and TCP sockets and connections. 
+
+.SH "FILES"
+No files are required for applications using the libspread-util library.
+.SH "DIAGNOSTICS"
+The library will not output any debugging information except in fatal errors.
+The functions return standard error codes and any specific return values
+are documented in the header files and man pages. 
+
+.SH "BUGS"
+None currently known. The libspread-util library is unknown if it is thread-safe or not. 
+.SH AUTHOR
+Yair Amir <yairamir@cs.jhu.edu>
+.PP
+Jonathan Stanton <jonathan@spreadconcepts.com>
+.PP
+Spread Project <spread@spread.org>
+.SH "SEE ALSO"
+.BR E_get_time (3)
+
+

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<!--
+	Start of a module definition.
+
+	-attributes-
+	  name:
+	    name of the module
+	  category:
+	    an optional hierarchical category tag where / is used
+	    as path separator
+	  standalone:
+	    "true" or "false" defines if the module is using the SC3 libraries
+	    and thus the global configuration or not
+	-->   
+	<module name="testme" category="Modules/Helpers" standalone="false">
+		<description>
+			The short description of module testme. Do not use ReST markup here.
+		</description>
+		<!-- Configuration section to describe configuration file parameters -->
+		<configuration>
+			<!--
+			Describe one parameter. The parameter name must not include a dot.
+			Namespaces of parameters are defined as groups as the dot is used to
+			group parameters, eg a.b1 and a.b2 forms group "a" with parameters
+			"b1" and "b2".
+
+			-attributes-
+			  name:
+			    name of the parameter
+			  type:
+			    type of the parameter: string, int, boolean, double or list:string, list:int, ...
+			  default:
+			    optional default value
+			-->
+			<parameter name="text" type="string">
+				<description>Brief description of the parameter.</description>
+			</parameter>
+			<!--
+			Starts a parameter group. A group is defined by its name and its position
+			in the tree. It can hold parameters, structs or groups.
+
+			-attributes-
+			  name:
+			    name of the group
+			-->
+			<group name="logging">
+				<description>Various logging parameters</description>
+				<!-- Another parameter inside the logging group -->
+				<parameter name="level" type="int" default="2">
+					<description>Sets the logging level</description>
+				</parameter>
+
+				<!--
+				Define a structure. A structure is a definition of parameters and groups
+				which does not follow directly the parent group. It is instantiated by
+				prepending a name.
+
+				-attributes-
+				  type:
+				    The name of the type is describes
+				  link:
+				    The full path of the parameter that holds available structure instances.
+
+				Example:
+				  # Define the instantiated structures
+				  logging.backends = syslog, local
+				  # Configure them
+				  logging.syslog.enabled = true
+					logging.syslog.path = /var/log/messages
+				  logging.local.enabled = false
+					logging.local.path = ~/.seiscomp3/testme.log
+				-->
+				<struct type="backend" link = "logging.backends">
+					<parameter name="enabled" type="boolean"/>
+					<parameter name="path" type="string"/>
+				</struct>
+			</group>
+		</configuration>
+
+		<!-- command-line section to describe command-line options -->
+		<command-line>
+			<!--
+			Starts a group. A group is defined by its name. A group is just
+			used in the documentation to group parameters unlike above.
+			-->
+			<group name="Generic">
+				<!--
+				Describe a command-line option
+
+				-attributes-
+				  flag:
+				    The optional short flag
+				  long-flag:
+				    The optional long flag
+				  argument:
+				    The argument used to generate the documentation. Options
+				    without an argument are taken as switches.
+				  publicID:
+				    optional ID to refer to this option in the documentation
+				-->
+				<option flag="h" long-flag="help" publicID="generic#help">
+					<description>show help message.</description>
+				</option>
+				<!-- Referes to an existing command-line option -->
+				<optionReference>generic#help</optionReference>
+		</command-line>
+	</module>
+</seiscomp>

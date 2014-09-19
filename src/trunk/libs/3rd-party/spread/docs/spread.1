@@ -1,0 +1,48 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SPREAD 1 "December 2001" Spread "User Manuals"
+.SH NAME
+spread \- Multicast Group Communication Daemon
+.SH SYNOPSIS
+.BI "spread [-l " y/n "] [-n " proc_name "] [-c " config_file ]
+.SH DESCRIPTION
+.B spread
+runs the Spread daemon on the local machine using the
+default configuration file spread.conf unless told 
+otherwise. 
+.SH OPTIONS
+.IP "-l y/n"
+Turn on or off logging. Default is off.
+.IP "-n proc_name"
+Force this daemon to be identified by a specific process name.
+.IP "-c config-file"
+Use an alternate configuration file
+.I config-file
+instead of
+.IR ./spread.conf .
+.SH FILES
+.I ./spread.conf
+.RS
+The default config file location. 
+.I /etc/spread.conf 
+is also searched if a local file is not found.
+.SH DIAGNOSTICS
+The daemon will output some startup information to stdout
+and any severe errors will also be output to stdout. Redirecting
+standard out to a file or using the EventLogFile directive in the spread.conf 
+file is recommended if you are interested in log messages.
+.SH BUGS
+None currently known. The libspread library is thread-safe. However, 
+the libspread-core.a library is not thread-safe. The libtspread-core.a 
+library is the version to use if you need a thread-safe version of the core. 
+The non-thread-safe library is
+provided for those who are writing single-threaded applications and do not
+want to pay the minimal performance penalty for locking.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+
+.SH "SEE ALSO"
+.BR libspread (3)

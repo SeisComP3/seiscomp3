@@ -1,0 +1,28 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_POLL 3 "JULY 2005" SPREAD "User Manuals"
+.SH NAME
+SP_version \- returns the three component version number of the Spread library
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_version( int *" major_version, "int *" minor_version, "int *" patch_version );
+.SH DESCRIPTION
+.B SP_version
+is a way to retrieve the current version of the Spread library that is linked with the client
+application. This may not be the same version number as the daemon that the client connects
+to. This function does not require any network communication. 
+.SH "RETURN VALUES"
+Returns 0 if the parameters are invalid pointers, or returns one and sets the parameters to appropriate version numbers if they are valid.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

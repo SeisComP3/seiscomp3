@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="slarchive" category="Acquisition" standalone="true">
+		<description>SeedLink client for data stream archiving</description>
+		<configuration>
+			<parameter name="address" type="string" default="127.0.0.1">
+				<description>
+				Host of the Seedlink server to connect to. If the acquisition
+				is running on one system nothing needs to be changed.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="18000">
+				<description>
+				The port of the Seedlink server to connect to. If the acquisition
+				is running on one system this port must match the configured
+				local Seedlink port.
+				</description>
+			</parameter>
+			<parameter name="archive" type="string" default="var/lib/archive">
+				<description>
+				Path to waveform archive where all data is stored. Relative paths
+				(as the default) are treated relative to the installation
+				directory ($SEISCOMP_ROOT).
+				</description>
+			</parameter>
+			<parameter name="buffer" type="int" default="1000">
+				<description>
+				Number of records (512 byte units) to buffer before flushing to
+				disk.
+				</description>
+			</parameter>
+			<parameter name="delay" type="int" default="30">
+				<description>
+				The network reconnect delay (in seconds) for the connection
+				to the SeedLink server. If the connection breaks for any
+				reason this will govern how soon a reconnection should be
+				attempted. The default value is 30 seconds.
+				</description>
+			</parameter>
+			<parameter name="networkTimeout" type="int" default="900">
+				<description>
+				The network timeout (in seconds) for the connection to the
+				SeedLink server. If no data [or keep alive packets?] are received
+				in this time range the connection is closed and re-established
+				(after the reconnect delay has expired). The default value is
+				600 seconds. A value of 0 disables the timeout.
+				</description>
+			</parameter>
+			<parameter name="idleTimeout" type="int" default="300">
+				<description>
+				Timeout for closing idle data stream files in seconds. The idle
+				time of the data streams is only checked when some packets has
+				arrived. If no packets arrived no idle stream files will be
+				closed. There is no reason to change this parameter except for
+				the unusual cases where the process is running against an open
+				file number limit. Default is 300 seconds.
+				</description>
+			</parameter>
+			<parameter name="keepalive" type="int" default="0">
+				<description>
+				Interval (in seconds) at which keepalive (heartbeat) packets
+				are sent to the server. Keepalive packets are only sent if
+				nothing is received within the interval. This requires a
+				Seedlink version >= 3.
+				</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<synopsis>
+				slarchive [OPTION]... [host][:][port]
+			</synopsis>
+			<description>
+				Address ([host][:][port]) is a required argument. It specifies the address
+				of the SeedLink server in host:port format. Either the host, port or both
+				can be omitted. If host is omitted then localhost is assumed,
+				i.e. ':18000' implies 'localhost:18000'. If the port is omitted
+				then 18000 is assumed, i.e. 'localhost' implies 'localhost:18000'.
+				If only ':' is specified 'localhost:18000' is assumed.
+			</description>
+			<group name="">
+				<option flag="V">
+					<description>Print program version and exit.</description>
+				</option>
+				<option flag="h">
+					<description>Print program usage and exit.</description>
+				</option>
+				<option flag="v">
+					<description>
+						Be more verbose. This flag can be used multiple times (&quot;-v -v&quot; or &quot;-vv&quot;)
+						for more verbosity. One flag: report basic handshaking (link configuration) details and
+						briefly report each packet received. Two flags: report the details of the handshaking,
+						each packet received and detailed connection diagnostics.
+					</description>
+				</option>
+				<option flag="p">
+					<description>
+						Print details of received Mini-SEED data records. This flag can be used multiple times
+						(&quot;-p -p&quot; or &quot;-pp&quot;) for more detail. One flag: a single summary line
+						for each data packet received. Two flags: details of the Mini-SEED data records received,
+						including information from fixed header and 100/1000/1001 blockettes.
+					</description>
+				</option>
+				<option flag="nd" argument="delay">
+					<description>
+						The network reconnect delay (in seconds) for the connection to the SeedLink server.
+						If the connection breaks for any reason this will govern how soon a reconnection should
+						be attempted. The default value is 30 seconds.
+					</description>
+				</option>
+				<option flag="nt" argument="timeout">
+					<description>
+						The network timeout (in seconds) for the connection to the SeedLink server. If no data
+						[or keep alive packets?] are received in this time range the connection is closed and
+						re-established (after the reconnect delay has expired). The default value is 600 seconds.
+						A value of 0 disables the timeout.
+					</description>
+				</option>
+				<option flag="k" argument="keepalive">
+					<description>
+						Interval (in seconds) at which keepalive (heartbeat) packets are sent to the server.
+						Keepalive packets are only sent if nothing is received within the interval. Requires SeedLink
+						version &gt;= 3.
+					</description>
+				</option>
+				<option flag="x" argument="statefile[:interval]">
+					<description>
+						During client shutdown the last received sequence numbers and time stamps (start times)
+						for each data stream will be saved in this file. If this file exists upon startup the information
+						will be used to resume the data streams from the point at which they were stopped. In this way the
+						client can be stopped and started without data loss, assuming the data are still available on the
+						server. If an interval is specified the state will be saved every interval in that packets are
+						received. Otherwise the state will be saved only on normal program termination.
+					</description>
+				</option>
+				<option flag="i" argument="timeout">
+					<description>
+						Timeout for closing idle data stream files in seconds. The idle time of the data streams is
+						only checked when some packets has arrived. If no packets arrived no idle stream files will be
+						closed. There is no reason to change this parameter except for the unusual cases where the
+						process is running against an open file number limit. Default is 300 seconds.
+					</description>
+				</option>
+				<option flag="d">
+					<description>
+						Configure the connection in "dial-up" mode. The remote server will close the connection when
+						it has sent all of the data in its buffers for the selected data streams. This is opposed to
+						the normal behavior of waiting indefinitely for data.
+					</description>
+				</option>
+				<option flag="b">
+					<description>Configure the connection in &quot;batch&quot; mode.</description>
+				</option>
+				<option flag="Fi[:overlap]">
+					<description>
+						Future check initially. Check the last Mini-SEED data record in an existing archive file
+						and do not write new data to that file if it is older than a certain overlap. The default
+						overlap limit is 2 seconds; the overlap can be specified by appending a colon and the desired
+						overlap limit in seconds to the option. If the overlap is exceeded an error message will be
+						logged once for each time the file is opened. This option makes sense only for archive formats
+						where each unique data stream is written to a unique file (e.g. SDS format). If a data stream
+						is closed due to timeout (see option -i) the initial future check will be preformed when the
+						file is re-opened.
+					</description>
+				</option>
+				<option flag="Fc[:overlap]">
+					<description>
+						Future check continuously. Available only for archive Mini-SEED data records. Check if the
+						first sample of the record is older than the last sample of the previous record for a given
+						archive file, within a certain overlap. The default overlap limit is 2 seconds; the overlap
+						can be specified by appending a colon and the desired overlap limit in seconds to the option.
+						If the overlap is exceeded an error message will be logged once until either a non-overlapping
+						packet is received or a new archive file is used. This option only makes sense for archive
+						formats where each unique data stream is written to a unique file (e.g. SDS format).
+					</description>
+				</option>
+				<option flag="A" argument="format">
+					<description>
+						If specified, all received packets (Mini-SEED records) will be appended to a directory/file
+						structure defined by format. All directories implied in the format string will be created if
+						necessary. The option may be used multiple times to write received packets to multiple archives.
+						See the section &quot;archiving data&quot;.
+					</description>
+				</option>
+				<option flag="SDS" argument="path">
+					<description>
+						If specified, all received packets (Mini-SEED records) will be saved into a Simple Data
+						Structure (SDS) dir/file structure starting at the specified directory. This directory and
+						all subdirectories will be created if necessary. This option is a preset of the '-A' option.
+						The SDS dir/file structure is:
+
+						&lt;SDSdir&gt;/&lt;YEAR&gt;/&lt;NET&gt;/&lt;STA&gt;/&lt;CHAN.TYPE&gt;/NET.STA.LOC.CHAN.TYPE.YEAR.DAY
+
+						Details are mentioned later on.
+					</description>
+				</option>
+				<option flag="BUD" argument="path">
+					<description>
+						If specified, all received waveform data packets (Mini-SEED data records) will be saved into
+						a Buffer of Uniform Data (BUD) dir/file structure starting at the specified directory.
+						This directory and all subdirectories will be created if necessary. This option is a preset
+						of the '-A' option. The BUD dir/file structure is:
+
+						&lt;BUDdir&gt;/&lt;NET&gt;/&lt;STA&gt;/STA.NET.LOC.CHAN.YEAR.DAY
+					</description>
+				</option>
+				<option flag="DLOG" argument="DLOGdir">
+					<description>
+						If specified, all received packets (Mini-SEED data records) will be saved into an old style
+						SeisComP/datalog dir/file structure starting at the specified directory. This directory and
+						all subdirectories will be created if necessary. This option is a preset of the '-A' option.
+						The DLOG dir/file structure is:
+
+						&lt;DLOGdir&gt;/&lt;STA&gt;/[LOC.]&lt;CHAN&gt;.&lt;TYPE&gt;/STA.NET.CHAN.TYPE.YEAR.DAY.HHMM
+					</description>
+				</option>
+				<option flag="l" argument="streamfile">
+					<description>
+						The given file contains a list of streams. This option implies multi-station mode.
+						The format of the stream list file is given below in the section &quot;stream list file&quot;.
+					</description>
+				</option>
+				<option flag="s" argument="selectors">
+					<description>
+						Defining default selectors. If no multi-station data streams are configured these selectors
+						will be used for uni-station mode. Otherwise these selectors will be used when no selectors
+						are specified for a given stream with the '-S' or '-l' options.
+					</description>
+				</option>
+				<option flag="S" argument="stream[:selectors], ...">
+					<description>
+						The connection will be configured in multi-station mode with optional SeedLink selectors
+						for each station, see examples below. Stream should be provided in NET_STA format. If no
+						selectors are provided for a given stream, the default selectors will be used, if defined.
+
+						Requires SeedLink &gt;= 2.5.
+					</description>
+				</option>
+				<option flag="tw" argument="start:[end]">
+					<description>
+						Specifying a time window for the data streams that is applied by the server. The format
+						for both times is year,month,day,hour,min,sec; for example: "2002,08,05,14,00:2002,08,05,14,15,00".
+						The end time is optional but the colon must be present. If no end time is specified the
+						server will send data indefinitely. This option will override any saved state information.
+
+						Warning: time windowing might be disabled on the remote server.
+
+						Requires SeedLink &gt;= 3.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+
+	<binding module="slarchive">
+		<description>
+		Configures what streams of a station should be archived and for
+		how long.
+		</description>
+		<configuration>
+			<parameter name="selectors" type="list:string">
+				<description>
+				List of stream selectors. If left empty all available
+				streams will be requested. See slarchive manpage for
+				more information.
+				</description>
+			</parameter>
+			<parameter name="keep" type="int" default="30">
+				<description>
+				Number of days the data is kept in the archive. This
+				requires purge_datafile to be run as cronjob.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

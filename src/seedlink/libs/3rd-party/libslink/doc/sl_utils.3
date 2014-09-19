@@ -1,0 +1,58 @@
+.TH SL_UTILS 3 2006/12/10
+.SH NAME
+General use utility routines:
+
+sl_dtime \- Get the current system time as a double precision
+Unix/POSIX epoch
+
+sl_doy2md \- Convert a year and day-of-year to a month and
+day-of-month
+
+sl_strncpclean \- Copy a string while removing space characters
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp 
+.BI "double \fBsl_dtime\fP (void);
+.sp
+.BI "int \fBsl_doy2md\fP (int " year ", int " jday ", int *" month ", int *" mday ");
+.sp
+.BI "int \fBsl_strncpclean\fP (char *" dest ", const char *" source ", int " length ");
+.fi
+.SH DESCRIPTION
+\fBsl_dtime\fP returns the current system time as a double precision
+Unix or POSIX epoch time, defined as the number of seconds since
+January 1, 1970.  On a Unix/Linux platform the returned time has
+microsecond precision.  On a Windows (WIN32) platform the returned
+time has millisecond precision.
+
+\fBsl_doy2md\fP converts to provided 4-digit \fIyear\fP and \fIjday\fP
+(day-of-year) to a month and day-of-month and places the values in
+\fImonth\fP and \fImday\fP respectively via the supplied pointers.
+\fIyear\fP is expected to be in the range 1900-2100, \fIjday\fP is
+expected to be in the range 1-366, \fImonth\fP will be in the range
+1-12 and \fImday\fP will be in the range 1-31.
+
+\fBsl_strncpclean\fP copies \fIlength\fP characters from \fIsource\fP
+to \fIdest\fP while removing all space characters.  The result is left
+justified and always null terminated.  \fIsource\fP must have at least
+\fIlength\fP characters and \fIdest\fP must have enough room needed
+for the non-space characters within \fIlength\fP and the null
+terminator.
+
+.SH RETURN VALUES
+\fBsl_dtime\fP returns a double precision epoch time.
+
+\fBsl_doy2md\fP returns 0 on success and -1 on error (input year or
+day-of-year is out of range).
+
+\fBsl_strncpclean\fP returns the number of characters (not including
+the null terminator) copied to the destination string.
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

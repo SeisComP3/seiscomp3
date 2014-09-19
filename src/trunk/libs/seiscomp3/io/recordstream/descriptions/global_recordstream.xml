@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="RecordStream">
+		<extends>global</extends>
+		<description>
+			RecordStream interface for SeisComP.
+		</description>
+	</plugin>
+</seiscomp>

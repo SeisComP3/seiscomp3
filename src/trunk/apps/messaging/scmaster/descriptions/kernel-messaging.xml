@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="messaging">
+		<extends>kernel</extends>
+		<description>SeisComP messaging component that enables communication of modules over the network.</description>
+		<configuration>
+			<group name="messaging">
+				<parameter name="enable" type="boolean" default="true">
+					<description>
+						Enables/disables local messaging (spread+scmaster).
+						The messaging component is an integral component
+						of all modules (except eg acquisition modules).
+						If you are not sure what to do, enable it.
+					</description>
+				</parameter>
+				<parameter name="port" type="port" default="4803">
+					<description>
+						Defines the messaging port. The default port
+						is 4803 and the messaging connection for
+						all modules running locally is localhost:4803.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

@@ -1,0 +1,162 @@
+.TH FL_multicast 3 "Dec 2000" "Flush Spread" "User Manuals"
+.SH NAME
+FL_unicast, FL_scat_unicast, FL_subgroupcast, FL_scat_subgroupcast, FL_multicast, FL_scat_multicast \- Multicast messages to subsets of Flush Spread groups.
+.SH SYNOPSIS
+.B #include <fl.h>
+
+.BI "int FL_unicast(mailbox " mbox ", service " serv_type ", const char *" group_name ", const char *" recvr_name ", int16 " mess_type ", int " mess_len ", const char *" mess ");"
+
+.BI "int FL_scat_unicast(mailbox " mbox ", service " serv_type ", const char *" group_name ", const char *" recvr_name ", int16 " mess_type ", const scatter *" scat ");"
+
+.BI "int FL_subgroupcast(mailbox " mbox ", service " serv_type ", const char *" group_name ", int " num_recvrs ", const char " recvr_names "[][MAX_GROUP_NAME], int16 " mess_type ", int " mess_len ", const char *" mess ");"
+
+.BI "int FL_scat_subgroupcast(mailbox " mbox ", service " serv_type ", const char *" group_name ", int " num_recvrs ", const char " recvr_names "[][MAX_GROUP_NAME], int16 " mess_type ", const char *" scat ");"
+
+.BI "int FL_unicast(mailbox " mbox ", service " serv_type ", const char *" group_name ", int16 " mess_type ", int " mess_len ", const char *" mess ");"
+
+.BI "int FL_scat_unicast(mailbox " mbox ", service " serv_type ", const char *" group_name ", int16 " mess_type ", const scatter *" scat ");"
+.SH DESCRIPTION
+.B FL_multicast
+and its variants all multicast a message from the connection represented by
+.I mbox
+to a subset of the membership of the Flush Spread group named
+.IR group_name .
+
+Note, that unlike Spread, Flush Spread does not provide guarantees
+about messages sent to different groups; meaning that FIFO, CAUSAL,
+SAFE, etc. safety properties are not maintained across different Flush
+Spread groups, but only within a group to which they are sent. For
+example, if an application sends a FIFO message A to the private group
+G and then sends another FIFO message B to the regular group H, of
+which G is a member, then G could receive B before A or vice versa.
+
+In order to multicast a message to a group, the destination group 
+.I group_name
+must either be a private group name, or this connection must be a
+full-fledged member of that regular group (has joined and been
+included in a membership of the group, and is not leaving the group,
+see FL_join, FL_leave) and not be in an illegal state to multicast (by
+having recently flushed the group and not yet received its next
+view/membership, see FL_flush).
+
+The
+.I serv_type
+is a type field that should be set to the service type this message
+requires. The valid flags for multicasting messages are:
+
+.RS
+.B UNRELIABLE_MESS
+.br
+.TB
+.B RELIABLE_MESS 
+.br
+.TB
+.B FIFO_MESS
+.br
+.TB
+.B CAUSAL_MESS
+.br
+.TB
+.B AGREED_MESS
+.br
+.TB
+.B SAFE_MESS
+.RE
+
+This type field can be bit-wise ORed with other flags like
+SELF_DISCARD if desired.  Currently SELF_DISCARD is the only
+additional flag for multicasts: SELF_DISCARD will cause the
+multicasted message to NOT be delivered back to this connection.
+
+The string
+.I group_name
+indicates the name of the Flush Spread group to which this message
+should be sent.  This group can be either a regular or a private Flush
+Spread group, as dicussed above.  The multicast variants sends the
+message to all members of a group, while the unicast and subgroupcast
+variants allow the sender to specify a subset of the group to which to
+send the message.  For the unicast variants the sender specifies the
+private group name of the intended recipient in the variable
+.IR recvr_name .  
+For the subgroupcast variants the sender specifies the number of
+recipients in the variable
+.I num_recvrs
+and a doubly scripted array of the members' private group names in the
+variable
+.IR recvr_names ,
+where duplicate names are tolerated.  For the unicast and subgroupcast
+variants all specified receivers must have been members of the most
+recently installed view/membership of the group.  If the application
+breaks this rule it will receive an ILLEGAL_RECEIVERS error.
+
+The
+.I mess_type
+is a 16 bit integer which can be used by the application arbitrarily.
+However, Flush Spread restricts which values can be used to be greater
+than or equal to FL_MIN_LEGAL_MESS_TYPE.  If the application sends
+with a message type of less than FL_MIN_LEGAL_MESS_TYPE, then the
+error ILLEGAL_MESSAGE_TYPE will be returned.  The intent of this
+message type is that the application can use it to name different
+kinds of data messages so they can be differentiated without looking
+into the body of the message.  This value
+.B WILL
+be endian corrected upon returning. 
+
+The non-scatter variants use a single buffer to pass the body of the
+message to be sent.  The
+.I mess_len
+field gives the message length in bytes. While the
+.I mess
+field is a pointer to the buffer containing the message.  For the
+scatter variants, both of these parameters are replaced with one
+pointer,
+.IR scat_mess ,
+to a scatter structure, which is similiar to an iovec.  This allows
+messages made up of several parts to be sent without an extra copy on
+systems which support scatter-gather.  However, the number of scatter
+elements is restricted to be non-negative and less than or equal to
+FL_MAX_SCATTER_ELEMENTS.  If a buffer length is negative or an illegal
+number of scatter elements is used then ILLEGAL_MESSAGE will be
+returned.
+.SH "RETURN VALUES"
+Returns the number of bytes sent on success or one of the following
+errors ( < 0 ):
+.TP
+.B ILLEGAL_SESSION
+The connection represented by 
+.I mbox
+was illegal, usually because it is no longer active.
+.TP
+.B ILLEGAL_GROUP
+The 
+.I group_name
+given to multicast to was illegal for some reason. Usually because it
+was of length 0 or length > MAX_GROUP_NAME.  This error can also be
+returned if the connection was not a full-fledged member (i.e. - not
+yet included in a Flush membership message for the group, or already
+leaving) of a regular group.
+.TP
+.B ILLEGAL_RECEIVERS
+A unicast or subgroupcast specified private group names that weren't
+members of
+.IR group_name 's
+most recent view/membership.
+.TP
+.B ILLEGAL_STATE
+A multicast to a group was attempted after flushing the group and
+before receiving the next view/membership for that group.
+.TP
+.B ILLEGAL_SERVICE
+If the service type was using bits reserved by Flush Spread or Spread.
+.TP
+.B ILLEGAL_PARAM
+An illegal parameter, such as a negative array size was passed.
+.TP
+.B ILLEGAL_MESSAGE
+The message had an illegal structure, like a negative buffer size or
+an illegal number of scatter elements.
+.TP
+.B CONNECTION_CLOSED
+Errors occurred during communication and the multicast could not be completed.
+.SH AUTHOR
+John Schultz <jschultz@cnds.jhu.edu>

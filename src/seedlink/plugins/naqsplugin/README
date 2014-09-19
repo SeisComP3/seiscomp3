@@ -1,0 +1,70 @@
+
+naqs_plugin:
+A plugin to collect data from a Nanometrics data server (NAQS).
+
+written by
+Chad Trabant ORFEUS/EC-Project MEREDIAN
+
+based on sample code from Nanometrics (see comments at the top of
+the naqs_plugin.c file)
+
+-- Building -- 
+The plugin.c and plugin.h files appropriate for the SeedLink server
+version that you wish to use the plugin with are required.
+
+As of this writing this plugin has only been tested on Linux, but
+should be portable to a Solaris environment (maybe some small changes
+are needed, but I don't think so.)
+
+Data is collected from the NAQS as raw samples and given to the
+controlling SeedLink server using the send_raw_depoch() interface.  A
+stream processor must be setup to handle this data.  Because a NAQS
+can transmit a wide variety of sampling rates (which can be specified
+with the -s flag) the stream processor, in most cases, will not do
+much but declare the sampling rate (and maybe rename the channels).  A
+very minimalistic streams.xml is might be:
+
+--------------------
+<?xml version="1.0" standalone="yes"?>
+<streams>
+  <proc name="stream_40">
+    <tree>
+      <input name="HHZ" channel="Z" location="" rate="40"/>
+      <input name="HHN" channel="N" location="" rate="40"/>
+      <input name="HHE" channel="E" location="" rate="40"/>
+      <node stream="BH"/>
+    </tree>
+  </proc>
+</streams>
+--------------------
+
+For the following reasons it is recommended to collect with this
+plugin as "close" to the data source as possible:
+
+1) This plugin collects data from a NAQS by requesting uncompressed
+   data via the TCP/IP interface.
+
+2) There is no re-requesting of data implemented.  The plugin will set
+   a short-term-completion time (by default it is 60 seconds, max. is
+   300 seconds), but any data arriving out-of-order (at the NAQS)
+   beyond this time delay will result in a data gap.
+
+
+-----   Usage   -------------------------------------------------------
+
+Usage: naqs_plugin [-d dumpfile] [-p port] [-s samprate] [-t stc] [-v]
+                   <-c Channels> <-n NAQS>
+
+  -d dumpfile   Append all received packets to this 'dumpfile'
+  -p port       Specify the NAQS control/data port, default 28000
+  -v            Be more verbose, can be used multiple times
+  -s samprate   Sampling rate to request, 0 = original (default)
+  -t stc        Short-term-completion time, default 60 seconds
+  -c Channels   Regular expression(s) to match Channel(s) to request,
+                  multiple expressions separated by commas, required
+  -n NAQS       Address of server, required
+
+
+
+
+

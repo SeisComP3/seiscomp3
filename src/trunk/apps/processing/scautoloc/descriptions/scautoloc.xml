@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scautoloc" category="Processing">
+		<description>Locates seismic events.</description>
+		<configuration>
+			<group name="locator">
+				<parameter name="defaultDepth" type="double" default="10" unit="km">
+					<description>
+					For each location, scautoloc performs checks to test if the
+					depth estimate is reliable. If the same location quality
+					(e.g. pick RMS) can be achieved while fixing the depth to
+					the default depth, the latter is used. This is most often
+					the case for shallow events with essentially no depth
+					resolution.
+					</description>
+				</parameter>
+				<parameter name="minimumDepth" type="double" default="5" unit="km">
+					<description>
+					The locator might converge at a depth of 0 or even negative
+					depths. This is usually not desired, as 0 km might be
+					interpreted as indicative of e.g. a quarry blast or another
+					explosive source. In the case of "too shallow" locations the
+					minimum depth will be used.
+
+					Note that the minimum depth can also be configured in scolv,
+					possibly to a different value.
+					</description>
+				</parameter>
+			</group>
+			<group name="autoloc">
+				<group name="locator">
+					<parameter name="profile" type="string" default="iasp91">
+						<description>
+						The locator profile to use.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="maxRMS" type="double" default="3.5" unit="sec">
+					<description>
+					Max. permissible RMS for a location to be reported.
+					</description>
+				</parameter>
+				<parameter name="maxResidual" type="double" default="7.0" unit="sec">
+					<description>
+					Max. individual residual (unweighted) for a pick to be used
+					in locationMax. permissible RMS for a location to be reported.
+					</description>
+				</parameter>
+				<parameter name="maxSGAP" type="double" default="360" unit="deg">
+					<description>
+					Max. secondary azimuth gap for an origin to be reported by.
+					Default is 360 degrees, i.e. no restriction based on this parameter.
+					</description>
+				</parameter>
+				<parameter name="maxStationDistance" type="double" default="180" unit="deg">
+					<description>
+					Stations outside the maximum distance range are ignored.
+					</description> 
+				</parameter>
+				<parameter name="minPhaseCount" type="integer" default="6">
+					<description>
+					Minimum number of phases.
+					</description> 
+				</parameter>
+				<parameter name="minStaCountIgnorePKP" type="integer" default="30">
+					<description>
+					If the station count for stations at &lt; 105 degrees distance
+					exceeds this number, no picks at &gt; 105 degrees will be
+					used in location. They will be loosely associated, though.
+					</description> 
+				</parameter>
+				<parameter name="cleanupInterval" type="integer" default="3600" unit="s">
+					<description>
+					Clean-up interval for removing old/unused objects.
+					</description> 
+				</parameter>
+				<parameter name="maxAge" type="integer" default="21600" unit="s">
+					<description>
+					 Max. age for objects kept in memory.
+					</description> 
+				</parameter>
+				<parameter name="wakeupInterval" type="integer" default="5">
+					<description>
+					 Don`t change.
+					</description> 
+				</parameter>
+				<parameter name="adoptManualDepth" type="boolean" default="true">
+					<description>
+					If set to true, autoloc adopts a depth from a manual origin. If false,
+					autoloc may set a default depth (autoloc.defaultDepth).
+					</description>
+				</parameter>
+				<parameter name="amplTypeAbs" type="string" default="mb">
+					<description>
+					If this string is non-empty, an amplitude obtained from an amplitude
+					object is used by ... . If this string is &quot;mb&quot;, a period
+					obtained from the amplitude object is also used; if it has some other
+					value, then 1 [units?] is used. If this string is empty, then the amplitude
+					is set to 0.5 * thresholdXXL, and 1 [units?] is used for the period.
+					</description>
+				</parameter>
+				<parameter name="amplTypeSNR" type="string" default="snr">
+					<description>
+					If this string is non-empty, it is used to obtain a pick SNR from an
+					amplitude object. If it is empty, the pick SNR is 10.
+					</description>
+				</parameter>
+				<parameter name="publicationIntervalTimeSlope" type="double">
+					<description>
+					This is the parameter &quot;a&quot; in the equation &#x394;t = aN + b
+					for the time interval between origin updates.
+					</description>
+				</parameter>
+				<parameter name="publicationIntervalTimeIntercept" type="double">
+					<description>
+					This is the parameter &quot;b&quot; in the above mentioned equation
+					for the update interval &#x394;t.
+					</description>
+				</parameter>
+				<parameter name="grid" type="string" default="@DATADIR@/scautoloc/grid.conf">
+					<description>
+					Location of autoloc grid file.
+					</description>
+				</parameter>
+				<parameter name="stationConfig" type="string" default="@DATADIR@/scautoloc/station.conf">
+					<description>
+					Location of autoloc stations config file.
+					</description>
+				</parameter>
+				<parameter name="pickLog" type="string" default="@LOGDIR@/autoloc-picklog">
+					<description>
+					Location of autoloc stations config file.
+					</description>
+				</parameter>
+				<parameter name="useManualOrigins" type="boolean" default="false">
+					<description>
+					If set to true, scautoloc will listen for manual origins. Manual picks and pick
+					weights will be adopted from the manual origin and the processing continues with these.
+					Origins produced this way by adding incoming automatic picks are nevertheless marked as
+					automatic origins. But they may contain manual picks (even pP and S picks).
+
+					Note that in order to listen to manual origins, make sure to add the LOCATION group to
+					connection.subscriptions!
+
+					This is an experimental feature relevant only for large regional and global networks,
+					where interaction by the analyst is expected already before the event is over.
+					</description>
+				</parameter>
+
+				<group name="xxl">
+					<parameter name="enable" type="boolean" default="false">
+						<description>
+						Arrivals with exceptionally large amplitudes may be flagged as XXL, 
+						allowing (in future) faster, preliminary "heads-up" alerts.
+
+						This option enables the feature.
+						</description>
+					</parameter>
+					<parameter name="minAmplitude" type="double" default="10000">
+						<description>
+						Minimum amplitude for a pick to be flagged as XXL. NOTE that
+						BOTH minAmplitude and minSNR need to be exceeded!
+						</description>
+					</parameter>
+					<parameter name="minSNR" type="double" default="8">
+						<description>
+						Minimum SNR for a pick to be flagged as XXL. NOTE that
+						BOTH minAmplitude and minSNR need to be exceeded!
+						</description> 
+					</parameter>
+					<parameter name="minPhaseCount" type="integer" default="4">
+						<description>
+						Minimum number of XXL phases. Currently the minimum
+						possible value is 4.
+						</description> 
+					</parameter>
+					<parameter name="maxStationDistance" type="double" default="10" unit="deg">
+						<description>
+						XXL picks from stations beyond maxDistanceXXL are ignored.
+						</description> 
+					</parameter>
+					<parameter name="maxDepth" type="double" default="100" unit="km">
+						<description>
+						Only up to this depth XXL preliminary origins may be created.
+						</description> 
+					</parameter>
+				</group>
+				
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+			
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+			
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option flag="" long-flag="test" argument="" default="">
+					<description>Do not send any object</description>
+				</option>
+				
+				<option flag="" long-flag="offline" argument="" default="">
+					<description>Do not connect to a messaging server. Instead a
+					station-locations.conf file can be provided. This implies
+					--test and --playback</description>
+				</option>
+				
+				<option flag="" long-flag="playback" argument="" default="">
+					<description>Flush origins immediately without delay</description>
+				</option>
+			</group>
+
+			<group name="Settings">
+				<option flag="" long-flag="station-locations" argument="arg" default="">
+					<description>
+					The station-locations.conf file to use when in
+					offline mode. If no file is given the database is used.
+					</description>
+				</option>
+
+				<option flag="" long-flag="station-config" argument="arg" default="">
+					<description>The station.conf file</description>
+				</option>
+
+				<option flag="" long-flag="pick-log" argument="arg" default="">
+					<description>The pick log file</description>
+				</option>
+
+				<option flag="" long-flag="grid" argument="arg" default="">
+					<description>The grid.conf file to use</description>
+				</option>
+
+				<option flag="" long-flag="default-depth" argument="arg" default="10">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="max-sgap" argument="arg" default="360">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="max-rms" argument="arg" default="3.5">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="max-residual" argument="arg" default="3">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="max-station-distance" argument="arg" default="5">
+					<description>Maximum distance of stations to be used</description>
+				</option>
+
+				<option flag="" long-flag="max-nucleation-distance-default" argument="arg" default="180">
+					<description>Default maximum distance of stations to be used for nucleating new origins.</description>
+				</option>
+
+				<option flag="" long-flag="min-pick-affinity" argument="arg" default="0.05">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="min-phase-count" argument="arg" default="4">
+					<description>Minimum number of picks for an origin to be reported.</description>
+				</option>
+
+				<option flag="" long-flag="min-score" argument="arg" default="8">
+					<description>Minimum score for an origin to be reported</description>
+				</option>
+
+				<option flag="" long-flag="min-pick-snr" argument="arg" default="3">
+					<description>Minimum SNR for a pick to be processed</description>
+				</option>
+
+				<option flag="" long-flag="threshold-xxl" argument="arg" default="10000000">
+					<description>An amplitude exceeding this threshold will flag the pick as XXL</description>
+				</option>
+
+				<option flag="" long-flag="min-phase-count-xxl" argument="arg" default="4">
+					<description>Minimum number of picks for an XXL origin to be reported</description>
+				</option>
+
+				<option flag="" long-flag="max-distance-xxl" argument="arg" default="15">
+					<description></description>
+				</option>
+
+				<option flag="" long-flag="min-sta-count-ignore-pkp" argument="arg" default="15">
+					<description>Minimum station count for which we ignore PKP phases</description>
+				</option>
+
+				<option flag="" long-flag="min-score-bypass-nucleator" argument="arg" default="40">
+					<description>Minimum score at which the nucleator is bypassed</description>
+				</option>
+
+				<option flag="" long-flag="keep-events-timespan" argument="arg" default="86400">
+					<description>The timespan to keep historical events</description>
+				</option>
+
+				<option flag="" long-flag="cleanup-interval" argument="arg" default="3600">
+					<description>The object cleanup interval in seconds</description>
+				</option>
+
+				<option flag="" long-flag="max-age" argument="arg" default="3784320000">
+					<description>
+					During cleanup all objects older than maxAge (in seconds)
+					are removed (maxAge == 0 => disable cleanup)
+					</description>
+				</option>
+
+				<option flag="" long-flag="wakeup-interval" argument="arg" default="5">
+					<description>The interval in seconds to check pending operations</description>
+				</option>
+
+				<option flag="" long-flag="dynamic-pick-threshold-interval" argument="arg" default="60">
+					<description>
+					The interval in seconds in which to check for extraordinarily
+					high pick activity, resulting in a dynamically increased
+					pick threshold
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

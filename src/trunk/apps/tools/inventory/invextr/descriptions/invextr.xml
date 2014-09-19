@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="invextr" category="Inventory">
+		<description>Extracts channels from inventory.</description>
+		<command-line>
+			<synopsis>
+				invextr [OPTIONS] [input=stdin] [output=stdout]
+			</synopsis>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Extract">
+				<option flag="" long-flag="chans" argument="arg">
+					<description>
+						A comma separated list of channel ids to extract
+						which can contain wildcards.
+
+						Example: invextr --chans &quot;GE.*.*.BHZ,GE.MORC.*.*&quot; inv.xml
+					</description>
+				</option>
+				<option flag="" long-flag="rm" argument="arg">
+					<description>
+						Removes all channels given with '--chans' instead of
+						extracting them.
+
+						Example: invextr --rm --chans &quot;GE.*&quot; inv.xml
+					</description>
+				</option>
+				<option flag="f" long-flag="formatted">
+					<description>Enables formatted XML output.</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

@@ -1,0 +1,44 @@
+Next steps:
+
+* Improve nucleation threshold. While the nucleator ignores stations
+  beyond a configurable distance, the associator does not, which is
+  bad.
+
+  We need a way to express something like
+
+    "Use this station for event nucleation only up to 20 degrees."
+
+  This is already achieved by setting the "max. nucleation distance"
+  parameter in station.conf (4th column). However, if it's a big
+  teleseismic event we want this station to contribute phases and
+  magnitudes as well. Therefore we need a score-dependent maximum
+  association distance. This means that at a given distance, a
+  station may contribute a phase to an event if the score is large
+  enough. Here the score seems to be a better criterion than number
+  of stations.
+
+  But it also has a disadvantage. If some stations are down, which
+  would otherwise increase the score, the score threshold may not
+  be  reached for that distance and the station not be used. For
+  the same reason there may be an increased regional dependence of
+  the detectability of an event.
+
+  A magnitude based criterion would be best, but initially we don't
+  have magnitudes.
+
+* Improve score calculation. Somehow we need to include PKP,
+  perhaps by setting a configurable weight. Omitting PKP in score
+  computation results in wrong origins where PKP is incorectly
+  considered P and increases the score.
+
+  This would require a different treatment of arrivals based on
+  their "excluded" flag: Phases excluded only based on phase type
+  would be counted in the score, though with relatively low (but
+  configurable) weight.
+
+  In the logging such phases would be marked as excluded from origin
+  computation with a lower-case "x", whereas normally excluded
+  phases are marked with an upper-case "X".
+
+* Process manual origins passively, i.e. only associate picks
+  without relocating

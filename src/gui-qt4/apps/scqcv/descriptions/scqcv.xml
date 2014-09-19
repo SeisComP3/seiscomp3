@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scqcv" category="GUI">
+		<description>Quality control view</description>
+		<configuration>
+			<group name="plugins">
+				<struct type="QCPlugin configuration">
+					<parameter name="expire" type="integer" unit="s">
+						<description>
+							Default time in seconds, how long a value is displayed in scqcv
+							if no update is received. Setting to 0 means, show value until
+							updated.
+						</description>
+					</parameter>
+					<parameter name="goodInterval" type="string">
+						<description>
+							Default thresholds in between that a QC parameter value is defined
+							as &quot;good&quot;. Each QC plug-in should define its own threshold.
+							Format is &lt;double&gt;, &lt;double&gt;.
+						</description>
+					</parameter>
+					<parameter name="useAbs4good" type="boolean">
+						<description>
+							Default sorting behavior. Setting to true means handle positive
+							and negative values equally while sorting, i.e. use absolute
+							values for sorting but display real values (e.g.: -1, 1, 2, 3,
+							-4, 5, -8, 8, 9, 10, ...).
+						</description>
+					</parameter>
+				</struct>
+			</group>
+			<group name="streams">
+				<parameter name="codes" type="list:string">
+					List of channels to display. By default the global database
+					configuration is used which can be overridden with this parameter.
+				</parameter>
+			</group>
+		</configuration>
+	</module>
+</seiscomp>

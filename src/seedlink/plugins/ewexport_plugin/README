@@ -1,0 +1,9 @@
+
+ewexport_plugin:
+
+This is a SeedLink plugin that collects data from an Earthworm
+export_? process.  Usually the export_scnl program is run on a host
+with access to the appropriate data; export_scnl is a version of
+export_generic that will only transfer waveform data.  While
+ewexport_plugin will accept any Earthworm messages only waveform data
+will be processed.

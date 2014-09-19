@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 FDSNWS - DataSelect</title>
+</head>
+<body>
+  <h1>SeisComP3 FDSNWS DataSelect Web Service</h1>
+  <p>The dataselect Web service provides access to time series data in <a
+  href="http://www.iris.edu/data/miniseed.htm">miniSEED</a> format. The data may
+  be filtered e.g. by time, station and network parameters. The request type is
+  <em>HTTP-GET</em> and <em>HTTP-POST</em>. Please refer to
+  <a href="http://www.fdsn.org/webservices">http://www.fdsn.org/webservice</a>
+  for a complete service description.</p>
+
+  <h2>Available URLs</h2>
+  <ul>
+    <li><a href="query">query</a></li>
+    <li><a href="queryauth">queryauth</a></li>
+    <li><a href="version">version</a></li>
+    <li><a href="application.wadl">application.wadl</a></li>
+  </ul>
+
+  <h2>Feature Notes</h2>
+  <ul>
+    <li>back-end software: <a href="http://www.seiscomp3.org">SeisComP3</a></li>
+    <li><em>quality</em> request parameter not implemented (information not
+      available in SeisComP)</li>
+    <li><em>minimumlength</em> request parameter not implemented</li>
+    <li><em>longestonly</em> request parameter not implemented</li>
+    <li>access to restricted networks and stations is only granted through the
+      <em>queryauth</em> method</li>
+  </ul>
+</body>
+</html>

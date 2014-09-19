@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scamp" category="Processing">
+		<description>Calculates amplitudes on basis of incoming origins and the associated picks.</description>
+		<configuration>
+			<parameter name="amplitudes" type="list:string" default="MLv, mb, mB, Mwp">
+				<description>Definition of amplitude types to be calculated.</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+				<option flag="x" long-flag="expiry" argument="time">
+					<description>Time span in hours after which objects expire.</description>
+				</option>
+				<option flag="O" long-flag="origin-id" argument="publicID">
+					<description>OriginID to calculate amplitudes for and exit.</description>
+				</option>
+				<option long-flag="dump-records">
+					<description>Dumps the filtered traces to ASCII when using -O.</description>
+				</option>
+			</group>
+			
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+			
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+				<option long-flag="test">
+					<description>
+						Test mode where no messages are sent.
+					</description>
+				</option>
+			</group>
+			
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

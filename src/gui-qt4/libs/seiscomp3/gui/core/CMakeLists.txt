@@ -1,0 +1,92 @@
+SET(
+	GUI_CORE_SOURCES
+		application.cpp
+		aboutwidget.cpp
+		messages.cpp
+		connectiondialog.cpp
+		connectionstatelabel.cpp
+		questionbox.cpp
+		infotext.cpp
+		diagramwidget.cpp
+		locator.cpp
+		mainwindow.cpp
+		messagethread.cpp
+		recordpolyline.cpp
+		recordstreamthread.cpp
+		recordview.cpp
+		recordviewitem.cpp
+		recordwidget.cpp
+		streamwidget.cpp
+		ruler.cpp
+		scheme.cpp
+		timescale.cpp
+		xmlview.cpp
+		gradient.cpp
+		utils.cpp
+		inspector.cpp
+		tensorrenderer.cpp
+		uncertainties.cpp
+)
+
+IF(MACOSX)
+	SET(GUI_CORE_SOURCES ${GUI_CORE_SOURCES} osx.mm)
+	SET_SOURCE_FILES_PROPERTIES(
+		osx.mm PROPERTIES COMPILE_FLAGS "-ObjC++"
+	)
+ENDIF(MACOSX)
+
+
+SET(
+	GUI_CORE_HEADERS
+		maps.h
+		messages.h
+		scheme.h
+		infotext.h
+		locator.h
+		recordpolyline.h
+		gradient.h
+		questionbox.h
+		utils.h
+		tensorrenderer.h
+)
+
+SET(
+	GUI_CORE_MOC_HEADERS
+		application.h
+		aboutwidget.h
+		connectiondialog.h
+		connectionstatelabel.h
+		diagramwidget.h
+		mainwindow.h
+		messagethread.h
+		recordstreamthread.h
+		recordview.h
+		recordviewitem.h
+		recordwidget.h
+		streamwidget.h
+		ruler.h
+		timescale.h
+		xmlview.h
+		inspector.h
+		uncertainties.h
+)
+
+SET(
+	GUI_CORE_UI
+		aboutwidget.ui
+		connectiondialog.ui
+		questionbox.ui
+		infotext.ui
+		xmlview.ui
+		inspector.ui
+		uncertainties.ui
+		diagramfilter.ui
+		showplugins.ui
+)
+
+SET(
+	GUI_CORE_RESOURCES
+		images.qrc
+)
+
+SC_SETUP_GUI_LIB_SUBDIR(GUI_CORE)

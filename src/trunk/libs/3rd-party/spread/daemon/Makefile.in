@@ -1,0 +1,128 @@
+.SUFFIXES: .lo .to .tlo
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+sbindir=@sbindir@
+datarootdir=@datarootdir@
+libdir=@libdir@
+includedir=@includedir@
+mandir=@mandir@
+mansubdir=@mansubdir@
+sysconfdir=@sysconfdir@
+piddir=@piddir@
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+buildtoolsdir=$(top_srcdir)/buildtools
+host=@host@
+
+DESTDIR=
+VPATH=@srcdir@
+SPREAD_PROGRAM=@sbindir@/spread
+SP_MAJOR_VERSION=@SP_MAJOR_VERSION@
+SP_MINOR_VERSION=@SP_MINOR_VERSION@
+SP_PATCH_VERSION=@SP_PATCH_VERSION@
+VERSION=@SP_MAJOR_VERSION@.@SP_MINOR_VERSION@.@SP_PATCH_VERSION@
+
+PATHS= 
+
+#libspread-util includes
+LIBSPREADUTIL_DIR=../libspread-util
+LIBSPREADUTIL_PATHS=-I$(LIBSPREADUTIL_DIR)/include -I$(top_srcdir)/libspread-util/include
+LIBSPREADUTIL_LDFLAGS=-rdynamic
+LIBSPREADUTIL_LIBS=-ldl
+
+CC=@CC@
+LD=@LD@
+CFLAGS=@CFLAGS@
+CPPFLAGS=-I. -I$(srcdir) -I$(top_srcdir)/include -I../stdutil/src -I$(top_srcdir)/stdutil/src $(LIBSPREADUTIL_PATHS) @CPPFLAGS@ $(PATHS) @DEFS@
+LDFLAGS=@LDFLAGS@ $(LIBSPREADUTIL_LDFLAGS)
+LIBS=@LIBS@ $(LIBSPREADUTIL_LIBS)
+THLDFLAGS=@THLDFLAGS@ $(LIBSPREADUTIL_LDFLAGS)
+THLIBS=@THLIBS@ $(LIBSPREADUTIL_LIBS)
+LEX=@LEX@
+INSTALL=@INSTALL@
+SOFTLINK=@LN_S@
+PERL=@PERL@
+ENT=@ENT@
+EXEEXT=@EXEEXT@
+
+TARGETS=spread$(EXEEXT) spmonitor$(EXEEXT)
+
+SPREADOBJS= spread.o protocol.o session.o groups.o membership.o network.o status.o log.o flow_control.o message.o lex.yy.o y.tab.o configuration.o acm.o acp-permit.o auth-null.o auth-ip.o ip_enum.o
+
+MONITOR_OBJS= monitor.o lex.yy.o y.tab.o configuration.o ip_enum.o acm.o
+
+TMONITOR_OBJS= monitor.to lex.yy.to y.tab.to configuration.to ip_enum.to acm.to
+
+all: $(TARGETS)
+
+$(SPREADOBJS): config.h
+$(MONITOR_OBJS): config.h
+$(TMONITOR_OBJS): config.h
+
+.c.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
+
+.c.to:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -D_REENTRANT -c $< -o $*.to
+
+parser:
+	$(YACC) -d $(srcdir)/config_parse.y
+	$(LEX) $(srcdir)/config_gram.l
+
+#Disabled now because of timestamp errors causing extra regeneration
+#To build parser run "make parser" after ./configure is run.
+#lex.yy.c:       config_gram.l y.tab.c
+#	$(LEX) config_gram.l
+
+#y.tab.c:        config_parse.y
+#	$(YACC) -d config_parse.y
+
+spread$(EXEEXT): $(SPREADOBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a ../stdutil/lib/libstdutil-threaded-release.a
+	$(LD) -o $@ $(LDFLAGS) $(SPREADOBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a ../stdutil/lib/libstdutil-threaded-release.a $(LIBS)
+
+spmonitor$(EXEEXT): $(MONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) -o $@ $(LDFLAGS) $(MONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a $(LIBS)
+
+sptmonitor$(EXEEXT): $(TMONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) $(THLDFLAGS) -o $@ $(TMONITOR_OBJS) $(THLIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+
+testprog: spsend$(EXEEXT) sprecv$(EXEEXT)
+
+spsend$(EXEEXT): s.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) -o $@ $(LDFLAGS) s.o $(LIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+
+sprecv$(EXEEXT): r.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) -o $@ $(LDFLAGS) r.o $(LIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+
+clean:
+	rm -f *.lo *.tlo *.to *.o *.a *.dylib $(TARGETS) spsimple_user
+	rm -f config.cache config.log docs/*.out core
+	rm -rf autom4te.cache
+	rm -rf ../bin/$(host)
+
+distclean: clean
+	rm -f Makefile config.h config.status *~
+
+binrelease: $(TARGETS)
+	$(buildtoolsdir)/mkinstalldirs ../bin/$(host)
+	$(INSTALL) -m 0755 -s spmonitor$(EXEEXT) ../bin/$(host)/spmonitor$(EXEEXT)
+	$(INSTALL) -m 0755 -s spread$(EXEEXT) ../bin/$(host)/spread$(EXEEXT)
+
+install: $(TARGETS) install-files 
+
+install-files:
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(bindir)
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(sbindir)
+	$(buildtoolsdir)/mkinstalldirs $(DESTDIR)$(includedir)
+	$(INSTALL) -m 0755 -s spmonitor$(EXEEXT) $(DESTDIR)$(bindir)/spmonitor$(EXEEXT)
+	$(INSTALL) -m 0755 -s spread$(EXEEXT) $(DESTDIR)$(sbindir)/spread$(EXEEXT)
+
+uninstallall:	uninstall
+	-rmdir $(DESTDIR)$(bindir)
+	-rmdir $(DESTDIR)$(sbindir)
+
+uninstall: 
+	-rm -f $(DESTDIR)$(bindir)/spmonitor$(EXEEXT)
+	-rm -f $(DESTDIR)$(sbindir)/spread$(EXEEXT)

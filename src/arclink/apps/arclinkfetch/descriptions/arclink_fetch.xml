@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="arclink_fetch" category="Utilities" standalone="true">
+		<description>ArcLink CLI client.</description>
+		<command-line>
+			<group name="">
+				<option long-flag="version">
+					<description>
+					show program’s version number and exit
+					</description>
+				</option>
+				<option flag="h" long-flag="help">
+					<description>
+					show a help message and exit
+					</description>
+				</option>
+				<option flag="l" long-flag="longhelp">
+					<description>
+					show long help message and exit
+					</description>
+				</option>
+				<option flag="w" long-flag="password-file" default="dcidpasswords.txt">
+					<description>
+					file containing passwords used for decryption of encrypted data.
+					</description>
+				</option>
+				<option flag="a" long-flag="address" default="webdc.eu:18001">
+					<description>
+					address of primary ArcLink node
+					</description>
+				</option>
+				<option flag="f" long-flag="request-format" default="native">
+					<description>
+					request format: breqfast
+					</description>
+				</option>
+				<option flag="k" long-flag="data-format" default="mseed">
+					<description>
+					data format: mseed, mseed4k, fseed, dseed, inv[entory]
+					</description>
+				</option>
+				<option flag="n" long-flag="no-resp-dict">
+					<description>
+					avoid using response dictionary
+					</description>
+				</option>
+				<option flag="g" long-flag="rebuild-volume">
+					<description>
+					rebuild SEED volume
+					</description>
+				</option>
+				<option flag="p" long-flag="proxy">
+					<description>
+					proxy mode, no routing is performed, instead the request is sent directly for the server
+					</description>
+				</option>
+				<option flag="t" long-flag="timeout" default="300">
+					<description>
+					timeout in seconds
+					</description>
+				</option>
+				<option flag="x" long-flag="retries" default="5">
+					<description>
+					download retries
+					</description>
+				</option>
+				<option flag="v">
+					<description>
+					increase verbosity level
+					</description>
+				</option>
+				<option flag="q">
+					<description>
+					decrease verbosity level
+					</description>
+				</option>
+				<option flag="u" long-flag="user">
+					<description>
+					user's e-mail address
+					</description>
+				</option>
+				<option flag="o" long-flag="output-file">
+					<description>
+					file where downloaded data is written
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

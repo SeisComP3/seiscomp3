@@ -1,0 +1,65 @@
+.TH SL_READ_STREAMLIST 3 2003/11/03
+.SH NAME
+sl_read_streamlist, sl_parse_streamlist \- add entries to a stream chain
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_read_streamlist\fP (SLCD *" slconn ", char *" streamfile ",
+.BI "                        char *" defselect ");
+.sp
+.BI "int \fBsl_parse_streamlist\fP (SLCD *" slconn ", char *" streamlist ",
+.BI "                         char *" defselect ");
+.fi
+.SH DESCRIPTION
+These functions add streams to the stream chain associated with
+\fIslconn\fP by reading a stream list from either a file or by parsing
+a string.  In both cases \fIdefselect\fP indicates default selectors
+that will be used when no other selectors for a given stream are
+specified.  If \fIdefselect\fP is NULL and no selectors are specified
+for a stream entry then none will be used.
+
+\fBsl_read_streamlist\fP adds stream entries read from a file with
+the following format:
+
+.nf
+--------  example stream list file -------
+# Comment lines begin with a '#' or '*'
+GE ISP  BH?.D
+NL HGN
+MN AQU  BH?  HH?
+--------
+.fi
+
+When no selectors are given for a specific entry, like stream NL HGN
+in the above example, then the value of \fIdefselect\fP is used.
+
+\fBsl_parse_streamlist\fP adds stream entries parsed from a string of
+the following form:
+
+"stream1[:selectors1],stream2[:selectors2],..."
+
+\'stream\' is in NET_STA format.
+
+For example:
+
+"GE_ISP:BH?.D,NL_HGN,MN_AQU:BH? HH?"
+
+When no selectors are given for a specific entry, like stream NL HGN
+in the above example, then the value of \fIdefselect\fP is used.
+
+In fact, the above example file and example string define the same
+stream list.  They would both result in the same stream chain entries
+if the same \fIdefselect\fP was used.
+
+.SH RETURN VALUES
+These functions return the number of streams added to the stream
+chain or -1 on error.
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

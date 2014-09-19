@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="kernel" category="System" standalone="true">
+		<description>SeisComP kernel.</description>
+		<configuration>
+			<parameter name="syslog" type="boolean" default="false">
+				<description>
+					Sends all logging output to the syslog backend which logs
+					usually to /var/log/messages.
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+</seiscomp>

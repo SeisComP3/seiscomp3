@@ -1,0 +1,1 @@
+apt-get install libxml2 libboost-filesystem1.40.0 libboost-iostreams1.40.0 libboost-thread1.40.0 libboost-program-options1.40.0 libboost-regex1.40.0 libboost-signals1.40.0 libboost-system1.40.0 libssl0.9.8 libncurses5 libmysqlclient16 libpq5 libpython2.6 python-m2crypto

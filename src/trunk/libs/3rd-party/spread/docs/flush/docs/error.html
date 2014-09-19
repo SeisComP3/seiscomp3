@@ -1,0 +1,80 @@
+<html>
+<head><title>Flush Documentation: Error Return Codes</title></head>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<h2><em>Error Return Codes</em></h2>
+
+Flush Spread uses the same error return codes as Spread. In addition to these 
+<a href="http://www.spread.org/docs/error.html">common error codes</a>, Flush Spread 
+also adds the following error codes:
+
+<pre>
+#define		ILLEGAL_PARAM
+#define		WOULD_BLOCK
+#define		ILLEGAL_MESSAGE_TYPE
+#define		ILLEGAL_STATE
+#define		ILLEGAL_RECEIVERS
+</pre>
+
+<ol>
+<li><tt>ILLEGAL_PARAM:</tt></p>
+
+An illegal parameter was passed to a call. Usually this is the result of specifying a
+negative array size.</p>
+
+<li><tt>WOULD_BLOCK:</tt></p>
+
+A receive call that requested the <tt>DONT_BLOCK</tt> <a href="messages.html">service</a> would
+have blocked.</p>
+
+<li><tt>ILLEGAL_MESSAGE_TYPE:</tt></p>
+
+A multicast call was made with an <a href="misc.html">illegal message type</a>.</p>
+
+<li><tt>ILLEGAL_STATE:</tt></p>
+
+A <a href="FL_multicast.html">FL_multicast</a> or <a href="FL_flush.html">FL_flush</a> call was made
+on a group while that group was in a prohibited state for that call.</p>
+
+<li><tt>ILLEGAL_RECEIVERS:</tt></p>
+
+A subgroup-multicast or unicast call specified receivers that were not currently
+members of the reference group.</p>
+</ol>
+
+Flush Spread also expands the meaning of the following Spread error codes:
+
+<pre>
+#define		ILLEGAL_GROUP
+#define		ILLEGAL_MESSAGE
+</pre>
+
+<ol>
+<li><tt>ILLEGAL_GROUP:</tt></p> 
+
+In addition to representing illegal Spread group names, this error also represents that a
+group-specific call (i.e. - multicast, flush, join, leave) was made illegally while either
+not a member of the group (multicast, flush, leave) or while a member of the group
+(join).</p>
+
+<li><tt>ILLEGAL_MESSAGE:</tt></p>
+
+This error code in Flush Spread has the same meaning as it does in Spread. It means that
+either a send or receive message buffer or scatter was illegal in some manner. This can be
+returned if the size of a buffer is negative or if the number of scat elements is illegal
+(negative or greater than <tt><a href="misc.html">FL_MAX_SCATTER_ELEMENTS</a></tt>).</p>
+
+</ol>
+
+<!--#include virtual="/includes/footer" -->
+
+</body></html>

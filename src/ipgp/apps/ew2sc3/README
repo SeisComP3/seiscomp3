@@ -1,0 +1,41 @@
+########################################################################
+#                                                                      #
+# Copyright (C) 2012 OVSM/IPGP                                         #
+#                                                                      #
+# This program is free software: you can redistribute it and/or modify #
+# it under the terms of the GNU General Public License as published by #
+# the Free Software Foundation, either version 3 of the License, or    #
+# (at your option) any later version.                                  #
+#                                                                      #
+# This program is distributed in the hope that it will be useful,      #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
+# GNU General Public License for more details.                         #
+#                                                                      #
+# This program is part of 'Projet TSUAREG - INTERREG IV Caraïbes'.     #
+# It has been co-financed by the European Union and le Ministère de    #
+# l'Ecologie, du Développement Durable, des Transports et du Logement. #
+#                                                                      #
+########################################################################
+#                                                                      #
+# IPGP EarthWorm To SeisComP3 (ew2sc3) application                     #
+#                                                                      #
+# Authors: Jean-Marie SAUREL / Stephen ROSELIA                         #
+# Emails : saurel@ipgp.fr    / stephen.roselia@supinfo.com             #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Imports auto-located / auto-detected origin from Earthworm into      #
+# SeisComP3 database.                                                  #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Configuration:                                                       #
+# Edit config/ew2sc3.cfg                                               #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Usage:                                                               #
+# seiscomp exec ew2sc3 [--debug]                                       #
+#                                                                      #
+########################################################################

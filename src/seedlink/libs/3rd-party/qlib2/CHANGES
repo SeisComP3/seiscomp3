@@ -1,0 +1,295 @@
+========================================================================
+2004/04/07	2004.098 version 1.31
+Changed extra field in data_hdr structure to rate_spsec to hold the
+blockette 100 samples_per_second value if a blockette 100 is found.
+Changed drm_utils to put drm-specific info in the xm1 and xm2 fields.
+Changed files:
+	data_hdr.h data_hdr.inc sdr_utils.c drm_utils.c
+========================================================================
+2004/03/06	2004.066 version 1.30
+Include malloc.h for SUNOS4 only. ISTI added support for MACOSX.
+Changed files:
+	ms_unpack.c, pack.c, qutils.c, qtime.c
+========================================================================
+2004/02/10	2004.41	version 1.29
+Allow seconds in time to end with a decimal point.
+Changed files:
+	qtime.c
+========================================================================
+2004/02/07	2004.038	version 1.28
+Free malloced memory before returns in various ms_pack functions.
+Thanks to Dave Ketchum.
+Changed files:
+	ms_pack.c
+========================================================================
+2004/02/04	2003.035	version 1.27
+Use sample rate in blockette 100 for timespan when packing data.
+Use blockette 100 for computing data_hdr endtime.
+Changed files:
+	ms_pack.c, sdr_utils.c
+========================================================================
+2003/08/01	2003.213	version 1.26
+Allow tabs in whitespace between date and time.
+Changed files:
+	qtime.c
+========================================================================
+2003/07/29	2003.210	version 1.25
+Changed herrno to qlib2_errno.  Fix bug in decode_hdr_sdr().
+Changed files:
+	drm_utils.c, ms_utils.c, qda_utils.c, qutils.c, sdr_utils.c
+========================================================================
+2003/06/27	2003.178	version 1.24
+Changed dump_hdr() to output floating point rate if rate_mult != 1.
+Changed files:
+	sdr_utils.c
+========================================================================
+(2003.108)	version 1.23	
+
+2003/01/19
+	Added function init_qlib2() to configure qlib2 with enhanced
+	functionality.  
+	init_qlib2(0) functions the old way.
+	init_qlib2(1) prevents qlib2 from exiting on any error.
+
+In order to build a qlib2 that does not call exit(), the following functions
+were updated.
+
+File					Function		Error				Status	Action
+------------------------------------------------------------------------------------------------------------------------
+ms_pack.c:	    exit (1);		ms_pack_steim()		unknown STEIM type		DONE	return MS_ERROR
+
+ms_unpack.c:	    exit(1);		ms_unpack()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+ms_unpack.c:	    exit(1);		ms_unpack()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+ms_unpack.c:	exit(-1);		ms_unpack()		unknown data format 		DONE	return QLIB2_DATATYPE_ERROR
+
+ms_utils.c:	    exit(1);		read_ms_hdr()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+ms_utils.c:	    exit(1);		read_ms_hdr()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+ms_utils.c:	    exit(1);		read_ms_bkt()		zero offset to next blockette	DONE	return MS_ERROR
+ms_utils.c:	    exit(1);		read_ms_bkt()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+ms_utils.c:	exit(1);		get_ms_attr()		unknown data type		DONE	returns attr.bytelimit = 0
+
+pack.c:	exit(1);			pack_steim1()		error mallocing buffer		DONE	return QLIB2_MALLOC_ERROR
+pack.c:	exit(1);			pack_steim2()		error mallocing buffer		DONE	return QLIB2_MALLOC_ERROR
+pack.c:	    exit(1);			pack_steim2()		diff > 30 bits			DONE	return MS_ERROR
+
+qtime.c:	    exit(1);		init_leap_second_table	too many leapseconds		DONE	print error msg
+qtime.c:	    exit(1);		init_leap_second_table	invalid leapsecond line		DONE	print error msg
+qtime.c:		exit(1);	init_leap_second_table	invalid leapsecond correction	DONE	print error msg
+qtime.c:	exit(1);		end_of_span()		invalid span value		DONE	returns INT_TIME(0,0,0)
+qtime.c:	exit(1);		end_of_span()		invalid span value		DONE	returns INT_TIME(0,0,0)
+qtime.c:	exit(1);		add_interval()		invalid interval			returns INT_TIME(0,0,0)
+
+qutils.c:	    exit (1);		xwrite()		hard write error		DONE	return negative write count.
+qutils.c:	exit (1);		get_my_wordorder()	cannot determine wordorder	DONE	return MS_ERROR
+qutils.c:	exit(1);		wordorder_from_time()	cannot determine workorder	DONE	return MS_ERROR
+
+sdr_utils.c:	    exit(1);		read_blockettes()	zero offset to next blockette	DONE	return MS_ERROR
+sdr_utils.c:	    exit(1);		read_blockettes()	unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+sdr_utils.c:		exit(1);	read_blockettes()	commented out.			DONE	no action needed
+sdr_utils.c:	    exit(1);		read_blockettes()	unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+sdr_utils.c:	exit(1);		write_blockettes()	no space for blockette		DONE	return MS_ERROR
+sdr_utils.c:	exit(1);		add_blockette()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+sdr_utils.c:	exit(1);		add_blockette()		unable to malloc buffer		DONE	return QLIB2_MALLOC_ERROR
+sdr_utils.c:	exit(1);		new_data_hdr()		unable to malloc buffer		DONE	return NULL on error (new)
+
+unpack.c:		    exit(1);	unpack_steim1()		error on unpack			DONE	return MS_ERROR
+unpack.c:		exit(1);	unpack_steim2()		error on unpack			DONE	return MS_ERROR
+------------------------------------------------------------------------------------------------------------------------
+
+int init_qlib2
+   (int		mode);		/* desired qlib2 operation mode.	*/
+	0 = QLIB2_CLASSIC
+	1 = NO_EXIT
+return:
+	0 = QLIB2_CLASSIC mode
+	1 = NO_EXIT mode
+	<0 = ERROR in initialization.
+
+Changes in function returns:
+	read_blockette:	used to return 1 for OK, 0 for not OK.  Now returns 1 for OK, anything else for not OK.
+	write_blockettes can now return error code other than 0 (success).
+	add_blockette can now return error code other than 1 (OK).
+	new_data_hdr can now return NULL on malloc error.
+	user should call valid_span before end_of_span.  end_of_span returns INT_TIME of (0,0,0) for invalid span.
+	read_ms_hdr can return error
+	read_ms_bkt can return error
+	get_ms_attr returns error as attr.bytelimit = 0
+	end_of_span can return time of (0,0,0) for error.
+	add_interval can return time of (0,0,0) for error.
+	xwrite can return negative count of error.
+	get_my_wordorder can return error.
+	wordorder_from_time can return error.
+	dup_data_hdr can return NULL on error.
+	copy_data_hdr can return NULL on error.
+	add_required_miniseed_blockettes can return negative code on error.
+	copy_data_hdr can return NULL on error.
+	dup_data_hdr can return NULL on error.
+	new_data_hdr can return NULL on error.
+	add_required_miniseed_blockettes can return negative code on error.
+========================================================================
+2001/02/11	Doug Neuhauser, doug@seismo.berkeley.edu
+
+The Makefile creates 4 versions of the qlib2 libraray.
+	libqlib2.a		Default qlib2 library, no debugging
+	libqlib2.debug.a	Default qlib2 library, compiler debugging	
+	libqlib2nl.a		No leapseond qlib2 library, no debugging
+	libqlib2nl.debug.a	No leapseond qlib2 library, compiler debugging
+
+The qlib2 time routines REQUIRE a leapseconds file in order to compute time
+correctly across leapsecond boundaries.
+
+If you REALLY do not want to use leapseconds in time calculation, you may use
+the qlib2nl libraray with your programs.  This will bypass the use of
+leapseconds in time calculations.  In this case, you do not need a leapseconds
+file.
+
+PLEASE NOTE that I DO NOT RECOMMEND bypassing leapsecond calculations
+under normal use.
+
+By default, the qlib2 library looks for filename for the leapseconds is:
+	/usr/local/lib/leapseconds
+This can be overridden in the Makefile, or at runtime by setting
+the environment variable LEAPSECONDS:
+	setenv LEAPSECONDS	path_of_leapseconds_file
+
+For an up-to-date leapsecond file, you can retrieve the file
+	ftp://quake.geo.berkeley.edu/pub/quanterra/ucb/leapseconds
+
+========================================================================
+...
+========================================================================
+2000/04/21	version 1.1.13,2000.112	Doug Neuhauser
+	qtime.c, Makefile
+	Provide optional NO_LEAPSEONDS compile definition to disable 
+	leapsecond inclusion for those sites that don't use leapseconds.
+	Added build of library libqlib2nl.a which does not include
+	leapsecond processing.
+========================================================================
+2000/01/26	version 1.1.12,2000.026	Doug Neuhauser
+	ms_pack.c
+	ms_pack sets x0, xn, xm1, xm2 fields in data_hdr supplied by user.
+	Used to maintain compressor history across multiple calls to ms_pack.
+========================================================================
+2000/01/20	version 1.1.11,2000.020	Doug Neuhauser
+	qtime.c, sdr_utils.c
+	Handle blockettes whose lengths are not a multiple of 4.
+	Fix int_to_tepoch for dates earlier than 1970.
+========================================================================
+1999/11/09	version 1.1.10,1999.313	Doug Neuhauser
+	ms_utils.c, unpack.c
+	Fix to always ensure buf pointing to valid buffer in read_ms_hdr().
+	Do not return error from ms_upack() if hdr->num_samples == 0.
+========================================================================
+1999/10/03	version 1.1.9,1999.276	Doug Neuhauser
+	qutils.c
+	Fix from Craig Scrivner to properly determine FSDH wordorder from
+	the time field on a little-endian system.
+========================================================================
+1999/09/03	version 1.1.8,1999.246	Doug Neuhauser
+	ms_utils.c
+	Fix from Craig Scrivner to assign *pbuf in read_ms_hdr() only if
+	allocated buffer is returned to caller.
+========================================================================
+1999/08/02	version 1.1.7,1999.214	Doug Neuhauser
+	qtime.c, qtime.h, sdr.h
+	Added support for true epoch time, Y2K upgrade for no 2 digit years.
+	Changed reserved field in b1001 to flags, defined mshear timing flag.
+========================================================================
+1999/04/16	version 1.1.6,1999.106	Doug Neuhauser
+	Updated dump_hdr to dump full SEED stream name in 
+	station.network.channel.location format.
+========================================================================
+1999/04/08	version 1.1.5,1999.098	Doug Neuhauser	
+	Updated typedefs for SEED datatypes to have SEED_ prefix to
+	avoid conflicts with other packages.
+==============================================================================
+1997/06/17	version 1.1 (1997.168)
+
+NOTE THAT THE DATA_HDR IS NOW INCOMPATIBLE WITH PREVIOUS VERSIONS.
+
+In order to support sample rates that were not either N or 1/N 
+samples per second, I added a sample_rate_mult field to the data_hdr
+structure.  This necessitated an additional argument to the time_interval
+function and dsamples_in_time function, and a new function called
+sps_rate(rate,mult) instead of the old SPS_RATE(rate) macro.
+
+old function				new function
+------------------------------------------------------------------------------
+dsamples_in_time (rate,usecs)		dsamples_in_time (rate,mult,usecs)
+time_interval (n,rate,*sec,*usec)	time_interval2 (n,rate,mult,
+							*sec,*usec)
+					sps_rate (rate,mult)
+
+I also added xm1 and xm2 to the structure which can hold information
+required for steim1 and steim2 compression.
+
+==============================================================================
+
+1996/12/01	Qlib2 (Qlib Version 2)		Douglas Neuhauser, UC Berkeley
+
+* General routines to read MiniSEED records:
+
+	read_ms:
+	f_read_ms:
+
+		Read a single MiniSEED record, decode header and blockettes
+		into DATA_HDR, read and unpack data, return to user ptr to
+		DATA_HDR and unpacked data.
+
+	read_ms_record:
+		Read a single MiniSEED record, decode header and blockettes
+		into DATA_HDR, return to user ptr to DATA_HDR and raw
+		MiniSEED record.
+
+	ms_ms_hdr:  
+		Read a single MiniSEED header, decode header and blockettes
+		into DATA_HDR, return to user ptr to DATA_HDR and raw
+		MiniSEED header and blockettes.
+	
+	read_ms_data:
+		Read raw data portion of MiniSEED record and return it to user.
+
+* General routines to create MiniSEED records:
+
+	ms_pack_data:
+	f_ms_pack_data:
+		Given DATA_HDR and data array, create MiniSEED records of
+		specified blksize and data_type in memory, return user
+		ptr to MiniSEED records.
+
+* Provide support for reading and writing MiniSEED in the following formats:
+	STEIM1, STEIM2, INT_16, INT_24, INT_32
+
+* Support for reading and creating records with any valid MiniSEED blocksize.
+
+* Single data packing and unpacking routines, and single header encoding and
+decoding routines.
+
+* Added the following fields to the DATA_HDR structure:  
+	data_type, blksize, redi_type, hdr_wordorder, data_wordorder.
+
+* Changed the INT_TIME and EXT_TIME structures to usec (1 microsecond)
+accuracy from ticks (.1 millisecond) accuracy.  Changed all time routines to
+work with usecs instead of ticks.  eg:	
+	time_interval
+	add_time
+	add_dtime (new)
+	tdiff
+	dsamples_in_time
+	samples_in_time
+
+* New #defines for	
+	USECS_PER_SEC
+	USECS_PER_MSEC
+	USECS_PER_TICK
+
+* Added ability to read and write MiniSEED records where header and data is
+in either big or little endian wordorder.
+
+* Fortran callable routines now ALL have a "f_" prefix on them, since some
+compilers do not use the BSD convention of appending an "_" to external
+routines called from fortran.  The Fortran_to_C interlude routines are
+conditionally compiled to provide the "_" if required (Sun requires the "_"
+suffix).
+
+==============================================================================

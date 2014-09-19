@@ -1,0 +1,40 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH E_get_time 3 "February 2012" LibSpread-Util "User Manuals"
+.SH NAME
+E_get_time \- Return current system time as sec and usec
+.SH SYNOPSIS
+.B #include <spu_events.h>
+.sp
+.BI "sp_time E_get_time( void );"
+
+.SH DESCRIPTION
+.B E_get_time
+returns the current time as a 
+.I sp_time
+structure. This contains the current time in seconds and microseconds. 
+
+The 
+.B E_get_time 
+function does not block.
+
+The sp_time structure consists of
+.BI "long" sec
+.BI "long" usec
+which provide the time since the Unix Epoch. 
+
+.SH "RETURN VALUES"
+Returns the current time on success or exits the program if the time can not be determined. 
+
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cs.jhu.edu>
+.br
+Jonathan Stanton <jonathan@spreadconcepts.com>
+.br
+
+.SH "SEE ALSO"
+.BR libspread-util (3)
+

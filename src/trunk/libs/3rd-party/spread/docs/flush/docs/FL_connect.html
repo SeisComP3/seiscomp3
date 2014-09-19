@@ -1,0 +1,166 @@
+<HTML><HEAD><TITLE>Manpage of FL_connect</TITLE>
+</HEAD>
+
+<BODY bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_connect</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_connect - connect an application to a Spread daemon using Flush Spread semantics.
+
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_connect(const char *</B><I>daemon_name</I><B>, const char *</B><I>user_name</I><B>, int </B><I>priority</I><B>, int </B><I>group_membership</I><B>, mailbox *</B><I>mbox</I><B>, char *</B><I>private_name</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_connect</B>
+
+is the initial call an application must make to establish a
+connection with a Spread daemon.  All other Flush Spread calls
+refer to a valid 
+<I>mbox </I>
+
+returned by this function.
+<P>
+The 
+<I>daemon_name</I>
+
+is the name of the Spread daemon with which to connect.  It should be a
+string in one of the following forms:
+<DL COMPACT><DT><DD>
+<DL COMPACT>
+<DT><B>4803</B>
+
+<DD>
+This will connect to the Spread daemon on the local 
+machine running on port 4803.  This form cannot be
+used to connect to a Windows95/NT machine.</p>
+
+<DT><B>4803@localhost</B>
+
+<DD>
+This will also connect to the Spread daemon 
+on the local machine running on port 4803.
+This form can be used on Windows95/NT machines.</p>
+
+<DT><B>4803@host.domain.edu</B> or <B>4803@128.220.221.99</B>
+
+<DD>
+This will connect to the machine identified by either 
+domain name or IP address at the specified port.</p>
+</DL></DL>
+
+The
+<I>user_name </I>
+
+is the name this connection would like to be known as.  It must be
+unique on the machine running the spread daemon.  The name can be an
+arbitrary length string with the same character restrictions as a
+group name (mainly it cannot contain the '#' character).
+<P>
+<I>priority</I>
+
+is a boolean (non-zero true, zero false) for whether this connection
+will be a &quot;priority&quot; connection or not. Currently this has no effect.
+<P>
+<I>group_membership</I>
+
+is a boolean for whether this connection will receive group membership
+messages or not.  Usually for Flush Spread applications this parameter
+should be true.  If your application doesn't need group membership
+messages, then Spread may provide the semantics that you need more
+efficiently than Flush Spread.
+<P>
+The
+<I>mbox</I>
+
+should be a pointer to a mailbox variable.  After the 
+<B>FL_connect</B>
+
+call successfully returns, this variable will hold the valid mbox for
+this new connection.
+<P>
+The
+<I>private_name</I>
+
+should be a pointer to a string big enough to hold at least
+MAX_GROUP_NAME characters.  After the call returns it will contain the
+private group name of this connection.  These group names are what are
+reported in membership messages and can be used to send unicast and
+subgroup-multicast messages to this connection.  No other applications
+can join this special group.
+<P>
+<H2>RETURN VALUES</H2>
+
+Returns 
+<B>ACCEPT_SESSION </B>
+
+on success or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+
+<DT><B>ILLEGAL_SPREAD</B>
+<DD>
+The 
+<I>daemon_name</I>
+given to connect to was illegal for some reason. Usually because
+it was a unix socket on Windows95/NT, an improper format for a host
+or an illegal port number. </p>
+
+<DT><B>COULD_NOT_CONNECT</B>
+
+<DD>
+Lower level socket calls failed to allow a connection to the 
+specified spread daemon right now.</p>
+
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+During communication to establish the connection errors occured
+and the setup could not be completed.</p>
+
+<DT><B>REJECT_VERSION</B>
+
+<DD>
+The daemon and/or libraries have a version mismatch.</p>
+
+<DT><B>REJECT_NO_NAME</B>
+
+<DD>
+No user name was provided.</p>
+
+<DT><B>REJECT_ILLEGAL_NAME</B>
+
+<DD>
+Name provided violated some requirement (length or used an illegal character).</p>
+
+<DT><B>REJECT_NOT_UNIQUE</B>
+
+<DD>
+Name provided is not unique on this daemon. Recommended response is to try
+again with a different name.
+</DL>
+
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+<P>
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

@@ -1,0 +1,50 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_JOIN 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_join \- create connection between app and daemon
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_join( mailbox " mbox ", const char *" group );
+.SH DESCRIPTION
+.B SP_join
+joins a group with the name passed as the string
+.I group.
+If the group does not exist amoung the Spread daemons it
+is created, otherwise the Join joins the existing group.
+The
+.I mbox
+of the connection upon which to join a group is the first parameter.</P>
+The
+.I group
+ string represents the name of the group to join.
+.SH "RETURN VALUES"
+Returns 0 on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_GROUP
+The 
+.I group
+given to join was illegal for some reason. Usually because it was of 
+length 0 or length > MAX_GROUP_NAME
+.TP
+.B ILLEGAL_SESSION
+The session specified by
+.I mbox
+is illegal. Usually because it is not active.
+.TP
+.B CONNECTION_CLOSED
+During communication errors occured
+and the join could not be initiated.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

@@ -1,0 +1,126 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_CONNECT 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_connect \- Connect an application to a daemon
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_connect( const char *" spread_name ", const char *" private_name ", int " priority ", int " group_membership ", mailbox *" mbox ", char *" private_group );
+.SH DESCRIPTION
+.B SP_connect
+is the initial call an application must make to establish a
+connection with a Spread daemon.  All other spread calls must
+refer to a valid 
+.I mbox 
+returned by this function.
+
+The 
+.I spread_name
+is the name of the Spread daemon to connect to.  It should be a
+string in one of the following forms:
+.RS
+.TP
+.B "4803" 
+This will connect to the Spread daemon on the local 
+machine running on port 4803.  This form cannot be
+used to connect to a Windows95/NT machine.
+.TP
+.B "4803@localhost" 
+This will also connect to the Spread daemon 
+on the local machine running on port 4803.
+This form can be used on Windows95/NT machines.
+.TP
+.BR "4803@host.domain.edu " or " 4803@128.220.221.99"     
+This will connect to the machine identified by either 
+domain name or IP address at the specified port. 
+.RE
+
+The
+.I private_name 
+is the name this connection would like to be known as.  It
+must be unique on the machine running the spread daemon.  The 
+name can be of at most MAX_PRIVATE_NAME characters, with the same character
+restrictions as a group name (mainly it cannot contain the '#'
+character). If the application does not care what name it uses, it
+can pass in a NULL pointer into this field and the daemon
+will assign the connection a unique, random name.
+
+The
+.I priority
+is a 0/1 flag for whether this connection will be a "Priority" 
+connection or not. Currently this has no effect.
+
+The 
+.I group_membership
+is a boolean integer.  If 1 then the application will 
+receive group membership messages for this connection, 
+if 0 then the application will 
+.B not
+receive 
+.B any
+membership change messages.
+
+The
+.I mbox
+should be a pointer to a mailbox variable.  After the 
+.B SP_connect
+call returns this variable will hold the mbox for
+the connection.
+
+The
+.I private_group
+should be a pointer to a string big 
+enough to hold at least MAX_GROUP_NAME characters.  
+After the Connect call returns it will contain the private 
+group name of this connection.  This group name can be used to
+send unicast messages to this connection and no one can join 
+this special group.
+
+.SH "RETURN VALUES"
+Returns 
+.B ACCEPT_SESSION 
+on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_SPREAD
+The 
+.I spread_name
+given to connect to was illegal for some reason. Usually because
+it was a unix socket on Windows95/NT, an improper format for a host
+or an illegal port number
+.TP
+.B COULD_NOT_CONNECT
+Lower level socket calls failed to allow a connection to the 
+specified spread daemon right now.
+.TP
+.B CONNECTION_CLOSED
+During communication to establish the connection errors occured
+and the setup could not be completed.
+.TP
+.B REJECT_VERSION
+The daemon or library has a version mismatch.
+.TP
+.B REJECT_NO_NAME
+This is a protocol error which should not occur if the connection
+request is sent correctly to the daemon. It means that the length
+of the user name was not sent (if no user name is provided a length
+of 0 must be sent).
+.TP
+.B REJECT_ILLEGAL_NAME
+Name provided violated some requirement (length or used an illegal character)
+.TP
+.B REJECT_NOT_UNIQUE
+Name provided is not unique on this daemon. Recommended response is to try
+again with a different name.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

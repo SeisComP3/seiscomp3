@@ -1,0 +1,123 @@
+             Spread specific help with writing
+
+      Multi-Threaded and Multi-Process client applications
+--------------------------------------------------------------------
+
+The Spread system supports both single-threaded client applications
+and multi-threaded client applications. As much as possible it tries
+to provide both types with high-efficiency interfaces and
+API's. However, writing multi-threaded applications entails some
+unavoidable increase in complexity, both at the API level and with
+performance considerations and so this document attempts to explain
+how best to utilize Spread from multi-threaded applications.
+
+Spread exports several different APIs for client applications. The
+core Spread API provides extended virtual synchrony semantics and is
+defined in the sp.h header and consists of functions beginning with
+the SP_ prefix. The Flush Spread API provides Virtual Synchrony
+semantics and is defined in the fl.h header and consists of functions
+beginning with the FL_ prefix. Both APIs can be used by multithreaded
+applications and are written to be 'thread-safe' (not taking into
+account some of the specific semantic limitations explained below).
+
+Linking and Libraries:
+
+For applications that are single-threaded and do not need, or want,
+threaded locks around shared datastructures, a 'non-thread-safe'
+version of the core Spread API's is available in the libspread-core
+library. All multi-threaded applications should use either the main
+libspread library which contains all of the API's in their thread-safe
+form, or the libtspread-core library for only the core Spread API's in
+thread-safe form. (Note the "t" character in the library name)
+
+The rest of this document will assume you do want the multi-thread
+safe libraries and will use either the VS or EVS Spread API's.
+
+To link your application code with Spread you will need to compile
+your code with the platform appropriate _REENTRANT define enabled, and
+will need to link with the pthreads library on unix systems as well as
+the libspread or libtspread-core library. On Windows you need to link
+with the multi-thread safe windows system libraries just like any
+normal Windows threaded program.
+
+Spread Locking Semantics:
+
+Multi-threaded programs can use separate threads to receive messages
+on different connections, send messages to connections, process
+application messages, etc. The Spread library's internal locking will
+protect the library data structures from concurrent access, will
+provide serialization of SP_receive family calls so only one thread
+receives each message, and will enforce that each message send occurs
+atomically on a connection. If more then one thread is sending or
+receiving from the same connection, then the ordering of messages sent
+or received can not be determined because it depends on the order in
+which the processes are granted the shared lock for the connection.
+
+If several threads call SP_recv on the same connection, then they will
+all be blocked until messages arrive and then each one will read one
+message from the connection, the order in which they receive the
+messages is undetermined as they are all blocked on a shared
+lock. Thus normally if you care about the message ordering or safety
+semantics, only one thread will be assigned to call SP_receive for
+each connection. After it receives the messages, it can make an
+application level decision to dispatch other threads to process the
+message contents based on the type of message and what semantics are
+enforced.
+
+In the same way if multiple threads call SP_mcast functions on the
+same connection, each message will be sent out correctly, but the
+order in which they are sent is indeterminate.
+
+Multiple Processes Semantics:
+
+Multiple processes, on the other hand, should NEVER call SP_receive on
+the same spread connection as the locking does not protect against
+accesses from different processes and thus can cause corrupted
+messages, deadlocks and other problems.  What a program can do when
+using multiple processes is pass a spread connection from one process
+to another through a fork call, and as long as only one of the
+processes uses the connection, then the behavior will be correct. For
+example a parent process can pass the connection through a fork to a
+child and as long as only the parent or the child (but not both) use
+the connection it will work correctly, even if a parent is also
+multithreaded. Note, this does NOT allow a process to send the spread
+connection to another process through mechanisms such as Unix Domain
+Socket File Descriptor passing, as although the spread connection is a
+file descriptor and will correctly be passed, the library state of the
+connection that is stored in the libspread will not be shared with the
+receiving process, and thus the spread library will not be able to
+work with the received connection.
+
+When calling fork in a multi-threaded application using Spread, the
+Spread library uses an at_fork handler to release any locks that are
+held in the child process at the time of the fork. This is strictly
+speaking, unsafe, because a parent thread may have a Mutex lock on the
+mailbox because it is reading from the socket and once the locks in
+the child are reset, the child process could also attempt a read --
+resulting in garbage in both process.  However -- We document and
+require that spread mailboxes cannot be read from different processes
+at the same time, so the application is responsible for not using them
+this way.
+
+To enable a multi-threaded application to who is the parent of a
+forked child to cleanly remove their libspread state about the
+connection passed to the client, the function SP_kill has now been
+exposed in the Spread API. This function will close the Spread
+connection and remove any library state about the connection WITHOUT
+notifying the daemon about the close. If, as in the forked
+parent/child case, the client connection is still connected and open
+in a different process (such as the parent calling SP_kill after a
+fork and the child not closing it) then the daemon will not notice any
+change and will continue to communicate with the process who currently
+has the connection still open.
+
+However, generally the SP_disconnect function should be used to
+disconnect from the daemon as it correctly and expediently notifies
+the daemon about the disconnection. If a client calls SP_kill instead
+of SP_disconnect when no other process has the client side mbox open
+(because of fork) then the network connection to the daemon will be
+closed and the daemon will detect the client as disconnected as soon
+as the network layer (TCP) registers a closed socket on the daemon
+side. Thus it will appear to the daemon as if a true network fault
+occurred or the client crashed as opposed to cleanly disconnecting.
+

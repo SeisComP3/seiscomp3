@@ -1,0 +1,91 @@
+2006.292:
+	- Change -m option to -M and add -R to have both match and
+	reject regexs for filenames.
+	- Add the -Q option to skipping the scanning of files that
+	have not been modified for a specified number of seconds,
+	by default this option is off.
+
+2006.287:
+	- Add -z option to do the nextnew scan-ahead stuff only
+	when a statefile was specified but is not successfully read.
+	- Use stat instead of lstat when checking if scan target
+	directories exist and are in fact directories, should allow
+	symbolic links to be specified.
+	- Fix minor casting error in unused StackNotEmpty in stack.c.
+
+2006.006:
+	- Change long's to int's, needed for 64-bit architectures.
+	The LP64 data model changed long & pointers to 64-bit while
+	int, short and char did not change from the ILP32 model.
+	- Change lprintf buffer size to 1024 characters.
+
+2005.163:
+	- Add '-D' option to take a file with a list of dirs
+	that will be scanned.  The file will be re-checked every
+	10 scans and if it has been modified the list will be
+	re-loaded.
+	- Add make target 'testing' to build without libslplugin.
+
+2005.144:
+	- Re-work scanfiles again to properly fix scanning with
+	either absolute or relative paths.  The function now 
+	differentiates between the local target directory (since
+	chdir is done each time) and the complete path from the
+	initial directory.
+	- Move regex checking to after directory detection so
+	as not to skip directories that do not match.
+	- Add offset into error message about invalid Mini-SEED.
+
+2005.143:
+	- Move the filename from the binary tree node data to the
+	node key and remove the device number.  The tree now keys
+	off of the inode number and then filename.  It remains a
+	fast search as the string comparison (filename) is only
+	done after the number comparison (inode) matches.
+	- Change option '-i' to '-s'.
+	- Add options '-i' and '-I' to control the scanning of
+	idle directory entries.  This allows idle files to not
+	be checked every scan and further optimizes the scanning.
+	- Change maximum directory entry name length to 512.
+
+2005.139:
+	- Fix usage of non-absolute paths as target directories,
+	includes the assumption that the directory separation
+	character is '/'.
+
+2005.101:
+	- Add option to create a "station_id" (passed to the server)
+	of "NET_STA" instead of the default of "STA".  This is
+	necessary with duplicate station codes from different
+	networks.
+
+2004.231:
+	- Implement a balanced tree to keep track of the file list,
+	this resulted in a huge improvement in scalability.
+	- Change scanfiles() to chdir into the working directory 
+	allowing lstat to be called without absolute paths, it's
+	faster.
+	- Lots of little fixups.
+
+2004.226:
+	- More optimizations.
+	- Lots of little fixups.
+
+2004.225:
+	- Fix prunefiles() so it works when adjacent chain entries
+	are being pruned.
+	- Only fallback to searching the filelist with strcmp
+	when one or more inodes matched.
+	- Fix some potential non-terminated strings when doing
+	strncpy.
+
+2004.217:
+	- Change name to mseedscan_plugin for clarity.
+	- Base directories now specified with the -d option.
+	- Remove trailing slash from input directories.
+	- Check that the input directories exist during startup
+	and log a warning if not.  If the entry does not exist
+	it will be checked during each scan, this way if it
+	appears it will be scanned as expected.
+
+2004.216: initial version

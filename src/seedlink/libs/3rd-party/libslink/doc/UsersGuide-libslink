@@ -1,0 +1,304 @@
+
+                libslink: the SeedLink client library
+
+                              4 May 2004
+
+Purpose:
+
+	The purpose of this library is to provide all needed functionality
+for communicating with a SeedLink server in a generalized way.  This library
+facilitates rapid SeedLink client development as the client does not need
+to know any details of the SeedLink protocol.  The library is intended to
+work with all existing versions of SeedLink and will not use features that
+a given SeedLink server does not support.  The library is written in C.
+
+
+Threads:
+	
+	The library is thread-safe on Unix-like platforms as long as
+each thread manages it's own SeedLink Connection Description (see
+below).  The library is definitely not thread-safe under Win32.
+
+
+Usage:
+
+-------------------  The SeedLink Connection Description -------------------
+
+	The usage philosophy is that a so-called SeedLink Connection
+Description (SLCD) stipulates all aspects of a connection to a server. In
+libslink the SLCD is implemented as a C struct which is used by most of the
+utility functions.  The struct is given below with descriptions of each
+parameter:
+
+  typedef struct slcd_s
+  {
+    SLstream   *streams;
+    char       *sladdr;
+    char       *begin_time;
+    char       *end_time;
+
+    short int	resume;
+    short int   multistation;
+    short int   dialup;
+    short int   lastpkttime;
+    short int   terminate;
+
+    int         keepalive;
+    int         netto;
+    int         netdly;
+
+    float       protocol_ver;
+    char       *info;
+    int         link;
+    SLstat     *stat;
+    SLlog      *log;
+  } SLCD;
+
+
+Parameter descriptions:
+
+  streams:	A pointer to struct that specifies streams to be 
+		requested from the server; this is the beginning of the
+		"stream chain".  The user should not need to interface
+		directly with the stream chain as there are helper functions
+		to populate the chain; namely sl_addstream() and
+		sl_setuniparams().
+
+  sladdr:	The address of the SeedLink server to connect to in 
+		'host:port' format.  example: "st27.gfz-potsdam.de:18000".
+		
+  begin_time:
+  end_time:	If these parameters are set the connection is configured
+		for time window extraction.  The end_time is optional.  When
+		no end_time is set the behavior is server dependent but can
+		be expected, with current server versions, to indicate that
+		the server should keep the window open-ended and not close
+		the connection.  The format is 'year,month,day,hour,min,sec',
+		i.e. "2002,05,03,13,00,00", for both parameters.  If
+		these parameters are set they will override the use of any
+		sequence numbers (specified in the stream chain) to resume
+		a data stream.
+
+  resume:	A flag to control the inclusion of sequence numbers with the
+		DATA or FETCH commands.  If this flag is true sequence numbers
+		will be appended to the DATA/FETCH command instructing the
+		remote server to start sending data from the supplied sequence
+		number for a given stream.  If false no sequence numbers will
+		be sent and the server will start the stream from the next
+		arriving data packet.  The default is 1 (true).
+
+  multistation: A flag to indicate that the connection should be configured
+		in multi-station mode.  If you use sl_addstream() or 
+		sl_setuniparams() to populate the stream chain this
+		parameter is set automatically.  The default is 0 (false).
+
+  dialup:	A flag to indicate that the connection should be configured
+		in so-called dial-up mode.  This is a mode of  operation
+		where the server will close the connection when the end of
+		the selected buffers have been reached, i.e. the most current
+		data has been sent.  The default is 0 (false).
+
+  lastpkttime:  A flag to indicate if the last packet time should be appended
+                to a DATA or FETCH command during connection negotiation.
+		The last packet time is only (optionally) sent to SeedLink
+		servers version 2.93 or greater.  In combination with the last
+		packet sequence number, this information is used by the remote
+		server to decide if the last packet sequence number is valid
+		for the current buffer.  Basically this should prevent large
+		amounts of overlap data from being sent if the client has not
+		been connected in a while and is a basic sanity check.  The
+		default is 0 (false).
+
+  terminate:    A flag to indicate that the connection to the remote server
+		should be shutdown and the internal buffer should be flushed
+		of complete packets.  The routine sl_terminate() will set this
+		flag; it is recommended to use sl_terminate() in a signal
+		handling routine.  The default is, of course, 0 (false).
+
+The following parameters have specific meaning for the connection
+management function described below, sl_collect():
+
+  keepalive:	Interval, in seconds, to send keepalive requests to the
+		server.  Default is 0 (disabled).
+
+  netto:	Network timeout, in seconds.  If no packets are received
+		within this period the connection will be closed and
+		re-opened.  Default is 600 seconds.  A value of 0 disables
+		this feature.
+
+  netdly:       Network connection delay, in seconds.  This parameter
+		controls how much time the manager will wait until attempting
+		to re-connect.  Default is 30 seconds.
+
+The following parameters are maintained by the library routines and should
+not be changed by the calling program:
+
+  protocol_ver: This is the version of the SeedLink protocol in use.  This
+		value is parsed from the server's response to the
+		HELLO command and will be set to 0.0 when the version
+		could not be detected.  Internal library routines use
+		this value to check if specific features should be
+		used with the currently connected server.  If the
+		version could not be detected the default action is to
+		allow all features.  The first line of response to the
+		HELLO command is expected to be in the format:
+		"seedlink v#.# <optional text>" where 'seedlink' is
+		case insensitive and '#.#' is the protocol version.
+
+  info:         This parameter indicates that an INFO packet should be
+		requested from the server during the next call to
+                sl_collect().  The client should request INFO packets via
+		the sl_request_info() function and not use this value
+		directly.
+
+  link:		This is the file descriptor associated with the connected
+		network socket.  This value will be -1 when not connected
+		to a server.
+
+
+-----------   Configuring the SeedLink Connection Description   ------------
+
+There are a number of functions to assist with the creation of a SLCD (see
+the man pages for programming details):
+
+  sl_newslcd()  : allocate and initialize a SLCD struct with default values.
+
+  sl_freeslcd() : free all memory associated with a SLCD.
+
+  sl_addstream() : add a stream entry to the stream chain; multi-station
+	mode is implied.
+
+  sl_setuniparams() : set the stream parameters for uni-station mode.
+
+  sl_read_streamlist() : read a list of streams from a file and add them
+	to the stream chain; multi-station mode is implied.
+
+  sl_parse_streamlist() : parse a list of stream from a string and add them
+	to the stream chain; multi-station mode is implied.
+
+
+--------------------   Using the connection manager   ----------------------
+
+A function is provided to manage a connection to a SeedLink server based on
+the parameters in the connection description.
+
+  sl_collect() : using the parameters in the connection description this
+	function will maintain a persistent connect to a server.  Designed
+	to run in a tight loop at the heart of a client program this
+	routine blocks until a packet is received, then setting the slpack
+	pointer to the packet and returning a positive integer.  Zero (0) is
+	returned when either 1) the requested time window has been
+	fulfilled, 2) the termination sequence is completed or 3) an error
+	occurred.
+
+	If the 'info' parameter is set in the connection description the
+	manager will request the specified INFO during the next iteration
+	of sl_collect().  In-stream INFO requests can be made by using
+	the sl_request_info() function.
+
+	The manager uses the keepalive, netto and netdly parameters in the
+	way specified above.
+
+  sl_collect_nb() : This is a non-blocking version of sl_collect() it will
+	always return whether a packet is received or not.  If not
+	called at regular short intervals this function might not be
+	able to properly manage the connection, i.e. update internal
+	timers for timeouts, send keepalives, etc.  For this reason
+	this is NOT A RECOMMENDED INTERFACE.  If you really need to
+	use this function try to call it at regular intervals, in
+	other words, don't spend too much time processing or sleeping
+	in-between calls.
+
+  sl_terminate() : set the terminate flag in the connection description.
+	This will cause sl_collect() to close the network connection, 
+	finish passing received packets to the caller and finally return 0.
+
+It is highly recommended to implement signal handling to call 
+sl_terminate() for smooth program termination.
+
+
+------------------------   Using state files   -----------------------------
+
+The state of each stream, the sequence number and time stamp in the stream
+chain, can be saved to and recovered from state files:
+
+  sl_savestate() : save current sequence numbers and time stamps to a file.
+
+  sl_recoverstate() : recover sequence numbers and time stamps from a file.
+
+Using these functions a SeedLink client can be shut down and re-started
+without a gap in the data stream as long as all necessary data still exists
+in the SeedLink buffer.
+
+
+-----------   Controlling output from the library functions   --------------
+
+All of the log and diagnostic messages emitted by the library functions
+use the same interface.  The output from this interface can be controlled.
+This is useful when the library will be embedded in a larger system with
+a custom logging facility.  See the man page for more details.
+
+  sl_loginit() : initialize the verbosity level of the library
+	functions, also set the functions and prefixes used for log,
+	diagnostic and error messages.
+
+  sl_log() : the central logging facility.  Behavior is controlled by the
+	settings specified with sl_loginit().
+
+The default destination for log messages is standard output (stdout),
+while all diagnostic (including error) messages go to standard error
+(stderr).  Most of the internal messages emmited by the library are
+considered diagnostic and will, by default, go to standard error.
+
+The default prefix for log and diagnostic messages is nothing. The
+default prefix for diagnostic error messages is "error: ".
+
+There are reentrant versions of these functions that operation either on the
+logging parameters in a SLCD or directly on a logging parameter SLlog struct.
+They are intended for use in threaded programs or where a complex logging
+scheme is desired.  See the man pages for more details.
+
+
+-------------------   Handling of Mini-SEED records   ----------------------
+
+Some functions are included for parsing Mini-SEED record headers and
+unpacking/decompressing data samples.  As of version 1.0 the data
+formats supported are INT-16, INT-32, Steim-1 and Steim-2.
+
+  sl_msr_parse_() : parse the fixed section data header and blockettes
+	100, 1000 and 1001.  Optionally unpacking/decompressing data samples.
+
+  sl_msr_print() : print header values out using sl_log().  The level of
+	information printed can be controlled.
+
+There are also functions to return the (double precision) sample rate and
+the record start time as a (double precision) POSIX epoch, these are
+sl_msr_dsamprate() and sl_msr_depochstime() respectively.  Consult the manual
+pages for further details.
+
+
+--------------------   Illustrative program example   ----------------------
+
+For a real example of libslink usage see the program in the 'example'
+directory.  Below is a simple, step-by-step, schematic view of common library
+usage:
+
+  sl_newslcd()          - initialize new connection description.
+    - set a server address
+    - set other desired parameters; begin/end time or dialup
+  sl_parse_streamlist() - parse a stream list string
+  sl_recover_state()    - recover state information from a file
+
+  while ( sl_collect() != 0 )
+    {
+       sl_packettype();
+       sl_sequence();
+
+       [ do something with the data record ]
+
+    }
+
+  sl_savestate()        - save state information to a file
+  exit
+
+

@@ -1,0 +1,52 @@
+########################################################################
+#                                                                      #
+# Copyright (C) 2012 OVSM/IPGP                                         #
+#                                                                      #
+# This program is free software: you can redistribute it and/or modify #
+# it under the terms of the GNU General Public License as published by #
+# the Free Software Foundation, either version 3 of the License, or    #
+# (at your option) any later version.                                  #
+#                                                                      #
+# This program is distributed in the hope that it will be useful,      #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
+# GNU General Public License for more details.                         #
+#                                                                      #
+# This program is part of 'Projet TSUAREG - INTERREG IV Caraïbes'.     #
+# It has been co-financed by the European Union and le Ministère de    #
+# l'Ecologie, du Développement Durable, des Transports et du Logement. #
+#                                                                      #
+########################################################################
+#                                                                      #
+# Hypo71 earthquake location plugin for SeisComP3                      #
+#                                                                      #
+# Authors: Jean-Marie SAUREL / Stephen ROSELIA                         #
+# Emails : saurel@ipgp.fr    / stephen.roselia@supinfo.com             #
+#                                                                      #
+########################################################################
+#                                                                      #
+# HYPO71 is a computer program for determining hypocenter, magnitude,  #
+# and first motion pattern of local earthquakes, and was first         #
+# released in 1971. It is perhaps the first earthquake location        #
+# program that achieved worldwide usage, as evidenced by the fact that #
+# about 1,000 copies of the HYPO71 manual were requested and           #
+# distributed (Lee, 1990). It is included here for historical          #
+# documentation.                                                       #
+#                                                                      #
+#     http://www.jclahr.com/science/software/hypo71/index.html         #
+#                                                                      #
+########################################################################
+#                                                                      #
+# How to make it work:                                                 #
+#                                                                      #
+# Load the plugin in scolv.cfg -> plugins = hypo71                     #
+# Add content of config/hypo71.cfg, edit properly paths, permissions   #
+#                                                                      #
+# Copy config/hypo71/ into ${HOME}/hypo71/                             #
+# Edit run.sh and make paths match accordingly to those specified      #
+# in scolv.cfg                                                         #
+#                                                                      #
+########################################################################
+
+
+

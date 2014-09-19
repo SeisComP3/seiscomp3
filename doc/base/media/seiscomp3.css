@@ -1,0 +1,46 @@
+dl.confval dt	{
+	border: 1px solid red;
+	background-color: #f0f0f0;
+	border: 1px solid #d0d0d0;
+	padding: 2px;
+}
+
+dl.confval dd {
+	margin-left: 0;
+}
+
+table.docutils {
+	margin-left: 0px;
+	border: 1px solid #AAAAAA;
+}
+
+table.docutils th.head {
+	background-color: rgb(175, 193, 196);
+	color: white;
+}
+
+table.docutils td {
+	border-left: 1px solid #AAAAAA;
+	border-right: 1px solid #AAAAAA;
+}
+
+table.docutils tr.row-event {
+	background-color: white;
+}
+
+table.docutils tr.row-odd {
+	background-color: rgb(242, 242, 242);
+}
+
+p.caption {
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+div.legend {
+	font-size: 0.8em;
+}
+
+/*div.figure img {
+	box-shadow: 0px 0px 10px 1px lightgray;
+}*/

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="wago" category="sources">
+		<description>WAGO Controller (T-Elektronik)</description>
+		<configuration>
+			<parameter name="address" type="string">
+				<description>
+					Hostname or IP.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="502">
+				<description>
+					TCP port.
+				</description>
+			</parameter>
+			<parameter name="channels" type="list:string" default="">
+				<description>
+					List of channels.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string" default="wago">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

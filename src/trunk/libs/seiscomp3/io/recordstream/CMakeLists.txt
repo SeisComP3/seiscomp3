@@ -1,0 +1,30 @@
+SET(RECORDSTREAM_SOURCES
+	file.cpp
+	memory.cpp
+	sdsarchive.cpp
+	odcarchive.cpp
+	arclink.cpp
+	slconnection.cpp
+	combined.cpp
+	streamidx.cpp
+	decimation.cpp
+	resample.cpp
+	fdsnws.cpp
+	remez/remez.c
+)
+
+SET(RECORDSTREAM_HEADERS
+	file.h
+	memory.h
+	sdsarchive.h
+	odcarchive.h
+	arclink.h
+	slconnection.h
+	combined.h
+	streamidx.h
+	decimation.h
+	resample.h
+	fdsnws.h
+)
+
+SC_SETUP_LIB_SUBDIR(RECORDSTREAM)

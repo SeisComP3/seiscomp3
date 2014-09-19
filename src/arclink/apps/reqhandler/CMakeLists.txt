@@ -1,0 +1,4 @@
+INSTALL(PROGRAMS reqhandler.py RENAME reqhandler DESTINATION ${SC3_PACKAGE_SHARE_DIR}/plugins/arclink)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

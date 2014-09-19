@@ -1,0 +1,20 @@
+#
+#keyword         stream   network   station   channel   ID
+#
+
+ChanInfo	 PMSTZ4	  IP	   PMST	      BHZ	1
+ChanInfo	 PMSTN4	  IP	   PMST	      BHN	3
+ChanInfo	 PMSTE4	  IP   	   PMST	      BHE	 5
+
+ChanInfo	 PACTZ4	  IP	   PACT	      BHZ
+ChanInfo	 PACTN4	  IP	   PACT	      BHN
+ChanInfo	 PACTE4	  IP	   PACT	      BHE
+
+ChanInfo         3M39Z2   SP       SPD        BHZ       4
+ChanInfo         3M39N2   SP       SPD        BHN       5
+ChanInfo         3M39E2   SP       SPD        BHE       6
+
+ChanInfo         3M43Z2   SP       LPW        BHZ       4
+ChanInfo         3M43N2   SP       LPW        BHN       5
+ChanInfo         3M43E2   SP       LPW        BHE       6
+

@@ -1,0 +1,28 @@
+#
+#
+# Nmake file for libslink example client - Windows version
+# Use 'nmake -f Makefile.win'
+
+NODEBUG=1
+
+!include <ntwin32.mak>
+
+INCS = /I..
+LIBS = ../libslink.lib ws2_32.lib
+BIN = slclient.exe
+
+OBJS =	slclient.obj
+
+cflags = $(cflags) -DWIN32
+
+all: slclient
+
+slclient: $(OBJS)
+	link.exe /nologo /out:$(BIN) $(LIBS) $(OBJS)
+
+.c.obj:
+   $(cc) /nologo $(cflags) $(cdebug) $(cvarsmt) $(tflags) $(INCS) $<
+
+# Clean-up directives
+clean:
+	-del a.out core *.o *.obj *% *~ $(BIN)

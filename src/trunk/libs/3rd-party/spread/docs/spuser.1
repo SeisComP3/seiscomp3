@@ -1,0 +1,38 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SPUSER 1 "DECEMBER 2001" Spread "User Manuals"
+.SH NAME
+spuser \- Spread Group Communication Client
+.SH SYNOPSIS
+.BI "spuser [-u " connection_name "] [-s " spread_address "] [-n " username "] [-p " password "] [-r]"
+.SH DESCRIPTION
+.B spuser
+is a Spread client program that can send and receive messages and 
+join and leave groups. By default it trys to connect to a Spread
+daemon running on port 4803 of the local machine.
+
+.SH OPTIONS
+.IP "-u connection_name"
+The name this connection to the daemon will use to uniquely identify itself.
+.IP "-s spread address"
+The port number, or port number and host to which the spuser 
+program should connect in order to reach a Spread daemon.
+.IP "-n username"
+The user name that one would like to authenticate with
+if password based authentication is enabled.
+.IP "-p password"
+The password to be used for authentication.
+.IP "-r"
+Use a random connection name.
+.SH BUGS
+Some limitations on message size and number of groups are hardcoded into spuser.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+
+Spuser is Copyright 1998-2006 Spread Concepts, LLC.
+.SH "SEE ALSO"
+.BR libspread (3)
+.BR spread (1)

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="VS" category="Processing" standalone="true" author="Swiss Seismological Service">
+		<description>
+		Near instantaneous estimates of earthquake magnitude.
+		</description>
+	</module>
+</seiscomp>

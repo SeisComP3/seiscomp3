@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp2 (http://www.altova.com) by Shang-Lin Chen (Caltech) -->
+<!-- First draft: January 12, 2007
+      Second draft: April 17, 2007
+
+      As of August 23, 2010, changes since last release (2007) include:
+      - Added StaXml namespace to all elements.
+      - Changed major anonymous complex types to named complex types, e.g. Channel and Station now have separate named types.
+      - Switched to more consistent capitalization scheme: In element and type names, first letter of each word is capitalized.
+      - Changed names of date elements to be more consistent.
+      - Removed prefixes where there is no ambiguity, e.g. StaDepth -> Depth.
+      - Converted channel code information into attributes of ChannelType.
+
+      August 23, 2010:
+      - Swap order 32 and 16 moved to attributes.
+      - InstrOrientation changed to InstrumentOrientation.
+      - Removed Action element.
+
+      Oct 21, 2010:
+      - Added StationEpoch.
+      - Removed default value for Site->Country field.
+
+      Nov 22, 2010:
+      - Moved station ID attributes from StationEpoch to Station.
+      - Removed StationEpoch->Comment. The epoch base type already has an element named Comment.
+      - Added maxOccurs="unbounded" to Polynomial->Coefficient.
+
+      Dec 1, 2010:
+      - Added ExternalReport element of type ExternalDocumentType. This is an optional URI that can be included to link
+        to external documents.
+
+      Feb 25, 2011:
+      - Added InstrumentSensitivity element and complex type.
+      - Removed unit elements that are no longer used since we switched to using generic strings for units.
+
+      March 14, 2011:
+      - Added restricted attribute to ChannelType to specify access restrictions
+
+      April 26, 2011:
+      - Removed Network->station_count attribute.
+      - Replaced station_count with Network->TotalNumberStations and Network->SelectedNumberStations, elements
+        that represent the total number of stations in the network and the number of stations in the network that were
+        selected by the query that produced the StationXML document. These are both optional elements.
+      - Added element ModuleURI, the web address for the query that produced the StationXML document.
+
+      May 18, 2011:
+      - Added type xs:string to CoefficientsType->Input/OutputUnits.
+      - Added Input/OutputUnits to PolynomialType and ResponseListType.
+      - Replaced Stations->NumberChannels with TotalNumberChannels and SelectedNumberChannels.
+
+      Oct 19, 2011
+      - Added <xs:any namespace="##other" minOccurs="0" processContents="lax"/> to NetworkType,
+        StationEpochType, ChnEpochType
+
+	December 19, 2011
+    - Clarified documentation for CounterType.
+    - Changed integers to CounterType.
+	- Removed Gain and Sensitivity fields. Overall gain should be placed in the  
+      InstrumentSensitivity element. Stage-specific gains should be specified in StageSensitivity. 
+    - Merged existing gain and sensitivity types into SensitivityType. 
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:StaXml="http://www.data.scec.org/xml/station/" targetNamespace="http://www.data.scec.org/xml/station/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>
+            Draft of station XML schema.
+        </xs:documentation>
+	</xs:annotation>
+	<!-- Root element -->
+	<xs:element name="StaMessage" type="StaXml:StaXmlBaseType"/>
+	<!-- Type definitions -->
+	<xs:complexType name="StaXmlBaseType">
+		<xs:annotation>
+			<xs:documentation>Top-level type for Station XML. Required field are Source (network ID of the institution sending the message)
+                and one or more Network containers or one or more Station containers.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Source" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Network ID of the institution sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Sender" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Name of the institution sending this message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Module" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Name of the software module that generated this document.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ModuleURI" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+                                    This is the address of the query that generated the StationXML document, or,
+                                    if applicable, the address of the software that generated this document.
+                                </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SentDate" type="xs:dateTime"/>
+			<xs:choice>
+				<xs:element name="Network" type="StaXml:NetworkType" maxOccurs="unbounded"/>
+				<xs:element name="Station" type="StaXml:StationType" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NetworkType">
+		<xs:annotation>
+			<xs:documentation>This type represents the Network layer. Its attributes are network code and, optionally, the total number of stations in the network.
+                This number may differ from the actual number of Stations in the StationXML file.
+                The official name of the network or other descriptive information can be included in the Description element. The Network can contain 0 or more
+                Stations. 
+                </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0"/>
+			<xs:element name="StartDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="EndDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="TotalNumberStations" type="StaXml:CounterType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+                            TotalNumberStations the total number of stations contained in this network, including
+                            inactive or terminated stations.
+                        </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SelectedNumberStations" type="StaXml:CounterType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>
+                            SelectedNumberStations the total number of stations in this network that were selected by
+                            the query that produced this StationXML document, even if the stations do not appear in the
+                            document. (This might happen if the user only wants a StationXML document goes no further than the Network level.)
+                        </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Station" type="StaXml:StationType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="net_code" type="xs:string"/>
+		<!-- <xs:attribute name="station_count" type="xs:integer"/> -->
+	</xs:complexType>
+	<xs:complexType name="StationType">
+		<xs:annotation>
+			<xs:documentation>Station container. Includes one or more epochs.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StationEpoch" type="StaXml:StationEpochType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="net_code" type="xs:string" use="required"/>
+		<xs:attribute name="sta_code" type="xs:string" use="required"/>
+		<xs:attribute name="sta_number" type="StaXml:CounterType"/>
+		<xs:attribute name="agency_code" type="xs:string"/>
+		<xs:attribute name="deployment_code" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="StationEpochType">
+		<xs:annotation>
+			<xs:documentation>This type represents a station epoch. An organization that does not keep track of station epochs should just
+                include one epoch with the station's creation and termination dates as the epoch start and end dates.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="StaXml:EpochType">
+				<xs:sequence>
+					<xs:any namespace="##other" processContents="lax" minOccurs="0"/>
+					<xs:element name="Lat" type="StaXml:LatType"/>
+					<xs:element name="Lon" type="StaXml:LonType"/>
+					<xs:element name="Elevation" type="StaXml:DistanceType"/>
+					<xs:element name="Site">
+						<xs:annotation>
+							<xs:documentation>These fields describe the location of the station using geo-political boundaries. </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Town" type="xs:string" minOccurs="0"/>
+								<xs:element name="County" type="xs:string" minOccurs="0"/>
+								<xs:element name="State" type="xs:string" minOccurs="0"/>
+								<xs:element name="Country" type="xs:string"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Name">
+						<xs:annotation>
+							<xs:documentation>Common name used to refer to this station.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="40"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Description" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+                        Long description of the station's location, e.g. "20 miles west of Highway 40."
+                    </xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:maxLength value="80"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Installation" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Type of installation.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="BB_SEISMIC"/>
+								<xs:enumeration value="SP_SEISMIC"/>
+								<xs:enumeration value="SM_REFERENCE"/>
+								<xs:enumeration value="SM_BUILDING"/>
+								<xs:enumeration value="BB_PORTABLE"/>
+								<xs:enumeration value="SP_PORTABLE"/>
+								<xs:enumeration value="SP_ARRAY"/>
+								<xs:enumeration value="LP_ARRAY"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="Instrument" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Type of instrumentation.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="SPx1"/>
+								<xs:enumeration value="SPx3"/>
+								<xs:enumeration value="BBx1"/>
+								<xs:enumeration value="BBx3"/>
+								<xs:enumeration value="SMx1"/>
+								<xs:enumeration value="SMx3"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<!-- What does instrument refer to? Number of instruments? -->
+					<xs:element name="Vault" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Type of vault, e.g. WWSSN, tunnel, transportable array, etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Geology" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Type of rock and/or geologic formation.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Structure" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Station structure type, as defined in V0.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="InstrumentOrientation" type="StaXml:AngleType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Connector reference orientation or structure/array reference orientation (see V0 definition).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="VelocityModel" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Local velocity model or V30 value.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<!-- Possible values? -->
+					<xs:element name="Equipment" type="StaXml:EquipmentType" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>Equipment currently used by all channels in a station.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Operator" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>An operating agency and associated contact persons. If there multiple operators, each one should be encapsulated within an Operator tag. Since the Contact element is a generic type that represents any contact person, it also has its own optional Agency element. </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Agency" type="xs:string" maxOccurs="unbounded"/>
+								<xs:element name="Contact" type="StaXml:PersonType" maxOccurs="unbounded"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<!-- Since we have StartDate and EndDate in epoch base type, should we keep CreationDate and TerminationDate or move out of StationEpoch? -->
+					<xs:element name="CreationDate" type="xs:dateTime">
+						<xs:annotation>
+							<xs:documentation>Datetime (UTC) the station was created.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="TerminationDate" type="xs:dateTime" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Datetime (UTC) the station was terminated or will be terminated. A blank value should be assumed to mean that the station is still active indefinitely.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="NumberRecorders" type="StaXml:CounterType" minOccurs="0"/>
+					<xs:element name="TotalNumberChannels" type="StaXml:CounterType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Total number of channels recorded at this station.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="SelectedNumberChannels" type="StaXml:CounterType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Number of channels recorded at this station and selected by the query that produced this StationXML document.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Dataless" type="xs:anyURI" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>URI of this stations dataless SEED volume.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="ExternalReport" type="StaXml:ExternalDocumentType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>URI of any type of external report, such as IRIS data reports.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Channel" type="StaXml:ChannelType" minOccurs="0" maxOccurs="unbounded"/>
+					<!-- Should Channel be optional? -->
+				</xs:sequence>
+				<xs:attribute name="swap_order_32" type="StaXml:EndianType" use="optional" default="BIG_ENDIAN"/>
+				<xs:attribute name="swap_order_16" type="StaXml:EndianType" use="optional" default="BIG_ENDIAN"/>
+			</xs:extension>
+		</xs:complexContent>
+		<!-- <xs:element name="StationAlias" type="StaXml:StationIdType" minOccurs="0"/> -->
+	</xs:complexType>
+	<xs:complexType name="ChannelType">
+		<xs:annotation>
+			<xs:documentation>This container describes a channel and at least one of its epochs.
+                        Attributes of ChannelType specify the channel code and the SEED channel code if different. The
+                        "restricted" attribute also specifies whether data or metadata from the channel is restricted to authenticated users (1) or open(0).
+                        Omitting the "restricted" attribute implies the data is open.
+                        </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CreationDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Datetime (UTC) this channel was first created.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TerminationDate" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Datetime (UTC) this channel was terminated or will be terminated. If blank, the channel should be assumed to be active.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Dataless" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="ExternalReport" type="StaXml:ExternalDocumentType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>URI of any type of external report, such as IRIS data reports.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Epoch" type="StaXml:ChnEpochType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="chan_code" type="xs:string" use="required"/>
+		<xs:attribute name="seed_chan_code" type="xs:string"/>
+		<xs:attribute name="domain" type="xs:string"/>
+		<xs:attribute name="loc_code" type="xs:string"/>
+		<xs:attribute name="restricted" type="xs:integer" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StationIdType">
+		<xs:annotation>
+			<xs:documentation>Station and network codes used to identify a station. </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NetCode">
+				<xs:annotation>
+					<xs:documentation>IRIS network code.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="2"/>
+						<xs:pattern value="[\w]+"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="StaCode">
+				<xs:annotation>
+					<xs:documentation>Alphanumeric station code.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="5"/>
+						<xs:pattern value="[\w]+"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="NetNumber" type="StaXml:CounterType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Network number, used by some networks.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StaNumber" type="StaXml:CounterType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Station number, used by some networks.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EpochType">
+		<xs:annotation>
+			<xs:documentation>This complex type describes time windows. It is used as a base type for station and channel epochs.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StartDate" type="xs:dateTime"/>
+			<xs:element name="EndDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="Comment" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExternalDocumentType">
+		<xs:annotation>
+			<xs:documentation>This type contains a URI and description for external data that users may want to reference in Station XML.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="URI" type="xs:anyURI"/>
+			<xs:element name="Description" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ChnEpochType">
+		<xs:annotation>
+			<xs:documentation>Covers SEED blockette 52 and the response blockettes.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="StaXml:EpochType">
+				<xs:sequence>
+					<xs:any namespace="##other" processContents="lax" minOccurs="0"/>
+					<xs:element name="Lat" type="StaXml:LatType">
+						<xs:annotation>
+							<xs:documentation>Latitude coordinates of this channel's sensor.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Lon" type="StaXml:LonType">
+						<xs:annotation>
+							<xs:documentation>Longitude coordinates of this channel's sensor.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Elevation" type="StaXml:DistanceType">
+						<xs:annotation>
+							<xs:documentation>Elevation of the sensor.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Depth" type="StaXml:DistanceType">
+						<xs:annotation>
+							<xs:documentation>The local depth or overburden of the instrument's location. For downhole instruments, the depth of the instrument under the surface ground level. For underground vaults, the distance from the instrument to the local ground level above.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Azimuth" type="StaXml:AzimuthType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Azimuth of the sensor in degrees from north, clockwise.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Dip" type="StaXml:DipType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Dip of the instrument in degrees, down from horizontal.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Offset" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Sensor's north, east, and vertical offsets in meters. Corresponds to V0 real header parameters 50-52.</xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="North" type="StaXml:DistanceType"/>
+								<xs:element name="East" type="StaXml:DistanceType"/>
+								<xs:element name="Vertical" type="StaXml:DistanceType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="Output" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>The type of data this channel collects. Corresponds to channel flags in SEED blockette 52. The SEED volume producer could use the first letter of an Output value as the SEED channel flag.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:NMTOKEN">
+								<xs:enumeration value="TRIGGERED"/>
+								<xs:enumeration value="CONTINUOUS"/>
+								<xs:enumeration value="HEALTH"/>
+								<xs:enumeration value="GEOPHYSICAL"/>
+								<xs:enumeration value="WEATHER"/>
+								<xs:enumeration value="FLAG"/>
+								<xs:enumeration value="SYNTHESIZED"/>
+								<xs:enumeration value="INPUT"/>
+								<xs:enumeration value="EXPERIMENTAL"/>
+								<xs:enumeration value="MAINTENANCE"/>
+								<xs:enumeration value="BEAM"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="SampleRate" type="StaXml:SampleRateType" minOccurs="0"/>
+					<xs:element name="StorageFormat" type="xs:string" minOccurs="0"/>
+					<xs:element name="ClockDrift" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A tolerance value, measured in seconds per sample, used as a threshold for time error detection in data from the channel. </xs:documentation>
+						</xs:annotation>
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:restriction base="StaXml:FloatType">
+									<xs:minInclusive value="0"/>
+									<xs:attribute name="unit" type="xs:string" use="optional" fixed="S/SAMPLE"/>
+								</xs:restriction>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="SignalUnit" type="xs:string" minOccurs="0"/>
+					<xs:element name="CalibrationUnit" type="xs:string" minOccurs="0"/>
+					<xs:element name="BlockLengthExponent" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Record length of data from this channel, expressed as an exponent of 2. For example, if the blocklength is 256, use the value 8. </xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:integer">
+								<xs:minInclusive value="8"/>
+								<xs:maxInclusive value="12"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="DataLogger" type="StaXml:DataloggerType" minOccurs="0"/>
+					<xs:element name="Sensor" type="StaXml:EquipmentType" minOccurs="0"/>
+					<xs:element name="PreAmplifier" type="StaXml:EquipmentType" minOccurs="0"/>
+					<xs:element name="InstrumentSensitivity" type="StaXml:SensitivityType" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							InstrumentSensitivity contains the overall sensitivity of a channel.
+						</xs:documentation>
+					</xs:annotation>
+					</xs:element>
+					<xs:element name="Response" type="StaXml:ResponseType" minOccurs="0" maxOccurs="unbounded"/>
+					<!-- <xs:element name="Gain" type="StaXml:GainType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Channel gain. Corresponds to SEED blockette 58 for stage 0.</xs:documentation>
+						</xs:annotation>
+					</xs:element> -->
+					<!-- V0 fields -->
+					<!-- <xs:element name="Sensitivity" type="StaXml:GainSensitivityType" minOccurs="0"/> -->
+					<xs:element name="DampingConstant" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+                                    Corresponds to SEED real parameter 41.
+                                </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="NaturalFrequency" type="StaXml:FrequencyType" minOccurs="0"/>
+					<xs:element name="LeastSignificantBit" minOccurs="0">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:restriction base="StaXml:FloatType">
+									<xs:minInclusive value="0"/>
+									<xs:attribute name="unit" type="xs:string" use="optional" fixed="MICROVOLTS/COUNT"/>
+									<xs:attributeGroup ref="StaXml:uncertainty"/>
+								</xs:restriction>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="FullScaleInput" minOccurs="0">
+						<xs:complexType>
+							<xs:annotation>
+								<xs:documentation>In Volts. Corresponds to V0 real header paramter 23.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleContent>
+								<xs:restriction base="StaXml:FloatType">
+									<xs:minInclusive value="0"/>
+									<xs:attribute name="unit" type="xs:string" use="optional" fixed="VOLTS"/>
+									<xs:attributeGroup ref="StaXml:uncertainty"/>
+								</xs:restriction>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="FullScaleOutput" type="StaXml:VoltageType" minOccurs="0"/>
+					<xs:element name="FullScaleCapability" type="StaXml:VoltageType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Full scale sensing capability. Corresponds to V0 real parameter 44. </xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PreTriggerTime" type="StaXml:SecondType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Pre-trigger memory recording time (secs). Corresponds to V0 real header parameter 24.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="PostDetriggerTime" type="StaXml:SecondType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Post-detrigger recording time (secs). Corresponds to V0 real header parameter 25.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!-- End ChnEpochType-->
+	<xs:group name="FrequencyRangeGroup">
+		<xs:sequence>
+			<xs:element name="FrequencyStart" type="xs:double"/>
+			<xs:element name="FrequencyEnd" type="xs:double"/>
+			<xs:element name="FrequencyDBVariation" type="xs:double"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="SensitivityType">
+		<xs:annotation>
+			<xs:documentation>Complex type for sensitivity and frequency ranges.This complex type can be used to represent both overall sensitivities and individual stage gains. The FrequencyRangeGroup is an optional construct that defines a pass band in Hertz ( FrequencyStart and FrequencyEnd) in which the SensitivityValue is valid within the number of decibels specified in FrequencyDBVariation.
+                </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SensitivityValue" type="xs:double"/>
+			<xs:element name="Frequency" type="xs:double"/>
+			<xs:element name="SensitivityUnits" type="xs:string"/>
+			<xs:group ref="StaXml:FrequencyRangeGroup" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Equipment types. -->
+	<xs:complexType name="EquipmentType">
+		<xs:sequence>
+			<xs:element name="EquipType" type="xs:string"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="Manufacturer" type="xs:string" minOccurs="0"/>
+			<xs:element name="Vendor" type="xs:string" minOccurs="0"/>
+			<xs:element name="Model" type="xs:string" minOccurs="0"/>
+			<xs:element name="SerialNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="InstallationDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="RemovalDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="CalibrationDate" type="xs:dateTime" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="DataloggerType">
+		<xs:annotation>
+			<xs:documentation>
+                    Datalogger complex type. It extends the equipment type. Covers recorder/datalogger parameters in V0.
+                </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="StaXml:EquipmentType">
+				<xs:sequence>
+					<xs:element name="TotalChannels" type="StaXml:CounterType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Total number of channels datalogger can record. Corresponds to V0 integer header parameter 34.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="RecordedChannels" type="StaXml:CounterType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Number of channels recorded by this datalogger.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ResponseType">
+		<xs:annotation>
+			<xs:documentation>
+                    This complex type represents channel response and covers SEED blockettes 53 to 56.
+                </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>Choose one of these responses. There should be one response per stage.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="PolesZeros" type="StaXml:PolesZerosType" minOccurs="0"/>
+				<xs:element name="Coefficients" type="StaXml:CoefficientsType" minOccurs="0"/>
+				<xs:element name="ResponseList" type="StaXml:ResponseListType" minOccurs="0"/>
+				<!-- Generic response: highpass, lowpass, polynomials, etc. -->
+				<xs:element name="Generic" type="StaXml:GenericResponseType" minOccurs="0"/>
+				<xs:element name="FIR" type="StaXml:FIRType" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="Polynomial" type="StaXml:PolynomialType" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="Decimation" type="StaXml:DecimationType" minOccurs="0"/>
+			<xs:element name="StageSensitivity" type="StaXml:SensitivityType">
+				<xs:annotation>
+					<xs:documentation>StageSensitivity is the gain at the stage of the encapsulating response element and corresponds to SEED blockette 58. In the SEED convention, stage 0 gain represents the overall sensitivity of the channel. In StationXML, stage 0 gains are allowed but are considered deprecated. Overall sensitivity should be specified in the InstrumentSensitivity element.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Spectra" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Response spectrum values. Corresponds to the spectrum section in the V0 headers.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NumberPeriods" type="StaXml:CounterType"/>
+						<xs:element name="NumberDampingValues" type="StaXml:CounterType"/>
+						<xs:element name="Sa" minOccurs="0" maxOccurs="4">
+							<xs:annotation>
+								<xs:documentation>Sa spectrum value at a certain period for 5% damping. Corresponds to V0 real header parameters 70-76.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:complexContent>
+									<xs:extension base="StaXml:FloatType">
+										<xs:attribute name="period" type="xs:double"/>
+									</xs:extension>
+								</xs:complexContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="stage" type="StaXml:CounterType" use="required">
+			<xs:annotation>
+				<xs:documentation>Stage sequence number. This is used in all the response SEED blockettes and in V0 parameter 60.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="stage_description" type="StaXml:StageType" use="optional">
+			<xs:annotation>
+				<xs:documentation>Describing the type of stage. Used in SEED response blockettes.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ResponseListType">
+		<xs:annotation>
+			<xs:documentation>Corresponds to SEED blockette 55.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string"/>
+			<xs:element name="ResponseListElement" type="StaXml:ResponseListElementType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResponseListElementType">
+		<xs:sequence>
+			<xs:element name="Frequency" type="StaXml:FrequencyType"/>
+			<xs:element name="Amplitude" type="StaXml:FloatType"/>
+			<xs:element name="Phase" type="StaXml:AngleType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PassType">
+		<xs:annotation>
+			<xs:documentation>Pass response, containing corner frequency and roll off.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CornerFreq" type="StaXml:FrequencyType"/>
+			<xs:element name="Roll">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:restriction base="StaXml:FloatType">
+							<xs:attribute name="unit" type="xs:string" use="optional" default="DB/OCTAVE"/>
+							<xs:attributeGroup ref="StaXml:uncertainty"/>
+						</xs:restriction>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Damping" type="xs:double"/>
+			<xs:element name="Polenumber" type="StaXml:CounterType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- <xs:complexType name="GainSensitivityType">
+		<xs:annotation>
+			<xs:documentation>Gain and sensitivity values. Corresponds to SEED blockette 58.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SensitivityValue" type="xs:double"/>
+			<xs:element name="GainUnits" type="xs:string" minOccurs="0"/>
+			<xs:element name="Frequency" type="StaXml:FloatType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType> -->
+	<xs:complexType name="LogType">
+		<xs:annotation>
+			<xs:documentation>Container for log entries.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Entry" type="StaXml:CommentType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CommentType">
+		<xs:annotation>
+			<xs:documentation>Container for a comment or log entry.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Value" type="xs:string"/>
+			<xs:element name="Author" type="StaXml:PersonType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Date" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="StaXml:CounterType"/>
+	</xs:complexType>
+	<xs:complexType name="PolesZerosType">
+		<xs:annotation>
+			<xs:documentation>Complex poles and zeros. Corresponds to SEED blockette 53.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Comment" type="StaXml:CommentType" minOccurs="0"/>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string" default="COUNTS"/>
+			<xs:element name="NormalizationFactor" type="xs:double" default="1.0"/>
+			<xs:element name="NormalizationFreq" type="StaXml:FrequencyType"/>
+			<xs:element name="Pole" type="StaXml:PoleZeroType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Zero" type="StaXml:PoleZeroType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenericResponseType">
+		<xs:annotation>
+			<xs:documentation>Generic response. Corresponds to SEED blockette 56. Corresponds to V0 parameters 60-62 (Filter/processing parameters)?</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="GenComment" type="xs:string" minOccurs="0"/>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string"/>
+			<xs:element name="Sensitivity" type="StaXml:FloatType"/>
+			<xs:element name="FreeFreq" type="StaXml:FrequencyType"/>
+			<!-- Highpass and lowpass response -->
+			<xs:element name="HighPass" type="StaXml:PassType"/>
+			<xs:element name="LowPass" type="StaXml:PassType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FIRType">
+		<xs:sequence>
+			<xs:element name="ResponseName" type="xs:string" minOccurs="0"/>
+			<xs:element name="Symmetry">
+				<xs:simpleType>
+					<xs:restriction base="xs:NMTOKEN">
+						<xs:enumeration value="NONE"/>
+						<xs:enumeration value="EVEN"/>
+						<xs:enumeration value="ODD"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string"/>
+			<xs:element name="NumeratorCoefficient" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="i" type="xs:integer"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PolynomialType">
+		<xs:annotation>
+			<xs:documentation>
+                 Response of a non-linear sensor. Corresponds to SEED blockette 52.
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string"/>
+			<xs:element name="ApproximationType" type="xs:NMTOKEN" default="MACLAURIN"/>
+			<xs:element name="FreqLowerBound" type="StaXml:FrequencyType"/>
+			<xs:element name="FreqUpperBound" type="StaXml:FrequencyType"/>
+			<xs:element name="ApproxLowerBound" type="StaXml:FrequencyType"/>
+			<xs:element name="ApproxUpperBound" type="StaXml:FrequencyType"/>
+			<xs:element name="MaxError" type="StaXml:FrequencyType"/>
+			<xs:element name="Coefficient" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StaXml:FloatNoUnitType">
+							<xs:attribute name="number" type="StaXml:CounterType"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CoefficientsType">
+		<xs:annotation>
+			<xs:documentation>Corresponds to SEED blockette 54.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InputUnits" type="xs:string"/>
+			<xs:element name="OutputUnits" type="xs:string"/>
+			<xs:element name="Numerator" type="StaXml:FloatType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Denominator" type="StaXml:FloatType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecimationType">
+		<xs:annotation>
+			<xs:documentation>Corresponds to SEED blockette 57.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="InputSampleRate" type="StaXml:FrequencyType"/>
+			<xs:element name="Factor" type="xs:integer"/>
+			<xs:element name="Offset" type="xs:integer"/>
+			<xs:element name="Delay" type="StaXml:FloatType"/>
+			<xs:element name="Correction" type="StaXml:FloatType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- The following elements represent numbers. -->
+	<xs:attributeGroup name="uncertainty">
+		<xs:annotation>
+			<xs:documentation>Expressing uncertainties or errors with a positive and a negative component. Both values should be given as positive integers, but minus_error is understood to actually be negative.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="plus_error" type="xs:integer" use="optional"/>
+		<xs:attribute name="minus_error" type="xs:integer" use="optional"/>
+	</xs:attributeGroup>
+	<xs:complexType name="FloatNoUnitType">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="FloatType">
+		<xs:annotation>
+			<xs:documentation>Representation of floating-point numbers used as measurements.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" type="xs:string" use="optional"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<!-- Derived from FloatType. -->
+	<xs:complexType name="SecondType">
+		<xs:annotation>
+			<xs:documentation>A time value in seconds.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:attribute name="unit" type="xs:string" fixed="S"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="VoltageType">
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:attribute name="unit" type="xs:string" fixed="VOLTS"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="AngleType">
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:minInclusive value="-360"/>
+				<xs:maxInclusive value="360"/>
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="DEGREES"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LatBaseType">
+		<xs:annotation>
+			<xs:documentation>Base latitude type. Because of the limitations of schema, defining this type and then extending it to create the real latitude type is the only way to restrict values while adding datum as an attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:minInclusive value="-90"/>
+				<xs:maxExclusive value="90"/>
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="DEGREES"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LatType">
+		<xs:annotation>
+			<xs:documentation>Type for latitude coordinates.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StaXml:LatBaseType">
+				<xs:attribute name="datum" type="xs:NMTOKEN" use="optional" default="WGS84"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LonBaseType">
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:minInclusive value="-180"/>
+				<xs:maxInclusive value="180"/>
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="DEGREES"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LonType">
+		<xs:annotation>
+			<xs:documentation>Type for longitude coordinates.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="StaXml:LonBaseType">
+				<xs:attribute name="datum" type="xs:NMTOKEN" use="optional" default="WGS84"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="AzimuthType">
+		<xs:annotation>
+			<xs:documentation>Instrument azimuth, measured from north.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:minInclusive value="0"/>
+				<xs:maxExclusive value="360"/>
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="DEGREES"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DipType">
+		<xs:annotation>
+			<xs:documentation>Instrument dip in degrees down from horizontal. Together azimuth and dip describe the direction of the sensitive axis of the instrument.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:minInclusive value="-90"/>
+				<xs:maxInclusive value="90"/>
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="DEGREES"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DistanceType">
+		<xs:annotation>
+			<xs:documentation>Extension of FloatType for distances, elevations, and depths.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:attribute name="unit" type="xs:string" use="optional" default="M"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="FrequencyType">
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="HZ"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="GainType">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="nominal" type="StaXml:NominalType" default="NOMINAL"/>
+				<xs:attribute name="unit" type="xs:string" default="dB/ocatve"/>
+				<xs:attributeGroup ref="StaXml:uncertainty"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="SampleRateType">
+		<xs:simpleContent>
+			<xs:restriction base="StaXml:FloatType">
+				<xs:attribute name="unit" type="xs:string" use="optional" fixed="SAMPLES/S"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PoleZeroType">
+		<xs:annotation>
+			<xs:documentation>Complex numbers used as poles or zeros in channel response.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Real" type="StaXml:FloatNoUnitType"/>
+			<xs:element name="Imaginary" type="StaXml:FloatNoUnitType"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:integer"/>
+	</xs:complexType>
+	<xs:simpleType name="CounterType">
+		<xs:annotation>
+			<xs:documentation>Integers greater than or equal to 0.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PersonType">
+		<xs:annotation>
+			<xs:documentation>Representation of a person's contact information. A person can belong to multiple agencies and have multiple email addresses and phone numbers.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string"/>
+			<xs:element name="Agency" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Email" type="StaXml:EmailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Phone" type="StaXml:PhoneNumberType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- Simple types -->
+	<xs:simpleType name="SensorComponentType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="N"/>
+			<xs:enumeration value="Z"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NominalType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="NOMINAL"/>
+			<xs:enumeration value="CALCULATED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EmailType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[\w\.\-_]+@[\w\.\-_]+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PhoneNumberType">
+		<xs:sequence>
+			<xs:element name="CountryCode" type="xs:integer" default="1" minOccurs="0"/>
+			<xs:element name="AreaCode" type="xs:integer"/>
+			<xs:element name="PhoneNumber">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[0-9]+-[0-9]+"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="description">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="work"/>
+					<xs:enumeration value="mobile"/>
+					<xs:enumeration value="home"/>
+					<xs:enumeration value="VOIP"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="EndianType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="BIG_ENDIAN"/>
+			<xs:enumeration value="LITTLE_ENDIAN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StageType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="LAPLACE">
+				<xs:annotation>
+					<xs:documentation>Laplace transform analog response, in rad/sec.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HERTZ">
+				<xs:annotation>
+					<xs:documentation>Analog response in Hz.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="COMPOSITE">
+				<xs:annotation>
+					<xs:documentation> Composite (currently undefined)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DIGITAL">
+				<xs:annotation>
+					<xs:documentation>Digital (Z-transform)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

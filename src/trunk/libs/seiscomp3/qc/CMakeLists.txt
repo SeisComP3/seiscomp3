@@ -1,0 +1,29 @@
+SET(QC_HEADERS
+	qcprocessor.h
+	qcprocessor_rms.h
+	qcprocessor_mean.h
+	qcprocessor_latency.h
+	qcprocessor_delay.h
+	qcprocessor_overlap.h
+	qcprocessor_gap.h
+	qcprocessor_availability.h
+	qcprocessor_spike.h
+	qcprocessor_timing.h
+	qcprocessor_outage.h
+)
+
+SET(QC_SOURCES
+	qcprocessor_rms.cpp
+	qcprocessor_mean.cpp
+	qcprocessor_latency.cpp
+	qcprocessor_delay.cpp
+	qcprocessor_overlap.cpp
+	qcprocessor_gap.cpp
+	qcprocessor_availability.cpp
+	qcprocessor_spike.cpp
+	qcprocessor_timing.cpp
+	qcprocessor_outage.cpp
+	qcprocessor.cpp
+)
+
+SC_SETUP_LIB_SUBDIR(QC)

@@ -1,0 +1,1658 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>AmplitudeView</class>
+ <widget class="QMainWindow" name="AmplitudeView" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>948</width>
+    <height>663</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Amplitude picker</string>
+  </property>
+  <property name="iconSize" >
+   <size>
+    <width>16</width>
+    <height>16</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QSplitter" name="splitter" >
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="Seiscomp::Gui::ZoomRecordFrame" name="frameZoom" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape" >
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Plain</enum>
+       </property>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>2</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="frameCurrentTraceLabel" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>4</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="labelStationCode" >
+               <property name="font" >
+                <font>
+                 <family>Verdana</family>
+                 <pointsize>14</pointsize>
+                 <weight>75</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                 <underline>false</underline>
+                 <strikeout>false</strikeout>
+                </font>
+               </property>
+               <property name="text" >
+                <string>ABCD</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelCode" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>4</hsizetype>
+                 <vsizetype>4</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="font" >
+                <font>
+                 <family>Verdana</family>
+                 <pointsize>12</pointsize>
+                 <weight>50</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                 <underline>false</underline>
+                 <strikeout>false</strikeout>
+                </font>
+               </property>
+               <property name="text" >
+                <string>AB  BHZ</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QVBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelDistanceName" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>4</hsizetype>
+                   <vsizetype>5</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text" >
+                  <string>D:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="labelAzimuthName" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>4</hsizetype>
+                   <vsizetype>5</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text" >
+                  <string>A:</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="labelDistance" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>5</hsizetype>
+                   <vsizetype>4</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text" >
+                  <string>12Â°</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="labelAzimuth" >
+                 <property name="text" >
+                  <string>314Â°</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>81</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>10</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <layout class="QGridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item row="1" column="2" >
+                <widget class="QPushButton" name="btnTimeScaleDown" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>0</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="toolTip" >
+                  <string>Increase visible timespan</string>
+                 </property>
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="icons.qrc" >:/icons/icons/arrow_right.png</iconset>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" >
+                <widget class="QPushButton" name="btnTimeScaleUp" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>0</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="toolTip" >
+                  <string>Decrease visible timespan</string>
+                 </property>
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="icons.qrc" >:/icons/icons/arrow_left.png</iconset>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1" >
+                <widget class="QPushButton" name="btnAmplScaleUp" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>0</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="toolTip" >
+                  <string>Scale amplitudes up</string>
+                 </property>
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="icons.qrc" >:/icons/icons/arrow_up.png</iconset>
+                 </property>
+                 <property name="default" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1" >
+                <widget class="QPushButton" name="btnScaleReset" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>0</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="toolTip" >
+                  <string>Reset timespan and amplitude scale</string>
+                 </property>
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="icons.qrc" >:/icons/icons/reload.png</iconset>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1" >
+                <widget class="QPushButton" name="btnAmplScaleDown" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>0</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16</width>
+                   <height>16</height>
+                  </size>
+                 </property>
+                 <property name="toolTip" >
+                  <string>Scale amplitudes down</string>
+                 </property>
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="icons.qrc" >:/icons/icons/arrow_down.png</iconset>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>16</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Maximum</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btnRowAccept" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="toolTip" >
+                <string>Accept amplitude</string>
+               </property>
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="icon" >
+                <iconset resource="icons.qrc" >:/icons/icons/ok.png</iconset>
+               </property>
+               <property name="iconSize" >
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="checkable" >
+                <bool>true</bool>
+               </property>
+               <property name="flat" >
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnRowRemove" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="toolTip" >
+                <string>Deactivate current amplitude or trace depending on the picking mode</string>
+               </property>
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="icon" >
+                <iconset resource="icons.qrc" >:/icons/icons/remove.png</iconset>
+               </property>
+               <property name="iconSize" >
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="shortcut" >
+                <string>X</string>
+               </property>
+               <property name="checkable" >
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnRowReset" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>0</hsizetype>
+                 <vsizetype>0</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>32</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="toolTip" >
+                <string>Reset automatic amplitudes and remove manual amplitudes</string>
+               </property>
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="icon" >
+                <iconset resource="icons.qrc" >:/icons/icons/erase.png</iconset>
+               </property>
+               <property name="iconSize" >
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frameCurrentTrace" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Plain</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QFrame" name="frameTraces" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>1</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape" >
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Plain</enum>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>642</y>
+     <width>948</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="toolBarScale" >
+   <property name="windowTitle" >
+    <string>Zooming</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionDefaultView" />
+   <addaction name="separator" />
+   <addaction name="actionIncreaseRowHeight" />
+   <addaction name="actionDecreaseRowHeight" />
+   <addaction name="separator" />
+   <addaction name="actionIncreaseRowTimescale" />
+   <addaction name="actionDecreaseRowTimescale" />
+   <addaction name="separator" />
+   <addaction name="actionMaximizeAmplitudes" />
+  </widget>
+  <widget class="QToolBar" name="toolBarSort" >
+   <property name="windowTitle" >
+    <string>Sort</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionSortByDistance" />
+   <addaction name="actionSortAlphabetically" />
+  </widget>
+  <widget class="QToolBar" name="toolBarAlign" >
+   <property name="windowTitle" >
+    <string>Alignment</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionAlignOnPArrival" />
+   <addaction name="actionAlignOnOriginTime" />
+  </widget>
+  <widget class="QToolBar" name="toolBarComponent" >
+   <property name="windowTitle" >
+    <string>Components</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionShowZComponent" />
+   <addaction name="actionShowNComponent" />
+   <addaction name="actionShowEComponent" />
+  </widget>
+  <widget class="QToolBar" name="toolBarStations" >
+   <property name="sizePolicy" >
+    <sizepolicy>
+     <hsizetype>5</hsizetype>
+     <vsizetype>7</vsizetype>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle" >
+    <string>Add stations</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionShowAllStations" />
+   <addaction name="actionShowUsedStations" />
+  </widget>
+  <widget class="QToolBar" name="toolBarPicking" >
+   <property name="windowTitle" >
+    <string>Picking</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionPickAmplitude" />
+  </widget>
+  <widget class="QMenuBar" name="menuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>948</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menuSort" >
+     <property name="title" >
+      <string>&amp;Sort</string>
+     </property>
+     <addaction name="actionSortByDistance" />
+     <addaction name="actionSortAlphabetically" />
+    </widget>
+    <widget class="QMenu" name="menuAlign" >
+     <property name="title" >
+      <string>Align</string>
+     </property>
+     <addaction name="actionAlignOnPArrival" />
+     <addaction name="actionAlignOnOriginTime" />
+    </widget>
+    <widget class="QMenu" name="menu_Zoomtrace" >
+     <property name="title" >
+      <string>&amp;Zoomtrace</string>
+     </property>
+     <addaction name="actionIncreaseAmplitudeScale" />
+     <addaction name="actionDecreaseAmplitudeScale" />
+     <addaction name="actionTimeScaleUp" />
+     <addaction name="actionTimeScaleDown" />
+     <addaction name="separator" />
+     <addaction name="actionClipComponentsToViewport" />
+    </widget>
+    <widget class="QMenu" name="menuTraces" >
+     <property name="title" >
+      <string>&amp;Traces</string>
+     </property>
+     <widget class="QMenu" name="menuAlignArrival" >
+      <property name="title" >
+       <string>Align</string>
+      </property>
+      <addaction name="actionAlignOnOriginTime" />
+     </widget>
+     <addaction name="actionIncreaseRowHeight" />
+     <addaction name="actionDecreaseRowHeight" />
+     <addaction name="actionIncreaseRowTimescale" />
+     <addaction name="actionDecreaseRowTimescale" />
+     <addaction name="actionMaximizeAmplitudes" />
+     <addaction name="separator" />
+     <addaction name="menuAlignArrival" />
+     <addaction name="menuSort" />
+    </widget>
+    <widget class="QMenu" name="menuComponents" >
+     <property name="title" >
+      <string>&amp;Components</string>
+     </property>
+     <addaction name="actionShowZComponent" />
+     <addaction name="actionShowNComponent" />
+     <addaction name="actionShowEComponent" />
+    </widget>
+    <addaction name="actionDefaultView" />
+    <addaction name="actionShowUsedStations" />
+    <addaction name="actionShowTraceValuesInNmS" />
+    <addaction name="separator" />
+    <addaction name="menu_Zoomtrace" />
+    <addaction name="menuTraces" />
+    <addaction name="menuComponents" />
+   </widget>
+   <widget class="QMenu" name="menu_Navigation" >
+    <property name="title" >
+     <string>&amp;Navigation</string>
+    </property>
+    <addaction name="actionScrollLeft" />
+    <addaction name="actionScrollRight" />
+    <addaction name="actionScrollFineLeft" />
+    <addaction name="actionScrollFineRight" />
+   </widget>
+   <widget class="QMenu" name="menu_Locate" >
+    <property name="title" >
+     <string>&amp;Amplitudes</string>
+    </property>
+    <addaction name="actionPickAmplitude" />
+    <addaction name="actionDisablePicking" />
+    <addaction name="separator" />
+    <addaction name="actionComputeMagnitudes" />
+   </widget>
+   <widget class="QMenu" name="menu_Filter" >
+    <property name="title" >
+     <string>&amp;Filter</string>
+    </property>
+    <addaction name="actionToggleFilter" />
+   </widget>
+   <addaction name="menuView" />
+   <addaction name="menu_Navigation" />
+   <addaction name="menu_Filter" />
+   <addaction name="menu_Locate" />
+  </widget>
+  <widget class="QToolBar" name="toolBarFilter" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionToggleFilter" />
+  </widget>
+  <widget class="QToolBar" name="toolBarSetup" >
+   <property name="windowTitle" >
+    <string>Calculate</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionRecalculateAmplitude" />
+   <addaction name="actionRecalculateAmplitudes" />
+  </widget>
+  <widget class="QToolBar" name="toolBarComputeMagnitudes" >
+   <property name="windowTitle" >
+    <string>Apply</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionComputeMagnitudes" />
+  </widget>
+  <action name="actionIncreaseAmplitudeScale" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/vzoomin.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Scale amplitudes up</string>
+   </property>
+   <property name="iconText" >
+    <string>Scale amplitudes up</string>
+   </property>
+   <property name="toolTip" >
+    <string>Increase amplitude scale of current trace</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="actionDecreaseAmplitudeScale" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/vzoomout.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Scale amplitudes down</string>
+   </property>
+   <property name="iconText" >
+    <string>Scale amplitudes down</string>
+   </property>
+   <property name="toolTip" >
+    <string>Descrease amplitude scale of current trace</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="actionTimeScaleUp" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/zoomout.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Increase visible timespan</string>
+   </property>
+   <property name="toolTip" >
+    <string>Increase visible timespan</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionTimeScaleDown" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/zoomin.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Decrease visible timespan</string>
+   </property>
+   <property name="iconText" >
+    <string>Decrease visible timespan</string>
+   </property>
+   <property name="toolTip" >
+    <string>Decrease visible timespan</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionScrollLeft" >
+   <property name="text" >
+    <string>Scroll left</string>
+   </property>
+   <property name="toolTip" >
+    <string>Scroll current trace left</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+Left</string>
+   </property>
+  </action>
+  <action name="actionScrollRight" >
+   <property name="text" >
+    <string>Scroll right</string>
+   </property>
+   <property name="toolTip" >
+    <string>Scroll current trace right</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+Right</string>
+   </property>
+  </action>
+  <action name="actionSelectNextTrace" >
+   <property name="text" >
+    <string>Next trace</string>
+   </property>
+   <property name="iconText" >
+    <string>Next trace</string>
+   </property>
+   <property name="shortcut" >
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="actionSelectPreviousTrace" >
+   <property name="text" >
+    <string>Previous trace</string>
+   </property>
+   <property name="iconText" >
+    <string>Previous trace</string>
+   </property>
+   <property name="shortcut" >
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionScrollFineLeft" >
+   <property name="text" >
+    <string>Scroll fine left</string>
+   </property>
+   <property name="iconText" >
+    <string>Scroll fine left</string>
+   </property>
+   <property name="toolTip" >
+    <string>Scroll current trace left with finer steps</string>
+   </property>
+   <property name="shortcut" >
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionScrollFineRight" >
+   <property name="text" >
+    <string>Scroll fine right</string>
+   </property>
+   <property name="iconText" >
+    <string>Scroll fine right</string>
+   </property>
+   <property name="toolTip" >
+    <string>Scroll current trace right with finer steps</string>
+   </property>
+   <property name="shortcut" >
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionIncreaseRowHeight" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/vzoomin.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Increase row height</string>
+   </property>
+   <property name="toolTip" >
+    <string>Increases the row height in traceview (Shift+Y)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+Y</string>
+   </property>
+  </action>
+  <action name="actionDecreaseRowHeight" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/vzoomout.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Decrease row height</string>
+   </property>
+   <property name="toolTip" >
+    <string>Decreases the row height in traceview (Y)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Y</string>
+   </property>
+  </action>
+  <action name="actionIncreaseRowTimescale" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/zoomin.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Increase row timescale</string>
+   </property>
+   <property name="toolTip" >
+    <string>Increases the timescale in traceview (>)</string>
+   </property>
+   <property name="shortcut" >
+    <string>></string>
+   </property>
+  </action>
+  <action name="actionDecreaseRowTimescale" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/zoomout.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Decrease row timescale</string>
+   </property>
+   <property name="toolTip" >
+    <string>Decreases the timescale in traceview (&lt;)</string>
+   </property>
+   <property name="shortcut" >
+    <string>&lt;</string>
+   </property>
+  </action>
+  <action name="actionSelectFirstRow" >
+   <property name="text" >
+    <string>Select first row</string>
+   </property>
+   <property name="shortcut" >
+    <string>Home</string>
+   </property>
+  </action>
+  <action name="actionSelectLastRow" >
+   <property name="text" >
+    <string>Select last row</string>
+   </property>
+   <property name="shortcut" >
+    <string>End</string>
+   </property>
+  </action>
+  <action name="actionAlignOnPArrival" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/align_p.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Align on trigger time</string>
+   </property>
+   <property name="iconText" >
+    <string>Align on trigger time</string>
+   </property>
+   <property name="toolTip" >
+    <string>Align on trigger time</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="actionAlignOnOriginTime" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/align_t.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Align on origin time</string>
+   </property>
+   <property name="iconText" >
+    <string>Align on origin time</string>
+   </property>
+   <property name="toolTip" >
+    <string>Align on origin time (Ctrl+0)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionDefaultView" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/home.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Default view</string>
+   </property>
+   <property name="toolTip" >
+    <string>Default view (Shift+N)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+N</string>
+   </property>
+  </action>
+  <action name="actionSortAlphabetically" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/sort_abc.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Sort by names</string>
+   </property>
+   <property name="iconText" >
+    <string>Sort by names</string>
+   </property>
+   <property name="toolTip" >
+    <string>Sorts the traces by name (Alt+A)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+A</string>
+   </property>
+  </action>
+  <action name="actionSortByDistance" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/sort_dist.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Sort by distance</string>
+   </property>
+   <property name="toolTip" >
+    <string>Sort by distance (Alt+D)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+D</string>
+   </property>
+  </action>
+  <action name="actionToggleFilter" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/filter.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Toggle filter</string>
+   </property>
+   <property name="toolTip" >
+    <string>Toggles using a filter before displaying the traces (F)</string>
+   </property>
+   <property name="shortcut" >
+    <string>F</string>
+   </property>
+  </action>
+  <action name="actionMaximizeAmplitudes" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/vmax.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Maximize visible amplitudes</string>
+   </property>
+   <property name="iconText" >
+    <string>Maximize visible amplitudes</string>
+   </property>
+   <property name="toolTip" >
+    <string>Maximize visible amplitudes (S)</string>
+   </property>
+   <property name="shortcut" >
+    <string>S</string>
+   </property>
+  </action>
+  <action name="actionComputeMagnitudes" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/locate.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Apply</string>
+   </property>
+   <property name="iconText" >
+    <string>Apply</string>
+   </property>
+   <property name="toolTip" >
+    <string>Compute the magnitude and update it in the origin.</string>
+   </property>
+   <property name="statusTip" >
+    <string>Compute the magnitude and update it in the origin.</string>
+   </property>
+   <property name="shortcut" >
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionShowAllStations" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/mindistance.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Add stations in range</string>
+   </property>
+   <property name="iconText" >
+    <string>Add stations in range</string>
+   </property>
+   <property name="toolTip" >
+    <string>Adds all stations next to the origin with distance lower or equal than the entered value that haven't triggered. When view mode is "used stations only" you won't see the new stations until leaving this mode.</string>
+   </property>
+  </action>
+  <action name="actionShowUsedStations" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/withpick.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Show used stations only</string>
+   </property>
+   <property name="iconText" >
+    <string>Used stations only</string>
+   </property>
+   <property name="toolTip" >
+    <string>Toggles between hiding unpicked and deactivated stations and showing all stations</string>
+   </property>
+  </action>
+  <action name="actionShowZComponent" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/channelZ.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Vertical</string>
+   </property>
+   <property name="iconText" >
+    <string>Vertical</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show Vertical Component (Z)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Z</string>
+   </property>
+  </action>
+  <action name="actionShowNComponent" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/channelN.png</iconset>
+   </property>
+   <property name="text" >
+    <string>North</string>
+   </property>
+   <property name="iconText" >
+    <string>North</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show North Component (N)</string>
+   </property>
+   <property name="shortcut" >
+    <string>N</string>
+   </property>
+  </action>
+  <action name="actionShowEComponent" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/channelE.png</iconset>
+   </property>
+   <property name="text" >
+    <string>East</string>
+   </property>
+   <property name="iconText" >
+    <string>East</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show East Component (E)</string>
+   </property>
+   <property name="shortcut" >
+    <string>E</string>
+   </property>
+  </action>
+  <action name="actionGotoNextMarker" >
+   <property name="text" >
+    <string>Goto next marker</string>
+   </property>
+   <property name="iconText" >
+    <string>Goto next marker</string>
+   </property>
+   <property name="toolTip" >
+    <string>Goto next marker</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionGotoPreviousMarker" >
+   <property name="text" >
+    <string>Goto previous marker</string>
+   </property>
+   <property name="iconText" >
+    <string>Goto previous marker</string>
+   </property>
+   <property name="toolTip" >
+    <string>Goto previous marker</string>
+   </property>
+   <property name="shortcut" >
+    <string>Alt+Left</string>
+   </property>
+  </action>
+  <action name="actionSwitchFullscreen" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Toggle fullscreen</string>
+   </property>
+   <property name="iconText" >
+    <string>Toggle fullscreen</string>
+   </property>
+   <property name="toolTip" >
+    <string>Toggle fullscreen</string>
+   </property>
+   <property name="shortcut" >
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="actionAddStations" >
+   <property name="text" >
+    <string>Add stations</string>
+   </property>
+   <property name="shortcut" >
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="actionSearchStation" >
+   <property name="text" >
+    <string>Search station</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionLimitFilterToZoomTrace" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Limit filter to zoom trace</string>
+   </property>
+   <property name="toolTip" >
+    <string>Limit filter to zoom trace</string>
+   </property>
+   <property name="statusTip" >
+    <string>Limits filtering to zoom trace. All other traces are not filtered. This is mostly used to gain performance.</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+F</string>
+   </property>
+  </action>
+  <action name="actionShowTraceValuesInNmS" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show trace values in nm/s</string>
+   </property>
+  </action>
+  <action name="actionClipComponentsToViewport" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Clip components to viewport</string>
+   </property>
+   <property name="shortcut" >
+    <string>C</string>
+   </property>
+  </action>
+  <action name="actionCreateAmplitude" >
+   <property name="text" >
+    <string>Create amplitude</string>
+   </property>
+   <property name="iconText" >
+    <string>Create amplitude</string>
+   </property>
+   <property name="toolTip" >
+    <string>Create amplitude</string>
+   </property>
+   <property name="shortcut" >
+    <string>Enter</string>
+   </property>
+  </action>
+  <action name="actionConfirmAmplitude" >
+   <property name="text" >
+    <string>Confirm amplitude</string>
+   </property>
+   <property name="iconText" >
+    <string>Confirm amplitude</string>
+   </property>
+   <property name="toolTip" >
+    <string>Confirm amplitude</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+Return</string>
+   </property>
+  </action>
+  <action name="actionDeleteAmplitude" >
+   <property name="text" >
+    <string>Delete amplitude</string>
+   </property>
+   <property name="iconText" >
+    <string>Delete amplitude</string>
+   </property>
+   <property name="toolTip" >
+    <string>Delete amplitude (Del)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionDisablePicking" >
+   <property name="text" >
+    <string>Leave picking mode</string>
+   </property>
+   <property name="iconText" >
+    <string>Leave picking mode</string>
+   </property>
+   <property name="toolTip" >
+    <string>Leave picking mode (Esc)</string>
+   </property>
+   <property name="shortcut" >
+    <string>Esc</string>
+   </property>
+  </action>
+  <action name="actionRecalculateAmplitudes" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/ok.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Recalculate all amplitudes</string>
+   </property>
+   <property name="iconText" >
+    <string>Recalculate all amplitudes</string>
+   </property>
+   <property name="toolTip" >
+    <string>Recalculate all amplitudes</string>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+R</string>
+   </property>
+  </action>
+  <action name="actionPickAmplitude" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/pick_p.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Pick amplitudes</string>
+   </property>
+   <property name="iconText" >
+    <string>Pick amplitudes</string>
+   </property>
+   <property name="shortcut" >
+    <string>1</string>
+   </property>
+  </action>
+  <action name="actionRecalculateAmplitude" >
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/ok_single.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Recalculate amplitude of selected waveform</string>
+   </property>
+   <property name="iconText" >
+    <string>Recalculate amplitude of selected waveform</string>
+   </property>
+   <property name="toolTip" >
+    <string>Recalculate amplitude of selected waveform</string>
+   </property>
+   <property name="shortcut" >
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionSetAmplitude" >
+   <property name="text" >
+    <string>Set amplitude</string>
+   </property>
+   <property name="shortcut" >
+    <string>Space</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>Seiscomp::Gui::ZoomRecordFrame</class>
+   <extends>QFrame</extends>
+   <header>seiscomp3/gui/datamodel/pickerzoomframe.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="icons.qrc" />
+ </resources>
+ <connections/>
+</ui>

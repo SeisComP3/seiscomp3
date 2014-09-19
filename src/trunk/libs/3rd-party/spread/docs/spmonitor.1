@@ -1,0 +1,49 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SPMONITOR 1 "DECEMBER 2001" Spread "User Manuals"
+.SH NAME
+spmonitor \- Spread Monitoring and Adminstration client
+.SH SYNOPSIS
+.BI "spmonitor [-n " proc_name "] [-c " config_file "] [-t " status_timeout "] [-p " port "]"
+.SH DESCRIPTION
+.B spmonitor
+Provides a general monitoring and administrative tool for the Spread system. 
+The spmonitor program can send queries and commands to Spread daemons to either
+gather debugging or performance statistics, or to shut down specific daemons or
+change flow control parameters of the system to tune performance. 
+
+Some details about the effective use of the spmonitor program are contained
+in the Users Guide which is available from the Spread web site www.spread.org.
+.SH OPTIONS
+.IP "-t status_timeout"
+The seconds between every status report. The default is 10.
+.IP "-p port"
+The port number, to which the spmonitor 
+program should connect in order to reach a Spread daemon.
+.IP "-n proc_name"
+Force this daemon to be identified by a specific process name.
+.IP "-c config-file"
+Use an alternate configuration file
+.I config-file
+instead of
+.IR ./spread.conf .
+.SH FILES
+.I ./spread.conf
+.RS
+The default config file location. 
+.I /etc/spread.conf 
+is also searched if a local file is not found.
+.SH BUGS
+The spmonitor works by sending UDP packets to the Spread daemon, so if network 
+losses occur, commands or status reports can be lost. It can also lose reports
+when monitoring a large number of daemons. 
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+
+Spuser is Copyright 1998-2006 Spread Concepts, LLC.
+.SH "SEE ALSO"
+.BR libspread (3)
+.BR spread (1)

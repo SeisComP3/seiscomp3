@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scdb" category="Utilities">
+		<description>
+			Populates a SQL database from XML files or messages.
+		</description>
+		<configuration>
+			<group name="connection">
+				<parameter name="requestGroup" type="string">
+					<description>
+						Defines the group on scmaster to subscribe for database requests.
+					</description>
+				</parameter>
+				<parameter name="provideGroup" type="string">
+					<description>
+						Defines the group on scmaster to send database response messages to.
+					</description>
+				</parameter>
+			</group>
+			<group name="output">
+				<parameter name="type" type="string">
+					<description>
+						Defines the output database connection type.
+					</description>
+				</parameter>
+				<parameter name="parameters" type="string">
+					<description>
+						Defines the output database connection parameters.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+				<option flag="-m" long-flag="mode" argument="arg">
+					<description>
+						scdb can either process a XML file and write it to the database
+						or collecting messages from scmaster. If connected to scmaster
+						the mode defines what objects are handled: none (no objects at all),
+						notifier (notifier only) or all (all objects whereas non-notifier
+						objects are INSERTED into the database).
+					</description>
+				</option>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#config-db</optionReference>
+				<option flag="-o" long-flag="output" argument="arg">
+					<description>
+						If connected to scmaster this flag defines the database
+						connection to use for writing. The configured application
+						database connection (as received from scmaster) is reported
+						to clients as part of a database response messages.
+					</description>
+				</option>
+			</group>
+
+			<group name="Import">
+				<option flag="i" long-flag="input" argument="arg">
+					<description>
+						Defines the import XML file to be written to database.
+					</description>
+				</option>
+				<option flag="b" long-flag="batchsize" argument="arg">
+					<description>
+						Batch size of a database transactions [0..1000].
+						By default all INSERT/UPDATE/DELETE statements are
+						executed in one single transaction.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scalert" category="Utilities">
+		<description>Real time (voice) alert template.</description>
+		<configuration>
+			<parameter name="firstNew" type="boolean" default="false">
+				<description>
+					Treats an event as new event when it is seen the first time.
+				</description>
+			</parameter>
+			<parameter name="agencyIDs" type="list:string" default="">
+				<description>
+					Defines a white list of agencyIDs to alert an event. The
+					agencyID is extracted from the preferred origin of the event.
+					If this list is empty, all agencies are allowed.
+				</description>
+			</parameter>
+			<group name="poi">
+				<parameter name="message" type="string">
+					<description>
+						The default message string for the event-script is
+						&quot;earthquake, [HOURS] hours [MINS] minutes ago, [DESC],
+						magnitude [MAG], depth [DEP] kilometers&quot; whereas [DESC] is the
+						string given in the event.description attribute. This string can be
+						overwritten using one of the following options.
+						There are three placeholders that can be used: @region@, @dist@ and
+						@poi@.
+						Example: &quot;@region@, @dist@ kilometers from @poi@ away&quot;.
+					</description>
+				</parameter>
+				<parameter name="maxDist" type="double" default="20">
+					<description>
+						When using the nearest point of interest (city) as part of the
+						message string, specify the maximum distance in degrees from the
+						event. Any point of interest farther away will be ignored.
+					</description>
+				</parameter>
+				<parameter name="minPopulation" type="double" default="50000">
+					<description>
+						Minimum population for a city to become a point of interest.
+					</description>
+				</parameter>
+			</group>
+			<group name="scripts">
+				<parameter name="amplitude" type="string">
+					<description>
+					Specify the script to be called if an amplitude
+					arrives, network-, stationcode and amplitude are passed
+					as parameters $1, $2 and $3.
+					</description>
+				</parameter>
+				<parameter name="alert" type="string">
+					<description>
+					Specify the script to be called if a preliminary
+					origin arrives, latitude and longitude are passed as
+					parameters $1 and $2.
+					</description>
+				</parameter>
+				<parameter name="event" type="string">
+					<description>
+					Specify the script to be called when an event has been
+					declared; the message string, a flag (1=new event,
+					0=update event), the EventID, the arrival count and the
+					magnitude (optional when set) are passed as parameter
+					$1, $2, $3, $4 and $5.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+				<option long-flag="first-new" param-ref="firstNew"/>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Alert">
+				<option long-flag="amp-type" argument="arg" default="snr">
+					<description>
+					Specify the amplitude type to listen to.
+					</description>
+				</option>
+				<option long-flag="amp-script" argument="arg" param-ref="scripts.amplitude"/>
+				<option long-flag="alert-script" argument="arg" param-ref="scripts.alert"/>
+				<option long-flag="event-script" argument="arg" param-ref="scripts.event"/>
+			</group>
+
+			<group name="Cities">
+				<option long-flag="max-dist" argument="arg" param-ref="poi.maxDist"/>
+				<option long-flag="min-population" argument="arg" param-ref="poi.minPopulation"/>
+			</group>
+
+			<group name="Debug">
+				<option flag="E" long-flag="eventid" argument="arg">
+					<description>
+					Specify event ID that is used for testing. After running the alert
+					scripts scvoice will exit.
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

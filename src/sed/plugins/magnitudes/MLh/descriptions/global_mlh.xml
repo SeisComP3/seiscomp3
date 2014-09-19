@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="MLh">
+		<extends>global</extends>
+		<description>
+		The MLh plugin (previously MLsed) is designed to compute amplitudes
+		and magnitudes according to the Swiss Seismological Service (SED)
+		standards.
+		</description>
+	</plugin>
+	<binding name="MLh" module="global">
+		<description>
+		The MLh plugin (previously MLsed) is designed to compute amplitudes
+		and magnitudes according to the Swiss Seismological Service (SED)
+		standards. It is a modified version of the gempa ML plugin developed
+		at the Liverpool developer meeting.
+		</description>
+		<configuration>
+			<group name="MLh">
+				<parameter name="maxavg" type="string" default="max">
+					<description>
+					Define combiner operation for both horizontals (min, max, avg).
+					</description>
+				</parameter>
+				<parameter name="ClippingThreshold" type="double">
+					<description>
+					MLh clipping level, in raw counts, eg. 80% of 2^23 = 6710886.
+					</description>
+				</parameter>
+				<parameter name="params" type="string">
+					<description>
+					Defines attenuation parameters for MLh.
+					Format: &quot;UpToKilometers A B; UpToNextKilometers A B;&quot;.
+					Example: &quot;30 nomag; 60 0.018 2.17; 700 0.0038 3.02&quot;.
+					The first parameter set &quot;30 nomag&quot; means that up to 30km
+					from the sensor the magnitude should not be calculated.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

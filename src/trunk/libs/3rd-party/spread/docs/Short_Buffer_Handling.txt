@@ -1,0 +1,86 @@
+Short Buffer Handling
+
+The traditional behavior of networking APIs when a user provided
+buffer is insufficient is to provide as much data as possible and
+truncate the rest. Sometimes the user receives a notice that some data
+was truncated and sometimes no notification is given. Thus it is the
+user's responsibility to detect when datagrams are too short and
+recover in some way (such as re-requesting data).
+
+The difficulty with using this approach in Spread is that when the
+application has to recover from this some properties of the message
+are lost. For example, if the message was a SAFE message, the other
+members can rightly assume that either all the members will get the
+data or they will not get it because they crash or disconnect from
+Spread . In this case some members might get part of the data, but
+have to recover the rest of it, also the data can be lost even when
+the process continues to execute correctly which makes it difficult
+for the other members to detect the fault.
+
+Essentially because each message has attached meaning, such as
+ordering, or reliability guarantees, unpredictable loss of data in an
+otherwise reliable system compromises the very semantics we want to
+use. It is possible to check for this loss and recover, but the costs
+are significant, especially when weighed against the cost of avoiding
+the problem in the first place. Thus, unlike UDP datagrams, Spread
+messages are designed to be reliable even with short buffers.
+
+The method used is straightforward. Spread will never truncate large
+messages unless you explicitly ask it to. When you call SP receive
+with a data buffer or groups list too short to hold all the data, the
+SP_receive function will return with an error code of GROUPS_TOO_SHORT
+or BUFFER_TOO_SHORT and NO data or groups will be returned. The only
+information that will be returned is in the following parameters:
+
+service_type: set to the correct type for the message. sender is
+empty.
+
+num_groups: set to the number of groups the groups parameter needs to
+accept to avoid a GROUPS TOO SHORT error. This number is returned as a
+negative number. If there were sufficient groups given then a 0 will
+be returned
+
+groups: is empty.
+
+mess_type: set to the message type field the application sent with the
+original message, this is only a short int (16bits). This value is
+already endian corrected before the application receives it.
+
+endian_mismatch: set to the size, in bytes, of the data buffers needed
+to completely receive this message and avoid a BUFFERS TOO SHORT
+error. This number is returned as a negative number. If the buffers
+were large enough a 0 will be returned.
+
+mess: is empty.
+
+So, when SP receive returns one of the *_TOO_SHORT errors you can
+examine the service type and mess type fields to get some information
+about what kind of message Spread is trying to give you. You can then
+examine the num groups and endian mismatch fields to discover how
+large your buffers need to be. You then increase your application
+buffers and call SP receive again. It should return with the message
+and without error (unless something else is also wrong).
+
+This retry approach is safe with multi-threaded applications because
+each call succeeds or fails on it's own and if two threads retry for
+the same message, one will get it and the other will get the message
+after it (which is what would happen anyway if they were not
+retrying).
+
+The retry approach does, however, require that the application check
+for errors when calling SP receive and if a *_TOO_SHORT error occurs
+they either enlarge their buffers or call SP receive again with the
+DROP_RECV flag set, as described below. If they either ignore errors
+or do not correct the short buffers, the application will continually
+loop calling SP receive and not receiving anything.
+
+If the application does not want to actually receive the entire data
+buffer or groups list, it has the option of calling SP_receive with
+the service type field set to the DROP_RECV flag. When this is done,
+Spread will treat the message just like most networking systems and
+return all the data and groups that will fit in the available space
+and truncate the rest. It will still return an error value informing
+the application that it has lost data. In simple applications or ones
+with relaxed, or specialized requirements this might be more useful
+then having to check for error values and retry the SP receive.
+

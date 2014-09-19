@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="dr24" category="sources">
+		<description>Geotech DR24 (serial plugin)</description>
+		<configuration>
+			<parameter name="comport" type="string" default="/dev/data">
+				<description>Serial port.</description>
+			</parameter>
+			<parameter name="baudrate" type="int" default="19200">
+				<description>Baud rate.</description>
+			</parameter>
+			<parameter name="proc" type="string" default="dr24_20">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

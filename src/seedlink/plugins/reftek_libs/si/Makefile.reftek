@@ -1,0 +1,45 @@
+# $Id: Makefile.reftek 165 2005-12-23 12:34:58Z andres $
+# Makefile for si library
+ 
+VPATH   = 
+RANLIB  = ranlib
+LIBDIR  = $(VPATH)../../../lib/$(PLATFORM)
+INCDIR  = $(VPATH)../../include
+OPTMIZ  = -g
+INCS    = -I$(INCDIR) -I$(VPATH).
+DEFS    = -D$(OSNAME) -D$(OSTYPE) -D_REENTRANT
+CFLAGS  = $(OPTMIZ) $(INCS) $(DEFS)
+ARCHIVE = libsi.a
+OUTPUT  = $(LIBDIR)/$(ARCHIVE)
+OBJS    = $(OUTPUT)(si.o)
+ 
+.PRECIOUS : $(OUTPUT)
+ 
+all: OBJS/$(PLATFORM) $(LIBDIR) FORCE
+	cd OBJS/$(PLATFORM); \
+	gmake -f ../../Makefile VPATH=../../ makestamp
+ 
+$(OUTPUT): makestamp
+ 
+makestamp: $(OBJS)
+	$(RANLIB) $(OUTPUT)
+	touch makestamp
+ 
+clean: FORCE
+	rm -f OBJS/$(PLATFORM)/*.o
+ 
+remove: FORCE
+	rm -f $(OUTPUT) OBJS/$(PLATFORM)/makestamp
+ 
+sccsinfo: FORCE
+	sccs info
+
+install: all
+
+$(LIBDIR):
+	mkdir -p $@
+
+OBJS/$(PLATFORM):
+	mkdir -p $@
+ 
+FORCE:

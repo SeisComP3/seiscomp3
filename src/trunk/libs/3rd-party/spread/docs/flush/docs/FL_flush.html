@@ -1,0 +1,136 @@
+<HTML><HEAD><TITLE>Manpage of FL_flush</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_flush</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_flush - flush a group in response to receiving a flush request message.
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_flush(mailbox </B><I>mbox</I><B>, const char *</B><I>group_name</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_flush</B>
+
+flushes the group named
+<I>group_name</I>
+
+in which the connection represented by
+<I>mbox</I>
+
+has received a flush request message.  A flush request message is
+delivered in a group when the underlying membership of that group
+changes; it is a signal to the application that the membership has
+changed and some of the original members may have &quot;gone away&quot; (meaning
+that they are no longer in the group with this connection).  However,
+Flush Spread will not install a new membership in the group until each
+of the members of the new membership flush the group.  Flushing a
+group gives Flush Spread the permission of this connection to go ahead
+and install a new view/membership for the group.
+<P>
+During the time after receiving a flush request message but before
+flushing the group the application must be _VERY_ careful about
+calling receive functions; if the application isn't careful enough it
+can permantently block the entire group.  For example, say the
+underlying membership of a group of 10 members changed such that this
+connection is now alone in the group (there is no way an application
+can detect the make-up of a group after receiving a flush request).
+If the application simply calls receive before flushing the group and
+hasn't ensured that it will receive a message somehow (see below) it
+will permanently block itself in the receive and any other members
+that might later be added to that group.
+<P>
+There are a couple ways to avoid this problem, which isn't a bug by
+the way :P, (1) don't call receive functions after receiving a flush
+request message and before flushing the group, (2) call receive but
+set the DONT_BLOCK service flag; if there aren't any messages to
+receive it will break out with a WOULD_BLOCK error, (3) ensure that
+there will be a message to receive somehow.  There are several ways to
+do this, but one 100% sure way to do this is if the application sends
+or has sent a message on this connection (with the SELF_DISCARD
+service _NOT_ set) that it has not yet received back.  In this case,
+the application will eventually receive its own message (even if it
+was to another group) on the connection and can therefore be assured
+of not blocking permanently.
+<P>
+The application _IS_ allowed to send messages to a group after
+receiving a flush request for that group and before flushing the
+group.  However, only a subset of the original members of the current
+view will receive these messages (note that I said a subset, not a
+strict subset).  Technically, this is always the case in Spread: an
+application can determine which other members received certain
+messages for sure by (1) application level message receipt
+acknowledgement, (2) employing the safety properties of SAFE messages
+(although this doesn't guarantee that those members actually processed
+and handled the message), (3) employing the virtual synchrony property
+and the transitional set of the new membership when it is installed
+(although, again, this doesn't guarantee that those members actually
+processed and handled the messages). See FL_receive or read up on
+group communication for more in-depth discussions of this matter.
+<P>
+Anyways, when the application is ready it can flush the group.  Once
+it flushes the group it is not allowed to send any messages to that
+group, until it receives the new membership for that group.  If the
+application breaks this rule, it will receive an ILLEGAL_STATE error.
+<P>
+<H2>RETURN VALUES</H2>
+
+Returns 0 on success or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+is illegal, usually because it is not active.</p>
+
+<DT><B>ILLEGAL_GROUP</B>
+
+<DD>
+The 
+<I>group_name</I>
+
+given to flush was illegal for some reason, usually because it was of
+length 0 or length &gt; MAX_GROUP_NAME.  This error can also be returned
+when a group is flushed for a connection that it has not yet joined or
+is already leaving.</p>
+
+<DT><B>ILLEGAL_STATE</B>
+
+<DD>
+A connection may flush a group only once in response to each flush
+request message delivered in that group.  If you violate this rule you
+will get an ILLEGAL_STATE error.</p>
+
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+Errors occurred during communication and the flush could not be
+initiated.
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

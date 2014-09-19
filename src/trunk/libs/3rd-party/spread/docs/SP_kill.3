@@ -1,0 +1,51 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_DISCONNECT 3 "JULY 2005" SPREAD "User Manuals"
+.SH NAME
+SP_kill \- close a client side connection without notifying the daemon. 
+.SH SYNOPSIS
+.B #include <sp.h>
+.br
+.BI "int SP_kill( mailbox " mbox );
+.SH DESCRIPTION
+.B SP_kill
+should be called when the application needs to close 
+a connection to the Spread daemon, but does not want to notify the
+daemon about the close. The most common case of needing this is when a
+Spread client application calls the unix function 
+.B fork()
+and needs to close the connection in either the parent or child since the other
+will handle the communcation. 
+
+Generally the 
+.B SP_disconnect() function should be used to disconnect from the daemon as it 
+correctly and expediently notifies the daemon about the disconnection. If a client
+calls 
+.B SP_kill 
+instead of SP_disconnect when no other process has the client side mbox open (because 
+of fork) then the network connection to the daemon will be closed and the daemon 
+will detect the client as disconnected as soon as the network layer (TCP) registers
+a closed socket on the daemon side. Thus it will appear to the daemon as if a true
+network fault occurred or the client crashed as opposed to cleanly disconnecting. 
+
+The 
+.I mbox 
+should be for the connection you wish to close the mbox on.
+.SH "RETURN VALUES"
+Returns 0 on success or 
+.B ILLEGAL_SESSION
+when the session 
+.I mbox
+given is not a valid connection.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

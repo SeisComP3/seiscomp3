@@ -1,0 +1,86 @@
+Wed Mar 27 23:27:08 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configure.in: Change test for clock_gettime(CLOCK_MONOTONIC) to runtime test from compile test. 
+
+Wed Mar 27 22:51:12 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* arch.h, src/events.c, src/alarm.c: Windows portability fixes provided by Juan Pizzorno. 
+
+Tue Mar 12 07:08:28 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* src/events.c (E_attach_fd): Change Alarm priority from PRINT to EVENTS so non-error FD attach 
+	does not log every time. 
+
+Mon Jun 18 13:24:41 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* src/data_link.c (DL_init_channel): Fix DL_init_channels algorithm for selecting which
+	interface to bind for multicast and broadcast receive sockets. Fixes regression in Spread 
+	usage of DL for multicast sockets. 
+
+2012-05-02  Jonathan Stanton  <jonathan@laptop5.int.spreadconcepts.com>
+
+	* src/data_link.c (DL_init_channel): The version of data_link.c's DL_init_channel function has
+	changed semantics from the version previously used by Spread. When you create a channel with a 
+	multicast address, it will now only bind that socket to the multicast address not to INADDR_ANY.
+	This is needed for some uses of datalink (like in Spines) but is the wrong semantics if you want
+	one socket to receive both multicast and unicast traffic sent to the same port. So to support that
+	semantics a new channel_type modifier was added to the API DL_BIND_ALL which when passed in will force
+	the bind to be to INADDR_ANY unless a specific interface address was provided. 
+
+Tue Mar 20 17:57:44 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* configure.in: Make use of dladdr in the function name lookup code a compile time option so 
+	systems that don't have dladdr can build the library without needing it. 
+
+Mon Mar  5 23:50:52 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* include/spu_alarm_types.h (CONF_SYS): Change CONF alarm type which conflicted with OpenSSL 
+	to CONF_SYS to avoid the conflict. 
+
+Mon Mar  5 18:14:22 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* src/memory.c (Mem_init_status): Remove Mem_init_status function as it is hacked in
+	to support only certain code bases and is not even used by them. If detailed memory
+	stats are needed by an application we will add in a better way to access. 
+
+Mon Mar  5 17:21:14 2012  Jonathan Stanton  <jonathan@spreadconcepts.com>
+
+	* src/memory.c (Mem_init_object): Add "obj_name" field to Mem_init_object() to provide a 
+	nice name to print in error messages. This replaces the hard-coded string names in 
+	Objnum_to_String(). This is a API change. 
+
+March 04, 2012
+--------------
+Complete changes to add new independant configure based build system for the library, with support for windows and autoconf systems. 
+
+All header files are now safe to include in other code (do not directly include any configure generated defines) and have been moved to a separate include directory. The system dependant information that is determined by configure is included in the headers under the SPU_ namespace and only for the specific information required for the public API headers. These headers are also usable by the library implementation code by simply including them into .c files after the normal arch.h is included 
+
+Unneeded or obsolete code has been removed from the headers. 
+
+	
+January 30, 2012
+----------------
+To that baseline we added the following features:
+
+ - Monitoring slow events (ones that take too long) in the evenst code and providing an API to access the data about them.
+ - Using a monotonic clock in the events code when one is available. If not it falls back to the previous methods.
+ - New E_in_queue() function to query whether a scheduled event is already in the event system.
+ - Adding abilty for Alarm calls to be pushed through a queue to another thread for writing to disk. This takes slow disk IO out of the Alarm fastpath. 
+ - Better multicast routing handling in data_link.c
+ - Added NO_LOOP option to datalink channel creation function to prevent user from recieving their own multicast packets back in DL_recv. 
+ - Added reference counting to memory.c allocated objects. Not used by default, but can be activated on an object-by-object basis with the new API functions. 
+ - Added Windows implmentation of sock_strerror() and generic implementation of strerror(). 
+ - John Schultz's rewrite of alarm.c with lots of clean ups. 
+ - Add realtime alerting hook to alarms.
+ - Change to high precision timestamp capability of Alarm, it is now enabled by Alarm_enable_timestamp_high_res() function instaed of Alarm_enable_precise_timestamps(). 
+ + all changes in Spread changelog from version 4.1 until those committed on 1/28/2012. 
+
+January 20,2012
+---------------
+Baseline is Spread 4.1 release version of following source files and their corresponding headers:
+  events.c
+  data_link.c
+  alarm.c
+  memory.c
+  
+ and the required headers and build files for the configure scripts and portability headers. 

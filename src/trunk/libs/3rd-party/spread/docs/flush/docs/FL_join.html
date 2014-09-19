@@ -1,0 +1,77 @@
+<HTML><HEAD><TITLE>Manpage of FL_join</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_join</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_join - join a connection to a Flush Spread group
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_join(mailbox </B><I>mbox</I><B>, const char *</B><I>group_name</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_join</B>
+
+joins the connection represented by 
+<I>mbox</I>
+
+to a group with the name
+<I>group_name</I>.
+
+If the group does not exist among the Spread daemons it is created,
+otherwise the connection is joined to the existing group.  A
+connection may not join a group it is already a member of, which it
+has already joined, or from which it is currently leaving.
+<H2>RETURN VALUES</H2>
+
+Returns 0 on success or one of the following errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_GROUP</B>
+
+<DD>
+The 
+<I>group_name</I>
+
+given to join was illegal for some reason, usually because it was of
+length 0 or length &gt; MAX_GROUP_NAME.  This error is also returned if a
+group with which this connection is already involved (i.e. - already
+joining, already joined, currently leaving) is joined again.</p>
+
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by
+<I>mbox</I>
+
+is illegal, usually because it is not active.</p>
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+Errors occurred during communication and the join could not be
+initiated.</p>
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

@@ -1,0 +1,22 @@
+SET(SCIMPORT_TARGET scimport)
+
+SET(
+    SCIMPORT_HEADERS
+    import.h
+    filter.h
+)
+
+SET(
+    SCIMPORT_SOURCES
+    import.cpp
+    filter.cpp
+	main.cpp
+)
+
+SC_ADD_EXECUTABLE(SCIMPORT ${SCIMPORT_TARGET})
+TARGET_LINK_LIBRARIES(${SCIMPORT_TARGET} ${Boost_thread_LIBRARY})
+SC_LINK_LIBRARIES_INTERNAL(${SCIMPORT_TARGET} client)
+SC_INSTALL_INIT(${SCIMPORT_TARGET} ../../templates/initd.py)
+
+FILE(GLOB descs "${CMAKE_CURRENT_SOURCE_DIR}/descriptions/*.xml")
+INSTALL(FILES ${descs} DESTINATION ${SC3_PACKAGE_APP_DESC_DIR})

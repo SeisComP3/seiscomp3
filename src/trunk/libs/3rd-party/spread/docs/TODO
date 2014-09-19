@@ -1,0 +1,21 @@
+Features, ideas, and other things that might get done.
+Those ending with (*break) break binary,source or client-server compatability
+------------------------------------------------------
+* Improve stability under high load
+
+* Change max buffered message limit to be not just num messages, but also size, or other parameters.
+* Make this runtime configurable.
+
+* Fix partial DOS when someone connects and doesn't send anything (the 1 second delay)
+* Merge cleanup of session layer from research branch
+
+* Once ses ids are non-volatile (fix for session_index on windows) have group 
+  struct store ses instead of mbox and then just copy it once in 
+  G_analize_group instead of O(Gsize) Sess_get_session_index() calls.
+
+* Make various binary packages available (rpm, deb, pkg, ...)
+
+* Figure out hanging bug with max ARU window reported by Tom Mornini & co.
+* Decide what to do with multipath patch from Marc Zyngier
+
+* Add Yair's fix for delayed tokens. (*break)

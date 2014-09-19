@@ -1,0 +1,68 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_GET_VS_SETS_INFO 3 "February 2006" SPREAD "User Manuals"
+.SH NAME
+SP_get_vs_sets_info, SP_scat_get_vs_sets_info \- Extract list of VS sets from membership message
+.SH SYNOPSIS
+.B #include <sp.h>
+.sp
+.BI "int SP_get_vs_sets_info( const char * " memb_mess ", vs_set_info *" vs_sets ", int " num_vs_sets ", unsigned int *" my_vs_set_index );
+.br
+.BI "int SP_scat_get_vs_sets_info( const scatter * " memb_mess_scat ", vs_set_info *" vs_sets ", int " num_vs_sets ", unsigned int *" my_vs_set_index );
+.sp
+.SH DESCRIPTION
+.B SP_get_vs_sets_info
+and its scatter variant extract the list of VS sets provided in a Network membership message and store them into the 
+.I vs_sets
+array of 
+.B vs_set_info 
+structs. The number of elements in the array should be provided in the
+.I num_vs_sets
+parameter. 
+
+This function also returns an index of which VS set in the array corresponds to the current process's VS set. That index value is returned in the
+.I my_vs_set_index
+parameter. 
+
+The 
+.I memb_mess
+field or scatter field  should be the body of a message that was returned in a previous 
+.B SP_receive 
+call for a membership message. 
+
+The fields of a vs_set_info struct include
+.RS
+.TP
+.I unsigned int num_members
+.br
+.TP
+.I unsigned int member_offset
+.RE
+
+The 
+.I member_offset
+field is the byte offset into the membership message body where this VS set's member list begins.
+For each of the vs_set_info records in the array, the function 
+.B SP_get_vs_set_members
+will grab the actual array of member names for the specified VS set.
+
+.SH "RETURN VALUES"
+Returns a postivive value on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B BUFFER_TOO_SHORT
+The allocated array of vs_set_info structs can not hold the number of
+VS sets contained in this membership message. No data is parsed. Reallocate
+a larger array of vs_set_info structs (the required number is available
+in the membership_info struct) and call this function again.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

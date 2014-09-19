@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="LocSAT">
+		<extends>global</extends>
+		<description>LOCSAT locator for SeisComP.</description>
+		<configuration>
+			<group name="LOCSAT">
+				<parameter name="profiles" type="list:string" default="iasp91,tab">
+					<description>
+					Defines a list of available LOCSAT tab directories.
+					</description>
+				</parameter>
+				<parameter name="enableConfidenceEllipsoid" type="boolen" default="false">
+					<description>
+					Compute the confidence ellipsoid.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

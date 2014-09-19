@@ -1,0 +1,136 @@
+.TH SL_COLLECT 3 2005/03/26
+.SH NAME
+sl_collect, sl_terminate \- SeedLink connection management
+
+.SH SYNOPSIS
+.nf
+.B #include <libslink.h>
+.sp
+.BI "int \fBsl_collect\fP (SLCD *" slconn ", SLpacket **" slpack );
+.sp
+.BI "int \fBsl_collect_nb\fP (SLCD *" slconn ", SLpacket **" slpack );
+.sp
+.BI "void \fBsl_terminate\fP (SLCD *" slconn );
+.fi
+
+.SH DESCRIPTION
+Using the parameters in a SeedLink Connection Description (SLCD)
+\fBsl_collect\fP will persistantly maintain a connection to SeedLink
+server.  Designed to run in a tight loop at the heart of a client
+program, this function blocks until a packet is received.  When a 
+packet is received \fIslpack\fP is set to the packet address and a
+positive integer is returned.  Based on the \fIkeepalive\fP,
+\fInetto\fP and \fInetdly\fP parameters in the SLCD, the function will
+send keep alive packets and reconnect when necessary.  When the 
+\fIterminate\fP flag is set in the SLCD \fBsl_collect\fP will close
+the network connection, finish passing received packets to the calling
+program and finally return NULL when the buffer is empty.
+
+\fBsl_collect\fP will maintain the sequence number and start time of
+the last received packet for each stream in the stream chain.  This
+is useful in conjuntion with the \fBsl_savestate\fP and
+\fBsl_recoverstate\fP functions.
+
+\fBsl_collect_nb\fP is a non-blocking version of \fBsl_collect\fP.  It
+will always return whether a packet is received or not.  If not called
+regularly this function might not be able to properly manage the
+connection, i.e. update internal timers, send keepalives, etc.  For
+this reason this is NOT A RECOMMENDED INTERFACE.
+
+The library will parse the SLCD->sladdr parameter (the SeedLink server
+address in 'host:port' format) in the following way: if the host is
+omitted 'localhost' will be assumed, if the port is omitted '18000'
+will be assumed, if both are omitted 'localhost:18000' will be asumed.
+Example translations when defaults are used:
+.nf
+  '<host>:' => '<host>:18000'
+  ':<port>' => 'localhost:<port>'
+  ':'       => 'localhost:18000'
+.fi
+
+\fBsl_terminate\fP will set the \fIterminate\fP flag in the SLCD
+causing \fBsl_collect\fP to terminate the connection and flush the
+packet buffer during subsequent calls.  This function should be called
+during program termination, for example in a signal handler.
+
+.SH RETURN VALUES
+When a packet is received \fBsl_collect\fP returns SLPACKET and
+updates the \fIslpack\fP pointer.  When the connection was closed by
+the server or the termination sequence is completed SLTERMINATE is
+returned and the \fIslpack\fP pointer will be NULL.
+
+\fBsl_collect_nb\fP behaves just like \fBsl_collect\fP with the
+exception that it will return SLNOPACKET when no packets are
+available; in this case the \fIslpack\fP pointer will be NULL.
+
+.SH SeedLink PACKETS
+A SeedLink packet is simply a SeedLink header followed by a Mini-SEED
+record; defined in libslink.h as a C struct (and type):
+
+.nf
+typedef struct slpacket_s
+{
+  char      slhead[SLHEADSIZE];   /* SeedLink header */
+  char      msrecord[SLRECSIZE];  /* Mini-SEED record */
+} SLpacket;
+.fi
+
+\fIslhead\fP is the SeedLink header (signature and sequence number).
+
+\fImsrecord\fP is the raw Mini-SEED record.
+
+The \fBsl_sequence\fP and \fBsl_packettype\fP routines can be used to
+determine the packet sequence number and type respectively.
+
+.SH EXAMPLE
+.nf
+#include <libslink.h>
+
+void packet_handler (char *, int, int, int);
+
+main () {
+  SLCD     * slconn;
+  SLpacket * slpack;
+  int ptype;
+  int seqnum;
+
+  [configure the SLCD]
+
+  while ( sl_collect(slconn, &slpack) != 0 )
+    {
+	ptype  = sl_packettype (slpack);
+	seqnum = sl_sequence (slpack);
+
+        packet_handler ((char *) &slpack->msrecord, ptype, seqnum, SLRECSIZE);
+
+        /* Could send an INFO packet here with sl_request_info() */
+        if ( some criteria )
+          {
+             sl_request_info (slconn, "ID", 0);
+          }
+    }
+
+  return 0;
+}
+
+packet_handler (char *msrecord, int packet_type,
+                int seqnum, int packet_size) {
+  [do something with the record]
+}
+.fi
+
+.SH NOTES
+It is highly recommended to implement signal handling to properly
+shutdown the client using \fBsl_terminate\fP.
+
+.SH SEE ALSO
+\fBsl_newslcd\fP(3), \fBsl_sequence\fP(3), \fBsl_packettype\fP(3),
+\fBsl_read_streamlist\fP(3), \fBsl_parse_streamlist\fP(3),
+\fBsl_savestate\fP(3), \fBsl_recoverstate\fP(3), libslink Users Guide
+
+.SH AUTHOR
+.nf
+Chad Trabant
+Developed while at ORFEUS Data Center/EC-Project MEREDIAN
+Currently at IRIS Data Management Center
+.fi

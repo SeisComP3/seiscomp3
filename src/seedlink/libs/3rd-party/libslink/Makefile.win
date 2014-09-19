@@ -1,0 +1,41 @@
+#
+#
+# Nmake File For libslink - MS Visual C++ version
+# Use 'nmake -f Makefile.win'
+
+NODEBUG=1
+
+!include <ntwin32.mak>
+
+INCS = /I.
+LIB = libslink.lib
+DLL = libslink.dll
+
+OBJS=	gswap.obj	\
+	unpack.obj	\
+	msrecord.obj	\
+	genutils.obj	\
+	strutils.obj	\
+	logging.obj	\
+	network.obj	\
+	statefile.obj	\
+	config.obj	\
+	slplatform.obj	\
+	slutils.obj	\
+	globmatch.obj
+
+all: lib
+
+lib: $(OBJS)
+	link.exe /lib /nologo /out:$(LIB) $(OBJS)
+
+dll: $(OBJS)
+	link.exe /dll /nologo /out:$(DLL) $(OBJS)
+
+.c.obj:
+   $(cc) /nologo $(cflags) $(cdebug) $(cvarsmt) $(tflags) $(INCS) $<
+
+
+# Clean-up directives
+clean:
+	-del a.out core *.o *.obj *% *~ $(LIB) $(DLL)

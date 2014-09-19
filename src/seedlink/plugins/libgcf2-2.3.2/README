@@ -1,0 +1,68 @@
+#
+# README:
+#
+# Copyright (c) 2003 Guralp Systems Limited
+# Author James McKenzie, contact <software@guralp.com>
+# All rights reserved.
+#
+# $Id: README,v 1.3 2004/05/02 10:31:16 root Exp $
+#
+# $Log: README,v $
+# Revision 1.3  2004/05/02 10:31:16  root
+# *** empty log message ***
+#
+# Revision 1.2  2003/05/21 15:49:43  root
+# *** empty log message ***
+#
+# Revision 1.1  2003/05/16 10:36:26  root
+# *** empty log message ***
+#
+# Revision 1.2  2003/04/01 18:14:24  root
+# #
+#
+# Revision 1.1  2003/04/01 17:52:10  root
+# #
+#
+#
+
+This is libgcf2 a library which is
+meant to make dealing with GCF datafiles, devices which talk
+GCF, disks with GCF on them and GCF network services much
+much easier.
+
+In particular libgcf2 lets you do the following.
+
+* Receive GCF from scream via TCP or UDP, with optional
+  automatic recovery of lost blocks.
+
+* Read Parse and Extract Data from GCF stored either in
+  directories, files or DISKS.
+
+* libgcf2 will directly access SCSI and IEEE1493 (firewire)
+  disks without the requirement to write labels first.
+
+* quickly (3-4 seconds) find the data you want in large
+  (10Gb) files.
+
+* Interpret disks written by SAMs and 6TDs.
+
+* run on Solaris and Linux (Win32 support planned)
+
+* talk directly to instruments connected to serial ports
+
+* allows sending of commands via TCP to scream or directly
+  to a connected instrument
+
+* deal with whatever hoops are required to be jumped for
+  your system to get files > 4Gb to work.
+
+libgcf2 is designed to use the same small amount of memory
+regardless of the size of the files you want it to deal with.
+This feature makes libgcf2 especially suitable for embedding
+into low power and lightweight systems.
+
+see the examples directory for some documented examples.
+
+libgcf2 installs a libgcf2-config script so that you can find it later.
+
+James McKenie, <software@guralp.com>, 2003.

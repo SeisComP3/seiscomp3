@@ -1,0 +1,20 @@
+SET(
+	CORE_DATAMODEL_GENERATED_HEADERS
+		types.h
+		envelopevalue.h
+		envelopechannel.h
+		envelope.h
+		vs.h
+		vs_package.h
+		databasereader.h
+)
+
+SET(
+	CORE_DATAMODEL_GENERATED_SOURCES
+		types.cpp
+		envelopevalue.cpp
+		envelopechannel.cpp
+		envelope.cpp
+		vs.cpp
+		databasereader.cpp
+)

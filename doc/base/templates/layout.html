@@ -1,0 +1,40 @@
+{% extends "!layout.html" %}
+
+
+{% block rootrellink %}
+       <li><a href="{{ pathto('index') }}">Home </a> &raquo;</li>
+{% endblock %}
+
+{%- block extrahead %}
+    <link rel="stylesheet" href="../_static/seiscomp3.css" type="text/css" />
+{% endblock %}
+
+{% block relbar1 %}
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="http://www.seiscomp3.org"><img src="{{
+pathto("_static/SeisComP3.png", 1) }}" border="0" alt="SeisComP3"/></a>
+</div>
+{{ super() }}
+{% endblock %}
+
+{# put the sidebar before the body #}
+{% block sidebar1 %}{{ sidebar() }}{% endblock %}
+{% block sidebar2 %}{% endblock %}
+
+{%- block footer %}
+    <div class="footer">
+     Release <b>{{ release }}</b> version <b>{{ version }}</b> 
+    {%- if show_copyright %}
+      {%- if hasdoc('copyright') %}
+        {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+      {%- else %}
+        {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
+      {%- endif %}
+    {%- endif %}
+    {%- if show_sphinx %}
+      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+    {%- endif %}
+    </div>
+{%- endblock %}
+

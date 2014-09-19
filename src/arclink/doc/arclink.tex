@@ -1,0 +1,1301 @@
+\documentclass[11pt,a4paper,titlepage]{article}
+\usepackage{times}
+\usepackage{graphics}
+\usepackage{alltt}
+\usepackage{dmacros}
+\usepackage{graphicx}
+\usepackage{listings}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\marginparwidth}{0cm}
+\setlength{\marginparsep}{0cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0cm}
+\setlength{\headsep}{0cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{16cm}
+\setlength{\footskip}{1.5cm}
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{0.9}
+
+\tolerance=2600
+\hbadness=2000
+\hyphenpenalty=1000
+\doublehyphendemerits=1000000
+
+\newcommand{\SingleRowStrut}{\protect\rule[-2.5mm]{0mm}{7mm}}
+\newcommand{\FirstMultiRowStrut}{\protect\rule{0mm}{4.5mm}}
+\newcommand{\LastMultiRowStrut}{\protect\rule[-2.5mm]{0mm}{0mm}}
+
+\skip\footins = 18pt % plus 1fil
+\renewcommand{\footnoterule}{\kern -6pt \hrule width 2in \kern 5.6pt}
+\renewcommand{\thefootnote}{$\ast$} 
+
+\leftmargini=\parindent
+\leftmarginii=2\parindent
+
+\newcommand{\pkg}[1]{\textsf{#1}}
+\newcommand{\dir}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\cmd}[1]{\texttt{#1}}
+
+\let\mylt<
+\let\mygt>
+\newcommand{\xcr}{$\mylt$cr$\mygt$}
+\newcommand{\xlf}{$\mylt$lf$\mygt$}
+\newcommand{\dfl}[1]{[#1]}
+
+\let\stditem\item
+\newenvironment{pkglist}{%
+    \def\item[##1]{\stditem[\pkg{##1}]}%
+    \begin{description}}
+    {\end{description}}
+
+\newenvironment{dirlist}{%
+    \def\item[##1]{\stditem[\dir{##1}]}%
+    \begin{description}}
+    {\end{description}}
+
+\newenvironment{cmdlist}{%
+    \def\item[##1]{\stditem[\cmd{##1}]}%
+    \begin{description}}
+    {\end{description}}
+
+\hyphenation{seismo-graphic}
+
+% SeisComp oder SeisComP oder Seiscomp???
+\newcommand{\seiscomp}{SeisComp }
+
+\title{SeisComP3/ArcLink Manual}
+\author{GFZ Potsdam}
+\date{November 26, 2008}
+\begin{document}
+\maketitle
+
+\setcounter{page}{2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% Table of Contents %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\
+\vfill
+\tableofcontents
+\vfill
+\
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+SeisComP is likely the most widely distributed software package for seismological data acquisition and real-time data exchange over internet. Its data transmission protocol SeedLink became a de facto world standard. The ﬁrst version of SeisComP was developed for the GEOFON network and further extended within the MEREDIAN project under the lead of GEOFON/GFZ Potsdam and ORFEUS. Originally SeisComP was designed as a high standard fully automatic data acquisition and (near-)real-time data processing tool including quality control.\\
+
+SeisComP3-neries package includes:
+\begin{enumerate}
+	\item ArcLink
+	\item SeedLink
+	\item Dataless SEED Import
+	\item Quality Control Tools
+\end{enumerate}
+
+\subsection{Important changes since last release (2008.178)}
+
+\begin{description}
+    \item[ArcLink protocol:] added (experimental) QC constraints to
+    inventory and waveform requests.
+    
+	\item[ArcLink server:] increased maximum length of request line to make
+    room for QC constraints.
+
+    \item[XML schema:] no changes.
+
+    \item[Database:] new object mapping, scripts that used to read/write
+    database directly will no longer work.
+
+    \item[Request Handler:] integrated with SeisComp3 infrastructure
+    (database, messaging, recordsctream, etc.); SQLObject no longer required.
+
+    \item[Dataless SEED import:] script implemented in ORFEUS DC has been
+    integrated into SC3. Most common dataless types can be fully imported
+    into SC3 database; new style FIR blockette (61) and response
+    dictionaries (41-48) are not yet supported.
+
+    \item[QC tool:] new development. Calculates QC parameters in real-time
+    (connected to SeedLink) or offline (using data files) mode. The
+    parameters are stored in SC3 database. QC tool is extensible with
+    plugins.
+\end{description}
+
+%\subsection{Previous Release Notes}
+%
+%\begin{table}[h]
+%	\begin{tabular}{lll}
+%		\textbf{Release} & \textbf{Date} & \textbf{Highlights} \\
+%		\\
+%		1.0 & Feb. 2001 & SeedLink 2.0 (plug-in interface) Plug-ins for EarthData PS2400 and\\
+%			& & Lennartz M24 \\
+%		1.1 & Aug. 2001 & SeedLink 2.1 (streams.xml, improved buﬀer structure) make conf/make\\
+%			& & key scripts LISS plug-in, SeedLink-Antelope connectivity \\
+%		1.1.5 & Jan. 2002 & SeedLink 2.5 (multi-station mode) \\
+%		1.16 & Mar. 2002 & GIF live seismograms \\
+%		2.0 & Oct. 2003 & SeedLink 3.0 (INFO request, time window extraction) libslink,\\
+%			& & chain plug-in, Comserv-independence \\
+%		2.1 & Jun. 2004 & Python add-on package (SeisPy) incl. AutoLoc2 chain plug-in extension\\
+%			& &  interface, triggered streams \\
+%		2.5 & Mar. 2006 & Integration of add-on packages, modular conﬁg script \\
+%		3.0 & May 2007 & new architecture based on QuakeML 0.5 \\
+%	\end{tabular}
+%	\caption{previous release notes}
+%\end{table}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Installation and Configuration}
+
+\subsection{Requirements}
+
+\seiscomp 3.0 binary packages are provided for some common Linux
+distributions like openSUSE 10.2/10.3, Ubuntu 8.04 and CentOS 5.2. It is
+strongly recommended to perform online update of the operating system
+before starting with \seiscomp installation.
+
+\seiscomp 3.0 requires several common Linux software packages for its
+operation. Using 32-bit openSUSE 10.3 as an example, these packages can be
+installed as follows:
+\begin{itemize}
+\item Log in as root.
+
+\item Add repositories:
+\begin{verbatim}
+zypper ar ftp://ftp.gwdg.de/pub/opensuse/distribution/10.3/repo/oss oss
+zypper ar ftp://ftp.gwdg.de/pub/opensuse/distribution/10.3/repo/non-oss 
+    non-oss
+\end{verbatim}
+
+\item Install required packages:
+\begin{verbatim}
+zypper install boost festival fftw3 libmysqlclient15 libqt4 libqt4-x11
+    libxml2 mysql mysql-client ncurses postgresql-libs python python-numeric
+    python-xml rlog SDL_mixer apache2 apache2-mod_python
+\end{verbatim}
+
+\item For better performance, add the following lines to /etc/my.cnf:
+\begin{verbatim}
+innodb_buffer_pool_size = 64M
+innodb_flush_log_at_trx_commit = 2
+\end{verbatim}
+
+\item Start MySQL:
+\begin{verbatim}
+rcmysql start
+insserv mysql
+\end{verbatim}
+
+\item Optionally, set MySQL root password:
+\begin{verbatim}
+mysqladmin -u root password <YOUR PASSWORD>
+\end{verbatim}
+\end{itemize}
+
+Here are some tips for compiling the package from source:
+\begin{itemize}
+\item Install C/C++ and Python development selections and the above
+packages with "-devel" suffix if available.
+
+\item Install Spread (from src/trunk/libs/3rd-party/spread) into 'trunk'
+subdirectory of SEISCOMP\_ROOT:
+\begin{verbatim}
+cd src/trunk/libs/3rd-party/spread
+configure --prefix=/home/sysop/seiscomp3/trunk; make; make install
+\end{verbatim}
+
+\item The are two source packages: seiscomp3-base contains the classic
+components (SeedLink, ArcLink, etc.). To compile this package, type 'make
+install; make clean' in its top-level directory. seiscomp3-trunk contains the
+new generation libraries, messaging, processing modules and utilities; this
+package must be compiled using cmake and installed into 'trunk' subdirectory of
+SEISCOMP\_ROOT. Make sure that cmake is installed and call:
+\begin{verbatim}
+make -f Makefile.cvs
+\end{verbatim}
+\end{itemize}
+
+
+\subsection{Quick Installation Procedure}
+
+\begin{itemize}
+\item SeisComP3/ArcLink binary package is distributed in form of a tar file,
+which must be unpacked in the home directory of the user that is running
+SeisComp:
+\begin{verbatim}
+cd
+tar xvzf seiscomp3-arclink-suse10.3-32-2008.330.tar.gz
+\end{verbatim}
+
+\item Change to the \dir{seiscomp3} directory and call \cmd{./setup}. This
+adds some scripts to the user's \dir{\char`~/bin} directory and optionally
+creates the database.
+
+\item Import your dataless volume:
+\begin{verbatim}
+import_dlsv -p 'arclink:default' dataless_file
+\end{verbatim}
+
+\item Call \cmd{seiscomp config} and initialize global parameters as
+explained in~\ref{global}. 
+
+\item Define arclink profile as explained in section~\ref{profiles}.
+
+\item Choose "write configuration". This creates configurations files for
+various modules and writes metadata into the database.
+
+\item ``Synchronize'' your dataless volumes. This adds full responses into
+the database:
+\begin{verbatim}
+sync_dlsv II.dataless
+\end{verbatim}
+
+\item Call \cmd{seiscomp start} to start \seiscomp.
+
+\item Install crontab using
+\begin{verbatim}
+seiscomp print_crontab | crontab -
+\end{verbatim}
+
+\end{itemize}
+
+
+\subsection{The \cmd{seiscomp} Utility}
+
+When called without arguments, \cmd{seiscomp} prints a short usage message
+and exits. In addition, the following forms of the command are recognized:
+\begin{cmdlist}
+\item[seiscomp start] starts all packages. It is harmless to use the
+``start'' option when \seiscomp is already running. Lockfiles are used to
+ensure that superfluous program instances are not started.
+
+\item[seiscomp stop] stops all packages.
+
+\item[seiscomp check] re-starts packages, which have been started by
+\cmd{seiscomp start}, but are not running (eg., crashed). When called from
+crontab, it provides a ``watchdog'' function.
+
+\item[seiscomp print\_crontab] shows recommended crontab. This crontab
+should be installed with the \cmd{crontab} utility.
+
+\item[seiscomp config] starts configuration dialog.
+\end{cmdlist}
+
+\cmd{start}, \cmd{stop}, \cmd{check} and \cmd{print\_crontab} can be
+optionally followed by the list of packages. In this case, the command
+applies only to given packages. Most of the work behind these commands is
+done by scripts that are located in \dir{pkg} directory.
+
+
+\subsubsection{Initializing Global Parameters}\label{global}
+
+When \cmd{seiscomp config} is called the first time, the global parameters of
+all installed packages are initialized; after that the main menu shown on
+figure~\ref{mainmenu} is displayed. During subsequent calls of \cmd{seiscomp
+config}, the main menu is displayed immediately and global parameters can be
+changed with option ``G''.
+
+\begin{figure}[ht]
+\centering
+\begin{listing}
+G) Edit global parameters
+A) Add/Edit network
+R) Remove network
+P) Add/Edit configuration profile
+W) Write configuration and quit
+Q) Quit without writing configuration
+Command? [A]:
+\end{listing}
+\caption{Main Menu}\label{mainmenu}
+\end{figure}
+
+During configuration dialogs, the current value is shown in square
+brackets:
+\begin{verbatim}
+Location code [00]:
+\end{verbatim}
+Typing \fbox{Enter} will select the default value. Underscore can be used
+to enter an empty string, eg.:
+\begin{alltt}
+Location code [00]:_\fbox{\textnormal{Enter}}
+\end{alltt}
+
+The following global parameters are applicable to all packages:
+\begin{interface}
+\item Name of Data Center:
+
+This will be used in full SEED volumes, shown by SeedLink HELLO request
+(\cmd{slinktool -P server:18000}), etc. Arbitrary ASCII string.
+
+\item Use syslog when supported [no]:
+
+Some packages can send log messages to syslog. If you select ``yes'', log
+messages from these packages will appear in \file{/var/log/messages}
+instead of the package log directory. In this case, the operating system
+will take care of removing old messages to keep the log file from growing
+infinitely. Using a separate log file, such as \file{/var/log/seiscomp} is
+also possible.
+\end{interface}
+
+The following global parameters are applicable to \pkg{acquisition}.
+\begin{interface}
+\item Enable slarchive [yes]:
+
+If you answer ``yes'', then data will be saved to \dir{archive} directory
+under \dir{acquisition}, structured according to \emph{SeisComP data
+structure} (SDS). Unless you want to configure a hub or processing system
+that does not save data locally, answer ``yes''. Note, however, that
+archiving a large number of stations requires good harddisk performance.
+
+\item Enable real-time simulation [no]:
+
+If you set this to “yes”, then the local SeedLink will not connect to a
+real data source, but rather waits for pre-recorded data from the playback
+utility. This mode is used for demo playbacks and testing.
+
+\item First local UDP port (Q330) [5500]:
+
+Each Q330 digitizer requires two UDP ports on \seiscomp side, which are
+normally automatically allocated. If you select 5500 as the first UDP port,
+then ports 5500--5501 are reserved for the first station, 5502--5503 for
+the second station and so on.
+\end{interface}
+
+The following global parameters are applicable to \pkg{trunk}.
+\begin{interface}
+\item Agency ID:
+
+Unique agency ID (short string without spaces) to identify the source of
+earthquake detections and other metadata objects (eg., picks).
+
+\item Datacenter ID:
+
+Unique datacenter ID (short string without spaces) to identify the
+authority of station metadata. Any stations added locally (eg, using
+import\_dlsv and sync\_dlsv) are labeled with this ID.
+
+\item Prefix of event ID:
+
+Prefix of event ID eg., ``gfz'' in ``gfz2008fght''.
+
+\item Client list [scevent scmag scamp scautopick scautoloc scqc]:
+
+List of processing modules (clients) to start.
+
+\item Log level [2]:
+
+Log level of processing modules.
+
+\item Database type [mysql]:
+
+Type of DB used for storing station metadata and event information. Plugins
+for MySQL, PostgreSQL and possibly other database types are available.
+
+\item Database read connection [sysop:sysop@localhost/seiscomp3]:
+
+Read connection to database in form of user:password@host/databasename. In
+case remote modules connect to the DB, using full host name is recommended.
+
+\item Database write connection [sysop:sysop@localhost/seiscomp3]:
+
+Write connection to database.
+
+\item Recordstream service [combined]:
+
+Type of recordstream used by the processing modules to get realtime data.
+Can be 'slink' for SeedLink, 'arclink' for ArcLink or 'combined' for
+SeedLink/ArcLink combined. (Other types of recordstreams like 'sdsarchive'
+are supported for offline data; those should not be used here.)
+
+\item Recordstream source [localhost:18000;localhost:18001]:
+
+Source of the above recordstream.
+
+\item Update inventory (set to 'no' if using sync_dlsv) [no]:
+
+Set to 'no' if you use dataless SEED as inventory source rather than
+keyfiles.
+
+\item Run scqc as a daily cronjob [no]:
+
+Set to 'yes' if you want to let scqc to process you data files once per
+day as a cron job rather than running scqc as a realtime SC3 client.
+
+\end{interface}
+
+The following global parameters are applicable to \pkg{arclink}.
+\begin{interface}
+\item Master ArcLink node for DB synchronization [webdc.eu:18001]:
+
+If you want to enable ArcLink database syncronization, enter an address of
+a node contaning complete database. A cron job will be installed to
+retrieve database updates daily. This feature can be disabled by entering
+an empty value using \_.
+
+\item Time of DB synchronization [04:33]:
+
+Time when daily DB synchronization runs. The default value is randomly
+generated.
+
+\item Maximum size of data product (MB) [500]:
+
+Maximum size of ArcLink data product. Set this to prevent users filling up
+your disk space by accidentally requesting too much data.
+\end{interface}
+
+The following global parameters are applicable to \pkg{diskmon}.
+\begin{interface}
+\item Disk usage treshold in per cent [95]:
+
+Each time when disk usage exceeds this level, the users are alerted via
+e-mail once. Note that disk usage is only checked when \seiscomp cron job
+is installed or \cmd{seiscomp check} is called regularly by other means.
+
+\item List of e-mail addresses to notify:
+
+Space-separated list of e-mail addresses to notify when disk usage treshold
+is exceeded.
+\end{interface}
+
+\subsubsection{Defining ArcLink Profile}\label{profiles}
+
+Profile is a set of station parameters, which is shared by one or more
+stations. In order to create a profile, choose ``P'' from the main menu.
+Now select a package for which you want to create a profile. Thereafter
+select the name of profile. You can edit an existing profile or create a
+new one.
+
+Parameters of various packages are described in SeisComp 3.0 documentation.
+Unless you are running local acquisition or processing, only \pkg{arclink}
+profile is mandatory.
+
+The following parameters can be set in \pkg{arclink} profile:
+\begin{interface}
+\item Public SeedLink server [geofon.gfz-potsdam.de:18000]:
+
+Your public SeedLink server for routing database.
+
+\item Public ArcLink server [webdc.eu:18001]:
+
+Your public ArcLink server for routing database.
+
+\item Users allowed to access the data via ArcLink (leave empty if no
+restrictions):
+
+If the given profile is associated with restricted stations, enter the
+ArcLink usernames (e-mail addresses) of the authorized users here.
+\end{interface}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Software Architecture}
+
+A SeisComP3 system consists of a set of independent applications each performing a discrete task. The communication between the applications is realized by a TCP/IP based messaging system (see fig. \ref{fig_sc3mediator}). This messaging system is based on the open source toolkit “Spread” that provides a high performance messaging service across local and wide area networks. At the top of “Spread” a mediator, called scmaster handling additional requirements of SeisComP3 that are not natively provided by “Spread”. 
+The data model of SeisComP3 is based on the QuakeML schema version 0.5 (www.quakeml.org). QuakeML is also used as database object schema. By default SeisComP3 uses a MySQL database, but PostgreSQL is supported, too.
+
+The applications in SeisComP3 can be divided in two different groups: data acquisition and processing. A short descriptions of the applications shows table \ref{tab_sc3applications}:
+
+\begin{table}[h]
+	\begin{tabular}{lll}
+		\textbf{Application} & \textbf{Type} & \textbf{Description} \\
+		\\
+		Seedlink & data acquisition & providing realtime waveform data \\
+		Arclink & data acquisition & providing archive waveform data \\
+		scmaster & processing & handling messaging \\
+		scqc & processing & determination of waveform quality parameter \\
+	\end{tabular}
+	\caption{short descriptions of the SeisComP3 applications}
+	\label{tab_sc3applications}
+\end{table}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=7cm]{Mediator_neries.eps}
+	\caption[Architecture of SeisComP3]{\textbf{Architecture of SeisComP3}
+	The communication between the SeisComP3 applications is realized by the MEDIATOR -called scmaster-,
+	a TCP/IP messaging system. The mediator have read and write permissions for the database. The
+	SeisComP3 applications have just read permissons to the database and listens to the mediator. They
+	have also access to the seismogramm server, ArcLink and SeedLink.}
+	\label{fig_sc3mediator}
+\end{figure}
+
+\newpage
+
+\subsection{scmaster}
+
+scmaster was designed as a kind of microkernel or mediator which delegates client requests. Therefore it is the key application responsible for the orchestration of the distributed system. In order to participate in the distributed system a client needs to send a connect request to the scmaster. In turn the master returns an acknowledgment message which either informs the client of its admission or rejection. If the connect request was successful the acknowledgment message will provide the client with the available message groups it can subscribe to. Moreover, all currently connected clients will be notified about the newly joined member.
+
+In case the master is configured with a database the client will also receive a direct follow up message which holds the address of this database. The address can be used to retrieve archived data later on. After a connection has been established every message of the client will pass through the master first where it is processed accordingly and then relayed to the target groups. Once a client is done with processing a disconnect message will be sent to the master who in turn notifies all remaining clients about the leaving.
+scmaster can be configured with a database to ensure the integrity of the system. Before a message is distributed by scmaster the message is written to the specified database. This way each message is stored before it enters the system. In case of a crash all necessary information can be recovered from the database. 
+
+Currently, driver exist for MySQL, PostgreSQL and sqlite. Note that the scmaster can run without a database but loses data integrity in doing so.
+
+
+\textbf{scmaster} supports commandline options as well as configuration files (scmaster.cfg). The users configuration file is placed under \cmd{\$HOME/.seiscomp3/scmaster.cfg}
+
+Example of scmaster.cfg:
+%\begin{lstlisting}[title=Example of scmaster.cfg]
+%\begin{figure}[htp!]
+%\centering
+%\begin{listing}
+\begin{verbatim}
+msgGroups = <list>
+  # message groups listed will be created.
+  # By default the following groups will be created:
+	STATUS_GROUP
+	IMPORT_GROUP
+	AMPLITUDE
+	CONFIG
+	EVENT
+	GUI
+	INVENTORY
+	ROUTING
+	LOCATION
+	LOGGING
+	MAGNITUDE
+	PICK
+	PUBLICATION
+	QC
+	SERVICE_PROVIDE
+	SERVICE_REQUEST
+
+plugins = <list>
+  # List of plug-ins which will be loaded.
+  # The database plug-in should be defined always:
+  plugins = libseiscomp3_dbplugin
+
+plugins.<plugin name>.<attribute> = <string>
+  # Parameters defined for the plug-in.
+  # For the database plug-in should be defined:
+  plugins.dbPlugin.dbDriver = mysql
+
+plugins.dbPlugin.readConnection = "user:user@host/yourdb"
+plugins.dbPlugin.writeConnection = "user:user@host/yourdb"
+
+# Example:
+plugins = libseiscomp3_dbplugin
+plugins.dbPlugin.dbDriver = mysql
+plugins.dbPlugin.readConnection = "sysop:sysop@localhost/seiscomp3"
+plugins.dbPlugin.writeConnection = "sysop:sysop@localhost/seiscomp3"
+\end{verbatim}
+%\end{listing}
+%\caption{Sample scmaster.cfg}\label{scmastercfg}
+%\end{figure}
+%\end{lstlisting}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Technical description of ArcLink}
+
+ArcLink complements SeedLink by providing access to archive data and
+station database. The ArcLink protocol is similar to SeedLink: it is based
+on TCP and uses simple commands in ASCII coding. However, rather than
+``subscribing'' to real-time streams, the client requests data based on
+time windows. Unlike SeedLink, the data will not be sent immediately, but
+possibly minutes or even hours later, when the request has been processed.
+An ArcLink request is associated with a request ID that can be used by the
+client to get status of the request, download data, and delete the request.
+
+The ArcLink server does not access the data archive directly, but rather
+delegates this job to ``request randler''. Thus, using different request
+handlers, it is possible to use ArcLink as a uniform method for accessing
+different data archives---just like SeedLink is used as a uniform method
+for getting real-time data. The request handler is analoguous to SeedLink
+plugin, however, while SeedLink starts exactly one instance of each defined
+plugin at startup, ArcLink uses a single request handler and starts one
+instance of request handler per request.
+
+In addition to waveforms and metadata, it is also possible to request
+routing information from an ArcLink server, telling which ArcLink server
+provides data of any given station.  The routing database itself is
+supposed to be synchronized between all ArcLink servers—--this way a client
+can connect to any public ArcLink server, request routing information and
+split request accordingly.
+
+
+\subsection{Request Format}
+
+The generic request format is following:
+
+\begin{alltt}
+REQUEST \textnormal{\emph{request\_type optional\_attributes}}
+\textnormal{\emph{start\_time end\_time net station stream loc\_id optional\_constraints}}
+\textnormal{\emph{[more request lines...]}}
+END
+\end{alltt}
+
+Allowed request types are currently WAVEFORM, RESPONSE, INVENTORY, ROUTING
+and QC. Data format of WAVEFORM and RESPONSE requests is SEED (Mini-SEED,
+dataless SEED, full SEED). Data format of INVENTORY, ROUTING and QC
+requests is XML. Data can be optionally compressed by bzip2.
+
+
+\subsubsection{WAVEFORM request}
+
+If \emph{request\_type}==\texttt{WAVEFORM}, attributes ``format'' and
+``compression'' are defined. The value of ``format'' can be ``MSEED'' for
+Mini-SEED or ``FSEED" (default) for full SEED; ``compression'' can be
+``bzip2'' or ``none'' (default).  Wildcards are allowed only in
+\emph{stream} and \emph{loc\_id}.  Constraints are not allowed.
+\emph{loc\_id} is optional. If \emph{loc\_id} is missing or ``.", only
+streams with empty location ID are requested. Sample waveform request:
+
+\begin{verbatim}
+REQUEST WAVEFORM format=MSEED
+2005,09,01,00,05,00 2005,09,01,00,10,00 IA PPI BHZ .
+END
+\end{verbatim}
+
+
+\subsubsection{RESPONSE request}
+
+If \emph{request\_type}==\texttt{RESPONSE}, attribute ``compression'' is
+defined, which can be ``bzip2'' or ``none'' (default). Constraints are not
+allowed.  Wildcard ``*'' is allowed in \emph{station} \emph{stream} and
+\emph{loc\_id}, so it is possible to request a dataless volume of a whole
+network. If \emph{loc\_id} is missing or ``.'', only streams with empty
+location ID are included in the dataless volume. The word ``RESPONSE'' is
+ambiguous; possibly we should find a better one.
+
+
+\subsubsection{INVENTORY request}
+
+If \emph{request\_type}==\texttt{INVENTORY}, attributes ``instruments",
+``compression'' and "modified\_after'' are defined. The value of
+``instruments'' can be ``true'' or "false", ``compression'' can be
+``bzip2'' or ``none'' (default), and "modified\_after", if present, must
+contain an ISO time string.
+
+\begin{description}
+\item[instruments \dfl{false}] whether instrument data is added to XML
+\item[compression \dfl{none}] compress XML data
+\item[modified\_after] if set, only entries modified after given time will be
+    returned. Can be used for DB synchronization.
+\end{description}
+
+Wildcard ``*'' is allowed in all fields, except \emph{start\_time} and
+\emph{end\_time}.  \emph{station}, \emph{stream} and \emph{loc\_id} are
+optional. If \emph{station} or \emph{stream} is not specified, the
+respective elements are not added to the XML tree; if \emph{loc\_id} is
+missing or ``.'', only streams with empty location ID are included. For
+example, to request a just a list of GEOFON stations (but not stream
+information), one would use:
+
+\begin{verbatim}
+REQUEST INVENTORY
+1990,1,1,0,0,0 2030,12,31,0,0,0 GE *
+END
+\end{verbatim}
+
+Following constraints are defined:
+\begin{description}
+\item[sensortype] limit streams to those using specific sensor types: ``VBB", 
+    ``BB", ``SM", ``OBS", etc. Can be also a combination like ``VBB+BB+SM".
+\item[latmin] minimum latitude
+\item[latmax] maximum latitude
+\item[lonmin] minimum longitude
+\item[lonmax] maximum longitude
+\item[permanent] \emph{true} or \emph{false}, requesting only permanent or
+    temporary networks respectively
+\item[restricted] \emph{true} or \emph{false}, requesting only
+    networks/stations/streams that have restricted or open data respectively.
+\end{description}
+
+If any of \emph{station}, \emph{stream} or \emph{loc\_id} is missing, one
+or more dots should be used before constraints. For example, to request the
+list of networks with open data, one would use:
+
+\begin{verbatim}
+REQUEST INVENTORY
+1990,1,1,0,0,0 2030,12,31,0,0,0 * . restricted=false
+END
+\end{verbatim}
+
+
+\subsubsection{ROUTING request}
+
+If \emph{request\_type}==\texttt{ROUTING}, attributes ``compression'' and
+``modified\_after'' are defined. The value of ``compression'' can be
+``bzip2'' or ``none'' (default); "modified\_after", if present, must
+contain an ISO time string.
+
+\begin{description}
+\item[compression \dfl{none}] compress XML data
+\item[modified\_after] if set, only entries modified after given time will be
+    returned. Can be used for DB synchronization.
+\end{description}
+
+Wildcard ``*'' is allowed in all fields, except \emph{start\_time} and
+\emph{end\_time}.  Constraints are not allowed. All fields except
+\emph{start\_time}, \emph{end\_time} and \emph{net} are optional; missing
+\emph{station} stands for ``default route'' of a given network.
+\emph{stream} and \emph{loc\_id} are ignored.
+
+
+\subsubsection{QC request}
+
+If \emph{request\_type}==\texttt{QC}, attributes ``compression'' and
+``modified\_after'' are defined. The value of ``compression'' can be
+``bzip2'' or ``none'' (default); "modified\_after", if present, must
+contain an ISO time string.
+
+\begin{description}
+\item[compression \dfl{none}] compress XML data
+\item[modified\_after] if set, only entries modified after given time will be
+    returned. Can be used for DB synchronization.
+\item[outages] include list of outages (``true'' or ``false'').
+\item[logs] include log messages (``true'' or ``false''). 
+\end{description}
+
+Wildcard ``*'' is allowed in all fields, except \emph{start\_time} and
+\emph{end\_time}. All fields must be present. Constraints are not allowed.
+
+
+\subsection{Client Protocol}
+
+ArcLink commands consist of an ASCII string followed by zero or more
+arguments separated by spaces and terminated with carriage return
+(\xcr, ASCII code 13) followed by an optional line feed (\xlf,
+ASCII code 10).  Except STATUS, the command response is one or more lines
+terminated with \xcr\xlf. Unless noted otherwise, the response is
+OK\xcr\xlf or ERROR\xcr\xlf, depending if the command was
+successful or not. After getting the ERROR response, it is possible to
+retrieve the error message with SHOWERR.
+
+The following ArcLink commands are defined:
+\begin{interface}
+
+\item HELLO
+
+returns 2 \xcr\xlf-terminated lines: software version and data
+centre name.
+
+\item BYE
+
+closes connection (useful for testing the server with telnet, otherwise it
+is enough to close the client-side socket).
+
+\item USER <username> <password>
+
+authenticates user, required before any of the following commands.
+
+\item INSTITUTION <any_string>
+
+optionally specifies institution name.
+
+\item LABEL <label>
+
+optional label of request.
+
+\item SHOWERR
+
+returns 1 \xcr\xlf-terminated line, containing the error message
+(to be used after getting the ERROR response).
+
+\item REQUEST <request_type> <optional_attributes>
+
+start of request
+
+\item END
+
+end of request; if successful, returns request ID, otherwise
+ERROR\xcr\xlf
+
+\item STATUS <req_id>
+
+send status of request \<req_id>. if \<req_id>==ALL, sends status of all
+requests of the user. Response is either ERROR\xcr\xlf or an XML
+document, followed by END\xcr\xlf.
+
+\item DOWNLOAD <req_id>[.<vol_id>] [<pos>]
+
+download the result of request.  Response is ERROR\xcr\xlf or size,
+followed by the data and END\xcr\xlf. Optional argument <pos> makes
+possible to resume broken download.
+
+\item BDOWNLOAD <req_id>[.<vol_id>] [<pos>]
+
+like DOWNLOAD, but will block until the request is finished.
+
+\item PURGE <req_id>
+
+delete the result of a request from the server.
+
+\end{interface}
+
+
+\subsection{Request Handler Protocol}\label{reqhandler}
+
+The ArcLink server sends a request to request handler in the following
+format:
+
+\begin{alltt}
+USER \textnormal{\emph{username}} \textnormal{\emph{password}}
+\textnormal{\emph{[}}INSTITUTION \textnormal{\emph{any_string]}}
+\textnormal{\emph{[}L}ABEL \textnormal{\emph{label]}}
+REQUEST \textnormal{\emph{request\_typei req\_id optional\_attributes}}
+\textnormal{\emph{[one or more request lines...]}}
+END
+\end{alltt}
+
+After receiving the request, the request\_handler can send responses to the
+server. Following responses are defined:
+
+\newcommand{\stcode}[1]{\textnormal{\texttt{#1}}}
+
+\begin{interface}
+
+\item STATUS LINE <n> PROCESSING <vol\_id>
+
+add request line number \<n> (0-based) to volume \<vol_id>. The volume is
+created if it already does not exist.
+
+\item STATUS <ref> <status>
+
+set line or volume status, where \<ref> is ``\texttt{LINE} \<n>'' or
+''\texttt{VOLUME} \<vol_id>'' and \<status> is one of the following:
+\begin{description}
+\stditem[\stcode{OK}] request sucessfully processed, data available
+\stditem[\stcode{NODATA}] no processing errors, but data not available
+\stditem[\stcode{WARN}] processing errors, some downloadable data available
+\stditem[\stcode{ERROR}] processing errors, no downloadable data available
+\stditem[\stcode{RETRY}] temporarily no data available
+\stditem[\stcode{DENIED}] access to data denied for the user
+\stditem[\stcode{CANCEL}] processing cancelled (eg., by operator)
+\stditem[\stcode{MESSAGE} \textnormal{\emph{any\_string}}] error message in
+    case of WARN or ERROR, but can be used regardless of status (the last
+    message is shown in STATUS response)
+\stditem[\stcode{SIZE} \textnormal{\emph{n}}] data size; in case of volume,
+    it must be the exact size of downloadable product.
+\end{description}
+
+\item MESSAGE <any_string>
+
+send general processing (error) message. The last message is shown in
+STATUS response.
+
+\item ERROR
+
+request handler could not process the request due to error (eg., got an
+unhandled Python exception). This ends the request and normally the request
+handler quits. If not, it should be ready to handle the next request. Note
+that if request handler quits (crashes) without sending ERROR, then the
+request will be repeated (sent to another request handler instance) by the
+server. This behaviour might be changed in future server versions to avoid
+loops, eg., if request handler quits, ERROR would be implied.
+
+\item END
+
+request processing finished normally. The request handler is ready for the
+next request.
+
+\end{interface}
+
+
+\subsection{ArcLink Configuration File}
+
+\file{arclink.ini} has the same syntax as \file{seedlink.ini}. It may
+contain several sections, but only one having the same name as the
+executable being used. A section in \file{arclink.ini} has the following
+structure (default values are shown in square brackets, but relying on
+them is not recommended):
+\begin{description}
+\item[parameter ``organization''] organization ID, same as in SeedLink.
+(Arbitrary string.)
+
+\item[parameter ``request\_dir''] path to directory where (temporary)
+request files are stored.
+
+\item[parameter ``connections'' \dfl{0}] maximum number of parallel TCP
+connections (0---no limit).
+
+\item[parameter ``request\_queue'' \dfl{0}] maximum number of requests
+waiting to be processed. When request queue is full, no more requests are
+accepted (0---no limit.
+
+\item[parameter ``request\_size'' \dfl{100}] maximum request size in lines.
+
+\item[parameter ``handlers\_soft'' \dfl{10}] number of request handler
+instances to keep running even if they are idle.
+
+\item[parameter ``handlers\_hard'' \dfl{100}] maximum numbers of request
+handler instances, eg., maximum number of requests that are processed in
+parallel.
+
+\item[parameter ``handler\_timeout'' \dfl{600}] if a request handler blocks
+input for more than the given time period in seconds, then ArcLink server
+shuts down the request handler (0---no timeout check).
+
+\item[parameter ``handler\_start\_retry'' \dfl{60}] restart terminated
+request handlers after this time period in seconds (0---never re-start
+terminated request handlers). A request handler may terminate itself
+because of some internal error or it can be shut down by ArcLink if timeout
+occurs or invalid response is received.
+
+\item[parameter ``handler\_shutdown\_wait'' \dfl{10}] wait this time period
+in seconds for a request handler to terminate after sending the TERM signal
+(0---wait forever). If a request handler does not terminate on it's own
+within this time period, the KILL signal will be sent.
+
+\item[parameter ``port'' \dfl{18001}] TCP port used by the server.
+
+\item[parameter ``lockfile''] path to the lock file; used by the
+\cmd{seiscomp} utility to check if ArcLink is running.
+
+\item[parameter ``statefile''] the state of requests is dumped into this
+file when ArcLink exits. If this parameter is defined, but the file does not
+exist (eg., because ArcLink crashed), then ArcLink reads *.desc files in
+the request directory to restore state. If ``statefile'' is not defined,
+then ArcLink does not restore state after restart.
+
+\item[parameter ``handlers\_reserved\_*'' \dfl{0}] number of extra request
+handler instances for each type of request. These are used when
+``handlers\_hard'' is reached.
+
+\item[parameter ``swapout\_time'' \dfl{0}] delete finished requests from
+RAM when not used (STATUS, DOWNLOAD or BDOWNLOAD commands) within given
+amount of seconds (0---never delete requests).
+
+\item[parameter ``purge\_time'' \dfl{0}] delete finished requests and data
+products also from the request directory when not used (STATUS, DOWNLOAD or
+BDOWNLOAD commands) within given amount of seconds (0---never delete
+requests).
+
+\end{description}
+
+
+\subsection{The \cmd{arclinktool} utility}\label{arclinktool}
+
+Similar to \cmd{slinktool}, there is \cmd{arclinktool}, which can be used
+for testing ArcLink servers and making simple data requests. Sample
+\cmd{arclinktool} usage is shown below.
+
+\begin{itemize}
+\item Check if \cmd{arclinktool} works.
+\begin{verbatim}
+> arclinktool -h
+Usage: arclinktool.py -u user [-i institution] [-o file] {-r|-s|-d|-p} host:port
+Options:
+--version show program's version number and exit
+-h, --help show this help message and exit
+-u USER, --user=USER  user's e-mail address
+-i INST, --institution=INST
+                      user's institution
+-o OUTF, --output-file=OUTF
+                      file where downloaded data is written
+-c DECOMP, --decompress=DECOMP
+                      compression type for decompression
+-r REQUEST_FILE, --submit=REQUEST_FILE
+                      submit request
+-s STATUS_ID, --status=STATUS_ID
+                      check status
+-d DOWNLOAD_ID, --download=DOWNLOAD_ID
+                      download product
+-p PURGE_ID, --purge=PURGE_ID
+                      delete product from the server
+\end{verbatim}
+
+\item Now write a request file containing, eg.
+\begin{verbatim}
+REQUEST WAVEFORM format=MSEED
+2008,06,04,06,00,00 2008,06,04,06,10,00 GE CART BHZ .
+2008,06,04,06,00,00 2008,06,04,06,10,00 GE MAHO BHZ .
+END
+\end{verbatim}
+
+\item Submit the request to the ArcLink server.
+\begin{verbatim}
+> arclinktool -u andres -r req.txt localhost:18001
+Connected to ArcLink v0.4 (2006.276) at GITEWS
+Request successfully submitted
+Request ID: 91
+\end{verbatim}
+
+\item Check the status.
+\begin{verbatim}
+> arclinktool -u andres -s 91 localhost:18001
+Connected to ArcLink v0.4 (2006.276) at GITEWS
+Request ID: 91, Type: WAVEFORM, Args: format=MSEED
+Status: READY, Size: 37376, Info:
+Volume ID: local, Status: OK, Size: 37376, Info:
+Request: 2008,06,04,06,00,00 2008,06,04,06,10,00 GE CART BHZ .
+Status: OK, Size: 18432, Info:
+Request: 2008,06,04,06,00,00 2008,06,04,06,10,00 GE MAHO BHZ .
+Status: OK, Size: 18944, Info:
+\end{verbatim}
+
+\item Download data.
+\begin{verbatim}
+> arclinktool -u andres -d 91 -o data.mseed localhost:18001
+Connected to ArcLink v0.4 (2006.276) at GITEWS
+Download successful
+\end{verbatim}
+
+\item Delete request from server.
+\begin{verbatim}
+> arclinktool -u andres -p 91 localhost:18001
+Connected to ArcLink v0.4 (2006.276) at GITEWS
+Product successfully deleted
+\end{verbatim}
+
+\end{itemize}
+
+\subsection{SDS definition}
+
+The basic directory and file layout is defined as:
+\begin{verbatim}
+<SDSdir>/Year/NET/STA/CHAN.TYPE/NET.STA.LOC.CHAN.TYPE.YEAR.DAY
+\end{verbatim}
+
+Definitions of fields:
+\begin{interface}
+
+\item SDSdir
+
+arbitrary base directory
+
+\item YEAR
+
+4 digit YEAR
+
+\item NET 
+
+Network code/identifier, 1-8 characters, no spaces
+
+\item STA
+
+Station code/identifier, 1-8 characters, no spaces
+
+\item CHAN
+
+Channel code/identifier, 1-8 characters, no spaces
+
+\item TYPE
+
+1 character, indicating the data type, provided types are:
+’D’ - Waveform data
+’E’ - Detection data
+’L’ - Log data
+’T’ - Timing data
+’C’ - Calibration data
+’O’ - Opaque data
+
+\item LOC
+
+Location identifier, 1-8 characters, no spaces
+
+\item DAY
+
+3 digit day of year, padded with zeros
+
+\end{interface}
+
+The dots ’.’ in the file names must always be present regardless if neighboring fields are empty. Additional data type flags may be used for extended structure definition.
+
+%\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{scqc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\section{Seedlink}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Further ArcLink Tools}
+
+%Further software tools are avaiable:
+%\begin{itemize}
+%\item arclinktool.py (see \ref{arclinktool})
+%\item breqfast.py
+%\item dbtool.py
+%\item html_chunks.py
+%\item reqhandler.py (see also \ref{reqhandler})
+%\item reqsum.py
+%\item sds.py
+%\item sync\_db.py
+%\item webinterface.py
+%\item webreqsum.py
+%\end{itemize}
+
+%\subsection{breqfast}
+
+%%%Applikation / crontab... eMail REQHandler
+
+\subsection{\cmd{dump\_db} and \cmd{fill\_db}}
+
+\cmd{dump\_db} and \cmd{fill\_db}, known from previous ArcLink releases,
+have been ported to SeisComp3 as well. These tools are used to dump the
+inventory database in XML format and load an XML file into the database,
+respectively.  Note that even though the database structure changed, XML
+schema is still the same, so you can dump your old database into an XML
+file and load this file into the new database.
+
+These tools are fully integrated with SeisComp3, so they get most of the
+parameters from standard SeisComp3 configuration files and not many
+command-line parameters are needed. Here is a example usage:
+\begin{verbatim}
+dump_db inventory.xml
+fill_db --seedlink geofon.gfz-potsdam.de:18000 --arclink webdc.eu:18001
+    inventory.xml
+\end{verbatim}
+
+Of course, the tools support all standard SeisComp3 command-line options, as
+illustrated by figure~\ref{filldbhelp}.
+
+\begin{figure}[htp!]
+\centering
+\begin{listing}
+> fill_db -h
+
+Generic:
+  -h [ --help ]         produce help message
+  -V [ --version ]      show version information
+  --crash-handler arg   path to crash handler script
+  -D [ --daemon ]       run as daemon
+
+Verbose:
+  --verbosity arg       verbosity level [0..4]
+  -v [ --v ]            increase verbosity level (may be repeated, eg. -vv)
+  -q [ --quiet ]        quiet mode: no logging output
+  --component arg       limits the logging to a certain component. this option 
+                        can be given more than once
+  -s [ --syslog ]       use syslog
+  -l [ --lockfile ] arg path to lock file
+  --console arg (=1)    send log output to stdout
+  --debug               debug mode: --verbosity=4 --console
+
+Messaging:
+  -u [ --user ] arg (=fill_db)                 client name used when connecting
+                                               to the messaging
+  -H [ --host ] arg (=localhost)               messaging host (host[:port])
+  -t [ --timeout ] arg (=3)                    connection timeout in seconds
+  -g [ --primary-group ] arg (=LISTENER_GROUP) the primary message group of the
+                                               client
+  -S [ --subscribe-group ] arg                 a group to subscribe to.  this 
+                                               option can be given more than 
+                                               once
+  --encoding arg (=binary)                     sets the message encoding 
+                                               (binary or xml)
+
+Database:
+  --db-driver-list             list all supported database drivers
+  -d [ --database ] arg        the database connection string, format: 
+                               service://user:pwd@host/database
+  --config-module arg (=trunk) the configmodule to use
+
+ArcLink:
+  --use-sc3db arg (=1)  use SC3 messaging/database
+  --db-url arg          database URL (sqlobject only)
+  --arclink arg         public arclink address for routing
+  --seedlink arg        public seedlink address for routing
+\end{listing}
+\caption{\cmd{fill\_db} help message}\label{filldbhelp}
+\end{figure}
+
+
+\subsection{\cmd{sync\_db}}
+
+\cmd{sync\_db} is similar to \cmd{fill\_db}, except it requests data from a
+remote ArcLink server instead of reading an XML file. \cmd{sync\_db} also
+transfers routing information and it can optionally work in incremental
+mode, transferring only changes (using last\_modified) rather complete
+database.
+
+When doing full sync, objects that no longer exist in source database will
+be removed also from the target DB. This is not possible in incremental
+mode.
+
+
+\subsection{\cmd{dbtool}}
+
+\cmd{dbtool} is an alternative database utility that can read and write
+both types of databases (SQLObject and SC3) at the same time.
+
+\texttt{> python dbtool.py -h} for a list of options.\\
+\\
+Usage:
+\begin{verbatim}
+dbtool.py {--read (arclink|scDb|sc3Db) | --write (scDb|sc3Db)} {-i -r -a}
+		{-A ARCLINKURL | -d scDbURL | -D scDb3URL -M SC3MSGURL }
+		{-I INVENTORYXML | -R ROUTINGXML}
+\end{verbatim}
+Some examples: \\
+\texttt{python dbtool.py --read arclink -i -A sysop@localhost:18001 -m 2007-12-31 -I inventory.xml} \\
+Reads the inventory entries - which are more recent than 2007-12-31 - from an Arclink server and saves them in a xml file. \\
+\\
+\texttt{python dbtool.py --read scDb -i -d mysql://username:password@localhost/seiscomp -I inventory.xml} \\
+Reads the inventory entries from a scDb and saves them in a xml file. \\
+\\
+\texttt{python dbtool.py --write sc3Db -i -D mysql://username:password@localhost/seiscomp3 -M username@localhost:4803 -I inventory.xml} \\
+Writes the inventory entries from a xml file and saves them to the sc3Db. \\
+\\
+\texttt{python dbtool.py --read scDb -ira -d mysql://username:password@localhost/seiscomp -I inventory.xml -R routing.xml} \\
+Reads the inventory and routing/access entries from a scDb and saves them in xml files. \\
+
+
+\section{Web Interface}
+
+A simple web interface for ArcLink has been implemented. This can be installed as follows:
+\begin{itemize}
+\item Install and configure Apache2 with Python scripting support
+(mod\_python). An easy way of doing this is to use yast2-http-server
+module.
+
+\item Add the following to /etc/apache2/conf.d/arclink.conf:
+\begin{verbatim}
+<Directory "/srv/www/htdocs/arclink">
+    SetHandler mod_python
+    PythonHandler webinterface
+    PythonDebug On
+</Directory>
+\end{verbatim}
+
+\item Copy (or link) webinterface.py and html\_chunks.py to
+/srv/www/htdocs/arclink.
+
+\item Add your index page to /srv/www/htdocs/index.html. The content of
+this file, up to '$<$!-- end header --$>$' will be displayed at the top of
+every page generated by the web interface.
+
+\item Create directory /tmp/arclink. The directory must be writable by the
+user under which Apache daemon is running.
+
+\item Execute the following commands \emph{before} starting Apache2 (you may
+want to put those into /etc/init.d/apache2):
+\begin{verbatim}
+export SEISCOMP_ROOT=/home/sysop/seiscomp3
+export SEISCOMP3_ROOT=/home/sysop/seiscomp3/trunk
+source /home/sysop/seiscomp3/lib/env.sh
+source /home/sysop/seiscomp3/trunk/share/env.sh
+\end{verbatim}
+
+\item Start Apache2 using \cmd{rcapache2 start}.
+\end{itemize}
+
+After a successfull installation the web interface is avaiable under http://hostname/arclink/query?
+(see fig. \ref{fig_webinterface}).
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=17cm]{webinterface.eps}
+	\caption[Web Interface]{\textbf{Web Interface} After a successfull installation the
+    web interface will be avaiable.}
+	\label{fig_webinterface}
+\end{figure}
+
+
+
+\end{document}
+

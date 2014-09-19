@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="sync_arc" category="Utilities">
+		<description>ArcLink remote merging tool (one-way synchronization)</description>
+			<command-line>
+
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+				<group name="Mode of Operation">
+					<option long-flag="check">
+						<description>Check my own inventory against the Master Table (the list of nodes affected can be controlled by the --nodes/--exclude options)</description>
+					</option>
+					<option long-flag="sanity-check">
+						<description>Check the sanity of the inventory loaded on this node finding possible overlaps with the Master Table.</description>
+					</option>
+					<option long-flag="sanity-clean">
+						<description>Remove the conflicting elements loaded on my host pointed out by the sanity command.</description>
+					</option>
+					<option long-flag="merge">
+						<description>Performs a merging (one-direction synchronization) of inventory and routing based on the content of the Master Table (the list of nodes affected can be controlled by the --nodes/--exclude options).</description>
+					</option>
+					<option long-flag="remove">
+						<description>Remove (undo the merge) inventory/routing information that was merged (the list of nodes affected can be controlled by the --nodes/--exclude options).</description>
+					</option>
+					<option long-flag="erase">
+						<description>Erase my inventory/routing entries restoring the local seiscomp3 database to an empty state (use with caution).</description>
+					</option>
+					<option long-flag="list">
+						<description>Fetch and list the Master Table content.</description>
+					</option>
+				</group>
+
+				<group name="Options">
+					<option long-flag="nodes" argument="nodeA,nodeB">
+						<description>Comma separated list of nodes to remove, merge, check.</description>
+					</option>
+					<option long-flag="exclude" argument="nodeA,nodeB">
+						<description>Comma separated list of nodes to exclude from remove, merge, check.</description>
+					</option>
+					<option long-flag="keep-synced">
+						<description>keep a copy of the Inventory and Routing tables merged.</description>
+					</option>
+					<option long-flag="keep-raw">
+						<description>keep a copy of the RAW Inventory and Routing tables fetched.</description>
+					</option>
+					<option long-flag="load-raw" argument="YY-MM-DD">
+						<description>load a copy of the RAW Inventory/Routing information from disk. It expects a date value in the following format YYYY-MM-DD.</description>
+					</option>
+					<option long-flag="dry-run">
+						<description>Perform everything that should be done but don't write changes to the database.</description>
+					</option>
+					<option long-flag="force">
+						<description>Force merging against MYSELF.</description>
+					</option>
+				</group>
+			</command-line>
+
+			<configuration>
+				<parameter name="poolFolder" type="string" default="./">
+					<description>
+					Indicates a folder to store/retrieve the RAW inventory files when the options --keep-raw/--load-raw are in use
+					</description>
+				</parameter>
+				<parameter name="poolKeep" type="int" default="0">
+					<description>
+						Indicate the number of Inventory and Routing files that the pool folder should contain. If set to 0 the pool folder is never cleaned, if this  variable contains a number larger than zero the sync_arc program will make sure that the pool folder contains only "poolKeep" set of files  (inventory/routing) for each node.
+					</description>
+				</parameter>
+				<parameter name="masterTableAddress" type="string" default="http://webdc.eu/arclink">
+					<description>
+						Location of the webservice responsible for generating the master table. The complete address used is: #masterTableAddress#/table?group=#arclinkGroup#
+					</description>
+				</parameter>
+				<parameter name="arclinkGroup" type="string" default="eida">
+					<description>
+						The arclink network group name that we want to merge to. This will be used to query the server pointed by the 'masterTableAddress' for the master table as indicated.
+					</description>
+				</parameter>
+			</configuration>
+	</module>
+</seiscomp>

@@ -1,0 +1,1 @@
+INSTALL(PROGRAMS arclink_fetch.py RENAME arclink_fetch DESTINATION ${SC3_PACKAGE_BIN_DIR})

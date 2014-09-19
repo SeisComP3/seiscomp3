@@ -1,0 +1,38 @@
+SET(
+	CORE_DATAMODEL_GENERATED_HEADERS
+		types.h
+		literaturesource.h
+		surfacerupture.h
+		filterparameter.h
+		simplefilter.h
+		simplefilterchainmember.h
+		peakmotion.h
+		fileresource.h
+		contact.h
+		record.h
+		eventrecordreference.h
+		rupture.h
+		strongorigindescription.h
+		strongmotionparameters.h
+		strongmotionparameters_package.h
+		databasereader.h
+)
+
+SET(
+	CORE_DATAMODEL_GENERATED_SOURCES
+		types.cpp
+		literaturesource.cpp
+		surfacerupture.cpp
+		filterparameter.cpp
+		simplefilter.cpp
+		simplefilterchainmember.cpp
+		peakmotion.cpp
+		fileresource.cpp
+		contact.cpp
+		record.cpp
+		eventrecordreference.cpp
+		rupture.cpp
+		strongorigindescription.cpp
+		strongmotionparameters.cpp
+		databasereader.cpp
+)

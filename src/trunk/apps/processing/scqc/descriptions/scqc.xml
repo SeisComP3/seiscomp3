@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scqc" category="Processing">
+		<description>Derives quality parameters from waveforms.</description>
+		<configuration>
+			<parameter name="CreatorId" type="string" default="smi://de.gfz-potsdam/QcTool_0.3.1">
+				<description>ID of QC message creator</description>
+			</parameter>
+			<parameter name="useConfiguredStreams" type="boolean" default="false">
+				<description>
+					Limit QC determination to processed data streams.
+				</description>
+			</parameter>
+			<parameter name="streamMask" type="string">
+				<description>
+					If useConfiguredStreams == False then
+					load (from inventory) only those streams, matching the streamMask
+
+					RegEx e.g. &quot;^(NET1|NET2)\.(STA1|STA2|STA3)\.(LOC)\.((BH)|(LH)|(HH))Z$&quot;
+
+					RegEx e.g. &quot;^(.+)\.(.+)\.(.*)\.(.+)Z$&quot;
+
+					streamMask = &quot;^(.+)\.(.+)\.(.*)\.(BHZ)$&quot;
+				</description>
+			</parameter>
+			<parameter name="dbLookBack" type="int" default="7">
+				<description>
+					Database look up for past entries not older than x days
+					(to determine the last QC parameter calculated).
+				</description>
+			</parameter>
+			<group name="plugins">
+				<group name="default">
+					<parameter name="reportInterval" type="int" default="60">
+						<description>Interval for sending the report messages in seconds.</description>
+					</parameter>
+					<parameter name="alertInterval" type="int" default="30">
+						<description>Interval for checking the alert thresholds in seconds.</description>
+					</parameter>
+					<parameter name="staBufferLength" type="int" default="600">
+						<description>Short Term Average (STA) buffer length in seconds.</description>
+					</parameter>
+					<parameter name="ltaBufferLength" type="int" default="600">
+						<description>Long Term Average (LTA) buffer length in seconds.</description>
+					</parameter>
+					<parameter name="timeout" type="int" default="0">
+						<description>Generate a report message in case no data is received since timeout in seconds.</description>
+					</parameter>
+					<parameter name="thresholds" type="int" default="100">
+						<description>Alert thresholds in percent, single value [or list 25,50,75 ... not yet implemented].</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

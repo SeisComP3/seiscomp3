@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scvsmaglog" category="Processing" author="Swiss Seismological Service">
+		<description>
+		Logs VS magnitude messages.
+		</description>
+		<configuration>
+			<group name="email">
+				<parameter name="smtpserver" type="string">
+					<description>
+					URL of the smtp server to send the report files to.
+					</description>
+				</parameter>
+				<parameter name="port" type="int" default="25">
+					<description>
+					Port where the SMTP server accepts connections.
+					</description>
+				</parameter>
+				<parameter name="usetls" type="boolean" default="false">
+					<description>
+					Whether to use TLS when connecting to the smtp server.
+					</description>
+				</parameter>
+				<parameter name="usessl" type="boolean" default="false">
+					<description>
+					Whether to use SSL when connecting to the smtp server.
+					Note, only 'email.usetls' or 'user.ssl' can be true.
+					</description>
+				</parameter>
+				<parameter name="authenticate" type="boolean" default="false">
+					<description>
+					Whether the smtp server requires authentication (username + password).
+					</description>
+				</parameter>
+				<parameter name="credentials" type="file">
+					<description>
+					If the smtp server requires authentication you have to specify a file that contains
+					username and password in the format:
+
+					username=your-username
+
+					password=your-password
+
+					Make sure that you set the file permission as restrictive as
+					possible.
+					</description>
+				</parameter>
+				<parameter name="senderaddress" type="string">
+					<description>
+					Email address that will appear as sender in the report email.
+					</description>
+				</parameter>
+				<parameter name="subject" type="string">
+					<description>
+					Any string that should be prepended to the email's subject string.
+					</description>
+				</parameter>
+				<parameter name="host" type="string">
+					<description>
+					Host as it is supposed to appear in the email's subject string.
+					</description>
+				</parameter>
+				<parameter name="recipients" type="list:string">
+					<description>
+					A list of email addresses that receive the report emails.
+					</description>
+				</parameter>
+				<parameter name="magThresh" type="double" default="0.0">
+					<description>
+					Only send a notification email if the magnitude threshold is exceeded.
+					</description>
+				</parameter>
+			</group>
+			<group name="report">
+				<parameter name="eventbuffer" type="int" default="3600" unit="s">
+					<description>
+					Time in seconds that events and the related objects are buffered.
+					</description>
+				</parameter>
+				<parameter name="directory" type="dir" default="~/.seiscomp3/log/VS_reports">
+					<description>
+					Directory to save reports to.
+					</description>
+				</parameter>
+			</group>
+			<group name="ActiveMQ">
+				<parameter name="hostname" type="string" default="localhost">
+					<description>
+					Server name that runs the ActiveMQ broker.
+					</description>
+				</parameter>
+				<parameter name="port" type="int" default="61619">
+					<description>
+					Port on which ActiveMQ broker accepts stomp messages.
+					</description>
+				</parameter>
+				<parameter name="username" type="string" default="your-ActiveMQ-username">
+					<description>
+					Username with which messages are sent.
+					</description>
+				</parameter>
+				<parameter name="password" type="string" default="your-ActiveMQ-password">
+					<description>
+					Password with which messages are sent.
+					</description>
+				</parameter>
+				<parameter name="topic" type="string" default="/topic/your-topic-for-alerts">
+					<description>
+					ActiveMQ broker topic to send alerts to.
+					</description>
+				</parameter>
+				<parameter name="hbtopic" type="string" default="/topic/your-topic-for-heart-beats">
+					<description>
+					ActiveMQ broker topic to send heart beats to.
+					</description>
+				</parameter>
+			</group>
+			
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Reports">
+				<option long-flag="savedir" argument="path">
+					<description>Directory to save reports to.</description>
+				</option>
+			</group>
+			<group name="Mode">
+				<option long-flag="playback">
+					<description>Disable database connection.</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

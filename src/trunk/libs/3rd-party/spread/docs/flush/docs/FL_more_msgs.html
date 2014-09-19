@@ -1,0 +1,79 @@
+<HTML><HEAD><TITLE>Manpage of FL_more_msgs</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_more_msgs</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_more_msgs - returns the number of complete messages buffered and
+ready to be received on a connection.
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_more_msgs(mailbox </B><I>mbox</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_more_msgs</B>
+
+allows an application to check to see if any complete messages are
+already buffered and ready to be received on the connection represented by
+<I>mbox</I>.
+
+<P>
+<B>NOTE</B>,
+
+that this function 
+<B>CANNOT </B>
+
+be used as an I/O polling function to check if a receive call should
+be done.  If this function returns zero there still might be a message
+ready to receive on the connection: FL_poll, and file descriptor
+selects/polls can detect if there is activity (not necessarily a
+message) on a connection, while DONT_BLOCK receive semantics can
+detect whether or not there is a message on the connection and
+FL_more_msgs can only answer if there are any buffered messages
+already on the connection.
+<P>
+This function is merely a helper function to re-get the current status
+of the
+<I>more_messes</I>
+
+parameter returned from a call to 
+<B>FL_receive</B>.
+
+<H2>RETURN VALUES</H2>
+
+Returns the number of complete buffered messages ready to be received,
+or one of the following errors ( &lt; 0):
+<DL COMPACT>
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+is illegal, usually because it is not active.
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

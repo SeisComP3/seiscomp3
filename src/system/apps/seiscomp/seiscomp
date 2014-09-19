@@ -1,0 +1,1004 @@
+#!/usr/bin/env python
+
+import os, sys, signal, subprocess, pipes, glob, shutil, imp, traceback
+
+if sys.platform == "darwin":
+    SysLibraryPathVar = "DYLD_FALLBACK_LIBRARY_PATH"
+    SysFrameworkPathVar = "DYLD_FALLBACK_FRAMEWORK_PATH"
+else:
+    SysLibraryPathVar = "LD_LIBRARY_PATH"
+    SysFrameworkPathVar = None
+
+
+def get_library_path():
+    if sys.platform == "darwin":
+        return LD_LIBRARY_PATH + ":" + DYLD_FALLBACK_FRAMEWORK_PATH
+    else:
+        return LD_LIBRARY_PATH
+        
+def get_framework_path():
+        return DYLD_FALLBACK_FRAMEWORK_PATH
+
+# ------------------------------------------------------------------------------
+# Helper functions
+# ------------------------------------------------------------------------------
+SIGTERM_SENT = False
+
+def sigterm_handler(signum, frame):
+  global SIGTERM_SENT
+  if not SIGTERM_SENT:
+    SIGTERM_SENT = True
+    #print >>sys.stderr, "Sending TERM to PG"
+    os.killpg(0, signal.SIGTERM)
+
+  sys.exit()
+
+
+def system(args):
+  proc = subprocess.Popen(args, shell=False, env=os.environ)
+  while True:
+    try:
+      return proc.wait()
+    except KeyboardInterrupt:
+      continue
+    except Exception, e:
+      # Terminate was introduced in Python 2.6
+      try: proc.terminate()
+      except: pass
+      sys.stderr.write("Exception: %s\n" % str(e))
+      continue
+
+  #return subprocess.call(cmd, shell=True)
+
+
+def error(msg):
+  sys.stderr.write("error: %s\n" % msg)
+  sys.stderr.flush()
+
+
+# Returns a seiscomp3.Kernel.Module instance
+# from a given path with a given name
+def load_module(path):
+  modname =  os.path.splitext(os.path.basename(path))[0].replace('.', '_')
+  f = open(path, 'r')
+  modname = '__seiscomp_modules_' + modname
+
+  if sys.modules.has_key(modname):
+    mod = sys.modules[modname]
+  else:
+    # create a module
+    mod = imp.new_module(modname)
+    mod.__file__ = path
+
+    # store it in sys.modules
+    sys.modules[modname] = mod
+
+  # our namespace is the module dictionary
+  namespace = mod.__dict__
+
+  # test whether this has been done already
+  if not hasattr(mod, 'Module'):
+    code = f.read()
+    # compile and exec dynamic code in the module
+    exec compile(code, '', 'exec') in namespace
+
+  module = namespace.get('Module')
+  return module
+
+
+def module_compare(a,b):
+  if a.order < b.order: return -1
+  if a.order > b.order: return 1
+  if a.name < b.name: return -1
+  if a.name > b.name: return 1
+  return 0
+
+
+def load_init_modules(path):
+  mods = []
+
+  files = glob.glob(os.path.join(path, "*.py"))
+  for f in files:
+    try: pmod = load_module(f)#imp.load_source(mod_name, f)
+    except Exception, exc:
+      error(("%s: " % f) + str(exc))
+      continue
+
+    try: mod = pmod(env) #.Module(env)
+    except Exception, exc:
+      error(("%s: " % f) + str(exc))
+      continue
+
+    mods.append(mod)
+
+  #mods = sorted(mods, key=lambda mod: mod.order)
+  mods = sorted(mods, cmp=module_compare)
+
+  return mods
+
+
+def get_module(name):
+  for m in mods:
+    if m.name == name: return m
+  return None
+
+def has_module(name):
+  return get_module(name) != None
+
+
+def dump_paths():
+  print "--------------------"
+  print "SEISCOMP_ROOT=%s" % SEISCOMP_ROOT
+  print "PATH=%s" % os.environ["PATH"]
+  print "%s=%s" % (SysLibraryPathVar, os.environ[SysLibraryPathVar])
+  if SysFrameWorkPathVar:
+     print "%s=%s" % (SysFrameworkPathVar, os.environ[SysFrameworkPathVar])
+  print "PYTHONPATH=%s" % sys.path
+  print "CWD=%s" % os.getcwd()
+  print "--------------------"
+
+
+# Returns whether a module should run or not. It simply returns if its
+# runfile exists.
+def shouldModuleRun(mod_name):
+  return os.path.exists(env.runFile(mod_name))
+
+
+def touch(filename):
+  try: open(filename, 'w').close()
+  except Exception, exc:
+    error(str(exc))
+
+
+def start_module(mod):
+  # Create runfile
+  touch(env.runFile(mod.name))
+  return mod.start()
+
+
+def stop_module(mod):
+  mod.stop()
+  # Delete runfile
+  try: os.remove(env.runFile(mod.name))
+  except: pass
+  return 0
+
+
+def start_kernel_modules():
+  for mod in mods:
+    if isinstance(mod, seiscomp3.Kernel.CoreModule):
+      start_module(mod)
+
+
+
+def stop_kernel_modules():
+  for mod in reversed(mods):
+    if isinstance(mod, seiscomp3.Kernel.CoreModule):
+      stop_module(mod)
+
+
+# ------------------------------------------------------------------------------
+# Commandline action handler
+# ------------------------------------------------------------------------------
+def on_setup(args, flags):
+  import seiscomp3.Setup
+
+  params = {}
+
+  if "stdin" in flags:
+    cfg = seiscomp3.Config.Config()
+    if cfg.readConfig("-") == False:
+      error("invalid configuration from stdin")
+      return 1
+  else:
+    setup = seiscomp3.Setup.Simple()
+    try: cfg = setup.run(env)
+    except Exception, e:
+      error(str(e))
+      return 1
+
+  retCode = 0
+
+  for mod in config_mods:
+    if len(args) == 0 or mod.name in args:
+      try:
+        hasSetupHandler = callable(getattr(mod, 'setup'))
+      except:
+        hasSetupHandler = False
+
+      if hasSetupHandler:
+        print "* setup %s" % mod.name
+        if mod.setup(cfg) != 0:
+          error("module '%s' failed to setup" % mod.name)
+          retCode = 1
+
+  if retCode == 0:
+    runpath = os.path.join(SEISCOMP_ROOT, "var", "run")
+    if not os.path.exists(runpath):
+      try: os.makedirs(runpath)
+      except: error("failed to create directory: %s" % runpath)
+
+    statfile = os.path.join(runpath, "seiscomp.init")
+    if not os.path.exists(statfile):
+      try: open(statfile, "w").close()
+      except: error("failed to create status file: %s" % statfile)
+
+  return retCode
+
+def on_setup_help(args):
+  print "Initializes the configuration of all available modules. Each module implements"
+  print "its own setup handler which is called at this point. The initialization takes"
+  print "the installation directory into account and should be repeated when copying"
+  print "the system to another directory."
+  print "NOTE: Setup might overwrite already made settings with default values."
+  return 0
+
+
+
+def on_shell(args, flags):
+  import seiscomp3.Shell
+
+  shell = seiscomp3.Shell.CLI()
+  try: shell.run(env)
+  except Exception, e:
+    error(str(e))
+    return 1
+  return 0
+
+
+def on_shell_help(args):
+  print "Launches the SeisComP shell, a commandline interface which allows"
+  print "to manage modules configurations and bindings."
+  return 0
+
+
+
+def on_enable(args, flags):
+  if len(args) == 0:
+    error("module name required")
+    return 1
+
+  for name in args:
+    m = get_module(name)
+    if m is None:
+      error("%s is not available" % name)
+    elif isinstance(m, seiscomp3.Kernel.CoreModule):
+      error("%s is a kernel module and is enabled automatically" % name)
+    else:
+      env.enableModule(name)
+  return 0
+
+
+def on_enable_help(args):
+  print "Enables all given modules to be started when 'seiscomp start' is invoked"
+  print "without a module list."
+  print
+  print "Examples:"
+  print "seiscomp enable seedlink slarchive"
+
+
+def on_disable(args, flags):
+  if len(args) == 0:
+    error("module name required")
+    return 1
+
+  for name in args:
+    m = get_module(name)
+    if m is None:
+      error("%s is not available" % m)
+    elif isinstance(m, seiscomp3.Kernel.CoreModule):
+      error("%s is a kernel module and cannot be disabled" % name)
+    else:
+      env.disableModule(name)
+  return 0
+
+
+def on_disable_help(args):
+  print "Disables all given modules. See 'enable'."
+  print
+  print "Examples:"
+  print "seiscomp disable seedlink slarchive"
+
+
+
+def on_start(args, flags):
+  if len(args) == 0:
+    start_kernel_modules()
+    for mod in mods:
+      # Kernel modules have been started already
+      if isinstance(mod, seiscomp3.Kernel.CoreModule): continue
+      # Module in autorun?
+      if env.isModuleEnabled(mod.name):
+        start_module(mod)
+  else:
+    for mod in mods:
+      if mod.name in args or len(args) == 0:
+        start_module(mod)
+
+  return 0
+
+
+def on_start_help(args):
+  print "Starts all enabled modules or a list of modules given."
+  print
+  print "Examples:"
+  print "seiscomp start"
+  print "seiscomp start seedlink slarchive"
+
+
+def on_stop(args, flags):
+  if len(args) == 0:
+    for mod in reversed(mods):
+      # Kernel modules will be stopped latter
+      if isinstance(mod, seiscomp3.Kernel.CoreModule): continue
+      stop_module(mod)
+
+    # Stop all kernel modules
+    stop_kernel_modules()
+  else:
+    for mod in reversed(mods):
+      if mod.name in args or len(args) == 0:
+        stop_module(mod)
+
+  return 0
+
+
+def on_stop_help(args):
+  print "Stops all enabled modules or a list of modules given."
+  print
+  print "Examples:"
+  print "seiscomp stop"
+  print "seiscomp stop seedlink slarchive"
+
+
+def on_restart(args, flags):
+  on_stop(args, flags)
+  on_start(args, flags)
+  return 0
+
+
+def on_restart_help(args):
+  print "Restarts all enabled modules or a list of modules given."
+  print "This command is equal to:"
+  print "seiscomp stop {args}"
+  print "seiscomp start {args}"
+  print
+  print "Examples:"
+  print "seiscomp restart"
+  print "seiscomp restart seedlink slarchive"
+
+
+def on_check(args, flags):
+  for mod in mods:
+    if mod.name in args or len(args) == 0:
+      if shouldModuleRun(mod.name):
+        mod.check()
+  return 0
+
+
+def on_check_help(args):
+  print "Checks if a started module is still running. If not it is started again."
+  print "If no modules are given, all started modules are checked."
+  print
+  print "Examples:"
+  print "$ seiscomp check seedlink"
+  print "seedlink is already running"
+
+
+def on_exec(args, flags):
+  if len(args) < 1:
+    error("no module name given")
+    return False
+
+  # Change back into the working dir
+  env.chback()
+  return system(args)
+
+
+def on_exec_help(args):
+  print "Executes a command like calling a command from commandline."
+  print "It will setup all paths and execute the command."
+  print "'seiscomp run' will block until the command terminates."
+  print "Example:"
+  print "seiscomp exec scolv"
+
+
+def on_list(args, flags):
+  if len(args) < 1:
+    error("expected argument: {modules|aliases|enabled|disabled}")
+    return 1
+
+  if args[0] == "modules":
+    for mod in mods:
+      if env.isModuleEnabled(mod.name) or isinstance(mod, seiscomp3.Kernel.CoreModule):
+        state = "enabled"
+      else:
+        state = "disabled"
+      print "%s is %s" % (mod.name, state)
+    return 0
+  elif args[0] == "aliases":
+    f = open(ALIAS_FILE, 'r')
+    lines = [line.rstrip() for line in f.readlines()]
+    for line in lines:
+      if line.lstrip().startswith('#') or not line.strip(): continue
+      toks = [t.strip() for t in line.split('=')]
+      # Remove invalid lines
+      if len(toks) != 2: continue
+      if useCSV:
+        print "%s;%s" % (toks[0], toks[1])
+      else:
+        print "%s -> %s" % (toks[0], toks[1])
+    f.close()
+    return 0
+  elif args[0] == "enabled":
+    for mod in mods:
+      if env.isModuleEnabled(mod.name) or isinstance(mod, seiscomp3.Kernel.CoreModule):
+        print mod.name
+    return 0
+  elif args[0] == "disabled":
+    for mod in mods:
+      if not env.isModuleEnabled(mod.name) and not isinstance(mod, seiscomp3.Kernel.CoreModule):
+        print mod.name
+    return 0
+
+  error("wrong argument: {modules|aliases|enabled|disabled} expected")
+  return 1
+
+
+def on_list_help(args):
+  print "Prints the result of a query. 4 queries are currently supported:"
+  print " modules: lists all existing modules"
+  print " aliases: lists all existing aliases"
+  print " enabled: lists all enabled modules"
+  print " disabled: lists all disabled modules"
+  print
+  print "Examples:"
+  print "$ seiscomp list aliases"
+  print "scautopick2 -> scautopick"
+
+
+def on_status(args, flags):
+  for mod in mods:
+    if mod.name in args or len(args) == 0:
+      mod.status(shouldModuleRun(mod.name))
+  return 0
+
+
+def on_status_help(args):
+  print "Prints the status of all or a list of modules and gives a warning if a module"
+  print "should run but doesn't."
+  print "This command supports csv formatted output via '--csv' switch."
+  print
+  print "Examples:"
+  print "$ seiscomp status scautopick"
+  print "scautopick           is not running"
+  print "$ seiscomp --csv status scautopick"
+  print "scautopick;0;0;0"
+  print
+  print "CSV format:"
+  print " column 1: module name"
+  print " column 2: running flag"
+  print " column 3: should run flag"
+  print " column 4: enabled flag"
+
+
+def on_print(args, flags):
+  if len(args) < 1:
+    error("expected argument: {crontab|env}")
+    return 1
+
+  if args[0] == "crontab":
+    print "*/3 * * * * %s check >/dev/null 2>&1" % os.path.join(env.SEISCOMP_ROOT, "bin", "seiscomp")
+    for mod in mods:
+      mod.printCrontab()
+  elif args[0] == "env":
+    print "export SEISCOMP_ROOT=%s" % SEISCOMP_ROOT
+    print "export PATH=%s:$PATH" % BIN_PATH
+    print "export %s=%s:$%s" % (SysLibraryPathVar, get_library_path(), SysLibraryPathVar)
+    if sys.platform == "darwin":
+      print "export %s=%s:$%s" % (SysFrameworkPathVar, get_framework_path(), SysFrameworkPathVar)
+      
+    print "export PYTHONPATH=%s:$PYTHONPATH" % PYTHONPATH
+    print "export MANPATH=%s:$MANPATH" % MANPATH
+    print "export LC_ALL=C"
+  else:
+    error("wrong argument: {crontab|env} expected")
+    return 1
+
+  return 0
+
+
+def on_print_help(args):
+  print "seiscomp print {crontab|env}"
+  print " crontab: prints crontab entries of all registered or given modules."
+  print " env: prints environment variables necessary to run SeisComP3 modules."
+  print
+  print "Examples:"
+  print "Source SC3 environment into current bash session"
+  print "$ eval $(seiscomp3/bin/seiscomp print env)"
+
+
+def on_install_deps_linux(args, flags):
+  try:
+    out = subprocess.Popen(['lsb_release', '-sir'],
+                           stdout=subprocess.PIPE).communicate()[0].splitlines()
+    out = [l.strip() for l in out]
+  except:
+    error("lsb_release is not installed")
+    print "*********************************************************************"
+    print "seiscomp was not able to figure out the installed distribution"
+    print "You need to check the documentation for required packages and install"
+    print "them manually."
+    print "*********************************************************************"
+    return 1
+
+  try:
+    release, version = out
+  except:
+    error("unexpected version result")
+    return 1
+
+  print "Distribution: " + release + " " + version
+
+  script_dir = os.path.join(env.SEISCOMP_ROOT, "share", "deps", release.lower(), version.lower())
+  if not os.path.exists(script_dir):
+    print "*********************************************************************"
+    print "Sorry, the installed distribution is not supported."
+    print "You need to check the documentation for required packages and install"
+    print "them manually."
+    print "*********************************************************************"
+    return 1
+
+  if len(args) == 0:
+    error("no packages given")
+    print "Give the packages you want to install dependencies for after"
+    print "install-deps."
+    print "Example: seiscomp install-deps base gui mysql-server"
+
+  for pkg in args:
+    script = os.path.join(script_dir, "install-" + pkg + ".sh")
+    if not os.path.exists(script):
+      error("no handler available for package '%s'" % pkg)
+      return 1
+
+    if system(["sudo", "sh", script]) != 0:
+      error("installation failed")
+      return 1
+
+  return 0
+
+
+def on_install_deps(args, flags):
+  if sys.platform.startswith("linux"):
+    return on_install_deps_linux(args, flags)
+  else:
+    error("unsupported platform")
+    print "*********************************************************************"
+    print "The platform you are currently running on is not supported to install"
+    print "dependencies automatically."
+    print "You need to check the documentation for required packages and install"
+    print "them manually."
+    print "*********************************************************************"
+    return 1
+
+
+def on_install_deps_help(args):
+  print "Installs OS dependencies to run SeisComP3. This requires either a 'sudo'"
+  print "or root account. Additional packages can be given as arguments."
+  print "Packages: mysql, postgresql"
+  return 0
+
+
+def on_update_config(args, flags):
+  print "* starting kernel modules"
+  start_kernel_modules()
+  for mod in config_mods:
+    if len(args) == 0 or mod.name in args:
+      print "* configure %s" % mod.name
+      if mod.updateConfig() != 0:
+        error("updating configuration for %s failed" % mod.name)
+        return 1
+  return 0
+
+
+def on_update_config_help(args):
+  print "Updates the configuration of all available modules. This command will convert"
+  print "the etc/*.cfg to the modules native configuration including its bindings."
+  return 0
+
+
+def on_alias(args, flags):
+  if len(args) < 2:
+    error("expected arguments: {create|remove} ALIAS_NAME APP_NAME")
+    return 1
+
+  if args[0] == "create":
+    if len(args) != 3:
+      error("expected two arguments for create: ALIAS_NAME APP_NAME")
+      return 1
+
+    mod = None
+    for m in mods:
+      if m.name == args[2]:
+        mod = m
+        break
+
+    if not mod:
+      error("module '%s' not found" % args[2])
+      return 1
+
+    supportsAliases = False
+    try:
+      supportsAliases = mod.supportsAliases()
+    except: pass
+
+    if not supportsAliases:
+      error("module '%s' does not support aliases" % args[2])
+      return 1
+
+    mod2 = args[2]
+    if os.path.exists(os.path.join("bin", mod2)):
+      mod1 = os.path.join("bin", args[1])
+    elif os.path.exists(os.path.join("sbin", mod2)):
+      mod1 = os.path.join("sbin", args[1])
+    else:
+      error("no %s binary found (neither bin nor sbin)")
+      return 1
+
+    # create alias line in etc/descriptions/aliases
+    if not os.path.exists(DESC_PATH):
+      try: os.makedirs(DESC_PATH)
+      except Exception, e:
+        error("failed to create directory: %s" % DESC_PATH)
+        return 1
+
+    has_alias = False
+    lines = []
+    new_lines = []
+    try:
+      f = open(ALIAS_FILE, 'r')
+      lines = [line.rstrip() for line in f.readlines()]
+      for line in lines:
+        if line.lstrip().startswith('#') or not line.strip():
+          # Keep comments or empty lines
+          new_lines.append(line)
+          continue
+        toks = [t.strip() for t in line.split('=')]
+        # Remove invalid lines
+        if len(toks) != 2: continue
+        if toks[0] == args[1]:
+          has_alias = True
+        else:
+          new_lines.append(line)
+      f.close()
+    except: pass
+
+    if has_alias:
+      error("%s is already an alias for %s" % (args[1], toks[1]))
+      return 1
+
+    # Check if target exists already
+    if os.path.exists(os.path.join(SEISCOMP_ROOT, mod1)):
+      error("module '%s' exists already" % args[1])
+      return 1
+
+    try: f = open(ALIAS_FILE, 'w')
+    except:
+      error("failed to open/create alias file: %s" % ALIAS_FILE)
+      return 1
+
+    new_lines.append("%s = %s" % (args[1], args[2]))
+
+    f.write("\n".join(new_lines) + "\n")
+    f.close()
+
+    if has_alias: return 1
+
+    # copy defaults from etc/defaults/mod1.cfg to etc/defaults/mod2.cfg
+    default_cfg1 = os.path.join("etc", "defaults", args[1] + ".cfg")
+    default_cfg2 = os.path.join("etc", "defaults", args[2] + ".cfg")
+    if os.path.exists(default_cfg2):
+      print "Copy default configuration: %s -> %s" % (default_cfg2, default_cfg1)
+      shutil.copyfile(os.path.join(SEISCOMP_ROOT, default_cfg2), os.path.join(SEISCOMP_ROOT, default_cfg1))
+    else:
+      print "No default configuration to copy"
+
+    # create symlink from bin/mod1 to bin/mod2
+    # - first: remove target
+    try: os.remove(os.path.join(SEISCOMP_ROOT, mod1))
+    except: pass
+    print "Create app symlink: %s -> %s" % (mod2, mod1)
+    os.symlink(mod2, os.path.join(SEISCOMP_ROOT, mod1))
+
+    # create symlink from etc/init/mod1.py to etc/init/mod2.py
+    init1 = os.path.join("etc", "init", args[1] + ".py")
+    init2 = os.path.join("etc", "init", args[2] + ".py")
+    print "Copy init script: %s -> %s" % (init2, init1)
+    shutil.copyfile(os.path.join(SEISCOMP_ROOT, init2), os.path.join(SEISCOMP_ROOT, init1))
+
+    return 0
+  elif args[0] == "remove":
+    if len(args) != 2:
+      error("expected one argument for remove: alias-name")
+      return 1
+
+    #  check and remove alias line in etc/descriptions/aliases
+    has_alias = False
+    lines = []
+    new_lines = []
+    try:
+      f = open(ALIAS_FILE, 'r')
+      lines = [line.rstrip() for line in f.readlines()]
+      for line in lines:
+        if line.lstrip().startswith('#') or not line.strip():
+          # Keep comments or empty lines
+          new_lines.append(line)
+          continue
+        toks = [t.strip() for t in line.split('=')]
+        # Remove invalid lines
+        if len(toks) != 2: continue
+        if toks[0] == args[1]:
+          has_alias = True
+        else:
+          new_lines.append(line)
+      f.close()
+    except: pass
+
+    if not has_alias:
+      error("%s is not defined as an alias" % args[1])
+      if len(lines) == len(new_lines): return 1
+
+    try: f = open(ALIAS_FILE, 'w')
+    except:
+      error("failed to open/create alias file: %s" % ALIAS_FILE)
+      return 1
+
+    if len(lines) > 0:
+      f.write("\n".join(new_lines) + "\n")
+    f.close()
+
+    if not has_alias: return 1
+
+    #  delete defaults etc/defaults/mod1.cfg
+    default_cfg = os.path.join("etc", "defaults", args[1] + ".cfg")
+    print "Remove default configuration: %s" % default_cfg
+    try: os.remove(os.path.join(SEISCOMP_ROOT, default_cfg))
+    except: pass
+
+    # remove symlink from bin/mod1
+    if os.path.exists(os.path.join("bin", args[1])):
+      sym_link = os.path.join("bin", args[1])
+    elif os.path.exists(os.path.join("sbin", args[1])):
+      sym_link = os.path.join("sbin", args[1])
+    else:
+      sym_link = ""
+
+    if sym_link:
+      print "Remove app symlink: %s" % sym_link
+      try: os.remove(os.path.join(SEISCOMP_ROOT, sym_link))
+      except: pass
+
+    # remove symlink from etc/init/mod1.py
+    init_scr = os.path.join("etc", "init", args[1] + ".py")
+    print "Remove init script: %s" % init_scr
+    try: os.remove(os.path.join(SEISCOMP_ROOT, init_scr))
+    except: pass
+
+    return 0
+  else:
+    error("wrong command '%s': expected 'create' or 'remove'" % args[0])
+    return 1
+
+  return 0
+
+
+def on_alias_help(args):
+  print "seiscomp alias {create|remove} ALIAS_NAME APP_NAME"
+  print "Creates/removes symlinks to applications. Symlinks to symlinks are not allowed."
+  print
+  print "Examples:"
+  print "$ seiscomp alias create scautopick2 scautopick"
+  print "Copy default configuration: etc/defaults/scautopick.cfg -> etc/defaults/scautopick2.cfg"
+  print "Create app symlink: scautopick -> bin/scautopick2"
+  print "Copy init script: etc/init/scautopick.py -> etc/init/scautopick2.py"
+  print
+  print "$ seiscomp alias remove scautopick2"
+  print "Remove default configuration: etc/defaults/scautopick2.cfg"
+  print "Remove app symlink: bin/scautopick2"
+  print "Remove init script: etc/init/scautopick2.py"
+
+
+allowed_actions = [
+  "install-deps",
+  "setup",
+  "shell",
+  "enable",
+  "disable",
+  "start",
+  "stop",
+  "restart",
+  "check",
+  "status",
+  "list",
+  "exec",
+  "update-config",
+  "alias",
+  "print",
+  "help"
+  ]
+
+
+# Define all actions that do not need locking of seiscomp
+actions_without_lock = [
+  #"install-deps",
+  "help",
+  "list",
+  "exec",
+  "print"
+]
+
+
+def on_help(args, flags):
+  if len(args) == 0:
+    print "Available commands:"
+    for action in allowed_actions:
+      print "  %s" % action
+    print
+    print "Use 'help [command]' to get more help about a command"
+    return 0
+  else:
+    cmd = args[0]
+    try: func = globals()["on_" + cmd.replace("-", "_") + "_help"]
+    except:
+      print "Sorry, no help available for %s" % cmd
+      return 1
+    func(args[1:])
+    return 0
+
+
+def run_action(action, args, flags):
+  try:
+    func = globals()["on_" + action.replace("-", "_")]
+    return func(args, flags)
+  except Exception, exc:
+    error("command '%s' failed: %s" % (action, str(exc)))
+    if "debug" in flags:
+      info = traceback.format_exception(*sys.exc_info())
+      for i in info: sys.stderr.write(i)
+    return 2
+
+
+def on_csv_help(args):
+  print "If --csv is prepended to a usual command the internal output is set to comma separated values."
+  print "The only command that is currently using this output format is 'status'."
+  print "Example: seiscomp --csv status"
+  return 0
+
+
+# ------------------------------------------------------------------------------
+# Check command line
+# ------------------------------------------------------------------------------
+useCSV = False
+
+argv = sys.argv[1:]
+argflags = []
+
+# Check for flags
+while len(argv):
+  if argv[0] == "--csv":
+    useCSV = True
+    argv = argv[1:]
+  elif argv[0].startswith("--"):
+    argflags.append(argv[0][2:])
+    argv = argv[1:]
+  else:
+    break
+
+if len(argv) < 1:
+  print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
+  sys.exit(1)
+
+action = argv[0]
+args = argv[1:]
+
+if not action in allowed_actions:
+  print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
+  sys.exit(1)
+
+# ------------------------------------------------------------------------------
+# Initialize the environment
+# ------------------------------------------------------------------------------
+
+# Resolve symlinks (if any)
+if os.path.islink(sys.argv[0]):
+  sys.argv[0] = os.path.realpath(sys.argv[0])
+
+# Guess SEISCOMP_ROOT from path of called script
+SEISCOMP_ROOT = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), ".."))
+INIT_PATH = os.path.join(SEISCOMP_ROOT, "etc", "init")
+DESC_PATH = os.path.join(SEISCOMP_ROOT, "etc", "descriptions")
+ALIAS_FILE = os.path.join(DESC_PATH, "aliases")
+BIN_PATH = os.path.join(SEISCOMP_ROOT, "bin")
+SBIN_PATH = os.path.join(SEISCOMP_ROOT, "sbin")
+PYTHONPATH = os.path.join(SEISCOMP_ROOT, "lib", "python")
+MANPATH = os.path.join(SEISCOMP_ROOT, "share", "man")
+LD_LIBRARY_PATH = os.path.join(SEISCOMP_ROOT, "lib")
+DYLD_FALLBACK_FRAMEWORK_PATH = os.path.join(SEISCOMP_ROOT, "lib", "3rd-party")
+
+# Run another process with proper LD_LIBRARY_PATH set otherwise the dynamic
+# linker will not find dependent SC3 libraries
+isWrapped = False
+try:
+  if os.environ["SEISCOMP_WRAP"] == "TRUE":
+    isWrapped = True
+except: pass
+
+
+# Setup signal handler
+#signal.signal(signal.SIGTERM, sigterm_handler)
+
+if not isWrapped:
+  try: os.environ["PATH"] = BIN_PATH + ":" + os.environ["PATH"]
+  except: os.environ["PATH"] = BIN_PATH
+  
+  try:
+    os.environ[SysLibraryPathVar] = get_library_path() + ":" + os.environ[SysLibraryPathVar]
+  except:
+    os.environ[SysLibraryPathVar] = get_library_path()
+
+  if sys.platform == "darwin":
+    os.environ[SysFrameworkPathVar] = get_framework_path()
+
+  try: os.environ["PYTHONPATH"] = PYTHONPATH + ":" + os.environ["PYTHONPATH"]
+  except: os.environ["PYTHONPATH"] = PYTHONPATH
+  try: os.environ["MANPATH"] = MANPATH + ":" + os.environ["MANPATH"]
+  except: os.environ["MANPATH"] = MANPATH
+
+  os.environ["LC_ALL"] = "C"
+  os.environ["SEISCOMP_WRAP"] = "TRUE"
+
+  sys.exit(system(sys.argv))
+
+# Register local lib/python in SEARCH PATH
+sys.path.insert(0, PYTHONPATH)
+
+#dump_paths()
+
+import seiscomp3.Config
+import seiscomp3.Kernel
+
+# Create environment which supports queries for various SeisComP
+# directoris and sets PATH, LD_LIBRARY_PATH and PYTHONPATH
+env = seiscomp3.Kernel.Environment(SEISCOMP_ROOT)
+env.setCSVOutput(useCSV)
+
+# Check for lock file
+isChild = False
+
+if action in actions_without_lock:
+  isChild = True
+else:
+  try: isChild = os.environ["SEISCOMP_LOCK"] == "TRUE"
+  except: pass
+
+if not isChild:
+  if env.tryLock("seiscomp") == False:
+    error("Could not get lock %s - is another process using it?" % env.lockFile("seiscomp"))
+    sys.exit(1)
+
+  os.environ["SEISCOMP_LOCK"] = "TRUE"
+  exitcode = system(["run_with_lock", "-q", env.lockFile("seiscomp")] + sys.argv)
+  sys.exit(exitcode)
+
+
+# Change into SEISCOMP_ROOT directory. The env instance will change
+# back into the current working directory automatically if destroyed.
+env.chroot()
+
+config_mods = load_init_modules(INIT_PATH)
+mods = []
+for m in config_mods:
+  if m.isConfigModule: continue
+  mods.append(m)
+
+sys.exit(run_action(action, args, argflags))

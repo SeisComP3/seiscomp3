@@ -1,0 +1,8 @@
+
+The code for the Seedlink plugin interface resides in this directory.
+
+The code for plugins are in subdirectories (i.e. ./sockplugin)
+
+At the moment the plugin interface code in this directory is incomplete,
+that is, there is only enough code to be able to use the send_mseed()
+function.

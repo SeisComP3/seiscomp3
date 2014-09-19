@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="arclinktool" category="Utilities" standalone="true">
+		<description>ArcLink CLI client.</description>
+		<command-line>
+			<group name="">
+				<option long-flag="version">
+					<description>
+					show program’s version number and exit
+					</description>
+				</option>
+				<option flag="h" long-flag="help">
+					<description>
+					show a help message and exit
+					</description>
+				</option>
+				<option flag="-u" long-flag="user">
+					<description>
+					user's e-mail address
+					</description>
+				</option>
+				<option flag="-i" long-flag="institution">
+					<description>
+					user's institution
+					</description>
+				</option>
+				<option flag="-o" long-flag="output-file">
+					<description>
+					file where downloaded data is written
+					</description>
+				</option>
+				<option flag="-w" long-flag="SSLpassword">
+					<description>
+					password to decrypt the received file
+					</description>
+				</option>
+				<option flag="-r" long-flag="submit">
+					<description>
+					submit request
+					</description>
+				</option>
+				<option flag="-s" long-flag="status">
+					<description>
+					check status
+					</description>
+				</option>
+				<option flag="-d" long-flag="download">
+					<description>
+					download product, returns an error when the product is not ready to download, in this case you should use the -b [block mode] option toguether with the -d option or check the request status with the -s option prior to download.
+					</description>
+				</option>
+				<option flag="-b" long-flag="blocking">
+					<description>
+					use blocking download. On the Arclink protocol blocking download commands can be issued even when the request is not ready for download yet, in this case the connection will hang until the request is ready and the download will start.
+					</description>
+				</option>
+				<option flag="-p" long-flag="purge">
+					<description>
+					delete product from the server
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

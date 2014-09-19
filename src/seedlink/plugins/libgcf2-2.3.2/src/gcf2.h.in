@@ -1,0 +1,724 @@
+/*
+ * gcf2.h.in:
+ *
+ * Copyright (c) 2003 Guralp Systems Limited
+ * Author James McKenzie, contact <software@guralp.com>
+ * All rights reserved.
+ *
+ * gcf.h.in - prototypes and data type for libgcf2
+ * with documentation.
+ *
+ *
+ */
+
+/*
+ * $Id: gcf2.h.in,v 1.39 2006/09/14 14:50:09 lwithers Exp $
+ */
+
+/*
+ * $Log: gcf2.h.in,v $
+ * Revision 1.39  2006/09/14 14:50:09  lwithers
+ * Fix up mk3 declut stuff
+ *
+ * Revision 1.38  2006/09/14 14:33:39  root
+ * *** empty log message ***
+ *
+ * Revision 1.37  2006/09/14 14:28:11  lwithers
+ * Add G2GetDecLut() and the machinery for the new G2PBlock.dig_type field.
+ *
+ * Revision 1.36  2006/09/14 13:48:47  root
+ * *** empty log message ***
+ *
+ * Revision 1.35  2006/02/10 15:46:52  root
+ * *** empty log message ***
+ *
+ * Revision 1.34  2004/11/18 12:46:54  root
+ * *** empty log message ***
+ *
+ * Revision 1.33  2004/11/18 12:43:12  root
+ * *** empty log message ***
+ *
+ * Revision 1.32  2004/10/29 13:54:10  root
+ * *** empty log message ***
+ *
+ * Revision 1.31  2004/06/29 16:06:41  root
+ * *** empty log message ***
+ *
+ * Revision 1.30  2004/06/29 14:27:57  root
+ * *** empty log message ***
+ *
+ * Revision 1.29  2004/06/29 13:57:13  root
+ * *** empty log message ***
+ *
+ * Revision 1.28  2004/06/29 13:44:53  root
+ * Major incompatability gpblockh size changes
+ *
+ * Revision 1.27  2004/06/29 12:27:11  root
+ * *** empty log message ***
+ *
+ * Revision 1.26  2004/05/02 10:31:16  root
+ * *** empty log message ***
+ *
+ * Revision 1.25  2004/04/23 00:36:32  root
+ * *** empty log message ***
+ *
+ * Revision 1.24  2004/04/23 00:21:24  root
+ * *** empty log message ***
+ *
+ * Revision 1.23  2004/04/21 09:34:18  root
+ * *** empty log message ***
+ *
+ * Revision 1.22  2004/04/20 22:31:47  root
+ * *** empty log message ***
+ *
+ * Revision 1.21  2004/04/20 20:43:30  root
+ * *** empty log message ***
+ *
+ * Revision 1.20  2004/04/20 20:08:59  root
+ * *** empty log message ***
+ *
+ * Revision 1.18  2004/04/20 16:26:48  root
+ * *** empty log message ***
+ *
+ * Revision 1.17  2004/04/20 15:39:08  root
+ * *** empty log message ***
+ *
+ * Revision 1.16  2004/04/16 16:19:49  root
+ * *** empty log message ***
+ *
+ * Revision 1.15  2004/04/15 22:35:45  root
+ * *** empty log message ***
+ *
+ * Revision 1.14  2004/04/15 11:08:18  root
+ * *** empty log message ***
+ *
+ * Revision 1.13  2004/04/14 15:39:52  root
+ * *** empty log message ***
+ *
+ * Revision 1.12  2004/04/14 11:38:30  root
+ * *** empty log message ***
+ *
+ * Revision 1.11  2004/02/13 16:33:14  root
+ * *** empty log message ***
+ *
+ * Revision 1.10  2004/02/13 15:42:03  root
+ * *** empty log message ***
+ *
+ * Revision 1.9  2003/06/24 16:33:35  root
+ * *** empty log message ***
+ *
+ * Revision 1.8  2003/06/20 12:17:59  root
+ * *** empty log message ***
+ *
+ * Revision 1.7  2003/06/06 16:10:52  root
+ * *** empty log message ***
+ *
+ * Revision 1.6  2003/06/06 16:03:36  root
+ * *** empty log message ***
+ *
+ * Revision 1.5  2003/05/29 16:40:02  root
+ * *** empty log message ***
+ *
+ * Revision 1.4  2003/05/28 21:40:56  root
+ * *** empty log message ***
+ *
+ * Revision 1.3  2003/05/22 14:33:02  root
+ * *** empty log message ***
+ *
+ * Revision 1.2  2003/05/21 15:09:11  root
+ * Comments to gcf2.h.in
+ *
+ * Revision 1.1  2003/05/16 10:40:23  root
+ * *** empty log message ***
+ *
+ * Revision 1.3  2003/04/16 14:28:01  root
+ * #
+ *
+ * Revision 1.2  2003/04/01 17:54:54  root
+ * #
+ *
+ * Revision 1.1  2003/04/01 17:52:13  root
+ * #
+ *
+ */
+
+/* MAKE ABSOLUTELY SURE THAT YOU ARE EDITING THE GCF2.H.IN */
+/* FILE FROM WHICH THIS IS GENERATED - OTHERWISE YOUR EDITS */
+/* WILL BE LOST */
+
+#ifndef __GCF2_H__
+#define __GCF2_H__
+
+#include <stdio.h>
+
+
+/*the integer constants here are set by configure*/
+
+/*get uint32_t and friends defined */
+#if @G2_HAVE_STDINT_H@
+#include <stdint.h>
+#elif @G2_HAVE_SYS_INT_TYPES_H@
+#include <sys/int_types.h>
+#endif
+#if @G2_HAVE_UNISTD_H@
+#include <unistd.h>
+#endif
+
+/*For sockaddr_in*/
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+/* If the following is <> then configure failed to find where */
+/* struct tm was defined - report it as a bug */
+
+/*get struct tm defined*/
+#include <@G2_TM_H@>
+
+/*Data types*/
+typedef void *G2File;		/*A GCF file/disk/dir*/
+typedef void *G2SerialP;	/*A Serial Parser*/
+
+typedef struct G2SerialCLI_struct
+{
+  void (*callback)(struct G2SerialCLI_struct *,uint8_t *buf,int len);
+  void *client_data;
+} G2SerialCLI;	
+
+typedef int64_t G2Offt;		/*An offset in a G2File*/
+
+
+/* Primative for time fom a digitizers' point of view*/
+typedef struct
+{
+  int day;
+  int sec;
+}
+G2GTime;
+
+#define G2GTimeCompare(a,o,b) ((((a)->day) == ((b)->day)) ? (((a)->sec) o ((b)->sec)) : (((a)->day) o ((b)->day)))
+
+/*UTC time*/
+typedef struct
+{
+  int year;                     /*1900-    */
+  int jday;                     /*1-366    */
+  int month;                    /*1-12     */
+  int mday;                     /*1-31    */
+  int wday;                     /*1-7   [1=Mon, 7=Sun]   */
+  int hour;                     /*0-23     */
+  int min;                      /*0-59    */
+  int sec;                      /*0-60    */
+  int leap;                     /*0 or 1    */
+}
+G2UTC;
+
+/*A serial port, client_data is avaible for the user*/
+/*to do with as they see fit*/
+
+typedef struct
+{
+  int fd;
+  int eof;
+  void *client_data;
+} G2Serial;
+
+
+/*A block structure - this is the lowest comon */
+/*denominator of a block*/
+typedef struct 
+{
+  uint8_t data[1024]; 	/*Data of the block*/
+  int size;		/*number of bytes of data in the block*/
+} G2Block;
+
+
+/*A block received over a serial port (can be cast to G2Block)*/
+typedef struct
+{
+  uint8_t data[1024];	/*Data of the block*/
+  int size;		/*Number of bytes of data in the block*/
+  int seq;		/*The sequence number from the serial
+			 *handshake protocol*/
+  int ck;		/*The checksum from the serial
+			 *handshake protocol*/
+}
+G2SerBlock;
+
+#define G2BLOCKTYPEUNKNOWN  -1
+#define G2BLOCKTYPESTATUS   0
+#define G2BLOCKTYPEDATA     1
+#define G2BLOCKTYPECDSTATUS 2
+
+#define G2DIGTYPEUNKNOWN	0x00
+#define G2DIGTYPEMK2		0x10
+#define G2DIGTYPEMK3		0x20
+
+/*A parsed block header*/
+typedef struct
+{
+  int type;
+
+  char sysid[7];	/*System id*/
+  char strid[7];	/*Stream id*/
+  
+  int sample_rate;	/*Sample rate*/
+  int format;		/*format (1=32/24bit,2=16bit,4=8bit)*/
+  int records;		/*records (number of 4 byte words)*/
+  int samples;		/*number of samples*/
+
+  int dig_type;		/*Type of digitizer G2DIGTYPEXXX */
+
+  int ttl;		/*filter coeficient information*/
+
+  G2GTime start;	/*Time of first sample of block*/
+  G2GTime end;		/*Time of first sample after the end of block*/
+
+  int32_t cric;		/*The calculated RIC*/
+  int32_t oric;		/*The RIC contained in the block*/
+} G2PBlockH;
+
+
+typedef struct 
+{
+  int gps_fix;	 /* gps state: 0 = no coms, '1' = no fix, '2' = 2-d, '3' = 3-d */
+  int gps_mode;  /* gps mode: 'A' = auto , 'M' = manual (from NMEA-0183 message)*/
+  int gps_control; /* gps control: 0=off (system is free running), 0xff=on (system is gps conditioned) */
+  int gps_power; /* gps power: 0 = off, 0xff=on */
+  int32_t gps_offset; /*Measured offset between GPS and pwm clock in units of 500ns */
+  int32_t busy_counter; /*A ~1kHz counter that counts down to zero, as calibration, */
+			/*or locking is in progress */
+  int	locking;
+  int 	unlocking;
+  int   centering;
+  int   cal[3]; /*Calibration in progress V, N, E */
+} G2CDStatus;
+
+
+/*A parsed block (can be cast to G2PBlockH) */
+typedef struct
+{
+  int type;
+
+  char sysid[7];	/*System id*/
+  char strid[7];	/*Stream id*/
+  
+  int sample_rate;	/*Sample rate*/
+  int format;		/*format (1=32/24bit,2=16bit,4=8bit)*/
+
+  int records;		/*records (number of 4 byte words)*/
+
+  int samples;		/*number of samples*/
+
+  int dig_type;		/*Type of digitizer G2DIGTYPEXXX */
+  int ttl;		/*filter coeficient information*/
+
+  G2GTime start;	/*Time of first sample of block*/
+  G2GTime end;		/*Time of first sample after the end of block*/
+
+  int32_t cric;		/*The calculated RIC*/
+  int32_t oric;		/*The RIC contained in the block*/
+
+  union {
+  int32_t data[1024];	/*Data from the block*/
+  char status[1024];	/*or status information in the block*/
+  G2CDStatus cdstatus;
+  } d;
+
+} G2PBlock;
+
+/*You _should_ treat this as opaque*/
+typedef struct {
+	struct sockaddr_in sin;				
+} G2NetAddr;
+
+typedef struct
+{
+  int fd;
+  int eof;
+  void *client_data;
+} G2Net;
+
+
+/***********************CMOS*****************************/
+
+/*Canto III:9 Lasciate ogne speranza, voi ch'intrate*/
+
+/* There is currently no generic or standardized way to get or set the state of
+ * a DM - (we are fixing this) 
+ */
+
+/* To set a vast array of forth commands are used, getting is more tricky,
+ * currently the solution involves fetching the non-volatile memory of the DM
+ * and parsing it. 
+ */
+
+/* Of course this requires we know a lot more about the DM than we ought
+ * G2CmosDecode attempts a best effort and sticks the result in the structure
+ * below
+ */
+
+#define G2_DM24_IT_V	0
+#define G2_DM24_IT_N	0
+#define G2_DM24_IT_E	0
+
+typedef struct
+{
+  uint8_t status;             /* ? */
+  uint8_t hundredths;
+  G2UTC time;
+  uint8_t timer;              /* ? */
+} G2DM24Time; 
+ 
+typedef struct
+{
+  G2DM24Time rtc;		/* RTC */
+
+  uint32_t sysid;               /* base 36 system id */
+  uint32_t serial;              /* base 36 serial num */
+  uint32_t pwm2;                /* ? */
+  uint32_t channels[8];         /* channel bitmap indexd by taps.
+                                   *channel 0 is bit 0 etc
+                                   *usually channel 0 is V
+                                 */
+  int tx_bauds[8];              /* tx baud rates per port */
+  int rx_bauds[8];              /* rx baud rates per port */
+  uint16_t aux_channels;        /* channel bitmap for auxillary 
+                                   *channels bit 8 is usually
+                                   *V mass pos */
+  uint8_t masses[4];            /* Last mass recorded mass possitions */
+  uint32_t orientation;         /* ? */
+  uint16_t reboots;             /* Number of system reboots */
+  G2DM24Time lastboot;		/* Last boot time */
+
+  int decimations[4];           /* Decimations between taps */
+  int samplerates[4];           /* Sample rates of taps */
+#define G2_DM24_IT_40T	1
+#define G2_DM24_IT_ESP	2
+#define G2_DM24_IT_3T	3
+#define G2_DM24_IT_3TD	4
+#define G2_DM24_IT_6TD	5
+#define G2_DM24_IT_5TD	6
+#define G2_DM24_IT_MAX  7
+  int instrument_type;          /* type of connected sensor see above */
+
+  uint8_t stc[6];               /* Short term constants use G2_DM25_IT_V etc. */
+  uint8_t ltc[6];               /* Long term constants */
+  uint8_t ratio[6];             /* Ratio */
+#define G2_DM24_FT_NONE		0
+#define G2_DM24_FT_0__1		0
+#define G2_DM24_FT_0__0_9	1
+#define G2_DM24_FT_0_2__0_9	2
+#define G2_DM24_FT_0_5__0_9	3
+  uint8_t trigger_filter;       /* Which triggering filter to use see above */
+  uint8_t filter_tap;           /* Which tap to feed triggering filters from */
+  uint32_t triggered_channels[8]; /* channel bitmap to use when triggered */
+  uint8_t triggers[4];          /* ? */
+  uint8_t pretrig;              /* amount of data to record before 
+                                   *trigger in seconds */
+  uint8_t posttrig;             /* amount of data to record after 
+                                   *trigger in seconds */
+  uint16_t checksum2;
+  uint16_t flash_file_size;     /* flash in which units? */
+  uint16_t flash_mode;          /* ? */
+#define G2_DM24_SS_NONE		0
+#define G2_DM24_SS_TRIMBLE	1
+#define G2_DM24_SS_GARMIN	2
+#define G2_DM24_SS_STREAM	3
+#define G2_DM24_SS_MAX		4
+  uint8_t sync_src;             /* Timing source see above */
+  uint16_t heartbeat;           /* heartbeat interval in units of 30ms */
+  uint16_t acknak_wait;         /* time to wait for ack/nak in units of 30ms */
+  uint8_t stopbits;             /* number of stop bits, 4 means use CTS? */
+  uint8_t once;                 /* non zero -> write once, otherwise use */
+  				/* storage as ring buffer */
+  uint8_t split;                /* ? */
+  uint16_t gps_duty;            /* in minuites % 60 = 0 */
+  uint8_t auto_center;          /* 0-250, 255==off */
+} G2CmosDM24;
+
+typedef struct {
+  int len;
+  uint8_t cmos[0x180];
+} G2CmosRaw;
+
+
+/***********************Decimtion LUT *******************/
+
+struct G2DecLutEnt {
+uint8_t ndecs;
+uint8_t decs[8];
+};
+
+typedef struct {
+  struct G2DecLutEnt *lut;
+  int n;
+} G2DecLut;
+	
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*Prototype definitions*/
+
+/***********************Decimtion LUT *******************/
+
+extern G2DecLut* G2GetDecLut(const G2PBlockH* pbh);
+extern G2DecLut G2DM24Mk2DecLut;
+extern G2DecLut G2DM24Mk3DecLut;
+
+/********************BIT PACKING************************/
+/*These extract (possibly unaligned) data in GCF (network) */
+/*byte order*/
+extern int G2uint8(uint8_t *buf);
+extern int G2uint16(uint8_t *buf);
+extern int G2uint24(uint8_t *buf);
+extern uint32_t G2uint32(uint8_t *buf);
+extern uint32_t G2luint32(uint8_t *buf);
+extern int G2int8(uint8_t *buf);
+extern int G2int16(uint8_t *buf);
+extern int G2int24(uint8_t *buf);
+extern int G2int32(uint8_t *buf);
+extern int G2lint32(uint8_t *buf);
+
+/********************TIME************************/
+/*These deal with G2GTimes and G2UTC*/
+extern G2UTC G2GTime2UTC (G2GTime);
+extern G2GTime G2UTC2GTime (G2UTC);
+extern void G2GTimeWrap(G2GTime *);
+extern struct tm G2UTC2tm (G2UTC);
+extern G2UTC G2tm2UTC (struct tm);
+extern int G2GTimeDiff (G2GTime, G2GTime); /* returns arg1-arg2 in secs */
+extern G2GTime G2GTimeInc (G2GTime, int);  /* returns arg1+arg2 seconds*/
+
+/********************DISK ACCESS************************/
+
+extern G2File *G2FileOpen (const char *); /*Opens a "file", which can be 
+					   *a file a directory of files
+					   *a RAW disk device, or a SCSI
+					   *random access device*/
+extern G2Offt G2FileLength (G2File * s);  /*Returns the number of bytes 
+					   *in the G2File*/
+extern G2Offt G2FileBlocks (G2File * s);  /*Returns the number of blocks
+					   *in the G2File*/
+extern G2Offt G2FileTell (G2File * s);    /*Returns the current position
+					   *in the G2File*/
+extern G2Offt G2FileSeek (G2File *, G2Offt, int); 
+					  /*Seeks to arg2 in the G2File,
+					   *arg3 has the same semantics
+					   *as whence in lseek(2)*/
+extern int G2FileRead (G2File *, void *, int);
+					  /*Read some bytes from a G2File,
+					   *has the same semantics as read(2)
+					   */
+extern int G2File1KRead (G2File *, G2Offt, void *, int);
+					  /*Read arg4 blocks starting at block
+					   *number arg2 into arg3, returns the
+					   *number of blocks read*/
+extern int G2FileReadBlock(G2File *s,G2Block *out);
+					  /*Read a Block from a file*/
+extern int G2FileRead1KBlock(G2File *s,G2Offt block,G2Block *out);
+					  /*Read block number block from file s*/
+extern void G2FileClose (G2File *);	  /*Close a G2File*/
+
+
+/********************BLOCKS************************/
+
+extern int G2transcode24to32 (G2Block * in, G2Block * out);
+			/*If in is a 24 bit block, transcode it
+			 *to a 32 bit block in out, otherwise just
+		         *copy in to out*/
+extern int G2transcode32to24 (G2Block * in, G2Block * out);
+			/*If in is a 32 bit block and it would fit
+			 *in a 24 bit block, transcode it
+			 *to a 24 bit block in out, otherwise just
+		         *copy in to out*/
+extern int G2DumpBlock(FILE *, G2Block *in);
+			/*Dump a human readable copy of a block,
+			 *to a STDIO file FILE*/
+
+extern int G2ParseBlockHead(G2Block *in, G2PBlockH *out);
+			/*Parse the header of block in to
+			 *a G2PBlockH (or a G2PBlock) structure
+			 *out*/
+extern int G2ParseBlock(G2Block *in, G2PBlock *out);
+			/*Parse the all of block in to
+			 *a G2PBlock structure
+			 *out*/
+extern void G2DumpPBlock(FILE *s,G2PBlock *p);
+			/*Dump a parsed block in human readable
+			 *form to STDIO file s*/
+extern void G2DumpPBlockH(FILE *s,G2PBlockH *ph);
+			/*Dump a parsed block header in 
+		         *human readable form to STDIO file s*/
+extern char *G2BlockId(G2PBlockH * ph);
+
+
+/********************SERIAL PORTS************************/
+
+
+#define G2SerFd(s) ((s)->fd)	/*Fd associated with serial port*/
+#define G2SerEof(s) ((s)->eof)	/*Eof detected on serial port*/
+
+extern G2Serial *G2SerOpen(char *name, int speed, int flags); 
+					/*Open serial port name, at
+					 *speed baud (speed is 19200,
+					 *not B19200) with flags
+					 *flags=0 for defaults*/
+extern G2Serial *G2SerOpenLock(char *name, int speed, int flags,int timeout); 
+					/*Open serial port name, at
+					 *speed baud (speed is 19200,
+					 *not B19200) with flags
+					 *flags=0 for defaults
+					 *timeout is how long to wait
+					 *for the lock*/
+extern void G2SerClose(G2Serial *g);	/*Close a serial port*/
+extern int G2SerData(G2Serial *s);	/*boolean, is data avaiable*/
+extern int G2SerRead(G2Serial *s, void *buf, int buflen);
+					/*Read data from serial port,
+			 		 *same semantics as read(2)*/
+extern int G2SerDrain(G2Serial *s,int timeout);
+					
+extern int G2SerWrite (G2Serial * s, void *buf, int buflen);
+					/*Write data to serial port,
+					 *same semantics as write(2)*/
+extern int G2SerWriteStrSlow(G2Serial *s, char *buf);
+					/*Write string to serial port,
+					 *with pauses for the USARTs*/
+
+extern void G2SerCheckSum(G2SerBlock *); /*Calculate and fille in arg1->ck
+					  *from arg1->data,arg1->seq and
+					  *arg1->size*/
+
+/********************SERIAL PARSER************************/
+extern void G2SerDispatch (G2SerialP * p); /*Execute parser, (called
+					    *when data becomes avaiable
+					    *on parser's serial port)*/
+
+/*In the create parser calls any callback function may be specificed
+ *as null meaning - don't do anything when this happens*/
+
+#if 0
+extern G2SerialP *G2CreateSerParser1(G2Serial *, 
+	void (*block)(G2Serial *,G2SerBlock *));
+					   /*Create a parser, block is called
+					    *whenever a valid block is received*/
+#endif
+
+extern G2SerialP *G2CreateSerParser(G2Serial *, 
+	void (*block)(G2Serial *,G2SerBlock *),
+	void (*oob_start)(G2Serial *),
+	void (*oob_data)(G2Serial *,void *,int),
+	void (*oob_end)(G2Serial *),
+        void (*all_data) (G2Serial *, uint8_t *, int));
+					  /*Create a parser, block is called
+					   *whenever a valid block is received,
+					   *oob_start when the link transitions to
+					   *out of band mode, oob_data(,data,len)
+					   *when out of band data is received,
+					   *oob_end when the link transitions to
+					   *GCF blocks, and all_data(,data,len)
+					   *is called for all bytes received from
+					   *the serial port*/
+
+extern void G2DestroySerParser(G2SerialP *);
+					/*Destroy a parser*/
+
+extern void G2SerAck(G2Serial *,G2SerBlock *);	
+					/*Ack a serial block*/
+extern void G2SerNack(G2Serial *,G2SerBlock *,int ); 
+					/*Nack a serial block 
+					 *3rd arg is the seq
+				   	 *number to restart from */
+extern void G2SerAckIntr(G2Serial *,G2SerBlock *); //FIXME
+					/*Ack a serial block, and
+					 *try to enter OOB mode*/
+extern void G2SerNackIntr(G2Serial *,G2SerBlock *,int ); 
+					/*Nack a serial block 
+					 *3rd arg is the seq
+				   	 *number to restart from */
+extern void G2SerIntr(G2Serial *s);		//FIXME
+
+extern void G2SerialCLIParse(G2SerialCLI *c, uint8_t *buf, int len);
+extern G2SerialCLI *G2CreateSerCLI(G2Serial *s);
+extern void G2HushDestroySerCLI(G2SerialCLI *c);
+extern void G2DestroySerCLI(G2SerialCLI *c);
+extern void G2SerCLIDispatch(G2SerialCLI *c);
+extern int G2SerCLIBlock(G2SerialCLI *c, int timeout);
+extern int G2SerCLIInCmdMode(G2SerialCLI *c);
+extern char *G2SerCLIBanner(G2SerialCLI *c);
+extern char *G2SerCLIResponse(G2SerialCLI *c);
+extern void G2SerCLICommand(G2SerialCLI *c, char *cmd);
+extern int G2SerCLICommandDone (G2SerialCLI * c);
+
+
+
+
+
+/********************NETWORK LAYER************************/
+
+#define G2NetFd(s) ((s)->fd)	/*Fd associated with network socket*/
+#define G2NetEof(s) ((s)->eof)	/*Eof detected on network socket*/
+#define G2NetAddrEq(a,b) (((a)->sin.sin_port==(b)->sin.sin_port) && ((a)->sin.sin_addr.s_addr==(b)->sin.sin_addr.s_addr))
+			
+
+/*for all of these port==0 => don't care*/
+
+extern int	G2NetLookup(char *namecolonport,G2NetAddr *a);
+				/*Lookup an address,ret 0 on success*/
+extern int	G2NetPort(G2Net *);
+				/*Get port number*/
+extern G2Net *G2NetOpenUDP(int port);	
+				/*Open a UDP port*/
+extern G2Net *G2NetOpenUDPB(int port,int local);	
+				/*Open a UDP port for broadcasting*/
+extern G2Net *G2NetOpenTCPC(G2NetAddr *remote);
+				/*Open a TCP client port and connect to remote*/
+extern G2Net *G2NetOpenTCPCNB(G2NetAddr *remote);
+				/*Open a TCP client port and connect to remote
+				 *non blocking call, call the next to get the 
+				 *result*/
+extern int G2NetOpenTCPCNBE(G2Net *);
+				/*Get result, if non zero, G2Net will
+				 *have been freed*/
+extern G2Net *G2NetOpenTCPS(int port);
+				/*Open a TCP client server port*/
+
+extern int G2NetOpenUDPTCP(int port,G2Net **tcp,G2Net **udp);
+				/*Attempt to open a TCP server port,
+				 *and a UDP port on the same number*/
+	
+extern void G2NetClose(G2Net *);
+				/*Close and free resources*/
+
+extern int G2NetRecv(G2Net *net, G2NetAddr *from, void *buf, int len);
+extern int G2NetSend(G2Net *net, G2NetAddr *to, void *buf, int lne);
+extern char *G2NetAddrtoa(G2NetAddr *a);
+extern G2Net *G2NetAccept(G2Net *tcps, G2NetAddr *from);
+
+//extern void G2Send();
+
+/***********************CMOS*****************************/
+
+			
+extern int G2CmosLen(char *response);
+extern int G2CmosParse(char *response, G2CmosRaw *out);
+extern int G2CmosDecodeDM24(G2CmosRaw *in, G2CmosDM24 *out);
+
+
+/********************UTILITY FUNCTIONS *********************/
+
+extern char *G2GetVersion(void); 	/*get const string to lib version*/
+extern void G2base36toa(uint32_t i, char *a); /*Convert integer to base36 rep*/
+extern uint32_t G2atobase36(char *a);	/*Convert base36 rep to integer*/
+extern void G2Sleep(int us);		/*Sleep for us micro seconds*/
+extern void G2SetBlocking (int);
+extern void G2ClrBlocking (int);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __GCF2_H__ */

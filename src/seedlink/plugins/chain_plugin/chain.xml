@@ -1,0 +1,140 @@
+<?xml version="1.0" standalone="yes"?>
+
+<!-- timetable_loader is an external script that is supposed to give
+     starting SEED record number and time for all streams. If
+     overlap_removal is set to "initial" or "full", then earlier records
+     will be discarded (record number is used in case several subsequent
+     records have the same header time).
+     
+     Command FIFO has beed replaced by more powerful extension interface.
+-->
+
+<chain
+  verbosity="2"
+  timetable_loader="/home/sysop/bin/load_timetable"
+
+  overlap_removal="initial"
+  multistation="yes"
+  netto="900"
+  netdly="10"
+  standby="10"
+  keepalive="60"
+  seqsave="10">
+
+  <!-- The 7 attributes above are the defaults for all groups. Group
+       attributes have the same meaning as in Comserv (dial_lock was
+       renamed to lockfile). One group corresponds to one SeedLink
+       connection. Each connection is handled by a child process,
+       launched by the main program. In multistation mode, a group can
+       contain arbitrary number of stations. -->
+  
+  <!-- Below is a sample definition of an extension module. The attribute
+       "filter" is a regular expression, which determines which streams
+       are sent to the particular extension module. Of course, any number
+       of extension modules can be defined. -->
+  
+  <extension
+    name = "test_extension"
+    filter = "GE_VSU__SH._D"
+    cmd = "python /home/sysop/python/test_extension.py"/>
+
+  <group
+    address="st27:18000"
+    multistation="yes"
+    netto="900"
+    netdly="10"
+    keepalive="20"
+    uptime="0"
+    standby="10"
+    seqsave="30"
+    seqfile="/home/sysop/status/group1.seq"
+    ifup="echo ifup"
+    ifdown="echo ifdown"
+    schedule="0-58/2 * * * *"
+    lockfile="/home/sysop/status/group1.pid">
+
+    <!-- Minimum <station> element is like this... -->
+    
+    <station name="STU" network="GE"/>
+
+    <!-- ...but of course it can be much longer. Here, "id" is the name
+         of station known to SeedLink (eg., in seedlink.ini), and defaults
+         to "out_network"_"out_name". The attributes "out_network" and
+         "out_name" provide an easy way to rename stations. Naturally,
+         "out_network" defaults to "network" and "out_name" defaults to
+         "name". "default_timing_quality" is used when unpacking data that
+         does not contain blockette 1001, that allows SeedLink to construct
+         blockette 1001 for downsampled data. -->
+    
+    <station
+      id="GE_TRTE"
+      name="TRTE"
+      network="GE"
+      out_name="TRTE"
+      out_network="GE"
+      selectors="BH?.D LH?.D"
+      default_timing_quality="100">
+
+      <!-- <rename> element allows to rename streams in a similar fashion
+           to "stream_renaming" in Comserv. -->
+      
+      <rename from="BH?" to="MH?"/>
+      <rename from="LH?" to="XH?"/> 
+
+      <!-- <trigger> element is used to define triggered streams as explained
+           above -->
+      
+      <trigger src="MHZ" buffer_length="60" pre_seconds="20" post_seconds="20"/>
+      <trigger src="MHN" buffer_length="60" pre_seconds="20" post_seconds="20"/>
+      <trigger src="MHE" buffer_length="60" pre_seconds="20" post_seconds="20"/>
+
+      <!-- <unpack> creates raw streams from Mini-SEED streams. The raw
+           streams can be downsampled by SeedLink. -->
+      
+      <unpack src="MHZ" dest="Z"/>
+      <unpack src="MHN" dest="N"/>
+      <unpack src="MHE" dest="E"/>
+    </station>
+      
+    <station
+      name="APE"
+      network="GE"
+      out_name="APE"
+      out_network="GE"
+      selectors="BHZ.D"
+      default_timing_quality="100"/>
+  </group>
+      
+  <group
+    address="st27:18000"
+    multistation="yes"
+    netto="900"
+    netdly="10"
+    keepalive="20"
+    uptime="0"
+    standby="10"
+    seqsave="30"
+    seqfile="/home/sysop/status/group2.seq"
+    ifup="echo ifup"
+    ifdown="echo ifdown"
+    schedule="1-59/2 * * * *"
+    lockfile="/home/sysop/status/group2.pid">
+
+    <station
+      name="ISP"
+      network="GE"
+      out_name="ISP"
+      out_network="GE"
+      selectors="BHZ.D"
+      default_timing_quality="100"/>
+      
+    <station
+      name="WLF"
+      network="GE"
+      out_name="WLF"
+      out_network="GE"
+      selectors="BHZ.D"
+      default_timing_quality="100"/>
+  </group>
+</chain>
+

@@ -1,0 +1,43 @@
+
+mseedscan_plugin - Scan file system for Mini-SEED files
+ 
+A SeedLink plugin to recursively scan one or more directory
+structures and continuously check for file modifications.  The
+files are presumed to be composed of 512-byte Mini-SEED records.
+As the files are appended or created the plugin will feed the new
+records to the controlling SeedLink server.
+
+The scanning of files uses the concept of active, idle and quiet
+files.  Files that have not been modified for specified amounts of
+time are considered idle or quiet.  The idle files will not be
+checked on every scan, instead a specified number of scans will be
+skipped for each idle file.  The quiet files will be be checked
+ever again.
+
+If a file is scanned and a valid Mini-SEED record was not read from
+the file a placeholder will be kept but the file will not be read
+from again.  This way files which do not contain Mini-SEED will
+only be reported once.  This placeholder will be retained in a
+statefile (if used), this means that the file will not be scanned
+if the program is re-started.  In order to get the plugin to
+re-scan a file it must be removed from the state file.
+
+Broken symbolic links are quietly skipped.  If they are eventually
+re-connected to something the something will be scanned as
+expected.
+
+A balanced binary-tree is used to keep track of the files processed
+and allows for operation with 100,000s of files.
+
+When starting an operational instance of this plugin with many,
+many data files the '-n' is useful to first load all the files
+and create a state file with their current sizes without actually
+processing all of the data records.  After which the plugin can be
+started without the '-n' flag and will only process newer data.
+
+The directory separator is assumed to be '/'.
+
+If the signal SIGUSR1 is recieved the program will print the
+current file list to standard error.
+
+Chad Trabant, IRIS Data Management Center

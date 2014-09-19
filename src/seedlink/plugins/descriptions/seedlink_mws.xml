@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="mws" category="sources">
+		<description>MWS (serial plugin)</description>
+		<configuration>
+			<parameter name="comport" type="string" default="/dev/weatherstation">
+				<description>Serial port.</description>
+			</parameter>
+			<parameter name="baudrate" type="int" default="19200">
+				<description>Baud rate.</description>
+			</parameter>
+			<parameter name="proc" type="string" default="mws">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

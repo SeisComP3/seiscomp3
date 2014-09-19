@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="chain">
+		<extends>seedlink</extends>
+		<description>Global options for the chain plugin</description>
+		<configuration>
+			<group name="plugins">
+				<group name="chain">
+					<parameter name="dialupConnections" type="int" default="0">
+						<description>
+							Defines the maximum number of concurrent dial-up
+							connections. A value of 0 does not limit the
+							concurrent connections.
+						</description>
+					</parameter>
+					<parameter name="loadTimeTable" type="boolean" default="true">
+						<description>
+							If enabled load_timetable is used by the chain plugin to request
+							the available time windows of each stream in the Seedlink buffer
+							to discard older records.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+	<binding module="seedlink" name="chain" category="sources">
+		<description>Seedlink server (TCP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string" default="geofon.gfz-potsdam.de">
+				<description>
+					Hostname or IP of the Seedlink server.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="18000">
+				<description>Port of the Seedlink server</description>
+			</parameter>
+			<parameter name="selectors" type="list:string">
+				<description>
+					List of stream selectors. If left empty all available
+					streams will be requested. See slinktool manpage for
+					more information.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<parameter name="station" type="string">
+				<description>
+					Defines the input station if different from the stations
+					code. Usually leave this parameter unconfigured. If
+					configured and different from the stations code
+					the station code will be renamed to match the local station
+					code.
+				</description>
+			</parameter>
+			<parameter name="network" type="string">
+				<description>
+					Defines the input network if different from the stations
+					network. Usually leave this parameter unconfigured. If
+					configured and different from the stations network code
+					the network code will be renamed to match the local network
+					code.
+				</description>
+			</parameter>
+			<parameter name="group" type="string">
+				<description>
+					Usually stations with the same source addresses and dialup
+					options are grouped together and managed by a chain plugin
+					process. You can give here an additional group ID. Available
+					placeholders are $NET and $STA that are replaced by the
+					network code or station code. Whitespaces are replaced by
+					underscores when generating chain.xml.
+				</description>
+			</parameter>
+			<parameter name="defaultTimingQuality" type="int">
+				<description>
+					The default timing quality is used when unpacking data that
+					does not contain blockette 1001, that allows SeedLink to
+					construct blockette 1001 for downsampled data.
+				</description>
+			</parameter>
+			<parameter name="overlapRemoval" type="string">
+				<description>
+					If overlap removal is set to "initial" or "full", then
+					earlier records will be discarded (record number is used
+					in case several subsequent records have the same header time).
+					All other values are treated as "none". Leave this option
+					unset unless you know what you are doing.
+				</description>
+			</parameter>
+			<parameter name="batchmode" type="boolean" default="true">
+                                <description>
+					If enabled then the chain plugin tries to subscribe for
+					channels with the BATCH command which is magnitudes faster
+					than the old handshake. Not all SeedLink servers support
+					the BATCH mode so it needs to be turned off in case of
+					problems. 
+				</description>
+                        </parameter>
+			<group name="dialup">
+				<parameter name="enable" type="boolean" default="false">
+					<description>
+						Enables dialup mode. Needs schedule and uptime to be
+						set accordingly.
+					</description>
+				</parameter>
+				<parameter name="uptime" type="int" default="600">
+					<description>
+						Dialup uptime in seconds.
+					</description>
+				</parameter>
+				<parameter name="schedule" type="string" default="0,30 * * * *">
+					<description>
+						The dialup schedula in cron format.
+					</description>
+				</parameter>
+				<parameter name="ifup" type="string">
+					<description>An optional dialup ifup script.</description>
+				</parameter>
+				<parameter name="ifdown" type="string">
+					<description>An optional dialup ifdown script.</description>
+				</parameter>
+			</group>
+			<group name="channels">
+				<parameter name="rename" type="list:string">
+					<description>
+						Allows to rename channels. This is a list of
+						strings where each item defines one mapping in the
+						format "SRC_LOCCHA:DST_LOCCHA". Either SRC_LOCCHA or
+						DST_LOCCHA may contain wildcard characters (question
+						mark) and the location code (LOC) in both identifiers
+						is optional.
+					</description>
+				</parameter>
+				<parameter name="unpack" type="list:string">
+					<description>
+						Allows to unpack channels instead of sending them as
+						miniseed to Seedlink. Unpacked streams can be downsampled
+						by Seedlink. This is a list of strings where each item
+						defines one unpack mapping  in the format
+						"SRC_LOCCHA:DST_ID:1" where DST_ID can
+						be an arbitrary channel id which must match the definition of
+						a stream in streams.xml. The last ":1" is optional and defines
+						if the unpacked data should be doubled (duplicate each sample).
+						In case rename mappings are active, SRC_LOCCHA referes to
+						the final channel name after renaming.
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>

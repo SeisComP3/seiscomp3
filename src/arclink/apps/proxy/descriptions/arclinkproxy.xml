@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="arclinkproxy" category="Acquisition" standalone="true">
+		<description>Proxy ArcLink server</description>
+		<configuration>
+			<parameter name="arclinkAddress" type="string" default="webdc.eu:18001">
+				<description>
+				Arclink address (used if proxy functionality is enabled).
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="18001">
+				<description>
+				TCP port that the proxy is running on.
+				</description>
+			</parameter>
+			<parameter name="archive" type="string" default="@ROOTDIR@/var/lib/archive">
+				<description>
+				Path to waveform archive where all data is stored. Relative paths
+				(as the default) are treated relative to the installation
+				directory ($SEISCOMP_ROOT).
+				</description>
+			</parameter>
+			<parameter name="nrt" type="string" default="">
+				<description>
+				Path to waveform archive where near real time data is stored. Avoid 
+				using relative paths as they are not interpreted.
+				</description>
+			</parameter>
+			<parameter name="iso" type="string" default="">
+				<description>
+				Path to ISO archive where old data is stored. Avoid 
+				using relative paths as they are not interpreted.
+				</description>
+			</parameter>
+			<parameter name="maxSessions" type="int" default="500">
+				<description>
+				Maximum number of simultaneous connections.
+				</description>
+			</parameter>
+			<parameter name="maxQueued" type="int" default="500">
+				<description>
+				Maximum number of queued requests.
+				</description>
+			</parameter>
+			<parameter name="maxQueuedPerUser" type="int" default="10">
+				<description>
+				Maximum number of queued requests per user.
+				</description>
+			</parameter>
+			<parameter name="maxExecuting" type="int" default="10">
+				<description>
+				Maximum number of requests executed in parallel.
+				</description>
+			</parameter>
+			<parameter name="maxLines" type="int" default="5000">
+				<description>
+				Maximum number of lines per request.
+				</description>
+			</parameter>
+			<parameter name="maxAge" type="int" default="860000">
+				<description>
+				Maximum age of request before automatically purged.
+				</description>
+			</parameter>
+			<parameter name="socketTimeout" type="int" default="300">
+				<description>
+				Socket timeout in seconds.
+				</description>
+			</parameter>
+			<parameter name="downloadRetries" type="int" default="5">
+				<description>
+				Number of download retries.
+				</description>
+			</parameter>
+			<parameter name="disableRouting" type="boolean" default="false">
+				<description>
+				Disable routing.
+				</description>
+			</parameter>
+			<parameter name="localOnly" type="boolean" default="true">
+				<description>
+				Disable proxy functionality (use only locally stored data).
+				</description>
+			</parameter>
+		</configuration>
+	</module>
+</seiscomp>

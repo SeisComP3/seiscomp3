@@ -1,0 +1,241 @@
+\section{Quality Control Tool}
+
+\subsection{Synopsis}
+\begin{small}
+\begin{verbatim}
+scqc -[hVDvqs] [--help] [--version] [--crash-handler arg]
+               [--daemon] [--verbosity arg] [--v] [--quiet]
+               [--component arg] [--syslog] [-l | --lockfile arg]
+               [--console arg] [--debug] [-u | --user arg]
+               [-H |--host arg] [-t | --timeout arg]
+               [-g | --primary-group arg] [-S |--subscribe-group arg]
+               [--encoding arg] [--db-driver-list]
+               [-d | --database arg] [--config-module arg]
+               [--record-driver-list] [-I | --record-url arg]
+               [--record-file arg] [--record-type arg] [--archive]
+               [--auto-time | --begin-time arg] [--end-time arg]
+               [--stream-mask arg]
+\end{verbatim}
+\end{small}
+
+\subsection{Description}
+
+\cmd{scqc} determines quality control parameters of seismic data, which may be stored in the database and/or displayed by an application. The program receives input (through the seiscomp3 API) either from realtime data streams or from archived data files. The output parameters are time averaged quality control (QC) parameters in terms of waveform quality messages. In regular intervals this messages are sent containing the short term average representation of the specific QC parameter for a given time span. When defined, alert messages are generated if the short term average (e.g. 90s) of a QC parameter differs from the long term average (e.g. 3600s) more than a defined threshold. To avoid peak load, QC messages are send time distributed.\\
+
+
+\noindent
+\cmd{scqc} currently can be set up to derive the following parameters from seismic data:
+\begin{itemize}
+
+\item Delay [s]: Time difference between arrival time and last record end time plus half record length. This parameter represents the mean \textit{data latency}, valid for all samples in a record. [realtime mode only]
+
+\item Latency [s]: Time difference between current time and record arrival time \textit{(feed latency)}.  [realtime mode only]
+
+\item Offset [counts]: Averaged value of all samples of a record.
+
+\item RMS [counts]: Offset corrected root mean square (RMS) value of a record.
+
+\item Spike (interval [s], amplitude [counts]): In case of the occurrence of a spike in a record this parameter delivers the interval time between adjacent spikes and the mean amplitude of the spike. Note: the spike finder algorithm is still preliminary.
+
+\item Gap (interval [s], length [s]): In case of a data gap between two consecutive records this parameter delivers the gap interval time and the mean length of the gap.
+
+\item Timing [\%]: miniseed record timing quality (0 - 100 \%) 
+\end{itemize}
+\noindent
+QC parameters are determined record by record and then the averaged over the configured time span.\\
+
+\subsection{Configuration}
+
+\noindent
+There are two modes of operation:
+\begin{description}
+\item[realtime mode: ] Receive seismic realtime data through seiscomp3 recordstream interface. Supported recordstream: slink (connect to seedlink server)\\
+In this mode, \cmd{scqc} is running as a daemon proccess, constantly processing incoming realtime data, until stopped by user interaction.
+
+\item[archive mode: ] Process a timewindow of archived seismic data through seiscomp3 recordstream interface. Supported recordstreams: slink, arclink, file, sdsarchive, isoarchive\\
+In this mode \cmd{scqc} terminates after completing the given timewindow. The program could be started periodically by crontab, e.g. .
+\end{description}
+
+
+\noindent
+\cmd{scqc} supports commandline options as well as configuration files (\cmd{scqc.cfg}).
+Commandline options are the default application options plus some archive processing specific additions. The users configuration file has to be placed under \cmd{\$HOME/.seiscomp3/}.
+
+\subsubsection{Command Line Options}
+\begin{small}
+\begin{verbatim}
+Generic:
+  -h [ --help ]         produce help message
+  -V [ --version ]      show version information
+  --crash-handler arg   path to crash handler script
+  -D [ --daemon ]       run as daemon
+
+Verbose:
+  --verbosity arg       verbosity level [0..4]
+  -v [ --v ]            increase verbosity level (may be repeated, eg. -vv)
+  -q [ --quiet ]        quiet mode: no logging output
+  --component arg       limits the logging to a certain component.
+                        This option can be given more than once
+  -s [ --syslog ]       use syslog
+  -l [ --lockfile ] arg path to lock file
+  --console arg (=0)    send log output to stdout
+  --debug               debug mode: --verbosity=4 --console
+
+Messaging:
+  -u [ --user ] arg (=scqc)        client name used when connecting
+                                   to the messaging
+  -H [ --host ] arg (=localhost)   messaging host (host[:port])
+                                   (default port = 4803)
+  -t [ --timeout ] arg (=3)        connection timeout in seconds
+  -g [ --primary-group ] arg (=QC) the primary message group of the client
+  -S [ --subscribe-group ] arg     a group to subscribe to. This
+                                   option can be given more than once
+  --encoding arg (=binary)         sets the message encoding (binary or xml)
+
+Database:
+  --db-driver-list                 list all supported database drivers
+  -d [ --database ] arg (=mysql://sysop:sysop@localhost/seiscomp3)
+                                   the database connection string,
+                                   format: service://user:pwd@host/database
+  --config-module arg (=trunk)     the config module to use
+
+Records:
+  --record-driver-list             list all supported record stream drivers
+  -I [ --record-url ] arg (=slink://localhost:18000)
+                                   the recordstream source URL, format:
+                                   [service://]location[#type]
+                                   [slink://server:18000]
+                                   [arclink://server:18001]
+                                   [combined://server:18000;server:18001]
+  --record-file arg                specify a file as recordsource
+  --record-type arg                specify a type for the records being read
+
+Archive-Processing:
+  --archive             Processing of archived data.
+  --auto-time           Automatic determination of start time for each stream
+                        from last db entries.
+                        end-time is set to future.
+  --begin-time arg      Begin time of record acquisition.
+                        [e.g.: "2008-11-11 10:33:50"]
+  --end-time arg        End time of record acquisition. If unset, current Time
+                        is used.
+  --stream-mask arg     Use this regexp for stream selection.
+                        [e.g. "^GE.*BHZ$"]
+\end{verbatim}
+\end{small}
+
+\subsubsection{Configuration File}
+
+\noindent
+Example of a \cmd{scqc.cfg} file that must be placed in \cmd{\$HOME/.seiscomp3/} for beeing recognized:
+%\begin{figure}[htp!]
+%\centering
+%\begin{listing}
+\begin{small}
+\begin{verbatim}
+# Send to the QC group
+connection.primarygroup = QC
+
+# Receive objects from CONFIG group
+connection.subscriptions = CONFIG
+
+# ID of the creator
+CreatorId="smi://de.gfz-potsdam/QcTool_0.2.2"
+
+# use only configured streams (z-component) (True/False) 
+# (trunk/keyfiles)
+useConfiguredStreams = True
+
+# if useConfiguredStreams == False then
+# load only those streams, matching the streamMask
+# RegEx e.g. "^(NET1|NET2)\.(STA1|STA2|STA3)\.(LOC)\.((BH)|(LH)|(HH))Z\$"
+# RegEx e.g. "^(.+)\.(.+)\.(.*)\.(.+)Z\$"
+streamMask = "^(.+)\.(.+)\.(.*)\.(BHZ)\$"
+
+# Qc parameter are sent as notifier or data messages.
+# Notifier messages will fill up the database. Use with caution!!!
+# (True/False)
+useNotifier = True
+
+# Database look up for past entries not older than x days
+# [days]
+dbLookBack = 7
+
+# currently implemented QcPlugins:
+# QcDelay, QcLatency, QcTiming, QcRms, QcOffset, QcGap, QcSpike
+#
+# Load this plugins for calculating Qc Parameters
+plugins = qcplugin_delay, \
+          qcplugin_latency, \
+          qcplugin_timing, \
+          qcplugin_rms, \
+          qcplugin_offset, \
+          qcplugin_gap, \
+          qcplugin_spike
+# QcPlugin default configuration
+#
+# Use this plugin only for realtime  processing[True].
+# Default [False] means, plugin is able to
+# process archives AND realtime streams.
+plugins.default.realTimeOnly = False
+#
+# Interval for sending report messages [s]
+plugins.default.reportInterval = 3600
+#
+# Interval for checking alert thresholds [s]
+# (only in realtime processing mode)
+plugins.default.alertInterval = 60
+#
+# Short Term Average Buffer length [s]
+plugins.default.staBufferLength = 3600
+#
+# Long Term Buffer Length [s]
+# (only in realtime processing mode)
+plugins.default.ltaBufferLength = 3600
+#
+# Report messages are generated in case of no data
+# is received since timeout seconds [s]
+# (only in realtime processing mode)
+plugins.default.timeout = 0
+#
+# Alert threshold in percent, single value.
+# [list: 25,50,75 ... not yet implemented]
+# (only in realtime processing mode)
+plugins.default.thresholds = 120
+
+# QcPlugin specific configuration
+plugins.QcLatency.timeout = 60
+plugins.QcLatency.realTimeOnly = True
+plugins.QcDelay.realTimeOnly = True
+\end{verbatim}
+\end{small}
+%\end{listing}
+%\caption{Sample scqcr.cfg}\label{scqccfg}
+%\end{figure}
+
+\subsection{Examples}
+\noindent
+The following examples assume, that your installed \cmd{scqc} use the config file \cmd{scqc.cfg} shown above. A proper installed and running seiscomp3 system is a prerequisite!
+
+\subsubsection{realtime mode}
+\noindent
+Run \cmd{scqc} in realtime mode to let it calculate QC parameters for all streams that are configured for automatic processing. QC parameters Latency and Delay are determined and stored into the database.
+\begin{small}
+\begin{verbatim}
+scqc --debug -H localhost -u scqc \
+     -d sysop:sysop@localhost/seiscomp3 \
+     -I slink://localhost:18000
+\end{verbatim}
+\end{small}
+
+\subsubsection{archive mode}
+Run \cmd{scqc} in archive mode to let it calculate QC parameters for one month for all streams that match the given regular expressions pattern. Using the specified timewindow and data from SDS-archive.
+\begin{small}
+\begin{verbatim}
+scqc --debug --stream-mask "^GE.*BHZ$" \
+     -I sdsarchive:///pathToSDSarchive \
+     -d sysop:sysop@localhost/seiscomp3 -H localhost \
+     -u myscqc --archive --begin-time "2008-01-01 00:00:00" \
+     --end-time "2008-01-31 23:59:59"
+\end{verbatim}
+\end{small}

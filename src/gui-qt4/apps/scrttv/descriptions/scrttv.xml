@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scrttv" category="GUI">
+		<description>Real-time trace view.</description>
+		<configuration>
+			<parameter name="maxDelay" type="int" unit="s" default="0">
+				<description>
+					If greater than 0 then all traces for which the data latency is higher
+					than this value are hidden.
+				</description>
+			</parameter>
+			<parameter name="resortAutomatically" type="boolean" default="true">
+				<description>
+					If enabled then all traces are sorted by distance when a new
+					origin arrives.
+				</description>
+			</parameter>
+			<parameter name="showPicks" type="boolean" default="true">
+				<description>
+					If enabled, picks are shown.
+				</description>
+			</parameter>
+			<parameter name="filter" type="string" default="BW(3, 0.5, 10.0)">
+				<description>
+					Defines the filter to be used when filtering is activated.
+				</description>
+			</parameter>
+			<parameter name="bufferSize" type="int" unit="s" default="1800">
+				<description>
+					Defines the buffer size in seconds of the ring bu of each trace.
+				</description>
+			</parameter>
+			<group name="streams">
+				<group name="sort">
+					<description>
+						Configures an initial location (latitude, longitude) to be used
+						for sorting the traces.
+					</description>
+					<parameter name="latitude" type="double" unit="deg">
+						<description>
+							Latitude of the initial location.
+						</description>
+					</parameter>
+					<parameter name="longitude" type="double" unit="deg">
+						<description>
+							Longitude of the initial location.
+						</description>
+					</parameter>
+				</group>
+				<parameter name="codes" type="list:string">
+					<description>
+						Defines a list of channels codes to be displayed. Each list item
+						can contain wildcards at any position and the given list is
+						intersected with all channels configured in inventory.
+					</description>
+				</parameter>
+				<group name="region">
+					<description>
+						Defines a region used for clipping requested stations.
+					</description>
+					<parameter name="lonmin" type="double" unit="deg">
+						<description>
+						</description>
+					</parameter>
+					<parameter name="lonmax" type="double" unit="deg">
+						<description>
+						</description>
+					</parameter>
+					<parameter name="latmin" type="double" unit="deg">
+						<description>
+						</description>
+					</parameter>
+					<parameter name="latmax" type="double" unit="deg">
+						<description>
+						</description>
+					</parameter>
+				</group>
+			</group>
+			<parameter name="autoResetDelay" type="int" unit="s" default="900">
+				<description>
+					Time span in seconds to switch back to the last view after an origin
+					caused resorting. The default is 15min.
+				</description>
+			</parameter>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<option flag="" long-flag="db-disable" argument="" publicID="database#db-disable">
+					<description>Do not use the database at all</description>
+				</option>
+			</group>
+
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

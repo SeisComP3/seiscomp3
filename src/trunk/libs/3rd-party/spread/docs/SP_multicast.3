@@ -1,0 +1,117 @@
+.\" Process this file with
+.\" groff -man -Tascii foo.1
+.\"
+.TH SP_MULTICAST 3 "JULY 1998" SPREAD "User Manuals"
+.SH NAME
+SP_multicast, SP_scat_multicast, SP_multigroup_multicast, SP_multigroup_scat_multicast \- Multicast message to groups
+.SH SYNOPSIS
+.B #include <sp.h>
+.sp
+.BI "int SP_multicast( mailbox " mbox ", service " service_type ", const char *" group ", int16 " mess_type ", int " mess_len ", const char *" mess );
+.br
+.BI "int SP_scat_multicast( mailbox " mbox ", service " service_type ", const char *" group ", int16 " mess_type ", const scatter " scat_mess );
+.sp
+.BI "int SP_multigroup_multicast( mailbox " mbox ", service " service_type ", int " num_groups ", const char " groups "[][MAX_GROUP_NAME], int16 " mess_type ", int " mess_len ", const char *" mess );
+.br
+.BI "int SP_multigroup_scat_multicast( mailbox " mbox ", service " service_type ", int " num_groups ", const char " groups "[][MAX_GROUP_NAME], int16 " mess_type ", const scatter " scat_mess );
+.SH DESCRIPTION
+.B SP_multicast
+and its variants all can multicast send a message to one or more groups.  The 
+message is sent on a particular connection and is marked as having come from the
+connection who sent it.
+The
+.I service_type
+is a type field that should be set to the service this message
+requires. The valid flags for messages are:
+.sp
+.RS
+.TB 0.8i
+.B UNRELIABLE_MESS
+.br
+.TB
+.B RELIABLE_MESS 
+.br
+.TB
+.B FIFO_MESS
+.br
+.TB
+.B CAUSAL_MESS
+.br
+.TB
+.B AGREED_MESS
+.br
+.TB
+.B SAFE_MESS
+.RE
+This type 
+can be bit ORed with other flags like SELF_DISCARD 
+if desired.  Currently SELF_DISCARD is the only additional flag.
+
+If the 
+.B SP_multicast
+or 
+.B SP_scat_multicast
+versions are being used then only one group can be sent to. So the
+.I group
+string should include the name of the group to send to. If a multigroup
+varient is being used then the groups are specified by the
+.I num_groups
+integer and the array of group names called
+.I groups
+representing all the groups the message should be sent to.  
+Each group has a string name of no
+more then MAX_GROUP_NAME chars. The array should have
+at least as many group names as the 'num_groups'  parameter
+indicates.
+The Spread system will only
+send the message once but will deliver it to all connections which 
+have joined at least one of the groups listed.  
+
+The
+.I mess_type
+This is a SHORT int (16 bits) which can be used by the 
+application arbitrarily.  The intent is that it could be used 
+to NAME different kinds of data messages so they can be
+differentiated without looking into the body of the message.
+This value 
+.B will 
+be endian corrected before receiving. 
+
+If the non-scatter varients are being used then a single buffer is
+passed to the multicast call specifying the full message to be sent.
+The 
+.I mess_len
+field gives the length in bytes of the message. While the
+.I mess
+field is a pointer to the buffer containing the message.
+For a scatter call both of these are replaced with one pointer,
+.I scat_mess,
+to a scatter structure, which is just like an iovec.  This allows 
+messages made up of several parts to be sent without an extra copy
+on systems which support scatter-gather.
+.SH "RETURN VALUES"
+Returns the number of bytes sent
+on success or one of the following errors ( < 0 ):
+.TP 0.8i
+.B ILLEGAL_SESSION
+The 
+.I mbox
+given to multicast on was illegal.
+.TP
+.B ILLEGAL_MESSAGE
+The message had an illegal structure, like a scatter not filled out correctly.
+.TP
+.B CONNECTION_CLOSED
+During communication to send the message errors occured
+and the send could not be completed.
+.SH BUGS
+None.
+.SH AUTHOR
+Yair Amir <yairamir@cnds.jhu.edu>
+.br
+Jonathan Stanton <jonathan@cnds.jhu.edu>
+.br
+
+.SH "SEE ALSO"
+.BR libspread (3)
+

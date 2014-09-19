@@ -1,0 +1,359 @@
+.TH SLINKTOOL 1 2007/10/09
+.SH NAME
+slinktool \- SeedLink client for data stream inspection, data collection
+and server testing
+
+.SH SYNOPSIS
+.nf
+slinktool [options] [host][:][port]
+
+.fi
+.SH DESCRIPTION
+\fBslinktool\fP connects to a \fISeedLink\fR server and queries the
+server for informaion or requests data using uni-station or
+multi-station mode and prints information about the packets received.
+All received packets can optionally be dumped to a single file or
+saved in custom directory and file layouts.
+
+.SH OPTIONS
+
+.IP "-V         "
+Report program version and exit.
+
+.IP "-h         "
+Print program usage and exit.
+
+.IP "-v         "
+Be more verbose.  This flag can be used multiple times ("-v -v" or
+"-vv") for more verbosity.  One flag: report basic handshaking (link
+configuration) details and briefly report each packet received.  Two
+flags: report the details of the handshaking, each packet received and
+detailed connection diagnostics.
+
+.IP "-P         "
+Ping the server: connect, print out the server ID and exit.  If the
+server was successfully contacted the return code will be 0, if errors
+were encountered the return code will be 1.
+
+.IP "-p         "
+Print details of received Mini-SEED data records. This flag can be
+used multiple times ("-p -p" or "-pp") for more detail.  One flag: a
+single summary line for each data packet received.  Two flags: details
+of the Mini-SEED data records received, including information from
+fixed header and 100/1000/1001 blockettes.
+
+.IP "-u         "
+Print data samples in data packets, implies at least one -p flag.
+
+.IP "-nd \fIdelay\fR"
+The network reconnect delay (in seconds) for the connection to
+the SeedLink server.  If the connection breaks for any reason
+this will govern how soon a reconnection should be attempted.
+The default value is 30 seconds.
+
+.IP "-nt \fItimeout\fR"
+The network timeout (in seconds) for the connection to the SeedLink
+server.  If no data [or keep alive packets?] are received in this 
+time the connection is closed and re-established (after the 
+reconnect delay has expired).  The default value is 600 seconds.
+A value of 0 disables the timeout.
+
+.IP "-k \fIkeepalive\fR  (requires SeedLink >= 3)"
+Keepalive packet interval (in seconds) at which keepalive (heartbeat)
+packets are sent to the server.  Keepalive packets are only sent if
+nothing is received within the interval.
+
+.IP "-x \fIstatefile\fR[:\fIinterval\fR]"
+During client shutdown the last received sequence numbers and time
+stamps (start times) for each data stream will be saved in this file.
+If this file exists upon startup the information will be used to
+resume the data streams from the point at which they were stopped.  In
+this way the client can be stopped and started without data loss,
+assuming the data are still available on the server.  If
+\fIinterval\fR is specified the state will be saved every
+\fIinterval\fR packets that are received.  Otherwise the state will be
+saved only on normal program termination.
+
+.IP "-d"
+Configure the connection in "dial-up" mode.  The remote server will
+close the connection when it has sent all of the data in it's buffers
+for the selected data streams.  This is opposed to the normal behavior
+of waiting indefinately for data.
+
+.IP "-o \fIdumpfile\fR"
+If specified, all packets (Mini-SEED records) received will be
+appended to this file.  The file is created if it does not exist.  A
+special mode for this option is to send all received packets to
+standard output when the dumpfile is specified as '-'.  In this case
+all output besides these records will be redirected to standard error.
+
+.IP "-A \fIformat\fR"
+If specified, all packets (Mini-SEED records) received will be
+appended to a directory/file structure defined by \fBformat\fP.
+All directories implied in the \fBformat\fP string will be created if
+necessary.  See the section \fIArchiving data\fR.
+
+.IP "-SDS \fISDSdir\fR"
+If specified, all packets (Mini-SEED records) received will be
+saved into a Simple Data Structure (SDS) dir/file structure
+starting at the specified directory.  This directory and all
+subdirectories will be created if necessary.  This option is
+esentially a preset version of '-A' option.  The SDS dir/file
+structure is:
+.nf
+<SDSdir>/<YEAR>/<NET>/<STA>/<CHAN.TYPE>/NET.STA.LOC.CHAN.TYPE.YEAR.DAY
+.fi
+
+.IP "-BUD \fIBUDdir\fR"
+If specified, all waveform data packets (Mini-SEED data records)
+received will be saved into a Buffer of Uniform Data (BUD) dir/file
+structure starting at the specified directory.  This directory and all
+subdirectories will be created if necessary.  This option is
+esentially a preset version of '-A' option.  The BUD dir/file
+structure is:
+.nf
+<BUDdir>/<NET>/<STA>/STA.NET.LOC.CHAN.YEAR.DAY
+.fi
+
+.IP "-s \fIselectors\fR"
+This defines default selectors.  If no multi-station data streams are
+configured these selectors will be used for uni-station mode.
+Otherwise these selectors will be used when no selectors are specified
+for a given stream using the '-S' or '-l' options.
+
+.IP "-l \fIstreamfile\fR"
+A list of streams will be read from the given file.  This option
+implies multi-station mode.  The format of the stream list file is
+given below in the section \fIStream list file\fR.
+
+.IP "-S \fIstream[:selectors],...\fR  (requires SeedLink >= 2.5)"
+A list of streams is given as an argument.  This option implies
+multi-station mode.  The stream list is composed of multiple streams
+(stations) and optional selectors.  \fIstream\fR should be provided in
+NET_STA format and \fIselectors\fR are normal SeedLink selectors, see
+examples and notes below.  If no selectors are provided for a given
+stream, the default selectors, if defined, will be used.
+
+.IP "-tw \fIstart:[end]\fR  (requires SeedLink >= 3)"
+Specifies a time window applied, by the server, to data streams.
+The format for both times is year,month,day,hour,min,sec; for example:
+"2002,08,05,14,00:2002,08,05,14,15,00".
+The end time is optional but the colon must be present.  If no end
+time is specified the server will send data indefinately.  This option
+will override any saved state information.
+
+Warning: time windowing might be disabled on the remote server.
+
+.IP "-i \fIlevel\fR  (requires SeedLink >= 3)"
+Send an information request (INFO); the returned raw XML response
+is displayed.  Possible levels are: ID, CAPABILITIES, STATIONS,
+STREAMS, GAPS, CONNECTIONS, ALL.
+.PP
+Formatted INFO shortcuts (formats the XML for readability):
+
+.nf
+-I   print server id/version and exit
+-L   print station list and exit
+-Q   print stream list and exit
+-G   print gap list and exit
+-C   print connection list and exit
+.fi
+
+Warning: informational (INFO) messages might be disabled on the server.
+
+.IP "\fI[host][:][port]\fR"
+A required argument, specifies the address of the SeedLink server in
+host:port format.  Either the host, port or both can be omitted.  If
+host is omitted then localhost is assumed, i.e. ':18000'
+implies 'localhost:18000'.  If the port is omitted then 18000 is
+assumed, i.e. 'localhost' implies 'localhost:18000'.  If only ':' is
+specified 'localhost:18000' is assumed.
+
+.SH "EXAMPLES"
+All-station/Uni-station mode example:
+.IP
+The following would connect to a SeedLink server at slink.host.com
+port 18000 and configure the link in all-station/uni-station mode,
+exactly which data are received depends on the data being served by
+the SeedLink server on that particular port.  Additionally, all of the
+received packets are appended to the file 'data.mseed' and each packet
+received is reported on the standard output.
+
+.B >slinktool -v -o data.mseed slink.host.com:18000
+
+The '-s' argument could be used to indicate selectors to limit the
+type of packets sent by the SeedLink server (without selectors all
+packet types are sent).  The following would limit this connection
+to BHZ channel waveform data with a location code of 10 (see an
+explanation of SeedLink selectors below).  Additionally another
+verbose flag is given, causing slinktool to report detailed
+header information from data records.
+
+.B >slinktool -vv -s 10BHZ.D -o data.mseed slink.host.com:18000
+
+.PP
+Multi-station mode example:
+.IP
+The following example would connect to a SeedLink server on
+localhost port 18010 and configure the link in multi-station
+mode.  Each station specified with the '-S' argument will be
+requested, optionally specifying selectors for each station.
+
+.nf
+.B >slinktool -v -S GE_WLF,MN_AQU:00???,IU_KONO:BHZ.D :18010
+.fi
+
+This would request GEOFON station WLF (all data as no selectors
+were indicated), MedNet station AQU with location code 00 (all
+channels) and IU network station KONO (only waveform data) from
+channel BHZ.
+
+Of course, a variety of different data selections can be made
+(only one '-S' option):
+
+.nf
+.B -s 'BHE.D BHN.D' -S 'GE_STU,GE_MALT,GE_WLF'
+  (horizontal BH channels, data only)
+.B -s BHZ -S GE_STU,GE_WLF,GE_RUE,GE_EIL
+  (vertical channels only)
+.fi
+
+.PP
+Wildcarding network and station codes
+.IP
+Some SeedLink implementation support wildcarding of the network and
+station codes, when this is the case the only two wildcard characters
+recognized are '*' for one or more characters and '?' for any single
+character.
+
+As an example, all US network data can be requested using the
+following syntax:
+
+.nf
+-B -S 'US_*
+.fi
+
+.SH "SeedLink SELECTORS"
+
+SeedLink selectors are used to request specific types of data within a
+given data stream, in effect limiting the default action of sending
+all data types.  A data packet is sent to the client if it matches any
+positive selector (without leading "!") and doesn't match any negative
+selectors (with a leading "!").  The general format of selectors is
+LLSSS.T, where LL is location, SSS is channel and T is type (one of
+[DECOTL] for Data, Event, Calibration, Blockette, Timing, and Log
+records).  "LL", ".T", and "LLSSS." can be omitted, implying anything
+in that field.  It is also possible to use "?" in place of L and S as
+a single character wildcard.  Multiple selectors are separated by
+space(s).
+
+.nf
+Some examples:
+BH?          - BHZ, BHN, BHE (all record types)
+00BH?.D      - BHZ, BHN, BHE with location code '00' (data records)
+BH? !E       - BHZ, BHN, BHE (excluding detection records)
+BH? E        - BHZ, BHN, BHE & detection records of all channels
+!LCQ !LEP    - exclude LCQ and LEP channels
+!L !T        - exclude log and timing records
+.fi
+
+.SH "Archiving data"
+Using the '-A \fBformat\fP' option received data can be saved in a
+custom directory and file structure.  The archive \fBformat\fP
+argument is expanded for each packet processed using the following
+flags:
+
+.nf
+  \fBn\fP : network code, white space removed
+  \fBs\fP : station code, white space removed
+  \fBl\fP : location code, white space removed
+  \fBc\fP : channel code, white space removed
+  \fBY\fP : year, 4 digits
+  \fBy\fP : year, 2 digits zero padded
+  \fBj\fP : day of year, 3 digits zero padded
+  \fBH\fP : hour, 2 digits zero padded
+  \fBM\fP : minute, 2 digits zero padded
+  \fBS\fP : second, 2 digits zero padded
+  \fBF\fP : fractional seconds, 4 digits zero padded
+  \fB%\fP : the percent (%) character
+  \fB#\fP : the number (#) character
+  \fBt\fP : single character type code:
+         D - waveform data packet
+         E - detection packet 
+         C - calibration packet 
+         T - timing packet 
+         L - log packet 
+         O - opaque data packet 
+         U - unknown/general packet 
+         I - INFO packet
+         ? - unidentifiable packet
+.fi
+
+The flags are prefaced with either the \fB%\fP or \fB#\fP modifier.
+The \fB%\fP modifier indicates a defining flag while the \fB#\fP
+indicates a non-defining flag.  All received packets with the same set
+of defining flags will be saved to the same file. Non-defining flags
+will be expanded using the values in the first packet received for the
+resulting file name.
+
+Time flags are based on the start time of the given packet.
+
+For example, the format string:
+
+\fB/archive/%n/%s/%n.%s.%l.%c.%Y.%j\fP
+
+would be expanded to day length files named something like:
+
+\fB/archive/NL/HGN/NL.HGN..BHE.2003.055\fP
+
+Using non-defining flags the format string:
+
+\fB/data/%n.%s.%Y.%j.%H:#M:#S.miniseed\fP
+
+would be expanded to:
+
+\fB/data/NL.HGN.2003.044.14:17:54.miniseed\fP
+
+resulting in hour length files because the minute and second are
+specified with the non-defining modifier.  The minute and second
+fields are from the first packet in the file.
+
+.SH "Stream list file"
+The stream list file used with the '-l' option is expected to
+define a data stream on each line.  The format of each line is:
+
+.nf
+<net> <station> [selectors]
+.fi
+
+The selectors are optional.  If default selectors are also specified
+(with the '-s' option), they they will be used when no selectors are
+specified for a given stream.  An example file follows:
+
+.nf
+----  Begin example file -----
+# Comment lines begin with a '#' or '*'
+# Example stream list file for use with the -l argument of slclient or
+# with the sl_read_streamlist() libslink function.
+GE ISP  BH?.D
+NL HGN
+MN AQU  BH? HH?
+----  End example file -----
+.fi
+
+.SH "NOTES"
+All diagnostic output from slinktool is printed to standard error
+(stderr), exceptions are when printing Mini-SEED packet details (the
+-p flag), when printing unpacked samples (the -u flag) and when
+printing the raw or formatted responses to INFO requests.
+
+SeedLink is currently distributed as part of the SeisComP
+(Seismological Communication Processor) package.  For more
+information see, http://www.gfz-potsdam.de/geofon/
+
+.SH AUTHOR
+.nf
+Chad Trabant
+ORFEUS Data Center/EC-Project MEREDIAN
+IRIS Data Management Center
+.fi

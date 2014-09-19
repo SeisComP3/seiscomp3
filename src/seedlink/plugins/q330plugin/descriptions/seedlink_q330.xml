@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="q330">
+		<extends>seedlink</extends>
+		<description>Global options for the Q330 plugin</description>
+		<configuration>
+			<group name="plugins">
+				<group name="q330">
+					<parameter name="udpbase" type="int" default="5500">
+						<description>
+							UDP base port used when udp port is defined as "auto"
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</plugin>
+	<binding module="seedlink" name="q330" category="sources">
+		<description>Quanterra Q330 (UDP/IP)</description>
+		<configuration>
+			<parameter name="address" type="string">
+				<description>
+					Hostname or IP.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="5330">
+				<description>
+					Source port to receive data packets.
+				</description>
+			</parameter>
+			<parameter name="udpport" type="string" default="auto">
+				<description>
+					UDP port.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<parameter name="slot" type="int" default="1">
+				<description>
+					Q330 dataport number (1-4).
+				</description>
+			</parameter>
+			<parameter name="serial" type="string" default="0x0100000123456789">
+				<description>
+					Q330 serial number (with 0x prefix).
+				</description>
+			</parameter>
+			<parameter name="auth" type="string" default="0x00">
+				<description>
+					Q330 auth code (with 0x prefix).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

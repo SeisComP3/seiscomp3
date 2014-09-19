@@ -1,0 +1,1564 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>EventEdit</class>
+ <widget class="QWidget" name="EventEdit" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>835</width>
+    <height>795</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="splitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTextEdit" name="listJournal" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="undoRedoEnabled" >
+       <bool>false</bool>
+      </property>
+      <property name="lineWrapMode" >
+       <enum>QTextEdit::NoWrap</enum>
+      </property>
+      <property name="readOnly" >
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>5</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="tabPosition" >
+       <enum>QTabWidget::West</enum>
+      </property>
+      <widget class="QWidget" name="originWidget" >
+       <attribute name="title" >
+        <string>Origins</string>
+       </attribute>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="2" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="frameMap" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTreeWidget" name="treeMagnitudes" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>7</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="alternatingRowColors" >
+             <bool>true</bool>
+            </property>
+            <property name="rootIsDecorated" >
+             <bool>false</bool>
+            </property>
+            <property name="uniformRowHeights" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0" colspan="2" >
+         <widget class="Line" name="line" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QFrame" name="frameInformation" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="2" column="1" colspan="3" >
+            <widget class="QComboBox" name="comboTypes" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>1</hsizetype>
+               <vsizetype>0</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Sets the type of the event. Selection changes are going to be sent immediately.</string>
+             </property>
+             <property name="sizeAdjustPolicy" >
+              <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+             </property>
+             <property name="minimumContentsLength" >
+              <number>9</number>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2" colspan="2" >
+            <widget class="QLabel" name="labelPhasesValue" >
+             <property name="text" >
+              <string>0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3" >
+            <widget class="QLabel" name="labelDepthError" >
+             <property name="text" >
+              <string>+/- 0 km</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" >
+            <widget class="QLabel" name="labelLongitudeValue" >
+             <property name="text" >
+              <string>0.00</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" >
+            <widget class="QLabel" name="labelOriginStatus" >
+             <property name="text" >
+              <string>Origin Status:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="2" colspan="2" >
+            <widget class="QLabel" name="labelRMSValue" >
+             <property name="text" >
+              <string>0.0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" >
+            <widget class="QLabel" name="labelAgency" >
+             <property name="text" >
+              <string>Agency:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" >
+            <widget class="QLabel" name="labelType" >
+             <property name="text" >
+              <string>Type:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="0" >
+            <widget class="QPushButton" name="buttonFixOrigin" >
+             <property name="text" >
+              <string>Fix</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" >
+            <widget class="QLabel" name="labelLatitudeValue" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>0.00</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2" >
+            <widget class="QLabel" name="labelDepthUnit" >
+             <property name="text" >
+              <string>km</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0" >
+            <widget class="QLabel" name="labelDepth" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Depth:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3" >
+            <widget class="QLabel" name="labelLatitudeError" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>+/- 0 km</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="labelTime" >
+             <property name="text" >
+              <string>Time:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="3" >
+            <widget class="QLabel" name="labelLongitudeError" >
+             <property name="text" >
+              <string>+/- 0 km</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" >
+            <widget class="QLabel" name="labelLatitude" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Latitude:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2" >
+            <widget class="QLabel" name="labelLongitudeUnit" >
+             <property name="text" >
+              <string>° E</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" >
+            <widget class="QLabel" name="labelLongitude" >
+             <property name="text" >
+              <string>Longitude:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="2" colspan="2" >
+            <widget class="QLabel" name="labelAgencyValue" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="0" colspan="4" >
+            <widget class="QPushButton" name="buttonReleaseOrigin" >
+             <property name="toolTip" >
+              <string>Release a previously fixed preferred origin and let scevent decide what origin to use.</string>
+             </property>
+             <property name="text" >
+              <string>Release origin</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="1" colspan="3" >
+            <widget class="QComboBox" name="comboFixOrigin" />
+           </item>
+           <item row="1" column="1" colspan="3" >
+            <widget class="QLabel" name="labelRegionValue" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Flinn-Engdahl region</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2" >
+            <widget class="QLabel" name="labelLatitudeUnit" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>° N</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="3" >
+            <widget class="QLabel" name="labelTimeValue" >
+             <property name="text" >
+              <string>1970-01-01 00:00:00</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="10" column="2" colspan="2" >
+            <widget class="QLabel" name="labelOriginStatusValue" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" >
+            <widget class="QLabel" name="labelPhases" >
+             <property name="text" >
+              <string>Phase Count:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="labelRegion" >
+             <property name="text" >
+              <string>Region:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1" >
+            <widget class="QLabel" name="labelDepthValue" >
+             <property name="text" >
+              <string>0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" >
+            <widget class="QLabel" name="labelRMS" >
+             <property name="text" >
+              <string>RMS Residual:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" >
+            <widget class="QLabel" name="label" >
+             <property name="text" >
+              <string>Type certainty:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="3" >
+            <widget class="QComboBox" name="comboTypeCertainties" />
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="2" column="1" >
+         <widget class="QFrame" name="frameInformation_2" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="4" column="0" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>110</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="1" colspan="2" >
+            <widget class="QLabel" name="labelMagnitudeMethodValue" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" >
+            <widget class="QLabel" name="labelMagnitudeMethod" >
+             <property name="text" >
+              <string>Method:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="2" >
+            <widget class="QPushButton" name="buttonReleaseMagnitudeType" >
+             <property name="toolTip" >
+              <string>Release a previouly fixed magnitude type and let scevent decide what magnitude to use.</string>
+             </property>
+             <property name="text" >
+              <string>Release</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" >
+            <widget class="QPushButton" name="buttonFixMagnitudeType" >
+             <property name="toolTip" >
+              <string>Use only magnitudes with the currently selected type as preferred magnitude.</string>
+             </property>
+             <property name="text" >
+              <string>Fix type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2" >
+            <widget class="QLabel" name="labelMagnitudeTypeValue" >
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="labelMagnitudeType" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Type:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="labelMagnitude" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Value:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" >
+            <widget class="QLabel" name="labelMagnitudeError" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>+/- 0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2" >
+            <widget class="QLabel" name="labelMagnitudeCountValue" >
+             <property name="text" >
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QLabel" name="labelMagnitudeValue" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" >
+            <widget class="QLabel" name="labelMagnitudeCount" >
+             <property name="text" >
+              <string>Count:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QFrame" name="frameOrigins" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="fmWidget" >
+       <attribute name="title" >
+        <string>Focal Mechanisms</string>
+       </attribute>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="2" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="fmMap" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="mtOriginInfo" >
+            <property name="title" >
+             <string>Derived Origin</string>
+            </property>
+            <layout class="QGridLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item row="6" column="0" >
+              <widget class="QLabel" name="mtOriginPhasesL" >
+               <property name="text" >
+                <string>Phase Count:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" >
+              <widget class="QLabel" name="mtOriginDepth" >
+               <property name="text" >
+                <string>0</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" >
+              <widget class="QLabel" name="mtOriginDepthL" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>5</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>Depth:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2" >
+              <widget class="QLabel" name="mtOriginLatUnit" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>5</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>° N</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" >
+              <widget class="QLabel" name="mtOriginRegionL" >
+               <property name="text" >
+                <string>Region:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3" >
+              <widget class="QLabel" name="mtOriginDepthError" >
+               <property name="text" >
+                <string>+/- 0 km</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0" >
+              <widget class="QLabel" name="mtOriginAgencyL" >
+               <property name="text" >
+                <string>Agency:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1" >
+              <widget class="QLabel" name="mtOriginLon" >
+               <property name="text" >
+                <string>0.00</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" >
+              <widget class="QLabel" name="mtOriginLatL" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>5</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>Latitude:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="2" colspan="2" >
+              <widget class="QLabel" name="mtOriginPhases" >
+               <property name="text" >
+                <string>0</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" >
+              <widget class="QLabel" name="mtOriginTimeL" >
+               <property name="text" >
+                <string>Time:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="3" >
+              <widget class="QLabel" name="mtOriginTime" >
+               <property name="text" >
+                <string>1970-01-01 00:00:00</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3" >
+              <widget class="QLabel" name="mtOriginRegion" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>13</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>Flinn-Engdahl region</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="2" colspan="2" >
+              <widget class="QLabel" name="mtOriginAgency" >
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0" >
+              <widget class="QLabel" name="mtOriginStatusL" >
+               <property name="text" >
+                <string>Origin Status:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1" >
+              <widget class="QLabel" name="mtOriginLat" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>5</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>0.00</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2" >
+              <widget class="QLabel" name="mtOriginDepthUnit" >
+               <property name="text" >
+                <string>km</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3" >
+              <widget class="QLabel" name="mtOriginLatError" >
+               <property name="sizePolicy" >
+                <sizepolicy>
+                 <hsizetype>5</hsizetype>
+                 <vsizetype>5</vsizetype>
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text" >
+                <string>+/- 0 km</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0" >
+              <widget class="QLabel" name="mtOriginLonL" >
+               <property name="text" >
+                <string>Longitude:</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="2" colspan="2" >
+              <widget class="QLabel" name="mtOriginStatus" >
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2" >
+              <widget class="QLabel" name="mtOriginLonUnit" >
+               <property name="text" >
+                <string>° E</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3" >
+              <widget class="QLabel" name="mtOriginLonError" >
+               <property name="text" >
+                <string>+/- 0 km</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="10" column="0" >
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QTreeWidget" name="fmTree" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="alternatingRowColors" >
+           <bool>true</bool>
+          </property>
+          <property name="rootIsDecorated" >
+           <bool>false</bool>
+          </property>
+          <property name="uniformRowHeights" >
+           <bool>true</bool>
+          </property>
+          <property name="itemsExpandable" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QFrame" name="fmInfo" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Plain</enum>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="8" column="1" colspan="3" >
+            <widget class="QLabel" name="fmDist" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Station Distribution Ratio</string>
+             </property>
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" >
+            <widget class="QLabel" name="fmMisfitL" >
+             <property name="text" >
+              <string>Misfit:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" >
+            <widget class="QLabel" name="fmDistL" >
+             <property name="text" >
+              <string>Distribution:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="1" colspan="3" >
+            <widget class="QComboBox" name="fmFixCombo" />
+           </item>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="fmNP2L" >
+             <property name="text" >
+              <string>NP2:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" >
+            <widget class="QLabel" name="fmMethodL" >
+             <property name="text" >
+              <string>Method:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" >
+            <widget class="QLabel" name="fmCountL" >
+             <property name="text" >
+              <string>Count:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="0" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>50</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="13" column="0" >
+            <widget class="QPushButton" name="fmFixButton" >
+             <property name="text" >
+              <string>Fix</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" colspan="3" >
+            <widget class="QLabel" name="fmGap" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Azimuthal Gap</string>
+             </property>
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" colspan="3" >
+            <widget class="QLabel" name="fmNP2" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Nodal Plane 2 (strike/dip/rake)</string>
+             </property>
+             <property name="text" >
+              <string>-/-/-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1" colspan="3" >
+            <widget class="QLabel" name="fmMode" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Evaluation Mode</string>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="1" colspan="3" >
+            <widget class="QLabel" name="fmStatus" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Evaluation Status</string>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" >
+            <widget class="QLabel" name="fmGapL" >
+             <property name="text" >
+              <string>Azi. Gap:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="3" >
+            <widget class="QLabel" name="fmNP1" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Nodal Plane 1 (strike/dip/rake)</string>
+             </property>
+             <property name="text" >
+              <string>-/-/-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1" colspan="3" >
+            <widget class="QLabel" name="fmMethod" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Method ID</string>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="0" colspan="4" >
+            <widget class="QPushButton" name="fmAutoButton" >
+             <property name="text" >
+              <string>Automatic FM selection</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1" colspan="3" >
+            <widget class="QLabel" name="fmMisfit" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Misfit</string>
+             </property>
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="fmNP1L" >
+             <property name="text" >
+              <string>NP1:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0" >
+            <widget class="QLabel" name="fmStatusL" >
+             <property name="text" >
+              <string>Status:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" >
+            <widget class="QLabel" name="fmModeL" >
+             <property name="text" >
+              <string>Mode:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="3" >
+            <widget class="QLabel" name="fmCount" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>Station Polarity Count</string>
+             </property>
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="15" column="0" colspan="4" >
+            <widget class="QPushButton" name="fmTriggerButton" >
+             <property name="text" >
+              <string>Trigger Mw computation</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2" >
+         <widget class="Line" name="fmLine" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" >
+         <widget class="QGroupBox" name="mtMagInfo" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>5</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title" >
+           <string>Magnitude</string>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="mtMagTypeL" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Type:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="2" >
+            <widget class="QLabel" name="mtMagMethod" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>13</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>-</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2" >
+            <widget class="QLabel" name="mtMagCount" >
+             <property name="text" >
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" >
+            <widget class="QLabel" name="mtMagError" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>+/- 0</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="0" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>110</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0" >
+            <widget class="QLabel" name="mtMagCountL" >
+             <property name="text" >
+              <string>Count:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2" >
+            <widget class="QPushButton" name="buttonReleaseMw" >
+             <property name="toolTip" >
+              <string>Release a previously fixed moment magnitude as preferred magnitude and let scevent decide what magnitude (part of the preferred origin) to use.</string>
+             </property>
+             <property name="text" >
+              <string>Release</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" >
+            <widget class="QLabel" name="mtMagMethodL" >
+             <property name="text" >
+              <string>Method:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" >
+            <widget class="QLabel" name="mtMagL" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>Value:</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" >
+            <widget class="QLabel" name="mtMag" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>5</hsizetype>
+               <vsizetype>5</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2" >
+            <widget class="QLabel" name="mtMagType" >
+             <property name="text" >
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" >
+            <widget class="QPushButton" name="buttonFixMw" >
+             <property name="toolTip" >
+              <string>Fixes the moment magnitude of the current preferred focal mechanism as preferred magnitude if available.</string>
+             </property>
+             <property name="text" >
+              <string>Fix Mw</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="icons.qrc" />
+ </resources>
+ <connections/>
+</ui>

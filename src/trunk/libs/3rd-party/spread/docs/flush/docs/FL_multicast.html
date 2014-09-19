@@ -1,0 +1,242 @@
+<HTML><HEAD><TITLE>Manpage of FL_multicast</TITLE>
+</HEAD>
+
+<body bgcolor="#FFFFFF">
+
+<!--#include virtual="/includes/header-a" -->
+
+<a href="http://www.cnds.jhu.edu/research/group/flush_spread">
+<img src="flush_spread_title.gif" alt="FLUSH SPREAD" border=0>
+</a>
+
+<!--#include virtual="/includes/header-b" -->
+
+<H1>FL_multicast</H1>
+Section: User Manuals (3)<BR>Updated: Dec 2000<BR>
+<HR>
+
+<H2>NAME</H2>
+
+FL_unicast, FL_scat_unicast, FL_subgroupcast, FL_scat_subgroupcast, FL_multicast, FL_scat_multicast - multicast messages to subsets of Flush Spread groups.
+<H2>SYNOPSIS</H2>
+
+<B>#include &lt;fl.h&gt;</B>
+
+<P>
+<B>int FL_unicast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, const char *</B><I>recvr_name</I><B>, int16 </B><I>mess_type</I><B>, int </B><I>mess_len</I><B>, const char *</B><I>mess</I><B>);</B>
+
+<P>
+<B>int FL_scat_unicast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, const char *</B><I>recvr_name</I><B>, int16 </B><I>mess_type</I><B>, const scatter *</B><I>scat</I><B>);</B>
+
+<P>
+<B>int FL_subgroupcast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, int </B><I>num_recvrs</I><B>, const char </B><I>recvr_names</I><B>[][MAX_GROUP_NAME], int16 </B><I>mess_type</I><B>, int </B><I>mess_len</I><B>, const char *</B><I>mess</I><B>);</B>
+
+<P>
+<B>int FL_scat_subgroupcast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, int </B><I>num_recvrs</I><B>, const char </B><I>recvr_names</I><B>[][MAX_GROUP_NAME], int16 </B><I>mess_type</I><B>, const char *</B><I>scat</I><B>);</B>
+
+<P>
+<B>int FL_unicast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, int16 </B><I>mess_type</I><B>, int </B><I>mess_len</I><B>, const char *</B><I>mess</I><B>);</B>
+
+<P>
+<B>int FL_scat_unicast(mailbox </B><I>mbox</I><B>, service </B><I>serv_type</I><B>, const char *</B><I>group_name</I><B>, int16 </B><I>mess_type</I><B>, const scatter *</B><I>scat</I><B>);</B>
+
+<H2>DESCRIPTION</H2>
+
+<B>FL_multicast</B>
+
+and its variants all multicast a message from the connection represented by
+<I>mbox</I>
+
+to a subset of the membership of the Flush Spread group named
+<I>group_name</I>.
+
+<P>
+Note, that unlike Spread, Flush Spread does not provide guarantees
+about messages sent to different groups; meaning that FIFO, CAUSAL,
+SAFE, etc. safety properties are not maintained across different Flush
+Spread groups, but only within a group to which they are sent. For
+example, if an application sends a FIFO message A to the private group
+G and then sends another FIFO message B to the regular group H, of
+which G is a member, then G could receive B before A or vice versa.
+<P>
+In order to multicast a message to a group, the destination group 
+<I>group_name</I>
+
+must either be a private group name, or this connection must be a
+full-fledged member of that regular group (has joined and been
+included in a membership of the group, and is not leaving the group,
+see FL_join, FL_leave) and not be in an illegal state to multicast (by
+having recently flushed the group and not yet received its next
+view/membership, see FL_flush).
+<P>
+The
+<I>serv_type</I>
+
+is a type field that should be set to the service type this message
+requires. The valid flags for multicasting messages are:
+<P>
+<DL COMPACT><DT><DD>
+<B>UNRELIABLE_MESS</B>
+
+<BR>
+
+
+<B>RELIABLE_MESS </B>
+
+<BR>
+
+
+<B>FIFO_MESS</B>
+
+<BR>
+
+
+<B>CAUSAL_MESS</B>
+
+<BR>
+
+
+<B>AGREED_MESS</B>
+
+<BR>
+
+
+<B>SAFE_MESS</B>
+
+</DL>
+
+<P>
+This type field can be bit-wise ORed with other flags like
+SELF_DISCARD if desired.  Currently SELF_DISCARD is the only
+additional flag for multicasts: SELF_DISCARD will cause the
+multicasted message to NOT be delivered back to this connection.
+<P>
+The string
+<I>group_name</I>
+
+indicates the name of the Flush Spread group to which this message
+should be sent.  This group can be either a regular or a private Flush
+Spread group, as dicussed above.  The multicast variants sends the
+message to all members of a group, while the unicast and subgroupcast
+variants allow the sender to specify a subset of the group to which to
+send the message.  For the unicast variants the sender specifies the
+private group name of the intended recipient in the variable
+<I>recvr_name</I>.
+
+For the subgroupcast variants the sender specifies the number of
+recipients in the variable
+<I>num_recvrs</I>
+
+and a doubly scripted array of the members' private group names in the
+variable
+<I>recvr_names</I>,
+
+where duplicate names are tolerated.  For the unicast and subgroupcast
+variants all specified receivers must have been members of the most
+recently installed view/membership of the group.  If the application
+breaks this rule it will receive an ILLEGAL_RECEIVERS error.
+<P>
+The
+<I>mess_type</I>
+
+is a 16 bit integer which can be used by the application arbitrarily.
+However, Flush Spread restricts which values can be used to be greater
+than or equal to FL_MIN_LEGAL_MESS_TYPE.  If the application sends
+with a message type of less than FL_MIN_LEGAL_MESS_TYPE, then the
+error ILLEGAL_MESSAGE_TYPE will be returned.  The intent of this
+message type is that the application can use it to name different
+kinds of data messages so they can be differentiated without looking
+into the body of the message.  This value
+<B>WILL</B>
+
+be endian corrected upon returning. 
+<P>
+The non-scatter variants use a single buffer to pass the body of the
+message to be sent.  The
+<I>mess_len</I>
+
+field gives the message length in bytes. While the
+<I>mess</I>
+
+field is a pointer to the buffer containing the message.  For the
+scatter variants, both of these parameters are replaced with one
+pointer,
+<I>scat_mess</I>,
+
+to a scatter structure, which is similiar to an iovec.  This allows
+messages made up of several parts to be sent without an extra copy on
+systems which support scatter-gather.  However, the number of scatter
+elements is restricted to be non-negative and less than or equal to
+FL_MAX_SCATTER_ELEMENTS.  If a buffer length is negative or an illegal
+number of scatter elements is used then ILLEGAL_MESSAGE will be
+returned.
+
+<H2>RETURN VALUES</H2>
+
+Returns the number of bytes sent on success or one of the following
+errors ( &lt; 0 ):
+<DL COMPACT>
+<DT><B>ILLEGAL_SESSION</B>
+
+<DD>
+The connection represented by 
+<I>mbox</I>
+
+was illegal, usually because it is no longer active.</p>
+
+<DT><B>ILLEGAL_GROUP</B>
+
+<DD>
+The 
+<I>group_name</I>
+
+given to multicast to was illegal for some reason. Usually because it
+was of length 0 or length &gt; MAX_GROUP_NAME.  This error can also be
+returned if the connection was not a full-fledged member (i.e. - not
+yet included in a Flush membership message for the group, or already
+leaving) of a regular group.</p>
+
+<DT><B>ILLEGAL_RECEIVERS</B>
+
+<DD>
+A unicast or subgroupcast specified private group names that weren't
+members of
+<I>group_name</I>'s
+
+most recent view/membership.</p>
+
+<DT><B>ILLEGAL_STATE</B>
+
+<DD>
+A multicast to a group was attempted after flushing the group and
+before receiving the next view/membership for that group.</p>
+
+<DT><B>ILLEGAL_SERVICE</B>
+
+<DD>
+If the service type was using bits reserved by Flush Spread or Spread.</p>
+
+<DT><B>ILLEGAL_PARAM</B>
+
+<DD>
+An illegal parameter, such as a negative array size was passed.</p>
+
+<DT><B>ILLEGAL_MESSAGE</B>
+
+<DD>
+The message had an illegal structure, like a negative buffer size or
+an illegal number of scatter elements.</p>
+
+<DT><B>CONNECTION_CLOSED</B>
+
+<DD>
+Errors occurred during communication and the multicast could not be completed.
+</DL>
+<H2>AUTHOR</H2>
+
+John Schultz &lt;<A HREF="mailto:jschultz@cnds.jhu.edu">jschultz@cnds.jhu.edu</A>&gt;
+
+<!--#include virtual="/includes/footer" -->
+
+</BODY>
+</HTML>

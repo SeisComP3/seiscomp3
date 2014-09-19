@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="mseedscan" category="sources">
+		<description>MseedScan</description>
+		<configuration>
+			<parameter name="dir" type="string">
+				<description>Directory to scan.</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>
