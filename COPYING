@@ -172,18 +172,16 @@ ArcLink Programs (source code)
 
 arclink, isomount
 
-4.2 SeisComP Binary License package
-
-GUI Programs (binaries only)
+GUI Programs (source code)
 
 scesv, scheli, scmapcut, scmm, scmv, scolv, scqcv, scrttv
 
-GUI Libraries (binaries only)
+GUI Libraries (source code)
 
 libseiscomp3_qt4.so, libseiscomp3_mm_preliminaryorigin.so,
 libseiscomp3_mplugin.so
 
-4.3 GNU Public License package (acquisition)
+4.2 GNU Public License package (acquisition)
 
 SeedLink Binaries
 
@@ -200,7 +198,7 @@ chain_plugin, ewexport_plugin, fs_plugin, mseedfifo_plugin, mseedscan_plugin,
 naqs_plugin, nrts_plugin, q330_plugin, reftek_plugin, run_with_lock,
 wave24_plugin, win_plugin, serial_plugin, sock_plugin, scream_plugin
 
-4.4 Derivative Works
+4.3 Derivative Works
 
 "Derivative Works" shall mean any work, whether in source or object form, that
 is based on (or derived from) the Program and for which the editorial revisions,
@@ -222,3 +220,4 @@ Signature
 Name:
 
 EMail:
+

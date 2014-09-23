@@ -1,0 +1,144 @@
+/***************************************************************************
+ *   Copyright (C) by GFZ Potsdam                                          *
+ *                                                                         *
+ *   You can redistribute and/or modify this program under the             *
+ *   terms of the SeisComP Public License.                                 *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   SeisComP Public License for more details.                             *
+ ***************************************************************************/
+
+// This file was created by a source code generator.
+// Do not modify the contents. Change the definition and run the generator
+// again!
+
+
+#ifndef __SEISCOMP_DATAMODEL_REALQUANTITY_H__
+#define __SEISCOMP_DATAMODEL_REALQUANTITY_H__
+
+
+#include <seiscomp3/core/baseobject.h>
+#include <seiscomp3/core.h>
+#include <seiscomp3/core/exceptions.h>
+
+
+namespace Seiscomp {
+namespace DataModel {
+
+
+DEFINE_SMARTPOINTER(RealQuantity);
+
+
+/**
+ * \brief Physical quantities expressed as floating point numbers are
+ * \brief represented by their
+ * \brief measured or computed values and optional values for
+ * \brief symmetric or upper
+ * \brief and lower uncertainties. The interpretation of these
+ * \brief uncertainties is
+ * \brief not defined in the standard. They can contain statistically
+ * \brief well-defined
+ * \brief error measures, but the mechanism can also be used to
+ * \brief simply describe a
+ * \brief possible value range. If the confidence level of the
+ * \brief uncertainty is known,
+ * \brief it can be listed in the optional attribute confidenceLevel.
+ * \brief Note that uncertainty, upperUncertainty, and
+ * \brief lowerUncertainty are given as absolute values of the
+ * \brief deviation
+ * \brief from the main value.
+ */
+class SC_SYSTEM_CORE_API RealQuantity : public Core::BaseObject {
+	DECLARE_SC_CLASS(RealQuantity);
+	DECLARE_SERIALIZATION;
+	DECLARE_METAOBJECT;
+
+	// ------------------------------------------------------------------
+	//  Xstruction
+	// ------------------------------------------------------------------
+	public:
+		//! Constructor
+		RealQuantity();
+
+		//! Copy constructor
+		RealQuantity(const RealQuantity& other);
+
+		//! Custom constructor
+		RealQuantity(double value);
+		RealQuantity(double value,
+		             const OPT(double)& uncertainty,
+		             const OPT(double)& lowerUncertainty,
+		             const OPT(double)& upperUncertainty,
+		             const OPT(double)& confidenceLevel);
+
+		//! Destructor
+		~RealQuantity();
+	
+
+	// ------------------------------------------------------------------
+	//  Operators
+	// ------------------------------------------------------------------
+	public:
+		operator double&();
+		operator double() const;
+
+		//! Copies the metadata of other to this
+		RealQuantity& operator=(const RealQuantity& other);
+		//! Checks for equality of two objects. Childs objects
+		//! are not part of the check.
+		bool operator==(const RealQuantity& other) const;
+		bool operator!=(const RealQuantity& other) const;
+
+		//! Wrapper that calls operator==
+		bool equal(const RealQuantity& other) const;
+
+
+	// ------------------------------------------------------------------
+	//  Setters/Getters
+	// ------------------------------------------------------------------
+	public:
+		//! Value of the quantity. The unit is implicitly defined and
+		//! depends on the context.
+		void setValue(double value);
+		double value() const;
+
+		//! Uncertainty as the absolute value of symmetric deviation
+		//! from the main value.
+		void setUncertainty(const OPT(double)& uncertainty);
+		double uncertainty() const throw(Seiscomp::Core::ValueException);
+
+		//! Uncertainty as the absolute value of deviation from the
+		//! main value towards smaller values.
+		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
+		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+
+		//! Uncertainty as the absolute value of deviation from the
+		//! main value towards larger values.
+		void setUpperUncertainty(const OPT(double)& upperUncertainty);
+		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+
+		//! Confidence level of the uncertainty, given in percent.
+		void setConfidenceLevel(const OPT(double)& confidenceLevel);
+		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+
+
+	// ------------------------------------------------------------------
+	//  Implementation
+	// ------------------------------------------------------------------
+	private:
+		// Attributes
+		double _value;
+		OPT(double) _uncertainty;
+		OPT(double) _lowerUncertainty;
+		OPT(double) _upperUncertainty;
+		OPT(double) _confidenceLevel;
+};
+
+
+}
+}
+
+
+#endif
