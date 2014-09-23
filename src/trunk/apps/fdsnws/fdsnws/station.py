@@ -290,7 +290,7 @@ class FDSNStation(resource.Resource):
 				                            msg, ro)
 
 			req.setHeader('Content-Type', 'application/xml')
-			exp.setFormattedOutput(ro.formatted)
+			exp.setFormattedOutput(bool(ro.formatted))
 			d = deferToThread(self._processRequestExp, req, ro, exp)
 
 		# Process request in separate thread

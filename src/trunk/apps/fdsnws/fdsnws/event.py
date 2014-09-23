@@ -229,7 +229,7 @@ class FDSNEvent(resource.Resource):
 		else:
 			exp = Exporter.Create(ro.Exporters[ro.format])
 			if exp:
-				exp.setFormattedOutput(ro.formatted)
+				exp.setFormattedOutput(bool(ro.formatted))
 			else:
 				msg = "output format '%s' no available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
