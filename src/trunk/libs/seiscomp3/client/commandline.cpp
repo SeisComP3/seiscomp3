@@ -117,9 +117,9 @@ bool CommandLine::parse(int argc, char** argv) {
 		_unrecognizedOptions = collect_unrecognized(parsed.options, include_positional);
 	}
 	catch ( std::exception& e ) {
-		cout << "Error: " << e.what() <<  endl;
+		cout << "Error: " << e.what() << endl;
 		cout << *_options << endl;
-    	return false;
+		return false;
 	}
 
 	notify(_variableMap);
