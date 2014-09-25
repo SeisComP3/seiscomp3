@@ -75,6 +75,9 @@ bool FDSNWSConnection::setSource(std::string serverloc) {
 		_host = serverloc;
 	}
 
+	if ( _host.find(':') == string::npos )
+		_host += ":80";
+
 	return true;
 }
 

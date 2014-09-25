@@ -63,6 +63,7 @@ SLConnection::SLConnection()
 	_sock.setTimeout(300); // default
 	_maxRetries = -1; // default
 	_retriesLeft = -1;
+	_useBatch = true;
 }
 
 SLConnection::SLConnection(string serverloc)
@@ -71,11 +72,14 @@ SLConnection::SLConnection(string serverloc)
 	_sock.setTimeout(300); // default
 	_maxRetries = -1; // default
 	_retriesLeft = -1;
+	_useBatch = true;
 }
 
 SLConnection::~SLConnection() {}
 
 bool SLConnection::setSource(string serverloc) {
+	_useBatch = true;
+
 	size_t pos = serverloc.find('?');
 	if ( pos != std::string::npos ) {
 		_serverloc = serverloc.substr(0, pos);
@@ -108,6 +112,8 @@ bool SLConnection::setSource(string serverloc) {
 					if ( !Core::fromString(_maxRetries, value) )
 						return false;
 				}
+				else if ( name == "no-batch" )
+					_useBatch = false;
 			}
 		}
 	}
@@ -211,15 +217,19 @@ void SLConnection::handshake() {
 	Util::StopWatch aStopWatch;
 
 	bool batchmode = false;
-	_sock.sendRequest("BATCH",false);
-	string response = _sock.readline();
+	if ( _useBatch ) {
+		_sock.sendRequest("BATCH",false);
+		string response = _sock.readline();
 
-	if (response == "OK") {
-		batchmode = true;
-		SEISCOMP_INFO("Seedlink server supports BATCH command");
+		if (response == "OK") {
+			batchmode = true;
+			SEISCOMP_INFO("Seedlink server supports BATCH command");
+		}
+		else
+			SEISCOMP_INFO("Seedlink server does not support BATCH command");
 	}
 	else
-		SEISCOMP_INFO("Seedlink server does not support BATCH command");
+		SEISCOMP_INFO("BATCH mode requests disabled");
 
 	for (set<StreamIdx>::iterator it = _streams.begin(); it != _streams.end(); ++it) {
 		try {

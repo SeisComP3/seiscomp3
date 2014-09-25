@@ -116,6 +116,7 @@ class SC_SYSTEM_CORE_API SLConnection : public Seiscomp::IO::RecordStream {
 			Core::Time          _stime;
 			Core::Time          _etime;
 			bool                _readingData;
+			bool                _useBatch;
 			int                 _maxRetries;
 			int                 _retriesLeft;
 

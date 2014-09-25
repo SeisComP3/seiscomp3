@@ -35,9 +35,9 @@ FrameworkVersion CurrentVersion;
 
 FrameworkVersion::FrameworkVersion() {
 #ifdef WITH_SVN_REVISION
-        _text = std::string("Jakarta git-") + git_revision();
+	_text = std::string("Jakarta git-") + git_revision();
 #else
-        _text = std::string("Jakarta git-unknown");
+	_text = std::string("Jakarta git-unknown");
 #endif
 }
 

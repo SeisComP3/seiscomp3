@@ -338,6 +338,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void onSelectedTime(Seiscomp::Gui::RecordWidget*, Seiscomp::Core::Time);
 		void setAlignment(Seiscomp::Core::Time);
 		void acquisitionFinished();
+		void handleAcquisitionError(const QString &msg);
 		void relocate();
 		void modifyOrigin();
 		void updateTheoreticalArrivals();
