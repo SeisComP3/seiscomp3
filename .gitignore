@@ -12,9 +12,6 @@
 /*.includes
 /*.user
 
-# /doc/
-/doc/base/api-python.rst
-
 # /src/arclink/apps/misc/
 /src/arclink/apps/misc/.pydevproject
 /src/arclink/apps/misc/.project
