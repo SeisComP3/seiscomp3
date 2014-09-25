@@ -61,12 +61,23 @@
 							File containing a profile parameters
 							</description>
 						</parameter>
+						<parameter name="fixStartDepthOnly" type="boolean" default="false">
+							<description>
+							If the depth is requested to be fixed (e.g. by ticking the option
+							in scolv) the plugin performs only one location starting at
+							specified depth but with free depth evaluation. This option
+							defines whether it should really fix the depth (false) or
+							use this fixed depth only as starting point (true).
+							</description>
+						</parameter>
 					</struct>
 				</group>
 				<parameter name="publicID" type="string">
-					<description>Custom patternID to use when generating origin publicID</description></parameter>
-				<parameter name="useHypo71PatternID" type="bool">
-					<description>Specifies if the given publicD should be used for generating origin publicID</description></parameter>
+					<description>Custom patternID to use when generating origin publicID</description>
+				</parameter>
+				<parameter name="useHypo71PatternID" type="boolean">
+					<description>Specifies if the given publicD should be used for generating origin publicID</description>
+				</parameter>
 			</group>
 		</configuration>
 	</plugin>

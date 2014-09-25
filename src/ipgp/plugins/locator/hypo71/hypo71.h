@@ -46,6 +46,7 @@ class Hypo71 : public LocatorInterface {
 				std::string methodID;
 				std::string controlFile;
 				std::string velocityModelFile;
+				bool        fixStartDepthOnly;
 		};
 
 		typedef std::map<std::string, std::string> StationMap;
@@ -394,7 +395,7 @@ class Hypo71 : public LocatorInterface {
 		static IDList _allowedParameters;
 
 		bool _allowMissingStations;
-		bool _useLastOriginAsReference;
+//		bool _useLastOriginAsReference;
 		bool _useHypo71PatternID;
 
 		double _fixedDepthGridSpacing;
@@ -413,6 +414,11 @@ class Hypo71 : public LocatorInterface {
 		std::string _currentOriginID;
 		std::string velocityModel;
 		std::string depthModel;
+
+		std::string _trialLatDeg;
+		std::string _trialLatMin;
+		std::string _trialLonDeg;
+		std::string _trialLonMin;
 
 		TextLines _controlFile;
 		IDList _profileNames;

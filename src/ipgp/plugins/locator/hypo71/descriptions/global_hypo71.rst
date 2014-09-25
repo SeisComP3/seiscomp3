@@ -244,9 +244,8 @@ Finally set-up your Hypo71 profile (${HOME}/hypo71/profiles/profile.a.conf
    KAZ = 1      # 1 or blank # apply azimuthal weighting of stations ?
    KSORT = 1    # 1 or blank # sort stations by distance in the output ?
    
-   # Use last localization as starting point ?
-   # then LAT1, LAT2, LON1, LON2 and ZTR will take origin last values
-   DISABLE_LAST_LOC = true
+   # Use the position obtained from the best ZTR value ?
+   USE_TRIAL_POSITION = false
    
    
    ####################
