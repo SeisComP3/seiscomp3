@@ -19,7 +19,10 @@
 #include <QString>
 #include <QRectF>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/client/application.h>
+#endif
+
 #include <seiscomp3/gui/core/maps.h>
 #include <seiscomp3/gui/core/scheme.h>
 #include <seiscomp3/gui/core/messagethread.h>
