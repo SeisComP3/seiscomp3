@@ -386,11 +386,11 @@ class Bulletin(object):
                 p = a = "N/A"
                 if amp:
                     #if typ in ["mb", "mB", "Ms", "ML"]:
-                    if typ in ["mb", "mB", "Ms", "ML", "MLv", "Mwp"]:
+                    if typ in ["mb", "mB", "Ms", "Ms(BB)", "ML", "MLv", "Mwp"]:
                         try:    a = "%g" % amp.amplitude().value()
                         except: a = "N/A"
 
-                        if typ in ["mb", "Ms"]:
+                        if typ in ["mb", "Ms", "Ms(BB)"]:
                             try:    p = "%.2f" % amp.period().value()
                             except: p = "N/A"
                         else:
