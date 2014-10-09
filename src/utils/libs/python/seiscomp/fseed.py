@@ -85,8 +85,11 @@ def _mkseedpaz(nblk, nfld, npaz, s):
     pos = 0
     n = 0
     c = ""
+
+    l = 0
+    if not s is None: l = len(s)
     
-    while pos < len(s):
+    while pos < l:
         m = _rx_paz.match(s, pos)
         if m == None:
             raise SEEDError, "blockette %d, field %d: error parsing PAZ at '%s'" % (nblk, nfld, s[pos:])
