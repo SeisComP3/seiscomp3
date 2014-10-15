@@ -1896,6 +1896,16 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 		unit = DISPLACE;
 		sequence_number = GetPAZSequence(ci, DISPLACE, DIGITAL);
 	}
+	if(sequence_number == -1)
+	{
+		unit = PRESSURE;
+		sequence_number = GetPAZSequence(ci, PRESSURE, DIGITAL);
+	}
+	if(sequence_number == -1)
+	{
+		unit = TEMPERATURE;
+		sequence_number = GetPAZSequence(ci, TEMPERATURE, DIGITAL);
+	}
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
 
@@ -2541,6 +2551,12 @@ bool Inventory::IsPAZStream(ChannelIdentifier& ci)
 		return true;
 
 	if(GetPAZSequence(ci, DISPLACE, DIGITAL) != -1)
+		return true;
+
+	if(GetPAZSequence(ci, PRESSURE, DIGITAL) != -1)
+		return true;
+
+	if(GetPAZSequence(ci, TEMPERATURE, DIGITAL) != -1)
 		return true;
 
 	return false;
