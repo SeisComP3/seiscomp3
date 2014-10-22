@@ -228,6 +228,7 @@ CREATE TABLE AmplitudeReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	amplitudeID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(amplitudeID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -612,6 +613,7 @@ CREATE TABLE Magnitude (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -650,6 +652,7 @@ CREATE TABLE StationMagnitude (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(amplitudeID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -706,6 +709,7 @@ CREATE TABLE Pick (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(time_value),
 	INDEX(time_value_ms),
 	FOREIGN KEY(_oid)
@@ -722,6 +726,7 @@ CREATE TABLE OriginReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	originID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(originID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -768,6 +773,7 @@ CREATE TABLE Event (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(preferredOriginID),
 	INDEX(preferredMagnitudeID),
 	INDEX(preferredFocalMechanismID),

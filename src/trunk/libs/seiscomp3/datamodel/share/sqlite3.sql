@@ -639,6 +639,7 @@ CREATE TABLE Amplitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
 CREATE INDEX Amplitude_pickID ON Amplitude(pickID);
 
 CREATE TRIGGER AmplitudeUpdate UPDATE ON Amplitude
@@ -704,6 +705,7 @@ CREATE TABLE Magnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Magnitude__parent_oid ON Magnitude(_parent_oid);
 
 CREATE TRIGGER MagnitudeUpdate UPDATE ON Magnitude
 BEGIN
@@ -748,6 +750,7 @@ CREATE TABLE StationMagnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX StationMagnitude__parent_oid ON StationMagnitude(_parent_oid);
 CREATE INDEX StationMagnitude_amplitudeID ON StationMagnitude(amplitudeID);
 
 CREATE TRIGGER StationMagnitudeUpdate UPDATE ON StationMagnitude
@@ -810,6 +813,7 @@ CREATE TABLE Pick (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
 CREATE INDEX Pick_time_value ON Pick(time_value);
 CREATE INDEX Pick_time_value_ms ON Pick(time_value_ms);
 
@@ -890,6 +894,7 @@ CREATE TABLE Event (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Event__parent_oid ON Event(_parent_oid);
 CREATE INDEX Event_preferredOriginID ON Event(preferredOriginID);
 CREATE INDEX Event_preferredMagnitudeID ON Event(preferredMagnitudeID);
 CREATE INDEX Event_preferredFocalMechanismID ON Event(preferredFocalMechanismID);
@@ -1025,6 +1030,7 @@ CREATE TABLE Origin (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
 CREATE INDEX Origin_time_value ON Origin(time_value);
 CREATE INDEX Origin_time_value_ms ON Origin(time_value_ms);
 
