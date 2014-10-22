@@ -55,7 +55,7 @@ static int                      numstreams;
 
 extern int RSIZE;
 int        RINGBUFFER_LENGTH;  	// container for GCF blocks; the larger this number the larger
-                                // the delay can be for sending out data 
+                                // the delay can be for sending out data
 
 extern double get_dtime (void);
 
@@ -525,12 +525,14 @@ time_t epochtime (int year, int mon, int day, int hour, int min, int sec)
 
 
 
+static int reqsockid = -1;
+
 uint8_t *request_block_tcp_mode ( uint16_t recnr)
 {
-      int sockid, byteorder;
+      int byteorder;
       int n;
       //struct sockaddr_in sin;
-      struct sockaddr_in local, remote;
+      struct sockaddr_in remote;
       struct hostent *he;
       uint8_t *buf;
       uint16_t hrecnr;
@@ -549,54 +551,50 @@ uint8_t *request_block_tcp_mode ( uint16_t recnr)
       uc[2]  = *(up+1);
 
 
-      sockid = socket (PF_INET, SOCK_STREAM, 0);
-      local.sin_family = AF_INET;
-      local.sin_port = htons(0);
-      local.sin_addr.s_addr = htonl(INADDR_ANY);
+      if (reqsockid < 0) {
+          printf("open gap retrieval channel\n");
+          reqsockid = socket (PF_INET, SOCK_STREAM, 0);
+          remote.sin_port =  htons((uint16_t) config.reqport);         // port for gap retrieval using TCP;
+          remote.sin_family = AF_INET;
+          strcpy ( server, config.server);
+          he = gethostbyname (server);
+          if (!he) fatal2 ("gethostbyname(%s) failed: %m", server);
+          if (he->h_addrtype != AF_INET)
+              fatal ("gethostbyname returned a non-IP address");
+          memcpy (&remote.sin_addr.s_addr, he->h_addr, he->h_length);
 
-      if (bind (sockid, (struct sockaddr *) &local, sizeof (local)))
-          fatal (("bind failed "));
-      remote.sin_port =  htons((uint16_t) config.reqport);         // port for gap retrieval using TCP;
-      remote.sin_family = AF_INET;
-      strcpy ( server, config.server);
-      he = gethostbyname (server);
-      if (!he) fatal2 ("gethostbyname(%s) failed: %m", server);
-      if (he->h_addrtype != AF_INET)
-          fatal ("gethostbyname returned a non-IP address");
-      memcpy (&remote.sin_addr.s_addr, he->h_addr, he->h_length);
-
-      if (connect (sockid, (struct sockaddr *) &remote, sizeof (remote))) {
-          printf("connect failed\n");
+          if (connect (reqsockid, (struct sockaddr *) &remote, sizeof (remote))) {
+              close(reqsockid); reqsockid = -1;
+              printf("connect failed\n");
+              return NULL;
+          }
       }
-      else
-      {
-        if (send (sockid, &uc[0], 3,  MSG_CONFIRM) != 3) {
-            printf("Send TCP failed\n");
-            exit(0);
-        }
 
-        buf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
-
-        n = complete_read (sockid, (char *) buf, SCREAM_V40_LENGTH);
-
-        if (n!=SCREAM_V40_LENGTH) printf("read complete failed.....n=%d\n", n);
-
-        //if(n==4) printf("block no longer available %d\n", (uint16_t) recnr); 
-        
-        byteorder = buf[GCF_BLOCK_LEN+1];
-
-        //blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
-        //printf("got block %d  over TCP \n", (blocknr));
-
-        if ( byteorder == 2 ) {
-             //printf("TCP swap buffer\n"); 
-             gcf_byte_swap ( buf );
-        }
-
-        //printf("got block %d  over TCP \n", (blocknr));
-
+      if (send (reqsockid, &uc[0], 3,  MSG_CONFIRM) != 3) {
+          printf("Send TCP failed\n");
+          close(reqsockid); reqsockid = -1;
+          return NULL;
       }
-      close(sockid);
+
+      buf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
+
+      n = complete_read (reqsockid, (char *) buf, SCREAM_V40_LENGTH);
+
+      if (n!=SCREAM_V40_LENGTH) printf("read complete failed.....n=%d\n", n);
+
+      //if(n==4) printf("block no longer available %d\n", (uint16_t) recnr);
+
+      byteorder = buf[GCF_BLOCK_LEN+1];
+
+      //blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
+      //printf("got block %d  over TCP \n", (blocknr));
+
+      if ( byteorder == 2 ) {
+          //printf("TCP swap buffer\n");
+          gcf_byte_swap ( buf );
+      }
+
+      //printf("got block %d  over TCP \n", (blocknr));
 
       return ( (uint8_t *) buf );
                           

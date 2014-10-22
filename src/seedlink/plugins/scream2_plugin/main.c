@@ -82,6 +82,7 @@ pthread_mutex_t      mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int                  wptr;
 int                  optrr;
 int                  wcflag;
+int                  dropflag = 0;
 
 
 
@@ -106,6 +107,11 @@ void my_exit (int sig) {
            case SIGTERM:
                 printf("\nSIGTERM - Termination request made to the program.\n");
                 break;
+           case SIGUSR1:
+                printf("\nSIGUSR1 - Toggle packet loss.\n");
+                dropflag = 1-dropflag;
+                return;
+
         }
         fflush (stdout);
         fflush (stderr);
@@ -135,6 +141,7 @@ main (int argc, char **argv)
   (void) signal(SIGINT, my_exit);
   (void) signal(SIGSEGV, my_exit);
   (void) signal(SIGTERM, my_exit);
+  (void) signal(SIGUSR1, my_exit);
 
   RSIZE = -1;
 
@@ -251,14 +258,23 @@ void *listen_to_scream (void *in)             // thread
      // initialize UDP connection to receive UDP packets from SCREAM
 
 
-     scream_init_socket (config.protocol, config.server, config.port);
+     if ( scream_init_socket (config.protocol, config.server, config.port) )
+         fatal("uncrecoverable error");
 
      gcfbuf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
 
      for (;;)
      {
-         scream_receive (&thisblocknr, gcfbuf, sizeof(uint8_t) * SCREAM_MAX_LENGTH);
+         while ( scream_receive (&thisblocknr, gcfbuf, sizeof(uint8_t) * SCREAM_MAX_LENGTH) ) {
+             /* Receive failed, sleep a second and reconnect */
+             sleep(1);
+             while ( scream_init_socket (config.protocol, config.server, config.port) ) {
+                 sleep(1);
+             }
+         }
+
          if(DEBUG==1)printf("got record %d\n", thisblocknr);
+
                // now throw the data packet into the central ring buffer
                // ----- lock variables
                do {} while ( (np=pthread_mutex_trylock(&mutex1 )) != 0 );
@@ -343,7 +359,7 @@ void *distribute_forever (void *in)             // thread
                   fatal (("Unknown version of scream protocol at remote end"));
                   break;
             }
-            if (DEBUG==1) printf("Got UDP blocknr = %d\n", blocknr);
+            if(DEBUG==1) printf("Got blocknr = %d\n", blocknr);
 
             thisblocknr = blocknr;
 
@@ -369,10 +385,33 @@ void *distribute_forever (void *in)             // thread
 */
                    for ( i=previousblocknr+1; i<thisblocknr; i++ ) {
 
-                         printf("%c[%d;%dm  Block %d is missing and requested now by TCP %c[%d;%dm\n", 27,7,31, i, 27,0,30);
-                         req_gcfbuf = (uint8_t *) request_block_tcp_mode ( (uint16_t) i);
+                         printf("  Block %d is missing and requested now by TCP\n", i);
+                         while ( 1 ) {
+                             req_gcfbuf = (uint8_t *) request_block_tcp_mode ( (uint16_t) i);
+                             if ( req_gcfbuf != NULL ) break;
+                             /* Connection failed, sleep a second and try again */
+                             sleep(1);
+                         }
 
-                         // byte-order has been checked and applied if needed in 'request_block_tcp_mode' 
+                         /* byte-order has been checked and applied if needed in 'request_block_tcp_mode'  */
+
+                         switch (gcfbuf[GCF_BLOCK_LEN])
+                         {
+                         case 31:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+34]*256 + req_gcfbuf[GCF_BLOCK_LEN+35];
+                               break;
+                         case 40:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+2]*256 + req_gcfbuf[GCF_BLOCK_LEN+3];
+                               break;
+                         case 45:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+2]*256 + req_gcfbuf[GCF_BLOCK_LEN+3];
+                               break;
+                         default:
+                               fprintf(stderr, "Scream version ID = %d\n", req_gcfbuf[GCF_BLOCK_LEN]);
+                               fatal (("Unknown version of scream protocol at remote end"));
+                               break;
+                         }
+                         if(DEBUG==1) printf("Got blocknr* = %d\n", blocknr);
 
                          gcf_dispatch ((uint8_t *) req_gcfbuf, SCREAM_V40_LENGTH);
                          usleep(1);

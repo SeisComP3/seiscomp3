@@ -46,6 +46,7 @@
 
 extern char *dumpfile;
 extern int DEBUG;
+extern int dropflag;
 
 static int sockfd = -1;
 static int protocol;
@@ -54,8 +55,7 @@ static int protocol;
 /* For SCM_PROTO_UDP, server is ignored, port is the */
 /*   local port to listen on */
 
-void
-scream_init_socket (int _protocol, char *server, int port)
+int scream_init_socket (int _protocol, char *server, int port)
 {
     struct sockaddr_in local, remote;
     struct hostent *he;
@@ -66,15 +66,12 @@ scream_init_socket (int _protocol, char *server, int port)
     switch (_protocol)
     {
       case SCM_PROTO_TCP:
+        if ( dropflag ) {
+          printf("connect failed\n");
+          return 1;
+        }
 
         sockfd = socket (PF_INET, SOCK_STREAM, 0);
-
-        local.sin_family = AF_INET;
-        local.sin_port = 0;
-        local.sin_addr.s_addr = INADDR_ANY;
-
-        if (bind (sockfd, (struct sockaddr *) &local, sizeof (local)))
-            fatal ("bind failed: %m");
 
         remote.sin_family = AF_INET;
         remote.sin_port = htons (port);
@@ -91,6 +88,7 @@ scream_init_socket (int _protocol, char *server, int port)
 
         if (connect (sockfd, (struct sockaddr *) &remote, sizeof (remote))) {
             printf("connect failed\n");
+            return 1;
         }
         else
         {
@@ -98,10 +96,13 @@ scream_init_socket (int _protocol, char *server, int port)
           printf("send SCREAM_CMD_START_XMIT\n");
 
           if (send (sockfd, &cmd, 1,  MSG_CONFIRM) != 1)
-             fatal ("write to socket failed: %m");
-
+          {
+             printf("write to socket failed: %m");
+             close(sockfd);
+             sockfd = -1;
+             return 1;
+          }
         }
-
 
         break;
 
@@ -134,9 +135,11 @@ scream_init_socket (int _protocol, char *server, int port)
         fatal (("Unknown protocol"));
         break;
       }
+
+    return 0;
 }
 
-void scream_receive (int *thisblocknr, uint8_t *buf, int buflen)
+int scream_receive (int *thisblocknr, uint8_t *buf, int buflen)
 {
     int     n, blocknr;
     FILE    *fd;
@@ -187,24 +190,42 @@ void scream_receive (int *thisblocknr, uint8_t *buf, int buflen)
             break;
 
         case SCM_PROTO_TCP:
-            if (complete_read(sockfd, (char *) buf, SCREAM_INITIAL_LEN) != SCREAM_INITIAL_LEN)
-                fatal (("read failed---------"));
+            if (dropflag) {
+                 printf("read failed, closing connection\n");
+                 close(sockfd); sockfd = -1;
+                 return 1;
+            }
+
+            if (complete_read(sockfd, (char *) buf, SCREAM_INITIAL_LEN) != SCREAM_INITIAL_LEN) {
+                printf("read failed, closing connection\n");
+                close(sockfd); sockfd = -1;
+                return 1;
+            }
 
             switch (buf[GCF_BLOCK_LEN])
             {
                 case 31:
-                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V31_SUBSEQUENT) != SCREAM_V31_SUBSEQUENT)
-                        fatal (("read failed: %m"));
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V31_SUBSEQUENT) != SCREAM_V31_SUBSEQUENT) {
+                        printf("read failed: %m\n");
+                        close(sockfd); sockfd = -1;
+                        return 1;
+                    }
                     blocknr = buf[GCF_BLOCK_LEN+34]*256 + buf[GCF_BLOCK_LEN+35];
                     break;
                 case 40:
-                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V40_SUBSEQUENT) != SCREAM_V40_SUBSEQUENT)
-                        fatal (("read failed: %m"));
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V40_SUBSEQUENT) != SCREAM_V40_SUBSEQUENT) {
+                        printf("read failed: %m\n");
+                        close(sockfd); sockfd = -1;
+                        return 1;
+                    }
                     blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
                     break;
                 case 45:
-                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V45_SUBSEQUENT) != SCREAM_V45_SUBSEQUENT)
-                        fatal (("read failed: %m"));
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V45_SUBSEQUENT) != SCREAM_V45_SUBSEQUENT) {
+                        printf("read failed: %m\n");
+                        close(sockfd); sockfd = -1;
+                        return 1;
+                    }
                     blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
                     break;
                 default:
@@ -218,6 +239,6 @@ void scream_receive (int *thisblocknr, uint8_t *buf, int buflen)
             break;
     }
 
-    return;
+    return 0;
 
 }
