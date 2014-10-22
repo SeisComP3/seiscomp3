@@ -20,7 +20,7 @@
  *
  */
 
-static char rcsid[] = "$Id: gputil.c 2 2005-07-26 19:28:46Z andres $";
+/*static char rcsid[] = "$Id: gputil.c 2 2005-07-26 19:28:46Z andres $";*/
 
 /*
  * $Log$

@@ -20,7 +20,7 @@
  *
  */
 
-//static char rcsid[] = "$Id: scream.c 1364 2008-10-24 18:42:33Z andres $";
+/* static char rcsid[] = "$Id: scream.c 1364 2008-10-24 18:42:33Z andres $"; */
 
 /*
  * $Log$
@@ -42,89 +42,181 @@
 #include "project.h"
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 
 extern char *dumpfile;
 extern int DEBUG;
 
 static int sockfd = -1;
-//static int socktcp = -1;
-//static int protocol;
+static int protocol;
 
 
 /* For SCM_PROTO_UDP, server is ignored, port is the */
 /*   local port to listen on */
 
 void
-scream_init_socket (char *server, int port)
+scream_init_socket (int _protocol, char *server, int port)
 {
-  //struct sockaddr_in local, remote;
-  struct sockaddr_in local;
+    struct sockaddr_in local, remote;
+    struct hostent *he;
+    uint8_t cmd;
 
- sockfd = socket (PF_INET, SOCK_DGRAM, 0);
+    protocol = _protocol;
 
- /*For the UDP binding we want to be able to rebind to this listening port */
+    switch (_protocol)
+    {
+      case SCM_PROTO_TCP:
 
-  int on = 1;
+        sockfd = socket (PF_INET, SOCK_STREAM, 0);
 
-  //if (setsockopt (sockfd, SOCK_STREAM, SO_REUSEADDR, (void *) &on, sizeof (on)))
-  if (setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, (void *) &on, sizeof (on)))
-        warning (("Error setting SO_REUSEADDR: %m"));
+        local.sin_family = AF_INET;
+        local.sin_port = 0;
+        local.sin_addr.s_addr = INADDR_ANY;
 
- local.sin_family      = AF_INET;
- local.sin_port        = htons (port);
- local.sin_addr.s_addr = INADDR_ANY;
+        if (bind (sockfd, (struct sockaddr *) &local, sizeof (local)))
+            fatal ("bind failed: %m");
 
- if (bind (sockfd, (struct sockaddr *) &local, sizeof (local))) {
-    printf("Bind a socket to port %d  failed in scream.c\n", port);
-    exit(0);
- }
+        remote.sin_family = AF_INET;
+        remote.sin_port = htons (port);
+
+        he = gethostbyname (server);
+
+        if (!he)
+            fatal2 ("gethostbyname(%s) failed: %m", server);
+
+        if (he->h_addrtype != AF_INET)
+            fatal ("gethostbyname returned a non-IP address");
+
+        memcpy (&remote.sin_addr.s_addr, he->h_addr, he->h_length);
+
+        if (connect (sockfd, (struct sockaddr *) &remote, sizeof (remote))) {
+            printf("connect failed\n");
+        }
+        else
+        {
+          cmd = SCREAM_CMD_START_XMIT;
+          printf("send SCREAM_CMD_START_XMIT\n");
+
+          if (send (sockfd, &cmd, 1,  MSG_CONFIRM) != 1)
+             fatal ("write to socket failed: %m");
+
+        }
+
+
+        break;
+
+      case SCM_PROTO_UDP:
+
+        sockfd = socket (PF_INET, SOCK_DGRAM, 0);
+
+        /*For the UDP binding we want to be able to rebind to this listening port */
+
+        {
+          int on = 1;
+
+          if (setsockopt (sockfd, SOL_SOCKET, SO_REUSEADDR, (void *) &on, sizeof (on)))
+
+              warning (("Error setting SO_REUSEADDR: %m"));
+        }
+
+        local.sin_family = AF_INET;
+        local.sin_port = htons (port);
+        local.sin_addr.s_addr = INADDR_ANY;
+
+        if (bind (sockfd, (struct sockaddr *) &local, sizeof (local))) {
+            printf("Bind a socket to port %d  failed in scream.c\n", port);
+            exit(0);
+        }
+
+        break;
+
+      default:
+        fatal (("Unknown protocol"));
+        break;
+      }
 }
 
-void scream_receive (int *thisblocknr, uint8_t *buf)
+void scream_receive (int *thisblocknr, uint8_t *buf, int buflen)
 {
     int     n, blocknr;
     FILE    *fd;
 
-    memset(buf,0,sizeof(buf));
-
-    // try to get 1077 bytes here 
-
-    n = read ( sockfd, buf, SCREAM_MAX_LENGTH);
-    if ( n < 0 )
-        fatal (("recv failed - no UDP connection ?"));
-
-
-    //  useful for writing the raw GCF records to file
-    if ( dumpfile != NULL ) {
-       fd = (FILE *) fopen (dumpfile, "a");
-       if ( fd != NULL ) {
-            fwrite (buf, 1, 1077, fd);
-            fclose (fd);
-       }
-    }
-
-    if (DEBUG==1) printf("version = %d   GCF_BLOCK_LEN=%d  \n", 
-            buf[GCF_BLOCK_LEN], GCF_BLOCK_LEN);
-
-    switch (buf[GCF_BLOCK_LEN])
+    switch (protocol)
     {
-            case 31:
-                  blocknr = buf[GCF_BLOCK_LEN+34]*256 + buf[GCF_BLOCK_LEN+35];
-                  break;
-            case 40:
-                  blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
-                  break;
-            case 45:
-                  blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
-                  break;	          
-            default:
-                  fprintf(stderr, "Scream version ID = %d\n", buf[GCF_BLOCK_LEN]);
-                  fatal (("Unknown version of scream protocol at remote end"));
-                  break;
-    }
-    if(DEBUG==1) printf("Got UDP blocknr = %d\n", blocknr);
+        case SCM_PROTO_UDP:
+            memset(buf,0,buflen);
 
-    *thisblocknr = blocknr;
+            /* try to get 1077 bytes here */
+
+            n = read ( sockfd, buf, buflen);
+            if ( n < 0 )
+                fatal (("recv failed - no UDP connection ?"));
+
+            /*  useful for writing the raw GCF records to file */
+            if ( dumpfile != NULL ) {
+               fd = (FILE *) fopen (dumpfile, "a");
+               if ( fd != NULL ) {
+                    fwrite (buf, 1, 1077, fd);
+                    fclose (fd);
+               }
+            }
+
+            if (DEBUG==1) printf("version = %d   GCF_BLOCK_LEN=%d  \n",
+                                 buf[GCF_BLOCK_LEN], GCF_BLOCK_LEN);
+
+            switch (buf[GCF_BLOCK_LEN])
+            {
+                case 31:
+                    blocknr = buf[GCF_BLOCK_LEN+34]*256 + buf[GCF_BLOCK_LEN+35];
+                    break;
+                case 40:
+                    blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
+                    break;
+                case 45:
+                    blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
+                    break;
+                default:
+                    fprintf(stderr, "Scream version ID = %d\n", buf[GCF_BLOCK_LEN]);
+                    fatal (("Unknown version of scream protocol at remote end"));
+                    break;
+            }
+
+            if(DEBUG==1) printf("Got UDP blocknr = %d\n", blocknr);
+
+            *thisblocknr = blocknr;
+            break;
+
+        case SCM_PROTO_TCP:
+            if (complete_read(sockfd, (char *) buf, SCREAM_INITIAL_LEN) != SCREAM_INITIAL_LEN)
+                fatal (("read failed---------"));
+
+            switch (buf[GCF_BLOCK_LEN])
+            {
+                case 31:
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V31_SUBSEQUENT) != SCREAM_V31_SUBSEQUENT)
+                        fatal (("read failed: %m"));
+                    blocknr = buf[GCF_BLOCK_LEN+34]*256 + buf[GCF_BLOCK_LEN+35];
+                    break;
+                case 40:
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V40_SUBSEQUENT) != SCREAM_V40_SUBSEQUENT)
+                        fatal (("read failed: %m"));
+                    blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
+                    break;
+                case 45:
+                    if (complete_read(sockfd, (char *) buf + SCREAM_INITIAL_LEN, SCREAM_V45_SUBSEQUENT) != SCREAM_V45_SUBSEQUENT)
+                        fatal (("read failed: %m"));
+                    blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
+                    break;
+                default:
+                    fatal (("Unknown version of scream protocol at remote end"));
+                    break;
+            }
+
+            if(DEBUG==1) printf("Got TCP blocknr = %d\n", blocknr);
+
+            *thisblocknr = blocknr;
+            break;
+    }
 
     return;
 

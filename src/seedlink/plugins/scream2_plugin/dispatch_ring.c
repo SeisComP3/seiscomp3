@@ -19,8 +19,9 @@
 #include "project.h"
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 
-#define MAXSTREAMS            	500        // max number of streams accepted from SCREAM
+#define MAXSTREAMS            	500        /* max number of streams accepted from SCREAM */
 
 #define G_OK          0
 #define G_TOO_LATE    1
@@ -34,7 +35,7 @@ int idum;
         char         		*stat;
         char         		*chan;
         char         		*netw;
-        int          		flag;          // 0 = gcf block follows previous block; 1 = gcf block follows a gap 
+        int          		flag;          /* 0 = gcf block follows previous block; 1 = gcf block follows a gap */
         int          		recno;
         int                     samples;
         int                     sample_rate;
@@ -59,6 +60,12 @@ int        RINGBUFFER_LENGTH;  	// container for GCF blocks; the larger this num
 extern double get_dtime (void);
 
 time_t epochtime (int year, int mon, int day, int hour, int min, int sec);
+void init_stackp (int chid);
+void add_to_stack (struct gcf_block_struct *b, int chid, Map *mp, int recno, int flag);
+void sort_stack (int chid);
+void set_stack_flag (int chid);
+
+void gcf_byte_swap(uint8_t* buf);
 
 int debug;
 
@@ -230,7 +237,7 @@ void dispatch (struct gcf_block_struct *b, int recno)
 
 }
 
-init_stackp (int chid)
+void init_stackp (int chid)
 {
     int i;
 
@@ -255,7 +262,7 @@ init_stackp (int chid)
 
 
 
-fifo_ring (int chid)
+void fifo_ring (int chid)
 {
     int i;
     char buffer[100];
@@ -286,9 +293,9 @@ fifo_ring (int chid)
    s_index[chid] = s_index[chid] -1;
 }
 
-add_to_stack (struct gcf_block_struct *b, int chid, Map *mp, int recno, int flag)
+void add_to_stack (struct gcf_block_struct *b, int chid, Map *mp, int recno, int flag)
 {
-   int index, i, j, cnt;
+   int index, i, j;
    char tbuf[100], tbuf2[100];
 
    //list_stack (0,chid);
@@ -348,30 +355,29 @@ add_to_stack (struct gcf_block_struct *b, int chid, Map *mp, int recno, int flag
 
 }
 
-sort_on_begtime ( el1, el2 )
-GCF_STACK **el1, **el2;
-//GCF_STACK *el1, *el2;
+int sort_on_begtime ( const void *p1, const void *p2 )
 {
+    const GCF_STACK **el1 = (const GCF_STACK **)p1;
+    const GCF_STACK **el2 = (const GCF_STACK **)p2;
 /*
 printf("in sort time ============================================  %ld  %ld  %d  %d   + %d %d\n", 
               el1->epochstart, el2->epochstart, el1->recno, el2->recno, el1->idum, el2->idum);
 */
-     //if ( el1->idum <  el2->idum ) return (-1);
-     //if ( el1->idum == el2->idum ) return (0);
-     //if ( el1->idum >  el2->idum ) return (1);
-     if ( (*el1)->epochstart <  (*el2)->epochstart ) return (-1);
-     if ( (*el1)->epochstart == (*el2)->epochstart ) return (0);
-     if ( (*el1)->epochstart >  (*el2)->epochstart ) return (1);
-     else return(0);
+    //if ( el1->idum <  el2->idum ) return (-1);
+    //if ( el1->idum == el2->idum ) return (0);
+    //if ( el1->idum >  el2->idum ) return (1);
+    if ( (*el1)->epochstart <  (*el2)->epochstart ) return (-1);
+    if ( (*el1)->epochstart == (*el2)->epochstart ) return (0);
+    if ( (*el1)->epochstart >  (*el2)->epochstart ) return (1);
+    else return(0);
 }
 
-printf_gcf (GCF_STACK *el)
+void printf_gcf (GCF_STACK *el)
 {
 printf("recno = %d  epoch = %ld  sta=%s  cha=%s  flag=%d  ns=%d  sr=%d idu=%d\n", el->recno, el->epochstart, el->stat, el->chan, el->flag, el->samples, el->sample_rate, el->idum);
 }
 
-sort_stack (chid)
-int chid;
+void sort_stack (int chid)
 {
     // sort stack based on start-time
     int ns;
@@ -383,7 +389,7 @@ int chid;
     //for(i=0;i<ns;i++) printf_gcf (stackpp[chid][i]);
 }
 
-print_stack (int chid,  int index)
+void print_stack (int chid,  int index)
 {
     char buffer[70];
     char buffer2[70];
@@ -394,10 +400,9 @@ print_stack (int chid,  int index)
     strftime(buffer2,50,"%T",localtime(&stackpp[chid][index]->epochend));
 
     printf("stack[%d] = %ld  %s %s ns=%d\n",  index, stackpp[chid][index]->epochstart, buffer, buffer2, stackpp[chid][index]->samples );
-
 }
 
-list_stack (int id,  int chid)
+void list_stack (int id,  int chid)
 {
     int i;
     char buffer[70];
@@ -466,7 +471,7 @@ check_stack (int chid )
 }
 */
 
-set_stack_flag (int chid)
+void set_stack_flag (int chid)
 {
 
     int i;
@@ -523,7 +528,7 @@ time_t epochtime (int year, int mon, int day, int hour, int min, int sec)
 uint8_t *request_block_tcp_mode ( uint16_t recnr)
 {
       int sockid, byteorder;
-      int blocknr, n;
+      int n;
       //struct sockaddr_in sin;
       struct sockaddr_in local, remote;
       struct hostent *he;
@@ -539,7 +544,7 @@ uint8_t *request_block_tcp_mode ( uint16_t recnr)
       //printf("request for recnr:  %d  %x\n", recnr, recnr);
       uc[0]  = (uint8_t) SCREAM_CMD_RESEND;
       hrecnr = htons(recnr);
-      up     = &hrecnr;
+      up     = (unsigned char *)&hrecnr;
       uc[1]  = *up;
       uc[2]  = *(up+1);
 
@@ -555,9 +560,9 @@ uint8_t *request_block_tcp_mode ( uint16_t recnr)
       remote.sin_family = AF_INET;
       strcpy ( server, config.server);
       he = gethostbyname (server);
-      if (!he) fatal (("gethostbyname(%s) failed: %m", server));
+      if (!he) fatal2 ("gethostbyname(%s) failed: %m", server);
       if (he->h_addrtype != AF_INET)
-          fatal (("gethostbyname returned a non-IP address"));
+          fatal ("gethostbyname returned a non-IP address");
       memcpy (&remote.sin_addr.s_addr, he->h_addr, he->h_length);
 
       if (connect (sockid, (struct sockaddr *) &remote, sizeof (remote))) {
@@ -572,7 +577,7 @@ uint8_t *request_block_tcp_mode ( uint16_t recnr)
 
         buf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
 
-        n = complete_read (sockid, (uint8_t *) buf, SCREAM_V40_LENGTH);
+        n = complete_read (sockid, (char *) buf, SCREAM_V40_LENGTH);
 
         if (n!=SCREAM_V40_LENGTH) printf("read complete failed.....n=%d\n", n);
 
@@ -587,8 +592,6 @@ uint8_t *request_block_tcp_mode ( uint16_t recnr)
              //printf("TCP swap buffer\n"); 
              gcf_byte_swap ( buf );
         }
-
-        blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
 
         //printf("got block %d  over TCP \n", (blocknr));
 
