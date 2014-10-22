@@ -136,6 +136,7 @@ struct EventTypeFormatter : Formatter {
 			      v == EEventTypeNames::name(DUPLICATE) ) {
 			SEISCOMP_WARNING("mapping unsupported EventType '%s' to 'other'",
 			                 v.c_str());
+			v = EEventTypeNames::name(OTHER_EVENT);
 		}
 	}
 };

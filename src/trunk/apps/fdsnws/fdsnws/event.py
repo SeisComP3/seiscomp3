@@ -204,6 +204,15 @@ class FDSNEvent(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
+	def __init__(self, hideAuthor = False, evaluationMode = None,
+	             eventTypeWhitelist = None, eventTypeBlacklist = None):
+		self._hideAuthor = hideAuthor
+		self._evaluationMode = evaluationMode
+		self._eventTypeWhitelist = eventTypeWhitelist
+		self._eventTypeBlacklist = eventTypeBlacklist
+
+
+	#---------------------------------------------------------------------------
 	def render_GET(self, req):
 		# Parse and validate GET parameters
 		ro = _EventRequestOptions(req.args)
@@ -251,11 +260,30 @@ class FDSNEvent(resource.Resource):
 
 
 	#---------------------------------------------------------------------------
+	def _removeAuthor(self, obj):
+		try:
+			ci = obj.creationInfo()
+			ci.setAuthor("")
+			ci.setAuthorURI("")
+		except ValueException: pass
+
+
+	#---------------------------------------------------------------------------
+	def _loadComments(self, dbq, obj):
+		cnt = dbq.loadComments(e)
+		if self._hideAuthor:
+			for iComment in xrange(cnt):
+				self._removeAuthor(obj.comment(iComment))
+		return cnt
+
+
+	#---------------------------------------------------------------------------
 	def _processRequestExp(self, req, ro, dbq, exp, ep):
 		objCount = ep.eventCount()
 		maxObj = Application.Instance()._queryObjects
 
-		if not HTTP.checkObjects(req, objCount, maxObj): return False
+		if not HTTP.checkObjects(req, objCount, maxObj):
+			return False
 
 		pickIDs = set()
 		if ro.picks is None:
@@ -263,14 +291,18 @@ class FDSNEvent(resource.Resource):
 
 		# add related information
 		for iEvent in xrange(ep.eventCount()):
-			if req._disconnected: return False
+			if req._disconnected:
+				return False
 			e = ep.event(iEvent)
+			if self._hideAuthor:
+				self._removeAuthor(e)
 
 			# eventDescriptions and comments
 			objCount += dbq.loadEventDescriptions(e)
 			if ro.comments:
-				objCount += dbq.loadComments(e)
-			if not HTTP.checkObjects(req, objCount, maxObj): return False
+				objCount += self._loadComment(dbq, e)
+			if not HTTP.checkObjects(req, objCount, maxObj):
+				return False
 
 			# origin references: either all or preferred only
 			dbIter = dbq.getObjects(e, DataModel.OriginReference.TypeInfo())
@@ -283,13 +315,20 @@ class FDSNEvent(resource.Resource):
 				elif oRef.originID() == e.preferredOriginID():
 					e.add(oRef)
 					dbIter.close()
+				# TODO: if focal mechanisms are added make sure derived
+				# origin is loaded
+
 			objCount += e.originReferenceCount()
-			# TODO: load FocalMechanismReferences???
-			if not HTTP.checkObjects(req, objCount, maxObj): return False
+
+			if not HTTP.checkObjects(req, objCount, maxObj):
+				return False
+
+			# TODO: add focal mechanisms
 
 			# origins
 			for iORef in xrange(e.originReferenceCount()):
-				if req._disconnected: return False
+				if req._disconnected:
+					return False
 				oID = e.originReference(iORef).originID()
 				obj = dbq.getObject(DataModel.Origin.TypeInfo(), oID)
 				o = DataModel.Origin.Cast(obj)
@@ -298,11 +337,14 @@ class FDSNEvent(resource.Resource):
 
 				ep.add(o)
 				objCount += 1
+				if self._hideAuthor:
+					self._removeAuthor(o)
 
 				# comments
 				if ro.comments:
-					objCount += dbq.loadComments(o)
-				if not HTTP.checkObjects(req, objCount, maxObj): return False
+					objCount += self._loadComments(dbq, o)
+				if not HTTP.checkObjects(req, objCount, maxObj):
+					return False
 
 				# magnitudes
 				dbIter = dbq.getObjects(oID, DataModel.Magnitude.TypeInfo())
@@ -315,32 +357,52 @@ class FDSNEvent(resource.Resource):
 					elif mag.publicID() == e.preferredMagnitudeID():
 						o.add(mag)
 						dbIter.close()
+
+					if self._hideAuthor:
+						self._removeAuthor(mag)
+
 				objCount += o.magnitudeCount()
 				if ro.comments:
 					for iMag in xrange(o.magnitudeCount()):
-						objCount += dbq.loadComments(o.magnitude(iMag))
-				if not HTTP.checkObjects(req, objCount, maxObj): return False
+						objCount += self._loadComments(dbq, o.magnitude(iMag))
+				if not HTTP.checkObjects(req, objCount, maxObj):
+					return False
+
+				# TODO station magnitudes, amplitudes
+				# - added pick id for each pick referenced by amplitude
 
 				# arrivals
 				if ro.arrivals:
 					objCount += dbq.loadArrivals(o)
+					if self._removeAuthor:
+						for iArrival in xrange(o.arrivalCount()):
+							self._removeAuthor(o.arrival(iArrival))
 
 					# collect pick IDs if requested
 					if ro.picks:
 						for iArrival in xrange(o.arrivalCount()):
 							pickIDs.add(o.arrival(iArrival).pickID())
 
-				if not HTTP.checkObjects(req, objCount, maxObj): return False
+				if not HTTP.checkObjects(req, objCount, maxObj):
+					return False
 
 		# picks
 		if pickIDs:
 			objCount += len(pickIDs)
-			if not HTTP.checkObjects(req, objCount, maxObj): return False
+			if not HTTP.checkObjects(req, objCount, maxObj):
+				return False
+
 			for pickID in pickIDs:
 				obj = dbq.getObject(DataModel.Pick.TypeInfo(), pickID)
 				pick = DataModel.Pick.Cast(obj)
 				if pick is not None:
+					if self._hideAuthor:
+						self._removeAuthor(pick)
+					if ro.comments:
+						objCount += self._loadComments(dbq, pick)
 					ep.add(pick)
+				if not HTTP.checkObjects(req, objCount, maxObj):
+					return False
 
 		# write response
 		sink = utils.Sink(req)
@@ -439,10 +501,32 @@ class FDSNEvent(resource.Resource):
 		ep = DataModel.EventParameters()
 		if ro.eventIDs:
 			for eID in ro.eventIDs:
-				event = dbq.getEventByPublicID(eID)
-				event = DataModel.Event.Cast(event)
-				if event:
-					ep.add(event)
+				obj = dbq.getEventByPublicID(eID)
+				e = DataModel.Event.Cast(obj)
+				if not e:
+					continue
+
+				if self._eventTypeWhitelist or self._eventTypeBlacklist:
+					eType = None
+					try: eType = DataModel.EEventTypeNames_name(e.type())
+					except ValueException: pass
+					if self._eventTypeWhitelist and \
+					   not eType in self._eventTypeWhitelist: continue
+					if self._eventTypeBlacklist and \
+					   eType in self._eventTypeBlacklist: continue
+
+				if self._evaluationMode is not None:
+					obj = dbq.getObject(DataModel.Origin.TypeInfo(),
+					                    e.preferredOriginID())
+					o = DataModel.Origin.Cast(obj)
+					try:
+						if o is None or \
+						   o.evaluationMode() != self._evaluationMode:
+							continue
+					except ValueException:
+						continue
+
+				ep.add(e)
 		else:
 			self._findEvents(ep, ro, dbq)
 
@@ -511,6 +595,13 @@ class FDSNEvent(resource.Resource):
 		q += " WHERE e._oid = pe._oid"
 
 		# event information filter
+		if self._eventTypeWhitelist:
+			q += " AND e.%s IN ('%s')" % (
+			     _T('type'), "', '".join(self._eventTypeWhitelist))
+		if self._eventTypeBlacklist:
+			q += " AND (e.%s IS NULL OR e.%s NOT IN ('%s'))" % (
+			     _T('type'), _T('type'),
+			     "', '".join(self._eventTypeBlacklist))
 		if ro.contributors:
 			q += " AND e.%s AND upper(e.%s) IN('%s')" % (
 			     _T('creationinfo_used'), _T('creationinfo_agencyid'),
@@ -520,13 +611,19 @@ class FDSNEvent(resource.Resource):
 		q += " AND o._oid = po._oid AND po.%s = e.%s" % (
 		       colPID, _T('preferredOriginID'))
 
+		# evaluation mode config parameter
+		if self._evaluationMode is not None:
+			colEvalMode = _T('evaluationMode')
+			q += " AND o.%s = '%s'" % ( colEvalMode,
+			     DataModel.EEvaluationModeNames.name(self._evaluationMode))
+
 		# time
 		if ro.time:
 			colTimeMS = _T('time_value_ms')
 			if ro.time.start is not None:
 				t = _time(ro.time.start)
 				ms = ro.time.start.microseconds()
-				q += " AND (o.%s > '%s' OR (o.%s = '%s' AND o.%s >= %i)) " % (
+				q += " AND (o.%s > '%s' OR (o.%s = '%s' AND o.%s >= %i))" % (
 				     colTime, t, colTime, t, colTimeMS, ms)
 			if ro.time.end is not None:
 				t = _time(ro.time.end)
