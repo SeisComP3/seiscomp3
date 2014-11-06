@@ -91,8 +91,12 @@
 						Sets the drawing of grid lines in the plot.
 					</description>
 				</parameter>
-				<parameter name="computeMissingTakeOffAngles" type="boolean" default="false">
+				<parameter name="computeMissingTakeOffAngles" type="boolean" default="true">
 					<description>
+						If a locator does not populate the take off angle in its arrivals
+						the first motion plot will not show picked polarities. This option
+						defines whether to compute take off angles that are not present
+						in the arrivals or not.
 					</description>
 				</parameter>
 				<parameter name="defaultAddStationsDistance" type="double" unit="deg" default="15">

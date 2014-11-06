@@ -232,7 +232,7 @@ MainFrame::MainFrame(){
 	catch ( ... ) { locatorConfig.drawGridLines = true; }
 
 	try { locatorConfig.computeMissingTakeOffAngles = SCApp->configGetBool("olv.computeMissingTakeOffAngles"); }
-	catch ( ... ) { locatorConfig.computeMissingTakeOffAngles = false; }
+	catch ( ... ) { locatorConfig.computeMissingTakeOffAngles = true; }
 
 	try { locatorConfig.defaultEventRadius = SCApp->configGetDouble("olv.map.event.defaultRadius"); }
 	catch ( ... ) {}
