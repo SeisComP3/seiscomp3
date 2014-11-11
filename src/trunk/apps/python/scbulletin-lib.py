@@ -141,7 +141,7 @@ class Bulletin(object):
             txt += "\n"
             preferredMagnitudeID = evt.preferredMagnitudeID()
         else:
-            preferredMagnitudeID = None
+            preferredMagnitudeID = ""
 
         tim = org.time().value()
         lat = org.latitude().value()
@@ -266,9 +266,9 @@ class Bulletin(object):
                     (typ, val, err, mag.stationCount(), preferredMarker, agencyID)
 
         if not foundPrefMag and preferredMagnitudeID != "":
-            mag = seiscomp3.DataModel.Magnitude.Find(evt.preferredMagnitudeID())
+            mag = seiscomp3.DataModel.Magnitude.Find(preferredMagnitudeID)
             if mag is None and self._dbq:
-                o = self._dbq.loadObject(seiscomp3.DataModel.Magnitude.TypeInfo(), evt.preferredMagnitudeID())
+                o = self._dbq.loadObject(seiscomp3.DataModel.Magnitude.TypeInfo(), preferredMagnitudeID)
                 mag = seiscomp3.DataModel.Magnitude.Cast(o)
 
             if mag:
@@ -425,12 +425,15 @@ class Bulletin(object):
         evt = self._evt
         if not evt and self._dbq:
             evt = self._dbq.getEvent(org.publicID())
-        if not evt:
-            return ""
-        evid = evt.publicID()
-        pos = evid.find("#") # XXX Hack!!!
-        if pos != -1:
-            evid = evid[:pos]
+        if evt:
+            evid = evt.publicID()
+            pos = evid.find("#") # XXX Hack!!!
+            if pos != -1:
+                evid = evid[:pos]
+            prefMagID = evt.preferredMagnitudeID()
+        else:
+            evid = "..."
+            prefMagID = ""
 
         txt = ""
 
@@ -461,17 +464,17 @@ class Bulletin(object):
         nmag = org.magnitudeCount()
         for i in xrange( org.magnitudeCount() ):
             mag = org.magnitude(i)
-            if mag.publicID() == evt.preferredMagnitudeID():
+            if mag.publicID() == prefMagID:
                 if mag.type() in ["mb","mB","Mwp","ML","MLv", "Mjma"]:
                     tmp["mtyp"] = mag.type()
                 tmp["mval"] = mag.magnitude().value()
                 foundMag = True
                 break;
 
-        if not foundMag and evt.preferredMagnitudeID() != "":
-            mag = seiscomp3.DataModel.Magnitude.Find(evt.preferredMagnitudeID())
+        if not foundMag and prefMagID != "":
+            mag = seiscomp3.DataModel.Magnitude.Find(prefMagID)
             if mag is None and self._dbq:
-                o = self._dbq.loadObject(seiscomp3.DataModel.Magnitude.TypeInfo(), evt.preferredMagnitudeID())
+                o = self._dbq.loadObject(seiscomp3.DataModel.Magnitude.TypeInfo(), prefMagID)
                 mag = seiscomp3.DataModel.Magnitude.Cast(o)
 
             if mag :
@@ -751,13 +754,17 @@ class BulletinApp(seiscomp3.Client.Application):
                         raise TypeError, inputFile + ": no eventparameters found"
 
                     if ep.eventCount() <= 0:
-                        raise TypeError, inputFile + ": no event in eventparameters found"
+                        if ep.originCount() <= 0:
+                            raise TypeError, inputFile + ": no origin and no event in eventparameters found"
+                        else:
+                            org = ep.origin(0)
+                            txt = bulletin.printOrigin(org)
+                    else:
+                        ev = ep.event(0)
+                        if ev is None:
+                            raise TypeError, inputFile + ": invalid event"
 
-                    ev = ep.event(0)
-                    if ev is None:
-                        raise TypeError, inputFile + ": invalid event"
-
-                    txt = bulletin.printEvent(ev)
+                        txt = bulletin.printEvent(ev)
 
             except Exception, exc:
                 sys.stderr.write("ERROR: " + str(exc) + "\n")
