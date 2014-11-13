@@ -120,8 +120,9 @@ class _WaveformProducer:
 			# read first record to test if any data exists at all
 			if not rec:
 				msg = "no waveform data found"
-				self.req.write(HTTP.renderErrorPage(self.req, http.NO_CONTENT,
-				               msg, self.ro))
+				data = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
+				if data:
+					self.req.write(data)
 				self.req.unregisterProducer()
 				self.req.finish()
 				return
