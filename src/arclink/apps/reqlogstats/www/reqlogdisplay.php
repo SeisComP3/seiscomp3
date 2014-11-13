@@ -142,7 +142,8 @@ $year = substr($date,0,4);
 $month = substr($date,5,2);
 $day = substr($date,8,2);
 
-$db = new ReqLogSQ3($reqlogstats_db_dir . "/reqlogstats-$year.db");
+$db_filename = $reqlogstats_db_dir . "/reqlogstats-$year.db";
+$db = new ReqLogSQ3($db_filename);
 
 $img_base_url = "../data";
 $img1 = "$img_base_url/total-$year-$month.svg";
