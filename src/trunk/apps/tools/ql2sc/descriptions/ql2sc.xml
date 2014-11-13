@@ -67,6 +67,11 @@
 							<description>Include only preferred origin and magnitude information</description>
 						</parameter>
 					</group>
+					<parameter name="keepAlive" type="boolean" default="false">
+						<description>
+							Request server to send keep alive messages to prevent connection reset by firewalls on long idle periods.
+						</description>
+					</parameter>
 					<parameter name="filter" type="string">
 						<description>
 							SQL like WHERE clause to filter the result set.

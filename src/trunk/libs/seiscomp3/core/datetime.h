@@ -22,6 +22,7 @@
 #endif
 #include <string>
 
+
 struct tm;
 
 namespace Seiscomp {
@@ -29,6 +30,11 @@ namespace Core {
 
 
 class SC_SYSTEM_CORE_API TimeSpan {
+	public:
+		static const double MinTime;
+		static const double MaxTime;
+
+
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------

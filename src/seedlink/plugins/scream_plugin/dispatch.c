@@ -21,7 +21,7 @@
  *
  */
 
-static char rcsid[] = "$Id: dispatch.c 1904 2009-09-30 14:08:31Z andres $";
+/*static char rcsid[] = "$Id: dispatch.c 1904 2009-09-30 14:08:31Z andres $";*/
 
 /*
  * $Log$
@@ -63,7 +63,7 @@ dispatch (gcf_block b, int recno)
   static double prevend[MAXCHAN];
   Map *mp;
 
-  //printf("Dispatch record %d\n", recno);
+  /*printf("Dispatch record %d\n", recno);*/
 /* We can't handle status information*/
 
   if (!b->sample_rate) {
@@ -93,15 +93,15 @@ dispatch (gcf_block b, int recno)
 
    if ( chid < 0 || chid >= MAXCHAN )
    {
-        //printf("Unable to handle stream %s\n", b->strid);
+        /*printf("Unable to handle stream %s\n", b->strid);*/
 	return;
    }
    
-   //printf("%d %.6s %d samples at %d Hz\n", b->estart, b->strid, b->samples, b->sample_rate);
-   //fflush(stdout);
+   /*printf("%d %.6s %d samples at %d Hz\n", b->estart, b->strid, b->samples, b->sample_rate);*/
+   /*fflush(stdout);*/
    
    if ( prevend[chid] > 0 && (b->estart - prevend[chid]) > (1.0/b->sample_rate) ) {
-        //printf("GAP detected of %lf seconds for %.6s\n", b->estart - prevend[chid], b->strid);
+        /*printf("GAP detected of %lf seconds for %.6s\n", b->estart - prevend[chid], b->strid);*/
         fflush(stdout);
    }
 

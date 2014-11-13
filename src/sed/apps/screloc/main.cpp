@@ -21,6 +21,7 @@
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/datamodel/publicobjectcache.h>
 #include <seiscomp3/seismology/locatorinterface.h>
+#include <seiscomp3/io/archive/xmlarchive.h>
 
 
 #include <iostream>
@@ -56,9 +57,11 @@ class Reloc : public Client::Application {
 		void createCommandLineDescription() {
 			commandline().addGroup("Mode");
 			commandline().addOption("Mode", "test", "test mode, do not send any message");
+			commandline().addOption("Mode", "dump", "dump processed origins as XML to stdout");
 			commandline().addGroup("Input");
 			commandline().addOption("Input", "origin-id,O", "reprocess the origin and send a message", &_originIDs);
 			commandline().addOption("Input", "locator", "the locator type to use", &_locatorType, false);
+			commandline().addOption("Input", "profile", "the locator profile to use", &_locatorProfile, false);
 		}
 
 
@@ -98,6 +101,9 @@ class Reloc : public Client::Application {
 
 			_cache.setDatabaseArchive(query());
 			_locator->init(configuration());
+
+			if ( !_locatorProfile.empty() )
+				_locator->setProfile(_locatorProfile);
 
 			return true;
 		}
@@ -286,6 +292,22 @@ class Reloc : public Client::Application {
 				ci->setAuthor(author());
 			}
 
+			if ( commandline().hasOption("dump") ) {
+				EventParametersPtr ep = new EventParameters;
+				ep->add(newOrg.get());
+
+				for ( LocatorInterface::PickList::iterator it = picks.begin();
+				      it != picks.end(); ++it ) {
+					ep->add(it->first.get());
+				}
+
+				IO::XMLArchive ar;
+				ar.setFormattedOutput(true);
+				ar.create("-");
+				ar << ep;
+				ar.close();
+			}
+
 			return newOrg;
 		}
 
@@ -320,6 +342,7 @@ class Reloc : public Client::Application {
 	private:
 		std::vector<std::string>   _originIDs;
 		std::string                _locatorType;
+		std::string                _locatorProfile;
 		bool                       _ignoreRejected;
 		bool                       _allowPreliminary;
 		LocatorInterfacePtr        _locator;

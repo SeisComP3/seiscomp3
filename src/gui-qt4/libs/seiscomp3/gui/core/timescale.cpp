@@ -23,6 +23,7 @@
 
 #include "timescale.h"
 
+#include <seiscomp3/core/exceptions.h>
 
 namespace Seiscomp {
 namespace Gui {
@@ -32,6 +33,7 @@ TimeScale::TimeScale(QWidget *parent, Qt::WindowFlags f, Position pos)
  : Ruler(parent, f, pos) {
 	_showAbsoluteValues = false;
 	_showAbsoluteDate= false;
+	setLimits(Seiscomp::Core::TimeSpan::MinTime, Seiscomp::Core::TimeSpan::MaxTime, 0.001, 315360000.0);
 }
 
 
@@ -132,24 +134,35 @@ bool TimeScale::getTickText(double pos, double lastPos,
 	if ( !_showAbsoluteValues )
 		return Ruler::getTickText(pos, lastPos, line, str);
 
+	// Fixed floating point precision error
+	pos += 0.0005;
+
 	if ( line == 0 ) {
-		Seiscomp::Core::Time time(pos);
-		if ( !time.valid() ) return false;
-		str = time.toString(_primaryTimeFormat).c_str();
-		return true;
+		try {
+			Seiscomp::Core::Time time(pos);
+			if ( !time.valid() ) return false;
+
+			str = time.toString(_primaryTimeFormat).c_str();
+			return true;
+		}
+		catch ( const Core::OverflowException&) { return false; }
+		
 	}
 
 	if ( line == 1 && _showAbsoluteDate ) {
-		Seiscomp::Core::Time time(pos);
-		if ( time.valid() ) {
-			std::string timeStr = time.toString(_secondaryTimeFormat);
-			Seiscomp::Core::Time prevTime(lastPos);
-			if ( !prevTime.valid() ||
-			     prevTime.toString(_secondaryTimeFormat) != timeStr ) {
-				str = timeStr.c_str();
-				return true;
+		try {
+			Seiscomp::Core::Time time(pos);
+			if ( time.valid() ) {
+				std::string timeStr = time.toString(_secondaryTimeFormat);
+				Seiscomp::Core::Time prevTime(lastPos);
+				if ( !prevTime.valid() ||
+				     prevTime.toString(_secondaryTimeFormat) != timeStr ) {
+					str = timeStr.c_str();
+					return true;
+				}
 			}
 		}
+		catch ( const Core::OverflowException&) { return false; }
 	}
 
 	return false;

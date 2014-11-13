@@ -23,9 +23,13 @@
 #include <seiscomp3/communication/protocol.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/datamodel/amplitude.h>
-#include <seiscomp3/datamodel/pick.h>
+#include <seiscomp3/datamodel/event.h>
+#include <seiscomp3/datamodel/eventparameters.h>
+#include <seiscomp3/datamodel/focalmechanism.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/pick.h>
+#include <seiscomp3/datamodel/reading.h>
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/logging/log.h>
 
@@ -115,6 +119,11 @@ bool Config::init() {
 		catch ( ... ) { isSet = true; }
 		if ( isSet ) cfg.options |= IO::QuakeLink::opDataPreferred;
 
+		// keep alive messages
+		try { isSet = app->configGetBool(prefix + "keepAlive"); }
+		catch ( ... ) { isSet = false; }
+		if ( isSet ) cfg.options |= Seiscomp::IO::QuakeLink::opKeepAlive;
+
 		// filter
 		try { cfg.filter = app->configGetString(prefix + "filter"); }
 		catch ( ... ) {}
@@ -141,6 +150,24 @@ bool Config::init() {
 			cfg.routingTable[DataModel::Magnitude::TypeInfo().className()] = "MAGNITUDE";
 		}
 
+		// create explicit routing entries for top-level EventParameters
+		// children
+		RoutingTable::const_iterator rit = cfg.routingTable.find(DataModel::EventParameters::TypeInfo().className());
+		if ( rit != cfg.routingTable.end() && !rit->second.empty() ) {
+			if ( cfg.routingTable[DataModel::Pick::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Pick::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Amplitude::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Amplitude::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Reading::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Reading::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Origin::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Origin::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::FocalMechanism::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::FocalMechanism::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Event::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Event::TypeInfo().className()] = rit->second;
+		}
+
 		hosts.push_back(cfg);
 
 		stringstream ss;
@@ -155,6 +182,7 @@ bool Config::init() {
 		               "    staMags   : %s\n"
 		               "    staMts    : %s\n"
 		               "    preferred : %s\n"
+		               "  keepAlive   : %s\n"
 		               "  filter      : %s\n"
 		               "  routing     : %s\n",
 		              it->c_str(),
@@ -166,6 +194,7 @@ bool Config::init() {
 		               cfg.options & IO::QuakeLink::opDataStaMags    ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataStaMts     ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataPreferred  ? "true" : "false",
+		               cfg.options & IO::QuakeLink::opKeepAlive      ? "true" : "false",
 		               cfg.filter.c_str(),
 		               ss.str().c_str());
 	}

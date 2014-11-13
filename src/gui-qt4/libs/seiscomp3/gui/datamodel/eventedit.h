@@ -27,12 +27,96 @@
 #include <seiscomp3/datamodel/journalentry.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/gui/qt4.h>
+#include <seiscomp3/gui/datamodel/originsymbol.h>
+#include <seiscomp3/gui/datamodel/tensorsymbol.h>
 #include <seiscomp3/gui/map/mapwidget.h>
 
 #include <seiscomp3/gui/datamodel/ui_eventedit.h>
 
 namespace Seiscomp {
 namespace Gui {
+
+// Extends tensor symbol by label and reference position
+class SC_GUI_API ExtTensorSymbol  : public TensorSymbol {
+	public:
+		ExtTensorSymbol(const Math::Tensor2Sd &t,
+		                const DataModel::FocalMechanism *fm,
+		                Map::Decorator* decorator = NULL);
+		~ExtTensorSymbol() {};
+
+	public:
+		void setSelected(bool selected) { _selected = selected; }
+		void setDrawAgency(bool enabled) { _drawAgency = enabled; }
+		void setDrawMagnitude(bool enabled) { _drawMagnitude = enabled; }
+		void setDrawDepth(bool enabled) { _drawDepth = enabled; }
+		void setReferencePositionEnabled(bool enabled) { _refPosEnabled = enabled; }
+		void setReferencePosition(const QPointF &refPos) { _refPos = refPos; }
+
+		const QString& agencyID() const { return _agency; }
+		const Core::Time& created() const { return _created; }
+
+	protected:
+		virtual void customDraw(const Map::Canvas *canvas, QPainter &painter);
+
+	private:
+		bool            _selected;
+		bool            _refPosEnabled;
+		QPointF         _refPos;
+
+		QString         _agency;
+		QString         _magnitude;
+		QString         _depth;
+		Core::Time      _created;
+
+		bool            _drawAgency;
+		bool            _drawMagnitude;
+		bool            _drawDepth;
+};
+
+
+
+// Adds context menu entries to control drawing of focal mechanism symbols
+class SC_GUI_API FMMap : public MapWidget {
+	Q_OBJECT
+
+	public:
+		FMMap(const MapsDesc &maps, QWidget *parent = 0, Qt::WFlags f = 0)
+		 : MapWidget(maps, parent, f) { init(); }
+		FMMap(Map::ImageTree* mapTree, QWidget *parent = 0, Qt::WFlags f = 0)
+		 : MapWidget(mapTree, parent, f) { init(); }
+
+		virtual ~FMMap();
+
+		virtual void draw(QPainter&);
+
+		void addFM(const DataModel::FocalMechanism *fm);
+		void clear();
+		void setCurrentFM(const std::string &id);
+		void setEvent(const DataModel::Event *event);
+
+
+	protected:
+		void contextMenuEvent(QContextMenuEvent *e);
+
+	private:
+		void init();
+		void updateSmartLayout();
+
+	private:
+		typedef std::map<std::string, ExtTensorSymbol*> FMSymbols;
+
+		FMSymbols                   _fmSymbols;
+		OriginSymbol               *_originSymbol;
+
+		bool                        _drawAgency;
+		bool                        _drawMagnitude;
+		bool                        _drawDepth;
+		bool                        _smartLayout;
+		bool                        _groupByAgency;
+
+		bool                        _smartLayoutDirty;
+		QRectF                      _fmBoundings;
+};
 
 
 // Derived from Observer to receive local object modifications, because
@@ -209,14 +293,14 @@ class SC_GUI_API EventEdit : public QWidget, public DataModel::Observer {
 		// focal mechanism tab
 		FMList                       _fms;
 		OriginList                   _derivedOrigins;
-		MapWidget                   *_fmMap;
-		QRectF                       _fmBoundings;
+		FMMap                       *_fmMap;
 		DataModel::FocalMechanismPtr _currentFM;
 		DataModel::MomentTensorPtr   _currentMT;
 		int                          _fixFMDefaultActionCount;
 		int                          _preferredFMIdx;
 		QStringList                  _fmTableHeader;
 		QVector<int>                 _fmColumnMap;
+		OriginSymbol                *_fmPrefOriginSymbol;
 };
 
 

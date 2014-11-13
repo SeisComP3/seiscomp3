@@ -9262,6 +9262,34 @@ SWIGINTERN PyObject *GenericArchive_swigregister(PyObject *SWIGUNUSEDPARM(self),
   return SWIG_Py_Void();
 }
 
+SWIGINTERN int Swig_var_TimeSpan_MinTime_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable TimeSpan_MinTime is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_TimeSpan_MinTime_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_From_double(static_cast< double >(Seiscomp::Core::TimeSpan::MinTime));
+  return pyobj;
+}
+
+
+SWIGINTERN int Swig_var_TimeSpan_MaxTime_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable TimeSpan_MaxTime is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_TimeSpan_MaxTime_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_From_double(static_cast< double >(Seiscomp::Core::TimeSpan::MaxTime));
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_TimeSpan__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Core::TimeSpan *result = 0 ;
@@ -35936,7 +35964,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x010400)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x010600)));
   SWIG_addvarlink(SWIG_globals(),(char*)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));
@@ -35947,6 +35975,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "GenericArchive_DB_TABLE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::DB_TABLE)));
   SWIG_Python_SetConstant(d, "GenericArchive_SPLIT_TIME",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::SPLIT_TIME)));
   SWIG_Python_SetConstant(d, "GenericArchive_INDEX_ATTRIBUTE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::INDEX_ATTRIBUTE)));
+  SWIG_addvarlink(SWIG_globals(),(char*)"TimeSpan_MinTime",Swig_var_TimeSpan_MinTime_get, Swig_var_TimeSpan_MinTime_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"TimeSpan_MaxTime",Swig_var_TimeSpan_MaxTime_get, Swig_var_TimeSpan_MaxTime_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"Time_Null",Swig_var_Time_Null_get, Swig_var_Time_Null_set);
   SWIG_Python_SetConstant(d, "Status_SEISCOMP_SUCCESS",SWIG_From_int(static_cast< int >(Seiscomp::Core::Status::SEISCOMP_SUCCESS)));
   SWIG_Python_SetConstant(d, "Status_SEISCOMP_FAILURE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Status::SEISCOMP_FAILURE)));

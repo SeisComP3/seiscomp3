@@ -91,8 +91,12 @@
 						Sets the drawing of grid lines in the plot.
 					</description>
 				</parameter>
-				<parameter name="computeMissingTakeOffAngles" type="boolean" default="false">
+				<parameter name="computeMissingTakeOffAngles" type="boolean" default="true">
 					<description>
+						If a locator does not populate the take off angle in its arrivals
+						the first motion plot will not show picked polarities. This option
+						defines whether to compute take off angles that are not present
+						in the arrivals or not.
 					</description>
 				</parameter>
 				<parameter name="defaultAddStationsDistance" type="double" unit="deg" default="15">
@@ -170,6 +174,12 @@
 						when in picking mode.
 					</description>
 				</parameter>
+				<parameter name="ignoreUnconfiguredStations" type="boolean" default="false">
+					<description>
+						If enabled the picker will not add stations that are not
+						configured with a detecStream.
+					</description>
+				</parameter>
 				<parameter name="loadAllComponents" type="boolean" default="true">
 					<description>
 						Loads all three components by default. If disabled then additional
@@ -231,6 +241,14 @@
 				<parameter name="minimumTimeWindow" type="int" unit="s" default="1800">
 					<description>
 						Minimum data time window length.
+					</description>
+				</parameter>
+				<parameter name="alignmentPosition" type="double" default="0.5">
+					<description>
+						Defines the relative position of the alignment when traces are
+						aligned at a phase. This value is bound
+						to interval [0:1] where 0 is the left side and 1 is right
+						side of the trace window.
 					</description>
 				</parameter>
 				<group name="uncertainties">

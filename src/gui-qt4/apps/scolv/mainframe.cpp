@@ -232,13 +232,16 @@ MainFrame::MainFrame(){
 	catch ( ... ) { locatorConfig.drawGridLines = true; }
 
 	try { locatorConfig.computeMissingTakeOffAngles = SCApp->configGetBool("olv.computeMissingTakeOffAngles"); }
-	catch ( ... ) { locatorConfig.computeMissingTakeOffAngles = false; }
+	catch ( ... ) { locatorConfig.computeMissingTakeOffAngles = true; }
 
 	try { locatorConfig.defaultEventRadius = SCApp->configGetDouble("olv.map.event.defaultRadius"); }
 	catch ( ... ) {}
 
 	try { pickerConfig.showCrossHair = SCApp->configGetBool("picker.showCrossHairCursor"); }
 	catch ( ... ) { pickerConfig.showCrossHair = false; }
+
+	try { pickerConfig.ignoreUnconfiguredStations = SCApp->configGetBool("picker.ignoreUnconfiguredStations"); }
+	catch ( ... ) { pickerConfig.ignoreUnconfiguredStations = false; }
 
 	try { pickerConfig.loadAllComponents = SCApp->configGetBool("picker.loadAllComponents"); }
 	catch ( ... ) { pickerConfig.loadAllComponents = true; }
@@ -278,6 +281,14 @@ MainFrame::MainFrame(){
 
 	try { pickerConfig.minimumTimeWindow = Core::TimeSpan(SCApp->configGetInt("picker.minimumTimeWindow")); }
 	catch ( ... ) { pickerConfig.minimumTimeWindow = Core::TimeSpan(1800); }
+
+	try { pickerConfig.alignmentPosition = SCApp->configGetDouble("picker.alignmentPosition"); }
+	catch ( ... ) { pickerConfig.alignmentPosition = 0.5; }
+
+	if ( pickerConfig.alignmentPosition < 0 )
+		pickerConfig.alignmentPosition = 0;
+	else if ( pickerConfig.alignmentPosition > 1 )
+		pickerConfig.alignmentPosition = 1;
 
 	try {
 		vector<string> uncertaintyProfiles =
@@ -933,6 +944,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetBool("olv.hideStationsWithoutData", pc.hideStationsWithoutData);
 
 		SCApp->configSetBool("picker.showCrossHairCursor", pc.showCrossHair);
+		SCApp->configSetBool("picker.ignoreUnconfiguredStations", pc.ignoreUnconfiguredStations);
 		SCApp->configSetBool("picker.loadAllComponents", pc.loadAllComponents);
 		SCApp->configSetBool("picker.loadAllPicks", pc.loadAllPicks);
 		SCApp->configSetBool("picker.loadStrongMotion", pc.loadStrongMotionData);
@@ -944,6 +956,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetInt("picker.preOffset", pc.preOffset.seconds());
 		SCApp->configSetInt("picker.postOffset", pc.postOffset.seconds());
 		SCApp->configSetInt("picker.minimumTimeWindow", pc.minimumTimeWindow.seconds());
+		SCApp->configSetDouble("picker.alignmentPosition", pc.alignmentPosition);
 		SCApp->configSetBool("picker.removeAutomaticPicksFromStationAfterManualReview", pc.removeAutomaticStationPicks);
 		SCApp->configSetBool("picker.removeAllAutomaticPicksAfterManualReview", pc.removeAutomaticPicks);
 

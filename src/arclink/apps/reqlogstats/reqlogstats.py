@@ -64,7 +64,13 @@ def parse_table(table):
                     content = td.attrib["sorttable_customkey"]
                 else:
                     content = td.text
-            rowdata.append(str(content).strip())
+            try:
+                rowdata.append(content.strip().encode('ascii', 'replace'))
+            except UnicodeEncodeError as e:
+                print "While working on row", len(result), "of table with headers:", "|".join(headers)
+                print "ERROR working on content: {", content, "}"
+                raise e
+
             #print '|'.join([td.tag, str(td.attrib), str(content).strip(), str(td.tail)])
         result.append(tuple(rowdata))
     return result

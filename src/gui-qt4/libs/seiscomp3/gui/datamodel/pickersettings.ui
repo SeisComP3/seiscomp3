@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>359</width>
-    <height>506</height>
+    <width>517</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -43,8 +43,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>341</width>
-        <height>294</height>
+        <width>499</width>
+        <height>438</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -281,8 +281,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>96</width>
-        <height>26</height>
+        <width>499</width>
+        <height>438</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -368,6 +368,16 @@
          <property name="spacing" >
           <number>6</number>
          </property>
+         <item>
+          <widget class="QCheckBox" name="cbIgnoreUnconfiguredStations" >
+           <property name="toolTip" >
+            <string>If this option is ticked the picker will not add stations that are not configured with a detecStream.</string>
+           </property>
+           <property name="text" >
+            <string>Ignore unconfigured stations</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QCheckBox" name="cbAllComponents" >
            <property name="toolTip" >
@@ -548,7 +558,7 @@
             <bool>true</bool>
            </property>
            <property name="indent" >
-            <number>22</number>
+            <number>20</number>
            </property>
           </widget>
          </item>
@@ -739,22 +749,6 @@
             <number>6</number>
            </property>
            <item>
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType" >
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>16</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QSlider" name="slPreOffset" >
              <property name="maximum" >
               <number>60</number>
@@ -807,22 +801,6 @@
            <property name="spacing" >
             <number>6</number>
            </property>
-           <item>
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType" >
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>16</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item>
             <widget class="QSlider" name="slPostOffset" >
              <property name="maximum" >
@@ -880,22 +858,6 @@
             <number>6</number>
            </property>
            <item>
-            <spacer>
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType" >
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" >
-              <size>
-               <width>16</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QSlider" name="slMinimumLength" >
              <property name="maximum" >
               <number>60</number>
@@ -931,6 +893,55 @@
              </property>
              <property name="displayFormat" >
               <string>HH:mm:ss</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13" >
+           <property name="text" >
+            <string>Waveform alignment position</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QSlider" name="slWaveformAlignment" >
+             <property name="maximum" >
+              <number>100</number>
+             </property>
+             <property name="value" >
+              <number>50</number>
+             </property>
+             <property name="sliderPosition" >
+              <number>50</number>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="waveformAlignmentEdit" >
+             <property name="suffix" >
+              <string>%</string>
+             </property>
+             <property name="maximum" >
+              <number>100</number>
+             </property>
+             <property name="singleStep" >
+              <number>10</number>
+             </property>
+             <property name="value" >
+              <number>50</number>
              </property>
             </widget>
            </item>
@@ -1522,8 +1533,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>255</x>
-     <y>866</y>
+     <x>519</x>
+     <y>801</y>
     </hint>
     <hint type="destinationlabel" >
      <x>96</x>
@@ -1538,8 +1549,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>348</x>
-     <y>866</y>
+     <x>612</x>
+     <y>801</y>
     </hint>
     <hint type="destinationlabel" >
      <x>179</x>
@@ -1554,12 +1565,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>83</x>
-     <y>530</y>
+     <x>100</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>148</x>
-     <y>692</y>
+     <x>188</x>
+     <y>629</y>
     </hint>
    </hints>
   </connection>
@@ -1570,12 +1581,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>125</x>
-     <y>530</y>
+     <x>142</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>338</x>
-     <y>695</y>
+     <x>602</x>
+     <y>632</y>
     </hint>
    </hints>
   </connection>
@@ -1586,12 +1597,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>102</x>
-     <y>530</y>
+     <x>119</x>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>125</x>
-     <y>665</y>
+     <x>142</x>
+     <y>603</y>
     </hint>
    </hints>
   </connection>
@@ -1602,12 +1613,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>72</x>
-     <y>287</y>
+     <x>89</x>
+     <y>253</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>61</x>
-     <y>318</y>
+     <x>78</x>
+     <y>272</y>
     </hint>
    </hints>
   </connection>
@@ -1618,12 +1629,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>46</x>
-     <y>256</y>
+     <x>64</x>
+     <y>233</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>257</x>
-     <y>256</y>
+     <x>248</x>
+     <y>233</y>
     </hint>
    </hints>
   </connection>

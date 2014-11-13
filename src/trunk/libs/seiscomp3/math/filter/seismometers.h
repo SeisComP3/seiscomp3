@@ -50,7 +50,19 @@ class PolesAndZeros {
 
 class WoodAnderson : public PolesAndZeros {
 	public:
-		WoodAnderson(GroundMotion input);
+		// Gutenberg(1935)              -> gain=2800, T0=0.8s, h=0.8
+		// Uhrhammer and Collins (1990) -> gain=2080, T0=0.8s, h=0.7
+		//
+		// Note that use of the Uhrhammer and Collins (1990) version
+		// is recommended by the IASPEI Magnitude Working Group
+		// recommendations of 2011 September 9.
+		struct Config {
+			Config(double gain=2800, double T0=0.8, double h=0.8) :
+				gain(gain), T0(T0), h(h) {}
+
+			double gain, T0, h;
+		};
+		WoodAnderson(GroundMotion input, Config config=Config());
 };
 
 

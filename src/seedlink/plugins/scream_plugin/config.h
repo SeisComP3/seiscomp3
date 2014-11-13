@@ -55,7 +55,6 @@ struct config_struct
   double heartbeatinterval;
 };
 
-//extern struct config_struct config;
 extern void parse_config (const char *filename);
 
 #endif /* __CONFIG_H__ */

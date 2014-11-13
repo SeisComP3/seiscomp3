@@ -244,7 +244,7 @@ bool Connection::selectArchived(Responses &responses, const Core::Time &from,
 	string code;
 	while ( readResponseCode(code) ) {
 		if ( startsWith(code, "EOD/SELECT/ARCHIVED") ) {
-			if ( ! readResponseCode(code) ) break;
+			if ( !readResponseCode(code) ) break;
 			if ( !equals(code, "EOD/SELECT") ) {
 				logInvalidResp("EOD/SELECT", code.c_str());
 				break;
@@ -424,7 +424,8 @@ bool Connection::sendOptions(int changedOptions) {
 	       updateOption(opDataStaMags,    "DATA.STAMAGS",    changedOptions) &&
 	       updateOption(opDataArrivals,   "DATA.ARRIVALS",   changedOptions) &&
 	       updateOption(opDataStaMts,     "DATA.STAMTS",     changedOptions) &&
-	       updateOption(opDataPreferred,  "DATA.PREFERRED",  changedOptions);
+	       updateOption(opDataPreferred,  "DATA.PREFERRED",  changedOptions) &&
+	       updateOption(opKeepAlive,      "KEEPALIVE",       changedOptions);
 }
 
 bool Connection::updateOption(Options option, const char *cmd,
@@ -512,13 +513,11 @@ bool Connection::readResponse(Response &response) {
 }
 
 size_t Connection::readLine(string &line) {
+	line.clear();
 	try {
 		line = _sock->readline();
 	}
-	catch ( SocketException& ) {
-		line.clear();
-		return 0;
-	}
+	catch ( SocketException& ) {}
 
 	// strip carriage return
 	size_t len = line.size();
@@ -542,13 +541,17 @@ void Connection::logInvalidResp(const char *expected, const char *got) {
 }
 
 bool Connection::readResponseCode(std::string &code) {
-	if ( readLine(code) == 0 ) {
-		logAndDisconnect("received empty response code");
-		return false;
+	while (readLine(code)) {
+		if ( code == "ALIVE")
+			SEISCOMP_DEBUG("%sreceived ALIVE message", _logPrefix.c_str());
+		else {
+			SEISCOMP_DEBUG("%sread response code: %s", _logPrefix.c_str(),
+			               code.c_str());
+			return true;
+		}
 	}
-	SEISCOMP_DEBUG("%sread response code: %s", _logPrefix.c_str(),
-	               code.c_str());
-	return true;
+	logAndDisconnect("received empty response code");
+	return false;
 }
 
 bool Connection::assertResponseCode(const std::string &expected) {

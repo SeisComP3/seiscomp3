@@ -9,7 +9,8 @@
 
 import socket, traceback
 
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
+from twisted.python.failure import Failure
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
@@ -33,27 +34,42 @@ def writeTS(req, data):
 
 
 #-------------------------------------------------------------------------------
-# Finish served requests
-def onRequestServed(success, req):
-	if req._disconnected:
-		Logging.debug("request aborted")
-		return
-
-	if success:
-		Logging.debug("request successfully served")
+# Finish requests deferred to threads
+def onFinish(result, req):
+	Logging.debug("finish value = %s" % str(result))
+	if isinstance(result, Failure):
+		err = result.value
+		if isinstance(err, defer.CancelledError):
+			Logging.error("request canceled")
+			return
+		Logging.error("%s %s" % (result.getErrorMessage(),
+		              traceback.format_tb(result.getTracebackObject())))
 	else:
-		Logging.debug("request failed")
+		if result:
+			Logging.debug("request successfully served")
+		else:
+			Logging.debug("request failed")
+
 	reactor.callFromThread(req.finish)
+	#req.finish()
 
 
 #-------------------------------------------------------------------------------
-# Handle request errors
-def onRequestError(failure, req):
-	Logging.error("%s %s" % (failure.getErrorMessage(),
-	              traceback.format_tb(failure.getTracebackObject())))
+# Handle connection errors
+def onCancel(failure, req):
+	if failure:
+		Logging.error("%s %s" % (failure.getErrorMessage(),
+		              traceback.format_tb(failure.getTracebackObject())))
+	else:
+		Logging.error("request canceled")
+	req.cancel()
 
-	reactor.callFromThread(req.processingFailed, failure)
-	return failure
+
+#-------------------------------------------------------------------------------
+# Handle premature connection reset
+def onResponseFailure(err, call):
+	Logging.error("response canceled")
+	call.cancel()
 
 
 #-------------------------------------------------------------------------------

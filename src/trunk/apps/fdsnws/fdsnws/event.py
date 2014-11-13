@@ -252,8 +252,8 @@ class FDSNEvent(resource.Resource):
 
 		# Process request in separate thread
 		d = deferToThread(self._processRequest, req, ro, dbq, exp)
-		d.addCallback(utils.onRequestServed, req)
-		d.addErrback(utils.onRequestError, req)
+		req.notifyFinish().addErrback(utils.onCancel, d)
+		d.addBoth(utils.onFinish, req)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
@@ -532,9 +532,10 @@ class FDSNEvent(resource.Resource):
 
 		if ep.eventCount() == 0:
 			msg = "no matching events found"
-			utils.writeTS(req,
-			              HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro))
-			return False
+			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			if data:
+				req.write(data)
+			return True
 
 		Logging.debug("events found: %i" % ep.eventCount())
 

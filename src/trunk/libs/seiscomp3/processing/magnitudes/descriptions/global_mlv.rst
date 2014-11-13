@@ -1,7 +1,8 @@
 Amplitude
 ---------
 
-The MLv amplitude calculation is very similar to the original ML, except that it is measured on the vertical component.
+The MLv amplitude calculation is very similar to the original ML, except that
+it is measured on the vertical component.
 
 Station Magnitude
 -----------------
@@ -14,7 +15,7 @@ The individual station MLv is calculated using the following formula:
 
 A is the MLv Wood-Anderson amplitude in millimeters. The second term
 is the empirical calibration function, which in turn is a function
-of the hypocentral distance (see Richter, 1935). This calibration
+of the epicentral distance (see Richter, 1935). This calibration
 function can be configured globally or per station using the config
 variable module.trunk.global.MLv.logA0, e.g.
 
@@ -34,11 +35,11 @@ distance the magnitude would be
 
    mag = \log10(A) - (-3) = \log10(A) + 3
 
-
 which is according to the original Richter (1935) formula if the
 amplitude is measured in millimeters. Note that the baseline for
 logA0 is millimeters for historical reasons, while internally in
 SeisComP 3 the Wood-Anderson amplitudes are measured and stored
 micrometers.
 
-Several distance-value pairs can be configured for different ranges of epicenter distance.
+Several distance-value pairs can be configured for different ranges of
+epicenter distance.

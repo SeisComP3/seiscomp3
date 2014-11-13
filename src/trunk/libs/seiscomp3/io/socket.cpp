@@ -264,12 +264,13 @@ void Socket::fillbuf() {
 	int byteCount = readImpl(_buf + _wp, BUFSIZE - _wp);
 	if ( byteCount < 0 ) {
 		_reconnect = true;
-		SEISCOMP_ERROR("socket read: %s",strerror(errno));
+		SEISCOMP_ERROR("socket read: %s", strerror(errno));
 		throw SocketException("socket read error");
 	}
 
 	if ( byteCount == 0 ) {
 		_reconnect = true;
+		SEISCOMP_DEBUG("unexpected EOF while reading from socket");
 		throw SocketException("unexpected EOF while reading from socket");
 	}
 

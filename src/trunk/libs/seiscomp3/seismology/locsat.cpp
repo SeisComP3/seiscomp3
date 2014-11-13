@@ -313,12 +313,12 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 	try { depth = origin->depth().value(); } catch (...){}
 
 	_locateEvent->setOrigin(origin->latitude().value(),
-                            origin->longitude().value(),
-                            depth );
+	                        origin->longitude().value(),
+	                        depth );
 
 	_locateEvent->setOriginTime((double)origin->time().value());
 
-	if ( ! loadArrivals(origin, timeError)) {
+	if ( !loadArrivals(origin, timeError)) {
 		delete _locateEvent;
 		_locateEvent = NULL;
 		return NULL;
@@ -464,7 +464,6 @@ double LocSAT::stationCorrection(const std::string &staid,
 
 
 bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
-
 	if ( ! origin)
 		return false;
 
@@ -472,7 +471,6 @@ bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
 	SEISCOMP_DEBUG("Load arrivals:");
 #endif
 	for (unsigned int i = 0; i < origin->arrivalCount(); i++){
-
 		DataModel::Arrival* arrival = origin->arrival(i);
 		DataModel::Pick* pick = getPick(arrival);
 		if (!pick){

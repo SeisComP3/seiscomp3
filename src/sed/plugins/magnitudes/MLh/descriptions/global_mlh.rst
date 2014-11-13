@@ -18,11 +18,12 @@ The MLh plugin calculates the individual station magnitude using the following f
 
 .. math::
 
-   mag = \log10(waamp1) + A \times epdistkm + B
+   mag = \log10(waamp1) + A \times hypdistkm + B
 
-waampl is the amplitude produced by the MLh plugin. Epidistkm is the distance from the sensor
-to the epicenter in kilometers. A and B are parameters that can be configured in a config file.
-Several pairs of A and B can be configured for different ranges of epicenter distance.
+waampl is the amplitude produced by the MLh plugin. Hypdistkm is the distance
+from the sensor to the hypocenter in kilometers. A and B are parameters that
+can be configured in a config file. Several pairs of A and B can be configured
+for different ranges of hypocenter distance.
 
 Overall Event Magnitude
 -----------------------
