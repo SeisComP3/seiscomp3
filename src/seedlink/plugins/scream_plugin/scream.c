@@ -45,7 +45,6 @@ static char rcsid[] = "$Id: scream.c 1364 2008-10-24 18:42:33Z andres $";
 #include <netdb.h>
 
 static int sockfd = -1;
-static int socktcp = -1;
 static int protocol;
 
 /* _protocol is one of SCM_PROTO_... */
