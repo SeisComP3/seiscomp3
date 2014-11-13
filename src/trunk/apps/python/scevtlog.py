@@ -292,9 +292,6 @@ class EventHistory(seiscomp3.Client.Application):
 
 
   def printEventXML(self, evt, newEvent):
-    wasEnabled = seiscomp3.DataModel.PublicObject.IsRegistrationEnabled()
-    seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
-
     now = seiscomp3.Core.Time.GMT()
 
     # Load comments
@@ -319,6 +316,9 @@ class EventHistory(seiscomp3.Client.Application):
       self.query().loadArrivals(org)
     prefmag = self._cache.get(seiscomp3.DataModel.Magnitude, evt.preferredMagnitudeID())
 
+    wasEnabled = seiscomp3.DataModel.PublicObject.IsRegistrationEnabled()
+    seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
     ep = seiscomp3.DataModel.EventParameters()
     evt_cloned = seiscomp3.DataModel.Event.Cast(evt.clone())
     ep.add(evt_cloned)
@@ -326,12 +326,16 @@ class EventHistory(seiscomp3.Client.Application):
     summary = self.getSummary(now, org, prefmag)
 
     if org:
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+
       # Load magnitudes
       if org.magnitudeCount() == 0:
         self.query().loadMagnitudes(org)
 
       if org.stationMagnitudeCount() == 0:
         self.query().loadStationMagnitudes(org)
+
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
 
       # Copy event comments
       ncmts = evt.commentCount()
@@ -365,7 +369,11 @@ class EventHistory(seiscomp3.Client.Application):
       for i in xrange(narr):
         arr_cloned = seiscomp3.DataModel.Arrival.Cast(org.arrival(i).clone())
         org_cloned.add(arr_cloned)
+
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
         pick = self._cache.get(seiscomp3.DataModel.Pick, arr_cloned.pickID())
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
         if pick:
           pick_cloned = seiscomp3.DataModel.Pick.Cast(pick.clone())
           ep.add(pick_cloned)
@@ -377,8 +385,10 @@ class EventHistory(seiscomp3.Client.Application):
 
         mag_cloned = seiscomp3.DataModel.Magnitude.Cast(mag.clone())
 
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
         if mag.stationMagnitudeContributionCount() == 0:
           self.query().loadStationMagnitudeContributions(mag)
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
 
         # Copy magnitude references
         nmagref = mag.stationMagnitudeContributionCount()
@@ -396,7 +406,9 @@ class EventHistory(seiscomp3.Client.Application):
         org_cloned.add(mag_cloned)
         if amp_map.has_key(mag_cloned.amplitudeID()) == False:
           amp_map[mag_cloned.amplitudeID()] = True
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
           amp = self._cache.get(seiscomp3.DataModel.Amplitude, mag_cloned.amplitudeID())
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
           if amp:
             amp_cloned = seiscomp3.DataModel.Amplitude.Cast(amp.clone())
             ep.add(amp_cloned)
