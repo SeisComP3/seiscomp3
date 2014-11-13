@@ -10,12 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-
-
-
-#include <iostream>
-#include <float.h>
-#include <math.h>
+#include "ruler.h"
 
 #include <QFrame>
 #include <QPixmap>
@@ -25,7 +20,10 @@
 #include <QEvent>
 #include <QStyleOptionFocusRect>
 
-#include "ruler.h"
+#include <iostream>
+#include <float.h>
+#include <math.h>
+#include <limits>
 
 #define CHCK255(x)                      ((x)>255?255:((x)<0?0:(x)))
 
@@ -37,6 +35,9 @@ Ruler::Ruler(QWidget *parent, Qt::WindowFlags f, Position pos)
 	setFrameStyle(QFrame::Panel | QFrame::Plain);
 	setLineWidth(0);
 	setPosition(pos);
+	setLimits(std::numeric_limits<double>::min(),
+	          std::numeric_limits<double>::max(),
+	          0, 0);
 	_scl = 1.;
 	_da = _dt = -1.;
 	_min = _max = 0.;
@@ -93,6 +94,17 @@ void Ruler::setPosition(Position pos) {
 
 void Ruler::setScale(double scl) {
 	_scl = scl;
+
+	// If the scale does not fit the configured min/max resolution
+	// the scale will be changed to a valid value
+	if ( _limitMinRange > 0 && _scl > rulerWidth() / _limitMinRange ) _scl = rulerWidth() / _limitMinRange;
+	if ( _limitMaxRange > 0 && _scl < rulerWidth() / _limitMaxRange ) {
+		double diff = _max - _min;
+		_min += diff / 2.0 - _limitMaxRange / 2.0;
+		_max = _min + _limitMaxRange;
+		_scl = rulerWidth() / _limitMaxRange;
+	}
+
 	emit scaleChanged(_scl);
 	updateIntervals();
 	update();
@@ -360,7 +372,7 @@ void Ruler::paintEvent(QPaintEvent *e) {
 			// Draw ticks and counts
 			int rx = (int)((cpos-pos)*_scl);
 			QString str;
-			QVector<double> lastPos(_lc, -DBL_MAX);
+			QVector<double> lastPos(_lc, 0);
 			while ( rx < rw ) {
 				painter.drawLine(r2wPos(rx, 0), r2wPos(rx, tick));
 				if ( k == 0 ) {
@@ -449,20 +461,59 @@ void Ruler::mouseReleaseEvent(QMouseEvent *e) {
 			double smax = (_pos+_rangemax) / _scl + _min;
 
 			if ( smin < smax )
-				emit rangeChangeRequested(smin, smax);
+				changeRange(smin, smax);
 			else {
 				std::swap(smin, smax);
 				double max = rulerWidth() / _scl + _min;
 				double s = (max-_min) / (smax-smin);
 				double tmin = s * (_min-smin) + _min;
 				double tmax = s * (max-smax) + max;
-				emit rangeChangeRequested(tmin, tmax);
+				changeRange(tmin, tmax);
 			}
 		}
 		_rangemin = _rangemax = 0;
 		update();
 		_dragMode = 0;
 	}
+}
+
+
+void Ruler::checkLimit(double &tmin, double &tmax) {
+	tmin += _ofs;
+	tmax += _ofs;
+
+	double trange = tmax-tmin;
+	double tcen = tmin + trange*0.5;
+
+	// Clip to allowed ranges
+	if ( trange < _limitMinRange ) {
+		trange = _limitMinRange;
+		tmin = tcen - trange*0.5;
+		tmax = tcen + trange*0.5;
+	}
+	else if ( trange > _limitMaxRange ) {
+		trange = _limitMaxRange;
+		tmin = tcen - trange*0.5;
+		tmax = tcen + trange*0.5;
+	}
+
+	if ( (tmin < _limitLeft) || (tmax < _limitLeft) ) {
+		tmin = _limitLeft;
+		tmax = tmin + trange;
+	}
+	else if ( (tmin > _limitRight) || (tmax > _limitRight) ) {
+		tmax = _limitRight;
+		tmin = tmax - trange;
+	}
+
+	tmin -= _ofs;
+	tmax -= _ofs;
+}
+
+
+void Ruler::changeRange(double tmin, double tmax) {
+	checkLimit(tmin, tmax);
+	emit rangeChangeRequested(tmin, tmax);
 }
 
 void Ruler::mouseMoveEvent(QMouseEvent *e) {
@@ -505,9 +556,12 @@ void Ruler::mouseMoveEvent(QMouseEvent *e) {
 		double fDragOffset = double(dragOffset) / _scl;
 		_dragStart = p;
 		_iDragStart = rx;
-		emit dragged(fDragOffset);
+		double tmin = _min+fDragOffset;
+		double tmax = _max+fDragOffset;
+		checkLimit(tmin, tmax);
+		emit dragged(tmin-_min);
 		if ( _enableRangeSelection && _emitRangeChangeWhileDragging )
-			emit rangeChangeRequested(_min+fDragOffset, _max+fDragOffset);
+			emit rangeChangeRequested(tmin, tmax);
 	}
 	else if ( _dragMode == -2 ) {
 		_rangemax = rx < 0 ? 0 : rx >= rulerWidth() ? rulerWidth()-1 : rx;
@@ -552,12 +606,12 @@ void Ruler::wheelEvent(QWheelEvent *event) {
 		QPoint rp = w2rPos(event->x(), event->y());
 		double center = (double)(rp.x() + _pos) / rulerWidth();
 		double ofs = delta / _scl;
-		emit rangeChangeRequested(_min + ofs * center, _max - ofs * (1-center));
+		changeRange(_min + ofs * center, _max - ofs * (1-center));
 	}
 	// translate
 	else {
 		double ofs = delta / _scl;
-		emit rangeChangeRequested(_min + ofs, _max + ofs);
+		changeRange(_min + ofs, _max + ofs);
 	}
 
 	event->accept();
@@ -608,6 +662,13 @@ void Ruler::updateIntervals() {
 
 	if ( changed )
 		emit changedInterval(_drx[0], _drx[1], _ofs);
+}
+
+void Ruler::setLimits(double leftValue, double rightValue, double minRange, double maxRange) {
+	_limitLeft = leftValue;
+	_limitRight = rightValue;
+	_limitMinRange = minRange;
+	_limitMaxRange = maxRange;
 }
 
 } // ns Gui

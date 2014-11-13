@@ -26,7 +26,26 @@ using namespace Seiscomp;
 
 #include "recordwidget.h"
 
+namespace  sc = Seiscomp::Core;
+
 #define CHCK255(x) ((x)>255?255:((x)<0?0:(x)))
+
+#define CHCK_RANGE                             \
+	double diff = _tmax - _tmin;               \
+	if ( _tmin < sc::TimeSpan::MinTime ) {     \
+		_tmin = sc::TimeSpan::MinTime;         \
+		_tmax = _tmin + diff;                  \
+	}                                          \
+                                               \
+	if ( _tmax > sc::TimeSpan::MaxTime ) {     \
+		_tmax = sc::TimeSpan::MaxTime;         \
+		_tmin = _tmax - diff;                  \
+		if ( _tmin < sc::TimeSpan::MinTime ) { \
+			_tmin = sc::TimeSpan::MinTime;     \
+			diff = _tmax - _tmin;              \
+			_pixelPerSecond = width() / diff;  \
+		}                                      \
+	}                                          \
 
 namespace {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -36,7 +55,8 @@ namespace {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
-            float &ofs, float &min, float &max, bool globalOffset = false) {
+            float &ofs, float &min, float &max, bool globalOffset = false,
+            const Core::TimeWindow &ofsTw = Core::TimeWindow()) {
 	ofs = 0;
 	int sampleCount = 0;
 	int offsetSampleCount = 0;
@@ -91,9 +111,36 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 		::minmax(ns, f, imin, imax, &xmin, &xmax);
 
 		if ( !globalOffset ) {
-			for ( int i = imin; i < imax; ++i )
-				ofs += (*arr)[i];
-			offsetSampleCount = sampleCount;
+			if ( ofsTw ) {
+				try {
+					const Core::TimeWindow &rtw = rec->timeWindow();
+
+					if ( ofsTw.overlaps(rtw) ) {
+						double fs = rec->samplingFrequency();
+						double dt = ofsTw.startTime() - rec->startTime();
+						if(dt>0)
+							imin = int(dt*fs);
+						else
+							imin = 0;
+
+						dt = rec->endTime() - ofsTw.endTime();
+						imax = ns;
+						if(dt>0)
+							imax -= int(dt*fs);
+
+						for ( int i = imin; i < imax; ++i )
+							ofs += (*arr)[i];
+						offsetSampleCount = sampleCount;
+					}
+				}
+				catch ( ... ) {
+				}
+			}
+			else {
+				for ( int i = imin; i < imax; ++i )
+					ofs += (*arr)[i];
+				offsetSampleCount = sampleCount;
+			}
 		}
 
 		if( min==max && isFirst ) {
@@ -1414,6 +1461,7 @@ void RecordWidget::setTimeScale (double t) {
 	_pixelPerSecond = t;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
 
+	CHCK_RANGE
 	if ( _autoMaxScale )
 		setNormalizationWindow(visibleTimeWindow());
 	else
@@ -1453,6 +1501,8 @@ void RecordWidget::scroll(int v) {
 void RecordWidget::setScale (double t, float a) {
 	_pixelPerSecond = t;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
+
+	CHCK_RANGE
 	setAmplScale(a);
 
 	if ( _autoMaxScale )
@@ -1472,6 +1522,7 @@ void RecordWidget::setTimeRange (double t1, double t2) {
 	_tmin = t1;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
 
+	CHCK_RANGE
 	if ( _autoMaxScale )
 		setNormalizationWindow(visibleTimeWindow());
 
@@ -1594,7 +1645,7 @@ void RecordWidget::prepareRecords(Stream *s) {
 	if ( s->records[Stream::Raw] && (!s->filtering || _showAllRecords) ) {
 		trace->visible = minmax(s->records[Stream::Raw], _normalizationWindow,
 		                        trace->offset, trace->amplMin, trace->amplMax,
-		                        _useGlobalOffset);
+		                        _useGlobalOffset, _offsetWindow);
 		trace->absMax = std::max(std::abs(trace->offset-trace->amplMin),
 		                         std::abs(trace->offset-trace->amplMax));
 	}
@@ -1605,7 +1656,7 @@ void RecordWidget::prepareRecords(Stream *s) {
 	if ( s->records[Stream::Filtered] && (s->filtering || _showAllRecords) ) {
 		trace->visible = minmax(s->records[Stream::Filtered], _normalizationWindow,
 		                        trace->offset, trace->amplMin, trace->amplMax,
-		                        _useGlobalOffset);
+		                        _useGlobalOffset, _offsetWindow);
 		trace->absMax = std::max(std::abs(trace->offset-trace->amplMin),
 		                         std::abs(trace->offset-trace->amplMax));
 	}
@@ -3129,9 +3180,20 @@ void RecordWidget::setAutoMaxScale(bool e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void RecordWidget::setNormalizationWindow(const Seiscomp::Core::TimeWindow& tw) {
+void RecordWidget::setNormalizationWindow(const Seiscomp::Core::TimeWindow &tw) {
 	_normalizationWindow = tw;
 	_amplScale = 0.0;
+	setDirty();
+	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordWidget::setOffsetWindow(const Seiscomp::Core::TimeWindow &tw) {
+	_offsetWindow = tw;
 	setDirty();
 	update();
 }
