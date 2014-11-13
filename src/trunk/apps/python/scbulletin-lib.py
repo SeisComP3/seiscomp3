@@ -129,6 +129,10 @@ class Bulletin(object):
             if extra:
                 txt += "    Preferred Origin ID    %s\n" % evt.preferredOriginID()
                 txt += "    Preferred Magnitude ID %s\n" % evt.preferredMagnitudeID()
+            try:
+                type = evt.type()
+                txt += "    Type                   %s\n" % seiscomp3.DataModel.EEventTypeNames.name(type)
+            except: pass
             txt += "    Description\n"
             for i in xrange(evt.eventDescriptionCount()):
                 evtd = evt.eventDescription(i)
