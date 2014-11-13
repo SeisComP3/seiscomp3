@@ -1612,6 +1612,9 @@ PickerView::Config::Config() {
 	timingQualityHigh = Qt::darkGreen;
 
 	defaultDepth = 10;
+	alignmentPosition = 0.5;
+	offsetWindowStart = 0;
+	offsetWindowEnd = 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3113,19 +3116,12 @@ void PickerView::alignOnPhase(const QString& phase, bool theoretical) {
 
 	_recordView->setAbsoluteTimeEnabled(false);
 
-	/*
-	if ( getShortPhaseName(phase.toStdString()) == 'P' )
-		_recordView->setTimeRange(-60.0, 60.0);
-	else if ( getShortPhaseName(phase.toStdString()) == 'S' )
-		_recordView->setTimeRange(-120.0, 120.0);
-	else
-		_recordView->setTimeRange(-120.0, 120.0);
-	*/
-
-	_recordView->setJustification(0.5);
+	_recordView->setJustification(_config.alignmentPosition);
 
 	double timeRange = _recordView->timeRangeMax() - _recordView->timeRangeMin();
-	_recordView->setTimeRange(-timeRange*0.5, timeRange*0.5);
+	double leftTime = -timeRange*_config.alignmentPosition;
+	double rightTime = timeRange*(1.0-_config.alignmentPosition);
+	_recordView->setTimeRange(leftTime, rightTime);
 
 	_checkVisibility = true;
 
@@ -3457,6 +3453,13 @@ void PickerView::loadNextStations(float distance) {
 	
 				// try to get the configured location and stream code
 				Stream *stream = findConfiguredStream(s, _origin->time());
+				if ( stream != NULL ) {
+					SEISCOMP_DEBUG("Adding configured stream %s.%s.%s.%s",
+					               stream->sensorLocation()->station()->network()->code().c_str(),
+					               stream->sensorLocation()->station()->code().c_str(),
+					               stream->sensorLocation()->code().c_str(),
+					               stream->code().c_str());
+				}
 
 				// Try to get a default stream
 				if ( stream == NULL ) {
@@ -3467,8 +3470,16 @@ void PickerView::loadNextStations(float distance) {
 					}
 				}
 
-				if ( stream == NULL )
+				if ( (stream == NULL) && !_config.ignoreUnconfiguredStations ) {
 					stream = findStream(s, _origin->time(), Processing::WaveformProcessor::MeterPerSecond);
+					if ( stream != NULL ) {
+						SEISCOMP_DEBUG("Adding velocity stream %s.%s.%s.%s",
+						               stream->sensorLocation()->station()->network()->code().c_str(),
+						               stream->sensorLocation()->station()->code().c_str(),
+						               stream->sensorLocation()->code().c_str(),
+						               stream->code().c_str());
+					}
+				}
 	
 				if ( stream ) {
 					WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
@@ -5160,7 +5171,7 @@ void PickerView::setCursorPos(const Seiscomp::Core::Time& t, bool always) {
 			_recordView->currentItem()->widget()->width()/_currentRecord->timeScale():
 			_currentRecord->tmax() - _currentRecord->tmin();
 
-		float pos = float(t - _currentRecord->alignment()) - len/2;
+		float pos = float(t - _currentRecord->alignment()) - len*_config.alignmentPosition;
 		offset = pos - _currentRecord->tmin();
 	}
 	else {

@@ -217,6 +217,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 			bool showCrossHair;
 
+			bool ignoreUnconfiguredStations;
 			bool loadAllComponents;
 			bool loadAllPicks;
 			bool loadStrongMotionData;
@@ -237,6 +238,10 @@ class SC_GUI_API PickerView : public QMainWindow {
 			Core::TimeSpan preOffset;
 			Core::TimeSpan postOffset;
 			Core::TimeSpan minimumTimeWindow;
+
+			double alignmentPosition;
+			double offsetWindowStart;
+			double offsetWindowEnd;
 
 			QColor timingQualityLow;
 			QColor timingQualityMedium;
