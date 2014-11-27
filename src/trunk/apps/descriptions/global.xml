@@ -474,6 +474,13 @@
 						Defines if amplitude calculation of certain type is enabled.
 						</description>
 					</parameter>
+					<parameter name="enableResponses" type="boolean" default="false">
+						<description>
+						Activates deconvolution for this amplitude type. If not
+						set the global flag &quot;amplitudes.enableResponses&quot;
+						will be used instead.
+						</description>
+					</parameter>
 					<parameter name="saturationThreshold" type="double" default="-1">
 						<description>
 						If greater than 0 and the absolute value of an incoming
