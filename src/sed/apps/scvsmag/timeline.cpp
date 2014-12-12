@@ -129,8 +129,7 @@ bool Timeline::feed(const DataModel::VS::Envelope *env) {
 		for ( sit = station->begin(); sit != station->end(); ++sit ) {
 			if ( cha->waveformID().locationCode() != (*sit)->locationCode )
 				continue;
-			if ( cha->waveformID().channelCode().compare(0, 2,
-					(*sit)->streamCode) != 0 )
+			if ( cha->waveformID().channelCode().compare(0, 2, (*sit)->streamCode) != 0 )
 				continue;
 			sensor = *sit;
 			break;
