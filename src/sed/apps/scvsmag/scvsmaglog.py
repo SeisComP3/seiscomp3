@@ -20,7 +20,7 @@ Copyright (C) 2006-2013 by Swiss Seismological Service
 """
 
 import sys, traceback, seiscomp3.Client
-from seiscomp3.DataModel import PublicObjectTimeSpanBuffer
+from seiscomp3.DataModel import PublicObjectTimeSpanBuffer, EventParameters
 from seiscomp3.Core import TimeSpan, Time
 from seiscomp3 import Config, System
 import smtplib
@@ -40,6 +40,7 @@ class Listener(seiscomp3.Client.Application):
         self.setPrimaryMessagingGroup(seiscomp3.Communication.Protocol.LISTENER_GROUP)
         self.addMessagingSubscription("LOCATION")
         self.addMessagingSubscription("MAGNITUDE")
+        self.addMessagingSubscription("PICK")
         self.addMessagingSubscription("EVENT")
 
         self.cache = PublicObjectTimeSpanBuffer()
@@ -113,6 +114,7 @@ class Listener(seiscomp3.Client.Application):
             return False
 
         try:
+            self.sendemail = self.configGetBool("email.activate")
             self.smtp_server = self.configGetString("email.smtpserver")
             self.email_port = self.configGetInt("email.port")
             self.tls = self.configGetBool("email.usetls")
@@ -143,10 +145,12 @@ class Listener(seiscomp3.Client.Application):
             self.amqHbTopic = self.configGetString('ActiveMQ.hbtopic')
             self.amqUser = self.configGetString('ActiveMQ.username')
             self.amqPwd = self.configGetString('ActiveMQ.password')
+            self.amqMsgFormat = self.configGetString('ActiveMQ.messageFormat')
         except:
             pass
 
         try:
+            self.storeReport = self.configGetBool("report.activate")
             self.expirationtime = self.configGetDouble("report.eventbuffer")
             self.report_directory = self.ei.absolutePath(self.configGetString("report.directory"))
         except:
@@ -175,7 +179,8 @@ class Listener(seiscomp3.Client.Application):
             import ud_interface
             self.udevt = ud_interface.CoreEventInfo(self.amqHost, self.amqPort,
                                                     self.amqTopic, self.amqUser,
-                                                    self.amqPwd)
+                                                    self.amqPwd,
+                                                    self.amqMsgFormat)
             self.hb = ud_interface.HeartBeat(self.amqHost, self.amqPort,
                                              self.amqHbTopic, self.amqUser,
                                              self.amqPwd)
@@ -199,7 +204,7 @@ class Listener(seiscomp3.Client.Application):
                 threshold_exceeded = True
             sout += "%4.2f|" % mag
             sout += "%6.2f|" % ed['lat']
-            sout += "%6.2f|" % ed['lon']
+            sout += "%7.2f|" % ed['lon']
             sout += "%6.2f|" % ed['diff'].toDouble()
             sout += "%6.2f|" % ed['depth']
             sout += "%s|" % ed['ts']
@@ -208,13 +213,14 @@ class Listener(seiscomp3.Client.Application):
             sout += "%11d|" % ed['nstorg']
             sout += "%10d\n" % ed['nstmag']
 
-        self.event_dict[evID]['report'] = sout
-        if not os.path.isdir(self.report_directory):
-            os.makedirs(self.report_directory)
-        f = open(os.path.join(self.report_directory,
-                              '%s_report.txt' % evID.replace('/', '_')), 'w')
-        f.writelines(self.event_dict[evID]['report'])
-        f.close()
+        if self.storeReport:
+            self.event_dict[evID]['report'] = sout
+            if not os.path.isdir(self.report_directory):
+                os.makedirs(self.report_directory)
+            f = open(os.path.join(self.report_directory,
+                                  '%s_report.txt' % evID.replace('/', '_')), 'w')
+            f.writelines(self.event_dict[evID]['report'])
+            f.close()
         self.event_dict[evID]['magnitude'] = ed['magnitude']
         seiscomp3.Logging.info("\n" + sout)
         if self.sendemail and threshold_exceeded:
@@ -240,6 +246,17 @@ class Listener(seiscomp3.Client.Application):
         try:
             seiscomp3.Logging.debug("Received origin %s" % org.publicID())
             self.cache.feed(org)
+        except:
+            info = traceback.format_exception(*sys.exc_info())
+            for i in info: sys.stderr.write(i)
+
+    def handlePick(self, pk, parentID):
+        """
+        Add picks to the cache.
+        """
+        try:
+            seiscomp3.Logging.debug("Received pick %s" % pk.publicID())
+            self.cache.feed(pk)
         except:
             info = traceback.format_exception(*sys.exc_info())
             for i in info: sys.stderr.write(i)
@@ -353,22 +370,6 @@ class Listener(seiscomp3.Client.Application):
                     self.event_dict[evID]['updates'][updateno]['depth'] = org.depth().value()
                     self.event_dict[evID]['updates'][updateno]['nstorg'] = org.arrivalCount()
                     self.event_dict[evID]['updates'][updateno]['nstmag'] = mag.stationCount()
-                    if self.udevt is not None:
-                        self.udevt.id = evID
-                        self.udevt.mag = mag.magnitude().value()
-                        self.udevt.mag_uncer = 0.5
-                        self.udevt.lat = org.latitude().value()
-                        self.udevt.lat_uncer = 0.5
-                        self.udevt.lon = org.longitude().value()
-                        self.udevt.lon_uncer = 0.5
-                        self.udevt.dep = org.depth().value()
-                        self.udevt.dep_uncer = 10.0
-                        self.udevt.o_time = org.time().value().toString('%Y-%m-%dT%H:%M:%SZ')
-                        self.udevt.o_time_uncer = 2.0
-                        if updateno == 0:
-                            self.udevt.type = 0
-                        else:
-                            self.udevt.type = 1
                     try:
                         self.event_dict[evID]['updates'][updateno]['ts'] = \
                         mag.creationInfo().modificationTime().toString("%FT%T.%4fZ")
@@ -389,17 +390,33 @@ class Listener(seiscomp3.Client.Application):
 
             if comment.id() == 'likelihood':
                 seiscomp3.Logging.debug("likelihood comment received for magnitude %s " % parentID)
+                ep = EventParameters()
                 magID = parentID
                 orgID = self.origin_lookup[magID]
                 evID = self.event_lookup[orgID]
+                evt = self.cache.get(seiscomp3.DataModel.Event, evID)
+                if evt:
+                    evt.setPreferredMagnitudeID(parentID)
+                    ep.add(evt)
+                else:
+                    seiscomp3.Logging.debug("Cannot find event %s in cache." % evID)
+                org = self.cache.get(seiscomp3.DataModel.Origin, orgID)
+                if org:
+                    ep.add(org)
+                    for _ia in xrange(org.arrivalCount()):
+                        pk = self.cache.get(seiscomp3.DataModel.Pick, org.arrival(_ia).pickID())
+                        if not pk:
+                            seiscomp3.Logging.debug("Cannot find pick %s in cache." % org.arrival(_ia).pickID())
+                        else:
+                            ep.add(pk)
+                else:
+                    seiscomp3.Logging.debug("Cannot find origin %s in cache." % orgID)
                 # if there are updates attach the likelihood to the most recent one
                 if len(self.event_dict[evID]['updates'].keys()) > 0:
                     idx = sorted(self.event_dict[evID]['updates'].keys())[-1]
                     self.event_dict[evID]['updates'][idx]['likelihood'] = float(comment.text())
                     if self.udevt is not None:
-                        self.udevt.likelihood = float(comment.text())
-                        self.udevt.send(self.udevt.DMMessageEncoder())
-
+                        self.udevt.send(self.udevt.message_encoder(ep))
         except:
             info = traceback.format_exception(*sys.exc_info())
             for i in info: seiscomp3.Logging.error(i)
@@ -408,6 +425,10 @@ class Listener(seiscomp3.Client.Application):
         """
         Call-back function if an object is updated.
         """
+        pk = seiscomp3.DataModel.Pick.Cast(object)
+        if pk:
+            self.handlePick(pk, parentID)
+
         mag = seiscomp3.DataModel.Magnitude.Cast(object)
         if mag:
             self.handleMagnitude(mag, parentID)
@@ -425,6 +446,10 @@ class Listener(seiscomp3.Client.Application):
         """
         Call-back function if a new object is received.
         """
+        pk = seiscomp3.DataModel.Pick.Cast(object)
+        if pk:
+            self.handlePick(pk, parentID)
+
         mag = seiscomp3.DataModel.Magnitude.Cast(object)
         if mag:
             self.cache.feed(mag)
