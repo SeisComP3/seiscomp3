@@ -90,6 +90,13 @@
 					applied.
 					</description>
 				</parameter>
+				<parameter name="maxazgap" type="double" default="300">
+					<description>
+						This defines a cutoff azimuthal gap in degrees. For origins with a larger 
+						azimuthal gap the likelihood will be very small. If you don't want to apply
+						this criterion set it to 360.
+					</description>
+				</parameter>
 				<parameter name="logenvelopes" type="boolean" default="false">
 					<description>
 					This toggles envelope logging. Note that this will produce very large files and

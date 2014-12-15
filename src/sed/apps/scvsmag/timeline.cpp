@@ -444,7 +444,7 @@ ReturnCode Timeline::maxmimum(const StationID &id, const Core::Time &start,
 
 ReturnCode Timeline::pollbuffer(double epiclat, double epiclon, double dthresh,
 		int &stationcount) const {
-	int start_idx, end_idx, bufferSize;
+	int start_idx, end_idx;
 	int cnt = 0;
 	bool found;
 	string locationCode;
@@ -457,7 +457,6 @@ ReturnCode Timeline::pollbuffer(double epiclat, double epiclon, double dthresh,
 	// check whether data has arrived within the last 30 s
 	start_idx = _backSlots - 30;
 	end_idx = _backSlots;
-	bufferSize = _headSlots + _backSlots;
 	// Clip start and end indices
 	if ( start_idx < 0 )
 		start_idx = 0;

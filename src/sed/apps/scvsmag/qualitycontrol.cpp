@@ -150,6 +150,8 @@ bool VsMagnitude::isEventValid(double stmag, VsEvent *evt, double &likelihood,
 			}
 		}
 	}
+	if (evt->azGap >= evt->maxAzGap)
+		lh *= 0.2;
 	likelihood = lh;
 	if ( lh > 0.5 )
 		return true;
