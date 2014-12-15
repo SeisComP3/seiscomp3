@@ -95,6 +95,8 @@ protected:
 		int allThresholdStationsCount;
 		bool isValid; // set to true or false by quality control in VsMagnitude::process(VsEvent *evt)
 		double dthresh;
+		double azGap;
+		double maxAzGap;
 		int update;
 		double likelihood;
 	};
@@ -169,6 +171,7 @@ private:
 	int _timeout;
 	bool _siteEffect; // turn site effects on or off
 	double _maxepicdist;
+	double _maxazgap;
 	bool _logenvelopes;
 };
 

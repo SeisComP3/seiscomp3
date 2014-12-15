@@ -248,6 +248,14 @@ bool VsMagnitude::initConfiguration() {
 				"vsmag.maxepicdist not configured, using default: %f", _maxepicdist);
 	}
 
+	// Set a maximum azimuthal gap
+	try {
+		_maxazgap = configGetDouble("vsmag.maxazgap");
+	} catch ( ... ) {
+		SEISCOMP_INFO(
+				"vsmag.maxepicdist not configured, using default: %f", _maxepicdist);
+	}
+
 	// turn on envelope logging
 	try {
 		_logenvelopes = configGetBool("vsmag.logenvelopes");
@@ -584,6 +592,7 @@ void VsMagnitude::handleEvent(Event *event) {
 			return;
 		}
 		vsevent->update = -1;
+		vsevent->maxAzGap = _maxazgap;
 		/// ...and attach it to the cache (_events)
 		_events[event->publicID()] = vsevent;
 	}
@@ -660,6 +669,9 @@ void VsMagnitude::handleEvent(Event *event) {
 
 	vsevent->dthresh = dthresh;
 	SEISCOMP_DEBUG("dmax; %f, davg: %f, dthresh: %f", dmax, davg, dthresh);
+
+	// Get azimuthal gap
+	vsevent->azGap = org->quality().azimuthalGap();
 }
 
 namespace {
@@ -988,6 +1000,7 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 
 	out.precision(3);
 	out << "Magnitude check: " << deltamag << "; Arrivals check: " << deltapick;
+	out << "; Azimuthal gap: " << evt->azGap;
 	resultstr = out.str();
 	out.str("");
 	SEISCOMP_LOG(_processingInfoChannel, "%s", resultstr.c_str());
