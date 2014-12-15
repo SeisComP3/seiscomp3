@@ -167,7 +167,7 @@ class Listener(seiscomp3.Client.Application):
         if not self.sendemail:
             seiscomp3.Logging.info('Sending email has been disabled.')
         else:
-            self.sendMail({}, test=True)
+            self.sendMail({}, '', test=True)
 
         self.cache.setTimeSpan(TimeSpan(self.expirationtime))
         if self.isDatabaseEnabled():
@@ -224,7 +224,7 @@ class Listener(seiscomp3.Client.Application):
         self.event_dict[evID]['magnitude'] = ed['magnitude']
         seiscomp3.Logging.info("\n" + sout)
         if self.sendemail and threshold_exceeded:
-            self.sendMail(self.event_dict[evID])
+            self.sendMail(self.event_dict[evID], evID)
         self.event_dict[evID]['published'] = True
 
     def handleMagnitude(self, magnitude, parentID):
@@ -293,7 +293,7 @@ class Listener(seiscomp3.Client.Application):
         # delete old events
         self.garbageCollector()
 
-    def sendMail(self, evt, test=False):
+    def sendMail(self, evt, evID, test=False):
         """
         Email reports.
         """
@@ -303,7 +303,7 @@ class Listener(seiscomp3.Client.Application):
         else:
             msg = MIMEText(evt['report'])
             subject = self.email_subject + ' / %s / ' % self.hostname
-            subject += '%.2f' % evt['magnitude']
+            subject += '%.2f / %s' % (evt['magnitude'], evID)
             msg['Subject'] = subject
         msg['From'] = self.email_sender
         msg['To'] = self.email_recipients[0]
