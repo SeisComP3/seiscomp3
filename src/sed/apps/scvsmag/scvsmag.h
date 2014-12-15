@@ -76,7 +76,6 @@ public:
 
 protected:
 	typedef std::map<Timeline::StationID, VsTimeWindow> VsWindows;
-	typedef std::set<Timeline::StationID> StationList;
 
 	DEFINE_SMARTPOINTER(VsEvent);
 	struct VsEvent: Core::BaseObject {
@@ -90,7 +89,7 @@ protected:
 		Core::Time originArrivalTime;
 		Core::Time originCreationTime;
 		int vsStationCount;
-		StationList pickedStations; // all stations contributing picks to an origin
+		Timeline::StationList pickedStations; // all stations contributing picks to an origin
 		int pickedStationsCount;
 		int pickedThresholdStationsCount;
 		int allThresholdStationsCount;
