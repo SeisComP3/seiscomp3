@@ -216,9 +216,9 @@ bool VsMagnitude::initConfiguration() {
 
 	try {
 		_backSlots = configGetInt("vsmag.backslots");
-		if ( _backSlots < 0 ) {
+		if ( _backSlots < 10 ) {
 			SEISCOMP_ERROR(
-					"vsmag.backslots must not be negative (%d < 0)", _backSlots);
+					"vsmag.backslots must not be smaller than 10 (%d < 10)", _backSlots);
 			return false;
 		}
 	} catch ( ... ) {
@@ -601,7 +601,7 @@ void VsMagnitude::handleEvent(Event *event) {
 		vsevent->expirationTime = org->time().value() + Core::TimeSpan(_eventExpirationTime, 0);
 
 	/// Generate some statistics for later use in delta-pick quality measure
-	StationList pickedThresholdStations; // all picked stations at a limited distance from the epicenter
+	Timeline::StationList pickedThresholdStations; // all picked stations at a limited distance from the epicenter
 	vsevent->pickedStations.clear();
 	SEISCOMP_DEBUG("Number of arrivals in origin %s: %d", org->publicID().c_str(), (int)org->arrivalCount());
 	vsevent->stations.clear();
@@ -739,7 +739,7 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 	double stmag;
 	double distdg, epicdist, azi1, azi2;
 	ReturnCode ret;
-	StationList unused;
+	Timeline::StationList unused;
 	evt->allThresholdStationsCount = 0;
 	vs.seteqlat(evt->lat);
 	vs.seteqlon(evt->lon);
@@ -786,8 +786,6 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 		 if ( not_enough_data == ret || clipped_data == ret){
 			 SEISCOMP_WARNING("Not enough data available for %s.%s.%s", it->first.first.c_str(),
 						it->first.second.c_str(),locationCode.c_str());
-			 if ( distdg < evt->dthresh )
-			 	evt->allThresholdStationsCount++;
 			 unused.insert(it->first);
 			 continue;
 		 }
@@ -796,8 +794,6 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 		if ( index_error == ret || undefined_problem == ret)
 			continue;
 
-		if ( distdg < evt->dthresh )
-			evt->allThresholdStationsCount++;
 		if ( _maxepicdist > 0 ){
 			if( epicdist > _maxepicdist )
 				continue;
@@ -919,6 +915,13 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 	evt->vsMagnitude = minMag;
 	evt->vsStationCount = inputs.size();
 
+
+	if ( _timeline.pollbuffer(evt->lat, evt->lon,evt->dthresh,evt->allThresholdStationsCount) != no_problem){
+		SEISCOMP_WARNING("Problems in the buffer polling function.");
+		return;
+	}
+
+
 	// Use quality control functions to decide if the event is valid
 	evt->isValid = false;
 	double deltamag;
@@ -972,8 +975,8 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 	if (evt->pickedStationsCount > evt->vsStationCount){
 		out << "Stations not used for VS-mag: ";
 		// find picked stations that don't contribute to the VS magnitude
-		StationList &sl = evt->pickedStations;
-		for (StationList::iterator it=sl.begin(); it!=sl.end(); ++it){
+		Timeline::StationList &sl = evt->pickedStations;
+		for (Timeline::StationList::iterator it=sl.begin(); it!=sl.end(); ++it){
 			if ( evt->stations.find(*it) == evt->stations.end() || unused.find(*it) != unused.end()) {
 				out << (*it).first << '.' << (*it).second << ' ';
 			}

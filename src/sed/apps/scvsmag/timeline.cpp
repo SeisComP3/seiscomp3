@@ -442,4 +442,96 @@ ReturnCode Timeline::maxmimum(const StationID &id, const Core::Time &start,
 	return undefined_problem;
 }
 
+ReturnCode Timeline::pollbuffer(double epiclat, double epiclon, double dthresh,
+		int &stationcount) const {
+	int start_idx, end_idx, bufferSize;
+	int cnt = 0;
+	bool found;
+	string locationCode;
+	double distdg, azi1, azi2;
+	StationList stationsCounted;
+
+	// Look up station
+	Client::Inventory *inv = Client::Inventory::Instance();
+
+	// check whether data has arrived within the last 30 s
+	start_idx = _backSlots - 30;
+	end_idx = _backSlots;
+	bufferSize = _headSlots + _backSlots;
+	// Clip start and end indices
+	if ( start_idx < 0 )
+		start_idx = 0;
+
+	Stations::const_iterator it;
+	SensorBuffersPtr station;
+	SensorBuffers::const_iterator sit;
+	for ( it = _stations.begin(); it != _stations.end(); ++it ) {
+		station = it->second;
+		found = false;
+
+		// Check whether waveform data has arrived on the vertical
+		// component of either the velocity or the acceleration sensor
+		SensorBufferPtr sensorACC, sensorVEL;
+		for ( sit = station->begin(); sit != station->end(); ++sit ) {
+			SensorBufferPtr sensor = *sit;
+			if ( sensor->sensorUnit
+					== Processing::WaveformProcessor::MeterPerSecondSquared )
+				sensorACC = sensor;
+			else if ( sensor->sensorUnit
+					== Processing::WaveformProcessor::MeterPerSecond )
+				sensorVEL = sensor;
+		}
+
+		if ( sensorVEL ) {
+			for ( int i = start_idx; i <= end_idx; ++i ) {
+				const Cell &cell = sensorVEL->buffer[i];
+				if ( cell.envelopes[Z].values[Velocity] >= 0){
+					found = true;
+					locationCode = sensorVEL->locationCode;
+					break;
+				}
+			}
+		}
+
+		if ( sensorACC && !found ) {
+			for ( int i = start_idx; i <= end_idx; ++i ) {
+				const Cell &cell = sensorACC->buffer[i];
+				if ( cell.envelopes[Z].values[Velocity] >= 0){
+					found = true;
+					locationCode = sensorACC->locationCode;
+					break;
+				}
+			}
+		}
+
+		if(!found)
+			continue;
+
+		// check whether sensor is within the distance threshold
+		DataModel::SensorLocation *loc;
+		loc = inv->getSensorLocation(it->first.first, it->first.second, locationCode, _referenceTime);
+		if ( loc == NULL ) {
+			SEISCOMP_WARNING(
+					"%s.%s.%s: sensor location not in inventory: ignoring", it->first.first.c_str(), it->first.second.c_str(), locationCode.c_str());
+			continue;
+		}
+		Math::Geo::delazi(epiclat, epiclon, loc->latitude(), loc->longitude(),
+						&distdg, &azi1, &azi2);
+		if ( distdg < dthresh ){
+			cnt++;
+			stationsCounted.insert(it->first);
+		}
+	}
+	string resultstr;
+	ostringstream out;
+	out << "Stations within dt: ";
+	for (StationList::iterator it=stationsCounted.begin(); it!=stationsCounted.end(); ++it){
+			out << (*it).first << '.' << (*it).second << ' ';
+		}
+	resultstr = out.str();
+	SEISCOMP_DEBUG("%s", resultstr.c_str());
+
+	stationcount = cnt;
+	return no_problem;
+}
 }// end of namespace

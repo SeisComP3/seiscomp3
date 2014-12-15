@@ -27,6 +27,8 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/processing/waveformprocessor.h>
 #include <seiscomp3/datamodel/vs/vs_package.h>
+#include <seiscomp3/math/geo.h>
+#include <set>
 
 #include "circular.h"
 
@@ -113,6 +115,7 @@ public:
 	//! Pair of network and station code
 	typedef std::pair<std::string, std::string> StationID;
 	typedef std::map<StationID, SensorBuffersPtr> Stations;
+	typedef std::set<StationID> StationList;
 
 	/**
 	 Initializes the timeline and sets the number of slots
@@ -164,6 +167,13 @@ public:
 			Core::Time &timeVertical, Envelope &horizontal,
 			Core::Time &timeHorizontal, std::string &locationCode,
 			std::string &channelCode) const;
+
+	/**
+	 Checks for which stations within a given distance of the epicenter data
+	 is available.
+	 */
+	ReturnCode pollbuffer(double epiclat, double epiclon, double dthresh,
+			int &stationcount) const;
 
 	/**
 	 Returns the number of envelope streams in the buffer.
