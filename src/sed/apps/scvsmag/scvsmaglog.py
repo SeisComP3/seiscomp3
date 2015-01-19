@@ -183,7 +183,7 @@ class Listener(seiscomp3.Client.Application):
                                                     self.amqMsgFormat)
             self.hb = ud_interface.HeartBeat(self.amqHost, self.amqPort,
                                              self.amqHbTopic, self.amqUser,
-                                             self.amqPwd)
+                                             self.amqPwd, self.amqMsgFormat)
             self.enableTimer(5)
             seiscomp3.Logging.info('ActiveMQ interface is running.')
         except Exception, e:

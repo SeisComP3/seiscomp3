@@ -67,15 +67,21 @@ class UDConnection:
 
 class HeartBeat(UDConnection):
 
-    def __init__(self, host, port, topic, username, password):
+    def __init__(self, host, port, topic, username, password,
+                 format='qml1.2-rt'):
         UDConnection.__init__(self, host, port, topic, username, password)
+        self.format = format
 
     def send_hb(self):
         dt = datetime.datetime.utcnow()
-        now = dt.strftime('%a %B %d %H:%M:%S %Y')
         root = ET.Element('hb')
-        root.set('originator', 'vs.9')
-        root.set('sender', 'vs.9')
+        root.set('originator', 'vssc3')
+        root.set('sender', 'vssc3')
+        if self.format == 'qml1.2-rt':
+            now = dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            root.set('xmlns', 'http://heartbeat.reakteu.org')
+        else:
+            now = dt.strftime('%a %B %d %H:%M:%S %Y')
         root.set('timestamp', now)
         tree = ET.ElementTree(root)
         f = cStringIO.StringIO()
