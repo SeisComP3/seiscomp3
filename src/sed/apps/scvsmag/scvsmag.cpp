@@ -55,7 +55,7 @@ VsMagnitude::VsMagnitude(int argc, char **argv) :
 	addMessagingSubscription("LOCATION");
 	addMessagingSubscription("EVENT");
 	addMessagingSubscription("PICK");
-	addMessagingSubscription("VS");
+	addMessagingSubscription("AMPLITUDE");
 
 	// Setting default values:
 
