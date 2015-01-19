@@ -140,7 +140,7 @@
     <!-- Define some global variables -->
     <!-- CHANGE ME: Please change the ID_PREFIX to the reverse DNS name of your
          institute -->
-    <xsl:variable name="ID_PREFIX" select="'smi:org.gfz-potsdam.de/geofon/'"/>
+    <xsl:variable name="ID_PREFIX" select="'smi:ch.ethz.sed/sc3a/'"/>
     <xsl:variable name="PID" select="'publicID'"/>
 
     <!-- Starting point: Match the root node and select the one and only
