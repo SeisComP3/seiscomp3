@@ -43,119 +43,44 @@ bool VsMagnitude::isEventValid(double stmag, VsEvent *evt, double &likelihood,
 		double &deltamag, double &deltapick) {
 
 	double lh = 1.0;
+	double merr;
 
 	deltamag = deltaMag(stmag, *evt->vsMagnitude);
 	deltapick = deltaPick(evt);
-
-	if ( stmag < 1.5 ) {
-		if ( deltapick <= 0.1 ) {
-			if ( deltamag < 0.6 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else if ( deltapick > 0.1 && deltapick < 0.5 ) {
-			if ( deltamag < 0.5 ) {
-				lh = 0.8;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.5 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	} else if ( stmag < 2.0 ) {
-		if ( deltapick <= 0.1 ) {
-			if ( deltamag < 0.5 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else if ( deltapick > 0.1 && deltapick < 0.5 ) {
-			if ( deltamag < 0.4 ) {
-				lh = 0.8;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.4 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	} else if ( stmag < 2.5 ) {
-		if ( deltapick <= 0.1 ) {
-			if ( deltamag < 0.4 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else if ( deltapick > 0.1 && deltapick < 0.5 ) {
-			if ( deltamag < 0.3 ) {
-				lh = 0.8;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.3 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	} else if ( stmag < 3.0 ) {
-		if ( deltapick < 0.5 ) {
-			if ( deltamag < 0.25 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.25 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	} else if ( stmag < 4.0 ) {
-		if ( deltapick < 0.5 ) {
-			if ( deltamag < 0.2 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.2 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	} else if ( stmag > 4.0 ) {
-		if ( deltapick < 0.5 ) {
-			if ( deltamag < 0.18 ) {
-				lh = 0.99;
-			} else {
-				lh = 0.4;
-			}
-		} else {
-			if ( deltamag < 0.18 ) {
-				lh = 0.3;
-			} else {
-				lh = 0.12;
-			}
-		}
-	}
-	if (evt->azGap >= evt->maxAzGap)
+	merr = valid_magnitude_error(stmag);
+	if (deltamag > merr)
+		lh *= 0.4;
+	if (deltapick > 0.5)
+		lh *= 0.3;
+	if (evt->azGap > evt->maxAzGap)
 		lh *= 0.2;
-	likelihood = lh;
+	if ((1.0 - lh) < 0.001) {
+		likelihood = 0.99;
+	} else {
+		likelihood = lh;
+	}
 	if ( lh > 0.5 )
 		return true;
 	return false;
+}
+
+/*
+ * Lookup the permissible magnitude error
+ */
+double VsMagnitude::valid_magnitude_error(double stmag){
+	if ( stmag < 1.5 ) {
+		return 0.5;
+	} else if ( stmag < 2.0 ) {
+		return 0.4;
+	} else if ( stmag < 2.5 ) {
+		return 0.3;
+	} else if ( stmag < 3.0 ) {
+		return 0.25;
+	} else if ( stmag < 4.0 ) {
+		return 0.2;
+	} else {
+		return 0.18;
+	}
 }
 
 /*!
