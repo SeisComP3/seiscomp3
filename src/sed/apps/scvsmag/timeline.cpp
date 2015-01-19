@@ -325,8 +325,8 @@ ReturnCode Timeline::maxmimum(const StationID &id, const Core::Time &start,
 			}
 		}
 		// check that the time between the pick and the latest envelope entry
-		// in the buffer is at least 3 s
-		if ( latest_entry - pick_idx < 3 )
+		// in the buffer is at least 1 s
+		if ( latest_entry - pick_idx < 1 )
 			return not_enough_data;
 
 		SEISCOMP_DEBUG("max_idx: %d; min_idx: %d", max_idx, min_idx);
