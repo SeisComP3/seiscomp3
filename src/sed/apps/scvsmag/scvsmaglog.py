@@ -51,7 +51,7 @@ class Listener(seiscomp3.Client.Application):
         self.latest_event = Time.Null
         # report settings
         self.ei = System.Environment.Instance()
-        self.report_head = "Mag.|Lat.  |Lon.  |tdiff |Depth |creation time (UTC)" + " "*6 + "|"
+        self.report_head = "Mag.|Lat.  |Lon.   |tdiff |Depth |creation time (UTC)" + " "*6 + "|"
         self.report_head += "origin time (UTC)" + " "*8 + "|likeh." + "|#st.(org.) "
         self.report_head += "|#st.(mag.)" + "\n"
         self.report_head += "-"*114 + "\n"
