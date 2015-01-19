@@ -133,6 +133,7 @@ protected:
 			double &deltamag, double &deltapick);
 	double deltaMag(double vsmag, double stmag); // for Quality Control
 	double deltaPick(VsEvent *evt); // ratio between the stations that reported a pick to the overall number of stations within a given radius.
+	double valid_magnitude_error(double stmag);
 
 	/**
 	 Returns the site correction scale.
