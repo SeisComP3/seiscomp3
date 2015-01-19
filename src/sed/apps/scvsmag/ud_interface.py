@@ -7,7 +7,6 @@ Created on May 7, 2013
 """
 
 from stompy.simple import Client
-import xml.etree.ElementTree as ET
 import cStringIO
 import datetime
 import time
