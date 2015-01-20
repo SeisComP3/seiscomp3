@@ -771,6 +771,7 @@ void VsMagnitude::process(VsEvent *evt, Event *event) {
 			return;
 	}
 
+	evt->staMags.clear();
 	VsWindows::iterator it;
 	for ( it = evt->stations.begin(); it != evt->stations.end(); ++it ) {
 		Envelope venv, henv;
@@ -867,7 +868,7 @@ void VsMagnitude::process(VsEvent *evt, Event *event) {
 		wid.setChannelCode(channelCode);
 		staMag->setWaveformID(wid);
 		org->add(staMag.get());
-		_staMags.push_back(staMag);
+		evt->staMags.push_back(staMag);
 		Notifier::SetEnabled(false);
 
 		// Logging
@@ -1072,13 +1073,13 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	nmag->setType("MVS");
 	nmag->setStationCount(vsevt->vsStationCount);
 	nmag->setCreationInfo(_creationInfo);
-	for (StaMagArray::iterator it = _staMags.begin(); it != _staMags.end(); ++it) {
+	for (StaMagArray::iterator it = vsevt->staMags.begin(); it != vsevt->staMags.end(); ++it) {
 			const DataModel::StationMagnitude *staMag = (*it).get();
 			StationMagnitudeContributionPtr magRef = new StationMagnitudeContribution(staMag->publicID());
 			nmag->add(magRef.get());
 	}
 	org->add(nmag.get());
-	_staMags.clear();
+	vsevt->staMags.clear();
 
 	/// set a comment containing the update number
 	/// if the update numbers of two successive comments for the

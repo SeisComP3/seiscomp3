@@ -78,6 +78,7 @@ public:
 
 protected:
 	typedef std::map<Timeline::StationID, VsTimeWindow> VsWindows;
+	typedef std::vector<DataModel::StationMagnitudeCPtr> StaMagArray;
 
 	DEFINE_SMARTPOINTER(VsEvent);
 	struct VsEvent: Core::BaseObject {
@@ -90,6 +91,7 @@ protected:
 		OPT(double) vsMagnitude;
 		Core::Time originArrivalTime;
 		Core::Time originCreationTime;
+		StaMagArray staMags;
 		int vsStationCount;
 		Timeline::StationList pickedStations; // all stations contributing picks to an origin
 		int pickedStationsCount;
@@ -158,9 +160,6 @@ private:
 	Logging::FdOutput* _processingInfoOutput;
 	Logging::Channel* _envelopeInfoChannel;
 	Logging::Output* _envelopeInfoFile;
-
-	typedef std::vector<DataModel::StationMagnitudeCPtr> StaMagArray;
-	StaMagArray _staMags;
 
 	// Configuration
 	std::string _vs30filename;
