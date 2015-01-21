@@ -1073,12 +1073,11 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	nmag->setType("MVS");
 	nmag->setStationCount(vsevt->vsStationCount);
 	nmag->setCreationInfo(_creationInfo);
+	org->add(nmag.get());
 	for (StaMagArray::iterator it = vsevt->staMags.begin(); it != vsevt->staMags.end(); ++it) {
 			const DataModel::StationMagnitude *staMag = (*it).get();
-			StationMagnitudeContributionPtr magRef = new StationMagnitudeContribution(staMag->publicID());
-			nmag->add(magRef.get());
+			nmag->add(new StationMagnitudeContribution(staMag->publicID()));
 	}
-	org->add(nmag.get());
 	vsevt->staMags.clear();
 
 	/// set a comment containing the update number
