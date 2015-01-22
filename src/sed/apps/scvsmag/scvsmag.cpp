@@ -1076,7 +1076,9 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	org->add(nmag.get());
 	for (StaMagArray::iterator it = vsevt->staMags.begin(); it != vsevt->staMags.end(); ++it) {
 			const DataModel::StationMagnitude *staMag = (*it).get();
-			nmag->add(new StationMagnitudeContribution(staMag->publicID()));
+			StationMagnitudeContributionPtr magRef = new StationMagnitudeContribution(staMag->publicID());
+			magRef->setWeight(1.0);
+			nmag->add(magRef.get());
 	}
 	vsevt->staMags.clear();
 
