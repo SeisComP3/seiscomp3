@@ -1,6 +1,6 @@
 Part of the :ref:`VS` package.
 
-scvsmaglog is part of a new SeisComp3 implementation of the
+*scvsmaglog* is part of a new SeisComp3 implementation of the
 `Virtual Seismologist <http://www.seismo.ethz.ch/research/vs>`_
 (VS) Earthquake Early Warning algorithm (Cua, 2005; Cua and Heaton, 2007) released
 under the `'SED Public License for SeisComP3 Contributions'
@@ -8,18 +8,43 @@ under the `'SED Public License for SeisComP3 Contributions'
 the Python package `dateutil <https://pypi.python.org/pypi/python-dateutil>`_ to
 be installed.
 
-It logs the VS magnitude messages received from *scvsmag* and, once an event
+It logs the VS magnitude messages received from :ref:`scvsmag` and, once an event
 has timed out, generates report files. These report files are saved to disk and
 can also be sent via email.
 
-It also implements an ActiveMQ interface which provides the possibility to send
-messages to the UserDisplay, a real-time EEW user interface developed by `Caltech
-<http://www.eew.caltech.edu/research/userdisplay.html>`_.
-While the UserDisplay is currently not openly available, the message stream from
-this interface can be used. The xml scheme and set-up of an ActiveMQ broker
-necessary to receive the messages is briefly described in section :ref:`ref_VS_UDI`.
-Note that the ActiveMQ interface requires the installation of the Python 
-package `stompy <https://pypi.python.org/pypi/stompy>`_. 
+It also implements an ActiveMQ interface (http://activemq.apache.org/) which 
+provides the possibility to send alert messages in real-time. Currently, 
+messages can be sent in three different formats (SeisComP3ML, QuakeML, ShakeAlertML).
+The recommended client to display these alert messages is the `Earthquake 
+Early Warning Display (EEWD) <http://www.reaktproject.eu/index.php?option=com_content&view=article&id=496&Itemid=58>`_
+an open source user interface developed within the 
+European `REAKT <http://www.reaktproject.eu/>`_ project and based on the 
+the `UserDisplay <http://www.eew.caltech.edu/research/userdisplay.html>`_.
+The UserDisplay is not openly available, however, people with permission to run
+the UserDisplay can use it to receive alert messages from *scvsmaglog*.
+
+To receive alerts with the EEWD set the format to *qml1.2-rt*, to receive alerts
+with the UserDisplay set the format to *shakealert*. There are currently no clients 
+which can digest SeisComP3ML. Using pipelines alerts can be sent out in more 
+than one format.
+
+The real-time ActiveMQ interface requires the Python packages 
+`stompy <https://pypi.python.org/pypi/stompy>`_ and `lxml <http://lxml.de/>`_ to 
+be installed. 
+
+It is beyond the scope of this documentation to explain the complete setup of an
+ActiveMQ broker. However, since scvsmaglog uses the STOMP protocol to send
+messages to the broker it is essential to add the following line
+to configuration of the ActiveMQ broker.
+
+.. code-block:: sh
+
+   <connector>
+   <serverTransport uri="stomp://your-server-name:your-port"/>
+   </connector>
+
+Please refer to `ActiveMQ <http://activemq.apache.org/>`_ for setting up an 
+ActiveMQ broker.
 
 
 Reports
@@ -42,90 +67,8 @@ Below is an example of the first few lines of a report file:
 
 *Creation time* is the time the VS magnitude message was generated, *tdiff* is the
 time difference between *creation time* and *origin time* in seconds, *likeh* is the
-likelihood that this event is a real event (see documentation of the *scvsmag* module), # *st.(org)*
+likelihood that this event is a real event (see documentation of :ref:`scvsmag`), # *st.(org)*
 is the number of stations that contributed to the origin and # *st.(mag)* the number of envelope streams
 that contributed to the magnitude.
 
-
-.. _ref_VS_UDI:
-
-ActiveMQ interface
-=====================
-
-Event messages
---------------
-
-Event messages are sent once a first magnitude estimate is available. The
-'message_type' of the first message is 'new', and for any successive message it's
-either 'update' or 'delete'. Currently all values except the uncertainty
-estimates will be set by scvsmaglog.
-
-.. code-block:: xml
-
-   <?xml version='1.0' encoding='UTF-8'?>
-   <event_message message_type="new" orig_sys="dm" version="0">
-       <core_info id="-9">
-           <mag units="Mw">-9.9</mag>
-           <mag_uncer units="Mw">-9.9</mag_uncer>
-           <lat units="deg">-999.9</lat>
-           <lat_uncer units="deg">-999.9</lat_uncer>
-           <lon units="deg">-999.9</lon>
-           <lon_uncer units="deg">-999.9</lon_uncer>
-           <depth units="km">-9.9</depth>
-           <depth_uncer units="km">-9.9</depth_uncer>
-           <orig_time units="UTC">2013-06-10T13:35:12Z</orig_time>
-           <orig_time_uncer units="sec">-9.9</orig_time_uncer>
-           <likelihood>-9.9</likelihood>
-       </core_info>
-   </event_message>
-
-
-Heartbeat messages
-------------------
-
-Heartbeat messages are sent in 5 s intervals.
-
-.. code-block:: sh
-
-   <?xml version='1.0' encoding='UTF-8'?>
-   <hb originator="vs.9" sender="vs.9" timestamp="Mon June 10 13:41:35 2013" />
-
-ActiveMQ broker configuration
------------------------------
-
-It is beyond the scope of this documentation to explain the complete setup of an
-ActiveMQ broker. However, since scvsmaglog uses the STOMP protocol to send
-messages to the broker it is essential to install the stompy package, which
-provides Python bindings for the STOMP protocol, and to add the following line
-to configuration of the ActiveMQ broker.
-
-.. code-block:: sh
-
-   <connector>
-   <serverTransport uri="stomp://your-server-name:your-port"/>
-   </connector>
-
-Please refer to `ActiveMQ <http://activemq.apache.org/>`_ for setting up an 
-ActiveMQ broker.
-
-Consumer example
-----------------
-The following listing shows a consumer that listens for heartbeats and alerts 
-and writes them to stdout.
-
-.. code-block:: python
-
-   #!/usr/bin/env python                                                                                 
-   from stompy.simple import Client
-   stomp = Client(host='your-server-name', port=your-port)
-   stomp.connect(username='username', password='password')
-
-   stomp.subscribe("/topic/heartbeat")
-   stomp.subscribe("/topic/alert")
-   while True:                                                                                           
-       message = stomp.get()                                                                             
-       print message.body                                                                                
-   stomp.unsubscribe("/topic/heartbeat")
-   stomp.unsubscribe("/topic/alerts")
-   stomp.disconnect()
 

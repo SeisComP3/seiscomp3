@@ -134,18 +134,12 @@ False alarms, missed events, solution quality
 ---------------------------------------------
 
 The rate of false alarms and missed events is determined by the output of the
-normal SeisComp3 origin chain (scautopick, scautoloc), and will be similar to the
-performance of the automatic setup for typical network operations (i.e. if you
-do not trust your automatic origins for the network, you will not trust them for
-VS either). A solution quality is independently estimated by VS, combining
-information on location quality and station quality.
-
-.. _fig-VS-likelihood:
-
-.. figure:: media/VS/VS_likelihood_scheme_v1.2.png
-   :width: 16cm
-
-   Detailed graph on how the solution quality is determined.
+normal SeisComp3 origin chain (:ref:`scautopick`, :ref:`scautoloc`), and will 
+be similar to the performance of the automatic setup for typical network 
+operations (i.e. if you do not trust your automatic origins for the network, you
+will not trust them for VS either). A solution quality is independently estimated
+by VS, combining information on location quality and station quality.
+See :ref:`scvsmag` on how the VS specific solution quality is computed.
 
 
 VS License
