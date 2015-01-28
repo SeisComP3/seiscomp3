@@ -16,8 +16,8 @@
 					<description>
 					A ascii grid file of Vs30 values conforming to the standard ShakeMap format.
 					Each line contains a comma separated list of longitude, latitude and the
-					VS30 value for one grid point. Longitude and latitude have to got from lower
-					to higher values and longitudes increase faster than latitudes.
+					VS30 value for one grid point. Longitudes and latitudes have to increase 
+					with longitudes increasing faster than latitudes.
 					</description>
 				</parameter>
 				<parameter name="vs30default" type="double" default="910">
