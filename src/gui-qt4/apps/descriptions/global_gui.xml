@@ -483,6 +483,11 @@
 							Precision of RMS values.
 						</description>
 					</parameter>
+					<parameter name="uncertainties" type="int" default="0">
+						<description>
+							Precision of uncertainty values, e.g. latitude errors.
+						</description>
+					</parameter>
 				</group>
 				<group name="unit">
 					<parameter name="distanceInKM" type="boolean" default="false">
