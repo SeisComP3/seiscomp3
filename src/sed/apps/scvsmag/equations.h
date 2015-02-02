@@ -23,7 +23,7 @@
 
 class VsEquations {
 private:
-	float mag, eqlat, eqlon;
+	float mag, eqlat, eqlon, norm;
 	// HA, HV, HD, ZA, ZV, ZD
 	static const float attenuation[2][6][2][7];
 public:
@@ -40,7 +40,7 @@ public:
 	int psclass(float ZA, float ZV, float HA, float HV);
 	float mest(float ZAD, const int PSclass);
 	float mesterr(const int PSclass);
-	float zavg(const int PSclass, float magnitude);
+	float zavg(const int PSclass);
 	float zavgerr(const int PSclass);
 	float saturation(const float c1, const float c2);
 	float edist(const float stlat, const float stlon);
@@ -57,6 +57,8 @@ public:
 	void seteqlon(float eventlon);
 	const float getmag();
 	void setmag(float magnitude);
+	const float getnorm();
+	void setnorm(float norminit);
 
 };
 

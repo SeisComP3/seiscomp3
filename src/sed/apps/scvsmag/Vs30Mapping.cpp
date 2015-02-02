@@ -98,7 +98,7 @@ bool Vs30Mapping::TupleHandlerGrid::read() {
 	float lon;
 
 	float oldlat = std::numeric_limits<float>::min();
-	float oldlon = std::numeric_limits<float>::min();
+	float oldlon = -181.0;
 	float oldlon2 = std::numeric_limits<float>::min();
 
 	float vsx;
@@ -131,7 +131,7 @@ bool Vs30Mapping::TupleHandlerGrid::read() {
 					"Longitude must be equal or smaller than +180 (lon=%.2f)", lon);
 			return false;
 		}
-		if ( !((fabs(lon) > fabs(oldlon)) || (fabs(oldlon) > fabs(oldlon2))) ) {
+		if ( !((lon > oldlon) || (oldlon > oldlon2)) ) {
 			SEISCOMP_ERROR("Longitudes must increase continuously");
 			return false;
 		}
@@ -145,7 +145,7 @@ bool Vs30Mapping::TupleHandlerGrid::read() {
 					"Latitude must be equal or smaller than +90 (lat=%.2f)", lat);
 			return false;
 		}
-		if ( !(fabs(lat) >= fabs(oldlat)) ) {
+		if ( !(lat >= oldlat) ) {
 			SEISCOMP_ERROR("Latitudes must increase continuously");
 			return false;
 		}

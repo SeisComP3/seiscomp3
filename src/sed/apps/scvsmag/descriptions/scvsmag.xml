@@ -16,8 +16,8 @@
 					<description>
 					A ascii grid file of Vs30 values conforming to the standard ShakeMap format.
 					Each line contains a comma separated list of longitude, latitude and the
-					VS30 value for one grid point. Longitude and latitude have to got from lower
-					to higher values and longitudes increase faster than latitudes.
+					VS30 value for one grid point. Longitudes and latitudes have to increase 
+					with longitudes increasing faster than latitudes.
 					</description>
 				</parameter>
 				<parameter name="vs30default" type="double" default="910">
@@ -88,6 +88,13 @@
 					This defines a cutoff epicentral distance in kilometers; stations further than that
 					won't be used for magnitude computation; a negative value means no cutoff is
 					applied.
+					</description>
+				</parameter>
+				<parameter name="maxazgap" type="double" default="300">
+					<description>
+						This defines a cutoff azimuthal gap in degrees. For origins with a larger 
+						azimuthal gap the likelihood will be very small. If you don't want to apply
+						this criterion set it to 360.
 					</description>
 				</parameter>
 				<parameter name="logenvelopes" type="boolean" default="false">

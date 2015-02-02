@@ -29,5 +29,3 @@ the configuration parameter in :file:`global.cfg`:
 .. code-block:: sh
 
    plugins = dmvs
-
-By default scenvelope sends messages to the group "VS".

@@ -26,6 +26,7 @@
 #include "equations.h"
 
 VsEquations::VsEquations() {
+	norm = 1.0;
 }
 
 VsEquations::~VsEquations() {
@@ -105,8 +106,8 @@ float VsEquations::mesterr(const int PSclass) {
 	return PSclass == 1 ? 0.41 : 0.45;
 }
 
-float VsEquations::zavg(const int PSclass, float magnitude) {
-	return PSclass == 1 ? -0.685 * magnitude + 5.52 : -0.615 * magnitude + 5.496;
+float VsEquations::zavg(const int PSclass) {
+	return PSclass == 1 ? -0.685 * mag + 5.52 : -0.615 * mag + 5.496;
 }
 
 float VsEquations::zavgerr(const int PSclass) {
@@ -155,15 +156,15 @@ enum {
 
 float VsEquations::likelihood(float ZA, float ZV, float ZD, float HA, float HV,
 		float HD, int PSclass, int Soilclass, float stlat, float stlon) {
-	float a, b, c1, c2, d, e, sigma, f3;
+	float a, b, c1, c2, d, e, sigma, sigma_zad, f3;
 	float envelopes[4] = { ZV, HA, HV, HD };
 	int wavetypes[4] = { zv, ha, hv, hd };
-	float singlemag = VsEquations::mest(
-			VsEquations::ground_motion_ratio(ZA, ZD), PSclass);
+	sigma_zad = VsEquations::zavgerr(PSclass);
 	float f1 = pow(
 			VsEquations::ground_motion_ratio(ZA, ZD)
-					- VsEquations::zavg(PSclass, singlemag), 2)
-			/ (2 * pow(VsEquations::zavgerr(PSclass), 2));
+					- VsEquations::zavg(PSclass), 2)
+			/ (2 * pow(sigma_zad, 2));
+	norm *= 1.0/(sqrt(2*M_PI)*sigma_zad);
 
 	float f2 = 0;
 	for ( int kk = 0; kk < 4; kk++ ) {
@@ -174,6 +175,7 @@ float VsEquations::likelihood(float ZA, float ZV, float ZD, float HA, float HV,
 		d = VsEquations::getd(PSclass, wavetypes[kk], Soilclass);
 		e = VsEquations::gete(PSclass, wavetypes[kk], Soilclass);
 		sigma = VsEquations::getsigma(PSclass, wavetypes[kk], Soilclass);
+		norm *= 1.0/(sqrt(2*M_PI)*sigma);
 		f3 = pow((log10(envelopes[kk]) -
 				VsEquations::amplitude(a, b, c1, c2, d, e, stlat,stlon)), 2) /
 				(2 * pow(sigma, 2));
@@ -188,6 +190,14 @@ void VsEquations::setmag(float magnitude) {
 
 const float VsEquations::getmag() {
 	return mag;
+}
+
+void VsEquations::setnorm(float norminit) {
+	norm = norminit;
+}
+
+const float VsEquations::getnorm() {
+	return norm;
 }
 
 void VsEquations::seteqlat(float eventlat) {
