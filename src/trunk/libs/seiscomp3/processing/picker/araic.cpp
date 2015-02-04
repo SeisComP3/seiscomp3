@@ -201,6 +201,15 @@ const string &ARAICPicker::methodID() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string &ARAICPicker::filterID() const {
+	return _filter;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ARAICPicker::calculatePick(int n, const double *data,
                                 int signalStartIdx, int signalEndIdx,
                                 int &triggerIdx, int &lowerUncertainty,

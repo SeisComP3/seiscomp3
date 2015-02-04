@@ -184,13 +184,13 @@ void BKPicker::bk_wrapper(int n, double *data, int &kmin, double &snr,
 	snr = (double)signal / (double)noise;
 	SEISCOMP_DEBUG(" bk_wrapper() signal: %d noise: %d  snr: %f",signal,noise,snr);
 }
-
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-BKPicker::BKPicker() { 
+BKPicker::BKPicker() {
 	setMinSNR(0.);
 	// Setup defaults
 	_config.signalBegin = -20;
@@ -223,10 +223,25 @@ BKPicker::~BKPicker() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const string &BKPicker::methodID() const {
 	static string method = "BK";
 	return method;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string &BKPicker::filterID() const {
+	return usedFilter;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -255,8 +270,11 @@ bool BKPicker::calculatePick(int ndata, const double *data,
 	for (int i=0; i<n; i++)
 		tmp[i] = f[i]-offset;
 
+	usedFilter = "";
 	if (filterType == "BP"){
 		SEISCOMP_DEBUG("Applying Bandpass: poles: %d, f1: %f, f2: %f",filterPoles,f1,f2);
+		// Set the filter string to be returned in filterID
+		usedFilter = "BW(" + Core::toString(filterPoles) + "," + Core::toString(f1) + "," + Core::toString(f2) + ")";
 		Math::Filtering::IIR::ButterworthBandpass<double> f(filterPoles, f1, f2, _stream.fsamp);
 		static_cast<Math::Filtering::InPlaceFilter<double>*>(&f)->apply(tmp);
 	}
@@ -277,7 +295,9 @@ bool BKPicker::calculatePick(int ndata, const double *data,
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

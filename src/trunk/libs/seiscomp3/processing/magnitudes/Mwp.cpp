@@ -44,6 +44,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mwp::computeMagnitude(
 	double depth,     // in kilometers
 	double &value)
 {
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
 	bool status = Magnitudes::compute_Mwp(amplitude*1.E-9, delta, value);
 	value = correctMagnitude(value);
 	return status ? OK : Error;

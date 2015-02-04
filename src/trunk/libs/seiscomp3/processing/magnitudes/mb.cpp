@@ -47,6 +47,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_mb::computeMagnitude(
 	// Clip depth to 0
 	if ( depth < 0 ) depth = 0;
 
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
 	// maximum allowed period is 3 s according to IASPEI standard (pers. comm. Peter Bormann)
 	if ( period < 0.4 || period > 3.0 )
 		return PeriodOutOfRange;

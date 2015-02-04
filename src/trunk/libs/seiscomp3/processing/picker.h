@@ -75,7 +75,11 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 	//  Configuration Interface
 	// ----------------------------------------------------------------------
 	public:
+		//! Returns the name of the method used by concrete implementations
 		virtual const std::string &methodID() const = 0;
+
+		//! Returns the filter used by concrete implementations
+		virtual const std::string &filterID() const = 0;
 
 		//! Set the start of the signal window relative to the trigger
 		void setSignalStart(double start)  { _config.signalBegin = start; }

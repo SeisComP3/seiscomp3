@@ -43,6 +43,7 @@ class SC_SYSTEM_CLIENT_API GFZPicker : public Picker {
 		bool setup(const Settings &settings);
 
 		const std::string &methodID() const;
+		const std::string &filterID() const;
 
 
 	// ----------------------------------------------------------------------
@@ -53,6 +54,9 @@ class SC_SYSTEM_CLIENT_API GFZPicker : public Picker {
 		                   int signalStartIdx, int signalEndIdx,
 		                   int &triggerIdx, int &lowerUncertainty,
 		                   int &upperUncertainty, double &snr);
+
+	private:
+		std::string _usedFilter;
 };
 
 
