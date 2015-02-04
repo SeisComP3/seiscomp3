@@ -49,7 +49,7 @@ date_default_timezone_set('UTC');
 # May want to hide tables which reveal information about users:
 $show_all_tables = isset($_GET['showall']);
 
-$date_default = offset(date('Y-m-d'), -2);  // Two days ago
+$date_default = offset(date('Y-m-d'), -1);  // Yesterday.
 
 $date_str = (isset($_GET['date']))?$_GET['date']:$date_default;
 
@@ -108,8 +108,8 @@ $selected_node_ids = Array( 1 );
 $prev_month_str = month_prev($year, $month, $day);
 $next_month_str = month_next($year, $month, $day);
 
-$bk_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $prev_month_str , 'code' => $code_str));
-$fd_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $next_month_str, 'code' => $code_str));
+$bk_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $prev_month_str, 'code' => $code_str), '', '&amp;');
+$fd_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $next_month_str, 'code' => $code_str), '', '&amp;');
 $items = Array( tag('a', "&lt;&lt; Prev month", Array('href' => $bk_link)) . ' |',
                 "Monthly summary statistics for " . date('F Y', mktime(0, 0, 0, $month, $day, $year)),
                 '| ' . tag('a', "Next month &gt;&gt;", Array('href' => $fd_link))

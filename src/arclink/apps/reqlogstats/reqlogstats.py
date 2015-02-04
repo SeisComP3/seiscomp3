@@ -591,6 +591,7 @@ bodyfile="/tmp/reqlogstats.txt"
 source_dict = {"bgr": "BGR",
                "ethz": "ETHZ",
                "gfz-potsdam": "GFZ",
+               "infp": "NIEP",
                "ingv": "INGV",
                "ipgp": "IPGP",
                "resif": "RESIF",
