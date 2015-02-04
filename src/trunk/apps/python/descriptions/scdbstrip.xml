@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scdbstrip" category="Utilities">
+		<description>Database clean-up of processing results.</description>
+		<configuration>
+			<group name="database">
+				<group name="cleanup">
+					<group name="keep">
+						<parameter name="days" type="int" default="30">
+							<description>
+							The number of days to preserve in the database. This
+							value is just one part of the whole timespan. Hours
+							and minutes are configured separately.
+							</description>
+						</parameter>
+						<parameter name="hours" type="int" default="0">
+							<description>
+							The number of hours to preserve in the database. This
+							value is just one part of the whole timespan. Days
+							and minutes are configured separately.
+							</description>
+						</parameter>
+						<parameter name="minutes" type="int" default="0">
+							<description>
+							The number of minutes to preserve in the database. This
+							value is just one part of the whole timespan. Days
+							and hours are configured separately.
+							</description>
+						</parameter>
+					</group>
+				</group>
+			</group>
+		</configuration>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<option long-flag="first-new" param-ref="firstNew"/>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Database">
+				<optionReference>database#db-driver-list</optionReference>
+				<optionReference>database#database</optionReference>
+				<optionReference>database#config-module</optionReference>
+				<optionReference>database#inventory-db</optionReference>
+				<optionReference>database#db-disable</optionReference>
+			</group>
+
+			<group name="Settings">
+				<option long-flag="days" argument="arg" param-ref="database.cleanup.keep.days">
+					<description>
+					The number of days to keep. Hours and minutes are also
+					used the compute the whole time span.
+					</description>
+				</option>
+				<option long-flag="hours" argument="arg" param-ref="database.cleanup.keep.hours">
+					<description>
+					The number of hours to keep. Days and minutes are also
+					used the compute the whole time span.
+					</description>
+				</option>
+				<option long-flag="minutes" argument="arg" param-ref="database.cleanup.keep.minutes">
+					<description>
+					The number of minutes to keep. Days and hours are also
+					used the compute the whole time span.
+					</description>
+				</option>
+				<option long-flag="datetime" argument="arg">
+					<description>
+					Replaces the days:hours:minutes timespan definition by an
+					arbtrary absolute timestamp in UTC. The format is
+					%Y-%m-%d %H:%M:%S.
+					</description>
+				</option>
+				<option long-flag="invert" flag="i">
+					<description>
+					Delete all events after the specified time period and not
+					before.
+					</description>
+				</option>
+				<option long-flag="keep-events">
+					<description>
+					Event-IDs to keep in the database separated with comma.
+					</description>
+				</option>
+			</group>
+
+			<group name="Mode">
+				<option long-flag="check"/>
+				<option long-flag="clean-unused"/>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>
