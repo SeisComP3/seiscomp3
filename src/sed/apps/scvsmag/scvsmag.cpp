@@ -1068,6 +1068,7 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	Notifier::SetEnabled(true);
 	_creationInfo.setCreationTime(_currentTime);
 	_creationInfo.setModificationTime(Core::None);
+	_creationInfo.setVersion(Core::toString(vsevt->update));
 	MagnitudePtr nmag = Magnitude::Create();
 	nmag->setMagnitude(RealQuantity(*vsevt->vsMagnitude));
 	nmag->setType("MVS");
@@ -1076,9 +1077,7 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	org->add(nmag.get());
 	for (StaMagArray::iterator it = vsevt->staMags.begin(); it != vsevt->staMags.end(); ++it) {
 			const DataModel::StationMagnitude *staMag = (*it).get();
-			StationMagnitudeContributionPtr magRef = new StationMagnitudeContribution(staMag->publicID());
-			magRef->setWeight(1.0);
-			nmag->add(magRef.get());
+			nmag->add(new StationMagnitudeContribution(staMag->publicID(),staMag->magnitude().value()- *vsevt->vsMagnitude,1.0));
 	}
 	vsevt->staMags.clear();
 
