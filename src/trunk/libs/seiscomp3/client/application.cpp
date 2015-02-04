@@ -563,7 +563,13 @@ extern SC_SYSTEM_CLIENT_API const char* compiler_version();
 #endif
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::printVersion() {
-	cout << name() << ": " << version() << endl;
+	const char *appVersion = version();
+	if ( appVersion == NULL )
+		cout << name() << ": " << frameworkVersion() << endl;
+	else {
+		cout << name() << ": " << appVersion << endl;
+		cout << "Framework: " << frameworkVersion() << endl;
+	}
 	cout << "API version: "
 	     << SC_API_VERSION_MAJOR(SC_API_VERSION) << "."
 	     << SC_API_VERSION_MINOR(SC_API_VERSION) << "."
@@ -1620,54 +1626,8 @@ bool Application::init() {
 		}
 	}
 
-	if ( _enableLoadInventory ) {
-		if ( !_inventoryDB.empty() ) {
-			if ( !loadInventory(_inventoryDB) ) return false;
-		}
-		else if ( _database ) {
-			if ( _query ) {
-				SEISCOMP_INFO("Loading complete inventory");
-				showMessage("Loading inventory");
-				Inventory::Instance()->load(_query.get());
-				SEISCOMP_INFO("Finished loading complete inventory");
-			}
-			else {
-				SEISCOMP_ERROR("No database query object");
-				return false;
-			}
-		}
-
-		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
-		                                             _networkTypeBlackList,
-		                                             _stationTypeWhiteList,
-		                                             _stationTypeBlackList);
-		if ( filtered > 0 )
-			SEISCOMP_INFO("Filtered %d stations by type", filtered);
-	}
-	else if ( _enableLoadStations ) {
-		if ( !_inventoryDB.empty() ) {
-			if ( !loadInventory(_inventoryDB) ) return false;
-		}
-		else if ( _database ) {
-			if ( _query ) {
-				SEISCOMP_INFO("Loading inventory (stations only)");
-				showMessage("Loading stations");
-				Inventory::Instance()->loadStations(_query.get());
-				SEISCOMP_INFO("Finished loading inventory (stations only)");
-			}
-			else {
-				SEISCOMP_ERROR("No database query object");
-				return false;
-			}
-		}
-
-		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
-		                                             _networkTypeBlackList,
-		                                             _stationTypeWhiteList,
-		                                             _stationTypeBlackList);
-		if ( filtered > 0 )
-			SEISCOMP_INFO("Filtered %d stations by type", filtered);
-	}
+	if ( !reloadInventory() )
+		return false;
 
 	if ( _exitRequested )
 		return false;
@@ -1838,6 +1798,64 @@ void Application::handleEndSync() {}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::handleEndAcquisition() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::reloadInventory() {
+	if ( _enableLoadInventory ) {
+		if ( !_inventoryDB.empty() ) {
+			if ( !loadInventory(_inventoryDB) ) return false;
+		}
+		else if ( _database ) {
+			if ( _query ) {
+				SEISCOMP_INFO("Loading complete inventory");
+				showMessage("Loading inventory");
+				Inventory::Instance()->load(_query.get());
+				SEISCOMP_INFO("Finished loading complete inventory");
+			}
+			else {
+				SEISCOMP_ERROR("No database query object");
+				return false;
+			}
+		}
+
+		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
+		                                             _networkTypeBlackList,
+		                                             _stationTypeWhiteList,
+		                                             _stationTypeBlackList);
+		if ( filtered > 0 )
+			SEISCOMP_INFO("Filtered %d stations by type", filtered);
+	}
+	else if ( _enableLoadStations ) {
+		if ( !_inventoryDB.empty() ) {
+			if ( !loadInventory(_inventoryDB) ) return false;
+		}
+		else if ( _database ) {
+			if ( _query ) {
+				SEISCOMP_INFO("Loading inventory (stations only)");
+				showMessage("Loading stations");
+				Inventory::Instance()->loadStations(_query.get());
+				SEISCOMP_INFO("Finished loading inventory (stations only)");
+			}
+			else {
+				SEISCOMP_ERROR("No database query object");
+				return false;
+			}
+		}
+
+		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
+		                                             _networkTypeBlackList,
+		                                             _stationTypeWhiteList,
+		                                             _stationTypeBlackList);
+		if ( filtered > 0 )
+			SEISCOMP_INFO("Filtered %d stations by type", filtered);
+	}
+
+	return true;
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -2104,6 +2122,15 @@ void Application::initCommandLine() {
 	}
 
 	createCommandLineDescription();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const char *Application::version() {
+	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3208,7 +3235,7 @@ void Application::handleInterrupt(int s) throw() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const char *Application::version() const {
+const char *Application::frameworkVersion() const {
 	return _version.c_str();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

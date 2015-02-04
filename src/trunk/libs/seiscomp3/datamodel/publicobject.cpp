@@ -361,7 +361,6 @@ void PublicObject::serialize(Archive& ar) {
 	if ( ar.isReading() )
 		unregisterMe();
 
-	//ar & NAMED_OBJECT_HINT("publicID", _publicID, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT("publicID", _publicID);
 
 	if ( ar.isReading() ) {
@@ -369,17 +368,10 @@ void PublicObject::serialize(Archive& ar) {
 			generateId(_idPattern);
 
 		/* Just register the publicID. If another object with the same
-		 * publicID is already registered the publicID read before will
-         * be set empty.
-         */
+		 * publicID is already registered, registration will fail. The
+		 * publicID read from the archive or set previously is not changed.
+		 */
 		registerMe();
-
-		/* To strict for the first version. I keep it in mind to enable it
-		 * again after working some time with the objects.
-		 * If enabled, all objects being read going to be ignored when
-		 * another object with the same publicID already exits.
-		ar.setValidity(registerMe());
-		*/
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

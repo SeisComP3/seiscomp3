@@ -57,7 +57,7 @@ class SC_SYSTEM_CLIENT_API ConfigDB {
 
 	Seiscomp::DataModel::DatabaseIterator getConfigObjects(Seiscomp::DataModel::DatabaseReader* reader,
 		const Seiscomp::Core::RTTI& classType,
-   		const OPT(std::string)& moduleName,
+		const OPT(std::string)& moduleName,
 		const OPT(std::string)& networkCode,
 		const OPT(std::string)& stationCode,
 		const OPT(std::string)& setupName,

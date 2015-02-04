@@ -34,6 +34,10 @@ public:
       Seiscomp::Core::_private::Alarmable::handleAlarm();
     }
     virtual void printUsage() const;
+    virtual char const *version();
+    virtual char const *versionSwigPublic() {
+      return Seiscomp::Client::Application::version();
+    }
     virtual void createCommandLineDescription();
     virtual void createCommandLineDescriptionSwigPublic() {
       Seiscomp::Client::Application::createCommandLineDescription();
@@ -192,7 +196,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[37];
+    mutable swig::SwigVar_PyObject vtable[38];
 #endif
 
 };
@@ -217,6 +221,10 @@ public:
       Seiscomp::Core::_private::Alarmable::handleAlarm();
     }
     virtual void printUsage() const;
+    virtual char const *version();
+    virtual char const *versionSwigPublic() {
+      return Seiscomp::Client::Application::version();
+    }
     virtual void createCommandLineDescription();
     virtual void createCommandLineDescriptionSwigPublic() {
       Seiscomp::Client::Application::createCommandLineDescription();
@@ -384,7 +392,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[38];
+    mutable swig::SwigVar_PyObject vtable[39];
 #endif
 
 };
