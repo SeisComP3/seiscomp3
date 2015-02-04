@@ -18,6 +18,11 @@ encoding = "$encoding"
 * List of trusted addresses
 trusted = "$trusted"
 
+* List of IP addresses or IP/mask pairs (in ipchains/iptables syntax)
+* that can access stations. Per station access definitions
+* supersede this parameter.
+access = "$access"
+
 * Check start and end times of streams
 stream_check = "$stream_check"
 

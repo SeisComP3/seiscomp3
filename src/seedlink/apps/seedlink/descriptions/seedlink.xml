@@ -27,6 +27,14 @@
 					List of trusted addresses.
 				</description>
 			</parameter>
+			<parameter name="access" type="list:string" default="0.0.0.0/0">
+				<description>
+					List of IP addresses or IP/mask pairs (in ipchains/iptables syntax)
+					that can access stations. Per station access definitions
+					supersede this parameter. By default any client can access
+					all stations.
+				</description>
+			</parameter>
 			<parameter name="stream_check" type="boolean" default="true">
 				<description>
 					Check start and end times of streams.

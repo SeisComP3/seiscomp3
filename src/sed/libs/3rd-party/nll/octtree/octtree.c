@@ -88,7 +88,9 @@ void freeTree3D(Tree3D* tree, int freeDataPointer) {
 
     if (tree->isSpherical) {
         free(tree->ds_x);
+        tree->ds_x = NULL;
         free(tree->num_x);
+        tree->num_x = NULL;
     }
 
     int ix, iy, iz;
@@ -100,14 +102,17 @@ void freeTree3D(Tree3D* tree, int freeDataPointer) {
                     freeNode(tree->nodeArray[ix][iy][iz], freeDataPointer);
             }
             free(tree->nodeArray[ix][iy]);
+            tree->nodeArray[ix][iy] = NULL;
         }
         free(tree->nodeArray[ix]);
+        tree->nodeArray[ix] = NULL;
     }
 
     // AJL - 20080710  (valgrind)
     free(tree->nodeArray);
-
+    tree->nodeArray = NULL;
     free(tree);
+    tree = NULL;
 
 }
 
@@ -133,6 +138,7 @@ Tree3D* newTree3D(int data_code, int numx, int numy, int numz,
     garray = (OctNode ****) malloc((size_t) numx * sizeof (OctNode***));
     if (garray == NULL) {
         free(tree);
+        tree = NULL;
         return (NULL);
     }
     tree->ds_x = NULL;
@@ -204,21 +210,27 @@ Tree3D* newTree3D_spherical(int data_code, int numx_nominal, int numy, int numz,
     garray = (OctNode ****) malloc((size_t) numx_nominal * sizeof (OctNode***));
     if (garray == NULL) {
         free(tree);
+        tree = NULL;
         return (NULL);
     }
     // alocate ds_x array
     tree->ds_x = (double*) malloc((size_t) numy * sizeof (double));
     if (tree->ds_x == NULL) {
         free(garray);
+        garray = NULL;
         free(tree);
+        tree = NULL;
         return (NULL);
     }
     // alocate num_x array
     tree->num_x = (int*) malloc((size_t) numy * sizeof (int));
     if (tree->num_x == NULL) {
         free(garray);
+        garray = NULL;
         free(tree->ds_x);
+        tree->ds_x = NULL;
         free(tree);
+        tree = NULL;
         return (NULL);
     }
 
@@ -334,9 +346,12 @@ void freeNode(OctNode* node, int freeDataPointer) {
     }
 
     // try to free data
-    if (freeDataPointer)
+    if (freeDataPointer) {
         free(node->pdata);
+        node->pdata = NULL;
+    }
     free(node);
+    node = NULL;
 
 }
 
@@ -498,6 +513,7 @@ void freeResultTree(ResultTreeNode* prtree) {
     if (prtree->right != NULL)
         freeResultTree(prtree->right);
     free(prtree);
+    prtree = NULL;
 }
 
 /*** function to get ResultTreeNode with highest value */
