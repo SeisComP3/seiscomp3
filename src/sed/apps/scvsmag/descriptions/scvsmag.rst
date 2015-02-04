@@ -45,7 +45,7 @@ is re-evaluated. A typical entry is shown below.
    21 2013/06/28 10:51:01 [processing/info/VsMagnitude] # picked stations: 6; # envelope streams: 79
    22 2013/06/28 10:51:01 [processing/info/VsMagnitude] Distance threshold (dt): 44.68 km; # picked stations < dt: 4; # envelope streams < dt: 4
    23 2013/06/28 10:51:01 [processing/info/VsMagnitude] Stations not used for VS-mag: CH.HASLI CH.LLS
-   24 2013/06/28 10:51:01 [processing/info/VsMagnitude] Magnitude check: 0.027; Arrivals check: 0.000
+   24 2013/06/28 10:51:01 [processing/info/VsMagnitude] Magnitude check: 0.027; Arrivals check: 0.000; Azimuthal gap: 34.992
    25 2013/06/28 10:51:01 [processing/info/VsMagnitude] likelihood: 0.99
    26 2013/06/28 10:51:01 [processing/info/VsMagnitude] End logging for event: sed2012cyqr
 
@@ -92,18 +92,13 @@ The following table comments each line in the above output.
 +---------+---------------------------------------------------------------------+
 | 24      | 'Magnitude check' is the relative difference between the VS         |
 |         | magnitude and the median of the single station magnitudes.          |
-|         | If it exceeds a certain threshold the magnitude quality value is    |
-|         | set to 0.4 otherwise to 1.0. 'Arrivals check' is the relative       |
-|         | difference betweeen the number of picked stations and the number of |
-|         | envelope streams contributing to the VS magnitude. If it exceeds a  |
-|         | certain threshold the arrivals quality criteria is set to 0.3       |
-|         | otherwise to 1.0. The full decision tree for computing the          |
-|         | likelihood and the related thresholds is shown                      |
-|         | :ref:`here <fig-VS-likelihood>`.                                    |
+|         | 'Arrivals check' is the relative difference between the number of   |
+|         | picked stations and the number of envelope streams available within |
+|         | as certain epicentral distance. The 'Azimuthal gap' is the largest  |
+|         | difference in azimuth between the picked stations.                  |
 +---------+---------------------------------------------------------------------+
-| 25      | The 'likelihood' is the product of the magnitude and the arrivals   |
-|         | quality criteria. If both are 1.0 than the likelihoodis set to      |
-|         | 0.99.                                                               |
+| 25      | The 'likelihood' is the product of the quality checks described     |
+|         | above. See :ref:`ref_VS_LH` for more details                        |
 +---------+---------------------------------------------------------------------+
 | 26      | End of the log message for the event with the given event ID.       |
 +---------+---------------------------------------------------------------------+
@@ -122,6 +117,48 @@ that the timestamp of the envelope value marks the start time of the 1 s wavefor
 window over which the envelope value was computed. Depending on the size of your 
 seismic network, :file:`envelope-logging-info.log` might quickly use a lot of disk
 space.
+
+.. _ref_VS_LH:
+
+Computing the likelihood value
+------------------------------
+The likelihood is computed as follows:
+
+.. code-block:: sh
+
+   likelihood = Magnitude check * Arrivals check * Azimuthal Gap Check
+   
+If the magnitude check exceeds a magnitude dependent threshold its value is set
+to 0.4, otherwise it is 1.0. The thresholds are defined as follows:
+
++-----------+-----------+
+| Magnitude | Threshold |
++===========+===========+
+| <1.5      | 0.5       |
++-----------+-----------+
+| <2.0      | 0.4       |
++-----------+-----------+
+| <2.5      | 0.3       |
++-----------+-----------+
+| <3.0      | 0.25      |
++-----------+-----------+
+| <4.0      | 0.2       |
++-----------+-----------+
+| >4.0      | 0.18      |
++-----------+-----------+
+
+If the arrivals check exceeds a value of 0.5 (i.e. more than half of the real-time 
+stations within a certain epicentral distance have not contributed picks to the
+location) its value is set to 0.3, otherwise it is 1.0. The epicentral distance
+threshold is the middle between the maximum and the average epicentral distance 
+of the stations contributing picks to the location.
+
+The permissible azimuthal gap can be configured (default is 300). If it is 
+exceeded, 'Azimuthal Gap Check' is set to 0.2, otherwise it is set to 1.0. 
+
+A likelihood of 0.024, therefore, indicates, that all three quality checks failed. 
+If all quality checks succeeded the likelihood is set to 0.99.
+ 
 
 References
 ==========
