@@ -97,7 +97,7 @@ class SyncStationXML : public Client::Application {
 
 			const vector<string> &args = commandline().unrecognizedOptions();
 			if ( args.size() < 1 ) {
-				cerr << "Usage: staxml2inv [options] input [output=stdout]" << endl;
+				cerr << "Usage: fdsnxml2inv [options] input [output=stdout]" << endl;
 				return false;
 			}
 
