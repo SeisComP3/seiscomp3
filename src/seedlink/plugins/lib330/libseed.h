@@ -22,11 +22,12 @@ Edit History:
    -- ---------- --- ---------------------------------------------------
     0 2006-09-10 rdr Created
     1 2007-01-08 hjs prefaced some functions with lib330 to avoid collisions
+    2 2011-03-17 rdr Add new deb_flags definitions.
 */
 #ifndef libseed_h
 /* Flag this file as included */
 #define libseed_h
-#define VER_LIBSEED 2
+#define VER_LIBSEED 3
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -54,7 +55,9 @@ Edit History:
 #define OPAQUE_HDR_SIZE 20 /* for all 5 characters */
 #define TIMING_BLOCKETTE_SIZE 200
 #define RECORD_EXP 9
+#define DEB_LOWV 4 /* In low range */
 #define DEB_Q330 6 /* Data originates from a Q330 */
+#define DEB_NEWBITS 0x20 /* New bit meanings if set */
 #define DEB_PB14_FIX 0x40 /* fixed leap day handling */
 #define DEB_EVENT_ONLY 0x80 /* event only channel */
 /* Seed activity Flags */

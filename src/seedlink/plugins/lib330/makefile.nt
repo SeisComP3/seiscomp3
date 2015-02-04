@@ -6,12 +6,12 @@ OBJS = libarchive.obj libcvrt.obj libnetserv.obj libslider.obj libverbose.obj\
       libclient.obj libdetect.obj libopaque.obj libstats.obj q330cvrt.obj\
       libcmds.obj libfilters.obj libpoc.obj libstrucs.obj q330io.obj\
       libcompress.obj liblogs.obj libsampcfg.obj libsupport.obj\
-      libcont.obj libmd5.obj libsample.obj libtokens.obj\
+      libcont.obj libmd5.obj libsample.obj libtokens.obj libdss.obj\
       libctrldet.obj libmsgs.obj libseed.obj libtypes.obj\
 
 HDRS =	libarchive.h libclient.h libcmds.h libcompress.h libcont.h libctrldet.h\
 	libcvrt.h libdetect.h libfilters.h liblogs.h libmd5.h libmsgs.h\
-	libnetserv.h libopaque.h libpoc.h libsampcfg.h libsampglob.h\
+	libnetserv.h libopaque.h libpoc.h libsampcfg.h libsampglob.h libdss.h\
  	libsample.h libseed.h libslider.h libstats.h libstrucs.h libsupport.h\
 	libtokens.h libtypes.h libverbose.h pascal.h platform.h q330cvrt.h\
 	q330io.h q330types.h

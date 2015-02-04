@@ -34,6 +34,7 @@ Edit History:
     4 2008-03-13 rdr Don't reset records_written at 999999.  Don't set records_written from
                      last data record. If not set by continuity it's OK to start over since
                      SEED sequence numbers are informational only.
+    5 2009-06-25 rdr Increment blockette count when appending timing blockettes.
 */
 #ifndef OMIT_SEED
 #ifndef libarchive_h
@@ -339,6 +340,7 @@ begin
             psrc = (pointer)((integer)parc->pcfr + parc->total_frames - TIMING_BLOCKETTE_SIZE + 2) ; /* previous blockette */
             storeword (addr(psrc), parc->total_frames) ; /* extend link */
             incn(parc->total_frames, TIMING_BLOCKETTE_SIZE) ;
+            inc(parc->hdr_buf.number_of_following_blockettes) ; /* a blockette was added */
             parc->appended = TRUE ;
           end
         else

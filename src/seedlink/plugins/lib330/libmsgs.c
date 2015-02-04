@@ -1,5 +1,5 @@
 /*   Lib330 Message Handlers
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -24,6 +24,15 @@ Edit History:
     1 2006-10-29 rdr In "showdot" add some castes just to make sure.
     2 2007-01-18 rdr Add LIBMSG_STATTO.
     3 2007-03-05 rdr Add LIBMSG_CONPURGE.
+    4 2007-07-16 rdr Add Baler messages.
+    5 2007-09-07 rdr Add LIBMSG_TOTAL.
+    6 2008-02-18 rdr Don't use LOG lcq if network not yet set.
+    7 2009-02-09 rdr Add EP Support.
+    8 2009-09-28 rdr Add AUXMSG_DSS.
+    9 2010-03-27 rdr Add messages for Q335.
+   10 2010-08-21 rdr Change order of evaluation in msgadd and dump_msgqueue.
+   11 2013-08-09 rdr Add conditional compilation to make string parameter to msgadd,
+                     libmsgadd and libdataadd a const.
 */
 #ifndef libmsgs_h
 #include "libmsgs.h"
@@ -81,7 +90,9 @@ begin
         case LIBMSG_DETECT : strcpy(s, "") ; /* all info in suffix */ break ;
         case LIBMSG_NETSTN : strcpy(s, "Station: ") ; break ;
         case LIBMSG_ZONE : strcpy(s, "Changing Time Zone Adjustment from ") ; break ;
-        case LIBMSG_AVG : strcpy(s, "") ; /* all info in suffix */ break ;
+        case LIBMSG_AVG :
+        case LIBMSG_TOTAL : strcpy(s, "") ; /* all info in suffix */ break ;
+        case LIBMSG_EPDLYCHG : strcpy(s, "Environmental Processor Configuration Change") ; break ;
       end
       break ;
     case 2 : /* success code */
@@ -100,7 +111,9 @@ begin
         case LIBMSG_WRCONT : strcpy(s, "Writing Continuity File: ") ; break ;
         case LIBMSG_SOCKETOPEN : strcpy(s, "Socket Opened ") ; break ;
         case LIBMSG_DEREGTO : strcpy(s, "De-Registration Timeout") ; break ;
+        case LIBMSG_BACK : strcpy(s, "Baler Acknowledged by Q330") ; break ;
         case LIBMSG_CONN : strcpy(s, "Connected to TCP Tunnel") ; break ;
+        case LIBMSG_Q335 : strcpy(s, "Q335 Architecture Detected") ; break ;
       end
       break ;
     case 3 : /* converted Q330 blockettes */
@@ -137,6 +150,7 @@ begin
         case LIBMSG_CONTNR : strcpy(s, "Continuity not restored") ; break ;
         case LIBMSG_STATTO : strcpy(s, "Status Timeout, Will retry registratin in ") ; break ;
         case LIBMSG_CONPURGE : strcpy(s, "Continuity was expired, Ignoring rest of file: ") ; break ;
+        case LIBMSG_WRONGPORT : strcpy(s, "Wrong Data Port for Baler") ; break ;
       end
       break ;
     case 5 : /* server faults */
@@ -165,6 +179,7 @@ begin
         case LIBMSG_RECOMP : strcpy(s, "Re-compression error on ") ; break ;
         case LIBMSG_SEGOVER : strcpy(s, "Segment buffer overflow on ") ; break ;
         case LIBMSG_TCPTUN : strcpy(s, "TCP Tunnelling error: ") ; break ;
+        case LIBMSG_HFRATE : strcpy(s, "Sampling Rate mis-match ") ; break ;
       end
       break ;
     case 6 :
@@ -185,6 +200,8 @@ begin
         case AUXMSG_WEBADV : strcpy(s, "Webserver advertising ") ; break ;
         case AUXMSG_RECVTO : strcpy(s, "Receive Timeout ") ; break ;
         case AUXMSG_WEBLINK : strcpy(s, "") ; /* contained in suffix */ break ;
+        case AUXMSG_RECV : strcpy(s, "Recv: ") ; break ;
+        case AUXMSG_DSS : strcpy(s, "") ; /* contained in suffix */ break ;
       end
       break ;
     case 8 :
@@ -195,12 +212,38 @@ begin
   return result ;
 end
 
-void msgadd (pq330 q330, word msgcode, longword dt, string95 *msgsuf)
+#ifndef OMIT_SEED
+void dump_msgqueue (pq330 q330)
+begin
+  paqstruc paqs ;
+
+  paqs = q330->aqstruc ;
+  if ((q330->libstate != LIBSTATE_TERM) land ((q330->network)[0]) land (q330->aqstruc) land
+      (paqs->msgq_out != paqs->msgq_in) land (paqs->msg_lcq) land (paqs->msg_lcq->com->ring))
+    then
+      begin
+        msglock (q330) ;
+        while (paqs->msgq_out != paqs->msgq_in)
+          begin
+            log_message (q330, addr(paqs->msgq_out->msg)) ;
+            paqs->msgq_out = paqs->msgq_out->link ;
+          end
+        msgunlock (q330) ;
+      end
+end
+#endif
+
+#ifdef CONSTMSG
+void msgadd (pq330 q330, word msgcode, longword dt, const string95 *msgsuf, boolean client)
+#else
+void msgadd (pq330 q330, word msgcode, longword dt, string95 *msgsuf, boolean client)
+#endif
 begin
   string s, s1, s2 ;
   paqstruc paqs ;
 
   paqs = q330->aqstruc ;
+  msglock (q330) ;
   q330->msg_call.context = q330 ;
   q330->msg_call.timestamp = lib_round(now()) ;
   q330->msg_call.datatime = dt ;
@@ -224,23 +267,23 @@ begin
         if (lnot q330->nested_log)
           then
             begin
-              if ((paqs->msg_lcq == NIL) lor (paqs->msg_lcq->com->ring == NIL) lor
-                  (q330->libstate < LIBSTATE_RUNWAIT) lor (q330->libstate > LIBSTATE_DEALLOC))
+              if ((client) lor (q330->libstate == LIBSTATE_TERM) lor ((q330->network)[0] == 0) lor
+                  (paqs->msg_lcq == NIL) lor (paqs->msg_lcq->com->ring == NIL))
                 then
                   begin
-                    if (paqs->mhqnxi->link != paqs->mhqnxo)
+                    if (paqs->msgq_in->link != paqs->msgq_out)
                       then
                         begin
-                          strcpy(addr(paqs->mhqnxi->m), addr(s)) ;
-                          paqs->mhqnxi = paqs->mhqnxi->link ;
+                          strcpy(addr(paqs->msgq_in->msg), addr(s)) ;
+                          paqs->msgq_in = paqs->msgq_in->link ;
                         end
                   end
                 else
                   begin
-                    while (paqs->mhqnxo != paqs->mhqnxi)
+                    while (paqs->msgq_out != paqs->msgq_in)
                       begin
-                        log_message (q330, addr(paqs->mhqnxo->m)) ;
-                        paqs->mhqnxo = paqs->mhqnxo->link ;
+                        log_message (q330, addr(paqs->msgq_out->msg)) ;
+                        paqs->msgq_out = paqs->msgq_out->link ;
                       end
                     log_message (q330, addr(s)) ;
                   end
@@ -250,22 +293,31 @@ begin
           then
             q330->par_create.call_messages (addr(q330->msg_call)) ;
       end
+  msgunlock (q330) ;
 end
 
+#ifdef CONSTMSG
+void libmsgadd (pq330 q330, word msgcode, const string95 *msgsuf)
+#else
 void libmsgadd (pq330 q330, word msgcode, string95 *msgsuf)
+#endif
 begin
 
-  msgadd (q330, msgcode, 0, msgsuf) ;
+  msgadd (q330, msgcode, 0, msgsuf, FALSE) ;
 end
 
+#ifdef CONSTMSG
+void libdatamsg (pq330 q330, word msgcode, const string95 *msgsuf)
+#else
 void libdatamsg (pq330 q330, word msgcode, string95 *msgsuf)
+#endif
 begin
   longword dt ;
   paqstruc paqs ;
 
   paqs = q330->aqstruc ;
   dt = lib_round(paqs->data_timetag) ;
-  msgadd (q330, msgcode, dt, msgsuf) ;
+  msgadd (q330, msgcode, dt, msgsuf, FALSE) ;
 end
 
 char *lib_get_errstr (enum tliberr err, string63 *result)
@@ -320,6 +372,7 @@ begin
     case LIBSTATE_TERM : strcpy(s, "Terminated") ; break ;
     case LIBSTATE_PING : strcpy(s, "Unregistered Ping") ; break ;
     case LIBSTATE_CONN : strcpy(s, "TCP Connect Wait") ; break ;
+    case LIBSTATE_ANNC : strcpy(s, "Baler Announcement") ; break ;
     case LIBSTATE_REG : strcpy(s, "Requesting Registration") ; break ;
     case LIBSTATE_READCFG : strcpy(s, "Reading Configuration") ; break ;
     case LIBSTATE_READTOK : strcpy(s, "Reading Tokens") ; break ;
@@ -383,8 +436,12 @@ begin
     case C1_DCP : strcpy(s, "Digitizer Calibration Packet") ; break ;
     case C1_RQMAN : strcpy(s, "Request Manufacturer''s Area") ; break ;
     case C1_MAN : strcpy(s, "Manufacturer''s Area") ; break ;
+    case C1_COM : strcpy(s, "Communications packet") ; break ;
     case C2_RQGPS : strcpy(s, "Request GPS Parameters") ; break ;
     case C2_GPS : strcpy(s, "GPS Parameters") ; break ;
+    case C2_BRDY : strcpy(s, "Baler Ready") ; break ;
+    case C2_BOFF : strcpy(s, "Baler Off") ; break ;
+    case C2_BACK : strcpy(s, "Baler Acknowledge") ; break ;
     default :
       begin
         h = cmd ;

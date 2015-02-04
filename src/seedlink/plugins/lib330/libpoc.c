@@ -1,5 +1,5 @@
 /*   Lib330 POC Receiver
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006, 2013 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -23,7 +23,12 @@ Edit History:
     0 2006-09-28 rdr Created
     1 2006-10-29 rdr Remove "addr" function when passing thread address. Fix posix
                      thread function return type.
+    2 2007-08-04 rdr Add conditionals for omitting network code.
+    3 2010-01-04 rdr Use fcntl instead of ioctl to set socket non-blocking.
+    4 2013-02-02 rdr Use actual socket number for select.
 */
+#ifndef OMIT_NETWORK
+
 #ifndef q330types_h
 #include "q330types.h"
 #endif
@@ -81,6 +86,7 @@ typedef struct {
   struct sockaddr csockin, csockout ; /* commands socket address descriptors */
 #else
   integer cpath ; /* commands socket */
+  integer high_socket ;
   struct sockaddr csockin, csockout ; /* commands socket address descriptors */
 #endif
   crc_table_type crc_table ;
@@ -105,6 +111,9 @@ begin
 #endif
         pocstr->cpath = INVALID_SOCKET ;
       end
+#ifndef X86_WIN32
+  pocstr->high_socket = 0 ;
+#endif
 end
 
 static void process_poc (ppocstr pocstr, pbyte *p)
@@ -184,7 +193,7 @@ end
 
 static void open_socket (ppocstr pocstr)
 begin
-  integer err ;
+  integer err, flags ;
   longint flag ;
   struct sockaddr_in *psock ;
 
@@ -193,6 +202,11 @@ begin
   if (pocstr->cpath == INVALID_SOCKET)
     then
       return ;
+#ifndef X86_WIN32
+  if (pocstr->cpath > pocstr->high_socket)
+    then
+      pocstr->high_socket = pocstr->cpath ;
+#endif
   psock = (pointer) addr(pocstr->csockin) ;
   memset(psock, 0, sizeof(struct sockaddr)) ;
   psock->sin_family = AF_INET ;
@@ -219,7 +233,8 @@ begin
 #ifdef X86_WIN32
   ioctlsocket (pocstr->cpath, FIONBIO, addr(flag)) ;
 #else
-  ioctl (pocstr->cpath, FIONBIO, addr(flag)) ;
+  flags = fcntl (pocstr->cpath, F_GETFL, 0) ;
+  fcntl (pocstr->cpath, F_SETFL, flags or O_NONBLOCK) ;
 #endif
   pocstr->sockopen = TRUE ;
 end
@@ -277,7 +292,7 @@ begin
           FD_SET (pocstr->cpath, addr(readfds)) ;
           timeout.tv_sec = 0 ;
           timeout.tv_usec = 25000 ; /* 25ms timeout */
-          res = select (getdtablesize(), addr(readfds), addr(writefds), addr(exceptfds), addr(timeout)) ;
+          res = select (pocstr->high_socket + 1, addr(readfds), addr(writefds), addr(exceptfds), addr(timeout)) ;
           if (res > 0)
             then
               if (FD_ISSET (pocstr->cpath, addr(readfds)))
@@ -338,3 +353,4 @@ begin
   close_socket (pocstr) ;
 end
 
+#endif

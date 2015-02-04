@@ -1,5 +1,5 @@
 /*   Lib330 common type definitions
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -21,13 +21,24 @@ Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
     0 2006-09-09 rdr Created
-    1 2008-07-29 rdr Add met3 support.
-    2 2008-08-19 rdr Add TCP Support.
+    1 2007-07-16 rdr Add tback and LIBSTATE_ANNC.
+    2 2007-08-04 rdr tcp/ip structure definitions moved here from q330types.h
+    3 2008-01-09 rdr Add 230400 baud and baler flags.
+    4 2008-07-31 rdr Add met3 support.
+    5 2008-08-05 rdr Add flag bits for requesting baler configuration block.
+    6 2008-08-20 rdr Add TCP Support.
+    7 2009-02-08 rdr Add Environmental Processor support.
+    8 2009-03-11 rdr Add SDI status definitions.
+    9 2009-04-18 rdr Changes in EP structures.
+   10 2009-06-27 rdr Increase size of opaque structure in tback.
+   11 2010-03-27 rdr Add Q335 definitions.
+   12 2010-05-08 rdr Add minimum on time to tcomm.
+   13 2010-12-26 rdr Add sensor currents to boom status.
 */
 /* Flag this file as included */
 #ifndef libtypes_h
 #define libtypes_h
-#define VER_LIBTYPES 2
+#define VER_LIBTYPES 13
 
 #include "pascal.h"
 
@@ -42,11 +53,13 @@ Edit History:
 #define CHANNELS 6 /* Number of digitizer/boom channels */
 #define FREQS 8 /* Number of frequencies possible from Q330 */
 #define FREQUENCIES 8 /* Same as FREQS */
-#define MAX_RATE 200 /* highest frequency for detector */
+#define HIGH_FREQ_BIT 7 /* Bit 7 frequency is variable rate */
+#define MAX_RATE 1000 /* highest frequency for detector */
 #define MAXMTU 576 /* Maximum MTU allowed */
 #define MINMTU 276 /* Minimum MTU allowed */
 #define MAXDATA 536 /* maximum size of QDP payload */
 #define TCPBUFSZ (MAXMTU + 4) /* with room for two extra words */
+#define MAXDATA96 722 /* maxumum size of QDP payload if Base96 */
 #define COMMLENGTH 11 /*number of characters in a comm name*/
 #define CE_MAX 32 /* maximum number of comm events */
 #define NTP_SERV_COUNT 2 /* Number of NTP server definitions */
@@ -65,11 +78,15 @@ Edit History:
 #define FF_AUX 4 /* Bit 2 in fixed.flags indicates aux board status supported */
 #define FF_NWEB 8 /* Bit 3 in fixed.flags indicates can handle new web server advertisement */
 #define FF_SS 0x10 /* Bit 4 in fixed.flags indicates supports serial sensor status */
+#define FF_HIPWR 0x20 /* Bit 5 in fixed.flags indicates > 250ma current limit */
+#define FF_EP 0x40 /* Bit 6 in fixed.flags indicates at least 1 EP configured */
+#define FF_335 0x100 /* Bit 8 in fixed.flags indicates this is a Q335 */
 /* Clock Type */
 #define CLK_NONE 0 /* No internal clock */
 #define CLK_M12 1 /* Motorola M12 */
 /* Calibrator Types */
 #define CAL_QCAL330 33
+#define CAL_QCAL335 35
 /* Aux. board types */
 #define AUXAD_ID 32
 #define AUXAD_PORT 140
@@ -141,6 +158,8 @@ Edit History:
 #define SRB_DYN 17 /* Dynamic IP Address */
 #define SRB_AUX 18 /* Aux Board Status */
 #define SRB_SS 19 /* Serial Sensor Status */
+#define SRB_EP 20 /* Environmental Processor Status */
+#define SRB_FES 21 /* Q335 Front End Status */
 /* Configuration Request Bits */
 #define CRB_GLOB 0 /* Global configuration */
 #define CRB_FIX 1 /* Fixed configuration */
@@ -149,6 +168,13 @@ Edit History:
 #define CRB_ROUTES 4 /* Routes */
 #define CRB_DEVS 5 /* CNP Devices */
 #define CRB_SENSCTRL 6 /* Sensor Control */
+/* baler flags */
+#define BA_PDOWN 1 /* power down when done */
+#define BA_MANUAL 2 /* powered on by command, use access timeout */
+#define BA_CMDS 4 /* Commands OK */
+#define BA_CFG 8 /* Config block follows */
+/* baler ready flags */
+#define BR_RQCFG 1 /* Request configuration blockette */
 /* Baler Status */
 #define BS_AUTO 0x8000 /* Automatic On */
 #define BS_MANUAL 0x4000 /* Manual On */
@@ -176,14 +202,37 @@ Edit History:
 #define PLL_HOLD 0x40
 #define PLL_TRACK 0x80
 #define PLL_LOCK 0xC0
+/* Environmental Processor defines */
+#define EP_MAXCHAN 128
+#define EP_MAXAD 3
+#define MAX_SDI 4 /* Status for 1st 4 SDI devices only */
 /* Version Info */
 #define FIRST_WITH_CURIP 0x138 /* 1.56 is the first with current ip address in interface status */
 #define FIRST_WITH_PERC_TRIG 0x14C /* 1.76 is first with percentage trigger capability */
 #define FIRST_WITH_BASE96 0x14D /* 1.77 is first with base96 data capability */
 #define FIRST_WITH_RPOC 0x159 /* 1.89 is first with random poc source port */
 #define FIRST_WITH_SS 0x15E /* 1.94 is first with serial sensor */
+/* Communications Ethernet Flags */
+#define CEF_DEFAULT     0   /* Use default address */
+#define CEF_CONST       1   /* Use constant address */
+#define CEF_DHCP        2   /* Use DHCP */
+#define CEF_UPINGBLOCK  0x80 /* Blocks pings from unregistered hosts */
+#define CEF_UNLOCK      0x400 /* Unlock always */
+#define CEF_BLK_ICMP    0x1000 /* Block ICMP Packets */
+#define CEF_MTU         0x2000 /* MTU Override is active */
+/* Communications Power Cycling Flags */
+#define CPF_CONT        0x1000000 /* Continuously powered baler */
+#define CPF_MAXOFF      0x2000000 /* At Interval */
+#define CPF_INHIBIT     0x4000000 /* Inhibit baler below percentage */
+#define CPF_PERC1       0x10000000 /* At data port 1 percentage */
+#define CPF_PERC2       0x20000000 /* At data port 1 percentage */
+#define CPF_PERC3       0x40000000 /* At data port 1 percentage */
+#define CPF_PERC4       0x80000000 /* At data port 1 percentage */
+/* Listopts flags */
+#define WBL_WHITE       0x8000 /* List is a whitelist instead of blacklist */
+#define IP_LIST_SIZE    8   /* White/Blacklist entries */
 
-typedef longword tbauds[9] ;
+typedef longword tbauds[10] ;
 extern const tbauds bauds ;
 
 /* Clock processing information */
@@ -368,6 +417,8 @@ typedef struct  {  /* Boom positions and other stuff */
   int16 seis1_temp;   /* seismo 1 temperature - celsius */
   int16 seis2_temp;   /* seimso 2 temperature - celsius */
   longword cal_timeouts; /* calibrator timeouts */
+  int16 sensa_cur ; /* Sensor A current - 5ma - Q335 only */
+  int16 sensb_cur ; /* Sensor B current - 5ma - Q335 only */
 } tstat_boom;
 typedef struct { /* PLL Status */
   single start_km, time_error, rms_vco, best_vco;
@@ -610,6 +661,164 @@ typedef struct { /* Used internally by library */
   word ping_type ;
   word ping_id ;
 } tpingbuffer ;
+typedef struct { /* C2_BACK */
+  t64 sernum ; /* Q330 serial number */
+  longword q330_ip ; /* Q330 IP address */
+  longword poc_ip ; /* POC/Baler IP address */
+  longword log2_ip ; /* Logger alternative address */
+  word bport ; /* Q330 base port */
+  word lport ; /* Logical Port number */
+  word webbps ; /* web bps / 10 */
+  word flags ; /* baler/dial-out flags */
+  word access_to ; /* access timeout in seconds */
+  word spare2 ;
+  t64 balersn ; /* Baler serial number */
+  /* Optional baler configuration block */
+  word size ; /* Byte count of structure */
+  word phyport ; /* physical interface it is tied to */
+  word balertype ; /* 44 = Baler44 and Q330/S */
+  word version ;
+  word opaque[116] ; /* only select portions of willard and the baler know */
+} tback ;
+
+typedef struct ttimeouts {
+  word idle_timeout ; /* minutes for this data port once packet buffer is empty */
+  word busy_timeout ; /* minutes for this data port while packet buffer not empty */
+} ttimeouts ;
+typedef struct tiplist {
+  longword low ;
+  longword high ;
+} tiplist ;
+
+typedef struct tcomm { /* Format of CPC_COM */
+  t64 serial ; /* serial number for broadcast */
+  word version ; /* structure version */
+  word active_lth ; /* active length */
+  word mtu ; /* MTU Override */
+  word base_port ; /* UDP/TCP base port */
+  longword eth_ip ; /* Ethernet IP address */
+  longword eth_mask ; /* Ethernet Netmask */
+  longword eth_gate ; /* Ethernet Gateway address */
+  longword pwr_cycling ; /* Power Cycling Flags */
+  ttimeouts timeouts[LP_TEL4 - LP_TEL1 + 1] ; /* timeouts per data port */
+  word triggers[LP_TEL4 - LP_TEL1 + 1] ; /* percentage for each data port */
+  word min_off ; /* Minimum Power off time */
+  word listopts ; /* Black/Whitelist options */
+  word max_off ; /* Maximum Power off time */
+  word baler_min_perc ; /* Baler minimum percent */
+  tiplist iplist[IP_LIST_SIZE] ; /* white or blacklists */
+  longword eth_flags ; /* Ethernet flags */
+  word min_on ; /* Minimum On time */
+  word spare ;
+  byte other_exp[364] ; /* Other expansion area */
+} tcomm ;
+
+typedef struct { /* Format of C3_BCFG */
+  word sub_command ;
+  word sub_response ;
+  word size ; /* Byte count of structure */
+  word phyport ; /* physical interface it is tied to */
+  word balertype ; /* 44 = Baler44 and Q330/S */
+  word version ;
+  char opaque[236] ; /* only select portions of willard and the baler know */
+} tbalecfg ;
+
+typedef struct {
+  longword ress[PP_SER2 - PP_SER1 + 1] ;
+  word chancnt ; /* number of 32 bit channel entries */
+  word spare ;
+  longword chandlys[2] ; /* 8 bit channel and 24 filter delay in 5usec inc */
+} tepdelay ;
+/* SDI Defs */
+enum tsdi_phase {SP_UNKNOWN, SP_ENUMADDR, SP_ENUMID, SP_CFGRD, SP_CFGWR, SP_CFGDONE,
+                 SP_READY, SP_SAMPLE, SP_SAMPWAIT} ;
+enum tsdi_driver {SD_UNKNOWN, SD_WXT520} ;
+typedef struct tsdistat { /* for 1 device */
+  char address ; /* device address, '0' - '9' */
+  enum tsdi_phase phase ; /* see enum definition above */
+  enum tsdi_driver driver ; /* Driver ID */
+  byte spare1 ; /* for alignment */
+  char model[6] ; /* Sensor model */
+  char serial[13] ; /* Sensor serial number */
+  char spare2 ;
+  char version[3] ; /* Sensor version */
+  char spare3 ;
+} tsdistat ;
+enum tep_model {EM_UNKNOWN,   /* DS2431 not set yet */
+                EM_BASE1} ;   /* Production prototype boards */
+enum tadc_model {AM_NONE,     /* No analog board or DS2431 not set yet */
+                 AM_SETRA1,   /* One Analog channel with Setra Interface */
+                 AM_GEN1,     /* One Analog channel, general purpose */
+                 AM_GEN3} ;   /* Three Analog channels, general purpose */
+#define LAST_EP_MODEL EM_BASE1
+#define LAST_ADC_MODEL AM_GEN3
+typedef struct {
+  single start_km ;
+  single time_error ;
+  single best_vco ;
+  longword ticks_track_lock ; /* ticks since last track or lock */
+  longint km ;
+  word state ; /* hold/track/lock */
+  word spare1 ;
+  t64 serial ;
+  longword procid ;
+  longword secs_boot ; /* seconds since boot */
+  longword secs_resync ; /* seconds since last resync */
+  longword resyncs ; /* Total number of resyncs */
+  longword q330_comm_errors ; /* communications errors from 330 */
+  longword ep_comm_errors ; /* communications errors from EP */
+  word spare2 ;
+  word sdi_count ; /* number of SDI-12 devices active */
+  word version ; /* firmware version and revision */
+  word flags ;
+  word analog_chans ; /* Number of analog channels */
+  enum tep_model ep_model ;
+  byte ep_rev ;
+  longword gains ; /* 4 bits per channel */
+  word inp_volts ; /* in .1 volt increments */
+  word humidity ; /* in percent */
+  longword pressure ; /* in ubar */
+  longint temperature ; /* in 0.1C increments */
+  longint adcounts[4] ;
+  tsdistat sdistats[MAX_SDI] ;
+  /* Following replaces 5th SDI status in previous versions */
+  t64 adc_serial ;
+  enum tadc_model adc_model ;
+  byte adc_rev ;
+  word adc_spare1 ;
+  longword adc_spare2 ;
+  longword spares[3] ;
+} tstat_oneep ;
+typedef tstat_oneep tstat_ep[2] ;
+
+typedef struct tfestat { /* Status for one FE */
+  single start_km ;
+  single time_error ;
+  single best_vco ;
+  longword ticks_track_lock ; /* ticks since last track or lock */
+  longint km ;
+  word state ; /* hold/track/lock */
+  word flags ; /* Bit 0 means sensor temperature is valid */
+  longword secs_resync ; /* seconds since last resync */
+  longword resyncs ; /* Total number of resyncs */
+  longword secs_boot ; /* seconds since boot */
+  longword cp_comm_errors ; /* communications errors from CP */
+  word inp_volts ; /* in .1 volt increments */
+  word sensor_bitmap ; /* current bitmap */
+  word cal_status ; /* what phase it is in */
+  int16 sensor_temp ;
+  t64 sensor_serial ;
+  shortint booms[4] ; /* 3 boom positions plus spare*/
+} tfestat ;
+typedef struct tfestat_hdr {
+  word count ; /* number of boards */
+  word lth ; /* status length */
+} tfestat_hdr ;
+typedef struct tstat_fes {
+  tfestat_hdr hdr ;
+  tfestat boards[2] ;
+} tstat_fes ;
+
 enum tliberr {LIBERR_NOERR, /* No error */
               LIBERR_PERM, /* No Permission */
               LIBERR_TMSERV, /* Port in Use */
@@ -645,6 +854,7 @@ enum tlibstate {LIBSTATE_IDLE, /* Not connected to Q330 */
                 LIBSTATE_TERM, /* Terminated */
                 LIBSTATE_PING, /* Un-registered Ping, returns to LIBSTATE_IDLE when done */
                 LIBSTATE_CONN, /* TCP Connect wait */
+                LIBSTATE_ANNC, /* Announce baler */
                 LIBSTATE_REG, /* Requesting Registration */
                 LIBSTATE_READCFG, /* Reading Configuration */
                 LIBSTATE_READTOK, /* Reading Tokens */

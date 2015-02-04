@@ -21,8 +21,17 @@ Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
     0 2006-09-28 rdr Created
-    1 2008-07-29 rdr Update loadssstat to handle met3.
-    2 2008-09-02 rdr Fix loadssstat for multiple sensors.
+    1 2007-07-16 rdr Add routines for baler commands.
+    2 2008-07-31 rdr Update loadssstat to handle met3.
+    3 2008-08-05 rdr Add reading of optional baler config block for c2_back.
+    4 2008-09-02 rdr Fix loadssstat for multiple sensors.
+    5 2009-02-08 rdr Add loadep. Add loadepstat.
+    6 2009-02-21 rdr Add loadepcfg and storeepcfg.
+    7 2009-03-11 rdr Add new fields in loadepstat.
+    8 2009-04-18 rdr Changes due to field changes in EP structures.
+    9 2010-04-14 rdr loadfestat updated.
+   10 2010-12-26 rdr loadboomstat now handles sensor currents.
+   11 2011-01-12 rdr Sensor currents now overlay cal_timeouts.
 */
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -399,7 +408,7 @@ begin
   pwrstat->loads_off = loadbyte (p) ;
 end
 
-void loadboomstat (pbyte *p, tstat_boom *boomstat)
+void loadboomstat (pbyte *p, tstat_boom *boomstat, boolean q335)
 begin
   integer i ;
 
@@ -413,8 +422,20 @@ begin
   boomstat->ant_cur = loadword (p) ;
   boomstat->seis1_temp = loadint16 (p) ;
   boomstat->seis2_temp = loadint16 (p) ;
-  boomstat->cal_timeouts = loadlongword (p) ;
-  end
+  if (q335)
+    then
+      begin
+        boomstat->cal_timeouts = 0 ;
+        boomstat->sensa_cur = loadword (p) ;
+        boomstat->sensb_cur = loadword (p) ;
+      end
+    else
+      begin
+        boomstat->cal_timeouts = loadlongword (p) ;
+        boomstat->sensa_cur = 0 ;
+        boomstat->sensb_cur = 0 ;
+      end
+end
 
 void loadpllstat (pbyte *p, tstat_pll *pllstat)
 begin
@@ -788,6 +809,278 @@ begin
   for (i = 0 ; i <= 3 ; i++)
     storelongword (p, dack->acks[i]) ;
   storelongword (p, dack->spare3) ;
+end
+
+void storebrdy (pbyte *p, tbrdy *brdy)
+begin
+
+#ifdef ENDIAN_LITTLE
+  storelongword (p, brdy->sernum[1]) ;
+  storelongword (p, brdy->sernum[0]) ;
+#else
+  storelongword (p, brdy->sernum[0]) ;
+  storelongword (p, brdy->sernum[1]) ;
+#endif
+  storeblock (p, 2, addr(brdy->net)) ;
+  storeblock (p, 6, addr(brdy->stn)) ;
+  storeword (p, brdy->model) ;
+  storeword (p, brdy->version) ;
+  storesingle (p, brdy->disk_size) ;
+#ifdef ENDIAN_LITTLE
+  storelongword (p, brdy->balersn[1]) ;
+  storelongword (p, brdy->balersn[0]) ;
+#else
+  storelongword (p, brdy->balersn[0]) ;
+  storelongword (p, brdy->balersn[1]) ;
+#endif
+end
+
+void loadback (pbyte *p, tback *back)
+begin
+
+#ifdef ENDIAN_LITTLE
+  back->sernum[1] = loadlongword (p) ;
+  back->sernum[0] = loadlongword (p) ;
+#else
+  back->sernum[0] = loadlongword (p) ;
+  back->sernum[1] = loadlongword (p) ;
+#endif
+  back->q330_ip = loadlongword (p) ;
+  back->poc_ip = loadlongword (p) ;
+  back->log2_ip = loadlongword (p) ;
+  back->bport = loadword (p) ;
+  back->lport = loadword (p) ;
+  back->webbps = loadword (p) ;
+  back->flags = loadword (p) ;
+  back->access_to = loadword (p) ;
+  back->spare2 = loadword (p) ;
+#ifdef ENDIAN_LITTLE
+  back->balersn[1] = loadlongword (p) ;
+  back->balersn[0] = loadlongword (p) ;
+#else
+  back->balersn[0] = loadlongword (p) ;
+  back->balersn[1] = loadlongword (p) ;
+#endif
+  if (back->flags and BA_CFG)
+    then
+      begin
+        back->size = loadword (p) ;
+        back->phyport = loadword (p) ;
+        back->balertype = loadword (p) ;
+        back->version = loadword (p) ;
+        loadblock (p, back->size, addr(back->opaque)) ;
+      end
+end
+
+void loadepstat (pbyte *p, tstat_ep *epstat)
+begin
+  integer i, j ;
+  tstat_oneep *ps ;
+
+  for (i = PP_SER1 ; i <= PP_SER2 ; i++)
+    begin
+      ps = addr((*epstat)[i]) ;
+      ps->start_km = loadsingle (p) ;
+      ps->time_error = loadsingle (p) ;
+      ps->best_vco = loadsingle (p) ;
+      ps->ticks_track_lock = loadlongword (p) ; /* ticks since last track or lock */
+      ps->km = loadlongint (p) ;
+      ps->state = loadword (p) ; /* hold/track/lock */
+      ps->spare1 = loadword (p) ;
+#ifdef ENDIAN_LITTLE
+      ps->serial[1] = loadlongword (p) ;
+      ps->serial[0] = loadlongword (p) ;
+#else
+      ps->serial[0] = loadlongword (p) ;
+      ps->serial[1] = loadlongword (p) ;
+#endif
+      ps->procid = loadlongword (p) ;
+      ps->secs_boot = loadlongword (p) ; /* seconds since boot */
+      ps->secs_resync = loadlongword (p) ; /* seconds since last resync */
+      ps->resyncs = loadlongword (p) ; /* Total number of resyncs */
+      ps->q330_comm_errors = loadlongword (p) ; /* communications errors from 330 */
+      ps->ep_comm_errors = loadlongword (p) ; /* communications errors from EP */
+      ps->spare2 = loadword (p) ;
+      ps->sdi_count = loadword (p) ; /* number of SDI-12 devices active */
+      ps->version = loadword (p) ; /* version and revision */
+      ps->flags = loadword (p) ;
+      ps->analog_chans = loadword (p) ;
+      ps->ep_model = (enum tep_model)(loadbyte (p)) ;
+      ps->ep_rev = loadbyte (p) ;
+      ps->gains = loadlongword (p) ;
+      ps->inp_volts = loadword (p) ; /* in .1 volt increments */
+      ps->humidity = loadword (p) ; /* in percent */
+      ps->pressure = loadlongword (p) ; /* in ubar */
+      ps->temperature = loadlongint (p) ; /* in 0.1C increments */
+      for (j = 0 ; j <= 3 ; j++)
+        ps->adcounts[j] = loadlongint (p) ;
+      for (j = 0 ; j < MAX_SDI ; j++)
+        begin
+          ps->sdistats[j].address = (char) loadbyte (p) ;
+          ps->sdistats[j].phase = (enum tsdi_phase) loadbyte (p) ;
+          ps->sdistats[j].driver = (enum tsdi_driver) loadbyte (p) ;
+          ps->sdistats[j].spare1 = loadbyte (p) ;
+          loadblock (p, 6, addr(ps->sdistats[j].model)) ;
+          loadblock (p, 13, addr(ps->sdistats[j].serial)) ;
+          ps->sdistats[j].spare2 = (char) loadbyte (p) ;
+          loadblock (p, 3, addr(ps->sdistats[j].version)) ;
+          ps->sdistats[j].spare3 = (char) loadbyte (p) ;
+        end
+#ifdef ENDIAN_LITTLE
+      ps->adc_serial[1] = loadlongword (p) ;
+      ps->adc_serial[0] = loadlongword (p) ;
+#else
+      ps->adc_serial[0] = loadlongword (p) ;
+      ps->adc_serial[1] = loadlongword (p) ;
+#endif
+      ps->adc_model = (enum tadc_model)(loadbyte (p)) ;
+      ps->adc_rev = loadbyte (p) ;
+      ps->adc_spare1 = loadword (p) ;
+      ps->adc_spare2 = loadlongword (p) ;
+      for (j = 0 ; j <= 2 ; j++)
+        ps->spares[j] = loadlongword (p) ;
+    end
+end
+
+void loadfestats (pbyte *p, tstat_fes *fes)
+begin
+  integer i, j ;
+  tfestat *pfs ;
+
+  fes->hdr.count = loadword (p) ;
+  fes->hdr.lth = loadword (p) ;
+  if (fes->hdr.count < 2)
+    then
+      memset (addr(fes->boards[1]), 0, sizeof(tfestat)) ; /* no data for second board */
+  for (i = 0 ; i < fes->hdr.count ; i++)
+    begin
+      pfs = addr(fes->boards[i]) ;
+      pfs->start_km = loadsingle (p) ;
+      pfs->time_error = loadsingle (p) ;
+      pfs->best_vco = loadsingle (p) ;
+      pfs->ticks_track_lock = loadlongword (p) ;
+      pfs->km = loadlongint (p) ;
+      pfs->state = loadword (p) ;
+      pfs->flags = loadword (p) ;
+      pfs->secs_resync = loadlongword (p) ;
+      pfs->resyncs = loadlongword (p) ;
+      pfs->secs_boot = loadlongword (p) ;
+      pfs->cp_comm_errors = loadlongword (p) ;
+      pfs->inp_volts = loadword (p) ;
+      pfs->sensor_bitmap = loadword (p) ;
+      pfs->cal_status = loadword (p) ;
+      pfs->sensor_temp = loadint16 (p) ;
+#ifdef ENDIAN_LITTLE
+      pfs->sensor_serial[1] = loadlongword (p) ;
+      pfs->sensor_serial[0] = loadlongword (p) ;
+#else
+      pfs->sensor_serial[0] = loadlongword (p) ;
+      pfs->sensor_serial[1] = loadlongword (p) ;
+#endif
+      for (j = 0 ; j <= 3 ; i++)
+        pfs->booms[j] = loadbyte (p) ;
+    end
+end
+
+void loadepd (pbyte *p, tepdelay *epdelay)
+begin
+  integer i ;
+
+  epdelay->ress[PP_SER1] = loadlongword (p) ;
+  epdelay->ress[PP_SER2] = loadlongword (p) ;
+  epdelay->chancnt = loadword (p) ;
+  epdelay->spare = loadword (p) ;
+  for (i = 0 ; i < epdelay->chancnt ; i++)
+    epdelay->chandlys[i] = loadlongword (p) ;
+end
+
+void loadepcfg (pbyte *p, tepcfg *epcfg)
+begin
+  integer i ;
+
+  memset (epcfg, 0, sizeof(tepcfg)) ;
+  epcfg->ress[PP_SER1] = loadlongword (p) ;
+  epcfg->ress[PP_SER2] = loadlongword (p) ;
+  epcfg->flags[PP_SER1] = loadlongword (p) ;
+  epcfg->flags[PP_SER2] = loadlongword (p) ;
+  epcfg->chancnt = loadword (p) ;
+  epcfg->spare = loadword (p) ;
+  for (i = 0 ; i < epcfg->chancnt ; i++)
+    begin
+      epcfg->chanmasks[i].chan = loadbyte (p) ;
+      epcfg->chanmasks[i].mask = loadbyte (p) ;
+    end
+end
+
+void storeepcfg (pbyte *p, tepcfg *epcfg)
+begin
+  integer i ;
+
+  storelongword (p, epcfg->ress[PP_SER1]) ;
+  storelongword (p, epcfg->ress[PP_SER2]) ;
+  storelongword (p, epcfg->flags[PP_SER1]) ;
+  storelongword (p, epcfg->flags[PP_SER2]) ;
+  storeword (p, epcfg->chancnt) ;
+  storeword (p, epcfg->spare) ;
+  for (i = 0 ; i < epcfg->chancnt ; i++)
+    begin
+      storebyte (p, epcfg->chanmasks[i].chan) ;
+      storebyte (p, epcfg->chanmasks[i].mask) ;
+    end
+end
+
+void loadcomm (pbyte *p, tcomm *comm)
+begin
+  byte lp ;
+  integer i ;
+
+#ifdef ENDIAN_LITTLE
+  comm->serial[1] = loadlongword (p) ;
+  comm->serial[0] = loadlongword (p) ;
+#else
+  comm->serial[0] = loadlongword (p) ;
+  comm->serial[1] = loadlongword (p) ;
+#endif
+  comm->version = loadword (p) ;
+  comm->active_lth = loadword (p) ;
+  comm->mtu = loadword (p) ;
+  comm->base_port = loadword (p) ;
+  comm->eth_ip = loadlongword (p) ;
+  comm->eth_mask = loadlongword (p) ;
+  comm->eth_gate = loadlongword (p) ;
+  comm->pwr_cycling = loadlongword (p) ;
+  for (lp = LP_TEL1 ; lp <= LP_TEL4 ; lp++)
+    begin
+      comm->timeouts[lp].idle_timeout = loadword (p) ;
+      comm->timeouts[lp].busy_timeout = loadword (p) ;
+    end
+  for (lp = LP_TEL1 ; lp <= LP_TEL4 ; lp++)
+    comm->triggers[lp] = loadword (p) ;
+  comm->min_off = loadword (p) ;
+  comm->listopts = loadword (p) ;
+  comm->max_off = loadword (p) ;
+  comm->baler_min_perc = loadword (p) ;
+  for (i = 0 ; i < IP_LIST_SIZE ; i++)
+    begin
+      comm->iplist[i].low = loadlongword (p) ;
+      comm->iplist[i].high = loadlongword (p) ;
+    end
+  comm->eth_flags = loadlongword (p) ;
+  comm->min_on = loadword (p) ;
+  comm->spare = loadword (p) ;
+  loadblock (p, 364, addr(comm->other_exp)) ;
+end
+
+void loadbalecfg (pbyte *p, tbalecfg *bcfg)
+begin
+
+  bcfg->sub_command = loadword (p) ;
+  bcfg->sub_response = loadword (p) ;
+  bcfg->size = loadword (p) ;
+  bcfg->phyport = loadword (p) ;
+  bcfg->balertype = loadword (p) ;
+  bcfg->version = loadword (p) ;
+  loadstring (p, 236, addr(bcfg->opaque)) ;
 end
 
 #ifndef OMIT_SDUMP

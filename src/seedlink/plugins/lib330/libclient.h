@@ -1,5 +1,5 @@
 /*   Lib330 structures relating to Q330 communications
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -9,7 +9,7 @@
     (at your option) any later version.
 
     Lib330 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    but WITHOUT ANY WARRANTY; without even the implied warranty of,
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
@@ -23,13 +23,19 @@ Edit History:
     0 2006-09-09 rdr Created
     1 2006-10-26 rdr Add last_data_time, current_ip, and current_port to topstat.
     2 2006-11-30 rdr Add Definitions for module directory.
-    3 2008-04-03 rdr Add opt_compat.
-    4 2008-08-19 rdr Add tcp support.
+    3 2007-08-01 rdr Add baler callback functions.
+    4 2007-08-21 rdr Add BT_SOCKET.
+    5 2008-04-03 rdr Add opt_compat.
+    6 2008-04-29 rdr Add FAT_DIRCLOSE.
+    7 2008-08-20 rdr Add tcp support.
+    8 2009-08-02 rdr Add opt_dss_memory.
+    9 2010-03-27 rdr Add Q335 State subtype definitions.
+}
 */
 #ifndef libclient_h
 /* Flag this file as included */
 #define libclient_h
-#define VER_LIBCLIENT 7
+#define VER_LIBCLIENT 15
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -40,6 +46,7 @@ Edit History:
 #define OSF_ALL 1 /* bit set to send all one second data */
 #define OSF_DATASERV 2 /* bit set to send dataserv lcqs */
 #define OSF_1HZ 4 /* bit set to send 1hz main digitizer data */
+#define OSF_EP 8 /* bit set to send 1hz Environmental Processor data */
 /* miniseed filtering bit masks */
 #define OMF_ALL 1 /* bit set to send all miniseed data */
 #define OMF_NETSERV 2 /* bit set to send netserv data */
@@ -53,7 +60,7 @@ Edit History:
 #define FIRMAXSIZE 400
 #define MAX_DETSTAT 40 /* maximum number that library will return */
 #define MAX_CTRLSTAT 20 /* maximum number that library will return */
-#define MAX_MODULES 30
+#define MAX_MODULES 31
 #else
 #define MAX_MODULES 23
 #endif
@@ -62,7 +69,8 @@ typedef char string2[3] ;
 typedef char string3[4] ;
 typedef char string5[6] ;
 typedef char string9[10] ;
-typedef char string250[252] ;
+typedef char string250[250] ;
+typedef string250 *pstring ;
 typedef pointer tcontext ; /* a client doesn't need to know the contents of the context */
 typedef void (*tcallback)(pointer p) ; /* prototype for all the callback procedures */
 enum thost_mode {HOST_ETH, HOST_SER, HOST_TCP} ;
@@ -85,6 +93,12 @@ typedef struct tfilter { /* coefficient storage for FIR filters */
 typedef tfilter *pfilter ;
 #endif
 
+typedef struct { /* for file access */
+  tcallback call_fileacc ; /* File access callback */
+  pointer station_ptr ; /* opaque pointer */
+} tfile_owner ;
+typedef tfile_owner *pfile_owner ;
+
 typedef struct { /* parameters for lib_create call */
   t64 q330id_serial ; /* serial number */
   word q330id_dataport ; /* Data port, use LP_TEL1 .. LP_TEL4 */
@@ -95,6 +109,7 @@ typedef struct { /* parameters for lib_create call */
   word opt_verbose ; /* VERB_xxxx bitmap */
   word opt_zoneadjust ; /* calculate host's timezone automatically */
   word opt_secfilter ; /* OSF_xxx bits */
+  word opt_client_msgs ; /* Number of client message buffers */
 #ifndef OMIT_SEED
   word opt_compat ; /* Compatibility Mode */
   word opt_minifilter ; /* OMF_xxx bits */
@@ -112,6 +127,8 @@ typedef struct { /* parameters for lib_create call */
   tcallback call_messages ; /* address of messages callback procedure */
   tcallback call_secdata ; /* address of one second data callback procedure */
   tcallback call_lowlatency ; /* address of low latency data callback procedure */
+  tcallback call_baler ; /* Baler related callbacks */
+  pfile_owner file_owner ; /* For continuity file handling */
 } tpar_create ;
 typedef struct { /* parameters for lib_register call */
   t64 q330id_auth ; /* authentication code */
@@ -137,8 +154,25 @@ typedef struct { /* parameters for lib_register call */
   word opt_regattempts ; /* maximum registration attempts before hibernate if non-zero */
   word opt_ipexpire ; /* dyanmic IP address expires after this many minutes since last POC */
   word opt_buflevel ; /* terminate connection when buffer level reaches this value if non-zero */
+  word opt_q330_cont ; /* Determines how often Q330 continuity is written to disk in minutes */
+  word opt_dss_memory ; /* Maximum DSS memory (in KB) if non-zero */
 } tpar_register ;
+typedef struct { /* format of lib_change_conntiming */
+  word opt_conntime ; /* maximum connection time in minutes if non-zero */
+  word opt_connwait ; /* wait this many minutes after connection time or buflevel shutdown */
+  word opt_buflevel ; /* terminate connection when buffer level reaches this value if non-zero */
+  word data_timeout ; /* timeout in minutes for data timeout (default is 10) */
+  word data_timeout_retry ; /* minutes to wait after data timeout (default is 10) */
+  word status_timeout ; /* timeout in minutes for status timeout (default is 5) */
+  word status_timeout_retry ; /* minutes to wait after status timeout (default is 5) */
+  word piu_retry ; /* minutes to wait after port in use timeout (default is 5 */
+} tconntiming ;
+
+#ifdef USE_GCC_PACKING
+enum tpacket_class {PKC_DATA, PKC_EVENT, PKC_CALIBRATE, PKC_TIMING, PKC_MESSAGE, PKC_OPAQUE}  __attribute__ ((__packed__)) ;
+#else
 enum tpacket_class {PKC_DATA, PKC_EVENT, PKC_CALIBRATE, PKC_TIMING, PKC_MESSAGE, PKC_OPAQUE} ;
+#endif
 enum tacctype {AC_GAPS, AC_BOOTS, AC_READ, AC_WRITE, AC_COMATP, AC_COMSUC, AC_PACKETS, AC_COMEFF,
             AC_POCS, AC_NEWIP, AC_DUTY, AC_THROUGH, AC_MISSING, AC_FILL, AC_CMDTO, AC_SEQERR,
             AC_CHECK, AC_IOERR} ;
@@ -149,6 +183,8 @@ enum tacctype {AC_GAPS, AC_BOOTS, AC_READ, AC_WRITE, AC_COMATP, AC_COMSUC, AC_PA
 #define AC_STATUS_LATENCY ((integer)AC_DATA_LATENCY + 1)
 #define INVALID_ENTRY -1 /* no data for this time period */
 #define INVALID_LATENCY -66666666 /* not yet available */
+#define SCS_Q335 1 /* State Call subtype indicating connected to Q335 */
+#define SCS_Q330 0 /* State Call subtype indicating connected to Q330 */
 
 typedef struct {
   word low_seq ; /* last packet number acked */
@@ -249,6 +285,27 @@ enum tstate_type {ST_STATE, /* new operational state */
                  ST_TICK, /* info has seconds, subtype has usecs */
                  ST_OPSTAT, /* new operational status minute */
                  ST_TUNNEL} ; /* tunnel response available */
+enum tbaler_type {BT_Q330TIME, /* number of seconds since 2000 from Q330 */
+                  BT_UDPRECV, /* UDP packet received that might be for baler */
+                  BT_TCPRECV, /* TCP packet received that might be for baler */
+                  BT_REGRESP, /* Registration response */
+                  BT_TIMER, /* 100ms timer */
+                  BT_BACK,  /* Baler Acknowledge */
+                  BT_SOCKET, /* Opening a baler socket */
+                  BT_BACK335} ; /* Baler Acknowledge for Q335 */
+enum tbaler_socket {BS_CONTROL, BS_DATA, BS_BCASTCTRL} ;
+enum tfileacc_type {FAT_OPEN,      /* Open File */
+                    FAT_CLOSE,     /* Close File */
+                    FAT_DEL,       /* Delete File */
+                    FAT_SEEK,      /* Seek in File */
+                    FAT_READ,      /* Read from File */
+                    FAT_WRITE,     /* Write to File */
+                    FAT_SIZE,      /* Return File size */
+                    FAT_CLRDIR,    /* Clear Directory */
+                    FAT_DIRFIRST,  /* Get first entry in directory */
+                    FAT_DIRNEXT,   /* Following entries, -1 file handle = done */
+                    FAT_DIRCLOSE} ;/* If user wants to stop the scan before done */
+
 typedef struct { /* format for state callback */
   tcontext context ;
   enum tstate_type state_type ; /* reason for this message */
@@ -264,11 +321,33 @@ typedef struct { /* format for messages callback */
   longword timestamp, datatime ;
   string95 suffix ;
 } tmsg_call ;
+
+typedef struct { /* format for baler callback */
+  tcontext context ;
+  enum tbaler_type baler_type ; /* reason for this message */
+  string9 station_name ;
+  longword response ; /* Some calls require a response */
+  longword info ; /* A 32 bit value depending on callback */
+  void *info2 ; /* Decoded IP header or address of tback packet */
+  void *info3 ; /* Decoded UDP or TCP Header */
+  void *info4 ; /* Address of UDP or TCP payload, info has payload length */
+} tbaler_call ;
+
+typedef struct { /* format of file access callback */
+  pfile_owner owner ; /* information to locate station */
+  enum tfileacc_type fileacc_type ; /* reason for this message */
+  integer response ; /* -1 or file handle for open */
+  pointer fname ; /* pointer to filename for open & delete, address of buffer read/write */
+  integer opt1 ; /* first open parameter or descriptor */
+  integer opt2 ; /* second open parameter if needed, or read/write size */
+} tfileacc_call ;
+
 typedef struct { /* format of data provided by received POC */
   longword new_ip_address ; /* new dynamic IP address */
   word new_base_port ; /* port translation may have changed it */
   string95 log_info ; /* any additional information the POC receiver wants logged */
 } tpocmsg ;
+
 #ifndef OMIT_SEED
 typedef struct { /* format of one detector status entry */
   char name[DETECTOR_NAME_LENGTH + 11] ;
@@ -319,6 +398,7 @@ typedef struct { /* format of essential items from tokens */
   word datas_port ; /* dataserver TCP port */
   longword webip ; /* IP address according to server challenge */
   tdss dss ; /* DSS configuration */
+  tclock clock ; /* Clock configuration */
   word buffer_counts[MAX_LCQ] ; /* pre-event buffers + 1 */
 } tdpcfg ;
 typedef struct { /* one module */
@@ -327,6 +407,16 @@ typedef struct { /* one module */
 } tmodule ;
 typedef tmodule tmodules[MAX_MODULES] ; /* Null name to indicate end of list */
 typedef tmodules *pmodules ;
+
+enum tmd5op_type {MDO_INIT, /* initialize buffer */
+                  MDO_UPDATE, /* Update acc */
+                  MDO_RESULT} ; /* Return result */
+typedef struct { /* MD5 Operations */
+  enum tmd5op_type optype ; /* operation to do */
+  pbyte ptr ; /* pointer to input data */
+  integer cnt ; /* length of input data */
+  t128 res ; /* result */
+} tmd5op ;
 
 extern void lib_create_context (tcontext *ct, tpar_create *cfg) ; /* If ct = NIL return, check resp_err */
 extern enum tliberr lib_destroy_context (tcontext *ct) ; /* Return error if any */
@@ -358,4 +448,16 @@ extern void lib_webadvertise (tcontext ct, string15 *stnname, string *dpaddr) ;
 extern enum tliberr lib_send_tunneled (tcontext ct, byte cmd, byte response, pointer buf, integer req_size) ;
 extern enum tliberr lib_get_tunneled (tcontext ct, byte *response, pointer buf, integer *resp_size) ;
 extern pmodules lib_get_modules (void) ;
+extern enum tliberr lib_conntiming (tcontext ct, tconntiming *conntiming, boolean setter) ;
+extern longint lib_crccalc (tcontext ct, pbyte p, longint len) ;
+extern enum tliberr lib_send_checkip (tcontext ct, longword ip) ;
+extern enum tliberr lib_md5_operation (tcontext ct, tmd5op *md5op) ;
+extern enum tliberr lib_set_access_timer (tcontext ct, word seconds) ;
+extern enum tliberr lib_set_freeze_timer (tcontext ct, integer seconds) ;
+extern enum tliberr lib_flush_data (tcontext ct) ;
+#ifndef OMIT_SERIAL
+extern enum tliberr lib_inject_packet (tcontext ct, pbyte payload, byte protocol, longword srcaddr,
+                        longword destaddr, word srcport, word destport, word datalength,
+                        longword seq, longword ack, word window, byte flags) ;
+#endif
 #endif

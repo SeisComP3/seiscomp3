@@ -1,5 +1,5 @@
-/*   Lib330 Q330 I/O Communications routine headers
-     Copyright 2006-2010 Certified Software Corporation
+/*   Lib330 DSS definitions
+     Copyright 2009 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -20,36 +20,34 @@
 Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
-    0 2006-09-29 rdr Created
+    0 2009-07-28 rdr Created.
 */
-#ifndef q330io_h
+#ifndef libdss_h
 /* Flag this file as included */
-#define q330io_h
-#define VER_Q330IO 13
+#define libdss_h
+#define VER_LIBDSS 6
 
-/* Make sure libtypes.h is included */
+#ifndef OMIT_SEED
+
+#ifndef q330types_h
+#include "q330types.h"
+#endif
 #ifndef libtypes_h
 #include "libtypes.h"
 #endif
 #ifndef libstrucs_h
 #include "libstrucs.h"
 #endif
-
-extern void close_sockets (pq330 q330) ;
-#ifndef OMIT_NETWORK
-extern boolean open_sockets (pq330 q330, boolean both, boolean fromback) ;
-extern void read_cmd_socket (pq330 q330) ;
-extern void read_data_socket (pq330 q330) ;
-extern void tcp_error (pq330 q330, string95 *msgsuf) ;
+#ifndef libseed_h
+#include "libseed.h"
 #endif
 
-#ifndef OMIT_SERIAL
-extern void send_packet (pq330 q330, integer lth, word toport, word fromport) ;
-extern boolean open_serial (pq330 q330) ;
-extern void read_from_serial (pq330 q330) ;
-extern void inject_packet (pq330 q330, pbyte payload, byte protocol, longword srcaddr,
-                           longword destaddr, word srcport, word destport, word datalength,
-                           longword seq, longword ack, word window, byte flags) ;
-#endif
+extern void lib_dss_start (tdss *dss, pointer ct, word host_size_limit) ;
+extern void lib_dss_stop (pointer ct) ;
+extern void lib_dss_timer (pointer ct) ;
+extern void get_dss_server_display (pointer ct, string63 *result) ;
+extern void lib_dss_continuous (pointer ct) ;
+extern void lib_dss_read (pointer ct) ;
 
+#endif
 #endif

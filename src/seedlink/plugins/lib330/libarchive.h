@@ -25,7 +25,7 @@ Edit History:
 #ifndef libarchive_h
 /* Flag this file as included */
 #define libarchive_h
-#define VER_LIBARCHIVE 4
+#define VER_LIBARCHIVE 5
 
 #ifndef OMIT_SEED
 /* Make sure libtypes.h is included */

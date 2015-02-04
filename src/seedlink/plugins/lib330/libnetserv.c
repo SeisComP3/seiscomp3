@@ -1,5 +1,5 @@
-/*   Lib330 Netserver (LISS) definitions
-     Copyright 2006 Certified Software Corporation
+/*   Lib330 Netserver (LISS) Routines
+     Copyright 2006-2013 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -27,8 +27,16 @@ Edit History:
     2 2007-03-07 rdr pbuf declaration fixed for lib_ns_send. Don't generate client
                      disconnected message in send_next_buffer, this can cause corruption
                      of the miniseed callback structure.
+    3 2007-08-04 rdr Add conditionals for omitting network code.
+    4 2008-01-09 rdr Generate client disconnected message as it occurs.
+    5 2008-04-20 rdr Fix missing assignment to err in read_from_client.
+    6 2010-01-04 rdr Use fcntl instead of ioctl to set socket non-blocking. Fix setting non-blocking
+                     on accepted socket.
+    7 2013-02-02 rdr Use actual highest socket for select.
+    8 2013-08-08 rdr Fix checking for EPIPE in send_netserv_packet.
 */
 #ifndef OMIT_SEED /* Can't use without seed generation */
+#ifndef OMIT_NETWORK /* or without network */
 #ifndef libnetserv_h
 #include "libnetserv.h"
 #endif
@@ -60,7 +68,6 @@ typedef struct {
   boolean sockopen ;
   boolean sockfull ; /* last send failed */
   boolean terminate ;
-  boolean report_discon ; /* report disconnetion */
   tns_par ns_par ; /* creation parameters */
 #ifdef X86_WIN32
   SOCKET npath ; /* netserv socket */
@@ -72,6 +79,7 @@ typedef struct {
   struct sockaddr nsockin, nsockout ; /* netserv address descriptors */
   integer sockpath ;
   struct sockaddr client ;
+  integer high_socket ;
 #endif
   integer nsq_in, nsq_out ;
   double last_sent ;
@@ -156,6 +164,9 @@ begin
 #endif
         nsstr->sockpath = INVALID_SOCKET ;
       end
+#ifndef X86_WIN32
+  nsstr->high_socket = 0 ;
+#endif
 end
 
 static void open_socket (pnsstr nsstr)
@@ -189,6 +200,11 @@ begin
         lib_msg_add(nsstr->ns_par.stnctx, AUXMSG_SOCKETERR, 0, addr(s)) ;
         return ;
       end
+#ifndef X86_WIN32
+  if (nsstr->npath > nsstr->high_socket)
+    then
+      nsstr->high_socket = nsstr->npath ;
+#endif
   psock = (pointer) addr(nsstr->nsockin) ;
   memset(psock, 0, sizeof(struct sockaddr)) ;
   psock->sin_family = AF_INET ;
@@ -251,7 +267,8 @@ begin
   ioctlsocket (nsstr->npath, FIONBIO, addr(flag)) ;
   err = listen (nsstr->npath, 1) ;
 #else
-  ioctl (nsstr->npath, FIONBIO, addr(flag)) ;
+  flag = fcntl (nsstr->npath, F_GETFL, 0) ;
+  fcntl (nsstr->npath, F_SETFL, flag or O_NONBLOCK) ;
   err = listen (nsstr->npath, 1) ;
 #endif
   if (err)
@@ -277,7 +294,6 @@ begin
   sprintf(s, "on netserv[%d] port %d", nsstr->ns_par.server_number, host_port) ;
   lib_msg_add(nsstr->ns_par.stnctx, AUXMSG_SOCKETOPEN, 0, addr(s)) ;
   nsstr->sockopen = TRUE ;
-  nsstr->report_discon = FALSE ;
 end
 
 static void accept_ns_socket (pnsstr nsstr)
@@ -326,11 +342,15 @@ begin
       end
     else
       begin
-        flag = 1 ;
 #ifdef X86_WIN32
-        ioctlsocket (nsstr->npath, FIONBIO, addr(flag)) ;
+        flag = 1 ;
+        ioctlsocket (nsstr->sockpath, FIONBIO, addr(flag)) ;
 #else
-        ioctl (nsstr->npath, FIONBIO, addr(flag)) ;
+        if (nsstr->sockpath > nsstr->high_socket)
+          then
+            nsstr->high_socket = nsstr->sockpath ;
+        flag = fcntl (nsstr->sockpath, F_GETFL, 0) ;
+        fcntl (nsstr->sockpath, F_SETFL, flag or O_NONBLOCK) ;
 #endif
         psock = (pointer) addr(nsstr->client) ;
         showdot (ntohl(psock->sin_addr.s_addr), addr(hostname)) ;
@@ -392,7 +412,6 @@ begin
         nsstr->haveclient = TRUE ;
         nsstr->last_sent = now () ;
         nsstr->sockfull = FALSE ;
-        nsstr->report_discon = FALSE ;
       end
 end
 
@@ -411,6 +430,7 @@ begin
     if (err == SOCKET_ERROR)
       then
         begin
+          err =
 #ifdef X86_WIN32
                WSAGetLastError() ;
 #else
@@ -449,6 +469,7 @@ end
 static boolean send_netserv_packet (pnsstr nsstr, pointer buf)
 begin
   integer err ;
+  string63 s ;
 
   if (lnot nsstr->haveclient)
     then
@@ -476,7 +497,7 @@ begin
 #ifdef X86_WIN32
         else if ((err == ECONNRESET) lor (err == ECONNABORTED))
 #else
-        else if (err = EPIPE)
+        else if (err == EPIPE)
 #endif
           then
             begin
@@ -485,7 +506,8 @@ begin
 #else
               close (nsstr->sockpath) ;
 #endif
-              nsstr->report_discon = TRUE ;
+              sprintf(s, "netserv[%d] port", nsstr->ns_par.server_number) ;
+              lib_msg_add(nsstr->ns_par.stnctx, AUXMSG_DISCON, 0, addr(s)) ;
               nsstr->haveclient = FALSE ;
               nsstr->sockfull = FALSE ;
               return TRUE ;
@@ -539,7 +561,6 @@ begin
   struct timeval timeout ;
   integer res ;
   boolean sent ;
-  string95 s ;
 
   nsstr = p ;
   repeat
@@ -610,13 +631,6 @@ begin
         end
       else
         sleepms (25) ;
-    if (nsstr->report_discon)
-      then
-        begin
-          nsstr->report_discon = FALSE ;
-          sprintf(s, "netserv[%d] port", nsstr->ns_par.server_number) ;
-          lib_msg_add(nsstr->ns_par.stnctx, AUXMSG_DISCON, 0, addr(s)) ;
-        end
   until nsstr->terminate) ;
   nsstr->running = FALSE ;
   ExitThread (0) ;
@@ -630,7 +644,6 @@ begin
   struct timeval timeout ;
   integer res ;
   boolean sent ;
-  string95 s ;
 
   nsstr = p ;
   repeat
@@ -652,7 +665,7 @@ begin
               end
           timeout.tv_sec = 0 ;
           timeout.tv_usec = 25000 ; /* 25ms timeout */
-          res = select (getdtablesize(), addr(readfds), addr(writefds), addr(exceptfds), addr(timeout)) ;
+          res = select (nsstr->high_socket + 1, addr(readfds), addr(writefds), addr(exceptfds), addr(timeout)) ;
           if (res > 0)
             then
               begin
@@ -701,13 +714,6 @@ begin
         end
       else
         sleepms (25) ;
-    if (nsstr->report_discon)
-      then
-        begin
-          nsstr->report_discon = FALSE ;
-          sprintf(s, "netserv[%d] port", nsstr->ns_par.server_number) ;
-          lib_msg_add(nsstr->ns_par.stnctx, AUXMSG_DISCON, 0, addr(s)) ;
-        end
   until nsstr->terminate) ;
   nsstr->running = FALSE ;
   pthread_exit (0) ;
@@ -772,4 +778,5 @@ begin
   destroy_mutex (nsstr) ;
 end
 
+#endif
 #endif

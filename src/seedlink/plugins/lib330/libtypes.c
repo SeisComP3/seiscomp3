@@ -38,4 +38,4 @@ const tclock default_clock = {
   10, /* has been locked lowest quality */
   0, /* Never been locked quality */
   0 } ; /* minimum seconds between clock messages */
-const tbauds bauds = {300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200} ;
+const tbauds bauds = {300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400} ;

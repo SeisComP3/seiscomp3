@@ -25,7 +25,7 @@ Edit History:
 #ifndef libmd5_h
 /* Flag this file as included */
 #define libmd5_h
-#define VER_LIBMD5 1
+#define VER_LIBMD5 3
 
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -48,5 +48,5 @@ typedef byte tbytebuf[64] ;
 extern char *dig2str (t64 *d, string63 *result) ;
 extern void calcmd5 (pq330 q330, string250 *chal, t128 *resp) ;
 extern void init_md5_buffer (pq330 q330) ;
-
+extern void md5_operation (pq330 q330, tmd5op *md5op) ;
 #endif

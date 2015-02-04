@@ -26,7 +26,7 @@ Edit History:
 #ifndef libnetserv_h
 /* Flag this file as included */
 #define libnetserv_h
-#define VER_LIBNETSERV 2
+#define VER_LIBNETSERV 6
 
 #ifndef OMIT_SEED
 /* Make sure libtypes.h is included */

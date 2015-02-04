@@ -1,5 +1,5 @@
 /*   Lib330 DP Token Processing
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -23,6 +23,11 @@ Edit History:
     0 2006-10-01 rdr Created
     1 2007-03-06 rdr Add call to purge_continuity.
     2 2007-03-12 rdr Don't purge continuity here, wait until receive data.
+    3 2008-01-10 rdr Move LOG into DP LCQs. DPLCQ buffers come out of thrbuf
+                     instead of using getmem.
+    4 2009-07-30 rdr Move uppercase to libsupport.
+    5 2010-03-27 rdr Add Q335 support.
+    6 2011-07-24 rdr Fix bug in loading opaque token data.
 */
 #ifndef libclient_h
 #include "libclient.h"
@@ -107,16 +112,6 @@ begin
     end
 end
 
-/* upshift a C string */
-static char *uppercase (pchar s)
-begin
-  size_t i ;
-
-  for (i = 0 ; i < strlen(s) ; i++)
-    s[i] = toupper (s[i]) ;
-  return s ;
-end
-
 void read_fir (paqstruc paqs, pbyte *p)
 begin
   pfilter cur_fir ;
@@ -128,12 +123,12 @@ begin
   len = loadbyte(p) ;
   loadblock (p, len, addr(ucs)) ;
   ucs[len] = 0 ;
-  uppercase(addr(ucs)) ;
+  lib330_upper(addr(ucs)) ;
   cur_fir = paqs->firchain ;
   while (cur_fir)
     begin
       strcpy(ucfname, cur_fir->fname) ;
-      uppercase(addr(ucfname)) ;
+      lib330_upper(addr(ucfname)) ;
       if (strcmp(ucfname, ucs) == 0)
         then
           begin
@@ -232,7 +227,9 @@ begin
   byte b ;
   longword mask ;
   pq330 q330 ;
-  string7 s ;
+  int16 real_rate ;
+  string95 s ;
+  string15 s2 ;
 #ifndef OMIT_SEED
   plcq pt ;
   pdownstream_packet pds ;
@@ -258,6 +255,33 @@ begin
   cur_lcq->raw_data_field = loadbyte (p) ;
   cur_lcq->lcq_opt = loadlongword (p) ;
   cur_lcq->rate = loadint16 (p) ;
+  if (((cur_lcq->raw_data_source and DCM) == DC_D32) land (cur_lcq->raw_data_field == HIGH_FREQ_BIT))
+    then
+      begin
+        switch (q330->share.fixed.freq7 and 0x7F) begin
+          case 5 :
+            real_rate = 250 ;
+            break ;
+          case 8 :
+            real_rate = 500 ;
+            break ;
+          case 10 :
+            real_rate = 1000 ;
+            break ;
+          default :
+            real_rate = 0 ;
+            break ;
+        end
+        if (cur_lcq->rate != real_rate)
+          then
+            begin
+              seed2string(cur_lcq->location, cur_lcq->seedname, addr(s2)) ;
+              sprintf (s, "in Token:%d Actual:%d For %s", (integer)cur_lcq->rate,
+                       (integer)real_rate, s2) ;
+              libmsgadd(q330, LIBMSG_HFRATE, addr(s)) ;
+              cur_lcq->rate = real_rate ; /* correct */
+            end
+      end
   cur_lcq->caldly = 60 ;
 #ifndef OMIT_SEED
   getbuf (q330, addr(cur_lcq->com), sizeof(tcom_packet)) ;
@@ -405,8 +429,7 @@ begin
     then
       begin /* add new one */
         newone = TRUE ;
-        cur_lcq = malloc (sizeof(tlcq)) ;
-        memset (cur_lcq, 0, sizeof(tlcq)) ;
+        getthrbuf (q330, addr(cur_lcq), sizeof(tlcq)) ;
         if (paqs->dplcqs == NIL)
           then
             paqs->dplcqs = cur_lcq ;
@@ -427,8 +450,7 @@ begin
   if (newone)
     then
       begin
-        cur_lcq->com = malloc (sizeof(tcom_packet)) ;
-        memset (cur_lcq->com, 0, sizeof(tcom_packet)) ;
+        getthrbuf (q330, addr(cur_lcq->com), sizeof(tcom_packet)) ;
         cur_lcq->com->frame = 1 ;
         cur_lcq->com->next_compressed_sample = 1 ;
         cur_lcq->com->maxframes = 255 ;
@@ -632,24 +654,52 @@ void add_msg_tim_lcqs (paqstruc paqs)
 begin
   plcq cur_lcq ;
   pq330 q330 ;
+  boolean newone ;
 
   q330 = paqs->owner ;
-  getbuf (q330, addr(cur_lcq), sizeof(tlcq)) ;
-  getbuf (q330, addr(cur_lcq->com), sizeof(tcom_packet)) ;
-  paqs->lcqs = extend_link (paqs->lcqs, cur_lcq) ;
+  cur_lcq = paqs->dplcqs ;
+  newone = FALSE ;
+  while (cur_lcq)
+    if ((memcmp(addr(cur_lcq->location), addr(paqs->log_tim.log_location), 2) == 0) land
+       (memcmp(addr(cur_lcq->seedname), addr(paqs->log_tim.log_seedname), 3) == 0))
+      then
+        break ;
+      else
+        cur_lcq = cur_lcq->link ;
+  if (cur_lcq == NIL)
+    then
+      begin /* add new one */
+        newone = TRUE ;
+        getthrbuf (q330, addr(cur_lcq), sizeof(tlcq)) ;
+        if (paqs->dplcqs == NIL)
+          then
+            paqs->dplcqs = cur_lcq ;
+          else
+            paqs->dplcqs = extend_link (paqs->dplcqs, cur_lcq) ;
+      end
   paqs->msg_lcq = cur_lcq ;
   memcpy(addr(cur_lcq->location), addr(paqs->log_tim.log_location), 2) ;
   memcpy(addr(cur_lcq->seedname), addr(paqs->log_tim.log_seedname), 3) ;
   set_loc_name (cur_lcq) ;
   cur_lcq->raw_data_source = MESSAGE_STREAM ;
-  inc(paqs->highest_lcqnum) ;
-  cur_lcq->lcq_num = paqs->highest_lcqnum ;
-  if (q330->par_create.call_minidata)
+  cur_lcq->lcq_num = 0xFF ; /* not used */
+  cur_lcq->validated = TRUE ;
+#ifndef OMIT_SEED
+  if (newone)
     then
-      cur_lcq->mini_filter = q330->par_create.opt_minifilter and (OMF_ALL or OMF_MSG) ;
-  if ((paqs->arc_size > 0) land (q330->par_create.call_aminidata))
+      begin
+        getthrbuf (q330, addr(cur_lcq->com), sizeof(tcom_packet)) ;
+        cur_lcq->com->frame = 1 ;
+        cur_lcq->com->next_compressed_sample = 1 ;
+        cur_lcq->com->maxframes = 255 ;
+      end
+#endif
+  init_dplcq (paqs, cur_lcq, newone) ;
+#ifndef OMIT_SEED
+  if (newone)
     then
-      cur_lcq->arc.amini_filter = q330->par_create.opt_aminifilter and (OMF_ALL or OMF_MSG) ;
+      preload_archive (q330, FALSE, cur_lcq) ;
+#endif
   getbuf (q330, addr(cur_lcq), sizeof(tlcq)) ;
   getbuf (q330, addr(cur_lcq->com), sizeof(tcom_packet)) ;
   paqs->lcqs = extend_link (paqs->lcqs, cur_lcq) ;
@@ -820,7 +870,7 @@ begin
 #ifndef OMIT_SEED
           paqs->opaque_size = next - 2 ; /* don't count length word */
           getbuf (q330, addr(paqs->opaque_buf), paqs->opaque_size) ;
-          loadblock (addr(p), paqs->opaque_size, addr(paqs->opaque_size)) ;
+          loadblock (addr(p), paqs->opaque_size, paqs->opaque_buf) ;
 #endif
           p = tonext(pref, next) ;
           break ;
@@ -850,7 +900,7 @@ begin
   q = paqs->dplcqs ;
   while (q)
     begin
-      if (lnot q->validated)
+      if ((lnot q->validated) land (q->raw_data_source != MESSAGE_STREAM))
         then
           begin
             for (acctype = AC_FIRST ; acctype <= AC_LAST ; acctype++)
