@@ -23,7 +23,6 @@
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/core.h>
 #include <seiscomp3/io/socket.h>
-#include <seiscomp3/io/recordstream/streamidx.h>
 
 
 namespace Seiscomp {
@@ -41,6 +40,63 @@ class SC_SYSTEM_CORE_API SeedlinkCommandException: public SeedlinkException {
 		SeedlinkCommandException(): SeedlinkException("command not accepted") {}
 		SeedlinkCommandException(const std::string& what): SeedlinkException(what) {}
 };
+
+
+class SC_SYSTEM_CORE_API SLStreamIdx {
+	public:
+		SLStreamIdx();
+
+		SLStreamIdx(const std::string &net, const std::string &sta,
+		            const std::string &loc, const std::string &cha);
+
+		SLStreamIdx(const std::string &net, const std::string &sta,
+		            const std::string &loc, const std::string &cha,
+		            const Seiscomp::Core::Time &stime,
+		            const Seiscomp::Core::Time &etime);
+
+		SLStreamIdx& operator=(const SLStreamIdx &other);
+
+		bool operator<(const SLStreamIdx &other) const;
+		bool operator==(const SLStreamIdx &other) const;
+
+		//! Returns the network code
+		const std::string &network() const;
+
+		//! Returns the station code
+		const std::string &station() const;
+
+		//! Returns the channel code
+		const std::string &channel() const;
+
+		//! Returns the location code
+		const std::string &location() const;
+
+		//! Returns the selector in <location><channel>.D notation
+		//! * wildcards are substituted by a corresponding number of ?
+		std::string selector() const;
+
+		//! Returns the start time
+		Core::Time startTime() const;
+
+		//! Returns the end time
+		Core::Time endTime() const;
+
+		//! Returns the most recent record end time
+		Seiscomp::Core::Time timestamp() const;
+
+		//! Sets the time stamp
+		void setTimestamp(Seiscomp::Core::Time &rectime) const;
+
+	private:
+		const std::string  _net;
+		const std::string  _sta;
+		const std::string  _loc;
+		const std::string  _cha;
+		const Core::Time   _stime;
+		const Core::Time   _etime;
+		mutable Core::Time _timestamp;
+};
+
 
 DEFINE_SMARTPOINTER(SLConnection);
 
@@ -101,26 +157,28 @@ class SC_SYSTEM_CORE_API SLConnection : public Seiscomp::IO::RecordStream {
 
 
 	private:
+		void handshake();
+
+
+	private:
 		class StreamBuffer : public std::streambuf {
 			public:
 				StreamBuffer();
 				std::streambuf *setbuf(char *s, std::streamsize n);
 			};
 
-			StreamBuffer        _streambuf;
-			std::istream        _stream;
-			std::string         _serverloc;
-			std::string         _slrecord;
-			IO::Socket          _sock;
-			std::set<StreamIdx> _streams;
-			Core::Time          _stime;
-			Core::Time          _etime;
-			bool                _readingData;
-			bool                _useBatch;
-			int                 _maxRetries;
-			int                 _retriesLeft;
-
-			void handshake();
+			StreamBuffer          _streambuf;
+			std::istream          _stream;
+			std::string           _serverloc;
+			std::string           _slrecord;
+			IO::Socket            _sock;
+			std::set<SLStreamIdx> _streams;
+			Core::Time            _stime;
+			Core::Time            _etime;
+			bool                  _readingData;
+			bool                  _useBatch;
+			int                   _maxRetries;
+			int                   _retriesLeft;
 };
 
 

@@ -179,8 +179,8 @@ bool ODCArchive::setStart(const string &fname) {
 	long int size;
 	bool result = true;
 
-    _recstream->stream().seekg(0, ios::end);
-    size = _recstream->stream().tellg();
+	_recstream->stream().seekg(0, ios::end);
+	size = _recstream->stream().tellg();
 
 	while ((retcode = ms_readmsr_r(&pfp,&prec,const_cast<char *>(fname.c_str()),-1,NULL,NULL,1,0,0)) == MS_NOERROR) {
 		samprate = prec->samprate;

@@ -26,105 +26,92 @@ using namespace Seiscomp::Core;
 StreamIdx::StreamIdx() {}
 
 StreamIdx::StreamIdx(const string& net, const string& sta, const string& loc,
-		     const string& cha)
-    : _net(net), _sta(sta), _loc(loc), _cha(cha) {}
+                     const string& cha)
+: _net(net), _sta(sta), _loc(loc), _cha(cha) {}
 
 StreamIdx::StreamIdx(const string& net, const string& sta, const string& loc,
-		     const string& cha, const Time& stime, const Time& etime)
-    : _net(net), _sta(sta), _loc(loc), _cha(cha),
-      _stime(stime), _etime(etime) {}
+                     const string& cha, const Time& stime, const Time& etime)
+: _net(net), _sta(sta), _loc(loc), _cha(cha)
+, _stime(stime), _etime(etime) {}
 
 StreamIdx& StreamIdx::operator=(const StreamIdx &other) {
-    if (this != &other) {
-	this->~StreamIdx();
-	new(this) StreamIdx(other);
-    }
-    
-    return *this;
+	if ( this != &other ) {
+		this->~StreamIdx();
+		new(this) StreamIdx(other);
+	}
+
+	return *this;
 }
 
 bool StreamIdx::operator<(const StreamIdx &other) const {
-    if (_net < other._net) return true;
-    else if(_net == other._net) {
-	if(_sta < other._sta) return true;
-	else if(_sta == other._sta) {
-	    if(_loc < other._loc) return true;
-	    else if(_loc == other._loc) {
-		if(_cha < other._cha) return true;
-                else if(_cha == other._cha) {
-                     if(_stime < other._stime) return true;
-                     else if(_stime == other._stime) {
-                         if(_etime < other._etime) return true;
-                     }
-                 } 
-	    }
+	if ( _net < other._net )
+		return true;
+	else if ( _net == other._net ) {
+		if ( _sta < other._sta )
+			return true;
+		else if ( _sta == other._sta ) {
+			if ( _loc < other._loc )
+				return true;
+			else if ( _loc == other._loc ) {
+				if ( _cha < other._cha )
+					return true;
+				else if ( _cha == other._cha ) {
+					if ( _stime < other._stime )
+						return true;
+					else if ( _stime == other._stime ) {
+						if(_etime < other._etime) return true;
+					}
+				}
+			}
+		}
 	}
-    }
 
-    return false;
+	return false;
 }
 
 bool StreamIdx::operator!=(const StreamIdx &other) const {
-    return (_net != other._net || _sta != other._sta ||
-	    _loc != other._loc || _cha != other._cha);
+	return (_net != other._net || _sta != other._sta ||
+	        _loc != other._loc || _cha != other._cha);
 }
 
 bool StreamIdx::operator==(const StreamIdx &other) const {
-    return !(*this != other);
+	return !(*this != other);
 }
 
 bool StreamIdx::operator>=(const StreamIdx &other) const {
-    return !(*this < other);
+	return !(*this < other);
 }
 
 bool StreamIdx::operator>(const StreamIdx &other) const {
-    return (*this >= other && *this != other);
+	return (*this >= other && *this != other);
 }
-    
+
 bool StreamIdx::operator<=(const StreamIdx &other) const {
-    return (*this < other || *this == other);
+	return (*this < other || *this == other);
 }
 
 const string &StreamIdx::network() const {
-    return _net;
+	return _net;
 }
 
 const string &StreamIdx::station() const {
-    return _sta;
+	return _sta;
 }
 
 const string &StreamIdx::channel() const {
-    return _cha;
+	return _cha;
 }
-   
+
 const string &StreamIdx::location() const {
 	return _loc;
 }
- 
-string StreamIdx::selector() const {
-    string loc = _loc;
-    string cha = _cha;
-    string::size_type pos = loc.find('*',0);
-
-    if (loc.length() > 0) {
-    	if (pos != string::npos) loc.replace(pos,1,1,'?');
-    	if (loc.length() < 2) loc.append(2-loc.length(),'?');
-    }
-    
-    pos = cha.find('*',0);
-    if (pos != string::npos) cha.replace(pos,1,1,'?');
-    if (cha.length() < 3) cha.append(3-cha.length(),'?');
-    
-    string selector = loc + cha + ".D";
-    return selector;
-}
 
 Time StreamIdx::startTime() const {
-    return _stime;
+	return _stime;
 }
 
 Time StreamIdx::endTime() const {
-    return _etime;
+	return _etime;
 }
 
 string StreamIdx::str(const Time& stime, const Time& etime) const {
@@ -148,14 +135,6 @@ string StreamIdx::str(const Time& stime, const Time& etime) const {
 	       _net + " " + _sta + " " + _cha + " " + _loc;
 }
 
-Time StreamIdx::timestamp() const {
-    return _timestamp;
-}
-
-void StreamIdx::setTimestamp(Time &rectime) const {
-    if (_timestamp < rectime)
-        _timestamp = rectime;
-}
 
 }
 }
