@@ -3,7 +3,7 @@ Introduction and Scope
 **********************
 
 SeisComP is likely the most widely distributed software package for
-seismological data acquisition and real-time data exchange over internet. Its
+seismological data acquisition and real-time data exchange over the Internet. Its
 data transmission protocol SeedLink became a de facto world standard. The first
 version of SeisComP was developed for the
 `GEOFON <http://geofon.gfz-potsdam.de/geofon/>`_ network and further extended
@@ -14,7 +14,7 @@ designed as a high standard fully automatic data acquisition and (near-)real-tim
 data processing tool including quality control, event detection and location as
 well as dissemination of event alerts. In the context of the
 `GITEWS <http://www.gitews.de/>`_ project (German Indian Ocean Tsunami Early
-Warning System) additional functionality were implemented to fulfil the
+Warning System) additional functionality were implemented to fulfill the
 requirements of 24/7 early warning control centers. Major changes in the
 architecture of SeisComP were necessary and many new features result in the
 upgrade of SeisComP to version 3. Important SeisComP releases are shown below.

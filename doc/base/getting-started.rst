@@ -71,22 +71,22 @@ trunk modules and the default request handler of Arclink.
     0) mysql
          MySQL server.
     1) postgresql
-         Postgresql server. There is currently no support in setup to create the
+         PostgreSQL server. There is currently no support in setup to create the
          database for you. You have to setup the database and user accounts on
          your own. The database schema is installed under share/db/postgresql.sql.
    Database backend [0]:
 
 If the database is enable the database backend can be selected. SeisComP3
-supports two main backends: MySQL and postgresql. Select the backend to be used
+supports two main backends: MySQL and PostgreSQL. Select the backend to be used
 here but be prepared that only for the MySQL backend the setup can help to
-create the database and tables for you. If you are using postgresql you have
+create the database and tables for you. If you are using PostgreSQL you have
 to provide a working database with the correct schema. The schema files are
 part of the distribution and can be found in :file:`share/db/postgresql.sql`. 
 
 .. note::
 
    As of PostgreSQL version 9 the default output encoding has changed to hex.
-   In order to fix issuses with seiscomp3 log in to your database and run the 
+   In order to fix issues with seiscomp3 log in to your database and run the 
    following command.
 
    .. code-block:: sql
@@ -161,7 +161,7 @@ Activate modules
 After the installation no module is activated for auto start. If :program:`seiscomp start`
 is called, nothing will happen. To activate a set of modules,
 :program:`seiscomp enable` needs to be called with a list of modules. To enable
-a processing system with Seedlink for data acquistion, use:
+a processing system with Seedlink for data acquisition, use:
 
 .. code-block:: sh
 
@@ -214,7 +214,7 @@ Update configuration and start everything
 To update the configuration when new stations have been added or modified,
 :program:`seiscomp update-config` needs to be run. This creates configuration
 files of modules that do not use the configuration directly, writes the trunk
-bindings to the database and sychronizes the inventory with the database.
+bindings to the database and synchronizes the inventory with the database.
 
 .. code-block:: sh
 
