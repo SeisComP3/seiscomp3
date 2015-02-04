@@ -197,6 +197,8 @@ WFParam::Config::Config() {
 	STALTAratio = 3;
 	STALTAmargin = 5;
 
+	durationScale = 1.5;
+
 	dampings.push_back(5);
 	naturalPeriods = 100;
 	naturalPeriodsLog = false;
@@ -214,10 +216,10 @@ WFParam::Config::Config() {
 	filter.first = 0.025;
 	filter.second = 40;
 
-	// Sensitivity correction filter, which is disabled by default
-	SCorder = 4;
-	SCfilter.first = 0;
-	SCfilter.second = 0;
+	// Post deconvolution filter, which is disabled by default
+	PDorder = 4;
+	PDfilter.first = 0;
+	PDfilter.second = 0;
 
 	enableDeconvolution = true;
 	enableNonCausalFilters = false;
@@ -247,6 +249,7 @@ WFParam::Config::Config() {
 
 	testMode = false;
 	offline = false;
+	force = false;
 	logCrontab = true;
 	saveProcessedWaveforms = false;
 	saveSpectraFiles = false;
@@ -350,6 +353,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT(_config.LTAlength, "wfparam.LTAlength");
 	NEW_OPT(_config.STALTAratio, "wfparam.STALTAratio");
 	NEW_OPT(_config.STALTAmargin, "wfparam.STALTAmargin");
+	NEW_OPT(_config.durationScale, "wfparam.durationScale");
 	NEW_OPT(_config.dampings, "wfparam.dampings");
 	NEW_OPT(_config.naturalPeriodsStr, "wfparam.naturalPeriods");
 	NEW_OPT(_config.naturalPeriodsLog, "wfparam.naturalPeriods.log");
@@ -363,12 +367,12 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	             "Mode", "lo-filter", "high-pass filter frequency");
 	NEW_OPT_FREQ(_config.filter.second, "wfparam.filter.hiFreq",
 	             "Mode", "hi-filter", "low-pass filter frequency");
-	NEW_OPT(_config.SCorder, "wfparam.sc.order",
+	NEW_OPT(_config.PDorder, "wfparam.pd.order",
 	        "Mode", "sc-order", "sensitivity correction filter order");
-	NEW_OPT_FREQ(_config.SCfilter.first, "wfparam.sc.loFreq",
-	             "Mode", "sc-lo-filter", "sensitivity correction high-pass filter frequency");
-	NEW_OPT_FREQ(_config.SCfilter.second, "wfparam.sc.hiFreq",
-	             "Mode", "sc-hi-filter", "sensitivity correction low-pass filter frequency");
+	NEW_OPT_FREQ(_config.PDfilter.first, "wfparam.pd.loFreq",
+	             "Mode", "pd-lo-filter", "post deconvolution high-pass filter frequency");
+	NEW_OPT_FREQ(_config.PDfilter.second, "wfparam.pd.hiFreq",
+	             "Mode", "pd-hi-filter", "post deconvolution low-pass filter frequency");
 	NEW_OPT(_config.enableDeconvolution, "wfparam.deconvolution");
 	NEW_OPT(_config.enableNonCausalFilters, "wfparam.filtering.noncausal");
 	NEW_OPT(_config.taperLength, "wfparam.filtering.taperLength");
@@ -403,6 +407,9 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	            "EventParameters (XML) to load", false);
 	NEW_OPT_CLI(_config.offline, "Mode", "offline",
 	            "Do not connect to the messaging and to the database",
+	            false, true);
+	NEW_OPT_CLI(_config.force, "Mode", "force",
+	            "Force event processing even if a journal entry exists that processing has completed",
 	            false, true);
 	NEW_OPT_CLI(_config.testMode, "Messaging", "test",
 	            "Test mode, no messages are sent", false, true);
@@ -985,22 +992,26 @@ bool WFParam::addProcess(DataModel::Event *evt) {
 	ProcessPtr proc;
 	Processes::iterator pit = _processes.find(evt->publicID());
 	if ( pit == _processes.end() ) {
-		if ( query() ) {
-			DatabaseIterator it;
-			JournalEntryPtr entry;
-			it = query()->getJournalAction(evt->publicID(), JOURNAL_ACTION);
-			while ( (entry = static_cast<JournalEntry*>(*it)) != NULL ) {
-				if ( entry->parameters() == JOURNAL_ACTION_COMPLETED ) {
-					SEISCOMP_INFO("%s: found journal entry \"completely processed\", ignoring event",
-					              evt->publicID().c_str());
-					it.close();
-					return false;
+		if ( !_config.force ) {
+			if ( query() ) {
+				DatabaseIterator it;
+				JournalEntryPtr entry;
+				it = query()->getJournalAction(evt->publicID(), JOURNAL_ACTION);
+				while ( (entry = static_cast<JournalEntry*>(*it)) != NULL ) {
+					if ( entry->parameters() == JOURNAL_ACTION_COMPLETED ) {
+						SEISCOMP_INFO("%s: found journal entry \"completely processed\", ignoring event",
+						              evt->publicID().c_str());
+						it.close();
+						return false;
+					}
+					++it;
 				}
-				++it;
+				it.close();
+				SEISCOMP_DEBUG("No journal entry \"completely processed\" found, go ahead");
 			}
-			it.close();
-			SEISCOMP_DEBUG("No journal entry \"completely processed\" found, go ahead");
 		}
+		else
+			SEISCOMP_DEBUG("Force processing, journal ignored");
 
 		SEISCOMP_DEBUG("Adding process [%s]", evt->publicID().c_str());
 		proc = new Process;
@@ -1554,7 +1565,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 	proc->setNonCausalFiltering(_config.enableNonCausalFilters, _config.taperLength);
 	proc->setPadLength(_config.padLength);
 	// -1 as hifreq: let the algorithm define the best frequency
-	proc->setSensitivityCorrectionFilterParams(_config.SCorder, _config.SCfilter.first, _config.SCfilter.second);
+	proc->setPostDeconvolutionFilterParams(_config.PDorder, _config.PDfilter.first, _config.PDfilter.second);
 	proc->setFilterParams(_config.order, _filter.first, _filter.second);
 	proc->setDeconvolutionEnabled(_config.enableDeconvolution);
 
@@ -2136,9 +2147,9 @@ void WFParam::setup(PGAVResult &res, Processing::PGAV *pgav) {
 	res.pga = pgav->PGA();
 	res.pgv = pgav->PGV();
 	res.duration = pgav->duration();
-	res.scFilterOrder = pgav->config().SCorder;
-	res.scFilter.first = pgav->loSCFilterUsed();
-	res.scFilter.second = pgav->hiSCFilterUsed();
+	res.pdFilterOrder = pgav->config().PDorder;
+	res.pdFilter.first = pgav->loPDFilterUsed();
+	res.pdFilter.second = pgav->hiPDFilterUsed();
 	res.filterOrder = pgav->config().filterOrder;
 	res.filter.first = pgav->loFilterUsed();
 	res.filter.second = pgav->hiFilterUsed();
@@ -2407,7 +2418,8 @@ void WFParam::collectResults() {
 				    << " year=\"" << year << "\" month=\"" << mon << "\" day=\"" << day << "\""
 				    << " hour=\"" << hour << "\" minute=\"" << min << "\" second=\"" << sec << "\" timezone=\"GMT\""
 				    << " locstring=\"" << evt->publicID() << " / "
-				    << org->latitude().value() << " / " << org->longitude().value() << "\"/>"
+				    << org->latitude().value() << " / " << org->longitude().value() << "\""
+				    << " created=\"" << Core::Time::GMT().seconds() << "\"/>"
 				    << endl;
 			}
 			catch ( exception &e ) {
@@ -2540,7 +2552,10 @@ void WFParam::writeShakeMapComponent(const PGAVResult *res, bool &stationTag,
 
 	if ( !stationTag ) {
 		*os << "  <station code=\"" << res->streamID.stationCode() << "\""
-			<< " name=\"" << res->streamID.stationCode() << "\"";
+			<< " name=\"" << res->streamID.stationCode() << "\""
+			<< " netid=\"" << res->streamID.networkCode() << "\"";
+		if ( loc && !loc->station()->network()->archive().empty() )
+			*os << " source=\"" << loc->station()->network()->archive() << "\"";
 		if ( sensor )
 			*os << " insttype=\"" << sensor->model() << "\"";
 		*os << " lat=\"" << loc->latitude() << "\""
@@ -2549,10 +2564,18 @@ void WFParam::writeShakeMapComponent(const PGAVResult *res, bool &stationTag,
 		stationTag = true;
 	}
 
-	if ( withComponent )
-		*os << "    <comp name=\"" << res->streamID.channelCode() << "\">" << endl;
+	*os << "    <comp name=\"";
+	if ( loc && !loc->code().empty() )
+		*os << loc->code();
 	else
-		*os << "    <comp name=\"" << res->streamID.channelCode().substr(0,2) << "\">" << endl;
+		*os << "--";
+	*os << ".";
+
+	if ( withComponent )
+		*os << res->streamID.channelCode();
+	else
+		*os << res->streamID.channelCode().substr(0,2);
+	*os << "\">" << endl;
 
 	ios::fmtflags tmpf(os->flags());
 	streamsize tmpp(os->precision());

@@ -46,8 +46,8 @@ class PGAV : public TimeWindowProcessor {
 			bool    preEventCutOff;
 			bool    useDeconvolution;
 
-			int     SCorder;
-			double  loSCFreq, hiSCFreq;
+			int     PDorder;
+			double  loPDFreq, hiPDFreq;
 
 			int     filterOrder;
 			double  loFilterFreq, hiFilterFreq;
@@ -62,6 +62,8 @@ class PGAV : public TimeWindowProcessor {
 			double  LTAlength;
 			double  STALTAratio;
 			double  STALTAmargin;
+
+			double  durationScale;
 
 			std::vector<double> dampings;
 			int     naturalPeriods;
@@ -107,11 +109,12 @@ class PGAV : public TimeWindowProcessor {
 		void setAftershockRemovalEnabled(bool);
 		void setPreEventCutOffEnabled(bool);
 		void setDeconvolutionEnabled(bool);
+		void setDurationScale(double);
 
-		// Set the sensititive correction filter parameters
+		// Set the post deconvolution filter parameters
 		// If either fmin or fmax is negative, its absolute value taken
 		// as a scale of the Nyquist frequency (fabs(f)*Nyquist)
-		void setSensitivityCorrectionFilterParams(int order, double fmin, double fmax);
+		void setPostDeconvolutionFilterParams(int order, double fmin, double fmax);
 
 		// Set the filter parameters
 		// If either fmin or fmax is negative, its absolute value taken
@@ -141,8 +144,8 @@ class PGAV : public TimeWindowProcessor {
 		double PGV() const { return _pgv; }
 		const OPT(double) &duration() const { return _duration; }
 
-		double loSCFilterUsed() const { return _loSCFilter; }
-		double hiSCFilterUsed() const { return _hiSCFilter; }
+		double loPDFilterUsed() const { return _loPDFilter; }
+		double hiPDFilterUsed() const { return _hiPDFilter; }
 
 		double loFilterUsed() const { return _loFilter; }
 		double hiFilterUsed() const { return _hiFilter; }
@@ -170,8 +173,8 @@ class PGAV : public TimeWindowProcessor {
 		double      _pga, _pgv;
 		ResponseSpectra _responseSpectra;
 
-		double      _loSCFilter;
-		double      _hiSCFilter;
+		double      _loPDFilter;
+		double      _hiPDFilter;
 
 		double      _loFilter;
 		double      _hiFilter;
