@@ -777,6 +777,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 
 			if ( toks.size() < 10 ) {
 				delete origin;
+				origin = NULL;
 				throw GeneralException((string("Unable to fix depth: invalid LOCGRID line in ") +
 				                        _currentProfile->controlFile).c_str());
 			}
@@ -797,6 +798,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 
 		if ( !foundLocGrid ) {
 			delete origin;
+			origin = NULL;
 			throw GeneralException((string("Unable to fix depth: LOCGRID line not found in ") +
 			                        _currentProfile->controlFile).c_str());
 		}
@@ -895,11 +897,13 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 					// Create a new origin with the same publicID
 					std::string publicID = origin->publicID();
 					delete origin;
+					origin = NULL;
 					origin = Origin::Create(publicID);
 					validOrigin = NLL2SC3(origin, _lastWarning, locNode, usedPicks, _usingFixedDepth);
 				}
 				else {
 					delete origin;
+					origin = NULL;
 					freeLocList(loc_list_head, 1);
 					throw LocatorException("Distance cut-off failed: empty location");
 				}
@@ -1138,6 +1142,7 @@ Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) 
 				}
 				catch ( GeneralException &exc ) {
 					delete lastWorkingOrg;
+					lastWorkingOrg = NULL;
 					_currentProfile = NULL;
 					throw exc;
 				}

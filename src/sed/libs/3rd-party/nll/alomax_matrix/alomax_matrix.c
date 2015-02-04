@@ -55,10 +55,13 @@ void free_matrix_double(MatrixDouble mtx, int nrow, int ncol) {
 
     int n;
     for (n = nrow - 1; n >= 0; n--) {
-        if (mtx[n] != NULL)
+        if (mtx[n] != NULL) {
             free(mtx[n]);
+            mtx[n] = NULL;
+        }
     }
     free((mtx));
+    mtx = NULL;
 
 }
 
@@ -101,6 +104,7 @@ void free_vector_double(VectorDouble vect) {
     if ((vect) == NULL) return;
 
     free((vect));
+    vect = NULL;
 
 }
 

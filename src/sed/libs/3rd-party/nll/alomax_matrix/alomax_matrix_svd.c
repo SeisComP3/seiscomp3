@@ -522,7 +522,9 @@ void SingularValueDecomposition(MatrixDouble A_matrix_orig, int nrows, int ncolu
 
     // clean up
     free(e);
+    e = NULL;
     free(work);
+    work = NULL;
     free_matrix_double(A_matrix, num_rows, nu);
 
 }

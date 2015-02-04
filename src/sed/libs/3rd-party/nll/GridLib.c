@@ -757,6 +757,7 @@ void* AllocateGrid(GridDesc* pgrid) {
 void FreeGrid(GridDesc* pgrid) {
     if (pgrid->buffer != NULL) {
         free(pgrid->buffer);
+        pgrid->buffer = NULL;
         NumAllocations--;
     }
     pgrid->buffer = NULL;
@@ -765,8 +766,8 @@ void FreeGrid(GridDesc* pgrid) {
 /** function to initialize buffer for 3D grid ***/
 
 int InitializeGrid(GridDesc* pgrid, GRID_FLOAT_TYPE init_value) {
-
-    GRID_FLOAT_TYPE *gbuf;
+    int i;
+/*    GRID_FLOAT_TYPE *gbuf;
 
     gbuf = (GRID_FLOAT_TYPE *) pgrid->buffer + pgrid->numx * pgrid->numy * pgrid->numz;
 
@@ -774,6 +775,11 @@ int InitializeGrid(GridDesc* pgrid, GRID_FLOAT_TYPE init_value) {
         *gbuf = init_value;
 
     return (0);
+*/
+    GRID_FLOAT_TYPE *gbuf = (GRID_FLOAT_TYPE *) pgrid->buffer;
+    for (i = 0; i <  pgrid->numx * pgrid->numy * pgrid->numz; i++) {
+        gbuf[i] = init_value;
+    }
 }
 
 /** function to create array for accessing 3D grid ***/
@@ -812,7 +818,10 @@ void DestroyGridArray(GridDesc* pgrid) {
     if (pgrid->array != NULL) {
 
         for (ix = 0; ix < pgrid->numx; ix++) {
-            free(pgrid->array[ix]);
+            if (pgrid->array[ix]) {
+                free(pgrid->array[ix]);
+                pgrid->array[ix] = NULL;
+            }
             NumAllocations--;
         }
 
