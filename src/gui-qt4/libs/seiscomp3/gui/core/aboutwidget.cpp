@@ -31,7 +31,7 @@ AboutWidget::AboutWidget(QWidget* parent, Qt::WFlags f)
 	activateWindow();
 
 	_ui.textLicense->setText(License::text());
-	_ui.labelVersion->setText(SCApp->version());
+	_ui.labelVersion->setText(SCApp->frameworkVersion());
 }
 
 

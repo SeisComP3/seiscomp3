@@ -25,6 +25,8 @@
 #include <math.h>
 #include <limits>
 
+#include <seiscomp3/math/math.h>
+
 #define CHCK255(x)                      ((x)>255?255:((x)<0?0:(x)))
 
 namespace Seiscomp {
@@ -352,6 +354,10 @@ void Ruler::paintEvent(QPaintEvent *e) {
 	QFrame::paintEvent(e);
 
 	QPainter painter(this);
+
+	if ( Seiscomp::Math::isNaN(_min) ) return;
+	if ( _min == std::numeric_limits<double>::infinity() ) return;
+	if ( _min == -std::numeric_limits<double>::infinity() ) return;
 
 	drawRangeSelection(painter);
 

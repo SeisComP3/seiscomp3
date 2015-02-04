@@ -1234,7 +1234,7 @@ void MvMainWindow::readEventsFromDataBaseNotOlderThan(const Seiscomp::Core::Time
 	for ( ; *it; ++it ) {
 		DataModel::Event* event = DataModel::Event::Cast(*it);
 		if ( !event ) continue;
-        if ( isFakeEvent(event) ) {
+		if ( isFakeEvent(event) ) {
 			SEISCOMP_DEBUG("Skipping fake event %s", event->publicID().c_str());
 			continue;
 		}
