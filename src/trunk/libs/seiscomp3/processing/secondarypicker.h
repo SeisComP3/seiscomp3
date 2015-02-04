@@ -93,6 +93,9 @@ class SC_SYSTEM_CLIENT_API SecondaryPicker : public TimeWindowProcessor {
 		//! the secondary pick.
 		virtual const std::string &methodID() const = 0;
 
+		//! Returns the filter used by concrete implementations
+		virtual const std::string &filterID() const = 0;
+
 		//! Set the start of the noise window relative to the trigger
 		void setNoiseStart(double start) { _config.noiseBegin = start; }
 

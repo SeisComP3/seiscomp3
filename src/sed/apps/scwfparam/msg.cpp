@@ -165,8 +165,8 @@ bool sendMessages(Seiscomp::Communication::Connection *con,
 				string filterID;
 
 				FilterDef scfdef(FilterType(pgavResult->isAcausal,
-				                            pgavResult->scFilterOrder),
-				                 pgavResult->scFilter);
+				                            pgavResult->pdFilterOrder),
+				                            pgavResult->pdFilter);
 
 				filterCacheIt = filterCache.find(scfdef);
 

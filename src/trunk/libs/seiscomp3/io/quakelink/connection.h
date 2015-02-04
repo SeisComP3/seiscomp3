@@ -106,8 +106,8 @@ class Response : public Core::BaseObject {
 typedef std::vector<Response> Responses;
 typedef std::vector<Response*> ResponsesPtr;
 
-class Connection {
-
+DEFINE_SMARTPOINTER(Connection);
+class Connection : public Core::BaseObject {
 	public:
 		/** Default constructor */
 		Connection();

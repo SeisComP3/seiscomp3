@@ -17,6 +17,20 @@ your system.
 of its installation automatically. So it is possible to control different
 installations.
 
+.. warning::
+
+   seiscomp should never run with root privileges unless you know exactly what
+   you are doing.
+
+   :program:`seiscomp` refuses to work when run with root privileges and issues
+   an error. To run it with root privileges the command line option
+   :option:`--asroot` must be given as first parameter, e.g.:
+
+   .. code-block:: sh
+
+      seiscomp --asroot start seedlink
+
+
 To get an overview of all available commands, issue
 
 .. code-block:: sh
@@ -75,8 +89,8 @@ Commands
 
   Updates the configuration. Modules should be able to read the configuration
   files in :file:`etc` directly, but some modules such as Seedlink need an additional
-  step to convert the configuration to their native format. Futhermore all
-  trunk station bindings and the inventory need to be sychronized with the
+  step to convert the configuration to their native format. Furthermore all
+  trunk station bindings and the inventory need to be synchronized with the
   database. If no module list is given, update-config is called for all available
   modules. Otherwise only the modules passed are updated.
 
@@ -280,7 +294,7 @@ for modules used by :program:`seiscomp` in Python.
    :param name: The module name which must be passed by derived classes.
                 It is stored in self.name.
 
-   The module interface which implementes the basic default operations.
+   The module interface which implements the basic default operations.
    Each script can define its own handlers to customize the behaviour.
 
    .. py:attribute: env

@@ -1,5 +1,5 @@
 /*   Lib330 Message Definitions
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -23,12 +23,13 @@ Edit History:
     0 2006-09-10 rdr Created
     1 2007-01-18 rdr Add LIBMSG_STATTO.
     2 2007-03-05 rdr Add LIBMSG_CONPURGE.
-    3 2008-08-19 rdr Add TCP support.
+    3 2008-01-09 rdr Add dump_msgqueue and AUXMSG_RECV.
+    4 2008-08-19 rdr Add TCP support.
 */
 #ifndef libmsgs_h
 /* Flag this file as included */
 #define libmsgs_h
-#define VER_LIBMSGS 3
+#define VER_LIBMSGS 11
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -81,6 +82,8 @@ Edit History:
 #define LIBMSG_NETSTN 123
 #define LIBMSG_ZONE 124
 #define LIBMSG_AVG 125
+#define LIBMSG_TOTAL 126
+#define LIBMSG_EPDLYCHG 127
 
 #define LIBMSG_CREATED 200
 #define LIBMSG_REGISTERED 201
@@ -96,7 +99,9 @@ Edit History:
 #define LIBMSG_WRCONT 211
 #define LIBMSG_SOCKETOPEN 212
 #define LIBMSG_DEREGTO 213
+#define LIBMSG_BACK 214
 #define LIBMSG_CONN 215
+#define LIBMSG_Q335 216
 
 #define LIBMSG_GPSSTATUS 300
 #define LIBMSG_DIGPHASE 301
@@ -127,6 +132,7 @@ Edit History:
 #define LIBMSG_CONTNR 411
 #define LIBMSG_STATTO 412
 #define LIBMSG_CONPURGE 413
+#define LIBMSG_WRONGPORT 414
 
 #define LIBMSG_ROUTEFAULT 500
 #define LIBMSG_CANTSEND 501
@@ -152,6 +158,7 @@ Edit History:
 #define LIBMSG_RECOMP 521
 #define LIBMSG_SEGOVER 522
 #define LIBMSG_TCPTUN 523
+#define LIBMSG_HFRATE 524
 
 #define LIBMSG_FIXED 600
 #define LIBMSG_GPSIDS 601
@@ -178,17 +185,30 @@ Edit History:
 #define AUXMSG_WEBADV 710
 #define AUXMSG_RECVTO 711
 #define AUXMSG_WEBLINK 712
+#define AUXMSG_RECV 713
+#define AUXMSG_DSS 714
 
 #define HOSTMSG_ALL 800
 
+#ifdef CONSTMSG
+extern void libmsgadd (pq330 q330, word msgcode, const string95 *msgsuf) ;
+extern void libdatamsg (pq330 q330, word msgcode, const string95 *msgsuf) ;
+extern void msgadd (pq330 q330, word msgcode, longword dt, const string95 *msgsuf, boolean client) ;
+#else
 extern void libmsgadd (pq330 q330, word msgcode, string95 *msgsuf) ;
 extern void libdatamsg (pq330 q330, word msgcode, string95 *msgsuf) ;
+extern void msgadd (pq330 q330, word msgcode, longword dt, string95 *msgsuf, boolean client) ;
+#endif
+
+#ifndef OMIT_SEED
+extern void dump_msgqueue (pq330 q330) ;
+#endif
+
 extern char *lib_get_msg (word code, string95 *result) ;
 extern char *lib_get_errstr (enum tliberr err, string63 *result) ;
 extern char *lib_get_statestr (enum tlibstate state, string63 *result) ;
 extern char *showdot (longword num, string15 *result) ;
 extern char *command_name (byte cmd, string95 *result) ;
-extern void msgadd (pq330 q330, word msgcode, longword dt, string95 *msgsuf) ;
 extern char *lib_gps_state (enum tgps_stat gs, string63 *result) ;
 extern char *lib_gps_fix (enum tgps_fix gf, string63 *result) ;
 extern char *lib_pll_state (enum tpll_stat ps, string31 *result) ;

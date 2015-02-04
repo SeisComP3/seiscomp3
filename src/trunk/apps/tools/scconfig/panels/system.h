@@ -29,6 +29,7 @@ class SystemPanel : public ConfiguratorPanel {
 		void activated();
 
 	private slots:
+		void onContextMenuRequested(const QPoint&);
 		void modificationChanged(bool changed);
 		void updateModuleState(bool logOutput = true);
 		void start();
@@ -45,6 +46,7 @@ class SystemPanel : public ConfiguratorPanel {
 
 	private:
 		void runSeiscomp(const QStringList &params);
+		void showStartLog(const QString &text);
 		void logStdOut(const QByteArray &data);
 		void logStdErr(const QByteArray &data);
 

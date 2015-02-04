@@ -49,12 +49,107 @@ IMPLEMENT_SC_CLASS_DERIVED(SLConnection,
 REGISTER_RECORDSTREAM(SLConnection, "slink");
 
 
+SLStreamIdx::SLStreamIdx() {}
+
+SLStreamIdx::SLStreamIdx(const string &net, const string &sta, const string &loc,
+                         const string &cha)
+: _net(net), _sta(sta), _loc(loc), _cha(cha) {}
+
+SLStreamIdx::SLStreamIdx(const string &net, const string &sta, const string &loc,
+                         const string &cha, const Time &stime, const Time &etime)
+: _net(net), _sta(sta), _loc(loc), _cha(cha)
+, _stime(stime), _etime(etime) {}
+
+SLStreamIdx& SLStreamIdx::operator=(const SLStreamIdx &other) {
+	if ( this != &other ) {
+		this->~SLStreamIdx();
+		new(this) SLStreamIdx(other);
+	}
+
+	return *this;
+}
+
+bool SLStreamIdx::operator<(const SLStreamIdx &other) const {
+	if ( _net < other._net )
+		return true;
+	else if ( _net == other._net ) {
+		if ( _sta < other._sta )
+			return true;
+		else if ( _sta == other._sta ) {
+			if ( _loc < other._loc )
+				return true;
+			else if ( _loc == other._loc ) {
+				if ( _cha < other._cha ) return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool SLStreamIdx::operator==(const SLStreamIdx &other) const {
+	return (_net == other._net && _sta == other._sta &&
+	        _loc == other._loc && _cha == other._cha);
+}
+
+const string &SLStreamIdx::network() const {
+	return _net;
+}
+
+const string &SLStreamIdx::station() const {
+	return _sta;
+}
+
+const string &SLStreamIdx::channel() const {
+	return _cha;
+}
+
+const string &SLStreamIdx::location() const {
+	return _loc;
+}
+
+string SLStreamIdx::selector() const {
+	string loc = _loc;
+	string cha = _cha;
+	string::size_type pos = loc.find('*',0);
+
+	if (loc.length() > 0) {
+		if (pos != string::npos) loc.replace(pos,1,1,'?');
+		if (loc.length() < 2) loc.append(2-loc.length(),'?');
+	}
+
+	pos = cha.find('*',0);
+	if (pos != string::npos) cha.replace(pos,1,1,'?');
+	if (cha.length() < 3) cha.append(3-cha.length(),'?');
+
+	string selector = loc + cha + ".D";
+	return selector;
+}
+
+Time SLStreamIdx::startTime() const {
+	return _stime;
+}
+
+Time SLStreamIdx::endTime() const {
+	return _etime;
+}
+
+Time SLStreamIdx::timestamp() const {
+	return _timestamp;
+}
+
+void SLStreamIdx::setTimestamp(Time &rectime) const {
+	if (_timestamp < rectime)
+		_timestamp = rectime;
+}
+
+
 SLConnection::StreamBuffer::StreamBuffer() {}
 
 streambuf *SLConnection::StreamBuffer::setbuf(char *s, streamsize n) {
-  setp(NULL, NULL);
-  setg(s, s, s + n);
-  return this;
+	setp(NULL, NULL);
+	setg(s, s, s + n);
+	return this;
 }
 
 SLConnection::SLConnection()
@@ -139,10 +234,10 @@ bool SLConnection::setSource(string serverloc) {
 }
 
 bool SLConnection::clear() {
-     this->~SLConnection();
-     new(this) SLConnection(_serverloc);
+	this->~SLConnection();
+	new(this) SLConnection(_serverloc);
 
-     return true;
+	return true;
 }
 
 void SLConnection::close() {
@@ -162,21 +257,21 @@ bool SLConnection::setRecordType(const char* type) {
 }
 
 bool SLConnection::addStream(string net, string sta, string loc, string cha) {
-	pair<set<StreamIdx>::iterator, bool> result;
-	result = _streams.insert(StreamIdx(net, sta, loc, cha));
+	pair<set<SLStreamIdx>::iterator, bool> result;
+	result = _streams.insert(SLStreamIdx(net, sta, loc, cha));
 	return result.second;
 }
 
 bool SLConnection::addStream(string net, string sta, string loc, string cha,
                              const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime) {
-	pair<set<StreamIdx>::iterator, bool> result;
-	result = _streams.insert(StreamIdx(net, sta, loc, cha, stime, etime));
+	pair<set<SLStreamIdx>::iterator, bool> result;
+	result = _streams.insert(SLStreamIdx(net, sta, loc, cha, stime, etime));
 	return result.second;
 }
 
 bool SLConnection::removeStream(string net, string sta, string loc, string cha) {
 	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
+	std::set<SLStreamIdx>::iterator it = _streams.begin();
 
 	for ( ; it != _streams.end(); ) {
 		if ( it->network()  == net &&
@@ -231,7 +326,7 @@ void SLConnection::handshake() {
 	else
 		SEISCOMP_INFO("BATCH mode requests disabled");
 
-	for (set<StreamIdx>::iterator it = _streams.begin(); it != _streams.end(); ++it) {
+	for (set<SLStreamIdx>::iterator it = _streams.begin(); it != _streams.end(); ++it) {
 		try {
 			Time stime = (it->startTime() != Time()) ? it->startTime() : _stime;
 			Time etime = (it->endTime() != Time()) ? it->endTime() : _etime;
@@ -303,15 +398,15 @@ Time getEndtime(MSRecord *prec) {
 	return stime + Time(diff);
 }
 
-void updateStreams(std::set<StreamIdx> &streams, MSRecord *prec) {
+void updateStreams(std::set<SLStreamIdx> &streams, MSRecord *prec) {
 	Time rectime = getEndtime(prec);
 	string net = prec->network;
 	string sta = prec->station;
 	string loc = prec->location;
 	string cha = prec->channel;
 
-	StreamIdx idx(net,sta,loc,cha);
-	set<StreamIdx>::iterator it = streams.find(idx);
+	SLStreamIdx idx(net,sta,loc,cha);
+	set<SLStreamIdx>::iterator it = streams.find(idx);
 	if (it != streams.end())
 		it->setTimestamp(rectime);
 }
@@ -410,9 +505,9 @@ istream& SLConnection::stream() {
 			}
 			else
 				SEISCOMP_WARNING("Could not parse the incoming MiniSEED record. Ignore it.");
-
-		} catch (SocketException &ex) {
-			if (_sock.tryReconnect()) {
+		}
+		catch ( SocketException &ex ) {
+			if ( _sock.tryReconnect() ) {
 				if (!trials)
 					SEISCOMP_ERROR("SocketException: %s; Try to reconnect",ex.what());
 				/* sleep before reconnect */
@@ -426,16 +521,18 @@ istream& SLConnection::stream() {
 				if ( _retriesLeft < 0 && _maxRetries >= 0 ) throw;
 				trials = true;
 				continue;
-			} else {
+			}
+			else {
 				_sock.close();
 				throw;
 			}
-
-		} catch (GeneralException) {
+		}
+		catch ( GeneralException & ) {
 			_sock.close();
 			throw;
 		}
 	}
+
 	return _stream;
 }
 

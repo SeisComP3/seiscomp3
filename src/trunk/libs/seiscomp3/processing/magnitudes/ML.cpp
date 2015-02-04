@@ -11,6 +11,7 @@
  ***************************************************************************/
 
 
+#include <seiscomp3/math/geo.h>
 #include <seiscomp3/processing/magnitudes/ML.h>
 #include <seiscomp3/seismology/magnitudes.h>
 
@@ -37,6 +38,12 @@ MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
 			double depth,       // in kilometers
 			double &value)
 {
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
+	if ( delta > Math::Geo::km2deg(1000) )
+		return DistanceOutOfRange;
+
 	double mag;
 	bool res = Magnitudes::compute_ML(amplitude, delta, depth, &mag);
 	//bool res = true;

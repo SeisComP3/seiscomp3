@@ -658,7 +658,7 @@ bool XMLArchive::locateObjectByName(const char* name, const char* targetClass, b
 				return _objectLocation != NULL;
 			}
 			else {
-    			_objectLocation = xmlNewTextChild(static_cast<xmlNodePtr>(_current), NULL, (const xmlChar*)name, NULL);
+				_objectLocation = xmlNewTextChild(static_cast<xmlNodePtr>(_current), NULL, (const xmlChar*)name, NULL);
 				return true;
 			}
 		}

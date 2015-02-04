@@ -41,6 +41,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 			EVALUES(
 				//! No error
 				OK,
+				//! Given amplitude is out of range
+				AmplitudeOutOfRange,
 				//! Given depth is out of range to continue processing
 				DepthOutOfRange,
 				//! Given distance is out of range to continue processing
@@ -54,6 +56,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 			),
 			ENAMES(
 				"OK",
+				"amplitude out of range",
 				"depth out of range",
 				"distance out of range",
 				"period out of range",

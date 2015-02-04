@@ -6,9 +6,14 @@
 		</description>
 		<configuration>
 			<group name="email">
+				<parameter name="activate" type="boolean" default="true">
+					<description>
+					Send email notifications.
+					</description>
+				</parameter>
 				<parameter name="smtpserver" type="string">
 					<description>
-					URL of the smtp server to send the report files to.
+						URL of the smtp server to send the report files to.
 					</description>
 				</parameter>
 				<parameter name="port" type="int" default="25">
@@ -72,6 +77,11 @@
 				</parameter>
 			</group>
 			<group name="report">
+				<parameter name="activate" type="boolean" default="true">
+					<description>
+					Save reports to disk.
+					</description>
+				</parameter>
 				<parameter name="eventbuffer" type="int" default="3600" unit="s">
 					<description>
 					Time in seconds that events and the related objects are buffered.
@@ -112,6 +122,11 @@
 				<parameter name="hbtopic" type="string" default="/topic/your-topic-for-heart-beats">
 					<description>
 					ActiveMQ broker topic to send heart beats to.
+					</description>
+				</parameter>
+				<parameter name="messageFormat" type="string" default="qml1.2-rt">
+					<description>
+					ActiveMQ message format; can be either 'qml1.2-rt', 'shakealert', or 'sc3ml'.
 					</description>
 				</parameter>
 			</group>

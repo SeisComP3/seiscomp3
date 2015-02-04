@@ -4,15 +4,15 @@
 ArcLink Server, Request Handler protocol
 ****************************************
 
-As explained on the ArcLink server documentation the server distributed with seiscomp3 does not know nothing
-about how to prepare the data products. Instead it uses the request-handler program to generate the products
-and just deliver the results prepared to the user. The server when started will start a couple of
-request-handlers (programs) that will communicate to the server using file descriptors. The server
+As explained in the ArcLink server documentation, the server distributed with seiscomp3 does not know anything
+about how to prepare the data products it serves. Instead it uses a request handler program to generate the products
+and just delivers the results prepared to the user. When the server starts it will start a couple of
+request handlers (processes) that will communicate to the server using file descriptors. The server
 uses the file descriptor 62 to send requests to a request handler and reads status responses from file
 descriptor 63.
 
 The communication between the server and the request handler is governed by an asynchronous protocol that is
-described in this documment.
+described in this document.
 
 Request handler protocol
 ------------------------
@@ -45,7 +45,7 @@ STATUS <ref> <status>
     ERROR    processing errors, no downloadable data available
     RETRY    temporarily no data available
     DENIED   access to data denied for the user
-    CANCEL   processing cancelled (eg., by operator)
+    CANCEL   processing cancelled (e.g., by operator)
     ======== =====================================================
 
 MESSAGE
@@ -79,7 +79,7 @@ similar to following::
     python reqhandler -vvv 62>&0 63<&1 >reqhandler.log 2>&1
 
 Now the program "reqhandler" waits for input from terminal and writes output to terminal as well. Additionally
-a logfile is written.
+a log file is written.
 
 Let's type the following request::
 

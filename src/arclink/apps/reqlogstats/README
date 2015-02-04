@@ -1,0 +1,18 @@
+reqlogstats EIDA log statistics
+===============================
+
+Collects reports sent by mail to GEOFON.
+Processes them.
+Displays summary reports on a web page.
+
+Requirements:
+ - SQLite3
+ - PHP
+ - an ounce of good luck
+
+To install on a web server:
+ * set up back-end scripts where they can handle mail, should not be servable by web server
+ * copy summary report PHP to a servable directory and make sure PHP can run there
+ * add a crontab entry to run reqlogstats.sh each day
+
+The ./install.sh script provided here may help you.

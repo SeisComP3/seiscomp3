@@ -879,6 +879,7 @@ def on_csv_help(args):
 # Check command line
 # ------------------------------------------------------------------------------
 useCSV = False
+asRoot = False
 
 argv = sys.argv[1:]
 argflags = []
@@ -888,11 +889,18 @@ while len(argv):
   if argv[0] == "--csv":
     useCSV = True
     argv = argv[1:]
+  elif argv[0] == "--asroot":
+    asRoot = True
+    argv = argv[1:]
   elif argv[0].startswith("--"):
     argflags.append(argv[0][2:])
     argv = argv[1:]
   else:
     break
+
+if os.getuid() == 0 and not asRoot:
+  print "Running seiscomp as root is dangerous. Use --asroot if you know what you are doing"
+  sys.exit(1)
 
 if len(argv) < 1:
   print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)

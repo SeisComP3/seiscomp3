@@ -25,7 +25,7 @@ Edit History:
 #ifndef libctrldet_h
 /* Flag this file as included */
 #define libctrldet_h
-#define VER_LIBCTRLDET 0
+#define VER_LIBCTRLDET 3
 
 #ifndef OMIT_SEED
 /* Make sure libtypes.h is included */

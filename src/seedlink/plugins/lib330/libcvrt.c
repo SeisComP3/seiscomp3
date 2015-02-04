@@ -22,6 +22,9 @@ Edit History:
    -- ---------- --- ---------------------------------------------------
     0 2006-09-28 rdr Created
     1 2006-10-29 rdr Add including my header file.
+    2 2009-06-09 rdr Add protection against denormalized floating point values in
+                     loadsingle.
+    3 2013-08-08 rdr Remove storemac.
 */
 #ifndef libcvrt_h
 #include "libcvrt.h"
@@ -116,20 +119,6 @@ begin
       end
 end
 
-void storemac (pbyte *p, tsix *mac)
-begin
-
-#ifdef ENDIAN_LITTLE
-  storeword (*p, (*mac)[2]) ;
-  storeword (*p, (*mac)[1]) ;
-  storeword (*p, (*mac)[0]) ;
-#else
-  storeword (*p, (*mac)[0]) ;
-  storeword (*p, (*mac)[1]) ;
-  storeword (*p, (*mac)[2]) ;
-#endif
-end
-
 void storeblock (pbyte *p, integer size, pointer psrc)
 begin
 
@@ -196,13 +185,20 @@ end
 
 single loadsingle (pbyte *p)
 begin
-  longint li ;
+  longint li, exp ;
   single s ;
 
   memcpy(addr(li), *p, 4) ;
 #ifdef ENDIAN_LITTLE
   li = ntohl(li) ;
 #endif
+  exp = (li shr 23) and 0xFF ;
+  if ((exp < 1) lor (exp > 254))
+    then
+      li = 0 ; /* replace with zero */
+  else if (li == 0x80000000)
+    then
+      li = 0 ; /* replace with positive zero */
   memcpy(addr(s), addr(li), 4) ;
   incn(*p, 4) ;
   return s ;

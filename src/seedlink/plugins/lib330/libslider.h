@@ -25,7 +25,7 @@ Edit History:
 #ifndef libslider_h
 /* Flag this file as included */
 #define libslider_h
-#define VER_LIBSLIDER 8
+#define VER_LIBSLIDER 16
 
 #ifndef libstrucs_h
 #include "libstrucs.h"
@@ -111,6 +111,7 @@ Edit History:
 #define SP_CALABORT 1 /* calibration abort */
 #define SP_CNP 2 /* CNP Block data */
 #define SP_CFGBLK 3 /* Configuration Blockette */
+#define SP_ENVPROC 4 /* Environmental Processor */
   /* Digitizer Phase Change Constants, first parameter */
 #define DPC_STARTUP 0
 #define DPC_WAIT 1
@@ -136,7 +137,7 @@ Edit History:
 #define CFG_SS1 4 /* Serial Sensor 1 configuration */
 #define CFG_SS2 5 /* Serial Sensor 2 configuration */
 #define CFGSZ_AUXAD 20 /* Size in bytes of AUXAD configuration */
-/* Data record headers */
+  /* Data record headers */
 typedef struct {
   byte chan ;
   byte val8a ;

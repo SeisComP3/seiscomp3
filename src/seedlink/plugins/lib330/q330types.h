@@ -1,5 +1,5 @@
 /*   Lib330 structures relating to Q330 communications
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -21,11 +21,16 @@ Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
     0 2006-09-09 rdr Created
+    1 2007-07-16 rdr Add baler definitions.
+    2 2007-08-04 rdr Move tcp/ip structure definitions to libtypes.h
+    3 2009-02-08 rdr Add EP definitions.
+    4 2009-04-18 rdr Changes in EP structures.
+    5 2010-03-07 rdr Add Q335 support.
 */
 #ifndef q330types_h
 /* Flag this file as included */
 #define q330types_h
-#define VER_Q330TYPES 0
+#define VER_Q330TYPES 4
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -36,11 +41,14 @@ Edit History:
 #define WINBUFS 128 /* Number of window buffers */
 #define MANF_26QAP1 8 /* Use 26 bit output for channels 1-3 */
 #define MANF_26QAP2 16 /* Use 26 bit output for channels 4-6 */
+#define UDP_HDR_LTH 8 /* The actual size of a UDP header */
+#define IP_HDR_LTH 20 /* The actual size of an IP header */
+#define TCP_HDR_LTH 20 /* The actual size of a TCP header */
+#define IPT_UDP 17 /* protocol type for UDP packets */
+#define IPT_TCP 6 /* protocol type for TCP packets */
 /* QDP */
 #define QDP_VERSION 2 /* QDP Version */
 #define QDP_HDR_LTH 12 /* in actual network traffic bytes */
-#define UDP_HDR_LTH 8 /* ditto */
-#define IP_HDR_LTH 20 /* ditto */
 /* Commands and Response */
 #define C1_CACK 0xA0 /* Command Acknowledge */
 #define C1_RQSRV 0x10 /* Request Server Registration */
@@ -67,6 +75,7 @@ Edit History:
 #define C1_DCP 0xB2 /* Digitizer Calibration Packet */
 #define C1_RQDEV 0x36 /* Request Devices */
 #define C1_DEV 0xB3 /* Device list */
+#define C1_COM 0xB4 /* Communications */
 #define C1_PING 0x38 /* Ping Q330 */
 #define C1_RQMAN 0x1E /* Request Manufacturer's Area */
 #define C1_MAN 0xA8 /* Manufacturer's Area */
@@ -76,6 +85,21 @@ Edit History:
 /* Secondary Commands */
 #define C2_RQGPS 0x53 /* Request GPS Parameters */
 #define C2_GPS 0xC1 /* GPS Parameters */
+#define C2_BRDY 0x5A /* Baler Ready */
+#define C2_BOFF 0x5B /* Baler Off */
+#define C2_BACK 0xC6 /* Baler Acknowledge */
+#define C2_REGCHK 0x5D /* Registration Check */
+#define C2_TERC 0x69   /* Tertiary Commands */
+#define C2_TERR 0x6A   /* Tertiary Response */
+#define C2_REGRESP 0xC9 /* Registration Response */
+#define C2_RQEPD 0x70 /* Request Environmental Processor Filter Delays */
+#define C2_EPD 0xD0 /* Environmental Processor Filter Delays */
+#define C2_RQEPCFG 0x71 /* Request Environmental Processor Configuration */
+#define C2_SEPCFG 0x72 /* Set Environmental Processor Configuration */
+#define C2_EPCFG 0xD1 /* Environmental Processor Configuration */
+/* Deprecated Commands */
+#define C3_BCFG 0x3 /* Baler Configuraiotn */
+#define C3_RQBCFG 0x4 /* Request Baler Configuration */
 /* Cal Status Bits */
 #define CAL_ENON 1 /* Calibration enable on */
 #define CAL_SGON 2 /* Calibration signal on */
@@ -103,6 +127,7 @@ Edit History:
 /* PLL Flag Bits */
 #define PLL_AUTO 0x8000 /* PLL Operation on */
 /* Status request bits */
+#define SRB_EPDLY 28 /* EP Delays changed */
 #define SRB_TOKEN 29 /* DP Tokens have changed */
 #define SRB_LCHG 30 /* Logical Port programming change */
 #define SRB_UMSG 31 /* User Message */
@@ -126,7 +151,6 @@ Edit History:
 #define GAIN_POFF 1 /* preamp off */
 #define GAIN_PON 2 /* preamp on */
 
-#define PIU_TIME 5 * 60 /* Port in Use */
 #define NR_TIME 30 /* Not Registered */
 #define CRC_POLYNOMIAL 1443300200
 
@@ -152,6 +176,18 @@ typedef struct { /* UDP header */
   word u_len ; /* length of UDP data */
   word u_cksum ; /* UDP checksum (0 => none) */
 } tudp ;
+/* TCP */
+typedef struct {
+  word t_src ; /* source TCP port number */
+  word t_dst ; /* destination TCP port number */
+  longword t_seq ; /* Outgoing sequence number */
+  longword t_ack ; /* Acknowledge of received data */
+  byte t_offset ; /* Header length/reserved */
+  byte t_code ; /* reserved/Code bits */
+  word t_window ; /* Window advertisement */
+  word t_cksum ; /* TCP checksum (0 => none) */
+  word t_urgptr ; /* Urgent pointer - not used */
+} ttcp ;
 /* QDP */
 typedef struct {     /* common header for all UDP messages */
   longint crc ;      /* over all the packet */
@@ -176,7 +212,7 @@ Any qdp packet at the Q330 binary level
 typedef struct {
   byte headers[28] ; /* for ip and udp */
   byte qdp[QDP_HDR_LTH] ; /* size of qdp header */
-  byte qdp_data[MAXDATA] ;
+  byte qdp_data[MAXDATA96] ;
 } tany ;
 typedef tany *pany ;
 typedef struct {
@@ -301,4 +337,25 @@ typedef struct { /* format of C1_DCP */
   longint offsets[CHANNELS] ; /* offset with preamp on */
   longint gains[CHANNELS] ; /* channel gains */
 } tdcp ;
+typedef struct { /* C2_BRDY */
+  t64 sernum ; /* Q330 serial number */
+  char net[3] ; /* Network */
+  char stn[7] ; /* Station and flags */
+  word model ; /* 14, 41, etc. */
+  word version ; /* x.x */
+  single disk_size ; /* in bytes */
+  t64 balersn ; /* Baler serial number */
+} tbrdy ;
+typedef struct {
+  byte chan ; /* channel number */
+  byte mask ; /* mask of data ports */
+} tchanmasks ;
+typedef struct {
+  longword ress[PP_SER2 - PP_SER1 + 1] ;
+  longword flags[PP_SER2 - PP_SER1 + 1] ;
+  word chancnt ; /* number of 16 bit channel mapping entries */
+  word spare ;
+  tchanmasks chanmasks[EP_MAXCHAN] ;
+} tepcfg ;
+
 #endif

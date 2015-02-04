@@ -31,15 +31,18 @@ function clean_dcid_list($text) {
 }
 
 function mark_yesno($val) {
-  if ($val != 0) {
+  // Normally truth is non-zero, but we'd like to see odd values too!
+  if ($val == 1) {
     return tag('span', 'Y', Array('style' => 'color: green'));
-  } else {
+  } else if ($val == 0) {
     return tag('span', 'N', Array('style' => 'color: red'));
+  } else {
+    return tag('span', '?', Array('style' => 'background-color: green; color: white; font-weight: bold;'));
   }
 }
 
 function render_availability_table($db, $start_str, $today_str, $end_str) {
-  $result = $db->makequerytable("SELECT id, host, port, dcid FROM `{table}`", "ArcStatsSource", True);
+  $result = $db->makequerytable("SELECT id, host, port, dcid FROM `{table}` ORDER BY `dcid`", "ArcStatsSource", True);
   $num_sources = count($result);
   $source_list = array();
   foreach ($result as $row) {
@@ -50,7 +53,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
 
   // Workaround for prepare/execute query problem with wildcarded ?, ?
   // which gave "Column Index out of range".
-  $q = "SELECT count(*) FROM {table} WHERE `start_day` = ':start' AND `src` = ':source'";
+  $q = "SELECT count(*) FROM {table} as A JOIN ArcStatsSource AS B WHERE A.src = B.id AND `start_day` = ':start' AND `dcid` = ':dcid'";
   //TODO $thing = $db->preparequery($q);
 
   // Headers for the table:
@@ -59,7 +62,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
   $day = $start_str; 
   $tmp = explode("-", $day);
   $tmp = month_next($tmp[0], $tmp[1], $tmp[2]);
-  $finish = offset($tmp, -1);
+  $finish = offset($tmp, -1); // FIXME: Not smart enough for end of month/year
 
   $me="reqlogdisplay.php";
   for (; $day <= $finish; $day = offset($day, 1)) {
@@ -71,13 +74,19 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
   echo "<table>";
   echo tag('thead', tr(td('EIDA NODE') . tag_list('th', $day_list)));
 
-  //foreach ($source_list as $source) {
+  $dcid_seen = array();
   foreach ($result as $row) {
     $source_id = $row['id'];
     //$source_id = $source['id'];
     $dcid = $row['dcid'];
     $host = $row['host'];
     $port = $row['port'];
+    if (array_key_exists($dcid, $dcid_seen)) {
+      // This row needs merging with a previous one
+      continue;  // but let's just skip it and rely on querying for dcid??
+    } else {
+      $dcid_seen[$dcid] = 1;
+    }
 
     $day = $start_str;  // DateTime::createFromFormat('Y-m-d', $start_str);
     $presence_list = Array();
@@ -85,21 +94,22 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
       $day_str = $day;
       //TODO $result = queryexecute($thing, Array($day_str, $source_id));
       //$result = $db->makepreparetable($q, 'ArcStatsSummary', Array($day_str, $source_id));
-      $q_2 = str_replace(Array(':start', ':source'),
-			 Array($day_str, $source_id),
+      $q_2 = str_replace(Array(':start', ':dcid'),
+			 Array($day_str, $dcid),
 			 $q);
       //print "QUERY: " . $q_2 . PHP_EOL;
 
       $result = $db->makequerytable($q_2, 'ArcStatsSummary');
       if (is_array($result)) {
 	$ans = $result[0];
-	$yesno = (intval($ans[0]) > 0);
+	$yesno = intval($ans[0]);  // (intval($ans[0]) > 0);
       } else {
 	$yesno = False;
       }
       $presence_list[] = mark_yesno($yesno);
     }
-    $header = tag("a", "$dcid", Array("href" => "$me?date=$today_str&dcid=$dcid")); // "$dcid ($host:$port)";
+    unset($row);
+    $header = tag("a", "$dcid", Array("href" => "$me?date=$today_str&amp;dcid=$dcid")); // "$dcid ($host:$port)";
     $tmp = explode("-", $today_str);
     $highlight = Array(intval($tmp[2]) => 'style="border-style: Solid; border-color: yellow; border-width: 0px 1px; background-color: lightyellow;"');
     echo tr(td($header) . tag_list('td', $presence_list, "", $highlight)) . PHP_EOL;
@@ -114,7 +124,7 @@ date_default_timezone_set('UTC');
 # May want to hide tables which reveal information about users:
 $show_all_tables = isset($_GET['showall']);
 
-$date_default = offset(date('Y-m-d'), -2);  // Two days ago
+$date_default = offset(date('Y-m-d'), -1);  // Yesterday
 
 $dcid_list = (isset($_GET['dcid']))?$_GET['dcid']:'all';
 $dcid_list = clean_dcid_list($dcid_list);
@@ -152,7 +162,7 @@ $img2 = "$img_base_url/sources-$year-$month.svg";
 echo tag('h1', 'Arclink Request Statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year)));
 
 if (file_exists($img1)) {
-        print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '"alt="Monthly chart total bytes" width="480"></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
+        print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '" alt="Monthly chart total bytes" width="480" /></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
 } else {
 	print tag("p", '[No graph for this month is available]');
 }
@@ -160,7 +170,7 @@ if (file_exists($img1)) {
 echo tag("h3", "Table for $year");
 $year_img = "../data/total-$year.svg";
 if (file_exists($year_img)) {
-	print tag("p", '<a href="' . $year_img .'"><img src="' . $year_img . '"alt="Year to date chart total bytes" width="480"></a> <a href="' . str_replace("total", "sources", $year_img) . '">Year to date by DCID</a>...');
+	print tag("p", '<a href="' . $year_img .'"><img src="' . $year_img . '" alt="Year to date chart total bytes" width="480" /></a> <a href="' . str_replace("total", "sources", $year_img) . '">Year to date by DCID</a>...');
 }
 print tag("p", 'Summary table for <a href="../data/total-' . $year. '.txt">' . $year . '</a>');
 

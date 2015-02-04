@@ -1,5 +1,5 @@
 /*   Lib330 time series configuration definitions
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -25,7 +25,7 @@ Edit History:
 #ifndef libsampcfg_h
 /* Flag this file as included */
 #define libsampcfg_h
-#define VER_LIBSAMPCFG 6
+#define VER_LIBSAMPCFG 16
 
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -45,7 +45,6 @@ extern void deallocate_sg (paqstruc paqs) ;
 extern pointer allocate_aqstruc (tcontext ownedby) ;
 extern void clear_calstat (pq330 q330) ;
 extern void set_gaps (plcq q) ;
-extern void deallocate_dplcqs (pq330 q330) ;
 extern void init_lcq (paqstruc paqs) ;
 extern void init_dplcq (paqstruc paqs, plcq pl, boolean newone) ;
 extern void init_dplcqs (paqstruc paqs) ;
@@ -54,7 +53,8 @@ extern char *realtostr (double r, integer digits, string31 *result) ;
 extern longword secsince (void) ;
 extern enum tliberr lib_commevents (pq330 q330, tcommevents *commevents) ;
 extern enum tliberr lib_getdpcfg (pq330 q330, tdpcfg *dpcfg) ;
-
+extern void update_ep_delays (pq330 q330, boolean show, boolean update) ;
+extern void verify_epcfg (pq330 q330) ;
 #ifndef OMIT_SEED
 extern enum tliberr lib_lcqstat (pq330 q330, tlcqstat *lcqstat) ;
 extern void lib_setcommevent (pq330 q330, integer number, boolean seton) ;

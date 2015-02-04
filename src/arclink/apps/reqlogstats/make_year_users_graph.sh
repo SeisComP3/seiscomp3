@@ -15,6 +15,7 @@
 set -u
 
 progname=`basename $0`
+dirname=`dirname $0`
 today=`date +%F`
 
 start_year=`date +%Y`
@@ -74,59 +75,6 @@ if [ ! -s ${dbfile} ] ; then
 fi
 
 
-# Normalise GiB,MiB etc to MiB ... Python, awk, or what?
-cat > t1.py <<EOF
-import sys
-for x in sys.stdin.readlines():
-        line = x.strip()
-        if line.endswith('GiB'):
-                words = line.split();
-                val = words[-2];
-                print '\t'.join(words[0:-2]), '\t', float(val) * 1024.0, 'MiB'
-        else:
-                print line
-
-EOF
-
-# Rearrange to a table for histogram plotting, and summation by size:
-cat > t2.py <<EOF
-import sys
-dcid_list = ['BGR', 'ETHZ', 'GFZ', 'INGV', 'IPGP', 'LMU', 'ODC', 'RESIF']
-curday = None
-row = {}
-
-def flush_day(day, row):
-	s = sum(float(row[x]) for x in row.keys())
-	print "%s %10.1f" % (day, s),
-	for dcid in dcid_list:
-		if row.has_key(dcid):
-			print "%8.1f" % (float(row[dcid])),
-		else:
-			print "%8d" % 0,
-	print
-
-print "# DAY    ", "      TOTAL", " ".join("%8s" % x for x in dcid_list)
-
-for x in sys.stdin.readlines():
-	line = x.strip()
-	words = line.split()
-	day = words[0]
-	dcid = words[1]
-	val = words[2]
-
-	if day == curday:
-		row[dcid] = val
-	else:
-		# new day, flush and reload
-		if (curday != None):
-			flush_day(curday, row)
-		curday = day
-		row = {}
-		row[dcid] = val
-if (curday != None):
-	flush_day(curday, row)
-EOF
-
 if [ -z "${dcid}" ] ; then
     cmd="SELECT start_day, dcid, count(userID) FROM ArcStatsUser as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${dcid_constr} AND substr(X.start_day, 1, 4) = '${start_year}' GROUP BY start_day, dcid ORDER BY start_day, dcid;"
 else
@@ -136,7 +84,7 @@ echo ${cmd}
 
 echo ${cmd} \
     | sqlite3 ${dbfile} | sed -e 's/|/  /g' \
-    | python t2.py > days3.dat
+    | python ${dirname}/t2.py > days3.dat
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
     echo "Nothing in db with '${dcid_constr}'."
@@ -148,12 +96,13 @@ tail -5 days3.dat
 
 start_month_name=$(date +%B -d "$start_year-$start_month-01")
 
+xtic_density=14
 gnuplot <<EOF
 set xdata time
 set timefmt "%Y-%m-%d"
 set xlabel 'Date in $start_year'
 set xrange ['$start_year-01-01':]
-set xtics 14*24*3600
+set xtics ${xtic_density}*24*3600
 set xtics format "%d\n%b"
 set ylabel 'Distinct users'
 #set logscale y
@@ -214,15 +163,17 @@ set output 'out.svg'
 # Default for ls 6 is dark blue, too close to pure blue for GFZ:
 set style line 3 linecolor rgb "#00589C"
 set style line 6 linecolor rgb "violet"
+set style line 10 linecolor rgb "magenta"
 
-plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % 14 == 0?sprintf("%i", \$0):"") title 'BGR' ls 2, \
+plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf("%i", \$0):"") title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \
      '' using  7 title 'IPGP' ls 6, \
      '' using  8 title 'LMU' ls 7, \
-     '' using  9 title 'ODC' ls 9, \
-     '' using 10 title 'RESIF' ls 8
+     '' using  9 title 'NIEP' ls 10, \
+     '' using 10 title 'ODC' ls 9, \
+     '' using 11 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output
@@ -255,4 +206,4 @@ else
     echo "No text file output!"
 fi
 
-rm -f t1.py t2.py days3.dat
+rm -f days3.dat

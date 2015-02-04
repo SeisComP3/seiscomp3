@@ -23,10 +23,10 @@ Edit History:
     0 2006-10-13 rdr Created
     1 2006-12-28 rdr Set/clear cfg_timer. Since the cfg_timer was added there is
                      no need to flush configuration manually at startup.
-    2 2008-01-16 rdr Fix record length for CNP blockette data.
-    3 2008-02-25 rdr Don't clear cfg_timer unless final flush. cfg_lastwritten set
-                     to data time, not host time.
-    4 2008-03-13 rdr Don't reset records_written at 999999.
+    2 2008-01-09 rdr Don't clear cfg_timer unless final flush.
+    3 2008-01-16 rdr Fix record length for CNP blockette data.
+    4 2008-02-27 rdr cfg_lastwritten set to data time, not host time.
+    5 2008-03-13 rdr Don't reset records_written at 999999.
 */
 #ifndef OMIT_SEED
 #ifndef libopaque_h

@@ -213,6 +213,7 @@ class DBCleaner(seiscomp3.Client.Application):
 
     self.setMessagingEnabled(False)
     self.setDatabaseEnabled(True, True)
+    self.setDaemonEnabled(False)
 
     self._daysToKeep = 30
     self._hoursToKeep = 0
@@ -644,7 +645,7 @@ class DBCleaner(seiscomp3.Client.Application):
       output.write("done")
 
     span = self._timer.elapsed().seconds()
-    output.write(", time spend: %d %02d:%02d:%02d\n" % (span / 86400, (span % 86400) / 3600, (span % 3600) / 60, span % 60))
+    output.write(", time spent: %d %02d:%02d:%02d\n" % (span / 86400, (span % 86400) / 3600, (span % 3600) / 60, span % 60))
 
 
   def runCommand(self, q):

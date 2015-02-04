@@ -21,6 +21,10 @@ Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
     0 2006-10-11 rdr Created
+    1 2007-08-04 rdr Some foolishness to get around gcc-avr32 optimizer bugs.
+                     Add underflow detection for multi_section_filter for platforms
+                     not corrected configured for "float-to-zero".
+}
 */
 #ifndef libfilters_h
 #include "libfilters.h"
@@ -250,7 +254,7 @@ begin
   integer i, cnt, flen ;
 
 /* standard filter DEC10 */
-  getbuf (q330, addr(paqs->firchain), sizeof(tfilter)) ;
+  getthrbuf (q330, addr(paqs->firchain), sizeof(tfilter)) ;
   ic = paqs->firchain ;
   ic->link = NIL ;
   strcpy(addr(ic->fname), "DEC10") ; ;
@@ -267,7 +271,7 @@ begin
       ic->coef[flen - i] = dec10[i - 1] ;
     end
 /* standard filter VLP389 */
-  getbuf (q330, addr(ic->link), sizeof(tfilter)) ;
+  getthrbuf (q330, addr(ic->link), sizeof(tfilter)) ;
   ic = ic->link ;
   ic->link = NIL ;
   strcpy(addr(ic->fname), "VLP389") ;
@@ -280,7 +284,7 @@ begin
   for (i = 1 ; i <= cnt ; i++)
     ic->coef[i - 1] = vlp389[i - 1] ;
 /* standard filter ULP379 */
-  getbuf (q330, addr(ic->link), sizeof(tfilter)) ;
+  getthrbuf (q330, addr(ic->link), sizeof(tfilter)) ;
   ic = ic->link ;
   ic->link = NIL ;
   strcpy(addr(ic->fname), "ULP379") ;
@@ -305,7 +309,7 @@ begin
     dest = dest->link ;
   while (src)
     begin
-      getbuf (q330, addr(dest->link), sizeof(tfilter)) ;
+      getthrbuf (q330, addr(dest->link), sizeof(tfilter)) ;
       memcpy(dest->link, src, sizeof(tfilter)) ; /* make copy */
       dest = dest->link ;
       dest->link = NIL ;
@@ -433,11 +437,13 @@ begin
       q->fir = create_fir (q330, q->source_fir) ;
 end
 
-void average (pq330 q330, pavg_packet pavg, tfloat s, tfloat samp, plcq q)
+void average (paqstruc paqs, pavg_packet pavg, tfloat s, tfloat samp, plcq q)
 begin
   string95 s1 ;
   string15 ss ;
+  pq330 q330 ;
 
+  q330 = paqs->owner ;
   pavg->signed_sum = pavg->signed_sum + s ; /* update sum */
   pavg->sqr_sum = pavg->sqr_sum + samp * samp ; /* update mean-sqr */
   if (abs(samp) > pavg->peak_abs)
@@ -448,7 +454,8 @@ begin
     then
       begin
         pavg->running_avg = pavg->signed_sum / q->avg_length ;
-        sprintf(s1, "%s:%12.3f%12.3f%12.3f", seed2string(q->location, q->seedname, addr(ss)),
+        seed2string(q->location, q->seedname, addr(ss)) ;
+        sprintf(s1, "%s:%12.3f%12.3f%12.3f", ss,
                 pavg->running_avg, sqrt(pavg->sqr_sum / q->avg_length), pavg->peak_abs) ;
         libdatamsg(q330, LIBMSG_AVG, addr(s1)) ;
         pavg->avg_count = 0 ;
@@ -506,7 +513,13 @@ begin
 
   multiply_accum = 0 ;
   for (counter = offset ; counter <= (vector_length + offset - 1) ; counter++)
-    multiply_accum = multiply_accum + (*a)[counter] * (*b)[counter] ;
+    begin
+#ifdef CHK_IIR_UNDERFLOW
+    if (fabs((*b)[counter]) < 1.0E-20)
+      (*b)[counter] = 0.0 ;
+#endif
+      multiply_accum = multiply_accum + (*a)[counter] * (*b)[counter] ;
+    end
   return multiply_accum ;
 end
 
@@ -542,6 +555,15 @@ begin
     then
       for (sect = 1 ; sect <= resp->sects ; sect++)
         s = recursive_filter (addr(resp->filt[sect]), s) ;
+#ifdef CHK_IIR_UNDERFLOW
+  if (fabs(s) < 1.0E-20)
+    then
+      if (s > 0)
+        then
+          s = 1.0E-20 ;
+        else
+          s = -1.0E-20 ;
+#endif
   return s ;
 end
 

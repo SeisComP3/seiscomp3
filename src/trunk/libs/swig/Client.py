@@ -507,9 +507,9 @@ class Application(Core.InterruptibleObject):
         """addPluginPackagePath(Application self, std::string const & package)"""
         return _Client.Application_addPluginPackagePath(self, *args)
 
-    def version(self):
-        """version(Application self) -> char const *"""
-        return _Client.Application_version(self)
+    def frameworkVersion(self):
+        """frameworkVersion(Application self) -> char const *"""
+        return _Client.Application_frameworkVersion(self)
 
     def agencyID(self):
         """agencyID(Application self) -> std::string const &"""
@@ -811,6 +811,10 @@ class Application(Core.InterruptibleObject):
         """
         return _Client.Application_logObject(self, *args)
 
+    def reloadInventory(self):
+        """reloadInventory(Application self) -> bool"""
+        return _Client.Application_reloadInventory(self)
+
     def Instance():
         """Instance() -> Application"""
         return _Client.Application_Instance()
@@ -823,6 +827,10 @@ class Application(Core.InterruptibleObject):
 
     if _newclass:HandleSignals = staticmethod(HandleSignals)
     __swig_getmethods__["HandleSignals"] = lambda x: HandleSignals
+    def version(self):
+        """version(Application self) -> char const *"""
+        return _Client.Application_version(self)
+
     def createCommandLineDescription(self):
         """createCommandLineDescription(Application self)"""
         return _Client.Application_createCommandLineDescription(self)
@@ -1152,6 +1160,10 @@ class StreamApplication(Application):
     def handleAlarm(self):
         """handleAlarm(StreamApplication self)"""
         return _Client.StreamApplication_handleAlarm(self)
+
+    def version(self):
+        """version(StreamApplication self) -> char const *"""
+        return _Client.StreamApplication_version(self)
 
     def createCommandLineDescription(self):
         """createCommandLineDescription(StreamApplication self)"""

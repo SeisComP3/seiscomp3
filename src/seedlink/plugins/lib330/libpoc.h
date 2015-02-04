@@ -25,7 +25,7 @@ Edit History:
 #ifndef libpoc_h
 /* Flag this file as included */
 #define libpoc_h
-#define VER_LIBPOC 0
+#define VER_LIBPOC 3
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h

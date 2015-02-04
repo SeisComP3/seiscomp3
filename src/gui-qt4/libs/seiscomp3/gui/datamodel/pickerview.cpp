@@ -356,6 +356,14 @@ class PickerMarker : public RecordMarker {
 			return _rot;
 		}
 
+		void setFilter(const QString &filter) {
+			_filter = filter;
+		}
+
+		const QString &filter() const {
+			return _filter;
+		}
+
 		void setType(Type t) {
 			_type = t;
 			if ( _type == Pick ) {
@@ -603,8 +611,11 @@ class PickerMarker : public RecordMarker {
 
 			if ( _referencedPick == NULL )
 				return QString("manual %1 pick (local)\n"
-				               "arrival: %2")
-				       .arg(text()).arg(isArrival()?"yes":"no");
+				               "filter: %2\n"
+				               "arrival: %3")
+				       .arg(text())
+				       .arg(_filter.isEmpty()?"None":_filter)
+				       .arg(isArrival()?"yes":"no");
 
 			QString text;
 
@@ -644,6 +655,8 @@ class PickerMarker : public RecordMarker {
 
 			if ( !_referencedPick->methodID().empty() )
 				text += QString("\nmethod: %1").arg(_referencedPick->methodID().c_str());
+			if ( !_referencedPick->filterID().empty() )
+				text += QString("\nfilter: %1").arg(_referencedPick->filterID().c_str());
 
 			text += QString("\narrival: %1").arg(isArrival()?"yes":"no");
 
@@ -719,6 +732,7 @@ class PickerMarker : public RecordMarker {
 		PickPtr           _referencedPick;
 		OPT(PickPolarity) _polarity;
 		TimeQuantity      _time;
+		QString           _filter;
 		Type              _type;
 		int               _slot;
 		int               _rot;
@@ -2810,6 +2824,7 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 		// and set its component to the currently displayed component
 		marker->setSlot(_currentSlot);
 		marker->setRotation(_currentRotationMode);
+		marker->setFilter(_currentFilterID);
 
 		if ( uncertaintyIndex >= 0 ) {
 			marker->setUncertainty(
@@ -2882,6 +2897,7 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 
 				marker->setSlot(_currentSlot);
 				marker->setRotation(_currentRotationMode);
+				marker->setFilter(_currentFilterID);
 	
 				for ( int i = 0; i < widget->markerCount(); ++i ) {
 					PickerMarker *marker2 = (PickerMarker*)widget->marker(i);
@@ -6391,6 +6407,8 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 				if ( marker->upperUncertainty() >= 0 )
 					p->time().setUpperUncertainty(marker->upperUncertainty());
 
+				if ( !marker->filter().isEmpty() )
+					p->setFilterID(marker->filter().toStdString());
 				p->setPhaseHint(Phase((const char*)marker->text().toAscii()));
 				p->setEvaluationMode(EvaluationMode(MANUAL));
 				p->setPolarity(marker->polarity());
@@ -7494,6 +7512,7 @@ void PickerView::changeFilter(int index, bool force) {
 	if ( name == NO_FILTER_STRING ) {
 		if ( _currentFilter ) delete _currentFilter;
 		_currentFilter = NULL;
+		_currentFilterID = QString();
 
 		if ( !_ui.actionLimitFilterToZoomTrace->isChecked() )
 			applyFilter();
@@ -7514,6 +7533,8 @@ void PickerView::changeFilter(int index, bool force) {
 		_comboFilter->setCurrentIndex(_lastFilterIndex);
 		_comboFilter->blockSignals(false);
 	}
+	else
+		_currentFilterID = filter;
 
 	if ( _currentFilter ) delete _currentFilter;
 	_currentFilter = newFilter;

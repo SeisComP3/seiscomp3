@@ -47,19 +47,12 @@ void Stream::init(const DataModel::Stream *stream) {
 	epoch = Core::TimeWindow();
 	_sensor = NULL;
 
-	double gainFreq = -1.0;
-
 	epoch.setStartTime(stream->start());
 	try { epoch.setEndTime(stream->end()); }
 	catch ( ... ) {}
 
 	try {
 		gain = stream->gain();
-	}
-	catch ( ... ) {}
-
-	try {
-		gainFreq = stream->gainFrequency();
 	}
 	catch ( ... ) {}
 
@@ -112,32 +105,6 @@ void Stream::init(const DataModel::Stream *stream) {
 					proc_response->convertFromHz();
 
 				proc_sensor->setResponse(proc_response.get());
-			}
-		}
-
-		ResponsePtr proc_resp = proc_sensor->response();
-		if ( (gainFreq > 0) && (gainFreq != 1.0) && proc_resp ) {
-			Math::Restitution::FFT::TransferFunctionPtr tf =
-				proc_resp->getTransferFunction();
-
-			if ( tf ) {
-				// Compute response at gain frequency and at 1Hz
-				Math::Complex r1, r2;
-				double targetGainFreq = 1.0;
-
-				tf->evaluate(&r1, 1, &gainFreq);
-				tf->evaluate(&r2, 1, &targetGainFreq);
-
-				double scale = abs(r2) / abs(r1);
-
-				if ( scale != 1.0 )
-					SEISCOMP_DEBUG("%s.%s.%s.%s: gain correction = %f",
-					               stream->sensorLocation()->station()->network()->code().c_str(),
-					               stream->sensorLocation()->station()->code().c_str(),
-					               stream->sensorLocation()->code().c_str(),
-					               stream->code().c_str(),
-					               scale);
-				gain *= scale;
 			}
 		}
 	}

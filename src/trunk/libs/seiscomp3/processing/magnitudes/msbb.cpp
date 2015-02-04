@@ -50,6 +50,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_msbb::computeMagnitude(
 	double depth,     // in kilometers
 	double &value)
 {
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
 	if ( delta < DELTA_MIN || delta > DELTA_MAX )
 		return DistanceOutOfRange;
 

@@ -620,7 +620,9 @@ bool AmplitudeProcessor::setup(const Settings &settings) {
 		catch ( ... ) {}
 	}
 
-	settings.getValue(_enableResponses, "amplitudes.enableResponses");
+	if ( !settings.getValue(_enableResponses, "amplitudes." + _type + ".enableResponses") )
+		settings.getValue(_enableResponses, "amplitudes.enableResponses");
+
 	settings.getValue(_config.saturationThreshold, "amplitudes.saturationThreshold");
 	settings.getValue(_config.snrMin, "amplitudes." + _type + ".minSNR");
 	settings.getValue(_config.noiseBegin, "amplitudes." + _type + ".noiseBegin");

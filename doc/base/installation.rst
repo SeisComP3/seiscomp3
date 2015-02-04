@@ -77,7 +77,7 @@ The next steps describe the installation of SeisComP3 with the prepared
 tar.gz files.
 
 * Log in as user (e.g. sysop)
-* Copy one of the :file:`seiscomp3-seattle-[version]-[OS]-[arch].tar.gz` files to
+* Copy one of the :file:`seiscomp3-jakarta-[version]-[OS]-[arch].tar.gz` files to
   your home directory. Take care which is the right package (32 or 64-bit) for
   your operating system.
 
@@ -87,23 +87,23 @@ tar.gz files.
   
      user@host:/tmp$ cd
 
-* Untar the SeisComP3 binary package
+* Un-tar the SeisComP3 binary package
    
   .. code-block:: sh
 
-     user@host:~$ tar xzf seiscomp3-seattle-[version]-[OS]-[arch].tar.gz
+     user@host:~$ tar xzf seiscomp3-jakarta-[version]-[OS]-[arch].tar.gz
 
-* Untar the SeisComP3 map package into seiscomp3/share/maps
+* Un-tar the SeisComP3 map package into seiscomp3/share/maps
 
   .. code-block:: sh
 
      user@host:~$ tar xzf seiscomp3-maps.tar.gz
 
-* If desired, untar the documentation into seiscomp3/share/doc
+* If desired, un-tar the documentation into seiscomp3/share/doc
 
   .. code-block:: sh
 
-     user@host:~$ tar xzf seiscomp3-seattle-[version]-doc.tar.gz
+     user@host:~$ tar xzf seiscomp3-jakarta-[version]-doc.tar.gz
 
 Now everything is installed and the system can be configured. The :ref:`next chapter<getting-started>`
 chapter explains the first steps.
@@ -130,11 +130,11 @@ distribution. The following table gives an overview:
 +-----------------------------+----------------------------------------+
 | libncurses-dev              | trunk:scm (compilation only, optional) |
 +-----------------------------+----------------------------------------+
-| libmysqlclient              | trunk (only if MYSQL is used)          |
+| libmysqlclient              | trunk (only if MySQL is used)          |
 +-----------------------------+----------------------------------------+
 | libmysqlclient-dev          | trunk (compilation only if enabled)    |
 +-----------------------------+----------------------------------------+
-| mysql-server                | trunk (only if MYSQL is used locally)  |
+| mysql-server                | trunk (only if MySQL is used locally)  |
 +-----------------------------+----------------------------------------+
 | libpq5                      | trunk (only if PostgreSQL is used)     |
 +-----------------------------+----------------------------------------+
@@ -150,7 +150,7 @@ distribution. The following table gives an overview:
 
 First the environment has to be set up. The :program:`seiscomp` tool comes with
 the command :command:`install-deps` which installs required packages.
-To use MYSQL, give 'mysql-server' as parameter. If your distribution is not
+To use MySQL, give 'mysql-server' as parameter. If your distribution is not
 supported by :command:`install-deps`, install the above packages or contact us
 to add support for your distribution.
 
@@ -168,17 +168,17 @@ to add support for your distribution.
 SQL configuration
 -----------------
 
-* For better performance with a MYSQL database, adjust the following parameters:
+* For better performance with a MySQL database, adjust the following parameters:
 
   * "innodb_buffer_pool_size = 64M"
   * "innodb_flush_log_at_trx_commit = 2"
 
   The location of the configuration can differ between distributions. For
   OpenSUSE it is in :file:`/etc/my.cnf` whereas Ubuntu uses
-  :file:`/etc/mysql/my.cnf`  respectively :file:`/etc/mysql/conf.d/*`. Please
+  :file:`/etc/mysql/my.cnf`  or :file:`/etc/mysql/conf.d/*`. Please
   read the documentation of your distribution .
 
-  After adjusting the parameters, MYSQL needs to be restarted. If you are
+  After adjusting the parameters, MySQL needs to be restarted. If you are
   running OpenSUSE you can run
 
   .. code-block:: sh
@@ -212,7 +212,7 @@ following table.
 +---------------------+--------------------------------------------------------------------+
 | *lib*               | The base library directory used by all modules.                    |
 +---------------------+--------------------------------------------------------------------+
-| *lib/python*        | The pyton library directory.                                       |
+| *lib/python*        | The python library directory.                                       |
 +---------------------+--------------------------------------------------------------------+
 | *man*               | The manual pages.                                                  |
 +---------------------+--------------------------------------------------------------------+
@@ -235,7 +235,7 @@ following table.
 +---------------------+--------------------------------------------------------------------+
 | *share*             | Application data such as maps, cities.xml and others.              |
 +---------------------+--------------------------------------------------------------------+
-| *share/templates*   | Template files used by eg SeedLink to create its native            |
+| *share/templates*   | Template files used by e.g. SeedLink to create its native          |
 |                     | configuration.                                                     |
 +---------------------+--------------------------------------------------------------------+
 | *etc*               | Configuration directory.                                           |

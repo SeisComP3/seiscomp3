@@ -26,7 +26,7 @@ Edit History:
 #ifndef libcont_h
 /* Flag this file as included */
 #define libcont_h
-#define VER_LIBCONT 5
+#define VER_LIBCONT 11
 
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -42,5 +42,5 @@ extern void check_continuity (pq330 q330) ;
 extern boolean restore_continuity (pq330 q330) ;
 extern void purge_continuity (pq330 q330) ;
 extern void purge_thread_continuity (pq330 q330) ;
-
+extern void continuity_timer (pq330 q330) ;
 #endif

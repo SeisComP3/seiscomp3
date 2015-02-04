@@ -44,7 +44,7 @@ Filters
 =======
 
 The following filter functions are available. If a filter function has no
-parameters it can be given either with parentheses (eg :py:func:`DIFF()<DIFF()>`) or without (eg :py:func:`DIFF<DIFF()>`).
+parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()>`) or without (e.g. :py:func:`DIFF<DIFF()>`).
 
 .. py:function:: AVG(timespan)
 
@@ -142,7 +142,7 @@ parameters it can be given either with parentheses (eg :py:func:`DIFF()<DIFF()>`
    seconds the running mean is subtracted from the single amplitude values. This is equivalent
    to highpass filtering the data.
 
-   Running mean highpass of eg 10 seconds calculates the difference to the running mean of 10 seconds.
+   Running mean highpass of e.g. 10 seconds calculates the difference to the running mean of 10 seconds.
 
    :param timespan: The timespan in seconds
 

@@ -604,11 +604,11 @@ class FDSNStation(resource.Resource):
 			if ro.includeRes:
 				for j in xrange(logger.decimationCount()):
 					decimation = logger.decimation(j)
-					newLogger.add(DataModel.Decimation(logger.decimation(j)))
+					newLogger.add(DataModel.Decimation(decimation))
 
 					# collect response ids
 					filterStr = ""
-					try: filterStr = decimation.analogueFilterChain().content()
+					try: filterStr = decimation.analogueFilterChain().content() + " "
 					except ValueException: pass
 					try: filterStr += decimation.digitalFilterChain().content()
 					except ValueException: pass

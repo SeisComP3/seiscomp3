@@ -1,5 +1,5 @@
 /*   Lib330 Q330 I/O Communications routine headers
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -25,7 +25,7 @@ Edit History:
 #ifndef q330io_h
 /* Flag this file as included */
 #define q330io_h
-#define VER_Q330IO 7
+#define VER_Q330IO 13
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -36,15 +36,20 @@ Edit History:
 #endif
 
 extern void close_sockets (pq330 q330) ;
-extern boolean open_sockets (pq330 q330, boolean both) ;
+#ifndef OMIT_NETWORK
+extern boolean open_sockets (pq330 q330, boolean both, boolean fromback) ;
 extern void read_cmd_socket (pq330 q330) ;
 extern void read_data_socket (pq330 q330) ;
 extern void tcp_error (pq330 q330, string95 *msgsuf) ;
+#endif
 
 #ifndef OMIT_SERIAL
 extern void send_packet (pq330 q330, integer lth, word toport, word fromport) ;
 extern boolean open_serial (pq330 q330) ;
 extern void read_from_serial (pq330 q330) ;
+extern void inject_packet (pq330 q330, pbyte payload, byte protocol, longword srcaddr,
+                           longword destaddr, word srcport, word destport, word datalength,
+                           longword seq, longword ack, word window, byte flags) ;
 #endif
 
 #endif

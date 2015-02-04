@@ -48,6 +48,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_mB::computeMagnitude(
 	// Clip depth to 0
 	if ( depth < 0 ) depth = 0;
 
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
 	bool status = Magnitudes::compute_mb(amplitude*1.E-3, 2*M_PI, delta, depth+1, &value);
 	value -= 0.14; // HACK until we have an optimal calibration function
 	value = correctMagnitude(value);

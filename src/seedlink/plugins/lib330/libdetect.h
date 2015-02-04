@@ -46,7 +46,6 @@ extern enum tliberr lib_detstat (pq330 q330, tdetstat *detstat) ;
 extern void lib_changeenable (pq330 q330, tdetchange *detchange) ;
 
 #define MAXSAMP 38
-#define NULL 0
 #define EV_OFF 2
 #define NOR_OUT 4
 #define CUR_MAX 50

@@ -4173,7 +4173,7 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 				                      sloc->latitude(), sloc->longitude(), elev);
 
 				double at = (double)(additionalPicks[i].pick->time().value()-org->time().value());
-				arrival->setTimeResidual(tt.time-at);
+				arrival->setTimeResidual(at-tt.time);
 			}
 			catch ( ... ) {}
 

@@ -140,6 +140,8 @@ class WFParam : public Application {
 			double      STALTAratio;
 			double      STALTAmargin;
 
+			double      durationScale;
+
 			std::vector<double> dampings;
 			std::string naturalPeriodsStr;
 			int         naturalPeriods;
@@ -179,11 +181,12 @@ class WFParam : public Application {
 			int         order;
 			FilterFreqs filter;
 
-			int         SCorder;
-			FilterFreqs SCfilter;
+			int         PDorder;
+			FilterFreqs PDfilter;
 
 			bool        useMaximumOfHorizontals;
 			bool        offline;
+			bool        force;
 			bool        testMode;
 			bool        logCrontab;
 			bool        saveProcessedWaveforms;

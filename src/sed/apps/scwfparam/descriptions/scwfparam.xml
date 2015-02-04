@@ -91,6 +91,13 @@
 					Specifies the number of seconds around P to be used to check the STA/LTA ratio.
 					</description>
 				</parameter>
+				<parameter name="durationScale" type="double" default="1.5">
+					<description>
+					Defines the factor applied to the signigicant duration to define the
+					processing spetra time window. If that value is &lt;= 0 the totalTimeWindowLength
+					is used.
+					</description>
+				</parameter>
 				<parameter name="dampings" type="list:double" unit="%" default="5">
 					<description>
 					Specifies a list of damping values (in percent) for computation of
@@ -179,16 +186,17 @@
 						</description>
 					</parameter>
 				</group>
-				<group name="sc">
+				<group name="pd">
 					<description>
-					Parameters of the 2nd stage (sensitivity correction) filter.
+					Parameters of the post-deconvolution filter applied in the
+					frequency domain.
 					</description>
 					<parameter name="order" type="int" default="4">
 						<description>
 						Specifies the order of the 2nd stage filter.
 						</description>
 					</parameter>
-					<parameter name="loFreq" type="double" default="0.025">
+					<parameter name="loFreq" type="double" default="0">
 						<description>
 						Specifies the frequency of the 2nd stage hi-pass filter. If this
 						parameter is equal to 0 the hi-pass filter is not used.
@@ -197,7 +205,7 @@
 						frequency of the filter.
 						</description>
 					</parameter>
-					<parameter name="hiFreq" type="double" default="40">
+					<parameter name="hiFreq" type="double" default="0">
 						<description>
 						Specifies the frequency of the 2nd stage lo-pass filter. If this
 						parameter is equal to 0 the lo-pass filter is not used.
@@ -479,6 +487,9 @@
 				</option>
 				<option long-flag="offline">
 					<description>Do not connect to the messaging and to the database</description>
+				</option>
+				<option long-flag="force">
+					<description>Force event processing even if a journal entry exists that processing has completed</description>
 				</option>
 				<option long-flag="dump-config">
 					<description>Dump the configuration and exit</description>

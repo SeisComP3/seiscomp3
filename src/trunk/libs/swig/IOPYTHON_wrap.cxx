@@ -3509,71 +3509,72 @@ namespace Swig {
 #define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[128]
 #define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[129]
 #define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[130]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[131]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[132]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[133]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[134]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[135]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[136]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[137]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[138]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[139]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[140]
-#define SWIGTYPE_p_TagType swig_types[141]
-#define SWIGTYPE_p_Type swig_types[142]
-#define SWIGTYPE_p_allocator_type swig_types[143]
-#define SWIGTYPE_p_bool swig_types[144]
-#define SWIGTYPE_p_char swig_types[145]
-#define SWIGTYPE_p_char_type swig_types[146]
-#define SWIGTYPE_p_const_iterator swig_types[147]
-#define SWIGTYPE_p_const_reference swig_types[148]
-#define SWIGTYPE_p_difference_type swig_types[149]
-#define SWIGTYPE_p_double swig_types[150]
-#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[151]
-#define SWIGTYPE_p_float swig_types[152]
-#define SWIGTYPE_p_fmtflags swig_types[153]
-#define SWIGTYPE_p_int swig_types[154]
-#define SWIGTYPE_p_int_type swig_types[155]
-#define SWIGTYPE_p_iostate swig_types[156]
-#define SWIGTYPE_p_iterator swig_types[157]
-#define SWIGTYPE_p_long swig_types[158]
-#define SWIGTYPE_p_off_type swig_types[159]
-#define SWIGTYPE_p_openmode swig_types[160]
-#define SWIGTYPE_p_p_void swig_types[161]
-#define SWIGTYPE_p_pos_type swig_types[162]
-#define SWIGTYPE_p_reference swig_types[163]
-#define SWIGTYPE_p_seekdir swig_types[164]
-#define SWIGTYPE_p_size_t swig_types[165]
-#define SWIGTYPE_p_size_type swig_types[166]
-#define SWIGTYPE_p_state_type swig_types[167]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[168]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[169]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[170]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[171]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[172]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[173]
-#define SWIGTYPE_p_std__exception swig_types[174]
-#define SWIGTYPE_p_std__invalid_argument swig_types[175]
-#define SWIGTYPE_p_std__ios_base swig_types[176]
-#define SWIGTYPE_p_std__istream swig_types[177]
-#define SWIGTYPE_p_std__listT_double_t swig_types[178]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[179]
-#define SWIGTYPE_p_std__locale swig_types[180]
-#define SWIGTYPE_p_std__ostream swig_types[181]
-#define SWIGTYPE_p_std__streambuf swig_types[182]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[183]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[184]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[185]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[186]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[187]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[188]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[189]
-#define SWIGTYPE_p_time_t swig_types[190]
-#define SWIGTYPE_p_traits_type swig_types[191]
-#define SWIGTYPE_p_value_type swig_types[192]
-#define SWIGTYPE_p_void swig_types[193]
-static swig_type_info *swig_types[195];
-static swig_module_info swig_module = {swig_types, 194, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[131]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[132]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[133]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[134]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[135]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[136]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[137]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[138]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[139]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[140]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[141]
+#define SWIGTYPE_p_TagType swig_types[142]
+#define SWIGTYPE_p_Type swig_types[143]
+#define SWIGTYPE_p_allocator_type swig_types[144]
+#define SWIGTYPE_p_bool swig_types[145]
+#define SWIGTYPE_p_char swig_types[146]
+#define SWIGTYPE_p_char_type swig_types[147]
+#define SWIGTYPE_p_const_iterator swig_types[148]
+#define SWIGTYPE_p_const_reference swig_types[149]
+#define SWIGTYPE_p_difference_type swig_types[150]
+#define SWIGTYPE_p_double swig_types[151]
+#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[152]
+#define SWIGTYPE_p_float swig_types[153]
+#define SWIGTYPE_p_fmtflags swig_types[154]
+#define SWIGTYPE_p_int swig_types[155]
+#define SWIGTYPE_p_int_type swig_types[156]
+#define SWIGTYPE_p_iostate swig_types[157]
+#define SWIGTYPE_p_iterator swig_types[158]
+#define SWIGTYPE_p_long swig_types[159]
+#define SWIGTYPE_p_off_type swig_types[160]
+#define SWIGTYPE_p_openmode swig_types[161]
+#define SWIGTYPE_p_p_void swig_types[162]
+#define SWIGTYPE_p_pos_type swig_types[163]
+#define SWIGTYPE_p_reference swig_types[164]
+#define SWIGTYPE_p_seekdir swig_types[165]
+#define SWIGTYPE_p_size_t swig_types[166]
+#define SWIGTYPE_p_size_type swig_types[167]
+#define SWIGTYPE_p_state_type swig_types[168]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[169]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[170]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[171]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[172]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[173]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[174]
+#define SWIGTYPE_p_std__exception swig_types[175]
+#define SWIGTYPE_p_std__invalid_argument swig_types[176]
+#define SWIGTYPE_p_std__ios_base swig_types[177]
+#define SWIGTYPE_p_std__istream swig_types[178]
+#define SWIGTYPE_p_std__listT_double_t swig_types[179]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[180]
+#define SWIGTYPE_p_std__locale swig_types[181]
+#define SWIGTYPE_p_std__ostream swig_types[182]
+#define SWIGTYPE_p_std__streambuf swig_types[183]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[184]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[185]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[186]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[187]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[188]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[189]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[190]
+#define SWIGTYPE_p_time_t swig_types[191]
+#define SWIGTYPE_p_traits_type swig_types[192]
+#define SWIGTYPE_p_value_type swig_types[193]
+#define SWIGTYPE_p_void swig_types[194]
+static swig_type_info *swig_types[196];
+static swig_module_info swig_module = {swig_types, 195, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -23543,6 +23544,574 @@ SWIGINTERN PyObject *SeedlinkCommandException_swigregister(PyObject *SWIGUNUSEDP
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_SLStreamIdx__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_SLStreamIdx")) SWIG_fail;
+  result = (Seiscomp::RecordStream::SLStreamIdx *)new Seiscomp::RecordStream::SLStreamIdx();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_SLStreamIdx__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::RecordStream::SLStreamIdx *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_SLStreamIdx",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res1 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_SLStreamIdx" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_SLStreamIdx" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res3 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_SLStreamIdx" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res4 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_SLStreamIdx" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  result = (Seiscomp::RecordStream::SLStreamIdx *)new Seiscomp::RecordStream::SLStreamIdx((std::string const &)*arg1,(std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_SLStreamIdx__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  Seiscomp::Core::Time *arg5 = 0 ;
+  Seiscomp::Core::Time *arg6 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  void *argp6 = 0 ;
+  int res6 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  Seiscomp::RecordStream::SLStreamIdx *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOO:new_SLStreamIdx",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res1 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_SLStreamIdx" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "1"" of type '" "std::string const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_SLStreamIdx" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res3 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_SLStreamIdx" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res4 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_SLStreamIdx" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "4"" of type '" "std::string const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "new_SLStreamIdx" "', argument " "5"" of type '" "Seiscomp::Core::Time const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "5"" of type '" "Seiscomp::Core::Time const &""'"); 
+  }
+  arg5 = reinterpret_cast< Seiscomp::Core::Time * >(argp5);
+  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
+  if (!SWIG_IsOK(res6)) {
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "new_SLStreamIdx" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
+  }
+  if (!argp6) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_SLStreamIdx" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
+  }
+  arg6 = reinterpret_cast< Seiscomp::Core::Time * >(argp6);
+  result = (Seiscomp::RecordStream::SLStreamIdx *)new Seiscomp::RecordStream::SLStreamIdx((std::string const &)*arg1,(std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(Seiscomp::Core::Time const &)*arg5,(Seiscomp::Core::Time const &)*arg6);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_SLStreamIdx(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[7];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 6) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_SLStreamIdx__SWIG_0(self, args);
+  }
+  if (argc == 4) {
+    int _v;
+    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_new_SLStreamIdx__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 6) {
+    int _v;
+    int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[0], (std::basic_string<char>**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[1], (std::basic_string<char>**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[3], (std::basic_string<char>**)(0));
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              int res = SWIG_ConvertPtr(argv[5], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
+              _v = SWIG_CheckState(res);
+              if (_v) {
+                return _wrap_new_SLStreamIdx__SWIG_2(self, args);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_SLStreamIdx'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::RecordStream::SLStreamIdx::SLStreamIdx()\n"
+    "    Seiscomp::RecordStream::SLStreamIdx::SLStreamIdx(std::string const &,std::string const &,std::string const &,std::string const &)\n"
+    "    Seiscomp::RecordStream::SLStreamIdx::SLStreamIdx(std::string const &,std::string const &,std::string const &,std::string const &,Seiscomp::Core::Time const &,Seiscomp::Core::Time const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx___lt__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  Seiscomp::RecordStream::SLStreamIdx *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SLStreamIdx___lt__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx___lt__" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SLStreamIdx___lt__" "', argument " "2"" of type '" "Seiscomp::RecordStream::SLStreamIdx const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SLStreamIdx___lt__" "', argument " "2"" of type '" "Seiscomp::RecordStream::SLStreamIdx const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp2);
+  result = (bool)((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->operator <((Seiscomp::RecordStream::SLStreamIdx const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  Seiscomp::RecordStream::SLStreamIdx *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SLStreamIdx___eq__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx___eq__" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SLStreamIdx___eq__" "', argument " "2"" of type '" "Seiscomp::RecordStream::SLStreamIdx const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SLStreamIdx___eq__" "', argument " "2"" of type '" "Seiscomp::RecordStream::SLStreamIdx const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp2);
+  result = (bool)((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->operator ==((Seiscomp::RecordStream::SLStreamIdx const &)*arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_network(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_network",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_network" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = (std::string *) &((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->network();
+  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_station(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_station",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_station" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = (std::string *) &((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->station();
+  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_channel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_channel",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_channel" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = (std::string *) &((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->channel();
+  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_location(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_location",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_location" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = (std::string *) &((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->location();
+  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_selector(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_selector",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_selector" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = ((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->selector();
+  resultobj = SWIG_From_std_basic_string_Sl_char_Sg_(static_cast< std::basic_string<char> >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_startTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::Time result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_startTime",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_startTime" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = ((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->startTime();
+  resultobj = SWIG_NewPointerObj((new Seiscomp::Core::Time(static_cast< const Seiscomp::Core::Time& >(result))), SWIGTYPE_p_Seiscomp__Core__Time, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_endTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::Time result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_endTime",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_endTime" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = ((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->endTime();
+  resultobj = SWIG_NewPointerObj((new Seiscomp::Core::Time(static_cast< const Seiscomp::Core::Time& >(result))), SWIGTYPE_p_Seiscomp__Core__Time, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_timestamp(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::Time result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SLStreamIdx_timestamp",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_timestamp" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  result = ((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->timestamp();
+  resultobj = SWIG_NewPointerObj((new Seiscomp::Core::Time(static_cast< const Seiscomp::Core::Time& >(result))), SWIGTYPE_p_Seiscomp__Core__Time, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SLStreamIdx_setTimestamp(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  Seiscomp::Core::Time *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SLStreamIdx_setTimestamp",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SLStreamIdx_setTimestamp" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Core__Time,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SLStreamIdx_setTimestamp" "', argument " "2"" of type '" "Seiscomp::Core::Time &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SLStreamIdx_setTimestamp" "', argument " "2"" of type '" "Seiscomp::Core::Time &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::Time * >(argp2);
+  ((Seiscomp::RecordStream::SLStreamIdx const *)arg1)->setTimestamp(*arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_SLStreamIdx(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::SLStreamIdx *arg1 = (Seiscomp::RecordStream::SLStreamIdx *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_SLStreamIdx",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_SLStreamIdx" "', argument " "1"" of type '" "Seiscomp::RecordStream::SLStreamIdx *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::SLStreamIdx * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *SLStreamIdx_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_SLConnection_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *result = 0 ;
@@ -28916,6 +29485,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_SeedlinkCommandException", _wrap_new_SeedlinkCommandException, METH_VARARGS, NULL},
 	 { (char *)"delete_SeedlinkCommandException", _wrap_delete_SeedlinkCommandException, METH_VARARGS, NULL},
 	 { (char *)"SeedlinkCommandException_swigregister", SeedlinkCommandException_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_SLStreamIdx", _wrap_new_SLStreamIdx, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx___lt__", _wrap_SLStreamIdx___lt__, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx___eq__", _wrap_SLStreamIdx___eq__, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_network", _wrap_SLStreamIdx_network, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_station", _wrap_SLStreamIdx_station, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_channel", _wrap_SLStreamIdx_channel, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_location", _wrap_SLStreamIdx_location, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_selector", _wrap_SLStreamIdx_selector, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_startTime", _wrap_SLStreamIdx_startTime, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_endTime", _wrap_SLStreamIdx_endTime, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_timestamp", _wrap_SLStreamIdx_timestamp, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_setTimestamp", _wrap_SLStreamIdx_setTimestamp, METH_VARARGS, NULL},
+	 { (char *)"delete_SLStreamIdx", _wrap_delete_SLStreamIdx, METH_VARARGS, NULL},
+	 { (char *)"SLStreamIdx_swigregister", SLStreamIdx_swigregister, METH_VARARGS, NULL},
 	 { (char *)"SLConnection_ClassName", _wrap_SLConnection_ClassName, METH_VARARGS, NULL},
 	 { (char *)"SLConnection_TypeInfo", _wrap_SLConnection_TypeInfo, METH_VARARGS, NULL},
 	 { (char *)"SLConnection_className", _wrap_SLConnection_className, METH_VARARGS, NULL},
@@ -29599,6 +30182,7 @@ static swig_type_info _swigt__p_Seiscomp__RecordStream__Arclink___private__Arcli
 static swig_type_info _swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection = {"_p_Seiscomp__RecordStream__Combined___private__CombinedConnection", "Seiscomp::RecordStream::Combined::_private::CombinedConnection *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__RecordStream__File = {"_p_Seiscomp__RecordStream__File", "Seiscomp::RecordStream::File *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__RecordStream__SLConnection = {"_p_Seiscomp__RecordStream__SLConnection", "Seiscomp::RecordStream::SLConnection *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__RecordStream__SLStreamIdx = {"_p_Seiscomp__RecordStream__SLStreamIdx", "Seiscomp::RecordStream::SLStreamIdx *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__RecordStream__SeedlinkCommandException = {"_p_Seiscomp__RecordStream__SeedlinkCommandException", "Seiscomp::RecordStream::SeedlinkCommandException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__RecordStream__SeedlinkException = {"_p_Seiscomp__RecordStream__SeedlinkException", "Seiscomp::RecordStream::SeedlinkException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t = {"_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t", "Seiscomp::TypedArray< Seiscomp::Core::Time > *|Seiscomp::DateTimeArray *", 0, 0, (void*)0, 0};
@@ -29792,6 +30376,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection,
   &_swigt__p_Seiscomp__RecordStream__File,
   &_swigt__p_Seiscomp__RecordStream__SLConnection,
+  &_swigt__p_Seiscomp__RecordStream__SLStreamIdx,
   &_swigt__p_Seiscomp__RecordStream__SeedlinkCommandException,
   &_swigt__p_Seiscomp__RecordStream__SeedlinkException,
   &_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t,
@@ -29991,6 +30576,7 @@ static swig_cast_info _swigc__p_Seiscomp__RecordStream__Arclink___private__Arcli
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__Combined___private__CombinedConnection[] = {  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__File[] = {  {&_swigt__p_Seiscomp__RecordStream__File, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__SLConnection[] = {  {&_swigt__p_Seiscomp__RecordStream__SLConnection, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__RecordStream__SLStreamIdx[] = {  {&_swigt__p_Seiscomp__RecordStream__SLStreamIdx, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__SeedlinkCommandException[] = {  {&_swigt__p_Seiscomp__RecordStream__SeedlinkCommandException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__RecordStream__SeedlinkException[] = {  {&_swigt__p_Seiscomp__RecordStream__SeedlinkException, 0, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SeedlinkCommandException, _p_Seiscomp__RecordStream__SeedlinkCommandExceptionTo_p_Seiscomp__RecordStream__SeedlinkException, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t[] = {  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -30184,6 +30770,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__RecordStream__Combined___private__CombinedConnection,
   _swigc__p_Seiscomp__RecordStream__File,
   _swigc__p_Seiscomp__RecordStream__SLConnection,
+  _swigc__p_Seiscomp__RecordStream__SLStreamIdx,
   _swigc__p_Seiscomp__RecordStream__SeedlinkCommandException,
   _swigc__p_Seiscomp__RecordStream__SeedlinkException,
   _swigc__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t,

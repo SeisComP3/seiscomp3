@@ -25,8 +25,7 @@ Edit History:
 #ifndef q330cvrt_h
 /* Flag this file as included */
 #define q330cvrt_h
-#define VER_Q330CVRT 1
-
+#define VER_Q330CVRT 11
 #ifndef q330types_h
 #include "q330types.h"
 #endif
@@ -51,7 +50,7 @@ extern longword loadstatmap (pbyte *p) ;
 extern void loadglobalstat (pbyte *p, tstat_global *globstat) ;
 extern void loadgpsstat (pbyte *p, tstat_gps *gpsstat) ;
 extern void loadpwrstat (pbyte *p, tstat_pwr *pwrstat) ;
-extern void loadboomstat (pbyte *p, tstat_boom *boomstat) ;
+extern void loadboomstat (pbyte *p, tstat_boom *boomstat, boolean q335) ;
 extern void loadpllstat (pbyte *p, tstat_pll *pllstat) ;
 extern void loadgpssats (pbyte *p, tstat_sats *gpssats) ;
 extern void loadarpstat (pbyte *p, tstat_arp *arpstat) ;
@@ -78,6 +77,15 @@ extern void storememhdr (pbyte *p, tmem *memhdr) ;
 extern void loadmemhdr (pbyte *p, tmem *memhdr) ;
 extern void loadseghdr (pbyte *p, tseghdr *seghdr) ;
 extern void storedack (pbyte *p, tdp_ack *dack) ;
+extern void storebrdy (pbyte *p, tbrdy *brdy) ;
+extern void loadback (pbyte *p, tback *back) ;
+extern void loadepstat (pbyte *p, tstat_ep *epstat) ;
+extern void loadfestats (pbyte *p, tstat_fes *fes) ;
+extern void loadepd (pbyte *p, tepdelay *epdelay) ;
+extern void loadepcfg (pbyte *p, tepcfg *epcfg) ;
+extern void storeepcfg (pbyte *p, tepcfg *epcfg) ;
+extern void loadcomm (pbyte *p, tcomm *comm) ;
+extern void loadbalecfg (pbyte *p, tbalecfg *bcfg) ;
 #ifndef OMIT_SDUMP
 extern void loadgps2 (pbyte *p, tgps2 *gps2) ;
 extern void loadman (pbyte *p, tman *man) ;
