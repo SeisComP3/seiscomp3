@@ -25,7 +25,7 @@ class L2Norm {
 	L2Norm();
 
 	// Process N traces in place of length n
-	void operator()(T *data[N], int n, double sfreq) const;
+	void operator()(const Record *, T *data[N], int n, double sfreq) const;
 
 	// publishs a processed component
 	bool publish(int c) const;
@@ -36,7 +36,7 @@ template <typename T>
 struct L2Norm<T,2> {
 	bool publish(int c) const { return c == 0; }
 
-	void operator()(T *data[2], int n, const Core::Time &stime, double sfreq) const {
+	void operator()(const Record *, T *data[2], int n, const Core::Time &stime, double sfreq) const {
 		for ( int i = 0; i < n; ++i )
 			data[0][i] = sqrt(data[0][i] * data[0][i] +
 			                  data[1][i] * data[1][i]);
@@ -48,7 +48,7 @@ template <typename T>
 struct L2Norm<T,3> {
 	bool publish(int c) const { return c == 0; }
 
-	void operator()(T *data[3], int n, const Core::Time &stime, double sfreq) const {
+	void operator()(const Record *, T *data[3], int n, const Core::Time &stime, double sfreq) const {
 		for ( int i = 0; i < n; ++i )
 			data[0][i] = sqrt(data[0][i] * data[0][i] +
 			                  data[1][i] * data[1][i]);

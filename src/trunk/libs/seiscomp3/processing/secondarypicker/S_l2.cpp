@@ -47,7 +47,7 @@ class FilterWrapper {
 				if ( _filter[i] ) delete _filter[i];
 		}
 
-		void operator()(T *data[N], int n, const Core::Time &stime, double sfreq) const {
+		void operator()(const Record *rec, T *data[N], int n, const Core::Time &stime, double sfreq) const {
 			if ( _baseFilter ) {
 				for ( int i = 0; i < N; ++i ) {
 					if ( _filter[i] == NULL ) {
@@ -60,7 +60,7 @@ class FilterWrapper {
 			}
 
 			// Call real operator
-			_proc(data, n, stime, sfreq);
+			_proc(rec, data, n, stime, sfreq);
 		}
 
 		bool publish(int c) const { return _proc.publish(c); }

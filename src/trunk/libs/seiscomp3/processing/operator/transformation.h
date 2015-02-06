@@ -11,7 +11,6 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_PROCESSING_OPERATOR_TRANSFORMATION_H__
 #define __SEISCOMP_PROCESSING_OPERATOR_TRANSFORMATION_H__
 
@@ -29,7 +28,7 @@ struct Transformation {
 	Transformation(const Math::Matrix3<T> &m);
 
 	// Process N traces in place of length n
-	void operator()(T *data[N], int n) const;
+	void operator()(const Record *, T *data[N], int n, double) const;
 
 	// publishs a processed component
 	bool publish(int c) const;
@@ -42,7 +41,7 @@ struct Transformation<T,2> {
 
 	bool publish(int c) const { return true; }
 
-	void operator()(T *data[2], int n) const {
+	void operator()(const Record *, T *data[2], int n, double) const {
 		for ( int i = 0; i < n; ++i ) {
 			Math::Vector3<T> v = matrix*Math::Vector3<T>(*data[0], *data[1], 0);
 			*data[0] = v.x;
@@ -61,7 +60,7 @@ struct Transformation<T,3> {
 
 	bool publish(int c) const { return true; }
 
-	void operator()(T *data[3], int n) const {
+	void operator()(const Record *, T *data[3], int n, double) const {
 		for ( int i = 0; i < n; ++i ) {
 			Math::Vector3<T> v = matrix*Math::Vector3<T>(*data[0], *data[1], *data[2]);
 			*data[0] = v.x;
