@@ -109,8 +109,7 @@
 #define SCM_PROTO_UDP		0
 #define SCM_PROTO_TCP		1
 
-extern void scm_init (int _protocol, char *server, int port);
-extern void scm_dispatch (int *, uint8_t *);
-//extern uint8_t * scm_dispatch (int *);
-//extern void scm_dispatch (void);
+extern int scream_init_socket(int _protocol, char *server, int port);
+extern int scream_receive (int *thisblocknr, uint8_t *buf, int buflen);
+
 #endif /* __SCREAM_H__ */

@@ -48,15 +48,14 @@ struct config_struct
   char *server;
   char *modulename;
   char *ringname;
-  int port;               // must be UDP port
-  int protocol;           // must be UDP
-  uint16_t reqport;            // is the TCP port used for requesting missing data from dropped UDP 
+  int port;
+  int protocol;
+  uint16_t reqport;       /* is the TCP port used for requesting missing data from dropped UDP */
   int verbose;
   int writelog;
   double heartbeatinterval;
 };
 
-//extern struct config_struct config;
 extern void parse_config (const char *filename);
 
 #endif /* __CONFIG_H__ */

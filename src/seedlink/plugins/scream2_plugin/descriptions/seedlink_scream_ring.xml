@@ -14,16 +14,30 @@
 			<parameter name="address" type="string" default="127.0.0.1">
 				<description>IP of the SCREAM! server.</description>
 			</parameter>
-			<parameter name="tcpport" type="int" default="1567">
-				<description>TCP port of the SCREAM!</description>
+			<parameter name="port" type="int" default="1567">
+				<description>Port of the SCREAM!</description>
 			</parameter>
-			<parameter name="udpport" type="int" default="1567">
-				<description>UDP port of the SCREAM!</description>
+			<parameter name="tcp" type="boolean" default="false">
+				<description>
+				Enables TCP/IP mode. By default the data is received via
+				UDP but TCP is used instead. This needs a propert
+				configuration of the SCREAM! server to accept TCP
+				connections.
+				</description>
+			</parameter>
+			<parameter name="tcpport" type="int" default="1567">
+				<description>TCP request port of the SCREAM! for backfill requests</description>
 			</parameter>
 			<parameter name="proc" type="string">
 				<description>
 				Name of the proc object (defined in streams.xml); used for processing
 				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+			<parameter name="rsize" type="int" default="1000">
+				<description>
+				Size of the stream ringbuffers (small values are useful for RT systems;
+				large values for decreasing gaps).
 				</description>
 			</parameter>
 			<parameter name="map" type="string">
