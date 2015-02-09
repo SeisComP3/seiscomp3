@@ -191,6 +191,14 @@ void AmplitudeProcessor::computeTimeWindow() {
 	Core::Time startTime = _trigger + Core::TimeSpan(_config.noiseBegin);
 	Core::Time   endTime = _trigger + Core::TimeSpan(_config.signalEnd);
 
+	// Add the taper length to the requested time window otherwise
+	// amplitudes are damped
+	if ( _enableResponses ) {
+		endTime += Core::TimeSpan(std::max(0.0, _config.respTaper));
+		if ( (double)margin() < _config.respTaper )
+			startTime -= Core::TimeSpan(_config.respTaper) - margin();
+	}
+
 	setTimeWindow(Core::TimeWindow(startTime, endTime));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -297,6 +305,7 @@ void AmplitudeProcessor::process(const Record *record) {
 	// signal and noise window relative to _continuous->startTime()
 	double dt0  = _trigger - dataTimeWindow().startTime();
 	double dt1  = dataTimeWindow().endTime() - dataTimeWindow().startTime();
+	double dtw1  = timeWindow().endTime() - dataTimeWindow().startTime();
 	double dtn1 = dt0 + _config.noiseBegin;
 	double dtn2 = dt0 + _config.noiseEnd;
 	double dts1 = dt0 + _config.signalBegin;
@@ -327,7 +336,9 @@ void AmplitudeProcessor::process(const Record *record) {
 	int i2 = int(dts2*_stream.fsamp+0.5);
 
 	//int progress = int(100.*(n-i1)/(i2-i1));
-	int progress = int(100.*(dt1-dts1)/(dts2-dts1));
+	//int progress = int(100.*(dt1-dts1)/(dts2-dts1));
+	int progress = int(100.*(dt1-dts1)/(std::max(dtw1,dts2)-dts1));
+
 	if ( progress > 100 ) progress = 100;
 	setStatus(InProgress, progress);
 
