@@ -95,7 +95,7 @@ void AmplitudeProcessor::init() {
 	_config.minimumDepth = -1E6;
 	_config.maximumDepth = 1E6;
 
-	_config.respTaper = 60.0;
+	_config.respTaper = 5.0;
 	_config.respMinFreq = 0.00833333; // 120 secs
 	_config.respMaxFreq = 0;
 }
