@@ -76,6 +76,12 @@
 				<option long-flag="locator" argument="arg">
 					<description>the locator type to use</description>
 				</option>
+				<option long-flag="use-weight" argument="arg" default="0">
+					<description>use current picks weight</description>
+				</option>
+				<option long-flag="evaluation-mode" argument="arg">
+					<description>set origin evaluation mode: &quot;AUTOMATIC&quot; or &quot;MANUAL&quot;</description>
+				</option>
 			</group>
 		</command-line>
 	</module>

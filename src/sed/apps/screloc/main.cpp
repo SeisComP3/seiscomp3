@@ -50,6 +50,8 @@ class Reloc : public Client::Application {
 			// set up 1 hour of pick caching
 			// otherwise the picks will be read from the database
 			_cache.setTimeSpan(Core::TimeSpan(60*60));
+
+			_useWeight = false;
 		}
 
 
@@ -62,8 +64,8 @@ class Reloc : public Client::Application {
 			commandline().addOption("Input", "origin-id,O", "reprocess the origin and send a message", &_originIDs);
 			commandline().addOption("Input", "locator", "the locator type to use", &_locatorType, false);
 			commandline().addOption("Input", "profile", "the locator profile to use", &_locatorProfile, false);
-			commandline().addOption("Input", "use-weight", "use current picks weight", &_useWeight, false);
-			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode ", &_originEvaluationMode, false);
+			commandline().addOption("Input", "use-weight", "use current picks weight", &_useWeight, true);
+			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode", &_originEvaluationMode, false);
 		}
 
 
@@ -276,10 +278,10 @@ class Reloc : public Client::Application {
 				PickPtr pick = _cache.get<Pick>(ar->pickID());
 				if ( !pick ) continue;
 
-                if (!_useWeight) {
-				    // Set weight to 1
-				    ar->setWeight(1.0);
-                }
+				if ( !_useWeight ) {
+					// Set weight to 1
+					ar->setWeight(1.0);
+				}
 
 				// Use all picks regardless of weight
 				picks.push_back(LocatorInterface::WeightedPick(pick,1));
@@ -287,11 +289,11 @@ class Reloc : public Client::Application {
 
 			OriginPtr newOrg = _locator->relocate(org);
 			if ( newOrg ) {
-				if (_originEvaluationMode == "AUTOMATIC"){
+				if ( _originEvaluationMode == "AUTOMATIC" )
 					newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
-				} else {
+				else
 					newOrg->setEvaluationMode(EvaluationMode(MANUAL));
-				}
+
 				CreationInfo *ci;
 
 				try {
