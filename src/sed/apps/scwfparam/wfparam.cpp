@@ -1568,6 +1568,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 	proc->setPostDeconvolutionFilterParams(_config.PDorder, _config.PDfilter.first, _config.PDfilter.second);
 	proc->setFilterParams(_config.order, _filter.first, _filter.second);
 	proc->setDeconvolutionEnabled(_config.enableDeconvolution);
+	proc->setDurationScale(_config.durationScale);
 
 	// Override used component
 	proc->setUsedComponent(component);
