@@ -35,7 +35,6 @@ using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Seismology;
 
 
-
 class Reloc : public Client::Application {
 	public:
 		Reloc(int argc, char **argv) : Client::Application(argc, argv) {
@@ -108,10 +107,10 @@ class Reloc : public Client::Application {
 			if ( !_locatorProfile.empty() )
 				_locator->setProfile(_locatorProfile);
 
-            if ( _originEvaluationMode != "AUTOMATIC" && _originEvaluationMode != "MANUAL") {
-                SEISCOMP_ERROR("evaluation-mode should be (AUTOMATIC|MANUAL)");
+			if ( _originEvaluationMode != "AUTOMATIC" && _originEvaluationMode != "MANUAL") {
+				SEISCOMP_ERROR("evaluation-mode should be (AUTOMATIC|MANUAL)");
 				return false;
-            }
+			}
 
 			return true;
 		}
@@ -288,11 +287,11 @@ class Reloc : public Client::Application {
 
 			OriginPtr newOrg = _locator->relocate(org);
 			if ( newOrg ) {
-                if (_originEvaluationMode == "AUTOMATIC"){
-				    newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
-                } else {
-				    newOrg->setEvaluationMode(EvaluationMode(MANUAL));
-                }
+				if (_originEvaluationMode == "AUTOMATIC"){
+					newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
+				} else {
+					newOrg->setEvaluationMode(EvaluationMode(MANUAL));
+				}
 				CreationInfo *ci;
 
 				try {
@@ -365,8 +364,8 @@ class Reloc : public Client::Application {
 		PublicObjectTimeSpanBuffer _cache;
 		ObjectLog                 *_inputOrgs;
 		ObjectLog                 *_outputOrgs;
-        bool                       _useWeight;
-        std::string                _originEvaluationMode;
+		bool                       _useWeight;
+		std::string                _originEvaluationMode;
 };
 
 
