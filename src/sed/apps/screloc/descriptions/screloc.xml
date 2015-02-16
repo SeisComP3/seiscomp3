@@ -82,6 +82,22 @@
 				<option long-flag="evaluation-mode" argument="arg">
 					<description>set origin evaluation mode: &quot;AUTOMATIC&quot; or &quot;MANUAL&quot;</description>
 				</option>
+				<option long-flag="ep" argument="file">
+					<description>
+					Defines an event parameters XML file to be read and processed. This
+					implies offline mode and only processes all origins contained
+					in that file. Each relocated origin is appended to the list
+					of origins unless --replace is given.
+					</description>
+				</option>
+				<option long-flag="replace">
+					<description>
+					Used in combination with --ep. If given then each origin for
+					that an output has been generated is replaced by the result
+					of relocation. In other words: two LocSAT origins in, two
+					NonLinLoc origins out. All other objects are passed through.
+					</description>
+				</option>
 			</group>
 		</command-line>
 	</module>

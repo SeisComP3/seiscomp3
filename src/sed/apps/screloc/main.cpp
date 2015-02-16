@@ -66,6 +66,10 @@ class Reloc : public Client::Application {
 			commandline().addOption("Input", "profile", "the locator profile to use", &_locatorProfile, false);
 			commandline().addOption("Input", "use-weight", "use current picks weight", &_useWeight, true);
 			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode", &_originEvaluationMode, false);
+			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins. "
+			                                       "This option should not be mixed with --dump.", &_epFile);
+			commandline().addOption("Input", "replace", "Used in combination with --ep and defines if origins are to be replaced "
+			                                            "by their relocated counterparts or just added to the output.");
 		}
 
 
@@ -85,6 +89,12 @@ class Reloc : public Client::Application {
 
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
 			catch ( ... ) {}
+
+			if ( !_epFile.empty() )
+				setMessagingEnabled(false);
+
+			if ( !isInventoryDatabaseEnabled() )
+				setDatabaseEnabled(false, false);
 
 			return true;
 		}
@@ -163,6 +173,50 @@ class Reloc : public Client::Application {
 
 					std::cerr << "INFO: new Origin created OriginID=" << newOrg.get()->publicID().c_str() << std::endl;
 				}
+
+				return true;
+			}
+			else if ( !_epFile.empty() ) {
+				// Disable database
+				setDatabase(NULL);
+
+				IO::XMLArchive ar;
+				if ( !ar.open(_epFile.c_str()) ) {
+					SEISCOMP_ERROR("Failed to open %s", _epFile.c_str());
+					return false;
+				}
+
+				EventParametersPtr ep;
+				ar >> ep;
+				ar.close();
+
+				if ( !ep ) {
+					SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
+					return false;
+				}
+
+				int numberOfOrigins = (int)ep->originCount();
+				bool replace = commandline().hasOption("replace");
+
+				for ( int i = 0; i < numberOfOrigins; ++i ) {
+					OriginPtr org = ep->origin(i);
+					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+					org = process(org.get());
+					if ( org ) {
+						if ( replace ) {
+							ep->removeOrigin(i);
+							--i;
+							--numberOfOrigins;
+						}
+
+						ep->add(org.get());
+					}
+				}
+
+				ar.create("-");
+				ar.setFormattedOutput(true);
+				ar << ep;
+				ar.close();
 
 				return true;
 			}
@@ -368,6 +422,7 @@ class Reloc : public Client::Application {
 		ObjectLog                 *_outputOrgs;
 		bool                       _useWeight;
 		std::string                _originEvaluationMode;
+		std::string                _epFile;
 };
 
 
