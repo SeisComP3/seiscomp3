@@ -141,6 +141,10 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void magnitudeCreated(Seiscomp::DataModel::Magnitude*);
 		void amplitudesConfirmed(Seiscomp::DataModel::Origin*, QList<Seiscomp::DataModel::AmplitudePtr>);
 		void recalculateMagnitude();
+		void selectChannels();
+		void selectChannelsWithEdit();
+		void activateChannels();
+		void deactivateChannels();
 		void openWaveforms();
 
 		void magnitudesSelected();
@@ -187,8 +191,11 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		                         QList<Seiscomp::DataModel::AmplitudePtr> *amps);
 
 		void computeMagnitude(DataModel::Magnitude *magnitude, const std::string &aggType);
+		bool editSelectionFilter();
+
 
 	private:
+		static void             *_selectionFilter;
 		typedef CalculateAmplitudes::AmplitudeEntry AmplitudeEntry;
 		typedef CalculateAmplitudes::PickAmplitudeMap PickAmplitudeMap;
 		typedef Processing::MagnitudeProcessorFactory::ServiceNames AvailableTypes;

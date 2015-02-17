@@ -638,20 +638,51 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QPushButton" name="btnRecalculate" >
-          <property name="enabled" >
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>4</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QToolButton" name="btnRecalculate" >
+          <property name="toolTip" >
+           <string>Recalculate the network magnitude</string>
           </property>
           <property name="text" >
            <string>Recalculate</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnSelect" >
+          <property name="toolTip" >
+           <string>Selects channels passing the current filter</string>
+          </property>
+          <property name="text" >
+           <string>Select</string>
+          </property>
+          <property name="shortcut" >
+           <string>s</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnActivate" >
+          <property name="toolTip" >
+           <string>Activate selected channels</string>
+          </property>
+          <property name="text" >
+           <string>+</string>
+          </property>
+          <property name="shortcut" >
+           <string>+</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnDeactivate" >
+          <property name="toolTip" >
+           <string>Deactivate selected channels</string>
+          </property>
+          <property name="text" >
+           <string>-</string>
+          </property>
+          <property name="shortcut" >
+           <string>-</string>
           </property>
          </widget>
         </item>
@@ -662,36 +693,22 @@
           </property>
           <property name="sizeHint" >
            <size>
-            <width>501</width>
-            <height>20</height>
+            <width>474</width>
+            <height>29</height>
            </size>
           </property>
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="btnWaveforms" >
-          <property name="enabled" >
-           <bool>true</bool>
-          </property>
+         <widget class="QToolButton" name="btnWaveforms" >
           <property name="text" >
            <string>Waveforms</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnCommit" >
+         <widget class="QToolButton" name="btnCommit" >
           <property name="enabled" >
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>4</hsizetype>
-            <vsizetype>0</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="autoFillBackground" >
            <bool>false</bool>
           </property>
           <property name="text" >
@@ -720,12 +737,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>491</x>
-     <y>742</y>
+     <x>235</x>
+     <y>824</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>603</x>
-     <y>745</y>
+     <x>298</x>
+     <y>823</y>
     </hint>
    </hints>
   </connection>

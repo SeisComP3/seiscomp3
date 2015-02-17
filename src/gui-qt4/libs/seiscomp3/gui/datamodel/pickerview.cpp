@@ -4573,7 +4573,7 @@ void PickerView::openRecordContextMenu(const QPoint &p) {
 	bool needSeparator = !menu.isEmpty();
 
 	if ( !_currentRecord->cursorText().isEmpty() &&
-	          (m->isPick() || (m->isArrival() && m->text() != _currentRecord->cursorText())) ) {
+	     (m->isPick() || (m->isArrival() && m->text() != _currentRecord->cursorText())) ) {
 		if ( needSeparator ) { menu.addSeparator(); needSeparator = false; }
 		createArrival = menu.addAction(QString("Declare %1 arrival").arg(_currentRecord->cursorText()));
 	}
