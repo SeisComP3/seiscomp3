@@ -1925,6 +1925,8 @@ void PickerView::init() {
 	addAction(_ui.actionAlignOnSArrival);
 
 	addAction(_ui.actionToggleFilter);
+	addAction(_ui.actionNextFilter);
+	addAction(_ui.actionPreviousFilter);
 	addAction(_ui.actionMaximizeAmplitudes);
 
 	addAction(_ui.actionPickP);
@@ -2087,6 +2089,10 @@ void PickerView::init() {
 
 	connect(_ui.actionToggleFilter, SIGNAL(triggered(bool)),
 	        this, SLOT(toggleFilter()));
+	connect(_ui.actionNextFilter, SIGNAL(triggered(bool)),
+	        this, SLOT(nextFilter()));
+	connect(_ui.actionPreviousFilter, SIGNAL(triggered(bool)),
+	        this, SLOT(previousFilter()));
 
 	connect(_ui.actionMaximizeAmplitudes, SIGNAL(triggered(bool)),
 	        this, SLOT(scaleVisibleAmplitudes()));
@@ -5696,6 +5702,40 @@ void PickerView::toggleFilter() {
 		_comboFilter->setCurrentIndex(0);
 	else if ( _lastFilterIndex > 0 )
 		_comboFilter->setCurrentIndex(_lastFilterIndex);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::nextFilter() {
+	// Filtering turned off
+	int idx = _comboFilter->currentIndex();
+	if ( idx == 0 ) return;
+
+	++idx;
+	if ( idx >= _comboFilter->count() )
+		idx = 1;
+
+	_comboFilter->setCurrentIndex(idx);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::previousFilter() {
+	// Filtering turned off
+	int idx = _comboFilter->currentIndex();
+	if ( idx == 0 ) return;
+
+	--idx;
+	if ( idx < 1 )
+		idx = _comboFilter->count()-1;
+
+	_comboFilter->setCurrentIndex(idx);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

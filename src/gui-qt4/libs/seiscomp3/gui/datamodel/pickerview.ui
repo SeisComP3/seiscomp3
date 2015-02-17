@@ -1734,6 +1734,22 @@
     <string>Ctrl+P</string>
    </property>
   </action>
+  <action name="actionNextFilter" >
+   <property name="text" >
+    <string>Next filter</string>
+   </property>
+   <property name="shortcut" >
+    <string>g</string>
+   </property>
+  </action>
+  <action name="actionPreviousFilter" >
+   <property name="text" >
+    <string>Previous filter</string>
+   </property>
+   <property name="shortcut" >
+    <string>d</string>
+   </property>
+  </action>
  </widget>
  <pixmapfunction></pixmapfunction>
  <customwidgets>
