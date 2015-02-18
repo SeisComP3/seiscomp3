@@ -52,6 +52,7 @@ class Reloc : public Client::Application {
 			_cache.setTimeSpan(Core::TimeSpan(60*60));
 
 			_useWeight = false;
+			_originEvaluationMode = "AUTOMATIC";
 		}
 
 
@@ -65,7 +66,7 @@ class Reloc : public Client::Application {
 			commandline().addOption("Input", "locator", "the locator type to use", &_locatorType, false);
 			commandline().addOption("Input", "profile", "the locator profile to use", &_locatorProfile, false);
 			commandline().addOption("Input", "use-weight", "use current picks weight", &_useWeight, true);
-			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode", &_originEvaluationMode, false);
+			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode", &_originEvaluationMode, true);
 			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins. "
 			                                       "This option should not be mixed with --dump.", &_epFile);
 			commandline().addOption("Input", "replace", "Used in combination with --ep and defines if origins are to be replaced "
@@ -120,7 +121,7 @@ class Reloc : public Client::Application {
 				_locator->setProfile(_locatorProfile);
 
 			if ( _originEvaluationMode != "AUTOMATIC" && _originEvaluationMode != "MANUAL") {
-				SEISCOMP_ERROR("evaluation-mode should be (AUTOMATIC|MANUAL)");
+				SEISCOMP_ERROR("evaluation-mode must be (AUTOMATIC|MANUAL)");
 				return false;
 			}
 
