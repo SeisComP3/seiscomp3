@@ -133,6 +133,28 @@ struct FreqOption : Application::Option {
 };
 
 
+string toXML(const string &input) {
+	string output;
+
+	for ( size_t i = 0; i < input.size(); ++i ) {
+		if ( input[i] == '&' )
+			output += "&amp;";
+		else if ( input[i] == '\"')
+			output += "&quot;";
+		else if ( input[i] == '\'')
+			output += "&apos;";
+		else if ( input[i] == '<')
+			output += "&lt;";
+		else if ( input[i] == '>')
+			output += "&gt;";
+		else
+			output += input[i];
+	}
+
+	return output;
+}
+
+
 }
 
 #define NEW_OPT(var, ...) addOption(&var, __VA_ARGS__)
@@ -231,6 +253,7 @@ WFParam::Config::Config() {
 	shakeMapOutputPath = "@LOGDIR@/shakemaps";
 	shakeMapOutputScriptWait = true;
 	shakeMapOutputSC3EventID = false;
+	shakeMapOutputRegionName = false;
 
 	waveformOutputPath = "@LOGDIR@/shakemaps/waveforms";
 	waveformOutputEventDirectory = false;
@@ -398,6 +421,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT(_config.shakeMapOutputScript, "wfparam.output.shakeMap.script");
 	NEW_OPT(_config.shakeMapOutputScriptWait, "wfparam.output.shakeMap.synchronous");
 	NEW_OPT(_config.shakeMapOutputSC3EventID, "wfparam.output.shakeMap.SC3EventID");
+	NEW_OPT(_config.shakeMapOutputRegionName, "wfparam.output.shakeMap.regionName");
 	NEW_OPT(_config.magnitudeTolerance, "wfparam.magnitudeTolerance");
 	NEW_OPT_CLI(_config.fExpiry, "Generic", "expiry,x",
 	            "Time span in hours after which objects expire", true);
@@ -2373,7 +2397,7 @@ void WFParam::collectResults() {
 		ofstream of;
 		Core::Time timestamp = Core::Time::GMT();
 		string eventPath, path;
-		string eventID, shakeMapEventID;
+		string eventID, shakeMapEventID, locstring;
 		bool writeToFile = _config.shakeMapOutputPath != "-";
 
 		eventID = generateEventID(evt.get());
@@ -2384,6 +2408,17 @@ void WFParam::collectResults() {
 			shakeMapEventID = evt->publicID();
 		else
 			shakeMapEventID = eventID;
+
+		if ( _config.shakeMapOutputRegionName ) {
+			EventDescriptionPtr ed = evt->eventDescription(EventDescriptionIndex(REGION_NAME));
+			if ( ed )
+				locstring = toXML(ed->text());
+		}
+		else {
+			locstring = evt->publicID() + " / " +
+			            Core::toString(org->latitude().value()) +" / " +
+			            Core::toString(org->longitude().value());
+		}
 
 		if ( writeToFile ) {
 			eventPath = _config.shakeMapOutputPath + eventID + "/";
@@ -2418,8 +2453,7 @@ void WFParam::collectResults() {
 				    << " mag=\"" << mag->magnitude().value() << "\""
 				    << " year=\"" << year << "\" month=\"" << mon << "\" day=\"" << day << "\""
 				    << " hour=\"" << hour << "\" minute=\"" << min << "\" second=\"" << sec << "\" timezone=\"GMT\""
-				    << " locstring=\"" << evt->publicID() << " / "
-				    << org->latitude().value() << " / " << org->longitude().value() << "\""
+				    << " locstring=\"" << locstring << "\""
 				    << " created=\"" << Core::Time::GMT().seconds() << "\"/>"
 				    << endl;
 			}
