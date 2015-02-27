@@ -821,6 +821,22 @@ void WFParam::done() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void WFParam::handleMessage(Core::Message *msg) {
+	// Each message is taken as an transaction.
+	_todos.clear();
+
+	Application::handleMessage(msg);
+
+	Todos::iterator it;
+	for ( it = _todos.begin(); it != _todos.end(); ++it )
+		addProcess(it->get());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void WFParam::addObject(const string& parentID, DataModel::Object* object) {
 	updateObject(parentID, object);
 }
@@ -845,8 +861,15 @@ void WFParam::updateObject(const string &parentID, Object* object) {
 
 	Event *event = Event::Cast(object);
 	if ( event ) {
-		addProcess(event);
-		return;
+		if ( !event->registered() ) {
+			EventPtr cached = Event::Find(event->publicID());
+			if ( cached ) {
+				_todos.insert(cached.get());
+				return;
+			}
+		}
+
+		_todos.insert(event);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -974,6 +997,8 @@ void WFParam::handleTimeout() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool WFParam::addProcess(DataModel::Event *evt) {
+	_cache.feed(evt);
+
 	if ( !_config.eventID.empty() && (evt->publicID() != _config.eventID) ) {
 		SEISCOMP_NOTICE("%s: event ignored: only event %s is allowed for processing",
 		                evt->publicID().c_str(), _config.eventID.c_str());
@@ -2410,6 +2435,10 @@ void WFParam::collectResults() {
 			shakeMapEventID = eventID;
 
 		if ( _config.shakeMapOutputRegionName ) {
+			// Load event descriptions if not already there
+			if ( query() && evt->eventDescriptionCount() == 0 )
+				query()->loadEventDescriptions(evt.get());
+
 			EventDescriptionPtr ed = evt->eventDescription(EventDescriptionIndex(REGION_NAME));
 			if ( ed )
 				locstring = toXML(ed->text());
