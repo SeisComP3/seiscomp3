@@ -2450,7 +2450,7 @@ void WFParam::collectResults() {
 		}
 
 		if ( writeToFile ) {
-			eventPath = _config.shakeMapOutputPath + eventID + "/";
+			eventPath = _config.shakeMapOutputPath + shakeMapEventID + "/";
 			path = eventPath + "input";
 			if ( !Util::pathExists(path) ) {
 				if ( !Util::createPath(path) ) {
