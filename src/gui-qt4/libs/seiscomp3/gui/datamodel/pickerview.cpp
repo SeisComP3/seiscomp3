@@ -62,6 +62,8 @@
 #define SET_PICKED_COMPONENT
 //#define CENTER_SELECTION
 
+#define COMP_NO_METADATA '\0'
+
 
 using namespace Seiscomp;
 using namespace Seiscomp::DataModel;
@@ -80,6 +82,7 @@ namespace {
 char ZNE_COMPS[3] = {'Z', 'N', 'E'};
 char ZRT_COMPS[3] = {'Z', 'R', 'T'};
 char ZH_COMPS[3] = {'Z', 'H', '-'};
+char Z12_COMPS[3] = {'Z', '1', '2'};
 
 
 MAKEENUM(
@@ -4872,18 +4875,24 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 		getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time());
 		if ( tc.comps[ThreeComponents::Vertical] )
 			comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
-		else
+		else {
 			allComponents = false;
+			comps[0] = COMP_NO_METADATA;
+		}
 
 		if ( tc.comps[ThreeComponents::FirstHorizontal] )
 			comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
-		else
+		else {
 			allComponents = false;
+			comps[1] = COMP_NO_METADATA;
+		}
 
 		if ( tc.comps[ThreeComponents::SecondHorizontal] )
 			comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
-		else
+		else {
 			allComponents = false;
+			comps[2] = COMP_NO_METADATA;
+		}
 
 		label->latitude = loc->latitude();
 		label->longitude = loc->longitude();
@@ -4956,9 +4965,10 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 	if ( theoreticalArrivals )
 		addTheoreticalArrivals(item, streamID.networkCode(), streamID.stationCode(), streamID.locationCode());
 
-	queueStream(distance, setWaveformIDComponent(streamID, comps[0]), 'Z');
-	queueStream(distance, setWaveformIDComponent(streamID, comps[1]), '1');
-	queueStream(distance, setWaveformIDComponent(streamID, comps[2]), '2');
+	for ( int i = 0; i < 3; ++i ) {
+		if ( comps[i] == COMP_NO_METADATA ) continue;
+		queueStream(distance, setWaveformIDComponent(streamID, comps[i]), Z12_COMPS[i]);
+	}
 
 	return item;
 }
@@ -5007,14 +5017,18 @@ void PickerView::setupItem(const char comps[3],
 
 	item->widget()->setSlotCount(3);
 
-	item->insertComponent(comps[0], 0);
-	item->insertComponent(comps[1], 1);
-	item->insertComponent(comps[2], 2);
+	for ( int i = 0; i < 3; ++i ) {
+		if ( comps[i] != COMP_NO_METADATA )
+			item->insertComponent(comps[i], i);
+		else
+			item->widget()->setRecordID(i, "No metadata");
+	}
 
 	Client::Inventory *inv = Client::Inventory::Instance();
 	if ( inv ) {
 		std::string channelCode = item->streamID().channelCode().substr(0,2);
 		for ( int i = 0; i < 3; ++i ) {
+			if ( comps[i] == COMP_NO_METADATA ) continue;
 			Processing::Stream stream;
 			try {
 				stream.init(item->streamID().networkCode(),
@@ -5514,25 +5528,25 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 		}
 	}
 
-	switch ( _comboRotation->currentIndex() ) {
-		case RT_Z12:
-			for ( int i = 0; i < item->widget()->slotCount(); ++i )
-				_currentRecord->setRecordID(i, QString("%1").arg(item->mapSlotToComponent(i)));
-			break;
-		case RT_ZNE:
-			for ( int i = 0; i < item->widget()->slotCount(); ++i )
-				_currentRecord->setRecordID(i, QString("%1").arg(ZNE_COMPS[i]));
-			break;
-		case RT_ZRT:
-			for ( int i = 0; i < item->widget()->slotCount(); ++i )
-				_currentRecord->setRecordID(i, QString("%1").arg(ZRT_COMPS[i]));
-			break;
-		case RT_ZH:
-			for ( int i = 0; i < item->widget()->slotCount(); ++i )
-				_currentRecord->setRecordID(i, QString("%1").arg(ZH_COMPS[i]));
-			break;
-	}
+	for ( int i = 0; i < item->widget()->slotCount(); ++i ) {
+		char code = _recordView->currentItem()->mapSlotToComponent(i);
+		if ( code == '?' ) continue;
 
+		switch ( _comboRotation->currentIndex() ) {
+			case RT_Z12:
+				_currentRecord->setRecordID(i, QString("%1").arg(code));
+				break;
+			case RT_ZNE:
+				_currentRecord->setRecordID(i, QString("%1").arg(ZNE_COMPS[i]));
+				break;
+			case RT_ZRT:
+				_currentRecord->setRecordID(i, QString("%1").arg(ZRT_COMPS[i]));
+				break;
+			case RT_ZH:
+				_currentRecord->setRecordID(i, QString("%1").arg(ZH_COMPS[i]));
+				break;
+		}
+	}
 
 	if ( cha.size() > 2 )
 		cha[cha.size()-1] = component;
@@ -7448,23 +7462,24 @@ void PickerView::changeRotation(int index) {
 	if ( _recordView->currentItem() ) {
 		updateItemLabel(_recordView->currentItem(), _recordView->currentItem()->currentComponent());
 
-		switch ( index ) {
-			case RT_Z12:
-				for ( int i = 0; i < _currentRecord->slotCount(); ++i )
-					_currentRecord->setRecordID(i, QString("%1").arg(_recordView->currentItem()->mapSlotToComponent(i)));
-				break;
-			case RT_ZNE:
-				for ( int i = 0; i < _currentRecord->slotCount(); ++i )
+		for ( int i = 0; i < _currentRecord->slotCount(); ++i ) {
+			char code = _recordView->currentItem()->mapSlotToComponent(i);
+			if ( code == '?' ) continue;
+
+			switch ( index ) {
+				case RT_Z12:
+					_currentRecord->setRecordID(i, QString("%1").arg(code));
+					break;
+				case RT_ZNE:
 					_currentRecord->setRecordID(i, QString("%1").arg(ZNE_COMPS[i]));
-				break;
-			case RT_ZRT:
-				for ( int i = 0; i < _currentRecord->slotCount(); ++i )
+					break;
+				case RT_ZRT:
 					_currentRecord->setRecordID(i, QString("%1").arg(ZRT_COMPS[i]));
-				break;
-			case RT_ZH:
-				for ( int i = 0; i < _currentRecord->slotCount(); ++i )
+					break;
+				case RT_ZH:
 					_currentRecord->setRecordID(i, QString("%1").arg(ZH_COMPS[i]));
-				break;
+					break;
+			}
 		}
 
 		_currentRecord->update();
