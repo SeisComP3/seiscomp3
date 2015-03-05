@@ -128,10 +128,10 @@ void AmpTool::createCommandLineDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool AmpTool::validateParameters() {
-	if ( !_originID.empty() )
-		setMessagingEnabled(false);
-
 	_testMode = commandline().hasOption("test");
+
+	if ( !_originID.empty() && _testMode )
+		setMessagingEnabled(false);
 
 	return true;
 }
