@@ -95,18 +95,21 @@ bool CombinedConnection::setSource(std::string serverloc) {
 
 	// Find first slash
 	p1 = serverloc.find('/');
+	string type1;
+
 	if ( p1 == string::npos ) {
-		SEISCOMP_ERROR("Invalid RecordStream URL '%s': missing type separator '/'",
-		               serverloc.c_str());
-		throw RecordStreamException("Invalid RecordStream URL");
+		type1 = "slink";
+		p1 = 0;
+	}
+	else {
+		type1 = serverloc.substr(0, p1);
+		// Move behind '/'
+		++p1;
 	}
 
-	string type1 = serverloc.substr(0, p1);
 	string source1;
 
 	// Extract source1
-	// Move behind '/'
-	++p1;
 	if ( p1 >= serverloc.size() ) {
 		SEISCOMP_ERROR("Invalid RecordStream URL '%s': missing second source",
 		               serverloc.c_str());
@@ -148,19 +151,21 @@ bool CombinedConnection::setSource(std::string serverloc) {
 	}
 
 	// Find first slash
+	string type2;
 	p2 = serverloc.find('/', p1);
 	if ( p2 == string::npos ) {
-		SEISCOMP_ERROR("Invalid RecordStream URL '%s': missing type separator for 2nd source '/'",
-		               serverloc.c_str());
-		throw RecordStreamException("Invalid RecordStream URL");
+		type2 = "arclink";
+		p2 = p1;
+	}
+	else {
+		type2 = serverloc.substr(p1, p2-p1);
+		// Move behind '/'
+		++p2;
 	}
 
-	string type2 = serverloc.substr(p1, p2-p1);
 	string source2;
 
 	// Extract source2
-	// Move behind '/'
-	++p2;
 	// source2 can be empty
 	if ( p2 < serverloc.size() ) {
 		p1 = p2;
