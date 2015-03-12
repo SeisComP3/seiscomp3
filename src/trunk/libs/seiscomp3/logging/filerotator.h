@@ -48,9 +48,16 @@ class SC_SYSTEM_CORE_API FileRotatorOutput : public FileOutput {
 
 
 	protected:
+		//! time span to keep one log
 		int _timeSpan;
+
+		//! number of log files to keep
 		int _historySize;
+
+		//! last log file written to
 		int _lastInterval;
+
+		boost::mutex outputMutex;
 };
 
 
