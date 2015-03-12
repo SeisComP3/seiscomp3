@@ -61,8 +61,6 @@ bool StationConfig::read(const std::string &fname)
 const StationConfig::Entry&
 StationConfig::get(const string &net, const string &sta) const
 {
-	string key = net+" "+sta;
-
 	vector<string> patterns;
 	patterns.push_back(net + " " + sta);
 	patterns.push_back(net + " *");
@@ -79,7 +77,7 @@ StationConfig::get(const string &net, const string &sta) const
 
 		const Entry &e = (*mit).second;
 		SEISCOMP_DEBUG("Station %-8s pattern %-8s config: usage=%d maxnucdist=%g",
-			       (net + " " + sta).c_str(), pattern.c_str(), e.usage, e.maxNucDist);
+		               (net + " " + sta).c_str(), pattern.c_str(), e.usage, e.maxNucDist);
 
 		return e;
 	}

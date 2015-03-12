@@ -46,8 +46,13 @@ namespace Autoloc {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 App::App(int argc, char **argv)
- : Application(argc, argv), Autoloc3() {
-
+: Application(argc, argv), Autoloc3()
+, objectCount(0)
+, _inputPicks(NULL)
+, _inputAmps(NULL)
+, _inputOrgs(NULL)
+, _outputOrgs(NULL)
+{
 	setMessagingEnabled(true);
 	setLoadStationsEnabled(true);
 
