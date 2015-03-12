@@ -563,6 +563,7 @@ class DatabaseArchive(Observer):
     def getObject(self, *args): return _DataModel.DatabaseArchive_getObject(self, *args)
     def getObjects(self, *args): return _DataModel.DatabaseArchive_getObjects(self, *args)
     def getObjectCount(self, *args): return _DataModel.DatabaseArchive_getObjectCount(self, *args)
+    def parentPublicID(self, *args): return _DataModel.DatabaseArchive_parentPublicID(self, *args)
     def write(self, *args): return _DataModel.DatabaseArchive_write(self, *args)
     def update(self, *args): return _DataModel.DatabaseArchive_update(self, *args)
     def remove(self, *args): return _DataModel.DatabaseArchive_remove(self, *args)
