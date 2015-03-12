@@ -15,23 +15,26 @@ class SeedlinkPluginHandler:
     host = seedlink._get('sources.scream_ring.address')
     try: tcpport = int(seedlink.param('sources.scream_ring.tcpport'))
     except: tcpport = 1567
-    try: udpport = int(seedlink.param('sources.scream_ring.udpport'))
-    except: udpport = 1567
+    try: port = int(seedlink.param('sources.scream_ring.port'))
+    except: port = 1567
 
     seedlink.setParam('sources.scream_ring.tcpport', tcpport);
-    seedlink.setParam('sources.scream_ring.udpport', udpport);
+    seedlink.setParam('sources.scream_ring.port', port);
 
-    # Old version allowed to configure scream2sl.map file. This is now
-    # obsolete and channel mappings are part of the binding configuration.
-    #try:
-    #  map = seedlink.param('sources.scream_ring.map')
-    #  if not os.path.isabs(map):
-    #    map = os.path.join(seedlink.config_dir, map)
-    #except: map = os.path.join(seedlink.config_dir, 'scream2sl.map')
+    try: rsize = int(seedlink.param('sources.scream_ring.rsize'))
+    except: rsize = 1000
 
-    #seedlink.setParam('sources.scream_ring.mapFlag',map)
+    seedlink.setParam('sources.scream_ring.rsize', rsize);
 
-    key = (host, tcpport, udpport)
+    try:
+      if seedlink.param('sources.scream_ring.tcp').lower() in ("yes","true","1"):
+        seedlink.setParam('sources.scream_ring.tcpFlag',' -tcp')
+      else:
+        seedlink.setParam('sources.scream_ring.tcpFlag','')
+    except:
+      seedlink.setParam('sources.scream_ring.tcpFlag','')
+
+    key = (host, tcpport, port, seedlink.param('sources.scream_ring.tcpFlag'))
 
     try:
       screamId = self.instances[key]

@@ -142,7 +142,7 @@ class Hypo71 : public LocatorInterface {
 		 */
 		DataModel::Origin*
 		locate(PickList& pickList, double initLat, double initLon,
-		       double initDepth, Core::Time& initTime) throw (Core::GeneralException);
+		       double initDepth, const Core::Time &initTime) throw (Core::GeneralException);
 
 		/**
 		 * @brief  Origin's relocator

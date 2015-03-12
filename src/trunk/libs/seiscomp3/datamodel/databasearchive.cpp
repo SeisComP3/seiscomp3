@@ -859,6 +859,36 @@ size_t DatabaseArchive::getObjectCount(const std::string& parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+std::string DatabaseArchive::parentPublicID(const PublicObject* object) {
+	std::string query;
+	query = "select Parent." + _publicIDColumn +
+	        " from PublicObject as Parent, PublicObject as Child, " +
+	        object->className() +
+	        " where Child._oid=" +
+	        object->className() + "._oid and Parent._oid=" +
+	        object->className() + "._parent_oid and Child." + _publicIDColumn + "='" +
+	        toSQL(object->publicID()) + "'";
+
+	if ( !_db->beginQuery(query.c_str()) ) {
+		SEISCOMP_ERROR("starting query '%s' failed", query.c_str());
+		return "";
+	}
+
+	if ( _db->fetchRow() )
+		query = (const char*)_db->getRowField(0);
+	else
+		query = std::string();
+
+	_db->endQuery();
+
+	return query;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t DatabaseArchive::getObjectCount(const PublicObject* parent,
                                        const Seiscomp::Core::RTTI& classType) {
 	if ( !validInterface() ) {

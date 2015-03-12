@@ -169,6 +169,12 @@
 				<option flag="" long-flag="offline">
 					<description>Do not connect to a messaging server and do not use the database.</description>
 				</option>
+				<option flag="" long-flag="ep">
+					<description>
+						Outputs an XML event parameters file containing all picks and amplitudes.
+						This option implies offline.
+					</description>
+				</option>
 				<option flag="" long-flag="amplitudes" argument="arg" default="1">
 					<description>Enables or disables computation of amplitudes.</description>
 				</option>

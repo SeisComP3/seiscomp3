@@ -41,7 +41,7 @@ public:
 	void addSite(const char* station, float lat, float lon, float elev);
 
 	void addArrival(long arrival_id, const char* station, const char* phase,
-                    double time, float deltime, int defining);
+	                double time, float deltime, int defining);
 	void setArrivalAzimuth(float azimuth, float delaz, int defining);
 	void setArrivalSlowness(float slow, float delslo, int defining);
 
@@ -55,6 +55,8 @@ public:
 	void setOriginErr();
 
 	Loc* getNewLocation();
+
+	void printLocatorParams();
 
 private:
 	Arrival* _arrival;
@@ -72,7 +74,6 @@ private:
 	int _siteCount;
 	int _arrivalCount;
 	int _assocCount;
-	void printLocatorParams();
 
 };
 

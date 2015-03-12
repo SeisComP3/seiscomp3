@@ -445,8 +445,11 @@ class FDSNEvent(resource.Resource):
 			except ValueException: depth = ''
 
 			# author
-			try: author = o.creationInfo().author()
-			except ValueException: author = ''
+			if self._hideAuthor:
+				author = ''
+			else:
+				try: author = o.creationInfo().author()
+				except ValueException: author = ''
 
 			# contributor
 			try: contrib = e.creationInfo().agencyID()
@@ -461,8 +464,11 @@ class FDSNEvent(resource.Resource):
 				if m is not None:
 					mType = m.type()
 					mVal = str(m.magnitude().value())
-					try: mAuthor = m.creationInfo().author()
-					except ValueException: pass
+					if self._hideAuthor:
+						mAuthor = ''
+					else:
+						try: mAuthor = m.creationInfo().author()
+						except ValueException: pass
 
 			# event description
 			dbq.loadEventDescriptions(e)

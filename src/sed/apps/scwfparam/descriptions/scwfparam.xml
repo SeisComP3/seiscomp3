@@ -400,6 +400,18 @@
 							component is saved.
 							</description>
 						</parameter>
+						<parameter name="SC3EventID" type="boolean" default="false">
+							<description>
+							Uses the SeisComP3 event publicID as id attribute of the
+							earthquake tag, a generated ShakeMapID otherwise.
+							</description>
+						</parameter>
+						<parameter name="regionName" type="boolean" default="false">
+							<description>
+							Uses the event region name (if available) for the locstring
+							attribute, the publicID, lat, lon otherwise.
+							</description>
+						</parameter>
 					</group>
 				</group>
 				<parameter name="magnitudeTolerance" type="double" default="0.5">

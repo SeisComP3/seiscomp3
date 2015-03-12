@@ -10,6 +10,7 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 inline int ClientDB::size() const
 {
@@ -41,15 +42,13 @@ inline ClientDB::iterator ClientDB::end()
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-inline ClientInfo::ClientInfo(const ServiceMessage& sm) :
-		_clientStatus(NULL)
-{
-	_clientName = sm.clientName();
-	_privateGroup = sm.privateSenderGroup();
-	_clientType = sm.clientType();
-	_clientPriority = sm.clientPriority();
-	_clientStatus = Communication::ClientStatus::CreateClientStatus(sm.data());
-}
+inline ClientInfo::ClientInfo(const ServiceMessage& sm)
+: _clientName(sm.clientName())
+, _privateGroup(sm.privateSenderGroup())
+, _clientType(sm.clientType())
+, _clientPriority(sm.clientPriority())
+, _clientStatus(Communication::ClientStatus::CreateClientStatus(sm.data()))
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -111,10 +110,10 @@ inline Protocol::ClientType ClientInfo::clientType() const
 
 
 
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 inline Protocol::ClientPriority ClientInfo::clientPriority() const
 {
 	return _clientPriority;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-

@@ -28,12 +28,13 @@ namespace Client {
 
 
 struct Constraints {
-	Constraints() : fixMw(false) {}
+	Constraints() : fixMw(false), fixType(false) {}
 
 	std::string                    preferredMagnitudeType;
 	std::string                    preferredOriginID;
 	std::string                    preferredFocalMechanismID;
 	bool                           fixMw;
+	bool                           fixType;
 	OPT(DataModel::EvaluationMode) preferredOriginEvaluationMode;
 	OPT(DataModel::EvaluationMode) preferredFocalMechanismEvaluationMode;
 

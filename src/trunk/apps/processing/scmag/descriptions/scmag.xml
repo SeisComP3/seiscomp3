@@ -104,6 +104,18 @@
 				<optionReference>database#inventory-db</optionReference>
 				<optionReference>database#db-disable</optionReference>
 			</group>
+
+			<group name="Input">
+				<option long-flag="ep" argument="file">
+					<description>
+					Defines an event parameters XML file to be read and processed. This
+					implies offline mode and only processes all origins contained
+					in that file. It computes magnitudes for all picks associated
+					with an origin where amplitudes are available and outputs an XML
+					file that additionally contains station- and network magnitudes.
+					</description>
+				</option>
+			</group>
 		</command-line>
 	</module>
 </seiscomp>

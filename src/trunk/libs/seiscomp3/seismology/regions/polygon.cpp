@@ -71,6 +71,9 @@ size_t PolyRegions::read(const std::string& location) {
 		return 0;
 	}
 
+	if ( !fs::exists(directory) )
+		return regionCount();
+
 	fs::directory_iterator end_itr;
 
 	try{
@@ -84,7 +87,8 @@ size_t PolyRegions::read(const std::string& location) {
 					SEISCOMP_ERROR("Error reading file: %s", SC_FS_IT_STR(itr).c_str());
 		}
 	}
-	catch (const std::exception& ex){
+	catch (const std::exception &ex) {
+		SEISCOMP_ERROR("Reading regions: %s", ex.what());
 		return regionCount();
 	}
 

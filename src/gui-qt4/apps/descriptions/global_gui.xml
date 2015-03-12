@@ -83,8 +83,14 @@
 						<parameter name="alternateForeground" type="color" default="808080">
 							<description>A general trace color of the alternate trace (eg scheli).</description>
 						</parameter>
-						<parameter name="gaps" type="color" default="FFFF0032">
+						<parameter name="gaps" type="color" default="FFFF0040">
 							<description>The color of data gaps in trace views.</description>
+						</parameter>
+						<parameter name="overlaps" type="color" default="FF00FF40">
+							<description>The color of data overlaps in trace views.</description>
+						</parameter>
+						<parameter name="alignment" type="color" default="FF0000">
+							<description>The color of the alignment marker in trace views.</description>
 						</parameter>
 					</group>
 

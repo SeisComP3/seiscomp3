@@ -120,6 +120,10 @@ void AmpTool::createCommandLineDescription() {
 	commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
 	commandline().addOption("Generic", "origin-id,O", "OriginID to calculate amplitudes for", &_originID, true);
 	commandline().addOption("Generic", "dump-records", "Dumps the filtered traces to ASCII when using -O");
+
+	commandline().addGroup("Input");
+	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
+	                        &_epFile);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -128,10 +132,16 @@ void AmpTool::createCommandLineDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool AmpTool::validateParameters() {
-	if ( !_originID.empty() )
+	_testMode = commandline().hasOption("test");
+
+	if ( !_originID.empty() && _testMode )
 		setMessagingEnabled(false);
 
-	_testMode = commandline().hasOption("test");
+	if ( !_epFile.empty() ) {
+		setMessagingEnabled(false);
+		if ( !isInventoryDatabaseEnabled() && !isConfigDatabaseEnabled() )
+			setDatabaseEnabled(false, false);
+	}
 
 	return true;
 }
@@ -247,6 +257,42 @@ bool AmpTool::run() {
 		_fetchMissingAmplitudes = false;
 		query()->loadArrivals(org.get());
 		process(org.get());
+		return true;
+	}
+
+	if ( !_epFile.empty() ) {
+		_fetchMissingAmplitudes = false;
+
+		// Disable database
+		setDatabase(NULL);
+
+		IO::XMLArchive ar;
+		if ( !ar.open(_epFile.c_str()) ) {
+			SEISCOMP_ERROR("Failed to open %s", _epFile.c_str());
+			return false;
+		}
+
+		ar >> _ep;
+		ar.close();
+
+		if ( !_ep ) {
+			SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
+			return false;
+		}
+
+		for ( size_t i = 0; i < _ep->originCount(); ++i ) {
+			OriginPtr org = _ep->origin(i);
+			SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+			process(org.get());
+		}
+
+		ar.create("-");
+		ar.setFormattedOutput(true);
+		ar << _ep;
+		ar.close();
+
+		_ep = NULL;
+
 		return true;
 	}
 
@@ -861,6 +907,8 @@ void AmpTool::emitAmplitude(const AmplitudeProcessor *proc,
 	}
 	else if ( !_originID.empty() || _testMode )
 		cerr << *amp << endl;
+	else if ( _ep )
+		_ep->add(amp.get());
 
 	// Store the amplitude for pickID
 	feed(amp.get());

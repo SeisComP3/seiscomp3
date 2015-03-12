@@ -1111,6 +1111,12 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 				         numZeros, numZeros + numTaperSamples,
 				         _data.size() - numZeros - numTaperSamples, _data.size() - numZeros);
 			}
+
+			ti += numZeros;
+			noise1i += numZeros;
+			sig0i += numZeros;
+			sig1i += numZeros;
+			n += numZeros;
 		}
 
 		// Compute frequency spectrum of trace
@@ -1263,9 +1269,13 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	// Compute PGV/PGA
 	// -------------------------------------------------------------------
 
+	SEISCOMP_DEBUG(">  computing maxima in time window %s ~ %s",
+	               (_stream.dataTimeWindow.startTime() + Core::TimeSpan(sig0i*dt)).iso().c_str(),
+	               (_stream.dataTimeWindow.startTime() + Core::TimeSpan(sig1i*dt)).iso().c_str());
+
 	// Velocity
 	if ( gainUnit == MeterPerSecond ) {
-		pgvi = find_absmax(sig1i, _data.typedData(), 0, sig1i, 0.0);
+		pgvi = find_absmax(sig1i, _data.typedData(), sig0i, sig1i, 0.0);
 		_pgv = fabs(_data[pgvi]);
 
 		_pga = -1.0;
@@ -1274,7 +1284,7 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 		for ( int i = 1; i < sig1i; ++i ) {
 			double m = (_data[i] - _data[i-1]) * _stream.fsamp;
 			double v = fabs(m);
-			if ( v > _pga ) {
+			if ( (i >= sig0i) && (v > _pga) ) {
 				_pga = v;
 				pgai = i;
 			}
@@ -1299,7 +1309,7 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 			//of << dt*i << "\t" << _data[i] << "\t" << sum << endl;
 			double v = fabs(sum);
 
-			if ( v > _pgv ) {
+			if ( (i >= sig0i) && (v > _pgv) ) {
 				pgvi = i;
 				_pgv = v;
 			}

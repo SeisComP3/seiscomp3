@@ -127,7 +127,7 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		DataModel::Origin* locate(PickList& pickList) throw(Core::GeneralException);
 		DataModel::Origin* locate(PickList& pickList,
 		                          double initLat, double initLon, double initDepth,
-		                          Seiscomp::Core::Time& initTime) throw(Core::GeneralException);
+		                          const Seiscomp::Core::Time& initTime) throw(Core::GeneralException);
 
 		DataModel::Origin* relocate(const DataModel::Origin* origin) throw(Core::GeneralException);
 

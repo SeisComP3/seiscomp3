@@ -459,14 +459,16 @@ void Diff2::createLogNodes(LogNode *rootLogNode, const string &rootID,
 		if ( po ) {
 			const string &pID = po->publicID();
 			PublicIDNodes::iterator it = nodeMap.find(pID);
-			if ( it == nodeMap.end() )
-				nodeMap[pID] = parentLogNode->addChild(o2t(o), op);
+			if ( it == nodeMap.end() ) {
+				if ( parentLogNode )
+					nodeMap[pID] = parentLogNode->addChild(o2t(o), op);
+			}
 			else {
 				it->second->setTitle(o2t(o));
 				it->second->setMessage(op);
 			}
 		}
-		else
+		else if ( parentLogNode )
 			parentLogNode->addChild(o2t(o), op);
 	}
 }

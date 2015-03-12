@@ -1000,7 +1000,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* NLLocator::locate(PickList& pickList,
                            double initLat, double initLon, double initDepth,
-                           Time &initTime) throw(Core::GeneralException) {
+                           const Time &initTime) throw(Core::GeneralException) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

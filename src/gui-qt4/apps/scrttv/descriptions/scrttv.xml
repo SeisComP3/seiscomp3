@@ -25,6 +25,13 @@
 					Defines the filter to be used when filtering is activated.
 				</description>
 			</parameter>
+			<parameter name="filters" type="list:string">
+				<description>
+					Defines a list of filters that is cycles through when pressing 'f'.
+					This options supersedes the filter option. If not defined then
+					filter is used instead.
+				</description>
+			</parameter>
 			<parameter name="bufferSize" type="int" unit="s" default="1800">
 				<description>
 					Defines the buffer size in seconds of the ring bu of each trace.

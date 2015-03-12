@@ -52,6 +52,8 @@ void FileRotatorOutput::log(const char* channelName,
                             LogLevel level,
                             const char* msg,
                             time_t time) {
+	boost::mutex::scoped_lock l(outputMutex);
+
 	int currentInterval = (int)(time / (time_t)_timeSpan);
 
 	if ( _lastInterval == -1 )

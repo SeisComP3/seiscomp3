@@ -495,9 +495,6 @@ class Autoloc3 {
 		Time     _now;
 		Time     _nextCleanup;
 
-		// time until which to wait before sending most recent Origin
-		Time     _nextReport;
-
 	protected:
 		typedef std::map<std::string, PickCPtr> PickMap;
 		PickMap  _pick;

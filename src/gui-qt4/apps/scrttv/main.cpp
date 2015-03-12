@@ -26,7 +26,7 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 	public:
 		TraceViewApp(int& argc, char** argv, int flags = DEFAULT) :
 		  Kicker<Seiscomp::Applications::TraceView::MainWindow>(argc, argv, flags) {
-			_filterName = "BW(3, 0.5, 10.0)";
+			_filterNames.push_back("BW(3,0.5,10.0)");
 			_initStartTime = false;
 			_automaticResort = true;
 			_showPicks = true;
@@ -117,14 +117,19 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 			}
 
 			try {
-				_filterName = configGetString("filter");
+				_filterNames = configGetStrings("filters");
 			}
-			catch ( ... ) {}
+			catch ( ... ) {
+				try {
+					_filterNames.push_back(configGetString("filter"));
+				}
+				catch ( ... ) {}
+			}
 
-			try {
-				_filterName = commandline().option<std::string>("filter");
+			if ( commandline().hasOption("filter") ) {
+				_filterNames.clear();
+				_filterNames.push_back(commandline().option<std::string>("filter"));
 			}
-			catch ( ... ) {}
 
 			try {
 				std::string dt = SCApp->commandline().option<std::string>("end-time");
@@ -164,12 +169,12 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 			w->setShowPicks(_showPicks);
 			w->setInventoryEnabled(_inventoryEnabled);
 			w->start();
-			w->setFilterByName(_filterName);
+			w->setFiltersByName(_filterNames);
 		}
 
 	private:
 		int _maxDelay;
-		std::string _filterName;
+		std::vector<std::string> _filterNames;
 		Seiscomp::Core::Time _endTime;
 		bool _initStartTime;
 		bool _automaticResort;

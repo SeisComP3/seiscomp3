@@ -119,6 +119,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 
 		typedef std::map<std::string, Seiscomp::Processing::StreamPtr>        StreamMap;
 		typedef Seiscomp::DataModel::PublicObjectTimeSpanBuffer               Cache;
+		typedef Seiscomp::DataModel::EventParametersPtr                       EventParametersPtr;
 
 		StreamMap                  _streams;
 		double                     _fExpiry;
@@ -139,6 +140,8 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		bool                       _testMode;
 		bool                       _firstRecord;
 		bool                       _dumpRecords;
+		std::string                _epFile;
+		EventParametersPtr         _ep;
 
 		int                        _acquisitionTimeout;
 		bool                       _hasRecordsReceived;

@@ -35,6 +35,25 @@ using namespace Seiscomp::IO;
 
 const TimeSpan DefaultRealtimeAvailability = 3600;
 
+
+namespace {
+
+
+size_t findClosingParenthesis(const string &s, size_t p) {
+	int cnt = 1;
+	for ( size_t i = p; i < s.size(); ++i ) {
+		if ( s[i] == '(' ) ++cnt;
+		else if ( s[i] == ')' ) --cnt;
+		if ( !cnt ) return i;
+	}
+
+	return string::npos;
+}
+
+
+}
+
+
 IMPLEMENT_SC_CLASS_DERIVED(CombinedConnection, Seiscomp::IO::RecordStream,
                            "CombinedConnection");
 
@@ -65,99 +84,222 @@ bool CombinedConnection::setRecordType(const char* type) {
 }
 
 bool CombinedConnection::setSource(std::string serverloc) {
-	// read optional parameters for combined source, separated by '??' after
-	// last URL
-	size_t param_sep = serverloc.find("??");
-	if ( param_sep == string::npos )
-		param_sep = serverloc.length();
+	size_t p1,p2;
+
+	/*
+	 * Format of source is:
+	 *  type1/source1;type2/source2
+	 * where
+	 *  sourceN is either source or (source)
+	 */
+
+	// Find first slash
+	p1 = serverloc.find('/');
+	string type1;
+
+	if ( p1 == string::npos ) {
+		type1 = "slink";
+		p1 = 0;
+	}
 	else {
-		string params = serverloc.substr(param_sep+2);
-		serverloc.erase(param_sep);
+		type1 = serverloc.substr(0, p1);
+		// Move behind '/'
+		++p1;
+	}
 
-		vector<string> toks;
-		Core::split(toks, params.c_str(), "&");
-		if ( !toks.empty() ) {
-			for ( std::vector<std::string>::iterator it = toks.begin();
-			      it != toks.end(); ++it ) {
-				std::string name, value;
+	string source1;
 
-				size_t pos = it->find('=');
-				if ( pos != std::string::npos ) {
-					name = it->substr(0, pos);
-					value = it->substr(pos+1);
+	// Extract source1
+	if ( p1 >= serverloc.size() ) {
+		SEISCOMP_ERROR("Invalid RecordStream URL '%s': missing second source",
+		               serverloc.c_str());
+		throw RecordStreamException("Invalid RecordStream URL");
+	}
+
+	// Source sourrounded by parenthesis
+	if ( serverloc[p1] == '(' ) {
+		++p1;
+		// Find closing parenthesis
+		p2 = findClosingParenthesis(serverloc, p1);
+		if ( p2 == string::npos ) {
+			SEISCOMP_ERROR("Invalid RecordStream URL '%s': expected closing parenthesis",
+			               serverloc.c_str());
+			throw RecordStreamException("Invalid RecordStream URL");
+		}
+
+		source1 = serverloc.substr(p1, p2-p1);
+		++p2;
+
+		if ( p2 >= serverloc.size() || serverloc[p2] != ';' ) {
+			SEISCOMP_ERROR("Invalid RecordStream URL '%s': expected ';' at %d",
+			               serverloc.c_str(), (int)p2);
+			throw RecordStreamException("Invalid RecordStream URL");
+		}
+
+		p1 = p2+1;
+	}
+	else {
+		p2 = serverloc.find(';', p1);
+		if ( p2 == string::npos ) {
+			SEISCOMP_ERROR("Invalid RecordStream URL '%s': missing second source, expected ';'",
+			               serverloc.c_str());
+			throw RecordStreamException("Invalid RecordStream URL");
+		}
+
+		source1 = serverloc.substr(p1, p2-p1);
+		p1 = p2+1;
+	}
+
+	// Find first slash
+	string type2;
+	p2 = serverloc.find('/', p1);
+	if ( p2 == string::npos ) {
+		type2 = "arclink";
+		p2 = p1;
+	}
+	else {
+		type2 = serverloc.substr(p1, p2-p1);
+		// Move behind '/'
+		++p2;
+	}
+
+	string source2;
+
+	// Extract source2
+	// source2 can be empty
+	if ( p2 < serverloc.size() ) {
+		p1 = p2;
+		// Source sourrounded by parenthesis
+		if ( serverloc[p1] == '(' ) {
+			++p1;
+			// Find closing parenthesis
+			p2 = findClosingParenthesis(serverloc, p1);
+			if ( p2 == string::npos ) {
+				SEISCOMP_ERROR("Invalid RecordStream URL '%s': expected closing parenthesis",
+				               serverloc.c_str());
+				throw RecordStreamException("Invalid RecordStream URL");
+			}
+
+			source2 = serverloc.substr(p1, p2-p1);
+			p1 = p2+1;
+		}
+		else {
+			p2 = serverloc.find("??", p1);
+			if ( p2 == string::npos )
+				source2 = serverloc.substr(p1);
+			else
+				source2 = serverloc.substr(p1, p2-p1);
+			p1 = p2;
+		}
+	}
+
+	string params;
+	if ( (p1 <= serverloc.size()-2) && !serverloc.compare(p1,2,"??") )
+		params = serverloc.substr(p1+2);
+	else if ( p1 < serverloc.size() ) {
+		SEISCOMP_ERROR("Invalid RecordStream URL '%s': undefined trailing content '%s'",
+		               serverloc.c_str(), serverloc.c_str()+p1);
+		throw RecordStreamException("Invalid RecordStream URL");
+	}
+
+	vector<string> toks;
+	Core::split(toks, params.c_str(), "&");
+	if ( !toks.empty() ) {
+		for ( std::vector<std::string>::iterator it = toks.begin();
+		      it != toks.end(); ++it ) {
+			std::string name, value;
+
+			size_t pos = it->find('=');
+			if ( pos != std::string::npos ) {
+				name = it->substr(0, pos);
+				value = it->substr(pos+1);
+			}
+			else {
+				name = *it;
+				value = "";
+			}
+
+			if ( name == "slinkMax" || name == "rtMax" || name == "1stMax" ) {
+				if ( value.empty() ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' is empty",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
 				}
-				else {
-					name = *it;
-					value = "";
+
+				double number;
+				double multiplicator = 1.0;
+
+				char last = *value.rbegin();
+				switch ( last ) {
+					case 's':
+						// seconds
+						break;
+					case 'm':
+						// minutes
+						multiplicator = 60;
+						break;
+					case 'h':
+						// hours
+						multiplicator = 3600;
+					case 'd':
+						// days
+						multiplicator = 86400;
+						break;
+					case 'w':
+						// weeks
+						multiplicator = 86400*7;
+						break;
+					default:
+						break;
 				}
 
-				if ( name == "slinkMax" || name == "rtMax" ) {
-					double seconds;
-					if ( !Core::fromString(seconds, value) ) {
-						SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
-						               "value of parameter '%s' not number",
-						               serverloc.c_str(), name.c_str());
-						throw RecordStreamException("Invalid RecordStream URL");
-					}
+				if ( multiplicator > 1.0 )
+					value.resize(value.size()-1);
 
-					SEISCOMP_DEBUG("setting realtime availability to %f",
-					               seconds);
-					_realtimeAvailability = Core::TimeSpan(seconds);
+				if ( !Core::fromString(number, value) ) {
+					SEISCOMP_ERROR("Invalid RecordStream URL '%s', "
+					               "value of parameter '%s' not number",
+					               serverloc.c_str(), name.c_str());
+					throw RecordStreamException("Invalid RecordStream URL");
 				}
+
+				SEISCOMP_DEBUG("setting realtime availability to %f (v:%f, m:%f)",
+				               number*multiplicator, number, multiplicator);
+				_realtimeAvailability = Core::TimeSpan(number*multiplicator);
 			}
 		}
 	}
 
-	// read URLs
-	size_t sep = serverloc.find(';');
-	if ( sep == string::npos || serverloc.find(';', sep+1) != string::npos ) {
-		SEISCOMP_ERROR("Invalid RecordStream URL '%s': exact 2 sources "
-		               "separated by ';' required", serverloc.c_str());
-		throw RecordStreamException("Invalid RecordStream URL");
-	}
-	if ( param_sep < sep ) {
-		SEISCOMP_ERROR("Invalid RecordStream URL '%s': parameter separator "
-		               "'\?\?' found before source separator ';'",
-		               serverloc.c_str());
-		throw RecordStreamException("invalid address format");
-	}
+	SEISCOMP_DEBUG("Type1   : %s", type1.c_str());
+	SEISCOMP_DEBUG("Source1 : %s", source1.c_str());
+	SEISCOMP_DEBUG("Type2   : %s", type2.c_str());
+	SEISCOMP_DEBUG("Source2 : %s", source2.c_str());
+	SEISCOMP_DEBUG("Params  : %s", params.c_str());
 
-	string rtSource = serverloc.substr(0, sep);
-	string arSource = serverloc.substr(sep + 1, param_sep - sep - 1);
-	string service;
-
-	// Change realtime stream if specified
-	sep = rtSource.find("/");
-	if ( sep != string::npos ) {
-		service = rtSource.substr(0, sep);
-		rtSource = sep+1 < rtSource.length() ? rtSource.substr(sep+1) : "";
-		IO::RecordStream *stream = IO::RecordStream::Create(service.c_str());
-		if ( !stream ) {
-			string msg = "Could not create realtime RecordStream: " + service;
-			SEISCOMP_ERROR_S(msg);
-			throw new RecordStreamException(msg);
-		}
-		else
-			_realtime = stream;
+	_realtime = IO::RecordStream::Create(type1.c_str());
+	if ( !_realtime ) {
+		string msg = "Could not create realtime RecordStream: " + type1;
+		SEISCOMP_ERROR_S(msg);
+		throw new RecordStreamException(msg);
 	}
 
-	// Change archive stream if specified
-	sep = arSource.find("/");
-	if ( sep != string::npos ) {
-		service = arSource.substr(0, sep);
-		arSource = sep+1 < arSource.length() ? arSource.substr(sep+1) : "";
-		IO::RecordStream *stream = IO::RecordStream::Create(service.c_str());
-		if ( !stream ) {
-			string msg = "Could not create archive RecordStream: " + service;
-			SEISCOMP_ERROR_S(msg);
-			throw RecordStreamException(msg);
-		}
-		else
-			_archive = stream;
+	_archive = IO::RecordStream::Create(type2.c_str());
+	if ( !_archive ) {
+		string msg = "Could not create archive RecordStream: " + type2;
+		SEISCOMP_ERROR_S(msg);
+		throw RecordStreamException(msg);
 	}
 
-	_realtime->setSource(rtSource);
-	_archive->setSource(arSource);
+	if ( !_realtime->setSource(source1) ) {
+		_realtime = _archive = NULL;
+		return false;
+	}
+
+	if ( !_archive->setSource(source2) ) {
+		_realtime = _archive = NULL;
+		return false;
+	}
 
 	_curtime = Time::GMT();
 	_archiveEndTime = _curtime - _realtimeAvailability;

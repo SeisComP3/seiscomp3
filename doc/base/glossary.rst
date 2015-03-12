@@ -361,8 +361,13 @@ is taken from Modern Global Seismology.
       not PP. According to the long time window and broad frequency range used for amplitude
       measurements mB saturates not like mb.
 
-      In SeisComP3 a static time window of 90 s is actually taken for amplitude measurements
-      at stations in the distance range of 5° to 105°.
+      In SeisComP3 a default time window of 60 s is actually taken for amplitude measurements
+      at stations in the distance range of 5° to 105°. If the distance to the epicenter is
+      known the time window is computed as
+
+      .. math::
+
+         l = min(11.5 \Delta, 60)
 
    magnitude, surface wave (Ms)   
       Ms is a magnitude scale based on teleseismic surface waves. Ms is based on measurements of
@@ -394,7 +399,7 @@ is taken from Modern Global Seismology.
 
          M(JMA) = \log \sqrt{{A_N}^2 + {A_E}^2} + 1.73 \log\Delta - 0.83
 
-      This equation is valid for local (< 2000 km) and shallow (< 60 km) earthquakes. For
+      This equation is valid for local (< 2000 km) and shallow (< 80 km) earthquakes. For
       deeper earthquakes additional correction functions have to be applied (Katsumata, 1996).
 
    magnitude, moment (Mw)   

@@ -295,6 +295,13 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		                      const Seiscomp::Core::RTTI &classType);
 
 		/**
+		 * Returns the publicID of the parent object if any.
+		 * @param object The PublicObject whose parent is queried.
+		 * @return The publicID of the parent or an empty string.
+		 */
+		std::string parentPublicID(const PublicObject* object);
+
+		/**
 		 * Writes an object into the database.
 		 * @param object The object to be written
 		 * @param parentId The publicID of the parent object used

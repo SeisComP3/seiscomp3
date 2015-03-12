@@ -116,6 +116,13 @@
 						Do not dump arrivals part of origins.
 					</description>
 				</option>
+				<option long-flag="ignore-magnitudes">
+					<description>
+						Does not export (network) magnitudes of origins. This
+						option is most useful in combination with -O to only
+						export the location information.
+					</description>
+				</option>
 				<option flag="p" long-flag="preferred-only">
 					<description>
 						When exporting events only the preferred origin, the preferred

@@ -1,11 +1,37 @@
+scdispatch reads an SC3ML file and creates notifier objects for them that
+are sent to the corresponding messaging groups (see :confval:`routingtable`).
+In contrast to :ref:`scdb` which writes SC3ML files directly into the database
+scdispatch uses the messaging bus. If :ref:`scmaster` is configured with
+the database plugin messages will end up in the database as well.
+
+scdispatch can work in two modes. The first mode is used when a concrete
+operation is specified such as *add*, *update* or *remove*. In that case all
+objects in the SC3ML are encapsulated in a notifier with that specific operation
+and sent to the messaging. No check is performed if the object is already in
+the database or not.
+
+In the second mode scdispatch loads the corresponding objects from the database
+and calculates differences. It will then create corresponding notifiers with
+operations *add*, *update* or *remove* and sent them to the messaging. That mode
+is quite close to a sync operation with the exception that top level objects
+(such as origin or event) that are not part of the input SC3ML are left untouched
+in the database. It can be used to synchronize event information from one system
+with another.
+
 Examples
 ========
 
-#. Send all objects from a SC3ML file. The default behavior is to add:
+#. Send different objects from a SC3ML file because the default behavior is to merge:
 
    .. code-block:: sh
 
       scdispatch -i test.xml
+
+#. Send new objects:
+
+   .. code-block:: sh
+
+      scdispatch -i test.xml -O add
 
 #. Send an update:
 
@@ -32,24 +58,17 @@ Examples
 
    .. code-block:: sh
 
-      scdispatch -i test.xml
+      scdispatch -i test.xml -O add
 
    or the event objects can be left out of the routing table, e.g.
 
    .. code-block:: sh
 
-      scdispatch -i test.xml \
+      scdispatch -i test.xml -O add \
                  --routingtable Pick:PICK, \
-                                Arrival:ARRIVAL,Amplitude:AMPLITUDE, \
+                                Amplitude:AMPLITUDE, \
                                 Origin:LOCATION,StationMagnitude:MAGNITUDE, \
-                                StationMagnitudeContribution:MAGNITUDE, \
                                 Magnitude:MAGNITUDE
-
-   .. note:: The routing table approach is slower, scdispatch still has to try
-      to send to the invalid group for each object. It seems that it should be
-      possible to route to Event:NULL or some other non used group but this seems
-      to always result in another Event (the one in the source SC3ML) being sent
-      and loaded. Is this a bug?
 
 
 #. Testing

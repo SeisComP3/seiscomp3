@@ -36,6 +36,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <set>
 
 
 namespace Seiscomp {
@@ -72,6 +73,7 @@ class WFParam : public Application {
 
 		void acquisitionFinished();
 
+		void handleMessage(Core::Message *msg);
 		void addObject(const std::string&, DataModel::Object* object);
 		void updateObject(const std::string&, DataModel::Object* object);
 
@@ -164,6 +166,7 @@ class WFParam : public Application {
 			std::string shakeMapOutputPath;
 			bool        shakeMapOutputScriptWait;
 			bool        shakeMapOutputSC3EventID;
+			bool        shakeMapOutputRegionName;
 
 			bool        enableMessagingOutput;
 
@@ -262,6 +265,7 @@ class WFParam : public Application {
 
 		typedef std::list<ProcessPtr>                            ProcessQueue;
 		typedef std::map<std::string, ProcessPtr>                Processes;
+		typedef std::set<DataModel::EventPtr>                    Todos;
 
 		std::set<std::string>      _processedEvents;
 
@@ -299,6 +303,8 @@ class WFParam : public Application {
 
 		Util::StopWatch            _acquisitionTimer;
 		Util::StopWatch            _noDataTimer;
+
+		Todos                      _todos;
 
 		Logging::Channel *_processingInfoChannel;
 		Logging::Output  *_processingInfoOutput;

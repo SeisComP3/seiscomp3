@@ -1129,10 +1129,9 @@ OriginPtr Autoloc3::_tryNucleate(const Pick *pick)
 
 	// Try to find the best Origin which might belong to same event
 	// TODO avoid the ugly cast...
-	Origin *bestEquivalentOrigin =
-		(Origin*) _origins.bestEquivalentOrigin(newOrigin.get());
+	Origin *bestEquivalentOrigin = const_cast<Origin*>(_origins.bestEquivalentOrigin(newOrigin.get()));
 	
-	if (bestEquivalentOrigin) {
+	if ( bestEquivalentOrigin != NULL ) {
  		double rms = bestEquivalentOrigin->rms(), score = _score(bestEquivalentOrigin);
 
 		OriginPtr temp = merge(bestEquivalentOrigin, newOrigin.get());
@@ -1204,7 +1203,7 @@ bool Autoloc3::_process(const Pick *pick)
 {
 	// process a pick
 
-	if ( ! valid(pick) ) {
+	if ( !valid(pick) ) {
 		SEISCOMP_DEBUG("invalid pick %-35s", pick->id.c_str());
 		return false;
 	}
@@ -1215,7 +1214,7 @@ bool Autoloc3::_process(const Pick *pick)
 	// A pick is tagged as XXL pick if it exceeds BOTH the configured XXL
 	// minimum amplitude and XXL minimum SNR threshold.
 	if ( _config.xxlEnabled && pick->amp >= _config.xxlMinAmplitude && pick->snr > _config.xxlMinSNR ) {
-		((Pick*)pick)->xxl = true;
+		const_cast<Pick*>(pick)->xxl = true;
 	}
 
 	// This has turned out to be too fuzzy a criterion:
@@ -1226,10 +1225,10 @@ bool Autoloc3::_process(const Pick *pick)
 	//	((Pick*)pick)->xxl = true;
 
 	// experimental:
-	((Pick*)pick)->normamp = pick->amp/_config.xxlMinAmplitude;
+	const_cast<Pick*>(pick)->normamp = pick->amp/_config.xxlMinAmplitude;
 
 	if ( automatic(pick) && _tooManyRecentPicks(pick) ) {
-		((Pick*)pick)->status = Pick::IgnoredAutomatic;
+		const_cast<Pick*>(pick)->status = Pick::IgnoredAutomatic;
 		return false;
 	}
 
@@ -1267,24 +1266,25 @@ bool Autoloc3::_process(const Pick *pick)
 
 	// try to associate pick to some existing origin
 
-	OriginPtr origin = 0;
+	OriginPtr origin;
 	origin = _tryAssociate(pick);
-	if (origin) {
+	if ( origin ) {
 		// if we associated the pick with an imported origin, we can stop here
-		if (origin->imported) {
+		if ( origin->imported ) {
 			_store(origin.get());
 			return true;
 		}
 
 		_rework(origin.get());
-		if (_passedFilter(origin.get())) {
+		if ( _passedFilter(origin.get()) ) {
 			_store(origin.get());
 		}
-		else origin = 0;
+		else
+			origin = NULL;
 	}
 
 //	if (associatedOriginLargestScore > _config.mi_reworknScoreBypassNucleator)
-	if (origin && origin->score >= _config.minScoreBypassNucleator)
+	if ( origin && origin->score >= _config.minScoreBypassNucleator )
 		return true;  // bypass the nucleator
 
 	//
@@ -1297,16 +1297,16 @@ bool Autoloc3::_process(const Pick *pick)
 	// each of them until the result is satisfactory.
 	//
 
-	if (origin) {
+	if ( origin ) {
 		// feed the pick to the Nucleator but ignore result
 // XXX XXX XXX		_tryNucleate(pick);
 		return true;
 	}
 
 	origin = _tryNucleate(pick);
-	if (origin) {
+	if ( origin ) {
 		_rework(origin.get());
-		if (_passedFilter(origin.get())) {
+		if ( _passedFilter(origin.get()) ) {
 			_store(origin.get());
 			return true;
 		}
@@ -1316,14 +1316,15 @@ bool Autoloc3::_process(const Pick *pick)
 	// finally try the XXL hack
 
 	origin = _xxlPreliminaryOrigin(pick);
-	if (origin) {
+	if ( origin ) {
 		OriginPtr equivalent = _findEquivalent(origin.get());
 		if (equivalent) {
 			equivalent->updateFrom(origin.get());
 			origin = equivalent;
 		}
+
 		_rework(origin.get());
-		if (_passedFilter(origin.get())) {
+		if ( _passedFilter(origin.get()) ) {
 			_store(origin.get());
 			return true;
 		}

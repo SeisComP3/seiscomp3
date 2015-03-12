@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 11, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 13, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 10) + patch. */
-#define SC_API_VERSION 0x010B00
+#define SC_API_VERSION 0x010D00
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,14 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "1.13.0"  0x010D00
+   - Changed Seiscomp::DataModel::DiffMerge::compareNonArrayProperty signature
+     from Object* to BaseObject *
+   - Added method Seiscomp::DataModel::DatabaseArchive::parentPublicID(...)
+
+ "1.12.0"  0x010C00
+   - Set Seiscomp::Seismology::LocatorInterface::locate(...) initTime to const
+
  "1.11.0"  0x010B00
    - Added const Record * as first parameter to
      Seiscomp::Processing::NCompsOperator<...>::Proc::operator()
