@@ -1883,6 +1883,7 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	_commandWaitDialog = NULL;
 
 	QBoxLayout *l = new QVBoxLayout;
+	l->setMargin(0);
 	_ui.frameList->setLayout(l);
 
 	_treeWidget = new TreeWidget(_ui.frameList);
@@ -4366,6 +4367,7 @@ void EventListView::setControlsHidden(bool hide) {
 
 void EventListView::setCustomControls(QWidget* widget) const {
 	_ui.frameCustomControls->setLayout(new QHBoxLayout());
+	_ui.frameCustomControls->layout()->setMargin(0);
 	_ui.frameCustomControls->layout()->addWidget(widget);
 }
 
