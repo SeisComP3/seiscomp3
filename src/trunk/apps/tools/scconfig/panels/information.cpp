@@ -58,6 +58,8 @@ void InformationPanel::addRow(QTableWidget *t, const QString &name, const QStrin
 	t->insertRow(row);
 	QTableWidgetItem *nameItem = new QTableWidgetItem(name);
 	QTableWidgetItem *valueItem = new QTableWidgetItem(value);
+	nameItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	valueItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	t->setItem(row, 0, nameItem);
 	t->setItem(row, 1, valueItem);
 }
