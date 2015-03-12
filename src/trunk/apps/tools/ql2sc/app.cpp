@@ -402,8 +402,8 @@ void App::diffPO(T *remotePO, const string &parentID, Notifiers &notifiers,
 	// search corresponding object in cache
 	T *localPO = T::Cast(_cache.find(remotePO->typeInfo(), remotePO->publicID()));
 
-	// if object was not found cache but loaded from database, all of its child
-	// objects have to be loaded too
+	// if object was not found in cache but loaded from database, all of its
+	// child objects have to be loaded too
 	if ( localPO && !_cache.cached() && query() ) {
 		query()->load(localPO);
 		PublicObjectCacheFeeder(_cache).feed(localPO, true);
