@@ -37,6 +37,7 @@ class DbPlugin : public MasterPluginInterface {
 	// CONSTRUCTION - DESTRUCTION
 	// --------------------------------------------------------------------------
 public:
+	DbPlugin();
 	virtual ~DbPlugin();
 
 
