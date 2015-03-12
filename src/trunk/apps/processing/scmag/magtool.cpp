@@ -1274,7 +1274,7 @@ bool MagTool::feed(DataModel::Origin *origin) {
 	}
 
 	DataModel::Origin *registered = DataModel::Origin::Find(origin->publicID());
-	if ( registered != origin ) {
+	if ( registered && registered != origin ) {
 		// We already read the origin from the database while processing
 		// historical origins
 

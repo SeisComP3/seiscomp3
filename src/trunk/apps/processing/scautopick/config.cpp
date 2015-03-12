@@ -146,7 +146,7 @@ void Picker::Config::init(const Client::Application *app) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Picker::Config::init(const Client::CommandLine &commandline) {
 	test = commandline.hasOption("test");
-	offline = commandline.hasOption("offline");
+	offline = commandline.hasOption("offline") || commandline.hasOption("ep");
 	dumpRecords = commandline.hasOption("dump-records");
 	sendDetections = commandline.hasOption("send-detections") ? true : sendDetections;
 }
