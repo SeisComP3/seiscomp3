@@ -163,6 +163,22 @@
 					</description>
 				</parameter>
 
+				<parameter name="ignoreFMDerivedOrigins" type="boolean" default="true">
+					<description>
+						Defines whether to associate or to ignore origins derived
+						from CMT/MT inversions.
+					</description>
+				</parameter>
+
+				<parameter name="declareFakeEventForRejectedOrigin" type="boolean" default="false">
+					<description>
+						If the preferred origin has evaluation status 'rejected' the
+						event type will be set as 'not existing' unless the event
+						type has been fixed by an operator or the preferred origin
+						has been fixed.
+					</description>
+				</parameter>
+
 				<parameter name="magTypes" type="list:string" default="mBc, Mw(mB), Mwp, ML, MLh, MLv, mb">
 					<description>
 						Magnitude type priority list for becoming a preferred magnitude for an

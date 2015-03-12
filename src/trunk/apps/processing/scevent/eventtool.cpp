@@ -272,6 +272,7 @@ bool EventTool::initConfiguration() {
 
 	try { _config.delayPrefFocMech = configGetInt("eventAssociation.delayPrefFocMech"); } catch (...) {}
 	try { _config.ignoreMTDerivedOrigins = configGetBool("eventAssociation.ignoreFMDerivedOrigins"); } catch (...) {}
+	try { _config.setAutoEventTypeNotExisting = configGetBool("eventAssociation.declareFakeEventForRejectedOrigin"); } catch (...) {}
 
 	try {
 		Config::StringList blIDs = configGetStrings("processing.blacklist.eventIDs");
@@ -318,6 +319,7 @@ bool EventTool::init() {
 	_config.delayTimeSpan = 0;
 	_config.delayPrefFocMech = 0;
 	_config.ignoreMTDerivedOrigins = true;
+	_config.setAutoEventTypeNotExisting = false;
 
 	if ( !Application::init() ) return false;
 
@@ -1136,43 +1138,70 @@ bool EventTool::handleJournalEntry(DataModel::JournalEntry *entry) {
 	else if ( entry->action() == "EvType" ) {
 		SEISCOMP_DEBUG("...set event type");
 
-		EventType et;
-		if ( !entry->parameters().empty() && !et.fromString(entry->parameters()) ) {
+		OPT(EventType) et;
+		EventType newEt;
+
+		if ( !entry->parameters().empty() && !newEt.fromString(entry->parameters()) ) {
 			response = createEntry(entry->objectID(), entry->action() + "Failed", ":invalid type:");
 		}
 		else {
-			if ( !entry->parameters().empty() ) {
-				info->event->setType(et);
-				response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+			try { et = info->event->type(); }
+			catch ( ... ) {}
+
+			if ( !et && entry->parameters().empty() ) {
+				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+			}
+			else if ( et && !entry->parameters().empty() && *et == newEt ) {
+				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
 			}
 			else {
-				info->event->setType(None);
-				response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+				if ( !entry->parameters().empty() ) {
+					info->event->setType(newEt);
+					response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+				}
+				else {
+					info->event->setType(None);
+					response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+				}
+
+				Notifier::Enable();
+				updateEvent(info->event.get());
+				Notifier::Disable();
 			}
-			Notifier::Enable();
-			updateEvent(info->event.get());
-			Notifier::Disable();
 		}
 	}
 	else if ( entry->action() == "EvTypeCertainty" ) {
 		SEISCOMP_DEBUG("...set event type certainty");
 
-		EventTypeCertainty etc;
-		if ( !entry->parameters().empty() && !etc.fromString(entry->parameters()) ) {
+		OPT(EventTypeCertainty) etc;
+		EventTypeCertainty newEtc;
+
+		if ( !entry->parameters().empty() && !newEtc.fromString(entry->parameters()) ) {
 			response = createEntry(entry->objectID(), entry->action() + "Failed", ":invalid type certainty:");
 		}
 		else {
-			if ( !entry->parameters().empty() ) {
-				info->event->setTypeCertainty(etc);
-				response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+			try { etc = info->event->typeCertainty(); }
+			catch ( ... ) {}
+
+			if ( !etc && entry->parameters().empty() ) {
+				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
+			}
+			else if ( etc && !entry->parameters().empty() && *etc == newEtc ) {
+				response = createEntry(entry->objectID(), entry->action() + "Failed", ":not modified:");
 			}
 			else {
-				info->event->setTypeCertainty(None);
-				response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+				if ( !entry->parameters().empty() ) {
+					info->event->setTypeCertainty(newEtc);
+					response = createEntry(entry->objectID(), entry->action() + "OK", entry->parameters());
+				}
+				else {
+					info->event->setTypeCertainty(None);
+					response = createEntry(entry->objectID(), entry->action() + "OK", ":unset:");
+				}
+				Notifier::Enable();
+				updateEvent(info->event.get());
+				Notifier::Disable();
 			}
-			Notifier::Enable();
-			updateEvent(info->event.get());
-			Notifier::Disable();
 		}
 	}
 	else if ( entry->action() == "EvName" ) {
@@ -2962,6 +2991,60 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 
 		// Processors have been called already
 		callProcessors = false;
+	}
+
+	// If an preferred origin is set and the event type has not been fixed
+	// manually set it to 'not existing' if the preferred origin is rejected.
+	if ( _config.setAutoEventTypeNotExisting &&
+	     info->preferredOrigin &&
+	     !info->constraints.fixType ) {
+		bool isRejected = false;
+		bool notExistingEvent = false;
+
+		try {
+			if ( info->preferredOrigin->evaluationStatus() == REJECTED )
+				isRejected = true;
+		}
+		catch ( ... ) {}
+
+		try {
+			notExistingEvent = info->event->type() == NOT_EXISTING;
+		}
+		catch ( ... ) {}
+
+		if ( isRejected ) {
+			SEISCOMP_INFO("%s: preferred origin is rejected",
+			              info->event->publicID().c_str());
+
+			// User has manually fixed an origin, don't touch the event type
+			if ( info->constraints.fixedOrigin() )
+				notExistingEvent = false;
+
+			if ( !notExistingEvent ) {
+				SEISCOMP_INFO("%s: set type to 'not existing' since preferred origin is rejected",
+				              info->event->publicID().c_str());
+				SEISCOMP_LOG(_infoChannel, "Set type to 'not existing' since preferred origin is rejected in event %s",
+				             info->event->publicID().c_str());
+				info->event->setType(EventType(NOT_EXISTING));
+				update = true;
+			}
+		}
+		else {
+			// User has manually fixed an origin, don't touch the event type
+			if ( info->constraints.fixedOrigin() )
+				notExistingEvent = false;
+
+			// Preferred origin is not rejected, remove the event type if it is
+			// set to 'not existing'
+			if ( notExistingEvent ) {
+				SEISCOMP_INFO("%s: remove type since preferred origin changed to not rejected",
+				              info->event->publicID().c_str());
+				SEISCOMP_LOG(_infoChannel, "Remove type since preferred origin is changed from rejected in event %s",
+				             info->event->publicID().c_str());
+				info->event->setType(None);
+				update = true;
+			}
+		}
 	}
 
 	if ( update ) {
