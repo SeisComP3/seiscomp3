@@ -2952,7 +2952,8 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
-                       double initDepth, Time& initTime) throw (Core::GeneralException) {
+                       double initDepth,
+                       const Time &initTime) throw (Core::GeneralException) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

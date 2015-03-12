@@ -135,7 +135,7 @@ int LocSAT::capabilities() const {
 
 DataModel::Origin* LocSAT::locate(PickList& pickList,
                                   double initLat, double initLon, double initDepth,
-                                  Seiscomp::Core::Time& initTime) throw(Core::GeneralException) {
+                                  const Core::Time &initTime) throw(Core::GeneralException) {
 	if (_locateEvent) delete _locateEvent;
 	_locateEvent = new Internal::LocSAT;
 	_locateEvent->setOrigin(initLat, initLon, initDepth);
