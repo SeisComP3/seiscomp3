@@ -53,18 +53,28 @@
 					File to dispatch to messaging.
 					</description>
 				</option>
-				<option flag="O" long-flag="operation" argument="flag">
+				<option flag="O" long-flag="operation" argument="flag" default="merge">
 					<description>
-					Notifier operation to use if not given: add, update or remove. If the
-					XML contains notifier objects then this operation is used. If just
-					plain objects are given, the operation needs to be specified. The
-					default is &quot;add&quot;.
+					Operation to use: add, update, remove or merge. Merge is special
+					operation and requires a database connection. It will read a
+					corresponding object from the database and calculates the
+					differences which are sent to the messaging. If add, update
+					or remove is specified then all objects in XML are sent with
+					the given operation regardless of their existence in the
+					database or not.
 					</description>
 				</option>
 				<option long-flag="routingtable" argument="flag">
 					<description>
 					Specify routing table as comma separated list of object:group pairs,
-					e.g. &quot;Origin:LOCATION,Arrival:ARRIVAL&quot;.
+					e.g. &quot;Origin:LOCATION,Event:EVENT&quot;. When an objects
+					should be routed to a group and no table entry for that perticular
+					class type is available, all parent objects are checked for
+					valid routing entries and the first found is used. E.g. if only
+					&quot;Origin:LOCATION&quot; is specified but the input file
+					contains also Arrivals which are child objects of Origin then
+					the routing entry of Origin is used because of the parent-child
+					relationship between Origin and Arrival.
 					</description>
 				</option>
 				<option long-flag="print-objects">

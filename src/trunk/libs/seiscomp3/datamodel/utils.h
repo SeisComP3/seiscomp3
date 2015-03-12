@@ -300,8 +300,9 @@ class SC_SYSTEM_CORE_API DiffMerge {
 		                   std::vector<NotifierPtr> &diffList);
 
 		bool equalsIndex(Object *o1, Object *o2);
+		bool compareNonArrayProperty(const Core::BaseObject *o1, const Core::BaseObject *o2);
 		bool compareNonArrayProperty(const Core::MetaProperty* prop,
-		                             const Object *o1, const Object *o2);
+		                             const Core::BaseObject *o1, const Core::BaseObject *o2);
 		void mergeRecursive(Object *o1, Object *o2,
 		                    std::map<std::string, std::string> &idMap);
 

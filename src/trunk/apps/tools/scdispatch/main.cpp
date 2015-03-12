@@ -18,31 +18,31 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/utils/timer.h>
 
+#include <seiscomp3/datamodel/databasearchive.h>
 #include <seiscomp3/datamodel/eventparameters_package.h>
+#include <seiscomp3/datamodel/diff.h>
 
 
 using namespace std;
 using namespace Seiscomp;
+using namespace Seiscomp::DataModel;
 
 
 typedef map<string, string> RoutingTable;
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-class ObjectWriter : protected DataModel::Visitor {
+class BaseObjectDispatcher : protected Visitor {
 	// ----------------------------------------------------------------------
 	//  X'struction
 	// ----------------------------------------------------------------------
 	public:
-		ObjectWriter(Communication::Connection* connection,
-		             DataModel::Operation op,
-		             bool test)
-		 : Visitor(op != DataModel::OP_REMOVE?DataModel::Visitor::TM_TOPDOWN:DataModel::Visitor::TM_BOTTOMUP),
-		   _connection(connection),
-		   _errors(0),
-		   _count(0),
-		   _operation(op),
-		   _test(test) {}
+		BaseObjectDispatcher(Visitor::TraversalMode tm,
+		                     Communication::Connection* connection, bool test)
+		: Visitor(tm)
+		, _connection(connection)
+		, _errors(0)
+		, _count(0)
+		, _test(test) {}
 
 
 	// ----------------------------------------------------------------------
@@ -50,19 +50,19 @@ class ObjectWriter : protected DataModel::Visitor {
 	// ----------------------------------------------------------------------
 	public:
 		//! Does the actual writing
-		bool operator()(DataModel::Object* object) {
-			return (*this)(object, "");
-		}
-
-		bool operator()(DataModel::Object* object, const string& parentID) {
-			cout << parentID << endl;
-			_parentID = parentID;
+		virtual bool operator()(Object *object) {
 			_errors = 0;
 			_count = 0;
+			_loggedObjects.clear();
 
 			object->accept(this);
 
 			return _errors == 0;
+		}
+
+		void setRoutingTable(const RoutingTable &table) {
+			_routingTable.clear();
+			_routingTable = table;
 		}
 
 		//! Returns the number of handled objects
@@ -71,43 +71,13 @@ class ObjectWriter : protected DataModel::Visitor {
 		//! Returns the number of errors while writing
 		int errors() const { return _errors; }
 
-		void setOperation(DataModel::Operation op) {
-			_operation = op;
-		}
-
-		DataModel::Operation operation() const {
-			return _operation;
-		}
-
-		void setRoutingTable(const RoutingTable &table) {
-			_routingTable.clear();
-			_routingTable = table;
-			RoutingTable::const_iterator it = table.begin();
-			for ( ; it != table.end(); it++ )
-				cout << it->first << " : " << it->second << endl;
-		}
-
 
 	// ----------------------------------------------------------------------
-	//  Visitor interface
+	//  Protected interface
 	// ----------------------------------------------------------------------
 	protected:
-		bool visit(DataModel::PublicObject* publicObject) {
-			return write(publicObject);
-		}
-
-		void visit(DataModel::Object* object) {
-			write(object);
-		}
-
-
-	// ----------------------------------------------------------------------
-	//  Implementation
-	// ----------------------------------------------------------------------
-	private:
-		string indent(DataModel::Object *object) {
+		string indent(Object *object) {
 			string tmp;
-			object = object->parent();
 			while ( object->parent() != NULL ) {
 				tmp += "  ";
 				object = object->parent();
@@ -115,25 +85,26 @@ class ObjectWriter : protected DataModel::Visitor {
 			return tmp;
 		}
 
-		bool write(DataModel::Object *object) {
-			if ( SCCoreApp->isExitRequested() ) return false;
+		void logObject(Object *object, Operation op, const std::string &group,
+		               const std::string &additionalIndent = "") {
+			PublicObject *po = PublicObject::Cast(object);
+			if ( po != NULL )
+				_loggedObjects.insert(po->publicID());
 
-			RoutingTable::iterator targetIt = _routingTable.find(object->className());
-			if ( targetIt == _routingTable.end() )
-				return false;
-
-			DataModel::PublicObject *parent = object->parent();
-
-			if ( !parent ) {
-				cerr << "No parent found for object " << object->className() << endl;
-				return false;
+			PublicObject *parent = object->parent();
+			if ( parent != NULL ) {
+				if ( _loggedObjects.find(parent->publicID()) == _loggedObjects.end() )
+					logObject(parent, OP_UNDEFINED, "");
 			}
 
-			cout << char(toupper(_operation.toString()[0])) << "  "
-			     << indent(object)
+			if ( op != OP_UNDEFINED )
+				cout << char(toupper(op.toString()[0]));
+			else
+				cout << ' ';
+
+			cout << "  " << additionalIndent << indent(object)
 			     << object->className() << "(";
 
-			DataModel::PublicObject *po = DataModel::PublicObject::Cast(object);
 			if ( po != NULL )
 				cout << "'" << po->publicID() << "'";
 			else {
@@ -152,7 +123,101 @@ class ObjectWriter : protected DataModel::Visitor {
 				}
 			}
 
-			cout << ")" << endl;
+			cout << ")";
+			if ( !group.empty() )
+				cout << " : " << group;
+			cout << endl;
+		}
+
+
+	// ----------------------------------------------------------------------
+	//  Protected members
+	// ----------------------------------------------------------------------
+	protected:
+		Communication::Connection *_connection;
+		int                        _errors;
+		int                        _count;
+		RoutingTable               _routingTable;
+		bool                       _test;
+		std::set<std::string>      _loggedObjects;
+};
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class ObjectDispatcher : public BaseObjectDispatcher {
+	// ----------------------------------------------------------------------
+	//  X'struction
+	// ----------------------------------------------------------------------
+	public:
+		ObjectDispatcher(Communication::Connection *connection,
+		                 Operation op, bool test)
+		: BaseObjectDispatcher(op != OP_REMOVE?Visitor::TM_TOPDOWN:Visitor::TM_BOTTOMUP,
+		                       connection, test)
+		, _operation(op) {}
+
+
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		bool operator()(Object *object) {
+			_parentID = "";
+			return BaseObjectDispatcher::operator()(object);
+		}
+
+		void setOperation(Operation op) {
+			_operation = op;
+		}
+
+		Operation operation() const {
+			return _operation;
+		}
+
+
+	// ----------------------------------------------------------------------
+	//  Visitor interface
+	// ----------------------------------------------------------------------
+	protected:
+		bool visit(PublicObject* publicObject) {
+			return write(publicObject);
+		}
+
+		void visit(Object* object) {
+			write(object);
+		}
+
+
+	// ----------------------------------------------------------------------
+	//  Implementation
+	// ----------------------------------------------------------------------
+	private:
+		bool write(Object *object) {
+			if ( SCCoreApp->isExitRequested() ) return false;
+
+			PublicObject *parent = object->parent();
+
+			if ( !parent ) {
+				cerr << "No parent found for object " << object->className() << endl;
+				return false;
+			}
+
+			RoutingTable::iterator targetIt = _routingTable.find(object->className());
+			PublicObject *p = parent;
+			while ( (targetIt == _routingTable.end()) && (p != NULL) ) {
+				targetIt = _routingTable.find(p->className());
+				p = p->parent();
+			}
+
+			if ( targetIt == _routingTable.end() ) {
+				cerr << "! No routing for " << object->className() << endl;
+				return false;
+			}
+
+			logObject(object, _operation, targetIt->second);
 
 			_parentID = parent->publicID();
 
@@ -160,8 +225,8 @@ class ObjectWriter : protected DataModel::Visitor {
 
 			if ( _test ) return true;
 
-			DataModel::NotifierMessage notifierMessage;
-			notifierMessage.attach(new DataModel::Notifier(_parentID, _operation, object));
+			NotifierMessage notifierMessage;
+			notifierMessage.attach(new Notifier(_parentID, _operation, object));
 
 			unsigned int counter = 0;
 			while ( counter <= 4 ) {
@@ -187,13 +252,8 @@ class ObjectWriter : protected DataModel::Visitor {
 	// Private data members
 	// ----------------------------------------------------------------------
 	private:
-		Communication::Connection* _connection;
-		string                     _parentID;
-		int                        _errors;
-		int                        _count;
-		DataModel::Operation       _operation;
-		RoutingTable               _routingTable;
-		bool                       _test;
+		string    _parentID;
+		Operation _operation;
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -202,9 +262,194 @@ class ObjectWriter : protected DataModel::Visitor {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-class ObjectCounter : protected DataModel::Visitor {
+class ObjectMerger : public BaseObjectDispatcher {
+	// ----------------------------------------------------------------------
+	//  X'struction
+	// ----------------------------------------------------------------------
 	public:
-		ObjectCounter(DataModel::Object* object) : DataModel::Visitor(), _count(0) {
+		ObjectMerger(Communication::Connection *connection,
+		             DatabaseReader *db, bool test)
+		: BaseObjectDispatcher(Visitor::TM_TOPDOWN, connection, test)
+		, _db(db)
+		, _msgCount(0) {}
+
+
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		bool operator()(Object *object) {
+			_msgCount = 0;
+
+			bool ret = BaseObjectDispatcher::operator()(object);
+
+			flush();
+			return ret;
+		}
+
+
+	// ----------------------------------------------------------------------
+	//  Visitor interface
+	// ----------------------------------------------------------------------
+	protected:
+		bool visit(PublicObject *po) {
+			// Each PublicObject in a single message
+			flush();
+
+			PublicObject *parent = po->parent();
+
+			if ( !parent ) {
+				cerr << "! No parent found for object " << po->className() << endl;
+				return false;
+			}
+
+			if ( SCCoreApp->isExitRequested() ) return false;
+
+			RoutingTable::iterator targetIt = _routingTable.find(po->className());
+			PublicObject *p = parent;
+			while ( (targetIt == _routingTable.end()) && (p != NULL) ) {
+				targetIt = _routingTable.find(p->className());
+				p = p->parent();
+			}
+
+			if ( targetIt == _routingTable.end() ) {
+				cerr << "! No routing for " << po->className() << endl;
+				return false;
+			}
+
+			_targetGroup = targetIt->second;
+
+			PublicObjectPtr stored = _db->loadObject(po->typeInfo(), po->publicID());
+
+			if ( !stored ) {
+				write(parent, po, OP_ADD);
+				return true;
+			}
+
+			string storedParent = _db->parentPublicID(stored.get());
+			if ( storedParent != parent->publicID() ) {
+				// Instead of losing information due to a re-parent
+				// we just create a new publicID and so a copy of the underlying
+				// object
+				PublicObject::GenerateId(po);
+				write(parent, po, OP_ADD);
+				return true;
+			}
+
+
+			std::vector<NotifierPtr> diffs;
+			Diff2 diff;
+			diff.diff(stored.get(), po, parent->publicID(), diffs);
+
+			// All equal
+			if ( diffs.empty() ) {
+				return false;
+			}
+
+			_inputIndent = indent(po);
+
+			for ( size_t i = 0; i < diffs.size(); ++i ) {
+				Notifier *n = diffs[i].get();
+				po = PublicObject::Cast(n->object());
+				if ( po != NULL ) flush();
+				write(n->object()->parent(), n->object(), n->operation());
+			}
+
+			_inputIndent.clear();
+
+			return false;
+		}
+
+		// Do nothing: objects are handled during diffing the public object
+		// tree.
+		void visit(Object *obj) {
+			PublicObject *parent = obj->parent();
+
+			if ( !parent ) {
+				cerr << "! No parent found for object " << obj->className() << endl;
+				return;
+			}
+
+			write(parent, obj, OP_ADD);
+		}
+
+
+	// ----------------------------------------------------------------------
+	//  Implementation
+	// ----------------------------------------------------------------------
+	private:
+		bool write(PublicObject *parent, Object *object, Operation op) {
+			++_count;
+
+			logObject(object, op, _targetGroup);
+
+			if ( !_msg ) _msg = new NotifierMessage;
+
+			_msg->attach(new Notifier(parent->publicID(), op, object));
+
+			return false;
+		}
+
+		void flush() {
+			if ( !_msg ) return;
+			if ( _test ) {
+				SEISCOMP_DEBUG("Would send %d notifiers to %s group",
+				               _msg->size(), _targetGroup.c_str());
+				++_msgCount;
+				_msg = NULL;
+				return;
+			}
+
+			SEISCOMP_DEBUG("Send %d notifiers to %s group",
+			               _msg->size(), _targetGroup.c_str());
+
+			while ( !SCCoreApp->isExitRequested() ) {
+				if ( _connection->send(_targetGroup.c_str(), _msg.get()) ) {
+					_msg = NULL;
+					++_msgCount;
+					if ( _msgCount % 100 == 0 ) SCCoreApp->sync();
+					return;
+				}
+
+				cerr << "Could not send message "
+				     << " to " << _targetGroup << "@" << _connection->masterAddress()
+				     << endl;
+
+				sleep(1);
+			}
+
+			_msg = NULL;
+			++_errors;
+		}
+
+		void logObject(Object *object, Operation op, const std::string &group) {
+			if ( op != OP_REMOVE )
+				BaseObjectDispatcher::logObject(object, op, group);
+			else
+				BaseObjectDispatcher::logObject(object, op, group, _inputIndent);
+		}
+
+
+	// ----------------------------------------------------------------------
+	// Private data members
+	// ----------------------------------------------------------------------
+	private:
+		DatabaseReader     *_db;
+		NotifierMessagePtr  _msg;
+		int                 _msgCount;
+		string              _targetGroup;
+		string              _inputIndent;
+};
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+class ObjectCounter : protected Visitor {
+	public:
+		ObjectCounter(Object* object) : Visitor(), _count(0) {
 			object->accept(this);
 		}
 
@@ -212,12 +457,12 @@ class ObjectCounter : protected DataModel::Visitor {
 		unsigned int count() const { return _count; }
 
 	protected:
-		bool visit(DataModel::PublicObject*) {
+		bool visit(PublicObject*) {
 			++_count;
 			return true;
 		}
 
-		virtual void visit(DataModel::Object*) {
+		virtual void visit(Object*) {
 			++_count;
 		}
 
@@ -230,98 +475,28 @@ class ObjectCounter : protected DataModel::Visitor {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-class ObjectDispatcher : public ObjectWriter {
-
-	// ----------------------------------------------------------------------
-	//  X'struction
-	// ----------------------------------------------------------------------
-	public:
-		ObjectDispatcher(Communication::Connection* connection,
-		                 DataModel::Operation op,
-		                 bool test,
-		                 unsigned int total,
-		                 unsigned int totalProgress)
-		 : ObjectWriter(connection, op, test),
-		   _total(total),
-		   _totalProgress(totalProgress),
-		   _lastStep(-1),
-		   _failure(0) {}
-
-
-	// ----------------------------------------------------------------------
-	//  Visitor interface
-	// ----------------------------------------------------------------------
-	protected:
-		bool visit(DataModel::PublicObject* publicObject) {
-			bool result = ObjectWriter::visit(publicObject);
-			if ( !result )
-				_failure += ObjectCounter(publicObject).count()-1;
-
-			updateProgress();
-
-			return result;
-		}
-
-
-		void visit(DataModel::Object* object) {
-			ObjectWriter::visit(object);
-			updateProgress();
-		}
-
-
-		void updateProgress() {
-			unsigned int current = count() + _failure;
-			unsigned int progress = current * _totalProgress / _total;
-			if ( progress != _lastStep ) {
-				_lastStep = progress;
-				//cout << "." << flush;
-			}
-		}
-
-
-	private:
-		unsigned int _total;
-		unsigned int _totalProgress;
-		unsigned int _lastStep;
-		unsigned int _failure;
-};
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 class DispatchTool : public Seiscomp::Client::Application {
 	public:
 		DispatchTool(int argc, char** argv)
-		 : Application(argc, argv),
-		   _operation(DataModel::OP_ADD) {
+		: Application(argc, argv)
+		, _notifierOperation("merge")
+		, _operation(OP_UNDEFINED) {
 
 			setAutoApplyNotifierEnabled(false);
 			setInterpretNotifierEnabled(false);
 			setMessagingEnabled(true);
-			setDatabaseEnabled(false, false);
+			setDatabaseEnabled(true, true);
+			setLoggingToStdErr(true);
 			setPrimaryMessagingGroup(Communication::Protocol::LISTENER_GROUP);
 			addMessagingSubscription("");
 
-			_routingTable.insert(make_pair(DataModel::Comment::ClassName(), "IMPORT_GROUP"));
-			_routingTable.insert(make_pair(DataModel::Pick::ClassName(), "PICK"));
-			_routingTable.insert(make_pair(DataModel::Amplitude::ClassName(), "AMPLITUDE"));
-			_routingTable.insert(make_pair(DataModel::Arrival::ClassName(), "LOCATION"));
-			_routingTable.insert(make_pair(DataModel::Origin::ClassName(), "LOCATION"));
-			_routingTable.insert(make_pair(DataModel::StationMagnitude::ClassName(), "MAGNITUDE"));
-			_routingTable.insert(make_pair(DataModel::StationMagnitudeContribution::ClassName(), "MAGNITUDE"));
-			_routingTable.insert(make_pair(DataModel::Magnitude::ClassName(), "MAGNITUDE"));
-			_routingTable.insert(make_pair(DataModel::FocalMechanism::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::MomentTensor::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::MomentTensorStationContribution::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::MomentTensorComponentContribution::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::MomentTensorPhaseSetting::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::DataUsed::ClassName(), "FOCMECH"));
-			_routingTable.insert(make_pair(DataModel::EventDescription::ClassName(), "EVENT"));
-			_routingTable.insert(make_pair(DataModel::FocalMechanismReference::ClassName(), "EVENT"));
-			_routingTable.insert(make_pair(DataModel::OriginReference::ClassName(), "EVENT"));
-			_routingTable.insert(make_pair(DataModel::Event::ClassName(), "EVENT"));
+			_routingTable.insert(make_pair(Pick::ClassName(), "PICK"));
+			_routingTable.insert(make_pair(Amplitude::ClassName(), "AMPLITUDE"));
+			_routingTable.insert(make_pair(Origin::ClassName(), "LOCATION"));
+			_routingTable.insert(make_pair(StationMagnitude::ClassName(), "MAGNITUDE"));
+			_routingTable.insert(make_pair(Magnitude::ClassName(), "MAGNITUDE"));
+			_routingTable.insert(make_pair(FocalMechanism::ClassName(), "FOCMECH"));
+			_routingTable.insert(make_pair(Event::ClassName(), "EVENT"));
 		}
 
 
@@ -329,13 +504,8 @@ class DispatchTool : public Seiscomp::Client::Application {
 		void createCommandLineDescription() {
 			commandline().addGroup("Dispatch");
 			commandline().addOption("Dispatch", "input,i", "File to dispatch to messaging", &_inputFile, false);
-			commandline().addOption(
-				"Dispatch",
-				"operation,O",
-				"Notifier operation: add, update or remove",
-				&_notifierOperation,
-				false
-			);
+			commandline().addOption("Dispatch", "operation,O", "Notifier operation: add, update, remove or merge",
+			                        &_notifierOperation, true);
 			commandline().addOption("Dispatch", "routingtable",
 			                        "Specify routing table as list of object:group pairs",
 			                        &_routingTableStr, false);
@@ -356,16 +526,28 @@ class DispatchTool : public Seiscomp::Client::Application {
 				for ( ; it != tableEntries.end(); it++ ) {
 					vector<string> entry;
 					Core::split(entry, (*it).c_str(), ":", false);
-					_routingTable.insert(make_pair(entry[0], entry[1]));
+					if ( entry.size() == 2 )
+						_routingTable.insert(make_pair(entry[0], entry[1]));
 				}
 
 			}
 
+			if ( _notifierOperation != "merge" )
+				setDatabaseEnabled(false, false);
+
 			if ( commandline().hasOption("operation") ) {
-				if ( !_operation.fromString(_notifierOperation) ) {
-					cout << "Notifier operation " << _notifierOperation << " is not valid" << endl;
-					cout << "Operations are add, update and remove" << endl;
-					return false;
+				if ( _notifierOperation != "merge" ) {
+					if ( !_operation.fromString(_notifierOperation) ) {
+						cout << "Notifier operation " << _notifierOperation << " is not valid" << endl;
+						cout << "Operations are add, update, remove or merge" << endl;
+						return false;
+					}
+
+					if ( _operation != OP_ADD && _operation != OP_REMOVE && _operation != OP_UPDATE ) {
+						cout << "Notifier operation " << _notifierOperation << " is not valid" << endl;
+						cout << "Operations are add, update, remove or merge" << endl;
+						return false;
+					}
 				}
 			}
 			else if ( commandline().hasOption("print-objects") ) {
@@ -393,12 +575,6 @@ class DispatchTool : public Seiscomp::Client::Application {
 		}
 
 
-		virtual bool initConfiguration() {
-			if ( !Application::initConfiguration() ) return false;
-			return true;
-		}
-
-
 		virtual bool initSubscriptions() {
 			return true;
 		}
@@ -406,17 +582,17 @@ class DispatchTool : public Seiscomp::Client::Application {
 
 		bool run() {
 			if ( commandline().hasOption("input") )
-				return importDatabase();
+				return processInput();
 
 			return false;
 		}
 
 
-		bool importDatabase() {
+		bool processInput() {
+			PublicObject::SetRegistrationEnabled(false);
+
 			IO::XMLArchive ar;
-			if ( _inputFile == "-" )
-				ar.open(cin.rdbuf());
-			else if ( !ar.open(_inputFile.c_str()) ) {
+			if ( !ar.open(_inputFile.c_str()) ) {
 				cout << "Error: could not open input file '" << _inputFile << "'" << endl;
 				return false;
 			}
@@ -424,19 +600,24 @@ class DispatchTool : public Seiscomp::Client::Application {
 			cout << "Parsing file '" << _inputFile << "'..." << endl;
 
 			Util::StopWatch timer;
-			DataModel::ObjectPtr doc;
+			ObjectPtr doc;
 			ar >> doc;
 			ar.close();
+
+			PublicObject::SetRegistrationEnabled(true);
 
 			if ( doc == NULL ) {
 				cerr << "Error: no valid object found in file '" << _inputFile << "'" << endl;
 				return false;
 			}
 
-			ObjectDispatcher dispatcher(connection(), _operation, commandline().hasOption("test"), ObjectCounter(doc.get()).count(), 78);
-			cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ROUTING TABLE" << endl;
-			dispatcher.setRoutingTable(_routingTable);
-			cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
+			BaseObjectDispatcher *dispatcher = NULL;
+			if ( _notifierOperation == "merge" )
+				dispatcher = new ObjectMerger(connection(), query(), commandline().hasOption("test"));
+			else
+				dispatcher = new ObjectDispatcher(connection(), _operation, commandline().hasOption("test"));
+
+			dispatcher->setRoutingTable(_routingTable);
 
 			unsigned int totalCount = ObjectCounter(doc.get()).count();
 
@@ -448,12 +629,14 @@ class DispatchTool : public Seiscomp::Client::Application {
 				cout << "Dispatching " << doc->className() << " to " << connection()->masterAddress() << endl;
 			timer.restart();
 
-			dispatcher(doc.get());
+			(*dispatcher)(doc.get());
 			sync();
 			cout << endl;
 
-			cout << "While dispatching " << dispatcher.count() << "/" << totalCount << " objects " << dispatcher.errors() << " errors occured" << endl;
-			cout << "Time needed to dispatch " << dispatcher.count() << " objects: " << Core::Time(timer.elapsed()).toString("%T.%f") << endl;
+			cout << "While dispatching " << dispatcher->count() << "/" << totalCount << " objects " << dispatcher->errors() << " errors occured" << endl;
+			cout << "Time needed to dispatch " << dispatcher->count() << " objects: " << Core::Time(timer.elapsed()).toString("%T.%f") << endl;
+
+			delete dispatcher;
 
 			return true;
 		}
@@ -466,7 +649,7 @@ class DispatchTool : public Seiscomp::Client::Application {
 		string               _notifierOperation;
 		string               _routingTableStr;
 		RoutingTable         _routingTable;
-		DataModel::Operation _operation;
+		Operation            _operation;
 
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
