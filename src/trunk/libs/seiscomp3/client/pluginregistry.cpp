@@ -19,6 +19,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/utils/files.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/core/version.h>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -367,6 +368,14 @@ PluginRegistry::PluginEntry PluginRegistry::open(const std::string &file) const 
 		FreeLibrary((HMODULE)handle);
 #endif
 		return PluginEntry(NULL, NULL, file);
+	}
+
+	if ( plugin->description().apiVersion != SC_API_VERSION ) {
+		SEISCOMP_WARNING("API version mismatch (%d.%d != %d.%d) can lead to unpredicted behaviour: %s",
+		                 SC_API_VERSION_MAJOR(plugin->description().apiVersion),
+		                 SC_API_VERSION_MINOR(plugin->description().apiVersion),
+		                 SC_API_VERSION_MAJOR(SC_API_VERSION), SC_API_VERSION_MINOR(SC_API_VERSION),
+		                 file.c_str());
 	}
 
 	return PluginEntry(handle, plugin, file);

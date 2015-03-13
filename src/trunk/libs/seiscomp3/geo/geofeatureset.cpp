@@ -28,6 +28,7 @@
 #include <sstream>
 
 using namespace Seiscomp::Geo;
+namespace fs = boost::filesystem;
 
 
 const GeoFeatureSet &GeoFeatureSetSingleton::getInstance() {

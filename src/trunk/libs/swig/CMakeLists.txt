@@ -30,6 +30,7 @@ SET(
 		Seismology
 		Communication
 		Client
+		Geo
 		helpers
 )
 
@@ -44,6 +45,7 @@ SET(WRAPPER_MODULE_Math_EXTRA_SC_LIBS core)
 SET(WRAPPER_MODULE_Client_EXTRA_SC_LIBS client)
 SET(WRAPPER_MODULE_Utils_EXTRA_SC_LIBS core)
 SET(WRAPPER_MODULE_Seismology_EXTRA_SC_LIBS core)
+SET(WRAPPER_MODULE_Geo_EXTRA_SC_LIBS core)
 
 SET(WRAPPER_MODULE_helpers_EXTRA_FILES helpers.cpp)
 SET(WRAPPER_MODULE_helpers_EXTRA_SC_LIBS core)
