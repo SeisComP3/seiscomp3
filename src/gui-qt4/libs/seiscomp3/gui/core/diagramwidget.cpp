@@ -1094,10 +1094,10 @@ void DiagramWidget::drawValue(int id, QPainter& painter, const QPoint& p,
 
 	switch ( type ) {
 		case Circle:
-			painter.drawEllipse(p.x()-2, p.y()-2, 4, 4);
+			painter.drawEllipse(p.x()-3, p.y()-3, 6, 6);
 			if ( !valid ) {
-				painter.drawLine(p.x()-1,p.y()-1,p.x()+1,p.y()+1);
-				painter.drawLine(p.x()+1,p.y()-1,p.x()-1,p.y()+1);
+				painter.drawLine(p.x()-2,p.y()-2,p.x()+2,p.y()+2);
+				painter.drawLine(p.x()+2,p.y()-2,p.x()-2,p.y()+2);
 			}
 			break;
 		case Triangle:
@@ -1119,10 +1119,10 @@ void DiagramWidget::drawValue(int id, QPainter& painter, const QPoint& p,
 			}
 			break;
 		case Rectangle:
-			painter.drawRect(p.x()-2, p.y()-2, 4, 4);
+			painter.drawRect(p.x()-3, p.y()-3, 6, 6);
 			if ( !valid ) {
-				painter.drawLine(p.x()-2,p.y()-2,p.x()+2,p.y()+2);
-				painter.drawLine(p.x()+2,p.y()-2,p.x()-2,p.y()+2);
+				painter.drawLine(p.x()-3,p.y()-3,p.x()+3,p.y()+3);
+				painter.drawLine(p.x()+3,p.y()-3,p.x()-3,p.y()+3);
 			}
 			break;
 		case Diamond:
@@ -1130,8 +1130,8 @@ void DiagramWidget::drawValue(int id, QPainter& painter, const QPoint& p,
 			painter.drawPolygon(diamond);
 			painter.translate(-p.x(), -p.y());
 			if ( !valid ) {
-				painter.drawLine(p.x()-2,p.y()-2,p.x()+2,p.y()+2);
-				painter.drawLine(p.x()+2,p.y()-2,p.x()-2,p.y()+2);
+				painter.drawLine(p.x()-3,p.y()-3,p.x()+3,p.y()+3);
+				painter.drawLine(p.x()+3,p.y()-3,p.x()-3,p.y()+3);
 			}
 			break;
 	}
