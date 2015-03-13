@@ -19,7 +19,6 @@
 #include <vector>
 #include <boost/filesystem/path.hpp>
 
-namespace fs = boost::filesystem;
 
 namespace Seiscomp
 {
@@ -61,7 +60,7 @@ public:
 
 private:
 	/** Reads a BNADir recursively, used by readBNADir() */
-	size_t readBNADirRecursive(const fs::path directory,
+	size_t readBNADirRecursive(const boost::filesystem::path directory,
 	                           const Category* category);
 
 	/** Prints the number of polygons read */
