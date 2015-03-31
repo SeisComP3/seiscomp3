@@ -171,12 +171,22 @@ struct ThreeComponents {
 
 //! Returns the best matching stream for the vertical component having
 //! the stream code set to streamCode (without component code, first two letters).
+//! The method returns the component with the lowest horizontal dip. If several
+//! components share the same dip the first one found is returned, e.g. UVW or ABC
+//! orientations.
 SC_SYSTEM_CORE_API Stream *
 getVerticalComponent(const SensorLocation *loc, const char *streamCode, const Core::Time &time);
 
 //! Returns the best matching streams for the vertical and horizontal components
 //! having the stream code set to streamCode (without component code, first two letters).
-SC_SYSTEM_CORE_API void
+//! Returns true if the resulting 3 components are forming an orthogonal system,
+//! false otherwise.
+//! The method tries to find 3 orthogonal components and select the first with
+//! the lowest dip (largest Z value) as vertical. The remaining two are returned
+//! as 1st horizontal (Y axis or North) and 2nd horizontal (X axis or East)
+//! respectively.
+//! NOTE: Each of the comps entries in res can be NULL.
+SC_SYSTEM_CORE_API bool
 getThreeComponents(ThreeComponents &res, const SensorLocation *loc, const char *streamCode, const Core::Time &time);
 
 
