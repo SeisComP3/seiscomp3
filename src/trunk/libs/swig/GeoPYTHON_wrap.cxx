@@ -7704,7 +7704,7 @@ SWIGINTERN PyObject *GeoFeature_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_GeoFeatureSet__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_GeoFeatureSet(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Geo::GeoFeatureSet *result = 0 ;
   
@@ -7715,63 +7715,6 @@ SWIGINTERN PyObject *_wrap_new_GeoFeatureSet__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_GeoFeatureSet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Geo::GeoFeatureSet *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Geo::GeoFeatureSet *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:new_GeoFeatureSet",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSet,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_GeoFeatureSet" "', argument " "1"" of type '" "Seiscomp::Geo::GeoFeatureSet const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_GeoFeatureSet" "', argument " "1"" of type '" "Seiscomp::Geo::GeoFeatureSet const &""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Geo::GeoFeatureSet * >(argp1);
-  result = (Seiscomp::Geo::GeoFeatureSet *)new Seiscomp::Geo::GeoFeatureSet((Seiscomp::Geo::GeoFeatureSet const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSet, SWIG_POINTER_NEW |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_new_GeoFeatureSet(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[2];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 0) {
-    return _wrap_new_GeoFeatureSet__SWIG_0(self, args);
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Geo__GeoFeatureSet, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_GeoFeatureSet__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_GeoFeatureSet'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::Geo::GeoFeatureSet::GeoFeatureSet()\n"
-    "    Seiscomp::Geo::GeoFeatureSet::GeoFeatureSet(Seiscomp::Geo::GeoFeatureSet const &)\n");
-  return 0;
 }
 
 
@@ -15620,10 +15563,7 @@ static PyMethodDef SwigMethods[] = {
 		"GeoFeature_area(CoordF polygon, size_t sides) -> double\n"
 		""},
 	 { (char *)"GeoFeature_swigregister", GeoFeature_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_GeoFeatureSet", _wrap_new_GeoFeatureSet, METH_VARARGS, (char *)"\n"
-		"GeoFeatureSet()\n"
-		"new_GeoFeatureSet(GeoFeatureSet arg1) -> GeoFeatureSet\n"
-		""},
+	 { (char *)"new_GeoFeatureSet", _wrap_new_GeoFeatureSet, METH_VARARGS, (char *)"new_GeoFeatureSet() -> GeoFeatureSet"},
 	 { (char *)"delete_GeoFeatureSet", _wrap_delete_GeoFeatureSet, METH_VARARGS, (char *)"delete_GeoFeatureSet(GeoFeatureSet self)"},
 	 { (char *)"GeoFeatureSet_clear", _wrap_GeoFeatureSet_clear, METH_VARARGS, (char *)"GeoFeatureSet_clear(GeoFeatureSet self)"},
 	 { (char *)"GeoFeatureSet_readBNADir", _wrap_GeoFeatureSet_readBNADir, METH_VARARGS, (char *)"GeoFeatureSet_readBNADir(GeoFeatureSet self, std::string const & dirPath) -> size_t"},
