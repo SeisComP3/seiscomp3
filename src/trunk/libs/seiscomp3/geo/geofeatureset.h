@@ -29,8 +29,6 @@ class SC_SYSTEM_CORE_API GeoFeatureSet : public Core::BaseObject {
 public:
 	/** Default constructor */
 	GeoFeatureSet();
-	/** Copy constructor, intentionally left undefined */
-	GeoFeatureSet(const GeoFeatureSet &);
 	/** Destructor */
 	virtual ~GeoFeatureSet();
 	/** Copy operator, intentionally left undefined */
@@ -59,6 +57,9 @@ public:
 	const std::vector<Category*> &categories() const { return _categories; };
 
 private:
+	/** Copy constructor, private -> non copyable */
+	GeoFeatureSet(const GeoFeatureSet &);
+
 	/** Reads a BNADir recursively, used by readBNADir() */
 	size_t readBNADirRecursive(const boost::filesystem::path directory,
 	                           const Category* category);

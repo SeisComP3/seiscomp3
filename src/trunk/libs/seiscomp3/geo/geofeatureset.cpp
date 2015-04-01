@@ -45,6 +45,9 @@ GeoFeatureSetSingleton::GeoFeatureSetSingleton() {
 GeoFeatureSet::GeoFeatureSet() {
 }
 
+GeoFeatureSet::GeoFeatureSet(const GeoFeatureSet &) {
+}
+
 GeoFeatureSet::~GeoFeatureSet() {
 	clear();
 }
