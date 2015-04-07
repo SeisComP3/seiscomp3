@@ -564,12 +564,13 @@ class FDSNEvent(resource.Resource):
 		def _time(time):
 			return db.timeToString(time)
 
-		reqMag = ro.mag or (ro.orderBy and ro.orderBy.startswith('magnitude'))
+		orderByMag = ro.orderBy and ro.orderBy.startswith('magnitude')
+		reqMag = ro.mag or orderByMag
 		reqDist = ro.geo and ro.geo.bCircle
 		colPID = _T('publicID')
 		colTime = _T('time_value')
 		colMag = _T('magnitude_value')
-		if reqMag:
+		if orderByMag:
 			colOrderBy = "m.%s" % colMag
 		else:
 			colOrderBy = "o.%s" % colTime
