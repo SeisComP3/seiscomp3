@@ -665,6 +665,8 @@ bool XMLArchive::locateObjectByName(const char* name, const char* targetClass, b
 	}
 	else {
 		if ( isReading() ) {
+			_attribName.clear();
+
 			if ( name && *name ) {
 				if ( hint() & XML_ELEMENT ) {
 					xmlNodePtr attrNode = static_cast<xmlNodePtr>(_current)->children;
@@ -700,17 +702,10 @@ bool XMLArchive::locateObjectByName(const char* name, const char* targetClass, b
 					xmlChar* prop = xmlGetProp(static_cast<xmlNodePtr>(_current), (const xmlChar*)name);
 					if ( prop == NULL ) {
 						_property.clear();
-						//_attribName = name;
-						/*
-						_objectLocation = findTag(static_cast<xmlDocPtr>(_document),
-						                          static_cast<xmlNodePtr>(_current),
-						                          name, NULL);
-						return _objectLocation != NULL;
-						*/
 						return false;
 					}
 	
-					_attribName.clear();
+					_attribName = name;
 					_property = (const char*)prop;
 		
 					xmlFree(prop);
@@ -824,6 +819,67 @@ void XMLArchive::writeAttrib(const std::string& value) {
 }
 
 
+void XMLArchive::setValidity(bool v) {
+	if ( !v ) {
+		if ( hint() & XML_ELEMENT ) {
+			if ( _objectLocation != NULL ) {
+				xmlNodePtr n = static_cast<xmlNodePtr>(_objectLocation);
+				int lineNo = (int)xmlGetLineNo(n);
+				std::string path;
+				while ( n->parent != NULL ) {
+					path.insert(0, (char*)n->name);
+					path.insert(0, "/");
+					n = n->parent;
+				}
+
+				SEISCOMP_ERROR("Invalid element content:%d: %s=%s", lineNo, path.c_str(), _property.c_str());
+			}
+			else
+				SEISCOMP_ERROR("Invalid element content: %s", _property.c_str());
+		}
+		else if ( hint() & XML_CDATA ) {
+			if ( _current != NULL ) {
+				xmlNodePtr n = static_cast<xmlNodePtr>(_current);
+				int lineNo = (int)xmlGetLineNo(n);
+				std::string path;
+				while ( n->parent != NULL ) {
+					path.insert(0, (char*)n->name);
+					path.insert(0, "/");
+					n = n->parent;
+				}
+
+				SEISCOMP_ERROR("Invalid CDATA content:%d: %s=%s", lineNo, path.c_str(), _property.c_str());
+			}
+			else
+				SEISCOMP_ERROR("Invalid CDATA content: %s", _property.c_str());
+		}
+		else {
+			if ( _current != NULL ) {
+				xmlNodePtr n = static_cast<xmlNodePtr>(_current);
+				int lineNo = (int)xmlGetLineNo(n);
+				std::string path;
+				while ( n->parent != NULL ) {
+					path.insert(0, (char*)n->name);
+					path.insert(0, "/");
+					n = n->parent;
+				}
+
+				if ( !_attribName.empty() ) {
+					path += '.';
+					path += _attribName;
+				}
+
+				SEISCOMP_ERROR("Invalid attribute content:%d: %s=%s", lineNo, path.c_str(), _property.c_str());
+			}
+			else
+				SEISCOMP_ERROR("Invalid attribute content: %s", _property.c_str());
+		}
+	}
+
+	Seiscomp::Core::Archive::setValidity(v);
+}
+
+
 void XMLArchive::addChild(const char* name, const char* type) const {
 	if ( _current == NULL ) {
 #ifdef CLASSNAME_AS_TAGNAME
@@ -881,12 +937,6 @@ void XMLArchive::serialize(SerializeDispatcher& disp) {
 		_objectLocation = xmlNewTextChild(static_cast<xmlNodePtr>(_current), NULL, (const xmlChar*)_property.c_str(), NULL);
 		setHint((hint() & ~XML_ELEMENT) | XML_CDATA);
 	}
-		/*
-		_objectLocation = findTag(static_cast<xmlDocPtr>(_document),
-		                          static_cast<xmlNodePtr>(_current),
-			                      _attribName.c_str(), NULL);
-	else*/
-		//_objectLocation = xmlNewTextChild(static_cast<xmlNodePtr>(_current), NULL, (const xmlChar*)_property.c_str(), NULL);
 
 	void* backupCurrent = _current;
 	void* backupLocation = _objectLocation;
@@ -896,18 +946,6 @@ void XMLArchive::serialize(SerializeDispatcher& disp) {
 
 	_current = backupCurrent;
 	_objectLocation = backupLocation;
-
-	/*
-	if ( !isReading() ) {
-		xmlNodePtr n = static_cast<xmlNodePtr>(_objectLocation);
-		if ( n->children == NULL && n->properties == NULL && n->content == NULL ) {
-			xmlUnlinkNode(n);
-			xmlFreeNode(n);
-		}
-
-		_objectLocation = NULL;
-	}
-	*/
 }
 
 
