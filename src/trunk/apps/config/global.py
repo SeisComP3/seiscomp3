@@ -16,12 +16,26 @@ def collectParams(container):
   return params
 
 
+def collect(idset, paramSetID):
+  paramSet = seiscomp3.DataModel.ParameterSet.Find(paramSetID)
+  if not paramSet: return
+  idset[paramSet.publicID()] = 1
+  if not paramSet.baseID(): return;
+  collect(idset, paramSet.baseID())
+
+
 def sync(paramSet, params):
   obsoleteParams = []
   seenParams = {}
-  for i in range(paramSet.parameterCount()):
+  i = 0
+  while i < paramSet.parameterCount():
     p = paramSet.parameter(i)
     if p.name() in params:
+      if p.name() in seenParams:
+        # Multiple parameter definitions with same name
+        sys.stdout.write("- %s:%s / duplicate parameter name\n" % (p.publicID(), p.name()))
+        p.detach()
+        continue
       seenParams[p.name()] = 1
       val = params[p.name()]
       if val != p.value():
@@ -29,6 +43,7 @@ def sync(paramSet, params):
         p.update()
     else:
       obsoleteParams.append(p)
+    i = i+1
 
   for p in obsoleteParams:
     p.detach()
@@ -109,13 +124,10 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
       if m == "global": m = "default"
 
       sys.stdout.write("+ %s\n" % m)
-      sys.stdout.write("  - reading stations")
-      sys.stdout.flush()
       for staid in mod.bindings.keys():
         binding = mod.getBinding(staid)
         if not binding: continue
-        sys.stdout.write("\r  + %s.%s" % (staid.networkCode, staid.stationCode))
-        sys.stdout.flush()
+        #sys.stdout.write("  + %s.%s\n" % (staid.networkCode, staid.stationCode))
         params = {}
         for i in range(binding.sectionCount()):
             params.update(collectParams(binding.section(i)))
@@ -123,7 +135,7 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
         if not key in self.stationSetups:
           self.stationSetups[key] = {}
         self.stationSetups[key][m] = params
-      sys.stdout.write("\r  + read %d stations\n" % len(mod.bindings.keys()))
+      sys.stdout.write("  + read %d stations\n" % len(mod.bindings.keys()))
 
     return seiscomp3.Client.Application.init(self)
 
@@ -276,6 +288,26 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
           paramSet.setBaseID(globalSet)
           if not paramSet.publicID() in newParamSets:
             paramSet.update()
+
+    # Collect unused ParameterSets
+    usedSets = {}
+    for i in range(config.configModuleCount()):
+      configMod = config.configModule(i)
+      for j in range(configMod.configStationCount()):
+        cs = configMod.configStation(j)
+        for k in range(cs.setupCount()):
+          setup = cs.setup(k)
+          collect(usedSets, setup.parameterSetID())
+
+    # Delete unused ParameterSets
+    i = 0
+    while i < config.parameterSetCount():
+      paramSet = config.parameterSet(i)
+      if not paramSet.publicID() in usedSets:
+        sys.stdout.write("- %s / obsolete parameter set\n" % paramSet.publicID())
+        paramSet.detach()
+      else:
+        i = i+1
 
     ncount = seiscomp3.DataModel.Notifier.Size()
     if ncount > 0:
