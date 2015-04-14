@@ -88,6 +88,8 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 		// Find maximum start time of all three records
 		skips = 1;
 		while ( skips ) {
+			maxStartComponent = -1;
+
 			for ( int i = 0; i < N; ++i ) {
 				if ( !i || maxStartTime < (*it[i])->startTime() ) {
 					maxStartTime = (*it[i])->startTime();

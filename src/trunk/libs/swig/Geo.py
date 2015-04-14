@@ -264,12 +264,9 @@ class GeoFeatureSet(Core.BaseObject):
     for _s in [Core.BaseObject]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, GeoFeatureSet, name)
     __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """
-        __init__(Seiscomp::Geo::GeoFeatureSet self) -> GeoFeatureSet
-        __init__(Seiscomp::Geo::GeoFeatureSet self, GeoFeatureSet arg2) -> GeoFeatureSet
-        """
-        this = _Geo.new_GeoFeatureSet(*args)
+    def __init__(self): 
+        """__init__(Seiscomp::Geo::GeoFeatureSet self) -> GeoFeatureSet"""
+        this = _Geo.new_GeoFeatureSet()
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _Geo.delete_GeoFeatureSet

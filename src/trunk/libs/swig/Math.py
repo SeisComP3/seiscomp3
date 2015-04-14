@@ -2683,6 +2683,10 @@ def delazi(*args):
   """delazi(double lat1, double lon1, double lat2, double lon2)"""
   return _Math.delazi(*args)
 
+def delazi_wgs84(*args):
+  """delazi_wgs84(double lat1, double lon1, double lat2, double lon2)"""
+  return _Math.delazi_wgs84(*args)
+
 def delandaz2coord(*args):
   """delandaz2coord(double dist, double azi, double lat0, double lon0)"""
   return _Math.delandaz2coord(*args)

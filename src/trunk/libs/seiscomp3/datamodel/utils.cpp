@@ -24,12 +24,9 @@
 #include <seiscomp3/datamodel/configstation.h>
 #include <seiscomp3/datamodel/setup.h>
 #include <seiscomp3/datamodel/utils.h>
+#include <seiscomp3/math/vector3.h>
 #include <seiscomp3/logging/log.h>
 #include <cmath>
-
-
-#define deg2rad(d) (M_PI*(d)/180.0)
-#define rad2deg(d) (180.0*(d)/M_PI)
 
 
 #include <cstring>
@@ -320,16 +317,33 @@ Stream *getVerticalComponent(const SensorLocation *loc, const char *streamCode, 
 }
 
 
-void getThreeComponents(ThreeComponents &res, const SensorLocation *loc, const char *streamCode, const Core::Time &time) {
+namespace {
+
+
+struct ComponentAxis {
+	ComponentAxis(Stream *m, const Math::Vector3f &ax) : model(m), axis(ax) {}
+
+	Stream *model;
+	Math::Vector3f axis;
+};
+
+
+bool by_Z_desc_and_code_asc(const ComponentAxis &axis1, const ComponentAxis &axis2) {
+	if ( axis1.axis.z > axis2.axis.z ) return true;
+	if ( axis1.axis.z < axis2.axis.z ) return false;
+	return axis1.model->code() < axis2.model->code();
+}
+
+
+}
+
+
+bool getThreeComponents(ThreeComponents &res, const SensorLocation *loc, const char *streamCode, const Core::Time &time) {
 	int len = strlen(streamCode);
 
 	res = ThreeComponents();
 
-	float maxCorrZ = -100;
-	float maxCorr1 = 100;
-	float maxCorr2 = 100;
-
-	float dirz[3] = {0,0,0}, dir1[3] = {0,0,0}, dir2[3] = {0,0,0};
+	std::vector<ComponentAxis> comps;
 
 	for ( size_t i = 0; i < loc->streamCount(); ++i ) {
 		Stream *stream = loc->stream(i);
@@ -346,65 +360,57 @@ void getThreeComponents(ThreeComponents &res, const SensorLocation *loc, const c
 
 		try {
 			float azi = (float)deg2rad(stream->azimuth());
-			float dip = (float)deg2rad(stream->dip());
+			float dip = (float)deg2rad(-stream->dip());
 
-			// Store up vector
-			float z = sin(-dip);
+			Math::Vector3f axis;
 
-			float metric = fabs(z);
+			axis.fromAngles(azi, dip);
 
-			if ( metric > maxCorrZ ) {
-				maxCorrZ = metric;
-				res.comps[ThreeComponents::Vertical] = stream;
-				dirz[0] = cos(-dip)*sin(azi);
-				dirz[1] = cos(-dip)*cos(azi);
-				dirz[2] = z;
+			// Check if there are already linearly dependent components
+			bool newOrthogonal = true;
+
+			for ( size_t a = 0; a < comps.size(); ++a ) {
+				float alpha = comps[a].axis.dot(axis);
+
+				// Allow one degree of uncertainty
+				if ( alpha > 0.0174524064373 ) {
+					newOrthogonal = false;
+					break;
+				}
 			}
 
-			if ( metric < maxCorr1 ) {
-				// Convert into normal space (X east, Y north, Z up)
-				res.comps[ThreeComponents::FirstHorizontal] = stream;
-				maxCorr1 = metric;
-				dir1[0] = cos(-dip)*sin(azi);
-				dir1[1] = cos(-dip)*cos(azi);
-				dir1[2] = z;
-			}
-			else if ( metric < maxCorr2 ) {
-				// Convert into normal space (X east, Y north, Z up)
-				res.comps[ThreeComponents::SecondHorizontal] = stream;
-				maxCorr2 = metric;
-				dir2[0] = cos(-dip)*sin(azi);
-				dir2[1] = cos(-dip)*cos(azi);
-				dir2[2] = z;
-			}
+			if ( !newOrthogonal ) continue;
+
+			comps.push_back(ComponentAxis(stream, axis));
 		}
 		catch ( ... ) {}
 	}
 
-	if ( res.comps[ThreeComponents::Vertical] == res.comps[ThreeComponents::FirstHorizontal] ) {
-		res.comps[ThreeComponents::FirstHorizontal] = res.comps[ThreeComponents::SecondHorizontal];
-		res.comps[ThreeComponents::SecondHorizontal] = NULL;
-		return;
-	}
+	if ( comps.empty() ) return false;
 
-	// No vertical and only one or no horizontal found, return
-	if ( !res.comps[ThreeComponents::Vertical] || !res.comps[ThreeComponents::SecondHorizontal] ) return;
+	std::sort(comps.begin(), comps.end(), by_Z_desc_and_code_asc);
+	res.comps[ThreeComponents::Vertical] = comps[0].model;
+
+	if ( comps.size() < 3 ) return false;
 
 	// Select the first horizontal left (math. positive) from the second
-	float cross[3];
-	cross[0] = dir1[1]*dir2[2] - dir1[2]*dir2[1];
-	cross[1] = dir1[2]*dir2[0] - dir1[0]*dir2[2];
-	cross[2] = dir1[0]*dir2[1] - dir1[1]*dir2[0];
+	Math::Vector3f cross;
+	cross.cross(comps[1].axis, comps[2].axis);
+
+	if ( cross.dot(comps[0].axis) > 0 )
+		std::swap(comps[1], comps[2]);
+
+	res.comps[ThreeComponents::FirstHorizontal] = comps[1].model;
+	res.comps[ThreeComponents::SecondHorizontal] = comps[2].model;
 
 	/*
-	std::cout << res.firstHorizontal->code() << ":   H1: " << dir1[0] << ", " << dir1[1] << ", " << dir1[2] << std::endl;
-	std::cout << res.secondHorizontal->code() << ":   H2: " << dir2[0] << ", " << dir2[1] << ", " << dir2[2] << std::endl;
-	std::cout << "    Z: " << dirz[0] << ", " << dirz[1] << ", " << dirz[2] << std::endl;
-	std::cout << "syn Z: " << cross[0] << ", " << cross[1] << ", " << cross[2] << std::endl;
+	std::cout << res.comps[ThreeComponents::FirstHorizontal]->code() << ":   H1: " << comps[1].axis.x << ", " << comps[1].axis.y << ", " << comps[1].axis.z << std::endl;
+	std::cout << res.comps[ThreeComponents::SecondHorizontal]->code() << ":   H2: " << comps[2].axis.x << ", " << comps[2].axis.y << ", " << comps[2].axis.z << std::endl;
+	std::cout << res.comps[ThreeComponents::Vertical]->code() << ":    Z: " << comps[0].axis.x << ", " << comps[0].axis.y << ", " << comps[0].axis.z << std::endl;
+	std::cout << "syn Z: " << cross.x << ", " << cross.y << ", " << cross.z << std::endl;
 	*/
 
-	if ( cross[0]*dirz[0] + cross[1]*dirz[1] + cross[2]*dirz[2] > 0 )
-		std::swap(res.comps[ThreeComponents::FirstHorizontal], res.comps[ThreeComponents::SecondHorizontal]);
+	return true;
 }
 
 

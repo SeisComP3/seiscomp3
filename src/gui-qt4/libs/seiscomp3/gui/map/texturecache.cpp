@@ -13,6 +13,7 @@
 
 
 #include <QHash>
+#include <QMutex>
 #include <iostream>
 
 #include <seiscomp3/gui/map/texturecache.h>
@@ -26,6 +27,8 @@ namespace Map {
 
 
 QMap<QString, TextureCache::CacheEntry> TextureCache::_images;
+QMutex imageCacheMutex;
+
 
 TextureCache *getTexelCache = NULL;
 
@@ -128,6 +131,8 @@ int TextureCache::tileHeight() const {
 
 
 bool TextureCache::load(QImage &img, Alg::MapTreeNode *node) {
+	QMutexLocker lock(&imageCacheMutex);
+
 	ImageCache::iterator it;
 	QString id = _mapTree->getID(node);
 	it = _images.find(id);
@@ -203,6 +208,8 @@ void TextureCache::checkResources(Texture *tex) {
 void TextureCache::setTexture(QImage &img, Alg::MapTreeNode *node) {
 	// Update image cache
 	{
+		QMutexLocker lock(&imageCacheMutex);
+
 		ImageCache::iterator it;
 		QString id = _mapTree->getID(node);
 		it = _images.find(id);
@@ -260,6 +267,8 @@ void TextureCache::invalidateTexture(Alg::MapTreeNode *node) {
 
 
 void TextureCache::clear() {
+	QMutexLocker lock(&imageCacheMutex);
+
 	_firstLevel.clear();
 	_storage.clear();
 	_images.clear();
@@ -271,6 +280,7 @@ void TextureCache::clear() {
 
 
 void TextureCache::remove(const QString &name) {
+	QMutexLocker lock(&imageCacheMutex);
 	ImageCache::iterator it;
 	it = _images.find(name);
 	if ( it != _images.end() ) {

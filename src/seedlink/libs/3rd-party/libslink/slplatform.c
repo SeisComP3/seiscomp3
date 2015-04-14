@@ -281,7 +281,7 @@ slp_openfile (const char *filename, char perm)
   int flags = (perm == 'w') ? (_O_RDWR | _O_CREAT | _O_BINARY) : (_O_RDONLY | _O_BINARY);
   int mode = (_S_IREAD | _S_IWRITE);
 #else
-  int flags = (perm == 'w') ? (O_RDWR | O_CREAT) : O_RDONLY;
+  int flags = (perm == 'w') ? (O_RDWR | O_CREAT | O_TRUNC) : O_RDONLY;
   mode_t mode = (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 #endif
   

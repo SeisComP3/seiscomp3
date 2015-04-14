@@ -758,6 +758,69 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		else
 			UpdateSensorLocation(ci, loc, loc_start, loc_end);
 
+// For debugging reasons
+#if 0
+		cerr << "[" << strm_code << "]" << endl;
+		for(unsigned int i=0; i<ci.rpz.size(); i++)
+		{
+			int siu = ci.rpz[i].GetSignalInUnits();
+			int sou = ci.rpz[i].GetSignalOutUnits();
+			int seq_in = -1, seq_out = -2;
+			cerr << " + PAZ ";
+			for(unsigned int j=0; j<adc->ua.size(); j++)
+			{
+				UnitsAbbreviations ua = adc->ua[j];
+				if(siu == ua.GetLookup())
+				{
+					seq_in = j;
+				}
+				if(sou == ua.GetLookup())
+				{
+					seq_out = j;
+				}
+			}
+			if ( seq_in >= 0 )
+				cerr << adc->ua[seq_in].GetName();
+			else
+				cerr << "-";
+			cerr << ":";
+			if ( seq_out >= 0 )
+				cerr << adc->ua[seq_out].GetName();
+			else
+				cerr << "-";
+			cerr << endl;
+		}
+		for(unsigned int i=0; i<ci.rp.size(); i++)
+		{
+			int siu = ci.rp[i].GetSignalInUnits();
+			int sou = ci.rp[i].GetSignalOutUnits();
+			int seq_in = -1, seq_out = -2;
+			cerr << " + POLY ";
+			for(unsigned int j=0; j<adc->ua.size(); j++)
+			{
+				UnitsAbbreviations ua = adc->ua[j];
+				if(siu == ua.GetLookup())
+				{
+					seq_in = j;
+				}
+				if(sou == ua.GetLookup())
+				{
+					seq_out = j;
+				}
+			}
+			if ( seq_in >= 0 )
+				cerr << adc->ua[seq_in].GetName();
+			else
+				cerr << "-";
+			cerr << ":";
+			if ( seq_out >= 0 )
+				cerr << adc->ua[seq_out].GetName();
+			else
+				cerr << "-";
+			cerr << endl;
+		}
+#endif
+
 		if(IsPAZStream(ci) || IsPolyStream(ci))
 		{
 			/* pair<set<pair<pair<pair<pair<pair<string, string>, string>, string>, Core::Time>, Core::Time> >::iterator, bool> ins = \
@@ -1103,49 +1166,9 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 
 	dlg->setGain(1.0);
 
-	if(ci.rc.size() > 0)
-	{
-		if(ci.rc[0].GetNumberOfNumerators() == 0)
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber())
-				{
-					dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-		else
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
-				{
-					dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-			for(unsigned int j=0; j< ci.rpz.size(); j++)
-			{
-					if(ci.rpz[j].GetNumberOfPoles() == 0 && ci.rpz[j].GetNumberOfZeros() == 0)
-					{
-							for(unsigned int i=0; i< ci.csg.size(); i++)
-							{
-									if(ci.csg[i].GetStageSequenceNumber() == ci.rpz[j].GetStageSequenceNumber())
-									{
-										dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-										break;
-									}
-							}
-
-					}
-			}
-	}
+	int sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage >= 0 )
+		dlg->setGain(fabs(ci.csg[sensitivity_stage].GetSensitivityGain()));
 
 	inventory->add(dlg.get());
 
@@ -1170,50 +1193,9 @@ void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr
 
 	dlg->setGain(1.0);
 
-	if(ci.rc.size() > 0)
-	{
-		if(ci.rc[0].GetNumberOfNumerators() == 0)
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber())
-				{
-					dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-		else
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
-				{
-					dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-			for(unsigned int j=0; j< ci.rpz.size(); j++)
-			{
-					if(ci.rpz[j].GetNumberOfPoles() == 0 && ci.rpz[j].GetNumberOfZeros() == 0)
-					{
-							for(unsigned int i=0; i< ci.csg.size(); i++)
-							{
-									if(ci.csg[i].GetStageSequenceNumber() == ci.rpz[j].GetStageSequenceNumber())
-									{
-
-										dlg->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-										break;
-									}
-							}
-
-					}
-			}
-	}
+	int sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage >= 0 )
+		dlg->setGain(fabs(ci.csg[sensitivity_stage].GetSensitivityGain()));
 
 	dlg->update();
 }
@@ -1322,50 +1304,10 @@ void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 	cal->setGain(1.0);
 	cal->setGainFrequency(0.0);
 
-	if(ci.rc.size() > 0)
-	{
-		if(ci.rc[0].GetNumberOfNumerators() == 0)
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber())
-				{
-					cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					cal->setGainFrequency(ci.csg[i].GetFrequency());
-					break;
-				}
-			}
-		}
-		else
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
-				{
-					cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-			for(unsigned int j=0; j< ci.rpz.size(); j++)
-			{
-					if(ci.rpz[j].GetNumberOfPoles() == 0 && ci.rpz[j].GetNumberOfZeros() == 0)
-					{
-							for(unsigned int i=0; i< ci.csg.size(); i++)
-							{
-									if(ci.csg[i].GetStageSequenceNumber() == ci.rpz[j].GetStageSequenceNumber())
-									{
-
-										cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-										break;
-									}
-							}
-
-					}
-			}
+	int sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage >= 0 ) {
+		cal->setGain(fabs(ci.csg[sensitivity_stage].GetSensitivityGain()));
+		cal->setGainFrequency(ci.csg[sensitivity_stage].GetFrequency());
 	}
 
 	dlg->add(cal.get());
@@ -1393,50 +1335,10 @@ void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 	cal->setGain(1.0);
 	cal->setGainFrequency(0.0);
 
-	if(ci.rc.size() > 0)
-	{
-		if(ci.rc[0].GetNumberOfNumerators() == 0)
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber())
-				{
-					cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					cal->setGainFrequency(ci.csg[i].GetFrequency());
-					break;
-				}
-			}
-		}
-		else
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
-				{
-					cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-					break;
-				}
-			}
-		}
-	}
-	else
-	{
-			for(unsigned int j=0; j< ci.rpz.size(); j++)
-			{
-					if(ci.rpz[j].GetNumberOfPoles() == 0 && ci.rpz[j].GetNumberOfZeros() == 0)
-					{
-							for(unsigned int i=0; i< ci.csg.size(); i++)
-							{
-									if(ci.csg[i].GetStageSequenceNumber() == ci.rpz[j].GetStageSequenceNumber())
-									{
-
-										cal->setGain(fabs(ci.csg[i].GetSensitivityGain()));
-										break;
-									}
-							}
-
-					}
-			}
+	int sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage >= 0 ) {
+		cal->setGain(fabs(ci.csg[sensitivity_stage].GetSensitivityGain()));
+		cal->setGainFrequency(ci.csg[sensitivity_stage].GetFrequency());
 	}
 
 	cal->update();
@@ -1464,7 +1366,7 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 	}
 
 	unsigned int i=0;
-	if(ci.rc.size() > 0 && ci.rc[0].GetNumberOfNumerators() == 0)
+	if(ci.rc.size() > 0 && IsDummy(ci.rc[0]))
 		++i;
 
 	for(; i<ci.rc.size(); i++)
@@ -1906,6 +1808,11 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 		unit = TEMPERATURE;
 		sequence_number = GetPAZSequence(ci, TEMPERATURE, DIGITAL);
 	}
+	if(sequence_number == -1)
+	{
+		unit = TEMPERATURE;
+		sequence_number = GetPAZSequence(ci, TEMPERATURE2, DIGITAL);
+	}
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
 
@@ -1948,6 +1855,11 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 	}
 	if(sequence_number == -1)
 	{
+		unit = TEMPERATURE;
+		sequence_number = GetPolySequence(ci, TEMPERATURE2, VOLTAGE);
+	}
+	if(sequence_number == -1)
+	{
 		unit = PRESSURE;
 		sequence_number = GetPolySequence(ci, PRESSURE, DIGITAL);
 	}
@@ -1955,6 +1867,11 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 	{
 		unit = TEMPERATURE;
 		sequence_number = GetPolySequence(ci, TEMPERATURE, DIGITAL);
+	}
+	if(sequence_number == -1)
+	{
+		unit = TEMPERATURE;
+		sequence_number = GetPolySequence(ci, TEMPERATURE2, DIGITAL);
 	}
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
@@ -2524,6 +2441,59 @@ int Inventory::GetPolySequence(ChannelIdentifier& ci, string in, string out)
 	return -1;
 }
 /*******************************************************************************
+* Function:     GetDataloggerSensitivity                                       *
+* Parameters:   none                                                           *
+*******************************************************************************/
+int Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const
+{
+	if(ci.rc.size() > 0)
+	{
+		if(IsDummy(ci.rc[0]))
+		{
+			for(unsigned int i=0; i< ci.csg.size(); i++)
+			{
+				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber())
+					return i;
+			}
+		}
+#if 0
+		else
+		{
+			for(unsigned int i=0; i< ci.csg.size(); i++)
+			{
+				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
+					return i;
+			}
+		}
+#endif
+	}
+	else
+	{
+			for(unsigned int j=0; j< ci.rpz.size(); j++)
+			{
+					if(ci.rpz[j].GetNumberOfPoles() == 0 && ci.rpz[j].GetNumberOfZeros() == 0)
+					{
+							for(unsigned int i=0; i< ci.csg.size(); i++)
+							{
+									if(ci.csg[i].GetStageSequenceNumber() == ci.rpz[j].GetStageSequenceNumber())
+										return i;
+							}
+
+					}
+			}
+	}
+
+	return -1;
+}
+/*******************************************************************************
+* Function:     IsDummy                                                        *
+* Parameters:   none                                                           *
+*******************************************************************************/
+bool Inventory::IsDummy(ResponseCoefficients &rc) const
+{
+	return rc.GetNumberOfNumerators() == 0;
+}
+/*******************************************************************************
 * Function:     IsPAZStream                                                    *
 * Parameters:   none                                                           *
 *******************************************************************************/
@@ -2559,6 +2529,9 @@ bool Inventory::IsPAZStream(ChannelIdentifier& ci)
 	if(GetPAZSequence(ci, TEMPERATURE, DIGITAL) != -1)
 		return true;
 
+	if(GetPAZSequence(ci, TEMPERATURE2, DIGITAL) != -1)
+		return true;
+
 	return false;
 }
 /*******************************************************************************
@@ -2570,10 +2543,16 @@ bool Inventory::IsPolyStream(ChannelIdentifier& ci)
 	if(GetPolySequence(ci, TEMPERATURE, VOLTAGE) != -1)
 		return true;
 
+	if(GetPolySequence(ci, TEMPERATURE2, VOLTAGE) != -1)
+		return true;
+
 	if(GetPolySequence(ci, PRESSURE, VOLTAGE) != -1)
 		return true;
 
 	if(GetPolySequence(ci, TEMPERATURE, DIGITAL) != -1)
+		return true;
+
+	if(GetPolySequence(ci, TEMPERATURE2, DIGITAL) != -1)
 		return true;
 
 	if(GetPolySequence(ci, PRESSURE, DIGITAL) != -1)

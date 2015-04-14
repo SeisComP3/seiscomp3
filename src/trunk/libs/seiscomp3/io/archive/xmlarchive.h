@@ -165,6 +165,8 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 	//  Protected interface
 	// ----------------------------------------------------------------------
 	protected:
+		void setValidity(bool v);
+
 		//! Implements derived virtual method
 		bool locateObjectByName(const char* name, const char* targetClass, bool nullable);
 		bool locateNextObjectByName(const char* name, const char* targetClass);

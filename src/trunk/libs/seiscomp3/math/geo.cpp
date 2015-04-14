@@ -96,6 +96,113 @@ void delazi(const Origin &origin, const Station &station,
 */
 
 
+static void mb_geocr( double lon, double lat, double *a, double *b, double *c ) {
+	/* local variables */
+	double   blbda, bphi, ep, ug, vg;
+
+	/* executable code */
+
+	blbda = deg2rad( lon );
+	bphi = deg2rad( lat );
+	ep = 1.0 - WGS84_FLATTENING;
+	ug = ep*ep*tan(bphi);
+	vg = 1.0/sqrt(1.0+ug*ug);
+	*a = vg*cos(blbda);
+	*b = vg*sin(blbda);
+	*c = ug*vg;
+
+} /* end of mb_geocr */
+
+
+static double mb_azm(double x, double y) {
+	/* local variables */
+	double   th;
+
+	/* executable code */
+
+	if  (x == 0.0)  {
+		if  (y > 0.0)  return 90.0;
+		if  (y < 0.0)  return 270.0;
+		return 0.0;
+	} /*endif*/
+
+	th = rad2deg( atan(fabs(y/x)) );
+	if  (x > 0.0)  {
+		if  (y < 0.0)  return (360.0-th);
+		return th;
+	} else {
+		if  (y >= 0.0)  return (180.0-th);
+		return (180.0+th);
+	} /*endif*/
+} /* end of mb_azm */
+
+
+void delazi_wgs84(double elat, double elon, double slat, double slon,
+                  double *distance, double *azim, double *bazim) {
+	/* returns distance and azimuth in degrees of two locations on
+	 * earth
+	 *
+	 * parameters of routine
+	 * double     slat, slon;    input; latitude and longitude of station
+	 * double     elat, elon;    input; latitude and longitude of epicentre
+	 * double     *distance;     output; distance in degrees
+	 * double     *azim;         output; azimuth in degrees
+	 * double     *bazim;        output; back-azimuth in degrees
+	 */
+	/* local variables */
+	double   as, bs, cs, ds;
+	double   ae, be, ce, de;
+	double   bls, cbls, sbls, ble;
+	double   codel, bgdel;
+	double   xi, xj, xk;
+	double   sindt, cosz, sinz;
+
+	/* executable code */
+
+	/* check for equality */
+	as = fabs(slat-elat) + fabs(slon-elon);
+	if  (as < 1.0e-5)  {
+		*distance = 0.0;
+		*azim = 0.0;
+		*bazim = 0.0;
+		return;
+	} /*endif*/
+
+	mb_geocr( slon, slat, &as, &bs, &cs );
+	ds = sqrt( 1.0 - cs*cs );
+	mb_geocr( elon, elat, &ae, &be, &ce );
+	de = sqrt( 1.0 - ce*ce );
+
+	bls = deg2rad( slon );
+	cbls = cos( bls );
+	sbls = sin( bls );
+	codel = ae*as + be*bs + ce*cs;
+
+	sindt = sqrt( 1.0-codel*codel );
+	if  (codel == 0.0)  {
+		bgdel = M_PI/2.0;
+	} else {
+		bgdel = atan( fabs(sindt/codel) );
+		if  (codel <= 0.0)
+			bgdel = M_PI - bgdel;
+	} /*endif*/
+
+	*distance = rad2deg( bgdel );
+
+	/* azimuths */
+	xi = bs*ce - be*cs;
+	xj = as*ce - ae*cs;
+	xk = as*be - ae*bs;
+	cosz = (xi*sbls + xj*cbls)/sindt;
+	sinz = xk/(ds*sindt);
+	*bazim = mb_azm( cosz, sinz );
+	ble = deg2rad( elon );
+	cosz = -(xi*sin(ble) + xj*cos(ble))/sindt;
+	sinz = -xk/(de*sindt);
+	*azim = mb_azm( cosz, sinz );
+}
+
+
 static int _delandaz2coord(double d, double az, double lat0, double lon0,
                            double *lat, double *lon) {
 	double a, b, gam, cosa, cosb, cosd, sina, sinb, sind;

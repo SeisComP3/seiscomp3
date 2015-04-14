@@ -195,7 +195,8 @@ void Archive<ROOT_TYPE>::setHint(int h) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE>
 void Archive<ROOT_TYPE>::setValidity(bool v) {
-	_validObject = v;
+	if ( !v )
+		_validObject = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

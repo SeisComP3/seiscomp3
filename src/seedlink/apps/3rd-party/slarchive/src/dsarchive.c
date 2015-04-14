@@ -586,13 +586,14 @@ ds_getstream (DataStream *datastream, SLMSrecord *msr, int reclen,
       
       if ( (foundgroup->filed = ds_openfile (datastream, filename)) == -1 )
 	{
-	  sl_log (2, 0, "cannot open data stream file, %s\n", strerror (errno));
+	  sl_log (2, 0, "cannot open data stream file %s, %s\n", filename, strerror (errno));
+	  foundgroup->filed = 0;
 	  return NULL;
 	}
       
       if ( (filepos = (int) lseek (foundgroup->filed, (off_t) 0, SEEK_END)) < 0 )
 	{
-	  sl_log (2, 0, "cannot seek in data stream file, %s\n", strerror (errno));
+	  sl_log (2, 0, "cannot seek in data stream file %s, %s\n", filename, strerror (errno));
 	  return NULL;
 	}
       

@@ -40,6 +40,18 @@ void delazi(double lat1, double lon1, double lat2, double lon2,
 
 
 /**
+ * For two points (lat1, lon1) and (lat2, lon2),
+ * the angular distance 'dist' in degrees,
+ * the azimuth 'azi1' (azimuth of point 2 seen from point 1) and
+ * the azimuth 'azi2' (azimuth of point 1 seen from point 2)
+ * are computed.
+ */
+SC_SYSTEM_CORE_API
+void delazi_wgs84(double lat1, double lon1, double lat2, double lon2,
+                  double *out_dist, double *out_azi1, double *out_azi2);
+
+
+/**
  * Computes the coordinates (lat, lon) of the point which
  * is at an azimuth of 'azi' and a distance of 'dist' as seen
  * from the point (lat0, lon0).
