@@ -30,6 +30,7 @@ namespace {
 
 const char* timeFormat = "%FT%T.0000Z";
 const char* timeFormatPrecise = "%FT%T.%fZ";
+const char* timeFormat2 = "%FT%TZ";
 
 }
 
@@ -281,8 +282,10 @@ SC_SYSTEM_CORE_API bool fromString(bool& value, const std::string& str) {
 
 bool fromString(time_t& value, const std::string& str) {
 	Seiscomp::Core::Time t;
-	if ( !t.fromString(str.c_str(), timeFormat) )
-		return false;
+	if ( !t.fromString(str.c_str(), timeFormat) ) {
+		if ( !t.fromString(str.c_str(), timeFormat2) )
+			return false;
+	}
 
 	value = t.seconds();
 	return true;
@@ -290,7 +293,12 @@ bool fromString(time_t& value, const std::string& str) {
 
 
 bool fromString(Time& value, const std::string& str) {
-	return value.fromString(str.c_str(), timeFormatPrecise);
+	if ( !value.fromString(str.c_str(), timeFormatPrecise) ) {
+		if ( !value.fromString(str.c_str(), timeFormat2) )
+			return false;
+	}
+
+	return true;
 }
 
 

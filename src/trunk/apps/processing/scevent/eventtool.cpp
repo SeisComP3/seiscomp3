@@ -419,8 +419,8 @@ bool EventTool::run() {
 	if ( !_eventID.empty() ) {
 		EventInformationPtr info = new EventInformation(&_cache, &_config, query(), _eventID);
 		if ( !info->event ) {
-				std::cout << "Event " << _eventID << " not found" << std::endl;
-				return false;
+			std::cout << "Event " << _eventID << " not found" << std::endl;
+			return false;
 		}
 
 		info->loadAssocations(query());

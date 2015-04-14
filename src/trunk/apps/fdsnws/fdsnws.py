@@ -376,7 +376,8 @@ class FDSNWS(Application):
 			Logging.info("start listening")
 			log.addObserver(logSC3)
 
-			retn = reactor.run()
+			reactor.run()
+			retn = True
 		except Exception, e:
 			Logging.error(str(e))
 

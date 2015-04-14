@@ -26,6 +26,7 @@
 
 #include <QHash>
 #include <QObject>
+#include <QPolygon>
 
 class QMouseEvent;
 
@@ -351,6 +352,8 @@ class SC_GUI_API Canvas : public QObject {
 		int                           _margin;
 		bool                          _isDrawLegendsEnabled;
 		CanvasDelegate               *_delegate;
+
+		mutable QPolygon              _polyCache;
 };
 
 class CanvasDelegate : public QObject {
