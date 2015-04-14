@@ -113,6 +113,8 @@ class Inventory
 		std::string GetStationInstrument(int);
 		int GetPAZSequence(ChannelIdentifier&, std::string, std::string);
 		int GetPolySequence(ChannelIdentifier&, std::string, std::string);
+		int GetDataloggerSensitivity(ChannelIdentifier&) const;
+		bool IsDummy(ResponseCoefficients &rc) const;
 		bool IsPAZStream(ChannelIdentifier& ci);
 		bool IsPolyStream(ChannelIdentifier& ci);
 };

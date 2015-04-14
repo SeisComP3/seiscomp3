@@ -15,14 +15,15 @@
 #define	LINE		512
 
 // abbreviations for analogue or digital transformation
-#define ACCEL1		"M/S**2"
-#define ACCEL2		"M/S2"
-#define VELOCITY	"M/S" 
-#define DISPLACE	"M"
-#define VOLTAGE		"V"
-#define DIGITAL		"COUNTS"
-#define TEMPERATURE "C"
-#define PRESSURE    "PA"
+#define ACCEL1		 "M/S**2"
+#define ACCEL2		 "M/S2"
+#define VELOCITY	 "M/S"
+#define DISPLACE	 "M"
+#define VOLTAGE		 "V"
+#define DIGITAL		 "COUNTS"
+#define TEMPERATURE  "C"
+#define TEMPERATURE2 "CELSIUS"
+#define PRESSURE     "PA"
 
 // initializing values for gettting or saving data
 #define ARCHIVE     "ARCH"
