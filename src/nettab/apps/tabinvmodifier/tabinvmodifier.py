@@ -311,7 +311,7 @@ class InventoryModifier(Client.Application):
             att = rules.getInstrumentsAttributes(datalogger.name(), "Dl")
             self._modifyInventory("datalogger", datalogger, att)
 
-        return 0
+        return True
 
     def done(self):
         if self.outputFile:
