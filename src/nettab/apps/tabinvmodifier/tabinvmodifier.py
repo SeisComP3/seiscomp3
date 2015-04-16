@@ -270,10 +270,10 @@ class InventoryModifier(Client.Application):
         iv = Client.Inventory.Instance().inventory()
 
         if not rules:
-            return 1
+            return False
 
         if not iv:
-            return 1 
+            return False
 
         Logging.debug("Loaded %d networks" % iv.networkCount())
         if self.outputFile is None:
