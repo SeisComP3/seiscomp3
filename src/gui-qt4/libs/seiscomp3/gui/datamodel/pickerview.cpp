@@ -6627,6 +6627,9 @@ void PickerView::selectTrace(const Seiscomp::DataModel::WaveformStreamID &wid) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::closeThreads() {
 	foreach ( RecordStreamThread* t, _acquisitionThreads) {
+		disconnect(t, SIGNAL(handleError(const QString &)),
+		           this, SLOT(handleAcquisitionError(const QString &)));
+
 		t->stop(true);
 		SEISCOMP_DEBUG("removed finished thread %d from list", t->ID());
 		delete t;
