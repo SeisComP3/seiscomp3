@@ -39,6 +39,7 @@ namespace System {
 
 
 IMPLEMENT_SC_CLASS(SchemaParameter, "Configuration::Parameter");
+IMPLEMENT_SC_CLASS(SchemaParameters, "Configuration::Parameters");
 IMPLEMENT_SC_CLASS(SchemaGroup, "Configuration::Group");
 IMPLEMENT_SC_CLASS(SchemaStructure, "Configuration::Struct");
 IMPLEMENT_SC_CLASS(SchemaModule, "Configuration::Module");
@@ -232,10 +233,7 @@ void SchemaModule::serialize(Archive& ar) {
 	ar & NAMED_OBJECT("inherit-global-bindings", inheritGlobalBinding);
 	ar & NAMED_OBJECT_HINT("description", description, Archive::XML_ELEMENT);
 
-	OPT(SchemaParameters) params;
-
-	ar & NAMED_OBJECT_HINT("configuration", params, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
-	if ( params ) parameters = *params;
+	ar & NAMED_OBJECT_HINT("configuration", parameters, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 
 	ar & NAMED_OBJECT_HINT("setup", setup, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 
@@ -459,6 +457,10 @@ bool SchemaDefinitions::load(const char *path) {
 			if ( fs::is_directory(*it) ) continue;
 			string filename = SC_FS_IT_STR(it);
 			if ( fs::extension(filename) != ".xml" ) continue;
+
+			size_t oldPluginCount = _plugins.size();
+
+			SEISCOMP_DEBUG("Loading %s", filename.c_str());
 			if ( !ar.open(filename.c_str()) ) {
 				SEISCOMP_ERROR("Failed to load %s", filename.c_str());
 				continue;
@@ -466,6 +468,10 @@ bool SchemaDefinitions::load(const char *path) {
 
 			serialize(ar);
 			ar.close();
+
+			if ( _plugins.size() > oldPluginCount ) {
+				cout << _plugins.back()->name << endl;
+			}
 		}
 
 		// Read the aliases file and create the aliases
@@ -493,6 +499,7 @@ bool SchemaDefinitions::load(const char *path) {
 		}
 	}
 	catch ( std::exception &exc ) {
+		SEISCOMP_ERROR("%s", exc.what());
 		return false;
 	}
 

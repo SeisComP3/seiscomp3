@@ -271,21 +271,23 @@ Binding *loadCategoryBinding(SchemaBinding *def, const std::string &prefix,
 	SectionPtr sec = new Section(def->name);
 	binding->sections.push_back(sec);
 
-	for ( size_t i = 0; i < def->parameters.parameterCount(); ++i ) {
-		SchemaParameter *pdef = def->parameters.parameter(i);
-		std::string paramName = namePrefix + "." + pdef->name;
-		ParameterPtr param = new Parameter(pdef, paramName);
-		sec->add(param.get());
-	}
+	if ( def->parameters ) {
+		for ( size_t i = 0; i < def->parameters->parameterCount(); ++i ) {
+			SchemaParameter *pdef = def->parameters->parameter(i);
+			std::string paramName = namePrefix + "." + pdef->name;
+			ParameterPtr param = new Parameter(pdef, paramName);
+			sec->add(param.get());
+		}
 
-	for ( size_t i = 0; i < def->parameters.groupCount(); ++i ) {
-		SchemaGroup *gdef = def->parameters.group(i);
-		loadGroup(sec.get(), gdef, namePrefix + ".");
-	}
+		for ( size_t i = 0; i < def->parameters->groupCount(); ++i ) {
+			SchemaGroup *gdef = def->parameters->group(i);
+			loadGroup(sec.get(), gdef, namePrefix + ".");
+		}
 
-	for ( size_t i = 0; i < def->parameters.structureCount(); ++i ) {
-		SchemaStructure *gdef = def->parameters.structure(i);
-		sec->addType(loadStructure(gdef, namePrefix + ".", ""));
+		for ( size_t i = 0; i < def->parameters->structureCount(); ++i ) {
+			SchemaStructure *gdef = def->parameters->structure(i);
+			sec->addType(loadStructure(gdef, namePrefix + ".", ""));
+		}
 	}
 
 	return binding;
@@ -1179,10 +1181,10 @@ Container *Module::findContainer(const std::string &path) const {
 
 
 bool Module::hasConfiguration() const {
-	if ( definition == NULL ) return false;
-	return definition->parameters.parameterCount() > 0 ||
-	       definition->parameters.groupCount() > 0 ||
-	       definition->parameters.structureCount() > 0 ||
+	if ( definition == NULL || !definition->parameters ) return false;
+	return definition->parameters->parameterCount() > 0 ||
+	       definition->parameters->groupCount() > 0 ||
+	       definition->parameters->structureCount() > 0 ||
 	       !definition->isStandalone();
 }
 
@@ -1773,33 +1775,37 @@ Module *Model::create(SchemaDefinitions *schema, SchemaModule *def) {
 	SectionPtr sec = new Section(def->name);
 	//sec->description = def->description;
 
-	for ( size_t j = 0; j < def->parameters.parameterCount(); ++j ) {
-		SchemaParameter *pdef = def->parameters.parameter(j);
-		ParameterPtr param = new Parameter(pdef, pdef->name);
-		sec->add(param.get());
+	if ( def->parameters ) {
+		for ( size_t j = 0; j < def->parameters->parameterCount(); ++j ) {
+			SchemaParameter *pdef = def->parameters->parameter(j);
+			ParameterPtr param = new Parameter(pdef, pdef->name);
+			sec->add(param.get());
+		}
+
+		for ( size_t j = 0; j < def->parameters->groupCount(); ++j )
+			loadGroup(sec.get(), def->parameters->group(j), "");
+
+		for ( size_t j = 0; j < def->parameters->structureCount(); ++j )
+			sec->addType(loadStructure(def->parameters->structure(j), "", ""));
 	}
-
-	for ( size_t j = 0; j < def->parameters.groupCount(); ++j )
-		loadGroup(sec.get(), def->parameters.group(j), "");
-
-	for ( size_t j = 0; j < def->parameters.structureCount(); ++j )
-		sec->addType(loadStructure(def->parameters.structure(j), "", ""));
 
 	// Load plugin definitions
 	vector<SchemaPlugin*> plugins = schema->pluginsForModule(def->name);
 	for ( size_t p = 0; p < plugins.size(); ++p ) {
 		SchemaPlugin *plugin = plugins[p];
-		for ( size_t j = 0; j < plugin->parameters.parameterCount(); ++j ) {
-			SchemaParameter *pdef = plugin->parameters.parameter(j);
-			ParameterPtr param = new Parameter(pdef, pdef->name);
-			sec->add(param.get());
+		if ( plugin->parameters ) {
+			for ( size_t j = 0; j < plugin->parameters->parameterCount(); ++j ) {
+				SchemaParameter *pdef = plugin->parameters->parameter(j);
+				ParameterPtr param = new Parameter(pdef, pdef->name);
+				sec->add(param.get());
+			}
+
+			for ( size_t j = 0; j < plugin->parameters->groupCount(); ++j )
+				loadGroup(sec.get(), plugin->parameters->group(j), "");
+
+			for ( size_t j = 0; j < plugin->parameters->structureCount(); ++j )
+				sec->addType(loadStructure(plugin->parameters->structure(j), "", ""));
 		}
-
-		for ( size_t j = 0; j < plugin->parameters.groupCount(); ++j )
-			loadGroup(sec.get(), plugin->parameters.group(j), "");
-
-		for ( size_t j = 0; j < plugin->parameters.structureCount(); ++j )
-			sec->addType(loadStructure(plugin->parameters.structure(j), "", ""));
 	}
 
 	mod->add(sec.get());
@@ -1833,17 +1839,19 @@ Module *Model::create(SchemaDefinitions *schema, SchemaModule *def) {
 			// Category bindings are not supported for import
 			if ( !sb->category.empty() ) continue;
 
-			for ( size_t j = 0; j < sb->parameters.parameterCount(); ++j ) {
-				SchemaParameter *pdef = sb->parameters.parameter(j);
-				ParameterPtr param = new Parameter(pdef, pdef->name);
-				sec->add(param.get());
+			if ( sb->parameters ) {
+				for ( size_t j = 0; j < sb->parameters->parameterCount(); ++j ) {
+					SchemaParameter *pdef = sb->parameters->parameter(j);
+					ParameterPtr param = new Parameter(pdef, pdef->name);
+					sec->add(param.get());
+				}
+
+				for ( size_t j = 0; j < sb->parameters->groupCount(); ++j )
+					loadGroup(sec, sb->parameters->group(j), "");
+
+				for ( size_t j = 0; j < sb->parameters->structureCount(); ++j )
+					sec->addType(loadStructure(sb->parameters->structure(j), "", ""));
 			}
-
-			for ( size_t j = 0; j < sb->parameters.groupCount(); ++j )
-				loadGroup(sec, sb->parameters.group(j), "");
-
-			for ( size_t j = 0; j < sb->parameters.structureCount(); ++j )
-				sec->addType(loadStructure(sb->parameters.structure(j), "", ""));
 		}
 	}
 
@@ -1901,17 +1909,19 @@ Module *Model::create(SchemaDefinitions *schema, SchemaModule *def) {
 			continue;
 		}
 
-		for ( size_t j = 0; j < sb->parameters.parameterCount(); ++j ) {
-			SchemaParameter *pdef = sb->parameters.parameter(j);
-			ParameterPtr param = new Parameter(pdef, prefix + pdef->name);
-			sec->add(param.get());
+		if ( sb->parameters ) {
+			for ( size_t j = 0; j < sb->parameters->parameterCount(); ++j ) {
+				SchemaParameter *pdef = sb->parameters->parameter(j);
+				ParameterPtr param = new Parameter(pdef, prefix + pdef->name);
+				sec->add(param.get());
+			}
+
+			for ( size_t j = 0; j < sb->parameters->groupCount(); ++j )
+				loadGroup(sec, sb->parameters->group(j), prefix);
+
+			for ( size_t j = 0; j < sb->parameters->structureCount(); ++j )
+				sec->addType(loadStructure(sb->parameters->structure(j), prefix, ""));
 		}
-
-		for ( size_t j = 0; j < sb->parameters.groupCount(); ++j )
-			loadGroup(sec, sb->parameters.group(j), prefix);
-
-		for ( size_t j = 0; j < sb->parameters.structureCount(); ++j )
-			sec->addType(loadStructure(sb->parameters.structure(j), prefix, ""));
 	}
 
 	if ( mod->bindingTemplate ) {

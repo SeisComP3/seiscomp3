@@ -64,6 +64,8 @@ DEFINE_SMARTPOINTER(SchemaStructure);
 
 DEFINE_SMARTPOINTER(SchemaParameters);
 class SC_SYSTEM_CORE_API SchemaParameters : public Core::BaseObject {
+	DECLARE_SC_CLASS(SchemaParameter);
+
 	// ------------------------------------------------------------------
 	//  X'truction
 	// ------------------------------------------------------------------
@@ -294,15 +296,15 @@ class SC_SYSTEM_CORE_API SchemaModule : public Core::BaseObject {
 	//  Attributes
 	// ------------------------------------------------------------------
 	public:
-		SchemaModule    *aliasedModule;
-		std::string      name;
-		std::string      category;
-		std::string      import;
-		std::string      description;
-		OPT(bool)        standalone;
-		OPT(bool)        inheritGlobalBinding;
-		SchemaParameters parameters;
-		SchemaSetupPtr   setup;
+		SchemaModule       *aliasedModule;
+		std::string         name;
+		std::string         category;
+		std::string         import;
+		std::string         description;
+		OPT(bool)           standalone;
+		OPT(bool)           inheritGlobalBinding;
+		SchemaParametersPtr parameters;
+		SchemaSetupPtr      setup;
 };
 
 
@@ -331,7 +333,7 @@ class SC_SYSTEM_CORE_API SchemaPlugin : public Core::BaseObject {
 		std::string              name;
 		std::vector<std::string> extends;
 		std::string              description;
-		SchemaParameters         parameters;
+		SchemaParametersPtr      parameters;
 		SchemaSetupPtr           setup;
 };
 
@@ -362,7 +364,7 @@ class SC_SYSTEM_CORE_API SchemaBinding : public Core::BaseObject {
 		std::string              module;
 		std::string              category;
 		std::string              description;
-		SchemaParameters         parameters;
+		SchemaParametersPtr      parameters;
 };
 
 
