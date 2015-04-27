@@ -1429,7 +1429,12 @@ unsigned long DatabaseArchive::objectId(Object* object, const std::string& paren
 
 	_isReading = false;
 
+	_validObject = true;
 	object->serialize(*this);
+	if ( !_validObject ) {
+		SEISCOMP_ERROR("failed to query for object");
+		return -1;
+	}
 
 	if ( _indexAttributes.empty() ) {
 		SEISCOMP_WARNING("objectID: index is empty");
@@ -1572,7 +1577,7 @@ bool DatabaseArchive::write(Object* object, const std::string& parentId) {
 		return false;
 	}
 
-	setValidity(true);
+	_validObject = true;
 
 	_objectAttributes = &_rootAttributes;
 	_objectAttributes->clear();
@@ -1612,6 +1617,11 @@ bool DatabaseArchive::write(Object* object, const std::string& parentId) {
 	_isReading = false;
 
 	object->serialize(*this);
+	if ( !_validObject ) {
+		SEISCOMP_ERROR("serializing object with type '%s' failed", object->className());
+		deleteObject(objectId);
+		return false;
+	}
 
 	_rootAttributes["_oid"] = toString(objectId);
 	bool success = false;
@@ -1642,6 +1652,8 @@ bool DatabaseArchive::write(Object* object, const std::string& parentId) {
 			_rootAttributes["_parent_oid"] = toString(iParentId);
 			success = insertRow(object->className(), *_objectAttributes);
 		}
+		else
+			SEISCOMP_ERROR("failed to get oid for object '%s'", parentId.c_str());
 	}
 	else
 		success = insertRow(object->className(), *_objectAttributes);
@@ -1655,7 +1667,7 @@ bool DatabaseArchive::write(Object* object, const std::string& parentId) {
 	}
 
 	_isReading = true;
-	setValidity(success);
+	_validObject = success;
 	return success;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1672,7 +1684,7 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 		return false;
 	}
 
-	setValidity(true);
+	_validObject = true;
 
 	_objectAttributes = &_rootAttributes;
 	_objectAttributes->clear();
@@ -1738,6 +1750,10 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 	_isReading = false;
 
 	object->serialize(*this);
+	if ( !_validObject ) {
+		SEISCOMP_ERROR("serializing updated object with type '%s' failed", object->className());
+		return false;
+	}
 
 	if ( iPublicID )
 		_indexAttributes["_oid"] = toString(iPublicID);
@@ -1777,10 +1793,7 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 
 	_isReading = true;
 
-	if ( !_db->execute(ss.str().c_str()) )
-		setValidity(false);
-	else
-		setValidity(true);
+	_validObject = _db->execute(ss.str().c_str());
 
 	return success();
 }
@@ -2191,7 +2204,7 @@ void DatabaseArchive::serializeObject(Object* obj) {
 
 	resetAttributePrefix();
 
-	setValidity(true);
+	_validObject = true;
 	obj->serialize(*this);
 
 	if ( _db != NULL && isReading() ) {
