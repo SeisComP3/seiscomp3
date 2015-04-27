@@ -81,7 +81,7 @@ Envelope::Envelope(int argc, char **argv) : Application(argc, argv) {
 	setLoadInventoryEnabled(true);
 	setLoadConfigModuleEnabled(false);
 
-	setPrimaryMessagingGroup("VS");
+	setPrimaryMessagingGroup("AMPLITUDE");
 	setAutoAcquisitionStart(true);
 
 	NEW_OPT(_config.streamsWhiteList, "envelope.streams.whitelist");

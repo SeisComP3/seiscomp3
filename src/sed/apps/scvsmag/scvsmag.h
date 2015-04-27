@@ -76,7 +76,6 @@ public:
 
 protected:
 	typedef std::map<Timeline::StationID, VsTimeWindow> VsWindows;
-	typedef std::set<Timeline::StationID> StationList;
 
 	DEFINE_SMARTPOINTER(VsEvent);
 	struct VsEvent: Core::BaseObject {
@@ -90,12 +89,14 @@ protected:
 		Core::Time originArrivalTime;
 		Core::Time originCreationTime;
 		int vsStationCount;
-		StationList pickedStations; // all stations contributing picks to an origin
+		Timeline::StationList pickedStations; // all stations contributing picks to an origin
 		int pickedStationsCount;
 		int pickedThresholdStationsCount;
 		int allThresholdStationsCount;
 		bool isValid; // set to true or false by quality control in VsMagnitude::process(VsEvent *evt)
 		double dthresh;
+		double azGap;
+		double maxAzGap;
 		int update;
 		double likelihood;
 	};
@@ -132,6 +133,7 @@ protected:
 			double &deltamag, double &deltapick);
 	double deltaMag(double vsmag, double stmag); // for Quality Control
 	double deltaPick(VsEvent *evt); // ratio between the stations that reported a pick to the overall number of stations within a given radius.
+	double valid_magnitude_error(double stmag);
 
 	/**
 	 Returns the site correction scale.
@@ -170,6 +172,7 @@ private:
 	int _timeout;
 	bool _siteEffect; // turn site effects on or off
 	double _maxepicdist;
+	double _maxazgap;
 	bool _logenvelopes;
 };
 

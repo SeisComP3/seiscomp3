@@ -668,32 +668,12 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 	FDSNXML::ResponseStagePtr sx_stage = new FDSNXML::ResponseStage;
 	FDSNXML::FrequencyType freq;
 	FDSNXML::FloatType ft;
-
-	FDSNXML::ResponseStagePtr sx_stage0 = sx_stage;
+	FDSNXML::CounterType cnt;
+	FDSNXML::ResponseStagePtr sx_stage0;
 
 	// Initialize zeros
 	freq.setValue(0);
 	ft.setValue(0);
-
-	FDSNXML::CounterType cnt;
-	cnt.setValue(resp->stageCount()+1);
-
-	sx_stage->setNumber(cnt);
-	sx_stage->stageGain().setValue(gain);
-	sx_stage->stageGain().setFrequency(freq);
-
-	sx_stage->setCoefficients(FDSNXML::Coefficients());
-	FDSNXML::Coefficients &coeff0 = sx_stage->coefficients();
-	coeff0.setInputUnits(FDSNXML::UnitsType(CURRENT));
-	coeff0.setOutputUnits(FDSNXML::UnitsType(DIGITAL));
-	coeff0.setCfTransferFunctionType(FDSNXML::CFTFT_DIGITAL);
-
-	sx_stage->setDecimation(FDSNXML::Decimation());
-	sx_stage->decimation().setFactor(1);
-	sx_stage->decimation().setOffset(0);
-	sx_stage->decimation().setDelay(ft);
-	sx_stage->decimation().setCorrection(ft);
-	sx_stage->decimation().setInputSampleRate(freq);
 
 	// Input sample rate will be derived from all subsequent stages and
 	// set later
@@ -708,13 +688,8 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 		return false;
 	}
 
-	double finalSR = (double)numerator / (double)denominator;
-
-	resp->addStage(sx_stage.get());
-
 	DataModel::Decimation *deci = datalogger->decimation(DataModel::DecimationIndex(numerator, denominator));
 	if ( deci != NULL ) {
-
 		try {
 			string analogueFilterChain = deci->analogueFilterChain().content();
 			vector<string> filters;
@@ -732,14 +707,39 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 				}
 
 				sx_stage = convert(paz, CURRENT, CURRENT);
-				FDSNXML::CounterType cnt;
 				cnt.setValue(resp->stageCount()+1);
 				sx_stage->setNumber(cnt);
 				resp->addStage(sx_stage.get());
 			}
 		}
 		catch ( ... ) {}
+	}
 
+	cnt.setValue(resp->stageCount()+1);
+
+	sx_stage = new FDSNXML::ResponseStage;
+	sx_stage->setNumber(cnt);
+	sx_stage->stageGain().setValue(gain);
+	sx_stage->stageGain().setFrequency(freq);
+
+	sx_stage->setCoefficients(FDSNXML::Coefficients());
+	FDSNXML::Coefficients &coeff0 = sx_stage->coefficients();
+	coeff0.setInputUnits(FDSNXML::UnitsType(CURRENT));
+	coeff0.setOutputUnits(FDSNXML::UnitsType(DIGITAL));
+	coeff0.setCfTransferFunctionType(FDSNXML::CFTFT_DIGITAL);
+
+	sx_stage->setDecimation(FDSNXML::Decimation());
+	sx_stage->decimation().setFactor(1);
+	sx_stage->decimation().setOffset(0);
+	sx_stage->decimation().setDelay(ft);
+	sx_stage->decimation().setCorrection(ft);
+	sx_stage->decimation().setInputSampleRate(freq);
+
+	resp->addStage(sx_stage.get());
+
+	sx_stage0 = sx_stage;
+
+	if ( deci != NULL ) {
 		try {
 			string digitialFilterChain = deci->digitalFilterChain().content();
 			vector<string> filters;
@@ -765,7 +765,6 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 					}
 				}
 
-				FDSNXML::CounterType cnt;
 				cnt.setValue(resp->stageCount()+1);
 				sx_stage->setNumber(cnt);
 				resp->addStage(sx_stage.get());
@@ -774,6 +773,7 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 		catch ( ... ) {}
 	}
 
+	double finalSR = (double)numerator / (double)denominator;
 	double outputSR = finalSR;
 	double inputSR = outputSR;
 

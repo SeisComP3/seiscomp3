@@ -57,7 +57,7 @@ void* NLL_AllocateGrid(GridDesc* pgrid)
 
 	if (USE_GRID_LIST) {
 
-		if ((index = GridMemList_IndexOfGridDesc(0, pgrid)) >= 0){
+		if (0 && (index = GridMemList_IndexOfGridDesc(0, pgrid)) >= 0){
 			// already in list
 			pGridMemStruct = GridMemList_ElementAt(index);
 			pGridMemStruct->active = 1;

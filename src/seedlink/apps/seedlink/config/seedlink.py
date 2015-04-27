@@ -580,6 +580,7 @@ class Module(TemplateModule):
         self._set_default("port", "18000", False)
         self._set_default("encoding", "steim2", False)
         self._set_default("trusted", "127.0.0.0/8", False)
+        self._set_default("access", "0.0.0.0/0", False)
         self._set_default("stream_check", "true", False)
         self._set_default("window_extraction", "true", False)
         self._set_default("window_extraction_trusted", "true", False)
