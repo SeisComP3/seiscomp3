@@ -100,6 +100,16 @@
 				Enables/disables access to restricted inventory data
 				</description>
 			</parameter>
+			<parameter name="hideAuthor" type="boolean" default="false">
+				<description>
+				If enabled removes author information from any event creationInfo element
+				</description>
+			</parameter>
+			<parameter name="evaluationMode" type="string">
+				<description>
+				If set the event service will only return events having a preferred origin with a matching evaluationMode property
+				</description>
+			</parameter>
 			<parameter name="serveDataSelect" type="boolean" default="true">
 				<description>
 				Enables/disables the DataSelect service.

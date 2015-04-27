@@ -469,8 +469,8 @@ Core::GreensFunction* HelmbergerArchive::read(const std::string &file,
 
 	int components = 0;
 	ifs >> components;
-	if ( components != 8 ) {
-		SEISCOMP_WARNING("%s: invalid number of components: %d, expected 8",
+	if ( components < 8 ) {
+		SEISCOMP_WARNING("%s: invalid number of components: %d, need 8",
 		                 file.c_str(), components);
 		return NULL;
 	}

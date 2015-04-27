@@ -232,10 +232,11 @@ bool Hypo71::init(const Config::Config& config) {
 		SEISCOMP_ERROR("%s CONFIGURATION FILE IS NOT CORRECTLY IMPLEMENTED!!", MSG_HEADER);
 	}
 
-	for (IDList::iterator it = _profileNames.begin();
-	        it != _profileNames.end();) {
+	for ( IDList::iterator it = _profileNames.begin();
+	      it != _profileNames.end(); ) {
 
 		Profile prof;
+
 		string prefix = string("hypo71.profile.") + *it + ".";
 
 		prof.name = *it;
@@ -266,6 +267,13 @@ bool Hypo71::init(const Config::Config& config) {
 			SEISCOMP_ERROR("%s |   configFile         | can't read value", MSG_HEADER);
 		}
 
+		try {
+			prof.fixStartDepthOnly = config.getBool(prefix + "fixStartDepthOnly");
+		}
+		catch ( ... ) {
+			prof.fixStartDepthOnly = false;
+		}
+
 		if ( prof.controlFile.empty() )
 			prof.controlFile = _controlFilePath;
 
@@ -284,7 +292,6 @@ bool Hypo71::init(const Config::Config& config) {
 	_profileNames.insert(_profileNames.begin(), "SELECT PROFILE");
 
 	SEISCOMP_DEBUG("%s -----------------------------------------------------------------", MSG_HEADER);
-
 	try {
 		updateProfile(config.getString("hypo71.defaultProfile"));
 	}
@@ -693,8 +700,8 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 	double upper = 0, lower = 0;
 	string pickID;
 
-	for (PickList::const_iterator it = pickList.begin();
-	        it != pickList.end(); ++it) {
+	for ( PickList::const_iterator it = pickList.begin();
+	      it != pickList.end(); ++it ) {
 
 		PickPtr pick = it->first;
 		weight = it->second;
@@ -717,6 +724,9 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 			lower = pick->time().lowerUncertainty();
 		}
 		catch ( ... ) {}
+
+		// Pick found, break the loop
+		break;
 	}
 
 	if ( pickID != "" ) {
@@ -745,6 +755,12 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	strftime(head, 80, "%F %H:%M:%S [log] ", timeinfo);
+
+	//! Reset trial hypocenter position
+	_trialLatDeg = "";
+	_trialLatMin = "";
+	_trialLonDeg = "";
+	_trialLonMin = "";
 
 	string calculatedZTR;
 	if ( _usingFixedDepth == true )
@@ -874,11 +890,11 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 	// Control card parameters
 	pConfig.readInto(cCC.ztr, "ZTR", dCC.ztr);
-	if ( _usingFixedDepth == true )
+	if ( _usingFixedDepth )
 		cCC.ztr = toString(round(_fixedDepth));
 	pConfig.readInto(cCC.xnear, "XNEAR", dCC.xnear);
 
-	if ( _enableDistanceCutOff == true )
+	if ( _enableDistanceCutOff )
 		cCC.xfar = toString(_distanceCutOff);
 	else
 		pConfig.readInto(cCC.xfar, "XFAR", dCC.xfar);
@@ -896,31 +912,27 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	cCC.ipun = dCC.ipun;
 	cCC.ksort = dCC.ksort;
 
-
 	// Available only on custom configuration file...
-	// Should we use last origin lat/lon to reprocess origin localization ?
-	if ( pConfig.read("DISABLE_LAST_LOC", true) ) {
-		_useLastOriginAsReference = false;
+	// Should we use the position obtained from the best ZTR value ?
+	if ( pConfig.read("USE_TRIAL_POSITION", true) ) {
+		cCC.lat1 = _trialLatDeg;
+		cCC.lat2 = _trialLatMin;
+		cCC.lon1 = _trialLonDeg;
+		cCC.lon2 = _trialLonMin;
+	}
+	else {
 		cCC.lat1 = "";
 		cCC.lat2 = "";
 		cCC.lon1 = "";
 		cCC.lon2 = "";
 	}
-	else {
-
-		//! Really strange:
-		//! HYPO71 doesn't take last lat/lon cardinal situation (NSEW)
-		_useLastOriginAsReference = true;
-
-		cCC.lat1 = h71DecimalToSexagesimal(_oLastLatitude, gpLatitude).substr(0, 2);
-		cCC.lat2 = h71DecimalToSexagesimal(_oLastLatitude, gpLatitude).substr(2, 7);
-		cCC.lon1 = h71DecimalToSexagesimal(_oLastLongitude, gpLongitude).substr(0, 3);
-		cCC.lon2 = h71DecimalToSexagesimal(_oLastLongitude, gpLongitude).substr(3, 7);
-	}
 
 	// Instruction card parameters            !
 	pConfig.readInto(cIC.knst, "KNST", dIC.knst);
 	pConfig.readInto(cIC.inst, "INST", dIC.inst);
+	if ( _usingFixedDepth && !_currentProfile->fixStartDepthOnly )
+		cIC.inst = "1";
+
 	cIC.ipro = dIC.ipro;
 	cIC.zres = dIC.zres;
 
@@ -1186,29 +1198,35 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	//! blank space
 	<< formatString("", 2, 0)
 
+	//! Latitudes and longitudes used here are recovered from the getZTR()
+	//! method, this will enhance the locator's precision
+
 	//! degree portion of the trial hypocenter latitude //! integer 2
 	<< formatString(cCC.lat1, 2, 0, "lat1")
+	//	<< formatString(_trialLatDeg, 2, 0, "tlat1deg")
 
 	//! blank space
 	<< formatString("", 1, 0)
 
 	//! minute portion of the trial hypocenter latitude //! float 5.2
 	<< formatString(cCC.lat2, 5, 0, "lat2")
+	//	<< formatString(_trialLatMin, 5, 0, "tlatmin")
 
 	//! blank space
 	<< formatString("", 1, 0)
 
 	//! degree portion of the trial longitude //! integer 3
 	<< formatString(cCC.lon1, 3, 0, "lon1")
+	//	<< formatString(_trialLonDeg, 3, 0, "tlondeg")
 
 	//! blank space
 	<< formatString("", 1, 0)
 
 	//! minute portion of the trial longitude //! float 5.2
 	<< formatString(cCC.lon2, 5, 0, "lon2")
+	//	<< formatString(_trialLonMin, 5, 0, "tlonmin")
 
 	<< endl;
-
 
 
 	// Phases list
@@ -1999,7 +2017,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 			// Associating new arrival with new origin.
 			// P.S.: the weight actually stays the same as the one in picklist
 			// since it is not the real weight but just intel about whether or not
-			// to use arrival (rms to high or some like that) [act as boolean 1 or 0]
+			// to use arrival (rms too high or some like that) [act as boolean 1 or 0]
 			for (PickList::iterator it = pickList.begin();
 			        it != pickList.end(); ++it) {
 
@@ -2057,7 +2075,6 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 				if ( toDouble(swt) > 0.5 )
 					depthPhaseCount++;
 				idx++;
-
 			}
 
 			// Saving station arrival info
@@ -2098,7 +2115,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 	oq.setAssociatedPhaseCount(idx);
 	oq.setUsedPhaseCount(idx);
-	oq.setDepthPhaseCount(idx);
+	oq.setDepthPhaseCount(0);
 	oq.setStandardError(hrms);
 
 	sort(Tazi.begin(), Tazi.end());
@@ -2276,25 +2293,11 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 	cCC.ipun = dCC.ipun;
 	cCC.ksort = dCC.ksort;
 
-	// Available only on custom configuration file
-	// Should we use last origin lat/lon to reprocess origin localization ?
-	if ( pConfig.read("DISABLE_LAST_LOC", true) ) {
-		_useLastOriginAsReference = false;
-		cCC.lat1 = "";
-		cCC.lat2 = "";
-		cCC.lon1 = "";
-		cCC.lon2 = "";
-	}
-	else {
-		//! Really strange:
-		//! HYPO71 doesn't take last lat/lon cardinal situation (NSEW)
-		_useLastOriginAsReference = true;
-
-		cCC.lat1 = h71DecimalToSexagesimal(_oLastLatitude, gpLatitude).substr(0, 2);
-		cCC.lat2 = h71DecimalToSexagesimal(_oLastLatitude, gpLatitude).substr(2, 7);
-		cCC.lon1 = h71DecimalToSexagesimal(_oLastLongitude, gpLongitude).substr(0, 3);
-		cCC.lon2 = h71DecimalToSexagesimal(_oLastLongitude, gpLongitude).substr(3, 7);
-	}
+	//! Start iterations without any known position
+	cCC.lat1 = "";
+	cCC.lat2 = "";
+	cCC.lon1 = "";
+	cCC.lon2 = "";
 
 	// Instruction card parameters            !
 	pConfig.readInto(cIC.knst, "KNST", dIC.knst);
@@ -2909,11 +2912,16 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 							minDepth = depth;
 							minRMS = toDouble(rms);
 
-							if ( ER < minER )
+							if ( ER < minER ) {
 								minER = ER;
+								_trialLatDeg = latDeg;
+								_trialLatMin = latMin;
+								_trialLonDeg = lonDeg;
+								_trialLonMin = lonMin;
+							}
 						}
-					}
-					catch ( ... ) {}
+
+					} catch ( ... ) {}
 				}
 
 				loop++;
@@ -2944,7 +2952,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
-                       double initDepth, Time & initTime) throw (Core::GeneralException) {
+                       double initDepth, Time& initTime) throw (Core::GeneralException) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2996,8 +3004,7 @@ Origin* Hypo71::relocate(const Origin* origin) throw (Core::GeneralException) {
 		try {
 			if ( origin->arrival(i)->weight() <= 0 )
 				weight = .0;
-		}
-		catch ( ... ) {}
+		} catch ( ... ) {}
 
 
 		picks.push_back(WeightedPick(pick, weight));
@@ -3054,9 +3061,8 @@ void Hypo71::addNewStation(const string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const string
-Hypo71::getStationMappedCode(const string& networkCode,
-                             const string& stationCode) {
+const string Hypo71::getStationMappedCode(const string& networkCode,
+                                          const string& stationCode) {
 
 	string name = networkCode + "." + stationCode;
 	for (StationMap::iterator i = _stationMap.begin();
@@ -3072,8 +3078,7 @@ Hypo71::getStationMappedCode(const string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const string
-Hypo71::getOriginalStationCode(const string& mappedCode) {
+const string Hypo71::getOriginalStationCode(const string& mappedCode) {
 
 	for (StationMap::iterator i = _stationMap.begin();
 	        i != _stationMap.end(); ++i)
@@ -3088,8 +3093,7 @@ Hypo71::getOriginalStationCode(const string& mappedCode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-string
-Hypo71::lastMessage(MessageType type) const {
+string Hypo71::lastMessage(MessageType type) const {
 
 	if ( type == Warning )
 		return _lastWarning;
@@ -3107,8 +3111,8 @@ void Hypo71::updateProfile(const string& name) {
 
 	_currentProfile = NULL;
 	Profile* prof = NULL;
-	for ( Profiles::iterator it = _profiles.begin();
-	      it != _profiles.end(); ++it ) {
+	for (Profiles::iterator it = _profiles.begin();
+	        it != _profiles.end(); ++it) {
 
 		if ( it->name != name )
 			continue;

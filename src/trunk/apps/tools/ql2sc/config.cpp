@@ -23,9 +23,13 @@
 #include <seiscomp3/communication/protocol.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/datamodel/amplitude.h>
-#include <seiscomp3/datamodel/pick.h>
+#include <seiscomp3/datamodel/event.h>
+#include <seiscomp3/datamodel/eventparameters.h>
+#include <seiscomp3/datamodel/focalmechanism.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/pick.h>
+#include <seiscomp3/datamodel/reading.h>
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/logging/log.h>
 
@@ -139,6 +143,24 @@ bool Config::init() {
 			cfg.routingTable[DataModel::Origin::TypeInfo().className()] = "LOCATION";
 			cfg.routingTable[DataModel::StationMagnitude::TypeInfo().className()] = "MAGNITUDE";
 			cfg.routingTable[DataModel::Magnitude::TypeInfo().className()] = "MAGNITUDE";
+		}
+
+		// create explicit routing entries for top-level EventParameters
+		// children
+		RoutingTable::const_iterator rit = cfg.routingTable.find(DataModel::EventParameters::TypeInfo().className());
+		if ( rit != cfg.routingTable.end() && !rit->second.empty() ) {
+			if ( cfg.routingTable[DataModel::Pick::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Pick::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Amplitude::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Amplitude::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Reading::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Reading::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Origin::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Origin::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::FocalMechanism::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::FocalMechanism::TypeInfo().className()] = rit->second;
+			if ( cfg.routingTable[DataModel::Event::TypeInfo().className()].empty() )
+				cfg.routingTable[DataModel::Event::TypeInfo().className()] = rit->second;
 		}
 
 		hosts.push_back(cfg);

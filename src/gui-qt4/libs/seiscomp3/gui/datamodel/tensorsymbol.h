@@ -50,13 +50,10 @@ class SC_GUI_API TensorSymbol : public Map::Symbol
 
 	protected:
 		virtual void customDraw(const Map::Canvas *canvas, QPainter& painter);
-
-
-	private:
 		void resize(int w, int h);
 
 
-	private:
+	protected:
 		TensorRenderer     _renderer;
 		QImage             _buffer;
 		Math::Tensor2Sd    _tensor;

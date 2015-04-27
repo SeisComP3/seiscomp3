@@ -10,14 +10,15 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-
 #include <seiscomp3/core/datetime.h>
+#include <seiscomp3/core/exceptions.h>
+
 #include <sstream>
 #include <cmath>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <seiscomp3/core/exceptions.h>
+
 
 #ifdef WIN32
 #include <time.h>
@@ -109,7 +110,6 @@ extern "C" {
 #define MICROS 1000000
 
 namespace {
-
 
 #ifdef __sun__
 #define NO_COMPACT_DATE
@@ -334,8 +334,8 @@ TimeSpan& TimeSpan::operator=(long t) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeSpan& TimeSpan::operator=(double t) {
-	if(t>(double)0x7fffffff||t<-(double)0x80000000)
-		throw Core::OverflowException("TimeSpan::operator=(): double doesn't fit int");
+	if( t > MaxTime || t < MinTime )
+		throw Core::OverflowException("TimeSpan::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
 	_timeval.tv_usec = (long)((t-_timeval.tv_sec)*MICROS);
 
@@ -606,6 +606,8 @@ Time& Time::operator=(time_t t) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time& Time::operator=(double t) {
+	if( t > MaxTime || t < MinTime )
+		throw Core::OverflowException("Time::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
 	_timeval.tv_usec = (long)((t-(double)_timeval.tv_sec)*MICROS);
 

@@ -116,57 +116,27 @@ void Stream::init(const DataModel::Stream *stream) {
 		}
 
 		ResponsePtr proc_resp = proc_sensor->response();
-		if ( gainFreq > 0 && proc_resp ) {
+		if ( (gainFreq > 0) && (gainFreq != 1.0) && proc_resp ) {
 			Math::Restitution::FFT::TransferFunctionPtr tf =
 				proc_resp->getTransferFunction();
 
 			if ( tf ) {
-				// Compute response at gain frequency
-				Math::Complex r;
-				tf->evaluate(&r, 1, &gainFreq);
+				// Compute response at gain frequency and at 1Hz
+				Math::Complex r1, r2;
+				double targetGainFreq = 1.0;
 
-				double scale = 1.0 / abs(r);
+				tf->evaluate(&r1, 1, &gainFreq);
+				tf->evaluate(&r2, 1, &targetGainFreq);
 
-				/*
-				std::cerr << networkCode << "." << stationCode << "."
-				          << locationCode << "." << channelCode << ": "
-				          << "gain scale: " << scale
-				          << " at " << gainFreq << "Hz"
-				          << std::endl;
-				*/
+				double scale = abs(r2) / abs(r1);
 
-				// NOTE: The following block tries to find the maximum
-				//       response and use it as the response of the
-				//       plateau. But this doesn't work reliable in praxis
-				//       that we rely on a properly configured normalization
-				//       factor.
-				/*
-				// Assume a default sampling frequency of 100 Hz
-				double fsamp = 100.0;
-				try {
-					fsamp = (double)stream->sampleRateNumerator() /
-					        (double)stream->sampleRateDenominator();
-				}
-				catch ( ... ) {}
-
-				double nyquistFreq = fsamp * 0.5;
-				double logNyquistFreq = log10(nyquistFreq);
-				double lf = -3;
-				double maxResp = 0;
-				while ( lf < logNyquistFreq ) {
-					double f = pow10(lf);
-					tf->evaluate(&r, 1, &f);
-					double a = abs(r);
-					if ( a > maxResp ) maxResp = a;
-					lf += 0.1;
-				}
-
-				if ( maxResp > 0 ) {
-					//std::cerr << " plateau response: " << maxResp << std::endl;
-					scale *= maxResp;
-				}
-				*/
-
+				if ( scale != 1.0 )
+					SEISCOMP_DEBUG("%s.%s.%s.%s: gain correction = %f",
+					               stream->sensorLocation()->station()->network()->code().c_str(),
+					               stream->sensorLocation()->station()->code().c_str(),
+					               stream->sensorLocation()->code().c_str(),
+					               stream->code().c_str(),
+					               scale);
 				gain *= scale;
 			}
 		}

@@ -142,9 +142,6 @@
 /src/trunk/libs/3rd-party/spread/stdutil/src/*.lto
 /src/trunk/libs/3rd-party/spread/stdutil/src/Makefile
 
-# /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
-/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
-
 # /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/stdarch_autoconf.h
 

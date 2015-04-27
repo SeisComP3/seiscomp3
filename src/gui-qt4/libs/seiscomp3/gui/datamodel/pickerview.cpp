@@ -6557,6 +6557,15 @@ void PickerView::closeThreads() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::handleAcquisitionError(const QString &msg) {
+	QMessageBox::critical(this, tr("Acquistion error"), msg);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::acquisitionFinished() {
 	QObject* s = sender();
 	if ( s ) {
@@ -6608,11 +6617,15 @@ void PickerView::acquireStreams() {
 		return;
 	}
 
+	connect(t, SIGNAL(handleError(const QString &)),
+	        this, SLOT(handleAcquisitionError(const QString &)));
+
 	connect(t, SIGNAL(receivedRecord(Seiscomp::Record*)),
 	        this, SLOT(receivedRecord(Seiscomp::Record*)));
 
 	connect(t, SIGNAL(finished()),
 	        this, SLOT(acquisitionFinished()));
+
 
 	t->setTimeWindow(_timeWindow);
 

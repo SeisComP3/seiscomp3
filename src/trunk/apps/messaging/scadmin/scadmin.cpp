@@ -66,7 +66,15 @@ int main(int argc, char *argv[])
 	("status,s", boost::program_options::value<std::string>(&clientName), "Ask client/group for status message");
 
 	boost::program_options::variables_map vm;
-	boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+	try {
+		boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+	}
+	catch ( std::exception& e ) {
+		std::cout << "Error: " << e.what() << std::endl << std::endl;
+		std::cout << desc << std::endl;
+		return false;
+	}
+
 	boost::program_options::notify(vm);
 
 	// Logging initialization

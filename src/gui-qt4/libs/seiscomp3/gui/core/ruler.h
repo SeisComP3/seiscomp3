@@ -34,6 +34,7 @@ class SC_GUI_API Ruler : public QFrame
 
 		void setPosition(Position);
 		void setRange(double, double);
+		void setLimits(double leftValue, double rightValue, double minRange, double maxRange);
 		void setScale(double);
 		bool setSelected(double, double);
 		bool setSelectionHandle(int handle, double pos);
@@ -135,14 +136,19 @@ class SC_GUI_API Ruler : public QFrame
 		                         const QString &text, bool allowClip = false,
 		                         bool allowRotate = false) const;
 
+		void checkLimit(double &tmin, double &tmax);
+		void changeRange(double tmin, double tmax);
+
 	protected:
 		Position _position;
 
 		double  _ofs;
 		double  _scl,
-		        _min, _max, // ruler range
-		        _da,        // annotation interval
-		        _dt;        // tick mark interval
+		        _min, _max,       // ruler range
+		        _da,              // annotation interval
+		        _dt,              // tick mark interval
+		        _limitLeft, _limitRight,
+		        _limitMinRange, _limitMaxRange;
 		int     _pos, _tickLong, _tickShort, _lc;
 		QVector<double> _selectionHandles;
 		int     _currentSelectionHandle;

@@ -26,7 +26,26 @@ using namespace Seiscomp;
 
 #include "recordwidget.h"
 
+namespace  sc = Seiscomp::Core;
+
 #define CHCK255(x) ((x)>255?255:((x)<0?0:(x)))
+
+#define CHCK_RANGE                             \
+	double diff = _tmax - _tmin;               \
+	if ( _tmin < sc::MinTime ) {               \
+		_tmin = sc::MinTime;                   \
+		_tmax = _tmin + diff;                  \
+	}                                          \
+                                               \
+	if ( _tmax > sc::MaxTime ) {               \
+		_tmax = sc::MaxTime;                   \
+		_tmin = _tmax - diff;                  \
+		if ( _tmin < sc::MinTime ) {           \
+			_tmin = sc::MinTime;               \
+			diff = _tmax - _tmin;              \
+			_pixelPerSecond = width() / diff;  \
+		}                                      \
+	}                                          \
 
 namespace {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1414,6 +1433,7 @@ void RecordWidget::setTimeScale (double t) {
 	_pixelPerSecond = t;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
 
+	CHCK_RANGE
 	if ( _autoMaxScale )
 		setNormalizationWindow(visibleTimeWindow());
 	else
@@ -1453,6 +1473,8 @@ void RecordWidget::scroll(int v) {
 void RecordWidget::setScale (double t, float a) {
 	_pixelPerSecond = t;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
+
+	CHCK_RANGE
 	setAmplScale(a);
 
 	if ( _autoMaxScale )
@@ -1472,6 +1494,7 @@ void RecordWidget::setTimeRange (double t1, double t2) {
 	_tmin = t1;
 	_tmax = _tmin + (_pixelPerSecond > 0 && width()?width()/_pixelPerSecond:0);
 
+	CHCK_RANGE
 	if ( _autoMaxScale )
 		setNormalizationWindow(visibleTimeWindow());
 

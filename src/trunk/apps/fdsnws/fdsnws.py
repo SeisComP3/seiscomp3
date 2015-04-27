@@ -121,10 +121,13 @@ class FDSNWS(Application):
 		self._htpasswd      = '@CONFIGDIR@/fdsnws.htpasswd'
 		self._accessLogFile = ''
 
-		self._allowRestricted = True
-		self._serveDataSelect = True
-		self._serveEvent      = True
-		self._serveStation    = True
+		self._allowRestricted   = True
+		self._serveDataSelect   = True
+		self._serveEvent        = True
+		self._serveStation      = True
+
+		self._hideAuthor        = False
+		self._evaluationMode    = None
 
 		self._accessLog     = None
 		self._inv           = None
@@ -191,6 +194,20 @@ class FDSNWS(Application):
 		try: self._serveStation = cfg.getBool('serveStation')
 		except: pass
 
+		# event filter
+		try: self._hideAuthor = cfg.getBool('hideAuthor')
+		except: pass
+		try:
+			name = cfg.getString('evaluationMode')
+			if name.lower() == DataModel.EEvaluationModeNames.name(DataModel.MANUAL):
+				self._evaluationMode = DataModel.MANUAL
+			elif name.lower() == DataModel.EEvaluationModeNames.name(DataModel.AUTOMATIC):
+				self._evaluationMode = DataModel.AUTOMATIC
+			else:
+				print >> sys.stderr, "invalid evaluation mode string: %s" % name
+				return False
+		except: pass
+
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = cfg.getString('fileNamePrefix')
 		except ConfigException: pass
@@ -212,6 +229,9 @@ class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
 	def run(self):
+		modeStr = None
+		if self._evaluationMode is not None:
+			modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
 		Logging.notice("\n" \
 		               "configuration read:\n" \
 		               "  serve\n" \
@@ -226,12 +246,14 @@ class FDSNWS(Application):
 		               "  queryObjects    : %i\n" \
 		               "  realtimeGap     : %s\n" \
 		               "  samples (M)     : %s\n" \
-		               "  allowRestricted : %s\n" % (
+		               "  allowRestricted : %s\n" \
+		               "  hideAuthor      : %s\n" \
+		               "  evaluationMode  : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted))
+		               self._allowRestricted, self._hideAuthor, modeStr))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
@@ -294,7 +316,7 @@ class FDSNWS(Application):
 			event1 = DirectoryResource(os.path.join(shareDir, 'event.html'))
 			event.putChild('1', event1)
 
-			event1.putChild('query', FDSNEvent())
+			event1.putChild('query', FDSNEvent(self._hideAuthor, self._evaluationMode))
 			fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('catalogs', fileRes)

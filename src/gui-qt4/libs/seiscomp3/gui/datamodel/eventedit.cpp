@@ -16,9 +16,9 @@
 #include <seiscomp3/gui/datamodel/eventedit.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 #include <seiscomp3/gui/datamodel/publicobjectevaluator.h>
-#include <seiscomp3/gui/datamodel/tensorsymbol.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/utils.h>
+#include <seiscomp3/gui/map/projection.h>
 
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/datamodel/journalentry.h>
@@ -312,11 +312,464 @@ QString axisToString(const Axis &a) {
 }
 
 
+double subGeo(double a, double b) {
+	double s = a - b;
+	if ( s < -180 )
+		s += 360;
+	else if ( s > 180 )
+		s -= 360;
+	return s;
+}
+
 
 QSize FMDefaultSize = QSize(32, 32);
 QSize FMSelectedSize = QSize(40, 40);
-
 } // namespace anonymous
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ExtTensorSymbol::ExtTensorSymbol(const Math::Tensor2Sd &t,
+                                 const FocalMechanism *fm,
+                                 Map::Decorator* decorator)
+ : TensorSymbol(t, decorator) {
+	if ( !fm ) return;
+
+	// agencyID + created
+	try {
+		_agency = fm->creationInfo().agencyID().c_str();
+		_created = fm->creationInfo().creationTime();
+	}
+	catch (Seiscomp::Core::ValueException &) {}
+
+	if ( !fm->momentTensorCount() ) return;
+	MomentTensor *mt = fm->momentTensor(0);
+
+	if ( _agency.isEmpty() ) {
+		try { _agency = mt->creationInfo().agencyID().c_str(); }
+		catch (Seiscomp::Core::ValueException &) {}
+	}
+	if ( !_created ) {
+		try { _created = mt->creationInfo().creationTime(); }
+		catch (Seiscomp::Core::ValueException &) {}
+	}
+
+	Origin *o = Origin::Find(mt->derivedOriginID());
+	Magnitude *m = Magnitude::Find(mt->momentMagnitudeID());
+
+	// depth
+	if ( o ) {
+		try { _depth = QString("%1 km").arg(o->depth().value(), 0, 'f', 0); }
+		catch (Seiscomp::Core::ValueException &) {}
+	}
+
+	// magnitude
+	if ( m ) {
+		_magnitude = QString("%1 %2")
+		             .arg(m->type().empty() ? "M" : m->type().c_str())
+		             .arg(m->magnitude().value(), 0, 'f', 1);
+	}
+
+
+	_selected = false;
+	_refPosEnabled = false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ExtTensorSymbol::customDraw(const Map::Canvas *c, QPainter &p) {
+	p.save();
+
+	if ( size() != _lastSize ) {
+		_lastSize = size();
+		resize(_lastSize.width(), _lastSize.height());
+	}
+
+	QPoint symbolPos;
+	if ( _refPosEnabled ) {
+		c->projection()->project(symbolPos, _refPos);
+		symbolPos += _offset;
+		QColor color = _selected ? Qt::black : QColor(64, 64, 64);
+		p.setPen(QPen(color, 1, _selected ? Qt::SolidLine : Qt::DashLine));
+		p.drawLine(_mapPosition, symbolPos);
+		p.setPen(color);
+		p.setBrush(QBrush(color));
+		p.drawEllipse(_mapPosition, 2, 2);
+	}
+	else
+		symbolPos = _mapPosition;
+
+	p.drawImage(symbolPos - QPoint(_size.width()/2, _size.height()/2), _buffer);
+
+	// draw label
+	QString text;
+	int lines = 0;
+	int width = 0;
+	QFont f = SCScheme.fonts.smaller;
+	QFontMetrics fm(f);
+	if ( _drawAgency && !_agency.isEmpty() ) {
+		text += _agency;
+		++lines;
+		width = fm.width(_agency);
+	}
+	if ( _drawMagnitude && !_magnitude.isEmpty() ) {
+		if ( !text.isEmpty() ) text += "\n";
+		text += _magnitude;
+		++lines;
+		width = max(width, fm.width(_magnitude));
+	}
+	if ( _drawDepth && !_depth.isEmpty() ) {
+		if ( !text.isEmpty() ) text += "\n";
+		text += _depth;
+		++lines;
+		width = max(width, fm.width(_depth));
+	}
+
+	if ( lines ) {
+		p.setFont(f);
+		p.setBrush(QColor(255, 255, 255, 192));
+		p.setPen(Qt::black);
+
+		int margin = 4;
+		QRect r(0, 0, width + 2*margin, lines * fm.height() + margin);
+		p.translate(symbolPos - QPoint(r.width()/2, -FMDefaultSize.height()/2 - margin));
+
+		p.drawRect(r);
+		p.drawText(r, text, QTextOption(Qt::AlignCenter));
+	}
+
+	p.restore();
+
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+FMMap::~FMMap() {
+	QSettings settings;
+	settings.beginGroup("FocalMechanismMap");
+	settings.setValue("tensorDrawAgency", _drawAgency);
+	settings.setValue("tensorDrawMagnitude", _drawMagnitude);
+	settings.setValue("tensorDrawDepth", _drawDepth);
+	settings.setValue("tensorSmartLayout", _smartLayout);
+	settings.setValue("tensorGroupByAgency", _groupByAgency);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::draw(QPainter& p) {
+	if ( _smartLayout && _smartLayoutDirty && _originSymbol ) {
+		_smartLayoutDirty = false;
+		int items = 0;
+		for ( FMSymbols::iterator it = _fmSymbols.begin();
+		      it != _fmSymbols.end(); ++it ) {
+			if ( it->second->isVisible() ) ++items;
+		}
+
+		QSize itemSize(1.7*FMDefaultSize.width(), 3*FMDefaultSize.height());
+		int xItems = items < 4 ? 0 : 2;
+		int yItems = 0;
+		int i = -1;
+		int x, y;
+		for ( FMSymbols::iterator it = _fmSymbols.begin();
+		      it != _fmSymbols.end(); ++it ) {
+			if ( !it->second->isVisible() ) continue;
+			if ( i < 0 || i >= 2*xItems + 2*yItems ) {
+				i = 0;
+				xItems += 2; yItems += 2;
+				x = -xItems / 2; y = yItems / 2;
+			}
+			else if ( i <= xItems ) ++x;
+			else if ( i <= xItems + yItems ) --y;
+			else if ( i <= 2*xItems + yItems ) --x;
+			else ++y;
+
+			it->second->setOffset(QPoint(x * itemSize.width(), y * itemSize.height()));
+			++i;
+		}
+	}
+	MapWidget::draw(p);
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::init() {
+	_originSymbol = NULL;
+	QSettings settings;
+	settings.beginGroup("FocalMechanismMap");
+	_drawAgency = settings.value("tensorDrawAgency", false).toBool();
+	_drawMagnitude = settings.value("tensorDrawMagnitude", false).toBool();
+	_drawDepth = settings.value("tensorDrawDepth", false).toBool();
+	_smartLayout = settings.value("tensorSmartLayout", false).toBool();
+	_groupByAgency = settings.value("tensorGroupByAgency", false).toBool();
+	_smartLayoutDirty = false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::addFM(const DataModel::FocalMechanism *fm) {
+	Origin *o = NULL;
+	MomentTensor *mt = NULL;
+	if ( fm->momentTensorCount() > 0 ) {
+		mt = fm->momentTensor(0);
+		o = Origin::Find(mt->derivedOriginID());
+	}
+	if ( !o )
+		o = Origin::Find(fm->triggeringOriginID());
+	const NodalPlane *np = NULL;
+	try { np = &(fm->nodalPlanes().nodalPlane1()); }
+	catch ( Core::ValueException& ) {}
+
+	if ( !o || !np ) return;
+
+	QColor c = Qt::black;
+	try {
+		if ( o->depth() < 50 )
+			c = Qt::red;
+		else if ( o->depth() < 100 )
+			c = QColor(255, 165, 0);
+		else if ( o->depth() < 250 )
+			c = Qt::yellow;
+		else if ( o->depth() < 600 )
+			c = Qt::green;
+		else
+			c = Qt::blue;
+	} catch ( Core::ValueException& ) {}
+
+	Math::Tensor2Sd tensor;
+	Math::NODAL_PLANE plane;
+	plane.str = np->strike();
+	plane.dip = np->dip();
+	plane.rake = np->rake();
+	Math::np2tensor(plane, tensor);
+
+	ExtTensorSymbol *symbol = new ExtTensorSymbol(tensor, fm);
+	symbol->setID(fm->publicID());
+	symbol->setPosition(QPointF(o->longitude(), o->latitude()));
+	symbol->setSize(FMDefaultSize);
+	symbol->setPriority(Map::Symbol::HIGH);
+	symbol->setShadingEnabled(true);
+	symbol->setTColor(c);
+	symbol->setBorderColor(Qt::black);
+	symbol->setDrawAgency(_drawAgency);
+	symbol->setDrawMagnitude(_drawMagnitude);
+	symbol->setDrawDepth(_drawDepth);
+	if ( _originSymbol ) {
+		symbol->setReferencePosition(QPointF(_originSymbol->longitude(),
+		                                     _originSymbol->latitude()));
+		symbol->setReferencePositionEnabled(_smartLayout);
+	}
+	canvas().symbolCollection()->add(symbol);
+
+	if ( _groupByAgency ) {
+		if ( symbol->agencyID().isEmpty() )
+			symbol->setVisible(false);
+		else {
+			for ( FMSymbols::iterator it = _fmSymbols.begin();
+			      it != _fmSymbols.end(); ++it ) {
+				if ( it->second->agencyID() != symbol->agencyID() ) continue;
+				if ( it->second->created() > symbol->created() ) {
+					symbol->setVisible(false);
+					break;
+				}
+				else
+					it->second->setVisible(false);
+			}
+		}
+	}
+	_fmSymbols[fm->publicID()] = symbol;
+
+
+	if ( _fmBoundings.isNull() )
+		_fmBoundings.setRect(o->longitude()-0.01, o->latitude()-0.01, 0.02, 0.02);
+	else {
+		if ( o->latitude() < _fmBoundings.top() )
+			_fmBoundings.setTop(o->latitude());
+		else if ( o->latitude() > _fmBoundings.bottom() )
+			_fmBoundings.setBottom(o->latitude());
+
+		double dist = subGeo(o->longitude().value(), _fmBoundings.left());
+		if ( dist < 0 )
+			_fmBoundings.setLeft(_fmBoundings.left() + dist);
+		else if ( dist > _fmBoundings.width() )
+			_fmBoundings.setRight(_fmBoundings.left() + dist);
+	}
+
+	setEnabled(true);
+	canvas().displayRect(_fmBoundings.adjusted(-0.5, -0.5, 0.5, 0.5));
+	_smartLayoutDirty = true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::clear() {
+	canvas().symbolCollection()->clear();
+	_fmBoundings = QRectF();
+	_originSymbol = NULL;
+	_fmSymbols.clear();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::setCurrentFM(const string &id) {
+	FMSymbols::iterator it = _fmSymbols.begin();
+	for ( ; it != _fmSymbols.end(); ++it ) {
+		it->second->setSize(FMDefaultSize);
+		it->second->setSelected(false);
+	}
+
+	it = _fmSymbols.find(id);
+	if ( it != _fmSymbols.end() ) {
+		it->second->setSize(FMSelectedSize);
+		it->second->setSelected(true);
+		if ( it->second->isVisible() )
+			canvas().symbolCollection()->setTop(it->second);
+	}
+
+	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::setEvent(const DataModel::Event *event) {
+	Map::SymbolCollection *col = canvas().symbolCollection();
+	if ( _originSymbol ) {
+		col->remove(_originSymbol);
+		_originSymbol = NULL;
+	}
+
+	QPointF epicenter;
+	Origin *o = NULL;
+	if ( event ) o = Origin::Find(event->preferredOriginID());
+	if ( o ) {
+		_originSymbol = new OriginSymbol;
+		_originSymbol->setPriority(Map::Symbol::MEDIUM);
+		_originSymbol->setID(o->publicID());
+		_originSymbol->setLatitude(o->latitude());
+		_originSymbol->setLongitude(o->longitude());
+		try {
+			_originSymbol->setDepth(o->depth());
+		} catch ( Core::ValueException& ) {}
+		col->add(_originSymbol);
+		epicenter.setX(o->longitude());
+		epicenter.setY(o->latitude());
+	}
+
+	bool refPosEnabled = _originSymbol && _smartLayout;
+	for ( FMSymbols::iterator it = _fmSymbols.begin(); it != _fmSymbols.end(); ++it ) {
+		it->second->setReferencePosition(epicenter);
+		it->second->setReferencePositionEnabled(refPosEnabled);
+	}
+
+	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void FMMap::contextMenuEvent(QContextMenuEvent *e) {
+	QMenu menu(this);
+	QMenu *fmMenu = menu.addMenu("Focal Mechanism");
+
+	QAction *actionDrawAgency = fmMenu->addAction("Draw agency id");
+	actionDrawAgency->setCheckable(true);
+	actionDrawAgency->setChecked(_drawAgency);
+
+	QAction *actionDrawMagnitude = fmMenu->addAction("Draw magnitude");
+	actionDrawMagnitude->setCheckable(true);
+	actionDrawMagnitude->setChecked(_drawMagnitude);
+
+	QAction *actionDrawDepth = fmMenu->addAction("Draw depth");
+	actionDrawDepth->setCheckable(true);
+	actionDrawDepth->setChecked(_drawDepth);
+
+	QAction *actionSmartLayout = fmMenu->addAction("Smart layout");
+	actionSmartLayout->setEnabled(_originSymbol);
+	actionSmartLayout->setCheckable(true);
+	actionSmartLayout->setChecked(_smartLayout);
+
+	QAction *actionGroupByAgency = fmMenu->addAction("Group by agency");
+	actionGroupByAgency->setCheckable(true);
+	actionGroupByAgency->setChecked(_groupByAgency);
+
+	updateContextMenu(&menu);
+
+	QAction *action = menu.exec(e->globalPos());
+	if ( action == NULL ) return;
+
+	bool fmSymbolChanged = true;
+	if ( action == actionDrawAgency )
+		_drawAgency = !_drawAgency;
+	else if ( action == actionDrawMagnitude )
+		_drawMagnitude = !_drawMagnitude;
+	else if ( action == actionDrawDepth )
+		_drawDepth = !_drawDepth;
+	else if ( action == actionSmartLayout )
+		_smartLayout = !_smartLayout;
+	else if ( action == actionGroupByAgency ) {
+		_groupByAgency = !_groupByAgency;
+		_smartLayoutDirty = true;
+
+		FMSymbols::iterator it = _fmSymbols.begin();
+		FMSymbols agencyMap;
+		for ( ; it != _fmSymbols.end(); ++it ) {
+			if ( _groupByAgency && !it->second->agencyID().isEmpty() ) {
+				FMSymbols::iterator a_it = agencyMap.find(it->second->agencyID().toStdString());
+				if ( a_it == agencyMap.end() ||
+				     a_it->second->created() <= it->second->created() ) {
+					it->second->setVisible(true);
+					if ( a_it != agencyMap.end())
+						a_it->second->setVisible(false);
+					agencyMap[it->second->agencyID().toStdString()] = it->second;
+					continue;
+				}
+			}
+			it->second->setVisible(!_groupByAgency);
+		}
+	}
+	else {
+		fmSymbolChanged = false;
+		executeContextMenuAction(action);
+	}
+
+	if ( fmSymbolChanged ) {
+		for ( FMSymbols::iterator it = _fmSymbols.begin(); it != _fmSymbols.end(); ++it ) {
+			it->second->setDrawAgency(_drawAgency);
+			it->second->setDrawMagnitude(_drawMagnitude);
+			it->second->setDrawDepth(_drawDepth);
+			it->second->setReferencePositionEnabled(_originSymbol && _smartLayout);
+		}
+		update();
+	}
+
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -354,7 +807,7 @@ void EventEdit::init() {
 
 	_ui.frameMap->installEventFilter(new SquareSizeFilter(this));
 	_originMap = new MapWidget(_mapTreeOrigin.get(), _ui.frameMap);
-	_fmMap = new MapWidget(_mapTreeFM.get(), _ui.fmMap);
+	_fmMap = new FMMap(_mapTreeFM.get(), _ui.fmMap);
 
 	_fmActivity = new QLabel(_fmMap);
 	_fmActivity->move(4,4);
@@ -886,9 +1339,10 @@ void EventEdit::updateObject(const QString &parentID, Object *obj) {
 					changePreferredOrigin = false;
 			}
 
-			if ( changePreferredOrigin )
+			if ( changePreferredOrigin ) {
 				updatePreferredOriginIndex();
-
+				_fmMap->setEvent(_currentEvent.get());
+			}
 
 			if ( _preferredMagnitudeIdx != -1 ) {
 				if ( _currentEvent->preferredMagnitudeID() == (const char*)_ui.treeMagnitudes->topLevelItem(
@@ -1262,19 +1716,6 @@ void EventEdit::showTab(int i) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-namespace {
-
-double subGeo(double a, double b) {
-	double s = a - b;
-	if ( s < -180 )
-		s += 360;
-	else if ( s > 180 )
-		s -= 360;
-	return s;
-}
-
-}
-
 void EventEdit::insertOriginRow(Origin *org) {
 	QTreeWidgetItem *item = new QTreeWidgetItem;
 
@@ -1473,65 +1914,7 @@ void EventEdit::insertFMRow(FocalMechanism *fm) {
 		item->setTextAlignment(_fmColumnMap[i], FMColAligns[i]);
 
 	_ui.fmTree->insertTopLevelItem(0, item);
-
-	Origin *o = NULL;
-	if ( fm->momentTensorCount() > 0 )
-		o = Origin::Find(fm->momentTensor(0)->derivedOriginID());
-	if ( !o )
-		o = Origin::Find(fm->triggeringOriginID());
-	NodalPlane *np = NULL;
-	try { np = &(fm->nodalPlanes().nodalPlane1()); }
-	catch ( Core::ValueException& ) {}
-
-	if ( o && np ) {
-		QColor c = Qt::black;
-		try {
-			if ( o->depth() < 50 )
-				c = Qt::red;
-			else if ( o->depth() < 100 )
-				c = QColor(255, 165, 0);
-			else if ( o->depth() < 250 )
-				c = Qt::yellow;
-			else if ( o->depth() < 600 )
-				c = Qt::green;
-			else
-				c = Qt::blue;
-		} catch ( Core::ValueException& ) {}
-
-		Math::Tensor2Sd tensor;
-		Math::NODAL_PLANE plane;
-		plane.str = np->strike();
-		plane.dip = np->dip();
-		plane.rake = np->rake();
-		Math::np2tensor(plane, tensor);
-		TensorSymbol *symbol = new TensorSymbol(tensor);
-		symbol->setID(fm->publicID());
-		symbol->setPosition(QPointF(o->longitude(), o->latitude()));
-		symbol->setSize(FMDefaultSize);
-		symbol->setPriority(Map::Symbol::HIGH);
-		symbol->setShadingEnabled(true);
-		symbol->setTColor(c);
-		symbol->setBorderColor(Qt::black);
-		_fmMap->canvas().symbolCollection()->add(symbol);
-
-		if ( _fmBoundings.isNull() )
-			_fmBoundings.setRect(o->longitude()-0.01, o->latitude()-0.01, 0.02, 0.02);
-		else {
-			if ( o->latitude() < _fmBoundings.top() )
-				_fmBoundings.setTop(o->latitude());
-			else if ( o->latitude() > _fmBoundings.bottom() )
-				_fmBoundings.setBottom(o->latitude());
-
-			double dist = subGeo(o->longitude().value(), _fmBoundings.left());
-			if ( dist < 0 )
-				_fmBoundings.setLeft(_fmBoundings.left() + dist);
-			else if ( dist > _fmBoundings.width() )
-				_fmBoundings.setRight(_fmBoundings.left() + dist);
-		}
-
-		_fmMap->setEnabled(true);
-		_fmMap->canvas().displayRect(_fmBoundings.adjusted(-0.5, -0.5, 0.5, 0.5));
-	}
+	_fmMap->addFM(fm);
 
 	updateFMRow(0, fm);
 }
@@ -1650,8 +2033,7 @@ void EventEdit::updateContent() {
 	_ui.fmTree->blockSignals(true);
 	_preferredFMIdx = -1;
 
-	_fmBoundings = QRectF();
-	_fmMap->canvas().symbolCollection()->clear();
+	_fmMap->clear();
 	_ui.fmTree->clear();
 	_ui.fmTree->setColumnCount(FMListColumns::Quantity);
 	_ui.fmTree->setHeaderLabels(_fmTableHeader);
@@ -1662,6 +2044,7 @@ void EventEdit::updateContent() {
 	updatePreferredFMIndex();
 	_ui.fmTree->blockSignals(false);
 	sortFMItems(_ui.fmTree->header()->sortIndicatorSection());
+	_fmMap->setEvent(_currentEvent.get());
 
 	updateEvent();
 	updateJournal();
@@ -1681,9 +2064,9 @@ void EventEdit::resetContent() {
 	resetFM();
 
 	_originBoundings = QRectF();
-	_fmBoundings = QRectF();
 	_originMap->canvas().symbolCollection()->clear();
-	_fmMap->canvas().symbolCollection()->clear();
+	_fmMap->clear();
+	_fmMap->setEvent(NULL);
 	_originTree->clear();
 	_ui.fmTree->clear();
 	_ui.listJournal->clear();
@@ -1783,14 +2166,7 @@ void EventEdit::resetFM() {
 
 	resetMT(true);
 
-	Map::SymbolCollection::iterator begin = _fmMap->canvas().symbolCollection()->begin();
-	Map::SymbolCollection::iterator end = _fmMap->canvas().symbolCollection()->end();
-	Map::SymbolCollection::iterator it = begin;
-
-	_fmMap->canvas().symbolCollection()->setTop(NULL);
-	for ( ; it != end; ++it )
-		static_cast<TensorSymbol*>(*it)->setSize(FMDefaultSize);
-
+	_fmMap->setCurrentFM("");
 	_fmMap->canvas().displayRect(QRectF(-180,-90,360,180));
 	_fmMap->setEnabled(false);
 	_fmMap->update();
@@ -2218,22 +2594,7 @@ void EventEdit::updateFM() {
 	catch ( Core::ValueException& ) { _ui.fmStatus->setText("-"); }
 
 	// Update map symbol (bring current MT to top)
-	Map::SymbolCollection::iterator begin = _fmMap->canvas().symbolCollection()->begin();
-	Map::SymbolCollection::iterator end = _fmMap->canvas().symbolCollection()->end();
-	Map::SymbolCollection::iterator it = begin;
-
-	for ( ; it != end; ++it )
-		static_cast<TensorSymbol*>(*it)->setSize(FMDefaultSize);
-
-	for ( it = begin; it != end; ++it ) {
-		if ( (*it)->id() == _currentFM->publicID() ) {
-			static_cast<TensorSymbol*>(*it)->setSize(FMSelectedSize);
-			_fmMap->canvas().symbolCollection()->setTop(*it);
-			break;
-		}
-	}
-
-	_fmMap->update();
+	_fmMap->setCurrentFM(_currentFM->publicID());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -22,11 +22,15 @@
 #endif
 #include <string>
 
+#include <limits>
+
 struct tm;
 
 namespace Seiscomp {
 namespace Core {
 
+const double MinTime = (double)std::numeric_limits<int>::min();
+const double MaxTime = (double)std::numeric_limits<int>::max();
 
 class SC_SYSTEM_CORE_API TimeSpan {
 	// ----------------------------------------------------------------------
