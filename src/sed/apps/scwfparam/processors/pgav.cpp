@@ -469,10 +469,19 @@ void PGAV::setDeconvolutionEnabled(bool e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void PGAV::setSensitivityCorrectionFilterParams(int o, double loFreq, double hiFreq) {
-	_config.SCorder = o;
-	_config.loSCFreq = loFreq;
-	_config.hiSCFreq = hiFreq;
+void PGAV::setDurationScale(double s) {
+	_config.durationScale = s;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PGAV::setPostDeconvolutionFilterParams(int o, double loFreq, double hiFreq) {
+	_config.PDorder = o;
+	_config.loPDFreq = loFreq;
+	_config.hiPDFreq = hiFreq;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -542,28 +551,28 @@ bool PGAV::setup(const Settings &settings) {
 	settings.getValue(_config.saturationThreshold, "PGAV.saturationThreshold");
 	settings.getValue(_config.useDeconvolution, "PGAV.deconvolution");
 	settings.getValue(_config.noncausal, "PGAV.noncausal");
-	settings.getValue(_config.SCorder, "PGAV.sc.order");
+	settings.getValue(_config.PDorder, "PGAV.pd.order");
 
-	if ( settings.getValue(tmp, "PGAV.sc.loFreq") ) {
+	if ( settings.getValue(tmp, "PGAV.pd.loFreq") ) {
 		if ( Config::freqFromString(tmpVal, tmp) ) {
-			SEISCOMP_ERROR("%s.%s.PGAV.sc.loFreq: invalid value '%s'",
+			SEISCOMP_ERROR("%s.%s.PGAV.pd.loFreq: invalid value '%s'",
 			               settings.networkCode.c_str(),
 			               settings.stationCode.c_str(), tmp.c_str());
 			return false;
 		}
 
-		_config.loSCFreq = tmpVal;
+		_config.loPDFreq = tmpVal;
 	}
 
-	if ( settings.getValue(tmp, "PGAV.sc.hiFreq") ) {
+	if ( settings.getValue(tmp, "PGAV.pd.hiFreq") ) {
 		if ( Config::freqFromString(tmpVal, tmp) ) {
-			SEISCOMP_ERROR("%s.%s.PGAV.sc.hiFreq: invalid value '%s'",
+			SEISCOMP_ERROR("%s.%s.PGAV.pd.hiFreq: invalid value '%s'",
 			               settings.networkCode.c_str(),
 			               settings.stationCode.c_str(), tmp.c_str());
 			return false;
 		}
 
-		_config.hiSCFreq = tmpVal;
+		_config.hiPDFreq = tmpVal;
 	}
 
 	settings.getValue(_config.filterOrder, "PGAV.filter.order");
@@ -932,62 +941,64 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 
 
 	// -------------------------------------------------------------------
-	// Signal duration and aftershock removal
+	// Signal duration
+	// -------------------------------------------------------------------
+	DoubleArray Ia;
+	double Ias = M_PI/(2*9.81)*dt;
+
+	Ia.resize(n);
+
+	// Ia = cumsum(_processedData^2)*Ias
+	double sum = 0;
+	for ( int i = 0; i < n; ++i ) {
+		sum += _data[i]*_data[i];
+		Ia[i] = sum*Ias;
+	}
+
+	double Imax = Ia[Ia.size()-1];
+	if ( Imax == 0 ) {
+		SEISCOMP_DEBUG(">  asr failed: code 101");
+		setStatus(Error, 101.0);
+#ifndef CONTINUE_PROCESSING_WHEN_CHECK_FAILS
+		return;
+#endif
+	}
+
+	double iImax = 1.0 / Imax;
+	double t05, t95;
+
+	t05 = 0.1;
+	t95 = 0.1;
+
+	// Ia = Ia / Imax
+	for ( int i = 0; i < n; ++i ) {
+		Ia[i] *= iImax;
+		if ( (Ia[i] > 0.03) && (Ia[i] < 0.05) )
+			t05 = i;
+
+		if ( (Ia[i] > 0.93) && (Ia[i] < 0.95) )
+			t95 = i;
+	}
+
+	if ( t95 < t05 )
+		t95 = n-1;
+
+	// Convert to seconds
+	t05 *= dt;
+	t95 *= dt;
+
+	// Store signal duration
+	_duration = t95 - t05;
+
+	SEISCOMP_DEBUG(">  signal duration = %.2fs, t05 = %.2fs, t95 = %.2fs",
+	               *_duration, t05, t95);
+
+
+	// -------------------------------------------------------------------
+	// Aftershock removal
 	// -------------------------------------------------------------------
 	if ( _config.aftershockRemoval ) {
-		DoubleArray Ia;
-		double Ias = M_PI/(2*9.81)*dt;
-
-		Ia.resize(n);
-
-		// Ia = cumsum(_processedData^2)*Ias
-		double sum = 0;
-		for ( int i = 0; i < n; ++i ) {
-			sum += _data[i]*_data[i];
-			Ia[i] = sum*Ias;
-		}
-
-		double Imax = Ia[Ia.size()-1];
-		if ( Imax == 0 ) {
-			SEISCOMP_DEBUG(">  asr failed: code 101");
-			setStatus(Error, 101.0);
-#ifndef CONTINUE_PROCESSING_WHEN_CHECK_FAILS
-			return;
-#endif
-		}
-
-		double iImax = 1.0 / Imax;
-		double t05, t95;
-
-		t05 = 0.1;
-		t95 = 0.1;
-
-		// Ia = Ia / Imax
-		for ( int i = 0; i < n; ++i ) {
-			Ia[i] *= iImax;
-			if ( (Ia[i] > 0.03) && (Ia[i] < 0.05) )
-				t05 = i;
-
-			if ( (Ia[i] > 0.93) && (Ia[i] < 0.95) )
-				t95 = i;
-		}
-
-		if ( t95 < t05 ) {
-			t95 = n-1;
-		}
-
-		// Convert to seconds
-		t05 *= dt;
-		t95 *= dt;
-
-		// Store signal duration
-		double sig_dur = t95 - t05;
-		_duration = sig_dur;
-
-		SEISCOMP_DEBUG(">  signal duration = %.2fs, t05 = %.2fs, t95 = %.2fs",
-		               sig_dur, t05, t95);
-
-		double d = std::max(Math::round(sig_dur / 3), _config.preEventWindowLength);
+		double d = std::max(Math::round(*_duration / 3), _config.preEventWindowLength);
 		int tcut = n;
 
 		int j = 0;
@@ -1020,8 +1031,18 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 		}
 
 		// Clip amplitude computation window to tcut
-		if ( tcut < sig1i )
+		if ( tcut < sig1i ) {
 			sig1i = std::max(0, tcut);
+			SEISCOMP_DEBUG(">  aftershock removal trimmed signal to %fs", sig1i*dt);
+		}
+		else if ( _config.durationScale > 0 ) {
+			sig1i = (int)((t05 + _config.durationScale* *_duration) * _stream.fsamp);
+			SEISCOMP_DEBUG(">  trimmed signal to %fs", sig1i*dt);
+		}
+	}
+	else if ( _config.durationScale > 0 ) {
+		sig1i = (int)((t05 + _config.durationScale* *_duration) * _stream.fsamp);
+		SEISCOMP_DEBUG(">  trimmed signal to %fs", sig1i*dt);
 	}
 
 	// Clip sig1i to number of samples
@@ -1034,17 +1055,17 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	std::vector<Complex> spectrum;
 	double df = 0.0;
 
-	if ( _config.noncausal ) {
+	if ( _config.noncausal || _config.useDeconvolution ) {
 		double Tzpad;
 
 		if ( _config.padLength < 0 ) {
-			Tzpad = 1.5*std::max(_config.SCorder, _config.filterOrder);
+			Tzpad = 1.5*std::max(_config.PDorder, _config.filterOrder);
 
-			if ( _config.loSCFreq > 0 && _config.SCorder > 0 &&
+			if ( _config.loPDFreq > 0 && _config.PDorder > 0 &&
 				 _config.loFilterFreq > 0 && _config.filterOrder > 0 )
-				Tzpad /= std::min(_config.loSCFreq, _config.loFilterFreq);
-			else if ( _config.loSCFreq > 0 && _config.SCorder > 0 )
-				Tzpad /= _config.loSCFreq;
+				Tzpad /= std::min(_config.loPDFreq, _config.loFilterFreq);
+			else if ( _config.loPDFreq > 0 && _config.PDorder > 0 )
+				Tzpad /= _config.loPDFreq;
 			else if ( _config.loFilterFreq > 0 && _config.filterOrder > 0 )
 				Tzpad /= _config.loFilterFreq;
 			else
@@ -1101,128 +1122,76 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	// Deconvolve data
 	// -------------------------------------------------------------------
 	if ( _config.useDeconvolution ) {
-		if ( _config.noncausal ) {
-			Sensor *sensor = _streamConfig[_usedComponent].sensor();
-	
-			// When using full responses then all information needs to be set up
-			// correctly otherwise an error is set
-			if ( !sensor ) {
-				SEISCOMP_DEBUG(">  no sensor information but deconvolution is enabled");
-				setStatus(MissingResponse, 1);
-				return;
-			}
-	
-			if ( !sensor->response() ) {
-				SEISCOMP_DEBUG(">  no responses but deconvolution is enabled");
-				setStatus(MissingResponse, 2);
-				return;
-			}
+		Sensor *sensor = _streamConfig[_usedComponent].sensor();
 
-			Math::Restitution::FFT::TransferFunctionPtr tf =
-				sensor->response()->getTransferFunction();
-	
-			if ( tf == NULL ) {
-				SEISCOMP_DEBUG(">  deconvolution failed, no transferfunction");
-				setStatus(DeconvolutionFailed, 1);
-				return;
-			}
-	
-			tf->deconvolve(spectrum, df, df);
-		}
-		else {
-			Sensor *sensor = _streamConfig[_usedComponent].sensor();
-
-			// When using full responses then all information needs to be set up
-			// correctly otherwise an error is set
-			if ( !sensor ) {
-				SEISCOMP_DEBUG(">  no sensor information but deconvolution is enabled");
-				setStatus(MissingResponse, 1);
-				return;
-			}
-
-			if ( !sensor->response() ) {
-				SEISCOMP_DEBUG(">  no responses but deconvolution is enabled");
-				setStatus(MissingResponse, 2);
-				return;
-			}
-
-			if ( !sensor->response()->deconvolveFFT(_data, _stream.fsamp, 0, 0, 0, 0) ) {
-				SEISCOMP_DEBUG(">  deconvolution failed");
-				setStatus(DeconvolutionFailed, 0);
-				return;
-			}
+		// When using full responses then all information needs to be set up
+		// correctly otherwise an error is set
+		if ( !sensor ) {
+			SEISCOMP_DEBUG(">  no sensor information but deconvolution is enabled");
+			setStatus(MissingResponse, 1);
+			return;
 		}
 
+		if ( !sensor->response() ) {
+			SEISCOMP_DEBUG(">  no responses but deconvolution is enabled");
+			setStatus(MissingResponse, 2);
+			return;
+		}
+
+		Math::Restitution::FFT::TransferFunctionPtr tf =
+			sensor->response()->getTransferFunction();
+
+		if ( tf == NULL ) {
+			SEISCOMP_DEBUG(">  deconvolution failed, no transferfunction");
+			setStatus(DeconvolutionFailed, 1);
+			return;
+		}
+
+		tf->deconvolve(spectrum, df, df);
 		SEISCOMP_DEBUG(">  applied deconvolution");
+
+		// -------------------------------------------------------------------
+		// Optional post-deconvolution filter
+		// -------------------------------------------------------------------
+		if ( _config.PDorder > 0 ) {
+			double fmin = _config.loPDFreq;
+			double fmax = _config.hiPDFreq;
+
+			if ( fmin < 0 ) fmin = fabs(fmin) * fNyquist;
+			if ( fmax < 0 ) fmax = fabs(fmax) * fNyquist;
+
+			_loPDFilter = fmin;
+			_hiPDFilter = fmax;
+
+			if ( fmin > 0 && fmax > 0 ) {
+				ButterworthBandpass_Acausal(spectrum, df, df, _config.PDorder, fmin, fmax);
+				SEISCOMP_DEBUG(">  post deconvolution filter with bp%d_%.4f_%.4f", _config.PDorder, fmin, fmax);
+			}
+			else if ( fmin > 0 ) {
+				ButterworthHiPass_Acausal(spectrum, df, df, _config.PDorder, fmin);
+				SEISCOMP_DEBUG(">  post deconvolution filter with hp%d_%.4f", _config.PDorder, fmin);
+			}
+			else if ( fmax > 0 ) {
+				ButterworthLoPass_Acausal(spectrum, df, df, _config.PDorder, fmax);
+				SEISCOMP_DEBUG(">  post deconvolution filter with lp%d_%.4f", _config.PDorder, fmax);
+			}
+			else
+				SEISCOMP_DEBUG(">  no post deconvolution filter applied: disabled corner freqs (%f,%f)",
+				               fmin, fmax);
+		}
+		else
+			SEISCOMP_DEBUG(">  no post deconvolution filter applied: order <= 0 (%d)",
+			               _config.PDorder);
+
+		// Convert back to time domain
+		if ( !_config.noncausal )
+			Math::ifft(_data.size(), _data.typedData(), spectrum);
 	}
 	else
 		SEISCOMP_DEBUG(">  no deconvolution applied (disabled)");
 
 	// -------------------------------------------------------------------
-	// Optional sensor sensitivity filter
-	// -------------------------------------------------------------------
-	if ( _config.SCorder > 0 ) {
-		double fmin = _config.loSCFreq;
-		double fmax = _config.hiSCFreq;
-
-		if ( fmin < 0 ) fmin = fabs(fmin) * fNyquist;
-		if ( fmax < 0 ) fmax = fabs(fmax) * fNyquist;
-
-		_loSCFilter = fmin;
-		_hiSCFilter = fmax;
-
-		if ( fmin > 0 && fmax > 0 ) {
-			if ( _config.noncausal )
-				ButterworthBandpass_Acausal(spectrum, df, df, _config.SCorder, fmin, fmax);
-			else {
-				Math::Filtering::IIR::ButterworthHighpass<double> hp(_config.SCorder, fmin );
-				hp.setSamplingFrequency(_stream.fsamp);
-				hp.apply(_data.size(), _data.typedData());
-				Math::Filtering::IIR::ButterworthLowpass<double> lp(_config.SCorder, fmax);
-				lp.setSamplingFrequency(_stream.fsamp);
-				lp.apply(_data.size(), _data.typedData());
-
-				/*
-				Math::Filtering::IIR::ButterworthBandpass<double> bp(_config.SCorder, fmin, fmax);
-				bp.setSamplingFrequency(_comp.fsamp);
-				bp.apply(_data.size(), _data.typedData());
-				*/
-			}
-
-			SEISCOMP_DEBUG(">  correct sensitivity with bp%d_%.4f_%.4f", _config.SCorder, fmin, fmax);
-		}
-		else if ( fmin > 0 ) {
-			if ( _config.noncausal )
-				ButterworthHiPass_Acausal(spectrum, df, df, _config.SCorder, fmin);
-			else {
-				Math::Filtering::IIR::ButterworthHighpass<double> hp(_config.SCorder, fmin );
-				hp.setSamplingFrequency(_stream.fsamp);
-				hp.apply(_data.size(), _data.typedData());
-			}
-
-			SEISCOMP_DEBUG(">  correct sensitivity with hp%d_%.4f", _config.SCorder, fmin);
-		}
-		else if ( fmax > 0 ) {
-			if ( _config.noncausal )
-				ButterworthLoPass_Acausal(spectrum, df, df, _config.SCorder, fmax);
-			else {
-				Math::Filtering::IIR::ButterworthLowpass<double> lp(_config.SCorder, fmax);
-				lp.setSamplingFrequency(_stream.fsamp);
-				lp.apply(_data.size(), _data.typedData());
-			}
-
-			SEISCOMP_DEBUG(">  correct sensitivity with lp%d_%.4f", _config.SCorder, fmax);
-		}
-		else
-			SEISCOMP_DEBUG(">  no sensitivity correction filter applied: disabled corner freqs (%f,%f)",
-			               fmin, fmax);
-	}
-	else
-		SEISCOMP_DEBUG(">  no sensitivity correction filter applied: filter order <= 0 (%d)", _config.SCorder);
-
-
-	// -------------------------------------------------------------------
-	// 2nd stage filter
+	// Filter
 	// -------------------------------------------------------------------
 	if ( _config.filterOrder > 0 ) {
 		double fmin = _config.loFilterFreq;
@@ -1253,7 +1222,7 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 				*/
 			}
 
-			SEISCOMP_DEBUG(">  2nd stage filter: bp%d_%.4f_%.4f", _config.filterOrder, fmin, fmax);
+			SEISCOMP_DEBUG(">  filter: bp%d_%.4f_%.4f", _config.filterOrder, fmin, fmax);
 		}
 		else if ( fmin > 0 ) {
 			if ( _config.noncausal )
@@ -1264,7 +1233,7 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 				hp.apply(_data.size(), _data.typedData());
 			}
 
-			SEISCOMP_DEBUG(">  2nd stage filter: hp%d_%.4f", _config.filterOrder, fmin );
+			SEISCOMP_DEBUG(">  filter: hp%d_%.4f", _config.filterOrder, fmin );
 		}
 		else if ( fmax > 0 ) {
 			if ( _config.noncausal )
@@ -1275,14 +1244,14 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 				lp.apply(_data.size(), _data.typedData());
 			}
 
-			SEISCOMP_DEBUG(">  2nd stage filter: lp%d_%.4f", _config.filterOrder, fmax);
+			SEISCOMP_DEBUG(">  filter: lp%d_%.4f", _config.filterOrder, fmax);
 
 		}
 		else
-			SEISCOMP_DEBUG(">  no 2nd stage filter applied: disabled corner freqs (%f,%f)", fmin, fmax);
+			SEISCOMP_DEBUG(">  no filter applied: disabled corner freqs (%f,%f)", fmin, fmax);
 	}
 	else
-		SEISCOMP_DEBUG(">  no 2nd stage filter applied: filter order <= 0 (%d)", _config.filterOrder);
+		SEISCOMP_DEBUG(">  no filter applied: filter order <= 0 (%d)", _config.filterOrder);
 
 	if ( _config.noncausal )
 		// Convert back to time domain
@@ -1466,7 +1435,8 @@ void PGAV::init() {
 	setAftershockRemovalEnabled(true);
 	setPreEventCutOffEnabled(true);
 	setDeconvolutionEnabled(false);
-	setSensitivityCorrectionFilterParams(0,0,0);
+	setDurationScale(1.5);
+	setPostDeconvolutionFilterParams(0,0,0);
 	setFilterParams(0,0,0);
 	setNonCausalFiltering(false, -1);
 	setPadLength(-1);

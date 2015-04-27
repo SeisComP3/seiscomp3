@@ -23,6 +23,9 @@ Edit History:
     0 2006-09-30 rdr Created
     1 2007-02-19 rdr In transform copy source array into array of longinteger
                      to handle CPU's that can't do non-aligned access (per DN).
+    2 2007-08-05 rdr Add md5_operation.
+    3 2007-08-08 rdr Fix above so it correctly swaps longwords on input to
+                     transform for big-endian hosts.
 */
 #ifndef libmd5_h
 #include "libmd5.h"
@@ -113,17 +116,32 @@ begin
   return rol (a + x + ac + (c xor (b or not d)), s) + b ;
 end
 
-static void transform (pointer paccum, pointer pbuffer)
+longword lswap (longword lw)
+begin
+
+  return ((lw shr 24) or ((lw and 0xFF0000) shr 8) or ((lw and 0xFF00) shl 8) or (lw shl 24)) ;
+end
+
+static void transform (pointer paccum, pointer pbuffer, boolean swap)
 begin
   longint a, b, c, d ;
   tlongintbuf *pbuf ;
   tdigestlongint *pacc ;
   longint ibuf[16] ;
+#ifndef ENDIAN_LITTLE
+  integer i ;
+#endif
 
   /* copy contents of pbuffer to ibuf for alignment purposes. */
   memcpy (addr(ibuf), (pointer) pbuffer, 16 * sizeof(longint));
   pacc = paccum ;
   pbuf = addr(ibuf) ;
+#ifndef ENDIAN_LITTLE
+  if (swap)
+    then /* byte order swapping required for file processing */
+      for (i = 0 ; i <= 15 ; i++)
+        (*pbuf)[i] = lswap((*pbuf)[i]) ;
+#endif
   a = (*pacc)[0] ;
   b = (*pacc)[1] ;
   c = (*pacc)[2] ;
@@ -201,7 +219,7 @@ begin
   incn((*pacc)[3], d) ;
 end
 
-void resetbuffer (pworkingvar workingvar)
+static void resetbuffer (pworkingvar workingvar)
 begin
 
   workingvar->bitlo = 0 ;
@@ -213,7 +231,7 @@ begin
   workingvar->cdigest[3] = 0x10325476 ;
 end
 
-static void update (pworkingvar workingvar, pointer chkbuf, longint len)
+static void update (pworkingvar workingvar, pointer chkbuf, longint len, boolean fileproc)
 begin
   pbyte bufptr ;
   longint left ;
@@ -238,13 +256,13 @@ begin
         if (workingvar->blen < 64)
           then
             return ;
-        transform(addr(workingvar->cdigest), addr(workingvar->bbuf)) ;
+        transform(addr(workingvar->cdigest), addr(workingvar->bbuf), fileproc) ;
         workingvar->blen = 0 ;
         decn(len, left) ;
       end
   while (len >= 64)
     begin
-      transform(addr(workingvar->cdigest), bufptr) ;
+      transform(addr(workingvar->cdigest), bufptr, fileproc) ;
       incn(bufptr, 64) ;
       decn(len, 64) ;
     end
@@ -259,53 +277,93 @@ end
 void init_md5_buffer (pq330 q330)
 begin
 
-  getbuf (q330, addr(q330->md5buf), sizeof(tworkingvar)) ;
+  getthrbuf (q330, addr(q330->md5buf), sizeof(tworkingvar)) ;
 end
 
-void calcmd5 (pq330 q330, string250 *chal, t128 *resp)
+static void get_result (pworkingvar workingvar, t128 *resp, boolean fileproc)
 begin
   tbytebuf workbuf ;
-  longint worklen ;
-  pworkingvar workingvar ;
-  longword lw ;
+  longint worklen, bitlo, bithi ;
   integer i ;
   tlongintbuf *plbuf ;
 
-  workingvar = q330->md5buf ;
-  resetbuffer (workingvar) ;
-  update(workingvar, chal, strlen(chal)) ;
   memcpy(addr(workingvar->fdigest), addr(workingvar->cdigest), sizeof(tdigest)) ;
   memcpy(addr(workbuf), addr(workingvar->bbuf), workingvar->blen) ; /*make copy of buffer*/
+  bitlo = workingvar->bitlo ; /* want length before padding */
+  bithi = workingvar->bithi ;
   /*pad out to block of form (0..55, bitlo, bithi)*/
 #ifdef ENDIAN_LITTLE
   workbuf[workingvar->blen] = 0x80 ;
   worklen = workingvar->blen + 1 ;
 #else
-  workbuf[workingvar->blen] = 0 ;
-  workbuf[workingvar->blen + 1] = 0 ;
-  workbuf[workingvar->blen + 2] = 0 ;
-  workbuf[workingvar->blen + 3] = 0x80 ;
-  worklen = workingvar->blen + 4 ;
+  if (fileproc)
+    then
+      begin /* process same as little endian, will be swapped in transform */
+        workbuf[workingvar->blen] = 0x80 ;
+        worklen = workingvar->blen + 1 ;
+      end
+    else
+      begin /* we know exactly where the buffer this will be, use fakeout */
+        workbuf[workingvar->blen] = 0 ;
+        workbuf[workingvar->blen + 1] = 0 ;
+        workbuf[workingvar->blen + 2] = 0 ;
+        workbuf[workingvar->blen + 3] = 0x80 ;
+        worklen = workingvar->blen + 4 ;
+      end
 #endif
   if (worklen > 56)
     then
       begin
         memset(addr(workbuf[worklen]), 0, 64 - worklen) ;
-        transform(addr(workingvar->fdigest), addr(workbuf)) ;
+        transform(addr(workingvar->fdigest), addr(workbuf), fileproc) ;
         worklen = 0 ;
       end
   memset(addr(workbuf[worklen]), 0, 56 - worklen) ;
   plbuf = addr(workbuf) ;
-  (*plbuf)[14] = workingvar->bitlo ;
-  (*plbuf)[15] = workingvar->bithi ;
-  transform (addr(workingvar->fdigest), addr(workbuf)) ;
+#ifndef ENDIAN_LITTLE
+  if (fileproc)
+    then
+      begin
+        (*plbuf)[14] = lswap(bitlo) ;
+        (*plbuf)[15] = lswap(bithi) ;
+      end
+    else
+#endif
+      begin
+        (*plbuf)[14] = bitlo ;
+        (*plbuf)[15] = bithi ;
+      end
+  transform (addr(workingvar->fdigest), addr(workbuf), fileproc) ;
   memcpy(resp, addr(workingvar->fdigest), sizeof(t128)) ;
 /* For big endian htonl won't work, for little endian this getline cancelled by storelongword */
   for (i = 0 ; i <= 3 ; i++)
-    begin
-      lw = (*resp)[i] ;
-      lw = (lw shr 24) or ((lw and 0xFF0000) shr 8) or ((lw and 0xFF00) shl 8) or (lw shl 24) ;
-      (*resp)[i] = lw ;
-    end
+    (*resp)[i] = lswap((*resp)[i]) ;
 end
 
+void calcmd5 (pq330 q330, string250 *chal, t128 *resp)
+begin
+  pworkingvar workingvar ;
+
+  workingvar = q330->md5buf ;
+  resetbuffer (workingvar) ;
+  update(workingvar, chal, strlen(chal), FALSE) ;
+  get_result (workingvar, resp, FALSE) ;
+end
+
+void md5_operation (pq330 q330, tmd5op *md5op)
+begin
+  pworkingvar workingvar ;
+
+  workingvar = q330->md5buf ;
+  switch (md5op->optype) begin
+    case MDO_INIT :
+      resetbuffer (workingvar) ;
+      break ;
+    case MDO_UPDATE :
+      update(workingvar, md5op->ptr, md5op->cnt, TRUE) ;
+      break ;
+    case MDO_RESULT :
+      get_result (workingvar, addr(md5op->res), TRUE) ;
+      break ;
+  end
+end

@@ -25,7 +25,7 @@ Edit History:
 #ifndef libfilters_h
 /* Flag this file as included */
 #define libfilters_h
-#define VER_LIBFILTERS 0
+#define VER_LIBFILTERS 2
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
@@ -42,7 +42,7 @@ extern void load_firfilters (pq330 q330, paqstruc paqs) ;
 extern void append_firfilters (pq330 q330, paqstruc paqs, pfilter src) ;
 extern pfir_packet create_fir (pq330 q330, pfilter src) ;
 extern piirfilter create_iir (pq330 q330, piirdef src, integer points) ;
-extern void average (pq330 q330, pavg_packet pavg, tfloat s, tfloat samp, plcq q) ;
+extern void average (paqstruc paqs, pavg_packet pavg, tfloat s, tfloat samp, plcq q) ;
 extern void allocate_lcq_filters (paqstruc paqs, plcq q) ;
 extern tfloat mac_and_shift (pfir_packet pf) ;
 extern pfilter find_fir (paqstruc paqs, byte num) ;

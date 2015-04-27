@@ -31,10 +31,18 @@ Edit History:
                      before a timing blockette is received.
     6 2007-07-06 rdr Data_timetag set to 0 instead of -1, anything less than +1 is considered
                      not yet set. Clear lasttime at the same time.
-    7 2008-07-29 rdr Add handling of new serial sensor blockettes. Change serial sensor
+    7 2007-08-04 rdr Add conditionals for omitting network code.
+    8 2008-01-11 rdr Ignore data from Q330 if freeze timer set.
+    9 2008-07-31 rdr Add handling of new serial sensor blockettes. Change serial sensor
                      configuration recording to use the enclosing blockette size minus
                      the overhead since the size will be different for different sensors.
-    8 2008-08-19 rdr Add TCP support. Put in missing AC_WRITE update in dack_out.
+   10 2008-08-20 rdr Add TCP support. Put in missing AC_WRITE update in dack_out.
+   11 2009-02-09 rdr Add EP support.
+   12 2009-07-28 rdr Add DSS support.
+   13 2009-09-13 rdr Fix error message for ST32_DRIFT.
+   14 2010-12-22 rdr Add Sensor control blockette handling.
+   15 2011-02-18 rdr Add handling of FE PLL blockettes.
+   16 2013-08-09 rdr Check for missing timing blockette when moving to next second of data.
 */
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -86,6 +94,9 @@ Edit History:
 #ifndef libcompress_h
 #include "libcompress.h"
 #endif
+#ifndef libdss_h
+#include "libdss.h"
+#endif
 #endif
 
 void allocate_packetbuffers (pq330 q330)
@@ -93,7 +104,7 @@ begin
   integer i ;
 
   for (i = 0 ; i <= 255 ; i++)
-    getbuf (q330, addr(q330->pkt_bufs[i]), sizeof(tpkt_buf)) ;
+    getthrbuf (q330, addr(q330->pkt_bufs[i]), sizeof(tpkt_buf)) ;
 end
 
 static void reset_window (pq330 q330)
@@ -183,9 +194,13 @@ begin
         strcat(s, s1) ;
         libmsgadd(q330, LIBMSG_PKTOUT, addr(s)) ;
       end
+#ifndef OMIT_NETWORK
   if (q330->usesock)
     then
       begin
+        if (q330->dpath == INVALID_SOCKET)
+          then
+            return ;
         if (q330->tcp)
           then
             begin
@@ -230,8 +245,10 @@ begin
           else
             add_status (q330, AC_WRITE, msglth + IP_HDR_LTH + UDP_HDR_LTH) ;
       end
+#endif
 #ifndef OMIT_SERIAL
-    else
+  if (q330->usesock == 0)
+    then
       begin
         memcpy(addr(q330->commands.cmsgout.qdp), addr(q330->dataout.qdp), msglth) ;
         send_packet (q330, msglth, q330->q330dport, q330->dataport) ;
@@ -343,6 +360,28 @@ begin
             sprintf(s, "%d to %d", v1, v2) ;
             libdatamsg (q330, LIBMSG_SEQRESUME, addr(s)) ;
           end
+      else if (dsn == (paqs->dt_data_sequence + 1))
+        then
+          begin /* Check for missed timing blockette */
+            p2 = p ;
+            chan = loadbyte (addr(p2)) ; /* get channel */
+            if (chan != DC_MN232)
+              then
+                begin /* Missed, need to wait for next timing blockette */
+                  sprintf(s, "1, %d to %d", v1, v2) ;
+                  libdatamsg (q330, LIBMSG_SEQGAP, addr(s)) ;
+                  add_status (q330, AC_GAPS, 1) ;
+                  inc(q330->share.opstat.totalgaps) ;
+                  seqgap_occurred = TRUE ;
+                  q330->lasttime = 0 ;
+                  paqs->data_timetag = 0 ;
+                end
+          end
+#ifndef OMITSEED
+      if ((q330->dssstruc) land (q330->dsspath != INVALID_SOCKET) land (dsn == (q330->lastseq + 1)))
+        then
+          lib_dss_continuous (q330->dssstruc) ; /* Starting a new second of data */
+#endif
       paqs->dt_data_sequence = dsn ; /* set global data record sequence number */
       q330->lastseq = paqs->dt_data_sequence ;
       pend = psave ;
@@ -423,7 +462,7 @@ begin
                     case ST32_DRIFT :
                       v1 = wordval ;
                       r = v1 + lval1 * 1.0E-6 ;
-                      sprintf(s, "8.6f Seconds", r) ;
+                      sprintf(s, "%8.6f Seconds", r) ;
                       libdatamsg (q330, LIBMSG_PHASERANGE, addr(s)) ;
                       break ;
                   end
@@ -506,12 +545,22 @@ begin
                               break ;
                           end
                           break ;
+                        case 4 :
+                          switch (paqs->proc_lcq->raw_data_field) begin
+                            case 0 :
+                              process_one (q330, subchan) ;
+                              break ;
+                            case 1 :
+                              process_one (q330, wordval shr 8) ;
+                              break ;
+                          end
+                          break ;
                       end
                       paqs->proc_lcq = paqs->proc_lcq->dispatch_link ;
                     end
                   break ;
                 case DC_MN32 :
-                  lval1 = loadlongint (addr(p)) ; /* Serial Sensor */
+                  lval1 = loadlongint (addr(p)) ; /* serial sensor */
                   paqs->proc_lcq = paqs->dispatch[idx] ;
                   while (paqs->proc_lcq)
                     begin
@@ -730,7 +779,28 @@ begin
                     end
                   break ;
                 case DC_AG32 :
-                  loadlongint (addr(p)) ;
+                  lval1 = loadlongint (addr(p)) ;
+                  paqs->proc_lcq = paqs->dispatch[idx] ;
+                  while (paqs->proc_lcq)
+                    begin
+                      switch (sub) begin
+                        case 0 :
+                        case 1 :
+                          switch (paqs->proc_lcq->raw_data_field) begin
+                            case 0 :
+                              process_one (q330, subchan) ; /* Clock quality */
+                              break ;
+                            case 1 :
+                              process_one (q330, sex(wordval)) ; /* VCO Control */
+                              break ;
+                            case 2 :
+                              process_one (q330, lval1) ; /* Clock phase */
+                              break ;
+                          end
+                          break ;
+                      end
+                      paqs->proc_lcq = paqs->proc_lcq->dispatch_link ;
+                    end
                   break ;
                 case DC_AG232 :
                   loadlongint (addr(p)) ;
@@ -974,7 +1044,52 @@ begin
                       end
 #endif
                       break ;
+                    case SP_ENVPROC :
+                      skip = (wordval - 1) and 0xFFFC ; /* + 3 not including first 4 */
+                      if (wordval == 8)
+                        then
+                          begin /* 1hz data */
+                            p = psave ; /* point at 32 bit value */
+                            lval1 = loadlongint (addr(p)) ;
+                            paqs->proc_lcq = paqs->epdispatch[subchan] ;
+                            while (paqs->proc_lcq)
+                              begin
+#ifndef OMIT_SEED
+                                if (q330->lastseq == 0)
+                                  then
+                                    paqs->proc_lcq->com->charging = TRUE ;
+#endif
+                                  process_one (q330, lval1) ;
+                                  paqs->proc_lcq = paqs->proc_lcq->dispatch_link ;
+                                end
+                          end
+                        else
+                          begin /* compressed data */
+                            if ((wordval > MAXDATA) lor
+                                ((wordval + (integer)pstart) > (integer)pend))
+                              then
+                                begin
+                                  v1 = wordval ;
+                                  sprintf(s, "%d", v1) ;
+                                  libdatamsg (q330, LIBMSG_INVBLKLTH, addr(s)) ;
+                                  return ;
+                                end
+                            paqs->proc_lcq = paqs->epdispatch[subchan] ;
+                            while (paqs->proc_lcq)
+                              begin
+#ifndef OMIT_SEED
+                                if (q330->lastseq == 0)
+                                  then
+                                    paqs->proc_lcq->com->charging = TRUE ;
+#endif
+                                p = psave ; /* in case multiple users */
+                                process_comp (q330, p, wordval) ;
+                                paqs->proc_lcq = paqs->proc_lcq->dispatch_link ;
+                              end
+                          end
+                      break ;
                     default :
+                      skip = (wordval - 1) and 0xFFFC ; /* + 3 not including first 4 */
                       v1 = chan ;
                       sprintf(s, "%X", v1) ;
                       zpad(s, 2) ;
@@ -1053,9 +1168,13 @@ begin
           then
             libmsgadd(q330, LIBMSG_PKTOUT, addr(s)) ;
       end
+#ifndef OMIT_NETWORK
   if (q330->usesock)
     then
       begin
+        if (q330->dpath == INVALID_SOCKET)
+          then
+            return ;
         if (q330->tcp)
           then
             begin
@@ -1100,8 +1219,10 @@ begin
           else
             add_status (q330, AC_WRITE, msglth + IP_HDR_LTH + UDP_HDR_LTH) ;
       end
+#endif
 #ifndef OMIT_SERIAL
-    else
+  if (q330->usesock == 0)
+    then
       begin
         memcpy(addr(q330->commands.cmsgout.qdp), addr(q330->dataout.qdp), msglth) ;
         send_packet (q330, msglth, q330->q330dport, q330->dataport) ;
@@ -1186,7 +1307,7 @@ begin
   if (lnot q330->link_recv)
     then
       return ;
-  if (q330->libstate != LIBSTATE_RUN)
+  if ((q330->libstate != LIBSTATE_RUN) lor (q330->share.freeze_timer > 0))
     then
       return ;
   add_status (q330, AC_PACKETS, 1) ;

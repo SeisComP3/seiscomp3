@@ -1,5 +1,5 @@
 /*   Lib330 time series handling definitions
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -25,13 +25,16 @@ Edit History:
     2 2006-12-30 rdr Add cfg_timer.
     3 2007-03-12 rdr Add first_data flag to indicate that continuity needs to be purged at the
                      first second of incoming data.
-    4 2008-08-02 rdr Add LO_NSEVT, and SCD_xxxx, scd_evt, and scd_cont.
-    5 2008-03-19 rdr Add gap_offset.
+    4 2008-01-09 rdr Use reasonable names for message queue. Move msg_lcq out of Q330 cleared area.
+    5 2008-08-19 rdr Add LO_NSEVT, and SCD_xxxx, scd_evt, and scd_cont.
+                     Add gap_offset.
+    6 2010-03-27 rdr Add Q335 definitions.
+    7 2011-03-17 rdr Add gain_bits to tlcq.
 */
 #ifndef libsampglob_h
 /* Flag this file as included */
 #define libsampglob_h
-#define VER_LIBSAMPGLOB 5
+#define VER_LIBSAMPGLOB 8
 
 #ifndef libtypes_h
 #include "libtypes.h"
@@ -110,12 +113,15 @@ Edit History:
 #define PEEKELEMS 16
 #define PEEKMASK 15 /* TP7 doesn't optimize mod operation */
 #define CFG_TIMEOUT 120 /* seconds since last config blockette added before flush */
+#define LOG_TIMEOUT 120 /* seconds since last message line added before flush */
 #endif
 
 #define SS_100 448 /* bytes needed for 100hz segment buffer */
 #define SS_200 888 /* bytes needed for 200hz segment buffer */
+#define SS_250 1096
+#define SS_500 2172
+#define SS_1000 4328
 #define NO_LAST_DATA_QUAL 999 /* initial value */
-#define MHOLDQSZ 500 /* Queue for messages prior to lcq allocation */
 
 #ifndef OMIT_SEED
 enum tevent_detector {MURDOCK_HUTT, THRESHOLD} ;
@@ -208,7 +214,7 @@ typedef tfloat trealsamps[MAXSAMP] ;
 
 typedef longint tdataarray[MAX_RATE] ;
 typedef tdataarray *pdataarray ;
-typedef byte tidxarray[MAX_RATE + 1] ;
+typedef word tidxarray[MAX_RATE + 1] ;
 typedef tidxarray *pidxarray ;
 typedef longword tmergedbuf[MAX_RATE] ;
 typedef tmergedbuf *pmergedbuf ;
@@ -375,6 +381,7 @@ typedef struct tlcq {
   byte lcq_num ; /* reference number for this LCQ */
   byte raw_data_source ; /* from Q330 channel */
   byte raw_data_field ; /* adds more information */
+  byte gain_bits ; /* for DEB flags */
   longword lcq_opt ; /* LCQ options */
   string2 slocation ; /* dynamic length version */
   string3 sseedname ;
@@ -489,11 +496,14 @@ typedef struct {
 } tlog_cfg ;
 typedef plcq tdispatch[96] ; /* handlers for non-main data */
 typedef plcq tmdispatch[CHANNELS][FREQUENCIES] ; /* for main data */
-typedef struct mholdqtype {
-  struct mholdqtype *link ;
-  string m ;
-} mholdqtype ;
-typedef mholdqtype *tmhqp ;
+typedef plcq tepdispatch[256] ; /* for Environmental Processor */
+
+typedef struct tmsgqueue {
+  struct tmsgqueue *link ;
+  string250 msg ;
+} tmsgqueue ;
+typedef tmsgqueue *pmsgqueue ;
+
 typedef struct {
   tcontext owner ;
 #ifndef OMIT_SEED
@@ -524,7 +534,6 @@ typedef struct {
   double last_update ; /* time of last clock update */
   longint except_count ; /* for timing blockette exception_count */
   plcq cfg_lcq ; /* For configuration data */
-  plcq msg_lcq ;
   plcq tim_lcq ;
   plcq cnp_lcqs ;
   piirdef iirchain ; /* start of iir filter chain */
@@ -539,14 +548,17 @@ typedef struct {
 #endif
   word last_sg ;
   plcq dplcqs ; /* For statistics */
+  plcq msg_lcq ;
   pointer data_latency_lcq ; /* dp lcq for data latency */
   pointer status_latency_lcq ; /* dp lcq for status latency */
   tdispatch dispatch ;
   tmdispatch mdispatch ;
+  tepdispatch epdispatch ;
 #ifndef OMIT_SEED
-  tmhqp mholdq, mhqnxi, mhqnxo ;
+  pmsgqueue msgqueue, msgq_in, msgq_out ;
   pfilter firchain ; /* start of fir filter chain */
   integer cfg_timer ; /* count-down since last added configuration data */
+  integer log_timer ; /* count-down since last added message line */
 #endif
 } taqstruc ;
 typedef taqstruc *paqstruc ;

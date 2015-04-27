@@ -53,6 +53,9 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mjma::computeMagnitude(
 	if ( delta < DELTA_MIN || delta > DELTA_MAX )
 		return DistanceOutOfRange;
 
+	if ( amplitude <= 0 )
+		return AmplitudeOutOfRange;
+
 	// Clip depth to 0
 	if ( depth < 0 ) depth = 0;
 

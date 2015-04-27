@@ -210,7 +210,7 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		void addPluginPackagePath(const std::string &package);
 
 		//! Returns the version string
-		const char *version() const;
+		const char *frameworkVersion() const;
 
 		//! Returns the configured agencyID
 		const std::string& agencyID() const;
@@ -545,6 +545,10 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 	//  Protected functions
 	// ----------------------------------------------------------------------
 	protected:
+		//! Returns the applications version. The default implementation
+		//! returns NULL and uses the global framework version instead.
+		virtual const char *version();
+
 		//! Reimplement this method to add additional commandline groups
 		//! and/or options
 		virtual void createCommandLineDescription();

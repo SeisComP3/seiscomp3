@@ -1,5 +1,5 @@
 /*   Lib330 time series configuration routines
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -22,13 +22,35 @@ Edit History:
    -- ---------- --- ---------------------------------------------------
     0 2006-09-30 rdr Created
     1 2006-10-26 rdr Fix mangled filter cutoff descriptions in verbose mode.
-    2 2008-03-02 rdr Add setting scd_evt and scd_cont based on lcq options.
-    3 2008-03-18 rdr Add set_gaps to setup both the gap_secs and new gap_offset. Gap_offset
+    2 2007-09-07 rdr Add call to print_generated_rectotals.
+    3 2008-01-10 rdr LOG LCQ moved to DP. Make number of client message buffers host
+                     programmable. DPLCQ buffers come out of thrbuf instead of using
+                     getmem. Remove deallocate_dplcqs.
+    4 2008-03-18 rdr Add setting scd_evt and scd_cont based on lcq options.
+                     Add set_gaps to setup both the gap_secs and new gap_offset. Gap_offset
                      needs to be overridden for decimated channels based on the rate of
                      the source channel.
-    4 2008-04-03 rdr If opt_compat is set then force netserv to event if archive is event.
-    5 2008-04-26 rdr Setup scd_cont for DP LCQs.
-    6 2008-06-19 rdr Initialize log name in allocate_aqstruc.
+    5 2008-04-03 rdr If opt_compat is set then force netserv to event if archive is event.
+    6 2008-04-26 rdr Setup scd_cont for DP LCQs.
+    7 2008-06-19 rdr Initialize log name in allocate_aqstruc.
+    8 2009-02-09 rdr Add EP support.
+    9 2009-03-11 rdr Protect against divide by zero errors when using a variable rate
+                     channel as the source for a decimated channel, these values will be
+                     calculated once the source rate is known.
+                     Change EP delays to 20us increments from 5us. Add filter delay dump
+                     for EP channels.
+   10 2009-04-18 rdr Fix filter delay string for EP channels.
+   11 2009-05-16 rdr Don't worry about delays for EP channels that are disabled. If tokens
+                     changed while running don't automatically check EP delays unless there
+                     is no update within 2 minutes. Normally Willard updates EP configuration
+                     after sending tokens.
+   12 2009-07-28 rdr Add DSS support.
+   13 2009-09-05 rdr Change update_ep_delays to show delay values when it is different from
+                     previous value (which is normally zero) or the show flag is on. Don't
+                     get an update unless the udpate flag is set.
+   14 2009-09-07 rdr Fix recursive mutex locking in verify_mapping.
+   15 2010-03-27 rdr Q335 support added.
+   16 2011-03-17 rdr Setup new gain_bits in LCQ init for deb_flags usage.
 */
 #ifndef libsampcfg_h
 #include "libsampcfg.h"
@@ -68,7 +90,15 @@ Edit History:
 #ifndef libsample_h
 #include "libsample.h"
 #endif
+#ifndef libverbose_h
+#include "libverbose.h"
 #endif
+#ifndef libdss_h
+#include "libdss.h"
+#endif
+#endif
+
+#define EP_UPDATE_TIME 120 /* 2 minutes */
 
 longword secsince (void)
 begin
@@ -80,8 +110,6 @@ void clear_sg (paqstruc paqs)
 begin
 
   memset (addr(paqs->first_sg), 0, (longint)addr(paqs->last_sg) - (longint)addr(paqs->first_sg)) ;
-  string2fixed (addr(paqs->log_tim.log_location), "  ") ;
-  string2fixed (addr(paqs->log_tim.log_seedname), "LOG") ;
   string2fixed (addr(paqs->log_tim.tim_location), "  ") ;
   string2fixed (addr(paqs->log_tim.tim_seedname), "ACE") ;
 #ifndef OMIT_SEED
@@ -89,6 +117,7 @@ begin
 #endif
   memset (addr(paqs->dispatch), 0, sizeof(tdispatch)) ;
   memset (addr(paqs->mdispatch), 0, sizeof(tmdispatch)) ;
+  memset (addr(paqs->epdispatch), 0, sizeof(tepdispatch)) ;
 end
 
 pointer allocate_aqstruc (tcontext ownedby)
@@ -96,25 +125,29 @@ begin
   paqstruc paqs ;
   pq330 q330 ;
 #ifndef OMIT_SEED
-  integer n ;
-  tmhqp mhqp ;
+  integer n, msgcnt ;
+  pmsgqueue msgq ;
 #endif
 
   q330 = ownedby ;
-  getbuf (q330, addr(paqs), sizeof(taqstruc)) ;
+  getthrbuf (q330, addr(paqs), sizeof(taqstruc)) ;
   paqs->owner = ownedby ;
   clear_sg (paqs) ;
 #ifndef OMIT_SEED
-  getbuf (q330, addr(mhqp), sizeof(mholdqtype)) ;
-  paqs->mholdq = mhqp ;
-  paqs->mhqnxi = mhqp ;
-  paqs->mhqnxo = mhqp ;
-  for (n = 2 ; n <= MHOLDQSZ ; n++)
+  getthrbuf (q330, addr(msgq), sizeof(tmsgqueue)) ;
+  paqs->msgqueue = msgq ;
+  paqs->msgq_in = msgq ;
+  paqs->msgq_out = msgq ;
+  msgcnt = q330->par_create.opt_client_msgs ;
+  if (msgcnt < MIN_MSG_QUEUE_SIZE)
+    then
+      msgcnt = MIN_MSG_QUEUE_SIZE ;
+  for (n = 2 ; n <= msgcnt ; n++)
     begin
-      getbuf (q330, addr(mhqp->link), sizeof(mholdqtype)) ;
-      mhqp = mhqp->link ;
+      getthrbuf (q330, addr(msgq->link), sizeof(tmsgqueue)) ;
+      msgq = msgq->link ;
     end
-  mhqp->link = paqs->mholdq ;
+  msgq->link = paqs->msgqueue ;
   n = q330->par_create.amini_exponent ;
   if (n >= 9)
     then
@@ -133,32 +166,6 @@ begin
   string2fixed (addr(paqs->log_tim.log_seedname), "LOG") ;
 #endif
   return paqs ;
-end
-
-void deallocate_dplcqs (pq330 q330)
-begin
-  plcq pl, p ;
-  paqstruc paqs ;
-
-  paqs = q330->aqstruc ;
-  pl = paqs->dplcqs ;
-  while (pl)
-    begin
-      p = pl->link ;
-#ifndef OMIT_SEED
-      if (pl->com)
-        then
-          begin
-            free (pl->com->ring) ;
-            free (pl->com) ;
-          end
-      if (pl->arc.pcfr)
-        then
-          free (pl->arc.pcfr) ;
-#endif
-      free (pl) ;
-      pl = p ;
-    end
 end
 
 char *realtostr (double r, integer digits, string31 *result)
@@ -221,6 +228,133 @@ begin
       end
 end
 
+void update_ep_delays (pq330 q330, boolean show, boolean update)
+begin
+  plcq pchan ;
+  paqstruc paqs ;
+  integer i ;
+  boolean have_all, found ;
+  string63 s ;
+  string15 s1, s2, s4 ;
+  tfloat last_delay ;
+
+  paqs = q330->aqstruc ;
+  if (paqs == NIL)
+    then
+      return ;
+  q330->update_ep_timer = 0 ;
+  have_all = TRUE ;
+  pchan = paqs->lcqs ;
+  while (pchan)
+    begin
+      if ((pchan->raw_data_source == (DC_SPEC + 4)) land ((pchan->lcq_opt and LO_DOFF) == 0))
+        then
+          begin
+            found = FALSE ;
+            for (i = 0 ; i < q330->share.epdelay.chancnt ; i++)
+              if (pchan->raw_data_field == (q330->share.epdelay.chandlys[i] shr 24))
+                then
+                  begin
+                    last_delay = pchan->delay ;
+                    pchan->delay = (q330->share.epdelay.chandlys[i] and 0xFFFFFF) * 20.0E-6 ;
+                    found = TRUE ;
+                    if (pchan->delay != last_delay)
+                      then
+                        begin
+                          if (last_delay != 0.0)
+                            then
+                              flush_lcq (paqs, pchan, pchan->com) ;
+                          if ((show) land (q330->cur_verbosity and VERB_LOGEXTRA))
+                            then
+                              begin
+                                sprintf(s, "%s@%s=%s", seed2string(addr(pchan->location), addr(pchan->seedname), addr(s1)),
+                                        scvrate(pchan->rate, addr(s2)), realtostr(pchan->delay, 6, addr(s4))) ;
+                                libmsgadd (q330, LIBMSG_FILTDLY, addr(s)) ;
+                              end
+                        end
+                    break ;
+                  end
+            if (lnot found)
+              then
+                have_all = FALSE ;
+          end
+      pchan = pchan->link ;
+    end
+  if ((update) land (lnot have_all))
+    then
+      new_cmd (q330, C2_RQEPCFG, sizeof(tepcfg)) ;
+end
+
+void verify_epcfg (pq330 q330)
+begin
+  plcq pchan ;
+  paqstruc paqs ;
+  integer i ;
+  boolean changes, found ;
+  byte mask ;
+
+  paqs = q330->aqstruc ;
+  if (paqs == NIL)
+    then
+      return ;
+  changes = FALSE ;
+  memcpy (addr(q330->share.newepcfg), addr(q330->share.epcfg), sizeof(tepcfg)) ;
+  mask = 1 shl q330->par_create.q330id_dataport ;
+  pchan = paqs->lcqs ;
+  while (pchan)
+    begin
+      if ((pchan->raw_data_source == (DC_SPEC + 4)) land ((pchan->lcq_opt and LO_DOFF) == 0))
+        then
+          begin
+            found = FALSE ;
+            for (i = 0 ; i < q330->share.newepcfg.chancnt ; i++)
+              if (pchan->raw_data_field == q330->share.newepcfg.chanmasks[i].chan)
+                then
+                  begin
+                    found = TRUE ;
+                    if ((q330->share.newepcfg.chanmasks[i].mask and mask) == 0)
+                      then
+                        begin
+                          changes = TRUE ;
+                          q330->share.newepcfg.chanmasks[i].mask = q330->share.newepcfg.chanmasks[i].mask or mask ;
+                        end
+                    break ;
+                  end
+            if (lnot found)
+              then
+                if (q330->share.newepcfg.chancnt < EP_MAXCHAN)
+                  then
+                    begin
+                      changes = TRUE ;
+                      q330->share.newepcfg.chanmasks[q330->share.newepcfg.chancnt].chan = pchan->raw_data_field ;
+                      q330->share.newepcfg.chanmasks[q330->share.newepcfg.chancnt].mask = mask ;
+                      inc(q330->share.newepcfg.chancnt) ;
+                    end
+          end
+      pchan = pchan->link ;
+    end
+  if (changes)
+    then
+      new_cmd (q330, C2_SEPCFG, sizeof(tepcfg)) ;
+end
+
+void set_gain_bits (pq330 q330, plcq q, byte *gb)
+begin
+  word w, chan ;
+
+  chan = q->raw_data_source and not DCM ; /* get channel */
+  if (chan >= 3)
+    then
+      w = (q330->share.global.input_map shr (2 + (chan shl 1))) and 3 ;
+    else
+      w = (q330->share.global.input_map shr (chan shl 1)) and 3 ;
+  if (((q330->share.global.gain_map shr (chan shl 1)) and 3) == GAIN_PON)
+    then
+      w = w or DEB_LOWV ;
+  *gb = (byte)w ;
+end
+
+
 void init_lcq (paqstruc paqs)
 begin
   plcq p, pl ;
@@ -247,13 +381,22 @@ begin
       getbuf (q330, addr(pl->databuf), pl->datasize) ;
       if (pl->rate > 1)
         then
-          getbuf (q330, addr(pl->idxbuf), pl->rate + 1) ;
+          getbuf (q330, addr(pl->idxbuf), (pl->rate + 1) * sizeof(word)) ;
       switch (pl->rate) begin
         case 100 :
           pl->segsize = SS_100 ;
           break ;
         case 200 :
           pl->segsize = SS_200 ;
+          break ;
+        case 250 :
+          pl->segsize = SS_250 ;
+          break ;
+        case 500 :
+          pl->segsize = SS_500 ;
+          break ;
+        case 1000 :
+          pl->segsize = SS_1000 ;
           break ;
         default :
           pl->segsize = 0 ;
@@ -270,6 +413,10 @@ begin
                (pl->raw_data_source >= DC_D32) land (pl->raw_data_source <= DC_D32 + 5))
               then
                 pl->onesec_filter = pl->onesec_filter or OSF_1HZ ;
+            if ((q330->par_create.opt_secfilter and OSF_EP) land (pl->rate == 1) land
+               (pl->raw_data_source == (DC_SPEC or 4)))
+              then
+                pl->onesec_filter = pl->onesec_filter or OSF_EP ;
           end
 #ifndef OMIT_SEED
       if (q330->par_create.call_minidata)
@@ -332,6 +479,7 @@ begin
                           p = p->dispatch_link ;
                         p->dispatch_link = pl ;
                       end
+                  set_gain_bits (q330, pl, addr(pl->gain_bits)) ;
                   lock (q330) ;
                   if (i <= 2)
                     then
@@ -367,6 +515,21 @@ begin
                       end
 #endif
                 end
+            else if (pl->raw_data_source == (DC_SPEC or 4))
+              then
+                begin
+                  i = pl->raw_data_field ;
+                  if (paqs->epdispatch[i] == NIL)
+                    then
+                      paqs->epdispatch[i] = pl ;
+                    else
+                      begin
+                        p = paqs->epdispatch[i] ;
+                        while (p->dispatch_link)
+                          p = p->dispatch_link ;
+                        p->dispatch_link = pl ;
+                      end
+                end
           end
       else if (pl->raw_data_source == READ_PREV_STREAM)
         then
@@ -375,14 +538,20 @@ begin
             if (pl->prev_link->rate > 0)
               then
                 pl->input_sample_rate = pl->prev_link->rate ;
-              else
+            else if (pl->prev_link->rate < 0)
+              then
                 pl->input_sample_rate = 1.0 / abs(pl->prev_link->rate) ;
+              else
+                pl->input_sample_rate = 0.0 ;
             if (pl->input_sample_rate >= 0.999)
               then
                 pl->gap_offset = 1.0 ;
-              else
+            else if (pl->input_sample_rate != 0)
+              then
                 pl->gap_offset = 1.0 / pl->input_sample_rate ; /* set new gap offset based on input rate */
-            if (pl->source_fir)
+              else
+                pl->gap_offset = 1.0 ;
+            if ((pl->source_fir) land (pl->input_sample_rate != 0))
               then
                 pl->delay = pl->prev_link->delay + (pl->source_fir->dly / pl->input_sample_rate) ;
               else
@@ -396,10 +565,10 @@ begin
                   libmsgadd (q330, LIBMSG_FILTDLY, addr(s)) ;
                 end
             pl->com->charging = TRUE ;
-            /* see if root source is 1hz */
             p = pl->prev_link ;
             while (p->prev_link)
               p = p->prev_link ;
+            /* see if root source is 1hz */
             if ((p) land (p->rate == 1))
               then
                 begin
@@ -407,6 +576,10 @@ begin
                   pl->slipping = TRUE ;
                   pl->slip_modulus = abs(pl->rate) ; /* .1hz has modulus of 10 */
                 end
+            /* see if root source is main digitizer */
+            if ((p) land ((p->raw_data_source and DCM) == DC_D32))
+              then
+                set_gain_bits (q330, p, addr(pl->gain_bits)) ;
 #endif
           end
       else if ((pl->raw_data_source >= MESSAGE_STREAM) land (pl->raw_data_source <= CFG_STREAM))
@@ -416,9 +589,6 @@ begin
             pl->com->blockette_index = 56 ; /* header plus blockette 1000 */
 #endif
             switch (pl->raw_data_source) begin
-              case MESSAGE_STREAM :
-                pl->pack_class = PKC_MESSAGE ;
-                break ;
               case TIMING_STREAM :
                 pl->pack_class = PKC_TIMING ;
                 break ;
@@ -481,6 +651,18 @@ begin
 #endif
       pl = pl->link ;
     end
+  if (q330->share.fixed.flags and FF_EP)
+    then
+      begin
+        if (q330->share.liberr == LIBERR_TOKENS_CHANGE)
+          then
+            begin
+              q330->update_ep_timer = EP_UPDATE_TIME ;
+              update_ep_delays (q330, TRUE, FALSE) ;
+            end
+          else
+            update_ep_delays (q330, TRUE, TRUE) ;
+      end
 end
 
 void init_dplcq (paqstruc paqs, plcq pl, boolean newone)
@@ -492,15 +674,19 @@ begin
 
   q330 = paqs->owner ;
   pl->dtsequence = 0 ;
-  if ((enum tacctype)pl->raw_data_field <= AC_LAST)
+  if (pl->raw_data_source != MESSAGE_STREAM)
     then
-      q330->share.accmstats[(enum tacctype)pl->raw_data_field].ds_lcq = pl ;
-  else if (pl->raw_data_field == AC_DATA_LATENCY)
-    then
-      paqs->data_latency_lcq = pl ;
-  else if (pl->raw_data_field == AC_STATUS_LATENCY)
-    then
-      paqs->status_latency_lcq = pl ;
+      begin
+        if ((enum tacctype)pl->raw_data_field <= AC_LAST)
+          then
+            q330->share.accmstats[(enum tacctype)pl->raw_data_field].ds_lcq = pl ;
+        else if (pl->raw_data_field == AC_DATA_LATENCY)
+          then
+            paqs->data_latency_lcq = pl ;
+        else if (pl->raw_data_field == AC_STATUS_LATENCY)
+          then
+            paqs->status_latency_lcq = pl ;
+      end
   if (q330->par_create.call_secdata)
     then
       begin
@@ -526,7 +712,11 @@ begin
       end
 #endif
   pl->dholdq = NIL ;
-  pl->pack_class = PKC_DATA ;
+  if (pl->raw_data_source == MESSAGE_STREAM)
+    then
+      pl->pack_class = PKC_MESSAGE ;
+    else
+      pl->pack_class = PKC_DATA ;
 #ifndef OMIT_SEED
   pl->scd_cont = SCD_BOTH ; /* both are continuous */
   if (pl->com->maxframes >= FRAMES_PER_RECORD)
@@ -535,17 +725,13 @@ begin
   if (lnot newone)
     then
       return ; /* don't need to allocate new buffers */
-  pr = malloc (sizeof(tcompressed_buffer_ring)) ;
-  memset (pr, 0, sizeof(tcompressed_buffer_ring)) ;
+  getthrbuf (q330, addr(pr), sizeof(tcompressed_buffer_ring)) ;
   pr->full = FALSE ;
   pl->com->ring = pr ;
   pr->link = pl->com->ring ; /* just keeps going back to itself */
   if (pl->arc.amini_filter)
     then
-      begin
-        pl->arc.pcfr = malloc (paqs->arc_size) ;
-        memset (pl->arc.pcfr, 0, paqs->arc_size) ;
-      end
+      getthrbuf (q330, addr(pl->arc.pcfr), paqs->arc_size) ;
 #endif
 end
 
@@ -572,15 +758,28 @@ void deallocate_sg (paqstruc paqs)
 begin
   pmem_manager pm ;
   integer mem ;
-/*  totrec : longword ; */
+  longword totrec ;
   pq330 q330 ;
+  string s ;
 
   q330 = paqs->owner ;
 #ifndef OMIT_SEED
   if (q330->need_sats)
     then
       finish_log_clock (q330) ;
+  if (q330->cur_verbosity and VERB_LOGEXTRA)
+    then
+      begin
+        flush_lcqs (paqs) ;
+        flush_dplcqs (q330) ;
+        totrec = print_generated_rectotals (q330) ;
+        sprintf(s, "Done: %d recs. seq end: %d", totrec, paqs->dt_data_sequence) ;
+        libdatamsg (q330, LIBMSG_TOTAL, addr(s)) ;
+      end
   flush_lcqs (paqs) ;
+  if (q330->dssstruc)
+    then
+      lib_dss_stop (q330->dssstruc) ;
 #endif
   mem = 0 ;
   pm = q330->memory_head ;
@@ -631,7 +830,9 @@ begin
         memcpy(addr(q330->share.newlog), addr(q330->share.log), sizeof(tlog)) ;
         memcpy(addr(q330->share.newlog.freqs), addr(newfreq), sizeof(tfreqs)) ;
         q330->share.newlog.flags = q330->share.newlog.flags or LNKFLG_SAVE ;
+        unlock (q330) ;
         new_cmd (q330, C1_SLOG, 0) ;
+        return ;
       end
   unlock (q330) ;
 end
@@ -743,6 +944,7 @@ begin
   dpcfg->net_port = paqs->netport ;
   dpcfg->datas_port = paqs->dservport ;
   dpcfg->dss = paqs->dss_def ;
+  memcpy(addr(dpcfg->clock), addr(q330->qclock), sizeof(tclock)) ;
   q = paqs->lcqs ;
   while (q)
     begin

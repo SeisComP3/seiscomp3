@@ -563,7 +563,13 @@ extern SC_SYSTEM_CLIENT_API const char* compiler_version();
 #endif
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::printVersion() {
-	cout << name() << ": " << version() << endl;
+	const char *appVersion = version();
+	if ( appVersion == NULL )
+		cout << name() << ": " << frameworkVersion() << endl;
+	else {
+		cout << name() << ": " << appVersion << endl;
+		cout << "Framework: " << frameworkVersion() << endl;
+	}
 	cout << "API version: "
 	     << SC_API_VERSION_MAJOR(SC_API_VERSION) << "."
 	     << SC_API_VERSION_MINOR(SC_API_VERSION) << "."
@@ -2123,6 +2129,15 @@ void Application::initCommandLine() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const char *Application::version() {
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::createCommandLineDescription() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3220,7 +3235,7 @@ void Application::handleInterrupt(int s) throw() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const char *Application::version() const {
+const char *Application::frameworkVersion() const {
 	return _version.c_str();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -26,13 +26,22 @@ Edit History:
                      than the new file position. For all versions if creating a flle,
                      truncate length to zero.
     3 2007-07-05 rdr Add some bulletproffing to zpad and jul_string.
+    4 2007-08-04 rdr Add CMEX32 support.
+    5 2008-01-10 rdr If file owner is specified then use baler callback to translate file
+                     names and handle media access for file open, close, and delete.
+    6 2009-07-30 rdr uppercase routine moved here from libtokens, renamed to lib330_upper
+    7 2013-08-18 rdr Add some includes.
 */
 #ifndef libsupport_h
 #include "libsupport.h"
 #endif
+#include <ctype.h>
 #include <stdio.h>
 #ifndef X86_WIN32
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #endif
 
 const dms_type days_mth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} ;
@@ -146,6 +155,15 @@ end
 
 #else
 
+#ifdef CMEX32
+double now (void)
+begin
+
+  return cmex_now () ;
+end
+
+#else
+
 double now (void)
 begin
 #define DIFF2000_1970 ((23 * 365) + (7 * 366)) /* Difference between 1970 and 2000 references */
@@ -157,6 +175,7 @@ begin
   r = ((double) tp.tv_sec + ((double) tp.tv_usec / 1000000.0)) ;
   return r - DIFF2000_1970 * 86400.0 ;
 end
+#endif
 #endif
 
 longint lib_round (double r)
@@ -332,6 +351,9 @@ typedef longword *plword ;
               ip = ptr->s_addr ;
             end
 #else
+#ifdef CMEX32
+        phost = NIL ;
+#else
         phost = gethostbyname(s) ;
         if (phost)
           then
@@ -340,6 +362,7 @@ typedef longword *plword ;
               ptr = (struct in_addr *) *listptr ;
               ip = ptr->s_addr ;
             end
+#endif
 #endif
       end
     else
@@ -357,9 +380,34 @@ begin
   return *sum ;
 end
 
+/* upshift a C string */
+char *lib330_upper (pchar s)
+begin
+  size_t i ;
+
+  for (i = 0 ; i < strlen(s) ; i++)
+    s[i] = toupper (s[i]) ;
+  return s ;
+end
+
+longint baler_file (pfile_owner powner, enum tfileacc_type fatype, pstring fname,
+                    integer opt1, integer opt2)
+begin
+  tfileacc_call fc ;
+
+  fc.owner = powner ;
+  fc.fileacc_type = fatype ;
+  fc.fname = fname ;
+  fc.opt1 = opt1 ;
+  fc.opt2 = opt2 ;
+  fc.response = 0 ;
+  powner->call_fileacc (addr(fc)) ;
+  return fc.response ;
+end
+
 #ifdef X86_WIN32
 
-tfile_handle lib_file_open (pchar path, integer mode)
+tfile_handle lib_file_open (pfile_owner powner, pchar path, integer mode)
 begin
   longword rwmode, openmode ;
   HANDLE cf ;
@@ -377,7 +425,11 @@ begin
   if (mode and LFO_READ)
     then
       rwmode = rwmode or GENERIC_READ ;
-  cf = CreateFile (path, rwmode, 0, NIL, openmode, FILE_ATTRIBUTE_NORMAL, 0) ;
+  if (powner)
+    then
+      cf = (HANDLE) baler_file (powner, FAT_OPEN, path, rwmode, openmode) ;
+    else
+      cf = CreateFile (path, rwmode, 0, NIL, openmode, FILE_ATTRIBUTE_NORMAL, 0) ;
   if (cf == INVALID_HANDLE_VALUE)
     then
       return INVALID_FILE_HANDLE ;
@@ -385,58 +437,84 @@ begin
       return cf ;
 end
 
-void lib_file_close (tfile_handle desc)
+void lib_file_close (pfile_owner powner, tfile_handle desc)
 begin
 
-  CloseHandle (desc) ;
+  if (powner)
+    then
+      baler_file (powner, FAT_CLOSE, NIL, (integer) desc, 0) ;
+    else
+      CloseHandle (desc) ;
 end
 
-boolean lib_file_seek (tfile_handle desc, integer offset)
+boolean lib_file_seek (pfile_owner powner, tfile_handle desc, integer offset)
 begin
 
-  return (SetFilePointer (desc, offset, NIL, FILE_BEGIN) == 0xFFFFFFFF) ;
+  if (powner)
+    then
+      return (baler_file (powner, FAT_SEEK, NIL, (integer) desc, offset)) ;
+    else
+      return (SetFilePointer (desc, offset, NIL, FILE_BEGIN) == 0xFFFFFFFF) ;
 end
 
-boolean lib_file_read (tfile_handle desc, pointer buf, integer size)
+boolean lib_file_read (pfile_owner powner, tfile_handle desc, pointer buf, integer size)
 begin
   unsigned long numread ;
 
-  if (ReadFile (desc, buf, size, addr(numread), NIL))
+  if (powner)
     then
-      return ((integer)numread != size) ;
+      numread = baler_file (powner, FAT_READ, buf, (integer) desc, size) ;
     else
-      return TRUE ;
+      ReadFile (desc, buf, size, addr(numread), NIL) ;
+  return ((integer)numread != size) ;
 end
 
-boolean lib_file_write (tfile_handle desc, pointer buf, integer size)
+boolean lib_file_write (pfile_owner powner, tfile_handle desc, pointer buf, integer size)
 begin
   unsigned long numwrite ;
 
-  if (WriteFile (desc, buf, size, addr(numwrite), NIL))
+  if (powner)
     then
-      return ((integer)numwrite != size) ;
+      numwrite = baler_file (powner, FAT_WRITE, buf, (integer) desc, size) ;
     else
-      return TRUE ;
+      WriteFile (desc, buf, size, addr(numwrite), NIL) ;
+  return ((integer)numwrite != size) ;
 end
 
-void lib_file_delete (pchar path)
+void lib_file_delete (pfile_owner powner, pchar path)
 begin
 
-  DeleteFile (path) ;
+  if (powner)
+    then
+      baler_file (powner, FAT_DEL, path, 0, 0) ;
+    else
+      DeleteFile (path) ;
 end
 
-integer lib_file_size (tfile_handle desc)
+integer lib_file_size (pfile_owner powner, tfile_handle desc)
 begin
-  longword sz ;
 
-  sz = GetFileSize (desc, NIL) ;
-  return sz ;
+  if (powner)
+    then
+      return baler_file (powner, FAT_SIZE, NIL, (integer) desc, 0) ;
+    else
+      return GetFileSize (desc, NIL) ;
 end
 
 #else
 
+#ifdef CMEX32
 /* returns negative number for error */
-tfile_handle lib_file_open (pchar path, integer mode)
+tfile_handle lib_file_open (pfile_owner powner, pchar path, integer mode)
+begin
+  tfile_handle cf ;
+
+  return (cmexopen (path, mode)) ;
+end
+
+#else
+/* returns negative number for error */
+tfile_handle lib_file_open (pfile_owner powner, pchar path, integer mode)
 begin
   tfile_handle cf ;
   integer flags ;
@@ -458,22 +536,35 @@ begin
     then
       flags or O_RDONLY ;
   rwmode = S_IRUSR or S_IWUSR or S_IRGRP or S_IROTH ;
-  cf = open (path, flags, rwmode) ;
+  if (powner)
+    then
+      cf = baler_file (powner, FAT_OPEN, path, rwmode, flags) ;
+    else
+      cf = open (path, flags, rwmode) ;
   return cf ;
 end
+#endif
 
-void lib_file_close (tfile_handle desc)
+void lib_file_close (pfile_owner powner, tfile_handle desc)
 begin
 
-  close (desc) ;
+  if (powner)
+    then
+      baler_file (powner, FAT_CLOSE, NIL, desc, 0) ;
+    else
+      close (desc) ;
 end
 
-boolean lib_file_seek (tfile_handle desc, integer offset)
+boolean lib_file_seek (pfile_owner powner, tfile_handle desc, integer offset)
 begin
   off_t result, long_offset ;
 
   long_offset = offset ;
-  result = lseek(desc, long_offset, SEEK_SET) ;
+  if (powner)
+    then
+      result = baler_file (powner, FAT_SEEK, NIL, (integer) desc, offset) ;
+    else
+      result = lseek(desc, long_offset, SEEK_SET) ;
 #ifdef __APPLE__
   return (result < 0) ;
 #else
@@ -481,34 +572,62 @@ begin
 #endif
 end
 
-boolean lib_file_read (tfile_handle desc, pointer buf, integer size)
+boolean lib_file_read (pfile_owner powner, tfile_handle desc, pointer buf, integer size)
 begin
   integer numread ;
 
-  numread = read (desc, buf, size) ;
+  if (powner)
+    then
+      numread = baler_file (powner, FAT_READ, buf, (integer) desc, size) ;
+    else
+      numread = read (desc, buf, size) ;
   return (numread != size) ;
 end
 
-boolean lib_file_write (tfile_handle desc, pointer buf, integer size)
+boolean lib_file_write (pfile_owner powner, tfile_handle desc, pointer buf, integer size)
 begin
   integer numwrite ;
 
-  numwrite = write(desc, buf, size) ;
+  if (powner)
+    then
+      numwrite = baler_file (powner, FAT_WRITE, buf, (integer) desc, size) ;
+    else
+      numwrite = write(desc, buf, size) ;
   return (numwrite != size) ;
 end
 
-void lib_file_delete (pchar path)
+void lib_file_delete (pfile_owner powner, pchar path)
 begin
 
-  remove (path) ;
+  if (powner)
+    then
+      baler_file (powner, FAT_DEL, path, 0, 0) ;
+    else
+      remove (path) ;
 end
 
-integer lib_file_size (tfile_handle desc)
+#ifdef CMEX32
+integer lib_file_size (pfile_owner powner, tfile_handle desc)
+begin
+
+  return cmexsize (desc) ;
+end
+
+#else
+
+integer lib_file_size (pfile_owner powner, tfile_handle desc)
 begin
   struct stat sb ;
 
-  fstat(desc, addr(sb)) ;
-  return sb.st_size ;
+  if (powner)
+    then
+      return baler_file (powner, FAT_SIZE, NIL, (integer) desc, 0) ;
+    else
+      begin
+        fstat(desc, addr(sb)) ;
+        return sb.st_size ;
+      end
 end
+#endif
 
 #endif

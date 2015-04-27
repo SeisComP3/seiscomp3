@@ -1,5 +1,5 @@
 /*   Lib330 Time Series data routine definitions
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -25,7 +25,7 @@ Edit History:
 #ifndef libsample_h
 /* Flag this file as included */
 #define libsample_h
-#define VER_LIBSAMPLE 6
+#define VER_LIBSAMPLE 11
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h

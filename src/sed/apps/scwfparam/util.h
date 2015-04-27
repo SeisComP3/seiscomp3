@@ -55,8 +55,8 @@ struct PGAVResult {
 	double           psa10;
 	double           psa30;
 	OPT(double)      duration;
-	int              scFilterOrder;
-	FilterFreqs      scFilter;
+	int              pdFilterOrder;
+	FilterFreqs      pdFilter;
 	int              filterOrder;
 	FilterFreqs      filter;
 	std::string      recordID;

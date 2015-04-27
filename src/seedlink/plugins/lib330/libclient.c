@@ -1,5 +1,5 @@
 /*   Lib330 client interface
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -22,8 +22,19 @@ Edit History:
    -- ---------- --- ---------------------------------------------------
     0 2006-09-10 rdr Created
     1 2007-07-16 rdr Fix physical interface status comparisons.
-    2 2007-09-04 rdr Fix size of tstat_log memcpy.
-    3 2008-04-14 rdr lib_get_status did not return LIBERR_NOSTAT if status not available.
+    2 2007-08-04 rdr Add lib_change_conntiming. Add lib_inject_packet.
+    3 2007-09-04 rdr Fix size of tstat_log memcpy.
+    4 2007-10-03 rdr tliberr lib_set_access_timer.
+    5 2007-10-10 rdr lib_get_status did not return LIBERR_NOSTAT if status not available.
+    7 2007-10-30 rdr When host request interface status, just do it, I don't know what
+                     Q330 interface I'm using, nor do I care.
+    8 2008-01-09 rdr When host request interface status, just do it, I don't know what
+                     Q330 interface I'm using, nor do I care. Add lib_set_freeze_timer.
+                     Add lib_flush_data. Change lib_change_conntiming into lib_conntiming
+                     with parameter to allow getting current values as well as changing.
+    9 2009-02-09 rdr Add EP Support.
+   10 2010-01-04 rdr Add version for libdss.
+   11 2010-03-27 rdr Add Q335 support.
 */
 #ifndef q330types_h
 #include "q330types.h"
@@ -101,6 +112,9 @@ Edit History:
 #endif
 #ifndef libarchive_h
 #include "libarchive.h"
+#endif
+#ifndef libdss_h
+#include "libdss.h"
 #endif
 #endif
 
@@ -182,6 +196,12 @@ begin
     then
       return ;
   lock (q330) ;
+      /* Eliminate status that can't be obtained */
+  if (q330->q335)
+    then
+      bitmap = bitmap and 0x310FEB ;
+    else
+      bitmap = bitmap and 0x1FFFFF ;
   q330->share.extra_status = bitmap ;
   q330->share.status_interval = interval ;
   q330->share.interval_counter = interval + 1 ; /* client is probably in a hurry if they are changing status */
@@ -202,6 +222,26 @@ begin
     then
       begin
         result = LIBERR_NOERR ; /* assume good */
+        if (q330->q335)
+          then
+            switch (bitnum) begin
+              case SRB_PWR :
+              case SRB_THR :
+              case SRB_SER1 :
+              case SRB_SER2 :
+              case SRB_ETH :
+              case SRB_DYN :
+              case SRB_AUX :
+              case SRB_SS :
+                unlock (q330) ;
+                return LIBERR_INVSTAT ;
+            end
+        else if (bitnum == SRB_FES)
+          then
+            begin
+              unlock (q330) ;
+              return LIBERR_INVSTAT ;
+            end
         switch (bitnum) begin
           case SRB_GLB :
             memcpy(buf, addr(q330->share.stat_global), sizeof(tstat_global)) ; /* Global Status */
@@ -238,25 +278,13 @@ begin
                 result = LIBERR_INVSTAT ;
             break ;
           case SRB_SER1 :
-            if (q330->q330phy == PP_SER1)
-              then
-                memcpy(buf, addr(q330->share.stat_serial), sizeof(tstat_serial)) ;
-              else
-                result = LIBERR_INVSTAT ; /* Serial Port 1 Status */
+            memcpy(buf, addr(q330->share.stat_serial), sizeof(tstat_serial)) ;
             break ;
           case SRB_SER2 :
-            if (q330->q330phy == PP_SER2)
-              then
-                memcpy(buf, addr(q330->share.stat_serial), sizeof(tstat_serial)) ;
-              else
-                result = LIBERR_INVSTAT ; /* Serial Port 2 Status */
+            memcpy(buf, addr(q330->share.stat_serial), sizeof(tstat_serial)) ;
             break ;
           case SRB_ETH :
-            if (q330->q330phy == PP_ETH)
-              then
-                memcpy(buf, addr(q330->share.stat_ether), sizeof(tstat_ether)) ;
-              else
-                result = LIBERR_INVSTAT ; /* Ethernet Status */
+            memcpy(buf, addr(q330->share.stat_ether), sizeof(tstat_ether)) ;
             break ;
           case SRB_BALER :
             memcpy(buf, addr(q330->share.stat_baler), sizeof(tstat_baler)) ; /* Baler Status */
@@ -269,6 +297,12 @@ begin
             break ;
           case SRB_SS :
             memcpy(buf, addr(q330->share.stat_sersens), sizeof(tstat_sersens)) ; /* Serial Sensor Status */
+            break ;
+          case SRB_EP :
+            memcpy(buf, addr(q330->share.stat_ep), sizeof(tstat_ep)) ; /* Environmental Processor Status */
+            break ;
+          case SRB_FES :
+            memcpy(buf, addr(q330->share.stat_fes), sizeof(tstat_fes)) ; /* Front End Status */
             break ;
           default :
             result = LIBERR_INVSTAT ;
@@ -325,6 +359,9 @@ begin
             end
         end
       end
+    else if ((q330->q335) land ((bitnum == CRB_ROUTES) lor (bitnum == CRB_DEVS)))
+      then
+        result = LIBERR_INVCFG ;
     else
       begin
         result = LIBERR_CFGWAIT ;
@@ -552,7 +589,7 @@ begin
 
   if (ct)
     then
-      msgadd (ct, msgcode, dt, msgsuf) ;
+      msgadd (ct, msgcode, dt, msgsuf, TRUE) ;
 end
 
 void lib_webadvertise (tcontext ct, string15 *stnname, string *dpaddr)
@@ -650,7 +687,7 @@ const tmodules modules =
     {/*name*/"LibOpaque", /*ver*/VER_LIBOPAQUE},     {/*name*/"LibLogs", /*ver*/VER_LIBLOGS},
     {/*name*/"LibFilters", /*ver*/VER_LIBFILTERS},   {/*name*/"LibDetect", /*ver*/VER_LIBDETECT},
     {/*name*/"LibCtrlDet", /*ver*/VER_LIBCTRLDET},   {/*name*/"LibArchive", /*ver*/VER_LIBARCHIVE},
-    {/*name*/"LibNetServ", /*ver*/VER_LIBNETSERV},
+    {/*name*/"LibNetServ", /*ver*/VER_LIBNETSERV},   {/*name*/"LibDSS", /*ver*/VER_LIBDSS},
 #endif
     {/*name*/"Q330Types", /*ver*/VER_Q330TYPES},     {/*name*/"Q330IO", /*ver*/VER_Q330IO},
     {/*name*/"Q330Cvrt", /*ver*/VER_Q330CVRT},       {/*name*/"LibPOC", /*ver*/VER_LIBPOC},
@@ -662,3 +699,132 @@ begin
   return addr(modules) ;
 end
 
+enum tliberr lib_conntiming (tcontext ct, tconntiming *conntiming, boolean setter)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  if (setter)
+    then
+      begin
+        q330->par_register.opt_conntime = conntiming->opt_conntime ;
+        q330->par_register.opt_connwait = conntiming->opt_connwait ;
+        q330->par_register.opt_buflevel = conntiming->opt_buflevel ;
+        q330->data_timeout = (integer) conntiming->data_timeout * 60 ;
+        q330->data_timeout_retry = (integer) conntiming->data_timeout_retry * 60 ;
+        q330->status_timeout = (integer) conntiming->status_timeout * 60 ;
+        q330->status_timeout_retry = (integer) conntiming->status_timeout_retry * 60 ;
+        q330->piu_retry = (integer) conntiming->piu_retry * 60 ;
+      end
+    else
+      begin
+        conntiming->opt_conntime = q330->par_register.opt_conntime ;
+        conntiming->opt_connwait = q330->par_register.opt_connwait ;
+        conntiming->opt_buflevel = q330->par_register.opt_buflevel ;
+        conntiming->data_timeout = q330->data_timeout div 60 ;
+        conntiming->data_timeout_retry = q330->data_timeout_retry div 60 ;
+        conntiming->status_timeout = q330->status_timeout div 60 ;
+        conntiming->status_timeout_retry = q330->status_timeout_retry div 60 ;
+        conntiming->piu_retry = q330->piu_retry div 60 ;
+      end
+  return LIBERR_NOERR ;
+end
+
+longint lib_crccalc (tcontext ct, pbyte p, longint len)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return 0 ;
+    else
+      return gcrccalc(addr(q330->crc_table), p, len) ;
+end
+
+enum tliberr lib_send_checkip (tcontext ct, longword ip)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  lock (q330) ;
+  q330->share.check_ip = ip ;
+  unlock (q330) ;
+  new_cmd (q330, C2_REGCHK, sizeof(longword)) ;
+  return LIBERR_NOERR ;
+end
+
+enum tliberr lib_md5_operation (tcontext ct, tmd5op *md5op)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  md5_operation (q330, md5op) ;
+  return LIBERR_NOERR ;
+end
+
+enum tliberr lib_set_access_timer (tcontext ct, word seconds)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  lock (q330) ;
+  q330->share.access_timer = seconds ;
+  unlock (q330) ;
+  return LIBERR_NOERR ;
+end
+
+enum tliberr lib_set_freeze_timer (tcontext ct, integer seconds)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  lock (q330) ;
+  q330->share.freeze_timer = seconds ;
+  unlock (q330) ;
+  return LIBERR_NOERR ;
+end
+
+enum tliberr lib_flush_data (tcontext ct)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  q330->flush_all = TRUE ;
+  return LIBERR_NOERR ;
+end
+
+#ifndef OMIT_SERIAL
+enum tliberr lib_inject_packet (tcontext ct, pbyte payload, byte protocol, longword srcaddr,
+                        longword destaddr, word srcport, word destport, word datalength,
+                        longword seq, longword ack, word window, byte flags)
+begin
+  pq330 q330 ;
+
+  q330 = ct ;
+  if (q330 == NIL)
+    then
+      return LIBERR_INVCTX ;
+  inject_packet (q330, payload, protocol, srcaddr, destaddr, srcport, destport,
+                 datalength, seq, ack, window, flags) ;
+  return LIBERR_NOERR ;
+end
+#endif

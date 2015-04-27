@@ -10,6 +10,10 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
+#define SEISCOMP_COMPONENT DESC
+
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <boost/version.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -455,7 +459,10 @@ bool SchemaDefinitions::load(const char *path) {
 			if ( fs::is_directory(*it) ) continue;
 			string filename = SC_FS_IT_STR(it);
 			if ( fs::extension(filename) != ".xml" ) continue;
-			if ( !ar.open(filename.c_str()) ) continue;
+			if ( !ar.open(filename.c_str()) ) {
+				SEISCOMP_ERROR("Failed to load %s", filename.c_str());
+				continue;
+			}
 
 			serialize(ar);
 			ar.close();

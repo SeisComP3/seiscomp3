@@ -26,11 +26,14 @@ Edit History:
 #ifndef libsupport_h
 /* Flag this file as included */
 #define libsupport_h
-#define VER_LIBSUPPORT 4
+#define VER_LIBSUPPORT 7
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
 #include "libtypes.h"
+#endif
+#ifndef libclient_h
+#include "libclient.h"
 #endif
 
 /* lib_file_open modes bit values */
@@ -56,11 +59,13 @@ extern void lib330_gregorian (longint jul, tsystemtime *greg) ;
 extern char *showsn (t64 *val, string31 *result) ;
 extern longword getip (pchar s, boolean *domain) ;
 extern word newrand (word *sum) ;
-extern tfile_handle lib_file_open (pchar path, integer mode) ;
-extern void lib_file_close (tfile_handle desc) ;
-extern boolean lib_file_seek (tfile_handle desc, integer offset) ;
-extern boolean lib_file_read (tfile_handle desc, pointer buf, integer size) ;
-extern boolean lib_file_write (tfile_handle desc, pointer buf, integer size) ;
-extern void lib_file_delete (pchar path) ;
-extern integer lib_file_size (tfile_handle desc) ;
+extern tfile_handle lib_file_open (pfile_owner powner, pchar path, integer mode) ;
+extern void lib_file_close (pfile_owner powner, tfile_handle desc) ;
+extern boolean lib_file_seek (pfile_owner powner, tfile_handle desc, integer offset) ;
+extern boolean lib_file_read (pfile_owner powner, tfile_handle desc, pointer buf, integer size) ;
+extern boolean lib_file_write (pfile_owner powner, tfile_handle desc, pointer buf, integer size) ;
+extern void lib_file_delete (pfile_owner powner, pchar path) ;
+extern integer lib_file_size (pfile_owner powner, tfile_handle desc) ;
+extern char *lib330_upper (pchar s) ;
+
 #endif

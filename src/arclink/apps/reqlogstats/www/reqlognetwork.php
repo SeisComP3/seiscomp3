@@ -49,7 +49,7 @@ date_default_timezone_set('UTC');
 # May want to hide tables which reveal information about users:
 $show_all_tables = isset($_GET['showall']);
 
-$date_default = offset(date('Y-m-d'), -2);  // Two days ago
+$date_default = offset(date('Y-m-d'), -1);  // Yesterday.
 
 $date_str = (isset($_GET['date']))?$_GET['date']:$date_default;
 

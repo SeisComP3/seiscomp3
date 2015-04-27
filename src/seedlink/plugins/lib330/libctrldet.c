@@ -23,6 +23,7 @@ Edit History:
     0 2006-10-13 rdr Created
     1 2006-10-29 rdr Fix call to stackdetop in expand_control_detectors.
     2 2008-01-29 rdr Use new platform specific "uninteger" for pointer comparisons.
+    3 2011-08-05 rdr Don't use NULL to zero byte variables to zero, use zero.
 */
 #ifndef OMIT_SEED
 #ifndef libctrldet_h
@@ -157,7 +158,7 @@ end
 
 void factor (texpand *pexp, ret *fac)
 begin
-  byte unop = NULL;
+  byte unop = 0 ;
 
   memcpy(fac, addr(pexp->nextoke), sizeof(ret)) ;
   if ((fac->t == OP) land (fac->ret_o == DEO_DONE))
@@ -187,10 +188,10 @@ end
 
 void term (texpand *pexp, ret *ter)
 begin
-  byte mulop = NULL;
+  byte mulop = 0 ;
   ret nfac ;
 
-  nfac.ret_o = NULL;
+  nfac.ret_o = 0 ;
   nfac.ret_dx = NULL;
   factor (pexp, ter) ;
   if ((ter->t == OP) land (ter->ret_o == DEO_DONE))
@@ -237,10 +238,10 @@ end
 
 void express (texpand *pexp, ret *expr)
 begin
-  byte addop = NULL ;
+  byte addop = 0 ;
   ret nter ;
 
-  nter.ret_o = NULL;
+  nter.ret_o = 0 ;
   nter.ret_dx = NULL;
   term (pexp, expr) ;
   if (expr->t == DETP)

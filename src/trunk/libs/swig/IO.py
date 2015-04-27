@@ -1048,6 +1048,32 @@ class SeedlinkCommandException(SeedlinkException):
 SeedlinkCommandException_swigregister = _IO.SeedlinkCommandException_swigregister
 SeedlinkCommandException_swigregister(SeedlinkCommandException)
 
+class SLStreamIdx(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SLStreamIdx, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SLStreamIdx, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _IO.new_SLStreamIdx(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def __lt__(self, *args): return _IO.SLStreamIdx___lt__(self, *args)
+    def __eq__(self, *args): return _IO.SLStreamIdx___eq__(self, *args)
+    def network(self): return _IO.SLStreamIdx_network(self)
+    def station(self): return _IO.SLStreamIdx_station(self)
+    def channel(self): return _IO.SLStreamIdx_channel(self)
+    def location(self): return _IO.SLStreamIdx_location(self)
+    def selector(self): return _IO.SLStreamIdx_selector(self)
+    def startTime(self): return _IO.SLStreamIdx_startTime(self)
+    def endTime(self): return _IO.SLStreamIdx_endTime(self)
+    def timestamp(self): return _IO.SLStreamIdx_timestamp(self)
+    def setTimestamp(self, *args): return _IO.SLStreamIdx_setTimestamp(self, *args)
+    __swig_destroy__ = _IO.delete_SLStreamIdx
+    __del__ = lambda self : None;
+SLStreamIdx_swigregister = _IO.SLStreamIdx_swigregister
+SLStreamIdx_swigregister(SLStreamIdx)
+
 class SLConnection(RecordStream):
     __swig_setmethods__ = {}
     for _s in [RecordStream]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))

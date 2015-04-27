@@ -20,7 +20,7 @@
 namespace Seiscomp {
 namespace RecordStream {
 
-class StreamIdx  {
+class SC_SYSTEM_CORE_API StreamIdx  {
 	public:
 		StreamIdx();
 
@@ -58,10 +58,6 @@ class StreamIdx  {
 		//! Returns the location code
 		const std::string &location() const;
 
-		//! Returns the selector in <location><channel>.D notation
-		//! * wildcards are substituted by a corresponding number of ?
-		std::string selector() const;
-
 		//! Returns the start time
 		Core::Time startTime() const;
 
@@ -73,11 +69,6 @@ class StreamIdx  {
 		std::string str(const Seiscomp::Core::Time& stime,
 		                const Seiscomp::Core::Time& etime) const;
 
-		//! Returns the most recent record end time
-		Seiscomp::Core::Time timestamp() const;
-
-		//! Sets the time stamp
-		void setTimestamp(Seiscomp::Core::Time &rectime) const;
 
 	private:
 		const std::string _net;
@@ -86,7 +77,6 @@ class StreamIdx  {
 		const std::string _cha;
 		const Seiscomp::Core::Time _stime;
 		const Seiscomp::Core::Time _etime;
-		mutable Seiscomp::Core::Time _timestamp;
 };
 
 } // namespace RecordStream

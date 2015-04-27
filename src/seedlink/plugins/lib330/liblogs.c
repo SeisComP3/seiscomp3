@@ -21,7 +21,9 @@ Edit History:
    Ed Date       By  Changes
    -- ---------- --- ---------------------------------------------------
     0 2006-10-12 rdr Created
-    1 2008-03-13 rdr Don't reset records_written at 999999.
+    1 2008-01-03 rdr Add log_timer handling.
+    2 2008-03-13 rdr Don't reset records_written at 999999.
+    3 2010-08-08 rdr In spad protect against negative length difference.
 */
 #ifndef liblogs_h
 #include "liblogs.h"
@@ -78,7 +80,7 @@ begin
 
   len = strlen(s) ;
   diff = lth - len ;
-  if (diff)
+  if (diff > 0)
     then
       begin
         memmove (addr(s[diff]), addr(s[0]), len + 1) ; /* shift existing string right */
@@ -618,6 +620,7 @@ begin
   pc = (pointer)((integer)addr(pcom->ring->rec) + 56 + pcom->frame) ; /* add text to data area */
   memcpy(pc, msg, strlen(msg)) ;
   incn(pcom->frame, strlen(msg)) ;
+  paqs->log_timer = LOG_TIMEOUT ;
 end
 
 void flush_messages (paqstruc paqs)
@@ -651,5 +654,6 @@ begin
   if ((q->arc.amini_filter) land (q->arc.hdr_buf.samples_in_record))
     then
       flush_archive (paqs, q) ;
+  paqs->log_timer = 0 ;
 end
 #endif

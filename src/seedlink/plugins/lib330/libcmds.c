@@ -1,5 +1,5 @@
 /*   Lib330 Command Processing
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -29,11 +29,33 @@ Edit History:
     6 2007-02-19 rdr Status timeout not getting cleared when first registering and also
                      not getting checked while running, fixed.
     7 2007-03-05 rdr Make calls to purge_thread_continuity.
-    8 2008-02-25 rdr Add lib_round when calculating zone offset.
-    9 2008-08-05 rdr If get a CERR_SNV go to wait state with a NR_TIME timeout. If get a socket
+    8 2007-07-16 rdr Add baler command support.
+    9 2007-07-31 rdr Add BT_Q330TIME callback and conditionals for omitting network code.
+   10 2007-08-07 rdr Add BT_BACK callback when C2_BRDY received. Add access timeout to
+                     avoiding shutting down a baler when it's busy reloading.
+   11 2007-09-04 rdr Do a BT_Q330TIME callback even if automatic timezone correction is disabled.
+   12 2007-10-03 rdr Access timer changed to countdown to zero.
+   13 2008-01-09 rdr Add processing for freeze_timer. Add locking of access time decrement.
+                     Use settable timeouts instead of constants. Pass along Q330 serial number
+                     in C2_BRDY call. Add flush_all support. Add additional info to LIBMSG_BACK message.
+                     Add log_timer handling. Add setting changed Q330 IP address and port as
+                     a result of receiving C2_BRDY.
+   14 2008-02-27 rdr Add lib_round when calculating zone offset.
+   15 2008-08-05 rdr Request baler configuration in C2_BRDY call.
+                     If get a CERR_SNV go to wait state with a NR_TIME timeout. If get a socket
                      open error then it could be a failure to reach the DNS server
                      instead of a actual error in the address, keep retrying every 10 minutes.
-   10 2008-08-19 rdr Add TCP support.
+   16 2008-08-20 rdr Add TCP support.
+   17 2009-02-09 rdr Add EP support.
+   18 2009-07-25 rdr Add DSS support.
+   19 2009-09-05 rdr Fix LIBMSG_SNV parameter, message is already included in libmsgs.
+   20 2010-03-27 rdr Add Q335 support by not doing SDUMP related structure requests until
+                     the C1_FGLS packet is received. In start_dealocation, if not registered
+                     go to LIBSTATE_WAIT instead of target state.
+   21 2010-04-20 rdr Add processing for LPSF_PWROFF request.
+   22 2010-05-07 rdr If opt_connwait is zero then use a value of ten minutes.
+   23 2010-05-17 rdr Add sending Q335 Aware flag in C1_RQFGLS.
+   24 2013-08-18 rdr Change reboot to lib330_reboot to avoid conflict with some nonsense.
 */
 #ifndef libcmds_h
 #include "libcmds.h"
@@ -90,6 +112,9 @@ Edit History:
 #endif
 #ifndef lobopaque_h
 #include "libopaque.h"
+#endif
+#ifndef libdss_h
+#include "libdss.h"
 #endif
 #endif
 
@@ -157,9 +182,9 @@ begin
   integer i, err ;
   double r ;
   word sersz ;
-  longword errs ;
 #ifndef OMIT_SERIAL
 #ifdef X86_WIN32
+  longword errs ;
   COMSTAT comstat ;
 #else
 #endif
@@ -197,8 +222,11 @@ begin
                 storerqstat (addr(p), q330->stat_request) ;
                 break ;
               case C1_RQLOG :
+                storeword (addr(p), q330->par_create.q330id_dataport) ;
+                break ;
               case C1_RQFGLS :
                 storeword (addr(p), q330->par_create.q330id_dataport) ;
+                storeword (addr(p), 1) ;
                 break ;
               case C1_POLLSN :
                 storepollsn (addr(p), addr(q330->newpoll)) ;
@@ -242,6 +270,25 @@ begin
                     storenewweb (addr(p), addr(q330->share.new_webadv)) ;
                   else
                     storeoldweb (addr(p), addr(q330->share.old_webadv)) ;
+                unlock (q330) ;
+                break ;
+              case C2_BRDY :
+                memset(addr(q330->brdy), 0, sizeof(tbrdy)) ;
+                memcpy(addr(q330->brdy.sernum), addr(q330->par_create.q330id_serial), sizeof(t64)) ;
+                (q330->brdy.stn)[5] = BR_RQCFG ; /* Request it if it is there */
+                storebrdy (addr(p), addr(q330->brdy)) ;
+                break ;
+              case C2_BOFF :
+                storeword (addr(p), 1) ;
+                break ;
+              case C2_REGCHK :
+                lock (q330) ;
+                storelongword (addr(p), q330->share.check_ip) ;
+                unlock (q330) ;
+                break ;
+              case C2_SEPCFG :
+                lock (q330) ;
+                storeepcfg (addr(p), addr(q330->share.newepcfg)) ;
                 unlock (q330) ;
                 break ;
             end
@@ -327,6 +374,7 @@ begin
               strcat(s, s1) ;
               libmsgadd(q330, LIBMSG_PKTOUT, addr(s)) ;
             end
+#ifndef OMIT_NETWORK
         if (q330->usesock)
           then
             begin
@@ -383,8 +431,10 @@ begin
                 else
                   add_status (q330, AC_WRITE, msglth + IP_HDR_LTH + UDP_HDR_LTH) ;
             end
+#endif
 #ifndef OMIT_SERIAL
-          else
+        if (q330->usesock == 0)
+          then
             send_packet (q330, msglth, q330->q330cport, q330->ctrlport) ;
 #endif
       end
@@ -440,7 +490,7 @@ begin
   word sz ;
 
   sz = 0 ;
-  for (w = SRB_GLB ; w <= SRB_SS ; w++)
+  for (w = SRB_GLB ; w <= SRB_FES ; w++)
     begin
       if (sz > MAXMTU)
         then
@@ -492,12 +542,18 @@ begin
             case SRB_SS :
               sz = sz + sizeof(tsshdr) + (sizeof(tssstat) * 2) ;
               break ;
+            case SRB_EP :
+              sz = sz + sizeof(tstat_ep) ;
+              break ;
+            case SRB_FES :
+              sz = sz + sizeof(tstat_fes) ;
+              break ;
           end
     end
   return sz ;
 end
 
-static void reboot (pq330 q330, boolean keep_link)
+static void lib330_reboot (pq330 q330, boolean keep_link)
 begin
 
   q330->reboot_done = FALSE ;
@@ -507,15 +563,6 @@ begin
   new_cmd (q330, C1_RQFGLS, sizeof(tlog) + sizeof(tfixed) +
            sizeof(tglobal) + sizeof(tsensctrl)) ;
   new_cmd (q330, C1_RQGID, sizeof(tgpsid)) ;
-#ifndef OMIT_SDUMP
-  if (q330->cur_verbosity and VERB_SDUMP)
-    then
-      begin
-        new_cmd (q330, C2_RQGPS, sizeof(tgps2)) ;
-        new_cmd (q330, C1_RQMAN, sizeof(tman)) ;
-        new_cmd (q330, C1_RQDCP, sizeof(tdcp)) ;
-      end
-#endif
   q330->stat_request = make_bitmap(q330->par_create.q330id_dataport + SRB_LOG1) or make_bitmap(SRB_GLB) ;
 #ifndef OMIT_SDUMP
   if (q330->cur_verbosity and VERB_SDUMP)
@@ -543,7 +590,11 @@ begin
           then
             new_cmd (q330, C1_UMSG, 0) ;
       end
-  new_cmd (q330, C1_DSRV, 0) ;
+  if (q330->balesim)
+    then
+      new_cmd (q330, C2_BOFF, 0) ;
+    else
+      new_cmd (q330, C1_DSRV, 0) ;
   q330->comtimer = 0 ;
   lock (q330) ;
   q330->share.have_config = 0 ;
@@ -568,7 +619,7 @@ begin
     case LIBERR_NOTR :
     case LIBERR_TMSERV :
     case LIBERR_DATATO :
-      new_state (q330, q330->share.target_state) ;
+      new_state (q330, LIBSTATE_WAIT) ;
       q330->registered = FALSE ;
       close_sockets (q330) ;
       break ;
@@ -580,7 +631,11 @@ end
 void lib_continue_registration (pq330 q330)
 begin
 
-  new_state (q330, LIBSTATE_REG) ;
+  if (q330->balesim)
+    then
+      new_state (q330, LIBSTATE_ANNC) ;
+    else
+      new_state (q330, LIBSTATE_REG) ;
   q330->registered = FALSE ;
   lock (q330) ;
   q330->share.have_config = 0 ;
@@ -591,17 +646,22 @@ begin
   q330->link_recv = FALSE ;
   q330->commands.cmdin = 0 ;
   q330->commands.cmdout = 0 ; /* purge command queue */
-  new_cmd (q330, C1_RQSRV, sizeof(t64)) ;
+  if (q330->balesim)
+    then
+      new_cmd (q330, C2_BRDY, sizeof(t64)) ;
+    else
+      new_cmd (q330, C1_RQSRV, sizeof(t64)) ;
   q330->reg_timer = 0 ;
 end
 
 void lib_start_registration (pq330 q330)
 begin
 
+#ifndef OMIT_NETWORK
   if (q330->usesock)
     then
       begin
-        if (open_sockets (q330, TRUE))
+        if (open_sockets (q330, TRUE, FALSE))
           then
             begin
               lib_change_state (q330, LIBSTATE_WAIT, LIBERR_NETFAIL) ;
@@ -611,16 +671,19 @@ begin
               return ;
             end
       end
+#endif
 #ifndef OMIT_SERIAL
-  else if (open_serial (q330))
+  if (q330->usesock == 0)
     then
-      begin
-        lib_change_state (q330, LIBSTATE_WAIT, LIBERR_NETFAIL) ;
-        q330->reg_wait_timer = 60 * 10 ;
-        q330->registered = FALSE ;
-        libmsgadd (q330, LIBMSG_SNR, "10 Minutes") ;
-        return ;
-      end
+      if (open_serial (q330))
+        then
+          begin
+            lib_change_state (q330, LIBSTATE_WAIT, LIBERR_NETFAIL) ;
+            q330->reg_wait_timer = 60 * 10 ;
+            q330->registered = FALSE ;
+            libmsgadd (q330, LIBMSG_SNR, "10 Minutes") ;
+            return ;
+          end
 #endif
   q330->reg_timer = 0 ;
   if (q330->got_connected)
@@ -633,10 +696,11 @@ end
 void lib_start_ping (pq330 q330)
 begin
 
+#ifndef OMIT_NETWORK
   if (q330->usesock)
     then
       begin
-        if (open_sockets (q330, FALSE))
+        if (open_sockets (q330, FALSE, FALSE))
           then
             begin
               lock (q330) ;
@@ -646,16 +710,19 @@ begin
               return ;
             end
       end
+#endif
 #ifndef OMIT_SERIAL
-  else if (open_serial (q330))
+  if (q330->usesock == 0)
     then
-      begin
-        lock (q330) ;
-        q330->share.target_state = LIBSTATE_IDLE ;
-        q330->share.liberr = LIBERR_NETFAIL ;
-        unlock (q330) ;
-        return ;
-      end
+      if (open_serial (q330))
+        then
+          begin
+            lock (q330) ;
+            q330->share.target_state = LIBSTATE_IDLE ;
+            q330->share.liberr = LIBERR_NETFAIL ;
+            unlock (q330) ;
+            return ;
+          end
 #endif
   new_state (q330, LIBSTATE_PING) ;
   q330->registered = FALSE ;
@@ -682,7 +749,7 @@ begin
   string250 s1 ;
   string63 s3 ;
   longword req_mask, mask ;
-  longword bitnum ;
+  longword bitnum, check_resp ;
   byte errcmd ;
   double t ;
   single perc ;
@@ -727,10 +794,10 @@ begin
                     libmsgadd (q330, LIBMSG_PERM, "") ;
                     break ;
                   case CERR_TMSERV :
-                    sprintf(s, "%d seconds", PIU_TIME) ;
+                    sprintf(s, "%d seconds", q330->piu_retry) ;
                     libmsgadd(q330, LIBMSG_PIU, addr(s)) ;
                     q330->registered = FALSE ;
-                    q330->reg_wait_timer = PIU_TIME ;
+                    q330->reg_wait_timer = q330->piu_retry ;
                     lib_change_state (q330, LIBSTATE_WAIT, LIBERR_TMSERV) ;
                     break ;
                   case CERR_NOTR :
@@ -749,7 +816,7 @@ begin
                     libmsgadd(q330, LIBMSG_PARERR, "") ;
                     break ;
                   case CERR_SNV :
-                    libmsgadd(q330, LIBMSG_SNV, "ERROR: Structure Not Valid") ;
+                    libmsgadd(q330, LIBMSG_SNV, "") ;
                     switch (errcmd) begin
                       case C1_RQMEM :
                         if ((q330->libstate == LIBSTATE_READTOK) land
@@ -863,11 +930,12 @@ begin
                         libmsgadd (q330, LIBMSG_REGISTERED, addr(s)) ;
                         q330->registered = TRUE ;
                         q330->reg_tries = 0 ;
-                        reboot (q330, FALSE) ;
+                        lib330_reboot (q330, FALSE) ;
                         q330->need_regmsg = (q330->cur_verbosity and VERB_REGMSG) ;
                       end
                   break ;
                 case C1_DSRV :
+                case C2_BOFF :
                   if (q330->recvhdr.command == C1_CACK)
                     then
                       begin
@@ -887,6 +955,7 @@ begin
                         lock (q330) ;
                         memcpy (addr(q330->raw_fixed), p, RAW_FIXED_SIZE) ;
                         loadfix (addr(p), addr(q330->share.fixed)) ;
+                        q330->q335 = ((q330->share.fixed.flags and FF_335) != 0) ;
                         p = psave ;
                         incn(p, fgl.gl_off) ;
                         memcpy (addr(q330->raw_global), p, RAW_GLOBAL_SIZE) ;
@@ -925,6 +994,25 @@ begin
                             reset_link (q330) ;
                         new_cfg (q330, make_bitmap(CRB_GLOB) or make_bitmap(CRB_FIX) or
                                        make_bitmap(CRB_LOG) or make_bitmap(CRB_SENSCTRL)) ;
+#ifndef OMIT_SDUMP
+                        if (q330->cur_verbosity and VERB_SDUMP)
+                          then
+                            begin
+                              new_cmd (q330, C2_RQGPS, sizeof(tgps2)) ;
+                              if (lnot q330->q335)
+                                then
+                                  begin
+                                    new_cmd (q330, C1_RQMAN, sizeof(tman)) ;
+                                    new_cmd (q330, C1_RQDCP, sizeof(tdcp)) ;
+                                  end
+                            end
+#endif
+                        if (q330->share.fixed.flags and FF_EP)
+                          then
+                            new_cmd (q330, C2_RQEPD, sizeof(tepdelay)) ;
+                        if (q330->q335)
+                          then
+                            libmsgadd(q330, LIBMSG_Q335, "") ;
                       end
                   break ;
                 case C1_SLOG :
@@ -995,11 +1083,17 @@ begin
                               libmsgadd (q330, LIBMSG_TOKCHG, "") ;
                               lib_change_state (q330, LIBSTATE_RUNWAIT, LIBERR_TOKENS_CHANGE) ;
                             end
+                        if (req_mask and make_bitmap(SRB_EPDLY))
+                          then
+                            begin /* EP Delay Change */
+                              libmsgadd (q330, LIBMSG_EPDLYCHG, "") ;
+                              new_cmd (q330, C2_RQEPD, sizeof(tepdelay)) ;
+                            end
                         /* remove non-status structure flags */
                         req_mask = req_mask and not (make_bitmap(SRB_UMSG) or
                                     make_bitmap(SRB_LCHG) or make_bitmap(SRB_TOKEN)) ;
                         lock (q330) ;
-                        for (bitnum = SRB_GLB ; bitnum <= SRB_SS ; bitnum++)
+                        for (bitnum = SRB_GLB ; bitnum <= SRB_FES ; bitnum++)
                           begin
                             mask = make_bitmap(bitnum) ;
                             if (mask and req_mask)
@@ -1026,26 +1120,39 @@ begin
                                         l = pglob->usec_offset - 1000000 ;
                                     q330->share.opstat.clock_drift = l ;
                                     q330->share.opstat.pll_stat = (enum tpll_stat)(pglob->clock_qual shr 6) ;
-                                    if ((pglob->sec_offset) land (q330->par_create.opt_zoneadjust))
+                                    if (pglob->sec_offset)
                                       then
-                                        begin
+                                        begin /* Have a valid time */
                                           t = pglob->cur_sequence + pglob->sec_offset + pglob->usec_offset / 1.0E6 ;
-                                          t = t - now () ; /* seconds offset */
-                                          l = lib_round(t / 1800) ; /* get zone number ( in 30 minute increments ) */
-                                          if ((q330->zone_adjust div 1800) != l)
+                                          baler_callback (q330, BT_Q330TIME, lib_round(t)) ;
+                                          if (q330->par_create.opt_zoneadjust)
                                             then
-                                              begin /* change it */
-                                                sprintf(s, "%3.1f to %3.1f Hours", q330->zone_adjust / 3600.0, l * 0.5) ;
-                                                libmsgadd(q330, LIBMSG_ZONE, addr(s)) ;
-                                                q330->zone_adjust = l * 1800 ; /* to seconds */
+                                              begin /* check automatic timezone adjustment */
+                                                l = lib_round((t - now ()) / 1800) ; /* get zone number ( in 30 minute increments ) */
+                                                if ((q330->zone_adjust div 1800) != l)
+                                                  then
+                                                    begin /* change it */
+                                                      sprintf(s, "%3.1f to %3.1f Hours", q330->zone_adjust / 3600.0, l * 0.5) ;
+                                                      libmsgadd(q330, LIBMSG_ZONE, addr(s)) ;
+                                                      q330->zone_adjust = l * 1800 ; /* to seconds */
+                                                    end
                                               end
+                                          l = lib_round(t) ;
+                                          l = l - (q330->share.opstat.last_data_time - q330->qclock.zone) ; /* data difference */
+                                          if (abs(l) < 10)
+                                            then
+                                              q330->dss_gate_on = TRUE ;
+                                            else
+                                              q330->dss_gate_on = FALSE ;
                                         end
+                                      else
+                                        q330->dss_gate_on = FALSE ;
                                     break ;
                                   case SRB_PWR :
                                     loadpwrstat (addr(p), addr(q330->share.stat_pwr)) ;
                                     break ;
                                   case SRB_BOOM :
-                                    loadboomstat (addr(p), addr(q330->share.stat_boom)) ;
+                                    loadboomstat (addr(p), addr(q330->share.stat_boom), q330->q335) ;
                                     for (i = 0 ; i <= 5 ; i++)
                                       q330->share.opstat.mass_pos[i] = q330->share.stat_boom.booms[i] ;
                                     q330->share.opstat.sys_temp = q330->share.stat_boom.sys_temp ;
@@ -1073,6 +1180,12 @@ begin
                                   case SRB_SS :
                                     loadssstat (addr(p), addr(q330->share.stat_sersens)) ;
                                     break ;
+                                  case SRB_EP :
+                                    loadepstat (addr(p), addr(q330->share.stat_ep)) ;
+                                    break ;
+                                  case SRB_FES :
+                                    loadfestats (p, addr(q330->share.stat_fes)) ;
+                                    break ;
                                   case SRB_LOG1 :
                                   case SRB_LOG2 :
                                   case SRB_LOG3 :
@@ -1097,15 +1210,22 @@ begin
                                         begin
                                           perc = ((plog->pack_used * 100.0) / l + 0.3) ;
                                           q330->share.opstat.pkt_full = perc ;
-                                          if ((q330->par_register.opt_buflevel) land (perc < q330->par_register.opt_buflevel))
+                                          if ((((q330->par_register.opt_buflevel) land (perc < q330->par_register.opt_buflevel)) lor
+                                                (q330->share.stat_log.flags and LPSF_PWROFF)) land (q330->share.freeze_timer <= 0))
                                             then
-                                              begin
-                                                q330->reg_wait_timer = (integer)q330->par_register.opt_connwait * 60 ;
-                                                libmsgadd (q330, LIBMSG_BUFSHUT, "") ;
-                                                unlock (q330) ;
-                                                lib_change_state (q330, LIBSTATE_WAIT, LIBERR_BUFSHUT) ;
-                                                lock (q330) ;
-                                              end
+                                              if (lnot((q330->balesim) land ((q330->share.access_timer) lor
+                                                                  (q330->share.stat_log.flags and LPSF_POWER))))
+                                                then
+                                                  begin
+                                                    q330->reg_wait_timer = (integer)q330->par_register.opt_connwait * 60 ;
+                                                    if (q330->reg_wait_timer == 0)
+                                                      then
+                                                        q330->reg_wait_timer = 600 ; /* if not set, use 10 minutes */
+                                                    libmsgadd (q330, LIBMSG_BUFSHUT, "") ;
+                                                    unlock (q330) ;
+                                                    lib_change_state (q330, LIBSTATE_WAIT, LIBERR_BUFSHUT) ;
+                                                    lock (q330) ;
+                                                  end
                                         end
                                     if (q330->lastds_sent_count == 0)
                                       then
@@ -1204,6 +1324,38 @@ begin
                         new_cfg (q330, make_bitmap(CRB_LOG)) ;
                       end
                   break ;
+                case C2_RQEPD :
+                  if (q330->recvhdr.command == C2_EPD)
+                    then
+                      begin
+                        lock (q330) ;
+                        loadepd (addr(p), addr(q330->share.epdelay)) ;
+                        unlock (q330) ;
+                        clear_cmsg (q330) ;
+                        update_ep_delays (q330, FALSE, TRUE) ;
+                      end
+                  break ;
+                case C2_RQEPCFG :
+                  if (q330->recvhdr.command == C2_EPCFG)
+                    then
+                      begin
+                        lock (q330) ;
+                        loadepcfg (addr(p), addr(q330->share.epcfg)) ;
+                        unlock (q330) ;
+                        clear_cmsg (q330) ;
+                        verify_epcfg (q330) ;
+                      end
+                  break ;
+                case C2_SEPCFG :
+                  if (q330->recvhdr.command == C1_CACK)
+                    then
+                      begin
+                        lock (q330) ;
+                        memcpy (addr(q330->share.epcfg), addr(q330->share.newepcfg), sizeof(tepcfg)) ;
+                        unlock (q330) ;
+                        clear_cmsg (q330) ;
+                      end
+                  break ;
                 case C1_RQRT :
                   if (q330->recvhdr.command == C1_RT)
                     then
@@ -1242,6 +1394,69 @@ begin
                   if (q330->recvhdr.command == C1_CACK)
                     then
                       clear_cmsg (q330) ;
+                  break ;
+                case C2_BRDY :
+                  if (q330->recvhdr.command == C2_BACK)
+                    then
+                      begin
+                        loadback (addr(p), addr(q330->back)) ;
+                        if (q330->par_create.q330id_dataport != q330->back.lport)
+                          then
+                            begin
+                              libmsgadd (q330, LIBMSG_WRONGPORT, "") ;
+                              clear_cmsg (q330) ;
+                              return ;
+                            end
+                        q330->q330ip = q330->back.q330_ip ;
+                        if ((q330->usesock == 0) land (q330->back.poc_ip))
+                          then
+                            q330->serial_ip = q330->back.poc_ip ;
+                        q330->par_register.q330id_baseport = q330->back.bport ;
+                        memcpy(addr(q330->par_create.q330id_serial), addr(q330->back.sernum), sizeof(t64)) ;
+                        clear_cmsg (q330) ;
+                        q330->q330cport = q330->par_register.q330id_baseport + 2 * (q330->par_create.q330id_dataport + 1) ;
+                        q330->q330dport = q330->q330cport + 1 ;
+                        q330->share.opstat.current_ip = q330->q330ip ;
+                        q330->share.opstat.current_port = q330->q330cport ;
+                        if (q330->back.flags and BA_PDOWN)
+                          then
+                            strcpy (s, " - Power Cycled") ;
+                          else
+                            strcpy (s, " - Continuous") ;
+                        if (q330->back.flags and BA_MANUAL)
+                          then
+                            strcat (s, ", Manual On") ;
+                        libmsgadd (q330, LIBMSG_BACK, addr(s)) ;
+                        q330->share.access_timer = INITIAL_ACCESS_TIMOUT ; /* Force staying on a minimum amount of time */
+                        if (q330->par_create.call_baler)
+                          then
+                            begin
+                              q330->baler_call.context = q330 ;
+                              q330->baler_call.baler_type = BT_BACK ;
+                              memcpy(addr(q330->baler_call.station_name), addr(q330->station_ident), sizeof(string9)) ;
+                              q330->baler_call.info2 = addr(q330->back) ;
+                              q330->baler_call.info = q330->back.poc_ip ;
+                              q330->baler_call.response = 0 ;
+                              q330->par_create.call_baler (addr(q330->baler_call)) ;
+                            end
+#ifndef OMIT_NETWORK
+                        if (q330->usesock)
+                          then
+                            open_sockets (q330, TRUE, TRUE) ; /* use real addresses */
+#endif
+                        new_state (q330, LIBSTATE_REG) ;
+                        new_cmd (q330, C1_RQSRV, sizeof(t64)) ;
+                        q330->reg_timer = 0 ;
+                      end
+                  break ;
+                case C2_REGCHK :
+                  if (q330->recvhdr.command == C2_REGRESP)
+                    then
+                      begin
+                        check_resp = loadlongword (addr(p)) ;
+                        clear_cmsg (q330) ;
+                        baler_callback (q330, BT_REGRESP, check_resp) ;
+                      end
                   break ;
 #ifndef OMIT_SDUMP
                 case C2_RQGPS :
@@ -1287,6 +1502,14 @@ begin
 #endif
 
   pc = addr(q330->commands) ;
+#ifdef CMEX32
+  if (q330->needtosayhello)
+    then
+      begin
+        q330->needtosayhello = FALSE ;
+        libmsgadd (q330, LIBMSG_CREATED, "") ;
+      end
+#endif
   if (q330->contmsg[0])
     then
       begin
@@ -1301,6 +1524,7 @@ begin
       end
     else
       q330->dynip_age = 0 ;
+  baler_callback (q330, BT_TIMER, 0) ;
   if (q330->libstate != q330->share.target_state)
     then
       begin
@@ -1316,6 +1540,7 @@ begin
                 break ;
               case LIBSTATE_CONN :
               case LIBSTATE_REG :
+              case LIBSTATE_ANNC :
                 close_sockets (q330) ;
                 new_state (q330, q330->share.target_state) ;
                 break ;
@@ -1369,6 +1594,12 @@ begin
                 send_dopen (q330) ;
                 add_status (q330, AC_COMSUC, 1) ; /* complete cycle */
                 new_state (q330, LIBSTATE_RUN) ;
+#ifndef OMIT_SEED
+                paqs = q330->aqstruc ;
+                if (paqs->dss_def.port_number)
+                  then
+                    lib_dss_start (addr(paqs->dss_def), q330, q330->par_register.opt_dss_memory) ;
+#endif
                 break ;
             end
             break ;
@@ -1390,9 +1621,11 @@ begin
                         flush_dplcqs (q330) ;
 #endif
                         save_thread_continuity (q330) ;
-                        deallocate_dplcqs (q330) ;
                       end
                   q330->terminate = TRUE ; /* shutdown thread */
+#ifdef CMEX32
+                  new_state (q330, LIBSTATE_TERM) ;
+#endif
                 end
             break ;
         end
@@ -1405,6 +1638,7 @@ begin
           begin /* about 1 second */
             q330->timercnt = 0 ;
             q330->share.opstat.runtime = q330->share.opstat.runtime - 1 ;
+            continuity_timer (q330) ;
           end
       return ;
     case LIBSTATE_TERM : return ;
@@ -1426,6 +1660,7 @@ begin
                       lib_change_state (q330, LIBSTATE_RUNWAIT, LIBERR_NOERR) ;
                 end
             q330->share.opstat.runtime = q330->share.opstat.runtime - 1 ;
+            continuity_timer (q330) ;
           end
       return ;
   end
@@ -1454,6 +1689,21 @@ begin
         lock (q330) ;
       end
   unlock (q330) ;
+#ifndef OMIT_SEED
+  dump_msgqueue (q330) ;
+  if (q330->flush_all)
+    then
+      begin
+        q330->flush_all = FALSE ;
+        paqs = q330->aqstruc ;
+        if (q330->libstate == LIBSTATE_RUN)
+          then
+            flush_lcqs (paqs) ;
+        if (q330->libstate >= LIBSTATE_REG)
+          then
+            flush_dplcqs (q330) ;
+      end
+#endif
   if ((pc->cphase == CP_WAIT) land (pc->ctrlrecnt == 0))
     then
       begin
@@ -1555,6 +1805,15 @@ begin
           then
             dec(pc->ctrlrecnt) ;
         inc(q330->share.interval_counter) ;
+        if (q330->share.freeze_timer > 0)
+          then
+            begin
+              lock (q330) ;
+              dec(q330->share.freeze_timer) ;
+              unlock (q330) ;
+            end
+          else
+            continuity_timer (q330) ;
         if (q330->libstate != LIBSTATE_RUN)
           then
             begin
@@ -1564,6 +1823,14 @@ begin
           else
             begin
               q330->share.opstat.runtime = q330->share.opstat.runtime + 1 ;
+              if (q330->update_ep_timer > 0)
+                then
+                  begin
+                    dec(q330->update_ep_timer) ;
+                    if (q330->update_ep_timer <= 0)
+                      then
+                        update_ep_delays (q330, FALSE, TRUE) ;
+                  end
               add_status (q330, AC_DUTY, 1) ;
 #ifndef OMIT_SEED
               paqs = q330->aqstruc ;
@@ -1574,6 +1841,14 @@ begin
                     if (paqs->cfg_timer <= 0)
                       then
                         flush_cfgblks (paqs, TRUE) ;
+                  end
+              if (paqs->log_timer > 0)
+                then
+                  begin
+                    dec(paqs->log_timer) ;
+                    if (paqs->log_timer <= 0)
+                      then
+                        flush_messages (paqs) ;
                   end
 #endif
             end
@@ -1592,14 +1867,17 @@ begin
                 end
             break ;
           case LIBSTATE_RUN :
-            inc(q330->data_timer) ;
-            if (q330->data_timer > (10 * 60)) /* 10 minutes */
+            if (q330->share.freeze_timer <= 0)
+              then
+                inc(q330->data_timer) ;
+            if (q330->data_timer > q330->data_timeout)
               then
                 begin
                   purge_cmdq (q330) ;
                   lib_change_state (q330, LIBSTATE_WAIT, LIBERR_DATATO) ;
-                  q330->reg_wait_timer = 10 * 60 ;
-                  libmsgadd (q330, LIBMSG_DATATO, "10 Minutes") ;
+                  q330->reg_wait_timer = q330->data_timeout_retry ;
+                  sprintf(s, "%d Minutes", q330->data_timeout_retry div 60) ;
+                  libmsgadd (q330, LIBMSG_DATATO, addr(s)) ;
                   add_status (q330, AC_COMATP, 1) ;
                 end
             if ((q330->share.log.flags and LNKFLG_FREEZE) == 0)
@@ -1613,6 +1891,11 @@ begin
                   q330->ack_timeout = 0 ;
                   send_dopen (q330) ;
                 end
+            lock (q330) ;
+            if (q330->share.access_timer)
+              then
+                dec(q330->share.access_timer) ;
+            unlock (q330) ;
             if (lnot q330->piggyok)
               then
                 begin
@@ -1643,10 +1926,17 @@ begin
                 begin
                   inc(q330->conn_timer) ;
                   if ((q330->par_register.opt_conntime) land (q330->share.target_state != LIBSTATE_WAIT) land
-                     ((q330->conn_timer div 60) >= q330->par_register.opt_conntime))
+                     ((q330->conn_timer div 60) >= q330->par_register.opt_conntime) land (q330->share.freeze_timer <= 0))
                     then
                       begin
+                        if ((q330->balesim) land ((q330->share.access_timer) lor
+                                            (q330->share.stat_log.flags and LPSF_POWER)))
+                          then
+                            break ; /* don't power down yet */
                         q330->reg_wait_timer = (integer)q330->par_register.opt_connwait * 60 ;
+                        if (q330->reg_wait_timer == 0)
+                          then
+                            q330->reg_wait_timer = 600 ; /* if not set, use 10 minutes */
                         lib_change_state (q330, LIBSTATE_WAIT, LIBERR_CONNSHUT) ;
                         libmsgadd (q330, LIBMSG_CONNSHUT, "") ;
                       end
@@ -1654,6 +1944,7 @@ begin
             break ;
           case LIBSTATE_CONN :
           case LIBSTATE_REG :
+          case LIBSTATE_ANNC :
             inc(q330->reg_timer) ;
             if (q330->reg_timer > 180) /* 3 minutes */
               then
@@ -1673,7 +1964,7 @@ begin
                       end
                     else
                       q330->reg_wait_timer = 120 ;
-                  sprintf(s, "%d minutes", q330->reg_wait_timer div 60) ;
+                  sprintf(s, "%d Minutes", q330->reg_wait_timer div 60) ;
                   libmsgadd (q330, LIBMSG_SNR, addr(s)) ;
                 end
             break ;
@@ -1682,13 +1973,14 @@ begin
           then
             begin
               inc(q330->status_timer) ;
-              if (q330->status_timer > (5 * 60)) /* 5 minutes */
+              if (q330->status_timer > q330->status_timeout) /* 5 minutes */
                 then
                   begin
                     purge_cmdq (q330) ;
                     lib_change_state (q330, LIBSTATE_WAIT, LIBERR_STATTO) ;
-                    q330->reg_wait_timer = 5 * 60 ;
-                    libmsgadd (q330, LIBMSG_STATTO, "5 Minutes") ;
+                    q330->reg_wait_timer = q330->status_timeout_retry ;
+                    sprintf(s, "%d Minutes", q330->status_timeout_retry div 60) ;
+                    libmsgadd (q330, LIBMSG_STATTO, addr(s)) ;
                     add_status (q330, AC_COMATP, 1) ;
                   end
             end

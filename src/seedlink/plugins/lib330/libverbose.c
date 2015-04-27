@@ -1,5 +1,5 @@
 /*   Lib330 Status Dump Routine
-     Copyright 2006 Certified Software Corporation
+     Copyright 2006-2010 Certified Software Corporation
 
     This file is part of Lib330
 
@@ -22,6 +22,11 @@ Edit History:
    -- ---------- --- ---------------------------------------------------
     0 2006-10-01 rdr Created
     1 2006-10-29 rdr Fix length of "s1" in report_channel_and_preamp_settings.
+    2 2007-09-07 rdr Add print_generated_rectotals.
+    3 2010-03-27 rdr Add Q335 support.
+    4 2010-05-09 rdr Some cosemetic Q335 changes.
+    5 2010-07-25 rdr Change in Q335 PGA encoding.
+    6 2012-07-08 rdr Fix clock type 2 display.
 */
 #ifndef libverbose_h
 #include "libverbose.h"
@@ -41,6 +46,19 @@ Edit History:
 #include "libsample.h"
 #endif
 
+static integer get_q335_gain (pq330 q330, word chan)
+begin
+  word w ;
+
+  if (chan >= 3)
+    then
+      w = (q330->share.global.input_map shr (2 + (chan shl 1))) and 3 ;
+    else
+      w = (q330->share.global.input_map shr (chan shl 1)) and 3 ; /* get PGA gain bits */
+  w = 1 shl w ;
+  return w ;
+end
+
 static void report_channel_and_preamp_settings (pq330 q330)
 begin
   word w, gm ;
@@ -55,27 +73,40 @@ begin
   for (w = 0 ; w <= CHANNELS - 1 ; w++)
     begin
       vpct[w] = 0.000002384 ;
-      if ((w <= 2) land (q330->man.flags and MANF_26QAP1))
+      if (lnot q330->q335)
         then
-          vpct[w] = 0.25 * vpct[w] ; /* 26 bit output */
-      if ((w >= 3) land (q330->man.flags and MANF_26QAP2))
-        then
-          vpct[w] = 0.25 * vpct[w] ; /* 26 bit output */
+          begin
+            if ((w <= 2) land (q330->man.flags and MANF_26QAP1))
+              then
+                vpct[w] = 0.25 * vpct[w] ; /* 26 bit output */
+            if ((w >= 3) land (q330->man.flags and MANF_26QAP2))
+              then
+                vpct[w] = 0.25 * vpct[w] ; /* 26 bit output */
+          end
       sprintf(s1, "%d", w + 1) ;
       switch ((gm shr (w shl 1)) and 3) begin
         case GAIN_POFF :
           strcat(chenb, s1) ;
+          if (q330->q335)
+            then
+              vpct[w] = vpct[w] / get_q335_gain (q330, w) ;
           break ;
         case GAIN_PON :
           strcat(chenb, s1) ;
           strcat(prenb, s1) ;
-          pg = 30.0 ;
-          if ((w <= 2) land (q330->man.qap13_type >= 2))
+          if (q330->q335)
             then
-              pg = 20.0 ;
-          if ((w >= 3) land (q330->man.qap46_type >= 2))
-            then
-              pg = 20.0 ;
+              pg = 8.0 * get_q335_gain (q330, w) ;
+            else
+              begin
+                pg = 30.0 ;
+                if ((w <= 2) land (q330->man.qap13_type >= 2))
+                  then
+                    pg = 20.0 ;
+                if ((w >= 3) land (q330->man.qap46_type >= 2))
+                  then
+                    pg = 20.0 ;
+              end
           vpct[w] = vpct[w] / pg ;
           break ;
         default :
@@ -162,8 +193,12 @@ begin
   pfix = addr(q330->share.fixed) ;
   sprintf(s, "Q330 Serial Number: %s", showsn(pfix->sys_num, addr(s1))) ;
   libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
-  sprintf(s, "AMB Serial Number: %s", showsn(pfix->amb_num, addr(s1))) ;
-  libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
+  if (lnot q330->q335)
+    then
+      begin
+        sprintf(s, "AMB Serial Number: %s", showsn(pfix->amb_num, addr(s1))) ;
+        libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
+      end
   sprintf(s, "Seismo 1 Serial Number: %s", showsn(pfix->seis1_num, addr(s1))) ;
   libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
   sprintf(s, "Seismo 2 Serial Number: %s", showsn(pfix->seis2_num, addr(s1))) ;
@@ -176,11 +211,18 @@ begin
   libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
   sprintf(s, "System Software Version: %d.%d", pfix->sys_ver shr 8, (integer)(pfix->sys_ver and 255)) ;
   libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
-  sprintf(s, "Slave Processor Version: %d.%d", pfix->sp_ver shr 8, (integer)(pfix->sp_ver and 255)) ;
+  if (q330->q335)
+    then
+      sprintf(s, "Core Processor Version: %d.%d", pfix->sp_ver shr 8, (integer)(pfix->sp_ver and 255)) ;
+    else
+      sprintf(s, "Slave Processor Version: %d.%d", pfix->sp_ver shr 8, (integer)(pfix->sp_ver and 255)) ;
   libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
   switch (pfix->cal_type) begin
     case 33 :
       strcpy(s1, "QCAL330") ;
+      break ;
+    case 35 :
+      strcpy(s1, "QCAL335") ;
       break ;
     default :
       strcpy(s1, "Unknown") ;
@@ -203,15 +245,18 @@ begin
       strcpy(s1, "Motorola M12") ;
       break ;
     case 2 :
-      strcpy(s1, "Seascan") ;
+      strcpy(s1, "Fastrax IT530") ;
     default :
       strcpy(s1, "None") ;
   end
   sprintf(s, "Clock Type: %s", s1) ;
   libmsgadd(q330, LIBMSG_FIXED,  addr(s)) ;
-  sprintf(s, "PLD Version: %d.%d", (integer)(pfix->pld_ver shr 8), (integer)(pfix->pld_ver and 255)) ;
-  libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
-
+  if (lnot q330->q335)
+    then
+      begin
+        sprintf(s, "PLD Version: %d.%d", (integer)(pfix->pld_ver shr 8), (integer)(pfix->pld_ver and 255)) ;
+        libmsgadd(q330, LIBMSG_FIXED, addr(s)) ;
+      end
   if (q330->share.gpsids[0][0])
     then
       begin
@@ -518,6 +563,62 @@ begin
   sprintf(s, "Physical Port: %s", s1) ;
   libmsgadd(q330, LIBMSG_LOG, addr(s)) ;
   report_channel_and_preamp_settings (q330) ;
-  report_digitizer_gain_and_offet (q330) ;
+  if (lnot q330->q335)
+    then
+      report_digitizer_gain_and_offet (q330) ;
 #endif
 end
+
+#ifndef OMIT_SEED
+longword print_generated_rectotals (pq330 q330)
+begin
+  paqstruc paqs ;
+  plcq q ;
+  string m ;
+  string31 s ;
+  string15 s1 ;
+  longint futuremr ;
+  longword totrec ;
+  boolean secondphase ;
+
+  paqs = q330->aqstruc ;
+  q = paqs->lcqs ;
+  strcpy(m, "written:") ;
+  totrec = 0 ;
+  secondphase = FALSE ;
+  while (q)
+    begin
+      futuremr = 0 ; /* forecast pending message record */
+      if ((q == paqs->msg_lcq) land (q->com->ring) land (q->com->frame >= 2))
+        then
+          futuremr = 1 ;
+      totrec = totrec + q->records_generated_session + futuremr ;
+      if ((q->records_generated_session + futuremr) > 0)
+        then
+          begin
+            if (strlen(m) >= 68)
+              then
+                begin
+                  libmsgadd(q330, LIBMSG_TOTAL, addr(m)) ;
+                  strcpy(m, "written:") ;
+                end
+            sprintf(s, " %s-%d", seed2string(q->location, q->seedname, addr(s1)),
+                    q->records_generated_session + futuremr) ;
+            strcat (m, s) ;
+          end
+      q = q->link ;
+      if (q == NIL)
+        then
+          if (lnot secondphase)
+            then
+              begin
+                secondphase = TRUE ;
+                q = paqs->dplcqs ;
+              end
+    end
+  if (strlen(m) > 8)
+    then
+      libmsgadd(q330, LIBMSG_TOTAL, addr(m)) ;
+  return totrec ;
+end
+#endif
