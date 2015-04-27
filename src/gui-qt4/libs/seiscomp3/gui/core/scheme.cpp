@@ -225,7 +225,7 @@ Scheme::Colors::Stations::Stations()
   triggered1(0, 0, 255),
   triggered2(0, 0, 128),
   disabled(102, 102, 102, 100),
-  idle(102, 102, 102) {
+  idle(102, 102, 102, 128) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -345,14 +345,14 @@ Scheme::Splash::Splash() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Map::Map() :
-	stationSize(8),
-    originSymbolMinSize(9),
-	vectorLayerAntiAlias(false),
+	stationSize(12),
+	originSymbolMinSize(9),
+	vectorLayerAntiAlias(true),
 	bilinearFilter(true),
 	showGrid(true),
 	showLayers(true),
 	showCities(true),
-    cityPopulationWeight(150),
+	cityPopulationWeight(150),
 	toBGR(false),
 	projection("")
 {}
