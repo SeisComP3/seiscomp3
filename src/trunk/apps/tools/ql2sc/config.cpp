@@ -119,6 +119,11 @@ bool Config::init() {
 		catch ( ... ) { isSet = true; }
 		if ( isSet ) cfg.options |= IO::QuakeLink::opDataPreferred;
 
+		// keep alive messages
+		try { isSet = app->configGetBool(prefix + "keepAlive"); }
+		catch ( ... ) { isSet = false; }
+		if ( isSet ) cfg.options |= Seiscomp::IO::QuakeLink::opKeepAlive;
+
 		// filter
 		try { cfg.filter = app->configGetString(prefix + "filter"); }
 		catch ( ... ) {}
@@ -177,6 +182,7 @@ bool Config::init() {
 		               "    staMags   : %s\n"
 		               "    staMts    : %s\n"
 		               "    preferred : %s\n"
+		               "  keepAlive   : %s\n"
 		               "  filter      : %s\n"
 		               "  routing     : %s\n",
 		              it->c_str(),
@@ -188,6 +194,7 @@ bool Config::init() {
 		               cfg.options & IO::QuakeLink::opDataStaMags    ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataStaMts     ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataPreferred  ? "true" : "false",
+		               cfg.options & IO::QuakeLink::opKeepAlive      ? "true" : "false",
 		               cfg.filter.c_str(),
 		               ss.str().c_str());
 	}

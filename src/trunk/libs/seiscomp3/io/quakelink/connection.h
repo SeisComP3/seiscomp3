@@ -48,16 +48,17 @@ enum ContentType {
 };
 
 enum Options {
-	opIgnore            =  0x0000,
-	opDefaults          =  0x0001,
-	opXMLIndent         =  0x0002,
-	opDataPicks         =  0x0004,
-	opDataAmplitudes    =  0x0008,
-	opDataStaMags       =  0x0010,
-	opDataArrivals      =  0x0020,
-	opDataStaMts        =  0x0040,
-	opDataPreferred     =  0x0080,
-	opAll               =  0xFFFF
+	opIgnore            = 0x0000,
+	opDefaults          = 0x0001,
+	opXMLIndent         = 0x0002,
+	opDataPicks         = 0x0004,
+	opDataAmplitudes    = 0x0008,
+	opDataStaMags       = 0x0010,
+	opDataArrivals      = 0x0020,
+	opDataStaMts        = 0x0040,
+	opDataPreferred     = 0x0080,
+	opKeepAlive         = 0x8000, // since API 1.6.0
+	opAll               = 0xFFFF
 };
 
 /**

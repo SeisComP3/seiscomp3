@@ -121,6 +121,7 @@ CREATE TABLE EventDescription (
 	UNIQUE(_parent_oid,m_type)
 );
 
+CREATE INDEX EventDescription__parent_oid ON EventDescription(_parent_oid);
 
 CREATE TRIGGER EventDescription_update BEFORE UPDATE ON EventDescription FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -151,6 +152,7 @@ CREATE TABLE Comment (
 	UNIQUE(_parent_oid,m_id)
 );
 
+CREATE INDEX Comment__parent_oid ON Comment(_parent_oid);
 
 CREATE TRIGGER Comment_update BEFORE UPDATE ON Comment FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -172,6 +174,7 @@ CREATE TABLE DataUsed (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX DataUsed__parent_oid ON DataUsed(_parent_oid);
 
 CREATE TRIGGER DataUsed_update BEFORE UPDATE ON DataUsed FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -225,6 +228,7 @@ CREATE TABLE CompositeTime (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX CompositeTime__parent_oid ON CompositeTime(_parent_oid);
 
 CREATE TRIGGER CompositeTime_update BEFORE UPDATE ON CompositeTime FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -244,6 +248,7 @@ CREATE TABLE PickReference (
 	UNIQUE(_parent_oid,m_pickID)
 );
 
+CREATE INDEX PickReference__parent_oid ON PickReference(_parent_oid);
 CREATE INDEX PickReference_m_pickID ON PickReference(m_pickID);
 
 CREATE TRIGGER PickReference_update BEFORE UPDATE ON PickReference FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -264,6 +269,7 @@ CREATE TABLE AmplitudeReference (
 	UNIQUE(_parent_oid,m_amplitudeID)
 );
 
+CREATE INDEX AmplitudeReference__parent_oid ON AmplitudeReference(_parent_oid);
 CREATE INDEX AmplitudeReference_m_amplitudeID ON AmplitudeReference(m_amplitudeID);
 
 CREATE TRIGGER AmplitudeReference_update BEFORE UPDATE ON AmplitudeReference FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -281,6 +287,7 @@ CREATE TABLE Reading (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Reading__parent_oid ON Reading(_parent_oid);
 
 
 
@@ -306,6 +313,7 @@ CREATE TABLE MomentTensorComponentContribution (
 	UNIQUE(_parent_oid,m_phaseCode,m_component)
 );
 
+CREATE INDEX MomentTensorComponentContribution__parent_oid ON MomentTensorComponentContribution(_parent_oid);
 
 CREATE TRIGGER MomentTensorComponentContribution_update BEFORE UPDATE ON MomentTensorComponentContribution FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -332,6 +340,7 @@ CREATE TABLE MomentTensorStationContribution (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX MomentTensorStationContribution__parent_oid ON MomentTensorStationContribution(_parent_oid);
 
 CREATE TRIGGER MomentTensorStationContribution_update BEFORE UPDATE ON MomentTensorStationContribution FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -355,6 +364,7 @@ CREATE TABLE MomentTensorPhaseSetting (
 	UNIQUE(_parent_oid,m_code)
 );
 
+CREATE INDEX MomentTensorPhaseSetting__parent_oid ON MomentTensorPhaseSetting(_parent_oid);
 
 CREATE TRIGGER MomentTensorPhaseSetting_update BEFORE UPDATE ON MomentTensorPhaseSetting FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -438,6 +448,7 @@ CREATE TABLE MomentTensor (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX MomentTensor__parent_oid ON MomentTensor(_parent_oid);
 CREATE INDEX MomentTensor_m_derivedOriginID ON MomentTensor(m_derivedOriginID);
 
 CREATE TRIGGER MomentTensor_update BEFORE UPDATE ON MomentTensor FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -555,6 +566,7 @@ CREATE TABLE FocalMechanism (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX FocalMechanism__parent_oid ON FocalMechanism(_parent_oid);
 CREATE INDEX FocalMechanism_m_triggeringOriginID ON FocalMechanism(m_triggeringOriginID);
 
 CREATE TRIGGER FocalMechanism_update BEFORE UPDATE ON FocalMechanism FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -621,6 +633,7 @@ CREATE TABLE Amplitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
 CREATE INDEX Amplitude_m_pickID ON Amplitude(m_pickID);
 
 CREATE TRIGGER Amplitude_update BEFORE UPDATE ON Amplitude FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -643,6 +656,7 @@ CREATE TABLE StationMagnitudeContribution (
 	UNIQUE(_parent_oid,m_stationMagnitudeID)
 );
 
+CREATE INDEX StationMagnitudeContribution__parent_oid ON StationMagnitudeContribution(_parent_oid);
 CREATE INDEX StationMagnitudeContribution_m_stationMagnitudeID ON StationMagnitudeContribution(m_stationMagnitudeID);
 
 CREATE TRIGGER StationMagnitudeContribution_update BEFORE UPDATE ON StationMagnitudeContribution FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -682,6 +696,7 @@ CREATE TABLE Magnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Magnitude__parent_oid ON Magnitude(_parent_oid);
 
 CREATE TRIGGER Magnitude_update BEFORE UPDATE ON Magnitude FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -724,6 +739,7 @@ CREATE TABLE StationMagnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX StationMagnitude__parent_oid ON StationMagnitude(_parent_oid);
 CREATE INDEX StationMagnitude_m_amplitudeID ON StationMagnitude(m_amplitudeID);
 
 CREATE TRIGGER StationMagnitude_update BEFORE UPDATE ON StationMagnitude FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -784,6 +800,7 @@ CREATE TABLE Pick (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
 CREATE INDEX Pick_m_time_value ON Pick(m_time_value);
 CREATE INDEX Pick_m_time_value_ms ON Pick(m_time_value_ms);
 
@@ -805,6 +822,7 @@ CREATE TABLE OriginReference (
 	UNIQUE(_parent_oid,m_originID)
 );
 
+CREATE INDEX OriginReference__parent_oid ON OriginReference(_parent_oid);
 CREATE INDEX OriginReference_m_originID ON OriginReference(m_originID);
 
 CREATE TRIGGER OriginReference_update BEFORE UPDATE ON OriginReference FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -825,6 +843,7 @@ CREATE TABLE FocalMechanismReference (
 	UNIQUE(_parent_oid,m_focalMechanismID)
 );
 
+CREATE INDEX FocalMechanismReference__parent_oid ON FocalMechanismReference(_parent_oid);
 CREATE INDEX FocalMechanismReference_m_focalMechanismID ON FocalMechanismReference(m_focalMechanismID);
 
 CREATE TRIGGER FocalMechanismReference_update BEFORE UPDATE ON FocalMechanismReference FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -858,6 +877,7 @@ CREATE TABLE Event (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Event__parent_oid ON Event(_parent_oid);
 CREATE INDEX Event_m_preferredOriginID ON Event(m_preferredOriginID);
 CREATE INDEX Event_m_preferredMagnitudeID ON Event(m_preferredMagnitudeID);
 CREATE INDEX Event_m_preferredFocalMechanismID ON Event(m_preferredFocalMechanismID);
@@ -904,6 +924,7 @@ CREATE TABLE Arrival (
 	UNIQUE(_parent_oid,m_pickID)
 );
 
+CREATE INDEX Arrival__parent_oid ON Arrival(_parent_oid);
 CREATE INDEX Arrival_m_pickID ON Arrival(m_pickID);
 
 CREATE TRIGGER Arrival_update BEFORE UPDATE ON Arrival FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -989,6 +1010,7 @@ CREATE TABLE Origin (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
 CREATE INDEX Origin_m_time_value ON Origin(m_time_value);
 CREATE INDEX Origin_m_time_value_ms ON Origin(m_time_value_ms);
 
@@ -1010,6 +1032,7 @@ CREATE TABLE Parameter (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Parameter__parent_oid ON Parameter(_parent_oid);
 
 CREATE TRIGGER Parameter_update BEFORE UPDATE ON Parameter FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1031,6 +1054,7 @@ CREATE TABLE ParameterSet (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX ParameterSet__parent_oid ON ParameterSet(_parent_oid);
 CREATE INDEX ParameterSet_m_baseID ON ParameterSet(m_baseID);
 
 CREATE TRIGGER ParameterSet_update BEFORE UPDATE ON ParameterSet FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -1053,6 +1077,7 @@ CREATE TABLE Setup (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX Setup__parent_oid ON Setup(_parent_oid);
 CREATE INDEX Setup_m_parameterSetID ON Setup(m_parameterSetID);
 
 CREATE TRIGGER Setup_update BEFORE UPDATE ON Setup FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -1075,6 +1100,7 @@ CREATE TABLE ConfigStation (
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode)
 );
 
+CREATE INDEX ConfigStation__parent_oid ON ConfigStation(_parent_oid);
 
 CREATE TRIGGER ConfigStation_update BEFORE UPDATE ON ConfigStation FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1095,6 +1121,7 @@ CREATE TABLE ConfigModule (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX ConfigModule__parent_oid ON ConfigModule(_parent_oid);
 CREATE INDEX ConfigModule_m_parameterSetID ON ConfigModule(m_parameterSetID);
 
 CREATE TRIGGER ConfigModule_update BEFORE UPDATE ON ConfigModule FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -1127,6 +1154,7 @@ CREATE TABLE QCLog (
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI)
 );
 
+CREATE INDEX QCLog__parent_oid ON QCLog(_parent_oid);
 
 CREATE TRIGGER QCLog_update BEFORE UPDATE ON QCLog FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1163,6 +1191,7 @@ CREATE TABLE WaveformQuality (
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_type,m_parameter)
 );
 
+CREATE INDEX WaveformQuality__parent_oid ON WaveformQuality(_parent_oid);
 CREATE INDEX WaveformQuality_m_start ON WaveformQuality(m_start);
 CREATE INDEX WaveformQuality_m_start_ms ON WaveformQuality(m_start_ms);
 CREATE INDEX WaveformQuality_m_end ON WaveformQuality(m_end);
@@ -1197,6 +1226,7 @@ CREATE TABLE Outage (
 	UNIQUE(_parent_oid,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_start,m_start_ms)
 );
 
+CREATE INDEX Outage__parent_oid ON Outage(_parent_oid);
 
 CREATE TRIGGER Outage_update BEFORE UPDATE ON Outage FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1216,6 +1246,7 @@ CREATE TABLE StationReference (
 	UNIQUE(_parent_oid,m_stationID)
 );
 
+CREATE INDEX StationReference__parent_oid ON StationReference(_parent_oid);
 CREATE INDEX StationReference_m_stationID ON StationReference(m_stationID);
 
 CREATE TRIGGER StationReference_update BEFORE UPDATE ON StationReference FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -1243,6 +1274,7 @@ CREATE TABLE StationGroup (
 	UNIQUE(_parent_oid,m_code)
 );
 
+CREATE INDEX StationGroup__parent_oid ON StationGroup(_parent_oid);
 
 CREATE TRIGGER StationGroup_update BEFORE UPDATE ON StationGroup FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1269,6 +1301,7 @@ CREATE TABLE AuxSource (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX AuxSource__parent_oid ON AuxSource(_parent_oid);
 
 CREATE TRIGGER AuxSource_update BEFORE UPDATE ON AuxSource FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1293,6 +1326,7 @@ CREATE TABLE AuxDevice (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX AuxDevice__parent_oid ON AuxDevice(_parent_oid);
 
 CREATE TRIGGER AuxDevice_update BEFORE UPDATE ON AuxDevice FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1319,6 +1353,7 @@ CREATE TABLE SensorCalibration (
 	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
 );
 
+CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
 
 CREATE TRIGGER SensorCalibration_update BEFORE UPDATE ON SensorCalibration FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1348,6 +1383,7 @@ CREATE TABLE Sensor (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX Sensor__parent_oid ON Sensor(_parent_oid);
 
 CREATE TRIGGER Sensor_update BEFORE UPDATE ON Sensor FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1380,6 +1416,7 @@ CREATE TABLE ResponsePAZ (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX ResponsePAZ__parent_oid ON ResponsePAZ(_parent_oid);
 
 CREATE TRIGGER ResponsePAZ_update BEFORE UPDATE ON ResponsePAZ FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1411,6 +1448,7 @@ CREATE TABLE ResponsePolynomial (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 
 CREATE TRIGGER ResponsePolynomial_update BEFORE UPDATE ON ResponsePolynomial FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1437,6 +1475,7 @@ CREATE TABLE DataloggerCalibration (
 	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
 );
 
+CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
 
 CREATE TRIGGER DataloggerCalibration_update BEFORE UPDATE ON DataloggerCalibration FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1461,6 +1500,7 @@ CREATE TABLE Decimation (
 	UNIQUE(_parent_oid,m_sampleRateNumerator,m_sampleRateDenominator)
 );
 
+CREATE INDEX Decimation__parent_oid ON Decimation(_parent_oid);
 
 CREATE TRIGGER Decimation_update BEFORE UPDATE ON Decimation FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1492,6 +1532,7 @@ CREATE TABLE Datalogger (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 
 CREATE TRIGGER Datalogger_update BEFORE UPDATE ON Datalogger FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1521,6 +1562,7 @@ CREATE TABLE ResponseFIR (
 	UNIQUE(_parent_oid,m_name)
 );
 
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
 
 CREATE TRIGGER ResponseFIR_update BEFORE UPDATE ON ResponseFIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1549,6 +1591,7 @@ CREATE TABLE AuxStream (
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
+CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
 
 CREATE TRIGGER AuxStream_update BEFORE UPDATE ON AuxStream FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1589,6 +1632,7 @@ CREATE TABLE Stream (
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
+CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
 
 CREATE TRIGGER Stream_update BEFORE UPDATE ON Stream FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1613,6 +1657,7 @@ CREATE TABLE SensorLocation (
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
+CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
 
 CREATE TRIGGER SensorLocation_update BEFORE UPDATE ON SensorLocation FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1648,6 +1693,7 @@ CREATE TABLE Station (
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
+CREATE INDEX Station__parent_oid ON Station(_parent_oid);
 
 CREATE TRIGGER Station_update BEFORE UPDATE ON Station FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1679,6 +1725,7 @@ CREATE TABLE Network (
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
+CREATE INDEX Network__parent_oid ON Network(_parent_oid);
 
 CREATE TRIGGER Network_update BEFORE UPDATE ON Network FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1701,6 +1748,7 @@ CREATE TABLE RouteArclink (
 	UNIQUE(_parent_oid,m_address,m_start)
 );
 
+CREATE INDEX RouteArclink__parent_oid ON RouteArclink(_parent_oid);
 
 CREATE TRIGGER RouteArclink_update BEFORE UPDATE ON RouteArclink FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1721,6 +1769,7 @@ CREATE TABLE RouteSeedlink (
 	UNIQUE(_parent_oid,m_address)
 );
 
+CREATE INDEX RouteSeedlink__parent_oid ON RouteSeedlink(_parent_oid);
 
 CREATE TRIGGER RouteSeedlink_update BEFORE UPDATE ON RouteSeedlink FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1743,6 +1792,7 @@ CREATE TABLE Route (
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode)
 );
 
+CREATE INDEX Route__parent_oid ON Route(_parent_oid);
 
 CREATE TRIGGER Route_update BEFORE UPDATE ON Route FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1768,6 +1818,7 @@ CREATE TABLE Access (
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode,m_user,m_start)
 );
 
+CREATE INDEX Access__parent_oid ON Access(_parent_oid);
 
 CREATE TRIGGER Access_update BEFORE UPDATE ON Access FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1791,6 +1842,7 @@ CREATE TABLE JournalEntry (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX JournalEntry__parent_oid ON JournalEntry(_parent_oid);
 CREATE INDEX JournalEntry_m_objectID ON JournalEntry(m_objectID);
 
 CREATE TRIGGER JournalEntry_update BEFORE UPDATE ON JournalEntry FOR EACH ROW EXECUTE PROCEDURE update_modified();
@@ -1813,6 +1865,7 @@ CREATE TABLE ArclinkUser (
 	UNIQUE(_parent_oid,m_name,m_email)
 );
 
+CREATE INDEX ArclinkUser__parent_oid ON ArclinkUser(_parent_oid);
 
 CREATE TRIGGER ArclinkUser_update BEFORE UPDATE ON ArclinkUser FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1836,6 +1889,7 @@ CREATE TABLE ArclinkStatusLine (
 	UNIQUE(_parent_oid,m_volumeID,m_type,m_status)
 );
 
+CREATE INDEX ArclinkStatusLine__parent_oid ON ArclinkStatusLine(_parent_oid);
 
 CREATE TRIGGER ArclinkStatusLine_update BEFORE UPDATE ON ArclinkStatusLine FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1872,6 +1926,7 @@ CREATE TABLE ArclinkRequestLine (
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_end,m_end_ms,m_streamID_networkCode,m_streamID_stationCode,m_streamID_locationCode,m_streamID_channelCode,m_streamID_resourceURI)
 );
 
+CREATE INDEX ArclinkRequestLine__parent_oid ON ArclinkRequestLine(_parent_oid);
 
 CREATE TRIGGER ArclinkRequestLine_update BEFORE UPDATE ON ArclinkRequestLine FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
@@ -1906,6 +1961,7 @@ CREATE TABLE ArclinkRequest (
 	UNIQUE(_parent_oid,m_created,m_created_ms,m_requestID,m_userID)
 );
 
+CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 
 CREATE TRIGGER ArclinkRequest_update BEFORE UPDATE ON ArclinkRequest FOR EACH ROW EXECUTE PROCEDURE update_modified();
 

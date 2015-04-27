@@ -204,9 +204,12 @@ class FDSNEvent(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, hideAuthor = False, evaluationMode = None):
+	def __init__(self, hideAuthor = False, evaluationMode = None,
+	             eventTypeWhitelist = None, eventTypeBlacklist = None):
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
+		self._eventTypeWhitelist = eventTypeWhitelist
+		self._eventTypeBlacklist = eventTypeBlacklist
 
 
 	#---------------------------------------------------------------------------
@@ -249,8 +252,8 @@ class FDSNEvent(resource.Resource):
 
 		# Process request in separate thread
 		d = deferToThread(self._processRequest, req, ro, dbq, exp)
-		d.addCallback(utils.onRequestServed, req)
-		d.addErrback(utils.onRequestError, req)
+		req.notifyFinish().addErrback(utils.onCancel, d)
+		d.addBoth(utils.onFinish, req)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
@@ -503,12 +506,22 @@ class FDSNEvent(resource.Resource):
 				if not e:
 					continue
 
+				if self._eventTypeWhitelist or self._eventTypeBlacklist:
+					eType = None
+					try: eType = DataModel.EEventTypeNames_name(e.type())
+					except ValueException: pass
+					if self._eventTypeWhitelist and \
+					   not eType in self._eventTypeWhitelist: continue
+					if self._eventTypeBlacklist and \
+					   eType in self._eventTypeBlacklist: continue
+
 				if self._evaluationMode is not None:
 					obj = dbq.getObject(DataModel.Origin.TypeInfo(),
 					                    e.preferredOriginID())
 					o = DataModel.Origin.Cast(obj)
 					try:
-						if o is None or o.evaluationMode() != self._evaluationMode:
+						if o is None or \
+						   o.evaluationMode() != self._evaluationMode:
 							continue
 					except ValueException:
 						continue
@@ -519,9 +532,10 @@ class FDSNEvent(resource.Resource):
 
 		if ep.eventCount() == 0:
 			msg = "no matching events found"
-			utils.writeTS(req,
-			              HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro))
-			return False
+			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			if data:
+				req.write(data)
+			return True
 
 		Logging.debug("events found: %i" % ep.eventCount())
 
@@ -582,6 +596,13 @@ class FDSNEvent(resource.Resource):
 		q += " WHERE e._oid = pe._oid"
 
 		# event information filter
+		if self._eventTypeWhitelist:
+			q += " AND e.%s IN ('%s')" % (
+			     _T('type'), "', '".join(self._eventTypeWhitelist))
+		if self._eventTypeBlacklist:
+			q += " AND (e.%s IS NULL OR e.%s NOT IN ('%s'))" % (
+			     _T('type'), _T('type'),
+			     "', '".join(self._eventTypeBlacklist))
 		if ro.contributors:
 			q += " AND e.%s AND upper(e.%s) IN('%s')" % (
 			     _T('creationinfo_used'), _T('creationinfo_agencyid'),

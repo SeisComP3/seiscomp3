@@ -32,15 +32,16 @@ PolesAndZeros::PolesAndZeros(const PolesAndZeros &other)
  : poles(other.poles), zeros(other.zeros), norm(other.norm) {}
 
 
-WoodAnderson::WoodAnderson(GroundMotion input) {
+WoodAnderson::WoodAnderson(GroundMotion input, Config config) {
 	poles.clear();
 	zeros.clear();
 
-	// Poles from Seismic Handler
-	poles.push_back( Pole(-6.283185, -4.712389) );
-	poles.push_back( Pole(-6.283185, +4.712389) );
-
-	norm = 2800.;
+	double p_abs = 2*M_PI/config.T0;
+	double p_re  = config.h*p_abs;
+	double p_im  = sqrt(p_abs*p_abs-p_re*p_re);
+	poles.push_back( Pole(-p_re, -p_im));
+	poles.push_back( Pole(-p_re, +p_im));
+	norm = config.gain;
 
 	switch(input) {
 		case Displacement: zeros.push_back( 0 );

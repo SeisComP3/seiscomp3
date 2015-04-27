@@ -105,6 +105,7 @@ CREATE TABLE EventDescription (
 	text VARCHAR(128) NOT NULL,
 	type VARCHAR(64) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -131,6 +132,7 @@ CREATE TABLE Comment (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -149,6 +151,7 @@ CREATE TABLE DataUsed (
 	componentCount INT UNSIGNED NOT NULL,
 	shortestPeriod DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -198,6 +201,7 @@ CREATE TABLE CompositeTime (
 	second_confidenceLevel DOUBLE UNSIGNED,
 	second_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -212,6 +216,7 @@ CREATE TABLE PickReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	pickID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -228,6 +233,7 @@ CREATE TABLE AmplitudeReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	amplitudeID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(amplitudeID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -242,6 +248,7 @@ CREATE TABLE Reading (
 	_oid INTEGER(11) NOT NULL,
 	_parent_oid INTEGER(11) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -263,6 +270,7 @@ CREATE TABLE MomentTensorComponentContribution (
 	misfit DOUBLE,
 	snr DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -286,6 +294,7 @@ CREATE TABLE MomentTensorStationContribution (
 	weight DOUBLE,
 	timeShift DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -304,6 +313,7 @@ CREATE TABLE MomentTensorPhaseSetting (
 	minimumSNR DOUBLE,
 	maximumTimeShift DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -384,6 +394,7 @@ CREATE TABLE MomentTensor (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(derivedOriginID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -497,6 +508,7 @@ CREATE TABLE FocalMechanism (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(triggeringOriginID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -559,6 +571,7 @@ CREATE TABLE Amplitude (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -576,6 +589,7 @@ CREATE TABLE StationMagnitudeContribution (
 	residual DOUBLE,
 	weight DOUBLE UNSIGNED,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(stationMagnitudeID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -612,6 +626,7 @@ CREATE TABLE Magnitude (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -650,6 +665,7 @@ CREATE TABLE StationMagnitude (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(amplitudeID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -706,6 +722,7 @@ CREATE TABLE Pick (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(time_value),
 	INDEX(time_value_ms),
 	FOREIGN KEY(_oid)
@@ -722,6 +739,7 @@ CREATE TABLE OriginReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	originID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(originID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -738,6 +756,7 @@ CREATE TABLE FocalMechanismReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	focalMechanismID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(focalMechanismID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -768,6 +787,7 @@ CREATE TABLE Event (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(preferredOriginID),
 	INDEX(preferredMagnitudeID),
 	INDEX(preferredFocalMechanismID),
@@ -809,6 +829,7 @@ CREATE TABLE Arrival (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -891,6 +912,7 @@ CREATE TABLE Origin (
 	creationInfo_version VARCHAR(64),
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(time_value),
 	INDEX(time_value_ms),
 	FOREIGN KEY(_oid)
@@ -908,6 +930,7 @@ CREATE TABLE Parameter (
 	name VARCHAR(255) NOT NULL,
 	value BLOB,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -925,6 +948,7 @@ CREATE TABLE ParameterSet (
 	created DATETIME,
 	created_ms INTEGER,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(baseID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -942,6 +966,7 @@ CREATE TABLE Setup (
 	parameterSetID VARCHAR(255),
 	enabled TINYINT(1) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(parameterSetID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -960,6 +985,7 @@ CREATE TABLE ConfigStation (
 	stationCode CHAR(8) NOT NULL,
 	enabled TINYINT(1) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -977,6 +1003,7 @@ CREATE TABLE ConfigModule (
 	parameterSetID VARCHAR(255),
 	enabled TINYINT(1) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(parameterSetID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1004,6 +1031,7 @@ CREATE TABLE QCLog (
 	end_ms INTEGER NOT NULL,
 	message BLOB NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1036,6 +1064,7 @@ CREATE TABLE WaveformQuality (
 	upperUncertainty DOUBLE,
 	windowLength DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(start),
 	INDEX(start_ms),
 	INDEX(end),
@@ -1066,6 +1095,7 @@ CREATE TABLE Outage (
 	end DATETIME,
 	end_ms INTEGER,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1081,6 +1111,7 @@ CREATE TABLE StationReference (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	stationID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(stationID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1104,6 +1135,7 @@ CREATE TABLE StationGroup (
 	longitude DOUBLE,
 	elevation DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1126,6 +1158,7 @@ CREATE TABLE AuxSource (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1146,6 +1179,7 @@ CREATE TABLE AuxDevice (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1168,6 +1202,7 @@ CREATE TABLE SensorCalibration (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1193,6 +1228,7 @@ CREATE TABLE Sensor (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1221,6 +1257,7 @@ CREATE TABLE ResponsePAZ (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1248,6 +1285,7 @@ CREATE TABLE ResponsePolynomial (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1270,6 +1308,7 @@ CREATE TABLE DataloggerCalibration (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1290,6 +1329,7 @@ CREATE TABLE Decimation (
 	digitalFilterChain_content BLOB,
 	digitalFilterChain_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1317,6 +1357,7 @@ CREATE TABLE Datalogger (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1342,6 +1383,7 @@ CREATE TABLE ResponseFIR (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1366,6 +1408,7 @@ CREATE TABLE AuxStream (
 	restricted TINYINT(1),
 	shared TINYINT(1),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1402,6 +1445,7 @@ CREATE TABLE Stream (
 	restricted TINYINT(1),
 	shared TINYINT(1),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1422,6 +1466,7 @@ CREATE TABLE SensorLocation (
 	longitude DOUBLE,
 	elevation DOUBLE,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1453,6 +1498,7 @@ CREATE TABLE Station (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1480,6 +1526,7 @@ CREATE TABLE Network (
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1498,6 +1545,7 @@ CREATE TABLE RouteArclink (
 	end DATETIME,
 	priority TINYINT UNSIGNED,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1514,6 +1562,7 @@ CREATE TABLE RouteSeedlink (
 	address VARCHAR(50) NOT NULL,
 	priority TINYINT UNSIGNED,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1532,6 +1581,7 @@ CREATE TABLE Route (
 	locationCode CHAR(8) NOT NULL,
 	streamCode CHAR(8) NOT NULL,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1553,6 +1603,7 @@ CREATE TABLE Access (
 	start DATETIME NOT NULL,
 	end DATETIME,
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1573,6 +1624,7 @@ CREATE TABLE JournalEntry (
 	action VARCHAR(160) NOT NULL,
 	parameters VARCHAR(160),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	INDEX(objectID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1590,6 +1642,7 @@ CREATE TABLE ArclinkUser (
 	email VARCHAR(80),
 	password VARCHAR(80),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1609,6 +1662,7 @@ CREATE TABLE ArclinkStatusLine (
 	message VARCHAR(160),
 	volumeID VARCHAR(80),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1641,6 +1695,7 @@ CREATE TABLE ArclinkRequestLine (
 	status_message VARCHAR(160),
 	status_volumeID VARCHAR(80),
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
@@ -1671,6 +1726,7 @@ CREATE TABLE ArclinkRequest (
 	summary_averageTimeWindow INT UNSIGNED,
 	summary_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,

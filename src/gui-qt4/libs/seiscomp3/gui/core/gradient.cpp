@@ -48,7 +48,7 @@ QColor Gradient::colorAt(qreal position, bool discrete) const {
 		else if ( it.key() > position ) {
 			if ( last != end() ) {
 				if ( discrete ) {
-					return (last.key()>=0)?last.value().first: it.value().first;
+					return last.value().first;
 				}
 				else {
 					qreal v1 = last.key();

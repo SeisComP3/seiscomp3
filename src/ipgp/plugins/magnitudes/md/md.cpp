@@ -529,9 +529,9 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 		//! computes rms after removing offset
 		amp_sig = 2 * d->rms(ofs_sig);
 
-		if ( amp_sig / *_noiseAmplitude <= _config.snrMin ) {
+		if ( amp_sig / *_noiseAmplitude <= aFile.SNR_MIN ) {
 			SEISCOMP_DEBUG("%s End of signal found! (%.2f <= %.2f)", AMPTAG,
-			    (amp_sig / *_noiseAmplitude), _config.snrMin);
+			    (amp_sig / *_noiseAmplitude), aFile.SNR_MIN);
 			hasEndSignal = true;
 			calculatedSnr = amp_sig / *_noiseAmplitude;
 			break;
@@ -541,7 +541,7 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 	if ( !hasEndSignal ) {
 		SEISCOMP_ERROR("%s SNR stayed over configured SNR_MIN! (%.2f > %.2f), "
 			"skipping magnitude calculation for this station", AMPTAG,
-		    calculatedSnr, _config.snrMin);
+		    calculatedSnr, aFile.SNR_MIN);
 		return false;
 	}
 

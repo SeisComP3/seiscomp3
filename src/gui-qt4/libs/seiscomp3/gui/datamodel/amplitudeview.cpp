@@ -3338,6 +3338,8 @@ bool AmplitudeView::setOrigin(Seiscomp::DataModel::Origin* origin,
 			if ( !item.amp ) continue;
 
 			item.pick = Pick::Cast(PublicObject::Find(item.amp->pickID()));
+			item.isTrigger = true;
+
 			if ( !item.amp->pickID().empty() && !item.pick && _reader )
 				item.pick = Pick::Cast(_reader->getObject(Pick::TypeInfo(), item.amp->pickID()));
 
@@ -3436,7 +3438,6 @@ bool AmplitudeView::setOrigin(Seiscomp::DataModel::Origin* origin,
 			}
 		}
 
-		
 		RecordViewItem *item = addStream(loc, streamID, reference, true);
 		// A new item has been inserted
 		if ( item != NULL ) {

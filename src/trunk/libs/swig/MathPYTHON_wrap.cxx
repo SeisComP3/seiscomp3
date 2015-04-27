@@ -3038,55 +3038,56 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros swig_types[98]
 #define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec swig_types[99]
 #define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson swig_types[100]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[101]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[102]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[103]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[104]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[105]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[106]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[107]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[108]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[109]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[110]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[111]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[112]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[113]
-#define SWIGTYPE_p_TYPE swig_types[114]
-#define SWIGTYPE_p_TagType swig_types[115]
-#define SWIGTYPE_p_Type swig_types[116]
-#define SWIGTYPE_p_ValueType swig_types[117]
-#define SWIGTYPE_p_allocator_type swig_types[118]
-#define SWIGTYPE_p_char swig_types[119]
-#define SWIGTYPE_p_const_iterator swig_types[120]
-#define SWIGTYPE_p_difference_type swig_types[121]
-#define SWIGTYPE_p_double swig_types[122]
-#define SWIGTYPE_p_float swig_types[123]
-#define SWIGTYPE_p_iterator swig_types[124]
-#define SWIGTYPE_p_p_PyObject swig_types[125]
-#define SWIGTYPE_p_size_type swig_types[126]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[127]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[128]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[129]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[130]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[131]
-#define SWIGTYPE_p_std__allocatorT_float_t swig_types[132]
-#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[133]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[134]
-#define SWIGTYPE_p_std__exception swig_types[135]
-#define SWIGTYPE_p_std__invalid_argument swig_types[136]
-#define SWIGTYPE_p_std__string swig_types[137]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[138]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[139]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[140]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[141]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[142]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[143]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[144]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[145]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[146]
-#define SWIGTYPE_p_value_type swig_types[147]
-static swig_type_info *swig_types[149];
-static swig_module_info swig_module = {swig_types, 148, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config swig_types[101]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[102]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[103]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[104]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[105]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[106]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[107]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[108]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[109]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[110]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[111]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[112]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[113]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[114]
+#define SWIGTYPE_p_TYPE swig_types[115]
+#define SWIGTYPE_p_TagType swig_types[116]
+#define SWIGTYPE_p_Type swig_types[117]
+#define SWIGTYPE_p_ValueType swig_types[118]
+#define SWIGTYPE_p_allocator_type swig_types[119]
+#define SWIGTYPE_p_char swig_types[120]
+#define SWIGTYPE_p_const_iterator swig_types[121]
+#define SWIGTYPE_p_difference_type swig_types[122]
+#define SWIGTYPE_p_double swig_types[123]
+#define SWIGTYPE_p_float swig_types[124]
+#define SWIGTYPE_p_iterator swig_types[125]
+#define SWIGTYPE_p_p_PyObject swig_types[126]
+#define SWIGTYPE_p_size_type swig_types[127]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[128]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[129]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[130]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[131]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[132]
+#define SWIGTYPE_p_std__allocatorT_float_t swig_types[133]
+#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[134]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[135]
+#define SWIGTYPE_p_std__exception swig_types[136]
+#define SWIGTYPE_p_std__invalid_argument swig_types[137]
+#define SWIGTYPE_p_std__string swig_types[138]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[139]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[140]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[141]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[142]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[143]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[144]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[145]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[146]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[147]
+#define SWIGTYPE_p_value_type swig_types[148]
+static swig_type_info *swig_types[150];
+static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -30525,7 +30526,46 @@ SWIGINTERN PyObject *PolesAndZeros_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_new_WoodAnderson(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_WoodAnderson__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::GroundMotion arg1 ;
+  Seiscomp::Math::SeismometerResponse::WoodAnderson::Config arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::SeismometerResponse::WoodAnderson *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_WoodAnderson",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_WoodAnderson" "', argument " "1"" of type '" "Seiscomp::Math::GroundMotion""'");
+  } 
+  arg1 = static_cast< Seiscomp::Math::GroundMotion >(val1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_WoodAnderson" "', argument " "2"" of type '" "Seiscomp::Math::SeismometerResponse::WoodAnderson::Config""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_WoodAnderson" "', argument " "2"" of type '" "Seiscomp::Math::SeismometerResponse::WoodAnderson::Config""'");
+    } else {
+      Seiscomp::Math::SeismometerResponse::WoodAnderson::Config * temp = reinterpret_cast< Seiscomp::Math::SeismometerResponse::WoodAnderson::Config * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  result = (Seiscomp::Math::SeismometerResponse::WoodAnderson *)new Seiscomp::Math::SeismometerResponse::WoodAnderson(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_WoodAnderson__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::GroundMotion arg1 ;
   int val1 ;
@@ -30544,6 +30584,50 @@ SWIGINTERN PyObject *_wrap_new_WoodAnderson(PyObject *SWIGUNUSEDPARM(self), PyOb
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_WoodAnderson(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_WoodAnderson__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_WoodAnderson__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_WoodAnderson'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::SeismometerResponse::WoodAnderson::WoodAnderson(Seiscomp::Math::GroundMotion,Seiscomp::Math::SeismometerResponse::WoodAnderson::Config)\n"
+    "    Seiscomp::Math::SeismometerResponse::WoodAnderson::WoodAnderson(Seiscomp::Math::GroundMotion)\n");
+  return 0;
 }
 
 
@@ -36335,7 +36419,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolesAndZeros_norm_get", _wrap_PolesAndZeros_norm_get, METH_VARARGS, (char *)"PolesAndZeros_norm_get(PolesAndZeros self) -> double"},
 	 { (char *)"delete_PolesAndZeros", _wrap_delete_PolesAndZeros, METH_VARARGS, (char *)"delete_PolesAndZeros(PolesAndZeros self)"},
 	 { (char *)"PolesAndZeros_swigregister", PolesAndZeros_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_WoodAnderson", _wrap_new_WoodAnderson, METH_VARARGS, (char *)"new_WoodAnderson(Seiscomp::Math::GroundMotion input) -> WoodAnderson"},
+	 { (char *)"new_WoodAnderson", _wrap_new_WoodAnderson, METH_VARARGS, (char *)"\n"
+		"WoodAnderson(Seiscomp::Math::GroundMotion input, Seiscomp::Math::SeismometerResponse::WoodAnderson::Config config=Seiscomp::Math::SeismometerResponse::WoodAnderson::Config())\n"
+		"new_WoodAnderson(Seiscomp::Math::GroundMotion input) -> WoodAnderson\n"
+		""},
 	 { (char *)"delete_WoodAnderson", _wrap_delete_WoodAnderson, METH_VARARGS, (char *)"delete_WoodAnderson(WoodAnderson self)"},
 	 { (char *)"WoodAnderson_swigregister", WoodAnderson_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Seismometer5sec", _wrap_new_Seismometer5sec, METH_VARARGS, (char *)"new_Seismometer5sec(Seiscomp::Math::GroundMotion input) -> Seismometer5sec"},
@@ -36869,6 +36956,7 @@ static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__TransferFuncti
 static swig_type_info _swigt__p_Seiscomp__Math__SeismometerResponse__PolesAndZeros = {"_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros", "Seiscomp::Math::SeismometerResponse::PolesAndZeros *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec = {"_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec", "Seiscomp::Math::SeismometerResponse::Seismometer5sec *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson = {"_p_Seiscomp__Math__SeismometerResponse__WoodAnderson", "Seiscomp::Math::SeismometerResponse::WoodAnderson *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config = {"_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config", "Seiscomp::Math::SeismometerResponse::WoodAnderson::Config *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_char_t = {"_p_Seiscomp__NumericArrayT_char_t", "Seiscomp::CharArray *|Seiscomp::NumericArray< char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_double_t = {"_p_Seiscomp__NumericArrayT_double_t", "Seiscomp::DoubleArray *|Seiscomp::NumericArray< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_float_t = {"_p_Seiscomp__NumericArrayT_float_t", "Seiscomp::FloatArray *|Seiscomp::NumericArray< float > *", 0, 0, (void*)0, 0};
@@ -37029,6 +37117,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Math__SeismometerResponse__PolesAndZeros,
   &_swigt__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec,
   &_swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson,
+  &_swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config,
   &_swigt__p_Seiscomp__NumericArrayT_char_t,
   &_swigt__p_Seiscomp__NumericArrayT_double_t,
   &_swigt__p_Seiscomp__NumericArrayT_float_t,
@@ -37169,6 +37258,7 @@ static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__TransferFuncti
 static swig_cast_info _swigc__p_Seiscomp__Math__SeismometerResponse__PolesAndZeros[] = {  {&_swigt__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec, _p_Seiscomp__Math__SeismometerResponse__Seismometer5secTo_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros, 0, 0},  {&_swigt__p_Seiscomp__Math__SeismometerResponse__PolesAndZeros, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson, _p_Seiscomp__Math__SeismometerResponse__WoodAndersonTo_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec[] = {  {&_swigt__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__SeismometerResponse__WoodAnderson[] = {  {&_swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config[] = {  {&_swigt__p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_char_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_double_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_float_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_float_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -37329,6 +37419,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Math__SeismometerResponse__PolesAndZeros,
   _swigc__p_Seiscomp__Math__SeismometerResponse__Seismometer5sec,
   _swigc__p_Seiscomp__Math__SeismometerResponse__WoodAnderson,
+  _swigc__p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config,
   _swigc__p_Seiscomp__NumericArrayT_char_t,
   _swigc__p_Seiscomp__NumericArrayT_double_t,
   _swigc__p_Seiscomp__NumericArrayT_float_t,

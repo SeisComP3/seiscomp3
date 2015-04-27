@@ -18,7 +18,7 @@ from seiscomp import sds
 from seiscomp.arclink.manager import *
 from seiscomp3 import Logging
 
-VERSION = "1.1 (2013.008)"
+VERSION = "1.1 (2014.316)"
 
 class InvalidCommandError(Exception):
     pass
@@ -132,8 +132,8 @@ class RequestProxy(object):
         return self.__user
     
     def add(self, network, station, stream, loc_id, begin, end, constraints):
-        tw_tuple = (network, station, stream, loc_id, begin, end,
-            constraints, set())
+        tw_tuple = RequestLine(begin, end, network, station, stream, loc_id,
+            constraints)
 
         if self.__rtype == "WAVEFORM" and (g_options.local or self.__sds.exists(begin, end, network, station, stream, _checkdot(loc_id))):
             self.__tw_local.append(tw_tuple)
@@ -900,7 +900,7 @@ def process_options():
     parser.add_option("-O", "--organization", type="string", dest="organization",
       help="organization name (default %default)")
 
-    parser.add_option("-d", "--dcid", type="string", dest="organization",
+    parser.add_option("-d", "--dcid", type="string", dest="dcid",
       help="datacenter ID (default %default)")
 
     parser.add_option("-S", "--max-sessions", type="int", dest="max_sessions",

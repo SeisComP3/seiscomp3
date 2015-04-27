@@ -474,7 +474,9 @@ class SC_GUI_API RecordWidget : public QWidget
 		void setActive(bool);
 
 		void setAutoMaxScale(bool);
+
 		void setNormalizationWindow(const Seiscomp::Core::TimeWindow&);
+		void setOffsetWindow(const Seiscomp::Core::TimeWindow&);
 
 		//! Sets the maximum slot index for which setFilter(filter) is
 		//! applied. The semantics of 'any' is bound to value -1.
@@ -697,6 +699,7 @@ class SC_GUI_API RecordWidget : public QWidget
 		Seiscomp::Core::Time _startDragPos;
 
 		Seiscomp::Core::TimeWindow _normalizationWindow;
+		Seiscomp::Core::TimeWindow _offsetWindow;
 
 		RecordWidget *_shadowWidget;
 		RecordWidget *_markerSourceWidget;

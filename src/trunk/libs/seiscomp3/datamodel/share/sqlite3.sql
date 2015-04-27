@@ -114,6 +114,7 @@ CREATE TABLE EventDescription (
 	UNIQUE(_parent_oid,type)
 );
 
+CREATE INDEX EventDescription__parent_oid ON EventDescription(_parent_oid);
 
 CREATE TRIGGER EventDescriptionUpdate UPDATE ON EventDescription
 BEGIN
@@ -146,6 +147,7 @@ CREATE TABLE Comment (
 	UNIQUE(_parent_oid,id)
 );
 
+CREATE INDEX Comment__parent_oid ON Comment(_parent_oid);
 
 CREATE TRIGGER CommentUpdate UPDATE ON Comment
 BEGIN
@@ -169,6 +171,7 @@ CREATE TABLE DataUsed (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX DataUsed__parent_oid ON DataUsed(_parent_oid);
 
 CREATE TRIGGER DataUsedUpdate UPDATE ON DataUsed
 BEGIN
@@ -224,6 +227,7 @@ CREATE TABLE CompositeTime (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX CompositeTime__parent_oid ON CompositeTime(_parent_oid);
 
 CREATE TRIGGER CompositeTimeUpdate UPDATE ON CompositeTime
 BEGIN
@@ -245,6 +249,7 @@ CREATE TABLE PickReference (
 	UNIQUE(_parent_oid,pickID)
 );
 
+CREATE INDEX PickReference__parent_oid ON PickReference(_parent_oid);
 CREATE INDEX PickReference_pickID ON PickReference(pickID);
 
 CREATE TRIGGER PickReferenceUpdate UPDATE ON PickReference
@@ -267,6 +272,7 @@ CREATE TABLE AmplitudeReference (
 	UNIQUE(_parent_oid,amplitudeID)
 );
 
+CREATE INDEX AmplitudeReference__parent_oid ON AmplitudeReference(_parent_oid);
 CREATE INDEX AmplitudeReference_amplitudeID ON AmplitudeReference(amplitudeID);
 
 CREATE TRIGGER AmplitudeReferenceUpdate UPDATE ON AmplitudeReference
@@ -286,6 +292,7 @@ CREATE TABLE Reading (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Reading__parent_oid ON Reading(_parent_oid);
 
 CREATE TRIGGER ReadingUpdate UPDATE ON Reading
 BEGIN
@@ -314,6 +321,7 @@ CREATE TABLE MomentTensorComponentContribution (
 	UNIQUE(_parent_oid,phaseCode,component)
 );
 
+CREATE INDEX MomentTensorComponentContribution__parent_oid ON MomentTensorComponentContribution(_parent_oid);
 
 CREATE TRIGGER MomentTensorComponentContributionUpdate UPDATE ON MomentTensorComponentContribution
 BEGIN
@@ -342,6 +350,7 @@ CREATE TABLE MomentTensorStationContribution (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX MomentTensorStationContribution__parent_oid ON MomentTensorStationContribution(_parent_oid);
 
 CREATE TRIGGER MomentTensorStationContributionUpdate UPDATE ON MomentTensorStationContribution
 BEGIN
@@ -367,6 +376,7 @@ CREATE TABLE MomentTensorPhaseSetting (
 	UNIQUE(_parent_oid,code)
 );
 
+CREATE INDEX MomentTensorPhaseSetting__parent_oid ON MomentTensorPhaseSetting(_parent_oid);
 
 CREATE TRIGGER MomentTensorPhaseSettingUpdate UPDATE ON MomentTensorPhaseSetting
 BEGIN
@@ -452,6 +462,7 @@ CREATE TABLE MomentTensor (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX MomentTensor__parent_oid ON MomentTensor(_parent_oid);
 CREATE INDEX MomentTensor_derivedOriginID ON MomentTensor(derivedOriginID);
 
 CREATE TRIGGER MomentTensorUpdate UPDATE ON MomentTensor
@@ -571,6 +582,7 @@ CREATE TABLE FocalMechanism (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX FocalMechanism__parent_oid ON FocalMechanism(_parent_oid);
 CREATE INDEX FocalMechanism_triggeringOriginID ON FocalMechanism(triggeringOriginID);
 
 CREATE TRIGGER FocalMechanismUpdate UPDATE ON FocalMechanism
@@ -639,6 +651,7 @@ CREATE TABLE Amplitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
 CREATE INDEX Amplitude_pickID ON Amplitude(pickID);
 
 CREATE TRIGGER AmplitudeUpdate UPDATE ON Amplitude
@@ -663,6 +676,7 @@ CREATE TABLE StationMagnitudeContribution (
 	UNIQUE(_parent_oid,stationMagnitudeID)
 );
 
+CREATE INDEX StationMagnitudeContribution__parent_oid ON StationMagnitudeContribution(_parent_oid);
 CREATE INDEX StationMagnitudeContribution_stationMagnitudeID ON StationMagnitudeContribution(stationMagnitudeID);
 
 CREATE TRIGGER StationMagnitudeContributionUpdate UPDATE ON StationMagnitudeContribution
@@ -704,6 +718,7 @@ CREATE TABLE Magnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Magnitude__parent_oid ON Magnitude(_parent_oid);
 
 CREATE TRIGGER MagnitudeUpdate UPDATE ON Magnitude
 BEGIN
@@ -748,6 +763,7 @@ CREATE TABLE StationMagnitude (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX StationMagnitude__parent_oid ON StationMagnitude(_parent_oid);
 CREATE INDEX StationMagnitude_amplitudeID ON StationMagnitude(amplitudeID);
 
 CREATE TRIGGER StationMagnitudeUpdate UPDATE ON StationMagnitude
@@ -810,6 +826,7 @@ CREATE TABLE Pick (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Pick__parent_oid ON Pick(_parent_oid);
 CREATE INDEX Pick_time_value ON Pick(time_value);
 CREATE INDEX Pick_time_value_ms ON Pick(time_value_ms);
 
@@ -833,6 +850,7 @@ CREATE TABLE OriginReference (
 	UNIQUE(_parent_oid,originID)
 );
 
+CREATE INDEX OriginReference__parent_oid ON OriginReference(_parent_oid);
 CREATE INDEX OriginReference_originID ON OriginReference(originID);
 
 CREATE TRIGGER OriginReferenceUpdate UPDATE ON OriginReference
@@ -855,6 +873,7 @@ CREATE TABLE FocalMechanismReference (
 	UNIQUE(_parent_oid,focalMechanismID)
 );
 
+CREATE INDEX FocalMechanismReference__parent_oid ON FocalMechanismReference(_parent_oid);
 CREATE INDEX FocalMechanismReference_focalMechanismID ON FocalMechanismReference(focalMechanismID);
 
 CREATE TRIGGER FocalMechanismReferenceUpdate UPDATE ON FocalMechanismReference
@@ -890,6 +909,7 @@ CREATE TABLE Event (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Event__parent_oid ON Event(_parent_oid);
 CREATE INDEX Event_preferredOriginID ON Event(preferredOriginID);
 CREATE INDEX Event_preferredMagnitudeID ON Event(preferredMagnitudeID);
 CREATE INDEX Event_preferredFocalMechanismID ON Event(preferredFocalMechanismID);
@@ -938,6 +958,7 @@ CREATE TABLE Arrival (
 	UNIQUE(_parent_oid,pickID)
 );
 
+CREATE INDEX Arrival__parent_oid ON Arrival(_parent_oid);
 CREATE INDEX Arrival_pickID ON Arrival(pickID);
 
 CREATE TRIGGER ArrivalUpdate UPDATE ON Arrival
@@ -1025,6 +1046,7 @@ CREATE TABLE Origin (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Origin__parent_oid ON Origin(_parent_oid);
 CREATE INDEX Origin_time_value ON Origin(time_value);
 CREATE INDEX Origin_time_value_ms ON Origin(time_value_ms);
 
@@ -1048,6 +1070,7 @@ CREATE TABLE Parameter (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX Parameter__parent_oid ON Parameter(_parent_oid);
 
 CREATE TRIGGER ParameterUpdate UPDATE ON Parameter
 BEGIN
@@ -1071,6 +1094,7 @@ CREATE TABLE ParameterSet (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX ParameterSet__parent_oid ON ParameterSet(_parent_oid);
 CREATE INDEX ParameterSet_baseID ON ParameterSet(baseID);
 
 CREATE TRIGGER ParameterSetUpdate UPDATE ON ParameterSet
@@ -1095,6 +1119,7 @@ CREATE TABLE Setup (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX Setup__parent_oid ON Setup(_parent_oid);
 CREATE INDEX Setup_parameterSetID ON Setup(parameterSetID);
 
 CREATE TRIGGER SetupUpdate UPDATE ON Setup
@@ -1119,6 +1144,7 @@ CREATE TABLE ConfigStation (
 	UNIQUE(_parent_oid,networkCode,stationCode)
 );
 
+CREATE INDEX ConfigStation__parent_oid ON ConfigStation(_parent_oid);
 
 CREATE TRIGGER ConfigStationUpdate UPDATE ON ConfigStation
 BEGIN
@@ -1141,6 +1167,7 @@ CREATE TABLE ConfigModule (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX ConfigModule__parent_oid ON ConfigModule(_parent_oid);
 CREATE INDEX ConfigModule_parameterSetID ON ConfigModule(parameterSetID);
 
 CREATE TRIGGER ConfigModuleUpdate UPDATE ON ConfigModule
@@ -1175,6 +1202,7 @@ CREATE TABLE QCLog (
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
 );
 
+CREATE INDEX QCLog__parent_oid ON QCLog(_parent_oid);
 
 CREATE TRIGGER QCLogUpdate UPDATE ON QCLog
 BEGIN
@@ -1213,6 +1241,7 @@ CREATE TABLE WaveformQuality (
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,type,parameter)
 );
 
+CREATE INDEX WaveformQuality__parent_oid ON WaveformQuality(_parent_oid);
 CREATE INDEX WaveformQuality_start ON WaveformQuality(start);
 CREATE INDEX WaveformQuality_start_ms ON WaveformQuality(start_ms);
 CREATE INDEX WaveformQuality_end ON WaveformQuality(end);
@@ -1249,6 +1278,7 @@ CREATE TABLE Outage (
 	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,start,start_ms)
 );
 
+CREATE INDEX Outage__parent_oid ON Outage(_parent_oid);
 
 CREATE TRIGGER OutageUpdate UPDATE ON Outage
 BEGIN
@@ -1270,6 +1300,7 @@ CREATE TABLE StationReference (
 	UNIQUE(_parent_oid,stationID)
 );
 
+CREATE INDEX StationReference__parent_oid ON StationReference(_parent_oid);
 CREATE INDEX StationReference_stationID ON StationReference(stationID);
 
 CREATE TRIGGER StationReferenceUpdate UPDATE ON StationReference
@@ -1299,6 +1330,7 @@ CREATE TABLE StationGroup (
 	UNIQUE(_parent_oid,code)
 );
 
+CREATE INDEX StationGroup__parent_oid ON StationGroup(_parent_oid);
 
 CREATE TRIGGER StationGroupUpdate UPDATE ON StationGroup
 BEGIN
@@ -1327,6 +1359,7 @@ CREATE TABLE AuxSource (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX AuxSource__parent_oid ON AuxSource(_parent_oid);
 
 CREATE TRIGGER AuxSourceUpdate UPDATE ON AuxSource
 BEGIN
@@ -1353,6 +1386,7 @@ CREATE TABLE AuxDevice (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX AuxDevice__parent_oid ON AuxDevice(_parent_oid);
 
 CREATE TRIGGER AuxDeviceUpdate UPDATE ON AuxDevice
 BEGIN
@@ -1381,6 +1415,7 @@ CREATE TABLE SensorCalibration (
 	UNIQUE(_parent_oid,serialNumber,channel,start)
 );
 
+CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
 
 CREATE TRIGGER SensorCalibrationUpdate UPDATE ON SensorCalibration
 BEGIN
@@ -1412,6 +1447,7 @@ CREATE TABLE Sensor (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX Sensor__parent_oid ON Sensor(_parent_oid);
 
 CREATE TRIGGER SensorUpdate UPDATE ON Sensor
 BEGIN
@@ -1446,6 +1482,7 @@ CREATE TABLE ResponsePAZ (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX ResponsePAZ__parent_oid ON ResponsePAZ(_parent_oid);
 
 CREATE TRIGGER ResponsePAZUpdate UPDATE ON ResponsePAZ
 BEGIN
@@ -1479,6 +1516,7 @@ CREATE TABLE ResponsePolynomial (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 
 CREATE TRIGGER ResponsePolynomialUpdate UPDATE ON ResponsePolynomial
 BEGIN
@@ -1507,6 +1545,7 @@ CREATE TABLE DataloggerCalibration (
 	UNIQUE(_parent_oid,serialNumber,channel,start)
 );
 
+CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
 
 CREATE TRIGGER DataloggerCalibrationUpdate UPDATE ON DataloggerCalibration
 BEGIN
@@ -1533,6 +1572,7 @@ CREATE TABLE Decimation (
 	UNIQUE(_parent_oid,sampleRateNumerator,sampleRateDenominator)
 );
 
+CREATE INDEX Decimation__parent_oid ON Decimation(_parent_oid);
 
 CREATE TRIGGER DecimationUpdate UPDATE ON Decimation
 BEGIN
@@ -1566,6 +1606,7 @@ CREATE TABLE Datalogger (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 
 CREATE TRIGGER DataloggerUpdate UPDATE ON Datalogger
 BEGIN
@@ -1597,6 +1638,7 @@ CREATE TABLE ResponseFIR (
 	UNIQUE(_parent_oid,name)
 );
 
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
 
 CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
 BEGIN
@@ -1627,6 +1669,7 @@ CREATE TABLE AuxStream (
 	UNIQUE(_parent_oid,code,start)
 );
 
+CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
 
 CREATE TRIGGER AuxStreamUpdate UPDATE ON AuxStream
 BEGIN
@@ -1669,6 +1712,7 @@ CREATE TABLE Stream (
 	UNIQUE(_parent_oid,code,start)
 );
 
+CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
 
 CREATE TRIGGER StreamUpdate UPDATE ON Stream
 BEGIN
@@ -1695,6 +1739,7 @@ CREATE TABLE SensorLocation (
 	UNIQUE(_parent_oid,code,start)
 );
 
+CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
 
 CREATE TRIGGER SensorLocationUpdate UPDATE ON SensorLocation
 BEGIN
@@ -1732,6 +1777,7 @@ CREATE TABLE Station (
 	UNIQUE(_parent_oid,code,start)
 );
 
+CREATE INDEX Station__parent_oid ON Station(_parent_oid);
 
 CREATE TRIGGER StationUpdate UPDATE ON Station
 BEGIN
@@ -1765,6 +1811,7 @@ CREATE TABLE Network (
 	UNIQUE(_parent_oid,code,start)
 );
 
+CREATE INDEX Network__parent_oid ON Network(_parent_oid);
 
 CREATE TRIGGER NetworkUpdate UPDATE ON Network
 BEGIN
@@ -1789,6 +1836,7 @@ CREATE TABLE RouteArclink (
 	UNIQUE(_parent_oid,address,start)
 );
 
+CREATE INDEX RouteArclink__parent_oid ON RouteArclink(_parent_oid);
 
 CREATE TRIGGER RouteArclinkUpdate UPDATE ON RouteArclink
 BEGIN
@@ -1811,6 +1859,7 @@ CREATE TABLE RouteSeedlink (
 	UNIQUE(_parent_oid,address)
 );
 
+CREATE INDEX RouteSeedlink__parent_oid ON RouteSeedlink(_parent_oid);
 
 CREATE TRIGGER RouteSeedlinkUpdate UPDATE ON RouteSeedlink
 BEGIN
@@ -1835,6 +1884,7 @@ CREATE TABLE Route (
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode)
 );
 
+CREATE INDEX Route__parent_oid ON Route(_parent_oid);
 
 CREATE TRIGGER RouteUpdate UPDATE ON Route
 BEGIN
@@ -1862,6 +1912,7 @@ CREATE TABLE Access (
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode,user,start)
 );
 
+CREATE INDEX Access__parent_oid ON Access(_parent_oid);
 
 CREATE TRIGGER AccessUpdate UPDATE ON Access
 BEGIN
@@ -1887,6 +1938,7 @@ CREATE TABLE JournalEntry (
 	  ON DELETE CASCADE
 );
 
+CREATE INDEX JournalEntry__parent_oid ON JournalEntry(_parent_oid);
 CREATE INDEX JournalEntry_objectID ON JournalEntry(objectID);
 
 CREATE TRIGGER JournalEntryUpdate UPDATE ON JournalEntry
@@ -1911,6 +1963,7 @@ CREATE TABLE ArclinkUser (
 	UNIQUE(_parent_oid,name,email)
 );
 
+CREATE INDEX ArclinkUser__parent_oid ON ArclinkUser(_parent_oid);
 
 CREATE TRIGGER ArclinkUserUpdate UPDATE ON ArclinkUser
 BEGIN
@@ -1936,6 +1989,7 @@ CREATE TABLE ArclinkStatusLine (
 	UNIQUE(_parent_oid,volumeID,type,status)
 );
 
+CREATE INDEX ArclinkStatusLine__parent_oid ON ArclinkStatusLine(_parent_oid);
 
 CREATE TRIGGER ArclinkStatusLineUpdate UPDATE ON ArclinkStatusLine
 BEGIN
@@ -1974,6 +2028,7 @@ CREATE TABLE ArclinkRequestLine (
 	UNIQUE(_parent_oid,start,start_ms,end,end_ms,streamID_networkCode,streamID_stationCode,streamID_locationCode,streamID_channelCode,streamID_resourceURI)
 );
 
+CREATE INDEX ArclinkRequestLine__parent_oid ON ArclinkRequestLine(_parent_oid);
 
 CREATE TRIGGER ArclinkRequestLineUpdate UPDATE ON ArclinkRequestLine
 BEGIN
@@ -2010,6 +2065,7 @@ CREATE TABLE ArclinkRequest (
 	UNIQUE(_parent_oid,created,created_ms,requestID,userID)
 );
 
+CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 
 CREATE TRIGGER ArclinkRequestUpdate UPDATE ON ArclinkRequest
 BEGIN

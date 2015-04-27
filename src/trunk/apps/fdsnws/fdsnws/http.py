@@ -42,8 +42,12 @@ Service Version:
 		if ro is not None and code == http.NO_CONTENT:
 			code = ro.noData
 
-		request.setHeader('Content-Type', 'text/plain')
+		# status code 204 requires no message body
 		request.setResponseCode(code)
+		if code == http.NO_CONTENT:
+			return None
+
+		request.setHeader('Content-Type', 'text/plain')
 
 		reference = "%s/" % (request.path.rpartition('/')[0])
 

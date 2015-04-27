@@ -16,6 +16,9 @@
 #include <iostream>
 
 
+#ifdef WITH_SVN_REVISION
+extern SC_SYSTEM_CORE_API const char* git_revision();
+#endif
 #ifdef WITH_BUILD_INFOS
 extern SC_SYSTEM_CORE_API const char* build_system();
 extern SC_SYSTEM_CORE_API const char* compiler_version();
@@ -31,7 +34,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-	_text = "Jakarta 2014.269";
+	_text = "Jakarta 2014.318";
 }
 
 

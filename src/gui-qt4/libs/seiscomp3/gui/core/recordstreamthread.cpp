@@ -263,7 +263,10 @@ void RecordStreamThread::run()
 			}
 		}
 	}
-	catch ( std::exception& e ) {
+	catch ( Core::OperationInterrupted &e ) {
+		SEISCOMP_INFO("[rthread %d] acquisition exception: %s", ID(), e.what());
+	}
+	catch ( std::exception &e ) {
 		SEISCOMP_ERROR("[rthread %d] acquisition exception: %s", ID(), e.what());
 		handleError(QString(e.what()));
 	}

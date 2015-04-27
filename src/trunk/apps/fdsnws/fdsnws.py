@@ -126,8 +126,10 @@ class FDSNWS(Application):
 		self._serveEvent        = True
 		self._serveStation      = True
 
-		self._hideAuthor        = False
-		self._evaluationMode    = None
+		self._hideAuthor            = False
+		self._evaluationMode        = None
+		self._eventTypeWhitelist    = None
+		self._eventTypeBlacklist    = None
 
 		self._accessLog     = None
 		self._inv           = None
@@ -207,6 +209,16 @@ class FDSNWS(Application):
 				print >> sys.stderr, "invalid evaluation mode string: %s" % name
 				return False
 		except: pass
+		try:
+			strings = cfg.getStrings('eventType.whitelist')
+			if len(strings) > 1 or len(strings[0]):
+				self._eventTypeWhitelist = [ s.lower() for s in strings ]
+		except: pass
+		try:
+			strings = cfg.getStrings('eventType.blacklist')
+			if len(strings) > 0 or len(strings[0]):
+				self._eventTypeBlacklist = [ s.lower() for s in strings ]
+		except: pass
 
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = cfg.getString('fileNamePrefix')
@@ -232,6 +244,12 @@ class FDSNWS(Application):
 		modeStr = None
 		if self._evaluationMode is not None:
 			modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
+		whitelistStr = "<None>"
+		if self._eventTypeWhitelist is not None:
+			whitelistStr = ", ".join(self._eventTypeWhitelist)
+		blacklistStr = "<None>"
+		if self._eventTypeBlacklist is not None:
+			blacklistStr = ", ".join(self._eventTypeBlacklist)
 		Logging.notice("\n" \
 		               "configuration read:\n" \
 		               "  serve\n" \
@@ -248,12 +266,16 @@ class FDSNWS(Application):
 		               "  samples (M)     : %s\n" \
 		               "  allowRestricted : %s\n" \
 		               "  hideAuthor      : %s\n" \
-		               "  evaluationMode  : %s\n" % (
+		               "  evaluationMode  : %s\n" \
+		               "  eventType\n" \
+		               "    whitelist     : %s\n" \
+		               "    blacklist     : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted, self._hideAuthor, modeStr))
+		               self._allowRestricted, self._hideAuthor, modeStr,
+		               whitelistStr, blacklistStr))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
@@ -316,7 +338,10 @@ class FDSNWS(Application):
 			event1 = DirectoryResource(os.path.join(shareDir, 'event.html'))
 			event.putChild('1', event1)
 
-			event1.putChild('query', FDSNEvent(self._hideAuthor, self._evaluationMode))
+			event1.putChild('query', FDSNEvent(self._hideAuthor,
+			                                   self._evaluationMode,
+			                                   self._eventTypeWhitelist,
+			                                   self._eventTypeBlacklist))
 			fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('catalogs', fileRes)

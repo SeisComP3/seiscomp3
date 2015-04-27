@@ -19,8 +19,8 @@ class RequestOptions:
 	# since we have to ensure that no invalid character is present we use the
 	# search() method in combination with a negated pattern instead
 	FloatChars         = re.compile(r'[^-0-9.]').search
-	ChannelChars       = re.compile(r'[^A-Z0-9*?]').search
-	ChannelExtChars    = re.compile(r'[^A-Z0-9*?+\-_]').search
+	ChannelChars       = re.compile(r'[^A-Za-z0-9*?]').search
+	ChannelExtChars    = re.compile(r'[^A-Za-z0-9*?+\-_]').search
 	TimeFormats        = [ '%FT%T.%f',    # YYYY-MM-DDThh:mm:ss.ssssss
 	                       '%Y-%jT%T.%f', # YYYY-DDDThh:mm:ss.ssssss
 	                       '%FT%T',       # YYYY-MM-DDThh:mm:ss
@@ -479,7 +479,7 @@ class RequestOptions:
 		for vList in self.getValues(keys):
 			if values is None:
 				values = []
-			for v in vList.upper().split(','):
+			for v in vList.split(','):
 				v = v.strip()
 				if allowEmpty and (v == '--' or len(v) == 0):
 					values.append('--')
@@ -539,7 +539,7 @@ class RequestOptions:
 
 			else:
 				# stream parameters
-				toks = line.upper().split()
+				toks = line.split()
 				nToks = len(toks)
 				if nToks != 5 and nToks != 6:
 					raise ValueError, "invalid number of stream components " \

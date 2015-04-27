@@ -169,6 +169,15 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	connect(_ui.minimumLengthTimeEdit, SIGNAL(timeChanged(const QTime&)),
 	        this, SLOT(adjustLengthSlider(const QTime&)));
 
+	connect(_ui.slWaveformAlignment, SIGNAL(sliderMoved(int)),
+	        _ui.waveformAlignmentEdit, SLOT(setValue(int)));
+	connect(_ui.waveformAlignmentEdit, SIGNAL(valueChanged(int)),
+	        _ui.slWaveformAlignment, SLOT(setValue(int)));
+
+	connect(_ui.minimumLengthTimeEdit, SIGNAL(timeChanged(const QTime&)),
+	        this, SLOT(adjustLengthSlider(const QTime&)));
+
+
 	connect(_ui.slAmplitudePreOffset, SIGNAL(sliderMoved(int)),
 	        this, SLOT(adjustAmplitudePreTime(int)));
 
@@ -226,6 +235,7 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.cbHideStationsWithoutData->setChecked(_pickerConfig.hideStationsWithoutData);
 
 	_ui.cbShowCrossHair->setChecked(_pickerConfig.showCrossHair);
+	_ui.cbIgnoreUnconfiguredStations->setChecked(_pickerConfig.ignoreUnconfiguredStations);
 	_ui.cbAllComponents->setChecked(_pickerConfig.loadAllComponents);
 	_ui.cbLoadAllPicks->setChecked(_pickerConfig.loadAllPicks);
 	_ui.cbStrongMotion->setChecked(_pickerConfig.loadStrongMotionData);
@@ -242,6 +252,10 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.preTimeEdit->setTime(QTime().addSecs(_pickerConfig.preOffset.seconds()));
 	_ui.postTimeEdit->setTime(QTime().addSecs(_pickerConfig.postOffset.seconds()));
 	_ui.minimumLengthTimeEdit->setTime(QTime().addSecs(_pickerConfig.minimumTimeWindow.seconds()));
+
+	_ui.slWaveformAlignment->setValue(_pickerConfig.alignmentPosition*100);
+	_ui.waveformAlignmentEdit->setValue(_pickerConfig.alignmentPosition*100);
+
 	_ui.editRecordSource->setText(_pickerConfig.recordURL);
 
 	_ui.preAmplitudeTimeEdit->setTime(QTime().addSecs(_amplitudeConfig.preOffset.seconds()));
@@ -477,6 +491,7 @@ PickerView::Config PickerSettings::pickerConfig() const {
 	_pickerConfig.recordURL = _ui.editRecordSource->text();
 
 	_pickerConfig.showCrossHair = _ui.cbShowCrossHair->isChecked();
+	_pickerConfig.ignoreUnconfiguredStations = _ui.cbIgnoreUnconfiguredStations->isChecked();
 	_pickerConfig.loadAllComponents = _ui.cbAllComponents->isChecked();
 	_pickerConfig.loadAllPicks = _ui.cbLoadAllPicks->isChecked();
 	_pickerConfig.loadStrongMotionData = _ui.cbStrongMotion->isChecked();
@@ -491,6 +506,12 @@ PickerView::Config PickerSettings::pickerConfig() const {
 	_pickerConfig.preOffset = Core::TimeSpan(QTime().secsTo(_ui.preTimeEdit->time()));
 	_pickerConfig.postOffset = Core::TimeSpan(QTime().secsTo(_ui.postTimeEdit->time()));
 	_pickerConfig.minimumTimeWindow = Core::TimeSpan(QTime().secsTo(_ui.minimumLengthTimeEdit->time()));
+
+	_pickerConfig.alignmentPosition = _ui.slWaveformAlignment->value()*0.01;
+	if ( _pickerConfig.alignmentPosition < 0 )
+		_pickerConfig.alignmentPosition = 0;
+	else if ( _pickerConfig.alignmentPosition > 1 )
+		_pickerConfig.alignmentPosition = 1;
 
 	_pickerConfig.defaultAddStationsDistance = _ui.spinAddStationsDistance->value();
 	_pickerConfig.hideStationsWithoutData = _ui.cbHideStationsWithoutData->isChecked();

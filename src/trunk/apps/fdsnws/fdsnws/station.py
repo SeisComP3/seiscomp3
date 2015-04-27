@@ -293,9 +293,8 @@ class FDSNStation(resource.Resource):
 			exp.setFormattedOutput(bool(ro.formatted))
 			d = deferToThread(self._processRequestExp, req, ro, exp)
 
-		# Process request in separate thread
-		d.addCallback(utils.onRequestServed, req)
-		d.addErrback(utils.onRequestError, req)
+		req.notifyFinish().addErrback(utils.onCancel, d)
+		d.addBoth(utils.onFinish, req)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
@@ -355,9 +354,11 @@ class FDSNStation(resource.Resource):
 
 		# Return 204 if no matching inventory was found
 		if newInv.networkCount() == 0:
-			utils.writeTS(req, HTTP.renderErrorPage(req, http.NO_CONTENT,
-			              "no matching inventory found", ro))
-			return False
+			msg = "no matching inventory found"
+			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			if data:
+				req.write(data)
+			return True
 
 		# Copy references (dataloggers, responses, sensors)
 		decCount, resCount = 0, 0
@@ -373,13 +374,9 @@ class FDSNStation(resource.Resource):
 				objCount += resCount + decCount + newInv.dataloggerCount() + \
 				            newInv.sensorCount()
 
-		if exp:
-			sink = utils.Sink(req)
-			if not exp.write(sink, newInv):
-				return False
-		else:
-			req.setHeader('Content-Type', 'text/plain')
-			raise ValueError, "TODO"
+		sink = utils.Sink(req)
+		if not exp.write(sink, newInv):
+			return False
 
 		Logging.notice("%s: returned %iNet, %iSta, %iLoc, %iCha, " \
 		               "%iDL, %iDec, %iSen, %iRes (total objects/bytes: " \
@@ -526,8 +523,10 @@ class FDSNStation(resource.Resource):
 
 		# Return 204 if no matching inventory was found
 		if lineCount == 0:
-			req.write(HTTP.renderErrorPage(req, http.NO_CONTENT,
-			          "no matching inventory found", ro))
+			msg = "no matching inventory found"
+			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
+			if data:
+				req.write(data)
 			return False
 
 

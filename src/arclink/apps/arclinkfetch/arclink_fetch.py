@@ -558,11 +558,11 @@ def _main(SSLpasswordDict, addr, request_format, data_format, label, resp_dict, 
             logs.warning(ln)
 
 ## Prepare to download
-    canJoin = True
+    canJoin = False
     volumecount = 0
     
-    if req_type == "WAVEFORM" and req_args.get("format") != "MSEED":
-        canJoin = False
+    if req_type == "WAVEFORM" and req_args.get("format") == "MSEED":
+        canJoin = True
 
     for req in req_ok:
         for vol in req.status().volume:

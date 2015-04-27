@@ -15,6 +15,7 @@
 
 #include <sstream>
 #include <cmath>
+#include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,6 +27,10 @@
 
 
 using namespace Seiscomp::Core;
+
+
+const double TimeSpan::MinTime = -(double)0x80000000;
+const double TimeSpan::MaxTime =  (double)0x7fffffff;
 
 
 /* We are linking against the multithreaded versions

@@ -596,6 +596,8 @@ class TimeSpan(_object):
     __del__ = lambda self : None;
 TimeSpan_swigregister = _Core.TimeSpan_swigregister
 TimeSpan_swigregister(TimeSpan)
+TimeSpan.MinTime = _Core.cvar.TimeSpan_MinTime
+TimeSpan.MaxTime = _Core.cvar.TimeSpan_MaxTime
 
 class Time(TimeSpan):
     __swig_setmethods__ = {}

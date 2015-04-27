@@ -2581,7 +2581,10 @@ class WoodAnderson(PolesAndZeros):
     __getattr__ = lambda self, name: _swig_getattr(self, WoodAnderson, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(Seiscomp::Math::SeismometerResponse::WoodAnderson self, Seiscomp::Math::GroundMotion input) -> WoodAnderson"""
+        """
+        __init__(Seiscomp::Math::SeismometerResponse::WoodAnderson self, Seiscomp::Math::GroundMotion input, Seiscomp::Math::SeismometerResponse::WoodAnderson::Config config=Seiscomp::Math::SeismometerResponse::WoodAnderson::Config()) -> WoodAnderson
+        __init__(Seiscomp::Math::SeismometerResponse::WoodAnderson self, Seiscomp::Math::GroundMotion input) -> WoodAnderson
+        """
         this = _Math.new_WoodAnderson(*args)
         try: self.this.append(this)
         except: self.this = this

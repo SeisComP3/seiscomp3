@@ -33,7 +33,7 @@ TimeScale::TimeScale(QWidget *parent, Qt::WindowFlags f, Position pos)
  : Ruler(parent, f, pos) {
 	_showAbsoluteValues = false;
 	_showAbsoluteDate= false;
-	setLimits(Seiscomp::Core::MinTime, Seiscomp::Core::MaxTime, 0.001, 315360000.0);
+	setLimits(Seiscomp::Core::TimeSpan::MinTime, Seiscomp::Core::TimeSpan::MaxTime, 0.001, 315360000.0);
 }
 
 

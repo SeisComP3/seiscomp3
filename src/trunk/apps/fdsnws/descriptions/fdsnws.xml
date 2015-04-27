@@ -110,6 +110,14 @@
 				If set the event service will only return events having a preferred origin with a matching evaluationMode property
 				</description>
 			</parameter>
+			<group name="eventType">
+				<parameter name="whitelist" type="list:string">
+					<description>List of enabled event types</description>
+				</parameter>
+				<parameter name="blacklist" type="list:string">
+					<description>List of disabled event types</description>
+				</parameter>
+			</group>
 			<parameter name="serveDataSelect" type="boolean" default="true">
 				<description>
 				Enables/disables the DataSelect service.
