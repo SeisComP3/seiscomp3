@@ -73,7 +73,7 @@ class NLLocator : public Seiscomp::Seismology::LocatorInterface {
 		        throw(Core::GeneralException);
 		virtual DataModel::Origin* locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  Core::Time &initTime)
+		                                  const Core::Time &initTime)
 		        throw(Core::GeneralException);
 		virtual DataModel::Origin* relocate(const DataModel::Origin* origin)
 		        throw(Core::GeneralException);

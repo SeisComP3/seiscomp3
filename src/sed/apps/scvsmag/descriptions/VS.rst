@@ -147,7 +147,7 @@ VS License
 
 The SeisComp3 VS modules are free and open source, and are part of the SeisComp3
 distribution from Seattle v2013.200. They are distributed under the `'SED Public
-License for SeisComP3 Contributions' <see http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt>`_.
+License for SeisComP3 Contributions' <http://www.seismo.ethz.ch/static/seiscomp_contrib/license.txt>`_.
 
 
 References

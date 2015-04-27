@@ -50,6 +50,9 @@ class Reloc : public Client::Application {
 			// set up 1 hour of pick caching
 			// otherwise the picks will be read from the database
 			_cache.setTimeSpan(Core::TimeSpan(60*60));
+
+			_useWeight = false;
+			_originEvaluationMode = "AUTOMATIC";
 		}
 
 
@@ -62,6 +65,12 @@ class Reloc : public Client::Application {
 			commandline().addOption("Input", "origin-id,O", "reprocess the origin and send a message", &_originIDs);
 			commandline().addOption("Input", "locator", "the locator type to use", &_locatorType, false);
 			commandline().addOption("Input", "profile", "the locator profile to use", &_locatorProfile, false);
+			commandline().addOption("Input", "use-weight", "use current picks weight", &_useWeight, true);
+			commandline().addOption("Input", "evaluation-mode", "set origin evaluation mode", &_originEvaluationMode, true);
+			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins. "
+			                                       "This option should not be mixed with --dump.", &_epFile);
+			commandline().addOption("Input", "replace", "Used in combination with --ep and defines if origins are to be replaced "
+			                                            "by their relocated counterparts or just added to the output.");
 		}
 
 
@@ -81,6 +90,12 @@ class Reloc : public Client::Application {
 
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
 			catch ( ... ) {}
+
+			if ( !_epFile.empty() )
+				setMessagingEnabled(false);
+
+			if ( !isInventoryDatabaseEnabled() )
+				setDatabaseEnabled(false, false);
 
 			return true;
 		}
@@ -104,6 +119,11 @@ class Reloc : public Client::Application {
 
 			if ( !_locatorProfile.empty() )
 				_locator->setProfile(_locatorProfile);
+
+			if ( _originEvaluationMode != "AUTOMATIC" && _originEvaluationMode != "MANUAL") {
+				SEISCOMP_ERROR("evaluation-mode must be (AUTOMATIC|MANUAL)");
+				return false;
+			}
 
 			return true;
 		}
@@ -151,7 +171,53 @@ class Reloc : public Client::Application {
 						std::cerr << "ERROR: sending of processed origin failed" << std::endl;
 						continue;
 					}
+
+					std::cerr << "INFO: new Origin created OriginID=" << newOrg.get()->publicID().c_str() << std::endl;
 				}
+
+				return true;
+			}
+			else if ( !_epFile.empty() ) {
+				// Disable database
+				setDatabase(NULL);
+
+				IO::XMLArchive ar;
+				if ( !ar.open(_epFile.c_str()) ) {
+					SEISCOMP_ERROR("Failed to open %s", _epFile.c_str());
+					return false;
+				}
+
+				EventParametersPtr ep;
+				ar >> ep;
+				ar.close();
+
+				if ( !ep ) {
+					SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
+					return false;
+				}
+
+				int numberOfOrigins = (int)ep->originCount();
+				bool replace = commandline().hasOption("replace");
+
+				for ( int i = 0; i < numberOfOrigins; ++i ) {
+					OriginPtr org = ep->origin(i);
+					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+					org = process(org.get());
+					if ( org ) {
+						if ( replace ) {
+							ep->removeOrigin(i);
+							--i;
+							--numberOfOrigins;
+						}
+
+						ep->add(org.get());
+					}
+				}
+
+				ar.create("-");
+				ar.setFormattedOutput(true);
+				ar << ep;
+				ar.close();
 
 				return true;
 			}
@@ -267,8 +333,10 @@ class Reloc : public Client::Application {
 				PickPtr pick = _cache.get<Pick>(ar->pickID());
 				if ( !pick ) continue;
 
-				// Set weight to 1
-				ar->setWeight(1.0);
+				if ( !_useWeight ) {
+					// Set weight to 1
+					ar->setWeight(1.0);
+				}
 
 				// Use all picks regardless of weight
 				picks.push_back(LocatorInterface::WeightedPick(pick,1));
@@ -276,7 +344,11 @@ class Reloc : public Client::Application {
 
 			OriginPtr newOrg = _locator->relocate(org);
 			if ( newOrg ) {
-				newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
+				if ( _originEvaluationMode == "AUTOMATIC" )
+					newOrg->setEvaluationMode(EvaluationMode(AUTOMATIC));
+				else
+					newOrg->setEvaluationMode(EvaluationMode(MANUAL));
+
 				CreationInfo *ci;
 
 				try {
@@ -349,6 +421,9 @@ class Reloc : public Client::Application {
 		PublicObjectTimeSpanBuffer _cache;
 		ObjectLog                 *_inputOrgs;
 		ObjectLog                 *_outputOrgs;
+		bool                       _useWeight;
+		std::string                _originEvaluationMode;
+		std::string                _epFile;
 };
 
 

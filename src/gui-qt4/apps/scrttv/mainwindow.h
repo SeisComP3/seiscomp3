@@ -52,13 +52,9 @@ class TraceView : public Seiscomp::Gui::RecordView {
 
 	public:
 		TraceView(const Seiscomp::Core::TimeSpan& span,
-		          QWidget *parent = 0, Qt::WFlags f = 0)
-		 : Seiscomp::Gui::RecordView(span, parent, f) {
-			_timeSpan = (double)span;
-		}
+		          QWidget *parent = 0, Qt::WFlags f = 0);
 
 		~TraceView();
-
 
 	public slots:
 		void setDefaultDisplay() {
@@ -68,7 +64,6 @@ class TraceView : public Seiscomp::Gui::RecordView {
 			setTimeRange(-_timeSpan,0);
 			setUpdatesEnabled(true);
 		}
-
 
 	private:
 		double _timeSpan;
@@ -137,7 +132,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		~MainWindow();
 
 	public:
-		void setFilterByName(const std::string &filter);
+		void setFiltersByName(const std::vector<std::string> &filters);
 
 		void setStartTime(const Seiscomp::Core::Time &t);
 		void setEndTime(const Seiscomp::Core::Time &t);
@@ -159,7 +154,8 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		void selectStreams();
 		void addTabulator();
 
-		void enableFiltering(bool enable);
+		void cycleFilters(bool);
+		void cycleFiltersReverse(bool);
 		void showScaledValues(bool enable);
 		void changeTraceState();
 
@@ -219,6 +215,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 
 	protected:
 		void toggledFullScreen(bool);
+		void applyFilter();
 
 
 	private:
@@ -278,6 +275,9 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		int  _rowSpacing;
 		bool _withFrames;
 		int  _frameMargin;
+
+		std::vector<std::string> _filters;
+		int _currentFilterIdx;
 
 		Seiscomp::Gui::QuestionBox _questionApplyChanges;
 

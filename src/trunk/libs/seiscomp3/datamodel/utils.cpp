@@ -636,6 +636,23 @@ void  DiffMerge::showLog(std::ostream &os, int padding, int indent,
 }
 
 
+bool DiffMerge::compareNonArrayProperty(const Core::BaseObject *o1,
+                                        const Core::BaseObject *o2) {
+	if ( o1 == o2 ) return true;
+
+	// Different types are not comparable
+	if ( (o1->meta() == NULL) || (o1->meta() != o2->meta()) ) return false;
+
+	for ( size_t i = 0; i < o1->meta()->propertyCount(); ++i ) {
+		const Core::MetaProperty* prop = o1->meta()->property(i);
+		if ( !compareNonArrayProperty(prop, o1, o2) )
+			return false;
+	}
+
+	return true;
+}
+
+
 /**
  * Compares the value of a non array property.
  * @param prop property to compare
@@ -644,7 +661,9 @@ void  DiffMerge::showLog(std::ostream &os, int padding, int indent,
  * @return true if both values are equal or empty, else false
  * @throw TypeException if the property to compare is of class or array type
  */
-bool DiffMerge::compareNonArrayProperty(const Core::MetaProperty* prop, const Object *o1, const Object *o2) {
+bool DiffMerge::compareNonArrayProperty(const Core::MetaProperty *prop,
+                                        const Core::BaseObject *o1,
+                                        const Core::BaseObject *o2) {
 	if ( prop->isArray() )
 		throw Core::TypeException("Expected non array property");
 
@@ -656,7 +675,7 @@ bool DiffMerge::compareNonArrayProperty(const Core::MetaProperty* prop, const Ob
 	Core::MetaValue v_o2;
 	try { v_o1 = prop->read(o1); } catch ( ... ) { isSet_o1 = false; }
 	try { v_o2 = prop->read(o2); } catch ( ... ) { isSet_o2 = false; }
-	
+
 	if ( !isSet_o1 && !isSet_o2 ) {
 		if (_currentNode) _currentNode->add(prop->name(), true, "both unset");
 		return true;
@@ -699,27 +718,13 @@ bool DiffMerge::compareNonArrayProperty(const Core::MetaProperty* prop, const Ob
 		return boost::any_cast<bool>(v_o1) == boost::any_cast<bool>(v_o2);
 	}
 
+	if ( !prop->isClass() )
+		throw Core::TypeException("Unexpected type: " + prop->type());
+
 	Core::BaseObject* bo1 = boost::any_cast<Core::BaseObject*>(v_o1);
 	Core::BaseObject* bo2 = boost::any_cast<Core::BaseObject*>(v_o2);
-	if ( prop->type() == "ComplexArray") {
-		ComplexArray* ca1 = ComplexArray::Cast(bo1);
-		ComplexArray* ca2 = ComplexArray::Cast(bo2);
-		if (_currentNode) _currentNode->add<ComplexArray>(prop->name(), *ca1, *ca2);
-		return ca1->equal(*ca2);
-	}
-	if ( prop->type() == "RealArray") {
-		RealArray* ra1 = RealArray::Cast(bo1);
-		RealArray* ra2 = RealArray::Cast(bo2);
-		return ra1->equal(*ra2);
-	}
-	if ( prop->type() == "Blob") {
-		Blob* b1 = Blob::Cast(bo1);
-		Blob* b2 = Blob::Cast(bo2);
-		if (_currentNode) _currentNode->add<Blob>(prop->name(), *b1, *b2);
-		return b1->equal(*b2);
-	}
 
-	throw Core::TypeException("Unexpected type: " + prop->type());
+	return compareNonArrayProperty(bo1, bo2);
 }
 
 

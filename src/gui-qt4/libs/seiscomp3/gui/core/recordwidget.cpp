@@ -3443,7 +3443,7 @@ void RecordWidget::ensureVisibility(const Core::Time &time,
 void RecordWidget::fed(int slot, const Seiscomp::Record *rec) {
 	bool newlyCreated = false;
 
-	if ( slot >= _streams.size() ) return;
+	if ( (slot < 0) || (slot >= _streams.size()) ) return;
 
 	Stream *s = _streams[slot];
 

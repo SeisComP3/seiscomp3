@@ -209,7 +209,7 @@ class TraceDecorator : public Gui::RecordWidgetDecorator {
 
 TraceViewTabBar::TraceViewTabBar(QWidget *parent) : QTabBar(parent) {}
 
-	
+
 int TraceViewTabBar::findIndex(const QPoint& p) {
 	for ( int i = 0; i < count(); ++i )
 		if ( tabRect(i).contains(p) )
@@ -261,6 +261,12 @@ void TraceViewTabBar::textChanged() {
 	editor->close();
 }
 
+
+TraceView::TraceView(const Seiscomp::Core::TimeSpan& span,
+                     QWidget *parent, Qt::WFlags f)
+: Seiscomp::Gui::RecordView(span, parent, f) {
+	_timeSpan = (double)span;
+}
 
 TraceView::~TraceView() {}
 
@@ -376,6 +382,7 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	_bufferSize = 1800;
 	_recordStreamThread = NULL;
 	_tabWidget = NULL;
+	_currentFilterIdx = -1;
 
 	_statusBarFile   = new QLabel;
 	_statusBarFilter = new QLabel(" Filter OFF ");
@@ -410,7 +417,8 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	connect(_ui.actionOpenSeedLink, SIGNAL(triggered()), this, SLOT(openAcquisition()));
 	connect(_ui.actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
-	connect(_ui.actionToggleFilter, SIGNAL(toggled(bool)), this, SLOT(enableFiltering(bool)));
+	connect(_ui.actionCycleFilters, SIGNAL(triggered(bool)), this, SLOT(cycleFilters(bool)));
+	connect(_ui.actionCycleFiltersReverse, SIGNAL(triggered(bool)), this, SLOT(cycleFiltersReverse(bool)));
 	connect(_ui.actionApplyGain, SIGNAL(toggled(bool)), this, SLOT(showScaledValues(bool)));
 	connect(_ui.actionRestoreConfigOrder, SIGNAL(triggered()), this, SLOT(sortByConfig()));
 	connect(_ui.actionSortDistance, SIGNAL(triggered()), this, SLOT(sortByDistance()));
@@ -660,9 +668,8 @@ void MainWindow::setBufferSize(size_t bs) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainWindow::setFilterByName(const std::string &filter) {
-	foreach ( TraceView* view, _traceViews )
-		view->setFilterByName(filter.c_str());
+void MainWindow::setFiltersByName(const std::vector<std::string> &filters) {
+	_filters = filters;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -860,7 +867,6 @@ TraceView* MainWindow::createTraceView() {
 	connect(traceView, SIGNAL(filterChanged(const QString&)),
 	        this, SLOT(filterChanged(const QString&)));
 
-	connect(_ui.actionToggleFilter, SIGNAL(toggled(bool)), traceView, SLOT(enableFilter(bool)));
 	connect(_ui.actionToggleAllRecords, SIGNAL(toggled(bool)), traceView, SLOT(showAllRecords(bool)));
 
 	connect(_ui.actionHorZoomIn, SIGNAL(triggered()), traceView, SLOT(horizontalZoomIn()));
@@ -1708,9 +1714,11 @@ void MainWindow::addTabulator() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainWindow::filterChanged(const QString&) {
-	enableFiltering(true);
-	_ui.actionToggleFilter->setChecked(true);
+void MainWindow::filterChanged(const QString &s) {
+	_filters.clear();
+	_filters.push_back(s.toStdString());
+	_currentFilterIdx = 0;
+	_statusBarFilter->setText(QString(" Filter ON : %1").arg(_filters[_currentFilterIdx].c_str()));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1845,11 +1853,55 @@ void MainWindow::checkTraceDelay() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainWindow::enableFiltering(bool enable) {
-	if ( enable )
-		_statusBarFilter->setText(" Filter ON ");
-	else
+void MainWindow::cycleFilters(bool) {
+	if ( _currentFilterIdx < 0 ) {
+		if ( !_filters.empty() )
+			_currentFilterIdx = 0;
+	}
+	else {
+		++_currentFilterIdx;
+		if ( _currentFilterIdx >= (int)_filters.size() )
+			_currentFilterIdx = -1;
+	}
+
+	applyFilter();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainWindow::cycleFiltersReverse(bool) {
+	if ( _currentFilterIdx < 0 ) {
+		if ( !_filters.empty() )
+			_currentFilterIdx = _filters.size()-1;
+	}
+	else {
+		--_currentFilterIdx;
+		if ( _currentFilterIdx < 0 )
+			_currentFilterIdx = -1;
+	}
+
+	applyFilter();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainWindow::applyFilter() {
+	if ( _currentFilterIdx >= 0 ) {
+		TRACEVIEWS(setFilterByName(_filters[_currentFilterIdx].c_str()));
+		TRACEVIEWS(enableFilter(true));
+		_statusBarFilter->setText(QString(" Filter ON : %1").arg(_filters[_currentFilterIdx].c_str()));
+	}
+	else {
+		TRACEVIEWS(setFilter(NULL));
+		TRACEVIEWS(enableFilter(false));
 		_statusBarFilter->setText(" Filter OFF ");
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

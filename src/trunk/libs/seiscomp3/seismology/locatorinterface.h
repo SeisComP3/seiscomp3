@@ -119,7 +119,7 @@ class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 		virtual DataModel::Origin *locate(PickList& pickList) throw(Core::GeneralException) = 0;
 		virtual DataModel::Origin *locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  Core::Time &initTime) throw(Core::GeneralException) = 0;
+		                                  const Core::Time &initTime) throw(Core::GeneralException) = 0;
 		virtual DataModel::Origin *relocate(const DataModel::Origin *origin) throw(Core::GeneralException) = 0;
 
 		//! Returns a string (optional) valid for the last

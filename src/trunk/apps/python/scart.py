@@ -12,7 +12,8 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import glob, re, time, sys, os, seiscomp3.IO, seiscomp3.Logging
+import glob, re, time, sys, os
+import seiscomp3.IO, seiscomp3.Logging
 from   getopt import getopt, GetoptError
 
 
@@ -25,64 +26,90 @@ class Archive:
 
   def iterators(self, begin, end, net, sta, loc, cha):
     t = time.gmtime(begin.seconds())
-    if net == "*":
-      netdir = self.archiveDirectory + str(t[0]) + "/"
-      files = os.listdir(netdir)
-      its = []
-      for file in files:
-        if os.path.isdir(netdir + file) == False: continue
-        tmp_its = self.iterators(begin, end, file, sta, loc, cha)
-        for it in tmp_its:
-          its.append(it)
+    t_end = time.gmtime(end.seconds())
 
-      return its
+    start_year = t[0]
 
-    if sta == "*":
-      stadir = self.archiveDirectory + str(t[0]) + "/" + net + "/"
-      files = os.listdir(stadir)
-      its = []
-      for file in files:
-        if os.path.isdir(stadir + file) == False: continue
-        tmp_its = self.iterators(begin, end, net, file, loc, cha)
-        for it in tmp_its:
-          its.append(it)
+    for year in range(start_year,t_end[0]+1):
+      if year > start_year:
+        begin = seiscomp3.Core.Time.FromYearDay(year,1)
+        t = time.gmtime(begin.seconds())
 
-      return its
+      if net == "*":
+        netdir = self.archiveDirectory + str(year) + "/"
+        try: files = os.listdir(netdir)
+        except: continue
 
-    # Check if cha contains a regular expression or not
-    mr = re.match("[A-Z|a-z|0-9]*", cha)
-    if (mr and mr.group() != cha) or cha == "*":
-      cha = cha.replace('?', '.')
-      stadir = self.archiveDirectory + str(t[0]) + "/" + net + "/" + sta + "/"
-      try: files = os.listdir(stadir)
-      except: return []
-      its = []
-      for file in files:
-        if os.path.isdir(stadir + file) == False: continue
-        part = file[:3]
-        if cha != "*":
-          mr = re.match(cha, part)
-          if not mr or mr.group() != part:
-            continue
+        its = []
+        for file in files:
+          if os.path.isdir(netdir + file) == False: continue
+          tmp_its = self.iterators(begin, end, file, sta, loc, cha)
+          for it in tmp_its:
+            its.append(it)
 
-        tmp_its = self.iterators(begin, end, net, sta, loc, part)
-        for it in tmp_its:
-          its.append(it)
+        return its
 
-      return its
+      if sta == "*":
+        stadir = self.archiveDirectory + str(year) + "/" + net + "/"
+        files = os.listdir(stadir)
+        its = []
+        for file in files:
+          if os.path.isdir(stadir + file) == False: continue
+          tmp_its = self.iterators(begin, end, net, file, loc, cha)
+          for it in tmp_its:
+            its.append(it)
 
-    if loc == "*":
-      dir = self.archiveDirectory + str(t[0]) + "/" + net + "/" + sta + "/" + cha + ".D/"
-      files = glob.glob(dir + "*.%03d" % t[7])
-      its = []
-      for file in files:
-        file = file.split('/')[-1]
-        if os.path.isfile(dir + file) == False: continue
-        tmp_its = self.iterators(begin, end, net, sta, file.split('.')[2], cha)
-        for it in tmp_its:
-          its.append(it)
+        return its
 
-      return its
+      # Check if cha contains a regular expression or not
+      mr = re.match("[A-Z|a-z|0-9]*", cha)
+      if (mr and mr.group() != cha) or cha == "*":
+        cha = cha.replace('?', '.')
+        stadir = self.archiveDirectory + str(year) + "/" + net + "/" + sta + "/"
+        try: files = os.listdir(stadir)
+        except: return []
+        its = []
+        for file in files:
+          if os.path.isdir(stadir + file) == False: continue
+          part = file[:3]
+          if cha != "*":
+            mr = re.match(cha, part)
+            if not mr or mr.group() != part:
+              continue
+
+          tmp_its = self.iterators(begin, end, net, sta, loc, part)
+          for it in tmp_its:
+            its.append(it)
+
+        return its
+
+      if loc == "*":
+        dir = self.archiveDirectory + str(year) + "/" + net + "/" + sta + "/" + cha + ".D/"
+        its = []
+
+        start_day = t[7]
+        if t_end[0] > year:
+          end_day = 366
+        else:
+          end_day = t_end[7]
+
+        files = files = glob.glob(dir + "*.%03d" % start_day)
+
+        # Find first day with data
+        while len(files) == 0 and start_day <= end_day:
+          start_day += 1
+          begin = seiscomp3.Core.Time.FromYearDay(year, start_day)
+          files = glob.glob(dir + "*.%03d" % start_day)
+
+        for file in files:
+          file = file.split('/')[-1]
+          if os.path.isfile(dir + file) == False: continue
+
+          tmp_its = self.iterators(begin, end, net, sta, file.split('.')[2], cha)
+          for it in tmp_its:
+            its.append(it)
+
+        return its
 
     it = StreamIterator(self, begin, end, net, sta, loc, cha)
     if it.record is None:

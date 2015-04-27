@@ -20,6 +20,7 @@
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/client/application.h>
 #include <seiscomp3/datamodel/eventparameters.h>
+#include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/logging/log.h>
 
 
@@ -62,11 +63,19 @@ class MagToolApp : public Seiscomp::Client::Application {
 			commandline().addOption("Messaging", "interval", "Sets the message send interval,"
 			                                                 " 0 sends messages immediatly", &_interval, true);
 			commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
+
+			commandline().addGroup("Input");
+			commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
+			                        &_epFile);
 		}
 
 		bool validateParameters() {
-			if ( !isInventoryDatabaseEnabled() )
-				setDatabaseEnabled(false, false);
+			if ( !_epFile.empty() ) {
+				if ( !isConfigDatabaseEnabled() )
+					setDatabaseEnabled(false, false);
+
+				setMessagingEnabled(false);
+			}
 
 			return Client::Application::validateParameters();
 		}
@@ -332,6 +341,51 @@ class MagToolApp : public Seiscomp::Client::Application {
 			return true;
 		}
 
+		bool run() {
+			if ( !_epFile.empty() ) {
+				_sendImmediately = true;
+
+				// Disable database
+				setDatabase(NULL);
+
+				XMLArchive ar;
+				if ( !ar.open(_epFile.c_str()) ) {
+					SEISCOMP_ERROR("Failed to open %s", _epFile.c_str());
+					return false;
+				}
+
+				EventParametersPtr ep;
+				ar >> ep;
+				ar.close();
+
+				if ( !ep ) {
+					SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
+					return false;
+				}
+
+				for ( size_t i = 0; i < ep->pickCount(); ++i )
+					_magtool.feed(ep->pick(i));
+
+				for ( size_t i = 0; i < ep->amplitudeCount(); ++i )
+					_magtool.feed(ep->amplitude(i), false);
+
+				for ( size_t i = 0; i < ep->originCount(); ++i ) {
+					OriginPtr org = ep->origin(i);
+					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+					_magtool.feed(org.get());
+				}
+
+				ar.create("-");
+				ar.setFormattedOutput(true);
+				ar << ep;
+				ar.close();
+
+				return true;
+			}
+
+			return Seiscomp::Client::Application::run();
+		}
+
 		void done() {
 			Application::done();
 			_magtool.done();
@@ -438,6 +492,8 @@ class MagToolApp : public Seiscomp::Client::Application {
 
 		MagTool::MagnitudeTypes _magTypes;
 		MagTool _magtool;
+
+		std::string _epFile;
 };
 
 

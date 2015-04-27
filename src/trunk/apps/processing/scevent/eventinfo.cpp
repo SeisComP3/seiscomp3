@@ -305,6 +305,12 @@ bool EventInformation::addJournalEntry(DataModel::JournalEntry *e) {
 			constraints.fixMw = false;
 		// Else keep the last state
 	}
+	else if ( e->action() == "EvTypeOK" ) {
+		if ( e->parameters() == ":unset:" )
+			constraints.fixType = false;
+		else
+			constraints.fixType = true;
+	}
 
 	return true;
 }
@@ -319,8 +325,14 @@ bool EventInformation::setEventName(DataModel::JournalEntry *e, string &error) {
 	// Check for updating an existing event description
 	for ( size_t i = 0; i < event->eventDescriptionCount(); ++i ) {
 		if ( event->eventDescription(i)->type() != EARTHQUAKE_NAME ) continue;
+		if ( event->eventDescription(i)->text() == e->parameters() ) {
+			error = ":no changes:";
+			return false;
+		}
+
 		event->eventDescription(i)->setText(e->parameters());
 		event->eventDescription(i)->update();
+
 		return true;
 	}
 
@@ -344,6 +356,12 @@ bool EventInformation::setEventOpComment(DataModel::JournalEntry *e, string &err
 	// Check for updating an existing event description
 	for ( size_t i = 0; i < event->commentCount(); ++i ) {
 		if ( event->comment(i)->id() != "Operator" ) continue;
+		// Nothing to do
+		if ( event->comment(i)->text() == e->parameters() ) {
+			error = ":no changes:";
+			return false;
+		}
+
 		event->comment(i)->setText(e->parameters());
 
 		try {

@@ -143,7 +143,7 @@ class EventStreams(seiscomp3.Client.Application):
             sys.stdout.write(pick.waveformID().networkCode() + ".")
             sys.stdout.write(pick.waveformID().stationCode() + ".")
             sys.stdout.write(loc + ".")
-            sys.stdout.write(s + stream[2])
+            sys.stdout.write(s + streams[0][2])
 
             sys.stdout.write("\n")
 

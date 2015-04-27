@@ -9298,16 +9298,16 @@ SWIGINTERN PyObject *_wrap_LocatorInterface_locate__SWIG_1(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "LocatorInterface_locate" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
-  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__Time,  0 );
+  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
   if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "LocatorInterface_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "LocatorInterface_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
   }
   if (!argp6) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LocatorInterface_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LocatorInterface_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
   }
   arg6 = reinterpret_cast< Seiscomp::Core::Time * >(argp6);
   try {
-    result = (Seiscomp::DataModel::Origin *)(arg1)->locate(*arg2,arg3,arg4,arg5,*arg6);
+    result = (Seiscomp::DataModel::Origin *)(arg1)->locate(*arg2,arg3,arg4,arg5,(Seiscomp::Core::Time const &)*arg6);
   }
   catch(Seiscomp::Core::GeneralException &_e) {
     SWIG_Python_Raise(SWIG_NewPointerObj((new Seiscomp::Core::GeneralException(static_cast< const Seiscomp::Core::GeneralException& >(_e))),SWIGTYPE_p_Seiscomp__Core__GeneralException,SWIG_POINTER_OWN), "Seiscomp::Core::GeneralException", SWIGTYPE_p_Seiscomp__Core__GeneralException); SWIG_fail;
@@ -9369,8 +9369,7 @@ SWIGINTERN PyObject *_wrap_LocatorInterface_locate(PyObject *self, PyObject *arg
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              void *vptr = 0;
-              int res = SWIG_ConvertPtr(argv[5], &vptr, SWIGTYPE_p_Seiscomp__Core__Time, 0);
+              int res = SWIG_ConvertPtr(argv[5], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
               _v = SWIG_CheckState(res);
               if (_v) {
                 return _wrap_LocatorInterface_locate__SWIG_1(self, args);
@@ -9386,7 +9385,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LocatorInterface_locate'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    Seiscomp::Seismology::LocatorInterface::locate(Seiscomp::Seismology::LocatorInterface::PickList &)\n"
-    "    Seiscomp::Seismology::LocatorInterface::locate(Seiscomp::Seismology::LocatorInterface::PickList &,double,double,double,Seiscomp::Core::Time &)\n");
+    "    Seiscomp::Seismology::LocatorInterface::locate(Seiscomp::Seismology::LocatorInterface::PickList &,double,double,double,Seiscomp::Core::Time const &)\n");
   return 0;
 }
 
@@ -11592,16 +11591,16 @@ SWIGINTERN PyObject *_wrap_LocSAT_locate__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "LocSAT_locate" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
-  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__Time,  0 );
+  res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__Time,  0  | 0);
   if (!SWIG_IsOK(res6)) {
-    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "LocSAT_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "LocSAT_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
   }
   if (!argp6) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LocSAT_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "LocSAT_locate" "', argument " "6"" of type '" "Seiscomp::Core::Time const &""'"); 
   }
   arg6 = reinterpret_cast< Seiscomp::Core::Time * >(argp6);
   try {
-    result = (Seiscomp::DataModel::Origin *)(arg1)->locate(*arg2,arg3,arg4,arg5,*arg6);
+    result = (Seiscomp::DataModel::Origin *)(arg1)->locate(*arg2,arg3,arg4,arg5,(Seiscomp::Core::Time const &)*arg6);
   }
   catch(Seiscomp::Core::GeneralException &_e) {
     SWIG_Python_Raise(SWIG_NewPointerObj((new Seiscomp::Core::GeneralException(static_cast< const Seiscomp::Core::GeneralException& >(_e))),SWIGTYPE_p_Seiscomp__Core__GeneralException,SWIG_POINTER_OWN), "Seiscomp::Core::GeneralException", SWIGTYPE_p_Seiscomp__Core__GeneralException); SWIG_fail;
@@ -11663,8 +11662,7 @@ SWIGINTERN PyObject *_wrap_LocSAT_locate(PyObject *self, PyObject *args) {
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              void *vptr = 0;
-              int res = SWIG_ConvertPtr(argv[5], &vptr, SWIGTYPE_p_Seiscomp__Core__Time, 0);
+              int res = SWIG_ConvertPtr(argv[5], 0, SWIGTYPE_p_Seiscomp__Core__Time, 0);
               _v = SWIG_CheckState(res);
               if (_v) {
                 return _wrap_LocSAT_locate__SWIG_1(self, args);
@@ -11680,7 +11678,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'LocSAT_locate'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    Seiscomp::LocSAT::locate(Seiscomp::Seismology::LocatorInterface::PickList &)\n"
-    "    Seiscomp::LocSAT::locate(Seiscomp::Seismology::LocatorInterface::PickList &,double,double,double,Seiscomp::Core::Time &)\n");
+    "    Seiscomp::LocSAT::locate(Seiscomp::Seismology::LocatorInterface::PickList &,double,double,double,Seiscomp::Core::Time const &)\n");
   return 0;
 }
 

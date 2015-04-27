@@ -69,6 +69,18 @@
 				<optionReference>records#record-file</optionReference>
 				<optionReference>records#record-type</optionReference>
 			</group>
+
+			<group name="Input">
+				<option long-flag="ep" argument="file">
+					<description>
+					Defines an event parameters XML file to be read and processed. This
+					implies offline mode and only processes all origins contained
+					in that file. It computes amplitudes for all picks associated
+					with an origin and outputs an XML file that additionally
+					contains the amplitudes.
+					</description>
+				</option>
+			</group>
 		</command-line>
 	</module>
 </seiscomp>

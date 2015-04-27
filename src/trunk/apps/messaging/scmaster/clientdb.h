@@ -67,24 +67,24 @@ public:
 	Seiscomp::Core::TimeSpan uptime() const;
 
 	const Communication::ClientStatus* clientStatus() const;
-		
+
 
 private:
 	//! Not implemented
 	ClientInfo(const ClientInfo& info);
-	
-	
+
+
 	// -----------------------------------------------------------------------
 	// Private data members
 	// -----------------------------------------------------------------------
 private:
-	std::string                _clientName;
-	std::string                _privateGroup;
-	Protocol::ClientType       _clientType;
-	Protocol::ClientPriority   _clientPriority;
-	
-	Seiscomp::Util::StopWatch _timer;
-	Communication::ClientStatus*       _clientStatus;
+	std::string                   _clientName;
+	std::string                   _privateGroup;
+	Protocol::ClientType          _clientType;
+	Protocol::ClientPriority      _clientPriority;
+
+	Seiscomp::Util::StopWatch     _timer;
+	Communication::ClientStatus  *_clientStatus;
 };
 
 

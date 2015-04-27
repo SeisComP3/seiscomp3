@@ -22,6 +22,7 @@
 #include <seiscomp3/processing/secondarypicker.h>
 #include <seiscomp3/processing/amplitudeprocessor.h>
 
+#include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/datamodel/stationmagnitude.h>
 
@@ -131,6 +132,7 @@ class App : public Processing::Application {
 		typedef std::list<ProcEntry>  ProcList;
 		typedef std::map<std::string, ProcList> ProcMap;
 		typedef std::map<TWProc*, std::string> ProcReverseMap;
+		typedef DataModel::EventParametersPtr EP;
 
 		int            _sentMessages;
 		StreamMap      _streams;
@@ -143,9 +145,10 @@ class App : public Processing::Application {
 		StringSet      _streamIDs;
 
 		StationConfig  _stationConfig;
+		EP             _ep;
 
-		ObjectLog     *_logPicks;
-		ObjectLog     *_logAmps;
+		ObjectLog    *_logPicks;
+		ObjectLog    *_logAmps;
 };
 
 

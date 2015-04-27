@@ -22,6 +22,8 @@
 #include <seiscomp3/processing/response.h>
 #include <seiscomp3/processing/sensor.h>
 
+#include <seiscomp3/io/archive/xmlarchive.h>
+
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/filter.h>
 
@@ -169,9 +171,10 @@ void App::createCommandLineDescription() {
 	commandline().addOption("Database", "db-disable", "Do not use the database at all");
 
 	commandline().addGroup("Mode");
-	commandline().addOption("Mode", "offline", "Do not connect to a messaging server and do not use the database");
+	commandline().addOption("Mode", "offline", "Do not connect to a messaging server");
 	commandline().addOption("Mode", "amplitudes", "Enable/disable computation of amplitudes", &_config.calculateAmplitudes);
 	commandline().addOption("Mode", "test", "Do not send any object");
+	commandline().addOption("Mode", "ep", "Same as offline but outputs all result as an event parameters XML file");
 	commandline().addOption("Mode", "dump-config", "Dump the configuration and exit");
 	commandline().addOption("Mode", "dump-records", "Dump records to ASCII when in offline mode");
 
@@ -202,7 +205,6 @@ bool App::validateParameters() {
 	_config.init(commandline());
 	setMessagingEnabled(!_config.offline);
 	bool disableDB = commandline().hasOption("db-disable") ||
-	                 (_config.offline && !_config.calculateAmplitudes) ||
 	                 (!isInventoryDatabaseEnabled() && !isConfigDatabaseEnabled());
 
 	setDatabaseEnabled(!disableDB, true);
@@ -445,6 +447,9 @@ bool App::run() {
 		return true;
 	}
 
+	if ( commandline().hasOption("ep") )
+		_ep = new DataModel::EventParameters;
+
 	return Processing::Application::run();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -454,6 +459,15 @@ bool App::run() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::done() {
+	if ( _ep ) {
+		IO::XMLArchive ar;
+		ar.create("-");
+		ar.setFormattedOutput(true);
+		ar << _ep;
+		ar.close();
+		_ep = NULL;
+	}
+
 	Processing::Application::done();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1191,6 +1205,12 @@ void App::emitPPick(const Processing::Picker *proc,
 		}
 	}
 
+	if ( _ep ) {
+		_ep->add(pick.get());
+		if ( amp )
+			_ep->add(amp.get());
+	}
+
 	if ( !_config.secondaryPickerType.empty() )
 		addSecondaryPicker(res.time, res.record, pick->publicID());
 
@@ -1306,6 +1326,9 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 		++_sentMessages;
 	}
 
+	if ( _ep )
+		_ep->add(pick.get());
+
 	// Request a sync token every n messages to not flood the message bus
 	// and to prevent a disconnect by the master
 	if ( _sentMessages > MESSAGE_LIMIT ) {
@@ -1389,6 +1412,9 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 		connection()->send(m.get());
 		++_sentMessages;
 	}
+
+	if ( _ep )
+		_ep->add(pick.get());
 
 	if ( !_config.secondaryPickerType.empty() )
 		addSecondaryPicker(time, rec, pick->publicID());
@@ -1519,6 +1545,9 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 		else
 			++_sentMessages;
 	}
+
+	if ( _ep )
+		_ep->add(amp.get());
 
 	// Request a sync token every n messages to not flood the message bus
 	// and to prevent a disconnect by the master

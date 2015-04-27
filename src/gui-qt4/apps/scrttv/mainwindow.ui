@@ -55,7 +55,8 @@
     <property name="title" >
      <string>&amp;Interaction</string>
     </property>
-    <addaction name="actionToggleFilter" />
+    <addaction name="actionCycleFilters" />
+    <addaction name="actionCycleFiltersReverse" />
     <addaction name="actionToggleAllRecords" />
     <addaction name="actionToggleZoom" />
     <addaction name="actionToggleAutoMove" />
@@ -225,18 +226,18 @@
     <string>Right</string>
    </property>
   </action>
-  <action name="actionToggleFilter" >
+  <action name="actionCycleFilters" >
    <property name="checkable" >
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text" >
-    <string>Toggle filter</string>
+    <string>Cycle through filters</string>
    </property>
    <property name="iconText" >
-    <string>Toggle filter</string>
+    <string>Cycle through filters</string>
    </property>
    <property name="toolTip" >
-    <string>Toggle filter</string>
+    <string>Cycle through filters</string>
    </property>
    <property name="shortcut" >
     <string>F</string>
@@ -618,6 +619,14 @@
    </property>
    <property name="text" >
     <string>Apply gain</string>
+   </property>
+  </action>
+  <action name="actionCycleFiltersReverse" >
+   <property name="text" >
+    <string>Cycle through filters (reverse)</string>
+   </property>
+   <property name="shortcut" >
+    <string>shift+f</string>
    </property>
   </action>
  </widget>

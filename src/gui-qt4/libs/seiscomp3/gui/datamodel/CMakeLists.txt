@@ -69,6 +69,7 @@ SET(GUI_DATAMODEL_UI
 	eventedit.ui
 	maglistview.ui
 	magnitudeview.ui
+	magnitudeview_filter.ui
 	originlocatorview.ui
 	originlocatorview_commit.ui
 	originlocatorview_comment.ui

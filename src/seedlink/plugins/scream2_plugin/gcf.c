@@ -20,13 +20,16 @@
  *
  */
 
-a_fatal (char * str)
+#include <stdio.h>
+#include <stdlib.h>
+
+void a_fatal (char * str)
 {
       printf("Fatal error:  %s\n", str);
       exit(0);
 }
 
-static char rcsid[] = "$Id: gcf.c 1364 2008-10-24 18:42:33Z andres $";
+/*static char rcsid[] = "$Id: gcf.c 1364 2008-10-24 18:42:33Z andres $";*/
 
 /*
  * $Log$
@@ -254,7 +257,7 @@ gcf_dispatch (uint8_t * buf, int sz)
   id = gp_uint32(buf);
   if (id & 0x80000000) id &= 0x03FFFFFF;
   strcpy (block.sysid, gp_base36_to_a (id));
-  //strcpy (block.sysid, gp_base36_to_a (gp_uint32 (buf)));
+  /*strcpy (block.sysid, gp_base36_to_a (gp_uint32 (buf)));*/
   strcpy (block.strid, gp_base36_to_a (gp_uint32 (buf + 4)));
 
   i = gp_uint16 (buf + 8);
@@ -265,7 +268,7 @@ gcf_dispatch (uint8_t * buf, int sz)
 
   block.estart = gcf_time_to_time_t (&block.start);
 
-  block.ttl = buf[12];               // added RS
+  block.ttl = buf[12];               /* added RS */
   block.sample_rate = buf[13];
   block.format = buf[14] & 7;
   block.records = buf[15];
@@ -310,7 +313,7 @@ gcf_dispatch (uint8_t * buf, int sz)
     blocknr = buf[GCF_BLOCK_LEN+2]*256 + buf[GCF_BLOCK_LEN+3];
     recno = blocknr;
 
-    //printf("now dispatch the block with %d samples .... !!!   recno %d\n", block.samples, recno);
+    /*printf("now dispatch the block with %d samples .... !!!   recno %d\n", block.samples, recno);*/
 
     dispatch (&block, recno);
 }
@@ -340,19 +343,19 @@ void gcf_byte_swap(uint8_t* buf)
     uint8_t *iptr;
     iptr = buf;
 
-    // bytes 0-3 are the sysid
+    /* bytes 0-3 are the sysid */
     byte_swap_4(buf + 0);
-    // bytes 4-7 are the strid
+    /* bytes 4-7 are the strid */
     byte_swap_4(buf + 4);
-    // bytes 8-12 are the datecode
+    /* bytes 8-12 are the datecode */
     byte_swap_4(buf + 8);
 
-    // compute number of records
+    /*  compute number of records */
     fmt = buf[14];
-    if(!buf[13]) fmt = 0; // status
+    if(!buf[13]) fmt = 0; /*  status */
     nrec = fmt * buf[15];
 
-    // byte swap data, if necessary
+    /*  byte swap data, if necessary */
     switch(fmt) {
     case 1:
     case 2:
@@ -363,7 +366,7 @@ void gcf_byte_swap(uint8_t* buf)
         return;
     }
 
-    byte_swap_4(buf + 16); // fic
+    byte_swap_4(buf + 16); /*  fic */
     buf += 20;
 
     switch(fmt) {
@@ -389,12 +392,12 @@ void gcf_byte_swap(uint8_t* buf)
         break;
     }
 
-    byte_swap_4(buf);    // swap last sample ???
+    byte_swap_4(buf);     /* swap last sample ??? */
 
-    //buf += 2;
-    //byte_swap_2(buf);   // sequence number
+    /*buf += 2;*/
+    /*byte_swap_2(buf);*/ /* sequence number */
 
     iptr += 1026;
-    byte_swap_2(iptr);   // sequence number
+    byte_swap_2(iptr);    /* sequence number */
 }
 

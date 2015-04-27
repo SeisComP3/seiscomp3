@@ -35964,7 +35964,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x010A00)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x010D00)));
   SWIG_addvarlink(SWIG_globals(),(char*)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));

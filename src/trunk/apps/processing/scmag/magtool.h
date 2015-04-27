@@ -172,24 +172,24 @@ class MagTool {
 		typedef std::set<std::string> TypeList;
 		typedef std::map<std::string, Processing::ParametersPtr> ParameterMap;
 
-		MagnitudeTypeList _registeredMagTypes;
-		MagnitudeTypes    _magTypes;
-		ProcessorList     _processors;
-		ParameterMap      _parameters;
-		Core::TimeSpan    _cacheSize;
+		MagnitudeTypeList  _registeredMagTypes;
+		MagnitudeTypes     _magTypes;
+		ProcessorList      _processors;
+		ParameterMap       _parameters;
+		Core::TimeSpan     _cacheSize;
 
-		double            _minimumArrivalWeight;
-		bool              _summaryMagnitudeEnabled;
-		int               _summaryMagnitudeMinStationCount;
-		std::string       _summaryMagnitudeType;
-		TypeList          _summaryMagnitudeBlacklist;
-		TypeList          _summaryMagnitudeWhitelist;
+		double             _minimumArrivalWeight;
+		bool               _summaryMagnitudeEnabled;
+		int                _summaryMagnitudeMinStationCount;
+		std::string        _summaryMagnitudeType;
+		TypeList           _summaryMagnitudeBlacklist;
+		TypeList           _summaryMagnitudeWhitelist;
 
 		SummaryMagnitudeCoefficients _defaultCoefficients;
-		Coefficients      _magnitudeCoefficients;
-		AverageMethods    _magnitudeAverageMethods;
+		Coefficients       _magnitudeCoefficients;
+		AverageMethods     _magnitudeAverageMethods;
 
-		size_t            _dbAccesses;
+		size_t             _dbAccesses;
 
 	public:
 		Client::Application::ObjectLog *inputPickLog;

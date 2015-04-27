@@ -223,8 +223,8 @@ double AmplitudeProcessor_MLv::timeWindowLength(double distance_deg) const {
 	//
 	// This is very approximate and may need refinement. Usually the Lg
 	// group velocity is around 3.2-3.6 km/s. By setting v_min to 3 km/s,
-	// we are probably on the safe side. We add 30 s to coount for rupture
-	// duration, which may, however, nit be sufficient.
+	// we are probably on the safe side. We add 30 s to count for rupture
+	// duration, which may, however, not be sufficient.
 	double v_min = 3;
 
 	double distance_km = distance_deg*111.2;

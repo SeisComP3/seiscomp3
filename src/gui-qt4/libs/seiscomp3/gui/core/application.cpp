@@ -894,10 +894,15 @@ bool Application::validateParameters() {
 				pmSplash = QPixmap(splashImagePath());
 
 			QPainter p(&pmSplash);
+
+			const char *appVersion = version();
+			if ( appVersion == NULL )
+				appVersion = frameworkVersion();
+
 			p.setFont(SCScheme.fonts.splashVersion);
 			p.setPen(SCScheme.colors.splash.version);
 			drawText(p, SCScheme.splash.version.pos,
-			         SCScheme.splash.version.align, QString("Release %1").arg(version()));
+			         SCScheme.splash.version.align, QString("Release %1").arg(appVersion));
 		}
 
 		// Reset LC_ALL locale to "C" since it is overwritten during
@@ -1389,7 +1394,7 @@ void Application::messagesAvailable() {
 			continue;
 		}
 
-		if ( database() == NULL ) {
+		if ( isDatabaseEnabled() && (database() == NULL) ) {
 			Communication::DatabaseProvideMessage* dbmsg = Communication::DatabaseProvideMessage::Cast(msg);
 			if ( dbmsg && !_database ) {
 				cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());

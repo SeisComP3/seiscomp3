@@ -87,6 +87,7 @@ struct Config {
 
 	int             delayPrefFocMech;
 	bool            ignoreMTDerivedOrigins;
+	bool            setAutoEventTypeNotExisting;
 };
 
 

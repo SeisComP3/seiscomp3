@@ -9,7 +9,7 @@ the sta/lta ratio falls to the value of 1.5.
 
 The second task of scautopick is to calculate amplitudes for given magnitude
 types where the time window starts at the pick time. For example mb is calculated
-for a fixed time window of 30s after the pick, mB for time window of 90s, for
+for a fixed time window of 30s after the pick, mB for time window of 60s, for
 MLv a time window of 150s is estimated to make sure that S-arrivals are inside
 this time window. The precalculated amplitudes are sent out and received by
 the magnitude tool.

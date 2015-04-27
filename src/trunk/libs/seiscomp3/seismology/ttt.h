@@ -55,8 +55,8 @@ class SC_SYSTEM_CORE_API TravelTime {
 	public:
 		TravelTime();
 		TravelTime(const std::string &_phase,
-			   double _time, double _dtdd, double _dtdh, double _dddp,
-			   double _takeoff);
+		           double _time, double _dtdd, double _dtdh, double _dddp,
+		           double _takeoff);
 
 		bool operator==(const TravelTime &other) const;
 		bool operator<(const TravelTime &other) const;

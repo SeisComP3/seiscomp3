@@ -133,6 +133,28 @@ struct FreqOption : Application::Option {
 };
 
 
+string toXML(const string &input) {
+	string output;
+
+	for ( size_t i = 0; i < input.size(); ++i ) {
+		if ( input[i] == '&' )
+			output += "&amp;";
+		else if ( input[i] == '\"')
+			output += "&quot;";
+		else if ( input[i] == '\'')
+			output += "&apos;";
+		else if ( input[i] == '<')
+			output += "&lt;";
+		else if ( input[i] == '>')
+			output += "&gt;";
+		else
+			output += input[i];
+	}
+
+	return output;
+}
+
+
 }
 
 #define NEW_OPT(var, ...) addOption(&var, __VA_ARGS__)
@@ -231,6 +253,7 @@ WFParam::Config::Config() {
 	shakeMapOutputPath = "@LOGDIR@/shakemaps";
 	shakeMapOutputScriptWait = true;
 	shakeMapOutputSC3EventID = false;
+	shakeMapOutputRegionName = false;
 
 	waveformOutputPath = "@LOGDIR@/shakemaps/waveforms";
 	waveformOutputEventDirectory = false;
@@ -398,6 +421,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT(_config.shakeMapOutputScript, "wfparam.output.shakeMap.script");
 	NEW_OPT(_config.shakeMapOutputScriptWait, "wfparam.output.shakeMap.synchronous");
 	NEW_OPT(_config.shakeMapOutputSC3EventID, "wfparam.output.shakeMap.SC3EventID");
+	NEW_OPT(_config.shakeMapOutputRegionName, "wfparam.output.shakeMap.regionName");
 	NEW_OPT(_config.magnitudeTolerance, "wfparam.magnitudeTolerance");
 	NEW_OPT_CLI(_config.fExpiry, "Generic", "expiry,x",
 	            "Time span in hours after which objects expire", true);
@@ -797,6 +821,22 @@ void WFParam::done() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void WFParam::handleMessage(Core::Message *msg) {
+	// Each message is taken as an transaction.
+	_todos.clear();
+
+	Application::handleMessage(msg);
+
+	Todos::iterator it;
+	for ( it = _todos.begin(); it != _todos.end(); ++it )
+		addProcess(it->get());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void WFParam::addObject(const string& parentID, DataModel::Object* object) {
 	updateObject(parentID, object);
 }
@@ -821,8 +861,15 @@ void WFParam::updateObject(const string &parentID, Object* object) {
 
 	Event *event = Event::Cast(object);
 	if ( event ) {
-		addProcess(event);
-		return;
+		if ( !event->registered() ) {
+			EventPtr cached = Event::Find(event->publicID());
+			if ( cached ) {
+				_todos.insert(cached.get());
+				return;
+			}
+		}
+
+		_todos.insert(event);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -950,6 +997,8 @@ void WFParam::handleTimeout() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool WFParam::addProcess(DataModel::Event *evt) {
+	_cache.feed(evt);
+
 	if ( !_config.eventID.empty() && (evt->publicID() != _config.eventID) ) {
 		SEISCOMP_NOTICE("%s: event ignored: only event %s is allowed for processing",
 		                evt->publicID().c_str(), _config.eventID.c_str());
@@ -1568,6 +1617,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 	proc->setPostDeconvolutionFilterParams(_config.PDorder, _config.PDfilter.first, _config.PDfilter.second);
 	proc->setFilterParams(_config.order, _filter.first, _filter.second);
 	proc->setDeconvolutionEnabled(_config.enableDeconvolution);
+	proc->setDurationScale(_config.durationScale);
 
 	// Override used component
 	proc->setUsedComponent(component);
@@ -2372,7 +2422,7 @@ void WFParam::collectResults() {
 		ofstream of;
 		Core::Time timestamp = Core::Time::GMT();
 		string eventPath, path;
-		string eventID, shakeMapEventID;
+		string eventID, shakeMapEventID, locstring;
 		bool writeToFile = _config.shakeMapOutputPath != "-";
 
 		eventID = generateEventID(evt.get());
@@ -2384,8 +2434,23 @@ void WFParam::collectResults() {
 		else
 			shakeMapEventID = eventID;
 
+		if ( _config.shakeMapOutputRegionName ) {
+			// Load event descriptions if not already there
+			if ( query() && evt->eventDescriptionCount() == 0 )
+				query()->loadEventDescriptions(evt.get());
+
+			EventDescriptionPtr ed = evt->eventDescription(EventDescriptionIndex(REGION_NAME));
+			if ( ed )
+				locstring = toXML(ed->text());
+		}
+		else {
+			locstring = evt->publicID() + " / " +
+			            Core::toString(org->latitude().value()) +" / " +
+			            Core::toString(org->longitude().value());
+		}
+
 		if ( writeToFile ) {
-			eventPath = _config.shakeMapOutputPath + eventID + "/";
+			eventPath = _config.shakeMapOutputPath + shakeMapEventID + "/";
 			path = eventPath + "input";
 			if ( !Util::pathExists(path) ) {
 				if ( !Util::createPath(path) ) {
@@ -2417,8 +2482,7 @@ void WFParam::collectResults() {
 				    << " mag=\"" << mag->magnitude().value() << "\""
 				    << " year=\"" << year << "\" month=\"" << mon << "\" day=\"" << day << "\""
 				    << " hour=\"" << hour << "\" minute=\"" << min << "\" second=\"" << sec << "\" timezone=\"GMT\""
-				    << " locstring=\"" << evt->publicID() << " / "
-				    << org->latitude().value() << " / " << org->longitude().value() << "\""
+				    << " locstring=\"" << locstring << "\""
 				    << " created=\"" << Core::Time::GMT().seconds() << "\"/>"
 				    << endl;
 			}

@@ -101,6 +101,7 @@
 /src/trunk/libs/3rd-party/spread/config.log
 /src/trunk/libs/3rd-party/spread/config.status
 /src/trunk/libs/3rd-party/spread/Makefile
+/src/trunk/libs/3rd-party/spread/libspread-util/lib/
 
 # /src/trunk/libs/3rd-party/spread/daemon/
 /src/trunk/libs/3rd-party/spread/daemon/config.h

@@ -7,30 +7,37 @@
  *
  */
 
-/* Mar 2004  - Developed by Reinoud Sleeman  (ORFEUS/KNMI)  */
-/*             for the SCREAM plugin in SeedLink            */
-/* Oct 2008  - Improved by Jan Becker (gempa.de) to support */
-/*             stream mapping using the sysid of a stream   */
-/*             optionally.                                  */
-/*                                                          */
-//
-// Nov 2010  - This plugin opens a UDP connection to receive GCF data blocks  
-//             from a SCREAM server. GCF data-packets are stored in a central 
-//             rinbuffer using a thread. Whenever a data record is missing -   
-//             based on record numbers, not on time ! - a TCP request is send
-//             out to the SCREAM server to have the missing record being re-send.
-//
-//             A second thread takes the records from the central ringbuffer
-//             and distributes these over ringbuffers per channel. In each  
-//             channel ringbuffer the blocks are sorted on time and send to 
-//             seedlink when these are in time order. Whenever a gap is     
-//             detected the record(s) in the stack will be put on hold to allow     
-//             delayed data to flow in. The stack will be released when the   
-//             delayed data has arrived (and filled the gap), or when the stack is full.         
-//             The longer the stack the longer is wait for delayed data, hence the
-//             latency can be lagre.
+/* Mar 2004  - Developed by Reinoud Sleeman  (ORFEUS/KNMI)
+ *             for the SCREAM plugin in SeedLink
+ * Oct 2008  - Improved by Jan Becker (gempa.de) to support
+ *             stream mapping using the sysid of a stream
+ *             optionally.
+ *
+ * Nov 2010  - This plugin opens a UDP connection to receive GCF data blocks
+ *             from a SCREAM server. GCF data-packets are stored in a central
+ *             rinbuffer using a thread. Whenever a data record is missing -
+ *             based on record numbers, not on time ! - a TCP request is send
+ *             out to the SCREAM server to have the missing record being re-send.
+ *
+ *             A second thread takes the records from the central ringbuffer
+ *             and distributes these over ringbuffers per channel. In each
+ *             channel ringbuffer the blocks are sorted on time and send to
+ *             seedlink when these are in time order. Whenever a gap is
+ *             detected the record(s) in the stack will be put on hold to allow
+ *             delayed data to flow in. The stack will be released when the
+ *             delayed data has arrived (and filled the gap), or when the stack is full.
+ *             The longer the stack the longer is wait for delayed data, hence the
+ *             latency can be lagre.
 
-//             Reinoud Sleeman (ORFEUS/KNMI)                               
+ *             Reinoud Sleeman (ORFEUS/KNMI)
+ *
+ * Oct 2014  - Added support for TCP connections to receive GCF data blocks.
+ *             The connection code has been ported from scream_plugin.
+ *             Additionally some includes and compiler warnings were removed
+ *             though there are still lots of remaining.
+ *
+ *             Jan Becker (gempa GmbH)
+ */
 
 
 #include <sys/time.h>
@@ -38,6 +45,7 @@
 #include <pthread.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <unistd.h>
 
 #include "project.h"
 #include "config.h"
@@ -74,6 +82,7 @@ pthread_mutex_t      mutex1 = PTHREAD_MUTEX_INITIALIZER;
 int                  wptr;
 int                  optrr;
 int                  wcflag;
+int                  dropflag = 0;
 
 
 
@@ -98,6 +107,11 @@ void my_exit (int sig) {
            case SIGTERM:
                 printf("\nSIGTERM - Termination request made to the program.\n");
                 break;
+           case SIGUSR1:
+                printf("\nSIGUSR1 - Toggle packet loss.\n");
+                dropflag = 1-dropflag;
+                return;
+
         }
         fflush (stdout);
         fflush (stderr);
@@ -106,11 +120,14 @@ void my_exit (int sig) {
 }
 
 
+void parse_mapfile (char *mapfile);
+void gcf_byte_swap(uint8_t* buf);
+
 
 int
 main (int argc, char **argv)
 {
-  int       optind, ret, i;
+  int       optind, i;
   Map       *mp;
   char      scream_arg[60];
   char      gcf_arg[60];
@@ -124,10 +141,11 @@ main (int argc, char **argv)
   (void) signal(SIGINT, my_exit);
   (void) signal(SIGSEGV, my_exit);
   (void) signal(SIGTERM, my_exit);
+  (void) signal(SIGUSR1, my_exit);
 
   RSIZE = -1;
 
-  // Only UDP is supported 
+  // UDP is used by default
 
   config.protocol = SCM_PROTO_UDP;
 
@@ -140,7 +158,7 @@ main (int argc, char **argv)
          config.server = (char *) malloc (100);
          strcpy ( config.server, argv[++optind] );
     }
-    else if (strcmp(argv[optind], "-p") == 0)          // UDP port
+    else if (strcmp(argv[optind], "-p") == 0)          // port (UDP or TCP)
     {
          config.port = atoi(argv[++optind]);
     }
@@ -173,6 +191,10 @@ main (int argc, char **argv)
          mapfile = (char *) malloc (140);
          strcpy ( mapfile, argv[++optind] );
     }
+    else if (strcmp(argv[optind], "-tcp") == 0)
+    {
+         config.protocol = SCM_PROTO_TCP;
+    }
   }
   if ( config.server == NULL || config.port == 0 || config.reqport == 0 ) {
        printf("No server or port(s) defined\n");
@@ -200,10 +222,10 @@ main (int argc, char **argv)
 
   sprintf ( scream_arg, "%s:%d", config.server, config.port);
 
-  ret = pthread_create ( &thread_scream, NULL, listen_to_scream, (void *) scream_arg);
+  pthread_create ( &thread_scream, NULL, listen_to_scream, (void *) scream_arg);
   system ("sleep 1s");
 
-  ret = pthread_create ( &thread_distribute, NULL, distribute_forever, (void *) gcf_arg);
+  pthread_create ( &thread_distribute, NULL, distribute_forever, (void *) gcf_arg);
   system ("sleep 1s");
 
   //pthread_join( &thread_scream, NULL );
@@ -236,17 +258,26 @@ void *listen_to_scream (void *in)             // thread
      // initialize UDP connection to receive UDP packets from SCREAM
 
 
-     scream_init_socket ( config.server, config.port);
+     if ( scream_init_socket (config.protocol, config.server, config.port) )
+         fatal("uncrecoverable error");
 
      gcfbuf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
 
      for (;;)
      {
-               scream_receive (&thisblocknr, gcfbuf);
-	       if(DEBUG==1)printf("got record %d\n", thisblocknr);
+         while ( scream_receive (&thisblocknr, gcfbuf, sizeof(uint8_t) * SCREAM_MAX_LENGTH) ) {
+             /* Receive failed, sleep a second and reconnect */
+             sleep(1);
+             while ( scream_init_socket (config.protocol, config.server, config.port) ) {
+                 sleep(1);
+             }
+         }
+
+         if(DEBUG==1)printf("got record %d\n", thisblocknr);
+
                // now throw the data packet into the central ring buffer
                // ----- lock variables
-               do {} while ( np=pthread_mutex_trylock(&mutex1 ) != 0 );
+               do {} while ( (np=pthread_mutex_trylock(&mutex1 )) != 0 );
                memcpy ( (uint8_t *) cbuf[wptr], (uint8_t *) gcfbuf, SCREAM_V40_LENGTH);
                // update pointer for writing
                wptr++;
@@ -264,20 +295,21 @@ void *distribute_forever (void *in)             // thread
 {
      int                     i, thisblocknr;
      int                     blocknr;
-     int                     reset, np;
-     int     iwptr, iwcflag;
-     //double                  lasttime;
+     int                     np;
+     int                     iwptr, iwcflag;
+     /*int                     reset; */
+     /*double                  lasttime;*/
      uint8_t                 *gcfbuf;
      uint8_t                 *req_gcfbuf;
      uint8_t                 byteorder;
      //struct gcf_block_struct *gp;
 
      previousblocknr = -1;
-     reset = 0;
+     /*reset = 0;*/
 
      // initialize UDP connection to receive UDP packets from the ringbuffer
      // and send it out to be distributed over different ring buffers
-     // this port must be the same as in thread 'releae_gcf'
+     // this port must be the same as in thread 'release_gcf'
 
      gcfbuf = (uint8_t *) malloc ( sizeof(uint8_t) * SCREAM_MAX_LENGTH );
 
@@ -294,7 +326,7 @@ void *distribute_forever (void *in)             // thread
 //======================================================
 
             // ----- lock variable
-            do {} while ( np=pthread_mutex_trylock(&mutex1 ) != 0 );
+            do {} while ( (np=pthread_mutex_trylock(&mutex1)) != 0 );
             iwptr = wptr;
             iwcflag = wcflag;
             pthread_mutex_unlock( &mutex1 );
@@ -302,7 +334,7 @@ void *distribute_forever (void *in)             // thread
 
             while ( (optrr < iwptr && iwcflag == 0) || (optrr > iwptr && iwcflag == 1) )
             {
-                   do {} while ( np=pthread_mutex_trylock(&mutex1 ) != 0 );
+                   do {} while ( (np=pthread_mutex_trylock(&mutex1 )) != 0 );
                    memcpy ( (uint8_t *) gcfbuf, (uint8_t *) cbuf[optrr], SCREAM_V40_LENGTH);
                    pthread_mutex_unlock( &mutex1 );
                    optrr++;
@@ -327,7 +359,7 @@ void *distribute_forever (void *in)             // thread
                   fatal (("Unknown version of scream protocol at remote end"));
                   break;
             }
-            if (DEBUG==1) printf("Got UDP blocknr = %d\n", blocknr);
+            if(DEBUG==1) printf("Got blocknr = %d\n", blocknr);
 
             thisblocknr = blocknr;
 
@@ -353,10 +385,33 @@ void *distribute_forever (void *in)             // thread
 */
                    for ( i=previousblocknr+1; i<thisblocknr; i++ ) {
 
-                         printf("%c[%d;%dm  Block %d is missing and requested now by TCP %c[%d;%dm\n", 27,7,31, i, 27,0,30);
-                         req_gcfbuf = (uint8_t *) request_block_tcp_mode ( (uint16_t) i);
+                         printf("  Block %d is missing and requested now by TCP\n", i);
+                         while ( 1 ) {
+                             req_gcfbuf = (uint8_t *) request_block_tcp_mode ( (uint16_t) i);
+                             if ( req_gcfbuf != NULL ) break;
+                             /* Connection failed, sleep a second and try again */
+                             sleep(1);
+                         }
 
-                         // byte-order has been checked and applied if needed in 'request_block_tcp_mode' 
+                         /* byte-order has been checked and applied if needed in 'request_block_tcp_mode'  */
+
+                         switch (gcfbuf[GCF_BLOCK_LEN])
+                         {
+                         case 31:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+34]*256 + req_gcfbuf[GCF_BLOCK_LEN+35];
+                               break;
+                         case 40:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+2]*256 + req_gcfbuf[GCF_BLOCK_LEN+3];
+                               break;
+                         case 45:
+                               blocknr = req_gcfbuf[GCF_BLOCK_LEN+2]*256 + req_gcfbuf[GCF_BLOCK_LEN+3];
+                               break;
+                         default:
+                               fprintf(stderr, "Scream version ID = %d\n", req_gcfbuf[GCF_BLOCK_LEN]);
+                               fatal (("Unknown version of scream protocol at remote end"));
+                               break;
+                         }
+                         if(DEBUG==1) printf("Got blocknr* = %d\n", blocknr);
 
                          gcf_dispatch ((uint8_t *) req_gcfbuf, SCREAM_V40_LENGTH);
                          usleep(1);
@@ -366,9 +421,11 @@ void *distribute_forever (void *in)             // thread
                 }
               }
 
+              /*
               // flag the resetting of the UDP counter from 65536 to 0
               if ( previousblocknr <= 65536 && thisblocknr >= 0 && thisblocknr < previousblocknr ) reset = 1;
               else                                                                                 reset = 0;
+              */
 
               previousblocknr = thisblocknr;
 

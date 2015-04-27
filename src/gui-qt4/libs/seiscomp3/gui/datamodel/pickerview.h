@@ -361,6 +361,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void showUnassociatedPicks(bool);
 
 		void toggleFilter();
+		void nextFilter();
+		void previousFilter();
 		void addNewFilter(const QString&);
 
 		void scaleVisibleAmplitudes();

@@ -58,6 +58,7 @@ extern void doinfo (char *fmt, ...);
 */
 
 #define fatal(a) do { printf("%s\n", a); exit(-1); } while(0)
+#define fatal2(...) do { printf(__VA_ARGS__); exit(-1); } while(0)
 #define warning(a) do { printf("%s\n", a); } while(0)
 extern int complete_read (int fd, char *buf, int n);
 

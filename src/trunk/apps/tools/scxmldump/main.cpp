@@ -69,6 +69,7 @@ class EventDump : public Seiscomp::Client::Application {
 			commandline().addOption("Dump", "with-magnitudes,M", "export station magnitudes");
 			commandline().addOption("Dump", "with-focal-mechanisms,F", "export focal mechanisms");
 			commandline().addOption("Dump", "ignore-arrivals,a", "do not export origin arrivals");
+			commandline().addOption("Dump", "ignore-magnitudes", "ignores magnitudes of exported origins");
 			commandline().addOption("Dump", "preferred-only,p", "when exporting events only the preferred origin and the preferred magnitude will be dumped");
 			commandline().addOption("Dump", "all-magnitudes,m", "if only the preferred origin is exported, all magnitudes for this origin will be dumped");
 			commandline().addOption("Dump", "formatted,f", "use formatted output");
@@ -418,6 +419,11 @@ class EventDump : public Seiscomp::Client::Application {
 			bool ignoreArrivals = commandline().hasOption("ignore-arrivals");
 
 			query()->load(org);
+
+			if ( commandline().hasOption("ignore-magnitudes") ) {
+				while ( org->magnitudeCount() > 0 )
+					org->removeMagnitude(0);
+			}
 
 			if ( !staMags ) {
 				while ( org->stationMagnitudeCount() > 0 )
