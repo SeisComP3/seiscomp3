@@ -12,9 +12,28 @@
 /*.includes
 /*.user
 
+# /doc/
+/doc/base/api-python.rst
+
 # /src/arclink/apps/misc/
 /src/arclink/apps/misc/.pydevproject
 /src/arclink/apps/misc/.project
+
+# /src/arclink/libs/codegen/
+/src/arclink/libs/codegen/*.pyc
+/src/arclink/libs/codegen/*.pyc
+
+# /src/arclink/libs/python/seiscomp/db/generic/
+/src/arclink/libs/python/seiscomp/db/generic/inventory.py
+/src/arclink/libs/python/seiscomp/db/generic/genwrap.py
+/src/arclink/libs/python/seiscomp/db/generic/qc.py
+/src/arclink/libs/python/seiscomp/db/generic/routing.py
+
+# /src/arclink/libs/python/seiscomp/db/seiscomp3/
+/src/arclink/libs/python/seiscomp/db/seiscomp3/sc3wrap.py
+
+# /src/arclink/libs/python/seiscomp/db/xmlio/
+/src/arclink/libs/python/seiscomp/db/xmlio/xmlwrap.py
 
 # /src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/
 /src/seedlink/plugins/ISI_Toolkit_1_3_0/lib/makestamp
@@ -123,11 +142,25 @@
 /src/trunk/libs/3rd-party/spread/stdutil/src/*.lto
 /src/trunk/libs/3rd-party/spread/stdutil/src/Makefile
 
+# /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
+/src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/
+
 # /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdutil/private/stdarch_autoconf.h
 
-# /src/trunk/libs/3rd-party/spread/libspread-util/lib/
-/src/trunk/libs/3rd-party/spread/libspread-util/lib/
+# /src/trunk/libs/codegen/
+/src/trunk/libs/codegen/*.pyc
+
+# /src/trunk/libs/seiscomp3/datamodel/
+/src/trunk/libs/seiscomp3/datamodel/*.cpp
+/src/trunk/libs/seiscomp3/datamodel/*.h
+/src/trunk/libs/seiscomp3/datamodel/CMakeLists.generated
+
+# /src/trunk/libs/seiscomp3/datamodel/share/
+/src/trunk/libs/seiscomp3/datamodel/share/*.sql
+
+# /src/trunk/libs/swig/
+/src/trunk/libs/swig/DataModel.i
 
 # Enable only known src subdirectories
 /src/*/
@@ -169,7 +202,6 @@
 /src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.so
 /src/trunk/libs/3rd-party/spread/libspread-util/src/memory.lo
 /src/trunk/libs/3rd-party/spread/libspread-util/src/memory.o
-/src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.so.4.2.0
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.do
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.ldo
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.lo
