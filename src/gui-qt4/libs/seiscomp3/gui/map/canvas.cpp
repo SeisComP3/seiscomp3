@@ -159,9 +159,6 @@ void readLayerProperties(LayerProperties *props) {
 }
 
 
-static QPolygon polyCache(10);
-
-
 } // ns anonymous
 
 
@@ -195,7 +192,7 @@ bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
 
 
 Canvas::Canvas(const MapsDesc &meta)
-    : _geoReference(-180.0, -90.0, 360.0, 180.0), _margin(10), _delegate(NULL) {
+    : _geoReference(-180.0, -90.0, 360.0, 180.0), _margin(10), _delegate(NULL), _polyCache(10) {
 	_maptree = new ImageTree(meta);
 	if ( !_maptree->valid() )
 		_maptree = NULL;
@@ -206,7 +203,7 @@ Canvas::Canvas(const MapsDesc &meta)
 
 Canvas::Canvas(ImageTree *mapTree)
     : _geoReference(-180.0, -90.0, 360.0, 180.0), _dirtyImage(true), _dirtyLayers(true), _margin(10),
-    _isDrawLegendsEnabled(true), _delegate(NULL) {
+    _isDrawLegendsEnabled(true), _delegate(NULL), _polyCache(10) {
 	_maptree = mapTree;
 
 	if ( _maptree && !_maptree->valid() )
@@ -516,15 +513,15 @@ int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
 
 	QPointF v(poly[0].lon, poly[0].lat);
 
-	_projection->project(polyCache[0], v);
+	_projection->project(_polyCache[0], v);
 
 	// Grow cache if necessary
-	if ( polyCache.size() < (int)n ) polyCache.resize(n);
+	if ( _polyCache.size() < (int)n ) _polyCache.resize(n);
 
 	if ( minDist == 0 ) {
 		for ( size_t i = 1; i < n; ++i ) {
 			v.setX(poly[i].lon); v.setY(poly[i].lat);
-			_projection->project(polyCache[i], v);
+			_projection->project(_polyCache[i], v);
 		}
 
 		polySize = n;
@@ -534,7 +531,7 @@ int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
 			if ( std::abs(poly[i].lon - v.x()) > minDist ||
 			     std::abs(poly[i].lat - v.y()) > minDist ) {
 				v.setX(poly[i].lon); v.setY(poly[i].lat);
-				_projection->project(polyCache[polySize], v);
+				_projection->project(_polyCache[polySize], v);
 				++polySize;
 			}
 		}
@@ -548,7 +545,7 @@ size_t Canvas::drawGeoPolygon(QPainter& painter, size_t n, const Math::Geo::Coor
                               uint minPixelDist) const {
 	int polySize = polyToCache(n, poly, minPixelDist);
 	if ( polySize == 0 ) return 0;
-	painter.drawPolygon(&polyCache[0], polySize);
+	painter.drawPolygon(&_polyCache[0], polySize);
 	return polySize-1;
 }
 
@@ -648,19 +645,19 @@ size_t Canvas::drawGeoFeature(QPainter& painter, const Geo::GeoFeature *f,
 				int n = polyToCache(endIdx - startIdx, &f->vertices()[startIdx], minPixelDist);
 				if ( n < 2 ) continue;
 
-				polyCache.resize(n);
+				_polyCache.resize(n);
 
 				bool forward = Geo::GeoFeature::area(&f->vertices()[startIdx], endIdx-startIdx) > 0;
 				if ( i == 0 ) firstForward = forward;
 				forward = firstForward == forward;
 
 				if ( forward ) {
-					path.addPolygon(polyCache);
+					path.addPolygon(_polyCache);
 					path.closeSubpath();
 				}
 				else {
 					QPainterPath sub;
-					sub.addPolygon(polyCache);
+					sub.addPolygon(_polyCache);
 					sub.closeSubpath();
 #if QT_VERSION >= 0x040500
 					path -= sub;
