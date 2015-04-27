@@ -370,8 +370,8 @@ void PublicObject::serialize(Archive& ar) {
 
 		/* Just register the publicID. If another object with the same
 		 * publicID is already registered the publicID read before will
-         * be set empty.
-         */
+		 * be set empty.
+		 */
 		registerMe();
 
 		/* To strict for the first version. I keep it in mind to enable it

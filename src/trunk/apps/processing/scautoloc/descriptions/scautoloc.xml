@@ -122,10 +122,16 @@
 					Location of autoloc grid file.
 					</description>
 				</parameter>
-				<parameter name="stationConfig" type="string" default="@DATADIR@/scautoloc/station.conf">
+				<parameter name="stationConfig" type="path" default="@DATADIR@/scautoloc/station.conf">
 					<description>
 					Location of autoloc stations config file.
 					</description>
+				<parameter name="stationLocations" type="path">
+					<description>
+					The station-locations.conf file to use when in offline mode.
+					If no file is given the database is used.
+					</description>
+				</parameter>
 				</parameter>
 				<parameter name="pickLog" type="string" default="@LOGDIR@/autoloc-picklog">
 					<description>

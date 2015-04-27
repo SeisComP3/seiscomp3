@@ -28,9 +28,9 @@
     Copyright (C) 2007 Trent Waddington <trent.waddington@gmail.com>
     Copyright (c) 2008 John Tapsell <tapsell@kde.org>
 */
-class LogWindow : public QTextEdit {
+class LogDialog : public QTextEdit {
 	public:
-		LogWindow(QWidget * parent = 0) : QTextEdit(parent) {
+		LogDialog(QWidget * parent = 0) : QTextEdit(parent) {
 			escape_sequence = false;
 			escape_CSI = false;
 			escape_OSC = false;
@@ -40,7 +40,7 @@ class LogWindow : public QTextEdit {
 			escape_code = 0;
 		}
 
-		LogWindow(const QString &text, QWidget * parent = 0)
+		LogDialog(const QString &text, QWidget * parent = 0)
 		: QTextEdit(text, parent) {
 			escape_sequence = false;
 			escape_CSI = false;
@@ -268,7 +268,7 @@ ProcessWidget::ProcessWidget(QWidget *parent) : QDialog(parent) {
 	buttonLayout->addWidget(_btnOK);
 	buttonLayout->addWidget(_btnStop);
 
-	_logWindow = new LogWindow;
+	_logWindow = new LogDialog;
 	_logWindow->setAutoFillBackground(true);
 	_logWindow->setReadOnly(true);
 	_logWindow->setWordWrapMode(QTextOption::NoWrap);

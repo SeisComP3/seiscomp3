@@ -211,9 +211,9 @@ bool EventTool::initConfiguration() {
 
 	_config.regionFilter.push_back(regionFilter);
 
-	try { _config.eventTimeBefore = TimeSpan(configGetInt("eventAssociation.eventTimeBefore")); } catch (...) {}
-	try { _config.eventTimeAfter = TimeSpan(configGetInt("eventAssociation.eventTimeAfter")); } catch (...) {}
-	try { _config.maxTimeDiff = TimeSpan(configGetInt("eventAssociation.maximumTimeSpan")); } catch (...) {}
+	try { _config.eventTimeBefore = TimeSpan(configGetDouble("eventAssociation.eventTimeBefore")); } catch (...) {}
+	try { _config.eventTimeAfter = TimeSpan(configGetDouble("eventAssociation.eventTimeAfter")); } catch (...) {}
+	try { _config.maxTimeDiff = TimeSpan(configGetDouble("eventAssociation.maximumTimeSpan")); } catch (...) {}
 	try { _config.maxDist = configGetDouble("eventAssociation.maximumDistance"); } catch (...) {}
 
 	try { _config.minMwCount = configGetInt("eventAssociation.minMwCount"); } catch (...) {}

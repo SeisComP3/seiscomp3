@@ -34,7 +34,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-	_text = "Jakarta 2014.318";
+	_text = "Jakarta 2014.339";
 }
 
 

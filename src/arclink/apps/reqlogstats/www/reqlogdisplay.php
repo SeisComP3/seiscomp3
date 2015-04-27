@@ -99,7 +99,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
       }
       $presence_list[] = mark_yesno($yesno);
     }
-    $header = tag("a", "$dcid", Array("href" => "$me?date=$today_str&dcid=$dcid")); // "$dcid ($host:$port)";
+    $header = tag("a", "$dcid", Array("href" => "$me?date=$today_str&amp;dcid=$dcid")); // "$dcid ($host:$port)";
     $tmp = explode("-", $today_str);
     $highlight = Array(intval($tmp[2]) => 'style="border-style: Solid; border-color: yellow; border-width: 0px 1px; background-color: lightyellow;"');
     echo tr(td($header) . tag_list('td', $presence_list, "", $highlight)) . PHP_EOL;
@@ -152,7 +152,7 @@ $img2 = "$img_base_url/sources-$year-$month.svg";
 echo tag('h1', 'Arclink Request Statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year)));
 
 if (file_exists($img1)) {
-        print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '"alt="Monthly chart total bytes" width="480"></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
+        print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '" alt="Monthly chart total bytes" width="480" /></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
 } else {
 	print tag("p", '[No graph for this month is available]');
 }
@@ -160,7 +160,7 @@ if (file_exists($img1)) {
 echo tag("h3", "Table for $year");
 $year_img = "../data/total-$year.svg";
 if (file_exists($year_img)) {
-	print tag("p", '<a href="' . $year_img .'"><img src="' . $year_img . '"alt="Year to date chart total bytes" width="480"></a> <a href="' . str_replace("total", "sources", $year_img) . '">Year to date by DCID</a>...');
+	print tag("p", '<a href="' . $year_img .'"><img src="' . $year_img . '" alt="Year to date chart total bytes" width="480" /></a> <a href="' . str_replace("total", "sources", $year_img) . '">Year to date by DCID</a>...');
 }
 print tag("p", 'Summary table for <a href="../data/total-' . $year. '.txt">' . $year . '</a>');
 

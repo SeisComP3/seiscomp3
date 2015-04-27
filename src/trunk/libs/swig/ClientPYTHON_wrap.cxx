@@ -15785,6 +15785,35 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Application_reloadInventory(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Application_reloadInventory",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_reloadInventory" "', argument " "1"" of type '" "Seiscomp::Client::Application *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  {
+    try {
+      result = (bool)(arg1)->reloadInventory(); 
+    }
+    catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Application_Instance(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Swig::Director *director = 0;
@@ -23689,6 +23718,7 @@ static PyMethodDef SwigMethods[] = {
 		"logObject(RunningAverage log, Time timestamp, size_t count=1)\n"
 		"Application_logObject(Application self, RunningAverage log, Time timestamp)\n"
 		""},
+	 { (char *)"Application_reloadInventory", _wrap_Application_reloadInventory, METH_VARARGS, (char *)"Application_reloadInventory(Application self) -> bool"},
 	 { (char *)"Application_Instance", _wrap_Application_Instance, METH_VARARGS, (char *)"Application_Instance() -> Application"},
 	 { (char *)"Application_HandleSignals", _wrap_Application_HandleSignals, METH_VARARGS, (char *)"Application_HandleSignals(bool termination, bool crash)"},
 	 { (char *)"Application_createCommandLineDescription", _wrap_Application_createCommandLineDescription, METH_VARARGS, (char *)"Application_createCommandLineDescription(Application self)"},

@@ -18,6 +18,7 @@
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/logging/log.h>
+#include <seiscomp3/math/math.h>
 #include <seiscomp3/math/filter/butterworth.h>
 #include <seiscomp3/gui/core/application.h>
 
@@ -2265,7 +2266,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QColor gridColor[2] = {QColor(192,192,255), QColor(224,225,255)};
 
-	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) ) {
+	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_tmin) ) {
 		double left = _tmin + _gridOffset;
 
 		//for ( int k = 1; k >= 0; --k ) {

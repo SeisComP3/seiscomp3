@@ -1114,6 +1114,7 @@ void App::emitPPick(const Processing::Picker *proc,
 
 	pick->setTime(pickTime);
 	pick->setMethodID(proc->methodID());
+	pick->setFilterID(proc->filterID());
 
 	// If the detections should be sent as well set the repicked Pick mode
 	// to manual to distinguish between detected picks and picked picks.
@@ -1262,6 +1263,7 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 
 	pick->setTime(pickTime);
 	pick->setMethodID(proc->methodID());
+	pick->setFilterID(proc->filterID());
 	pick->setEvaluationMode(DataModel::EvaluationMode(DataModel::AUTOMATIC));
 	pick->setPhaseHint(DataModel::Phase(res.phaseCode));
 	pick->setWaveformID(DataModel::WaveformStreamID(
@@ -1341,6 +1343,17 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 	pick->setCreationInfo(ci);
 	pick->setTime(time);
 	pick->setMethodID(proc->methodID());
+
+	// Set filterID
+	string filter = _config.defaultFilter;
+
+	const StreamConfig *sc = _stationConfig.get(&configuration(), configModuleName(),
+	                                            rec->networkCode(), rec->stationCode());
+	if ( sc != NULL )
+		if ( !sc->filter.empty() ) filter = sc->filter;
+
+	pick->setFilterID(filter);
+
 	pick->setEvaluationMode(DataModel::EvaluationMode(DataModel::AUTOMATIC));
 	pick->setPhaseHint(DataModel::Phase(_config.phaseHint));
 	pick->setWaveformID(DataModel::WaveformStreamID(

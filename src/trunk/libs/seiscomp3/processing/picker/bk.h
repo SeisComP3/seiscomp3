@@ -43,6 +43,7 @@ class SC_SYSTEM_CLIENT_API BKPicker : public Picker {
 	public:
 		virtual bool setup(const Settings &settings);
 		const std::string &methodID() const;
+		const std::string &filterID() const;
 
 
 	// ----------------------------------------------------------------------
@@ -54,6 +55,7 @@ class SC_SYSTEM_CLIENT_API BKPicker : public Picker {
 		int    filterPoles; // number of poles
 		double f1; // bandpass lower cutoff freq. in Hz
 		double f2; // bandpass upper cutoff freq. in Hz
+		std::string usedFilter;
 
 		// picker parameters
 		double thrshl1; // threshold to trigger for pick (c.f. paper), default 10 

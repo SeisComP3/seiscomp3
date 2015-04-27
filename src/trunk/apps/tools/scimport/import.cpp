@@ -158,14 +158,23 @@ int Import::connectToSink(const std::string& sink) {
 	_sink = new Communication::SystemConnection;
 
 	// Connect to the sink master and use a default name
-	int ret = _sink->connect(sink, "", Communication::Protocol::IMPORT_GROUP);
-	if (ret != Core::Status::SEISCOMP_SUCCESS) {
-		SEISCOMP_WARNING("Could not connect to the sink master %s : %s",
-		                 sink.c_str(), Core::Status::StatusToStr(ret));
+	int ret;
+	bool first = true;
+	while ( (ret = _sink->connect(sink, "", Communication::Protocol::IMPORT_GROUP)) !=
+			Core::Status::SEISCOMP_SUCCESS && !_exitRequested ) {
+		if ( first ) {
+			SEISCOMP_WARNING("Could not connect to the sink master %s : %s, trying again every 2s",
+			                 sink.c_str(), Core::Status::StatusToStr(ret));
+			first = false;
+		}
+
+		Core::sleep(2);
 	}
 
+	if (ret != Core::Status::SEISCOMP_SUCCESS)
+		return ret;
+
 	// Get rid of data messages and read commands that are may send.
-	_sinkMessageThread = new boost::thread(boost::bind(&Import::readSinkMessages, this));
 	SEISCOMP_INFO("Successfully connected to sink master: %s", sink.c_str());
 
 	// Build routing table
@@ -183,6 +192,8 @@ int Import::connectToSink(const std::string& sink) {
 		SEISCOMP_ERROR("Unknown import mode: %i", _mode);
 		return Core::Status::SEISCOMP_FAILURE;
 	}
+
+	_sinkMessageThread = new boost::thread(boost::bind(&Import::readSinkMessages, this));
 
 	// Print routing table
 	for (std::map<std::string,
@@ -351,7 +362,7 @@ bool Import::buildImportRoutingtable()
 	}
 	else
 	{
-		Communication::Connection* con = connection();
+		Communication::Connection *con = connection();
 		if (con)
 			sourceGroups = con->groups();
 	}

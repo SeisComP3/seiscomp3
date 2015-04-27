@@ -19,6 +19,38 @@
 
 using namespace std;
 
+namespace {
+
+class LogDialog : public QDialog {
+	public:
+		LogDialog(QWidget *parent = NULL) : QDialog(parent) {
+			_content = new QTextEdit(this);
+			_content->setReadOnly(true);
+
+			QPushButton *close = new QPushButton("&Close", this);
+			connect(close, SIGNAL(clicked()), this, SLOT(accept()));
+
+			QHBoxLayout *layout = new QHBoxLayout;
+			layout->addStretch();
+			layout->addWidget(close);
+
+			QVBoxLayout *mainLayout = new QVBoxLayout;
+			mainLayout->addWidget(_content);
+			mainLayout->addLayout(layout);
+
+			setLayout(mainLayout);
+		}
+
+		void setContent(const QString &text) {
+			_content->setText(text);
+		}
+
+	private:
+		QTextEdit          *_content;
+};
+
+
+}
 
 SystemPanel::SystemPanel(QWidget *parent)
 : ConfiguratorPanel(false, parent) {
@@ -125,6 +157,9 @@ SystemPanel::SystemPanel(QWidget *parent)
 	_procTable->setAlternatingRowColors(true);
 	_procTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 	_procTable->setSortingEnabled(true);
+	_procTable->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(_procTable, SIGNAL(customContextMenuRequested(QPoint)), this,
+	        SLOT(onContextMenuRequested(QPoint)));
 
 	QSizePolicy sp = _procTable->sizePolicy();
 	sp.setVerticalStretch(1);
@@ -165,6 +200,37 @@ SystemPanel::SystemPanel(QWidget *parent)
 	clearSelection->setShortcut(QKeySequence("Escape"));
 	connect(clearSelection, SIGNAL(triggered()), _procTable->selectionModel(), SLOT(clearSelection()));
 	addAction(clearSelection);
+}
+
+void SystemPanel::onContextMenuRequested(const QPoint &pos) {
+	QMenu menu;
+
+	// Get item at the given pos
+	QTableWidgetItem *item = _procTable->itemAt(pos);
+	if ( item == NULL ) return;
+
+	// Get module item
+	if ( item->column() != 1 )
+		item = _procTable->item(item->row(), 1);
+
+	QDir installDir(QString::fromStdString(Seiscomp::Environment::Instance()->installDir()));
+	QString filename = installDir.filePath("var/log/" + item->text() + ".log");
+
+	QFile file(filename);
+	bool enabled = file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+	QAction *action = menu.addAction("Show log..");
+	action->setEnabled(enabled);
+	if ( menu.exec(QCursor::pos()) == action ) {
+		showStartLog(file.readAll());
+	}
+}
+
+void SystemPanel::showStartLog(const QString &text) {
+	LogDialog dlg;
+	dlg.setWindowTitle("Start log");
+	dlg.setContent(text);
+	dlg.exec();
 }
 
 

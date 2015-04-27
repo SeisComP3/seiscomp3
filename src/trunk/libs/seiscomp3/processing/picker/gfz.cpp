@@ -149,14 +149,14 @@ bool GFZPicker::setup(const Settings &settings) {
 	settings.getValue(_config.signalEnd, "picker.GFZ.signalEnd");
 	settings.getValue(_config.snrMin, "picker.GFZ.minSNR");
 
-	string filter;
-	settings.getValue(filter, "picker.GFZ.filter");
-	if ( !filter.empty() ) {
+	_usedFilter.clear();
+	settings.getValue(_usedFilter, "picker.GFZ.filter");
+	if ( !_usedFilter.empty() ) {
 		string error;
-		Filter *f = Filter::Create(filter, &error);
+		Filter *f = Filter::Create(_usedFilter, &error);
 		if ( f == NULL ) {
 			SEISCOMP_ERROR("failed to create filter '%s': %s",
-			               filter.c_str(), error.c_str());
+			               _usedFilter.c_str(), error.c_str());
 			return false;
 		}
 		setFilter(f);
@@ -173,6 +173,15 @@ bool GFZPicker::setup(const Settings &settings) {
 const string &GFZPicker::methodID() const {
 	static string method = "GFZ";
 	return method;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string &GFZPicker::filterID() const {
+	return _usedFilter;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

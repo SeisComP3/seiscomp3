@@ -220,8 +220,11 @@ bool SDSArchive::setStart(const string &fname) {
 	off_t fpos;
 	int retcode;
 	long int offset = 0;
-	long int size = _recstream->stream().rdbuf()->in_avail();
+	long int size;
 	bool result = true;
+
+	_recstream->stream().seekg(0, ios::end);
+	size = (long int)_recstream->stream().tellg();
 
 #define SDSARCHIVE_BINSEARCH
 #ifdef SDSARCHIVE_BINSEARCH

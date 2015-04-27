@@ -198,7 +198,8 @@ DataModel::Origin* LocSAT::fromPicks(PickList& picks){
 			_locateEvent->addArrival(i++, stationID.c_str(),
 			                         phase.c_str(),
 			                         (double)pick->time().value()-cor,
-			                         ARRIVAL_TIME_ERROR, 1);
+			                         ARRIVAL_TIME_ERROR,
+			                         it->second <= _minArrivalWeight?0:1);
 
 			// Set backazimuth
 			try {

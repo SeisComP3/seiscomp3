@@ -516,6 +516,12 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		void logObject(ObjectLog *log, const Core::Time &timestamp,
 		               size_t count = 1);
 
+		/**
+		 * Reloads the application inventory from either an XML file or
+		 * the database.
+		 */
+		bool reloadInventory();
+
 
 	// ----------------------------------------------------------------------
 	//  Static public members

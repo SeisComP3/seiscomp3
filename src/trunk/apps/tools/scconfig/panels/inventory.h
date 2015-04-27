@@ -29,7 +29,7 @@ class QLineEdit;
 class QPushButton;
 class QComboBox;
 
-class LogWindow;
+class LogDialog;
 class StatusPanel;
 
 
@@ -55,7 +55,7 @@ class ProcessWidget : public QDialog {
 
 	private:
 		QProcess    *_process;
-		LogWindow   *_logWindow;
+		LogDialog   *_logWindow;
 		QPushButton *_btnOK;
 		QPushButton *_btnStop;
 		StatusPanel *_status;

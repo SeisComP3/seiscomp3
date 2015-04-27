@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 6, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 7, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x010600
+#define SC_API_VERSION 0x010800
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,13 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "1.8.0"   0x010800
+   - Added Seiscomp::Client::Application::reloadInventory method
+
+ "1.7.0"   0x010700
+   - Added Seiscomp::Processing::Picker::filterID method
+   - Added Seiscomp::Processing::SecondaryPicker::filterID method
+
  "1.6.0"   0x010600
    - Added Seiscomp::IO::QuakeLink keep alive option
 

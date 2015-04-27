@@ -66,6 +66,7 @@ class SC_SYSTEM_CLIENT_API SL2Picker : public SecondaryPicker {
 		void setSaveIntermediate(bool);
 
 		const std::string &methodID() const;
+		const std::string &filterID() const;
 
 		bool setL2Config(const L2Config &l2config);
 

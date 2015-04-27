@@ -621,6 +621,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		int _currentSlot;
 		bool _alignedOnOT;
 		RecordWidget::Filter *_currentFilter;
+		QString _currentFilterID;
 
 		QWidget *_pickInfoList;
 

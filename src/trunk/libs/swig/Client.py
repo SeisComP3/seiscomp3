@@ -811,6 +811,10 @@ class Application(Core.InterruptibleObject):
         """
         return _Client.Application_logObject(self, *args)
 
+    def reloadInventory(self):
+        """reloadInventory(Application self) -> bool"""
+        return _Client.Application_reloadInventory(self)
+
     def Instance():
         """Instance() -> Application"""
         return _Client.Application_Instance()

@@ -43,6 +43,7 @@ class SC_SYSTEM_CLIENT_API ARAICPicker : public Picker {
 		bool setup(const Settings &settings);
 
 		const std::string &methodID() const;
+		const std::string &filterID() const;
 
 
 	// ----------------------------------------------------------------------

@@ -229,7 +229,7 @@ double AmplitudeProcessor_MLv::timeWindowLength(double distance_deg) const {
 
 	double distance_km = distance_deg*111.2;
 	double windowLength = distance_km/v_min + 30; 
-	return windowLength;
+	return windowLength < _config.signalEnd ? windowLength :_config.signalEnd;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

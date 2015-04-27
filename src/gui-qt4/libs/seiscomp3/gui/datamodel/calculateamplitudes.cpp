@@ -505,7 +505,7 @@ void CalculateAmplitudes::addProcessor(
 				ParameterSet *ps = ParameterSet::Find(setup->parameterSetID());
 				if ( !ps ) continue;
 
-				ParametersPtr parameters = new Processing::Parameters;
+				ParametersPtr parameters = new Parameters;
 				parameters->readFrom(ps);
 				_parameters[stationID] = parameters;
 				params = parameters.get();
