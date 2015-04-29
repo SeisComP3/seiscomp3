@@ -220,6 +220,16 @@ class SchemaParameters(Core.BaseObject):
     for _s in [Core.BaseObject]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SchemaParameters, name)
     __repr__ = _swig_repr
+    __swig_getmethods__["ClassName"] = lambda x: _System.SchemaParameters_ClassName
+    if _newclass:ClassName = staticmethod(_System.SchemaParameters_ClassName)
+    __swig_getmethods__["TypeInfo"] = lambda x: _System.SchemaParameters_TypeInfo
+    if _newclass:TypeInfo = staticmethod(_System.SchemaParameters_TypeInfo)
+    def className(self): return _System.SchemaParameters_className(self)
+    def typeInfo(self): return _System.SchemaParameters_typeInfo(self)
+    __swig_getmethods__["Cast"] = lambda x: _System.SchemaParameters_Cast
+    if _newclass:Cast = staticmethod(_System.SchemaParameters_Cast)
+    __swig_getmethods__["ConstCast"] = lambda x: _System.SchemaParameters_ConstCast
+    if _newclass:ConstCast = staticmethod(_System.SchemaParameters_ConstCast)
     def __init__(self): 
         this = _System.new_SchemaParameters()
         try: self.this.append(this)
@@ -236,6 +246,22 @@ class SchemaParameters(Core.BaseObject):
     __del__ = lambda self : None;
 SchemaParameters_swigregister = _System.SchemaParameters_swigregister
 SchemaParameters_swigregister(SchemaParameters)
+
+def SchemaParameters_ClassName():
+  return _System.SchemaParameters_ClassName()
+SchemaParameters_ClassName = _System.SchemaParameters_ClassName
+
+def SchemaParameters_TypeInfo():
+  return _System.SchemaParameters_TypeInfo()
+SchemaParameters_TypeInfo = _System.SchemaParameters_TypeInfo
+
+def SchemaParameters_Cast(*args):
+  return _System.SchemaParameters_Cast(*args)
+SchemaParameters_Cast = _System.SchemaParameters_Cast
+
+def SchemaParameters_ConstCast(*args):
+  return _System.SchemaParameters_ConstCast(*args)
+SchemaParameters_ConstCast = _System.SchemaParameters_ConstCast
 
 class SchemaGroup(SchemaParameters):
     __swig_setmethods__ = {}
