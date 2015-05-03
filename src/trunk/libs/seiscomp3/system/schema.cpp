@@ -458,8 +458,6 @@ bool SchemaDefinitions::load(const char *path) {
 			string filename = SC_FS_IT_STR(it);
 			if ( fs::extension(filename) != ".xml" ) continue;
 
-			size_t oldPluginCount = _plugins.size();
-
 			SEISCOMP_DEBUG("Loading %s", filename.c_str());
 			if ( !ar.open(filename.c_str()) ) {
 				SEISCOMP_ERROR("Failed to load %s", filename.c_str());
@@ -468,10 +466,6 @@ bool SchemaDefinitions::load(const char *path) {
 
 			serialize(ar);
 			ar.close();
-
-			if ( _plugins.size() > oldPluginCount ) {
-				cout << _plugins.back()->name << endl;
-			}
 		}
 
 		// Read the aliases file and create the aliases
