@@ -1173,7 +1173,7 @@ void App::emitPPick(const Processing::Picker *proc,
 	}
 
 #ifdef LOG_PICKS
-	if ( !isMessagingEnabled() ) {
+	if ( !isMessagingEnabled() && !_ep ) {
 		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
 		       res.time.toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
 		       res.record->networkCode().c_str(), res.record->stationCode().c_str(),
@@ -1295,7 +1295,7 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 	);
 
 #ifdef LOG_PICKS
-	if ( !isMessagingEnabled() ) {
+	if ( !isMessagingEnabled() && !_ep ) {
 		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
 		       res.time.toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
 		       res.record->networkCode().c_str(), res.record->stationCode().c_str(),
@@ -1390,7 +1390,7 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 	static_cast<const Detector*>(proc)->setPickID(pick->publicID());
 
 #ifdef LOG_PICKS
-	if ( !isMessagingEnabled() ) {
+	if ( !isMessagingEnabled() && !_ep ) {
 		//cout << pick.get();
 		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
 		       pick->time().value().toString("%Y-%m-%d %H:%M:%S.%1f").c_str(),
@@ -1517,7 +1517,7 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 	);
 
 #ifdef LOG_PICKS
-	if ( !isMessagingEnabled() ) {
+	if ( !isMessagingEnabled() && !_ep ) {
 		//cout << amp.get();
 		if ( amp->type() == "snr" || amp->type() == "mb" ) {
 			printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
