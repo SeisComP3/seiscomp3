@@ -194,6 +194,7 @@ class SC_GUI_API Application : public QApplication,
 		bool validateParameters();
 
 		bool handleInitializationError(Stage);
+		void handleInterrupt(int) throw();
 
 		virtual QString splashImagePath() const;
 
@@ -239,6 +240,7 @@ class SC_GUI_API Application : public QApplication,
 		void showPlugins();
 
 		void timerSOH();
+		void handleSignalNotification();
 
 
 	private:
@@ -272,6 +274,9 @@ class SC_GUI_API Application : public QApplication,
 
 		MessageThread*      _thread;
 		int                 _flags;
+
+		QSocketNotifier    *_signalNotifier;
+		int                 _signalSocketFd[2];
 };
 
 
