@@ -11,6 +11,8 @@ Revision:   17-07-2013
 ==============================================================================*/
 #include "seed.h"
 #include <assert.h>
+#define SEISCOMP_COMPONENT sync_dlsv
+#include <seiscomp3/logging/log.h>
 
 using namespace std;
 
@@ -121,6 +123,14 @@ inline string substr(const string &str, size_t pos = 0, size_t len = string::npo
 	}
 	*/
 	return str.substr(pos, len);
+}
+
+
+namespace {
+
+// Stores the type of the last blockette that was incomplete
+int lastIncompleteBlockette = -1;
+
 }
 
 
@@ -246,6 +256,7 @@ void VolumeIndexControl::ParseVolumeRecord(string record)
 						break;
 					default:
 						proceed = false;
+						SEISCOMP_WARNING("Unhandled blockette: %d", blockette);
 						break;
 				}
 				// must check if size of the record is smaller or equal to the size of the last blockette
@@ -395,6 +406,44 @@ VolumeTimeSpanIndex::VolumeTimeSpanIndex(string record)
 	timespans.push_back(ts);
 }
 
+
+template <typename T, typename C>
+void Parse(int blockette, C &container, bool merge, std::string record) {
+	ParseResult res = PR_OK;
+
+	try {
+		if ( merge ) {
+			SEISCOMP_DEBUG("Blockette %d: continuation", blockette);
+			res = container.back()->Merge(record);
+		}
+		else {
+			typename Seiscomp::Core::SmartPointer<T>::Impl rec = new T;
+			res = rec->Parse(record);
+			if ( res == PR_Error ) {
+				SEISCOMP_ERROR("Blockette %d: Parse error: %s", blockette, record.c_str());
+				return;
+			}
+
+			container.push_back(rec);
+		}
+	}
+	catch ( std::out_of_range &o ) {
+		SEISCOMP_ERROR("Blockette %d: %s", blockette, o.what());
+		return;
+	}
+
+	if ( res == PR_Partial ) {
+		SEISCOMP_DEBUG("Blockette %d: requires more data, try to continue on next record", blockette);
+		lastIncompleteBlockette = blockette;
+	}
+	else
+		lastIncompleteBlockette = -1;
+}
+
+#define PARSE(TYPE, CONTAINTER) \
+	Parse<TYPE>(blockette, CONTAINTER, lastIncompleteBlockette == blockette, substr(record, 7, data_size))
+
+
 /****************************************************************************************************************************
  * Function:     ParseVolumeRecord											    *
  * Parameters:   record	- the string that will be parsed								    *
@@ -403,10 +452,10 @@ VolumeTimeSpanIndex::VolumeTimeSpanIndex(string record)
  ****************************************************************************************************************************/
 void AbbreviationDictionaryControl::ParseVolumeRecord(string record)
 {
-	unsigned int blockette, size, position = 0;
+	int blockette;
+	size_t size, position = 0;
 	bool proceed = true;
 
-	log = new Logging();
 	SetBytes(LRECL-8);
 	if ( !GetRemains().empty() ) {
 		record = GetRemains() + record;
@@ -418,55 +467,59 @@ void AbbreviationDictionaryControl::ParseVolumeRecord(string record)
 		try {
 			blockette = FromString<int>(substr(record, 0,3).c_str());
 			size = FromString<int>(substr(record, 3, 4).c_str());
+			//SEISCOMP_DEBUG("Read blockette %d %d", blockette, (int)size);
 
 			if ( SetBytesLeft(size, record) ) {
+				size_t data_size = size-7;
+
 				switch ( blockette ) {
 					case(30):
-						dfd.push_back(DataFormatDictionary(substr(record, 7, size)));
+						PARSE(DataFormatDictionary, dfd);
 						break;
 					case(31):
-						cd.push_back(CommentDescription(substr(record, 7, size)));
+						PARSE(CommentDescription, cd);
 						break;
 					case(32):
-						csd.push_back(CitedSourceDictionary(substr(record, 7, size)));
+						PARSE(CitedSourceDictionary, csd);
 						break;
 					case(33):
-						ga.push_back(GenericAbbreviation(substr(record, 7, size)));
+						PARSE(GenericAbbreviation, ga);
 						break;
 					case(34):
-						ua.push_back(UnitsAbbreviations(substr(record, 7, size)));
+						PARSE(UnitsAbbreviations, ua);
 						break;
 					case(35):
-						bc.push_back(BeamConfiguration(substr(record, 7, size)));
+						PARSE(BeamConfiguration, bc);
 						break;
 					case(41):
-						fird.push_back(FIRDictionary(substr(record, 7, size)));
+						PARSE(FIRDictionary, fird);
 						break;
 					case(42):
-						rpd.push_back(ResponsePolynomialDictionary(substr(record, 7, size)));
+						PARSE(ResponsePolynomialDictionary, rpd);
 						break;
 					case(43):
-						rpzd.push_back(ResponsePolesZerosDictionary(substr(record, 7, size)));
+						PARSE(ResponsePolesZerosDictionary, rpzd);
 						break;
 					case(44):
-						rcd.push_back(ResponseCoefficientsDictionary(substr(record, 7, size)));
+						PARSE(ResponseCoefficientsDictionary, rcd);
 						break;
 					case(45):
-						rld.push_back(ResponseListDictionary(substr(record, 7, size)));
+						PARSE(ResponseListDictionary, rld);
 						break;
 					case(46):
-						grd.push_back(GenericResponseDictionary(substr(record, 7, size)));
+						PARSE(GenericResponseDictionary, grd);
 						break;
 					case(47):
-						dd.push_back(DecimationDictionary(substr(record, 7, size)));
+						PARSE(DecimationDictionary, dd);
 						break;
 					case(48):
-						csgd.push_back(ChannelSensitivityGainDictionary(substr(record, 7, size)));
+						PARSE(ChannelSensitivityGainDictionary, csgd);
 						break;
 					default:
 						proceed = false;
 						break;
 				}
+
 				// must check if size of the record is smaller or equal to the size of the last blockette
 				// else you'll get an segmentation fault
 				if ( record.size() <= size )
@@ -487,11 +540,11 @@ void AbbreviationDictionaryControl::ParseVolumeRecord(string record)
 			}
 		}
 		catch ( BadConversion &o ) {
-			log->write(o.what());
+			SEISCOMP_WARNING("%s", o.what());
 			proceed = false;
 		}
 		catch ( std::out_of_range &o ) {
-			log->write(string("AbbreviationDictionaryControl blockette: ") + o.what());
+			SEISCOMP_WARNING("AbbreviationDictionaryControl volume: %s", o.what());
 			SetBytes(0);
 			SetRemains("");
 			proceed = false;
@@ -543,7 +596,7 @@ void AbbreviationDictionaryControl::EmptyVectors()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the DataFormatDictionary									    *
 ****************************************************************************************************************************/
-DataFormatDictionary::DataFormatDictionary(string record) {
+ParseResult DataFormatDictionary::Parse(string record) {
 	int pos1=0, pos2;
 	short_descriptive_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	pos1 = ++pos2;
@@ -557,6 +610,7 @@ DataFormatDictionary::DataFormatDictionary(string record) {
 		decoder_keys.push_back(SplitString(record, SEED_SEPARATOR, pos1, pos2));
 		pos1 = ++pos2;
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -564,12 +618,13 @@ DataFormatDictionary::DataFormatDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the CommentDescription									    *
 ****************************************************************************************************************************/
-CommentDescription::CommentDescription(string record) {
+ParseResult CommentDescription::Parse(string record) {
 	comment_code_key = FromString<int>(substr(record, 0, 4));
 	comment_class_code = record[4];
 	int pos1=5, pos2;
 	description_of_comment = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	units = FromString<int>(substr(record, ++pos2, 3));
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -577,12 +632,13 @@ CommentDescription::CommentDescription(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the CitedSourceDictionary									    *
 ****************************************************************************************************************************/
-CitedSourceDictionary::CitedSourceDictionary(string record) {
+ParseResult CitedSourceDictionary::Parse(string record) {
 	source_lookup_code = FromString<int>(substr(record, 0, 2));
 	int pos1=2, pos2;
 	name_of_publication = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	date_published = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	publisher_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -590,10 +646,11 @@ CitedSourceDictionary::CitedSourceDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the GenericAbbreviation									    *
 ****************************************************************************************************************************/
-GenericAbbreviation::GenericAbbreviation(string record) {
+ParseResult GenericAbbreviation::Parse(string record) {
 	lookup_code = FromString<int>(substr(record, 0, 3));
 	int pos1=3, pos2;
 	description = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -601,11 +658,12 @@ GenericAbbreviation::GenericAbbreviation(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the UnitsAbbrevations									    *
 ****************************************************************************************************************************/
-UnitsAbbreviations::UnitsAbbreviations(string record) {
+ParseResult UnitsAbbreviations::Parse(string record) {
 	lookup_code = FromString<int>(substr(record, 0, 3));
 	int pos1=3, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	description = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -613,7 +671,7 @@ UnitsAbbreviations::UnitsAbbreviations(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the BeamConfiguration									    *
 ****************************************************************************************************************************/
-BeamConfiguration::BeamConfiguration(string record) {
+ParseResult BeamConfiguration::Parse(string record) {
 	lookup_code = FromString<int>(substr(record, 0, 3));
 	number_of_components = FromString<int>(substr(record, 3, 4));
 	int pos1=7;
@@ -631,6 +689,7 @@ BeamConfiguration::BeamConfiguration(string record) {
 		pos1 += 5;
 		components.push_back(comp);
  	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -638,30 +697,56 @@ BeamConfiguration::BeamConfiguration(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the FIRDictionary										    *
 ****************************************************************************************************************************/
-FIRDictionary::FIRDictionary(string record) {
+ParseResult FIRDictionary::Parse(std::string record)
+{
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
-	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	response_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	pos1 = ++pos2;
-	symmetry_code = record[pos1++];
-	signal_in_units = FromString<int>(substr(record, pos1, 3));
-	pos1 += 3;
-	signal_out_units = FromString<int>(substr(record, pos1, 3));
-	pos1 += 3;
-	number_of_factors = FromString<int>(substr(record, pos1, 4));
-	pos1 += 4;
-	for ( int i = 0; i < number_of_factors; ++i ) {
+
+	// Not merging
+	if ( coefficients.empty() ) {
+		symmetry_code = record[pos1++];
+		signal_in_units = FromString<int>(substr(record, pos1, 3));
+		pos1 += 3;
+		signal_out_units = FromString<int>(substr(record, pos1, 3));
+		pos1 += 3;
+		number_of_coefficients = FromString<int>(substr(record, pos1, 4));
+		pos1 += 4;
+	}
+	else
+		pos1 += 3+3+4;
+
+	int max_factors = (record.size()-pos1)/14;
+	if ( max_factors > number_of_coefficients ) {
+		SEISCOMP_WARNING("Blockette 41: size larger than specified content");
+		max_factors = number_of_coefficients;
+	}
+
+	for ( int i = 0; i < max_factors; ++i ) {
 		coefficients.push_back(FromString<double>(substr(record, pos1, 14)));
 		pos1 += 14;
 	}
+
+	if ( (int)coefficients.size() < number_of_coefficients )
+		return PR_Partial;
+
+	return PR_OK;
 }
+
+
+ParseResult FIRDictionary::Merge(string record)
+{
+	return Parse(record);
+}
+
 
 /****************************************************************************************************************************
 * Function:     ResponsePolynomialDictionary										    *
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponsePolynomialDictionary								    *
 ****************************************************************************************************************************/
-ResponsePolynomialDictionary::ResponsePolynomialDictionary(string record) {
+ParseResult ResponsePolynomialDictionary::Parse(string record) {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
@@ -693,6 +778,7 @@ ResponsePolynomialDictionary::ResponsePolynomialDictionary(string record) {
 		pos1 += 12;
 		polynomial_coefficients.push_back(pc);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -700,12 +786,12 @@ ResponsePolynomialDictionary::ResponsePolynomialDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponsePolesZerosDictionary								    *
 ****************************************************************************************************************************/
-ResponsePolesZerosDictionary::ResponsePolesZerosDictionary(string record) {
+ParseResult ResponsePolesZerosDictionary::Parse(string record) {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	pos1 = ++pos2;
-	response_type  = record[pos1++];
+	transfer_function_type = record[pos1++];
 	signal_in_units = FromString<int>(substr(record, pos1, 3));
 	pos1 += 3;
 	signal_out_units = FromString<int>(substr(record, pos1, 3));
@@ -742,6 +828,7 @@ ResponsePolesZerosDictionary::ResponsePolesZerosDictionary(string record) {
 		pos1 += 12;
 		complex_poles.push_back(cp);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -749,7 +836,7 @@ ResponsePolesZerosDictionary::ResponsePolesZerosDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponseCoefficientsDictionary								    *
 ****************************************************************************************************************************/
-ResponseCoefficientsDictionary::ResponseCoefficientsDictionary(string record) {
+ParseResult ResponseCoefficientsDictionary::Parse(string record) {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
@@ -778,6 +865,7 @@ ResponseCoefficientsDictionary::ResponseCoefficientsDictionary(string record) {
 		pos1 += 12;
 		denominators.push_back(coeff);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -785,7 +873,7 @@ ResponseCoefficientsDictionary::ResponseCoefficientsDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponseListDictionary									    *
 ****************************************************************************************************************************/
-ResponseListDictionary::ResponseListDictionary(string record) {
+ParseResult ResponseListDictionary::Parse(string record) {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
@@ -810,6 +898,7 @@ ResponseListDictionary::ResponseListDictionary(string record) {
 		pos1 += 12;
 		responses_listed.push_back(lr);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -817,7 +906,7 @@ ResponseListDictionary::ResponseListDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the GenericResponseDictionary								    *
 ****************************************************************************************************************************/
-GenericResponseDictionary::GenericResponseDictionary(string record) {
+ParseResult GenericResponseDictionary::Parse(string record) {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
@@ -837,6 +926,7 @@ GenericResponseDictionary::GenericResponseDictionary(string record) {
 		pos1 += 12;
 		corners_listed.push_back(cl);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -844,7 +934,7 @@ GenericResponseDictionary::GenericResponseDictionary(string record) {
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the DecimationDictionary									    *
 ****************************************************************************************************************************/
-DecimationDictionary::DecimationDictionary(string record)
+ParseResult DecimationDictionary::Parse(string record)
 {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
@@ -852,14 +942,15 @@ DecimationDictionary::DecimationDictionary(string record)
 	pos1 = ++pos2;
 	input_sample_rate = FromString<double>(substr(record, pos1, 10));
 	pos1 += 10;
-	decimation_factor = FromString<int>(substr(record, pos1, 5));
+	factor = FromString<int>(substr(record, pos1, 5));
 	pos1 += 5;
-	decimation_offset = FromString<int>(substr(record, pos1, 5));
+	offset = FromString<int>(substr(record, pos1, 5));
 	pos1 += 5;
 	estimated_delay = FromString<double>(substr(record, pos1, 11));
 	pos1 += 11;
 	correction_applied = FromString<double>(substr(record, pos1, 11));
 	pos1 += 11;
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -867,7 +958,7 @@ DecimationDictionary::DecimationDictionary(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ChannelSensitivityDictionary								    *
 ****************************************************************************************************************************/
-ChannelSensitivityGainDictionary::ChannelSensitivityGainDictionary(string record)
+ParseResult ChannelSensitivityGainDictionary::Parse(string record)
 {
 	lookup_key = FromString<int>(substr(record, 0, 4));
 	int pos1=4, pos2;
@@ -890,6 +981,7 @@ ChannelSensitivityGainDictionary::ChannelSensitivityGainDictionary(string record
 		pos1 = ++pos2;
 		history_values.push_back(hv);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -900,7 +992,8 @@ ChannelSensitivityGainDictionary::ChannelSensitivityGainDictionary(string record
  ****************************************************************************************************************************/
 void StationControl::ParseVolumeRecord(string record)
 {
-	unsigned int blockette, size, position = 0;
+	int blockette;
+	size_t size, position = 0;
 	bool proceed = true;
 
 	SetBytes(record.size());
@@ -936,8 +1029,8 @@ void StationControl::ParseVolumeRecord(string record)
 			if ( !si.empty() ) {
 				if(blockette < 52)
 					eos = (int)si.size()-1;
-				if(eos < (int)si.size() && !si[eos].ci.empty()) {
-					eoc = si[eos].ci.size()-1;
+				if(eos < (int)si.size() && !si[eos]->ci.empty()) {
+					eoc = si[eos]->ci.size()-1;
 				}
 			}
 
@@ -950,51 +1043,57 @@ void StationControl::ParseVolumeRecord(string record)
 					log.write("received blockette " + ToString(blockette) + ", but no station info available");
 				else if ( blockette > 52 && eoc == -1 )
 					log.write("received blockette " + ToString(blockette) + ", but no channel info available");
-				else if ( blockette > 52 && si[eos].ci.empty() )
+				else if ( blockette > 52 && si[eos]->ci.empty() )
 					log.write("ignoring channel blockette " + ToString(blockette) + ", station has no channels");
 				else {
+					size_t data_size = size-begin;
 					switch ( blockette ) {
 						case(50):
-							si.push_back(StationIdentifier(substr(record, begin, size)));
+							PARSE(StationIdentifier, si);
 							break;
 						case(51):
-							si[eos].sc.push_back(Comment(substr(record, begin, size)));
+							PARSE(Comment, si[eos]->sc);
 							break;
 						case(52):
-							eos = AddChannelToStation(ChannelIdentifier(substr(record, begin, size)));
-	//						si[eos].ci.push_back(ChannelIdentifier(substr(record, begin, size)));
+						{
+							ChannelIdentifierPtr ci = new ChannelIdentifier;
+							if ( ci->Parse(substr(record, begin, data_size)) == PR_OK )
+								eos = AddChannelToStation(ci);
+	//						PARSE(ChannelIdentifier, si[eos].ci);
 							break;
+						}
 						case(53):
-							si[eos].ci[eoc].rpz.push_back(ResponsePolesZeros(substr(record, begin, size)));
+							PARSE(ResponsePolesZeros, si[eos]->ci[eoc]->rpz);
 							break;
 						case(54):
-							si[eos].ci[eoc].rc.push_back(ResponseCoefficients(substr(record, begin, size)));
+							PARSE(ResponseCoefficients, si[eos]->ci[eoc]->rc);
 							break;
 						case(55):
-							si[eos].ci[eoc].rl.push_back(ResponseList(substr(record, begin, size)));
+							PARSE(ResponseList, si[eos]->ci[eoc]->rl);
 							break;
 						case(56):
-							si[eos].ci[eoc].gr.push_back(GenericResponse(substr(record, begin, size)));
+							PARSE(GenericResponse, si[eos]->ci[eoc]->gr);
 							break;
 						case(57):
-							si[eos].ci[eoc].dec.push_back(Decimation(substr(record, begin, size)));
+							PARSE(Decimation, si[eos]->ci[eoc]->dec);
 							break;
 						case(58):
-							si[eos].ci[eoc].csg.push_back(ChannelSensitivityGain(substr(record, begin, size)));
+							PARSE(ChannelSensitivityGain, si[eos]->ci[eoc]->csg);
 							break;
 						case(59):
-							si[eos].ci[eoc].cc.push_back(Comment(substr(record, begin, size)));
+							PARSE(Comment, si[eos]->ci[eoc]->cc);
 							break;
 						case(60):
-							si[eos].ci[eoc].rr.push_back(ResponseReference(substr(record, begin, size)));
+							PARSE(ResponseReference, si[eos]->ci[eoc]->rr);
 							break;
 						case(61):
-							si[eos].ci[eoc].firr.push_back(FIRResponse(substr(record, begin, size)));
+							PARSE(FIRResponse, si[eos]->ci[eoc]->firr);
 							break;
 						case(62):
-							si[eos].ci[eoc].rp.push_back(ResponsePolynomial(substr(record, begin, size)));
+							PARSE(ResponsePolynomial, si[eos]->ci[eoc]->rp);
 							break;
 						default:
+							SEISCOMP_WARNING("Unhandled blockette: %d", blockette);
 							proceed = false;
 							break;
 					}
@@ -1046,21 +1145,21 @@ void StationControl::ParseVolumeRecord(string record)
 * Returns:      number of station in vector										    *
 * Description:  						    *
 ****************************************************************************************************************************/
-int StationControl::AddChannelToStation(ChannelIdentifier chan)
+int StationControl::AddChannelToStation(ChannelIdentifierPtr chan)
 {
 	for(int i=si.size()-1; i>-1; i--)
 	{
-		if(chan.GetEndDate().empty() || chan.GetEndDate() > si[i].GetStartDate())
+		if(chan->GetEndDate().empty() || chan->GetEndDate() > si[i]->GetStartDate())
 		{
-			if(si[i].GetEndDate().empty() || si[i].GetEndDate() > chan.GetStartDate())
+			if(si[i]->GetEndDate().empty() || si[i]->GetEndDate() > chan->GetStartDate())
 			{
-				si[i].ci.push_back(chan);
+				si[i]->ci.push_back(chan);
 				return i;
 			}
 		}
 	}
 
-	si[si.size()-1].ci.push_back(chan);
+	si[si.size()-1]->ci.push_back(chan);
 	return si.size()-1;
 }
 
@@ -1072,12 +1171,9 @@ int StationControl::AddChannelToStation(ChannelIdentifier chan)
 ****************************************************************************************************************************/
 void StationControl::EmptyVectors()
 {
-	if(!si.empty())
-	{
-		for(size_t i=0; i<si.size(); i++)
-			si[i].EmptyVectors();
-		si.clear();
-	}
+	for(size_t i=0; i<si.size(); i++)
+		si[i]->EmptyVectors();
+	si.clear();
 }
 
 /****************************************************************************************************************************
@@ -1085,8 +1181,7 @@ void StationControl::EmptyVectors()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the StationIdentifier									    *
 ****************************************************************************************************************************/
-StationIdentifier::StationIdentifier(string record)
-{
+ParseResult StationIdentifier::Parse(string record) {
 	station_call_letters = substr(record, 0, 5);
 	latitude = FromString<double>(substr(record, 5, 10));
 	longitude = FromString<double>(substr(record, 15, 11));
@@ -1125,6 +1220,7 @@ StationIdentifier::StationIdentifier(string record)
 			country = SplitString(site_name, ',', pos1, pos2);
 		}
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1135,14 +1231,10 @@ StationIdentifier::StationIdentifier(string record)
 ****************************************************************************************************************************/
 void StationIdentifier::EmptyVectors()
 {
-	if(!sc.empty())
-		sc.clear();
-	if(!ci.empty())
-	{
-		for(size_t i=0; i<ci.size(); i++)
-			ci[i].EmptyVectors();
-		ci.clear();
-	}
+	sc.clear();
+	for(size_t i=0; i<ci.size(); i++)
+		ci[i]->EmptyVectors();
+	ci.clear();
 }
 
 /****************************************************************************************************************************
@@ -1150,7 +1242,7 @@ void StationIdentifier::EmptyVectors()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the Comment											    *
 ****************************************************************************************************************************/
-Comment::Comment(string record)
+ParseResult Comment::Parse(string record)
 {
 	int pos1=0, pos2;
 	beginning_effective_time = SplitString(record, SEED_SEPARATOR, pos1, pos2);
@@ -1160,6 +1252,7 @@ Comment::Comment(string record)
 	comment_code_key = FromString<int>(substr(record, pos1, 4));
 	pos1 += 4;
 	comment_level = FromString<int>(substr(record, pos1, 6));
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1167,7 +1260,7 @@ Comment::Comment(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ChannelIdentifier									    *
 ****************************************************************************************************************************/
-ChannelIdentifier::ChannelIdentifier(string record)
+ParseResult ChannelIdentifier::Parse(string record)
 {
 	location = substr(record, 0, 2);
 	channel = substr(record, 2, 3);
@@ -1213,6 +1306,7 @@ ChannelIdentifier::ChannelIdentifier(string record)
 //		end_date = FromJulianDay(end_date);
 	pos1 = ++pos2;
 	update_flag = record[pos1];
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1223,34 +1317,43 @@ ChannelIdentifier::ChannelIdentifier(string record)
 ****************************************************************************************************************************/
 void ChannelIdentifier::EmptyVectors()
 {
-	if(!rpz.empty())
-		rpz.clear();
-	if(!rc.empty())
-		rc.clear();
-	if(!rl.empty())
-		rl.clear();
-	if(!gr.empty())
-		gr.clear();
-	if(!dec.empty())
-		dec.clear();
-	if(!csg.empty())
-		csg.clear();
-	if(!cc.empty())
-		cc.clear();
-	if(!rr.empty())
-		rr.clear();
-	if(!firr.empty())
-		firr.clear();
-	if(!rp.empty())
-		rp.clear();
+	rpz.clear();
+	rc.clear();
+	rl.clear();
+	gr.clear();
+	dec.clear();
+	csg.clear();
+	cc.clear();
+	rr.clear();
+	firr.clear();
+	rp.clear();
 }
+
+/*******************************************************************************
+* Function:     GetMaximumInputDecimationSampleRate                            *
+* Parameters:   none                                                           *
+* Returns:      The maximum sample rate of all decimation stages or 0          *
+* Description:  clear all vectors after the data has been written to inventory *
+********************************************************************************/
+double ChannelIdentifier::GetMaximumInputDecimationSampleRate() const {
+	int minStage = -1;
+	double samprate = 0.0;
+	for( size_t i = 0; i < dec.size(); ++i ) {
+		if ( minStage < 0 || minStage > dec[i]->GetStageSequenceNumber() ) {
+			minStage = dec[i]->GetStageSequenceNumber();
+			samprate = dec[i]->GetInputSampleRate();
+		}
+	}
+	return samprate;
+}
+
 
 /****************************************************************************************************************************
 * Function:     ResponsePolesZeros											    *
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponsePolesZeros									    *
 ****************************************************************************************************************************/
-ResponsePolesZeros::ResponsePolesZeros(string record)
+ParseResult ResponsePolesZeros::Parse(string record)
 {
 	transfer_function_type  = record[0];
 	stage_sequence_number = FromString<int>(substr(record, 1, 2));
@@ -1288,6 +1391,7 @@ ResponsePolesZeros::ResponsePolesZeros(string record)
 		pos1 += 12;
 		complex_poles.push_back(cp);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1341,7 +1445,7 @@ string ResponsePolesZeros::GetComplexPoles()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponseCoefficients									    *
 ****************************************************************************************************************************/
-ResponseCoefficients::ResponseCoefficients(string record)
+ParseResult ResponseCoefficients::Parse(string record)
 {
 	response_type  = record[0];
 	stage_sequence_number = FromString<int>(substr(record, 1, 2));
@@ -1386,6 +1490,7 @@ ResponseCoefficients::ResponseCoefficients(string record)
 		pos1 += 12;
 		denominators.push_back(coeff);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1427,7 +1532,7 @@ string ResponseCoefficients::GetDenominators()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponseList										    *
 ****************************************************************************************************************************/
-ResponseList::ResponseList(string record)
+ParseResult ResponseList::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
 	signal_in_units = FromString<int>(substr(record, 2, 3));
@@ -1449,6 +1554,7 @@ ResponseList::ResponseList(string record)
 		pos1 += 12;
 		responses_listed.push_back(lr);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1456,7 +1562,7 @@ ResponseList::ResponseList(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the GenericResponse										    *
 ****************************************************************************************************************************/
-GenericResponse::GenericResponse(string record)
+ParseResult GenericResponse::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
 	signal_in_units = FromString<int>(substr(record, 2, 3));
@@ -1472,6 +1578,7 @@ GenericResponse::GenericResponse(string record)
 		pos1 += 12;
 		corners_listed.push_back(cl);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1479,7 +1586,7 @@ GenericResponse::GenericResponse(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the Decimation										    *
 ****************************************************************************************************************************/
-Decimation::Decimation(string record)
+ParseResult Decimation::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
 	input_sample_rate = FromString<double>(substr(record, 2, 10));
@@ -1487,6 +1594,7 @@ Decimation::Decimation(string record)
 	offset = FromString<int>(substr(record, 17, 5));
 	estimated_delay = FromString<double>(substr(record, 22, 11));
 	correction_applied = FromString<double>(substr(record, 33, 11));
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1494,7 +1602,7 @@ Decimation::Decimation(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ChannelSensitivityGain									    *
 ****************************************************************************************************************************/
-ChannelSensitivityGain::ChannelSensitivityGain(string record)
+ParseResult ChannelSensitivityGain::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
 	sensitivity_gain = FromString<double>(substr(record, 2, 12));
@@ -1512,6 +1620,7 @@ ChannelSensitivityGain::ChannelSensitivityGain(string record)
 		pos1 = ++pos2;
 		history_values.push_back(hv);
 	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1519,22 +1628,28 @@ ChannelSensitivityGain::ChannelSensitivityGain(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponseReference									    *
 ****************************************************************************************************************************/
-ResponseReference::ResponseReference(string record)
+ParseResult ResponseReference::Parse(string record)
 {
 	number_of_stages = FromString<int>(substr(record, 0,2));
+
 	int pos=2;
 	for(int i=0; i < number_of_stages; i++)
 	{
-		stage_sequence_number.push_back(FromString<int>(substr(record, pos, 2)));
+		ResponseReferenceStage stage;
+		stage.stage_sequence_number = FromString<int>(substr(record, pos, 2));
 		pos += 2;
+
+		stage.number_of_responses = FromString<int>(substr(record, pos, 2));
+		pos += 2;
+
+		for ( int j = 0; j < stage.number_of_responses; ++j ) {
+			stage.response_lookup_key.push_back(FromString<int>(substr(record, pos, 4)));
+			pos += 4;
+		}
+
+		stages.push_back(stage);
 	}
-	number_of_responses = FromString<int>(substr(record, pos,2));
-	pos += 2;
-	for(int i=0; i < number_of_responses; i++)
-	{
-		response_lookup_key.push_back(FromString<int>(substr(record, pos, 4)));
-		pos += 4;
-	}
+	return PR_OK;
 }
 
 /****************************************************************************************************************************
@@ -1542,33 +1657,49 @@ ResponseReference::ResponseReference(string record)
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the FIRResponse										    *
 ****************************************************************************************************************************/
-FIRResponse::FIRResponse(string record)
+ParseResult FIRResponse::Parse(string record)
 {
-	stage_sequence_number = FromString<int>(substr(record, 0, 2));
+	int seq_num = FromString<int>(substr(record, 0, 2));
 	int pos1=2, pos2;
+
 	response_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
 	pos1 = ++pos2;
-	symmetry_code = record[pos1++];
-	signal_in_units = FromString<int>(substr(record, pos1, 3));
-	pos1 += 3;
-	signal_out_units = FromString<int>(substr(record, pos1, 3));
-	pos1 += 3;
-	number_of_coefficients = FromString<int>(substr(record, pos1, 4));
-	pos1 += 4;
 
-	int nc = (record.size()-pos1) / 14;
-	if ( number_of_coefficients > nc ) {
-		cerr << "Invalid number coefficents (" << number_of_coefficients
-		     << ") with respect to blockette size in FIR Response, clip to "
-		     << nc << endl;
-		number_of_coefficients = nc;
+	// Not merging
+	if ( coefficients.empty() ) {
+		stage_sequence_number = seq_num;
+
+		symmetry_code = record[pos1++];
+		signal_in_units = FromString<int>(substr(record, pos1, 3));
+		pos1 += 3;
+		signal_out_units = FromString<int>(substr(record, pos1, 3));
+		pos1 += 3;
+		number_of_coefficients = FromString<int>(substr(record, pos1, 4));
+		pos1 += 4;
+	}
+	else
+		pos1 += 3+3+4;
+
+	int max_factors = (record.size()-pos1)/14;
+	if ( max_factors > number_of_coefficients ) {
+		SEISCOMP_WARNING("Blockette 41: size larger than specified content");
+		max_factors = number_of_coefficients;
 	}
 
-	for(int i=0; i < number_of_coefficients; i++)
-	{
+	for ( int i = 0; i < max_factors; ++i ) {
 		coefficients.push_back(FromString<double>(substr(record, pos1, 14)));
 		pos1 += 14;
 	}
+
+	if ( (int)coefficients.size() < number_of_coefficients )
+		return PR_Partial;
+
+	return PR_OK;
+}
+
+ParseResult FIRResponse::Merge(string record)
+{
+	return Parse(record);
 }
 
 string FIRResponse::GetCoefficients()
@@ -1587,7 +1718,7 @@ string FIRResponse::GetCoefficients()
 * Parameters:   record	- string with data of this blockette								    *
 * Description:  initialize the ResponsePolynomial									    *
 ****************************************************************************************************************************/
-ResponsePolynomial::ResponsePolynomial(string record)
+ParseResult ResponsePolynomial::Parse(string record)
 {
 	transfer_function_type  = record[0];
 	stage_sequence_number = FromString<int>(substr(record, 1, 2));
@@ -1611,6 +1742,7 @@ ResponsePolynomial::ResponsePolynomial(string record)
 		pos1 += 12;
 		polynomial_coefficients.push_back(pc);
 	}
+	return PR_OK;
 }
 
 string ResponsePolynomial::GetPolynomialCoefficients()
