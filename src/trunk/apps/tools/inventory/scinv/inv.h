@@ -61,24 +61,24 @@ class InventoryTask : public Task {
 	public:
 		void setLogHandler(LogHandler *handler);
 
-		const Seiscomp::DataModel::Datalogger * findDatalogger(const std::string &);
-		const Seiscomp::DataModel::Sensor *findSensor(const std::string &);
-		const Seiscomp::DataModel::AuxDevice *findAuxDevice(const std::string &);
-		const Seiscomp::DataModel::ResponseFIR *findFIR(const std::string &);
-		const Seiscomp::DataModel::ResponsePAZ *findPAZ(const std::string &);
-		const Seiscomp::DataModel::ResponsePolynomial *findPoly(const std::string &);
+		const Seiscomp::DataModel::Datalogger * findDatalogger(const std::string &) const;
+		const Seiscomp::DataModel::Sensor *findSensor(const std::string &) const;
+		const Seiscomp::DataModel::AuxDevice *findAuxDevice(const std::string &) const;
+		const Seiscomp::DataModel::ResponseFIR *findFIR(const std::string &) const;
+		const Seiscomp::DataModel::ResponsePAZ *findPAZ(const std::string &) const;
+		const Seiscomp::DataModel::ResponsePolynomial *findPoly(const std::string &) const;
 
 
 	// ------------------------------------------------------------------
 	//  Protected interface
 	// ------------------------------------------------------------------
 	protected:
-		Seiscomp::DataModel::Datalogger *dataloggerByName(const std::string &);
-		Seiscomp::DataModel::Sensor *sensorByName(const std::string &);
-		Seiscomp::DataModel::AuxDevice *auxDeviceByName(const std::string &);
-		Seiscomp::DataModel::ResponseFIR *respFIRByName(const std::string &);
-		Seiscomp::DataModel::ResponsePAZ *respPAZByName(const std::string &);
-		Seiscomp::DataModel::ResponsePolynomial *respPolynomialByName(const std::string &);
+		Seiscomp::DataModel::Datalogger *dataloggerByName(const std::string &) const;
+		Seiscomp::DataModel::Sensor *sensorByName(const std::string &) const;
+		Seiscomp::DataModel::AuxDevice *auxDeviceByName(const std::string &) const;
+		Seiscomp::DataModel::ResponseFIR *respFIRByName(const std::string &) const;
+		Seiscomp::DataModel::ResponsePAZ *respPAZByName(const std::string &) const;
+		Seiscomp::DataModel::ResponsePolynomial *respPolynomialByName(const std::string &) const;
 
 		void log(LogHandler::Level level, const char *message,
 		         const Seiscomp::DataModel::Object *obj1,

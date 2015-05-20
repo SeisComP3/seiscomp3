@@ -80,6 +80,177 @@ void compareObjects(const DataModel::Object *o1, const DataModel::Object *o2,
 }
 
 
+template <typename T>
+struct Out {
+	Out(const T *src, int indentation) : obj(src), indent(indentation) {}
+
+	const T   *obj;
+	int        indent;
+};
+
+template <typename R, typename T>
+struct Out2 : Out<T> {
+	Out2(const R *reg, const T *src, int indentation) : Out<T>(src, indentation), registry(reg) {}
+
+	const R   *registry;
+};
+
+
+struct Fill {
+	Fill(int number_of_copies, char ch_ = ' ') : n(number_of_copies), ch(ch_) {}
+	int  n;
+	char ch;
+};
+
+
+ostream &operator<<(ostream &os, const Fill &fill) {
+	for ( int i = 0; i < fill.n; ++i )
+		os.write(&fill.ch, 1);
+	return os;
+}
+
+
+template <typename T>
+Out<T> tabular(const T *src, int indentation) {
+	return Out<T>(src, indentation);
+}
+
+template <typename R, typename T>
+Out2<R,T> tabular(const R *reg, const T *src, int indentation) {
+	return Out2<R,T>(reg, src, indentation);
+}
+
+
+ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
+	const DataModel::ResponsePAZ *paz = out.obj;
+	os << Fill(out.indent) << "norm freq    ";
+	try { os << paz->normalizationFrequency() << "Hz"; }
+	catch (...) { os << "-"; }
+	os << endl;
+	os << Fill(out.indent) << "norm factor  ";
+	try { os << paz->normalizationFactor(); }
+	catch (...) { os << "-"; }
+	os << endl;
+	os << Fill(out.indent) << "poles        ";
+	try {
+		os << Core::toString(paz->poles().content());
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+	os << endl;
+
+	os << Fill(out.indent) << "zeros        ";
+	try {
+		os << Core::toString(paz->zeros().content());
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	return os;
+}
+
+
+ostream &operator<<(ostream &os, const Out<DataModel::ResponsePolynomial> &out) {
+	os << Fill(out.indent) << "<to be implemented>";
+	return os;
+}
+
+
+ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
+	const DataModel::ResponseFIR *fir = out.obj;
+
+	os << Fill(out.indent) << "gain         ";
+	try { os << fir->gain(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "factor       ";
+	try { os << fir->decimationFactor(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "symmetrie    ";
+	if ( fir->symmetry().empty() )
+		os << "-";
+	else
+		os << fir->symmetry();
+	os << endl;
+
+	os << Fill(out.indent) << "coefficients ";
+	try {
+		const vector<double> &coeffs = fir->coefficients().content();
+		for ( size_t i = 0; i < coeffs.size(); ++i ) {
+			if ( i ) {
+				if ( i % 5 == 0 ) os << endl << Fill(out.indent+13);
+				else os << " ";
+			}
+			os << showpos << scientific << coeffs[i];
+		}
+		os << noshowpos;
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	return os;
+}
+
+
+template <typename R>
+ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
+	try {
+		vector<string> ids;
+		Core::split(ids, out.obj->analogueFilterChain().content().c_str(), " ");
+		for ( size_t i = 0; i < ids.size(); ++i ) {
+			os << endl << Fill(out.indent) << "[analogue stage #" << (i+1) << "]" << endl;
+
+			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
+			if ( paz == NULL ) {
+				const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
+				if ( poly ) {
+					os << Fill(out.indent) << "POLY" << endl;
+					os << tabular(poly, out.indent);
+				}
+				else {
+					os << Fill(out.indent) << "UNKNOWN" << endl;
+				}
+			}
+			else {
+				os << Fill(out.indent) << "PAZ" << endl;
+				os << tabular(paz, out.indent);
+			}
+
+			if ( i < ids.size()-1 ) os << endl;
+		}
+	}
+	catch ( ... ) {}
+
+	try {
+		vector<string> ids;
+		Core::split(ids, out.obj->digitalFilterChain().content().c_str(), " ");
+		for ( size_t i = 0; i < ids.size(); ++i ) {
+			os << endl << Fill(out.indent) << "[digital stage #" << (i+1) << "]" << endl;
+
+			const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
+			if ( fir == NULL ) {
+				os << Fill(out.indent) << "UNKNOWN" << endl;
+			}
+			else {
+				os << Fill(out.indent) << "FIR" << endl;
+				os << tabular(fir, out.indent);
+			}
+
+			if ( i < ids.size()-1 ) os << endl;
+		}
+	}
+	catch ( ... ) {}
+
+	return os;
+}
+
+
 class InventoryManager : public Client::Application,
                          private LogHandler {
 	public:
@@ -1241,25 +1412,58 @@ class InventoryManager : public Client::Application,
 
 							if ( level >= 3 ) {
 								const DataModel::Sensor *sens;
+								const DataModel::Datalogger *dl;
 								const DataModel::ResponsePAZ *paz;
 								const DataModel::ResponsePolynomial *poly;
+
+								try {
+									int sr_num = str->sampleRateNumerator();
+									int sr_den = str->sampleRateDenominator();
+									cout << "          rate  " << sr_num << "/" << sr_den << " sps" << endl;
+								}
+								catch ( ... ) {}
 
 								try {
 									double gain = str->gain();
 									cout << "          gain  " << gain << endl;
 								}
 								catch ( ... ) {}
+								try {
+									double freq = str->gainFrequency();
+									cout << "          freq  " << freq << "Hz" << endl;
+								}
+								catch ( ... ) {}
+
+								if ( !str->gainUnit().empty() )
+									cout << "          unit  " << str->gainUnit() << endl;
 
 								sens = merger.findSensor(str->sensor());
 								if ( sens ) {
+									cout << "          sens  " << sens->description() << endl;
 									paz = merger.findPAZ(sens->response());
-									if ( paz )
-										cout << "          resp  poles and zeros" << endl;
+									if ( paz ) {
+										cout << "          resp  PAZ" << endl;
+										cout << tabular(paz, 16) << endl;
+									}
 									else {
 										poly = merger.findPoly(sens->response());
 										if ( poly )
 											cout << "          resp  polynomial" << endl;
 									}
+								}
+
+								dl = merger.findDatalogger(str->datalogger());
+								if ( dl ) {
+									if ( !dl->description().empty() )
+										cout << "          dl    " << dl->description() << endl;
+									try {
+										DataModel::Decimation *deci = dl->decimation(DataModel::DecimationIndex(str->sampleRateNumerator(), str->sampleRateDenominator()));
+										if ( deci ) {
+											cout << "          dec   " << str->sampleRateNumerator() << "/" << str->sampleRateDenominator() << " sps" << endl;
+											cout << tabular(&merger, deci, 16) << endl;
+										}
+									}
+									catch ( ... ) {}
 								}
 							}
 						}

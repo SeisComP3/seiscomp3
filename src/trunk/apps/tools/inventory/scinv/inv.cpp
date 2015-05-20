@@ -86,8 +86,8 @@ void InventoryTask::log(LogHandler::Level level, const char *message,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Datalogger *InventoryTask::dataloggerByName(const std::string &name) {
-	ObjectLookup::iterator it = _dataloggerNames.find(name);
+Datalogger *InventoryTask::dataloggerByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _dataloggerNames.find(name);
 	if ( it == _dataloggerNames.end() ) return NULL;
 	return (Datalogger*)it->second;
 }
@@ -97,8 +97,8 @@ Datalogger *InventoryTask::dataloggerByName(const std::string &name) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Sensor *InventoryTask::sensorByName(const std::string &name) {
-	ObjectLookup::iterator it = _sensorNames.find(name);
+Sensor *InventoryTask::sensorByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _sensorNames.find(name);
 	if ( it == _sensorNames.end() ) return NULL;
 	return (Sensor*)it->second;
 }
@@ -108,8 +108,8 @@ Sensor *InventoryTask::sensorByName(const std::string &name) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AuxDevice *InventoryTask::auxDeviceByName(const std::string &name) {
-	ObjectLookup::iterator it = _auxDeviceNames.find(name);
+AuxDevice *InventoryTask::auxDeviceByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _auxDeviceNames.find(name);
 	if ( it == _auxDeviceNames.end() ) return NULL;
 	return (AuxDevice*)it->second;
 }
@@ -119,8 +119,8 @@ AuxDevice *InventoryTask::auxDeviceByName(const std::string &name) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ResponseFIR *InventoryTask::respFIRByName(const std::string &name) {
-	ObjectLookup::iterator it = _FIRNames.find(name);
+ResponseFIR *InventoryTask::respFIRByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _FIRNames.find(name);
 	if ( it == _FIRNames.end() ) return NULL;
 	return (ResponseFIR*)it->second;
 }
@@ -130,8 +130,8 @@ ResponseFIR *InventoryTask::respFIRByName(const std::string &name) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) {
-	ObjectLookup::iterator it = _PAZNames.find(name);
+ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _PAZNames.find(name);
 	if ( it == _PAZNames.end() ) return NULL;
 	return (ResponsePAZ*)it->second;
 }
@@ -141,8 +141,8 @@ ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ResponsePolynomial *InventoryTask::respPolynomialByName(const std::string &name) {
-	ObjectLookup::iterator it = _PolyNames.find(name);
+ResponsePolynomial *InventoryTask::respPolynomialByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _PolyNames.find(name);
 	if ( it == _PolyNames.end() ) return NULL;
 	return (ResponsePolynomial*)it->second;
 }
@@ -218,8 +218,8 @@ void InventoryTask::cleanUp() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Datalogger *InventoryTask::findDatalogger(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.dataloggerLookup.find(publicID);
+const Datalogger *InventoryTask::findDatalogger(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.dataloggerLookup.find(publicID);
 	if ( it == _session.dataloggerLookup.end() ) return NULL;
 	return (const Datalogger*)it->second;
 }
@@ -229,8 +229,8 @@ const Datalogger *InventoryTask::findDatalogger(const std::string &publicID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Sensor *InventoryTask::findSensor(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.sensorLookup.find(publicID);
+const Sensor *InventoryTask::findSensor(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.sensorLookup.find(publicID);
 	if ( it == _session.sensorLookup.end() ) return NULL;
 	return (const Sensor*)it->second;
 }
@@ -240,8 +240,8 @@ const Sensor *InventoryTask::findSensor(const std::string &publicID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const AuxDevice *InventoryTask::findAuxDevice(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.auxDeviceLookup.find(publicID);
+const AuxDevice *InventoryTask::findAuxDevice(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.auxDeviceLookup.find(publicID);
 	if ( it == _session.auxDeviceLookup.end() ) return NULL;
 	return (const AuxDevice*)it->second;
 }
@@ -251,8 +251,8 @@ const AuxDevice *InventoryTask::findAuxDevice(const std::string &publicID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ResponseFIR *InventoryTask::findFIR(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.firLookup.find(publicID);
+const ResponseFIR *InventoryTask::findFIR(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.firLookup.find(publicID);
 	if ( it == _session.firLookup.end() ) return NULL;
 	return (const ResponseFIR*)it->second;
 }
@@ -262,8 +262,8 @@ const ResponseFIR *InventoryTask::findFIR(const std::string &publicID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ResponsePAZ *InventoryTask::findPAZ(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.pazLookup.find(publicID);
+const ResponsePAZ *InventoryTask::findPAZ(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.pazLookup.find(publicID);
 	if ( it == _session.pazLookup.end() ) return NULL;
 	return (const ResponsePAZ*)it->second;
 }
@@ -273,8 +273,8 @@ const ResponsePAZ *InventoryTask::findPAZ(const std::string &publicID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ResponsePolynomial *InventoryTask::findPoly(const std::string &publicID) {
-	ObjectLookup::iterator it = _session.polyLookup.find(publicID);
+const ResponsePolynomial *InventoryTask::findPoly(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.polyLookup.find(publicID);
 	if ( it == _session.polyLookup.end() ) return NULL;
 	return (const ResponsePolynomial*)it->second;
 }
