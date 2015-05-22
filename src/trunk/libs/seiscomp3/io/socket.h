@@ -123,6 +123,7 @@ class SC_SYSTEM_CORE_API SSLSocket: public Socket {
 		BIO      *_bio;
 		SSL      *_ssl;
 		SSL_CTX  *_ctx;
+		char      _errBuf[120];
 };
 
 } // namespace IO

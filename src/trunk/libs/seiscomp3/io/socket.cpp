@@ -20,6 +20,7 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <sys/types.h>
+#include <openssl/err.h>
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netdb.h>
@@ -606,11 +607,13 @@ void SSLSocket::open(const std::string &serverLocation) {
 
 	_ctx = SSL_CTX_new(SSLv23_client_method());
 	if ( _ctx == NULL )
-		throw SocketException("invalid SSL context");
+		throw SocketException(string("invalid SSL context: ") +
+	                          ERR_error_string(ERR_get_error(), _errBuf));
 
 	_bio = BIO_new_ssl_connect(_ctx);
 	if ( _bio == NULL )
-		throw SocketException("invalid bio");
+		throw SocketException(string("invalid bio: ") +
+	                          ERR_error_string(ERR_get_error(), _errBuf));
 
 	BIO_get_ssl(_bio, &_ssl);
 
@@ -620,10 +623,12 @@ void SSLSocket::open(const std::string &serverLocation) {
 	BIO_set_conn_int_port(_bio, (char*)&port);
 
 	if ( BIO_do_connect(_bio) <= 0 )
-		throw SocketException("error establishing secure socket connection");
-
+		throw SocketException(string("error establishing secure socket "
+	                                 "connection: ") +
+	                          ERR_error_string(ERR_get_error(), _errBuf));
 	if ( BIO_do_handshake(_bio) <= 0 )
-		throw SocketException("error performing SSL handshake");
+		throw SocketException(string("error performing SSL handshake: ") +
+	                          ERR_error_string(ERR_get_error(), _errBuf));
 
 	BIO_get_fd(_bio, &_sockfd);
 }
