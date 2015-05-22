@@ -16,3 +16,26 @@ To install on a web server:
  * add a crontab entry to run reqlogstats.sh each day
 
 The ./install.sh script provided here may help you.
+
+Adding a new node
+-----------------
+
+Try the following, once you have e-mail from the node operator:
+ - DON'T run reqlogstats.sh (or reqlogstats_mail.sh)
+ - cd reqlogstats; ./split_mail.sh
+ - find $HOME/eida_stats -type f -mtime -1 -name "msg*"   # Identify just the valid messages you want to include in the db.
+ - echo {valid file names only} | python reqlogstats.py
+ - Adjust the database so the new source (e-mail address) is assigned a DCID:
+
+	sqlite3 ~/reqlogstats/var/reqlogstats-2015.db
+	select * from ArcStatsSource;
+	update ArcStatsSource set dcid = "KOERI" where dcid="comoglu@boun.edu.tr";
+	.quit
+
+ - Now on the web page the node should be listed by DCID, not e-mail address
+	http://eida.gfz-potsdam.de/eida/reqlogstats/
+
+ - Add the new node in t2.py: it must produce an extra column in the table. Now check graphs are produced correctly...
+
+ - Alter make_month_graph.sh: adjust the gnuplot commands to colour the new node; check the colours are still assigned correctly.
+
