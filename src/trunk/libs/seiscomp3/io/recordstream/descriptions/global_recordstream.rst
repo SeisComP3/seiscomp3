@@ -31,6 +31,7 @@ URL and supports URL encoded parameters. The default host ist set to
 
 - `timeout` - connection timeout in seconds, default: 300
 - `retries` - number of connection retry attempts, default: 0
+- `no-batch` - disables BATCH mode to request data, does not take a value
 
 Examples
 ^^^^^^^^

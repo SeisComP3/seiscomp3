@@ -115,6 +115,7 @@ Out<T> tabular(const T *src, int indentation) {
 	return Out<T>(src, indentation);
 }
 
+
 template <typename R, typename T>
 Out2<R,T> tabular(const R *reg, const T *src, int indentation) {
 	return Out2<R,T>(reg, src, indentation);
