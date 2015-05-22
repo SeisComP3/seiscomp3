@@ -379,11 +379,11 @@ class _Iter(object):
             try:
                 return Record(self.__fd)
 
-            except MSeedError, e:
-                logs.error(str(e))
-
             except MSeedNoData:
                 pass
+
+            except MSeedError, e:
+                logs.error(str(e))
 
 class Input(object):
     def __init__(self, fd):
