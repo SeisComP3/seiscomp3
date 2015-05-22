@@ -55,7 +55,7 @@ def _mkseedcoeff(nblk, nfld, ncoeff, s):
 
     return c
 
-def _mkseedcoeff2(nblk, nfld, ncoeff, s):
+def _mkseedcoeff2(nblk, nfld, ncoeff, s, gain=1.0):
     pos = 0
     n = 0
     c = ""
@@ -70,7 +70,7 @@ def _mkseedcoeff2(nblk, nfld, ncoeff, s):
         except ValueError:
             raise SEEDError, "blockette %d, field %d: error parsing polynomial coefficients at '%s'" % (nblk, nfld, s[pos:])
 
-        c += "%12.5E%12.5E" % (v,0)
+        c += "%12.5E%12.5E" % (v/(gain**n),0)
         n += 1
         pos = m.end()
     
@@ -792,7 +792,7 @@ class _Blockette61(object):
 class _Blockette62(object):
     def __init__(self, input_units, output_units, freq_unit, low_freq,
         high_freq, approx_type, approx_lower_bound, approx_upper_bound,
-        approx_error, ncoeff, coeff):
+        approx_error, ncoeff, coeff, gain=1.0):
 
         self.__stage = 0
         self.__input_units = input_units
@@ -805,21 +805,21 @@ class _Blockette62(object):
         self.__approx_upper_bound = approx_upper_bound
         self.__approx_error = approx_error
         self.__ncoeff = ncoeff
-        self.__coeff = _mkseedcoeff2(62, 15, ncoeff, coeff)
+        self.__coeff = _mkseedcoeff2(62, 15, ncoeff, coeff, gain)
         self.__len = 81 + 24 * ncoeff
 
     def set_stage(self, stage):
         self.__stage = stage
     
     def output(self, f):
-        blk = "062%4d%2dP%3d%3d%1s%1s%12.5E%12.5E%12.5E%12.5E%12.5E%3d%s" % (self.__len,
+        blk = "062%4dP%2d%3d%3d%1s%1s%12.5E%12.5E%12.5E%12.5E%12.5E%3d%s" % (self.__len,
             self.__stage, self.__input_units, self.__output_units,
             self.__approx_type, self.__freq_unit, self.__low_freq, self.__high_freq,
             self.__approx_lower_bound, self.__approx_upper_bound, self.__approx_error,
             self.__ncoeff, self.__coeff)
             
         if len(blk) != self.__len:
-            raise SEEDError, "blockette 42 has invalid length: %d instead of %d" % (len(blk), self.__len)
+            raise SEEDError, "blockette 62 has invalid length: %d instead of %d" % (len(blk), self.__len)
         
         f.write_blk(blk)
         
@@ -1106,7 +1106,13 @@ class _ResponseContainer(object):
         (x1, x2, sens, sens_freq) = self.__fac._lookup_sensor(name,
             dev_id, compn)
 
-        self._add_stage(x1, x2)
+        if sens != 0.0:
+            self._add_stage(x1, x2)
+
+        else:
+            self._add_stage(x1)
+            sens = 1.0
+
         return (sens, sens_freq)
 
     def add_analogue_paz(self, name):
@@ -1874,8 +1880,24 @@ class _Channel(object):
         #    gain_freq = sens_freq)
 
         # Use overall gain from inventory
-        self.__sens_blk = _Blockette58(gain = strmcfg.gain,
-            gain_freq = strmcfg.gainFrequency)
+
+        if _is_poly_response(resp):
+            self.__stage0_blk = _Blockette62(input_units = signal_units,
+                output_units = unit_dict.lookup("COUNTS"),
+                freq_unit = resp.frequencyUnit,
+                low_freq = sensor.lowFrequency,
+                high_freq = sensor.highFrequency,
+                approx_type = resp.approximationType,
+                approx_lower_bound = resp.approximationLowerBound,
+                approx_upper_bound = resp.approximationUpperBound,
+                approx_error = resp.approximationError,
+                ncoeff = resp.numberOfCoefficients,
+                coeff = resp.coefficients,
+                gain = sens)
+
+        else:
+            self.__stage0_blk = _Blockette58(gain = strmcfg.gain,
+                gain_freq = strmcfg.gainFrequency)
 
     def __cmp__(self, other):
         if(self.__id < other.__id):
@@ -1890,7 +1912,7 @@ class _Channel(object):
         self.__chan_blk.set_vol_span(vol_start, vol_end)
         self.__chan_blk.output(f)
         self.__resp_container.output(f)
-        self.__sens_blk.output(f)
+        self.__stage0_blk.output(f)
             
 class _Station(object):
     def __init__(self, inventory, statcfg, format_dict, unit_dict,

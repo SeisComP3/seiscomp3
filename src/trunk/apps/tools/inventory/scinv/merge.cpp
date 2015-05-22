@@ -267,6 +267,15 @@ Merge::Merge(Inventory *inv) : InventoryTask(inv) {}
 		target->add(o.get());\
 	}
 
+#define MOVE_GEN_NAME(target, source, type, role) \
+	while ( source->role##Count() > 0 ) {\
+		type##Ptr o = source->role(0);\
+		o->detach();\
+		if ( o->name().empty() ) \
+			o->setName(o->publicID()); \
+		target->add(o.get());\
+	}
+
 bool Merge::push(Inventory *inv) {
 	if ( _inv == NULL ) return false;
 
@@ -281,19 +290,17 @@ bool Merge::push(Inventory *inv) {
 
 	MOVE(_tmpInv, inv, StationGroup, stationGroup)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, AuxDevice, auxDevice)
+	MOVE_GEN_NAME(_tmpInv, inv, AuxDevice, auxDevice)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, Sensor, sensor)
+	MOVE_GEN_NAME(_tmpInv, inv, Sensor, sensor)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, Datalogger, datalogger)
+	MOVE_GEN_NAME(_tmpInv, inv, Datalogger, datalogger)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, AuxDevice, auxDevice)
+	MOVE_GEN_NAME(_tmpInv, inv, ResponsePAZ, responsePAZ)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, ResponsePAZ, responsePAZ)
+	MOVE_GEN_NAME(_tmpInv, inv, ResponseFIR, responseFIR)
 	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, ResponseFIR, responseFIR)
-	if ( _interrupted ) return false;
-	MOVE(_tmpInv, inv, ResponsePolynomial, responsePolynomial)
+	MOVE_GEN_NAME(_tmpInv, inv, ResponsePolynomial, responsePolynomial)
 	if ( _interrupted ) return false;
 	MOVE(_tmpInv, inv, Network, network)
 

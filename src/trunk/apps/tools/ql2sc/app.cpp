@@ -242,7 +242,7 @@ bool App::init() {
 	int notificationID = -1;
 	for ( HostConfigs::const_iterator it = _config.hosts.begin();
 	      it != _config.hosts.end(); ++it, --notificationID ) {
-		SEISCOMP_NOTICE("Initializing host '%s'", it->host.c_str());
+		SEISCOMP_INFO("Initializing host '%s'", it->host.c_str());
 		QLClient *client = new QLClient(notificationID, &*it, _config.backLog);
 		_clients.push_back(client);
 		if ( !client->init(it->url, it->options) ) {
@@ -371,7 +371,7 @@ bool App::dispatchNotification(int type, Core::BaseObject *obj) {
 		if ( _verbosity > 3 )
 			SEISCOMP_DEBUG_S(ss.str());
 		else
-			SEISCOMP_NOTICE_S(ss.str());
+			SEISCOMP_INFO_S(ss.str());
 	}
 
 	if ( sendNotifiers(notifiers, routing) ) {
@@ -415,7 +415,7 @@ void App::diffPO(T *remotePO, const string &parentID, Notifiers &notifiers,
 
 bool App::sendNotifiers(const Notifiers &notifiers, const RoutingTable &routing) {
 	if ( notifiers.empty() ) {
-		SEISCOMP_NOTICE("no modification required");
+		SEISCOMP_INFO("no modification required");
 		return true;
 	}
 
@@ -471,10 +471,10 @@ bool App::sendNotifiers(const Notifiers &notifiers, const RoutingTable &routing)
 			++msgTotal;
 			ss << "  " << it->first << ": " << it->second << endl;
 		}
-		SEISCOMP_NOTICE("send %i notifer (ADD: %i, UPDATE: %i, REMOVE: %i) "
-		                "to the following message groups:\n%s",
-		                add + update + remove, add, update, remove,
-		                ss.str().c_str());
+		SEISCOMP_INFO("send %i notifer (ADD: %i, UPDATE: %i, REMOVE: %i) "
+		              "to the following message groups:\n%s",
+		              add + update + remove, add, update, remove,
+		              ss.str().c_str());
 	}
 	return true;
 }
@@ -522,8 +522,8 @@ void App::applyNotifier(const DataModel::Notifier *n) {
 }
 
 void App::readLastUpdates() {
-	SEISCOMP_NOTICE("reading last update timestamps from file '%s'",
-	                _lastUpdateFile.c_str());
+	SEISCOMP_INFO("reading last update timestamps from file '%s'",
+	              _lastUpdateFile.c_str());
 	int i = 0;
 	ifstream ifs(_lastUpdateFile.c_str());
 	string line;

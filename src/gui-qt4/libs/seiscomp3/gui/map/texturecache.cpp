@@ -27,7 +27,7 @@ namespace Map {
 
 
 QMap<QString, TextureCache::CacheEntry> TextureCache::_images;
-QMutex imageCacheMutex;
+QMutex imageCacheMutex(QMutex::Recursive);
 
 
 TextureCache *getTexelCache = NULL;

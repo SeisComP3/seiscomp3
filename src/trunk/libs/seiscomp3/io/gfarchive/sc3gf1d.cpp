@@ -11,7 +11,7 @@
  ***************************************************************************/
 
 
-#define SEISCOMP_COMPONENT Saul
+#define SEISCOMP_COMPONENT SC3GF1D
 
 
 #include <seiscomp3/logging/log.h>

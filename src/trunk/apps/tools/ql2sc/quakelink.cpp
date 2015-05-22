@@ -54,9 +54,9 @@ QLClient::~QLClient() {
 		_thread = NULL;
 	}
 
-	SEISCOMP_NOTICE("%sterminated, messages/bytes received: %lu/%lu",
-	                _logPrefix.c_str(), (unsigned long)_stats.messages,
-	                (unsigned long)_stats.payloadBytes);
+	SEISCOMP_INFO("%sterminated, messages/bytes received: %lu/%lu",
+	              _logPrefix.c_str(), (unsigned long)_stats.messages,
+	              (unsigned long)_stats.payloadBytes);
 }
 
 void QLClient::run() {
@@ -74,12 +74,12 @@ void QLClient::run() {
 
 void QLClient::join(const Core::Time &until) {
 	if ( _thread ) {
-		SEISCOMP_NOTICE("%swaiting for thread to terminate", _logPrefix.c_str());
+		SEISCOMP_INFO("%swaiting for thread to terminate", _logPrefix.c_str());
 #if BOOST_VERSION < 103500
 		_thread->join();
 #else
 		if ( _thread->timed_join(wait(until)) )
-			SEISCOMP_NOTICE("%sthread terminated", _logPrefix.c_str());
+			SEISCOMP_DEBUG("%sthread terminated", _logPrefix.c_str());
 		else
 			SEISCOMP_ERROR("%sthread did not shutdown properly",
 			               _logPrefix.c_str());
@@ -99,8 +99,8 @@ void QLClient::setLastUpdate(const Core::Time &time) {
 }
 
 void QLClient::processResponse(IO::QuakeLink::Response *response) {
-	SEISCOMP_NOTICE("%sreceived message, size: %lu)", _logPrefix.c_str(),
-	                (unsigned long)response->length);
+	SEISCOMP_INFO("%sreceived message, size: %lu)", _logPrefix.c_str(),
+	              (unsigned long)response->length);
 	SCCoreApp->sendNotification(Client::Notification(
 	                            _notificationID, response));
 	++_stats.messages;

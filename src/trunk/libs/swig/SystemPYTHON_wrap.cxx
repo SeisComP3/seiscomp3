@@ -8573,6 +8573,256 @@ SWIGINTERN PyObject *SchemaParameter_swigregister(PyObject *SWIGUNUSEDPARM(self)
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_SchemaParameters_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":SchemaParameters_ClassName")) SWIG_fail;
+  result = (char *)Seiscomp::System::SchemaParameters::ClassName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_TypeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::RTTI *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":SchemaParameters_TypeInfo")) SWIG_fail;
+  result = (Seiscomp::Core::RTTI *) &Seiscomp::System::SchemaParameters::TypeInfo();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_className(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::SchemaParameters *arg1 = (Seiscomp::System::SchemaParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_className",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_className" "', argument " "1"" of type '" "Seiscomp::System::SchemaParameters const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::SchemaParameters * >(argp1);
+  result = (char *)((Seiscomp::System::SchemaParameters const *)arg1)->className();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_typeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::SchemaParameters *arg1 = (Seiscomp::System::SchemaParameters *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::RTTI *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_typeInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_typeInfo" "', argument " "1"" of type '" "Seiscomp::System::SchemaParameters const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::SchemaParameters * >(argp1);
+  result = (Seiscomp::Core::RTTI *) &((Seiscomp::System::SchemaParameters const *)arg1)->typeInfo();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_Cast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::System::SchemaParameter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_Cast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
+  result = (Seiscomp::System::SchemaParameter *)Seiscomp::System::SchemaParameters::Cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameter, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_ConstCast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::System::SchemaParameter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_ConstCast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
+  result = (Seiscomp::System::SchemaParameter *)Seiscomp::System::SchemaParameters::ConstCast((Seiscomp::Core::BaseObject const *)arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameter, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_Cast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl > arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::System::SchemaParameter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_Cast",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SchemaParameters_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'");
+    } else {
+      Seiscomp::Core::BaseObjectPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectPtr * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (Seiscomp::System::SchemaParameter *)Seiscomp::System::SchemaParameters::Cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameter, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_Cast(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SchemaParameters_Cast__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SchemaParameters_Cast__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SchemaParameters_Cast'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::System::SchemaParameters::Cast(Seiscomp::Core::BaseObject *)\n"
+    "    Seiscomp::System::SchemaParameters::Cast(Seiscomp::Core::BaseObjectPtr)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_ConstCast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl > arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::System::SchemaParameter *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SchemaParameters_ConstCast",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaParameters_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SchemaParameters_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'");
+    } else {
+      Seiscomp::Core::BaseObjectCPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectCPtr * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (Seiscomp::System::SchemaParameter *)Seiscomp::System::SchemaParameters::ConstCast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameter, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SchemaParameters_ConstCast(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SchemaParameters_ConstCast__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SchemaParameters_ConstCast__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'SchemaParameters_ConstCast'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::System::SchemaParameters::ConstCast(Seiscomp::Core::BaseObject const *)\n"
+    "    Seiscomp::System::SchemaParameters::ConstCast(Seiscomp::Core::BaseObjectCPtr)\n");
+  return 0;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_SchemaParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::SchemaParameters *result = 0 ;
@@ -12425,7 +12675,7 @@ fail:
 SWIGINTERN PyObject *_wrap_SchemaModule_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::SchemaModule *arg1 = (Seiscomp::System::SchemaModule *) 0 ;
-  Seiscomp::System::SchemaParameters *arg2 = (Seiscomp::System::SchemaParameters *) 0 ;
+  Seiscomp::System::SchemaParametersPtr *arg2 = (Seiscomp::System::SchemaParametersPtr *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -12439,11 +12689,11 @@ SWIGINTERN PyObject *_wrap_SchemaModule_parameters_set(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaModule_parameters_set" "', argument " "1"" of type '" "Seiscomp::System::SchemaModule *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaModule * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaModule_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParameters *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaModule_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParametersPtr *""'"); 
   }
-  arg2 = reinterpret_cast< Seiscomp::System::SchemaParameters * >(argp2);
+  arg2 = reinterpret_cast< Seiscomp::System::SchemaParametersPtr * >(argp2);
   if (arg1) (arg1)->parameters = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -12458,7 +12708,7 @@ SWIGINTERN PyObject *_wrap_SchemaModule_parameters_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  Seiscomp::System::SchemaParameters *result = 0 ;
+  Seiscomp::System::SchemaParametersPtr *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:SchemaModule_parameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaModule, 0 |  0 );
@@ -12466,8 +12716,8 @@ SWIGINTERN PyObject *_wrap_SchemaModule_parameters_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaModule_parameters_get" "', argument " "1"" of type '" "Seiscomp::System::SchemaModule *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaModule * >(argp1);
-  result = (Seiscomp::System::SchemaParameters *)& ((arg1)->parameters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  result = (Seiscomp::System::SchemaParametersPtr *)& ((arg1)->parameters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -13024,7 +13274,7 @@ fail:
 SWIGINTERN PyObject *_wrap_SchemaPlugin_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::SchemaPlugin *arg1 = (Seiscomp::System::SchemaPlugin *) 0 ;
-  Seiscomp::System::SchemaParameters *arg2 = (Seiscomp::System::SchemaParameters *) 0 ;
+  Seiscomp::System::SchemaParametersPtr *arg2 = (Seiscomp::System::SchemaParametersPtr *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -13038,11 +13288,11 @@ SWIGINTERN PyObject *_wrap_SchemaPlugin_parameters_set(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaPlugin_parameters_set" "', argument " "1"" of type '" "Seiscomp::System::SchemaPlugin *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaPlugin * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaPlugin_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParameters *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaPlugin_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParametersPtr *""'"); 
   }
-  arg2 = reinterpret_cast< Seiscomp::System::SchemaParameters * >(argp2);
+  arg2 = reinterpret_cast< Seiscomp::System::SchemaParametersPtr * >(argp2);
   if (arg1) (arg1)->parameters = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -13057,7 +13307,7 @@ SWIGINTERN PyObject *_wrap_SchemaPlugin_parameters_get(PyObject *SWIGUNUSEDPARM(
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  Seiscomp::System::SchemaParameters *result = 0 ;
+  Seiscomp::System::SchemaParametersPtr *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:SchemaPlugin_parameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaPlugin, 0 |  0 );
@@ -13065,8 +13315,8 @@ SWIGINTERN PyObject *_wrap_SchemaPlugin_parameters_get(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaPlugin_parameters_get" "', argument " "1"" of type '" "Seiscomp::System::SchemaPlugin *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaPlugin * >(argp1);
-  result = (Seiscomp::System::SchemaParameters *)& ((arg1)->parameters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  result = (Seiscomp::System::SchemaParametersPtr *)& ((arg1)->parameters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -13689,7 +13939,7 @@ fail:
 SWIGINTERN PyObject *_wrap_SchemaBinding_parameters_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::SchemaBinding *arg1 = (Seiscomp::System::SchemaBinding *) 0 ;
-  Seiscomp::System::SchemaParameters *arg2 = (Seiscomp::System::SchemaParameters *) 0 ;
+  Seiscomp::System::SchemaParametersPtr *arg2 = (Seiscomp::System::SchemaParametersPtr *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -13703,11 +13953,11 @@ SWIGINTERN PyObject *_wrap_SchemaBinding_parameters_set(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaBinding_parameters_set" "', argument " "1"" of type '" "Seiscomp::System::SchemaBinding *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaBinding * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaBinding_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParameters *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SchemaBinding_parameters_set" "', argument " "2"" of type '" "Seiscomp::System::SchemaParametersPtr *""'"); 
   }
-  arg2 = reinterpret_cast< Seiscomp::System::SchemaParameters * >(argp2);
+  arg2 = reinterpret_cast< Seiscomp::System::SchemaParametersPtr * >(argp2);
   if (arg1) (arg1)->parameters = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -13722,7 +13972,7 @@ SWIGINTERN PyObject *_wrap_SchemaBinding_parameters_get(PyObject *SWIGUNUSEDPARM
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  Seiscomp::System::SchemaParameters *result = 0 ;
+  Seiscomp::System::SchemaParametersPtr *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:SchemaBinding_parameters_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__SchemaBinding, 0 |  0 );
@@ -13730,8 +13980,8 @@ SWIGINTERN PyObject *_wrap_SchemaBinding_parameters_get(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SchemaBinding_parameters_get" "', argument " "1"" of type '" "Seiscomp::System::SchemaBinding *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::SchemaBinding * >(argp1);
-  result = (Seiscomp::System::SchemaParameters *)& ((arg1)->parameters);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__System__SchemaParameters, 0 |  0 );
+  result = (Seiscomp::System::SchemaParametersPtr *)& ((arg1)->parameters);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -31246,6 +31496,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SchemaParameter_readOnly_get", _wrap_SchemaParameter_readOnly_get, METH_VARARGS, NULL},
 	 { (char *)"delete_SchemaParameter", _wrap_delete_SchemaParameter, METH_VARARGS, NULL},
 	 { (char *)"SchemaParameter_swigregister", SchemaParameter_swigregister, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_ClassName", _wrap_SchemaParameters_ClassName, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_TypeInfo", _wrap_SchemaParameters_TypeInfo, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_className", _wrap_SchemaParameters_className, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_typeInfo", _wrap_SchemaParameters_typeInfo, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_Cast", _wrap_SchemaParameters_Cast, METH_VARARGS, NULL},
+	 { (char *)"SchemaParameters_ConstCast", _wrap_SchemaParameters_ConstCast, METH_VARARGS, NULL},
 	 { (char *)"new_SchemaParameters", _wrap_new_SchemaParameters, METH_VARARGS, NULL},
 	 { (char *)"SchemaParameters_parameterCount", _wrap_SchemaParameters_parameterCount, METH_VARARGS, NULL},
 	 { (char *)"SchemaParameters_parameter", _wrap_SchemaParameters_parameter, METH_VARARGS, NULL},

@@ -66,7 +66,7 @@ bool Config::init() {
 	hosts.clear();
 	vector<string> hostNames, routings;
 
-	SEISCOMP_NOTICE("reading host configuration");
+	SEISCOMP_INFO("reading host configuration");
 	try { hostNames = app->configGetStrings("hosts"); }
 	catch ( ... ) {}
 	if ( hostNames.empty() ) {

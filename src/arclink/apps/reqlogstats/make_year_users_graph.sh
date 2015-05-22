@@ -33,7 +33,7 @@ if [ ! -d ${db_dir} ] ; then
     exit 1
 fi
 
-function show_usage() {
+show_usage() {
   echo "Usage: ${progname} [--dcid {dcid} ] [ {month} [ {year} [ {db file} ]]]"
   echo
   echo "Create usage images from {db file} for the given date."
@@ -170,10 +170,11 @@ plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf(
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \
      '' using  7 title 'IPGP' ls 6, \
-     '' using  8 title 'LMU' ls 7, \
-     '' using  9 title 'NIEP' ls 10, \
-     '' using 10 title 'ODC' ls 9, \
-     '' using 11 title 'RESIF' ls 8
+     '' using  8 title 'KOERI' ls 1, \
+     '' using  9 title 'LMU' ls 7, \
+     '' using 10 title 'NIEP' ls 10, \
+     '' using 11 title 'ODC' ls 9, \
+     '' using 12 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output

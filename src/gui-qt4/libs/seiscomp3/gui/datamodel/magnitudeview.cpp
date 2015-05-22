@@ -29,7 +29,6 @@
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/datamodel/amplitudeview.h>
 #include <seiscomp3/gui/datamodel/utils.h>
-#include <seiscomp3/gui/datamodel/ui_magnitudeview_filter.h>
 
 #include <functional>
 
@@ -182,43 +181,6 @@ struct like<QString> {
 };
 
 
-class ModelAbstractRowFilter {
-	public:
-		MAKEENUM(
-			CompareOperation,
-			EVALUES(
-				Undefined,
-				Less,
-				LessEqual,
-				Equal,
-				NotEqual,
-				Greater,
-				GreaterEqual,
-				Like
-			),
-			ENAMES(
-				"None",
-				"Less",
-				"Less or equal",
-				"Equal",
-				"Not equal",
-				"Greater",
-				"Greater or equal",
-				"Like"
-			)
-		);
-
-	public:
-		virtual ~ModelAbstractRowFilter() {}
-
-		virtual int column() const = 0;
-		virtual CompareOperation operation() const = 0;
-		virtual QString value() const = 0;
-
-		virtual bool passes(QAbstractItemModel *model, int row) = 0;
-};
-
-
 template <typename T>
 class ModelFieldValueFilter : public ModelAbstractRowFilter {
 	public:
@@ -227,6 +189,14 @@ class ModelFieldValueFilter : public ModelAbstractRowFilter {
 		virtual int column() const { return _column; }
 		virtual CompareOperation operation() const { return _op; }
 		virtual QString value() const { return QVariant(_value).toString(); }
+
+		virtual QString toString() {
+			StaMagsListColumns c = (EStaMagsListColumns)_column;
+			QString str = QString("%1,%2,%3").arg(c.toString()).arg(_op.toString()).arg(_value);
+			return str;
+		}
+
+		virtual bool fromString(const QString &) { return false; }
 
 		virtual bool passes(QAbstractItemModel *model, int row) {
 			return check(model, model->index(row, _column), _value);
@@ -283,46 +253,123 @@ class ModelDistanceFilter : public ModelFieldValueFilter<double> {
 
 
 template <class FUNC>
-class ModelRowFilterBinaryOperation : public ModelAbstractRowFilter {
+class ModelRowFilterMultiOperation : public ModelAbstractRowFilter {
 	public:
 		// Takes ownership
-		explicit ModelRowFilterBinaryOperation(ModelAbstractRowFilter *filter1, ModelAbstractRowFilter *filter2) : _filter1(filter1), _filter2(_filter2) {}
-		~ModelRowFilterBinaryOperation() {
-			if ( _filter1 ) delete _filter1;
-			if ( _filter2 ) delete _filter2;
+		explicit ModelRowFilterMultiOperation() {}
+		~ModelRowFilterMultiOperation() {
+			foreach ( ModelAbstractRowFilter *f, _filters ) delete f;
 		}
 
 	public:
 		int column() const { return -1; }
+		virtual CompareOperation operation() const { return Undefined; }
+		virtual QString value() const { return QString(); }
 
 		bool passes(QAbstractItemModel *model, int row) {
-			return _func(_filter1->passes(model,row), _filter2->passes(model, row));
+			if ( _filters.empty() ) return true;
+
+			bool ret = _filters[0]->passes(model,row);
+
+			for ( int i = 1; i < _filters.size(); ++i )
+				ret = _func(ret, _filters[i]->passes(model,row));
+
+			return ret;
 		}
 
+		virtual QString toString() {
+			QString str;
+
+			for ( int i = 0; i < _filters.size(); ++i ) {
+				if ( i ) str += QString(" %1 ").arg(FUNC::str());
+				str += _filters[i]->toString();
+			}
+
+			return str;
+		}
+
+		virtual bool fromString(const QString &s) {
+			QStringList items = s.split(FUNC::str());
+			foreach ( const QString &item, items ) {
+				QStringList toks = item.trimmed().split(",");
+				if ( toks.size() != 3 ) return false;
+				StaMagsListColumns c;
+				CompareOperation op;
+				QString value;
+				if ( !c.fromString(toks[0].trimmed().toStdString()) )
+					return false;
+				if ( !op.fromString(toks[1].trimmed().toStdString()) )
+					return false;
+				value = toks[2].trimmed();
+
+				ModelAbstractRowFilter *stage = NULL;
+
+				switch ( c ) {
+					case CHANNEL:
+					{
+						stage = new ModelFieldValueFilter<QString>(c, op, value);
+						break;
+					}
+					case MAGNITUDE:
+					case RESIDUAL:
+					case DISTANCE:
+					{
+						bool ok;
+						double v = value.toDouble(&ok);
+						if ( ok ) {
+							if ( c == DISTANCE )
+								stage = new ModelDistanceFilter(c, op, v);
+							else
+								stage = new ModelFieldValueFilter<double>(c, op, v);
+						}
+						break;
+					}
+					default:
+						break;
+				}
+
+				if ( stage != NULL )
+					add(stage);
+				else
+					return false;
+			}
+
+			return true;
+		}
+
+		void add(ModelAbstractRowFilter *f) { _filters.append(f); }
+		int count() const { return _filters.count(); }
+		ModelAbstractRowFilter *filter(int i) const { return _filters[i]; }
+
 	private:
-		FUNC                    _func;
-		ModelAbstractRowFilter *_filter1;
-		ModelAbstractRowFilter *_filter2;
+		FUNC                              _func;
+		QVector<ModelAbstractRowFilter *> _filters;
 };
 
 
 struct opAnd {
+	static const char *str() { static const char *s = "&&"; return s; }
 	bool operator()(bool lhs, bool rhs) const {
 		return lhs && rhs;
 	}
 };
 
 struct opOr {
+	static const char *str() { static const char *s = "||"; return s; }
 	bool operator()(bool lhs, bool rhs) const {
 		return lhs || rhs;
 	}
 };
 
 struct opXor {
+	static const char *str() { static const char *s = "^^"; return s; }
 	bool operator()(bool lhs, bool rhs) const {
 		return lhs != rhs;
 	}
 };
+
+
+typedef ModelRowFilterMultiOperation<opOr> ModelRowFilter;
 
 
 }
@@ -665,13 +712,245 @@ bool StationMagnitudeModel::useMagnitude(int row) const {
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+MagnitudeRowFilter::MagnitudeRowFilter(ModelAbstractRowFilter **filter_ptr, QWidget * parent, Qt::WFlags f)
+: QDialog(parent, f) {
+	_ui.setupUi(this);
+
+	_filter = filter_ptr;
+
+	if ( SCScheme.unit.distanceInKM )
+		_ui.labelInfo->setText(tr("NOTE: Distance is specified in km."));
+	else
+		_ui.labelInfo->setText(tr("NOTE: Distance is specified in degree."));
+
+	ModelRowFilter *filter = NULL;
+
+	if ( _filter != NULL )
+		filter = reinterpret_cast<ModelRowFilter*>(*_filter);
+
+	if ( filter != NULL ) {
+		for ( int i = 0; i < filter->count(); ++i ) {
+			ModelAbstractRowFilter *stage = filter->filter(i);
+			Row &row = addRow();
+
+			switch ( stage->column() ) {
+				case CHANNEL:
+					row.column->setCurrentIndex(0);
+					break;
+				case MAGNITUDE:
+					row.column->setCurrentIndex(1);
+					break;
+				case RESIDUAL:
+					row.column->setCurrentIndex(2);
+					break;
+				case DISTANCE:
+					row.column->setCurrentIndex(3);
+					break;
+				default:
+					break;
+			}
+
+			if ( stage->operation() != ModelAbstractRowFilter::Undefined )
+				row.operation->setCurrentIndex((int)stage->operation()-1);
+			row.value->setText(stage->value());
+		}
+	}
+	else {
+		// At least one row is mandatory
+		addRow();
+	}
+
+	QVBoxLayout *layout = new QVBoxLayout;
+	layout->setMargin(0);
+	_ui.frameFilters->setLayout(layout);
+
+	for ( int i = 0; i < _rows.count(); ++i ) {
+		layout->addLayout(_rows[i].layout);
+	}
+
+	connect(_ui.btnAdd, SIGNAL(clicked()), this, SLOT(addFilter()));
+	connect(_ui.btnRemove, SIGNAL(clicked()), this, SLOT(removeFilter()));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+MagnitudeRowFilter::Row &MagnitudeRowFilter::addRow() {
+	Row row;
+	row.layout = new QHBoxLayout;
+	row.column = new QComboBox(_ui.frameFilters);
+	row.operation = new QComboBox(_ui.frameFilters);
+	row.value = new QLineEdit(_ui.frameFilters);
+
+	row.layout->addWidget(row.column);
+	row.layout->addWidget(row.operation);
+	row.layout->addWidget(row.value);
+
+	row.column->addItem(tr("Channel"));
+	row.column->addItem(tr("Magnitude"));
+	row.column->addItem(tr("Residual"));
+	row.column->addItem(tr("Distance"));
+
+	for ( int i = 1; i < ModelAbstractRowFilter::CompareOperation::Quantity; ++i )
+		row.operation->addItem(tr(ModelAbstractRowFilter::ECompareOperationNames::name(i)));
+
+	_rows.append(row);
+	return _rows.back();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeRowFilter::accept() {
+	if ( _filter != NULL ) {
+		ModelRowFilter *filter = new ModelRowFilter();
+
+		foreach ( Row r, _rows ) {
+			ModelAbstractRowFilter::CompareOperation op;
+			int column;
+
+			op.fromInt(r.operation->currentIndex()+1);
+
+			switch ( r.column->currentIndex() ) {
+				case 0:
+					column = CHANNEL;
+					break;
+				case 1:
+					column = MAGNITUDE;
+					break;
+				case 2:
+					column = RESIDUAL;
+					break;
+				case 3:
+					column = DISTANCE;
+					break;
+				default:
+					QMessageBox::critical(this, tr("Error"), tr("Internal error: invalid column %1").arg(r.column->currentIndex()));
+					delete filter;
+					return;
+			}
+
+			ModelAbstractRowFilter *stage = NULL;
+
+			switch ( column ) {
+				case CHANNEL:
+				{
+					QString value = r.value->text();
+					stage = new ModelFieldValueFilter<QString>(column, op, value);
+					break;
+				}
+				case MAGNITUDE:
+				case RESIDUAL:
+				case DISTANCE:
+				{
+					bool ok;
+					double value = r.value->text().toDouble(&ok);
+					if ( ok ) {
+						if ( column == DISTANCE )
+							stage = new ModelDistanceFilter(column, op, value);
+						else
+							stage = new ModelFieldValueFilter<double>(column, op, value);
+					}
+					else {
+						QMessageBox::critical(this, tr("Error"), tr("Expected double value"));
+						delete filter;
+						return;
+					}
+					break;
+				}
+				default:
+					QMessageBox::critical(this, tr("Error"), tr("Internal error: invalid target column %1").arg(column));
+					delete filter;
+					return;
+			}
+
+			filter->add(stage);
+		}
+
+		if ( *_filter != NULL )
+			delete *_filter;
+
+		*_filter = filter;
+
+		QSettings &s = SCApp->settings();
+		s.beginGroup("MagnitudeView");
+		s.setValue("selectionFilter", filter->toString());
+		s.endGroup();
+	}
+
+	QDialog::accept();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeRowFilter::addFilter() {
+	static_cast<QVBoxLayout*>(_ui.frameFilters->layout())->addLayout(addRow().layout);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeRowFilter::removeFilter() {
+	if ( _rows.size() <= 1 ) return;
+
+	delete _rows.back().layout;
+	delete _rows.back().column;
+	delete _rows.back().operation;
+	delete _rows.back().value;
+	_rows.pop_back();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+namespace {
+
+
+ModelAbstractRowFilter *&selectionFilter() {
+	static ModelAbstractRowFilter *selectionFilter = NULL;
+	static bool filterReadFromSettings = false;
+
+	if ( !filterReadFromSettings ) {
+		QSettings &s = SCApp->settings();
+		s.beginGroup("MagnitudeView");
+		QString f_str = s.value("selectionFilter").toString();
+		if ( !f_str.isEmpty() ) {
+			ModelRowFilter *filter = new ModelRowFilter;
+			if ( !filter->fromString(f_str) ) {
+				delete filter;
+				QMessageBox::warning(NULL, SCApp->tr("Settings"), SCApp->tr("Could not restore magnitude selection filter"), QMessageBox::Ok);
+			}
+			else {
+				if ( selectionFilter != NULL )
+					delete selectionFilter;
+				selectionFilter = filter;
+			}
+		}
+		s.endGroup();
+		filterReadFromSettings = true;
+	}
+
+	return selectionFilter;
+}
+
+
+}
 
 
 //! Implementation of MagnitudeView
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void *MagnitudeView::_selectionFilter = NULL;
-
-
 MagnitudeView::MagnitudeView(const MapsDesc &maps,
                              Seiscomp::DataModel::DatabaseQuery* reader,
                              QWidget * parent, Qt::WFlags f)
@@ -1077,19 +1356,21 @@ void MagnitudeView::recalculateMagnitude() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::selectChannels() {
-	if ( _selectionFilter == NULL ) {
+	if ( selectionFilter() == NULL ) {
 		if ( !editSelectionFilter() )
 			return;
 	}
 
-	if ( _selectionFilter == NULL )
+	ModelAbstractRowFilter *filter = selectionFilter();
+
+	if ( filter == NULL )
 		return;
 
 	_ui.tableStationMagnitudes->selectionModel()->clear();
 
 	int rowCount = _modelStationMagnitudesProxy->rowCount();
 	for ( int i = 0; i < rowCount; ++i ) {
-		if ( reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter)->passes(_modelStationMagnitudesProxy, i) )
+		if ( reinterpret_cast<ModelAbstractRowFilter*>(filter)->passes(_modelStationMagnitudesProxy, i) )
 			_ui.tableStationMagnitudes->selectionModel()->select(_modelStationMagnitudesProxy->index(i, 0), QItemSelectionModel::Rows | QItemSelectionModel::Select);
 	}
 }
@@ -1912,108 +2193,8 @@ void MagnitudeView::computeMagnitude(DataModel::Magnitude *magnitude,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MagnitudeView::editSelectionFilter() {
-	QDialog dlg;
-	Ui::MagnitudeRowFilter ui;
-	ui.setupUi(&dlg);
-
-	ui.comboColumn->addItem(tr("Channel"));
-	ui.comboColumn->addItem(tr("Magnitude"));
-	ui.comboColumn->addItem(tr("Residual"));
-	ui.comboColumn->addItem(tr("Distance"));
-
-	if ( SCScheme.unit.distanceInKM )
-		ui.labelInfo->setText(tr("NOTE: Distance is specified in km."));
-	else
-		ui.labelInfo->setText(tr("NOTE: Distance is specified in degree."));
-
-	for ( int i = 1; i < ModelAbstractRowFilter::CompareOperation::Quantity; ++i )
-		ui.comboOperation->addItem(tr(ModelAbstractRowFilter::ECompareOperationNames::name(i)));
-
-	if ( _selectionFilter ) {
-		switch ( reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter)->column() ) {
-			case CHANNEL:
-				ui.comboColumn->setCurrentIndex(0);
-				break;
-			case MAGNITUDE:
-				ui.comboColumn->setCurrentIndex(1);
-				break;
-			case RESIDUAL:
-				ui.comboColumn->setCurrentIndex(2);
-				break;
-			case DISTANCE:
-				ui.comboColumn->setCurrentIndex(3);
-				break;
-			default:
-				break;
-		}
-
-		if ( reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter)->operation() != ModelAbstractRowFilter::Undefined )
-		ui.comboOperation->setCurrentIndex((int)reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter)->operation()-1);
-		ui.comboValue->setText(reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter)->value());
-	}
-
-	if ( dlg.exec() != QDialog::Accepted )
-		return false;
-
-	ModelAbstractRowFilter::CompareOperation op;
-	int column;
-
-	op.fromInt(ui.comboOperation->currentIndex()+1);
-
-	switch ( ui.comboColumn->currentIndex() ) {
-		case 0:
-			column = CHANNEL;
-			break;
-		case 1:
-			column = MAGNITUDE;
-			break;
-		case 2:
-			column = RESIDUAL;
-			break;
-		case 3:
-			column = DISTANCE;
-			break;
-		default:
-			QMessageBox::critical(this, tr("Error"), tr("Internal error: invalid column %1").arg(ui.comboColumn->currentIndex()));
-			return false;
-	}
-
-	ModelAbstractRowFilter *filter = NULL;
-
-	switch ( column ) {
-		case CHANNEL:
-		{
-			QString value = ui.comboValue->text();
-			filter = new ModelFieldValueFilter<QString>(column, op, value);
-			break;
-		}
-		case MAGNITUDE:
-		case RESIDUAL:
-		case DISTANCE:
-		{
-			bool ok;
-			double value = ui.comboValue->text().toDouble(&ok);
-			if ( ok ) {
-				if ( column == DISTANCE )
-					filter = new ModelDistanceFilter(column, op, value);
-				else
-					filter = new ModelFieldValueFilter<double>(column, op, value);
-			}
-			else {
-				QMessageBox::critical(this, tr("Error"), tr("Expected double value"));
-				return false;
-			}
-			break;
-		}
-		default:
-			QMessageBox::critical(this, tr("Error"), tr("Internal error: invalid target column %1").arg(column));
-			return false;
-	}
-
-	if ( _selectionFilter != NULL ) delete reinterpret_cast<ModelAbstractRowFilter*>(_selectionFilter);
-
-	_selectionFilter = filter;
-	return _selectionFilter != NULL;
+	MagnitudeRowFilter dlg(&selectionFilter());
+	return dlg.exec() == QDialog::Accepted;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

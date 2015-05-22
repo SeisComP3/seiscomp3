@@ -18,6 +18,7 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/datamodel/ui_magnitudeview.h>
+#include <seiscomp3/gui/datamodel/ui_magnitudeview_filter.h>
 #include <seiscomp3/gui/datamodel/magnitudemap.h>
 #include <seiscomp3/gui/map/mapwidget.h>
 #include <seiscomp3/gui/core/diagramwidget.h>
@@ -75,6 +76,75 @@ class SC_GUI_API StationMagnitudeModel : public QAbstractTableModel {
 		QVector<double> _distance;
 		QStringList _header;
 		int _rowCount;
+};
+
+
+class ModelAbstractRowFilter {
+	public:
+		MAKEENUM(
+			CompareOperation,
+			EVALUES(
+				Undefined,
+				Less,
+				LessEqual,
+				Equal,
+				NotEqual,
+				Greater,
+				GreaterEqual,
+				Like
+			),
+			ENAMES(
+				"None",
+				"Less",
+				"Less or equal",
+				"Equal",
+				"Not equal",
+				"Greater",
+				"Greater or equal",
+				"Like"
+			)
+		);
+
+	public:
+		virtual ~ModelAbstractRowFilter() {}
+
+		virtual int column() const = 0;
+		virtual CompareOperation operation() const = 0;
+		virtual QString value() const = 0;
+
+		virtual QString toString() = 0;
+		virtual bool fromString(const QString &) = 0;
+
+		virtual bool passes(QAbstractItemModel *model, int row) = 0;
+};
+
+
+class SC_GUI_API MagnitudeRowFilter : public QDialog {
+	Q_OBJECT
+
+	public:
+		MagnitudeRowFilter(ModelAbstractRowFilter **filter, QWidget * parent = 0, Qt::WFlags f = 0);
+
+		virtual void accept();
+
+	private slots:
+		void addFilter();
+		void removeFilter();
+
+	private:
+		struct Row {
+			QLayout   *layout;
+			QComboBox *column;
+			QComboBox *operation;
+			QLineEdit *value;
+		};
+
+		Row &addRow();
+		void popRow();
+
+		::Ui::MagnitudeRowFilter   _ui;
+		QVector<Row>               _rows;
+		ModelAbstractRowFilter   **_filter;
 };
 
 
@@ -195,7 +265,6 @@ class SC_GUI_API MagnitudeView : public QWidget {
 
 
 	private:
-		static void             *_selectionFilter;
 		typedef CalculateAmplitudes::AmplitudeEntry AmplitudeEntry;
 		typedef CalculateAmplitudes::PickAmplitudeMap PickAmplitudeMap;
 		typedef Processing::MagnitudeProcessorFactory::ServiceNames AvailableTypes;

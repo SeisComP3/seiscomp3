@@ -30,7 +30,7 @@ if [ ! -d ${db_dir} ] ; then
     exit 1
 fi
 
-function show_usage() {
+show_usage() {
   echo "Usage: ${progname} [--code {net} ] [ {month} [ {year} [ {db file} ]]]"
   echo
   echo "Create usage images from {db file} for the given date."
@@ -83,6 +83,7 @@ echo ${cmd} \
     | sqlite3 ${dbfile} | sed -e 's/|/  /g' \
     | python ${dirname}/t1.py \
     | python ${dirname}/t2.py > days3.dat
+cp days3.dat lemon.dat
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
     echo "Nothing in db with '${code_constr}'."
@@ -167,10 +168,11 @@ plot '<cut -c9- days3.dat' using 3:xtic(1) title 'BGR' ls 2, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \
      '' using  7 title 'IPGP' ls 6, \
-     '' using  8 title 'LMU' ls 7, \
-     '' using  9 title 'NIEP' ls 10, \
-     '' using 10 title 'ODC' ls 9, \
-     '' using 11 title 'RESIF' ls 8
+     '' using  8 title 'KOERI' ls 1, \
+     '' using  9 title 'LMU' ls 7, \
+     '' using 10 title 'NIEP' ls 10, \
+     '' using 11 title 'ODC' ls 9, \
+     '' using 12 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output

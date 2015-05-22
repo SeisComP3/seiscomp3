@@ -147,8 +147,8 @@ class App : public Processing::Application {
 		StationConfig  _stationConfig;
 		EP             _ep;
 
-		ObjectLog    *_logPicks;
-		ObjectLog    *_logAmps;
+		ObjectLog     *_logPicks;
+		ObjectLog     *_logAmps;
 };
 
 

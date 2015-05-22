@@ -386,7 +386,7 @@ struct ContainerReader<ROOT_TYPE, T,1> {
 		}
 
 		ar._first = true;
-		ar.setValidity(oldState);
+		ar._validObject = oldState;
 	}
 };
 
@@ -454,8 +454,7 @@ void operator()(Archive<ROOT_TYPE>& ar, const ObjectNamer<std::vector<T> >& name
 		}
 
 		ar._first = true;
-
-		ar.setValidity(oldState);
+		ar._validObject = oldState;
 	}
 };
 
@@ -530,8 +529,7 @@ void operator()(Archive<ROOT_TYPE>& ar, const ObjectNamer<std::list<T> >& namedO
 		}
 
 		ar._first = true;
-
-		ar.setValidity(oldState);
+		ar._validObject = oldState;
 	}
 };
 
@@ -618,7 +616,7 @@ inline void Archive<ROOT_TYPE>::read(::boost::optional<T>& object) {
 	if ( !success() )
 		object = boost::none;
 
-	setValidity(oldState);
+	_validObject = oldState;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

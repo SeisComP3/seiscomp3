@@ -33,6 +33,10 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#ifndef WIN32
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
 
 
 using namespace std;
@@ -46,14 +50,16 @@ namespace {
 QString splashDefaultImage = ":/images/images/splash-default.png";
 
 
+// Don't catch signal on windows since that path hasn't tested.
+#ifdef WIN32
 struct Initializer {
 	Initializer() {
 		Seiscomp::Client::Application::HandleSignals(false, false);
 	}
 };
 
-
 Initializer __init;
+#endif
 
 
 class ShowPlugins : public QDialog {
@@ -279,6 +285,16 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 	setLoadCitiesEnabled(true);
 
 	setConnectionRetries(0);
+
+#ifndef WIN32
+	if ( ::socketpair(AF_UNIX, SOCK_STREAM, 0, _signalSocketFd) )
+		qFatal("Couldn't create HUP socketpair");
+
+	_signalNotifier = new QSocketNotifier(_signalSocketFd[1], QSocketNotifier::Read, this);
+	connect(_signalNotifier, SIGNAL(activated(int)), this, SLOT(handleSignalNotification()));
+#else
+	_signalNotifier = NULL;
+#endif
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -289,6 +305,10 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 Application::~Application() {
 	if ( _dlgConnection ) delete _dlgConnection;
 	if ( _settings ) delete _settings;
+#ifndef WIN32
+	close(_signalSocketFd[0]);
+	close(_signalSocketFd[1]);
+#endif
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -473,6 +493,19 @@ void Application::timerSOH() {
 		else
 			database()->endQuery();
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::handleSignalNotification() {
+	int signal;
+	_signalNotifier->setEnabled(false);
+	::read(_signalSocketFd[1], &signal, sizeof(signal));
+	QApplication::quit();
+	_signalNotifier->setEnabled(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1084,6 +1117,15 @@ bool Application::handleInitializationError(Stage stage) {
 	}
 
 	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::handleInterrupt(int signal) throw() {
+	::write(_signalSocketFd[0], &signal, sizeof(signal));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
