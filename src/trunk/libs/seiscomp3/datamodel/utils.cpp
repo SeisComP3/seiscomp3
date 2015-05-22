@@ -329,6 +329,8 @@ struct ComponentAxis {
 
 
 bool by_Z_desc_and_code_asc(const ComponentAxis &axis1, const ComponentAxis &axis2) {
+	if ( fabs(axis1.axis.z) > fabs(axis2.axis.z) ) return true;
+	if ( fabs(axis1.axis.z) < fabs(axis2.axis.z) ) return false;
 	if ( axis1.axis.z > axis2.axis.z ) return true;
 	if ( axis1.axis.z < axis2.axis.z ) return false;
 	return axis1.model->code() < axis2.model->code();
