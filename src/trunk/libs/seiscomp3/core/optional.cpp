@@ -26,7 +26,7 @@ namespace Seiscomp {
 namespace Core {
 
 
-::boost::none_t const None = ::boost::none_t(0);
+::boost::none_t const None = ::boost::none;
 
 ValueError::ValueError() throw() {
 }
