@@ -225,7 +225,10 @@ void BinaryArchive::close() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(int& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(int)):0;
-	setValidity(size == sizeof(int));
+	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(int): expected %d bytes from stream, got %d", (int)sizeof(int), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -235,7 +238,10 @@ void BinaryArchive::read(int& value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(float& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(float)):0;
-	setValidity(size == sizeof(float));
+	if ( size != sizeof(float) ) {
+		SEISCOMP_ERROR("read(float): expected %d bytes from stream, got %d", (int)sizeof(float), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -245,7 +251,10 @@ void BinaryArchive::read(float& value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(double& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(double)):0;
-	setValidity(size == sizeof(double));
+	if ( size != sizeof(double) ) {
+		SEISCOMP_ERROR("read(double): expected %d bytes from stream, got %d", (int)sizeof(double), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -262,6 +271,7 @@ void BinaryArchive::read(std::vector<char>& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -269,7 +279,10 @@ void BinaryArchive::read(std::vector<char>& value) {
 	value.resize(vsize);
 	vsize = vsize * sizeof(char);
 	size = _buf->sgetn((char*)&value[0], vsize);
-	setValidity(size == vsize);
+	if ( size != vsize ) {
+		SEISCOMP_ERROR("read(char*): expected %d bytes from stream, got %d", vsize, size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -286,6 +299,7 @@ void BinaryArchive::read(std::vector<int>& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -293,7 +307,10 @@ void BinaryArchive::read(std::vector<int>& value) {
 	value.resize(vsize);
 	vsize = vsize * sizeof(int);
 	size = _buf->sgetn((char*)&value[0], vsize);
-	setValidity(size == vsize);
+	if ( size != vsize ) {
+		SEISCOMP_ERROR("read(int*): expected %d bytes from stream, got %d", vsize, size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -310,6 +327,7 @@ void BinaryArchive::read(std::vector<float>& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -317,7 +335,10 @@ void BinaryArchive::read(std::vector<float>& value) {
 	value.resize(vsize);
 	vsize = vsize * sizeof(float);
 	size = _buf->sgetn((char*)&value[0], vsize);
-	setValidity(size == vsize);
+	if ( size != vsize ) {
+		SEISCOMP_ERROR("read(float*): expected %d bytes from stream, got %d", vsize, size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -334,6 +355,7 @@ void BinaryArchive::read(std::vector<double>& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -341,7 +363,10 @@ void BinaryArchive::read(std::vector<double>& value) {
 	value.resize(vsize);
 	vsize = vsize * sizeof(double);
 	size = _buf->sgetn((char*)&value[0], vsize);
-	setValidity(size == vsize);
+	if ( size != vsize ) {
+		SEISCOMP_ERROR("read(double*): expected %d bytes from stream, got %d", vsize, size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -358,6 +383,7 @@ void BinaryArchive::read(std::vector<std::string>& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -376,7 +402,10 @@ void BinaryArchive::read(std::vector<std::string>& value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(std::complex<float>& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(std::complex<float>)):0;
-	setValidity(size == sizeof(std::complex<float>));
+	if ( size != sizeof(std::complex<float>) ) {
+		SEISCOMP_ERROR("read(complex<float>): expected %d bytes from stream, got %d", (int)sizeof(std::complex<float>), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -386,7 +415,10 @@ void BinaryArchive::read(std::complex<float>& value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(std::complex<double>& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(std::complex<double>)):0;
-	setValidity(size == sizeof(std::complex<double>));
+	if ( size != sizeof(std::complex<double>) ) {
+		SEISCOMP_ERROR("read(complex<double>): expected %d bytes from stream, got %d", (int)sizeof(std::complex<double>), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -398,7 +430,10 @@ void BinaryArchive::read(bool& value) {
 	char tmp;
 	int size = _buf?_buf->sgetn(&tmp, sizeof(char)):0;
 	value = (bool)tmp;
-	setValidity(size == sizeof(char));
+	if ( size != sizeof(char) ) {
+		SEISCOMP_ERROR("read(bool): expected %d bytes from stream, got %d", (int)sizeof(char), size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -415,6 +450,7 @@ void BinaryArchive::read(std::vector<std::complex<double> >& value) {
 	int vsize;
 	int size = _buf->sgetn((char*)&vsize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -422,7 +458,11 @@ void BinaryArchive::read(std::vector<std::complex<double> >& value) {
 	value.resize(vsize);
 	vsize = vsize * sizeof(std::complex<double>);
 	size = _buf->sgetn((char*)&value[0], vsize);
-	setValidity(size == vsize);
+
+	if ( size != vsize ) {
+		SEISCOMP_ERROR("read(complex<double>*): expected %d bytes from stream, got %d", vsize, size);
+		setValidity(false);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -439,6 +479,7 @@ void BinaryArchive::read(std::string& value) {
 	int ssize;
 	int size = _buf->sgetn((char*)&ssize, sizeof(int));
 	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(string.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
 		setValidity(false);
 		return;
 	}
@@ -449,7 +490,10 @@ void BinaryArchive::read(std::string& value) {
 		value.resize(ssize);
 		ssize = ssize * sizeof(std::string::value_type);
 		size = _buf->sgetn((char*)&value[0], ssize);
-		setValidity(size == ssize);
+		if ( size != ssize ) {
+			SEISCOMP_ERROR("read(string): expected %d bytes from stream, got %d", ssize, size);
+			setValidity(false);
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -461,7 +505,10 @@ void BinaryArchive::read(std::string& value) {
 void BinaryArchive::read(time_t& value) {
 	dateint tmpValue;
 	int size = _buf?_buf->sgetn((char*)&tmpValue, sizeof(tmpValue)):0;
-	setValidity(size == sizeof(tmpValue));
+	if ( size != sizeof(tmpValue) ) {
+		SEISCOMP_ERROR("read(time): expected %d bytes from stream, got %d", (int)sizeof(tmpValue), size);
+		setValidity(false);
+	}
 	value = tmpValue;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -474,7 +521,10 @@ void BinaryArchive::read(Seiscomp::Core::Time& value) {
 	dateint tmpSeconds, tmpUSeconds;
 	int size = _buf?_buf->sgetn((char*)&tmpSeconds, sizeof(tmpSeconds)):0;
 	size += _buf?_buf->sgetn((char*)&tmpUSeconds, sizeof(tmpUSeconds)):0;
-	setValidity(size == sizeof(tmpSeconds) + sizeof(tmpUSeconds));
+	if ( size != sizeof(tmpSeconds) + sizeof(tmpUSeconds) ) {
+		SEISCOMP_ERROR("read(datetime): expected %d bytes from stream, got %d", int(sizeof(tmpSeconds) + sizeof(tmpUSeconds)), size);
+		setValidity(false);
+	}
 	value = Seiscomp::Core::Time(tmpSeconds, tmpUSeconds);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
