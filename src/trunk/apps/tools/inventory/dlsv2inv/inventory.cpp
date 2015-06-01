@@ -1889,6 +1889,21 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 	}
 	if(sequence_number == -1)
 	{
+		unit = PRESSURE;
+		sequence_number = GetPAZSequence(ci, PRESSURE, VOLTAGE);
+	}
+	if(sequence_number == -1)
+	{
+		unit = TEMPERATURE;
+		sequence_number = GetPAZSequence(ci, TEMPERATURE, VOLTAGE);
+	}
+	if(sequence_number == -1)
+	{
+		unit = TEMPERATURE;
+		sequence_number = GetPAZSequence(ci, TEMPERATURE2, VOLTAGE);
+	}
+	if(sequence_number == -1)
+	{
 		unit = VELOCITY;
 		sequence_number = GetPAZSequence(ci, VELOCITY, DIGITAL);
 	}
@@ -2615,6 +2630,15 @@ bool Inventory::IsPAZStream(ChannelIdentifier& ci)
 		return true;
 
 	if(GetPAZSequence(ci, DISPLACE, VOLTAGE) != -1)
+		return true;
+
+	if(GetPAZSequence(ci, PRESSURE, VOLTAGE) != -1)
+		return true;
+
+	if(GetPAZSequence(ci, TEMPERATURE, VOLTAGE) != -1)
+		return true;
+
+	if(GetPAZSequence(ci, TEMPERATURE2, VOLTAGE) != -1)
 		return true;
 
 	if(GetPAZSequence(ci, VELOCITY, DIGITAL) != -1)
