@@ -62,7 +62,7 @@ copyright = u'2014, GFZ Potsdam, gempa GmbH'
 # built documents.
 #
 # The short X.Y version.
-version = 'Git'
+version = '2015.149'
 # The full version, including alpha/beta/rc tags.
 release = 'Jakarta'
 
