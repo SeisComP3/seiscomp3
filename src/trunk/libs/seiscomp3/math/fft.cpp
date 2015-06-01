@@ -52,21 +52,24 @@ enum FFTDirection {
 
 
 
+#define SWAP(a,b) tempr=(a);(a)=(b);(b)=tempr
+
 template <typename T>
-void fourier(T *data, size_t nn, int isign) {
-	size_t n,mmax,m,j,istep,i;
+void fourier(T *data, long nn, int isign) {
+	long n,mmax,m,j,istep,i;
 	double wtemp,wr,wpr,wpi,wi,theta;
 	T tempr,tempi;
 
 	n = nn << 1;
 	j = 1;
-	for ( i = 1; i < n; i+=2 ) {
-		if (j > i) {
-			std::swap(data[j-1],data[i-1]);
-			std::swap(data[j],data[i]);
+
+	for ( i = 1; i < n; i += 2 ) {
+		if ( j > i ) {
+			SWAP(data[j],data[i]);
+			SWAP(data[j+1],data[i+1]);
 		}
 
-		m = nn;
+		m = n >> 1;
 		while ( m >= 2 && j > m ) {
 			j -= m;
 			m >>= 1;
@@ -77,92 +80,85 @@ void fourier(T *data, size_t nn, int isign) {
 
 	mmax = 2;
 	while ( n > mmax ) {
-		istep =  mmax << 1;
-		theta =  isign*(TWO_PI / mmax);
-		wtemp =  sin(0.5*theta);
-		wpr   = -2.0*wtemp*wtemp;
-		wpi   =  sin(theta);
-		wr    =  1.0;
-		wi    =  0.0;
+		istep = 2*mmax;
+		theta = TWO_PI/(isign*mmax);
+		wtemp = sin(0.5*theta);
+		wpr = -2.0*wtemp*wtemp;
+		wpi = sin(theta);
+		wr = 1.0;
+		wi = 0.0;
 
-		for ( m = 1; m < mmax; m+=2 ) {
+		for ( m = 1; m < mmax; m +=2 ) {
 			for ( i = m; i <= n; i += istep ) {
 				j = i+mmax;
-				tempr = wr*data[j-1]-wi*data[j];
-				tempi = wr*data[j]+wi*data[j-1];
-				data[j-1] = data[i-1]-tempr;
-				data[j] = data[i]-tempi;
-				data[i-1] += tempr;
-				data[i] += tempi;
+				tempr = wr*data[j]-wi*data[j+1];
+				tempi = wr*data[j+1]+wi*data[j];
+				data[j] = data[i]-tempr;
+				data[j+1] = data[i+1]-tempi;
+				data[i] += tempr;
+				data[i+1] += tempi;
 			}
 
-			wtemp = wr;
-			wr = wr*(wpr+1) - wi*wpi;
-			wi = wi*(wpr+1) + wtemp*wpi;
+			wr = (wtemp=wr)*wpr-wi*wpi+wr;
+			wi = wi*wpr+wtemp*wpi+wi;
 		}
 
-		mmax = istep;
+		mmax=istep;
 	}
 }
+
+#undef SWAP
 
 
 template <typename T>
 void transform(T *data, size_t n, FFTDirection dir) {
 	if ( n < 4 ) return;
 
-	size_t i,i1,i2,i3,i4,np3,ni;
-	T c1=0.5,c2,h1r,h1i,h2r,h2i;
+	--data;
+	n /= 2;
+
+	long i,i1,i2,i3,i4,n2p3;
+	T c1 = 0.5,c2,h1r,h1i,h2r,h2i;
 	double wr,wi,wpr,wpi,wtemp,theta;
 
-	theta = M_PI/(double)(n>>1);
+	theta = M_PI/(double)n;
 	if ( dir == Forward ) {
 		c2 = -0.5;
-		fourier(data, n>>1, 1);
+		fourier(data,n,1);
 	}
 	else {
 		c2 = 0.5;
 		theta = -theta;
 	}
 
-	wtemp =  sin(0.5*theta);
-	wpr   = -2.0*wtemp*wtemp;
-	wpi   =  sin(theta);
-	wr    =  1.0+wpr;
-	wi    =  wpi;
-	np3   =  n+2;
-
-	ni = (n>>2)-1;
-
-	for ( i=0; i < ni; ++i ) {
-		i1 = i+i;
-		i2 = i1+1;
-		i3 = np3-i2-1;
-		i4 = i3+1;
-
-		h1r =  c1*(data[i1]+data[i3]);
-		h1i =  c1*(data[i2]-data[i4]);
+	wtemp = sin(0.5*theta);
+	wpr = -2.0*wtemp*wtemp;
+	wpi = sin(theta);
+	wr = 1.0+wpr;
+	wi = wpi;
+	n2p3 = 2*n+3;
+	for ( i = 2; i <= n/2; ++i ) {
+		i4 = 1+(i3 = n2p3-(i2=1+(i1 = i+i-1)));
+		h1r = c1*(data[i1]+data[i3]);
+		h1i = c1*(data[i2]-data[i4]);
 		h2r = -c2*(data[i2]+data[i4]);
-		h2i =  c2*(data[i1]-data[i3]);
-
-		data[i1] =  h1r + wr*h2r - wi*h2i;
-		data[i2] =  h1i + wr*h2i + wi*h2r;
-		data[i3] =  h1r - wr*h2r + wi*h2i;
-		data[i4] = -h1i + wr*h2i + wi*h2r;
-
-		wtemp=wr;
-		wr = wr*(wpr+1) - wi*wpi;
-		wi = wi*(wpr+1) + wtemp*wpi;
+		h2i = c2*(data[i1]-data[i3]);
+		data[i1] = h1r+wr*h2r-wi*h2i;
+		data[i2] = h1i+wr*h2i+wi*h2r;
+		data[i3] = h1r-wr*h2r+wi*h2i;
+		data[i4] = -h1i+wr*h2i+wi*h2r;
+		wr = (wtemp = wr)*wpr-wi*wpi+wr;
+		wi = wi*wpr+wtemp*wpi+wi;
 	}
 
-	h1r = data[0];
 	if ( dir == Forward ) {
-		data[0] = data[0] + data[1];
-		data[1] = h1r - data[1];
+		data[1] = (h1r = data[1])+data[2];
+		data[2] = h1r-data[2];
 	}
 	else {
-		data[0] = c1*(data[0]+data[1]);
-		data[1] = c1*(h1r-data[1]);
-		fourier(data, n>>1, -1);
+		data[1] = c1*((h1r = data[1])+data[2]);
+		data[2] = c1*(h1r-data[2]);
+		fourier(data,n,-1);
 	}
 }
 
@@ -177,27 +173,22 @@ void transform(T *data, size_t n, FFTDirection dir) {
 //!
 template <typename T>
 void ifft(int n, T *out, vector<Complex> &coeff) {
-	int tn = (coeff.size()-1)*2;
+	int tn = coeff.size()*2;
 	double *inout = reinterpret_cast<double*>(&coeff[0]);
 
 #ifdef MATH_USE_FFTW3
-	fftw_plan backward = fftw_plan_dft_c2r_1d(tn+2, (fftw_complex *)inout, inout,
+	fftw_plan backward = fftw_plan_dft_c2r_1d(tn, (fftw_complex *)inout, inout,
 	                                          FFTW_ESTIMATE);
 	fftw_execute(backward);
 	fftw_destroy_plan(backward);
 
+	tn -= 2;
 	for ( int i = 0; i < n; ++i )
 		out[i] = inout[i] / tn; // normalize
 #else
 	// Swap sign of imaginary part
-	for ( int i = 1; i < tn+2; i += 2 )
+	for ( int i = 3; i < tn; i += 2 )
 		inout[i] *= -1;
-
-	// Pack last real value into the imaginary part
-	// of the first sample
-	inout[1] = inout[tn];
-	inout[tn] = 0.0;
-	inout[tn+1] = 0.0;
 
 	transform(inout, tn, Backward); // do inverse FFT
 
@@ -219,7 +210,11 @@ void fft(vector<Complex> &out, int n, const T *data) {
 	int fftn = /*npow2?*/Filtering::next_power_of_2(n)/*:n*/;
 	if ( fftn <= 0 ) return;
 
+#ifdef MATH_USE_FFTW3
 	out.resize(fftn/2+1);
+#else
+	out.resize(fftn/2);
+#endif
 
 	double *inout = reinterpret_cast<double*>(&out[0]);
 
@@ -237,14 +232,8 @@ void fft(vector<Complex> &out, int n, const T *data) {
 #else
 	transform(inout, fftn, Forward); // do FFT
 
-	// Last real value is packed into the first
-	// imaginary part
-	inout[fftn] = inout[1];
-	inout[fftn+1] = 0.0;
-	inout[1] = 0.0;
-
 	// Swap sign of imaginary part
-	for ( int i = 1; i < fftn+2; i += 2 )
+	for ( int i = 3; i < fftn; i += 2 )
 		inout[i] *= -1;
 #endif
 }
