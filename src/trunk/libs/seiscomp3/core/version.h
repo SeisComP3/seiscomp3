@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 15, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 16, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 10) + patch. */
-#define SC_API_VERSION 0x010F00
+#define SC_API_VERSION 0x011000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,14 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "1.16.0"  0x011000
+   - Added Seiscomp::IO::Spectralizer
+   - Added Seiscomp::Gui::LUT
+   - Added Seiscomp::Gui::StaticLUT
+   - Added Seiscomp::Gui::StaticColorLUT
+   - Added Seiscomp::Gui::SpectrogramRenderer
+   - Added Seiscomp::Gui::SpectrogramWidget
+
  "1.15.0"  0x010F00
    - Added Seiscomp::Math::Geo::delazi_wgs84
 
