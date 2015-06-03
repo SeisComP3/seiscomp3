@@ -445,7 +445,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			double logRange = logTo - logFrom;
 
 			for ( int i = n; i; --i ) {
-				double li = exp10((i-1)*logRange/(n-1) + logFrom) - 1;
+				double li = pow(10.0, (i-1)*logRange/(n-1) + logFrom) - 1;
 				int i0 = (int)li;
 				double t = li-i0;
 
@@ -489,7 +489,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 			double logRange = logTo - logFrom;
 
 			for ( int i = n; i; --i ) {
-				double li = exp10((i-1)*logRange/(n-1) + logFrom) - 1;
+				double li = pow(10.0, (i-1)*logRange/(n-1) + logFrom) - 1;
 				int i0 = (int)li;
 				double t = li-i0;
 
@@ -807,7 +807,7 @@ void SpectrogramRenderer::renderAxis(QPainter &p, const QRect &rect, bool leftAl
 	double yPos = 0;
 
 	for ( int i = 0; i <= steps; ++i, yPos += vSpacing, f -= fSpacing ) {
-		int y = axis.top() + (int)(_logarithmic ? exp10(yPos) : yPos);
+		int y = axis.top() + (int)(_logarithmic ? pow(10.0, yPos) : yPos);
 		if ( y > axis.bottom() ) y = axis.bottom();
 		p.drawLine(xPos, y, xPos+4, y);
 
