@@ -224,6 +224,7 @@ class EventTool : public Application {
 		Util::StopWatch               _timer;
 		std::string                   _originID;
 		std::string                   _eventID;
+		std::string                   _epFile;
 
 		Config                        _config;
 		EventProcessors               _processors;

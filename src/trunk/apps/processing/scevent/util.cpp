@@ -201,7 +201,7 @@ string allocateEventID(DatabaseArchive *ar, const Origin *origin,
 
 	string text;
 	string eventID = generateEventID(year, x, prefix, pattern, text, &width);
-	ObjectPtr o = ar?ar->getObject(Event::TypeInfo(), eventID):NULL;
+	ObjectPtr o = ar?ar->getObject(Event::TypeInfo(), eventID):Event::Find(eventID);
 	bool blocked = (blackList != NULL) && (blackList->find(text) != blackList->end());
 
 	if ( !o && !blocked )
@@ -212,7 +212,7 @@ string allocateEventID(DatabaseArchive *ar, const Origin *origin,
 	for ( int i = 1; i < 5; ++i ) {
 		eventID = generateEventID(year, x+i*width, prefix, pattern, text);
 		blocked = (blackList != NULL) && (blackList->find(text) != blackList->end());
-		o = ar?ar->getObject(Event::TypeInfo(), eventID):NULL;
+		o = ar?ar->getObject(Event::TypeInfo(), eventID):Event::Find(eventID);
 		if ( !o && !blocked )
 			return eventID;
 		if ( blocked ) SEISCOMP_WARNING("Blocked ID: %s (rejected %s)", eventID.c_str(), text.c_str());
@@ -221,7 +221,7 @@ string allocateEventID(DatabaseArchive *ar, const Origin *origin,
 	for ( int i = 1; i < 5; ++i ) {
 		eventID = generateEventID(year, x-i*width, prefix, pattern, text);
 		blocked = (blackList != NULL) && (blackList->find(text) != blackList->end());
-		o = ar?ar->getObject(Event::TypeInfo(), eventID):NULL;
+		o = ar?ar->getObject(Event::TypeInfo(), eventID):Event::Find(eventID);
 		if ( !o && !blocked )
 			return eventID;
 		if ( blocked ) SEISCOMP_WARNING("Blocked ID: %s (rejected %s)", eventID.c_str(), text.c_str());

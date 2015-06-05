@@ -30,6 +30,8 @@
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/utils.h>
 
+#include <seiscomp3/io/archive/xmlarchive.h>
+
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/math/geo.h>
 
@@ -165,6 +167,9 @@ void EventTool::createCommandLineDescription() {
 	commandline().addOption("Generic", "expiry,x", "Time span in hours after which objects expire", &_fExpiry, true);
 	commandline().addOption("Generic", "origin-id,O", "Origin ID to associate (local only)", &_originID, true);
 	commandline().addOption("Generic", "event-id,E", "Event ID to update preferred objects (local only)", &_eventID, true);
+
+	commandline().addGroup("Input");
+	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins", &_epFile);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -180,6 +185,12 @@ bool EventTool::validateParameters() {
 
 	if ( _originID != "" || _eventID != "" )
 		setMessagingEnabled(false);
+
+	// For offline processing messaging is disabled and database
+	if ( !_epFile.empty() ) {
+		setMessagingEnabled(false);
+		setDatabaseEnabled(false, false);
+	}
 
 	return true;
 }
@@ -390,6 +401,59 @@ bool EventTool::init() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool EventTool::run() {
+	if ( !_epFile.empty() ) {
+		IO::XMLArchive ar;
+		if ( !ar.open(_epFile.c_str()) ) {
+			SEISCOMP_ERROR("Failed to open %s", _epFile.c_str());
+			return false;
+		}
+
+		_ep = NULL;
+		ar >> _ep;
+		ar.close();
+
+		if ( !_ep ) {
+			SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
+			return false;
+		}
+
+		for ( size_t i = 0; i < _ep->eventCount(); ++i ) {
+			EventPtr evt = _ep->event(i);
+			EventInformationPtr info = new EventInformation(&_cache, &_config, query(), evt);
+
+			// Loading the references does not make sense here, because
+			// the event has been just added
+			cacheEvent(info);
+		}
+
+		for ( size_t i = 0; i < _ep->originCount(); ++i ) {
+			EventInformationPtr info;
+
+			OriginPtr org = _ep->origin(i);
+			info = findAssociatedEvent(org.get());
+			if ( info ) {
+				SEISCOMP_DEBUG("Origin %s already associated with event %s",
+				               org->publicID().c_str(),
+				               info->event->publicID().c_str());
+				continue;
+			}
+
+			SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
+
+			info = associateOrigin(org.get(), true);
+			if ( !info ) continue;
+
+			updatePreferredOrigin(info.get());
+		}
+
+		ar.create("-");
+		ar.setFormattedOutput(true);
+		ar << _ep;
+		ar.close();
+
+		return true;
+	}
+
 	if ( !_originID.empty() ) {
 		if ( !query() ) {
 			std::cerr << "No database connection available" << std::endl;
@@ -2329,7 +2393,8 @@ void EventTool::cacheEvent(EventInformationPtr info) {
 	// Set the clean-up flag to false
 	info->aboutToBeRemoved = false;
 	// Add the event to the EventParameters
-	_ep->add(info->event.get());
+	if ( info->event->eventParameters() == NULL )
+		_ep->add(info->event.get());
 	// Feed event into cache
 	_cache.feed(info->event.get());
 }
@@ -3644,7 +3709,10 @@ void EventTool::removedFromCache(Seiscomp::DataModel::PublicObject *po) {
 		SEISCOMP_DEBUG("... mark event %s to be removed from cache", po->publicID().c_str());
 	}
 
-	po->detach();
+	// Only allow to detach objects from the EP instance if it hasn't been read
+	// from a file
+	if ( _epFile.empty() )
+		po->detach();
 
 	DataModel::Notifier::SetEnabled(saveState);
 }
