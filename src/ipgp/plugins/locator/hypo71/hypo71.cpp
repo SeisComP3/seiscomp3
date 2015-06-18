@@ -696,7 +696,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
                                const string& phaseCode,
                                const double& max) {
 
-	int weight = 0;
+	int weight = 4;
 	double upper = 0, lower = 0;
 	string pickID;
 
