@@ -446,8 +446,8 @@ const string Hypo71::h71DecimalToSexagesimal(const double& value,
                                              const GeographicPosition& gp) {
 
 	string output;
-	char dec[5];
-	char itaper[3];
+	char dec[6];
+	char itaper[4];
 	double i = floor(abs(value));
 	double d = (abs(value) - i) * 60;
 	d = floor(d * 100) / 100;
@@ -696,7 +696,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
                                const string& phaseCode,
                                const double& max) {
 
-	int weight;
+	int weight = 0;
 	double upper = 0, lower = 0;
 	string pickID;
 
@@ -1235,17 +1235,16 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 	// Searching for First Arrival Station (FAS)
 	bool foundFAS = false;
-	double refTime = .0, refTimeSec, prevRefTime, prevRefTimeSec;
-	int refTimeMin, prevRefTimeMin;
+	double refTime = .0, refTimeSec = .0, prevRefTime = .0, prevRefTimeSec = .0;
+	int refTimeMin = .0, prevRefTimeMin = .0;
 	string refTimeYear, refTimeMonth, refTimeDay, refTimeHour, refStation,
-	        refNetwork;
+	       refNetwork;
 	string prevRefTimeYear, prevRefTimeMonth, prevRefTimeDay,
-	        prevRefTimeHour, prevRefStation, prevRefNetwork;
+	       prevRefTimeHour, prevRefStation, prevRefNetwork;
 
 	// Uncertainty values
 	double maxUncertainty = -1, minUncertainty = 100;
 	string maxWeight = "0";
-	string minWeight = "4";
 
 
 	for (PickList::iterator i = pickList.begin();
@@ -1600,7 +1599,8 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 	// Execute script so the localization process gets properly run thru
 	// Hypo71 binary... This should take less than a sec...
-	system(_hypo71ScriptFile.c_str());
+	if ( system(_hypo71ScriptFile.c_str()) == -1 )
+		throw LocatorException("ERROR! Failed to execute " + _hypo71ScriptFile);
 
 	// Read back *.prt file, that's were all we need is stored
 	if ( _h71outputFile.empty() )
@@ -1618,8 +1618,8 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	int loop = 0;
 	int lineNumber = 1;
 	int event = -1;
-	int staStart;
-	int staEnd;
+	int staStart = -1;
+	int staEnd = -1;
 
 	// We need to locate the part of interest in which objects shall inherit
 	// data from, therefore we identify the key lines of the file by using
@@ -1676,7 +1676,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	int usedAssocCount = 0;
 	int depthPhaseCount = 0;
 	double rms = 0;
-	double hrms;
+	double hrms = -1;
 	vector<double> Tdist;
 	vector<double> Tazi;
 	string gap;
@@ -2116,7 +2116,8 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	oq.setAssociatedPhaseCount(idx);
 	oq.setUsedPhaseCount(idx);
 	oq.setDepthPhaseCount(0);
-	oq.setStandardError(hrms);
+	if ( hrms >= 0 )
+		oq.setStandardError(hrms);
 
 	sort(Tazi.begin(), Tazi.end());
 	Tazi.push_back(Tazi.front() + 360.);
@@ -2515,13 +2516,12 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 
 
 		// Phases list
-		string prevStaName;
 		bool isPPhase = false;
 		bool isSPhase = false;
 
 		// Searching for First Arrival Station (FAS) variables
 		bool foundFAS = false;
-		double refTime = .0, prevRefTime;
+		double refTime = .0, prevRefTime = .0;
 		string refTimeYear, refTimeMonth, refTimeDay, refTimeHour, refStation,
 		        refNetwork;
 		string prevRefTimeYear, prevRefTimeMonth, prevRefTimeDay,
@@ -2533,8 +2533,8 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 		string minWeight = "4";
 
 
-		for (PickList::const_iterator i = pickList.begin();
-		        i != pickList.end(); ++i) {
+		for ( PickList::const_iterator i = pickList.begin();
+		      i != pickList.end(); ++i) {
 
 			PickPtr p = i->first;
 			double ctime = (double) p->time().value();
@@ -2822,7 +2822,8 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 		// Though we might get some trouble and weird stuffs happening if the
 		// the system terminal is quite exotic (bash, shell, bourne shell, ksh, csh, etc)
 		// Food for thought!
-		system(_hypo71ScriptFile.c_str());
+		if ( system(_hypo71ScriptFile.c_str()) == -1 )
+			throw LocatorException("ERROR! Failed to execute " + _hypo71ScriptFile);
 
 		// READING BACK GENERATED HYPO71.PRT
 		if ( _h71outputFile.empty() ) {
@@ -2897,6 +2898,8 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 
 						if ( stringIsOfType(erh, stInteger) && stringIsOfType(erz, stInteger) )
 							ER = sqrt(pow(toDouble(erh), 2) + pow(toDouble(erz), 2));
+						else
+							ER = 10000.;
 
 						log << head << "|  RMS: " << formatString(rms, 10, 1) << "  LAT: " << tLat << endl;
 						log << head << "|  ERH: " << formatString(erh, 10, 1) << "  LON: " << tLon << endl;
