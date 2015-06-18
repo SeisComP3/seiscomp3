@@ -2903,7 +2903,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 						log << head << "|  ERZ: " << formatString(erz, 10, 1) << "DEPTH: " << depth << "km" << endl;
 						log << head << "|   ER: " << ER << endl;
 
-						if ( (toDouble(rms) < minRMS) or (toDouble(rms) == minRMS) ) {
+						if ( (toDouble(rms) < minRMS) or ( (toDouble(rms) == minRMS) and ( ER < minER ) ) ) {
 
 							if ( minDepth == "" )
 								log << head << "|  ZTR set to " << depth << "km" << endl;
@@ -2911,14 +2911,12 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 								log << head << "|  " << minDepth << "km old ZTR is replaced by " << depth << "km" << endl;
 							minDepth = depth;
 							minRMS = toDouble(rms);
-
-							if ( ER < minER ) {
-								minER = ER;
-								_trialLatDeg = latDeg;
-								_trialLatMin = latMin;
-								_trialLonDeg = lonDeg;
-								_trialLonMin = lonMin;
-							}
+							minER = ER;
+							
+							_trialLatDeg = latDeg;
+							_trialLatMin = latMin;
+							_trialLonDeg = lonDeg;
+							_trialLonMin = lonMin;
 						}
 
 					} catch ( ... ) {}
