@@ -423,7 +423,7 @@ class FDSNEvent(resource.Resource):
 		       "Contributor|ContributorID|MagType|Magnitude|MagAuthor|" \
 		       "EventLocationName\n"
 		df = "%FT%T.%f"
-		req.write(line)
+		utils.writeTS(req, line)
 		byteCount = len(line)
 
 		# add related information
@@ -485,7 +485,7 @@ class FDSNEvent(resource.Resource):
 			       eID, o.time().value().toString(df), o.latitude().value(),
 			       o.longitude().value(), depth, author, contrib, eID,
 			       mType, mVal, mAuthor, region)
-			req.write(line)
+			utils.writeTS(req, line)
 			lineCount +=1
 			byteCount += len(line)
 
@@ -540,7 +540,7 @@ class FDSNEvent(resource.Resource):
 			msg = "no matching events found"
 			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
-				req.write(data)
+				utils.writeTS(req, data)
 			return True
 
 		Logging.debug("events found: %i" % ep.eventCount())
