@@ -10,7 +10,11 @@ SeisComP3 is distributed in the form of tar files:
 
 Download these from http://www.seiscomp3.org/ .
 This section describes the installation of the binary packages of SeisComP3 on
-an openSUSE 11.1 64 bit system with KDE desktop profile.
+an 
+
+* :program:`Ubuntu 14`, 64 bit system
+* :program:`openSUSE 11`, 64 bit system
+* :program:`CentOS 6`, 64 bit system
 
 Requirements
 ============
@@ -18,7 +22,7 @@ Requirements
 The hardware requirements for a seismic system depend on the size of the
 station network to be operated.
 
-Minimal requirements are:
+Minimum requirements are:
 
 +-----+----------------------------------------------------------------------------------------+
 | CPU | 1                                                                                      |
@@ -115,44 +119,44 @@ Install dependencies
 SeisComP3 depends on a number of additional packages shipped with each Linux
 distribution. The following table gives an overview:
 
-+-----------------------------+----------------------------------------+
-| Package                     | SC3 component                          |
-+=============================+========================================+
-| flex                        | Seedlink (compilation only)            |
-+-----------------------------+----------------------------------------+
-| libxml2                     | Seedlink, Arclink, trunk               |
-+-----------------------------+----------------------------------------+
-| libboost                    | trunk                                  |
-+-----------------------------+----------------------------------------+
-| libboost-dev                | trunk (compilation only)               |
-+-----------------------------+----------------------------------------+
-| libncurses                  | trunk:scm (optional)                   |
-+-----------------------------+----------------------------------------+
-| libncurses-dev              | trunk:scm (compilation only, optional) |
-+-----------------------------+----------------------------------------+
-| libmysqlclient              | trunk (only if MySQL is used)          |
-+-----------------------------+----------------------------------------+
-| libmysqlclient-dev          | trunk (compilation only if enabled)    |
-+-----------------------------+----------------------------------------+
-| mysql-server                | trunk (only if MySQL is used locally)  |
-+-----------------------------+----------------------------------------+
-| libpq5                      | trunk (only if PostgreSQL is used)     |
-+-----------------------------+----------------------------------------+
-| libpq-dev                   | trunk (compilation only if enabled)    |
-+-----------------------------+----------------------------------------+
-| libqt4                      | trunk (only GUI should be used)        |
-+-----------------------------+----------------------------------------+
-| python-dev                  | trunk (compilation only)               |
-+-----------------------------+----------------------------------------+
-| festival                    | trunk (optional voice alert)           |
-+-----------------------------+----------------------------------------+
+:program:`Packages`
+
++--------------------+--------------------+----------------------+----------------------------------------+
+|:program:`Ubuntu 14`|:program:`OpenSUSE` |:program:`CentOS 6`   | SC3 component                          |
++====================+====================+======================+========================================+
+| flex               | flex               | flex                 | Seedlink (compilation only)            |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libxml2            | libxml2            | libxml2              | Seedlink, Arclink, trunk               |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libboost           | libboost           | boost                | trunk                                  |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libboost-dev       | libboost-dev       | boost-devel          | trunk (compilation only)               |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libncurses5        | libncurses         | ncurses              | trunk:scm (optional)                   |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libncurses5-dev    | libncurses-dev     | ncurses-devel        | trunk:scm (compilation only, optional) |
++--------------------+--------------------+----------------------+----------------------------------------+
+| mysql-client       | libmysqlclient     | mysql                | trunk (only if MySQL is used)          |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libmysqlclient-dev | libmysqlclient-dev | mysql-devel          | trunk (compilation only if enabled)    |
++--------------------+--------------------+----------------------+----------------------------------------+
+| mysql-server       | mysql-server       | mysql-server         | trunk (only if MySQL is used locally)  |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libpq5             | libpq5             | postgresql           | trunk (only if PostgreSQL is used)     |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libpq-dev          | libpq-dev          | postgresql-devel     | trunk (compilation only if enabled)    |
++--------------------+--------------------+----------------------+----------------------------------------+
+| libqt4-dev         | libqt4             | qt4                  | trunk (only GUI should be used)        |
++--------------------+--------------------+----------------------+----------------------------------------+
+| python-dev         | python-dev         | python-devel         | trunk (compilation only)               |
++--------------------+--------------------+----------------------+----------------------------------------+
+| festival           | festival           | festival             | trunk (optional voice alert)           |
++--------------------+--------------------+----------------------+----------------------------------------+
 
 
 First the environment has to be set up. The :program:`seiscomp` tool comes with
 the command :command:`install-deps` which installs required packages.
-To use MySQL, give 'mysql-server' as parameter. If your distribution is not
-supported by :command:`install-deps`, install the above packages or contact us
-to add support for your distribution.
+To use MySQL, give 'mysql-server' as parameter. 
 
 .. code-block:: sh
 
@@ -164,7 +168,45 @@ to add support for your distribution.
    Reading state information... Done
    ...
 
+   
+If your distribution is not supported by :command:`install-deps`
+, install the above packages manually
 
+:program:`Ubuntu` `version`
+
+.. code-block:: sh
+
+   user@host:~$ cd seiscomp3/share/deps/ubuntu/[version]
+   ...
+   
+   
+:program:`OpenSUSE` `version`
+
+.. code-block:: sh
+
+   user@host:~$ cd seiscomp3/share/deps/sles/[version]
+   ...
+   
+   
+:program:`CentOS` `version`
+
+.. code-block:: sh
+
+   user@host:~$ cd seiscomp3/share/deps/centos/[version]
+   ...
+
+   
+.. code-block:: sh
+
+   su root
+   bash install-mysql-server.sh
+   bash install-postgresql-server.sh
+   bash install-base.sh
+   bash install-gui.sh
+   ...
+   
+or contact the SeisComP3 developpers to add support for your distribution.
+   
 SQL configuration
 -----------------
 
@@ -173,30 +215,64 @@ SQL configuration
   * "innodb_buffer_pool_size = 64M"
   * "innodb_flush_log_at_trx_commit = 2"
 
-  The location of the configuration can differ between distributions. For
-  OpenSUSE it is in :file:`/etc/my.cnf` whereas Ubuntu uses
-  :file:`/etc/mysql/my.cnf`  or :file:`/etc/mysql/conf.d/*`. Please
-  read the documentation of your distribution .
+  The location of the configuration can differ between distributions. 
+  
+  :program:`OpenSUSE`
+  
+  :file:`/etc/my.cnf` 
+  
+  :program:`Ubuntu 14`
+  
+  :file:`/etc/mysql/my.cnf`  or :file:`/etc/mysql/conf.d/*`
+  
+  :program:`CentOS`
+  
+  :file:`/etc/my.cnf`
+  
+  Please read the documentation of your distribution .
 
-  After adjusting the parameters, MySQL needs to be restarted. If you are
-  running OpenSUSE you can run
+*  After adjusting the parameters, MySQL needs to be restarted. One can run
+
+  :program:`OpenSUSE`
+  
+  .. code-block:: sh
+
+     user@host:~$ sudo rcmysql restart
+
+  :program:`Ubuntu 14`
 
   .. code-block:: sh
 
-     $ sudo rcmysql restart
+     user@host:~$ sudo restart mysql
 
-  whereas Ubuntu requires
+  :program:`CentOS`
 
   .. code-block:: sh
 
-     $ sudo restart mysql
+     user@host:~$ su root
+     user@host:~$ /sbin/service mysqld restart
 
 
-* To start MySQL automatically during boot set in OpenSUSE
+* To start MySQL automatically during boot set
 
+  :program:`OpenSUSE`
+	
   .. code-block:: sh
 
      user@host:~$ insserv mysql
+
+  :program:`Ubuntu 14`
+
+  .. code-block:: sh
+
+     user@host:~$ sudo update-rc.d mysql defaults
+     
+  :program:`CentOS`
+
+  .. code-block:: sh
+
+     user@host:~$ su root
+     user@host:~$ /sbin/chkconfig mysqld on
 
 
 Directory structure
