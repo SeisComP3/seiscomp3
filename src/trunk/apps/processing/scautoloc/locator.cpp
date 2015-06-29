@@ -35,10 +35,7 @@ namespace Autoloc {
 Locator::Locator()
 {
 	_count = 0;
-
-	setDefaultLocatorParams();
 	_usingFixedDepth = false;
-
 	_minDepth = 5;
 }
 
