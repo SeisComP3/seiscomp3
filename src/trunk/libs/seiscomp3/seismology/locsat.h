@@ -131,15 +131,15 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 
 		DataModel::Origin* relocate(const DataModel::Origin* origin) throw(Core::GeneralException);
 
-		void setLocatorParams(int param, const char* value);
-		const char* getLocatorParams(int param) const;
-		void setDefaultLocatorParams();
-
 		const LocSATErrorEllipsoid &errorEllipsoid() const {
 			return _errorEllipsoid;
 		}
 
 	private:
+		void setLocatorParams(int param, const char* value);
+		std::string getLocatorParams(int param) const;
+		void setDefaultLocatorParams();
+
 		DataModel::Origin* relocate(const DataModel::Origin* origin, double timeError);
 		bool loadArrivals(const DataModel::Origin* origin, double timeError);
 		DataModel::Origin* fromPicks(PickList& pickList);
