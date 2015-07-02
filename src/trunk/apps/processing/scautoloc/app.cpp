@@ -383,14 +383,18 @@ bool App::initStations() {
 					}
 					catch ( ... ) {
 					}
-	
+
+					double elev = 0;
+					try { elev = station->elevation(); }
+					catch ( ... ) {}
+
 					::Autoloc::Station *sta =
 						new ::Autoloc::Station(
 							station->code(),
 							network->code(),
 							station->latitude(),
 							station->longitude(),
-							station->elevation());
+							elev);
 
 					sta->used = true;
 					sta->maxNucDist = _config.defaultMaxNucDist;
