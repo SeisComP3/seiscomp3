@@ -5936,13 +5936,6 @@ SWIG_From_float  (float value)
 }
 
 
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
 
 /* ---------------------------------------------------
  * C++ director class methods
@@ -11720,100 +11713,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_LocSAT_setLocatorParams(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::LocSAT *arg1 = (Seiscomp::LocSAT *) 0 ;
-  int arg2 ;
-  char *arg3 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:LocSAT_setLocatorParams",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__LocSAT, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LocSAT_setLocatorParams" "', argument " "1"" of type '" "Seiscomp::LocSAT *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::LocSAT * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LocSAT_setLocatorParams" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_AsCharPtrAndSize(obj2, &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LocSAT_setLocatorParams" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = reinterpret_cast< char * >(buf3);
-  (arg1)->setLocatorParams(arg2,(char const *)arg3);
-  resultobj = SWIG_Py_Void();
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return resultobj;
-fail:
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_LocSAT_getLocatorParams(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::LocSAT *arg1 = (Seiscomp::LocSAT *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:LocSAT_getLocatorParams",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__LocSAT, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LocSAT_getLocatorParams" "', argument " "1"" of type '" "Seiscomp::LocSAT const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::LocSAT * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "LocSAT_getLocatorParams" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  result = (char *)((Seiscomp::LocSAT const *)arg1)->getLocatorParams(arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_LocSAT_setDefaultLocatorParams(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::LocSAT *arg1 = (Seiscomp::LocSAT *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:LocSAT_setDefaultLocatorParams",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__LocSAT, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "LocSAT_setDefaultLocatorParams" "', argument " "1"" of type '" "Seiscomp::LocSAT *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::LocSAT * >(argp1);
-  (arg1)->setDefaultLocatorParams();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_LocSAT_errorEllipsoid(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::LocSAT *arg1 = (Seiscomp::LocSAT *) 0 ;
@@ -15697,9 +15596,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LocSAT_capabilities", _wrap_LocSAT_capabilities, METH_VARARGS, NULL},
 	 { (char *)"LocSAT_locate", _wrap_LocSAT_locate, METH_VARARGS, NULL},
 	 { (char *)"LocSAT_relocate", _wrap_LocSAT_relocate, METH_VARARGS, NULL},
-	 { (char *)"LocSAT_setLocatorParams", _wrap_LocSAT_setLocatorParams, METH_VARARGS, NULL},
-	 { (char *)"LocSAT_getLocatorParams", _wrap_LocSAT_getLocatorParams, METH_VARARGS, NULL},
-	 { (char *)"LocSAT_setDefaultLocatorParams", _wrap_LocSAT_setDefaultLocatorParams, METH_VARARGS, NULL},
 	 { (char *)"LocSAT_errorEllipsoid", _wrap_LocSAT_errorEllipsoid, METH_VARARGS, NULL},
 	 { (char *)"LocSAT_swigregister", LocSAT_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_FileNotFoundError", _wrap_new_FileNotFoundError, METH_VARARGS, NULL},

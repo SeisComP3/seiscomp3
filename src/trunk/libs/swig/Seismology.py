@@ -423,9 +423,6 @@ class LocSAT(LocatorInterface):
     def capabilities(self): return _Seismology.LocSAT_capabilities(self)
     def locate(self, *args): return _Seismology.LocSAT_locate(self, *args)
     def relocate(self, *args): return _Seismology.LocSAT_relocate(self, *args)
-    def setLocatorParams(self, *args): return _Seismology.LocSAT_setLocatorParams(self, *args)
-    def getLocatorParams(self, *args): return _Seismology.LocSAT_getLocatorParams(self, *args)
-    def setDefaultLocatorParams(self): return _Seismology.LocSAT_setDefaultLocatorParams(self)
     def errorEllipsoid(self): return _Seismology.LocSAT_errorEllipsoid(self)
 LocSAT_swigregister = _Seismology.LocSAT_swigregister
 LocSAT_swigregister(LocSAT)
