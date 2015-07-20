@@ -20,7 +20,7 @@
 					<param name="maxmagnitude" style="query" type="xsd:float"/>
 					<param name="magnitudetype" style="query" type="xsd:string"/>
 					<param name="includeallorigins" style="query" type="xsd:boolean" default="false"/>
-					<param name="includemagnitudes" style="query" type="xsd:boolean" default="false"/>
+					<param name="includeallmagnitudes" style="query" type="xsd:boolean" default="false"/>
 					<param name="includearrivals" style="query" type="xsd:boolean" default="false"/>
 					<param name="eventid" style="query" repeating="true"/>
 					<param name="limit" style="query" type="xsd:int"/>
