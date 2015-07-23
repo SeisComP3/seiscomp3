@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/icons" >
+    <qresource prefix="/icons">
         <file>icons/align_p.png</file>
         <file>icons/align_s.png</file>
         <file>icons/align_t.png</file>
@@ -41,6 +41,7 @@
         <file>icons/sort_p.png</file>
         <file>icons/sort_res.png</file>
         <file>icons/sort_s.png</file>
+        <file>icons/sort_az.png</file>
         <file>icons/undo.png</file>
         <file>icons/unlock.png</file>
         <file>icons/vmax.png</file>

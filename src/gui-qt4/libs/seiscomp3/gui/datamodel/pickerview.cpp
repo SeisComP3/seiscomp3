@@ -1917,6 +1917,7 @@ void PickerView::init() {
 
 	addAction(_ui.actionSortAlphabetically);
 	addAction(_ui.actionSortByDistance);
+	addAction(_ui.actionSortByAzimuth);
 	addAction(_ui.actionSortByResidual);
 
 	addAction(_ui.actionShowZComponent);
@@ -2030,6 +2031,8 @@ void PickerView::init() {
 	        this, SLOT(sortAlphabetically()));
 	connect(_ui.actionSortByDistance, SIGNAL(triggered(bool)),
 	        this, SLOT(sortByDistance()));
+	connect(_ui.actionSortByAzimuth, SIGNAL(triggered(bool)),
+	        this, SLOT(sortByAzimuth()));
 	connect(_ui.actionSortByResidual, SIGNAL(triggered(bool)),
 	        this, SLOT(sortByResidual()));
 
@@ -3228,6 +3231,8 @@ void PickerView::loadNextStations() {
 void PickerView::sortByState() {
 	if ( _ui.actionSortByDistance->isChecked() )
 		sortByDistance();
+	else if ( _ui.actionSortByAzimuth->isChecked() )
+		sortByAzimuth();
 	else if ( _ui.actionSortAlphabetically->isChecked() )
 		sortAlphabetically();
 	else if ( _ui.actionSortByResidual->isChecked() )
@@ -5889,6 +5894,7 @@ void PickerView::sortAlphabetically() {
 
 	_ui.actionSortAlphabetically->setChecked(true);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5902,6 +5908,21 @@ void PickerView::sortByDistance() {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(true);
+	_ui.actionSortByAzimuth->setChecked(false);
+	_ui.actionSortByResidual->setChecked(false);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::sortByAzimuth() {
+	_recordView->sortByValue(ITEM_AZIMUTH_INDEX, ITEM_PRIORITY_INDEX);
+
+	_ui.actionSortAlphabetically->setChecked(false);
+	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(true);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5915,6 +5936,7 @@ void PickerView::sortByResidual() {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5928,6 +5950,7 @@ void PickerView::sortByPhase(const QString& phase) {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
