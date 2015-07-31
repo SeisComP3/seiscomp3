@@ -44,6 +44,7 @@
 	<xsl:template match="scs:origin/scs:creationInfo"/>
 	<xsl:template match="scs:origin/scs:depthType"/>
 	<xsl:template match="scs:origin/scs:quality"/>
+	<xsl:template match="scs:origin/scs:uncertainty"/>
 	<xsl:template match="scs:origin/scs:evaluationMode"/>
 	<xsl:template match="scs:origin/scs:stationMagnitude"/>
 	<xsl:template match="scs:origin/scs:magnitude/scs:stationMagnitudeContribution"/>
