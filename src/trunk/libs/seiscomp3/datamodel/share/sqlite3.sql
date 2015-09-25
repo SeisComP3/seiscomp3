@@ -652,6 +652,8 @@ CREATE TABLE Amplitude (
 );
 
 CREATE INDEX Amplitude__parent_oid ON Amplitude(_parent_oid);
+CREATE INDEX Amplitude_timeWindow_reference ON Amplitude(timeWindow_reference);
+CREATE INDEX Amplitude_timeWindow_reference_ms ON Amplitude(timeWindow_reference_ms);
 CREATE INDEX Amplitude_pickID ON Amplitude(pickID);
 
 CREATE TRIGGER AmplitudeUpdate UPDATE ON Amplitude
