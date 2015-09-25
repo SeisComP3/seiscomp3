@@ -6,6 +6,8 @@ SET(UTILS_SOURCES
 	files.cpp
 	leparser.cpp
 	misc.cpp
+	keyvalues.cpp
+	bindings.cpp
 )
 
 SET(UTILS_HEADERS
@@ -18,6 +20,8 @@ SET(UTILS_HEADERS
 	leparser.h
 	misc.h
 	mutex.h
+	keyvalues.h
+	bindings.h
 )
 
 SC_SETUP_LIB_SUBDIR(UTILS)

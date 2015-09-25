@@ -25,7 +25,7 @@
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/utils.h>
-#include <seiscomp3/processing/parameters.h>
+#include <seiscomp3/utils/keyvalues.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/utils/timer.h>
 #include <seiscomp3/gui/core/recordviewitem.h>
@@ -729,6 +729,8 @@ void MainWindow::setStationEnabled(const string& networkCode,
 		Notifier::Enable();
 		module->add(newCs.get());
 		Notifier::Disable();
+
+		cs = newCs.get();
 	}
 
 	if ( cs->enabled() != enable ) {
@@ -1349,8 +1351,8 @@ void MainWindow::openAcquisition() {
 							continue;
 						}
 		
-						Processing::Parameters params;
-						params.readFrom(ps);
+						Util::KeyValues params;
+						params.init(ps);
 
 						std::string net, sta, loc, cha;
 						net = station->networkCode();

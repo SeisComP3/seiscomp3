@@ -44,6 +44,12 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 			double snrMin;      // default: 3
 		};
 
+		enum Polarity {
+			POSITIVE,
+			NEGATIVE,
+			UNDECIDABLE
+		};
+
 		struct Result {
 			const Record *record;
 			double        snr;
@@ -54,6 +60,7 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 			double        timeWindowEnd;
 			OPT(double)   slowness;
 			OPT(double)   backAzimuth;
+			OPT(Polarity) polarity;
 		};
 
 		typedef boost::function<void (const Picker*,
@@ -125,7 +132,8 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 		virtual bool calculatePick(int n, const double *data,
 		                           int signalStartIdx, int signalEndIdx,
 		                           int &triggerIdx, int &lowerUncertainty,
-		                           int &upperUncertainty, double &snr);
+		                           int &upperUncertainty, double &snr,
+		                           OPT(Polarity) &polarity) = 0;
 
 		void process(const Record *record, const DoubleArray &filteredData);
 		bool handleGap(Filter *filter, const Core::TimeSpan& span,

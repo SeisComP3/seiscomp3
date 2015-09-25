@@ -554,6 +554,8 @@ Core::GreensFunction* HelmbergerArchive::read(const std::string &file,
 		int completeLines = numSamples / numTokens;
 		int count = 0;
 
+		if ( maxSamples > numSamples ) maxSamples = numSamples;
+
 		FloatArrayPtr arr = new FloatArray(maxSamples);
 
 		for ( int i = 0; i < completeLines; ++i ) {

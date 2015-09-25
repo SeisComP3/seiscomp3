@@ -28,8 +28,8 @@ namespace
 
 Protocol::MSG_CONTENT_TYPES encodingLUT[MessageEncoding::Quantity] =
 {
-	Protocol::BINARY_SERIALIZATION,
-	Protocol::XML_CONTENT
+	Protocol::CONTENT_BINARY,
+	Protocol::CONTENT_XML
 };
 
 

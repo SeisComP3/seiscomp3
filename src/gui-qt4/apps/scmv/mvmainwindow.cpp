@@ -34,7 +34,7 @@
 #include <seiscomp3/datamodel/inventory.h>
 #include <seiscomp3/datamodel/utils.h>
 
-#include <seiscomp3/processing/parameters.h>
+#include <seiscomp3/utils/keyvalues.h>
 
 #include <seiscomp3/math/math.h>
 #include <seiscomp3/math/filter.h>
@@ -1105,8 +1105,8 @@ bool MvMainWindow::readStationsFromDataBase() {
 			std::string net = cs->networkCode();
 			std::string sta = cs->stationCode();
 
-			Processing::Parameters params;
-			params.readFrom(ps);
+			Util::KeyValues params;
+			params.init(ps);
 
 			std::string location;
 			std::string channel;

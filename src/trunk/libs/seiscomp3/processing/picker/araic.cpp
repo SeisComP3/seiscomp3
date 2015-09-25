@@ -213,7 +213,8 @@ const std::string &ARAICPicker::filterID() const {
 bool ARAICPicker::calculatePick(int n, const double *data,
                                 int signalStartIdx, int signalEndIdx,
                                 int &triggerIdx, int &lowerUncertainty,
-                                int &upperUncertainty, double &snr) {
+                                int &upperUncertainty, double &snr,
+                                OPT(Polarity) &polarity) {
 	Core::SmartPointer<Filter>::Impl filter = _filter.empty()?NULL:Filter::Create(_filter);
 	if ( filter ) {
 		SEISCOMP_DEBUG("AIC: created filter %s", _filter.c_str());

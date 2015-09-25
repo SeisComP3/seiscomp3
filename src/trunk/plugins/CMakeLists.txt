@@ -1,1 +1,1 @@
-SUBDIRS(database recordstream gfarchive)
+SUBDIRS(database recordstream)

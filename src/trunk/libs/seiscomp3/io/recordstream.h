@@ -72,6 +72,16 @@ class SC_SYSTEM_CORE_API RecordStream : public Seiscomp::Core::InterruptibleObje
 		//! The default implementation does nothing.
 		virtual void recordStored(Record*);
 
+		/**
+		 * @brief Filters a record.
+		 *
+		 *        This allows the RecordStream to apply additional filtering
+		 *        if the underlying stream request does not support it. The
+		 *        default implementation returns always false.
+		 * @return true if filtered (and ignored), false otherwise.
+		 */
+		virtual bool filterRecord(Record*);
+
 		//! Returns a record stream for the given service
 		//! @return A pointer to the recordstream object
 		//!         NOTE: The returned pointer has to be deleted by the

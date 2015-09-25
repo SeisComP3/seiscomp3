@@ -497,10 +497,11 @@ def on_print(args, flags):
     print "export %s=%s:$%s" % (SysLibraryPathVar, get_library_path(), SysLibraryPathVar)
     if sys.platform == "darwin":
       print "export %s=%s:$%s" % (SysFrameworkPathVar, get_framework_path(), SysFrameworkPathVar)
-      
+
     print "export PYTHONPATH=%s:$PYTHONPATH" % PYTHONPATH
     print "export MANPATH=%s:$MANPATH" % MANPATH
     print "export LC_ALL=C"
+    print "source %s/share/shell-completion/seiscomp.bash" % SEISCOMP_ROOT
   else:
     error("wrong argument: {crontab|env} expected")
     return 1
@@ -522,6 +523,10 @@ def on_install_deps_linux(args, flags):
   try:
     out = subprocess.Popen(['lsb_release', '-sir'],
                            stdout=subprocess.PIPE).communicate()[0].splitlines()
+    # some OS return release and version in one line
+    if len(out) == 1:
+      out = out[0].split()
+
     out = [l.strip() for l in out]
   except:
     error("lsb_release is not installed")
@@ -898,10 +903,6 @@ while len(argv):
   else:
     break
 
-if os.getuid() == 0 and not asRoot:
-  print "Running seiscomp as root is dangerous. Use --asroot if you know what you are doing"
-  sys.exit(1)
-
 if len(argv) < 1:
   print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
   sys.exit(1)
@@ -911,6 +912,10 @@ args = argv[1:]
 
 if not action in allowed_actions:
   print "seiscomp [flags] {%s} [args]" % "|".join(allowed_actions)
+  sys.exit(1)
+
+if os.getuid() == 0 and not asRoot and action != "install-deps":
+  print "Running seiscomp as root is dangerous. Use --asroot if you know what you are doing"
   sys.exit(1)
 
 # ------------------------------------------------------------------------------
@@ -1003,10 +1008,13 @@ if not isChild:
 # back into the current working directory automatically if destroyed.
 env.chroot()
 
-config_mods = load_init_modules(INIT_PATH)
-mods = []
-for m in config_mods:
-  if m.isConfigModule: continue
-  mods.append(m)
+simpleCommand = (action == "install-deps") or (action == "print" and args == "env")
+
+if not simpleCommand:
+  config_mods = load_init_modules(INIT_PATH)
+  mods = []
+  for m in config_mods:
+    if m.isConfigModule: continue
+    mods.append(m)
 
 sys.exit(run_action(action, args, argflags))

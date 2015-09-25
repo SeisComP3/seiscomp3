@@ -161,7 +161,7 @@ void DbPlugin::printStateOfHealthInformation(std::ostream &os) const {
 NetworkMessage* DbPlugin::service() {
 	if ( !_dbDriver.empty() && !_dbReadConnection.empty() ) {
 		DatabaseProvideMessage dbMsg(_dbDriver.c_str(), _dbReadConnection.c_str());
-		return NetworkMessage::Encode(&dbMsg, Protocol::BINARY_SERIALIZATION);
+		return NetworkMessage::Encode(&dbMsg, Protocol::CONTENT_BINARY);
 	}
 	return NULL;
 }

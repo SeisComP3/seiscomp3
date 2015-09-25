@@ -131,7 +131,8 @@ void RecordPolyline::translate(int x, int y)
 void RecordPolyline::create(Record const *rec,
                             double pixelPerSecond,
                             float amplMin, float amplMax, float amplOffset,
-                            int height, float *timingQuality) {
+                            int height, float *timingQuality,
+                            bool optimization) {
 	if (rec == NULL)
 		return;
 
@@ -178,70 +179,79 @@ void RecordPolyline::create(Record const *rec,
 
 	poly->append(QPoint(x_prev, y_prev));
 
-	for (int i = 1; i<nsamp; i++) {
-		int x_pos = int(i*dx) - x0;
-		int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+	if ( optimization ) {
+		for (int i = 1; i<nsamp; i++) {
+			int x_pos = int(i*dx) - x0;
+			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 
-		if ( y_pos != y_out ) {
-			// last output differs from the last sample?
-			if ( x_out != x_prev  ) {
-				x_out = x_prev;
-				poly->append(QPoint(x_out, y_out));
+			if ( y_pos != y_out ) {
+				// last output differs from the last sample?
+				if ( x_out != x_prev  ) {
+					x_out = x_prev;
+					poly->append(QPoint(x_out, y_out));
+				}
+
+				// last output differs from the current draw position?
+				if ( x_out != x_pos ) {
+					if ( y_min != y_out ) {
+						y_out = y_min;
+						poly->append(QPoint(x_out, y_out));
+					}
+					if ( y_max != y_out ) {
+						y_out = y_max;
+						poly->append(QPoint(x_out, y_out));
+					}
+					if ( y_prev != y_out ) {
+						y_out = y_prev;
+						poly->append(QPoint(x_out, y_out));
+					}
+
+					x_out = x_pos;
+
+					if ( y_pos != y_out ) {
+						y_out = y_pos;
+						poly->append(QPoint(x_out, y_pos));
+					}
+
+					y_min = y_max = y_out;
+				}
+				else {
+					// update y min/max range
+					if ( y_pos < y_min ) y_min = y_pos;
+					else if ( y_pos > y_max ) y_max = y_pos;
+				}
 			}
-
-			// last output differs from the current draw position?
-			if ( x_out != x_pos ) {
+			else {
 				if ( y_min != y_out ) {
 					y_out = y_min;
 					poly->append(QPoint(x_out, y_out));
+					y_min = y_out;
 				}
 				if ( y_max != y_out ) {
 					y_out = y_max;
 					poly->append(QPoint(x_out, y_out));
+					y_max = y_out;
 				}
 				if ( y_prev != y_out ) {
-					y_out = y_prev;
+					y_out = y_min = y_max = y_prev;
 					poly->append(QPoint(x_out, y_out));
 				}
+			}
 
-				x_out = x_pos;
-
-				if ( y_pos != y_out ) {
-					y_out = y_pos;
-					poly->append(QPoint(x_out, y_pos));
-				}
-
-				y_min = y_max = y_out;
-			}
-			else {
-				// update y min/max range
-				if ( y_pos < y_min ) y_min = y_pos;
-				else if ( y_pos > y_max ) y_max = y_pos;
-			}
-		}
-		else {
-			if ( y_min != y_out ) {
-				y_out = y_min;
-				poly->append(QPoint(x_out, y_out));
-				y_min = y_out;
-			}
-			if ( y_max != y_out ) {
-				y_out = y_max;
-				poly->append(QPoint(x_out, y_out));
-				y_max = y_out;
-			}
-			if ( y_prev != y_out ) {
-				y_out = y_min = y_max = y_prev;
-				poly->append(QPoint(x_out, y_out));
-			}
+			x_prev = x_pos;
+			y_prev = y_pos;
 		}
 
-		x_prev = x_pos;
-		y_prev = y_pos;
+		if ( x_out != x_prev )
+			poly->append(QPoint(x_prev, y_prev));
 	}
-
-	if ( x_out != x_prev )
-		poly->append(QPoint(x_prev, y_prev));
+	else {
+		for (int i = 1; i<nsamp; i++) {
+			int x_pos = int(i*dx) - x0;
+			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+			poly->append(QPoint(x_pos, y_pos));
+		}
+	}
 
 	if ( poly->isEmpty() )
 		pop_back();
@@ -255,7 +265,8 @@ void RecordPolyline::create(RecordSequence const *records,
                             double pixelPerSecond,
                             float amplMin, float amplMax, float amplOffset,
                             int height, float *timingQuality,
-                            QVector<QPair<int,int> >* gaps) {
+                            QVector<QPair<int,int> >* gaps,
+                            bool optimization) {
 	if (records == NULL)
 		return;
 	if (records->size() == 0)
@@ -336,70 +347,79 @@ void RecordPolyline::create(RecordSequence const *records,
 
 		poly->append(QPoint(x_prev, y_prev));
 
-		for (int i = 1; i<nsamp; i++) {
-			int x_pos = int(i*dx) - x0;
-			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+		if ( optimization ) {
+			for (int i = 1; i<nsamp; i++) {
+				int x_pos = int(i*dx) - x0;
+				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 
-			if ( y_pos != y_out ) {
-				// last output differs from the last sample?
-				if ( x_out != x_prev  ) {
-					x_out = x_prev;
-					poly->append(QPoint(x_out, y_out));
+				if ( y_pos != y_out ) {
+					// last output differs from the last sample?
+					if ( x_out != x_prev  ) {
+						x_out = x_prev;
+						poly->append(QPoint(x_out, y_out));
+					}
+
+					// last output differs from the current draw position?
+					if ( x_out != x_pos ) {
+						if ( y_min != y_out ) {
+							y_out = y_min;
+							poly->append(QPoint(x_out, y_out));
+						}
+						if ( y_max != y_out ) {
+							y_out = y_max;
+							poly->append(QPoint(x_out, y_out));
+						}
+						if ( y_prev != y_out ) {
+							y_out = y_prev;
+							poly->append(QPoint(x_out, y_out));
+						}
+
+						x_out = x_pos;
+
+						if ( y_pos != y_out ) {
+							y_out = y_pos;
+							poly->append(QPoint(x_out, y_pos));
+						}
+
+						y_min = y_max = y_out;
+					}
+					else {
+						// update y min/max range
+						if ( y_pos < y_min ) y_min = y_pos;
+						else if ( y_pos > y_max ) y_max = y_pos;
+					}
 				}
-
-				// last output differs from the current draw position?
-				if ( x_out != x_pos ) {
+				else {
 					if ( y_min != y_out ) {
 						y_out = y_min;
 						poly->append(QPoint(x_out, y_out));
+						y_min = y_out;
 					}
 					if ( y_max != y_out ) {
 						y_out = y_max;
 						poly->append(QPoint(x_out, y_out));
+						y_max = y_out;
 					}
 					if ( y_prev != y_out ) {
-						y_out = y_prev;
+						y_out = y_min = y_max = y_prev;
 						poly->append(QPoint(x_out, y_out));
 					}
+				}
 
-					x_out = x_pos;
-
-					if ( y_pos != y_out ) {
-						y_out = y_pos;
-						poly->append(QPoint(x_out, y_pos));
-					}
-
-					y_min = y_max = y_out;
-				}
-				else {
-					// update y min/max range
-					if ( y_pos < y_min ) y_min = y_pos;
-					else if ( y_pos > y_max ) y_max = y_pos;
-				}
-			}
-			else {
-				if ( y_min != y_out ) {
-					y_out = y_min;
-					poly->append(QPoint(x_out, y_out));
-					y_min = y_out;
-				}
-				if ( y_max != y_out ) {
-					y_out = y_max;
-					poly->append(QPoint(x_out, y_out));
-					y_max = y_out;
-				}
-				if ( y_prev != y_out ) {
-					y_out = y_min = y_max = y_prev;
-					poly->append(QPoint(x_out, y_out));
-				}
+				x_prev = x_pos;
+				y_prev = y_pos;
 			}
 
-			x_prev = x_pos;
-			y_prev = y_pos;
+			if ( x_out != x_prev )
+				poly->append(QPoint(x_prev, y_prev));
 		}
-
-		if ( x_out != x_prev )
-			poly->append(QPoint(x_prev, y_prev));
+		else {
+			for (int i = 1; i<nsamp; i++) {
+				int x_pos = int(i*dx) - x0;
+				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+				poly->append(QPoint(x_pos, y_pos));
+			}
+		}
 
 		if ( poly->isEmpty() )
 			pop_back();
@@ -434,7 +454,8 @@ void RecordPolyline::create(RecordSequence const *records,
                             double pixelPerSecond,
                             float amplMin, float amplMax, float amplOffset,
                             int height, float *timingQuality,
-                            QVector<QPair<int,int> >* gaps) {
+                            QVector<QPair<int,int> >* gaps,
+                            bool optimization) {
 	clear();
 
 	if ( records == NULL )
@@ -533,70 +554,79 @@ void RecordPolyline::create(RecordSequence const *records,
 
 		poly->append(QPoint(x_prev, y_prev));
 
-		for (int i = 1; i<nsamp; i++) {
-			int x_pos = int(i*dx) - x0;
-			int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+		if ( optimization ) {
+			for (int i = 1; i<nsamp; i++) {
+				int x_pos = int(i*dx) - x0;
+				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 
-			if ( y_pos != y_out ) {
-				// last output differs from the last sample?
-				if ( x_out != x_prev  ) {
-					x_out = x_prev;
-					poly->append(QPoint(x_out, y_out));
+				if ( y_pos != y_out ) {
+					// last output differs from the last sample?
+					if ( x_out != x_prev  ) {
+						x_out = x_prev;
+						poly->append(QPoint(x_out, y_out));
+					}
+
+					// last output differs from the current draw position?
+					if ( x_out != x_pos ) {
+						if ( y_min != y_out ) {
+							y_out = y_min;
+							poly->append(QPoint(x_out, y_out));
+						}
+						if ( y_max != y_out ) {
+							y_out = y_max;
+							poly->append(QPoint(x_out, y_out));
+						}
+						if ( y_prev != y_out ) {
+							y_out = y_prev;
+							poly->append(QPoint(x_out, y_out));
+						}
+
+						x_out = x_pos;
+
+						if ( y_pos != y_out ) {
+							y_out = y_pos;
+							poly->append(QPoint(x_out, y_pos));
+						}
+
+						y_min = y_max = y_out;
+					}
+					else {
+						// update y min/max range
+						if ( y_pos < y_min ) y_min = y_pos;
+						else if ( y_pos > y_max ) y_max = y_pos;
+					}
 				}
-
-				// last output differs from the current draw position?
-				if ( x_out != x_pos ) {
+				else {
 					if ( y_min != y_out ) {
 						y_out = y_min;
 						poly->append(QPoint(x_out, y_out));
+						y_min = y_out;
 					}
 					if ( y_max != y_out ) {
 						y_out = y_max;
 						poly->append(QPoint(x_out, y_out));
+						y_max = y_out;
 					}
 					if ( y_prev != y_out ) {
-						y_out = y_prev;
+						y_out = y_min = y_max = y_prev;
 						poly->append(QPoint(x_out, y_out));
 					}
+				}
 
-					x_out = x_pos;
-
-					if ( y_pos != y_out ) {
-						y_out = y_pos;
-						poly->append(QPoint(x_out, y_pos));
-					}
-
-					y_min = y_max = y_out;
-				}
-				else {
-					// update y min/max range
-					if ( y_pos < y_min ) y_min = y_pos;
-					else if ( y_pos > y_max ) y_max = y_pos;
-				}
-			}
-			else {
-				if ( y_min != y_out ) {
-					y_out = y_min;
-					poly->append(QPoint(x_out, y_out));
-					y_min = y_out;
-				}
-				if ( y_max != y_out ) {
-					y_out = y_max;
-					poly->append(QPoint(x_out, y_out));
-					y_max = y_out;
-				}
-				if ( y_prev != y_out ) {
-					y_out = y_min = y_max = y_prev;
-					poly->append(QPoint(x_out, y_out));
-				}
+				x_prev = x_pos;
+				y_prev = y_pos;
 			}
 
-			x_prev = x_pos;
-			y_prev = y_pos;
+			if ( x_out != x_prev )
+				poly->append(QPoint(x_prev, y_prev));
 		}
-
-		if ( x_out != x_prev )
-			poly->append(QPoint(x_prev, y_prev));
+		else {
+			for (int i = 1; i<nsamp; i++) {
+				int x_pos = int(i*dx) - x0;
+				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+				poly->append(QPoint(x_pos, y_pos));
+			}
+		}
 
 		if ( poly->isEmpty() )
 			pop_back();

@@ -115,6 +115,7 @@ Autoloc3::Config::Config()
 	test = false;
 	offline = false;
 	playback = false;
+	useManualPicks = false;
 	cleanupInterval = 3600;
 	aggressivePKP = true;
 	useManualOrigins = false;

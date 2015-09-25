@@ -707,6 +707,10 @@ bool RectangularProjection::lineTo(QPainter &p, const QPointF &to) {
 
 bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 	QPoint pp;
+
+	// Round to nearest integer since the text label is without decimals
+	lon = round(lon);
+
 	if ( project(pp, QPointF(lon, 90)) ) {
 		if ( pp.x() >= 0 && pp.x() < _width ) {
 			int top = std::max(0, pp.y());
@@ -725,6 +729,10 @@ bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 
 bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 	QPoint pp;
+
+	// Round to nearest integer since the text label is without decimals
+	lat = round(lat);
+
 	if ( project(pp, QPointF(0, lat)) ) {
 		if ( pp.y() >= 0 && pp.y() < _height ) {
 			int left = std::max(0,_halfWidth - (int)(_scale*2));

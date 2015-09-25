@@ -114,6 +114,13 @@ Seiscomp::Record* RecordInput::next() throw(Core::GeneralException) {
 				}
 			}
 
+			// If the record should be filtered out ignore it.
+			if ( _in->filterRecord(pms) ) {
+				delete pms;
+				pms = NULL;
+				continue;
+			}
+
 			// Notify the stream about the read record
 			_in->recordStored(pms);
 			return pms;

@@ -371,6 +371,7 @@ class RecordStream(Core.InterruptibleObject):
     def stream(self): return _IO.RecordStream_stream(self)
     def createRecord(self, *args): return _IO.RecordStream_createRecord(self, *args)
     def recordStored(self, *args): return _IO.RecordStream_recordStored(self, *args)
+    def filterRecord(self, *args): return _IO.RecordStream_filterRecord(self, *args)
     __swig_getmethods__["Create"] = lambda x: _IO.RecordStream_Create
     if _newclass:Create = staticmethod(_IO.RecordStream_Create)
     __swig_getmethods__["Open"] = lambda x: _IO.RecordStream_Open
@@ -965,16 +966,6 @@ class FileRecordStream(RecordStream):
     for _s in [RecordStream]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, FileRecordStream, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.FileRecordStream_ClassName
-    if _newclass:ClassName = staticmethod(_IO.FileRecordStream_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.FileRecordStream_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.FileRecordStream_TypeInfo)
-    def className(self): return _IO.FileRecordStream_className(self)
-    def typeInfo(self): return _IO.FileRecordStream_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.FileRecordStream_Cast
-    if _newclass:Cast = staticmethod(_IO.FileRecordStream_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.FileRecordStream_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.FileRecordStream_ConstCast)
     Begin = _IO.FileRecordStream_Begin
     Current = _IO.FileRecordStream_Current
     End = _IO.FileRecordStream_End
@@ -993,26 +984,11 @@ class FileRecordStream(RecordStream):
     def close(self): return _IO.FileRecordStream_close(self)
     def name(self): return _IO.FileRecordStream_name(self)
     def stream(self): return _IO.FileRecordStream_stream(self)
+    def filterRecord(self, *args): return _IO.FileRecordStream_filterRecord(self, *args)
     def tell(self): return _IO.FileRecordStream_tell(self)
     def seek(self, *args): return _IO.FileRecordStream_seek(self, *args)
 FileRecordStream_swigregister = _IO.FileRecordStream_swigregister
 FileRecordStream_swigregister(FileRecordStream)
-
-def FileRecordStream_ClassName():
-  return _IO.FileRecordStream_ClassName()
-FileRecordStream_ClassName = _IO.FileRecordStream_ClassName
-
-def FileRecordStream_TypeInfo():
-  return _IO.FileRecordStream_TypeInfo()
-FileRecordStream_TypeInfo = _IO.FileRecordStream_TypeInfo
-
-def FileRecordStream_Cast(*args):
-  return _IO.FileRecordStream_Cast(*args)
-FileRecordStream_Cast = _IO.FileRecordStream_Cast
-
-def FileRecordStream_ConstCast(*args):
-  return _IO.FileRecordStream_ConstCast(*args)
-FileRecordStream_ConstCast = _IO.FileRecordStream_ConstCast
 
 class SeedlinkException(RecordStreamException):
     __swig_setmethods__ = {}

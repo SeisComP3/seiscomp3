@@ -137,7 +137,7 @@ class SC_GUI_API CalculateAmplitudes : public QDialog {
 		typedef std::vector<Processing::AmplitudeProcessorPtr> ProcessorSlot;
 		typedef std::map<std::string, ProcessorSlot> ProcessorMap;
 		typedef std::multimap<Processing::AmplitudeProcessorCPtr, int> TableRowMap;
-		typedef std::map<std::string, Seiscomp::Processing::ParametersPtr> ParameterMap;
+		typedef std::map<std::string, Seiscomp::Util::KeyValuesPtr> ParameterMap;
 		typedef std::map<std::string, Seiscomp::Processing::StreamPtr> StreamMap;
 
 		::Ui::CalculateAmplitudes _ui;

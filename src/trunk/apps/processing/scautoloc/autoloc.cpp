@@ -594,7 +594,7 @@ bool Autoloc3::_tooManyRecentPicks(const Pick *newPick) const
 		if (oldPick->station() != newPick->station())
 			continue;
 
-		if ( manual(oldPick) && ! _config.useManualOrigins )
+		if ( !_config.useManualPicks && manual(oldPick) && !_config.useManualOrigins )
 			continue;
 
 		double dt = newPick->time - oldPick->time;
@@ -827,7 +827,7 @@ OriginPtr Autoloc3::_xxlPreliminaryOrigin(const Pick *newPick)
 		if ( dx > _config.xxlMaxStaDist )
 			continue;
 
-		if ( manual(oldPick) && ! _config.useManualOrigins )
+		if ( !_config.useManualPicks && manual(oldPick) && ! _config.useManualOrigins )
 			continue;
 
 		// make sure we don't have two picks of the same station
@@ -1241,13 +1241,13 @@ bool Autoloc3::_process(const Pick *pick)
 		return false;
 	}
 
-	if ( manual(pick) && ! _config.useManualOrigins ) {
+	if ( !_config.useManualPicks && manual(pick) && ! _config.useManualOrigins ) {
 		SEISCOMP_INFO_S("process pick BLACKLISTING " + pick->id + " (manual pick)");
 		_setBlacklisted(pick);
 		return false;
 	}
 
-	if ( manual(pick))
+	if ( !_config.useManualPicks && manual(pick))
 		// If we want to consider only associated manual picks,
 		// i.e. picks that come along with an origin that uses them,
 		// we stop here because we don't want to feed it into the associator/nucleator
@@ -2144,7 +2144,7 @@ bool Autoloc3::_addMorePicks(Origin *origin, bool keepDepth)
 
 		if ( ! pick->station() ) // better if blacklisted
 			continue;
-		if ( manual(pick))  // FIXME: maybe not needed here
+		if ( !_config.useManualPicks && manual(pick))  // FIXME: maybe not needed here
 			continue;
 		if ( ignored(pick))
 			continue;

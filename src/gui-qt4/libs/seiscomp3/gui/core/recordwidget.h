@@ -208,6 +208,23 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		typedef Math::Filtering::InPlaceFilter<float> Filter;
 
+		struct Trace {
+			Trace() : amplMin(0), amplMax(0), offset(0),
+			          absMax(0), yMin(0), yMax(0), visible(false) {}
+			float          amplMin;
+			float          amplMax;
+			float          offset;
+			float          absMax;
+			int            yMin;
+			int            yMax;
+			float          fyMin;
+			float          fyMax;
+			float          timingQuality;
+			int            timingQualityCount;
+			bool           dirty;
+			bool           visible;
+			RecordPolyline poly;
+		};
 
 	public:
 		RecordWidget(QWidget *parent=0);
@@ -229,6 +246,7 @@ class SC_GUI_API RecordWidget : public QWidget
 		bool setRecordColor(int slot, QColor c);
 		bool setRecordPen(int slot, const QPen &pen);
 		bool setRecordAntialiasing(int slot, bool antialiasing);
+		bool setRecordOptimization(int slot, bool enable);
 		bool setRecordBackgroundColor(int slot, QColor c);
 		bool removeRecordBackgroundColor(int slot);
 		bool setRecordFilter(int slot, const Filter *f);
@@ -244,6 +262,7 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		QString recordID(int slot) const;
 		const double *recordScale(int slot) const;
+		const Trace *traceInfo(int slot, bool filtered = false) const;
 
 		QVariant recordUserData(int slot);
 
@@ -330,6 +349,7 @@ class SC_GUI_API RecordWidget : public QWidget
 
 		//! Whether to show scaled or raw values. The default is false.
 		void showScaledValues(bool enable);
+		bool areScaledValuesShown() const { return _showScaledValues; }
 
 		//! Adds a marker to the widget. The ownership takes
 		//! the widget.
@@ -566,29 +586,11 @@ class SC_GUI_API RecordWidget : public QWidget
 		virtual void createPolyline(int slot, RecordPolyline &polyline,
 		                            RecordSequence const *, double pixelPerSecond,
 		                            float amplMin, float amplMax, float amplOffset,
-		                            int height);
+		                            int height, bool optimization);
 		virtual const double *value(int slot, const Seiscomp::Core::Time&) const;
 
 
 	private:
-		struct Trace {
-			Trace() : amplMin(0), amplMax(0), offset(0),
-			          absMax(0), yMin(0), yMax(0), visible(false) {}
-			float          amplMin;
-			float          amplMax;
-			float          offset;
-			float          absMax;
-			int            yMin;
-			int            yMax;
-			float          fyMin;
-			float          fyMax;
-			float          timingQuality;
-			int            timingQualityCount;
-			bool           dirty;
-			bool           visible;
-			RecordPolyline poly;
-		};
-
 		struct Stream {
 			enum Index {
 				Raw = 0,
@@ -613,6 +615,7 @@ class SC_GUI_API RecordWidget : public QWidget
 			bool            antialiasing;
 			QColor          customBackgroundColor;
 			bool            hasCustomBackgroundColor;
+			bool            optimize;
 			double          scale;
 
 			// Internal variables to track the current trace position

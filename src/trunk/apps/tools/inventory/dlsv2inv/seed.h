@@ -434,6 +434,7 @@ struct ListedResponses
 DECLARE_BLOCKETTE2(ResponseList, SequenceRecord) {
 	public:
 		virtual ParseResult Parse(std::string record);
+		virtual ParseResult Merge(std::string);
 
 		int GetSignalInUnits(){return signal_in_units;}
 		int GetSignalOutUnits(){return signal_out_units;}

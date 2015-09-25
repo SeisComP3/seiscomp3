@@ -4,8 +4,8 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = SeisComP3
-PROJECT_NUMBER         = 0.9
-OUTPUT_DIRECTORY       = doc
+PROJECT_NUMBER         = 2.1.0
+OUTPUT_DIRECTORY       = api-doc
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -82,7 +82,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = src/core/libs/seiscomp3
+INPUT                  = src/trunk/libs/seiscomp3
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
@@ -135,7 +135,7 @@ FILE_PATTERNS          = *.c \
 RECURSIVE              = yes
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = */.svn
+EXCLUDE_PATTERNS       = */.git
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO

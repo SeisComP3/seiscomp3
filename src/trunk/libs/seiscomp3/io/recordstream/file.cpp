@@ -15,121 +15,189 @@
 #include "file.h"
 #include <seiscomp3/logging/log.h>
 
+
+using namespace std;
 using namespace Seiscomp::RecordStream;
 
 
-IMPLEMENT_SC_CLASS_DERIVED(File,
-                           Seiscomp::IO::RecordStream,
-                           "RecordFile");
-
 REGISTER_RECORDSTREAM(File, "file");
+
 
 File::File() : RecordStream(), _current(&_fstream) {}
 
-File::File(std::string name) : RecordStream(), _current(&_fstream)  {
-  setSource(name);
+
+File::File(string name)
+: _current(&_fstream) {
+	setSource(name);
 }
 
-File::File(const File &f) : RecordStream(), _current(&_fstream) {
-  setSource(f.name());
+
+File::File(const File &f)
+: _current(&_fstream) {
+	setSource(f.name());
 }
+
 
 File::~File() {
-  close();
+	close();
 }
 
-File& File::operator=(const File &f) {
-  if (this != &f) {
-    if (_fstream.is_open())
-      _fstream.close();
-    _name = f.name();
-    if (_name != "-")
-      _fstream.open(_name.c_str(),std::ifstream::in|std::ifstream::binary);
-  }
-  
-  return *this;
+
+File &File::operator=(const File &f) {
+	if (this != &f) {
+		if ( _fstream.is_open() )
+			_fstream.close();
+
+		_name = f.name();
+		if ( _name != "-" )
+			_fstream.open(_name.c_str(),ifstream::in|ifstream::binary);
+	}
+
+	return *this;
 }
 
-bool File::setSource(std::string name) {
-  _name = name;
 
-  if (_fstream.is_open())
-      _fstream.close();
+bool File::setSource(string name) {
+	_name = name;
 
-  setRecordType("mseed");
+	if ( _fstream.is_open() )
+		_fstream.close();
 
-  if (_name != "-") {
-    _fstream.open(_name.c_str(),std::ifstream::in|std::ifstream::binary);
+	setRecordType("mseed");
 
-    size_t pos = name.rfind('.');
-    if ( pos != std::string::npos ) {
-      std::string ext = name.substr(pos+1);
-      if ( ext == "xml" )
-        setRecordType("xml");
-      else if ( ext == "bin" )
-        setRecordType("binary");
-      else if ( ext == "mseed" )
-        setRecordType("mseed");
-      else if ( ext == "ah" )
-        setRecordType("ah");
-    }
+	if ( _name != "-" ) {
+		_fstream.open(_name.c_str(),ifstream::in|ifstream::binary);
 
-    _current = &_fstream;
-    return !_fstream.fail();
-  }
-  _current = &std::cin;
-  return !std::cin.bad();
+		size_t pos = name.rfind('.');
+		if ( pos != string::npos ) {
+			string ext = name.substr(pos+1);
+			if ( ext == "xml" )
+				setRecordType("xml");
+			else if ( ext == "bin" )
+				setRecordType("binary");
+			else if ( ext == "mseed" )
+				setRecordType("mseed");
+			else if ( ext == "ah" )
+				setRecordType("ah");
+		}
+
+		_current = &_fstream;
+		return !_fstream.fail();
+	}
+
+	_current = &cin;
+	return !cin.bad();
 }
 
-bool File::addStream(std::string net, std::string sta, std::string loc, std::string cha) {
-  return false;
+
+bool File::addStream(string net, string sta, string loc, string cha) {
+	string id = net + "." + sta + "." + loc + "." + cha;
+	_filter[id] = TimeWindowFilter();
+	return true;
 }
 
-bool File::addStream(std::string net, std::string sta, std::string loc, std::string cha,
-  const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime) {
-  return false;
+
+bool File::addStream(string net, string sta, string loc, string cha,
+                     const Seiscomp::Core::Time &stime,
+                     const Seiscomp::Core::Time &etime) {
+	string id = net + "." + sta + "." + loc + "." + cha;
+	_filter[id] = TimeWindowFilter(stime, etime);
+	return true;
 }
+
 
 bool File::setStartTime(const Seiscomp::Core::Time &stime) {
-  return false;
+	_startTime = stime;
+	return true;
 }
+
 
 bool File::setEndTime(const Seiscomp::Core::Time &etime) {
-  return false;
+	_endTime = etime;
+	return true;
 }
+
 
 bool File::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-            return setStartTime(w.startTime()) && setEndTime(w.endTime());
+	return setStartTime(w.startTime()) && setEndTime(w.endTime());
 }
+
 
 bool File::setTimeout(int seconds) {
-  return false;
+	return false;
 }
+
 
 void File::close() {
-  if (_name != "-")
-    _fstream.close();
-  _current = &_fstream;
+	if (_name != "-")
+		_fstream.close();
+	_current = &_fstream;
+	_filter.clear();
 }
 
-std::string File::name() const {
-  return _name;
+
+string File::name() const {
+	return _name;
 }
 
-std::istream& File::stream() {
-  return *_current;
+
+istream& File::stream() {
+	return *_current;
 }
+
+
+bool File::filterRecord(Record *r) {
+	if ( !_filter.empty() ) {
+		FilterMap::iterator it = _filter.find(r->streamID());
+		// Not subscribed
+		if ( it == _filter.end() )
+			return true;
+
+		if ( it->second.start.valid() ) {
+			if ( r->endTime() < it->second.start )
+				return true;
+		}
+		else if ( _startTime.valid() ) {
+			if ( r->endTime() < _startTime )
+				return true;
+		}
+
+		if ( it->second.end.valid() ) {
+			if ( r->startTime() >= it->second.end )
+				return true;
+		}
+		else if ( _endTime.valid() ) {
+			if ( r->startTime() >= _endTime )
+				return true;
+		}
+	}
+	else {
+		if ( _startTime.valid() ) {
+			if ( r->endTime() < _startTime )
+				return true;
+		}
+
+		if ( _endTime.valid() ) {
+			if ( r->startTime() >= _endTime )
+				return true;
+		}
+	}
+
+	return false;
+}
+
 
 size_t File::tell() {
-  return (size_t)_fstream.tellg();
+	return (size_t)_fstream.tellg();
 }
 
+
 File &File::seek(size_t pos) {
-	_fstream.seekg((std::streampos)pos);
+	_fstream.seekg((streampos)pos);
 	return *this;
 }
 
 File &File::seek(int off, SeekDir dir) {
-	_fstream.seekg((std::streamoff)off, (std::ios_base::seekdir)dir);
+	_fstream.seekg((streamoff)off, (ios_base::seekdir)dir);
 	return *this;
 }

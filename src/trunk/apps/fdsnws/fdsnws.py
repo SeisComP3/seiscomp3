@@ -250,7 +250,7 @@ class FDSNWS(Application):
 		blacklistStr = "<None>"
 		if self._eventTypeBlacklist is not None:
 			blacklistStr = ", ".join(self._eventTypeBlacklist)
-		Logging.notice("\n" \
+		Logging.debug("\n" \
 		               "configuration read:\n" \
 		               "  serve\n" \
 		               "    dataselect    : %s\n" \
@@ -386,7 +386,7 @@ class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
 	def _loadInventory(self):
-		Logging.notice("loading inventory")
+		Logging.debug("loading inventory")
 		dbr = DataModel.DatabaseReader(self.database())
 		self._inv = DataModel.Inventory()
 

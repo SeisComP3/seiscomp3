@@ -145,18 +145,6 @@ void Picker::emitPick(const Result &result) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Picker::calculatePick(int n, const double *data,
-                           int signalStartIdx, int signalEndIdx,
-                           int &triggerIdx, int &lowerUncertainty,
-                           int &upperUncertainty, double &snr) {
-	return false;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Picker::process(const Record *record, const DoubleArray &) {
 	// Sampling frequency has not been set yet
 	if ( _stream.fsamp == 0.0 ) {
@@ -186,9 +174,11 @@ void Picker::process(const Record *record, const DoubleArray &) {
 	int triggerIdx = relTriggerTime*_stream.fsamp;
 	int lowerUncertainty = -1;
 	int upperUncertainty = -1;
+	OPT(Polarity) polarity;
 
 	if ( !calculatePick(continuousData().size(), continuousData().typedData(),
-	                    i1, i2, triggerIdx, lowerUncertainty, upperUncertainty, snr) ) {
+	                    i1, i2, triggerIdx, lowerUncertainty, upperUncertainty,
+	                    snr, polarity) ) {
 		setStatus(Error, 0.0);
 		return;
 	}
@@ -209,6 +199,7 @@ void Picker::process(const Record *record, const DoubleArray &) {
 		res.timeUpperUncertainty = (double)upperUncertainty / _stream.fsamp;
 		res.timeWindowBegin = (double)(timeWindow().startTime() - pickTime);
 		res.timeWindowEnd = (double)(timeWindow().endTime() - pickTime);
+		res.polarity = polarity;
 		emitPick(res);
 	}
 	else

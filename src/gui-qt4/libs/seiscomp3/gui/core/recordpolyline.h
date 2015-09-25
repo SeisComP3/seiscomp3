@@ -46,14 +46,16 @@ class SC_GUI_API RecordPolyline : public std::vector<QPolygon>
 	//! of that polyline
 	void create(Record const *, double pixelPerSecond,
 	            float amplMin, float amplMax, float amplOffset,
-	            int height, float *timingQuality = NULL);
+	            int height, float *timingQuality = NULL,
+	            bool optimization = true);
 
 	//! creates the record polyline and returns the virtual height
 	//! of that polyline
 	void create(RecordSequence const *, double pixelPerSecond,
 	            float amplMin, float amplMax, float amplOffset,
 	            int height, float *timingQuality = NULL,
-	            QVector<QPair<int,int> >* gaps = NULL);
+	            QVector<QPair<int,int> >* gaps = NULL,
+	            bool optimization = true);
 
 	void create(RecordSequence const *,
 	            const Core::Time &start,
@@ -61,7 +63,8 @@ class SC_GUI_API RecordPolyline : public std::vector<QPolygon>
 	            double pixelPerSecond,
 	            float amplMin, float amplMax, float amplOffset,
 	            int height, float *timingQuality = NULL,
-	            QVector<QPair<int,int> >* gaps = NULL);
+	            QVector<QPair<int,int> >* gaps = NULL,
+	            bool optimization = true);
 
 	void createStepFunction(RecordSequence const *, double pixelPerSecond,
 	                        float amplMin, float amplMax, float amplOffset,

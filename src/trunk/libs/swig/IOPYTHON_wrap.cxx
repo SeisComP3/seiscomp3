@@ -10754,6 +10754,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_RecordStream_filterRecord(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::RecordStream *arg1 = (Seiscomp::IO::RecordStream *) 0 ;
+  Seiscomp::Record *arg2 = (Seiscomp::Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:RecordStream_filterRecord",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__RecordStream, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RecordStream_filterRecord" "', argument " "1"" of type '" "Seiscomp::IO::RecordStream *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::RecordStream * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RecordStream_filterRecord" "', argument " "2"" of type '" "Seiscomp::Record *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Record * >(argp2);
+  result = (bool)(arg1)->filterRecord(arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_RecordStream_Create__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
@@ -22345,256 +22376,6 @@ SWIGINTERN PyObject *MSeedRecord_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_FileRecordStream_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":FileRecordStream_ClassName")) SWIG_fail;
-  result = (char *)Seiscomp::RecordStream::File::ClassName();
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_TypeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::RTTI *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)":FileRecordStream_TypeInfo")) SWIG_fail;
-  result = (Seiscomp::Core::RTTI *) &Seiscomp::RecordStream::File::TypeInfo();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_className(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::RecordStream::File *arg1 = (Seiscomp::RecordStream::File *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_className",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__File, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_className" "', argument " "1"" of type '" "Seiscomp::RecordStream::File const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::RecordStream::File * >(argp1);
-  result = (char *)((Seiscomp::RecordStream::File const *)arg1)->className();
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_typeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::RecordStream::File *arg1 = (Seiscomp::RecordStream::File *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::Core::RTTI *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_typeInfo",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__File, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_typeInfo" "', argument " "1"" of type '" "Seiscomp::RecordStream::File const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::RecordStream::File * >(argp1);
-  result = (Seiscomp::Core::RTTI *) &((Seiscomp::RecordStream::File const *)arg1)->typeInfo();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_Cast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::RecordStream::File *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_Cast",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
-  result = (Seiscomp::RecordStream::File *)Seiscomp::RecordStream::File::Cast(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__File, SWIG_POINTER_OWN |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_ConstCast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::RecordStream::File *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_ConstCast",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
-  result = (Seiscomp::RecordStream::File *)Seiscomp::RecordStream::File::ConstCast((Seiscomp::Core::BaseObject const *)arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__File, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_Cast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl > arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::RecordStream::File *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_Cast",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileRecordStream_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'");
-    } else {
-      Seiscomp::Core::BaseObjectPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectPtr * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
-  }
-  result = (Seiscomp::RecordStream::File *)Seiscomp::RecordStream::File::Cast(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__File, SWIG_POINTER_OWN |  0 );
-  if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_Cast(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[2];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_FileRecordStream_Cast__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_FileRecordStream_Cast__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'FileRecordStream_Cast'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::RecordStream::File::Cast(Seiscomp::Core::BaseObject *)\n"
-    "    Seiscomp::RecordStream::File::Cast(Seiscomp::Core::BaseObjectPtr)\n");
-  return 0;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_ConstCast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl > arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  Seiscomp::RecordStream::File *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:FileRecordStream_ConstCast",&obj0)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FileRecordStream_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'");
-    } else {
-      Seiscomp::Core::BaseObjectCPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectCPtr * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
-  }
-  result = (Seiscomp::RecordStream::File *)Seiscomp::RecordStream::File::ConstCast(arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__RecordStream__File, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_FileRecordStream_ConstCast(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[2];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_FileRecordStream_ConstCast__SWIG_0(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_FileRecordStream_ConstCast__SWIG_1(self, args);
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'FileRecordStream_ConstCast'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::RecordStream::File::ConstCast(Seiscomp::Core::BaseObject const *)\n"
-    "    Seiscomp::RecordStream::File::ConstCast(Seiscomp::Core::BaseObjectCPtr)\n");
-  return 0;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_FileRecordStream__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::RecordStream::File *result = 0 ;
@@ -23180,6 +22961,37 @@ SWIGINTERN PyObject *_wrap_FileRecordStream_stream(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< Seiscomp::RecordStream::File * >(argp1);
   result = (std::istream *) &(arg1)->stream();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__istream, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FileRecordStream_filterRecord(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::RecordStream::File *arg1 = (Seiscomp::RecordStream::File *) 0 ;
+  Seiscomp::Record *arg2 = (Seiscomp::Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:FileRecordStream_filterRecord",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__RecordStream__File, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FileRecordStream_filterRecord" "', argument " "1"" of type '" "Seiscomp::RecordStream::File *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::RecordStream::File * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FileRecordStream_filterRecord" "', argument " "2"" of type '" "Seiscomp::Record *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Record * >(argp2);
+  result = (bool)(arg1)->filterRecord(arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -29259,6 +29071,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RecordStream_stream", _wrap_RecordStream_stream, METH_VARARGS, NULL},
 	 { (char *)"RecordStream_createRecord", _wrap_RecordStream_createRecord, METH_VARARGS, NULL},
 	 { (char *)"RecordStream_recordStored", _wrap_RecordStream_recordStored, METH_VARARGS, NULL},
+	 { (char *)"RecordStream_filterRecord", _wrap_RecordStream_filterRecord, METH_VARARGS, NULL},
 	 { (char *)"RecordStream_Create", _wrap_RecordStream_Create, METH_VARARGS, NULL},
 	 { (char *)"RecordStream_Open", _wrap_RecordStream_Open, METH_VARARGS, NULL},
 	 { (char *)"RecordStream_swigregister", RecordStream_swigregister, METH_VARARGS, NULL},
@@ -29459,12 +29272,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MSeedRecord_read", _wrap_MSeedRecord_read, METH_VARARGS, NULL},
 	 { (char *)"MSeedRecord_write", _wrap_MSeedRecord_write, METH_VARARGS, NULL},
 	 { (char *)"MSeedRecord_swigregister", MSeedRecord_swigregister, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_ClassName", _wrap_FileRecordStream_ClassName, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_TypeInfo", _wrap_FileRecordStream_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_className", _wrap_FileRecordStream_className, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_typeInfo", _wrap_FileRecordStream_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_Cast", _wrap_FileRecordStream_Cast, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_ConstCast", _wrap_FileRecordStream_ConstCast, METH_VARARGS, NULL},
 	 { (char *)"new_FileRecordStream", _wrap_new_FileRecordStream, METH_VARARGS, NULL},
 	 { (char *)"delete_FileRecordStream", _wrap_delete_FileRecordStream, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_setSource", _wrap_FileRecordStream_setSource, METH_VARARGS, NULL},
@@ -29476,6 +29283,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileRecordStream_close", _wrap_FileRecordStream_close, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_name", _wrap_FileRecordStream_name, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_stream", _wrap_FileRecordStream_stream, METH_VARARGS, NULL},
+	 { (char *)"FileRecordStream_filterRecord", _wrap_FileRecordStream_filterRecord, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_tell", _wrap_FileRecordStream_tell, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_seek", _wrap_FileRecordStream_seek, METH_VARARGS, NULL},
 	 { (char *)"FileRecordStream_swigregister", FileRecordStream_swigregister, METH_VARARGS, NULL},

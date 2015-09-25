@@ -51,22 +51,6 @@ class DecimatedRecord : public GenericRecord {
 			if ( data()->dataType() == _datatype ) return;
 			setData(data()->copy(_datatype));
 		}
-
-
-	private:
-		template <typename T>
-		bool readData(std::istream &in, TypedArray<T> &target) {
-			for ( int i = 0; i < _nsamp; ++i ) {
-				INPUTTYPE val;
-				in.read((char*)&val, sizeof(val));
-				if ( !in.good() )
-					return false;
-
-				target[i] = (T)val;
-			}
-
-			return true;
-		}
 };
 
 

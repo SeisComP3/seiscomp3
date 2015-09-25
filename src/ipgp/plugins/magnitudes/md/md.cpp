@@ -428,21 +428,29 @@ bool AmplitudeProcessor_Md::setParameter(Capability cap,
 bool AmplitudeProcessor_Md::deconvolveData(Response* resp,
                                            DoubleArray& data,
                                            int numberOfIntegrations) {
+	if ( numberOfIntegrations < -1 )
+		return false;
 
 	SEISCOMP_DEBUG("Inside deconvolve function");
 
 	double m, n;
-	Math::Restitution::FFT::TransferFunctionPtr tf = resp->getTransferFunction(numberOfIntegrations);
+	Math::Restitution::FFT::TransferFunctionPtr tf =
+		resp->getTransferFunction(numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
 
-	if ( !tf ) {
-		setStatus(DeconvolutionFailed, 0);
+	if ( !tf )
 		return false;
-	}
+
+	Math::GroundMotion gm;
+
+	if ( numberOfIntegrations < 0 )
+		gm = Math::Displacement;
+	else
+		gm = Math::Velocity;
 
 	Math::Restitution::FFT::TransferFunctionPtr cascade;
-	Math::SeismometerResponse::WoodAnderson woodAndersonResp(Math::Velocity);
-	Math::SeismometerResponse::Seismometer5sec seis5sResp(Math::Velocity);
-	Math::SeismometerResponse::L4C_1Hz l4c1hzResp(Math::Velocity);
+	Math::SeismometerResponse::WoodAnderson woodAndersonResp(gm);
+	Math::SeismometerResponse::Seismometer5sec seis5sResp(gm);
+	Math::SeismometerResponse::L4C_1Hz l4c1hzResp(gm);
 
 	Math::Restitution::FFT::PolesAndZeros woodAnderson(woodAndersonResp);
 	Math::Restitution::FFT::PolesAndZeros seis5sec(seis5sResp);
@@ -516,7 +524,7 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 	//! TODO: elevate accuracy by using a nanometers scale (maybe)
 	unsigned int i = si1;
 	bool hasEndSignal = false;
-	double calculatedSnr;
+	double calculatedSnr = -1;
 
 	for (i = (int) Imax; i < i2; i = i + 1 * (int) _stream.fsamp) {
 

@@ -615,13 +615,14 @@ RecordWidget::Stream::Stream(bool owner) {
 	traces[0].timingQualityCount = traces[1].timingQualityCount = 0;
 	filter = NULL;
 	pen = QPen(SCScheme.colors.records.foreground, SCScheme.records.lineWidth);
-	antialiasing = false;
+	antialiasing = SCScheme.records.antiAliasing;
 	hasCustomBackgroundColor = false;
 	scale = 1.0;
 	ownRawRecords = owner;
 	ownFilteredRecords = true;
 	visible = true;
 	filtering = false;
+	optimize = SCScheme.records.optimize;
 
 	++StreamCount;
 }
@@ -643,6 +644,9 @@ RecordWidget::Stream::~Stream() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordWidget::Stream::setDirty() {
+	traces[Stream::Raw] = Trace();
+	traces[Stream::Filtered] = Trace();
+
 	traces[Stream::Raw].dirty = true;
 	traces[Stream::Filtered].dirty = true;
 }
@@ -760,6 +764,11 @@ RecordWidget::~RecordWidget() {
 
 	// Delete all stream pointers
 	clearRecords();
+
+	for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
+		if ( *it == NULL ) continue;
+		delete *it;
+	}
 
 	// Clear marker
 	while ( !_marker.isEmpty() )
@@ -1094,6 +1103,27 @@ bool RecordWidget::setRecordAntialiasing(int slot, bool antialiasing) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordWidget::setRecordOptimization(int slot, bool enable) {
+	Stream *stream = getStream(slot);
+	if ( stream == NULL ) return false;
+
+	if ( stream->optimize == enable ) return true;
+
+	stream->optimize = enable;
+	stream->setDirty();
+	update();
+
+	if ( _shadowWidget )
+		_shadowWidget->setRecordOptimization(slot, enable);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RecordWidget::setRecordBackgroundColor(int slot, QColor c) {
 	Stream *stream = getStream(slot);
 	if ( stream == NULL ) return false;
@@ -1149,6 +1179,17 @@ QString RecordWidget::recordID(int slot) const {
 	const Stream *stream = getStream(slot);
 	if ( stream == NULL ) return QString();
 	return stream->id;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const RecordWidget::Trace *RecordWidget::traceInfo(int slot, bool filtered) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return NULL;
+	return &stream->traces[filtered?Stream::Filtered:Stream::Raw];
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1689,7 +1730,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(_amplitudeRange[0]-offset);
 			trace->fyMax = magnify*(_amplitudeRange[1]-offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Raw], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, offset, h-hMargin, s->optimize);
 			trace->fyMin += offset;
 			trace->fyMax += offset;
 		}
@@ -1700,7 +1741,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(minAmpl-trace->offset);
 			trace->fyMax = magnify*(maxAmpl-trace->offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Raw], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin, s->optimize);
 			trace->fyMin += trace->offset;
 			trace->fyMax += trace->offset;
 		}
@@ -1708,7 +1749,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(trace->amplMin-trace->offset);
 			trace->fyMax = magnify*(trace->amplMax-trace->offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Raw], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin, s->optimize);
 			trace->fyMin += trace->offset;
 			trace->fyMax += trace->offset;
 		}
@@ -1730,7 +1771,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(_amplitudeRange[0]-offset);
 			trace->fyMax = magnify*(_amplitudeRange[1]-offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Filtered], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, offset, h-hMargin, s->optimize);
 			trace->fyMin += offset;
 			trace->fyMax += offset;
 		}
@@ -1741,7 +1782,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(minAmpl-trace->offset);
 			trace->fyMax = magnify*(maxAmpl-trace->offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Filtered], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin, s->optimize);
 			trace->fyMin += trace->offset;
 			trace->fyMax += trace->offset;
 		}
@@ -1749,7 +1790,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 			trace->fyMin = magnify*(trace->amplMin-trace->offset);
 			trace->fyMax = magnify*(trace->amplMax-trace->offset);
 			createPolyline(slot, trace->poly, s->records[Stream::Filtered], _pixelPerSecond,
-			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin);
+			               trace->fyMin, trace->fyMax, trace->offset, h-hMargin, s->optimize);
 			trace->fyMin += trace->offset;
 			trace->fyMax += trace->offset;
 		}
@@ -1800,8 +1841,8 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 void RecordWidget::createPolyline(int slot, RecordPolyline &polyline,
                                   RecordSequence const *seq, double pixelPerSecond,
                                   float amplMin, float amplMax, float amplOffset,
-                                  int height) {
-	polyline.create(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height, NULL);
+                                  int height, bool optimization) {
+	polyline.create(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height, NULL, NULL, optimization);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2209,7 +2250,6 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				                 blend(bg, customBackgroundColor));
 
 			if ( !isDirty ) break;
-
 
 			// Second pass draws all records
 			slot = 0;

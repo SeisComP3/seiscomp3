@@ -20,6 +20,7 @@
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/datamodel/amplitude.h>
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/client/application.h>
 #include "autoloc.h"
 
@@ -67,6 +68,7 @@ class App : public Client::Application,
 		virtual bool _report(const ::Autoloc::Origin *origin);
 //		bool runFromPickFile();
 		bool runFromXMLFile(const char *fname);
+		bool runFromEPFile(const char *fname);
 
 
 	protected:
@@ -76,6 +78,7 @@ class App : public Client::Application,
 
 	private:
 		std::string _inputFileXML; // for XML playback
+		std::string _inputEPFile; // for offline processing
 		std::string _stationLocationFile;
 		std::string _gridConfigFile;
 		std::string _amplTypeAbs, _amplTypeSNR;
@@ -85,6 +88,8 @@ class App : public Client::Application,
 		Core::Time playbackStartTime;
 		Core::Time  objectsStartTime;
 		unsigned int objectCount;
+
+		DataModel::EventParametersPtr _ep;
 
 		::Autoloc::Autoloc3::Config _config;
 		int _keepEventsTimeSpan;

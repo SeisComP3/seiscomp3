@@ -183,7 +183,7 @@ bool MagTool::init(const MagnitudeTypes &mags, const Core::TimeSpan& expiry) {
 
 	_dbAccesses = 0;
 
-	cout << "Setting object expiry to " << toString(expiry) << " seconds" << std::endl;
+	cerr << "Setting object expiry to " << toString(expiry) << " seconds" << std::endl;
 
 	MagnitudeTypeList *services = MagnitudeProcessorFactory::Services();
 
@@ -458,7 +458,7 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 	double period = 0;
 	try { period = ampl->period().value(); } catch ( ... ) {}
 
-	Parameters *params = NULL;
+	Util::KeyValues *params = NULL;
 	std::string stationID = ampl->waveformID().networkCode() + "." +
 	                        ampl->waveformID().stationCode();
 	ParameterMap::iterator it = _parameters.find(stationID);
@@ -487,10 +487,10 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 					continue;
 				}
 
-				ParametersPtr parameters = new Processing::Parameters;
-				parameters->readFrom(ps);
-				_parameters[stationID] = parameters;
-				params = parameters.get();
+				Util::KeyValuesPtr keys = new Util::KeyValues;
+				keys->init(ps);
+				_parameters[stationID] = keys;
+				params = keys.get();
 			}
 		}
 	}

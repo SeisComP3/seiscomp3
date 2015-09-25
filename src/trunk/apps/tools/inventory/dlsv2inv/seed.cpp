@@ -290,6 +290,7 @@ void VolumeIndexControl::ParseVolumeRecord(string record)
 			SetBytes(0);
 			SetRemains("");
 			proceed = false;
+			throw o;
 		}
 
 	}while(proceed);
@@ -408,28 +409,22 @@ VolumeTimeSpanIndex::VolumeTimeSpanIndex(string record)
 
 
 template <typename T, typename C>
-void Parse(int blockette, C &container, bool merge, std::string record) {
+bool Parse(int blockette, C &container, bool merge, std::string record) {
 	ParseResult res = PR_OK;
 
-	try {
-		if ( merge ) {
-			SEISCOMP_DEBUG("Blockette %d: continuation", blockette);
-			res = container.back()->Merge(record);
-		}
-		else {
-			typename Seiscomp::Core::SmartPointer<T>::Impl rec = new T;
-			res = rec->Parse(record);
-			if ( res == PR_Error ) {
-				SEISCOMP_ERROR("Blockette %d: Parse error: %s", blockette, record.c_str());
-				return;
-			}
-
-			container.push_back(rec);
-		}
+	if ( merge ) {
+		SEISCOMP_DEBUG("Blockette %d: continuation", blockette);
+		res = container.back()->Merge(record);
 	}
-	catch ( std::out_of_range &o ) {
-		SEISCOMP_ERROR("Blockette %d: %s", blockette, o.what());
-		return;
+	else {
+		typename Seiscomp::Core::SmartPointer<T>::Impl rec = new T;
+		res = rec->Parse(record);
+		if ( res == PR_Error ) {
+			SEISCOMP_ERROR("Blockette %d: Parse error: %s", blockette, record.c_str());
+			return false;
+		}
+
+		container.push_back(rec);
 	}
 
 	if ( res == PR_Partial ) {
@@ -438,6 +433,8 @@ void Parse(int blockette, C &container, bool merge, std::string record) {
 	}
 	else
 		lastIncompleteBlockette = -1;
+
+	return res != PR_Error;
 }
 
 #define PARSE(TYPE, CONTAINTER) \
@@ -548,6 +545,7 @@ void AbbreviationDictionaryControl::ParseVolumeRecord(string record)
 			SetBytes(0);
 			SetRemains("");
 			proceed = false;
+			throw o;
 		}
 	}
 	while ( proceed );
@@ -1135,6 +1133,7 @@ void StationControl::ParseVolumeRecord(string record)
 			SetBytes(0);
 			SetRemains("");
 			proceed = false;
+			throw o;
 		}
 	}while(proceed);
 }
@@ -1540,7 +1539,10 @@ ParseResult ResponseList::Parse(string record)
 	number_of_responses = FromString<int>(substr(record, 8, 4));
 	int pos1 = 12;
 	ListedResponses lr;
-	for(int i=0; i<number_of_responses; i++)
+
+	int items = std::min(number_of_responses, (int)((record.size() - pos1) / 60));
+
+	for(int i=0; i<items; i++)
 	{
 		lr.frequency = FromString<double>(substr(record, pos1, 12));
 		pos1 += 12;
@@ -1554,7 +1556,16 @@ ParseResult ResponseList::Parse(string record)
 		pos1 += 12;
 		responses_listed.push_back(lr);
 	}
+
+	if ( items < number_of_responses )
+		return PR_Partial;
+
 	return PR_OK;
+}
+
+ParseResult ResponseList::Merge(std::string record)
+{
+	return Parse(record);
 }
 
 /****************************************************************************************************************************

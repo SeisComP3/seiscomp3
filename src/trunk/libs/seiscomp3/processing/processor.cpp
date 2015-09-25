@@ -61,10 +61,10 @@ Settings::Settings(const string &mod,
                    const string &location,
                    const string &stream,
                    const Config::Config *config,
-                   const Parameters *parameters)
+                   const Util::KeyValues *keys)
 : module(mod), networkCode(network), stationCode(station),
   locationCode(location), channelCode(stream),
-  localConfiguration(config), keyParameters(parameters) {}
+  localConfiguration(config), keyParameters(keys) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

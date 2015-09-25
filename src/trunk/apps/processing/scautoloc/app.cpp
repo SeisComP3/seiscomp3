@@ -93,6 +93,7 @@ void App::createCommandLineDescription() {
 	commandline().addOption("Mode", "xml-playback", "TODO"); // TODO
 	commandline().addGroup("Input");
 	commandline().addOption("Input", "input,i", "XML input file for --xml-playback",&_inputFileXML, false);
+	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained picks and amplitudes" ,&_inputEPFile, false);
 
 	commandline().addGroup("Settings");
 	commandline().addOption("Settings", "station-locations", "The station-locations.conf file to use when in offline mode. If no file is given the database is used.", &_stationLocationFile, false);
@@ -133,6 +134,7 @@ void App::createCommandLineDescription() {
 	commandline().addOption("Settings", "speed", "Set this to greater 1 to increase XML playback speed", &_playbackSpeed);
 	commandline().addOption("Settings", "dynamic-pick-threshold-interval", "The interval in seconds in which to check for extraordinarily high pick activity, resulting in a dynamically increased pick threshold", &_config.dynamicPickThresholdInterval);
 
+	commandline().addOption("Settings", "use-manual-picks", "allow use of manual picks for nucleation and location");
 	commandline().addOption("Settings", "use-manual-origins", "allow use of manual origins from our own agency");
 	commandline().addOption("Settings", "use-imported-origins", "allow use of imported origins from trusted agencies as configured in 'processing.whitelist.agencies'. Imported origins are not relocated and only used for phase association");
 //	commandline().addOption("Settings", "resend-imported-origins", "Re-send imported origins after phase association");
@@ -148,18 +150,34 @@ bool App::validateParameters() {
 		setDatabaseEnabled(false, false);
 
 	if ( commandline().hasOption("offline") ) {
-		setMessagingEnabled(false);
-		if ( !_stationLocationFile.empty() )
-			setDatabaseEnabled(false, false);
 		_config.offline = true;
+		_config.playback = true;
+		_config.test = true;
 	}
 	else
 		_config.offline = false;
 
-	// Maybe we do want to allow sending of origins in offline mode?
-	_config.test = commandline().hasOption("test") || commandline().hasOption("offline");
-	if ( commandline().hasOption("playback") || commandline().hasOption("offline") )
+	if ( !_inputEPFile.empty() ) {
 		_config.playback = true;
+		_config.offline = true;
+	}
+
+
+	if ( _config.offline ) {
+		setMessagingEnabled(false);
+		if ( !_stationLocationFile.empty() )
+			setDatabaseEnabled(false, false);
+	}
+
+	// Maybe we do want to allow sending of origins in offline mode?
+	if ( commandline().hasOption("test") )
+		_config.test = true;
+
+	if ( commandline().hasOption("playback") )
+		_config.playback = true;
+
+	if ( commandline().hasOption("use-manual-picks") )
+		_config.useManualPicks = true;
 
 	if ( commandline().hasOption("use-manual-origins") )
 		_config.useManualOrigins = true;
@@ -321,9 +339,11 @@ bool App::init() {
 	setPickLogFilePrefix(_config.pickLogFile);
 
 	if ( _config.playback ) {
-		// XML playback, set timer to 1 sec
-		SEISCOMP_DEBUG("Playback mode - enable timer of 1 sec");
-		enableTimer(1);
+		if ( _inputEPFile.empty() ) {
+			// XML playback, set timer to 1 sec
+			SEISCOMP_DEBUG("Playback mode - enable timer of 1 sec");
+			enableTimer(1);
+		}
 	}
 	else {
 		// Read historical preferred origins in case we missed something
@@ -551,42 +571,104 @@ bool App::runFromXMLFile(const char *fname)
 
 
 
-/*
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool App::runFromPickFile()
-{
-	// read picks from stdin, one pick per line.
+bool App::runFromEPFile(const char *fname) {
+	IO::XMLArchive ar;
 
-	::Autoloc::Pick* pick = NULL;
-	while ( (pick = ::Autoloc::Utils::readPickLine()) != NULL) {
-		if ( _exitRequested ) break;
-
-		::Autoloc::Pick *existing = (::Autoloc::Pick *) Autoloc3::pick(pick->id);
-		if (existing) {
-			if ( pick->snr >= 0 )
-				existing->snr = pick->snr;
-			if ( pick->amp >= 0 )
-				existing->amp = pick->amp;
-			if ( pick->per >= 0 )
-				existing->per = pick->per;
-
-			delete pick;
-			pick = existing;
-		}
-		bool result = Autoloc3::feed(pick);
-
-		if ( ! result ) continue;
+	if ( !ar.open(fname)) {
+		SEISCOMP_ERROR("unable to open XML file: %s", fname);
+		return false;
 	}
+
+	ar >> _ep;
+	ar.close();
+
+	if ( !_ep ) {
+		SEISCOMP_ERROR("No event parameters found: %s", fname);
+		return false;
+	}
+
+	SEISCOMP_INFO("finished reading event parameters from XML");
+	SEISCOMP_INFO("  number of picks:      %ld", (long int)_ep->pickCount());
+	SEISCOMP_INFO("  number of amplitudes: %ld", (long int)_ep->amplitudeCount());
+	SEISCOMP_INFO("  number of origins:    %ld", (long int)_ep->originCount());
+
+	typedef std::pair<Core::Time,DataModel::PublicObjectPtr> TimeObject;
+	typedef std::vector<TimeObject> TimeObjectVector;
+
+	// retrieval of relevant objects from event parameters
+	// and subsequent DSU sort
+	TimeObjectVector objs;
+
+	for ( size_t i = 0; i < _ep->pickCount(); ++i ) {
+		DataModel::PickPtr pick = _ep->pick(i);
+		try {
+			Core::Time t = pick->creationInfo().creationTime();
+			objs.push_back(TimeObject(t, pick));
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("Ignore pick %s: no creation time set",
+			                 pick->publicID().c_str());
+		}
+	}
+
+	for ( size_t i = 0; i < _ep->amplitudeCount(); ++i ) {
+		DataModel::AmplitudePtr amplitude = _ep->amplitude(i);
+		try {
+			Core::Time t = amplitude->creationInfo().creationTime();
+			objs.push_back(TimeObject(t, amplitude));
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("Ignore amplitude %s: no creation time set",
+			                 amplitude->publicID().c_str());
+		}
+	}
+
+	for ( size_t i = 0; i < _ep->originCount(); ++i ) {
+		DataModel::OriginPtr origin = _ep->origin(i);
+		try {
+			Core::Time t = origin->creationInfo().creationTime();
+			objs.push_back(TimeObject(t, origin));
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("Ignore origin %s: no creation time set",
+			                 origin->publicID().c_str());
+		}
+	}
+
+	std::sort(objs.begin(), objs.end());
+	for (TimeObjectVector::iterator
+	     it = objs.begin(); it != objs.end(); ++it) {
+		_objects.push(it->second);
+	}
+
+	while ( !_objects.empty() && !isExitRequested() ) {
+		DataModel::PublicObjectPtr o = _objects.front();
+
+		_objects.pop();
+		addObject("", o.get());
+		++objectCount;
+	}
+
+	_flush();
+
+	ar.create("-");
+	ar.setFormattedOutput(true);
+	ar << _ep;
+	ar.close();
 
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-*/
+
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::run() {
+	if ( !_inputEPFile.empty() )
+		return runFromEPFile(_inputEPFile.c_str());
 
 	// normal online mode
 	if ( ! Autoloc3::config().offline )
@@ -975,7 +1057,22 @@ bool App::_report(const ::Autoloc::Origin *origin) {
 		std::string reportStr = ::Autoloc::printDetailed(origin);
 		SEISCOMP_INFO("Reporting origin %ld\n%s", origin->id, reportStr.c_str());
 		SEISCOMP_INFO ("Origin %ld not sent (test/offline mode)", origin->id);
-		std::cout << reportStr << std::endl;
+
+		if ( _ep ) {
+			DataModel::OriginPtr sc3origin = ::Autoloc::convertToSC3(origin, _config.reportAllPhases);
+			DataModel::CreationInfo ci;
+			ci.setAgencyID(agencyID());
+			ci.setAuthor(author());
+			ci.setCreationTime(now);
+			sc3origin->setCreationInfo(ci);
+
+			_ep->add(sc3origin.get());
+
+			std::cerr << reportStr << std::endl;
+		}
+		else
+			std::cout << reportStr << std::endl;
+
 		return true;
 	}
 

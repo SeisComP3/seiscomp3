@@ -1774,7 +1774,7 @@
     <string/>
    </property>
    <property name="shortcut" >
-    <string>shift+s</string>
+    <string>Shift+S</string>
    </property>
   </action>
   <action name="actionSortByAzimuth" >

@@ -1,5 +1,4 @@
 SET(PROC_SOURCES
-	parameters.cpp
 	response.cpp
 	sensor.cpp
 	stream.cpp
@@ -18,7 +17,6 @@ SET(PROC_SOURCES
 )
 
 SET(PROC_HEADERS
-	parameters.h
 	response.h
 	sensor.h
 	stream.h

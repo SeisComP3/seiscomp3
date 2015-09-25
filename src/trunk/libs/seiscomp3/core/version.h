@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(1, 16, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(3, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
-/* SC_API_VERSION is (major << 16) + (minor << 10) + patch. */
-#define SC_API_VERSION 0x011000
+/* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
+#define SC_API_VERSION 0x030000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,39 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "3.0.0"   0x030000
+   - Added Seiscomp::IO::RecordStream::filterRecord virtual method
+   - Fixed bug in Seiscomp::IO::QuakeLink::Connection
+   - Added Processing::Picker::Result::polarity
+
+ "2.5.0"   0x020500
+   - Added Seiscomp::Client::Application::configGetPath
+
+ "2.4.0"   0x020400
+   - Added Seiscomp::IO::BSONArchive
+   - Added Seiscomp::IO::JSONArchive
+
+ "2.3.0"   0x020300
+   - Added Seiscomp::DataModel::Object::setLastModifiedInArchive
+   - Added Seiscomp::DataModel::Object::lastModifiedInArchive
+   - Populate Seiscomp::DataModel::Object::_lastModifiedInArchive
+     with Seiscomp::DataModel::DatabaseArchive
+
+ "2.2.0"   0x020200
+   - Added optimization flag to Seiscomp::Gui::RecordPolyline::create
+   - Added Seiscomp::Gui::RecordWidget::setRecordOptimization
+   - Added Seiscomp::Gui::RecordWidget::traceInfo
+   - Added Seiscomp::Gui::RecordWidget::areScaledValuesShown
+   - Implement Seiscomp::Gui::Ruler::sizeHint for vertical layout
+
+ "2.1.0"   0x020100
+   - Removed Seiscomp::MultiComponentArray
+
+ "2.0.0"   0x020000
+   - Moved Processing::Parameters to Util::KeyValues
+   - Renamed Processing::Parameters::readFrom to Util::KeyValues::init
+   - Added Util::Bindings class
+
  "1.16.0"  0x011000
    - Added Seiscomp::IO::Spectralizer
    - Added Seiscomp::Gui::LUT

@@ -130,15 +130,16 @@ bool AmplitudeProcessor_MLv::setParameter(Capability cap, const std::string &val
 bool AmplitudeProcessor_MLv::deconvolveData(Response *resp,
                                             DoubleArray &data,
                                             int numberOfIntegrations) {
-	Math::Restitution::FFT::TransferFunctionPtr tf =
-		resp->getTransferFunction(numberOfIntegrations);
-
-	if ( tf == NULL ) {
-		setStatus(DeconvolutionFailed, 0);
+	if ( numberOfIntegrations < -1 )
 		return false;
-	}
 
-	Math::SeismometerResponse::WoodAnderson paz(Math::Velocity);
+	Math::Restitution::FFT::TransferFunctionPtr tf =
+		resp->getTransferFunction(numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
+
+	if ( tf == NULL )
+		return false;
+
+	Math::SeismometerResponse::WoodAnderson paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity);
 	Math::Restitution::FFT::PolesAndZeros woodAnderson(paz);
 	Math::Restitution::FFT::TransferFunctionPtr cascade =
 		*tf / woodAnderson;

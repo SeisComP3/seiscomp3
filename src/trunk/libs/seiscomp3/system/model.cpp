@@ -1660,10 +1660,32 @@ std::string Model::configFileLocation(bool, const std::string &name, int stage) 
 }
 
 std::string Model::stationConfigDir(bool, const std::string &name) const {
+	string keyBaseDir;
+
+	if ( !keyDirOverride.empty() ) {
+		keyBaseDir = keyDirOverride;
+
+		// Remove trailing slashes
+		while ( !keyBaseDir.empty() && (*keyBaseDir.rbegin() == '/') )
+			keyBaseDir.resize(keyBaseDir.size()-1);
+	}
+	else {
+		const char* keyDir = getenv("SEISCOMP_KEY_DIR");
+		if ( keyDir != NULL ) {
+			keyBaseDir = keyDir;
+
+			// Remove trailing slashes
+			while ( !keyBaseDir.empty() && (*keyBaseDir.rbegin() == '/') )
+				keyBaseDir.resize(keyBaseDir.size()-1);
+		}
+		else
+			keyBaseDir = Environment::Instance()->appConfigDir() + "/key";
+	}
+
 	if ( name.empty() )
-		return Environment::Instance()->appConfigDir() + "/key";
+		return keyBaseDir;
 	else
-		return Environment::Instance()->appConfigDir() + "/key/" + name;
+		return keyBaseDir+ "/" + name;
 }
 
 

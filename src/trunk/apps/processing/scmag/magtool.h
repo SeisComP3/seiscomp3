@@ -170,7 +170,7 @@ class MagTool {
 		typedef Processing::MagnitudeProcessorFactory::ServiceNames MagnitudeTypeList;
 		typedef std::multimap<std::string, Processing::MagnitudeProcessorPtr> ProcessorList;
 		typedef std::set<std::string> TypeList;
-		typedef std::map<std::string, Processing::ParametersPtr> ParameterMap;
+		typedef std::map<std::string, Util::KeyValuesPtr> ParameterMap;
 
 		MagnitudeTypeList  _registeredMagTypes;
 		MagnitudeTypes     _magTypes;

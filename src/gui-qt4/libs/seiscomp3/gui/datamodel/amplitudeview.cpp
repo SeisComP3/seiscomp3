@@ -782,7 +782,7 @@ Stream* findConfiguredStream(Station *station, const Seiscomp::Core::Time &time)
 }
 
 
-Processing::ParametersPtr getParams(const string &net, const string &sta) {
+Util::KeyValuesPtr getParams(const string &net, const string &sta) {
 	ConfigModule *module = SCApp->configModule();
 	if ( module == NULL ) return NULL;
 
@@ -801,9 +801,9 @@ Processing::ParametersPtr getParams(const string &net, const string &sta) {
 			continue;
 		}
 
-		Processing::ParametersPtr params = new Processing::Parameters;
-		params->readFrom(ps);
-		return params;
+		Util::KeyValuesPtr keys = new Util::KeyValues;
+		keys->init(ps);
+		return keys;
 	}
 
 	return NULL;
@@ -3721,14 +3721,14 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 		allComponents = false;
 
 
-	Processing::ParametersPtr params = getParams(sid.networkCode(), sid.stationCode());
+	Util::KeyValuesPtr keys = getParams(sid.networkCode(), sid.stationCode());
 
 	if ( !proc->setup(
 		Processing::Settings(
 			SCApp->configModuleName(),
 			sid.networkCode(), sid.stationCode(),
 			sid.locationCode(), sid.channelCode().substr(0,2),
-			&SCCoreApp->configuration(), params.get())) ) {
+			&SCCoreApp->configuration(), keys.get())) ) {
 		cerr << sid.networkCode() << "." << sid.stationCode() << ": setup processor failed"
 		     << ": ignoring station" << endl;
 		return NULL;
@@ -3746,7 +3746,7 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 			SCApp->configModuleName(),
 			sid.networkCode(), sid.stationCode(),
 			sid.locationCode(), sid.channelCode().substr(0,2),
-			&SCCoreApp->configuration(), params.get())) ) {
+			&SCCoreApp->configuration(), keys.get())) ) {
 		cerr << sid.networkCode() << "." << sid.stationCode() << ": setup magnitude processor failed"
 		     << ": ignoring station" << endl;
 		return NULL;

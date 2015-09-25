@@ -58,6 +58,13 @@ void RecordStream::recordStored(Record *) {
 }
 
 
+bool RecordStream::filterRecord(Record *) {
+	// No filtering by default because the underlying acquisition systems do
+	// it usually. In case of a file it can be useful.
+	return false;
+}
+
+
 RecordStream* RecordStream::Create(const char* service) {
 	if ( service == NULL ) return NULL;
 	

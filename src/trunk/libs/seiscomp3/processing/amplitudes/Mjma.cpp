@@ -81,16 +81,16 @@ void AmplitudeProcessor_Mjma::initFilter(double fsamp) {
 bool AmplitudeProcessor_Mjma::deconvolveData(Response *resp,
                                              DoubleArray &data,
                                              int numberOfIntegrations) {
-	Math::Restitution::FFT::TransferFunctionPtr tf =
-		resp->getTransferFunction(numberOfIntegrations);
-
-	if ( tf == NULL ) {
-		setStatus(DeconvolutionFailed, 0);
+	if ( numberOfIntegrations < -1 )
 		return false;
-	}
 
-	
-	Math::SeismometerResponse::Seismometer5sec paz(Math::Velocity);
+	Math::Restitution::FFT::TransferFunctionPtr tf =
+		resp->getTransferFunction(numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
+
+	if ( tf == NULL )
+		return false;
+
+	Math::SeismometerResponse::Seismometer5sec paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity);
 	Math::Restitution::FFT::PolesAndZeros seis5sec(paz);
 
 	Math::Restitution::FFT::TransferFunctionPtr cascade =

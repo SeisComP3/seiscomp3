@@ -11,14 +11,11 @@
  ***************************************************************************/
 
 
-
-
-
 #ifndef __APPS_PICKER_STATIONCONFIG_H__
 #define __APPS_PICKER_STATIONCONFIG_H__
 
 #include <seiscomp3/datamodel/configmodule.h>
-#include <seiscomp3/processing/parameters.h>
+#include <seiscomp3/utils/keyvalues.h>
 
 #include <string>
 #include <map>
@@ -46,7 +43,7 @@ struct StreamConfig {
 
 	bool         updatable;
 
-	Processing::ParametersPtr parameters;
+	Util::KeyValuesPtr parameters;
 };
 
 

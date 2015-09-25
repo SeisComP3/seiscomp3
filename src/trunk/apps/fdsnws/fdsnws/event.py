@@ -408,7 +408,7 @@ class FDSNEvent(resource.Resource):
 		sink = utils.Sink(req)
 		if not exp.write(sink, ep):
 			return False
-		Logging.notice("%s: returned %i events and %i origins (total " \
+		Logging.debug("%s: returned %i events and %i origins (total " \
 		               "objects/bytes: %i/%i)" % (ro.service, ep.eventCount(),
 		               ep.originCount(), objCount, sink.written))
 		utils.accessLog(req, ro, http.OK, sink.written, None)
@@ -490,7 +490,7 @@ class FDSNEvent(resource.Resource):
 			byteCount += len(line)
 
 		# write response
-		Logging.notice("%s: returned %i events (total bytes: %i) " % (
+		Logging.debug("%s: returned %i events (total bytes: %i) " % (
 		               ro.service, lineCount, byteCount))
 		utils.accessLog(req, ro, http.OK, byteCount, None)
 		return True

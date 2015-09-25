@@ -230,7 +230,7 @@ class WFParam : public Application {
 
 		typedef std::vector<Processing::TimeWindowProcessorPtr>  ProcessorSlot;
 		typedef std::map<std::string, ProcessorSlot>             ProcessorMap;
-		typedef std::map<std::string, Processing::ParametersPtr> ParameterMap;
+		typedef std::map<std::string, Util::KeyValuesPtr>        KeyMap;
 		typedef std::map<std::string, StationRequest>            RequestMap;
 
 		typedef std::map<std::string, Processing::StreamPtr>     StreamMap;
@@ -278,7 +278,7 @@ class WFParam : public Application {
 		TravelTimeTable            _travelTime;
 		ProcessorMap               _processors;
 		RequestMap                 _stationRequests;
-		ParameterMap               _parameters;
+		KeyMap                     _keys;
 
 		Crontab                    _crontab;
 		ProcessQueue               _processQueue;

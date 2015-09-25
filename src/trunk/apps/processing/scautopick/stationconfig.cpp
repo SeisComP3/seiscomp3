@@ -120,14 +120,14 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 	double trigOn = *_default.triggerOn, trigOff = *_default.triggerOff;
 	double tcorr = *_default.timeCorrection;
 	bool enabled = true;
-	Processing::ParametersPtr parameters;
+	Util::KeyValuesPtr keys;
 
 	if ( params ) {
-		parameters = new Processing::Parameters;
-		parameters->readFrom(params);
+		keys = new Util::KeyValues;
+		keys->init(params);
 	}
 
-	Processing::Settings settings(mod, net, sta, "", "", config, parameters.get());
+	Processing::Settings settings(mod, net, sta, "", "", config, keys.get());
 
 	settings.getValue(loc, "detecLocid");
 	settings.getValue(cha, "detecStream");
@@ -149,7 +149,7 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 	sc.timeCorrection = tcorr;
 	sc.filter = filter;
 	sc.enabled = enabled;
-	sc.parameters = parameters;
+	sc.parameters = keys;
 	return &sc;
 }
 

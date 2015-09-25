@@ -56,6 +56,8 @@ class SC_GUI_API Ruler : public QFrame
 		double dT() const { return _drx[1]; }
 		double dOfs() const { return _ofs; }
 
+		virtual QSize sizeHint() const;
+
 
 	public slots:
 		void showRange(double, double);
