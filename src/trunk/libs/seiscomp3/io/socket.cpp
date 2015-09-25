@@ -184,6 +184,8 @@ void Socket::close() {
 
 	_interrupt = false;
 	_reconnect = false;
+
+	_rp = _wp = 0;
 }
 
 bool Socket::isOpen() {
