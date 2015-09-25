@@ -16,7 +16,7 @@
 
 #include <seiscomp3/core/platform/platform.h>
 #include <seiscomp3/io/database.h>
-#if defined(WIN32) || defined(MACOSX)
+#if defined(WIN32)
 #include <mysql.h>
 #else
 #include <mysql/mysql.h>

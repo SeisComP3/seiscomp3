@@ -17,7 +17,7 @@
 #include <seiscomp3/core/plugin.h>
 #include <seiscomp3/core/system.h>
 #include <string.h>
-#if defined(WIN32) || defined(MACOSX)
+#if defined(WIN32)
 #include <errmsg.h>
 #else
 #include <mysql/errmsg.h>

@@ -1,11 +1,11 @@
 SET(
-    DATABASE_MYSQL_SOURCES
-	mysqldatabaseinterface.cpp
+	DATABASE_MYSQL_SOURCES
+		mysqldatabaseinterface.cpp
 )
 
 SET(
-    DATABASE_MYSQL_HEADERS
-	mysqldatabaseinterface.h
+	DATABASE_MYSQL_HEADERS
+		mysqldatabaseinterface.h
 )
 
 INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIR})
