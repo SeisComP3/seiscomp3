@@ -2010,59 +2010,84 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	bool emitUpdated = false;
 
-	int streamHeight = h;
-	int streamYOffset = 0;
-	int streamYOffsetAddy = 0;
 	int slot;
-
-	Stream *stream = NULL;
 
 	switch ( _drawMode ) {
 		default:
 		case Single:
 		{
+			Stream *stream = NULL;
+
 			if ( (_currentSlot >= _streams.size() || _currentSlot < 0) || !_streams[_currentSlot]->visible )
 				stream = NULL;
-			else {
+			else
 				stream = _streams[_currentSlot];
 
+			for ( int i = 0; i < _streams.size(); ++i ) {
+				Stream *str = _streams[i];
+				if ( str == NULL ) continue;
+
+				if ( str == stream ) {
+					str->posY = 0;
+					str->height = h;
+				}
+				else {
+					str->posY = 0;
+					str->height = 0;
+				}
+			}
+
+			if ( stream != NULL ) {
 				if ( stream->hasCustomBackgroundColor )
-					painter.fillRect(0,streamYOffset,w,streamHeight, blend(bg, stream->customBackgroundColor));
+					painter.fillRect(0,stream->posY,w,stream->height, blend(bg, stream->customBackgroundColor));
 
 				if ( (stream->records[Stream::Filtered] && (stream->filtering || _showAllRecords) && stream->traces[Stream::Filtered].dirty) ||
 					(stream->records[Stream::Raw] && (!stream->filtering || _showAllRecords) && stream->traces[Stream::Raw].dirty) ) {
 					prepareRecords(stream);
-					drawRecords(stream, _currentSlot, streamHeight);
+					drawRecords(stream, _currentSlot, stream->height);
 					emitUpdated = true;
 				}
 			}
+
 			break;
 		}
 
 		case InRows:
 		{
 			int visibleSlots = 0;
+			int streamHeight = h;
+			int streamYOffset = 0;
+
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it )
 				if ( (*it)->visible ) ++visibleSlots;
 
 			if ( visibleSlots > 0 ) streamHeight /= visibleSlots;
 
-			streamYOffsetAddy = streamHeight;
 			slot = 0;
-			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it, ++slot, streamYOffset += streamYOffsetAddy ) {
-				stream = (*it)->visible?*it:NULL;
-				if ( stream == NULL ) continue;
+			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it, ++slot ) {
+				Stream *stream = *it;
+				if ( !stream->visible ) {
+					stream->posY = 0;
+					stream->height = 0;
+					continue;
+				}
+
+				stream->posY = streamYOffset;
+				stream->height = streamHeight;
 
 				if ( stream->hasCustomBackgroundColor )
-					painter.fillRect(0,streamYOffset,w,streamHeight, blend(bg, stream->customBackgroundColor));
+					painter.fillRect(0,stream->posY,w,stream->height, blend(bg, stream->customBackgroundColor));
 
 				if ( (stream->records[Stream::Filtered] && (stream->filtering || _showAllRecords) && stream->traces[Stream::Filtered].dirty) ||
 					(stream->records[Stream::Raw] && (!stream->filtering || _showAllRecords) && stream->traces[Stream::Raw].dirty) ) {
 					prepareRecords(stream);
-					drawRecords(stream, slot, streamHeight);
+					drawRecords(stream, slot, stream->height);
 					emitUpdated = true;
 				}
+
+				streamYOffset += streamHeight;
 			}
+
 			break;
 		}
 
@@ -2075,8 +2100,16 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 			// Two passes: First pass fetches the amplitude range and so on and scales all records appropriate
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
-				stream = (*it)->visible?*it:NULL;
-				if ( stream == NULL ) continue;
+				Stream *stream = *it;
+				if ( !stream->visible ) {
+					stream->posY = 0;
+					stream->height = 0;
+					continue;
+				}
+
+				stream->posY = 0;
+				stream->height = h;
+
 				if ( stream->hasCustomBackgroundColor &&
 					 !customBackgroundColor.isValid() )
 					customBackgroundColor = stream->customBackgroundColor;
@@ -2103,15 +2136,14 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			}
 
 			if ( customBackgroundColor.isValid() )
-				painter.fillRect(0, streamYOffset, w, streamHeight,
-				                 blend(bg, customBackgroundColor));
+				painter.fillRect(0, 0, w, h, blend(bg, customBackgroundColor));
 
 			if ( !isDirty ) break;
 
 			// Second pass draws all records
 			slot = 0;
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it, ++slot ) {
-				stream = (*it)->visible?*it:NULL;
+				Stream *stream = (*it)->visible?*it:NULL;
 				if ( stream == NULL ) continue;
 
 				stream->traces[0].amplMin = minAmpl[0];
@@ -2120,7 +2152,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				stream->traces[1].amplMin = minAmpl[1];
 				stream->traces[1].amplMax = maxAmpl[1];
 
-				drawRecords(stream, slot, streamHeight);
+				drawRecords(stream, slot, stream->height);
 				emitUpdated = true;
 			}
 			break;
@@ -2134,8 +2166,16 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			QColor customBackgroundColor;
 			// Two passes: First pass fetches the amplitude range and so on and scales all records appropriate
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
-				stream = (*it)->visible?*it:NULL;
-				if ( stream == NULL ) continue;
+				Stream *stream = *it;
+				if ( !stream->visible ) {
+					stream->posY = 0;
+					stream->height = 0;
+					continue;
+				}
+
+				stream->posY = 0;
+				stream->height = h;
+
 				if ( stream->hasCustomBackgroundColor &&
 					 !customBackgroundColor.isValid() )
 					customBackgroundColor = stream->customBackgroundColor;
@@ -2165,8 +2205,8 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			}
 
 			if ( customBackgroundColor.isValid() )
-				painter.fillRect(0,streamYOffset,w,streamHeight,
-								 blend(bg, customBackgroundColor));
+				painter.fillRect(0,0,w,h,
+				                 blend(bg, customBackgroundColor));
 
 			if ( !isDirty ) break;
 
@@ -2174,7 +2214,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			// Second pass draws all records
 			slot = 0;
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it, ++slot ) {
-				stream = (*it)->visible?*it:NULL;
+				Stream *stream = (*it)->visible?*it:NULL;
 				if ( stream == NULL ) continue;
 
 				for ( int i = 0; i < 2; ++i ) {
@@ -2183,7 +2223,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					stream->traces[i].amplMax = stream->traces[i].offset + maxAmpl[j];
 				}
 
-				drawRecords(stream, slot, streamHeight);
+				drawRecords(stream, slot, stream->height);
 				emitUpdated = true;
 			}
 			break;
@@ -2197,14 +2237,16 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	drawCustomBackground(painter);
 
+
 	// Draw gaps
 	switch ( _drawMode ) {
 		default:
 		case Stacked:
-			// In stacked mode only the gaps of the current slot are drawn
-			stream = (_currentSlot >= 0 && _currentSlot < _streams.size() && _streams[_currentSlot]->visible) ?
-				  _streams[_currentSlot] : NULL;
 		case Single:
+		{
+			Stream *stream = (_currentSlot >= 0 && _currentSlot < _streams.size() && _streams[_currentSlot]->visible) ?
+			                 _streams[_currentSlot] : NULL;
+
 			if ( stream ) {
 				int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 				if ( !stream->traces[frontIndex].poly.empty() ) {
@@ -2223,17 +2265,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					QColor overlapColor(blend(bg, SCScheme.colors.records.overlaps));
 					painter.setPen(fg);
 					painter.translate(QPoint(x_tmin[frontIndex], _tracePaintOffset));
-					stream->traces[frontIndex].poly.drawGaps(painter, 0, streamHeight, gapColor, overlapColor);
+					stream->traces[frontIndex].poly.drawGaps(painter, 0, stream->height, gapColor, overlapColor);
 					painter.translate(QPoint(-x_tmin[frontIndex], -_tracePaintOffset));
 				}
 			}
 			break;
+		}
 
 		case SameOffset:
 			break;
 
 		case InRows:
-			streamYOffset = 0;
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
 				Stream *stream = (*it)->visible?*it:NULL;
 				if ( stream == NULL ) continue;
@@ -2254,12 +2296,10 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					QColor gapColor(blend(bg, SCScheme.colors.records.gaps));
 					QColor overlapColor(blend(bg, SCScheme.colors.records.overlaps));
 					painter.setPen(fg);
-					painter.translate(QPoint(x_tmin[frontIndex], _tracePaintOffset + streamYOffset));
-					stream->traces[frontIndex].poly.drawGaps(painter, 0, streamHeight, gapColor, overlapColor);
-					painter.translate(QPoint(-x_tmin[frontIndex], -_tracePaintOffset - streamYOffset));
+					painter.translate(QPoint(x_tmin[frontIndex], _tracePaintOffset + stream->posY));
+					stream->traces[frontIndex].poly.drawGaps(painter, 0, stream->height, gapColor, overlapColor);
+					painter.translate(QPoint(-x_tmin[frontIndex], -_tracePaintOffset - stream->posY));
 				}
-
-				streamYOffset += streamYOffsetAddy;
 			}
 			break;
 	}
@@ -2292,14 +2332,9 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 	switch ( _drawMode ) {
 		default:
 		case Single:
-			for ( int i = 0; i < _streams.size(); ++i ) {
-				Stream *stream = _streams[i];
-				if ( stream == NULL ) continue;
-
-				stream->posY = streamYOffset;
-				stream->height = streamHeight;
-			}
-
+		{
+			Stream *stream = (_currentSlot >= 0 && _currentSlot < _streams.size() && _streams[_currentSlot]->visible) ?
+			                 _streams[_currentSlot] : NULL;
 			if ( stream ) {
 				double offset[2] = {0,0};
 				int x_tmin[2];
@@ -2340,9 +2375,9 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				}
 			}
 			break;
+		}
 
 		case InRows:
-			streamYOffset = 0;
 			for ( int i = 0; i < _streams.size(); ++i ) {
 				Stream *stream = _streams[i]->visible?_streams[i]:NULL;
 				if ( stream == NULL ) continue;
@@ -2358,36 +2393,33 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 				x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
 
-				if ( streamYOffsetAddy > 0 ) {
+				if ( stream->height > 0 ) {
 					// Enable clipping to rows if enabled
 					if ( _clipRows )
-						painter.setClipRect(QRect(0, streamYOffset, w, streamHeight));
+						painter.setClipRect(QRect(0, stream->posY, w, stream->height));
 					else
 						painter.setClipRect(QRect(0, 0, w, h));
 
 					if ( i == _currentSlot && _streams.size() > 1 ) {
 						painter.setBrush(Qt::NoBrush);
 						painter.setPen(QPen(palette().color(_enabled?QPalette::Active:QPalette::Disabled, QPalette::Text), 1, Qt::DashLine));
-						painter.drawRect(QRect(0, streamYOffset, w-1, streamHeight-1));
+						painter.drawRect(QRect(0, stream->posY, w-1, stream->height-1));
 					}
 				}
-
-				stream->posY = streamYOffset;
-				stream->height = streamHeight;
 
 				int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 				if ( !stream->traces[1-frontIndex].poly.empty() && _showAllRecords ) {
 					painter.setPen(gridColor[0]);
-					painter.translate(QPoint(x_tmin[1-frontIndex], _tracePaintOffset + streamYOffset));
+					painter.translate(QPoint(x_tmin[1-frontIndex], _tracePaintOffset + stream->posY));
 					//_trace[1-frontIndex].poly.translate(x_tmin[1-frontIndex], _tracePaintOffset);
 					stream->traces[1-frontIndex].poly.draw(painter);
-					painter.translate(QPoint(-x_tmin[1-frontIndex], -_tracePaintOffset - streamYOffset));
+					painter.translate(QPoint(-x_tmin[1-frontIndex], -_tracePaintOffset - stream->posY));
 				}
 
 				if ( !stream->traces[frontIndex].poly.empty() ) {
 					if ( _drawOffset ) {
 						painter.setPen(blend(bg, gridColor[0], 75));
-						painter.drawLine(0,_tracePaintOffset+stream->traces[frontIndex].poly.baseline() + streamYOffset, w,_tracePaintOffset+stream->traces[frontIndex].poly.baseline() + streamYOffset);
+						painter.drawLine(0,_tracePaintOffset+stream->traces[frontIndex].poly.baseline() + stream->posY, w,_tracePaintOffset+stream->traces[frontIndex].poly.baseline() + stream->posY);
 					}
 
 					if ( stream->antialiasing != isAntialiasing )
@@ -2397,12 +2429,10 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					if ( hMargin < 0 ) hMargin = 0;
 
 					painter.setPen(_enabled?stream->pen:fg);
-					painter.translate(QPoint(x_tmin[frontIndex], _tracePaintOffset + streamYOffset + hMargin));
+					painter.translate(QPoint(x_tmin[frontIndex], _tracePaintOffset + stream->posY + hMargin));
 					stream->traces[frontIndex].poly.draw(painter);
-					painter.translate(QPoint(-x_tmin[frontIndex], -_tracePaintOffset - streamYOffset - hMargin));
+					painter.translate(QPoint(-x_tmin[frontIndex], -_tracePaintOffset - stream->posY - hMargin));
 				}
-
-				streamYOffset += streamYOffsetAddy;
 			}
 			break;
 
@@ -2415,8 +2445,6 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					if ( stream == NULL ) continue;
 
 					int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
-					stream->posY = streamYOffset;
-					stream->height = streamHeight;
 					if ( !stream->traces[frontIndex].poly.empty() ) {
 						painter.setPen(blend(bg, gridColor[0], 75));
 						painter.drawLine(0,_tracePaintOffset+stream->traces[frontIndex].poly.baseline(), w,_tracePaintOffset+stream->traces[frontIndex].poly.baseline());
@@ -2484,8 +2512,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 			break;
 	}
 
-	if ( streamYOffsetAddy > 0 )
-		painter.setClipRect(this->rect());
+	painter.setClipRect(this->rect());
 
 	if ( isAntialiasing )
 		painter.setRenderHint(QPainter::Antialiasing, false);
@@ -2577,6 +2604,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 		if ( m == _hoveredMarker ) {
 			QPen pen = painter.pen();
 			painter.setPen(QPen(palette().color(QPalette::Highlight), 1, Qt::DotLine));
+			painter.setBrush(Qt::NoBrush);
 			painter.drawRect(x-4, startY, 8, endY-startY+1);
 			painter.setPen(pen);
 		}
@@ -2584,6 +2612,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 		if ( m == activeMarker ) {
 			QPen pen = painter.pen();
 			painter.setPen(QPen(palette().color(QPalette::Text), 1, Qt::DashLine));
+			painter.setBrush(Qt::NoBrush);
 			painter.drawRect(x-4, startY, 8, endY-startY+1);
 			painter.setPen(pen);
 		}
@@ -2596,6 +2625,10 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 	switch ( _drawMode ) {
 		default:
 		case Single:
+		{
+			Stream *stream = (_currentSlot >= 0 && _currentSlot < _streams.size() && _streams[_currentSlot]->visible) ?
+			                 _streams[_currentSlot] : NULL;
+
 			if ( stream ) {
 				int frontIndex = stream->filtering?Stream::Filtered:Stream::Raw;
 				if ( !stream->traces[frontIndex].poly.empty() ) {
@@ -2611,12 +2644,12 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 							str.setNum(stream->traces[frontIndex].absMax, 'f', _valuePrecision);
 
 						int rh = 2*painter.fontMetrics().ascent()+4;
-						int y = streamHeight - rh;
+						int y = stream->height - rh;
 						if  ( y < 0 ) y = 0;
 
 						painter.drawText(0,y, w,rh, Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignTop, str);
 
-						if ( streamHeight >= y+rh ) {
+						if ( stream->height >= y+rh ) {
 							if ( _showScaledValues )
 								str.setNum(stream->traces[frontIndex].offset*stream->scale);
 							else
@@ -2649,9 +2682,9 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				}
 			}
 			break;
+		}
 
 		case InRows:
-			streamYOffset = 0;
 			for ( StreamMap::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
 				Stream *stream = (*it)->visible?*it:NULL;
 				if ( stream == NULL ) continue;
@@ -2670,12 +2703,12 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 							str.setNum(stream->traces[frontIndex].absMax, 'f', _valuePrecision);
 
 						int rh = 2*painter.fontMetrics().ascent()+4;
-						int y = streamYOffset + streamHeight - rh;
-						if ( y < streamYOffset ) y = streamYOffset;
+						int y = stream->posY + stream->height - rh;
+						if ( y < stream->posY ) y = stream->posY;
 
 						painter.drawText(0,y, w,rh, Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignTop, str);
 
-						if ( streamYOffset+streamHeight >= y+rh ) {
+						if ( stream->posY+stream->height >= y+rh ) {
 							if ( _showScaledValues )
 								str.setNum(stream->traces[frontIndex].offset*stream->scale);
 							else
@@ -2692,13 +2725,11 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					QRect br = painter.fontMetrics().boundingRect(stream->id);
 					br.adjust(0,0,4,4);
 					//br.moveCenter(QPoint(br.center().x(), streamHeight/2+streamYOffset));
-					br.moveTopLeft(QPoint(0,streamYOffset));
+					br.moveTopLeft(QPoint(0,stream->posY));
 					painter.fillRect(br, bg);
 					painter.drawRect(br);
 					painter.drawText(br, Qt::AlignCenter, stream->id);
 				}
-
-				streamYOffset += streamHeight;
 			}
 			break;
 
@@ -2742,12 +2773,12 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 						str.setNum(absMax, 'f', _valuePrecision);
 
 					int rh = 2*painter.fontMetrics().ascent()+4;
-					int y = streamHeight - rh;
+					int y = stream->height - rh;
 					if ( y < 0 ) y = 0;
 
 					painter.drawText(0,y, w,rh, Qt::TextSingleLine | Qt::AlignLeft | Qt::AlignTop, str);
 
-					if ( streamHeight >= y+rh ) {
+					if ( stream->height >= y+rh ) {
 						if ( _showScaledValues )
 							str.setNum(offset*stream->scale);
 						else
