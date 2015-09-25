@@ -375,6 +375,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 		void sortAlphabetically();
 		void sortByDistance();
+		void sortByAzimuth();
 		void sortByResidual();
 		void sortByPhase(const QString&);
 

@@ -725,6 +725,7 @@
     <number>4</number>
    </attribute>
    <addaction name="actionSortByDistance" />
+   <addaction name="actionSortByAzimuth" />
    <addaction name="actionSortAlphabetically" />
    <addaction name="actionSortByResidual" />
   </widget>
@@ -1748,6 +1749,17 @@
    </property>
    <property name="shortcut" >
     <string>d</string>
+   </property>
+  </action>
+  <action name="actionSortByAzimuth" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/sort_az.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Sort by azimuth</string>
    </property>
   </action>
  </widget>
