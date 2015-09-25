@@ -232,8 +232,13 @@ bool Instaseis::setSource(string source) {
 
 		rapidjson::Value::ConstMemberIterator jitr;
 
-		if ( (jitr = doc.FindMember("velocity_model")) != doc.MemberEnd() && jitr->value.IsString() )
+		if ( (jitr = doc.FindMember("velocity_model")) != doc.MemberEnd() && jitr->value.IsString() ) {
 			_model = jitr->value.GetString();
+			if ( _model == "external" ) {
+				if ( (jitr = doc.FindMember("external_model_name")) != doc.MemberEnd() && jitr->value.IsString() )
+					_model = string("ext-") + jitr->value.GetString();
+			}
+		}
 
 		if ( (jitr = doc.FindMember("min_d")) != doc.MemberEnd() && jitr->value.IsNumber() )
 			_minDist = jitr->value.GetDouble();
