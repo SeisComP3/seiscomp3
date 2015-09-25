@@ -357,7 +357,7 @@ class FDSNStation(resource.Resource):
 			msg = "no matching inventory found"
 			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
-				req.write(data)
+				utils.writeTS(req, data)
 			return True
 
 		# Copy references (dataloggers, responses, sensors)
@@ -378,7 +378,7 @@ class FDSNStation(resource.Resource):
 		if not exp.write(sink, newInv):
 			return False
 
-		Logging.notice("%s: returned %iNet, %iSta, %iLoc, %iCha, " \
+		Logging.debug("%s: returned %iNet, %iSta, %iLoc, %iCha, " \
 		               "%iDL, %iDec, %iSen, %iRes (total objects/bytes: " \
 		               "%i/%i) " % (ro.service, newInv.networkCount(), staCount,
 		               locCount, chaCount, newInv.dataloggerCount(), decCount,
@@ -391,20 +391,17 @@ class FDSNStation(resource.Resource):
 	def _processRequestText(self, req, ro):
 		if req._disconnected: return False
 
-		lineCount, byteCount = 0, 0
 		skipRestricted = not self._allowRestricted or \
 		                 (ro.restricted is not None and not ro.restricted)
 
-		headerNet = "#Network|Description|StartTime|EndTime|TotalStations\n"
-		headerSta = "#Network|Station|Latitude|Longitude|Elevation|" \
-		            "SiteName|StartTime|EndTime\n"
-		headerCha = "#Network|Station|Location|Channel|Latitude|Longitude|" \
-		            "Elevation|Depth|Azimuth|Dip|SensorDescription|Scale|" \
-		            "ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime\n"
 		df = "%FT%T"
+		data = ""
+		lines = []
 
 		# level = network
 		if not ro.includeSta:
+			data = "#Network|Description|StartTime|EndTime|TotalStations\n"
+
 			# iterate over inventory networks
 			for net in ro.networkIter(self._inv, True):
 				if req._disconnected: return False
@@ -418,21 +415,21 @@ class FDSNStation(resource.Resource):
 						break
 				if not stationFound: continue
 
-				if lineCount == 0:
-					req.write(headerNet)
-					byteCount = len(headerNet)
 				try: end = net.end().toString(df)
 				except ValueException: end = ''
 
-				line = "%s|%s|%s|%s|%i\n" % (net.code(),
-				       net.description(), net.start().toString(df), end,
-				       net.stationCount())
-				req.write(line)
-				lineCount += 1
-				byteCount += len(line)
+				lines.append(("%s %s" % (
+				                  net.code(), net.start().iso()),
+				              "%s|%s|%s|%s|%i\n" % (
+				                  net.code(), net.description(),
+				                  net.start().toString(df), end,
+				                  net.stationCount())))
 
 		# level = station
 		elif not ro.includeCha:
+			data = "#Network|Station|Latitude|Longitude|Elevation|" \
+			       "SiteName|StartTime|EndTime\n"
+
 			# iterate over inventory networks
 			for net in ro.networkIter(self._inv, False):
 				if req._disconnected: return False
@@ -441,9 +438,6 @@ class FDSNStation(resource.Resource):
 				for sta in ro.stationIter(net, True):
 					if not self._matchStation(sta, ro): continue
 
-					if lineCount == 0:
-						req.write(headerSta)
-						byteCount = len(headerSta)
 					try: lat = str(sta.latitude())
 					except ValueException: lat = ''
 					try: lon = str(sta.longitude())
@@ -455,16 +449,18 @@ class FDSNStation(resource.Resource):
 					try: end = sta.end().toString(df)
 					except ValueException: end = ''
 
-					line = "%s|%s|%s|%s|%s|%s|%s|%s\n" % (
-					       net.code(), sta.code(), lat, lon, elev, desc,
-					       sta.start().toString(df), end)
-					req.write(line)
-					lineCount += 1
-					byteCount += len(line)
+					lines.append(("%s.%s %s" % (net.code(), sta.code(),
+					                  sta.start().iso()),
+					              "%s|%s|%s|%s|%s|%s|%s|%s\n" % (
+					                  net.code(), sta.code(), lat, lon, elev,
+					                  desc, sta.start().toString(df), end)))
 
 		# level = channel|response
 		else:
-			lineFmt = "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n"
+			data = "#Network|Station|Location|Channel|Latitude|Longitude|" \
+			       "Elevation|Depth|Azimuth|Dip|SensorDescription|Scale|" \
+			       "ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime\n"
+
 			# iterate over inventory networks
 			for net in ro.networkIter(self._inv, False):
 				if req._disconnected: return False
@@ -475,9 +471,6 @@ class FDSNStation(resource.Resource):
 						for stream in ro.streamIter(loc, True):
 							if skipRestricted and utils.isRestricted(stream): continue
 
-							if lineCount == 0:
-								req.write(headerCha)
-								byteCount = len(headerSta)
 							try: lat = str(loc.latitude())
 							except ValueException: lat = ''
 							try: lon = str(loc.longitude())
@@ -512,27 +505,36 @@ class FDSNStation(resource.Resource):
 							try: end = stream.end().toString(df)
 							except ValueException: end = ''
 
-							line = lineFmt % (net.code(), sta.code(),
-							       loc.code(), stream.code(), lat, lon,
-							       elev, depth, azi, dip, desc, scale,
-							       scaleFreq, scaleUnit, sr,
-							       stream.start().toString(df), end)
-							req.write(line)
-							lineCount += 1
-							byteCount += len(line)
+							lines.append(("%s.%s.%s.%s %s" % (
+							                  net.code(), sta.code(),
+							                  loc.code(), stream.code(),
+							                  stream.start().iso()),
+							              "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|" \
+							              "%s|%s|%s|%s|%s|%s\n" % (
+							                  net.code(), sta.code(),
+							                  loc.code(), stream.code(), lat,
+							                  lon, elev, depth, azi, dip, desc,
+							                  scale, scaleFreq, scaleUnit, sr,
+							                  stream.start().toString(df),
+							                  end)))
+
+		# sort lines and append to final data string
+		lines.sort(key = lambda line: line[0])
+		for line in lines:
+			data += line[1]
 
 		# Return 204 if no matching inventory was found
-		if lineCount == 0:
+		if len(lines) == 0:
 			msg = "no matching inventory found"
 			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
-				req.write(data)
+				utils.writeTS(req, data)
 			return False
 
-
-		Logging.notice("%s: returned %i lines (total bytes: %i)" % (
-		               ro.service, lineCount, byteCount))
-		utils.accessLog(req, ro, http.OK, byteCount, None)
+		utils.writeTS(req, data)
+		Logging.debug("%s: returned %i lines (total bytes: %i)" % (
+		              ro.service, len(lines), len(data)))
+		utils.accessLog(req, ro, http.OK, len(data), None)
 		return True
 
 

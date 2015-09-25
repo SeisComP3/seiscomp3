@@ -206,7 +206,7 @@ ImExImpl::ImExImpl(ImEx* imex, const std::string& sinkName)
    _isRunning(false),
    _maxQueueSize(50),
    _messageQueue(_maxQueueSize),
-   _messageEncoding(Communication::Protocol::BINARY_SERIALIZATION),
+   _messageEncoding(Communication::Protocol::CONTENT_BINARY),
    isOriginEligibleImpl(&ImExImpl::isOriginEligibleImport),
    filterMagnitudeImpl(&ImExImpl::filterMagnitudeImport),
    sendMessageImpl(&ImExImpl::sendMessageImport) {
@@ -250,7 +250,7 @@ bool ImExImpl::init()
 
 	try {
 		_conversion = _imex->configGetString("hosts." + _sinkName + ".conversion");
-		_messageEncoding = Communication::Protocol::XML_CONTENT;
+		_messageEncoding = Communication::Protocol::CONTENT_XML;
 	}
 	catch ( Config::Exception& ) {
 	}

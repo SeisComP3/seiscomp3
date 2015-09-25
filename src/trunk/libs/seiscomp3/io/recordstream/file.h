@@ -17,18 +17,20 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <map>
+
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/core.h>
+
 
 namespace Seiscomp {
 namespace RecordStream {
 
+
 DEFINE_SMARTPOINTER(File);
 
-class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
-	DECLARE_SC_CLASS(File);
 
+class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 	public:
 		enum SeekDir {
 			Begin = std::ios_base::beg,
@@ -37,7 +39,7 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 		};
 
 	// ----------------------------------------------------------------------
-	//  Xstruction
+	//  X'truction
 	// ----------------------------------------------------------------------
 	public:
 		File();
@@ -54,7 +56,7 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 
 
 	// ----------------------------------------------------------------------
-	//  Public Interface
+	//  Public RecordStream interface
 	// ----------------------------------------------------------------------
 	public:
 		bool setSource(std::string);
@@ -74,7 +76,12 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 		std::string name() const;
 		std::istream& stream();
 
+		bool filterRecord(Record*);
 
+
+	// ----------------------------------------------------------------------
+	//  Public file specific interface
+	// ----------------------------------------------------------------------
 	public:
 		size_t tell();
 
@@ -86,11 +93,25 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 	//  Implementation
 	// ----------------------------------------------------------------------
 	private:
-		std::string _name;
-		std::fstream _fstream;
-		std::istream* _current;
+		struct TimeWindowFilter {
+			TimeWindowFilter() {}
+			TimeWindowFilter(const Core::Time &stime, const Core::Time &etime)
+			: start(stime), end(etime) {}
+
+			Core::Time  start;
+			Core::Time  end;
+		};
+
+		typedef std::map<std::string, TimeWindowFilter> FilterMap;
+
+		std::string     _name;
+		std::fstream    _fstream;
+		std::istream   *_current;
+		FilterMap       _filter;
+		Core::Time      _startTime;
+		Core::Time      _endTime;
 };
- 
+
 }
 }
 

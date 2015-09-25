@@ -26,6 +26,8 @@ SET(
 		inspector.cpp
 		tensorrenderer.cpp
 		uncertainties.cpp
+		spectrogramrenderer.cpp
+		spectrogramwidget.cpp
 )
 
 IF(MACOSX)
@@ -48,6 +50,7 @@ SET(
 		questionbox.h
 		utils.h
 		tensorrenderer.h
+		spectrogramrenderer.h
 )
 
 SET(
@@ -69,6 +72,7 @@ SET(
 		xmlview.h
 		inspector.h
 		uncertainties.h
+		spectrogramwidget.h
 )
 
 SET(

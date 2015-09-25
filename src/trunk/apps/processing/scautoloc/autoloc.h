@@ -186,6 +186,10 @@ class Autoloc3 {
 			// origins are sent immediately without delay.
 			bool playback;
 
+			// If true then manual picks are being used as automatics
+			// picks are
+			bool useManualPicks;
+
 			// The pick log file
 			std::string pickLogFile;
 			int         pickLogDate;

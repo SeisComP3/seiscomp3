@@ -19,6 +19,7 @@ SC_INSTALL_INIT(scevtlog ../templates/initd.py)
 SC_ADD_PYTHON_PROG(scevtstreams)
 SC_ADD_PYTHON_PROG(scsendorigin)
 SC_ADD_PYTHON_PROG(scsendjournal)
+SC_ADD_PYTHON_PROG(bindings2cfg)
 SC_ADD_PYTHON_PROG(key2inv)
 SC_ADD_PYTHON_PROG(import_inv)
 SC_ADD_PYTHON_PROG(sc32inv)
@@ -34,6 +35,12 @@ INSTALL(FILES
 	scbulletin-lib.py
 	DESTINATION ${PYTHON_PACKAGE_PATH}
 	RENAME scbulletin.py)
+
+INSTALL(FILES
+	# Python file to be installed
+	bindings2cfg-lib.py
+	DESTINATION ${PYTHON_PACKAGE_PATH}
+	RENAME bindings2cfg.py)
 
 # Copy data files for scvoice and scalert
 INSTALL(DIRECTORY data/scvoice DESTINATION ${SC3_PACKAGE_SHARE_DIR} USE_SOURCE_PERMISSIONS

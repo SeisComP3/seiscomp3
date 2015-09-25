@@ -185,6 +185,16 @@ class SC_SYSTEM_CORE_API Object : public Core::BaseObject {
 		//! Creates a notifier that updates this object
 		void update();
 
+		//! Sets the last modification timestamp. This attribute is not part
+		//! of a data model and will not be written to e.g. the database. Each
+		//! archive may handle or may not handle that value.
+		void setLastModifiedInArchive(const Core::Time &t);
+
+		//! Returns the last modification timestamp as read from the database
+		//! column _last_modified. May be invalid if either the database does
+		//! not support that column or the object has been created in memory.
+		const Core::Time &lastModifiedInArchive() const;
+
 		//! Assign the metadata of 'other' to 'this'
 		//! Returns true, if this and other are of same
 		//! type, false else.
@@ -214,15 +224,19 @@ class SC_SYSTEM_CORE_API Object : public Core::BaseObject {
 	//  Protected interface
 	// ------------------------------------------------------------------
 	protected:
-
 		//! This methods has the be called in derived classes to
 		//! notify registered observers
 		void childAdded(Object*);
 		void childRemoved(Object*);
 		void modified();
 
+
+	// ------------------------------------------------------------------
+	//  Private members
+	// ------------------------------------------------------------------
 	private:
-		PublicObject* _parent;
+		PublicObject *_parent;
+		Core::Time    _lastModifiedInArchive;
 	
 		typedef std::vector<Observer*> ObserverList;
 		static ObserverList _observers;

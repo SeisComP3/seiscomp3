@@ -787,8 +787,8 @@ class BulletinApp(seiscomp3.Client.Application):
 
 def main():
     app = BulletinApp(len(sys.argv), sys.argv)
-    app()
+    return app()
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

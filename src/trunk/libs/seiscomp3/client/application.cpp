@@ -1257,6 +1257,20 @@ std::string Application::configGetString(const std::string& query) const throw(C
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+std::string Application::configGetPath(const std::string& query) const throw(Config::Exception) {
+	try {
+		return Environment::Instance()->absolutePath(argumentStr(query));
+	}
+	catch ( ... ) {}
+
+	return Environment::Instance()->absolutePath(_configuration.getString(query));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::vector<int> Application::configGetInts(const std::string& query) const throw(Config::Exception) {
 	return _configuration.getInts(query);
 }

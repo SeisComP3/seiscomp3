@@ -373,6 +373,8 @@ Scheme::Marker::Marker() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Records::Records() {
 	lineWidth = 1;
+	antiAliasing = false;
+	optimize = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -558,6 +560,8 @@ void Scheme::fetch() {
 
 	READ_INT(marker.lineWidth);
 	READ_INT(records.lineWidth);
+	READ_BOOL(records.antiAliasing);
+	READ_BOOL(records.optimize);
 
 	READ_FONT(fonts.base);
 	fonts.setBase(fonts.base);

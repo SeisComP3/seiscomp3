@@ -22,6 +22,7 @@
 #include <seiscomp3/gui/core/recordstreamthread.h>
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/gui/core/uncertainties.h>
+#include <seiscomp3/gui/core/spectrogramrenderer.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -108,6 +109,21 @@ class ZoomRecordWidget : public RecordWidget {
 			maxLower = maxUpper = 0;
 			currentIndex = -1;
 			crossHair = false;
+			showSpectrogram = false;
+			traces = NULL;
+
+			Gradient gradient;
+			gradient.setColorAt(0.0, QColor(255,   0, 255,   0));
+			gradient.setColorAt(0.2, QColor(  0,   0, 255, 255));
+			gradient.setColorAt(0.4, QColor(  0, 255, 255, 255));
+			gradient.setColorAt(0.6, QColor(  0, 255,   0, 255));
+			gradient.setColorAt(0.8, QColor(255, 255,   0, 255));
+			gradient.setColorAt(1.0, QColor(255,   0,   0, 255));
+
+			for ( int i = 0; i < 3; ++i ) {
+				spectrogram[i].setOptions(spectrogram[i].options());
+				spectrogram[i].setGradient(gradient);
+			}
 		}
 
 		void setUncertainties(const PickerView::Config::UncertaintyList &list) {
@@ -141,7 +157,131 @@ class ZoomRecordWidget : public RecordWidget {
 			update();
 		}
 
+		void setShowSpectrogram(bool enable) {
+			if ( showSpectrogram == enable ) return;
+
+			showSpectrogram = enable;
+
+			resetSpectrogram();
+			update();
+		}
+
+		void setLogSpectrogram(bool enable) {
+			for ( int i = 0; i < 3; ++i )
+				spectrogram[i].setLogScale(enable);
+			update();
+		}
+
+		void setMinSpectrogramRange(double v) {
+			for ( int i = 0; i < 3; ++i )
+				spectrogram[i].setGradientRange(v, spectrogram[i].gradientUpperBound());
+			update();
+		}
+
+		void setMaxSpectrogramRange(double v) {
+			for ( int i = 0; i < 3; ++i )
+				spectrogram[i].setGradientRange(spectrogram[i].gradientLowerBound(), v);
+			update();
+		}
+
+		void setSpectrogramTimeWindow(double tw) {
+			for ( int i = 0; i < 3; ++i ) {
+				IO::Spectralizer::Options opts = spectrogram[i].options();
+				opts.windowLength = tw;
+				spectrogram[i].setOptions(opts);
+			}
+
+			if ( showSpectrogram ) {
+				resetSpectrogram();
+				update();
+			}
+		}
+
+		void setTraces(ThreeComponentTrace::Component *t) {
+			traces = t;
+			resetSpectrogram();
+		}
+
+		void feedRaw(int slot, const Seiscomp::Record *rec) {
+			if ( showSpectrogram && (slot >= 0) && (slot < 3))
+				spectrogram[slot].feed(rec);
+		}
+
+	private:
+		void resetSpectrogram() {
+			if ( showSpectrogram ) {
+				qApp->setOverrideCursor(Qt::WaitCursor);
+				for ( int i = 0; i < 3; ++i ) {
+					const double *scale = recordScale(i);
+					// Scale is is nm and needs to be converted to m
+					if ( scale != NULL ) spectrogram[i].setScale(*scale * 1E-9);
+					spectrogram[i].setRecords(traces != NULL ? traces[i].raw : NULL);
+					spectrogram[i].renderSpectrogram();
+				}
+				qApp->restoreOverrideCursor();
+			}
+		}
+
+		void drawSpectrogram(QPainter &painter, int slot) {
+			QRect r = rect();
+			r.setHeight(streamHeight(slot));
+			r.moveTop(streamYPos(slot));
+			spectrogram[slot].setAlignment(alignment());
+			spectrogram[slot].setTimeRange(tmin(), tmax());
+			spectrogram[slot].render(painter, r, false, false);
+		}
+
+		void drawSpectrogramAxis(QPainter &painter, int slot) {
+			QRect r = rect();
+			r.setHeight(streamHeight(slot));
+			r.moveTop(streamYPos(slot));
+			spectrogram[slot].setAlignment(alignment());
+			spectrogram[slot].setTimeRange(tmin(), tmax());
+			spectrogram[slot].renderAxis(painter, r, false);
+		}
+
 	protected:
+		virtual void paintEvent(QPaintEvent *p) {
+			RecordWidget::paintEvent(p);
+
+			if ( showSpectrogram ) {
+				QPainter painter(this);
+				painter.setBrush(palette().color(QPalette::Window));
+
+				switch ( drawMode() ) {
+					case InRows:
+						for ( int i = 0; i < 3; ++i )
+							drawSpectrogramAxis(painter, i);
+						break;
+					case Single:
+						if ( (currentRecords() >= 0) && (currentRecords() < 3) )
+							drawSpectrogramAxis(painter, currentRecords());
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		virtual void drawCustomBackground(QPainter &painter) {
+			if ( showSpectrogram ) {
+				painter.setBrush(palette().color(QPalette::Window));
+
+				switch ( drawMode() ) {
+					case InRows:
+						for ( int i = 0; i < 3; ++i )
+							drawSpectrogram(painter, i);
+						break;
+					case Single:
+						if ( (currentRecords() >= 0) && (currentRecords() < 3) )
+							drawSpectrogram(painter, currentRecords());
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
 		virtual void drawActiveCursor(QPainter &painter, int x, int y) {
 			RecordWidget::drawActiveCursor(painter, x, y);
 
@@ -193,9 +333,12 @@ class ZoomRecordWidget : public RecordWidget {
 		PickerView::Config::UncertaintyList uncertainties;
 
 	private:
-		bool crossHair;
-		double maxLower, maxUpper;
-		int currentIndex;
+		bool                            crossHair;
+		double                          maxLower, maxUpper;
+		int                             currentIndex;
+		SpectrogramRenderer             spectrogram[3];
+		bool                            showSpectrogram;
+		ThreeComponentTrace::Component *traces;
 };
 
 
@@ -1341,22 +1484,13 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 				comps[i] = rec;
 			}
 
-			// Create record sequences
+			// Trim record sizes
 			for ( int i = 0; i < 3; ++i ) {
 				FloatArray *data = static_cast<FloatArray*>(comps[i]->data());
 				if ( data->size() > minLen ) {
 					data->resize(minLen);
 					comps[i]->dataUpdated();
 				}
-
-				// Create ring buffer without limit if needed
-				if ( traces[i].transformed == NULL ) {
-					traces[i].transformed = new RingBuffer(0);
-					if ( widget ) widget->setRecords(i, traces[i].transformed, false);
-				}
-
-				traces[i].transformed->feed(comps[i].get());
-				if ( widget ) widget->fed(i, comps[i].get());
 			}
 
 			gotRecords = true;
@@ -1391,6 +1525,18 @@ bool ThreeComponentTrace::transform(int comp, Seiscomp::Record *rec) {
 			// And filter
 			for ( int i = 0; i < 3; ++i )
 				traces[i].filter.apply(comps[i].get());
+
+			// Create record sequences
+			for ( int i = 0; i < 3; ++i ) {
+				// Create ring buffer without limit if needed
+				if ( traces[i].transformed == NULL ) {
+					traces[i].transformed = new RingBuffer(0);
+					if ( widget ) widget->setRecords(i, traces[i].transformed, false);
+				}
+
+				traces[i].transformed->feed(comps[i].get());
+				if ( widget ) widget->fed(i, comps[i].get());
+			}
 
 			minStartTime = minEndTime;
 		}
@@ -1917,12 +2063,13 @@ void PickerView::init() {
 
 	addAction(_ui.actionSortAlphabetically);
 	addAction(_ui.actionSortByDistance);
+	addAction(_ui.actionSortByAzimuth);
 	addAction(_ui.actionSortByResidual);
 
 	addAction(_ui.actionShowZComponent);
 	addAction(_ui.actionShowNComponent);
 	addAction(_ui.actionShowEComponent);
-	
+
 	addAction(_ui.actionAlignOnOriginTime);
 	addAction(_ui.actionAlignOnPArrival);
 	addAction(_ui.actionAlignOnSArrival);
@@ -1958,6 +2105,8 @@ void PickerView::init() {
 	addAction(_ui.actionSwitchFullscreen);
 	addAction(_ui.actionAddStations);
 	addAction(_ui.actionSearchStation);
+
+	addAction(_ui.actionShowSpectrogram);
 
 	_lastFilterIndex = 0;
 
@@ -2001,6 +2150,8 @@ void PickerView::init() {
 	        this, SLOT(showTheoreticalArrivals(bool)));
 	connect(_ui.actionShowUnassociatedPicks, SIGNAL(triggered(bool)),
 	        this, SLOT(showUnassociatedPicks(bool)));
+	connect(_ui.actionShowSpectrogram, SIGNAL(triggered(bool)),
+	        this, SLOT(showSpectrogram(bool)));
 
 	_spinDistance = new QDoubleSpinBox;
 	_spinDistance->setValue(15);
@@ -2023,6 +2174,46 @@ void PickerView::init() {
 	        this, SLOT(loadNextStations()));
 	*/
 
+	QCheckBox *cb = new QCheckBox;
+	cb->setObjectName("spec.log");
+	cb->setText(tr("Logscale"));
+	cb->setChecked(false);
+	connect(cb, SIGNAL(toggled(bool)), this, SLOT(specLogToggled(bool)));
+	specLogToggled(cb->isChecked());
+
+	_ui.toolBarSpectrogram->addWidget(cb);
+
+	QDoubleSpinBox *spinLower = new QDoubleSpinBox;
+	spinLower->setMinimum(-100);
+	spinLower->setMaximum(100);
+	spinLower->setValue(-15);
+	connect(spinLower, SIGNAL(valueChanged(double)), this, SLOT(specMinValue(double)));
+	specMinValue(spinLower->value());
+
+	_ui.toolBarSpectrogram->addSeparator();
+	_ui.toolBarSpectrogram->addWidget(spinLower);
+
+	QDoubleSpinBox *spinUpper = new QDoubleSpinBox;
+	spinUpper->setMinimum(-100);
+	spinUpper->setMaximum(100);
+	spinUpper->setValue(-5);
+	connect(spinUpper, SIGNAL(valueChanged(double)), this, SLOT(specMaxValue(double)));
+	specMaxValue(spinUpper->value());
+
+	_ui.toolBarSpectrogram->addSeparator();
+	_ui.toolBarSpectrogram->addWidget(spinUpper);
+
+	QDoubleSpinBox *spinTW = new QDoubleSpinBox;
+	spinTW->setMinimum(0.1);
+	spinTW->setMaximum(600);
+	spinTW->setValue(5);
+	spinTW->setSuffix("s");
+	connect(spinTW, SIGNAL(valueChanged(double)), this, SLOT(specTimeWindow(double)));
+	specTimeWindow(spinTW->value());
+
+	_ui.toolBarSpectrogram->addSeparator();
+	_ui.toolBarSpectrogram->addWidget(spinTW);
+
 	// connect actions
 	connect(_ui.actionDefaultView, SIGNAL(triggered(bool)),
 	        this, SLOT(setDefaultDisplay()));
@@ -2030,6 +2221,8 @@ void PickerView::init() {
 	        this, SLOT(sortAlphabetically()));
 	connect(_ui.actionSortByDistance, SIGNAL(triggered(bool)),
 	        this, SLOT(sortByDistance()));
+	connect(_ui.actionSortByAzimuth, SIGNAL(triggered(bool)),
+	        this, SLOT(sortByAzimuth()));
 	connect(_ui.actionSortByResidual, SIGNAL(triggered(bool)),
 	        this, SLOT(sortByResidual()));
 
@@ -2039,7 +2232,7 @@ void PickerView::init() {
 	        this, SLOT(showNComponent()));
 	connect(_ui.actionShowEComponent, SIGNAL(triggered(bool)),
 	        this, SLOT(showEComponent()));
-	
+
 	connect(_ui.actionAlignOnOriginTime, SIGNAL(triggered(bool)),
 	        this, SLOT(alignOnOriginTime()));
 	connect(_ui.actionAlignOnPArrival, SIGNAL(triggered(bool)),
@@ -2907,11 +3100,11 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 				marker->setSlot(_currentSlot);
 				marker->setRotation(_currentRotationMode);
 				marker->setFilter(_currentFilterID);
-	
+
 				for ( int i = 0; i < widget->markerCount(); ++i ) {
 					PickerMarker *marker2 = (PickerMarker*)widget->marker(i);
 					if ( marker == marker2 ) continue;
-	
+
 					if ( marker2->text() == marker->text() && marker2->isArrival() ) {
 						// Set type back to pick. The phase code is updated
 						// automatically
@@ -3196,10 +3389,10 @@ void PickerView::loadNextStations() {
 				show = true;
 			else
 				show = item->value(ITEM_DISTANCE_INDEX) <= distance;
-	
+
 			if ( _ui.actionShowUsedStations->isChecked() )
 				show = show && isTraceUsed(item->widget());
-	
+
 			item->setVisible(show);
 		}
 	}
@@ -3228,6 +3421,8 @@ void PickerView::loadNextStations() {
 void PickerView::sortByState() {
 	if ( _ui.actionSortByDistance->isChecked() )
 		sortByDistance();
+	else if ( _ui.actionSortByAzimuth->isChecked() )
+		sortByAzimuth();
 	else if ( _ui.actionSortAlphabetically->isChecked() )
 		sortAlphabetically();
 	else if ( _ui.actionSortByResidual->isChecked() )
@@ -3370,15 +3565,15 @@ void PickerView::fetchComponent(char componentCode) {
 						     m->text().left(3) != "PcP" ) {
 							Core::Time start = m->time() - Core::TimeSpan(_config.preOffset);
 							Core::Time end = m->time() + Core::TimeSpan(_config.postOffset);
-		
+
 							if ( !tw.startTime().valid() || tw.startTime() > start )
 								tw.setStartTime(start);
-		
+
 							if ( !tw.endTime().valid() || tw.endTime() < end )
 								tw.setEndTime(end);
 						}
 					}
-	
+
 					it->timeWindow = tw;
 				}
 			}
@@ -3456,26 +3651,26 @@ void PickerView::loadNextStations(float distance) {
 			Network* n = inv->network(i);
 			for ( size_t j = 0; j < n->stationCount(); ++j ) {
 				Station* s = n->station(j);
-	
+
 				QString code = (n->code() + "." + s->code()).c_str();
-	
+
 				if ( _stations.contains(code) ) continue;
-	
+
 				try {
 					if ( s->end() <= _origin->time() )
 						continue;
 				}
 				catch ( Core::ValueException& ) {}
-	
+
 				double lat = s->latitude();
 				double lon = s->longitude();
 				double delta, az1, az2;
-	
+
 				Geo::delazi(_origin->latitude(), _origin->longitude(),
 				            lat, lon, &delta, &az1, &az2);
 
 				if ( delta > distance ) continue;
-	
+
 				// try to get the configured location and stream code
 				Stream *stream = findConfiguredStream(s, _origin->time());
 				if ( stream != NULL ) {
@@ -3505,7 +3700,7 @@ void PickerView::loadNextStations(float distance) {
 						               stream->code().c_str());
 					}
 				}
-	
+
 				if ( stream ) {
 					WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
 
@@ -3640,13 +3835,13 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 	if ( origin->arrivalCount() > 0 ) {
 		for ( size_t i = 0; i < origin->arrivalCount(); ++i ) {
 			Arrival* arrival = origin->arrival(i);
-	
+
 			PickPtr pick = Pick::Cast(PublicObject::Find(arrival->pickID()));
 			if ( !pick ) {
 				//std::cout << "pick not found" << std::endl;
 				continue;
 			}
-	
+
 			WaveformStreamID streamID = adjustWaveformStreamID(pick->waveformID());
 			SensorLocation *loc = NULL;
 
@@ -3678,7 +3873,7 @@ bool PickerView::setOrigin(Seiscomp::DataModel::Origin* origin,
 				if ( isLinkedItem(item) )
 					unlinkItem(item);
 			}
-	
+
 			addArrival(item->widget(), arrival, i);
 		}
 	}
@@ -4251,7 +4446,7 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 			streamID.networkCode(),
 			streamID.stationCode(),
 			_origin->time());
-	
+
 		if ( sta ) {
 			// Find the stream with given code priorities
 			Stream *stream = NULL;
@@ -4269,7 +4464,7 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 
 				smStreamID.setChannelCode(stream->code());
 				smStreamID = adjustWaveformStreamID(smStreamID);
-	
+
 				hasStrongMotion = true;
 			}
 		}
@@ -5440,6 +5635,7 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 		_currentRecord->clearRecords();
 		_currentRecord->setEnabled(false);
 		_currentRecord->setMarkerSourceWidget(NULL);
+		static_cast<ZoomRecordWidget*>(_currentRecord)->setTraces(NULL);
 		return;
 	}
 
@@ -5565,6 +5761,9 @@ void PickerView::itemSelected(RecordViewItem* item, RecordViewItem* lastItem) {
 	else
 		_ui.labelCode->setText("NO DATA");
 	*/
+
+	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setTraces(label->data.traces);
 
 	currentMarkerChanged(_currentRecord->currentMarker());
 
@@ -5889,6 +6088,7 @@ void PickerView::sortAlphabetically() {
 
 	_ui.actionSortAlphabetically->setChecked(true);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5902,6 +6102,21 @@ void PickerView::sortByDistance() {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(true);
+	_ui.actionSortByAzimuth->setChecked(false);
+	_ui.actionSortByResidual->setChecked(false);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::sortByAzimuth() {
+	_recordView->sortByValue(ITEM_AZIMUTH_INDEX, ITEM_PRIORITY_INDEX);
+
+	_ui.actionSortAlphabetically->setChecked(false);
+	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(true);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5915,6 +6130,7 @@ void PickerView::sortByResidual() {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5928,6 +6144,7 @@ void PickerView::sortByPhase(const QString& phase) {
 
 	_ui.actionSortAlphabetically->setChecked(false);
 	_ui.actionSortByDistance->setChecked(false);
+	_ui.actionSortByAzimuth->setChecked(false);
 	_ui.actionSortByResidual->setChecked(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -6127,7 +6344,7 @@ void PickerView::zoom(float factor) {
 
 	_currentRecord->setTimeScale(newScale);
 	_timeScale->setScale(newScale);
-	
+
 	if ( _checkVisibility ) ensureVisibility(tmin, tmax);
 	setTimeRange(tmin, tmax);
 }
@@ -6170,7 +6387,7 @@ void PickerView::scrollLeft() {
 		setCursorPos(cp);
 		return;
 	}
-	
+
 	float offset = -(float)width()/(8*_currentRecord->timeScale());
 	move(offset);
 }
@@ -6187,7 +6404,7 @@ if ( !_currentRecord->cursorText().isEmpty() ) {
 		setCursorPos(cp);
 		return;
 	}
-	
+
 	float offset = -1.0/_currentRecord->timeScale();
 	move(offset);
 }
@@ -6405,7 +6622,7 @@ void PickerView::fetchManualPicks(std::vector<RecordMarker*>* markers) const {
 						markers->push_back(marker);
 					SEISCOMP_DEBUG("   - reuse existing pick");
 				}
-					
+
 				continue;
 			}
 			*/
@@ -6759,14 +6976,6 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 	Seiscomp::RecordPtr tmp(rec);
 	if ( !rec->data() ) return;
 
-#ifndef WIN32
-	/*
-	std::cout << "[rec] " << rec->streamID() << " "
-	          << rec->startTime().iso() << " "
-	          << rec->endTime().iso() << std::endl;
-	*/
-#endif
-
 	std::string streamID = rec->streamID();
 	RecordItemMap::iterator it = _recordItemLabels.find(streamID);
 	if ( it == _recordItemLabels.end() )
@@ -6786,6 +6995,9 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 
 	bool firstRecord = label->data.traces[i].raw->empty();
 	if ( !label->data.traces[i].raw->feed(rec) ) return;
+
+	if ( label->recordViewItem() == _recordView->currentItem() )
+		static_cast<ZoomRecordWidget*>(_currentRecord)->feedRaw(i, rec);
 
 	// Check for out-of-order records
 	if ( (label->data.traces[i].filter || label->data.enableTransformation) &&
@@ -7345,6 +7557,42 @@ void PickerView::activateFilter(int index) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specLogToggled(bool e) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setLogSpectrogram(e);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specMinValue(double v) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setMinSpectrogramRange(v);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specMaxValue(double v) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setMaxSpectrogramRange(v);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specTimeWindow(double tw) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setSpectrogramTimeWindow(tw);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::limitFilterToZoomTrace(bool e) {
 	changeFilter(_comboFilter->currentIndex(), true);
 }
@@ -7406,6 +7654,15 @@ void PickerView::showUnassociatedPicks(bool v) {
 				m->setVisible(v);
 		}
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::showSpectrogram(bool v) {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setShowSpectrogram(v);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7626,7 +7883,7 @@ void PickerView::changeFilter(int index, bool force) {
 
 
 	bool filterApplied = false;
-	// Here one should 
+	// Here one should
 	if ( !_ui.actionLimitFilterToZoomTrace->isChecked() ) {
 		if ( _recordView->setFilterByName(filter) ) {
 			_currentRecord->setFilter(_recordView->filter());

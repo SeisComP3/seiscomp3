@@ -408,7 +408,7 @@ class FDSNEvent(resource.Resource):
 		sink = utils.Sink(req)
 		if not exp.write(sink, ep):
 			return False
-		Logging.notice("%s: returned %i events and %i origins (total " \
+		Logging.debug("%s: returned %i events and %i origins (total " \
 		               "objects/bytes: %i/%i)" % (ro.service, ep.eventCount(),
 		               ep.originCount(), objCount, sink.written))
 		utils.accessLog(req, ro, http.OK, sink.written, None)
@@ -423,7 +423,7 @@ class FDSNEvent(resource.Resource):
 		       "Contributor|ContributorID|MagType|Magnitude|MagAuthor|" \
 		       "EventLocationName\n"
 		df = "%FT%T.%f"
-		req.write(line)
+		utils.writeTS(req, line)
 		byteCount = len(line)
 
 		# add related information
@@ -485,12 +485,12 @@ class FDSNEvent(resource.Resource):
 			       eID, o.time().value().toString(df), o.latitude().value(),
 			       o.longitude().value(), depth, author, contrib, eID,
 			       mType, mVal, mAuthor, region)
-			req.write(line)
+			utils.writeTS(req, line)
 			lineCount +=1
 			byteCount += len(line)
 
 		# write response
-		Logging.notice("%s: returned %i events (total bytes: %i) " % (
+		Logging.debug("%s: returned %i events (total bytes: %i) " % (
 		               ro.service, lineCount, byteCount))
 		utils.accessLog(req, ro, http.OK, byteCount, None)
 		return True
@@ -540,7 +540,7 @@ class FDSNEvent(resource.Resource):
 			msg = "no matching events found"
 			data = HTTP.renderErrorPage(req, http.NO_CONTENT, msg, ro)
 			if data:
-				req.write(data)
+				utils.writeTS(req, data)
 			return True
 
 		Logging.debug("events found: %i" % ep.eventCount())

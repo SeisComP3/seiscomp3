@@ -538,7 +538,7 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 	int componentCount = 0;
 
 	// Lookup station parameters of config module
-	Parameters *params = NULL;
+	Util::KeyValues *params = NULL;
 	std::string stationID = pick->waveformID().networkCode() + "." +
 	                        pick->waveformID().stationCode();
 	ParameterMap::iterator it = _parameters.find(stationID);
@@ -560,10 +560,10 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 					continue;
 				}
 
-				ParametersPtr parameters = new Processing::Parameters;
-				parameters->readFrom(ps);
-				_parameters[stationID] = parameters;
-				params = parameters.get();
+				Util::KeyValuesPtr keys = new Util::KeyValues;
+				keys->init(ps);
+				_parameters[stationID] = keys;
+				params = keys.get();
 			}
 		}
 	}

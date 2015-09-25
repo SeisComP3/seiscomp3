@@ -248,7 +248,8 @@ const std::string &BKPicker::filterID() const {
 bool BKPicker::calculatePick(int ndata, const double *data,
                              int signalStartIndex, int signalEndIndex,
                              int &onsetIndex, int &lowerUncertainty,
-                             int &upperUncertainty, double &snr)
+                             int &upperUncertainty, double &snr,
+                             OPT(Polarity) &polarity)
 // Initially, onsetIndex contains the index of the triggering sample.
 {
 	const int     n = signalEndIndex - signalStartIndex;

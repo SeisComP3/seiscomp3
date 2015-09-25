@@ -971,6 +971,10 @@ class Application(Core.InterruptibleObject):
         """configGetString(Application self, std::string const & query) -> std::string"""
         return _Client.Application_configGetString(self, *args)
 
+    def configGetPath(self, *args):
+        """configGetPath(Application self, std::string const & query) -> std::string"""
+        return _Client.Application_configGetPath(self, *args)
+
     def configGetBools(self, *args):
         """configGetBools(Application self, std::string const & query) -> vectorBool"""
         return _Client.Application_configGetBools(self, *args)

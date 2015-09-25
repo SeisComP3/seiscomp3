@@ -16,6 +16,7 @@
 
 #include <seiscomp3/processing/amplitudeprocessor.h>
 #include <seiscomp3/math/mean.h>
+#include <seiscomp3/math/filter/iirdifferentiate.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 
@@ -521,6 +522,9 @@ void AmplitudeProcessor::prepareData(DoubleArray &data) {
 
 		int intSteps = 0;
 		switch ( unit ) {
+			case Meter:
+				intSteps = -1;
+				break;
 			case MeterPerSecond:
 				break;
 			case MeterPerSecondSquared:
@@ -553,9 +557,28 @@ void AmplitudeProcessor::prepareData(DoubleArray &data) {
 				return;
 			}
 
-			if ( unit != MeterPerSecond ) {
-				setStatus(IncompatibleUnit, 3);
-				return;
+			switch ( unit ) {
+				case Meter:
+					if ( _enableUpdates ) {
+						// Updates with differentiation are not yet supported.
+						setStatus(IncompatibleUnit, 5);
+						return;
+					}
+
+					// Derive to m/s
+					{
+						Math::Filtering::IIRDifferentiate<double> diff;
+						diff.setSamplingFrequency(_stream.fsamp);
+						diff.apply(data.size(), data.typedData());
+					}
+					break;
+
+				case MeterPerSecond:
+					break;
+
+				default:
+					setStatus(IncompatibleUnit, 3);
+					return;
 			}
 		}
 	}
@@ -573,9 +596,22 @@ bool AmplitudeProcessor::deconvolveData(Response *resp, DoubleArray &data,
 	Math::Statistics::computeLinearTrend(data.size(), data.typedData(), m, n);
 	Math::Statistics::detrend(data.size(), data.typedData(), m, n);
 
-	return resp->deconvolveFFT(data, _stream.fsamp, _config.respTaper,
-	                           _config.respMinFreq, _config.respMaxFreq,
-	                           numberOfIntegrations);
+	bool ret = resp->deconvolveFFT(data, _stream.fsamp, _config.respTaper,
+	                               _config.respMinFreq, _config.respMaxFreq,
+	                               numberOfIntegrations < 0 ? 0 : numberOfIntegrations);
+
+	if ( !ret )
+		return false;
+
+	// If number of integrations are negative, derive data
+	while ( numberOfIntegrations < 0 ) {
+		Math::Filtering::IIRDifferentiate<double> diff;
+		diff.setSamplingFrequency(_stream.fsamp);
+		diff.apply(data.size(), data.typedData());
+		++numberOfIntegrations;
+	}
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

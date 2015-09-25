@@ -572,6 +572,8 @@ CREATE TABLE Amplitude (
 	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
+	INDEX(timeWindow_reference),
+	INDEX(timeWindow_reference_ms),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)

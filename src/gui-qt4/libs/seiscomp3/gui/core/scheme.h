@@ -244,6 +244,8 @@ class SC_GUI_API Scheme {
 			Records();
 
 			int lineWidth;
+			bool antiAliasing;
+			bool optimize;
 		};
 
 		struct Precision {

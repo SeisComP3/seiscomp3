@@ -488,7 +488,7 @@ void Master::processNetworkMessages() {
 				               message->clientName().c_str(), sync_req->ID());
 				SyncResponseMessage sync_resp(sync_req->ID());
 				NetworkMessagePtr sync_resp_net =
-					NetworkMessage::Encode(&sync_resp, Protocol::BINARY_SERIALIZATION);
+					NetworkMessage::Encode(&sync_resp, Protocol::CONTENT_BINARY);
 				sync_resp_net->setDestination(message->privateSenderGroup());
 				send(sync_resp_net.get());
 				SEISCOMP_DEBUG("Sent sync response to group %s",

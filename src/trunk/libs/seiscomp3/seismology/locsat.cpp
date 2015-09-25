@@ -19,6 +19,7 @@
 #include <seiscomp3/seismology/locsat.h>
 #include <seiscomp3/seismology/ttt.h>
 #include <seiscomp3/math/geo.h>
+
 #include "locsat_internal.h"
 
 #include <stdlib.h>
@@ -1058,8 +1059,8 @@ void LocSAT::setProfile(const std::string &prefix) {
 }
 
 
-const char* LocSAT::getLocatorParams(int param) const {
-	char* value = new char[1024];
+std::string LocSAT::getLocatorParams(int param) const {
+	char value[256];
 
 	switch(param){
 

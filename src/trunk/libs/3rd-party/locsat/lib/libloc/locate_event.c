@@ -227,8 +227,6 @@ char * golocate_error_table[] =
 };
 
 
-extern int	setup_tttables ();
-
 #define	NULL_TIME	-9999999999.999
 #define	STRIKE_NULL	-1.0
 #define	STRIKE_MIN	0.0
@@ -351,22 +349,7 @@ int	new_num_sta;
 }
 
 
-int
-setup_tttables_dir (const char *new_dir)
-{
-	int new_num_phase_types;
-
-	/*
-	if (first_table_read)
-	{
-	*/
-		return setup_tttables (new_dir, default_phases, (sizeof default_phases) / sizeof(char*));
-	//}
-	return 0;
-}
-
-
-int
+static int
 setup_tttables (new_dir, new_phase_types, new_num_phase_types)
 
 char    *new_dir;
@@ -512,7 +495,14 @@ int	new_num_phase_types;
 
 }
 
-	
+
+int
+setup_tttables_dir (const char *new_dir)
+{
+	return setup_tttables (new_dir, default_phases, (sizeof default_phases) / sizeof(char*));
+}
+
+
 int
 locate_event (network, sites, num_sites, arrival, assoc, origin, origerr,
 	      locator_params, locator_errors, num_obs)

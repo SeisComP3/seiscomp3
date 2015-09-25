@@ -487,12 +487,12 @@ void CalculateAmplitudes::addProcessor(
 
 	proc->setTrigger(pick->time().value());
 
-	Parameters *params = NULL;
+	Util::KeyValues *keys = NULL;
 	std::string stationID = pick->waveformID().networkCode() + "." +
 	                        pick->waveformID().stationCode();
 	ParameterMap::iterator it = _parameters.find(stationID);
 	if ( it != _parameters.end() )
-		params = it->second.get();
+		keys = it->second.get();
 	else if ( SCApp->configModule() != NULL ) {
 		for ( size_t i = 0; i < SCApp->configModule()->configStationCount(); ++i ) {
 			ConfigStation *station = SCApp->configModule()->configStation(i);
@@ -505,10 +505,10 @@ void CalculateAmplitudes::addProcessor(
 				ParameterSet *ps = ParameterSet::Find(setup->parameterSetID());
 				if ( !ps ) continue;
 
-				ParametersPtr parameters = new Parameters;
-				parameters->readFrom(ps);
-				_parameters[stationID] = parameters;
-				params = parameters.get();
+				Util::KeyValuesPtr keys_ = new Util::KeyValues;
+				keys_->init(ps);
+				_parameters[stationID] = keys_;
+				keys = keys_.get();
 			}
 		}
 	}
@@ -547,7 +547,7 @@ void CalculateAmplitudes::addProcessor(
 			SCApp->configModuleName(),
 			pick->waveformID().networkCode(), pick->waveformID().stationCode(),
 			pick->waveformID().locationCode(), pick->waveformID().channelCode().substr(0,2),
-			&SCCoreApp->configuration(), params)) ) {
+			&SCCoreApp->configuration(), keys)) ) {
 		return;
 	}
 

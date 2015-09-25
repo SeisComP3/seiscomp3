@@ -442,7 +442,7 @@ NetworkMessage* NetworkMessage::Encode(Seiscomp::Core::Message* msg,
 
 		switch ( type )
 		{
-			case Protocol::BINARY_SERIALIZATION:
+			case Protocol::CONTENT_BINARY:
 			{
 				IO::VBinaryArchive ar(&filtered_buf, false, schemaVersion);
 				ar << msg;
@@ -451,7 +451,7 @@ NetworkMessage* NetworkMessage::Encode(Seiscomp::Core::Message* msg,
 			}
 				break;
 
-			case Protocol::XML_CONTENT:
+			case Protocol::CONTENT_XML:
 			{
 				IO::XMLArchive ar(&filtered_buf, false, schemaVersion);
 				ar << msg;
@@ -460,7 +460,7 @@ NetworkMessage* NetworkMessage::Encode(Seiscomp::Core::Message* msg,
 			}
 				break;
 
-			case Protocol::UNCOMPRESSED_XML:
+			case Protocol::CONTENT_UNCOMPRESSED_XML:
 			{
 				boost::iostreams::stream_buffer<boost::iostreams::back_insert_device<std::string> > buf(data);
 
@@ -471,7 +471,7 @@ NetworkMessage* NetworkMessage::Encode(Seiscomp::Core::Message* msg,
 			}
 				break;
 
-			case Protocol::IMPORTED_XML:
+			case Protocol::CONTENT_IMPORTED_XML:
 			{
 				boost::iostreams::stream_buffer<boost::iostreams::back_insert_device<std::string> > buf(data);
 
@@ -523,21 +523,21 @@ Seiscomp::Core::Message* NetworkMessage::decode() const
 
 		switch ( cType )
 		{
-			case Protocol::BINARY_SERIALIZATION:
+			case Protocol::CONTENT_BINARY:
 			{
 				IO::VBinaryArchive ar(&filtered_buf, true);
 				ar >> msg;
 			}
 				break;
 
-			case Protocol::XML_CONTENT:
+			case Protocol::CONTENT_XML:
 			{
 				IO::XMLArchive ar(&filtered_buf, true);
 				ar >> msg;
 			}
 				break;
 
-			case Protocol::UNCOMPRESSED_XML:
+			case Protocol::CONTENT_UNCOMPRESSED_XML:
 			{
 				boost::iostreams::stream_buffer<boost::iostreams::array_source> buf(data().c_str(), data().size());
 
@@ -546,7 +546,7 @@ Seiscomp::Core::Message* NetworkMessage::decode() const
 			}
 				break;
 
-			case Protocol::IMPORTED_XML:
+			case Protocol::CONTENT_IMPORTED_XML:
 			{
 				boost::iostreams::stream_buffer<boost::iostreams::array_source> buf(data().c_str(), data().size());
 

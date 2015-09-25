@@ -12,8 +12,8 @@
  ***************************************************************************/
 
 
-#ifndef __MARS_RESAMPLE_H__
-#define __MARS_RESAMPLE_H__
+#ifndef __SEISCOMP_IO_RECORDFILTER_RESAMPLE_H__
+#define __SEISCOMP_IO_RECORDFILTER_RESAMPLE_H__
 
 
 #include <seiscomp3/io/recordfilter.h>
@@ -30,7 +30,7 @@ namespace IO {
 
 //! @brief Base class for template class Resampler which defines
 //! @brief common data structures.
-class RecordResamplerBase : public RecordFilterInterface {
+class SC_SYSTEM_CORE_API RecordResamplerBase : public RecordFilterInterface {
 	protected:
 		RecordResamplerBase();
 		virtual ~RecordResamplerBase();

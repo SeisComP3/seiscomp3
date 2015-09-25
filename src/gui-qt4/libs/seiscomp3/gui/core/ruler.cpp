@@ -208,6 +208,14 @@ double Ruler::maximumSelection() const {
 	return _enableSelection ? _selectionHandles.back() : 0;
 }
 
+QSize Ruler::sizeHint() const {
+	if ( _position == Bottom || _position == Top )
+		return QFrame::sizeHint();
+
+	QSize size = QFrame::sizeHint();
+	return QSize(size.height(), size.width());
+}
+
 void Ruler::changed(int pos) {
 	_pos = pos;
 	update();

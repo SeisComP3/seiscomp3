@@ -465,7 +465,7 @@ Options:
                      of the real time difference between the records
     -n               network list (comma separated), default: *
     -c               channel filter (regular expression),
-                     default: (B|S|M|H)(L|H)(Z|N|E)
+                     default: (B|S|M|H|E)(L|H)(Z|N|E)
     -E               sort according to record end time; default is start time
         --files      specify the file handles to cache; default: 100
     -v, --verbose    verbose mode
@@ -503,7 +503,7 @@ recordURL    = "file://-"
 speed        = 0
 stdout       = False
 
-channels     = "(B|S|M|H)(L|H)(Z|N|E)"
+channels     = "(B|S|M|H|E)(L|H)(Z|N|E)"
 networks     = "*"
 
 archiveDirectory = "./"

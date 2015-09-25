@@ -18,7 +18,6 @@
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/processing/application.h>
-#include <seiscomp3/processing/parameters.h>
 #include <seiscomp3/datamodel/config_package.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/core/baseobject.h>
@@ -257,15 +256,15 @@ bool QcTool::init() {
 							continue;
 						}
 
-						Processing::Parameters params;
-						params.readFrom(ps);
+						Util::KeyValues keys;
+						keys.init(ps);
 
 						string net, sta, loc, cha;
 						net = station->networkCode();
 						sta = station->stationCode();
 
-						params.getString(loc, "detecLocid");
-						params.getString(cha, "detecStream");
+						keys.getString(loc, "detecLocid");
+						keys.getString(cha, "detecStream");
 
 						if ( !cha.empty() ) {
 							bool isFixedChannel = cha.size() > 2;
@@ -296,46 +295,52 @@ bool QcTool::init() {
 		} else { //! read all matching streams...
 			string mask = _streamMask;
 			boost::smatch what;
-			boost::regex streamMask(mask);
-			SEISCOMP_DEBUG("Reading those streams matching: %s", mask.c_str());
-			
-			DataModel::Inventory* inv = Seiscomp::Client::Inventory::Instance()->inventory();	
-			if (inv) {
-				for (size_t i = 0; i < inv->networkCount(); ++i) {
-					DataModel::NetworkPtr network = inv->network(i);
-					for (size_t j = 0; j < network->stationCount(); ++j) {
-						DataModel::StationPtr station = network->station(j);
-						try {if (station->end()) continue;} catch (...) {}
-			
-						for (size_t l = 0; l < station->sensorLocationCount(); ++l) {
-							DataModel::SensorLocationPtr sloc = station->sensorLocation(l);
-							try {if (sloc->end()) continue;} catch (...) {}
-							
-							for (size_t s = 0; s < sloc->streamCount(); ++s) {
-								DataModel::StreamPtr stream = sloc->stream(s);
-				
-								string net, sta, loc, cha;
-								net = network->code();
-								sta = station->code();
-								loc = sloc->code();
-								cha = stream->code();
-				
-								string streamID = net + "." + sta + "." + loc + "." + cha;
-								if (!boost::regex_match(streamID, what, streamMask)) {
-// 				SEISCOMP_DEBUG("ignoring: %s", streamID.c_str());
-									continue;
+			try {
+				boost::regex streamMask(mask);
+				SEISCOMP_DEBUG("Reading those streams matching: %s", mask.c_str());
+
+				DataModel::Inventory* inv = Seiscomp::Client::Inventory::Instance()->inventory();
+				if (inv) {
+					for (size_t i = 0; i < inv->networkCount(); ++i) {
+						DataModel::NetworkPtr network = inv->network(i);
+						for (size_t j = 0; j < network->stationCount(); ++j) {
+							DataModel::StationPtr station = network->station(j);
+							try {if (station->end()) continue;} catch (...) {}
+
+							for (size_t l = 0; l < station->sensorLocationCount(); ++l) {
+								DataModel::SensorLocationPtr sloc = station->sensorLocation(l);
+								try {if (sloc->end()) continue;} catch (...) {}
+
+								for (size_t s = 0; s < sloc->streamCount(); ++s) {
+									DataModel::StreamPtr stream = sloc->stream(s);
+
+									string net, sta, loc, cha;
+									net = network->code();
+									sta = station->code();
+									loc = sloc->code();
+									cha = stream->code();
+
+									string streamID = net + "." + sta + "." + loc + "." + cha;
+									if (!boost::regex_match(streamID, what, streamMask)) {
+	// 				SEISCOMP_DEBUG("ignoring: %s", streamID.c_str());
+										continue;
+									}
+									addStream(net, sta, loc, cha);
 								}
-								addStream(net, sta, loc, cha);
 							}
 						}
 					}
 				}
 			}
+			catch ( std::exception &e ) {
+				SEISCOMP_ERROR("Exception: %s", e.what());
+				return false;
+			}
 		}
 	}
 	
 	SEISCOMP_DEBUG("number of streams: %ld", (long int)_streamIDs.size());
-	
+
 	// Enable timeout callback every second
 	enableTimer(1);
 	

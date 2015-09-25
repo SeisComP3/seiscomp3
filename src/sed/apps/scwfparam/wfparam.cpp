@@ -1623,11 +1623,11 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 	proc->setUsedComponent(component);
 
 	// Lookup station parameters of config module
-	Parameters *params = NULL;
+	Util::KeyValues *params = NULL;
 	string stationID = waveformID.networkCode() + "." +
 	                   waveformID.stationCode();
-	ParameterMap::iterator it = _parameters.find(stationID);
-	if ( it != _parameters.end() )
+	KeyMap::iterator it = _keys.find(stationID);
+	if ( it != _keys.end() )
 		params = it->second.get();
 	else if ( configModule() != NULL ) {
 		for ( size_t i = 0; i < configModule()->configStationCount(); ++i ) {
@@ -1645,10 +1645,10 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 					continue;
 				}
 
-				ParametersPtr parameters = new Processing::Parameters;
-				parameters->readFrom(ps);
-				_parameters[stationID] = parameters;
-				params = parameters.get();
+				Util::KeyValuesPtr keys = new Util::KeyValues;
+				keys->init(ps);
+				_keys[stationID] = keys;
+				params = keys.get();
 			}
 		}
 	}
@@ -2450,7 +2450,7 @@ void WFParam::collectResults() {
 		}
 
 		if ( writeToFile ) {
-			eventPath = _config.shakeMapOutputPath + shakeMapEventID + "/";
+			eventPath = _config.shakeMapOutputPath + eventID + "/";
 			path = eventPath + "input";
 			if ( !Util::pathExists(path) ) {
 				if ( !Util::createPath(path) ) {

@@ -354,7 +354,7 @@ std::string Environment::absolutePath(const std::string& name) const {
 	if ( tmpName.find("~/") == 0 )
 		tmpName = homeDir() + tmpName.substr(1);
 
-        bool trailingSlash = !tmpName.empty() && tmpName[tmpName.size()-1] == '/';
+	bool trailingSlash = !tmpName.empty() && tmpName[tmpName.size()-1] == '/';
 
 	char absolutePath[PATH_MAX];
 	if ( realpath(tmpName.c_str(), absolutePath) )

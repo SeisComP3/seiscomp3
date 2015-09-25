@@ -342,6 +342,8 @@ class Object(Core.BaseObject):
     __swig_getmethods__["UnregisterObserver"] = lambda x: _DataModel.Object_UnregisterObserver
     if _newclass:UnregisterObserver = staticmethod(_DataModel.Object_UnregisterObserver)
     def update(self): return _DataModel.Object_update(self)
+    def setLastModifiedInArchive(self, *args): return _DataModel.Object_setLastModifiedInArchive(self, *args)
+    def lastModifiedInArchive(self): return _DataModel.Object_lastModifiedInArchive(self)
     def assign(self, *args): return _DataModel.Object_assign(self, *args)
     def clone(self): return _DataModel.Object_clone(self)
     def attachTo(self, *args): return _DataModel.Object_attachTo(self, *args)

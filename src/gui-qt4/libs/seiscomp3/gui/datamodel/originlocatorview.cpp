@@ -2139,8 +2139,7 @@ void OriginLocatorView::locatorChanged(const QString &text) {
 	else
 		_ui.cbLocatorProfile->setCurrentIndex(0);
 
-	if ( _ui.cbLocatorProfile->count() < 2 )
-		_ui.cbLocatorProfile->setEnabled(false);
+	_ui.cbLocatorProfile->setEnabled(_ui.cbLocatorProfile->count() >= 2);
 
 	_ui.cbFixedDepth->setEnabled(_locator->supports(Seismology::LocatorInterface::FixedDepth));
 	_ui.cbDistanceCutOff->setEnabled(_locator->supports(Seismology::LocatorInterface::DistanceCutOff));

@@ -114,7 +114,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		typedef std::set<std::string> AmplitudeList;
 		typedef std::vector<Seiscomp::Processing::AmplitudeProcessorPtr>      ProcessorSlot;
 		typedef std::map<std::string, ProcessorSlot>                          ProcessorMap;
-		typedef std::map<std::string, Seiscomp::Processing::ParametersPtr>    ParameterMap;
+		typedef std::map<std::string, Seiscomp::Util::KeyValuesPtr>           ParameterMap;
 		typedef std::map<std::string, StationRequest>                         RequestMap;
 
 		typedef std::map<std::string, Seiscomp::Processing::StreamPtr>        StreamMap;

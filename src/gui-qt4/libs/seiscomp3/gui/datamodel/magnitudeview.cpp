@@ -103,7 +103,7 @@ class StaMagsSortFilterProxyModel : public QSortFilterProxyModel {
 };
 
 
-Processing::ParametersPtr getParams(const string &net, const string &sta) {
+Util::KeyValuesPtr getParams(const string &net, const string &sta) {
 	ConfigModule *module = SCApp->configModule();
 	if ( module == NULL ) return NULL;
 
@@ -122,9 +122,9 @@ Processing::ParametersPtr getParams(const string &net, const string &sta) {
 			continue;
 		}
 
-		Processing::ParametersPtr params = new Processing::Parameters;
-		params->readFrom(ps);
-		return params;
+		Util::KeyValuesPtr keys = new Util::KeyValues;
+		keys->init(ps);
+		return keys;
 	}
 
 	return NULL;
@@ -2041,14 +2041,14 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 				continue;
 			}
 
-			Processing::ParametersPtr params = getParams(amp->waveformID().networkCode(),
-			                                             amp->waveformID().stationCode());
+			Util::KeyValuesPtr keys = getParams(amp->waveformID().networkCode(),
+			                                    amp->waveformID().stationCode());
 			if ( !magProc->setup(
 				Processing::Settings(
 					SCApp->configModuleName(),
 					amp->waveformID().networkCode(), amp->waveformID().stationCode(),
 					amp->waveformID().locationCode(), amp->waveformID().channelCode().substr(0,2),
-					&SCCoreApp->configuration(), params.get())) ) {
+					&SCCoreApp->configuration(), keys.get())) ) {
 				cerr << amp->waveformID().networkCode() << "."
 				     << amp->waveformID().stationCode() << ": setup magnitude processor failed"
 				     << ": ignoring station" << endl;

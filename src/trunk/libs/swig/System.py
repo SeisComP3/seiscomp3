@@ -1388,6 +1388,9 @@ class Model(Core.BaseObject):
     __swig_setmethods__["modMap"] = _System.Model_modMap_set
     __swig_getmethods__["modMap"] = _System.Model_modMap_get
     if _newclass:modMap = _swig_property(_System.Model_modMap_get, _System.Model_modMap_set)
+    __swig_setmethods__["keyDirOverride"] = _System.Model_keyDirOverride_set
+    __swig_getmethods__["keyDirOverride"] = _System.Model_keyDirOverride_get
+    if _newclass:keyDirOverride = _swig_property(_System.Model_keyDirOverride_get, _System.Model_keyDirOverride_set)
     __swig_destroy__ = _System.delete_Model
     __del__ = lambda self : None;
 Model_swigregister = _System.Model_swigregister

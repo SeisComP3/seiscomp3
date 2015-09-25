@@ -16,7 +16,7 @@
 
 
 #include <seiscomp3/config/exceptions.h>
-#include <seiscomp3/processing/parameters.h>
+#include <seiscomp3/utils/keyvalues.h>
 #include <seiscomp3/client.h>
 
 
@@ -36,7 +36,7 @@ struct SC_SYSTEM_CLIENT_API Settings {
 	         const std::string &location,
 	         const std::string &stream,
 	         const Config::Config *config,
-	         const Parameters *parameters);
+	         const Util::KeyValues *keys);
 
 	//! Returns a parameter value for a station. The first
 	//! lookup is in the global application configuration
@@ -67,13 +67,13 @@ struct SC_SYSTEM_CLIENT_API Settings {
 	bool getValue(double &value, const std::string &parameter) const;
 	bool getValue(bool &value, const std::string &parameter) const;
 
-	const std::string    &module;
-	const std::string    &networkCode;
-	const std::string    &stationCode;
-	const std::string    &locationCode;
-	const std::string    &channelCode;
-	const Config::Config *localConfiguration;
-	const Parameters     *keyParameters;
+	const std::string     &module;
+	const std::string     &networkCode;
+	const std::string     &stationCode;
+	const std::string     &locationCode;
+	const std::string     &channelCode;
+	const Config::Config  *localConfiguration;
+	const Util::KeyValues *keyParameters;
 };
 
 

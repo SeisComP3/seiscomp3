@@ -133,7 +133,7 @@ class _WaveformProducer:
 
 		if not rec:
 			self.req.unregisterProducer()
-			Logging.notice("%s: returned %i bytes of mseed data" % (
+			Logging.debug("%s: returned %i bytes of mseed data" % (
 			               self.ro.service, self.written))
 			utils.accessLog(self.req, self.ro, http.OK, self.written, None)
 			self.req.finish()

@@ -185,7 +185,7 @@ void MagList::reset() {
 
 void MagList::addMag(DataModel::Magnitude* netMag, bool bold, bool visible){
 	// create new magnitude display row
-	MagRow *magRow;
+	MagRow *magRow = NULL;
 
 	if ( netMag )
 		magRow = row(netMag->type());

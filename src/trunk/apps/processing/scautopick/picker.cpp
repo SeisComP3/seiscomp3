@@ -1115,6 +1115,22 @@ void App::emitPPick(const Processing::Picker *proc,
 	ci.setAuthor(author());
 	pick->setCreationInfo(ci);
 
+	if ( res.polarity ) {
+		switch ( *res.polarity ) {
+			case Processing::Picker::POSITIVE:
+				pick->setPolarity(DataModel::PickPolarity(DataModel::POSITIVE));
+				break;
+			case Processing::Picker::NEGATIVE:
+				pick->setPolarity(DataModel::PickPolarity(DataModel::NEGATIVE));
+				break;
+			case Processing::Picker::UNDECIDABLE:
+				pick->setPolarity(DataModel::PickPolarity(DataModel::UNDECIDABLE));
+				break;
+			default:
+				break;
+		}
+	}
+
 	DataModel::TimeQuantity pickTime(res.time);
 	if ( res.timeLowerUncertainty >= 0 && res.timeUpperUncertainty >= 0 &&
 	     res.timeLowerUncertainty == res.timeUpperUncertainty )

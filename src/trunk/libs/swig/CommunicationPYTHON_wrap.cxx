@@ -13967,10 +13967,10 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "Protocol_DATA_MSG",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::DATA_MSG)));
   SWIG_Python_SetConstant(d, "Protocol_ARCHIVE_MSG",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::ARCHIVE_MSG)));
   SWIG_Python_SetConstant(d, "Protocol_MT_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::MT_QUANTITY)));
-  SWIG_Python_SetConstant(d, "Protocol_BINARY_SERIALIZATION",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::BINARY_SERIALIZATION)));
-  SWIG_Python_SetConstant(d, "Protocol_XML_CONTENT",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::XML_CONTENT)));
-  SWIG_Python_SetConstant(d, "Protocol_UNCOMPRESSED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::UNCOMPRESSED_XML)));
-  SWIG_Python_SetConstant(d, "Protocol_IMPORTED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::IMPORTED_XML)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_BINARY",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_BINARY)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_XML)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_UNCOMPRESSED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_UNCOMPRESSED_XML)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_IMPORTED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_IMPORTED_XML)));
   SWIG_Python_SetConstant(d, "Protocol_MCT_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::MCT_QUANTITY)));
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Protocol_PROTOCOL_VERSION",Swig_var_Protocol_PROTOCOL_VERSION_get, Swig_var_Protocol_PROTOCOL_VERSION_set);

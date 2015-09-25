@@ -355,10 +355,16 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void updateRecordValue(Seiscomp::Core::Time);
 		void showTraceScaleToggled(bool);
 
+		void specLogToggled(bool);
+		void specMinValue(double);
+		void specMaxValue(double);
+		void specTimeWindow(double);
+
 		void limitFilterToZoomTrace(bool);
 
 		void showTheoreticalArrivals(bool);
 		void showUnassociatedPicks(bool);
+		void showSpectrogram(bool);
 
 		void toggleFilter();
 		void nextFilter();
@@ -375,6 +381,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 		void sortAlphabetically();
 		void sortByDistance();
+		void sortByAzimuth();
 		void sortByResidual();
 		void sortByPhase(const QString&);
 

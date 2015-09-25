@@ -242,6 +242,9 @@ Object* DatabaseIterator::fetch() const {
 		return NULL;
 	}
 
+	if ( _lastModified )
+		obj->setLastModifiedInArchive(*_lastModified);
+
 	_reader->serializeObject(obj);
 
 	if ( !_reader->success() ) {

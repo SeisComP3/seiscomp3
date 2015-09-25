@@ -3,3 +3,6 @@ SC_INSTALL_INIT(kernel kernel.py)
 INSTALL(DIRECTORY share/deps DESTINATION ${SC3_PACKAGE_SHARE_DIR}
         PATTERN ".svn" EXCLUDE
         PATTERN "CMakeLists.txt" EXCLUDE)
+INSTALL(DIRECTORY share/shell-completion DESTINATION ${SC3_PACKAGE_SHARE_DIR}
+        PATTERN ".svn" EXCLUDE
+        PATTERN "CMakeLists.txt" EXCLUDE)

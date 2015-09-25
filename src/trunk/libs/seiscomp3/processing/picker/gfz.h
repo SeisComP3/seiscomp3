@@ -53,7 +53,8 @@ class SC_SYSTEM_CLIENT_API GFZPicker : public Picker {
 		bool calculatePick(int n, const double *data,
 		                   int signalStartIdx, int signalEndIdx,
 		                   int &triggerIdx, int &lowerUncertainty,
-		                   int &upperUncertainty, double &snr);
+		                   int &upperUncertainty, double &snr,
+		                   OPT(Polarity) &polarity);
 
 	private:
 		std::string _usedFilter;

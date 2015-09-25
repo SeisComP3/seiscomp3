@@ -112,10 +112,10 @@ class Protocol(_object):
     DATA_MSG = _Communication.Protocol_DATA_MSG
     ARCHIVE_MSG = _Communication.Protocol_ARCHIVE_MSG
     MT_QUANTITY = _Communication.Protocol_MT_QUANTITY
-    BINARY_SERIALIZATION = _Communication.Protocol_BINARY_SERIALIZATION
-    XML_CONTENT = _Communication.Protocol_XML_CONTENT
-    UNCOMPRESSED_XML = _Communication.Protocol_UNCOMPRESSED_XML
-    IMPORTED_XML = _Communication.Protocol_IMPORTED_XML
+    CONTENT_BINARY = _Communication.Protocol_CONTENT_BINARY
+    CONTENT_XML = _Communication.Protocol_CONTENT_XML
+    CONTENT_UNCOMPRESSED_XML = _Communication.Protocol_CONTENT_UNCOMPRESSED_XML
+    CONTENT_IMPORTED_XML = _Communication.Protocol_CONTENT_IMPORTED_XML
     MCT_QUANTITY = _Communication.Protocol_MCT_QUANTITY
     __swig_getmethods__["MsgTypeToString"] = lambda x: _Communication.Protocol_MsgTypeToString
     if _newclass:MsgTypeToString = staticmethod(_Communication.Protocol_MsgTypeToString)

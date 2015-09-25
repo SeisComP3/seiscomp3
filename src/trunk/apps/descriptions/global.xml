@@ -531,6 +531,27 @@
 						changed if you know what you are doing.
 						</description>
 					</parameter>
+					<group name="resp">
+						<description>
+						Several parameters if usage of full responses is enabled.
+						</description>
+						<parameter name="minFreq" default="0.00833333" unit="Hz">
+							<description>
+							After data are converted in to the frequency domain that
+							minimum frequency defines the end of the left-side cosine taper for
+							the frequency spectrum. The taper applies from 0Hz to {minFreq}Hz.
+							A value of 0 or lower disables that taper.
+							</description>
+						</parameter>
+						<parameter name="maxFreq" default="0" unit="Hz">
+							<description>
+							After data are converted in to the frequency domain that
+							maximum frequency defines the start of the right-side cosine taper for
+							the frequency spectrum. The taper applies from {maxFreq}Hz to {fNyquist}Hz.
+							A value of 0 or lower disables that taper.
+							</description>
+						</parameter>
+					</group>
 				</struct>
 			</group>
 			<group name="mag">

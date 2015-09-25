@@ -669,16 +669,18 @@ class SC_SYSTEM_CORE_API Model : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		typedef std::map<std::string, SymbolMapItemPtr> SymbolFileMap;
-		typedef std::map<std::string, SymbolFileMap> SymbolMap;
-		typedef std::map<std::string, Module*> ModMap;
-		typedef std::set<std::string> Categories;
-		typedef std::map<StationID, StationPtr> Stations;
-		SchemaDefinitions *schema;
-		std::vector<ModulePtr> modules;
-		Categories categories;
-		Stations stations;
-		mutable SymbolMap symbols;
-		ModMap modMap;
+		typedef std::map<std::string, SymbolFileMap>    SymbolMap;
+		typedef std::map<std::string, Module*>          ModMap;
+		typedef std::set<std::string>                   Categories;
+		typedef std::map<StationID, StationPtr>         Stations;
+
+		SchemaDefinitions      *schema;
+		std::vector<ModulePtr>  modules;
+		Categories              categories;
+		Stations                stations;
+		mutable SymbolMap       symbols;
+		ModMap                  modMap;
+		std::string             keyDirOverride;
 };
 
 

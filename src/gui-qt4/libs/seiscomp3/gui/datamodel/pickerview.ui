@@ -725,6 +725,7 @@
     <number>4</number>
    </attribute>
    <addaction name="actionSortByDistance" />
+   <addaction name="actionSortByAzimuth" />
    <addaction name="actionSortAlphabetically" />
    <addaction name="actionSortByResidual" />
   </widget>
@@ -834,6 +835,17 @@
     <number>4</number>
    </attribute>
   </widget>
+  <widget class="QToolBar" name="toolBarSpectrogram" >
+   <property name="windowTitle" >
+    <string>Spectrogram</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+  </widget>
   <widget class="QToolBar" name="toolBarRelocate" >
    <property name="windowTitle" >
     <string>Apply</string>
@@ -861,6 +873,13 @@
      <height>29</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuPicking" >
+    <property name="title" >
+     <string>&amp;Picking</string>
+    </property>
+    <addaction name="actionRepickAutomatically" />
+    <addaction name="separator" />
+   </widget>
    <widget class="QMenu" name="menu_Filter" >
     <property name="title" >
      <string>&amp;Filter</string>
@@ -874,22 +893,6 @@
     </property>
     <addaction name="actionRelocate" />
     <addaction name="actionModifyOrigin" />
-   </widget>
-   <widget class="QMenu" name="menu_Navigation" >
-    <property name="title" >
-     <string>&amp;Navigation</string>
-    </property>
-    <addaction name="actionScrollLeft" />
-    <addaction name="actionScrollRight" />
-    <addaction name="actionScrollFineLeft" />
-    <addaction name="actionScrollFineRight" />
-   </widget>
-   <widget class="QMenu" name="menuPicking" >
-    <property name="title" >
-     <string>&amp;Picking</string>
-    </property>
-    <addaction name="actionRepickAutomatically" />
-    <addaction name="separator" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -953,10 +956,20 @@
     <addaction name="actionShowTraceValuesInNmS" />
     <addaction name="actionShowUnassociatedPicks" />
     <addaction name="actionShowTheoreticalArrivals" />
+    <addaction name="actionShowSpectrogram" />
     <addaction name="separator" />
     <addaction name="menu_Zoomtrace" />
     <addaction name="menuTraces" />
     <addaction name="menuComponents" />
+   </widget>
+   <widget class="QMenu" name="menu_Navigation" >
+    <property name="title" >
+     <string>&amp;Navigation</string>
+    </property>
+    <addaction name="actionScrollLeft" />
+    <addaction name="actionScrollRight" />
+    <addaction name="actionScrollFineLeft" />
+    <addaction name="actionScrollFineRight" />
    </widget>
    <addaction name="menuView" />
    <addaction name="menu_Navigation" />
@@ -1739,7 +1752,7 @@
     <string>Next filter</string>
    </property>
    <property name="shortcut" >
-    <string>g</string>
+    <string>G</string>
    </property>
   </action>
   <action name="actionPreviousFilter" >
@@ -1747,7 +1760,32 @@
     <string>Previous filter</string>
    </property>
    <property name="shortcut" >
-    <string>d</string>
+    <string>D</string>
+   </property>
+  </action>
+  <action name="actionShowSpectrogram" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show spectrogram</string>
+   </property>
+   <property name="statusTip" >
+    <string/>
+   </property>
+   <property name="shortcut" >
+    <string>Shift+S</string>
+   </property>
+  </action>
+  <action name="actionSortByAzimuth" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="icons.qrc" >:/icons/icons/sort_az.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Sort by azimuth</string>
    </property>
   </action>
  </widget>

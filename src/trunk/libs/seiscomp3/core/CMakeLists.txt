@@ -25,7 +25,6 @@ SET(CORE_SOURCES
 	plugin.cpp
 	system.cpp
 	baseobject.cpp
-	multicomponentarray.cpp
 	version.cpp
 )
 
@@ -70,8 +69,6 @@ SET(CORE_HEADERS
 	datamessage.h
 	plugin.h
 	system.h
-	multicomponentarray.h
-	multicomponentarray.inl
 	version.h
 )
 

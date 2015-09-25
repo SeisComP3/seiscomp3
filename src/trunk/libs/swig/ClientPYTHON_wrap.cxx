@@ -17809,6 +17809,56 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Application_configGetPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Application_configGetPath",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_configGetPath" "', argument " "1"" of type '" "Seiscomp::Client::Application const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Application_configGetPath" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Application_configGetPath" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    try {
+      try {
+        result = ((Seiscomp::Client::Application const *)arg1)->configGetPath((std::string const &)*arg2);
+      }
+      catch(Seiscomp::Config::Exception &_e) {
+        SWIG_Python_Raise(SWIG_NewPointerObj((new Seiscomp::Config::Exception(static_cast< const Seiscomp::Config::Exception& >(_e))),SWIGTYPE_p_Seiscomp__Config__Exception,SWIG_POINTER_OWN), "Seiscomp::Config::Exception", SWIGTYPE_p_Seiscomp__Config__Exception); SWIG_fail;
+      }
+    }
+    catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    }
+  }
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Application_configGetBools(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
@@ -23935,6 +23985,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Application_configGetInt", _wrap_Application_configGetInt, METH_VARARGS, (char *)"Application_configGetInt(Application self, std::string const & query) -> int"},
 	 { (char *)"Application_configGetDouble", _wrap_Application_configGetDouble, METH_VARARGS, (char *)"Application_configGetDouble(Application self, std::string const & query) -> double"},
 	 { (char *)"Application_configGetString", _wrap_Application_configGetString, METH_VARARGS, (char *)"Application_configGetString(Application self, std::string const & query) -> std::string"},
+	 { (char *)"Application_configGetPath", _wrap_Application_configGetPath, METH_VARARGS, (char *)"Application_configGetPath(Application self, std::string const & query) -> std::string"},
 	 { (char *)"Application_configGetBools", _wrap_Application_configGetBools, METH_VARARGS, (char *)"Application_configGetBools(Application self, std::string const & query) -> vectorBool"},
 	 { (char *)"Application_configGetInts", _wrap_Application_configGetInts, METH_VARARGS, (char *)"Application_configGetInts(Application self, std::string const & query) -> vectorInt"},
 	 { (char *)"Application_configGetDoubles", _wrap_Application_configGetDoubles, METH_VARARGS, (char *)"Application_configGetDoubles(Application self, std::string const & query) -> vectorDouble"},

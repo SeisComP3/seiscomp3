@@ -86,18 +86,33 @@ Seiscomp::DataModel::DatabaseIterator ConfigDB::getConfigObjects(Seiscomp::DataM
 		query << " LEFT JOIN ConfigModule ON (ConfigModule._oid=ConfigStation._parent_oid OR ConfigModule." << _T("parameterSetID") << "=PParameterSet." << _T("publicID") << ")";
 	}
 
-	query << " WHERE TRUE ";
-	if (moduleName)
-		query << "AND ConfigModule." << _T("name") << "='" << *moduleName << "' ";
-	if (networkCode)
-		query << "AND ConfigStation." << _T("networkCode") << "='" << *networkCode << "' ";
-	if (stationCode)
-		query << "AND ConfigStation." << _T("stationCode") << "='" << *stationCode << "' ";
-	if (setupName)
-		query << "AND Setup." << _T("name") << "='" << *setupName << "' ";
-	if (parameterNames.size() != 0) {
+	bool first = true;
+
+	if ( moduleName ) {
+		if ( first ) { query << " WHERE "; first = false; }
+		else query << " AND ";
+		query << "ConfigModule." << _T("name") << "='" << *moduleName << "' ";
+	}
+	if ( networkCode ) {
+		if ( first ) { query << " WHERE "; first = false; }
+		else query << " AND ";
+		query << "ConfigStation." << _T("networkCode") << "='" << *networkCode << "' ";
+	}
+	if ( stationCode ) {
+		if ( first ) { query << " WHERE "; first = false; }
+		else query << " AND ";
+		query << "ConfigStation." << _T("stationCode") << "='" << *stationCode << "' ";
+	}
+	if ( setupName ) {
+		if ( first ) { query << " WHERE "; first = false; }
+		else query << " AND ";
+		query << "Setup." << _T("name") << "='" << *setupName << "' ";
+	}
+	if ( parameterNames.size() != 0 ) {
+		if ( first ) { query << " WHERE "; first = false; }
+		else query << " AND ";
 		std::set<std::string>::const_iterator it = parameterNames.begin();
-		query << "AND (Parameter." << _T("name") << "='" << *it << "'";
+		query << "(Parameter." << _T("name") << "='" << *it << "'";
 		while(++it != parameterNames.end())
 			query << " OR Parameter." << _T("name") << "='" << *it << "'";
 		query << ") ";

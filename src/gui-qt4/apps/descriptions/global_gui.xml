@@ -363,9 +363,35 @@
 				</group>
 
 				<group name="marker">
-					<parameter name="lineWidth" type="color">
+					<parameter name="lineWidth" type="int">
 						<description>
-							The line width of the marker (e.g. picks of manual picker).
+						The line width of the marker (e.g. picks of manual picker).
+						</description>
+					</parameter>
+				</group>
+
+				<group name="records">
+					<parameter name="lineWidth" type="int" default="1">
+						<description>
+						The line width of the records / traces.
+						</description>
+					</parameter>
+					<parameter name="antiAliasing" type="bool" default="false">
+						<description>
+						Configures antialiasing of records / traces. Antialiasing
+						needs more processing time and does not look as good as
+						possible due to point optimizations. To get the best
+						visual quality, disable trace optimization as well.
+						</description>
+					</parameter>
+					<parameter name="optimize" type="bool" default="true">
+						<description>
+						Configures optimization of trace polylines. If activated
+						then lines on the same pixel line or same pixel row
+						collapse into single lines. Optimization does not look
+						as good as possible in combination with antialiasing.
+						For best quality disable optimization and enable
+						antialiasing.
 						</description>
 					</parameter>
 				</group>

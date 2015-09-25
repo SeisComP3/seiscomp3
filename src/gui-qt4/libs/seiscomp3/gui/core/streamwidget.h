@@ -11,8 +11,8 @@
  ***************************************************************************/
 
 
-#ifndef __StreamWidget_H__
-#define __StreamWidget_H__
+#ifndef __SEISCOMP_GUI_CORE_STREAMWIDGET_H__
+#define __SEISCOMP_GUI_CORE_STREAMWIDGET_H__
 
 #include <vector>
 #include <map>
