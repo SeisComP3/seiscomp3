@@ -262,7 +262,7 @@ bool Connection::selectArchived(Responses &responses, const Core::Time &from,
 			responses.resize(responses.size() - 1);
 			return false;
 		}
-		if ( !responses.back().timestamp.valid() ) {
+		if ( responses.back().type == ctXML && !responses.back().timestamp.valid() ) {
 			responses.resize(responses.size() - 1);
 			SEISCOMP_WARNING("%sinvalid timestamp in archived data, skipping",
 			                 _logPrefix.c_str());
@@ -376,6 +376,7 @@ bool Connection::connect() {
 	catch ( SocketException &se ) {
 		SEISCOMP_ERROR("%scould not connect to service '%s': %s ",
 		               _logPrefix.c_str(), _service.c_str(), se.what());
+		_sock->close();
 		return false;
 	}
 
