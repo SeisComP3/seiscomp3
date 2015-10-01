@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <string>
 #include <iostream>
+#include <boost/bind.hpp>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/strings.h>
@@ -271,7 +272,7 @@ void BalancedConnection::close() {
 
 void BalancedConnection::putRecord(Record* rec) {
 	{
-		boost::unique_lock<boost::mutex> lock(_mtx);
+		boost::mutex::scoped_lock lock(_mtx);
 
 		while(_buffer.size() >= BufferSize) {
 			_buf_not_full.wait(lock);
@@ -287,7 +288,7 @@ Record* BalancedConnection::getRecord() {
 	Record* rec;
 
 	{
-		boost::unique_lock<boost::mutex> lock(_mtx);
+		boost::mutex::scoped_lock lock(_mtx);
 
 		while( _buffer.empty() ) {
 			_buf_not_empty.wait(lock);

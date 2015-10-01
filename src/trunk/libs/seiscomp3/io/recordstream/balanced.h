@@ -21,7 +21,7 @@
 #include <sstream>
 
 #include <boost/thread/thread.hpp>
-#include <boost/thread/condition_variable.hpp>
+#include <boost/thread/condition.hpp>
 
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/timewindow.h>
@@ -94,8 +94,8 @@ class SC_SYSTEM_CORE_API BalancedConnection : public Seiscomp::IO::RecordStream 
 		std::list<Record*> _buffer;
 		std::istringstream _stream;
 		boost::mutex _mtx;
-		boost::condition_variable _buf_not_full;
-		boost::condition_variable _buf_not_empty;
+		boost::condition _buf_not_full;
+		boost::condition _buf_not_empty;
 };
 
 } // namesapce Balanced
