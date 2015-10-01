@@ -27,6 +27,7 @@ TARGET_LINK_LIBRARIES(
 	q330_plugin
 		slplugin
 		slutils
+		pthread
 		${CMAKE_THREAD_LIBS_INIT}
 )
 
