@@ -480,7 +480,7 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 
 	try {
 		FDSNXML::AzimuthType azi;
-		azi.setValue(stream->azimuth());
+		azi.setValue(stream->azimuth() < 0 ? 360.0 + fmod(stream->azimuth(), 360.0) : stream->azimuth());
 		sx_chan->setAzimuth(azi);
 	}
 	catch ( ... ) {
