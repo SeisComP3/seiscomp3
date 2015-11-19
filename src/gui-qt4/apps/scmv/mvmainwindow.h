@@ -184,6 +184,7 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 		void searchWidgetClosed();
 
 		void setStationIdVisible(bool val);
+		void setStationChannelCodesVisible(bool val);
 
 		void selectStationsForEvent(const QString& eventId);
 		void deselectStations();

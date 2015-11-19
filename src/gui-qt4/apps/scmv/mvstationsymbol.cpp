@@ -24,8 +24,7 @@ IMPLEMENT_RTTI_METHODS(MvStationSymbol)
 
 
 MvStationSymbol::MvStationSymbol(Map::Decorator* decorator)
- : StationSymbol(decorator) {
-
+: StationSymbol(decorator) {
 	init();
 }
 
@@ -33,9 +32,8 @@ MvStationSymbol::MvStationSymbol(Map::Decorator* decorator)
 
 
 MvStationSymbol::MvStationSymbol(double latitude, double longitude,
-					             Map::Decorator* decorator)
- : StationSymbol(latitude, longitude, decorator) {
-
+                                 Map::Decorator* decorator)
+: StationSymbol(latitude, longitude, decorator) {
 	init();
 }
 
@@ -92,57 +90,61 @@ bool MvStationSymbol::isCharacterDrawingEnabled() const {
 
 
 const std::string& MvStationSymbol::networkCode() const {
-    return _networkCode;
+	return _networkCode;
 }
 
 
 
 
 void MvStationSymbol::setNetworkCode(const std::string& networkCode) {
-    _networkCode = networkCode;
+	_networkCode = networkCode;
 }
 
 
 
 
 const std::string& MvStationSymbol::stationCode() const {
-    return _stationCode;
+	return _stationCode;
 }
 
 
 
 
 void MvStationSymbol::setStationCode(const std::string& stationCode) {
-    _stationCode = stationCode;
+	_stationCode = stationCode;
 }
 
 
 
 
 const std::string& MvStationSymbol::locationCode() const {
-    return _locationCode;
+	return _locationCode;
 }
 
 
 
 void MvStationSymbol::setLocationCode(const std::string& locationCode) {
-    _locationCode = locationCode;
+	_locationCode = locationCode;
 }
 
 
 
 
 const std::string& MvStationSymbol::channelCode() const {
-    return _channelCode;
+	return _channelCode;
 }
 
 
 
 
 void MvStationSymbol::setChannleCode(const std::string& channelCode) {
-    _channelCode = channelCode;
+	_channelCode = channelCode;
 }
 
+
+void MvStationSymbol::setDrawFullID(bool f) {
+	_drawFullId = f;
+}
 
 
 void MvStationSymbol::init() {
@@ -152,6 +154,7 @@ void MvStationSymbol::init() {
 	_char                      = ' ';
 	_characterDrawingColor     = Qt::black;
 	_isCharacterDrawingEnabled = false;
+	_drawFullId                = true;
 }
 
 
@@ -169,6 +172,8 @@ void MvStationSymbol::customDraw(const Map::Canvas *canvas, QPainter& painter) {
 
 
 void MvStationSymbol::drawID(QPainter& painter) {
+	std::string stationId = networkCode () + "." + stationCode();
+
 	painter.save();
 
 	QFont idFont = painter.font();
@@ -181,18 +186,17 @@ void MvStationSymbol::drawID(QPainter& painter) {
 	QPoint p1 = stationPolygon().point(1);
 	QPoint p2 = stationPolygon().point(2);
 	QPoint p3(p0.x() + (int)std::ceil((p0.x() - p2.x()) * 0.4),
-			  p0.y() - (int)std::ceil((p2.y() - p0.y()) * 0.4));
+	          p0.y() - (int)std::ceil((p2.y() - p0.y()) * 0.4));
 	QPoint p4(p1.x() + (int)std::ceil((p0.x() - p2.x()) * 0.1), p3.y());
 
 	painter.drawLine(p0, p3);
 	painter.drawLine(p3, p4);
 
 	painter.setPen(Qt::darkGray);
-	painter.drawText(p4.x(), p4.y() + 1, id().c_str());
+	painter.drawText(p4.x(), p4.y() + 1, (_drawFullId ? id() : stationId).c_str());
 
 	painter.setPen(_idDrawingColor);
 
-    std::string stationId = networkCode () + "." + stationCode();
 	painter.drawText(p4.x() + 1, p4.y(), stationId.c_str());
 
 	painter.restore();
