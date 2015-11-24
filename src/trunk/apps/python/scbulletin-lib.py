@@ -457,8 +457,10 @@ class Bulletin(object):
             # end (MO)
             "stat":"A"
         }
-        if org.evaluationMode() == seiscomp3.DataModel.MANUAL:
-            tmp["stat"] = "M"
+        try:
+            if org.evaluationMode() == seiscomp3.DataModel.MANUAL:
+                tmp["stat"] = "M"
+        except: pass
 
         # dummy default
         tmp["mtyp"] = "M"
