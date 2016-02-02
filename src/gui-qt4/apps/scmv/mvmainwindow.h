@@ -142,6 +142,7 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 		void handleNewAmplitude(Seiscomp::DataModel::Amplitude* amplitude);
 		void handleNewMagnitude(Seiscomp::DataModel::Magnitude* magnitude);
 		void handleNewOrigin(Seiscomp::DataModel::Origin* origin);
+		void handleNewFocalMechanism(Seiscomp::DataModel::FocalMechanism* fm);
 		void handleNewEvent(Seiscomp::DataModel::Event* event);
 		void handleEventUpdate(Seiscomp::DataModel::Event* event, EventData* eventData);
 
@@ -154,6 +155,8 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 		void updateInfoWidget(const Seiscomp::DataModel::Event* event);
 
 		Seiscomp::Gui::OriginSymbol* createOriginSymbolFromEvent(Seiscomp::DataModel::Event* event);
+		Seiscomp::Gui::TensorSymbol* createTensorSymbolFromEvent(Seiscomp::DataModel::Event* event);
+
 		bool checkIfEventIsActive(const EventData& eventData);
 
 		std::vector<StationData*> getAssociatedStationsForEvents(std::vector<EventData*>::const_iterator it,

@@ -164,7 +164,8 @@ void EventDataRepository::setEventDataLifeSpan(const Seiscomp::Core::TimeSpan& t
 
 
 bool EventDataRepository::addEvent(DataModel::Event* event,
-                                  Gui::OriginSymbol* originSymbol) {
+                                  Gui::OriginSymbol* originSymbol,
+                                   Gui::TensorSymbol *tensorSymbol) {
 	std::string preferredOriginId = event->preferredOriginID();
 	DataModel::Origin* preferredOrigin = findOrigin(preferredOriginId);
 	Core::Time preferredOriginTime = preferredOrigin->time();
@@ -180,7 +181,7 @@ bool EventDataRepository::addEvent(DataModel::Event* event,
 		if ( tmpPreferredOriginTime > preferredOriginTime ) break;
 	}
 
-	EventData eventData(event, originSymbol);
+	EventData eventData(event, originSymbol, tensorSymbol);
 	_eventDataCollection.insert(it, eventData);
 
 	return true;
@@ -191,6 +192,13 @@ bool EventDataRepository::addEvent(DataModel::Event* event,
 
 void EventDataRepository::addOrigin(DataModel::Origin* origin) {
 	_objectTimeSpanBuffer.feed(origin);
+}
+
+
+
+
+void EventDataRepository::addFocalMechanism(DataModel::FocalMechanism* fm) {
+	_objectTimeSpanBuffer.feed(fm);
 }
 
 
@@ -260,6 +268,14 @@ ArrivalData* EventDataRepository::findArrivalwithPickId(const std::string& pickI
 DataModel::Origin* EventDataRepository::findOrigin(const std::string& id) {
 	DataModel::PublicObject* publicObject = _objectTimeSpanBuffer.find(DataModel::Origin::TypeInfo(), id);
 	return DataModel::Origin::Cast(publicObject);
+}
+
+
+
+
+DataModel::FocalMechanism* EventDataRepository::findFocalMechanism(const std::string& id) {
+	DataModel::PublicObject* publicObject = _objectTimeSpanBuffer.find(DataModel::FocalMechanism::TypeInfo(), id);
+	return DataModel::FocalMechanism::Cast(publicObject);
 }
 
 
