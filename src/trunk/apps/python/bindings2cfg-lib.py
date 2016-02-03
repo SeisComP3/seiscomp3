@@ -1,5 +1,5 @@
 import os, time, sys
-import seiscomp3.Client
+import seiscomp3.System, seiscomp3.Client
 
 
 def collectParams(container):
@@ -402,6 +402,5 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
 
 
 def main():
-    import seiscomp3.System
     app = ConfigDBUpdater(len(sys.argv), sys.argv)
     return app()
