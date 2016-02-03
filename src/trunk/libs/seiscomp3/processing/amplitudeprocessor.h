@@ -39,7 +39,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 		enum Capability {
 			//! No supported capabilities
 			NoCapability  = 0x0000,
-			//! Supports differnt amplitude measure types
+			//! Supports different amplitude measure types
 			MeasureType   = 0x0001,
 			//! Supports different amplitude combiner if
 			//! the amplitude is measured on different
