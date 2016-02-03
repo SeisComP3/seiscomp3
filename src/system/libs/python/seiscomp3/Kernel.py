@@ -163,14 +163,13 @@ class Environment(seiscomp3.Config.Config):
     lockfile = self.lockFile(module)
 
     # Open pid file
-    try: f = open(lockfile, "r")
-    except: return False
+    f = open(lockfile, "r")
 
     # Try to read the pid
     try: pid = int(f.readline())
     except:
       f.close()
-      return False
+      raise
 
     # Kill process with pid
     subprocess.call("kill %d" % pid, shell=True)
