@@ -1,6 +1,0 @@
-This plugin is used to retrieve data from IRIS/IDA Near-Real Time System
-(NRTS). It requires IDA System Interface (ISI) Toolkit, which is not
-included in SeisComP.
-
-See also: http://ida.ucsd.edu/Telemetry/
-
