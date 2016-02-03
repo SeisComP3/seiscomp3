@@ -253,6 +253,21 @@ class ReportData(object):
                 self.clientIP = table
 
 
+class ReportDataResif(ReportData):
+    def __init__(self, summary, who):
+        self.summary = summary
+
+        # What units are size in? They are stored in bytes.
+        byte_size= float(summary['size'])
+        self.user = (
+            ('User', 'Requests', 'Lines', 'Nodata/Errors', 'Size'),
+            (who, summary['requests'], summary['lines'], summary['error_count'], byte_size),
+        )
+        self.network = (
+            ('Network', 'Requests', 'Lines', 'Nodata', 'Errors', 'Size'),
+            ('unknown', summary['requests'], summary['lines'], 0, summary['error_count'], byte_size),
+	)
+        return
 
 def lookup_source(con, host, port, dcid, description):
     """Return a source id - either an existing one, or a new one.
@@ -311,9 +326,18 @@ def insert_summary(con, k, summary):
     cursor = con.cursor()
     try:
         r = summary['requests']
-        rwe = summary['request_with_errors']
-        e = summary['error_count']
-        u = summary['users']
+        try:
+            rwe = summary['request_with_errors']
+        except KeyError:
+            rwe = 0       # FIXME: SQL NONE would be better
+        try:
+            e = summary['error_count']
+        except KeyError:
+            e = 0         # FIXME: SQL NONE would be better
+        if summary.has_key('users'):
+            u = summary['users']
+        else:
+            u = 0         # FIXME: SQL NONE would be better
         tl = summary['lines']
         ts = summary['size']
 
@@ -325,10 +349,11 @@ def insert_summary(con, k, summary):
             q = "INSERT INTO ArcStatsSummary VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?)"
             v = (k[0], k[1], r, rwe, e, u, tl, ts)
 
-    except KeyError:
+    except KeyError as e:
         print "Couldn't find some needed value(s)"
         for k, v in summary.iteritems():
             print k,':', v
+        print e
         return
 
     try:
@@ -459,6 +484,8 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
     If a report was already received, nothing is inserted.
     (In future: should replace previous data for this day and source?)
 
+    Returns 1 if it gets to the end, otherwise 0.
+
     """
     y = int(start_day[0:4]);
     if not db.endswith("-%i.db" % y):
@@ -474,9 +501,9 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
     
     print "Inserting tables... ",
     insert_summary(con, k, rd.summary)
-    insert_user(con, k, rd.user)
-    insert_request(con, k, rd.request)
-    insert_volume(con, k, rd.volume)
+    if len(rd.user) > 0:     insert_user(con, k, rd.user)        # HACK
+    if len(rd.request) > 0:  insert_request(con, k, rd.request)  # HACK
+    if len(rd.volume) > 0:   insert_volume(con, k, rd.volume)    # HACK
     if rd.station: insert_station(con, k, rd.station)
     if rd.network: insert_network(con, k, rd.network)
     if len(rd.messages) > 0:
@@ -540,6 +567,50 @@ def process_html_file(f, host, port, dcid, description):
     start_day = rd.summary['start'].split(' ', 1)[0]
     return insert_data(db, rd, host, port, dcid, description, start_day)
 
+def process_resif_string(s, host, port, dcid, description):
+    """RESIF supplies strings like this:
+
+    fdsnws@resif 0 0 16840.62 2015-07-29
+    ^            ^ ^ ^        ^
+    |            | | |        start day
+    |            | | size in MB
+    |            | lines?
+    |            requests?
+    reporter
+
+    """
+    words = s.split()
+    summary = dict()
+
+    def day_after(d):
+        words = d.split("-");
+	ddd = datetime.date(int(words[0]), int(words[1]), int(words[2]))
+	ddd = ddd + datetime.timedelta(days=1)
+        return ddd.isoformat()
+
+    try:
+        # No units were given in the report, but date was supplied
+        summary['start'] = words[4]
+        summary['end'] = day_after(summary['start'])
+        summary['requests'] = words[1]
+        summary['lines'] = words[2]
+        summary['size'] = int(float(words[3])*1024*1024)  # is given in MB, maybe.
+        # Don't perpetuate crap units in the DB
+        ###summary['size'] = words[3] + " MiB"
+
+        summary['error_count'] = None
+        summary['users'] = 1 ## words[0]
+
+    except KeyError as e:
+        print "Error reading summary object", e
+        print summary
+    print "Covers %(start)s to %(end)s - %(requests)s requests %(lines)s lines, size %(size)s" % summary
+    who = words[0]
+    start_day = summary['start'].split(' ', 1)[0]
+    rd = ReportDataResif(summary, who)
+    return insert_data(db, rd, who, -1, dcid, who, start_day)
+
+# ----------------------------------------------------------------------
 # This directory must match where the PHP report
 # generator looks for SQLite DB files:
 reqlogstats_db_dir="/home/sysop/reqlogstats/var"
@@ -588,14 +659,16 @@ for line in sys.stdin.readlines():
 
 bodyfile="/tmp/reqlogstats.txt"
 
+# Used to map e-mail sender e-mail addresses to nodes:
 source_dict = {"bgr": "BGR",
+               "edu": "KOERI",   # eida@boun.edu.tr
                "ethz": "ETHZ",
                "gfz-potsdam": "GFZ",
                "infp": "NIEP",
                "ingv": "INGV",
                "ipgp": "IPGP",
-               "resif": "RESIF",
                "knmi": "ODC",
+               "resif": "RESIF",
                "uni-muenchen": "LMU"
               }
 
@@ -605,6 +678,14 @@ for myfile in filelist:
     if not os.path.exists(myfile):
 	scores[2] += 1
 	continue
+
+    if os.path.basename(myfile).startswith("fdsnws_"):
+        with open(myfile, "r") as fid:
+            for s in fid.readlines():
+                print "Read in:", s
+                result = process_resif_string(s, "resif", -1, "RESIF", "fdsnws@resif")
+                scores[result] += 1
+        continue
 
     with open(myfile, 'r') as fid:
         msg = email.message_from_file(fid)

@@ -6,7 +6,7 @@
 #
 # Input: reqlogstats-*.db SQLite database
 # Parameters: network code [optional]
-# Output: two PNG plots - total, and break-out by source.
+# Output: two plots - total, and break-out by source.
 #
 # ----------------------------------------------------------------------
 set -u
@@ -74,16 +74,19 @@ fi
 
 
 if [ -z "${code}" ] ; then
-    cmd="SELECT start_day, dcid, total_size FROM ArcStatsSummary as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${code_constr} AND X.start_day > '$start_year-$start_month-00' AND X.start_day < '$start_year-$start_month-99' ORDER BY start_day, dcid;"
+	table="ArcStatsSummary as X JOIN ArcStatsSource as Y WHERE X.src = Y.id"
+	cmd="SELECT start_day, dcid, total_size FROM ${table} ${code_constr}"
 else
-    cmd="SELECT start_day, dcid, size/1024.0/1024.0 FROM ArcStatsNetwork as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${code_constr} AND X.start_day > '$start_year-$start_month-00' AND X.start_day < '$start_year-$start_month-99' ORDER BY start_day, dcid;"
+	table="ArcStatsNetwork as X JOIN ArcStatsSource as Y WHERE X.src = Y.id"
+	cmd="SELECT start_day, dcid, size FROM ${table} ${code_constr}"
 fi
+cmd="${cmd} AND X.start_day > '$start_year-$start_month-00' AND X.start_day < '$start_year-$start_month-99' ORDER BY start_day, dcid;"
 
+#echo ${cmd}
 echo ${cmd} \
     | sqlite3 ${dbfile} | sed -e 's/|/  /g' \
     | python ${dirname}/t1.py \
     | python ${dirname}/t2.py > days3.dat
-cp days3.dat lemon.dat
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
     echo "Nothing in db with '${code_constr}'."

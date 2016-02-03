@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# Make graph of bytes per day or month over a whole year.
+# Make graph of size of usage by FDSNWS per day or month over a whole year.
 #
-# Begun by Peter L. Evans, May 2014.
-# Quick hack which may need rethinking.
+# Begun by Peter L. Evans, September 2015.
+# Quick hack of make_year_graph.sh
 #
 # Input: reqlogstats-*.db SQLite database
 # Parameters: network code [optional]
+#         User id or pattern
 # Output: PNG plot - total
 #         PNG plot - break-out by source.
 #         text total  
@@ -34,29 +35,34 @@ if [ ! -d ${db_dir} ] ; then
 fi
 
 show_usage() {
-  echo "Usage: ${progname} [--code {net} ] [ {month} [ {year} [ {db file} ]]]"
+  echo "Usage: ${progname} {userpatt} [--dcid {dcid} ] [ {month} [ {year} [ {db file} ]]]"
   echo
   echo "Create usage images from {db file} for the given date."
-  echo "If {net} is not given, all networks are included."
+  echo "If {dcid} is not given, all DCIDs are included."
   echo "If {month} or {year} are not given, use today's date."
   echo "If {db file} is not given, use a default."
 }
 
-code=
-code_constr=""
+dcid=
+dcid_constr=""
 table=
 
 if [ $# -gt 0 ] ; then
+    userpatt=$1
+    shift
+else
+    show_usage
+fi
+if [ $# -gt 0 ] ; then
     first=$1
-    if [ "$first" == "--code" ] ; then
-	code=$2
-	code_constr="AND X.networkCode = '${code}'"
+    if [ "$first" == "--dcid" ] ; then
+	dcid=$2
+	dcid_constr="AND Y.dcid = '${dcid}'"
 	shift 2;
     fi
 fi
 
-echo "Restricted to code=${code}; setting constraint: '${code_constr}'"
-code2=${code/\//_}
+echo "Restricted to dcid=${dcid}; setting constraint: '${dcid_constr}'"
 
 if [ $# -ge 1 ] ; then
     start_month=$1  # Should be a two-digit number
@@ -75,22 +81,22 @@ if [ ! -s ${dbfile} ] ; then
     exit 1
 fi
 
+what="start_day, dcid, sum(size) FROM ArcStatsUser as X JOIN ArcStatsSource as Y WHERE X.src = Y.id"
+user_constr="AND userID LIKE '${userpatt}'"
 
-if [ -z "${code}" ] ; then
-    cmd="SELECT start_day, dcid, total_size FROM ArcStatsSummary as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${code_constr} AND substr(X.start_day, 1, 4) = '${start_year}' ORDER BY start_day, dcid;"
+if [ -z "${dcid}" ] ; then
+    cmd="SELECT ${what} ${user_constr} ${dcid_constr} AND substr(X.start_day, 1, 4) = '${start_year}' GROUP BY start_day, dcid ORDER BY start_day, dcid;"
 else
-    cmd="SELECT start_day, dcid, size/1024.0/1024.0 FROM ArcStatsNetwork as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${code_constr} ORDER BY start_day, dcid;"
+    cmd="SELECT ${what} ${user_constr} ${dcid_constr} GROUP BY start_day, dcid ORDER BY start_day, dcid;"
 fi
 echo ${cmd}
 
-# Select; normalise units (GiB -> MiB); make the table
 echo ${cmd} \
     | sqlite3 ${dbfile} | sed -e 's/|/  /g' \
-    | python ${dirname}/t1.py \
     | python ${dirname}/t2.py > days3.dat
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
-    echo "Nothing in db with '${code_constr}'."
+    echo "Nothing in db with '${dcid_constr}'."
     exit 0
 fi
 
@@ -103,35 +109,35 @@ xtic_density=14
 gnuplot <<EOF
 set xdata time
 set timefmt "%Y-%m-%d"
-set xlabel 'Day in $start_year'
+set xlabel 'Date in $start_year'
 set xrange ['$start_year-01-01':]
 set xtics ${xtic_density}*24*3600
-set xtics format "%j"
-set ylabel 'total_size, MiB'
+set xtics format "%d\n%b"
+set ylabel 'Total bytes for "${userpatt}"'
 set logscale y
 
 set key top left
 set grid x
-set style data linespoints
+set style data impulses
 
 set terminal svg font "arial,14" size 960,480   # even "giant" is not enough font.
 set output 'out.svg'
 
-plot 'days3.dat' using 1:2 title 'All EIDA nodes'
+plot 'days3.dat' using 1:2 title 'All EIDA nodes', \
+  '' using 1:5 title 'GFZ', \
+  '/srv/www/webdc/eida/data/total-2015.txt' using 1:(1024*1024*\$2) title 'All requests' w l
 
 #set terminal dumb
 #set output
 #replot
 EOF
 
-if [ -z "${code}" ] ; then
+if [ -z "${dcid}" ] ; then
     out_dir="${img_dir}"
-    outfile="${out_dir}/total-${start_year}.svg"
+    outfile="${out_dir}/total-user-${start_year}.svg"
 else
     echo "Sorry, can't do it yet. Bye."
     exit 22
-    #out_dir="${img_dir}/${start_year}/${start_month}"
-    #outfile="${out_dir}/graph-${code2}-total.svg"
 fi
 
 if [ -s out.svg ] ; then
@@ -148,14 +154,8 @@ fi
 
 gnuplot <<EOF
 set xlabel 'Day in $start_year'
-set xrange [0:366]
-set xtics out nomirror
-set xtics 0,7,366 format ""
-set mxtics 7
-set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
 
-set ylabel 'total_size, MiB'
-set yrange [0:]
+set ylabel 'Size by day for user "${userpatt}"'
 
 set key top left
 set nogrid
@@ -173,7 +173,7 @@ set style line 3 linecolor rgb "#00589C"
 set style line 6 linecolor rgb "violet"
 set style line 10 linecolor rgb "magenta"
 
-plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
+plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf("%i", \$0):"") title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \
@@ -189,17 +189,15 @@ plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
 #replot
 EOF
 
-if [ -z "${code}" ] ; then
+if [ -z "${dcid}" ] ; then
     out_dir="${img_dir}"
-    outfile="${out_dir}/sources-${start_year}.svg"
-    txtfile="${out_dir}/total-${start_year}.txt"
+    outfile="${out_dir}/sources-user-${start_year}.svg"
+    txtfile="${out_dir}/total-user-${start_year}.txt"
 else
     echo "Sorry, can't do it yet. Bye."
     exit 22
  
     #out_dir="${img_dir}/${start_year}/${start_month}"
-    #outfile="${out_dir}/graph-${code2}-sources.svg"
-    #txtfile="${out_dir}/graph-${code2}-total.txt"
 fi
 
 if [ -s out.svg ] ; then
