@@ -1121,6 +1121,14 @@ class StreamApplication(Application):
         """setRecordInputHint(StreamApplication self, Seiscomp::Record::Hint hint)"""
         return _Client.StreamApplication_setRecordInputHint(self, *args)
 
+    def setRecordDatatype(self, *args):
+        """setRecordDatatype(StreamApplication self, Seiscomp::Array::DataType datatype)"""
+        return _Client.StreamApplication_setRecordDatatype(self, *args)
+
+    def recordDataType(self):
+        """recordDataType(StreamApplication self) -> Seiscomp::Array::DataType"""
+        return _Client.StreamApplication_recordDataType(self)
+
     def startRecordThread(self):
         """startRecordThread(StreamApplication self)"""
         return _Client.StreamApplication_startRecordThread(self)

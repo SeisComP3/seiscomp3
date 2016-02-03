@@ -14,50 +14,17 @@ INCLUDE_DIRECTORIES(${Boost_thread_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${THIRD_PARTY_DIRECTORY}/libbson/src/bson)
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/src/trunk/libs/3rd-party/libbson/src/bson)
 
-SET(GEN_VERSION ${CMAKE_CURRENT_BINARY_DIR}/version.cpp)
+IF(CMAKE_BUILD_TYPE STREQUAL Debug)
+	ADD_DEFINITIONS(-DWITH_GIT_REVISION -DWITH_BUILD_INFOS)
+ELSE(CMAKE_BUILD_TYPE STREQUAL Debug)
+	ADD_DEFINITIONS(-DWITH_GIT_REVISION)
+ENDIF(CMAKE_BUILD_TYPE STREQUAL Debug)
 
-SET_SOURCE_FILES_PROPERTIES(${GEN_VERSION} PROPERTIES GENERATED true)
-
-if(CMAKE_BUILD_TYPE STREQUAL Debug)
-        ADD_DEFINITIONS(-DWITH_SVN_REVISION -DWITH_BUILD_INFOS)
-        ADD_CUSTOM_COMMAND(
-                OUTPUT  ${GEN_VERSION}
-                COMMAND ${CMAKE_COMMAND} -E echo_append 'const char* git_revision\(void\)  {const char* GIT_REVISION= \"'  > ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND bash -c 'echo -n `git --git-dir="${CMAKE_SOURCE_DIR}/.git"  --work-tree="${CMAKE_SOURCE_DIR}" rev-parse HEAD`' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo '\"\; return GIT_REVISION\; }' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append 'char const* build_system\(void\) {char const* BUILD_SYSTEM = \"' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append `uname -sr` >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo '\"\; return BUILD_SYSTEM\;}' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-
-                COMMAND ${CMAKE_COMMAND} -E echo_append 'char const* compiler_version\(void\) {char const* COMPILER_VERSION = \"' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append `${CMAKE_CXX_COMPILER} --version | head -1` >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo '\"\; return COMPILER_VERSION\;}' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-
-                COMMAND ${CMAKE_COMMAND} -E echo_append 'char const* os_version\(void\) {char const* OS_VERSION = \"' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append `lsb_release -sd | sed 's/\"//g'` >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append '/' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo_append '${BUILD_ARCH}' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo '\"\; return OS_VERSION\;}' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp ${GEN_VERSION}
-                COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMENT "create ${GEN_VERSION} for debug-mode"
-        )
-else(CMAKE_BUILD_TYPE STREQUAL Debug)
-        ADD_DEFINITIONS(-DWITH_SVN_REVISION)
-        ADD_CUSTOM_COMMAND(
-                OUTPUT ${GEN_VERSION}
-                COMMAND ${CMAKE_COMMAND} -E echo_append 'const char* git_revision\(void\)  {const char* GIT_REVISION= \"'  > ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND bash -c 'echo -n `git --git-dir="${CMAKE_SOURCE_DIR}/.git"  --work-tree="${CMAKE_SOURCE_DIR}" rev-parse HEAD`' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E echo '\"\; return GIT_REVISION\; }' >> ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp ${GEN_VERSION}
-                COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/version_pre.cpp
-                COMMENT "create ${GEN_VERSION} for release"
-        )
-endif(CMAKE_BUILD_TYPE STREQUAL Debug)
-
-SET(SYSTEM_CORE_SOURCES ${SYSTEM_CORE_SOURCES} ${GEN_VERSION})
-
+ADD_CUSTOM_TARGET(
+	build_and_git_infos ALL
+	COMMENT "Generate build infos and gather Git revision"
+	COMMAND ${CMAKE_COMMAND} -DSYSTEM=${CMAKE_SYSTEM_NAME} -DSRC=${CMAKE_CURRENT_SOURCE_DIR} -DROOT=${CMAKE_SOURCE_DIR} -DCOMPILER=${CMAKE_CXX_COMPILER} -P ${CMAKE_CURRENT_SOURCE_DIR}/core/build_version.cmake
+)
 
 SC_ADD_SUBDIR_SOURCES(SYSTEM_CORE logging)
 SC_ADD_SUBDIR_SOURCES(SYSTEM_CORE core)
@@ -226,5 +193,7 @@ SC_LIB_LINK_LIBRARIES(client
 )
 
 IF(WIN32)
-        SC_LIB_LINK_LIBRARIES(client zlib psapi)
+	SC_LIB_LINK_LIBRARIES(client zlib psapi)
 ENDIF(WIN32)
+
+ADD_DEPENDENCIES(seiscomp3_core build_and_git_infos)

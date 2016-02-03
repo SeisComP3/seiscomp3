@@ -124,12 +124,12 @@ point specified by 6 columns::
 
     -10.00 105.00 20.0 5.0 180.0 8
 
-The columns are grid point coordinates (latitude, longitude, depth), diameter,
+The columns are grid point coordinates (latitude, longitude, depth), radius,
 maximum station distance and minimum pick count, respectively. The above line
 sets a grid point centered at 10° S / 105° E at the depth of 20 km. It is
 sensitive to events within 5° of the center. Stations in a distance of up
 to 180° may be used to nucleate an event. At least 8 picks have to contribute
-to an origin at this location. The diameter should be chosen large enough to
+to an origin at this location. The radius should be chosen large enough to
 allow grid cells to overlap, but not too large. The size also determines the
 time windows for grouping the picks in the grid search. If the time windows
 are too long the risk of contamination with wrong picks increases. The maximum

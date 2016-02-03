@@ -55,6 +55,7 @@ Picker::Picker(const Core::Time& trigger)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Picker::init() {
 	setMargin(Core::TimeSpan(0.0));
+	_config.noiseBegin  = 0;
 	_config.signalBegin = -30;
 	_config.signalEnd   =  10;
 	_config.snrMin      =   3;
@@ -78,7 +79,7 @@ void Picker::computeTimeWindow() {
 		return;
 	}
 
-	Core::Time startTime = _trigger + Core::TimeSpan(_config.signalBegin);
+	Core::Time startTime = _trigger + Core::TimeSpan(std::min(_config.noiseBegin, _config.signalBegin));
 	Core::Time   endTime = _trigger + Core::TimeSpan(_config.signalEnd);
 
 	setTimeWindow(Core::TimeWindow(startTime, endTime));

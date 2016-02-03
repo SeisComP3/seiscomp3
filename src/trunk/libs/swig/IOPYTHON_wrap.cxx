@@ -8971,6 +8971,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_DatabaseInterface_getRowFieldName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::DatabaseInterface *arg1 = (Seiscomp::IO::DatabaseInterface *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:DatabaseInterface_getRowFieldName",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__DatabaseInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DatabaseInterface_getRowFieldName" "', argument " "1"" of type '" "Seiscomp::IO::DatabaseInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::DatabaseInterface * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "DatabaseInterface_getRowFieldName" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (char *)(arg1)->getRowFieldName(arg2);
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_DatabaseInterface_getRowField(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::DatabaseInterface *arg1 = (Seiscomp::IO::DatabaseInterface *) 0 ;
@@ -29028,6 +29059,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DatabaseInterface_fetchRow", _wrap_DatabaseInterface_fetchRow, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_findColumn", _wrap_DatabaseInterface_findColumn, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_getRowFieldCount", _wrap_DatabaseInterface_getRowFieldCount, METH_VARARGS, NULL},
+	 { (char *)"DatabaseInterface_getRowFieldName", _wrap_DatabaseInterface_getRowFieldName, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_getRowField", _wrap_DatabaseInterface_getRowField, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_getRowFieldString", _wrap_DatabaseInterface_getRowFieldString, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_getRowFieldSize", _wrap_DatabaseInterface_getRowFieldSize, METH_VARARGS, NULL},

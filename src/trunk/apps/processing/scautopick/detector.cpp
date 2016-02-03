@@ -106,6 +106,7 @@ void Detector::init() {
 	setAmplitudeTimeWindow(10.);
 	setMinAmplitudeOffset(3);
 	setDurations(-1,-1);
+	setSensitivityCorrection(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -150,6 +151,15 @@ void Detector::setDurations(double minDur, double maxDur) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Detector::setSensitivityCorrection(bool enable) {
+	_sensitivityCorrection = enable;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Detector::reset() {
 	Processing::SimpleDetector::reset();
 	_lastPick = Core::Time();
@@ -158,6 +168,18 @@ void Detector::reset() {
 	_currentPickRecord = NULL;
 	_minAmplitude = Core::None;
 	_triggeredAmplitude = 0;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Detector::fill(size_t n, double *samples) {
+	if ( _sensitivityCorrection )
+		_streamConfig[_usedComponent].applyGain(n, samples);
+
+	Processing::SimpleDetector::fill(n, samples);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

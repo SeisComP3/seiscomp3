@@ -42,11 +42,14 @@ class Detector : public Processing::SimpleDetector {
 		void setAmplitudeTimeWindow(const Core::TimeSpan &dt);
 		void setMinAmplitudeOffset(double);
 		void setDurations(double minDur, double maxDur);
+		void setSensitivityCorrection(bool enable);
 
 		void reset();
 
 
 	protected:
+		void fill(size_t n, double *samples);
+
 		bool handleGap(Filter *filter, const Core::TimeSpan&,
 		               double lastSample, double nextSample,
 		               size_t missingSamples);
@@ -101,6 +104,8 @@ class Detector : public Processing::SimpleDetector {
 
 		double         _minDuration;
 		double         _maxDuration;
+
+		bool           _sensitivityCorrection;
 
 		AmplitudeMaxProcessor _amplProc;
 

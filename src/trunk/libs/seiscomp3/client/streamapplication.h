@@ -72,6 +72,12 @@ class SC_SYSTEM_CLIENT_API StreamApplication : public Application {
 		//! The default is: DATA_ONLY
 		void setRecordInputHint(Record::Hint hint);
 
+		//! Sets the data type of read records.
+		//! The default is: FLOAT
+		void setRecordDatatype(Array::DataType datatype);
+
+		//! Returns the data type of the internal record sample buffer
+		Array::DataType recordDataType() const { return _recordDatatype; }
 
 		void startRecordThread();
 		void waitForRecordThread();
@@ -114,6 +120,7 @@ class SC_SYSTEM_CLIENT_API StreamApplication : public Application {
 		bool                _startAcquisition;
 		bool                _closeOnAcquisitionFinished;
 		Record::Hint        _recordInputHint;
+		Array::DataType     _recordDatatype;
 		IO::RecordStreamPtr _recordStream;
 		boost::thread      *_recordThread;
 		size_t              _receivedRecords;

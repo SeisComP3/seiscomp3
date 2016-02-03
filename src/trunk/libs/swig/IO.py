@@ -246,6 +246,7 @@ class DatabaseInterface(Core.BaseObject):
     def fetchRow(self): return _IO.DatabaseInterface_fetchRow(self)
     def findColumn(self, *args): return _IO.DatabaseInterface_findColumn(self, *args)
     def getRowFieldCount(self): return _IO.DatabaseInterface_getRowFieldCount(self)
+    def getRowFieldName(self, *args): return _IO.DatabaseInterface_getRowFieldName(self, *args)
     def getRowField(self, *args): return _IO.DatabaseInterface_getRowField(self, *args)
     def getRowFieldString(self, *args): return _IO.DatabaseInterface_getRowFieldString(self, *args)
     def getRowFieldSize(self, *args): return _IO.DatabaseInterface_getRowFieldSize(self, *args)

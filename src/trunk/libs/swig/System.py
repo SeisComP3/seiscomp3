@@ -797,9 +797,16 @@ class ConfigDelegate(Config.Logger):
     for _s in [Config.Logger]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, ConfigDelegate, name)
     __repr__ = _swig_repr
+    Added = _System.ConfigDelegate_Added
+    Removed = _System.ConfigDelegate_Removed
+    Updated = _System.ConfigDelegate_Updated
     def aboutToRead(self, *args): return _System.ConfigDelegate_aboutToRead(self, *args)
     def finishedReading(self, *args): return _System.ConfigDelegate_finishedReading(self, *args)
     def handleReadError(self, *args): return _System.ConfigDelegate_handleReadError(self, *args)
+    def aboutToWrite(self, *args): return _System.ConfigDelegate_aboutToWrite(self, *args)
+    def finishedWriting(self, *args): return _System.ConfigDelegate_finishedWriting(self, *args)
+    def hasWriteError(self, *args): return _System.ConfigDelegate_hasWriteError(self, *args)
+    def handleWriteTimeMismatch(self, *args): return _System.ConfigDelegate_handleWriteTimeMismatch(self, *args)
     def caseSensitivityConflict(self, *args): return _System.ConfigDelegate_caseSensitivityConflict(self, *args)
     def __init__(self): 
         this = _System.new_ConfigDelegate()

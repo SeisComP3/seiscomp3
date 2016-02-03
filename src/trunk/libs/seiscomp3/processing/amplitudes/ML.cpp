@@ -125,6 +125,10 @@ AmplitudeProcessor_ML::AmplitudeProcessor_ML()
 
 	_ampE.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
 	_ampN.setPublishFunction(boost::bind(&AmplitudeProcessor_ML::newAmplitude, this, _1, _2));
+
+	// Propagate configuration to single processors
+	_ampN.setConfig(config());
+	_ampE.setConfig(config());
 }
 
 

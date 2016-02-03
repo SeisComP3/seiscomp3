@@ -2954,7 +2954,9 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 						if ( status == AUTOMATIC ) {
 							SEISCOMP_DEBUG("... same priority and mode is AUTOMATIC");
 
-							if ( definingPhaseCount(origin) < definingPhaseCount(info->preferredOrigin.get()) ) {
+							originPriority = definingPhaseCount(origin);
+							preferredOriginPriority = definingPhaseCount(info->preferredOrigin.get());
+							if ( originPriority < preferredOriginPriority ) {
 								SEISCOMP_DEBUG("... skipping potential preferred automatic origin, phaseCount too low");
 								SEISCOMP_LOG(_infoChannel, "Origin %s has not been set preferred in event %s: priorities are equal (%d) but phaseCount too low (%d < %d)",
 								             origin->publicID().c_str(), info->event->publicID().c_str(), originPriority,
@@ -2970,11 +2972,13 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 							*/
 						}
 
-						if ( created(origin) < created(info->preferredOrigin.get()) ) {
-							SEISCOMP_DEBUG("... skipping potential preferred origin, there is a better one created later");
-							SEISCOMP_LOG(_infoChannel, "Origin %s: skipped potential preferred origin, there is a better one created later",
-							             origin->publicID().c_str());
-							return;
+						if ( originPriority == preferredOriginPriority ) {
+							if ( created(origin) < created(info->preferredOrigin.get()) ) {
+								SEISCOMP_DEBUG("... skipping potential preferred origin, there is a better one created later");
+								SEISCOMP_LOG(_infoChannel, "Origin %s: skipped potential preferred origin, there is a better one created later",
+								             origin->publicID().c_str());
+								return;
+							}
 						}
 					}
 					else {

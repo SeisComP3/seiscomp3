@@ -39,6 +39,7 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 		//! Configuration structure to store processing dependent
 		//! settings
 		struct Config {
+			double noiseBegin;  // start of the noise window to initialize filters
 			double signalBegin; // default: -30, relative to _trigger
 			double signalEnd;   // default: +10, relative to _trigger
 			double snrMin;      // default: 3
@@ -87,6 +88,9 @@ class SC_SYSTEM_CLIENT_API Picker : public TimeWindowProcessor {
 
 		//! Returns the filter used by concrete implementations
 		virtual const std::string &filterID() const = 0;
+
+		//! Set the start of the noise window relative to the trigger
+		void setNoiseStart(double start) { _config.noiseBegin = start; }
 
 		//! Set the start of the signal window relative to the trigger
 		void setSignalStart(double start)  { _config.signalBegin = start; }

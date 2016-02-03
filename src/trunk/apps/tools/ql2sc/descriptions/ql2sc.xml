@@ -44,9 +44,13 @@
 							Enables/disables GZip (GNU zip) compression.
 						</description>
 					</parameter>
+					<parameter name="native" type="boolean" default="false">
+						<description>Request native data instead of XML format. Native data export may be disabled on some hosts.</description>
+					</parameter>
 					<group name="data">
 						<description>
 							QuakeLink options specifying which XML components to fetch.
+							Note: These options are not used if 'native' data is requested.
 						</description>
 						<parameter name="picks" type="boolean" default="true">
 							<description>Include picks</description>

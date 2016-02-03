@@ -65,6 +65,11 @@
 						number.
 					</description>
 				</parameter>
+				<parameter name="utc" type="boolean">
+					<description>
+						Use UTC instead of localtime in logging timestamps.
+					</description>
+				</parameter>
 				<group name="file">
 					<parameter name="rotator" type="boolean" default="true"/>
 					<group name="rotator">
@@ -591,6 +596,15 @@
 					The picker interface name to be used in configuration files is
 					&quot;BK&quot;.
 					</description>
+					<parameter name="noiseBegin" type="double" default="0" unit="s">
+						<description>
+						Overrides the relative data acquisition time (relative to the triggering
+						pick). This adds a margin to the actual processing and is useful
+						to initialize the filter (e.g. bandpass). The data is not used
+						at all until signalBegin is reached. The data time window start
+						is the minimum of noiseBegin and signalBegin.
+						</description>
+					</parameter>
 					<parameter name="signalBegin" type="double" default="-20">
 						<description>
 						Overrides the default time (relative to the trigger
@@ -630,6 +644,15 @@
 					see paper of Zhang et al. (2003) in BSSA. The picker interface name to be used in configuration files is
 					&quot;AIC&quot;.
 					</description>
+					<parameter name="noiseBegin" type="double" default="0" unit="s">
+						<description>
+						Overrides the relative data acquisition time (relative to the triggering
+						pick). This adds a margin to the actual processing and is useful
+						to initialize the filter (e.g. bandpass). The data is not used
+						at all until signalBegin is reached. The data time window start
+						is the minimum of noiseBegin and signalBegin.
+						</description>
+					</parameter>
 					<parameter name="signalBegin" type="double" default="-30" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
@@ -663,8 +686,9 @@
 						<description>
 						Overrides the relative data processing start time (relative to the triggering
 						pick). This adds a margin to the actual processing and is useful
-						to initialize the filter (e.g. STALTA). The data is not used
-						at all until signalBegin is reached.
+						to initialize the filter (e.g. bandpass). The data is not used
+						at all until signalBegin is reached. The data time window start
+						is the minimum of noiseBegin and signalBegin.
 						</description>
 					</parameter>
 					<parameter name="signalBegin" type="double" default="0" unit="s">

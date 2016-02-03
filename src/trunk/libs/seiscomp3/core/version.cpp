@@ -16,13 +16,24 @@
 #include <iostream>
 
 
-#ifdef WITH_SVN_REVISION
-extern SC_SYSTEM_CORE_API const char* git_revision();
+#include <seiscomp3/core/build_version.h>
+
+
+#ifdef WITH_GIT_REVISION
+extern SC_SYSTEM_CORE_API const char* git_revision() {
+	return SC3_GIT_REVISION;
+}
 #endif
 #ifdef WITH_BUILD_INFOS
-extern SC_SYSTEM_CORE_API const char* build_system();
-extern SC_SYSTEM_CORE_API const char* compiler_version();
-extern SC_SYSTEM_CORE_API const char* os_version();
+extern SC_SYSTEM_CORE_API const char* build_system() {
+	return SC3_BUILD_SYSTEM;
+}
+extern SC_SYSTEM_CORE_API const char* compiler_version() {
+	return SC3_COMPILER_VERSION;
+}
+extern SC_SYSTEM_CORE_API const char* os_version() {
+	return SC3_OS_VERSION;
+}
 #endif
 
 
@@ -34,7 +45,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-#ifdef WITH_SVN_REVISION
+#ifdef WITH_GIT_REVISION
 	_text = std::string("Jakarta git-") + git_revision();
 #else
 	_text = std::string("Jakarta git-unknown");

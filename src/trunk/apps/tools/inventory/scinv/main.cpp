@@ -236,7 +236,21 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 
 			const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
 			if ( fir == NULL ) {
-				os << Fill(out.indent) << "UNKNOWN" << endl;
+				const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
+				if ( paz == NULL ) {
+					const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
+					if ( poly ) {
+						os << Fill(out.indent) << "POLY" << endl;
+						os << tabular(poly, out.indent);
+					}
+					else {
+						os << Fill(out.indent) << "UNKNOWN" << endl;
+					}
+				}
+				else {
+					os << Fill(out.indent) << "PAZ" << endl;
+					os << tabular(paz, out.indent);
+				}
 			}
 			else {
 				os << Fill(out.indent) << "FIR" << endl;

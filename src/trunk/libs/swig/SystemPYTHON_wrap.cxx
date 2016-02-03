@@ -3387,151 +3387,151 @@ namespace Swig {
 #define SWIGTYPE_p_BindingMap swig_types[6]
 #define SWIGTYPE_p_Bindings swig_types[7]
 #define SWIGTYPE_p_Categories swig_types[8]
-#define SWIGTYPE_p_DataArray swig_types[9]
-#define SWIGTYPE_p_IncludedFiles swig_types[10]
-#define SWIGTYPE_p_ModMap swig_types[11]
-#define SWIGTYPE_p_ModuleConfigs swig_types[12]
-#define SWIGTYPE_p_PackType swig_types[13]
-#define SWIGTYPE_p_PluginList swig_types[14]
-#define SWIGTYPE_p_Profiles swig_types[15]
-#define SWIGTYPE_p_RootType swig_types[16]
-#define SWIGTYPE_p_Seiscomp__Array swig_types[17]
-#define SWIGTYPE_p_Seiscomp__Config__Config swig_types[18]
-#define SWIGTYPE_p_Seiscomp__Config__Logger swig_types[19]
-#define SWIGTYPE_p_Seiscomp__Config__Symbol swig_types[20]
-#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[21]
-#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[22]
-#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[23]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[24]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[25]
-#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[26]
-#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__OptionalT_bool_t__Impl swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__BindingCategory_const_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__BindingCategory_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Binding_const_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Binding_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Group_const_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Group_t__Impl swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Model_const_t__Impl swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Model_t__Impl swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_const_t__Impl swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Module_const_t__Impl swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Module_t__Impl swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Parameter_const_t__Impl swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Parameter_t__Impl swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaBinding_const_t__Impl swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaBinding_t__Impl swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaDefinitions_const_t__Impl swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaDefinitions_t__Impl swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaGroup_const_t__Impl swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaGroup_t__Impl swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaModule_const_t__Impl swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaModule_t__Impl swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameter_const_t__Impl swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameter_t__Impl swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_const_t__Impl swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaPlugin_const_t__Impl swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaPlugin_t__Impl swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupGroup_const_t__Impl swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupGroup_t__Impl swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInputOption_const_t__Impl swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInputOption_t__Impl swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInput_const_t__Impl swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInput_t__Impl swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetup_const_t__Impl swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetup_t__Impl swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaStructure_const_t__Impl swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaStructure_t__Impl swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_const_t__Impl swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_const_t__Impl swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_const_t__Impl swig_types[95]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl swig_types[96]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_const_t__Impl swig_types[97]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl swig_types[98]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[99]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[100]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[101]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[102]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[103]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[104]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[105]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[106]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[107]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[108]
-#define SWIGTYPE_p_Seiscomp__Environment swig_types[109]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[110]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[111]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[112]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[113]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[114]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[115]
-#define SWIGTYPE_p_Seiscomp__System__Binding swig_types[116]
-#define SWIGTYPE_p_Seiscomp__System__BindingCategory swig_types[117]
-#define SWIGTYPE_p_Seiscomp__System__ConfigDelegate swig_types[118]
-#define SWIGTYPE_p_Seiscomp__System__ConfigDelegate__CSConflict swig_types[119]
-#define SWIGTYPE_p_Seiscomp__System__Container swig_types[120]
-#define SWIGTYPE_p_Seiscomp__System__Group swig_types[121]
-#define SWIGTYPE_p_Seiscomp__System__Model swig_types[122]
-#define SWIGTYPE_p_Seiscomp__System__ModelVisitor swig_types[123]
-#define SWIGTYPE_p_Seiscomp__System__Module swig_types[124]
-#define SWIGTYPE_p_Seiscomp__System__ModuleBinding swig_types[125]
-#define SWIGTYPE_p_Seiscomp__System__Parameter swig_types[126]
-#define SWIGTYPE_p_Seiscomp__System__SchemaBinding swig_types[127]
-#define SWIGTYPE_p_Seiscomp__System__SchemaDefinitions swig_types[128]
-#define SWIGTYPE_p_Seiscomp__System__SchemaGroup swig_types[129]
-#define SWIGTYPE_p_Seiscomp__System__SchemaModule swig_types[130]
-#define SWIGTYPE_p_Seiscomp__System__SchemaParameter swig_types[131]
-#define SWIGTYPE_p_Seiscomp__System__SchemaParameters swig_types[132]
-#define SWIGTYPE_p_Seiscomp__System__SchemaPlugin swig_types[133]
-#define SWIGTYPE_p_Seiscomp__System__SchemaSetup swig_types[134]
-#define SWIGTYPE_p_Seiscomp__System__SchemaSetupGroup swig_types[135]
-#define SWIGTYPE_p_Seiscomp__System__SchemaSetupInput swig_types[136]
-#define SWIGTYPE_p_Seiscomp__System__SchemaSetupInputOption swig_types[137]
-#define SWIGTYPE_p_Seiscomp__System__SchemaStructure swig_types[138]
-#define SWIGTYPE_p_Seiscomp__System__Section swig_types[139]
-#define SWIGTYPE_p_Seiscomp__System__Station swig_types[140]
-#define SWIGTYPE_p_Seiscomp__System__StationID swig_types[141]
-#define SWIGTYPE_p_Seiscomp__System__Structure swig_types[142]
-#define SWIGTYPE_p_Seiscomp__System__SymbolMapItem swig_types[143]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[144]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[145]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[146]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[147]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[148]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[149]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[150]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[151]
-#define SWIGTYPE_p_Stations swig_types[152]
-#define SWIGTYPE_p_SymbolFileMap swig_types[153]
+#define SWIGTYPE_p_ChangeList swig_types[9]
+#define SWIGTYPE_p_DataArray swig_types[10]
+#define SWIGTYPE_p_IncludedFiles swig_types[11]
+#define SWIGTYPE_p_ModMap swig_types[12]
+#define SWIGTYPE_p_ModuleConfigs swig_types[13]
+#define SWIGTYPE_p_PackType swig_types[14]
+#define SWIGTYPE_p_PluginList swig_types[15]
+#define SWIGTYPE_p_Profiles swig_types[16]
+#define SWIGTYPE_p_RootType swig_types[17]
+#define SWIGTYPE_p_Seiscomp__Array swig_types[18]
+#define SWIGTYPE_p_Seiscomp__Config__Config swig_types[19]
+#define SWIGTYPE_p_Seiscomp__Config__Logger swig_types[20]
+#define SWIGTYPE_p_Seiscomp__Config__Symbol swig_types[21]
+#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[22]
+#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[23]
+#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[24]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[25]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[26]
+#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[27]
+#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__OptionalT_bool_t__Impl swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__BindingCategory_const_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__BindingCategory_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Binding_const_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Binding_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Group_const_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Group_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Model_const_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Model_t__Impl swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_const_t__Impl swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Module_const_t__Impl swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Module_t__Impl swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Parameter_const_t__Impl swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Parameter_t__Impl swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaBinding_const_t__Impl swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaBinding_t__Impl swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaDefinitions_const_t__Impl swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaDefinitions_t__Impl swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaGroup_const_t__Impl swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaGroup_t__Impl swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaModule_const_t__Impl swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaModule_t__Impl swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameter_const_t__Impl swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameter_t__Impl swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_const_t__Impl swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaParameters_t__Impl swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaPlugin_const_t__Impl swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaPlugin_t__Impl swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupGroup_const_t__Impl swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupGroup_t__Impl swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInputOption_const_t__Impl swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInputOption_t__Impl swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInput_const_t__Impl swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetupInput_t__Impl swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetup_const_t__Impl swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaSetup_t__Impl swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaStructure_const_t__Impl swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SchemaStructure_t__Impl swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_const_t__Impl swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_const_t__Impl swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl swig_types[95]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_const_t__Impl swig_types[96]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl swig_types[97]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_const_t__Impl swig_types[98]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl swig_types[99]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[100]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[101]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[102]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[103]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[104]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[105]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[106]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[107]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[108]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[109]
+#define SWIGTYPE_p_Seiscomp__Environment swig_types[110]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[111]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[112]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[113]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[114]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[115]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[116]
+#define SWIGTYPE_p_Seiscomp__System__Binding swig_types[117]
+#define SWIGTYPE_p_Seiscomp__System__BindingCategory swig_types[118]
+#define SWIGTYPE_p_Seiscomp__System__ConfigDelegate swig_types[119]
+#define SWIGTYPE_p_Seiscomp__System__ConfigDelegate__CSConflict swig_types[120]
+#define SWIGTYPE_p_Seiscomp__System__Container swig_types[121]
+#define SWIGTYPE_p_Seiscomp__System__Group swig_types[122]
+#define SWIGTYPE_p_Seiscomp__System__Model swig_types[123]
+#define SWIGTYPE_p_Seiscomp__System__ModelVisitor swig_types[124]
+#define SWIGTYPE_p_Seiscomp__System__Module swig_types[125]
+#define SWIGTYPE_p_Seiscomp__System__ModuleBinding swig_types[126]
+#define SWIGTYPE_p_Seiscomp__System__Parameter swig_types[127]
+#define SWIGTYPE_p_Seiscomp__System__SchemaBinding swig_types[128]
+#define SWIGTYPE_p_Seiscomp__System__SchemaDefinitions swig_types[129]
+#define SWIGTYPE_p_Seiscomp__System__SchemaGroup swig_types[130]
+#define SWIGTYPE_p_Seiscomp__System__SchemaModule swig_types[131]
+#define SWIGTYPE_p_Seiscomp__System__SchemaParameter swig_types[132]
+#define SWIGTYPE_p_Seiscomp__System__SchemaParameters swig_types[133]
+#define SWIGTYPE_p_Seiscomp__System__SchemaPlugin swig_types[134]
+#define SWIGTYPE_p_Seiscomp__System__SchemaSetup swig_types[135]
+#define SWIGTYPE_p_Seiscomp__System__SchemaSetupGroup swig_types[136]
+#define SWIGTYPE_p_Seiscomp__System__SchemaSetupInput swig_types[137]
+#define SWIGTYPE_p_Seiscomp__System__SchemaSetupInputOption swig_types[138]
+#define SWIGTYPE_p_Seiscomp__System__SchemaStructure swig_types[139]
+#define SWIGTYPE_p_Seiscomp__System__Section swig_types[140]
+#define SWIGTYPE_p_Seiscomp__System__Station swig_types[141]
+#define SWIGTYPE_p_Seiscomp__System__StationID swig_types[142]
+#define SWIGTYPE_p_Seiscomp__System__Structure swig_types[143]
+#define SWIGTYPE_p_Seiscomp__System__SymbolMapItem swig_types[144]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[145]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[146]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[147]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[148]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[149]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[150]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[151]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[152]
+#define SWIGTYPE_p_Stations swig_types[153]
 #define SWIGTYPE_p_SymbolMap swig_types[154]
 #define SWIGTYPE_p_TagType swig_types[155]
 #define SWIGTYPE_p_Tags swig_types[156]
@@ -3558,8 +3558,8 @@ namespace Swig {
 #define SWIGTYPE_p_std__lessT_Seiscomp__System__StationID_t swig_types[177]
 #define SWIGTYPE_p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t swig_types[178]
 #define SWIGTYPE_p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t swig_types[179]
-#define SWIGTYPE_p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t swig_types[180]
-#define SWIGTYPE_p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t swig_types[181]
+#define SWIGTYPE_p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t swig_types[180]
+#define SWIGTYPE_p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t swig_types[181]
 #define SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t swig_types[182]
 #define SWIGTYPE_p_std__ostream swig_types[183]
 #define SWIGTYPE_p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t swig_types[184]
@@ -3575,15 +3575,16 @@ namespace Swig {
 #define SWIGTYPE_p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t swig_types[194]
 #define SWIGTYPE_p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t swig_types[195]
 #define SWIGTYPE_p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t swig_types[196]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t swig_types[197]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t swig_types[198]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t swig_types[199]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[200]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[201]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[202]
-#define SWIGTYPE_p_value_type swig_types[203]
-static swig_type_info *swig_types[205];
-static swig_module_info swig_module = {swig_types, 204, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t swig_types[197]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t swig_types[198]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t swig_types[199]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t swig_types[200]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[201]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[202]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[203]
+#define SWIGTYPE_p_value_type swig_types[204]
+static swig_type_info *swig_types[206];
+static swig_module_info swig_module = {swig_types, 205, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -15258,6 +15259,163 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ConfigDelegate_aboutToWrite(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::ConfigDelegate *arg1 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ConfigDelegate_aboutToWrite",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConfigDelegate_aboutToWrite" "', argument " "1"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ConfigDelegate_aboutToWrite" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  (arg1)->aboutToWrite((char const *)arg2);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ConfigDelegate_finishedWriting(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::ConfigDelegate *arg1 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  char *arg2 = (char *) 0 ;
+  Seiscomp::System::ConfigDelegate::ChangeList *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ConfigDelegate_finishedWriting",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConfigDelegate_finishedWriting" "', argument " "1"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ConfigDelegate_finishedWriting" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ConfigDelegate_finishedWriting" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate::ChangeList const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ConfigDelegate_finishedWriting" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate::ChangeList const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate::ChangeList * >(argp3);
+  (arg1)->finishedWriting((char const *)arg2,(Seiscomp::System::ConfigDelegate::ChangeList const &)*arg3);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ConfigDelegate_hasWriteError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::ConfigDelegate *arg1 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ConfigDelegate_hasWriteError",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConfigDelegate_hasWriteError" "', argument " "1"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ConfigDelegate_hasWriteError" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  (arg1)->hasWriteError((char const *)arg2);
+  resultobj = SWIG_Py_Void();
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ConfigDelegate_handleWriteTimeMismatch(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::ConfigDelegate *arg1 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  char *arg2 = (char *) 0 ;
+  Seiscomp::System::ConfigDelegate::ChangeList *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ConfigDelegate_handleWriteTimeMismatch",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ConfigDelegate_handleWriteTimeMismatch" "', argument " "1"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ConfigDelegate_handleWriteTimeMismatch" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ConfigDelegate_handleWriteTimeMismatch" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate::ChangeList const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ConfigDelegate_handleWriteTimeMismatch" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate::ChangeList const &""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate::ChangeList * >(argp3);
+  result = (bool)(arg1)->handleWriteTimeMismatch((char const *)arg2,(Seiscomp::System::ConfigDelegate::ChangeList const &)*arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ConfigDelegate_caseSensitivityConflict(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::ConfigDelegate *arg1 = (Seiscomp::System::ConfigDelegate *) 0 ;
@@ -20480,7 +20638,54 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ModuleBinding_writeConfig(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_ModuleBinding_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::ModuleBinding *arg1 = (Seiscomp::System::ModuleBinding *) 0 ;
+  std::string *arg2 = 0 ;
+  Seiscomp::System::ConfigDelegate *arg3 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:ModuleBinding_writeConfig",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__ModuleBinding, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ModuleBinding_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::ModuleBinding const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::ModuleBinding * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ModuleBinding_writeConfig" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ModuleBinding_writeConfig" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ModuleBinding_writeConfig" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp3);
+  result = (bool)((Seiscomp::System::ModuleBinding const *)arg1)->writeConfig((std::string const &)*arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ModuleBinding_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::ModuleBinding *arg1 = (Seiscomp::System::ModuleBinding *) 0 ;
   std::string *arg2 = 0 ;
@@ -20515,6 +20720,57 @@ SWIGINTERN PyObject *_wrap_ModuleBinding_writeConfig(PyObject *SWIGUNUSEDPARM(se
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ModuleBinding_writeConfig(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__ModuleBinding, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_ModuleBinding_writeConfig__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__ModuleBinding, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_ModuleBinding_writeConfig__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'ModuleBinding_writeConfig'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::System::ModuleBinding::writeConfig(std::string const &,Seiscomp::System::ConfigDelegate *) const\n"
+    "    Seiscomp::System::ModuleBinding::writeConfig(std::string const &) const\n");
+  return 0;
 }
 
 
@@ -22968,7 +23224,50 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Station_writeConfig(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Station_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::Station *arg1 = (Seiscomp::System::Station *) 0 ;
+  char *arg2 = (char *) 0 ;
+  Seiscomp::System::ConfigDelegate *arg3 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Station_writeConfig",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Station, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Station_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Station const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::Station * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Station_writeConfig" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Station_writeConfig" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp3);
+  result = (bool)((Seiscomp::System::Station const *)arg1)->writeConfig((char const *)arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return resultobj;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Station_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Station *arg1 = (Seiscomp::System::Station *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -22999,6 +23298,57 @@ SWIGINTERN PyObject *_wrap_Station_writeConfig(PyObject *SWIGUNUSEDPARM(self), P
 fail:
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Station_writeConfig(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Station, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_Station_writeConfig__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Station, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Station_writeConfig__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Station_writeConfig'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::System::Station::writeConfig(char const *,Seiscomp::System::ConfigDelegate *) const\n"
+    "    Seiscomp::System::Station::writeConfig(char const *) const\n");
+  return 0;
 }
 
 
@@ -23518,6 +23868,46 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(se
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
   int arg2 ;
+  Seiscomp::System::ConfigDelegate *arg3 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Model_writeConfig",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp3);
+  result = (bool)(arg1)->writeConfig(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -23545,7 +23935,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
   void *argp1 = 0 ;
@@ -23567,7 +23957,72 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
+  Seiscomp::System::Module *arg2 = (Seiscomp::System::Module *) 0 ;
+  std::string *arg3 = 0 ;
+  int arg4 ;
+  Seiscomp::System::ConfigDelegate *arg5 = (Seiscomp::System::ConfigDelegate *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 = SWIG_OLDOBJ ;
+  int val4 ;
+  int ecode4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:Model_writeConfig",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__System__Model, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_writeConfig" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__System__Module, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model_writeConfig" "', argument " "2"" of type '" "Seiscomp::System::Module *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::System::Module * >(argp2);
+  {
+    std::string *ptr = (std::string *)0;
+    res3 = SWIG_AsPtr_std_string(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Model_writeConfig" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Model_writeConfig" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Model_writeConfig" "', argument " "5"" of type '" "Seiscomp::System::ConfigDelegate *""'"); 
+  }
+  arg5 = reinterpret_cast< Seiscomp::System::ConfigDelegate * >(argp5);
+  result = (bool)(arg1)->writeConfig(arg2,(std::string const &)*arg3,arg4,arg5);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Model_writeConfig__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::System::Model *arg1 = (Seiscomp::System::Model *) 0 ;
   Seiscomp::System::Module *arg2 = (Seiscomp::System::Module *) 0 ;
@@ -23625,12 +24080,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[5];
+  PyObject *argv[6];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 5) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 1) {
@@ -23639,7 +24094,7 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_Model_writeConfig__SWIG_1(self, args);
+      return _wrap_Model_writeConfig__SWIG_2(self, args);
     }
   }
   if (argc == 2) {
@@ -23653,7 +24108,27 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_Model_writeConfig__SWIG_0(self, args);
+        return _wrap_Model_writeConfig__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Model_writeConfig__SWIG_0(self, args);
+        }
       }
     }
   }
@@ -23675,7 +24150,36 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
             _v = SWIG_CheckState(res);
           }
           if (_v) {
-            return _wrap_Model_writeConfig__SWIG_2(self, args);
+            return _wrap_Model_writeConfig__SWIG_4(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__System__Model, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__System__Module, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_AsPtr_std_string(argv[2], (std::string**)(0));
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            void *vptr = 0;
+            int res = SWIG_ConvertPtr(argv[4], &vptr, SWIGTYPE_p_Seiscomp__System__ConfigDelegate, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              return _wrap_Model_writeConfig__SWIG_3(self, args);
+            }
           }
         }
       }
@@ -23685,8 +24189,10 @@ SWIGINTERN PyObject *_wrap_Model_writeConfig(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Model_writeConfig'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::System::Model::writeConfig(int,Seiscomp::System::ConfigDelegate *)\n"
     "    Seiscomp::System::Model::writeConfig(int)\n"
     "    Seiscomp::System::Model::writeConfig()\n"
+    "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int,Seiscomp::System::ConfigDelegate *)\n"
     "    Seiscomp::System::Model::writeConfig(Seiscomp::System::Module *,std::string const &,int)\n");
   return 0;
 }
@@ -24447,7 +24953,7 @@ SWIGINTERN PyObject *_wrap_Model_symbols_set(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Model_symbols_set" "', argument " "1"" of type '" "Seiscomp::System::Model *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t, 0 |  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Model_symbols_set" "', argument " "2"" of type '" "Seiscomp::System::Model::SymbolMap *""'"); 
   }
@@ -24475,7 +24981,7 @@ SWIGINTERN PyObject *_wrap_Model_symbols_get(PyObject *SWIGUNUSEDPARM(self), PyO
   }
   arg1 = reinterpret_cast< Seiscomp::System::Model * >(argp1);
   result = (Seiscomp::System::Model::SymbolMap *)& ((arg1)->symbols);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -31748,6 +32254,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ConfigDelegate_aboutToRead", _wrap_ConfigDelegate_aboutToRead, METH_VARARGS, NULL},
 	 { (char *)"ConfigDelegate_finishedReading", _wrap_ConfigDelegate_finishedReading, METH_VARARGS, NULL},
 	 { (char *)"ConfigDelegate_handleReadError", _wrap_ConfigDelegate_handleReadError, METH_VARARGS, NULL},
+	 { (char *)"ConfigDelegate_aboutToWrite", _wrap_ConfigDelegate_aboutToWrite, METH_VARARGS, NULL},
+	 { (char *)"ConfigDelegate_finishedWriting", _wrap_ConfigDelegate_finishedWriting, METH_VARARGS, NULL},
+	 { (char *)"ConfigDelegate_hasWriteError", _wrap_ConfigDelegate_hasWriteError, METH_VARARGS, NULL},
+	 { (char *)"ConfigDelegate_handleWriteTimeMismatch", _wrap_ConfigDelegate_handleWriteTimeMismatch, METH_VARARGS, NULL},
 	 { (char *)"ConfigDelegate_caseSensitivityConflict", _wrap_ConfigDelegate_caseSensitivityConflict, METH_VARARGS, NULL},
 	 { (char *)"new_ConfigDelegate", _wrap_new_ConfigDelegate, METH_VARARGS, NULL},
 	 { (char *)"delete_ConfigDelegate", _wrap_delete_ConfigDelegate, METH_VARARGS, NULL},
@@ -32331,6 +32841,7 @@ static swig_type_info _swigt__p_BindingList = {"_p_BindingList", "BindingList *"
 static swig_type_info _swigt__p_BindingMap = {"_p_BindingMap", "BindingMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Bindings = {"_p_Bindings", "Bindings *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Categories = {"_p_Categories", "Categories *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ChangeList = {"_p_ChangeList", "ChangeList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_DataArray = {"_p_DataArray", "DataArray *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_IncludedFiles = {"_p_IncludedFiles", "IncludedFiles *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ModMap = {"_p_ModMap", "ModMap *", 0, 0, (void*)0, 0};
@@ -32475,7 +32986,6 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t =
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t = {"_p_Seiscomp__TypedArrayT_std__complexT_float_t_t", "Seiscomp::ComplexFloatArray *|Seiscomp::TypedArray< std::complex< float > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__string_t = {"_p_Seiscomp__TypedArrayT_std__string_t", "Seiscomp::StringArray *|Seiscomp::TypedArray< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Stations = {"_p_Stations", "Stations *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_SymbolFileMap = {"_p_SymbolFileMap", "SymbolFileMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SymbolMap = {"_p_SymbolMap", "SymbolMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Tags = {"_p_Tags", "Tags *", 0, 0, (void*)0, 0};
@@ -32502,8 +33012,8 @@ static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argume
 static swig_type_info _swigt__p_std__lessT_Seiscomp__System__StationID_t = {"_p_std__lessT_Seiscomp__System__StationID_t", "std::less< Seiscomp::System::StationID > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t = {"_p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t", "std::map< Seiscomp::System::StationID,Seiscomp::System::ModuleBindingPtr > *|Seiscomp::System::Module::BindingMap *|std::map< Seiscomp::System::StationID,Seiscomp::Core::SmartPointer< Seiscomp::System::ModuleBinding >::Impl > *|std::map< Seiscomp::System::StationID,Seiscomp::Core::SmartPointer< Seiscomp::System::ModuleBinding >::Impl,std::less< Seiscomp::System::StationID >,std::allocator< std::pair< Seiscomp::System::StationID const,Seiscomp::Core::SmartPointer< Seiscomp::System::ModuleBinding >::Impl > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t = {"_p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t", "Seiscomp::System::Model::Stations *|std::map< Seiscomp::System::StationID,Seiscomp::Core::SmartPointer< Seiscomp::System::Station >::Impl,std::less< Seiscomp::System::StationID >,std::allocator< std::pair< Seiscomp::System::StationID const,Seiscomp::Core::SmartPointer< Seiscomp::System::Station >::Impl > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t = {"_p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t", "std::map< std::string,Seiscomp::System::Model::SymbolFileMap,std::less< std::string >,std::allocator< std::pair< std::string const,Seiscomp::System::Model::SymbolFileMap > > > *|Seiscomp::System::Model::SymbolMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t = {"_p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t", "std::map< std::string,Seiscomp::System::Module *,std::less< std::string >,std::allocator< std::pair< std::string const,Seiscomp::System::Module * > > > *|Seiscomp::System::Model::ModMap *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t = {"_p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t", "std::map< std::string,std::map< std::string,Seiscomp::Core::SmartPointer< Seiscomp::System::SymbolMapItem >::Impl,std::less< std::string >,std::allocator< std::pair< std::string const,Seiscomp::Core::SmartPointer< Seiscomp::System::SymbolMapItem >::Impl > > >,std::less< std::string >,std::allocator< std::pair< std::string const,std::map< std::string,Seiscomp::Core::SmartPointer< Seiscomp::System::SymbolMapItem >::Impl,std::less< std::string >,std::allocator< std::pair< std::string const,Seiscomp::Core::SmartPointer< Seiscomp::System::SymbolMapItem >::Impl > > > > > > *|Seiscomp::System::Model::SymbolMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t = {"_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t", "Seiscomp::System::Station::Tags *|std::map< std::string,std::string,std::less< std::string >,std::allocator< std::pair< std::string const,std::string > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t = {"_p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t", "std::set< std::string,std::less< std::string >,std::allocator< std::string > > *|Seiscomp::System::Model::Categories *", 0, 0, (void*)0, 0};
@@ -32519,6 +33029,7 @@ static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seisc
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t = {"_p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t", "std::vector< Seiscomp::Core::SmartPointer< Seiscomp::System::Section >::Impl,std::allocator< Seiscomp::Core::SmartPointer< Seiscomp::System::Section >::Impl > > *|std::vector< Seiscomp::System::SectionPtr,std::allocator< Seiscomp::System::SectionPtr > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t = {"_p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t", "std::vector< Seiscomp::Core::SmartPointer< Seiscomp::System::Structure >::Impl,std::allocator< Seiscomp::Core::SmartPointer< Seiscomp::System::Structure >::Impl > > *|std::vector< Seiscomp::Core::SmartPointer< Seiscomp::System::Structure >::Impl > *|std::vector< Seiscomp::System::StructurePtr > *|std::vector< Seiscomp::System::StructurePtr,std::allocator< Seiscomp::System::StructurePtr > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t = {"_p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t", "Seiscomp::System::BindingCategory::BindingInstances *|std::vector< Seiscomp::System::BindingCategory::BindingInstance,std::allocator< Seiscomp::System::BindingCategory::BindingInstance > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t = {"_p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t", "std::vector< Seiscomp::System::ConfigDelegate::Change,std::allocator< Seiscomp::System::ConfigDelegate::Change > > *|Seiscomp::System::ConfigDelegate::ChangeList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t = {"_p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t", "Seiscomp::System::SchemaDefinitions::BindingList *|std::vector< Seiscomp::System::SchemaBinding *,std::allocator< Seiscomp::System::SchemaBinding * > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t = {"_p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t", "std::vector< Seiscomp::System::SchemaPlugin *,std::allocator< Seiscomp::System::SchemaPlugin * > > *|Seiscomp::System::SchemaDefinitions::PluginList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t = {"_p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t", "Seiscomp::System::Station::ModuleConfigs *|std::vector< Seiscomp::System::Station::ModuleConfig,std::allocator< Seiscomp::System::Station::ModuleConfig > > *", 0, 0, (void*)0, 0};
@@ -32537,6 +33048,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_BindingMap,
   &_swigt__p_Bindings,
   &_swigt__p_Categories,
+  &_swigt__p_ChangeList,
   &_swigt__p_DataArray,
   &_swigt__p_IncludedFiles,
   &_swigt__p_ModMap,
@@ -32681,7 +33193,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t,
   &_swigt__p_Seiscomp__TypedArrayT_std__string_t,
   &_swigt__p_Stations,
-  &_swigt__p_SymbolFileMap,
   &_swigt__p_SymbolMap,
   &_swigt__p_TagType,
   &_swigt__p_Tags,
@@ -32708,8 +33219,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__lessT_Seiscomp__System__StationID_t,
   &_swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t,
   &_swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t,
+  &_swigt__p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t,
   &_swigt__p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t,
-  &_swigt__p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t,
   &_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   &_swigt__p_std__ostream,
   &_swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t,
@@ -32725,6 +33236,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t,
   &_swigt__p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t,
+  &_swigt__p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t,
   &_swigt__p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t,
   &_swigt__p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t,
   &_swigt__p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t,
@@ -32743,6 +33255,7 @@ static swig_cast_info _swigc__p_BindingList[] = {  {&_swigt__p_BindingList, 0, 0
 static swig_cast_info _swigc__p_BindingMap[] = {  {&_swigt__p_BindingMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Bindings[] = {  {&_swigt__p_Bindings, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Categories[] = {  {&_swigt__p_Categories, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ChangeList[] = {  {&_swigt__p_ChangeList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_DataArray[] = {  {&_swigt__p_DataArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_IncludedFiles[] = {  {&_swigt__p_IncludedFiles, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ModMap[] = {  {&_swigt__p_ModMap, 0, 0, 0},{0, 0, 0, 0}};
@@ -32887,7 +33400,6 @@ static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__complexT_double_t_t[]
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__complexT_float_t_t[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__string_t[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Stations[] = {  {&_swigt__p_Stations, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_SymbolFileMap[] = {  {&_swigt__p_SymbolFileMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SymbolMap[] = {  {&_swigt__p_SymbolMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TagType[] = {  {&_swigt__p_TagType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Tags[] = {  {&_swigt__p_Tags, 0, 0, 0},{0, 0, 0, 0}};
@@ -32914,8 +33426,8 @@ static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__in
 static swig_cast_info _swigc__p_std__lessT_Seiscomp__System__StationID_t[] = {  {&_swigt__p_std__lessT_Seiscomp__System__StationID_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t[] = {  {&_swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t[] = {  {&_swigt__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -32931,6 +33443,7 @@ static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seisc
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -32949,6 +33462,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_BindingMap,
   _swigc__p_Bindings,
   _swigc__p_Categories,
+  _swigc__p_ChangeList,
   _swigc__p_DataArray,
   _swigc__p_IncludedFiles,
   _swigc__p_ModMap,
@@ -33093,7 +33607,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__TypedArrayT_std__complexT_float_t_t,
   _swigc__p_Seiscomp__TypedArrayT_std__string_t,
   _swigc__p_Stations,
-  _swigc__p_SymbolFileMap,
   _swigc__p_SymbolMap,
   _swigc__p_TagType,
   _swigc__p_Tags,
@@ -33120,8 +33633,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__lessT_Seiscomp__System__StationID_t,
   _swigc__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__ModuleBinding_t__Impl_t_t_t,
   _swigc__p_std__mapT_Seiscomp__System__StationID_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_std__lessT_Seiscomp__System__StationID_t_std__allocatorT_std__pairT_Seiscomp__System__StationID_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__Station_t__Impl_t_t_t,
+  _swigc__p_std__mapT_std__string_Seiscomp__System__Model__SymbolFileMap_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Model__SymbolFileMap_t_t_t,
   _swigc__p_std__mapT_std__string_Seiscomp__System__Module_p_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__System__Module_p_t_t_t,
-  _swigc__p_std__mapT_std__string_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__mapT_std__string_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_Seiscomp__Core__SmartPointerT_Seiscomp__System__SymbolMapItem_t__Impl_t_t_t_t_t_t,
   _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   _swigc__p_std__ostream,
   _swigc__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t,
@@ -33137,6 +33650,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Section_t__Impl_t_t,
   _swigc__p_std__vectorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_std__allocatorT_Seiscomp__Core__SmartPointerT_Seiscomp__System__Structure_t__Impl_t_t,
   _swigc__p_std__vectorT_Seiscomp__System__BindingCategory__BindingInstance_std__allocatorT_Seiscomp__System__BindingCategory__BindingInstance_t_t,
+  _swigc__p_std__vectorT_Seiscomp__System__ConfigDelegate__Change_std__allocatorT_Seiscomp__System__ConfigDelegate__Change_t_t,
   _swigc__p_std__vectorT_Seiscomp__System__SchemaBinding_p_std__allocatorT_Seiscomp__System__SchemaBinding_p_t_t,
   _swigc__p_std__vectorT_Seiscomp__System__SchemaPlugin_p_std__allocatorT_Seiscomp__System__SchemaPlugin_p_t_t,
   _swigc__p_std__vectorT_Seiscomp__System__Station__ModuleConfig_std__allocatorT_Seiscomp__System__Station__ModuleConfig_t_t,
@@ -33838,6 +34352,9 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "Environment_CS_USER_APP",SWIG_From_int(static_cast< int >(Seiscomp::Environment::CS_USER_APP)));
   SWIG_Python_SetConstant(d, "Environment_CS_LAST",SWIG_From_int(static_cast< int >(Seiscomp::Environment::CS_LAST)));
   SWIG_Python_SetConstant(d, "Environment_CS_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Environment::CS_QUANTITY)));
+  SWIG_Python_SetConstant(d, "ConfigDelegate_Added",SWIG_From_int(static_cast< int >(Seiscomp::System::ConfigDelegate::Added)));
+  SWIG_Python_SetConstant(d, "ConfigDelegate_Removed",SWIG_From_int(static_cast< int >(Seiscomp::System::ConfigDelegate::Removed)));
+  SWIG_Python_SetConstant(d, "ConfigDelegate_Updated",SWIG_From_int(static_cast< int >(Seiscomp::System::ConfigDelegate::Updated)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

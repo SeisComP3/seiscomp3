@@ -18,6 +18,7 @@
 #include <set>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <seiscomp3/core/interruptible.h>
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/utils/timer.h>
@@ -117,6 +118,8 @@ class SC_SYSTEM_CORE_API ArclinkConnection : public Seiscomp::IO::RecordStream {
 		bool _readingData;
 		bool _chunkMode;
 		int _remainingBytes;
+		std::ofstream _dump;
+
 		void handshake();
 		void cleanup();
 };

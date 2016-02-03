@@ -19267,6 +19267,72 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StreamApplication_setRecordDatatype(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
+  Seiscomp::Array::DataType arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:StreamApplication_setRecordDatatype",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__StreamApplication, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamApplication_setRecordDatatype" "', argument " "1"" of type '" "Seiscomp::Client::StreamApplication *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::StreamApplication * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "StreamApplication_setRecordDatatype" "', argument " "2"" of type '" "Seiscomp::Array::DataType""'");
+  } 
+  arg2 = static_cast< Seiscomp::Array::DataType >(val2);
+  {
+    try {
+      (arg1)->setRecordDatatype(arg2); 
+    }
+    catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StreamApplication_recordDataType(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Array::DataType result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StreamApplication_recordDataType",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__StreamApplication, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamApplication_recordDataType" "', argument " "1"" of type '" "Seiscomp::Client::StreamApplication const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::StreamApplication * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Array::DataType)((Seiscomp::Client::StreamApplication const *)arg1)->recordDataType(); 
+    }
+    catch (Swig::DirectorException &e) {
+      SWIG_fail; 
+    }
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StreamApplication_startRecordThread(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
@@ -24020,6 +24086,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StreamApplication_setAutoCloseOnAcquisitionFinished", _wrap_StreamApplication_setAutoCloseOnAcquisitionFinished, METH_VARARGS, (char *)"StreamApplication_setAutoCloseOnAcquisitionFinished(StreamApplication self, bool arg2)"},
 	 { (char *)"StreamApplication_requestSync", _wrap_StreamApplication_requestSync, METH_VARARGS, (char *)"StreamApplication_requestSync(StreamApplication self)"},
 	 { (char *)"StreamApplication_setRecordInputHint", _wrap_StreamApplication_setRecordInputHint, METH_VARARGS, (char *)"StreamApplication_setRecordInputHint(StreamApplication self, Seiscomp::Record::Hint hint)"},
+	 { (char *)"StreamApplication_setRecordDatatype", _wrap_StreamApplication_setRecordDatatype, METH_VARARGS, (char *)"StreamApplication_setRecordDatatype(StreamApplication self, Seiscomp::Array::DataType datatype)"},
+	 { (char *)"StreamApplication_recordDataType", _wrap_StreamApplication_recordDataType, METH_VARARGS, (char *)"StreamApplication_recordDataType(StreamApplication self) -> Seiscomp::Array::DataType"},
 	 { (char *)"StreamApplication_startRecordThread", _wrap_StreamApplication_startRecordThread, METH_VARARGS, (char *)"StreamApplication_startRecordThread(StreamApplication self)"},
 	 { (char *)"StreamApplication_waitForRecordThread", _wrap_StreamApplication_waitForRecordThread, METH_VARARGS, (char *)"StreamApplication_waitForRecordThread(StreamApplication self)"},
 	 { (char *)"StreamApplication_isRecordThreadActive", _wrap_StreamApplication_isRecordThreadActive, METH_VARARGS, (char *)"StreamApplication_isRecordThreadActive(StreamApplication self) -> bool"},

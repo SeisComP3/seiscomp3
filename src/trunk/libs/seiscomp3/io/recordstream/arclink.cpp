@@ -100,6 +100,9 @@ bool ArclinkConnection::setSource(std::string serverloc) {
 					_user = value;
 				else if ( name == "pwd" )
 					_passwd = value;
+
+				if ( name == "dump" )
+					_dump.open(value.c_str());
 			}
 		}
 	}
@@ -196,6 +199,8 @@ bool ArclinkConnection::clear() {
 // Hopefully safe to be called from another thread
 void ArclinkConnection::close() {
 	_sock.interrupt();
+
+	_dump.close();
 }
 
 bool ArclinkConnection::reconnect() {
@@ -306,12 +311,16 @@ std::istream& ArclinkConnection::stream() {
 		string data = _sock.read(RECSIZE);
 		int reclen = ms_detect(data.c_str(), RECSIZE);
 		if (reclen > RECSIZE)
-			_stream.str(data + _sock.read(reclen - RECSIZE));
+			data += _sock.read(reclen - RECSIZE);
 		else {
 			if (reclen <= 0) SEISCOMP_ERROR("Retrieving the record length failed (try 512 Byte)!");
 			reclen = RECSIZE;
-			_stream.str(data);
 		}
+
+		_stream.str(data);
+
+		if ( _dump ) _dump << data;
+
 		/////////////////////////////////////
 		_remainingBytes -= reclen;
 

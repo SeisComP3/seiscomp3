@@ -96,47 +96,47 @@ extern void	nap();
 
 
 //#include "loc_params.h"
-struct Locator_params
-{
+struct Locator_params {
 	Locator_params() {
-		outfile_name=prefix=NULL;
+		outfile_name = prefix = NULL;
 	}
+
 	~Locator_params() {
-		if(outfile_name)
+		if ( outfile_name )
 			delete [] outfile_name;
-		if(prefix)
+		if ( prefix )
 			delete [] prefix;
 	}
 
-				/* DEFAULT - DESCRIPTION                     */
-	int	num_dof;	/* 9999    - number of degrees of freedom    */
-	float	est_std_error;	/* 1.0     - estimate of data std error      */
-	float	conf_level;	/* 0.9     - confidence level    	     */
-	float	damp;		/* -1.0    - damping (-1.0 means no damping) */
-	int	max_iterations;	/* 20      - limit iterations to convergence */
-	char	fix_depth;	/* true    - use fixed depth ?               */
-	float	fixing_depth;	/* 0.0     - fixing depth value              */
-	float	lat_init;	/* modifiable - initial latitude             */
-	float	lon_init;	/* modifiable - initial longitude            */
-	float	depth_init;	/* modifiable - initial depth                */
-	int	use_location;	/* true    - use current origin data ?       */
-	char	verbose;	/* true    - verbose output of data ?        */
-	int	cor_level;	/* 0       - correction table level          */
-	char *	outfile_name;	/* NULL    - name of file to print data      */
-	char *	prefix;		/* NULL    - dir name & prefix of tt tables  */
+	/* DEFAULT - DESCRIPTION                     */
+	int     num_dof;         /* 9999    - number of degrees of freedom    */
+	float   est_std_error;   /* 1.0     - estimate of data std error      */
+	float   conf_level;      /* 0.9     - confidence level    	     */
+	float   damp;            /* -1.0    - damping (-1.0 means no damping) */
+	int     max_iterations;  /* 20      - limit iterations to convergence */
+	char    fix_depth;       /* true    - use fixed depth ?               */
+	float   fixing_depth;    /* 0.0     - fixing depth value              */
+	float   lat_init;        /* modifiable - initial latitude             */
+	float   lon_init;        /* modifiable - initial longitude            */
+	float   depth_init;      /* modifiable - initial depth                */
+	int     use_location;    /* true    - use current origin data ?       */
+	char    verbose;         /* true    - verbose output of data ?        */
+	int     cor_level;       /* 0       - correction table level          */
+	char   *outfile_name;    /* NULL    - name of file to print data      */
+	char   *prefix;          /* NULL    - dir name & prefix of tt tables  */
 };
 
-typedef struct locator_errors
-{
-	int	arid;
-	int	time;
-	int	az;
-	int	slow;
-} Locator_errors;
+
+struct Locator_errors {
+	int arid;
+	int time;
+	int az;
+	int slow;
+};
+
 
 //#include "db3/db_arrival.h"
-typedef struct arrival 
-{
+typedef struct arrival {
 	char	sta[16];
 	char	chan[9];
 	double	time;
@@ -259,17 +259,17 @@ typedef struct site
 } Site;
 
 //#include "css/csstime.h"
-struct date_time{
+struct date_time {
 	double epoch;
-	long date;
-	int year;
-	int month;
-	char mname[4];
-	int day;
-	int doy;
-	int hour;
-	int minute;
-	float second;
+	long   date;
+	int    year;
+	int    month;
+	char   mname[4];
+	int    day;
+	int    doy;
+	int    hour;
+	int    minute;
+	float  second;
 };
 
 
@@ -278,31 +278,30 @@ extern "C" {
 	void htoe(struct date_time*);
 	void etoh(struct date_time*);
 	int locate_event(char* _newnet,
-                     Site* _sites,
-                     int _num_sta,
-                     Arrival* _arrival,
-                     Assoc* _assoc,
-                     Origin* _origin,
-                     Origerr* _origerr,
-                     Locator_params* _locator_params,
-                     Locator_errors* _locator_errors,
-                     int _num_obs);
+	                 Site* _sites,
+	                 int _num_sta,
+	                 Arrival* _arrival,
+	                 Assoc* _assoc,
+	                 Origin* _origin,
+	                 Origerr* _origerr,
+	                 Locator_params* _locator_params,
+	                 Locator_errors* _locator_errors,
+	                 int _num_obs);
 }
 
 struct Loc {
-
-	Arrival*			arrival;
-	Assoc*				assoc;
-	Origerr*			origerr;
-	Origin*				origin;
-	Site*				sites;
-	Locator_params*		locator_params;
-	Locator_errors*		locator_errors;
-	struct date_time*	dt;
-	int siteCount; // num_sta
-	int arrivalCount; // num_obs
-	int assocCount; // = siteCount
-	char* newnet;
+	Arrival           *arrival;
+	Assoc             *assoc;
+	Origerr           *origerr;
+	Origin            *origin;
+	Site              *sites;
+	Locator_params    *locator_params;
+	Locator_errors    *locator_errors;
+	struct date_time  *dt;
+	int                siteCount;    // num_sta
+	int                arrivalCount; // num_obs
+	int                assocCount;   // = siteCount
+	char              *newnet;
 };
 
 

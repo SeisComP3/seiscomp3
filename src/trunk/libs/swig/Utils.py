@@ -139,6 +139,7 @@ class Timer(_object):
     def setSingleShot(self, *args): return _Utils.Timer_setSingleShot(self, *args)
     def start(self): return _Utils.Timer_start(self)
     def stop(self): return _Utils.Timer_stop(self)
+    def disable(self): return _Utils.Timer_disable(self)
     def isActive(self): return _Utils.Timer_isActive(self)
 Timer_swigregister = _Utils.Timer_swigregister
 Timer_swigregister(Timer)

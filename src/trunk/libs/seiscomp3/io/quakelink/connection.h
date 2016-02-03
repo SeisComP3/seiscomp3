@@ -44,7 +44,8 @@ enum ContentType {
 	ctUndefined         = -1,
 	ctXML               = 0,
 	ctEvSum             = 1,
-	ctEvLog             = 2
+	ctEvLog             = 2,
+	ctText              = 3
 };
 
 enum Options {
@@ -74,7 +75,8 @@ class Response : public Core::BaseObject {
 		Core::Time           timestamp;
 		std::string          format;
 		bool                 gzip;
-		OPT(int)             revision;
+		OPT(int)             revision; // since API 1.6.0
+		bool                 disposed; // since API 4.0.0
 
 		// Payload
 		std::string data;
@@ -90,6 +92,7 @@ class Response : public Core::BaseObject {
 			gzip        = other.gzip;
 			data        = other.data;
 			revision    = other.revision;
+			disposed    = other.disposed;
 			return *this;
 		}
 
@@ -99,6 +102,7 @@ class Response : public Core::BaseObject {
 			timestamp   = Core::Time::Null;
 			gzip        = false;
 			revision    = Core::None;
+			disposed    = false;
 			format.clear();
 			data.clear();
 	}
@@ -236,7 +240,6 @@ class Connection : public Core::BaseObject {
 			_logPrefix = prefix;
 		}
 
-	private:
 		bool connect();
 		bool sendRequest(const std::string &req, bool log = true);
 		bool sendOptions(int changedOptions);
@@ -255,7 +258,6 @@ class Connection : public Core::BaseObject {
 	protected:
 		std::string             _logPrefix;
 
-	private:
 		std::string             _service;
 		std::string             _user;
 		std::string             _pass;

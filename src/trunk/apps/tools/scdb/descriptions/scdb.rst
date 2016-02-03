@@ -6,7 +6,7 @@ write access to the database. Its task is to connect to :ref:`scmaster` and popu
 the database with all received notifier messages. Although it worked it
 introduced race conditions caused by the latency of the database backend since
 all other clients received the message at the same time. Accessing the database
-immediately at this point in time did not guarantuee that the object was
+immediately at this point in time did not guarantee that the object was
 written already.
 
 In consequence, the scmaster itself gained write access to the database and
@@ -23,7 +23,7 @@ Online mode
 -----------
 
 Now scdb can be used to maintain a backup or archive the database that is not
-part of the realtime processing. When running scdb as database write daemon it
+part of the real time processing. When running scdb as database write daemon it
 can inform a client about the database connection to use. A client sends a
 DatabaseRequest message and scdb sends back a DatabaseResponse message containing
 the database connection parameters.
@@ -39,8 +39,8 @@ configured database, e.g. a backup database.
 In the above example :ref:`scdb` connects to "server" and writes all messages to the
 output database. The database connection it received from the messaging server
 during the handshake is reported to client requesting a database address. To
-overwrite the read-only database, just override the applications database
-address:
+overwrite the read-only database, just override the application's database
+address (with the '-d' option):
 
 .. code-block:: sh
 
@@ -52,7 +52,7 @@ Offline mode
 ------------
 
 Another important task of :ref:`scdb` is to populate the database with any SeisComP3
-datamodel content. In combination with :ref:`scxmldump` it can be used to copy events
+data model content. In combination with :ref:`scxmldump` it can be used to copy events
 from one database to another.
 
 For that it does not connect to a messaging server but reads data from XML
@@ -62,7 +62,7 @@ files and writes it to the database.
 .. warning::
 
    When reading XML files the output database address is not passed
-   with -o but -d. The applications database address is used.
+   with -o but -d. The application's database address is used.
 
 .. code-block:: sh
 

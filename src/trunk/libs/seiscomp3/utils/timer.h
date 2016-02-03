@@ -102,6 +102,10 @@ class SC_SYSTEM_CORE_API Timer {
 		//! Stops the timer.
 		bool stop();
 
+		//! Stops the timer if active and waits until it is removed from
+		//! the timer list. After this call no callback will be executed.
+		bool disable();
+
 		//! Returns the current timer state
 		bool isActive() const;
 

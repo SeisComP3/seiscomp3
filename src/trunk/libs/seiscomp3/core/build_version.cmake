@@ -1,0 +1,35 @@
+# Get the latest abbreviated commit hash of the working branch
+EXECUTE_PROCESS(
+	COMMAND git rev-parse HEAD
+	WORKING_DIRECTORY ${ROOT}
+	OUTPUT_VARIABLE SC3_GIT_REVISION
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get the build system
+EXECUTE_PROCESS(
+	COMMAND uname -sr
+	OUTPUT_VARIABLE SC3_BUILD_SYSTEM
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get the compiler version
+EXECUTE_PROCESS(
+	COMMAND bash -c "${COMPILER} --version | head -1"
+	OUTPUT_VARIABLE SC3_COMPILER_VERSION
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get the OS version
+EXECUTE_PROCESS(
+	COMMAND bash -c "lsb_release -sd | sed 's/\"//g'"
+	OUTPUT_VARIABLE SC3_OS_VERSION
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+SET(SC3_SYSTEM ${SYSTEM})
+
+CONFIGURE_FILE(
+	${SRC}/core/build_version.h.in
+	${CMAKE_CURRENT_BINARY_DIR}/core/build_version.h
+)

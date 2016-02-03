@@ -52,10 +52,12 @@
 
 #include <seiscomp3/utils/files.h>
 
+#include <sstream>
+
 #include <cerrno>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sstream>
+#include <string.h>
 #include <locale.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -460,6 +462,7 @@ Application::Application(int argc, char** argv)
 	_logContext = false;
 	_logComponent = -1; // -1=unset, 0=off, 1=on
 	_logToStdout = false;
+	_logUTC = false;
 	_messagingTimeout = 3;
 	_messagingHost = "localhost";
 	_messagingPrimaryGroup = Communication::Protocol::LISTENER_GROUP;
@@ -1164,7 +1167,7 @@ void Application::enableTimer(unsigned int seconds) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::disableTimer() {
-	_userTimer.stop();
+	_userTimer.disable();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2103,6 +2106,7 @@ void Application::initCommandLine() {
 	commandline().addOption("Verbose", "debug", "debug mode: --verbosity=4 --console=1");
 	commandline().addOption("Verbose", "trace", "trace mode: --verbosity=4 --console=1 --print-component=1 --print-context=1");
 	commandline().addOption("Verbose", "log-file", "Use alternative log file", &_alternativeLogFile);
+	commandline().addOption("Verbose", "log-utc", "Use UTC instead of local timezone", &_logUTC);
 
 
 	if ( _enableMessaging ) {
@@ -2222,6 +2226,7 @@ bool Application::initConfiguration() {
 	try { _logContext = configGetBool("logging.context"); } catch (...) {}
 	try { _logComponent = configGetBool("logging.component") ? 1 : 0; } catch (...) {}
 	try { _logComponents = configGetStrings("logging.components"); } catch (...) {}
+	try { _logUTC = configGetBool("logging.utc"); } catch (...) {}
 
 	try { _objectLogTimeWindow = configGetInt("logging.objects.timeSpan"); } catch (...) {}
 
@@ -2408,6 +2413,7 @@ bool Application::initLogging() {
 			_logger = new Logging::FdOutput(STDERR_FILENO);
 
 		if ( _logger ) {
+			_logger->setUTCEnabled(_logUTC);
 			_logger->logComponent(_logComponent < 0 ? !_logToStdout : _logComponent);
 			_logger->logContext(_logContext);
 			if ( !_logComponents.empty() ) {
@@ -2871,7 +2877,7 @@ bool Application::forkProcess() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Application::acquireLockfile(const std::string& lockfile) {
+int Application::acquireLockfile(const std::string &lockfile) {
 #ifndef WIN32
 	int fd = open(lockfile.c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
 	if( fd < 0 ) {
@@ -2902,11 +2908,13 @@ int Application::acquireLockfile(const std::string& lockfile) {
 		return -1;
 	}
 
-	char buf[10];
-	snprintf(buf, 10, "%d", getpid());
+	char buf[30];
+	memset(buf, 0, sizeof(buf));
+	snprintf(buf, sizeof(buf), "%d", getpid());
+	ssize_t pid_len = strlen(buf);
 
-	if ( write(fd, buf, strlen(buf)) != int(strlen(buf)) ) {
-		SEISCOMP_ERROR("could not write %s: %s\n", lockfile.c_str(), strerror(errno));
+	if ( write(fd, buf, pid_len) != pid_len ) {
+		SEISCOMP_ERROR("could not write pid file at %s: %s\n", lockfile.c_str(), strerror(errno));
 		return -1;
 	}
 

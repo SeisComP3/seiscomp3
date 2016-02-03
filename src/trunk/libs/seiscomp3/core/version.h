@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(3, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(4, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x030000
+#define SC_API_VERSION 0x050000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,32 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "5.0.0"   0x050000
+   - Removed Seiscomp::Core::RecordSequence::continuousRecord(...)
+   - Removed Seiscomp::Core::RecordSequence::fillGaps
+   - Added template method Seiscomp::Core::RecordSequence::continuousRecord<T>(...)
+   - Added Seiscomp::Processing::Picker::Config::noiseBegin
+   - Added Seiscomp::Gui::Ruler::pixelPerUnit
+   - Added Seiscomp::Gui::Ruler::scale
+
+ "4.0.0"   0x040000
+   - Added Seiscomp::System::ConfigDelegate::aboutToWrite
+   - Added Seiscomp::System::ConfigDelegate::finishedWriting
+   - Added Seiscomp::System::ConfigDelegate::hasWriteError
+   - Added Seiscomp::System::ConfigDelegate::handleWriteTimeMismatch
+   - Added delegate parameter to Seiscomp::System::*::writeConfig
+   - Added Seiscomp::Gui::RecordStreamThread::setRecordHint
+   - Added Seiscomp::Client::StreamApplication::setRecordDatatype
+   - Added Seiscomp::Client::StreamApplication::recordDataType
+   - Added Seiscomp::IO::DatabaseInterface::getRowFieldName virtual abstract
+     method
+   - Fixed Gui::RecordPolyline rendering with large offset
+   - Added Seiscomp::Logging::Output::setUTCEnabled
+   - Added Seiscomp::IO::QuakeLink::Response::disposed field
+
+ "3.1.0"   0x030100
+   - Change private to protected access in Seiscomp::IO::QuakeLink::Connection
+
  "3.0.0"   0x030000
    - Added Seiscomp::IO::RecordStream::filterRecord virtual method
    - Fixed bug in Seiscomp::IO::QuakeLink::Connection

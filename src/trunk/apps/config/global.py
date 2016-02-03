@@ -51,6 +51,5 @@ class Module(seiscomp3.Kernel.Module):
 
 
 if __name__ == "__main__":
-    import seiscomp3.System
     app = seiscomp3.bindings2cfg.ConfigDBUpdater(len(sys.argv), sys.argv)
     sys.exit(app())

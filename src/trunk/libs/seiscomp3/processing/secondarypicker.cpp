@@ -32,6 +32,7 @@ IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(SecondaryPicker, TimeWindowProcessor, "Secon
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SecondaryPicker::SecondaryPicker() {
+	_config.noiseBegin = 0;
 	_config.signalBegin = _config.signalEnd = 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

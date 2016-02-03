@@ -167,6 +167,7 @@ class Output(_object):
     def unsubscribe(self, *args): return _Logging.Output_unsubscribe(self, *args)
     def logComponent(self, *args): return _Logging.Output_logComponent(self, *args)
     def logContext(self, *args): return _Logging.Output_logContext(self, *args)
+    def setUTCEnabled(self, *args): return _Logging.Output_setUTCEnabled(self, *args)
 Output_swigregister = _Logging.Output_swigregister
 Output_swigregister(Output)
 

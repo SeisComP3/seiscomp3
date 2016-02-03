@@ -17,6 +17,8 @@
 #include <seiscomp3/datamodel/eventparameters_package.h>
 #include <seiscomp3/io/xml/handler.h>
 #include <seiscomp3/logging/log.h>
+#include <set>
+
 
 #define NS_QML           "http://quakeml.org/xmlns/quakeml/1.2"
 #define NS_QML_RT        "http://quakeml.org/xmlns/quakeml-rt/1.2"
@@ -184,13 +186,26 @@ struct OriginConnector : IO::XML::MemberHandler {
 		if ( event == NULL || event->eventParameters() == NULL ) return false;
 		EventParameters *ep = event->eventParameters();
 		Origin *origin;
+		Magnitude *magnitude;
 		StationMagnitude *staMag;
 		Amplitude *amplitude;
 		Pick *pick;
-		for ( size_t oi = 0; oi < event->originReferenceCount(); ++oi ) {
-			origin = findOrigin(ep, event->originReference(oi)->originID());
-			if ( origin != NULL ) {
+		bool foundPreferredMagnitude = false;
+
+		std::set<std::string> orgRefs;
+
+		// Collect origin references
+		for ( size_t oi = 0; oi < event->originReferenceCount(); ++oi )
+			orgRefs.insert(event->originReference(oi)->originID());
+
+		// Check all origins if they should be exported
+		for ( size_t i = 0; i < ep->originCount(); ++i ) {
+			origin = ep->origin(i);
+			if ( orgRefs.find(origin->publicID()) != orgRefs.end() ) {
 				for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
+					magnitude = origin->magnitude(mi);
+					if ( event->preferredMagnitudeID() == magnitude->publicID() )
+						foundPreferredMagnitude = true;
 					output->handle(origin->magnitude(mi), "magnitude", "");
 				}
 				for ( size_t si = 0; si < origin->stationMagnitudeCount(); ++si ) {
@@ -209,7 +224,23 @@ struct OriginConnector : IO::XML::MemberHandler {
 					}
 				}
 			}
+			else if ( !foundPreferredMagnitude ) {
+				// Check for preferred magnitude in unassociated origins if not
+				// yet found
+				for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
+					magnitude = origin->magnitude(mi);
+					if ( event->preferredMagnitudeID() == magnitude->publicID() ) {
+						foundPreferredMagnitude = true;
+						output->handle(origin->magnitude(mi), "magnitude", "");
+						break;
+					}
+				}
+			}
 		}
+
+		if ( !foundPreferredMagnitude )
+			SEISCOMP_WARNING("preferred magnitude %s not found", event->preferredMagnitudeID().c_str());
+
 		return true;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }

@@ -921,6 +921,7 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		bool _logContext;
 		int _logComponent;
 		bool _logToStdout;
+		bool _logUTC;
 
 		std::string _plugins;
 		std::string _currentSyncID;

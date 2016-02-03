@@ -61,6 +61,7 @@ LocSAT::LocSAT() {
 	_computeConfidenceEllipsoid = false;
 
 	if ( _allowedParameters.empty() ) {
+		_allowedParameters.push_back("VERBOSE");
 		_allowedParameters.push_back("MAX_ITERATIONS");
 		_allowedParameters.push_back("NUM_DEG_FREEDOM");
 	}
@@ -102,7 +103,9 @@ LocatorInterface::IDList LocSAT::parameters() const {
 
 
 std::string LocSAT::parameter(const std::string &name) const {
-	if ( name == "MAX_ITERATIONS" )
+	if ( name == "VERBOSE" )
+		return getLocatorParams(LP_VERBOSE);
+	else if ( name == "MAX_ITERATIONS" )
 		return getLocatorParams(LP_MAX_ITERATIONS);
 	else if ( name == "NUM_DEG_FREEDOM" )
 		return getLocatorParams(LP_NUM_DEG_FREEDOM);
@@ -113,7 +116,9 @@ std::string LocSAT::parameter(const std::string &name) const {
 
 bool LocSAT::setParameter(const std::string &name,
                           const std::string &value) {
-	if ( name == "MAX_ITERATIONS" )
+	if ( name == "VERBOSE" )
+		setLocatorParams(LP_VERBOSE, value.c_str());
+	else if ( name == "MAX_ITERATIONS" )
 		setLocatorParams(LP_MAX_ITERATIONS, value.c_str());
 	else if ( name == "NUM_DEG_FREEDOM" )
 		setLocatorParams(LP_NUM_DEG_FREEDOM, value.c_str());
@@ -968,23 +973,23 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	//! --------------------------------------------------
 
 void LocSAT::setDefaultLocatorParams(){
-	_locator_params->cor_level		= 0;
-	_locator_params->use_location 	= TRUE;
-	_locator_params->fix_depth		= 'n';
-	_locator_params->fixing_depth	= 20.0;
-	_locator_params->verbose		= 'n';
-	_locator_params->lat_init		= 999.9;
-	_locator_params->lon_init		= 999.9;
-	_locator_params->depth_init		= 20.0;
-	_locator_params->conf_level		= 0.90;
-	_locator_params->damp			= -1.00;
-	_locator_params->est_std_error	= 1.00;
-	_locator_params->num_dof		= 9999;
-	_locator_params->max_iterations	= 100;
-	_minArrivalWeight				= 0.5;
-	_useArrivalRMSAsTimeError		= false;
+	_locator_params->cor_level      = 0;
+	_locator_params->use_location   = TRUE;
+	_locator_params->fix_depth      = 'n';
+	_locator_params->fixing_depth   = 20.0;
+	_locator_params->verbose        = 'n';
+	_locator_params->lat_init       = 999.9;
+	_locator_params->lon_init       = 999.9;
+	_locator_params->depth_init     = 20.0;
+	_locator_params->conf_level     = 0.90;
+	_locator_params->damp           = -1.00;
+	_locator_params->est_std_error  = 1.00;
+	_locator_params->num_dof        = 9999;
+	_locator_params->max_iterations = 100;
+	_minArrivalWeight               = 0.5;
+	_useArrivalRMSAsTimeError       = false;
 
-	strcpy(_locator_params->outfile_name, "ls.out");
+	strcpy(_locator_params->outfile_name, "");
 }
 
 

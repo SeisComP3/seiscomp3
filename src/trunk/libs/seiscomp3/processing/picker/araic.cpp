@@ -166,6 +166,7 @@ ARAICPicker::~ARAICPicker() {}
 bool ARAICPicker::setup(const Settings &settings) {
 	if ( !Picker::setup(settings) ) return false;
 
+	settings.getValue(_config.noiseBegin, "picker.AIC.noiseBegin");
 	settings.getValue(_config.signalBegin, "picker.AIC.signalBegin");
 	settings.getValue(_config.signalEnd, "picker.AIC.signalEnd");
 	settings.getValue(_config.snrMin, "picker.AIC.minSNR");

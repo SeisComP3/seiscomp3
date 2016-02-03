@@ -22,8 +22,7 @@ namespace Seiscomp {
 namespace Internal {
 
 
-LocSAT::LocSAT(){
-
+LocSAT::LocSAT() {
 	_origerr = (Origerr*)malloc(sizeof(Origerr));
 	_origin = (Origin*)malloc(sizeof(Origin));
 
@@ -43,8 +42,8 @@ LocSAT::LocSAT(){
 	setOriginErr();
 }
 
-LocSAT::~LocSAT(){
 
+LocSAT::~LocSAT() {
 	reset();
 
 	if ( _origerr ) free(_origerr);
@@ -59,8 +58,8 @@ LocSAT::~LocSAT(){
 	if ( _dt ) free(_dt);
 }
 
-void LocSAT::reset(){
 
+void LocSAT::reset() {
 	if (_sites) free(_sites);
 	_siteCount = 0;
 	_num_sta = 0;
@@ -75,11 +74,10 @@ void LocSAT::reset(){
 	if (_locator_errors) { free(_locator_errors); _locator_errors = NULL; }
 
 	_newnet = (char *)NULL;
-
 }
 
 
-Loc* LocSAT::doLocation(){
+Loc* LocSAT::doLocation() {
 	if( (_num_sta <= 0) || (_num_obs <= 0))
 		throw LocatorException("error: Too few usable data");
 
@@ -134,8 +132,7 @@ Loc* LocSAT::doLocation(){
 }
 
 
-void LocSAT::addSite(const char* station, float lat, float lon, float elev){
-
+void LocSAT::addSite(const char* station, float lat, float lon, float elev) {
 	if (_sites)
 		for (int i = 0; i < _siteCount; i++)
 			if (strcmp(station, _sites[i].sta) == 0){
@@ -153,16 +150,14 @@ void LocSAT::addSite(const char* station, float lat, float lon, float elev){
 	strcpy(_sites[_siteCount-1].sta, station);
 	_sites[_siteCount-1].lat = lat;
 	_sites[_siteCount-1].lon = lon;
-	_sites[_siteCount-1].elev = elev;
+	_sites[_siteCount-1].elev = elev*0.001;
 
 	_num_sta = _siteCount;
-
 }
 
 
 void LocSAT::addArrival(long arrival_id, const char* station, const char* phase,
-                        double time, float deltim, int defining){
-
+                        double time, float deltim, int defining) {
 	if (!_arrival){
 		_arrivalCount = 1;
 		_arrival = (Arrival*)malloc(_arrivalCount * sizeof(Arrival));
@@ -205,8 +200,7 @@ void LocSAT::addArrival(long arrival_id, const char* station, const char* phase,
 }
 
 
-void LocSAT::setArrivalAzimuth(float azimuth, float delaz, int defining){
-
+void LocSAT::setArrivalAzimuth(float azimuth, float delaz, int defining) {
 	_arrival[_arrivalCount-1].azimuth = azimuth;
 	_arrival[_arrivalCount-1].delaz = delaz;
 
@@ -217,8 +211,7 @@ void LocSAT::setArrivalAzimuth(float azimuth, float delaz, int defining){
 }
 
 
-void LocSAT::setArrivalSlowness(float slow, float delslo, int defining){
-
+void LocSAT::setArrivalSlowness(float slow, float delslo, int defining) {
 	_arrival[_arrivalCount-1].slow = slow;
 	_arrival[_arrivalCount-1].delslo = delslo;
 
@@ -229,8 +222,7 @@ void LocSAT::setArrivalSlowness(float slow, float delslo, int defining){
 }
 
 
-void LocSAT::setOriginErr(){
-
+void LocSAT::setOriginErr() {
 	_origerr->sdobs		= -1.0;
 	_origerr->smajax	= -1.0;
 	_origerr->sminax	= -1.0;
@@ -251,16 +243,17 @@ void LocSAT::setOriginErr(){
 	_origin->lat	= -999.9;
 	_origin->lon	= -999.9;
 	_origin->depth	= -999.9;
-
 }
 
 
-void LocSAT::setOrigin(float lat_init, float lon_init, float depth_init){
+void LocSAT::setOrigin(float lat_init, float lon_init, float depth_init) {
+	_origin->lat                = lat_init;
+	_origin->lon                = lon_init;
+	_origin->depth              = depth_init;
 
-	_origin->lat		= lat_init;
-	_origin->lon		= lon_init;
-	_origin->depth		= depth_init;
-
+	_locator_params->lat_init   = lat_init;
+	_locator_params->lon_init   = lon_init;
+	_locator_params->depth_init = depth_init;
 }
 
 
@@ -304,8 +297,7 @@ void LocSAT::setLocatorErrors(){
 
 
 void LocSAT::setOriginTime(int year4, int month, int day,
-                                int hour, int minute, int second, int usec){
-
+                           int hour, int minute, int second, int usec) {
 	_dt->year = year4;
 	_dt->month = month;
 	_dt->day = day;
@@ -313,51 +305,24 @@ void LocSAT::setOriginTime(int year4, int month, int day,
 	_dt->minute = minute;
 	_dt->second = second;
 
-	mdtodate(_dt);			/* Convert month/day to Julian date */
-	htoe(_dt);			/* Convert human to epoch time */
+	mdtodate(_dt); /* Convert month/day to Julian date */
+	htoe(_dt);     /* Convert human to epoch time */
 
 	_dt->epoch += usec;
 
 	_origin->time = _dt->epoch;
 }
 
-void LocSAT::setOriginTime(double epoch){
 
+void LocSAT::setOriginTime(double epoch) {
 	_origin->time = epoch;
 }
 
 
-Loc* LocSAT::getNewLocation(){
-	
-	Loc* newLoc = (Loc*)malloc(sizeof(Loc));
+Loc* LocSAT::getNewLocation() {
+	Loc *newLoc = (Loc*)malloc(sizeof(Loc));
 	
 	newLoc->newnet = _newnet;
-
-	/*
-	newLoc->siteCount = _siteCount;
-	newLoc->sites = (Site*)malloc(newLoc->siteCount * sizeof(Site));
-	memcpy(newLoc->sites, _sites, newLoc->siteCount * sizeof(Site));
-
-	newLoc->arrivalCount = _arrivalCount;
-	newLoc->arrival = (Arrival*)malloc(newLoc->arrivalCount * sizeof(Arrival));
-	memcpy(newLoc->arrival, _arrival, newLoc->arrivalCount * sizeof(Arrival));
-
-	newLoc->assocCount = _assocCount;
-	newLoc->assoc = (Assoc*)malloc(newLoc->assocCount * sizeof(Assoc));
-	memcpy(newLoc->assoc, _assoc, newLoc->assocCount * sizeof(Assoc));
-
-	newLoc->origerr = (Origerr*)malloc(sizeof(Origerr));
-	memmove(newLoc->origerr, _origerr, sizeof(Origerr));
-
-	newLoc->origin = (Origin*)malloc(sizeof(Origin));
-	memmove(newLoc->origin, _origin, sizeof(Origin));
-
-	newLoc->locator_errors = (Locator_errors*)malloc(sizeof(Locator_errors));
-	memmove(newLoc->locator_errors, _locator_errors, sizeof(Locator_errors));
-
-	newLoc->locator_params = (Locator_params*)malloc(sizeof(Locator_params));
-	memmove(newLoc->locator_params, _locator_params, sizeof(Locator_params));
-	*/
 
 	newLoc->siteCount = _siteCount;
 	newLoc->sites = _sites;
@@ -369,15 +334,14 @@ Loc* LocSAT::getNewLocation(){
 	newLoc->assoc = _assoc;
 
 	newLoc->origerr =_origerr;
-
 	newLoc->origin = _origin;
 
 	newLoc->locator_errors = _locator_errors;
-
 	newLoc->locator_params = _locator_params;
 
 	return newLoc;
 }
+
 
 } // of namespace Internal
 } // of namespace Seiscomp

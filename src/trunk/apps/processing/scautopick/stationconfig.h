@@ -37,6 +37,7 @@ struct StreamConfig {
 	OPT(double)  triggerOn;
 	OPT(double)  triggerOff;
 	OPT(double)  timeCorrection;
+	bool         sensitivityCorrection;
 	bool         enabled;
 
 	std::string  filter;

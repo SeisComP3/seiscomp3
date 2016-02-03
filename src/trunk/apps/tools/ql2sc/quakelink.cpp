@@ -108,9 +108,9 @@ void QLClient::processResponse(IO::QuakeLink::Response *response) {
 }
 
 void QLClient::listen() {
-//	_reconnect = true;
-	IO::QuakeLink::RequestFormat rf = _config->gzip ? IO::QuakeLink::rfGZXML :
-	                                                  IO::QuakeLink::rfXML;
+	IO::QuakeLink::RequestFormat rf = _config->gzip ?
+	                                 (_config->native ? IO::QuakeLink::rfGZNative : IO::QuakeLink::rfGZXML) :
+	                                 (_config->native ? IO::QuakeLink::rfNative : IO::QuakeLink::rfXML);
 	while ( !interrupted() ) {
 		// determine start time of request
 		Core::Time from;

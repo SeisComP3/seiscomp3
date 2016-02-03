@@ -246,9 +246,9 @@ class NotifierStoreAppender : public Visitor {
 	// ----------------------------------------------------------------------
 	public:
 		//! C'tor
-		NotifierStoreAppender(T &store, Operation op)
+		NotifierStoreAppender(T &store, Operation op, const std::string &parentID = "")
 		: Visitor(op == OP_REMOVE?TM_BOTTOMUP:TM_TOPDOWN),
-		  _store(&store), _operation(op) {}
+		  _store(&store), _operation(op), _parentID(parentID) {}
 
 
 	// ----------------------------------------------------------------------
@@ -256,19 +256,30 @@ class NotifierStoreAppender : public Visitor {
 	// ----------------------------------------------------------------------
 	public:
 		bool visit(PublicObject *po) {
-			if ( po->parent() == NULL ) return false;
-			_store->push_back(new Notifier(po->parent()->publicID(), _operation, po));
+			if ( po->parent() == NULL ) {
+				if ( _parentID.empty() )
+					return false;
+				_store->push_back(new Notifier(_parentID, _operation, po));
+			}
+			else
+				_store->push_back(new Notifier(po->parent()->publicID(), _operation, po));
 			return true;
 		}
 
 		void visit(Object *o) {
-			if ( o->parent() == NULL ) return;
-			_store->push_back(new Notifier(o->parent()->publicID(), _operation, o));
+			if ( o->parent() == NULL ) {
+				if ( _parentID.empty() )
+					return;
+				_store->push_back(new Notifier(_parentID, _operation, o));
+			}
+			else
+				_store->push_back(new Notifier(o->parent()->publicID(), _operation, o));
 		}
 
 	private:
-		T        *_store;
-		Operation _operation;
+		T                 *_store;
+		Operation          _operation;
+		const std::string &_parentID;
 };
 
 
@@ -278,7 +289,7 @@ void AppendNotifier(T &store, Operation op, Object *o, const std::string parentI
 	size_t endPos = store.size();
 	
 	// Create a store appender and visit all child objects
-	NotifierStoreAppender<T> nsa(store, op);
+	NotifierStoreAppender<T> nsa(store, op, parentID);
 	o->accept(&nsa);
 	
 	// If a parent id was specified and elements have been added to the

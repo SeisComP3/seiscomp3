@@ -145,6 +145,7 @@ GFZPicker::~GFZPicker() {}
 bool GFZPicker::setup(const Settings &settings) {
 	if ( !Picker::setup(settings) ) return false;
 
+	settings.getValue(_config.noiseBegin, "picker.GFZ.noiseBegin");
 	settings.getValue(_config.signalBegin, "picker.GFZ.signalBegin");
 	settings.getValue(_config.signalEnd, "picker.GFZ.signalEnd");
 	settings.getValue(_config.snrMin, "picker.GFZ.minSNR");

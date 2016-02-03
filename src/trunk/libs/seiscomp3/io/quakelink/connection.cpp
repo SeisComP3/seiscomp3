@@ -64,8 +64,9 @@ bool readHeaderValue(string &value, const string &line, const string &key) {
 
 ContentType contentType(const string &type) {
 	return startsWith(type, "quakelink/xml")   ? ctXML :
-	       startsWith(type, "quakelink/evlog") ? ctEvLog :
 	       startsWith(type, "quakelink/evsum") ? ctEvSum :
+	       startsWith(type, "quakelink/evlog") ? ctEvLog :
+	       startsWith(type, "text/plain")      ? ctText :
 	                                             ctUndefined;
 }
 
@@ -293,13 +294,13 @@ bool Connection::select(bool archived, const Core::Time &from,
 	string code;
 	while ( readResponseCode(code) ) {
 		if ( !archived && equals(code, "EOD/SELECT") ) {
-			SEISCOMP_NOTICE("%sEOD/SELECT", _logPrefix.c_str());
+			SEISCOMP_DEBUG("%sEOD/SELECT", _logPrefix.c_str());
 			return true;
 		}
 
 		if ( archived && startsWith(code, "EOD/SELECT/ARCHIVED") ) {
 			archived = false;
-			SEISCOMP_NOTICE("%sEOD/SELECT/ARCHIVED", _logPrefix.c_str());
+			SEISCOMP_DEBUG("%sEOD/SELECT/ARCHIVED", _logPrefix.c_str());
 			if ( updatesBetween.size() > 0 ) {
 				SEISCOMP_INFO("%sprocessing %lu updates received in between",
 				              _logPrefix.c_str(),
@@ -489,6 +490,16 @@ bool Connection::readResponse(Response &response) {
 			}
 
 			response.revision = rev;
+		}
+		else if ( readHeaderValue(value, line, "Disposed:") ) {
+			bool disposed;
+			if ( !Core::fromString(disposed, value.c_str()) ) {
+				logAndDisconnect("response header: Invalid Disposed value",
+				                 value.c_str());
+				return false;
+			}
+
+			response.disposed = disposed;
 		}
 		else {
 			SEISCOMP_DEBUG("%sreponse header: Unsupported header line: %s",

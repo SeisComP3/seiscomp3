@@ -174,6 +174,7 @@ void App::createCommandLineDescription() {
 	commandline().addOption("Mode", "offline", "Do not connect to a messaging server");
 	commandline().addOption("Mode", "amplitudes", "Enable/disable computation of amplitudes", &_config.calculateAmplitudes);
 	commandline().addOption("Mode", "test", "Do not send any object");
+	commandline().addOption("Mode", "playback", "Use playback mode that does not set a request time window and works best with files");
 	commandline().addOption("Mode", "ep", "Same as offline but outputs all result as an event parameters XML file");
 	commandline().addOption("Mode", "dump-config", "Dump the configuration and exit");
 	commandline().addOption("Mode", "dump-records", "Dump records to ASCII when in offline mode");
@@ -280,7 +281,12 @@ bool App::init() {
 	);
 
 	streamBuffer().setTimeSpan(_config.ringBufferSize);
-	recordStream()->setStartTime(Core::Time::GMT() - Core::TimeSpan(_config.leadTime));
+
+	// Only set start time if playback option is not set. Without a time window
+	// set a file source will forward all records to the application otherwise
+	// they are filtered according to the time window.
+	if ( !commandline().hasOption("playback") )
+		recordStream()->setStartTime(Core::Time::GMT() - Core::TimeSpan(_config.leadTime));
 
 	if ( configModule() != NULL ) {
 		_config.useAllStreams = false;
@@ -755,6 +761,7 @@ bool App::initDetector(const string &streamID,
 	double trigOff = _config.defaultTriggerOffThreshold;
 	double tcorr = _config.defaultTimeCorrection;
 	string filter = _config.defaultFilter;
+	bool sensitivityCorrection = false;
 
 	const StreamConfig *sc = _stationConfig.get(&configuration(), configModuleName(),
 	                                            networkCode, stationCode);
@@ -769,6 +776,7 @@ bool App::initDetector(const string &streamID,
 		if ( sc->triggerOff ) trigOff = *sc->triggerOff;
 		if ( !sc->filter.empty() ) filter = sc->filter;
 		if ( sc->timeCorrection ) tcorr = *sc->timeCorrection;
+		sensitivityCorrection = sc->sensitivityCorrection;
 	}
 
 	DetectorPtr detector = new Detector(trigOn, trigOff, _config.initTime);
@@ -791,13 +799,14 @@ bool App::initDetector(const string &streamID,
 	detector->setOffset(tcorr);
 	detector->setGapTolerance(_config.maxGapLength);
 	detector->setGapInterpolationEnabled(_config.interpolateGaps);
+	detector->setSensitivityCorrection(sensitivityCorrection);
 	detector->setPublishFunction(boost::bind(&App::emitDetection, this, _1, _2, _3));
 
 	if ( _config.calculateAmplitudes )
 		detector->setAmplitudePublishFunction(boost::bind(&App::emitAmplitude, this, _1, _2));
 
 	if ( !initProcessor(detector.get(), detector->usedComponent(),
-	                    time, streamID, networkCode, stationCode, locationCode, channelCode, false) )
+	                    time, streamID, networkCode, stationCode, locationCode, channelCode, sensitivityCorrection) )
 		return false;
 
 	SEISCOMP_DEBUG("%s: created detector", streamID.c_str());
