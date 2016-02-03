@@ -83,18 +83,26 @@ bool MySQLDatabase::open() {
 		SEISCOMP_INFO("Apply database read timeout of %d seconds", _timeout);
 		mysql_options(_handle, MYSQL_OPT_READ_TIMEOUT, (const char*)&_timeout);
 	}
-
+	if ( _host == "localhost" && _port != 3306 ) {
+		SEISCOMP_WARNING("You are trying to open a MySQL TCP connection on a "
+		                 "non standard port using the host string 'localhost'. "
+		                 "The port might be ignored in favor of a Unix socket "
+		                 "or shared memory connection. Use 127.0.0.1 or a host "
+		                 "name other than 'localhost' to force the creation of "
+		                 "a TCP connection.");
+	}
 	if ( mysql_real_connect(_handle, _host.c_str(), _user.c_str(), _password.c_str(),
 	                        _database.c_str(), _port, NULL, 0) == NULL ) {
 		SEISCOMP_ERROR("Connect to %s:%s@%s:%d/%s failed", _user.c_str(), _password.c_str(),
-	                   _host.c_str(), _port, _database.c_str());
+		               _host.c_str(), _port, _database.c_str());
 		mysql_close(_handle);
 		_handle = NULL;
 		return false;
 	}
 
-	SEISCOMP_DEBUG("Connected to %s:%s@%s:%d/%s", _user.c_str(), _password.c_str(),
-	               _host.c_str(), _port, _database.c_str());
+	SEISCOMP_DEBUG("Connected to %s:%s@%s:%d/%s (%s)", _user.c_str(),
+	               _password.c_str(), _host.c_str(), _port, _database.c_str(),
+	               _handle->host_info);
 
 	// Regarding some newsgroup results it is better to set the option AFTER
 	// the connection has been established even though the documentation says
@@ -359,6 +367,16 @@ int MySQLDatabase::findColumn(const char* name) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int MySQLDatabase::getRowFieldCount() const {
 	return _fieldCount;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const char *MySQLDatabase::getRowFieldName(int index) {
+	MYSQL_FIELD* field = mysql_fetch_field_direct(_result, index);
+	return field != NULL ? field->name : NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

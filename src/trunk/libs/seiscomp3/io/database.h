@@ -192,6 +192,13 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		  */
 		virtual int getRowFieldCount() const = 0;
 
+		/** Returns the name of an indexed field of a
+		    fetched row.
+		    @param index The field index (column)
+		    @return The name of the field.
+		  */
+		virtual const char *getRowFieldName(int index) = 0;
+
 		/** Returns the content of an indexed field of a
 		    fetched row.
 		    @param index The field index (column)
@@ -208,7 +215,7 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		 */
 		std::string getRowFieldString(int index);
 
-    	/** Returns the size of an indexed field of a
+		/** Returns the size of an indexed field of a
 		    fetched row.
 		    @param index The field index
 		    @return The size of the field data.
