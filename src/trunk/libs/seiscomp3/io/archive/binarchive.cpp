@@ -429,11 +429,12 @@ void BinaryArchive::read(std::complex<double>& value) {
 void BinaryArchive::read(bool& value) {
 	char tmp;
 	int size = _buf?_buf->sgetn(&tmp, sizeof(char)):0;
-	value = (bool)tmp;
 	if ( size != sizeof(char) ) {
 		SEISCOMP_ERROR("read(bool): expected %d bytes from stream, got %d", (int)sizeof(char), size);
 		setValidity(false);
 	}
+	else
+		value = (bool)tmp;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
