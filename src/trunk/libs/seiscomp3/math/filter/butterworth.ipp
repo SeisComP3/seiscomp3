@@ -22,36 +22,32 @@ std::vector<_Biquad> _init_bw_biquads2(int order, double f1, double f2, double f
 #define BUTTER_TYPE_BANDSTOP 3 /* not yet implemented */
 #define BUTTER_TYPE_HIGHLOW 4 /* combination of BUTTER_TYPE_LOW and BUTTER_TYPE_HIGH */
 
+
 template<class TYPE>
-ButterworthLowpass<TYPE>::ButterworthLowpass(
-	int order, double fc, double fsamp)
-	: _order(order), _fc(fc), _fsamp(0.0)
-{
-	if(fsamp) {
+ButterworthLowpass<TYPE>::ButterworthLowpass(int order, double fc, double fsamp)
+: _order(order), _fc(fc), _fsamp(0.0) {
+	if ( fsamp )
 		setSamplingFrequency(fsamp);
-	}
 }
 
 template<class TYPE>
-void ButterworthLowpass<TYPE>::setSamplingFrequency(double fsamp)
-{
+void ButterworthLowpass<TYPE>::setSamplingFrequency(double fsamp) {
 	if (_fsamp == fsamp)
 		return;
 
 	_fsamp = fsamp;
 	BiquadCascade<TYPE>::_clear();
 
-        std::vector< _Biquad > b;
+	std::vector< _Biquad > b;
 	b = _init_bw_biquads(_order, _fc, _fsamp, BUTTER_TYPE_LOW);
 
-        typename std::vector< _Biquad >::const_iterator biq;
+	typename std::vector< _Biquad >::const_iterator biq;
 	for (biq = b.begin(); biq != b.end(); biq++)
 		this->append(Biquad<TYPE>(*biq));
 }
 
 template<typename TYPE>
-int ButterworthLowpass<TYPE>::setParameters(int n, const double *params)
-{
+int ButterworthLowpass<TYPE>::setParameters(int n, const double *params) {
 	if ( n != 2 ) return 2;
 
 	int order = (int)params[0];
@@ -71,35 +67,30 @@ InPlaceFilter<TYPE>* ButterworthLowpass<TYPE>::clone() const {
 }
 
 template<class TYPE>
-ButterworthHighpass<TYPE>::ButterworthHighpass(
-	int order, double fc, double fsamp)
-	: _order(order), _fc(fc), _fsamp(0.0)
-{
-	if(fsamp) {
+ButterworthHighpass<TYPE>::ButterworthHighpass(int order, double fc, double fsamp)
+: _order(order), _fc(fc), _fsamp(0.0) {
+	if ( fsamp )
 		setSamplingFrequency(fsamp);
-	}
 }
 
 template<class TYPE>
-void ButterworthHighpass<TYPE>::setSamplingFrequency(double fsamp)
-{
-	if (_fsamp == fsamp)
+void ButterworthHighpass<TYPE>::setSamplingFrequency(double fsamp) {
+	if ( _fsamp == fsamp )
 		return;
 
 	_fsamp = fsamp;
 	BiquadCascade<TYPE>::_clear();
 
-        std::vector< _Biquad > b;
-        b = _init_bw_biquads(_order, _fc, _fsamp, BUTTER_TYPE_HIGH);
+	std::vector< _Biquad > b;
+	b = _init_bw_biquads(_order, _fc, _fsamp, BUTTER_TYPE_HIGH);
 
-        typename std::vector< _Biquad >::const_iterator biq;
+	typename std::vector< _Biquad >::const_iterator biq;
 	for (biq = b.begin(); biq != b.end(); biq++)
 		this->append(Biquad<TYPE>(*biq));
 }
 
 template<typename TYPE>
-int ButterworthHighpass<TYPE>::setParameters(int n, const double *params)
-{
+int ButterworthHighpass<TYPE>::setParameters(int n, const double *params) {
 	if ( n != 2 ) return 2;
 
 	int order = (int)params[0];
@@ -120,39 +111,37 @@ InPlaceFilter<TYPE>* ButterworthHighpass<TYPE>::clone() const {
 
 
 template<class TYPE>
-ButterworthBandpass<TYPE>::ButterworthBandpass(
-	int order, double fmin, double fmax, double fsamp, bool init)
-	: _order(order), _fmin(fmin), _fmax(fmax), _fsamp(0.0), _init(init)
-{
-	if(fsamp) {
+ButterworthBandpass<TYPE>::ButterworthBandpass(int order, double fmin, double fmax,
+                                               double fsamp, bool init)
+: _order(order), _fmin(fmin), _fmax(fmax), _fsamp(0.0), _init(init) {
+	if ( fsamp )
 		setSamplingFrequency(fsamp);
-	}
+
 	_lastSample = 0;
 	_gapLength = 0;
 }
 
+
 template<class TYPE>
-void ButterworthBandpass<TYPE>::setSamplingFrequency(double fsamp)
-{
-	if (_fsamp == fsamp)
+void ButterworthBandpass<TYPE>::setSamplingFrequency(double fsamp) {
+	if ( _fsamp == fsamp )
 		return;
 
 	_fsamp = fsamp;
 	BiquadCascade<TYPE>::_clear();
 
-        std::vector< _Biquad > b;
+	std::vector< _Biquad > b;
 
 	// This is a proper bandpass
-        b = _init_bw_biquads2(_order,_fmin,_fmax,_fsamp, BUTTER_TYPE_BAND);
+	b = _init_bw_biquads2(_order,_fmin,_fmax,_fsamp, BUTTER_TYPE_BAND);
 
-        typename std::vector< _Biquad >::const_iterator biq;
+	typename std::vector< _Biquad >::const_iterator biq;
 	for (biq = b.begin(); biq != b.end(); biq++)
 		this->append(Biquad<TYPE>(*biq));
 }
 
 template<typename TYPE>
-int ButterworthBandpass<TYPE>::setParameters(int n, const double *params)
-{
+int ButterworthBandpass<TYPE>::setParameters(int n, const double *params) {
 	if ( n != 3 ) return 3;
 
 	_order = (int)params[0];
@@ -174,23 +163,21 @@ void ButterworthBandpass<TYPE>::reset() {
 
 
 template<typename TYPE>
-static TYPE average(int n, TYPE *f)
-{
+static TYPE average(int n, TYPE *f) {
 	double sum=0;
-	for(int i=0; i<n; i++) {
+	for ( int i=0; i < n; ++i ) {
 		sum += f[i];
 	}
 	return TYPE(sum/n);
 }
 
+
 template<typename TYPE>
-void ButterworthBandpass<TYPE>::apply(int n, TYPE *inout)
-{
+void ButterworthBandpass<TYPE>::apply(int n, TYPE *inout) {
 	// aim: determine an offset and apply an appropriate offset canceller
+	if ( n <= 0 ) return;
 
-	if (n<=0) return;
-
-	if (_init) { // HACK
+	if ( _init ) { // HACK
 		double taperLength = 3./_fmin; // optimize
 
 		int ntap = int(taperLength*_fsamp);
@@ -222,26 +209,45 @@ void ButterworthBandpass<TYPE>::apply(int n, TYPE *inout)
 template<class TYPE>
 ButterworthHighLowpass<TYPE>::ButterworthHighLowpass(int order, double fmin,
                                                      double fmax, double fsamp)
-: ButterworthBandpass<TYPE>(order, fmin, fmax, fsamp) {}
+: _order(order), _fmin(fmin), _fmax(fmax), _fsamp(0.0) {
+	if ( fsamp )
+		setSamplingFrequency(fsamp);
+}
 
 
 template<class TYPE>
-void ButterworthHighLowpass<TYPE>::setSamplingFrequency(double fsamp)
-{
-	if (ButterworthBandpass<TYPE>::_fsamp == fsamp)
+void ButterworthHighLowpass<TYPE>::setSamplingFrequency(double fsamp) {
+	if ( _fsamp == fsamp )
 		return;
 
-	ButterworthBandpass<TYPE>::_fsamp = fsamp;
+	_fsamp = fsamp;
 	BiquadCascade<TYPE>::_clear();
 
-        std::vector< _Biquad > b;
+	std::vector< _Biquad > b;
 
 	// This is a bandpass obtained by catenation of lowpass and highpass
 	// of same order
-        b = _init_bw_biquads2(ButterworthBandpass<TYPE>::_order,ButterworthBandpass<TYPE>::_fmin,ButterworthBandpass<TYPE>::_fmax,ButterworthBandpass<TYPE>::_fsamp, BUTTER_TYPE_HIGHLOW);
+	b = _init_bw_biquads2(_order, _fmin, _fmax, _fsamp, BUTTER_TYPE_HIGHLOW);
 
-        typename std::vector< _Biquad >::const_iterator biq;
-	for (biq = b.begin(); biq != b.end(); biq++)
+	typename std::vector< _Biquad >::const_iterator biq;
+	for ( biq = b.begin(); biq != b.end(); ++biq )
 		this->append(Biquad<TYPE>(*biq));
 }
 
+
+template<class TYPE>
+int ButterworthHighLowpass<TYPE>::setParameters(int n, const double *params) {
+	if ( n != 3 ) return 3;
+
+	_order = (int)params[0];
+	_fmin = params[1];
+	_fmax = params[2];
+
+	return n;
+}
+
+
+template<class TYPE>
+InPlaceFilter<TYPE>* ButterworthHighLowpass<TYPE>::clone() const {
+	return new ButterworthHighLowpass<TYPE>(_order, _fmin, _fmax, _fsamp);
+}
