@@ -26,22 +26,23 @@ namespace Math {
 
 
 typedef std::complex<double> Complex;
+typedef std::vector<Math::Complex> ComplexArray;
 
 
 template <typename T>
-void fft(std::vector<Complex> &spec, int n, const T *data);
+void fft(ComplexArray &spec, int n, const T *data);
 
 template <typename T>
-void fft(std::vector<Complex> &spec, const std::vector<T> &data) {
+void fft(ComplexArray &spec, const std::vector<T> &data) {
 	fft(spec, (int)data.size(), &data[0]);
 }
 
 
 template <typename T>
-void ifft(int n, T *out, std::vector<Complex> &spec);
+void ifft(int n, T *out, ComplexArray &spec);
 
 template <typename T>
-void ifft(std::vector<T> &out, std::vector<Complex> &spec) {
+void ifft(std::vector<T> &out, ComplexArray &spec) {
 	ifft((int)out.size(), &out[0], spec);
 }
 

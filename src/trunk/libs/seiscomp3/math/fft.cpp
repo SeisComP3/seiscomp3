@@ -15,8 +15,6 @@
 #include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/filter.h>
 
-#include <vector>
-
 
 #define TWO_PI (M_PI*2)
 
@@ -172,7 +170,7 @@ void transform(T *data, size_t n, FFTDirection dir) {
 //! output: real data, N points
 //!
 template <typename T>
-void ifft(int n, T *out, vector<Complex> &coeff) {
+void ifft(int n, T *out, ComplexArray &coeff) {
 	int tn = coeff.size()*2;
 	double *inout = reinterpret_cast<double*>(&coeff[0]);
 
@@ -206,7 +204,7 @@ void ifft(int n, T *out, vector<Complex> &coeff) {
 //! output: half complex spectrum, N/2+1 Points
 //!
 template <typename T>
-void fft(vector<Complex> &out, int n, const T *data) {
+void fft(ComplexArray &out, int n, const T *data) {
 	int fftn = /*npow2?*/Filtering::next_power_of_2(n)/*:n*/;
 	if ( fftn <= 0 ) return;
 
@@ -241,16 +239,16 @@ void fft(vector<Complex> &out, int n, const T *data) {
 
 // Explicit template instantiation for float and double types
 template SC_SYSTEM_CORE_API
-void ifft<float>(int n, float *out, vector<Complex> &coeff);
+void ifft<float>(int n, float *out, ComplexArray &coeff);
 
 template SC_SYSTEM_CORE_API
-void ifft<double>(int n, double *out, vector<Complex> &coeff);
+void ifft<double>(int n, double *out, ComplexArray &coeff);
 
 template SC_SYSTEM_CORE_API
-void fft<float>(vector<Complex> &out, int n, const float *data);
+void fft<float>(ComplexArray &out, int n, const float *data);
 
 template SC_SYSTEM_CORE_API
-void fft<double>(vector<Complex> &out, int n, const double *data);
+void fft<double>(ComplexArray &out, int n, const double *data);
 
 
 }
