@@ -462,3 +462,70 @@ void ConfigConflictWidget::fixConflicts() {
 		file.module->model->writeConfig(file.module, file.filename, file.stage);
 	}
 }
+
+
+ConfigChangesWidget::ConfigChangesWidget(QWidget *parent) : QWidget(parent) {
+	QVBoxLayout *l = new QVBoxLayout;
+	_table = new QTableWidget;
+	l->addWidget(_table);
+	_table->setAlternatingRowColors(true);
+	setLayout(l);
+}
+
+
+void ConfigChangesWidget::setChanges(const Seiscomp::System::ConfigDelegate::ChangeList &changes) {
+	_table->clear();
+	_table->setColumnCount(4);
+	_table->setRowCount((int)changes.size());
+	_table->horizontalHeader()->setStretchLastSection(true);
+	_table->setHorizontalHeaderLabels(QStringList() << "Operation" << "Variable" << "Disk" << "Local");
+
+	QFont boldFont = font();
+	boldFont.setBold(true);
+
+	for ( size_t i = 0; i < changes.size(); ++i ) {
+		const Seiscomp::System::ConfigDelegate::Change &change = changes[i];
+		QTableWidgetItem *item;
+		QVariant bgColor;
+
+		switch ( change.operation ) {
+			case Seiscomp::System::ConfigDelegate::Added:
+				item = new QTableWidgetItem(tr("Add"));
+				bgColor = QColor(224,255,224);
+				break;
+			case Seiscomp::System::ConfigDelegate::Updated:
+				item = new QTableWidgetItem(tr("Update"));
+				bgColor = QColor(224,224,255);
+				break;
+			case Seiscomp::System::ConfigDelegate::Removed:
+				item = new QTableWidgetItem(tr("Remove"));
+				bgColor = QColor(255,224,224);
+				break;
+			default:
+				item = new QTableWidgetItem(tr("???"));
+				break;
+		}
+
+		item->setData(Qt::BackgroundColorRole, bgColor);
+		_table->setItem(i, 0, item);
+
+		item = new QTableWidgetItem(change.variable.c_str());
+		item->setData(Qt::BackgroundColorRole, bgColor);
+		item->setData(Qt::FontRole, boldFont);
+		_table->setItem(i, 1, item);
+
+		if ( !change.oldContent.empty() ) {
+			item = new QTableWidgetItem(change.oldContent.c_str());
+			item->setData(Qt::BackgroundColorRole, bgColor);
+			_table->setItem(i, 2, item);
+		}
+
+		if ( !change.newContent.empty() ) {
+			item = new QTableWidgetItem(change.newContent.c_str());
+			item->setData(Qt::BackgroundColorRole, bgColor);
+			_table->setItem(i, 3, item);
+		}
+	}
+
+	_table->resizeColumnsToContents();
+}

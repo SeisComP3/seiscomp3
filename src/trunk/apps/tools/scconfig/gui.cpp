@@ -516,7 +516,10 @@ class StaticDialog : public QDialog {
 
 
 struct QtConfigDelegate : System::ConfigDelegate {
-	QtConfigDelegate(QSettings *sets) : dialog(NULL), settings(sets), hasErrors(false) {}
+	QtConfigDelegate(QSettings *sets)
+	: dialog(NULL), settings(sets), hasErrors(false)
+	, needsReload(false) {}
+
 	~QtConfigDelegate() {
 		if ( dialog != NULL ) {
 			settings->beginGroup("CodeView");
@@ -691,6 +694,72 @@ struct QtConfigDelegate : System::ConfigDelegate {
 		settings->endGroup();
 	}
 
+	void finishedWriting(const char *filename, const ChangeList &changes) {
+		// Do nothing currently. Might be used to track unchanged or changed
+		// files if required.
+	}
+
+	void hasWriteError(const char *filename) {
+		fileWriteErrors.append(filename);
+		hasErrors = true;
+	}
+
+	bool handleWriteTimeMismatch(const char *filename, const ChangeList &changes) {
+		QDialog dlg;
+		QVBoxLayout *l = new QVBoxLayout;
+		l->setSpacing(0);
+		l->setMargin(0);
+		dlg.setLayout(l);
+
+		StatusLabel *headerLabel = new StatusLabel;
+		headerLabel->setWordWrap(true);
+		l->addWidget(headerLabel);
+
+		headerLabel->setInfoText(headerLabel->tr("%1 has changed on disk. The local changes do not reflect the changes made to the "
+		                                         "file outside of scconfig. Below are the changes listed that would be applied to the "
+		                                         "current file on disk. You can decide whether to apply the changes or to keep the file.\n\n"
+		                                         "If you keep the file the configuration will be reloaded afterwards.").arg(filename));
+
+		ConfigChangesWidget *w = new ConfigChangesWidget;
+		w->setChanges(changes);
+		l->addWidget(w);
+
+		QHBoxLayout *buttonLayout = new QHBoxLayout;
+		buttonLayout->setMargin(4);
+
+		QPushButton *btnReplace = new QPushButton;
+		btnReplace->setText(btnReplace->tr("Apply"));
+		btnReplace->setToolTip(btnReplace->tr("Apply the local changes to %1").arg(filename));
+
+		QPushButton *btnKeep = new QPushButton;
+		btnKeep->setText(btnKeep->tr("Keep"));
+
+		buttonLayout->addWidget(btnReplace);
+		buttonLayout->addStretch();
+		buttonLayout->addWidget(btnKeep);
+
+		QObject::connect(btnKeep, SIGNAL(clicked()), &dlg, SLOT(accept()));
+		QObject::connect(btnReplace, SIGNAL(clicked()), &dlg, SLOT(reject()));
+
+		l->addLayout(buttonLayout);
+
+		dlg.resize(600,400);
+		settings->beginGroup("Changes");
+		dlg.restoreGeometry(settings->value("geometry").toByteArray());
+		settings->endGroup();
+
+		bool keep = dlg.exec() == QDialog::Accepted;
+
+		settings->beginGroup("Changes");
+		settings->setValue("geometry", dlg.saveGeometry());
+		settings->endGroup();
+
+		if ( keep )
+			needsReload = true;
+
+		return keep;
+	}
+
 	QDialog *dialog;
 	QSettings *settings;
 	StatusLabel *headerLabel;
@@ -699,7 +768,9 @@ struct QtConfigDelegate : System::ConfigDelegate {
 	QPushButton *cancelButton;
 	QString lastErrorFile;
 	QList<ConfigFileWidget::Error> errors;
+	QStringList fileWriteErrors;
 	bool hasErrors;
+	bool needsReload;
 	QList<CSConflict> conflicts;
 };
 
@@ -1369,11 +1440,11 @@ Configurator::~Configurator() {
 void Configurator::updateModeLabel() {
 	switch ( _configurationStage ) {
 		case Environment::CS_USER_APP:
-			setWindowTitle(tr("SeisComP3 - user configuration @ %1").arg(Core::getHostname().c_str()));
+			setWindowTitle(tr("SeisComP3 - user configuration [ %1 ]").arg(Environment::Instance()->configDir().c_str()));
 			static_cast<MouseTrackLabel*>(_modeLabel)->setIcon(QIcon(":/res/icons/user-settings.png"), QSize(72,72));
 			break;
 		case Environment::CS_CONFIG_APP:
-			setWindowTitle(tr("SeisComP3 - system configuration @ %1").arg(Core::getHostname().c_str()));
+			setWindowTitle(tr("SeisComP3 - system configuration [ %1 ]").arg(Environment::Instance()->appConfigDir().c_str()));
 			static_cast<MouseTrackLabel*>(_modeLabel)->setIcon(QIcon(":/res/icons/system-settings.png"), QSize(72,72));
 			break;
 		default:
@@ -1609,9 +1680,18 @@ void Configurator::reload() {
 
 
 void Configurator::save() {
-	_model->model()->writeConfig(_configurationStage);
+	QtConfigDelegate cd(&_settings);
+	_model->model()->writeConfig(_configurationStage, &cd);
 	_model->setModified(false);
-	showStatusMessage("Configuration saved");
+
+	if ( cd.hasErrors )
+		showWarningMessage(QString("Failed to write configuration for %1 files\n%2")
+		                   .arg(cd.fileWriteErrors.count()).arg(cd.fileWriteErrors.join("\n")));
+	else
+		showStatusMessage("Configuration saved");
+
+	if ( cd.needsReload )
+		reload();
 }
 
 

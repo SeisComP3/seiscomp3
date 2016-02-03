@@ -15,7 +15,9 @@
 #define __SEISCOMP_CONFIGURATION_GUI_WIZARD_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/system/schema.h>
+#endif
 
 #include <QtGui>
 #include <string>

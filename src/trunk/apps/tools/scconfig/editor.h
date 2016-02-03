@@ -16,7 +16,9 @@
 
 
 #include <QtGui>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/system/model.h>
+#endif
 
 
 class ConfigHighlighter : public QSyntaxHighlighter {
@@ -117,6 +119,19 @@ class ConfigConflictWidget : public QWidget {
 		QListWidget *_list;
 };
 
+
+class ConfigChangesWidget : public QWidget {
+	Q_OBJECT
+
+	public:
+		ConfigChangesWidget(QWidget *parent = NULL);
+
+	public:
+		void setChanges(const Seiscomp::System::ConfigDelegate::ChangeList &);
+
+	private:
+		QTableWidget *_table;
+};
 
 
 #endif
