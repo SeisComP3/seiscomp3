@@ -14,12 +14,16 @@
 #ifndef __LEGEND_H__
 #define __LEGEND_H__
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
+#include <seiscomp3/core/rtti.h>
+#endif
 #include <seiscomp3/gui/map/mapsymbol.h>
 #include <seiscomp3/gui/map/mapwidget.h>
-#include <seiscomp3/core/rtti.h>
 
+#ifndef Q_MOC_RUN
 #include "types.h"
+#endif
 
 
 class Legend : public Seiscomp::Gui::Map::Symbol {

@@ -2153,6 +2153,11 @@ void PickerView::init() {
 	connect(_ui.actionShowSpectrogram, SIGNAL(triggered(bool)),
 	        this, SLOT(showSpectrogram(bool)));
 
+	/*
+	connect(_ui.actionOpenSprectrum, SIGNAL(triggered(bool)),
+	        this, SLOT(showSpectrum()));
+	*/
+
 	_spinDistance = new QDoubleSpinBox;
 	_spinDistance->setValue(15);
 
@@ -2183,10 +2188,14 @@ void PickerView::init() {
 
 	_ui.toolBarSpectrogram->addWidget(cb);
 
+	_specOpts.minRange = -15;
+	_specOpts.maxRange = -5;
+	_specOpts.tw = 5;
+
 	QDoubleSpinBox *spinLower = new QDoubleSpinBox;
 	spinLower->setMinimum(-100);
 	spinLower->setMaximum(100);
-	spinLower->setValue(-15);
+	spinLower->setValue(_specOpts.minRange);
 	connect(spinLower, SIGNAL(valueChanged(double)), this, SLOT(specMinValue(double)));
 	specMinValue(spinLower->value());
 
@@ -2196,7 +2205,7 @@ void PickerView::init() {
 	QDoubleSpinBox *spinUpper = new QDoubleSpinBox;
 	spinUpper->setMinimum(-100);
 	spinUpper->setMaximum(100);
-	spinUpper->setValue(-5);
+	spinUpper->setValue(_specOpts.maxRange);
 	connect(spinUpper, SIGNAL(valueChanged(double)), this, SLOT(specMaxValue(double)));
 	specMaxValue(spinUpper->value());
 
@@ -2206,13 +2215,20 @@ void PickerView::init() {
 	QDoubleSpinBox *spinTW = new QDoubleSpinBox;
 	spinTW->setMinimum(0.1);
 	spinTW->setMaximum(600);
-	spinTW->setValue(5);
+	spinTW->setValue(_specOpts.tw);
 	spinTW->setSuffix("s");
+	spinTW->setToolTip(tr("Sets the time window length of raw data to be used to compute a column of the spectrogram."));
 	connect(spinTW, SIGNAL(valueChanged(double)), this, SLOT(specTimeWindow(double)));
 	specTimeWindow(spinTW->value());
 
 	_ui.toolBarSpectrogram->addSeparator();
 	_ui.toolBarSpectrogram->addWidget(spinTW);
+
+	QToolButton *btnSpecUpdate = new QToolButton;
+	btnSpecUpdate->setToolTip(tr("Applies the time window changes to the current spectrogram (if active)."));
+	btnSpecUpdate->setText(tr("Apply"));
+	connect(btnSpecUpdate, SIGNAL(clicked()), this, SLOT(specApply()));
+	_ui.toolBarSpectrogram->addWidget(btnSpecUpdate);
 
 	// connect actions
 	connect(_ui.actionDefaultView, SIGNAL(triggered(bool)),
@@ -6499,6 +6515,15 @@ void PickerView::automaticRepick() {
 			picker->setTrigger(cp);
 			picker->setPublishFunction(boost::bind(&PickerView::emitPick, this, _1, _2));
 			picker->computeTimeWindow();
+
+			SEISCOMP_DEBUG("%s: ns=%f, ss=%f, se=%f", picker->methodID().c_str(),
+			               picker->config().noiseBegin,
+			               picker->config().signalBegin,
+			               picker->config().signalEnd);
+			SEISCOMP_DEBUG("%s: tw = %s ~ %s", picker->methodID().c_str(),
+			               picker->timeWindow().startTime().iso().c_str(),
+			               picker->timeWindow().endTime().iso().c_str());
+
 			int count = picker->feedSequence(seq);
 			statusBar()->showMessage(QString("Fed %1 of %2 records: state = %3(%4)")
 			                         .arg(count)
@@ -7567,7 +7592,8 @@ void PickerView::specLogToggled(bool e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::specMinValue(double v) {
-	static_cast<ZoomRecordWidget*>(_currentRecord)->setMinSpectrogramRange(v);
+	_specOpts.minRange = v;
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setMinSpectrogramRange(_specOpts.minRange);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7576,7 +7602,8 @@ void PickerView::specMinValue(double v) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::specMaxValue(double v) {
-	static_cast<ZoomRecordWidget*>(_currentRecord)->setMaxSpectrogramRange(v);
+	_specOpts.maxRange = v;
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setMaxSpectrogramRange(_specOpts.maxRange);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7585,7 +7612,16 @@ void PickerView::specMaxValue(double v) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::specTimeWindow(double tw) {
-	static_cast<ZoomRecordWidget*>(_currentRecord)->setSpectrogramTimeWindow(tw);
+	_specOpts.tw = tw;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::specApply() {
+	static_cast<ZoomRecordWidget*>(_currentRecord)->setSpectrogramTimeWindow(_specOpts.tw);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7663,6 +7699,15 @@ void PickerView::showUnassociatedPicks(bool v) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::showSpectrogram(bool v) {
 	static_cast<ZoomRecordWidget*>(_currentRecord)->setShowSpectrogram(v);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::showSpectrum() {
+	//
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

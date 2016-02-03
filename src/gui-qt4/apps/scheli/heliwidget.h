@@ -14,10 +14,13 @@
 #define __HELIWIDGET_H__
 
 #include <QtGui>
+
+#ifndef Q_MOC_RUN
 #include <boost/shared_ptr.hpp>
 
 #include <seiscomp3/core/recordsequence.h>
 #include <seiscomp3/math/filter.h>
+#endif
 #include <seiscomp3/gui/core/recordpolyline.h>
 
 

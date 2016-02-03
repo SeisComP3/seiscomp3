@@ -15,6 +15,7 @@
 #ifndef __SEISCOMP_GUI_MAP_CANVAS_H__
 #define __SEISCOMP_GUI_MAP_CANVAS_H__
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/maps.h>
 #include <seiscomp3/gui/map/legend.h>
 #include <seiscomp3/gui/map/imagetree.h>
@@ -23,6 +24,7 @@
 #include <seiscomp3/gui/map/layers/gridlayer.h>
 #include <seiscomp3/math/coord.h>
 #include <seiscomp3/geo/geofeature.h>
+#endif
 
 #include <QHash>
 #include <QObject>

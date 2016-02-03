@@ -786,9 +786,9 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 		_rubberBand = QRectF((this->*unProject)(_draggingStart), QSizeF(0,0));
 
 		if ( !_dragZoom ) {
-			updateSelection();
 			_selecting = true;
 			emit beginSelection();
+			updateSelection();
 		}
 	}
 

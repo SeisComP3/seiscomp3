@@ -16,8 +16,10 @@
 #define __SEISCOMP_GUI_MAINWINDOW_H__
 
 #include <QtGui>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/communication/systemmessages.h>
+#endif
 #include <seiscomp3/gui/core/connectionstatelabel.h>
 
 

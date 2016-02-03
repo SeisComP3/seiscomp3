@@ -26,7 +26,9 @@
 #include <seiscomp3/gui/core/maps.h>
 #include <seiscomp3/gui/core/scheme.h>
 #include <seiscomp3/gui/core/messagethread.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/messages.h>
+#endif
 
 #include <seiscomp3/gui/core/ui_showplugins.h>
 

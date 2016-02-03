@@ -24,7 +24,9 @@
 #include <QProcess>
 #include <QStringList>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasereader.h>
+#endif
 
 
 namespace Seiscomp {

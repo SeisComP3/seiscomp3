@@ -86,6 +86,11 @@
 						The P reduction velocity used in the &quot;move out&quot; plot.
 					</description>
 				</parameter>
+				<parameter name="drawMapLines" type="boolean" default="true">
+					<description>
+						Sets the drawing of lines in the map connecting the station with the event.
+					</description>
+				</parameter>
 				<parameter name="drawGridLines" type="boolean" default="true">
 					<description>
 						Sets the drawing of grid lines in the plot.

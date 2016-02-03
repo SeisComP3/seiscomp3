@@ -18,7 +18,9 @@
 
 #include <seiscomp3/gui/map/canvas.h>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/math/coord.h>
+#endif
 
 #include <QColor>
 #include <QPen>

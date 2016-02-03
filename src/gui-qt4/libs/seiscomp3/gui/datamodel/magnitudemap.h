@@ -17,7 +17,9 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/map/mapwidget.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

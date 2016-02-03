@@ -16,9 +16,11 @@
 #define __SEISCOMP_GUI_CORE_SPECTROGRAMRENDERER_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/recordsequence.h>
 #include <seiscomp3/math/restitution/transferfunction.h>
 #include <seiscomp3/io/recordfilter/spectralizer.h>
+#endif
 #include <seiscomp3/gui/core/lut.h>
 
 #include <QPainter>

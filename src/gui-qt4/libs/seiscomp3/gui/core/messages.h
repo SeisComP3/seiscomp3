@@ -15,8 +15,10 @@
 #ifndef __SEISCOMP_GUI_MESSAGE_H__
 #define __SEISCOMP_GUI_MESSAGE_H__
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/message.h>
 #include <seiscomp3/core/enumeration.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

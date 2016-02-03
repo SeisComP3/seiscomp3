@@ -21,7 +21,9 @@
 #include <QtGui>
 #include <string>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
+#endif
 
 #include "qcmodel.h"
 #include "qcviewconfig.h"

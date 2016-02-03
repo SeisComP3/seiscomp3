@@ -18,8 +18,10 @@
 #include <QImage>
 #include <QColor>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/math/matrix3.h>
 #include <seiscomp3/math/tensor.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

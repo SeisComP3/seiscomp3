@@ -25,7 +25,9 @@
 
 #include <seiscomp3/gui/qt4.h>
 #include <seiscomp3/gui/map/mapsymbol.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/origin.h>
+#endif
 
 
 namespace Seiscomp {
@@ -79,12 +81,11 @@ class SC_GUI_API OriginSymbol : public Map::Symbol {
 		virtual void customDraw(const Map::Canvas *canvas, QPainter& painter);
 		void drawOriginSymbol(const Map::Canvas *canvas, QPainter& painter);
 
-	private:
 		void init();
 		void updateSize();
 		void depthColorCoding();
 
-	private:
+	protected:
 		Seiscomp::DataModel::Origin* _origin;
 		QColor                       _color;
 		QPolygon                     _poly;

@@ -314,7 +314,7 @@ void RecordPolyline::create(RecordSequence const *records,
 		}
 
 		int nsamp = rec->sampleCount();
-		double tolerance = records->tolerance()/double(nsamp);
+		double tolerance = records->tolerance()/rec->samplingFrequency();
 		double diff;
 
 		if ( nsamp == 0 ) continue;
@@ -474,7 +474,7 @@ void RecordPolyline::create(RecordSequence const *records,
 	}
 	else {
 		yscl = height/amplHeight;
-		_baseline = (int)(amplMax*yscl);
+		_baseline = (int)((amplMax-amplOffset)*yscl);
 	}
 
 	int skipCount = 0;
@@ -503,7 +503,7 @@ void RecordPolyline::create(RecordSequence const *records,
 		}
 
 		int nsamp = rec->sampleCount();
-		double tolerance = records->tolerance()/double(nsamp);
+		double tolerance = records->tolerance()/rec->samplingFrequency();
 		double diff;
 
 		if ( nsamp == 0 ) continue;

@@ -235,12 +235,7 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, StationData* stationDat
 		StationData::QCData& data = it->second;
 
 		QString name = it->first.toString();
-        if ( data.status == QCStatus::NOT_SET ) {
-		    infoWidget->setQCContent(name, "", "", "", Qt::white);
-            continue;
-        }
-
-        QString value = QString("%1").arg(data.value, 0, 'f', 2);
+		QString value = QString("%1").arg(data.value, 0, 'f', 2);
 		QString lowerUncertainty = "NaN";
 		QString upperUncertainty = "NaN";
 
@@ -874,11 +869,10 @@ bool MvMainWindow::initRecordStream() {
 
 		_recordStreamThread->addStream(tokens[0],tokens[1],tokens[2], tokens[3]);
 
-		OPT(double) gain = SCApp->query()->getComponentGain(tokens[0], tokens[1],
-		                                                    tokens[2], tokens[3],
-		                                                    Core::Time::GMT());
-		if ( gain )
-			it->gmGain = gain.get();
+		try {
+			it->gmGain = Client::Inventory::Instance()->getGain(tokens[0], tokens[1], tokens[2], tokens[3], Core::Time::GMT());
+		}
+		catch ( ... ) {}
 	}
 
 	_recordStreamThread->start();
@@ -1887,12 +1881,12 @@ void MvMainWindow::handleNewMessage(Core::Message* message) {
 
 			if ( isFakeEvent(event) ||
 			     (*notifierIt)->operation() == DataModel::OP_REMOVE ) {
-                if ( eventData )  {
-                    removeEventData(eventData);
-                    updateEventWidget();
-                }
-                continue;
-            }
+				if ( eventData )  {
+					removeEventData(eventData);
+					updateEventWidget();
+				}
+				continue;
+			}
 
 			SCApp->query()->loadEventDescriptions(event);
 

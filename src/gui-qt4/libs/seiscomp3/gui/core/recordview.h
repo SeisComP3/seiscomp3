@@ -16,9 +16,11 @@
 #define __SEISCOMP_GUI_RECORDVIEW_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/recordviewitem.h>
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/math/filter.h>
+#endif
 #include <QScrollArea>
 #include <QTimer>
 #include <QSet>

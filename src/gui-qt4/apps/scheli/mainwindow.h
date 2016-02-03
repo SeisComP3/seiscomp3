@@ -14,7 +14,9 @@
 #define __MAINWINDOW_H__
 
 #include <QtGui>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/waveformstreamid.h>
+#endif
 #include <seiscomp3/gui/core/mainwindow.h>
 
 

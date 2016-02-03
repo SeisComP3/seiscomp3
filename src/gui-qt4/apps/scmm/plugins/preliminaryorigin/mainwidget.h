@@ -15,7 +15,9 @@
 #define __SEISCOMP_GUI_PLUGIN_MAPVIEWWIDGET_H__
 
 #include <QtGui>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/message.h>
+#endif
 #include <seiscomp3/gui/map/mapwidget.h>
 
 namespace Seiscomp {

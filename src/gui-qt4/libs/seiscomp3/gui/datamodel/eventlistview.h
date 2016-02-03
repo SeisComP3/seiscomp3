@@ -19,8 +19,10 @@
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/qt4.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/timewindow.h>
+#endif
 #include <seiscomp3/gui/datamodel/ui_eventlistview.h>
 #include <seiscomp3/gui/datamodel/ui_eventlistviewfilterdialog.h>
 

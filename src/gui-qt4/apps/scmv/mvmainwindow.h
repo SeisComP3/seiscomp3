@@ -22,6 +22,7 @@
 
 #include <seiscomp3/gui/core/mainwindow.h>
 #include <seiscomp3/gui/core/recordstreamthread.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 
 #include <seiscomp3/datamodel/waveformquality.h>
@@ -33,6 +34,7 @@
 #include "eventdata.h"
 #include "eventtablewidget.h"
 #include "searchwidget.h"
+#endif
 
 #include "ui_mvmainwindow.h"
 

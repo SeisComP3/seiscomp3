@@ -18,8 +18,10 @@
 
 #include <QThread>
 #include <QtCore>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/io/recordinput.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 
@@ -74,6 +76,14 @@ class SC_GUI_API RecordStreamThread : public QThread {
 		//! set before calling run() to have any impact.
 		void setDataType(Array::DataType dataType);
 
+		//! Returns the array data type this record stream thread is
+		//! configured to use (default: Array::FLOAT).
+		Record::Hint recordHint() const;
+
+		//! Set the record save hint (default: Record::DATA_ONLY).
+		//! NOTE: The hint must be set before calling run() to have any impact.
+		void setRecordHint(Record::Hint hint);
+
 		//! Returns the current recordthread ID
 		int ID() const;
 
@@ -105,6 +115,7 @@ class SC_GUI_API RecordStreamThread : public QThread {
 		static int                            _numberOfThreads;
 		GainMap                               _gainMap;
 		Array::DataType                       _dataType;
+		Record::Hint                          _recordHint;
 };
 
 

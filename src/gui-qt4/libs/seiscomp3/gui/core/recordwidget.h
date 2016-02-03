@@ -23,11 +23,13 @@
 #include <QScrollBar>
 #include <QHBoxLayout>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/math/filter.h>
 
 #include "recordpolyline.h"
+#endif
 
 
 namespace Seiscomp {

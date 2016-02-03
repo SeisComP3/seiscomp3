@@ -39,6 +39,7 @@ RecordStreamThread::RecordStreamThread(const std::string& recordStreamURL)
 	_requestedClose = false;
 	_readingStreams = false;
 	_dataType = Array::FLOAT;
+	_recordHint = Record::DATA_ONLY;
 
 	qRegisterMetaType<Seiscomp::RecordPtr>("Seiscomp::RecordPtr");
 
@@ -215,7 +216,7 @@ void RecordStreamThread::run()
 	RecordStreamState::Instance().openedConnection(this);
 
 	_mutex.lock();
-	IO::RecordInput recInput(_recordStream.get(), _dataType, Record::DATA_ONLY);
+	IO::RecordInput recInput(_recordStream.get(), _dataType, _recordHint);
 	_mutex.unlock();
 	try {
 		for (IO::RecordIterator it = recInput.begin(); it != recInput.end(); ++it)
@@ -322,6 +323,8 @@ const std::string& RecordStreamThread::recordStreamURL() const {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Array::DataType RecordStreamThread::dataType() const {
 	return _dataType;
@@ -329,11 +332,33 @@ Array::DataType RecordStreamThread::dataType() const {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordStreamThread::setDataType(Array::DataType dataType) {
 	_dataType = dataType;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Record::Hint RecordStreamThread::recordHint() const {
+	return _recordHint;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordStreamThread::setRecordHint(Record::Hint hint) {
+	_recordHint = hint;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

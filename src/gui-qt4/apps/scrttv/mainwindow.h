@@ -17,10 +17,12 @@
 #define __MAINWINDOW__
 
 #include <QtGui>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/datamodel/configstation.h>
+#endif
 #include <seiscomp3/gui/core/mainwindow.h>
 #include <seiscomp3/gui/core/questionbox.h>
 #include <seiscomp3/gui/core/recordview.h>

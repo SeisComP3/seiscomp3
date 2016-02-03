@@ -156,8 +156,8 @@ bool SpectrogramRenderer::feed(const Record *rec) {
 			// Deconvolution
 			if ( _transferFunction ) {
 				Seiscomp::ComplexDoubleArray *data = spec->data();
-				double df = spec->maximumFrequency() / data->size();
-				_transferFunction->deconvolve(data->impl(), df, df);
+				double df = spec->maximumFrequency() / (data->size()-1);
+				_transferFunction->deconvolve(data->size()-1, data->typedData()+1, df, df);
 			}
 
 			_spectra.push_back(spec);
@@ -406,7 +406,7 @@ void SpectrogramRenderer::fillRow(QImage &img, Seiscomp::ComplexDoubleArray *spe
 
 		// Compute min/max amplitude
 		double f = maxFreq;
-		double df = maxFreq / spec->size();
+		double df = maxFreq / (spec->size()-1);
 
 		for ( int i = n; i; --i, f -= df ) {
 			if ( f < fmin || f > fmax ) continue;

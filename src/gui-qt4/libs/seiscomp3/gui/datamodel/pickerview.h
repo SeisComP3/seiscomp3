@@ -19,6 +19,7 @@
 #include <seiscomp3/gui/core/recordview.h>
 #include <seiscomp3/gui/core/connectionstatelabel.h>
 #include <seiscomp3/gui/core/utils.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/io/recordfilter/iirfilter.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/origin.h>
@@ -26,6 +27,7 @@
 #include <seiscomp3/seismology/ttt.h>
 #include <seiscomp3/math/matrix3.h>
 #include <seiscomp3/processing/picker.h>
+#endif
 #include <QActionGroup>
 #include <QComboBox>
 #include <QSpinBox>
@@ -359,12 +361,14 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void specMinValue(double);
 		void specMaxValue(double);
 		void specTimeWindow(double);
+		void specApply();
 
 		void limitFilterToZoomTrace(bool);
 
 		void showTheoreticalArrivals(bool);
 		void showUnassociatedPicks(bool);
 		void showSpectrogram(bool);
+		void showSpectrum();
 
 		void toggleFilter();
 		void nextFilter();
@@ -578,6 +582,12 @@ class SC_GUI_API PickerView : public QMainWindow {
 			char                        component;
 		};
 
+		struct SpectrogramOptions {
+			double minRange;
+			double maxRange;
+			double tw;
+		};
+
 		typedef std::map<std::string, PrivatePickerView::PickerRecordLabel*> RecordItemMap;
 		typedef std::list<WaveformRequest> WaveformStreamList;
 
@@ -656,6 +666,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		QList<PickerMarkerActionPlugin*> _markerPlugins;
 
 		Config _config;
+		SpectrogramOptions _specOpts;
 
 		::Ui::PickerView _ui;
 		bool _settingsRestored;

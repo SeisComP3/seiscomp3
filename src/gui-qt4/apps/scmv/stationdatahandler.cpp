@@ -123,61 +123,44 @@ QColor RecordHandler::calculateColorFromVelocity(double velocity) {
 		return SCApp->scheme().colors.gm.gm0;
 
 	if ( velocity >= _velocityLimits[1] && velocity < _velocityLimits[2] )
-		return interpolate(velocity,
-		                   _velocityLimits[1],
-		                   _velocityLimits[2],
+		return interpolate(velocity, _velocityLimits[1], _velocityLimits[2],
 		                   SCApp->scheme().colors.gm.gm1,
 		                   SCApp->scheme().colors.gm.gm2);
 
 	if ( velocity >= _velocityLimits[2] && velocity < _velocityLimits[3] )
-		return interpolate(velocity,
-						   _velocityLimits[2],
-						   _velocityLimits[3],
-						   SCApp->scheme().colors.gm.gm2,
-						   SCApp->scheme().colors.gm.gm3);
+		return interpolate(velocity, _velocityLimits[2], _velocityLimits[3],
+		                   SCApp->scheme().colors.gm.gm2,
+		                   SCApp->scheme().colors.gm.gm3);
 
 	if ( velocity >= _velocityLimits[3] && velocity < _velocityLimits[4] )
-		return interpolate(velocity,
-						   _velocityLimits[3],
-						   _velocityLimits[4],
-						   SCApp->scheme().colors.gm.gm3,
-						   SCApp->scheme().colors.gm.gm4);
+		return interpolate(velocity, _velocityLimits[3], _velocityLimits[4],
+		                   SCApp->scheme().colors.gm.gm3,
+		                   SCApp->scheme().colors.gm.gm4);
 
 	if ( velocity >= _velocityLimits[4] && velocity < _velocityLimits[5] )
-		return interpolate(velocity,
-						   _velocityLimits[4],
-						   _velocityLimits[5],
-						   SCApp->scheme().colors.gm.gm4,
-						   SCApp->scheme().colors.gm.gm5);
+		return interpolate(velocity, _velocityLimits[4], _velocityLimits[5],
+		                   SCApp->scheme().colors.gm.gm4,
+		                   SCApp->scheme().colors.gm.gm5);
 
 	if ( velocity >= _velocityLimits[5] && velocity < _velocityLimits[6] )
-		return interpolate(velocity,
-						   _velocityLimits[5],
-						   _velocityLimits[6],
-						   SCApp->scheme().colors.gm.gm5,
-						   SCApp->scheme().colors.gm.gm6);
+		return interpolate(velocity, _velocityLimits[5], _velocityLimits[6],
+		                   SCApp->scheme().colors.gm.gm5,
+		                   SCApp->scheme().colors.gm.gm6);
 
 	if ( velocity >= _velocityLimits[6] && velocity < _velocityLimits[7] )
-		return interpolate(velocity,
-						   _velocityLimits[6],
-						   _velocityLimits[7],
-						   SCApp->scheme().colors.gm.gm6,
-						   SCApp->scheme().colors.gm.gm7);
+		return interpolate(velocity, _velocityLimits[6], _velocityLimits[7],
+		                   SCApp->scheme().colors.gm.gm6,
+		                   SCApp->scheme().colors.gm.gm7);
 
 	if ( velocity >= _velocityLimits[7] && velocity < _velocityLimits[8] )
-		return interpolate(velocity,
-						   _velocityLimits[7],
-						   _velocityLimits[8],
-						   SCApp->scheme().colors.gm.gm7,
-						   SCApp->scheme().colors.gm.gm8);
+		return interpolate(velocity, _velocityLimits[7], _velocityLimits[8],
+		                   SCApp->scheme().colors.gm.gm7,
+		                   SCApp->scheme().colors.gm.gm8);
 
 	if ( velocity >= _velocityLimits[8] && velocity < _velocityLimits[9] )
-		return  interpolate(velocity,
-						   _velocityLimits[8],
-						   _velocityLimits[9],
-						   SCApp->scheme().colors.gm.gm8,
-						   SCApp->scheme().colors.gm.gm9);
-
+		return  interpolate(velocity, _velocityLimits[8], _velocityLimits[9],
+		                   SCApp->scheme().colors.gm.gm8,
+		                   SCApp->scheme().colors.gm.gm9);
 
 	return SCApp->scheme().colors.gm.gm9;
 

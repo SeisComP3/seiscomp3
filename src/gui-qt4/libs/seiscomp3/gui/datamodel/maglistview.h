@@ -17,9 +17,11 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/core/connectiondialog.h>
-#include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/gui/datamodel/ui_maglistview.h>
+#ifndef Q_MOC_RUN
+#include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/datamodel/magnitude.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 namespace Seiscomp {

@@ -49,8 +49,14 @@ class SC_GUI_API Ruler : public QFrame
 
 		void setWheelEnabled(bool scale, bool translate);
 
+		double minimumRange() const { return _min; }
+		double maximumRange() const { return _max; }
+
 		double minimumSelection() const;
 		double maximumSelection() const;
+
+		double scale() const { return _scl; }
+		double pixelPerUnit() const { return _scl; }
 
 		double dA() const { return _drx[0]; }
 		double dT() const { return _drx[1]; }

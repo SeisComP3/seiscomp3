@@ -18,7 +18,9 @@
 #include <string>
 #include <QString>
 #include <QImage>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

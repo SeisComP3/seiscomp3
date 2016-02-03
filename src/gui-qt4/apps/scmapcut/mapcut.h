@@ -18,7 +18,9 @@
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 #include <seiscomp3/gui/map/canvas.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/origin.h>
+#endif
 #include <string.h>
 
 

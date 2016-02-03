@@ -19,6 +19,7 @@
 #include <seiscomp3/gui/core/recordview.h>
 #include <seiscomp3/gui/core/connectionstatelabel.h>
 #include <seiscomp3/gui/core/utils.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/seismology/ttt.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/origin.h>
@@ -28,6 +29,7 @@
 #include <seiscomp3/processing/amplitudeprocessor.h>
 #include <seiscomp3/processing/magnitudeprocessor.h>
 #include <seiscomp3/math/matrix3.h>
+#endif
 
 #include <QActionGroup>
 #include <QComboBox>
