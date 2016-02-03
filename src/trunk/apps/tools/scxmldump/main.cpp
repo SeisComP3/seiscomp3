@@ -368,7 +368,7 @@ class EventDump : public Seiscomp::Client::Application {
 					if ( event )
 						addEvent(ep.get(), event.get());
 					else
-						SEISCOMP_WARNING("Event with id '%s' has not been found", it->c_str());
+						SEISCOMP_ERROR("Event with id '%s' has not been found", it->c_str());
 				}
 				return ep->eventCount() > 0 && write(ep.get());
 			}
@@ -383,7 +383,7 @@ class EventDump : public Seiscomp::Client::Application {
 					if ( org )
 						addOrigin(ep.get(), org.get());
 					else
-						SEISCOMP_WARNING("Origin with id '%s' has not been found", it->c_str());
+						SEISCOMP_ERROR("Origin with id '%s' has not been found", it->c_str());
 				}
 				return ep->originCount() > 0 && write(ep.get());
 			}
