@@ -82,6 +82,9 @@ bool Instaseis::setSource(string source) {
 	// Close socket
 	_socket.close();
 
+	_path = string();
+	_hasInfo = false;
+
 	_minDist = 0;
 	_maxDist = 180;
 
@@ -136,10 +139,18 @@ bool Instaseis::setSource(string source) {
 	else
 		_host = source;
 
+	_path = "/";
+
 	// set address defaults if necessary
 	if ( _host.empty() || _host == ":" )
 		_host = DefaultHost + ":" + DefaultPort;
 	else {
+		pos = _host.find('/');
+		if ( pos != string::npos ) {
+			_path = _host.substr(pos);
+			_host.erase(_host.begin() + pos, _host.end());
+		}
+
 		pos = _host.find(':');
 		if ( pos == string::npos )
 			_host += ":" + DefaultPort;
@@ -149,22 +160,41 @@ bool Instaseis::setSource(string source) {
 			_host.insert(0, DefaultHost);
 	}
 
+	if ( _path.empty() || (*_path.rbegin() != '/') )
+		_path += '/';
+
 	if ( _timeout > 0 )
 		_socket.setTimeout(_timeout);
+
+	SEISCOMP_INFO("Set Instaseis source: host = %s, path = %s",
+	              _host.c_str(), _path.c_str());
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Instaseis::getInfo() const {
+	if ( _hasInfo ) return true;
 
 	try {
 		_socket.open(_host);
 
-		string request = "GET /info HTTP/1.1\r\n"
+		string request = "GET " + _path + "info HTTP/1.1\r\n"
 		                 "Host: " + _host + "\r\n"
+		                 "User-Agent: Mosaic/1.0\r\n"
 		                 "\r\n";
 		string response;
+		SEISCOMP_DEBUG("%s", request.c_str());
 
 		_socket.write(request);
 
 		response = _socket.readline();
 		if ( response.compare(0, 9, "HTTP/1.1 ") ) {
-			SEISCOMP_ERROR("Expected HTTP/1.1 response, got: %s", response.c_str());
+			SEISCOMP_ERROR("INFO: Expected HTTP/1.1 response, got: %s", response.c_str());
 			_socket.close();
 			return false;
 		}
@@ -172,12 +202,13 @@ bool Instaseis::setSource(string source) {
 		response.erase(response.begin(), response.begin() + 9);
 		Core::trim(response);
 		if ( response.compare(0, 3, "200") ) {
-			SEISCOMP_ERROR("Expected status 200, got: %s", response.substr(0,3).c_str());
+			SEISCOMP_ERROR("INFO: Expected status 200, got: %s", response.substr(0,3).c_str());
 			_socket.close();
 			return false;
 		}
 
 		int contentLength = -1;
+		bool chunkedTransfer = false;
 
 		while ( true ) {
 			response = _socket.readline();
@@ -202,11 +233,22 @@ bool Instaseis::setSource(string source) {
 						return false;
 					}
 				}
+				else if ( !response.compare(0, pos, "Transfer-Encoding") ) {
+					response.erase(response.begin(), response.begin() + pos + 1);
+					Core::trim(response);
+					if ( response == "chunked" )
+						chunkedTransfer = true;
+				}
 			}
 		}
 
-		if ( contentLength <= 0 ) {
-			SEISCOMP_ERROR("No content, Content-Length = %d", contentLength);
+		if ( (contentLength <= 0) && !chunkedTransfer ) {
+			SEISCOMP_ERROR("INFO: No content, Content-Length = %d", contentLength);
+			_socket.close();
+			return false;
+		}
+		else if ( (contentLength > 0) && chunkedTransfer ) {
+			SEISCOMP_ERROR("INFO: Content-Length specified and chunked transfer specified");
 			_socket.close();
 			return false;
 		}
@@ -214,10 +256,41 @@ bool Instaseis::setSource(string source) {
 		//SEISCOMP_DEBUG("Content-Length = %d", contentLength);
 		string json;
 
-		while ( contentLength > 0 ) {
-			string data = _socket.read(contentLength > BUFSIZE ? BUFSIZE : contentLength);
-			json += data;
-			contentLength -= (int)data.size();
+		if ( chunkedTransfer ) {
+			while ( true ) {
+				string r = _socket.readline();
+				size_t pos = r.find(' ');
+				unsigned int blockSize;
+
+				if ( sscanf(r.substr(0, pos).c_str(), "%X", &blockSize) != 1 ) {
+					SEISCOMP_ERROR("INFO: Invalid chunk header: %s", r.c_str());
+					_socket.close();
+					return false;
+				}
+
+				if ( blockSize < 0 ) {
+					SEISCOMP_ERROR("INFO: Invalid chunk header: %s", r.c_str());
+					_socket.close();
+					return false;
+				}
+
+				if ( blockSize == 0 )
+					break;
+
+				while ( blockSize > 0 ) {
+					string data = _socket.read(blockSize > BUFSIZE ? BUFSIZE : blockSize);
+					json += data;
+					blockSize -= (int)data.size();
+				}
+				_socket.readline();
+			}
+		}
+		else {
+			while ( contentLength > 0 ) {
+				string data = _socket.read(contentLength > BUFSIZE ? BUFSIZE : contentLength);
+				json += data;
+				contentLength -= (int)data.size();
+			}
 		}
 
 		_socket.close();
@@ -291,6 +364,7 @@ bool Instaseis::setSource(string source) {
 		return false;
 	}
 
+	_hasInfo = true;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -300,6 +374,7 @@ bool Instaseis::setSource(string source) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Instaseis::close() {
+	_hasInfo = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -309,7 +384,10 @@ void Instaseis::close() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 list<string> Instaseis::availableModels() const {
 	list<string> models;
-	models.push_back(_model);
+
+	if ( getInfo() )
+		models.push_back(_model);
+
 	return models;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -320,6 +398,9 @@ list<string> Instaseis::availableModels() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 list<double> Instaseis::availableDepths(const string &model) const {
 	list<double> depths;
+
+	if ( !getInfo() )
+		return depths;
 
 	if ( model != _model )
 		return depths;
@@ -353,6 +434,8 @@ bool Instaseis::setTimeSpan(const Core::TimeSpan &span) {
 bool Instaseis::addRequest(const string &id,
                            const string &model, double distance,
                            double depth) {
+	if ( !getInfo() ) return false;
+
 	if ( _model != model ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
@@ -385,6 +468,8 @@ bool Instaseis::addRequest(const string &id,
                            const string &model, double distance,
                            double depth,
                            const Core::TimeSpan &span) {
+	if ( !getInfo() ) return false;
+
 	if ( _model != model ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
@@ -430,13 +515,14 @@ Core::GreensFunction *Instaseis::get() {
 				ts = _maxLength;
 
 			string timespan = ts > 0 ? ("&endtime=" + Core::toString((double)ts)) : "";
-			string request = "GET /greens_function"
+			string request = "GET " + _path + "greens_function"
 			                 "?sourcedepthinmeters=" + Core::toString(req.depth*1000) +
 			                 "&sourcedistanceindegrees=" + Core::toString(Math::Geo::km2deg(req.distance)) +
 			                 "&format=miniseed" + timespan +
 			                 "&dt=" + Core::toString(_dt) +
 			                 "&units=displacement HTTP/1.1\r\n"
 			                 "Host: " + _host + "\r\n"
+			                 "User-Agent: Mosaic/1.0\r\n"
 			                 "\r\n";
 			string response;
 

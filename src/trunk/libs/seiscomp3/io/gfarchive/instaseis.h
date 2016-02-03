@@ -68,6 +68,13 @@ class SC_SYSTEM_CORE_API Instaseis : public GFArchive {
 
 
 	// ----------------------------------------------------------------------
+	//  Private interface
+	// ----------------------------------------------------------------------
+	private:
+		bool getInfo() const;
+
+
+	// ----------------------------------------------------------------------
 	//  Private member
 	// ----------------------------------------------------------------------
 	private:
@@ -80,25 +87,27 @@ class SC_SYSTEM_CORE_API Instaseis : public GFArchive {
 
 		typedef std::list<Request> RequestList;
 
-		Socket             _socket;
-		std::string        _model;
+		std::string          _host;
+		std::string          _path;
+		int                  _timeout;
+		Core::TimeSpan       _defaultTimespan;
+		RequestList          _requests;
 
-		std::string        _host;
-		Core::TimeSpan     _defaultTimespan;
-		RequestList        _requests;
+		mutable Socket       _socket;
+		mutable std::string  _model;
 
-		double             _dt;
+		mutable double       _dt;
 
-		int                _maxLength;
-		double             _srcShift;
+		mutable int          _maxLength;
+		mutable double       _srcShift;
 
-		double             _minDepth;
-		double             _maxDepth;
+		mutable double       _minDepth;
+		mutable double       _maxDepth;
 
-		double             _minDist;
-		double             _maxDist;
+		mutable double       _minDist;
+		mutable double       _maxDist;
 
-		int                _timeout;
+		mutable bool         _hasInfo;
 };
 
 
