@@ -21,7 +21,9 @@ specification.
    ``$DATADIR/fdsnws``.
 
 
-Data select
+.. _sec-dataSelect:
+
+DataSelect
 -----------
 
 * time series data in miniSEED format
@@ -54,6 +56,12 @@ Feature Notes
 * ``longestonly`` parameter is not implemented
 * access to restricted networks and stations is only granted through the
   ``queryauth`` method
+
+The data streams exposed by this service may be restrict by defining an
+inventory filter, see section :ref:`sec-inv-filter`.
+
+
+.. _sec-station:
 
 Station
 -------
@@ -96,6 +104,9 @@ Feature Notes
     * additional: ``[fdsnxml (=xml), stationxml, sc3ml]``
     * default: ``xml``
 
+The inventory exposed by this service may be restricted, see section :ref:`sec-inv-filter`.
+
+.. _sec-event:
 
 Event
 -----
@@ -148,6 +159,72 @@ Feature Notes
     * standard: ``[xml, text]``
     * additional: ``[qml (=xml), qml-rt, sc3ml, csv]``
     * default: ``xml``
+
+
+.. _sec-inv-filter:
+
+Filtering the inventory
+-----------------------
+
+The streams served by the :ref:`sec-station` and :ref:`sec-dataSelect` service
+may be filtered by specified an INI file in the ``stationFilter`` and
+``dataSelectFilter`` configuration parameter. You may use the same file for both
+services or define a separate configuration set. **Note:** If distinct file
+names are specified and both services are activated, the inventory is loaded
+twice which will increase the memory consumption of this module.
+
+.. code-block:: ini
+
+   [Chile]
+   code = CX.*.*.*
+
+   [!Exclude station APE]
+   code = GE.APE.*.*
+
+   [German (not restricted)]
+   code = GE.*.*.*
+   restricted = false
+   shared = true
+   archive = GFZ
+
+The listing above shows a configuration example which includes all Chile
+stations. Also all not restricted German stations, with exception of the station
+GE.APE, are included.
+
+The configuration is divided into several rules. The rule name is given in
+square brackets. A name starting with an exclamation mark defines an exclude
+rule, else the rule is an include. The rule name is not evaluated by the
+application but is plotted when debugging the rule set, see configuration
+parameter ``debugFilter``.
+
+Each rule consists of a set of attributes. The first and mandatory attribute is
+``code`` which defines a regular expression for the stream code (network,
+station, location, channel). In addition the following optional attributes
+exist:
+
+.. csv-table::
+   :header: "Attribute", "Type", "Network", "Station", "Location", "Channel"
+
+   "**restricted**", "Boolean", "X", "X", "", "X"
+   "**shared**", "Boolean", "X", "X", "", "X"
+   "**netClass**", "String", "X", "", "", ""
+   "**archive**", "String", "X", "X", "", ""
+
+A rule matches if all of its attributes match. The optional attributes are
+evaluated bottom-up where ever they are applicable. E.g. if a rule defines
+``restricted = false`` but the restricted flag is not present on channel level
+then it is searched on station and then on network level. If no ``restricted``
+attribute is found in the hierarchy, the rule will not match even if the value
+was set to ``false``.
+
+The individual rules are evaluated in order of their definition. The processing
+stops once a matching rule is found and the stream is included or excluded
+immediately. So the order of the rules is important.
+
+One may decided to specify a pure whitelist, a pure blacklist, or to mix include
+and exclude rules. If neither a matching include nor exclude rule is found, then
+channel is only added if no other include rule exists in the entire rule set.
+
 
 .. _sec-port:
 

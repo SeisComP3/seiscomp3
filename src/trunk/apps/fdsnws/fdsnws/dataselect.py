@@ -165,10 +165,11 @@ class FDSNDataSelect(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, userName=None):
+	def __init__(self, inv, userName=None):
 		resource.Resource.__init__(self)
 		self._rsURL = Application.Instance().recordStreamURL()
 		self.userName = userName
+		self.inv = inv
 
 
 	#---------------------------------------------------------------------------
@@ -203,9 +204,9 @@ class FDSNDataSelect(resource.Resource):
 
 
 	#-----------------------------------------------------------------------
-	def _networkIter(self, inv, ro):
-		for i in xrange(inv.networkCount()):
-			net = inv.network(i)
+	def _networkIter(self, ro):
+		for i in xrange(self.inv.networkCount()):
+			net = self.inv.network(i)
 
 			# network code
 			if ro.channel and not ro.channel.matchNet(net.code()):
@@ -309,9 +310,8 @@ class FDSNDataSelect(resource.Resource):
 
 		# Add request streams
 		# iterate over inventory networks
-		inv = Application.Instance()._inv
 		for s in ro.streams:
-			for net in self._networkIter(inv, s):
+			for net in self._networkIter(s):
 				if ro.userName is None and utils.isRestricted(net):
 					continue
 				for sta in self._stationIter(net, s):
@@ -358,5 +358,3 @@ class FDSNDataSelect(resource.Resource):
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
-
-

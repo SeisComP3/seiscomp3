@@ -97,17 +97,17 @@
 			</parameter>
 			<parameter name="allowRestricted" type="boolean" default="true">
 				<description>
-				Enables/disables access to restricted inventory data
+				Enables/disables access to restricted inventory data.
 				</description>
 			</parameter>
 			<parameter name="hideAuthor" type="boolean" default="false">
 				<description>
-				If enabled removes author information from any event creationInfo element
+				If enabled removes author information from any event creationInfo element.
 				</description>
 			</parameter>
 			<parameter name="evaluationMode" type="string">
 				<description>
-				If set the event service will only return events having a preferred origin with a matching evaluationMode property
+				If set the event service will only return events having a preferred origin with a matching evaluationMode property.
 				</description>
 			</parameter>
 			<group name="eventType">
@@ -131,6 +131,22 @@
 			<parameter name="serveStation" type="boolean" default="true">
 				<description>
 				Enables/disables the Station service.
+				</description>
+			</parameter>
+			<parameter name="stationFilter" type="string">
+				<description>
+				Path to station inventory filter file.
+				</description>
+			</parameter>
+			<parameter name="dataSelectFilter" type="string">
+				<description>
+				Path to dataselect inventory filter file.
+				</description>
+			</parameter>
+			<parameter name="debugFilter" type="boolean" default="false">
+				<description>
+				If enabled a debug line is written for each stream ID explaining
+				why a stream was added/removed by a inventory filter.
 				</description>
 			</parameter>
 			<parameter name="fileNamePrefix" type="string" default="fdsnws">
