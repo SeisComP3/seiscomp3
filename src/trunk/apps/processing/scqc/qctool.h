@@ -17,8 +17,17 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/record.h>
 
-#include <boost/signal.hpp>
+#include <boost/version.hpp>
 #include <boost/any.hpp>
+#if (BOOST_VERSION < 104000)
+#include <boost/signal.hpp>
+namespace bsig = boost;
+namespace boost_signals = boost::signals;
+#else
+#include <boost/signals2.hpp>
+namespace bsig = boost::signals2;
+namespace boost_signals = boost::signals2;
+#endif
 
 #include <string> 
 #include <set> 
@@ -35,8 +44,8 @@ namespace Qc {
 class QcBuffer;
 DEFINE_SMARTPOINTER(QcBuffer);
 
-class QcTool : public QcApp, public boost::signals::trackable {
-	
+
+class QcTool : public QcApp, public boost_signals::trackable {
 	public:
 		QcTool(int argc, char **argv);
 		~QcTool();
@@ -44,10 +53,11 @@ class QcTool : public QcApp, public boost::signals::trackable {
 		QcMessenger* qcMessenger() const;
 		bool exitRequested() const;
 
-		typedef boost::signal<void()> TimerSignal;
+		typedef bsig::signal<void()> TimerSignal;
 		void addTimeout(const TimerSignal::slot_type& onTimeout) const;
 		bool archiveMode() const;
-                std::string creatorID() const;
+		std::string creatorID() const;
+
 
 	protected:
 		void createCommandLineDescription();
@@ -64,9 +74,9 @@ class QcTool : public QcApp, public boost::signals::trackable {
 		Core::Time findLast(std::string net, std::string sta, std::string loc, std::string cha);
 
 		void initQc(const std::string& networkCode,
-                            const std::string& stationCode,
-                            const std::string& locationCode,
-                            const std::string& channelCode);
+		            const std::string& stationCode,
+		            const std::string& locationCode,
+		            const std::string& channelCode);
 		
 		void handleNewStream(const Record* rec);
 		
@@ -74,7 +84,6 @@ class QcTool : public QcApp, public boost::signals::trackable {
 
 
 	private:
-
 		bool _archiveMode;
 		bool _autoTime;
 		Core::Time _beginTime;
@@ -84,10 +93,10 @@ class QcTool : public QcApp, public boost::signals::trackable {
 		bool _useConfiguredStreams;
 		std::set<std::string> _streamIDs;
 
-                std::string _creator;
-                int _dbLookBack;
-                std::map<std::string, QcConfigPtr> _plugins;
-                std::set<std::string> _allParameterNames;
+		std::string _creator;
+		int _dbLookBack;
+		std::map<std::string, QcConfigPtr> _plugins;
+		std::set<std::string> _allParameterNames;
 	
 		double _maxGapLength;
 		double _ringBufferSize;
