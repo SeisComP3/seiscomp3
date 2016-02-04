@@ -95,28 +95,44 @@ bool GeoFeature::contains(const Vertex& v, const Vertex *polygon,
 	// no polygon if less than 3 sites
 	if ( sides < 3 ) return false;
 
-	int j = sides - 1;
+	int l = sides - 2;
+	int i = sides - 1;
 	bool oddCrossings = false;
 
-	for ( size_t i = 0; i < sides; j = i++ ) {
-		Vertex::ValueType segWidth = sub(polygon[i].lon, polygon[j].lon);
-		Vertex::ValueType relLonLeft = sub(v.lon, polygon[j].lon);
+//#define epsilon 1E-10
+#define epsilon 0
+
+	for ( size_t n = 0; n < sides; l = i, i = n++ ) {
+		Vertex::ValueType segWidth = sub(polygon[i].lon, polygon[l].lon);
+		Vertex::ValueType relLonLeft = sub(v.lon, polygon[l].lon);
 		Vertex::ValueType relLonRight = sub(v.lon, polygon[i].lon);
+
+		bool touch = relLonLeft * sub(v.lon, polygon[n].lon) > 0;
 
 		// Skip segments where v.lon falls outside the segments horizontal
 		// boundings
-		if ( segWidth >= 0 ) {
-			if ( relLonLeft < 0 || relLonRight >= 0 ) continue;
+		if ( touch ) {
+			if ( segWidth >= 0 ) {
+				if ( relLonLeft < -epsilon || relLonRight > epsilon ) continue;
+			}
+			else {
+				if ( relLonLeft > epsilon || relLonRight < -epsilon ) continue;
+			}
 		}
 		else {
-			if ( relLonLeft > 0 || relLonRight <= 0 ) continue;
+			if ( segWidth >= 0 ) {
+				if ( relLonLeft < -epsilon || relLonRight >= epsilon ) continue;
+			}
+			else {
+				if ( relLonLeft > epsilon || relLonRight <= -epsilon ) continue;
+			}
 		}
 
 		Vertex::ValueType y0;
 
 		// y0 = latitude of crossing
-		y0 = relLonLeft * (polygon[i].lat - polygon[j].lat) /
-		     segWidth + polygon[j].lat;
+		y0 = relLonLeft * (polygon[i].lat - polygon[l].lat) /
+		     segWidth + polygon[l].lat;
 
 		// North crossing
 		if ( y0 > v.lat )
