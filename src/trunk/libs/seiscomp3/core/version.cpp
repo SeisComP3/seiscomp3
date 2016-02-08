@@ -34,7 +34,7 @@ FrameworkVersion CurrentVersion;
 
 
 FrameworkVersion::FrameworkVersion() {
-	_text = "Jakarta 2015.078";
+	_text = "Jakarta 2015.078 (fix-geo)";
 }
 
 
