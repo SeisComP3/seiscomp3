@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="MLr">
+		<extends>global</extends>
+		<description>
+		The MLr plugin is designed to use the MLv station amplitudes
+		and provides a GNS/Geonet local magnitude  (Jristau this study: - REF-).	
+		The magnitude uses a station correction term and the hypocentral distance
+		Hard coded range are 0-20 degrees maximum distance, and 800 km max depth.
+		</description>
+	</plugin>
+	<binding name="MLr" module="global">
+		<description>
+		The MLr plugin is designed to use MLv station amplitudes
+		and a GNS/Geonet local magnitude (Jristau study - REF-).
+		It is a modified version of the gempa ML plugin developed
+		at the Liverpool developer meeting (Gempa).
+		It is a modified version of the SED MLh plugin (J.Becker Gempa + S. Heimers SED)
+		</description>
+		<configuration>
+			<group name="MLr">
+				<parameter name="params" type="string">
+					<description>
+					Defines Stations Corrections parameters for MLr.
+					Format: &quot;UpToKilometers A ; UpToNextKilometers A ;&quot;.
+					Example: &quot;30 nomag; 60 0.018 ; 700 0.0038 &quot;.
+					The first parameter set &quot;30 nomag&quot; means that up to 30km
+					from the sensor the magnitude should not be calculated.
+				 	A is used as Station Correction
+					"nomag" is used to disable station magnitudes 
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</binding>
+</seiscomp>
