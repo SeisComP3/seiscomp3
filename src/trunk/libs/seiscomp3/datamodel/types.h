@@ -261,7 +261,7 @@ MAKEENUM(
 		"plane crash",
 		"sonic boom",
 		"duplicate",
-		"other"
+		"other event"
 	)
 );
 
