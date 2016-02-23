@@ -133,6 +133,8 @@ struct EventTypeFormatter : Formatter {
 			v = "induced or triggered event";
 		else if ( v == EEventTypeNames::name(METEOR_IMPACT) )
 			v = "meteorite";
+		else if ( v == EEventTypeNames::name(OTHER_EVENT) )
+			v = "other event";
 		else if ( v == EEventTypeNames::name(NOT_LOCATABLE) ||
 			      v == EEventTypeNames::name(OUTSIDE_OF_NETWORK_INTEREST) ||
 			      v == EEventTypeNames::name(DUPLICATE) ) {
