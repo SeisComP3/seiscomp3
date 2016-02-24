@@ -151,6 +151,7 @@ class WFParam : public Application {
 			bool        naturalPeriodsFixed;
 			double      Tmin;
 			double      Tmax;
+			bool        clipTmax;
 
 			bool        afterShockRemoval;
 			bool        eventCutOff;
