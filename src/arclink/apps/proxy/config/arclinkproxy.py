@@ -26,6 +26,8 @@ class Module(seiscomp3.Kernel.Module):
 
     try:
       self.archive_dir = cfg.getString('archive')
+      self.archive_dir = self.archive_dir.replace("@ROOTDIR@", self.env.SEISCOMP_ROOT)
+
       if not os.path.isabs(self.archive_dir):
         self.archive_dir = os.path.join(self.env.SEISCOMP_ROOT, self.archive_dir)
     except: pass
