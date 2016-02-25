@@ -145,7 +145,7 @@ T *InventoryTask::create(const std::string &publicIDHint) {
 	      Seiscomp::DataModel::PublicObject::Find(publicIDHint) == NULL) )
 		obj = T::Create(publicIDHint);
 	else {
-		std::cerr << "Cannot create " << publicIDHint << std::endl;
+		SEISCOMP_DEBUG("Cannot create %s", publicIDHint.c_str());
 		obj = T::Create();
 	}
 
