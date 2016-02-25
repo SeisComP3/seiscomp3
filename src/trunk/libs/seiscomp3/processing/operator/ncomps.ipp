@@ -13,6 +13,7 @@
 
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/typedarray.h>
+#include <seiscomp3/core/bitset.h>
 
 
 namespace Seiscomp {
@@ -43,7 +44,6 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 			return status;
 		}
 	}
-
 
 	// Find common start time for all three components
 	RecordSequence::iterator it[N];
@@ -147,24 +147,32 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 				minEndTime = (*it_end[i])->endTime();
 		}
 
+		typedef typename Core::SmartPointer< NumericArray<T> >::Impl DataArrayPtr;
+
+		DataArrayPtr data[N];
 		GenericRecordPtr comps[N];
+
 		int minLen = 0;
 
 		// Clip maxStartTime to minStartTime
 		if ( maxStartTime < minStartTime )
 			maxStartTime = minStartTime;
 
+		BitSetPtr clipMask;
+
 		// Align records
 		for ( int i = 0; i < N; ++i ) {
 			float tq = 0;
 			int tqCount = 0;
-			GenericRecordPtr rec = new GenericRecord((*it[i])->networkCode(),
-			                                         (*it[i])->stationCode(),
-			                                         (*it[i])->locationCode(),
-			                                         (*it[i])->channelCode(),
-			                                         maxStartTime, samplingFrequency);
 
-			typename Core::SmartPointer< NumericArray<T> >::Impl data = new NumericArray<T>;
+			if ( _proc.publish(i) )
+				comps[i] = new GenericRecord((*it[i])->networkCode(),
+				                             (*it[i])->stationCode(),
+				                             (*it[i])->locationCode(),
+				                             _proc.translateChannelCode(i, (*it[i])->channelCode()),
+				                             maxStartTime, samplingFrequency);
+
+			data[i] = new NumericArray<T>;
 			RecordSequence::iterator seq_end = it_end[i];
 			++seq_end;
 
@@ -203,44 +211,73 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 					++tqCount;
 				}
 
-				data->append(len, srcData->typedData()+startIndex);
+				// Combine the clip masks with OR if available
+				const BitSet *recClipMask = (*rec_it)->clipMask();
+				if ( (recClipMask != NULL) && recClipMask->any() ) {
+					int ofs = data[i]->size();
+					int nBits = data[i]->size() + len;
+					if ( !clipMask )
+						clipMask = new BitSet(nBits);
+					else if ( clipMask->size() < nBits )
+						clipMask->resize(nBits, false);
+
+					for ( int i = startIndex; i < len; ++i, ++ofs )
+						clipMask->set(ofs, clipMask->test(ofs) || recClipMask->test(i));
+				}
+
+				data[i]->append(len, srcData->typedData()+startIndex);
+
 				++rec_it;
 			}
 
-			if ( tqCount > 0 )
-				rec->setTimingQuality((int)(tq / tqCount));
+			if ( comps[i] && (tqCount > 0) )
+				comps[i]->setTimingQuality((int)(tq / tqCount));
 
-			minLen = i==0?data->size():std::min(minLen, data->size());
+			minLen = i==0?data[i]->size():std::min(minLen, data[i]->size());
 
-			rec->setData(data.get());
-
-			comps[i] = rec;
+			if ( comps[i] ) comps[i]->setData(data[i].get());
 		}
 
-		T *data[N];
+		// Trim clip mask to sample array size
+		if ( clipMask ) {
+			if ( clipMask->size() > minLen )
+				clipMask->resize(minLen);
+			// Destroy clip mask if no bit is set
+			if ( !clipMask->any() )
+				clipMask = NULL;
+		}
+
+		T *data_samples[N];
 
 		for ( int i = 0; i < N; ++i ) {
-			NumericArray<T> *ar = static_cast<NumericArray<T>*>(comps[i]->data());
+			NumericArray<T> *ar = data[i].get();
 			if ( ar->size() > minLen ) {
 				ar->resize(minLen);
-				comps[i]->dataUpdated();
+				if ( comps[i] ) comps[i]->dataUpdated();
 			}
 
-			data[i] = static_cast<NumericArray<T>*>(comps[i]->data())->typedData();
+			data_samples[i] = data[i]->typedData();
+
+			Core::Time endTime = maxStartTime + Core::TimeSpan(data[i]->size() / rec->samplingFrequency());
 
 			// Set last transformed end time of component
 			if ( !_states[i].endTime.valid() ||
-			     _states[i].endTime < comps[i]->endTime() ) {
-				_states[i].endTime = comps[i]->endTime();
+			     _states[i].endTime < endTime ) {
+				_states[i].endTime = endTime;
 			}
 		}
 
 		if ( minLen > 0 ) {
 			// Process finally
-			_proc(rec, data, minLen, maxStartTime, rec->samplingFrequency());
+			_proc(rec, data_samples, minLen, maxStartTime, rec->samplingFrequency());
 
-			for ( int i = 0; i < N; ++i )
-				if ( _proc.publish(i) ) store(comps[i].get());
+			for ( int i = 0; i < N; ++i ) {
+				if ( comps[i] ) {
+					if ( clipMask )
+						comps[i]->setClipMask(clipMask.get());
+					store(comps[i].get());
+				}
+			}
 		}
 
 		status = WaveformProcessor::InProgress;

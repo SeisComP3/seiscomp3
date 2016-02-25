@@ -78,7 +78,10 @@ class CodeWrapper<T,2,PROC> {
 
 		void operator()(const Record *rec, T *data[2], int n, const Core::Time &stime, double sfreq) const { _proc(rec, data, n, stime, sfreq); }
 		bool publish(int c) const { return _proc.publish(c); }
+
 		int compIndex(const std::string &code) const { return -1; }
+
+		const std::string &translateChannelCode(int c, const std::string &code) { return code; }
 
 	private:
 		PROC<T,2>   _proc;
@@ -96,12 +99,16 @@ class CodeWrapper<T,3,PROC> {
 
 		void operator()(const Record *rec, T *data[3], int n, const Core::Time &stime, double sfreq) const { _proc(rec, data, n, stime, sfreq); }
 		bool publish(int c) const { return _proc.publish(c); }
+
 		int compIndex(const std::string &code) const {
 			if ( code == _code1 ) return 0;
 			else if ( code == _code2 ) return 1;
 			else if ( code == _code3 ) return 2;
 			return -1;
 		}
+
+		const std::string &translateChannelCode(int c, const std::string &code) { return code; }
+
 
 	private:
 		PROC<T,3>   _proc;
@@ -139,6 +146,8 @@ class StreamConfigWrapper {
 				if ( code == _configs[i].code() ) return i;
 			return -1;
 		}
+
+		const std::string &translateChannelCode(int c, const std::string &code) { return code; }
 
 
 	private:

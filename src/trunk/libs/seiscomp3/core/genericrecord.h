@@ -18,8 +18,11 @@
 #include <iostream>
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/core/array.h>
+#include <seiscomp3/core/bitset.h>
+
 
 namespace Seiscomp {
+
 
 DEFINE_SMARTPOINTER(GenericRecord);
 
@@ -28,61 +31,96 @@ class SC_SYSTEM_CORE_API GenericRecord : public Record {
 	DECLARE_SERIALIZATION;
 
 
- public:
-	//! Default Constructor
-	GenericRecord(Array::DataType dt = Array::DOUBLE, Hint h = DATA_ONLY);
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		//! Default Constructor
+		GenericRecord(Array::DataType dt = Array::DOUBLE, Hint h = DATA_ONLY);
 	
-	//! Initializing Constructor
-	GenericRecord(std::string net, std::string sta,
-	              std::string loc, std::string cha,
-	              Core::Time stime, double fsamp, int tqual = -1,
-	              Array::DataType dt = Array::DOUBLE,
-	              Hint h = DATA_ONLY);
+		//! Initializing Constructor
+		GenericRecord(std::string net, std::string sta,
+		              std::string loc, std::string cha,
+		              Core::Time stime, double fsamp, int tqual = -1,
+		              Array::DataType dt = Array::DOUBLE,
+		              Hint h = DATA_ONLY);
 	
-	//! Copy Constructor
-	GenericRecord(const GenericRecord& rec);
+		//! Copy Constructor
+		GenericRecord(const GenericRecord& rec);
 	
-	//! Another Constructor
-	GenericRecord(const Record& rec);
+		//! Another Constructor
+		GenericRecord(const Record& rec);
 
-	//! Destructor
-	virtual ~GenericRecord();
+		//! Destructor
+		virtual ~GenericRecord();
 	
-	//! Assignment operator
-	GenericRecord& operator=(const GenericRecord& rec);
+
+	// ----------------------------------------------------------------------
+	//  Operators
+	// ----------------------------------------------------------------------
+	public:
+		//! Assignment operator
+		GenericRecord& operator=(const GenericRecord& rec);
 	
-	//! Sets the sample frequency
-	void setSamplingFrequency(double freq);
 
-	//! Returns the data samples if the data is available; otherwise 0
-	Array* data();
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		//! Sets the sample frequency
+		void setSamplingFrequency(double freq);
 
-	//! Returns the data samples if the data is available; otherwise 0
-	const Array* data() const;
+		//! Returns the data samples if the data is available; otherwise 0
+		Array* data();
 
-	//! Same as data()
-	const Array* raw() const;
+		//! Returns the data samples if the data is available; otherwise 0
+		const Array* data() const;
 
-	//! Sets the data sample array. The ownership goes over to the record.
-	void setData(Array* data);
+		//! Same as data()
+		const Array* raw() const;
 
-	//! Sets the data sample array.
-	void setData(int size, const void *data, Array::DataType datatype);	
+		//! Returns the clipmask. The size of the clipmask matches the size
+		//! of the data array and each element (bit) is set to one if the
+		//! sample at the same index is clipped. The returned pointer is
+		//! managed by this instance and must not be deleted. But it is safe
+		//! to store it in a smart pointer.
+		const BitSet *clipMask() const;
 
-	//! Updates internal parameters caused by data updates
-	void dataUpdated();
+		//! Sets the data sample array. The ownership goes over to the record.
+		//! Note that this call will remove any clip mask set with previous
+		//! calls.
+		void setData(Array* data);
 
-	//! Frees the memory allocated for the data samples.
-	void saveSpace() const;
+		//! Sets the data sample array.
+		//! Note that this call will remove any clip mask set with previous
+		//! calls.
+		void setData(int size, const void *data, Array::DataType datatype);
 
-	//! Returns a deep copy of the calling object.
-	Record* copy() const;
+		/**
+		 * @brief Sets the clip mask.
+		 * @param The bitset pointer which will be managed by this instance.
+		 */
+		void setClipMask(BitSet *clipMask);
 
-	void read(std::istream &in) throw(Core::StreamException);
-	void write(std::ostream &out) throw(Core::StreamException);
+		//! Updates internal parameters caused by data updates
+		void dataUpdated();
+
+		//! This method does nothing.
+		void saveSpace() const;
+
+		//! Returns a deep copy of the calling object.
+		Record* copy() const;
+
+		void read(std::istream &in) throw(Core::StreamException);
+		void write(std::ostream &out) throw(Core::StreamException);
 	
- private:
-	ArrayPtr _data;
+
+	// ----------------------------------------------------------------------
+	//  Private members
+	// ----------------------------------------------------------------------
+	private:
+		ArrayPtr  _data;
+		BitSetPtr _clipMask;
 };
  
 }

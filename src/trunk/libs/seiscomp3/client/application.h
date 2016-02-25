@@ -32,6 +32,7 @@
 #include <seiscomp3/datamodel/configmodule.h>
 #include <seiscomp3/math/coord.h>
 #include <seiscomp3/utils/timer.h>
+#include <seiscomp3/utils/stringfirewall.h>
 
 #include <set>
 
@@ -835,14 +836,10 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 
 		std::string _agencyID;
 		std::string _author;
-		std::set<std::string> _procWhiteList;
-		std::set<std::string> _procBlackList;
 
-		Inventory::TypeWhiteList _networkTypeWhiteList;
-		Inventory::TypeBlackList _networkTypeBlackList;
-
-		Inventory::TypeWhiteList _stationTypeWhiteList;
-		Inventory::TypeBlackList _stationTypeBlackList;
+		Util::StringFirewall _procFirewall;
+		Util::StringFirewall _networkTypeFirewall;
+		Util::StringFirewall _stationTypeFirewall;
 
 		Logging::Output* _logger;
 		DataModel::DatabaseQueryPtr _query;
@@ -906,6 +903,7 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 
 		std::string _inventoryDB;
 		std::string _configDB;
+		std::string _cityDB;
 
 		std::string _dbType;
 		std::string _dbParameters;

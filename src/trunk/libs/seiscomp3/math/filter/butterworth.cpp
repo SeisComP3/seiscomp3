@@ -35,8 +35,9 @@ INSTANTIATE_INPLACE_FILTER(ButterworthHighLowpass, SC_SYSTEM_CORE_API);
 
 REGISTER_INPLACE_FILTER(ButterworthLowpass, "BW_LP");
 REGISTER_INPLACE_FILTER(ButterworthHighpass, "BW_HP");
-REGISTER_INPLACE_FILTER(ButterworthBandpass, "BW");
+REGISTER_INPLACE_FILTER(ButterworthBandpass, "BW_BP");
 REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
+REGISTER_INPLACE_FILTER2(ButterworthHighLowpass, Proxy, "BW");
 
 
 static void _bw_coeff_lp_hp(double phi, double L, int type, double *a, double *b)

@@ -15,17 +15,14 @@
 
 #include <math.h>
 
-#include <seiscomp3/math/filter/rca.h>
+#include <seiscomp3/math/filter/average.h>
 #include <seiscomp3/core/exceptions.h>
 #include<seiscomp3/logging/log.h>
 
 
-namespace Seiscomp
-{
-namespace Math
-{
-namespace Filtering
-{
+namespace Seiscomp {
+namespace Math {
+namespace Filtering {
 
 namespace _private {
 
@@ -51,9 +48,15 @@ void Average<TYPE>::apply(int n, TYPE *inout) {
 	if ( _fsamp == 0.0 )
 		throw _private::FilterException("Samplerate not initialized");
 
+	// Initialize the average buffer with the first sample
+	if ( _firstSample && n ) {
+		std::fill(_buffer.begin(), _buffer.end(), inout[0]);
+		_lastSum = inout[0] * _buffer.size();
+		_firstSample = false;
+	}
+
 	for ( int i = 0; i < n; ++i ) {
-		_lastValue = fabs(inout[i]);
-		inout[i] = (TYPE)(_lastSum * _oocount);
+		_lastValue = inout[i];
 
 		TYPE firstValue = _buffer[_index];
 		_buffer[_index] = _lastValue;
@@ -64,6 +67,8 @@ void Average<TYPE>::apply(int n, TYPE *inout) {
 			_index = 0;
 
 		_lastSum = _lastSum + _lastValue - firstValue;
+
+		inout[i] = (TYPE)(_lastSum * _oocount);
 	}
 }
 
@@ -75,9 +80,14 @@ InPlaceFilter<TYPE>* Average<TYPE>::clone() const {
 
 
 template<typename TYPE>
+void Average<TYPE>::setLength(double timeSpan) {
+	_timeSpan = timeSpan;
+}
+
+
+template<typename TYPE>
 void Average<TYPE>::setSamplingFrequency(double fsamp) {
-	if (_fsamp == fsamp)
-		return;
+	if ( _fsamp == fsamp ) return;
 
 	_fsamp = fsamp;
 	_sampleCount = (int)(_fsamp * _timeSpan);
@@ -88,7 +98,7 @@ void Average<TYPE>::setSamplingFrequency(double fsamp) {
 	_oocount = 1.0/_sampleCount;
 
 	_buffer.resize(_sampleCount);
-	std::fill(_buffer.begin(), _buffer.begin() + _sampleCount, (TYPE)0);
+	_firstSample = true;
 }
 
 
@@ -103,12 +113,18 @@ int Average<TYPE>::setParameters(int n, const double *params) {
 }
 
 
+template<typename TYPE>
+void Average<TYPE>::reset() {
+	_firstSample = true;
+	_lastSum = 0;
+	_index = 0;
+}
+
+
 INSTANTIATE_INPLACE_FILTER(Average, SC_SYSTEM_CORE_API);
 REGISTER_INPLACE_FILTER(Average, "AVG");
 
 
 } // namespace Seiscomp::Math::Filtering
-
 } // namespace Seiscomp::Math
-
 } // namespace Seiscomp

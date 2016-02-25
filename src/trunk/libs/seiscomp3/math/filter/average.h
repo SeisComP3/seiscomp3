@@ -18,12 +18,10 @@
 #include<seiscomp3/math/filter.h>
 
 
-namespace Seiscomp
-{
-namespace Math
-{
-namespace Filtering
-{
+namespace Seiscomp {
+namespace Math {
+namespace Filtering {
+
 
 template<typename TYPE>
 class Average : public InPlaceFilter<TYPE> {
@@ -31,12 +29,17 @@ class Average : public InPlaceFilter<TYPE> {
 		Average(double timeSpan /*sec*/ = 1.0, double fsamp = 0.0);
 
 	public:
+		void setLength(double timeSpan);
+
 		virtual void setSamplingFrequency(double fsamp);
 		virtual int setParameters(int n, const double *params);
 
 		// apply filter to data vector **in*place**
 		virtual void apply(int n, TYPE *inout);
 		virtual InPlaceFilter<TYPE>* clone() const;
+
+		// Resets the filter values
+		void reset();
 
 	private:
 		double _timeSpan;
@@ -46,14 +49,13 @@ class Average : public InPlaceFilter<TYPE> {
 		int _index;
 		TYPE _lastSum;
 		TYPE _lastValue;
+		bool _firstSample;
 		std::vector<TYPE> _buffer;
 };
 
 
 } // namespace Seiscomp::Math::Filtering
-
 } // namespace Seiscomp::Math
-
 } // namespace Seiscomp
 
 #endif

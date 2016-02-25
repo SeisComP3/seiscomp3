@@ -21,26 +21,56 @@
 
 namespace Seiscomp {
 namespace Client {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory Inventory::_instance;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-StationLocation::StationLocation() : latitude(999.0), longitude(999.0), elevation(999.0) {}
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+StationLocation::StationLocation()
+: latitude(999.0)
+, longitude(999.0)
+, elevation(999.0) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationLocation::StationLocation(double lat, double lon, double elv)
- : latitude(lat), longitude(lon), elevation(elv) {
-}
+: latitude(lat)
+, longitude(lon)
+, elevation(elv) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::Inventory() {
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory* Inventory::Instance() {
 	return &_instance;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::load(const char *filename) throw(std::exception) {
 	IO::XMLArchive ar;
 
@@ -50,8 +80,12 @@ void Inventory::load(const char *filename) throw(std::exception) {
 	ar >> _inventory;
 	ar.close();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::load(DataModel::DatabaseReader* reader) {
 	if ( reader == NULL ) return;
 
@@ -221,8 +255,12 @@ void Inventory::load(DataModel::DatabaseReader* reader) {
 	}
 	it.close();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	if ( reader == NULL ) return;
 
@@ -236,7 +274,6 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::NetworkPtr network = DataModel::Network::Cast(obj);
 		if ( network ) {
-//			std::cout << "_oid=" << it.oid() << ", _parent_oid=" << it.parentOid() << ", " << network->code() << std::endl;
 			networks.insert(std::make_pair(it.oid(), network));
 			_inventory->add(network.get());
 		}
@@ -250,7 +287,6 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::StationPtr station = DataModel::Station::Cast(obj);
 		if ( station ) {
-//			std::cout << "_oid=" << it.oid() << ", _parent_oid=" << it.parentOid() << ", " << station->code() << std::endl;
 			stations.insert(std::make_pair(it.oid(), station));
 			std::map<int, DataModel::NetworkPtr>::iterator p = networks.find(it.parentOid());
 			if ( p != networks.end() )
@@ -268,7 +304,6 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::SensorLocationPtr sensorLocation = DataModel::SensorLocation::Cast(obj);
 		if ( sensorLocation ) {
-//			std::cout << "_oid=" << it.oid() << ", _parent_oid=" << it.parentOid() << ", " << seisStream->code() << std::endl;
 			sensorLocations.insert(std::make_pair(it.oid(), sensorLocation));
 			std::map<int, DataModel::StationPtr>::iterator p = stations.find(it.parentOid());
 			if ( p != stations.end() )
@@ -285,7 +320,6 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::StreamPtr stream = DataModel::Stream::Cast(obj);
 		if ( stream ) {
-//			std::cout << "_oid=" << it.oid() << ", _parent_oid=" << it.parentOid() << ", " << seisStream->code() << std::endl;
 			std::map<int, DataModel::SensorLocationPtr>::iterator p = sensorLocations.find(it.parentOid());
 			if ( p != sensorLocations.end() )
 				p->second->add(stream.get());
@@ -312,12 +346,14 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	it.close();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-int Inventory::filter(const TypeWhiteList &networkTypeWhitelist,
-                      const TypeWhiteList &networkTypeBlacklist,
-                      const TypeWhiteList &stationTypeWhitelist,
-                      const TypeWhiteList &stationTypeBlacklist) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int Inventory::filter(const Util::StringFirewall *networkTypeFW,
+                      const Util::StringFirewall *stationTypeFW) {
 	int filtered = 0;
 
 	if ( !_inventory ) return filtered;
@@ -327,8 +363,7 @@ int Inventory::filter(const TypeWhiteList &networkTypeWhitelist,
 		const std::string &net_type = net->type();
 
 		// Type blocked?
-		if ( !(networkTypeWhitelist.empty()?true:networkTypeWhitelist.find(net_type) != networkTypeWhitelist.end()) ||
-		     !(networkTypeBlacklist.empty()?true:networkTypeBlacklist.find(net_type) == networkTypeBlacklist.end()) ) {
+		if ( (networkTypeFW != NULL) && networkTypeFW->isDenied(net_type) ) {
 			_inventory->removeNetwork(n);
 			filtered += net->stationCount();
 			continue;
@@ -341,8 +376,7 @@ int Inventory::filter(const TypeWhiteList &networkTypeWhitelist,
 			const std::string &sta_type = sta->type();
 
 			// Type not blocked?
-			if ( (stationTypeWhitelist.empty()?true:stationTypeWhitelist.find(sta_type) != stationTypeWhitelist.end()) &&
-			     (stationTypeBlacklist.empty()?true:stationTypeBlacklist.find(sta_type) == stationTypeBlacklist.end()) ) {
+			if ( (stationTypeFW != NULL) && stationTypeFW->isAllowed(sta_type) ) {
 				++s;
 				continue;
 			}
@@ -356,13 +390,21 @@ int Inventory::filter(const TypeWhiteList &networkTypeWhitelist,
 
 	return filtered;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::setInventory(DataModel::Inventory *inv) {
-        _inventory = inv;
+	_inventory = inv;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationLocation Inventory::stationLocation(const std::string& networkCode,
                                            const std::string& stationCode,
                                            const Core::Time& time) const {
@@ -376,17 +418,25 @@ StationLocation Inventory::stationLocation(const std::string& networkCode,
 
 	return StationLocation(station->latitude(),
 	                       station->longitude(),
-                           station->elevation());
+	                       station->elevation());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Station* Inventory::getStation(const std::string& networkCode,
                                           const std::string& stationCode,
                                           const Core::Time& time) const {
 	return DataModel::getStation(_inventory.get(), networkCode, stationCode, time);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::SensorLocation*
 Inventory::getSensorLocation(const std::string &networkCode,
                              const std::string &stationCode,
@@ -394,8 +444,12 @@ Inventory::getSensorLocation(const std::string &networkCode,
                              const Core::Time &time) const {
 	return DataModel::getSensorLocation(_inventory.get(), networkCode, stationCode, locationCode, time);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ThreeComponents
 Inventory::getThreeComponents(const std::string& networkCode,
                               const std::string& stationCode,
@@ -415,8 +469,12 @@ Inventory::getThreeComponents(const std::string& networkCode,
 
 	return tc;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Stream*
 Inventory::getStream(const std::string& networkCode,
                      const std::string& stationCode,
@@ -425,8 +483,12 @@ Inventory::getStream(const std::string& networkCode,
                      const Core::Time &time) const {
 	return DataModel::getStream(_inventory.get(), networkCode, stationCode, locationCode, channelCode, time);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Inventory::getAllStations(StationList& stationList,
                               const Core::Time& t) {
 	if ( _inventory == NULL )
@@ -468,18 +530,30 @@ int Inventory::getAllStations(StationList& stationList,
 
 	return stationList.size();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Station* Inventory::getStation(const DataModel::Pick* pick) const {
 	return DataModel::getStation(_inventory.get(), pick);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::SensorLocation* Inventory::getSensorLocation(const DataModel::Pick *pick) const {
 	return DataModel::getSensorLocation(_inventory.get(), pick);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const
 throw(Core::ValueException) {
 	DataModel::SensorLocation *loc = getSensorLocation(pick);
@@ -494,8 +568,12 @@ throw(Core::ValueException) {
 
 	return tc;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Inventory::getGain(const std::string& networkCode,
                           const std::string& stationCode,
                           const std::string& locationCode,
@@ -510,12 +588,20 @@ double Inventory::getGain(const std::string& networkCode,
 
 	return stream->gain();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Inventory* Inventory::inventory() {
 	return _inventory.get();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

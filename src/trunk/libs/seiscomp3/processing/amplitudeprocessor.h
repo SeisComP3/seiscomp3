@@ -17,6 +17,7 @@
 
 #include <seiscomp3/core/interfacefactory.h>
 #include <seiscomp3/processing/timewindowprocessor.h>
+#include <seiscomp3/math/filter/seismometers.h>
 #include <seiscomp3/client.h>
 #include <boost/function.hpp>
 
@@ -67,6 +68,8 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 			double respMaxFreq;
 
 			double saturationThreshold;
+
+			Math::SeismometerResponse::WoodAnderson::Config woodAndersonResponse;
 		};
 
 		struct AmplitudeIndex {

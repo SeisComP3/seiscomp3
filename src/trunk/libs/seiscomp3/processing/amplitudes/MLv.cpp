@@ -65,7 +65,7 @@ AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const Core::Time& trigger)
 void AmplitudeProcessor_MLv::initFilter(double fsamp) {
 	if ( !_enableResponses ) {
 		AmplitudeProcessor::setFilter(
-			new Filtering::IIR::WoodAndersonFilter<double>(Velocity)
+			new Filtering::IIR::WoodAndersonFilter<double>(Velocity, _config.woodAndersonResponse)
 		);
 	}
 	else
@@ -139,7 +139,8 @@ bool AmplitudeProcessor_MLv::deconvolveData(Response *resp,
 	if ( tf == NULL )
 		return false;
 
-	Math::SeismometerResponse::WoodAnderson paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity);
+	Math::SeismometerResponse::WoodAnderson paz(numberOfIntegrations < 0 ? Math::Displacement : Math::Velocity,
+	                                            _config.woodAndersonResponse);
 	Math::Restitution::FFT::PolesAndZeros woodAnderson(paz);
 	Math::Restitution::FFT::TransferFunctionPtr cascade =
 		*tf / woodAnderson;

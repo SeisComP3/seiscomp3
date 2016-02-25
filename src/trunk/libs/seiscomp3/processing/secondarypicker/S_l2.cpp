@@ -69,6 +69,10 @@ class FilterWrapper {
 			return _proc.compIndex(code);
 		}
 
+		const std::string &translateChannelCode(int, const std::string &code) {
+			return code;
+		}
+
 
 	private:
 		PROC _proc;

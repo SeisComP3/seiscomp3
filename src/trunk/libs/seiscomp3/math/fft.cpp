@@ -53,8 +53,8 @@ enum FFTDirection {
 #define SWAP(a,b) tempr=(a);(a)=(b);(b)=tempr
 
 template <typename T>
-void fourier(T *data, long nn, int isign) {
-	long n,mmax,m,j,istep,i;
+void fourier(T *data, int nn, int isign) {
+	int n,mmax,m,j,istep,i;
 	double wtemp,wr,wpr,wpi,wi,theta;
 	T tempr,tempi;
 
@@ -109,13 +109,13 @@ void fourier(T *data, long nn, int isign) {
 
 
 template <typename T>
-void transform(T *data, size_t n, FFTDirection dir) {
+void transform(T *data, int n, FFTDirection dir) {
 	if ( n < 4 ) return;
 
 	--data;
 	n /= 2;
 
-	long i,i1,i2,i3,i4,n2p3;
+	int i,i1,i2,i3,i4,n2p3;
 	T c1 = 0.5,c2,h1r,h1i,h2r,h2i;
 	double wr,wi,wpr,wpi,wtemp,theta;
 

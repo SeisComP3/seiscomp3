@@ -60,7 +60,7 @@ void IIRDifferentiate<T>::apply(int n, T *inout) {
 	for ( int i = 0;  i < n; ++i ) {
 		T v = inout[i];
 		if ( !_init ) {
-			inout[i] = v;
+			inout[i] = 0;
 			_init = true;
 		}
 		else

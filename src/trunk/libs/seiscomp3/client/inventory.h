@@ -19,6 +19,7 @@
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/datamodel/databasereader.h>
 #include <seiscomp3/datamodel/utils.h>
+#include <seiscomp3/utils/stringfirewall.h>
 #include <seiscomp3/client.h>
 
 #include <map>
@@ -42,15 +43,18 @@ struct SC_SYSTEM_CLIENT_API StationLocation {
 typedef std::vector<Seiscomp::DataModel::Station*> StationList;
 
 class SC_SYSTEM_CLIENT_API Inventory {
-	public:
-		typedef std::set<std::string> TypeWhiteList;
-		typedef std::set<std::string> TypeBlackList;
-
-
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	private:
+		//! Private c'tor. This class implements the singleton pattern and
+		//! can be accessed through the static Instance() method.
 		Inventory();
 
 
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
 	public:
 		static Inventory* Instance();
 
@@ -58,10 +62,8 @@ class SC_SYSTEM_CLIENT_API Inventory {
 		void load(DataModel::DatabaseReader*);
 		void setInventory(DataModel::Inventory*);
 
-		int filter(const TypeWhiteList &networkTypeWhitelist,
-		           const TypeWhiteList &networkTypeBlacklist,
-		           const TypeWhiteList &stationTypeWhitelist,
-		           const TypeWhiteList &stationTypeBlacklist);
+		int filter(const Util::StringFirewall *networkTypeFW,
+		           const Util::StringFirewall *stationTypeFW);
 
 		void loadStations(DataModel::DatabaseReader*);
 
@@ -126,6 +128,10 @@ class SC_SYSTEM_CLIENT_API Inventory {
 
 		DataModel::Inventory* inventory();
 
+
+	// ----------------------------------------------------------------------
+	//  Private members
+	// ----------------------------------------------------------------------
 	private:
 		DataModel::InventoryPtr _inventory;
 		static Inventory        _instance;

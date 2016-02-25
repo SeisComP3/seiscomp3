@@ -7,7 +7,7 @@ SET(FILTER_SOURCES
         iirfilter.cpp
         iirintegrate.cpp
 	iirdifferentiate.cpp
-        rca.cpp
+        average.cpp
         stalta.cpp
         taper.cpp
         rmhp.cpp
@@ -26,7 +26,7 @@ SET(FILTER_HEADERS
 	iirfilter.h
 	iirintegrate.h
 	iirdifferentiate.h
-	rca.h
+	average.h
 	stalta.h
 	taper.h
 	rmhp.h

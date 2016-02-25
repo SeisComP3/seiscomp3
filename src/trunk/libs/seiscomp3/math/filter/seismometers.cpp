@@ -487,8 +487,9 @@ INSTANTIATE_INPLACE_FILTER(WWSSN_LP_Filter, SC_SYSTEM_CORE_API);
 
 
 template <typename T>
-WoodAndersonFilter<T>::WoodAndersonFilter(GroundMotion input) {
-	setInput(input);
+WoodAndersonFilter<T>::WoodAndersonFilter(GroundMotion input,
+                                          SeismometerResponse::WoodAnderson::Config config) {
+	setInput(input, config);
 }
 
 
@@ -497,21 +498,32 @@ WoodAndersonFilter<T>::WoodAndersonFilter(const WoodAndersonFilter &other)
  : Filter<T>(other) {}
 
 template <typename T>
-void WoodAndersonFilter<T>::setInput(GroundMotion input) {
-	PolesAndZeros::operator=(WoodAnderson(input));
+void WoodAndersonFilter<T>::setInput(GroundMotion input, WoodAnderson::Config config) {
+	PolesAndZeros::operator=(WoodAnderson(input, config));
 }
 
 
 template <typename T>
 int WoodAndersonFilter<T>::setParameters(int n, const double *params) {
-	if ( n != 1 ) return 1;
+	if ( n < 1 || n > 4 ) return 1;
 
 	bool error;
 	GroundMotion input = double2gm(params[0], error);
 
 	if ( error ) return -1;
 
-	setInput(input);
+	WoodAnderson::Config config;
+
+	if ( n > 1 )
+		config.gain = params[1];
+
+	if ( n > 2 )
+		config.T0 = params[2];
+
+	if ( n > 3 )
+		config.h = params[3];
+
+	setInput(input, config);
 
 	return n;
 }

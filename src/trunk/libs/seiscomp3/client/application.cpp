@@ -1694,18 +1694,19 @@ bool Application::init() {
 
 		IO::XMLArchive ar;
 		bool foundCity;
-		foundCity = ar.open((Environment::Instance()->configDir() + "/cities.xml").c_str());
-		if ( !foundCity )
-			foundCity = ar.open((Environment::Instance()->shareDir() + "/cities.xml").c_str());
+
+		if ( _cityDB.empty() ) {
+			foundCity = ar.open((Environment::Instance()->configDir() + "/cities.xml").c_str());
+			if ( !foundCity )
+				foundCity = ar.open((Environment::Instance()->shareDir() + "/cities.xml").c_str());
+		}
+		else
+			foundCity = ar.open(_cityDB.c_str());
 
 		if ( foundCity ) {
 			ar >> NAMED_OBJECT("City", _cities);
 
 			SEISCOMP_INFO("Found cities.xml and read %lu entries", (unsigned long)_cities.size());
-			/*
-			for ( size_t i = 0; i < _cities.size(); ++i )
-				SEISCOMP_INFO("Added city: %s %.2f, %.2f)", _cities[i].name().c_str(), _cities[i].lon, _cities[i].lat);
-			*/
 
 			// Sort the cities descending
 			std::sort(_cities.begin(), _cities.end(), CityGreaterThan());
@@ -1839,10 +1840,8 @@ bool Application::reloadInventory() {
 			}
 		}
 
-		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
-		                                             _networkTypeBlackList,
-		                                             _stationTypeWhiteList,
-		                                             _stationTypeBlackList);
+		int filtered = Inventory::Instance()->filter(&_networkTypeFirewall,
+		                                             &_stationTypeFirewall);
 		if ( filtered > 0 )
 			SEISCOMP_INFO("Filtered %d stations by type", filtered);
 	}
@@ -1863,10 +1862,8 @@ bool Application::reloadInventory() {
 			}
 		}
 
-		int filtered = Inventory::Instance()->filter(_networkTypeWhiteList,
-		                                             _networkTypeBlackList,
-		                                             _stationTypeWhiteList,
-		                                             _stationTypeBlackList);
+		int filtered = Inventory::Instance()->filter(&_networkTypeFirewall,
+		                                             &_stationTypeFirewall);
 		if ( filtered > 0 )
 			SEISCOMP_INFO("Filtered %d stations by type", filtered);
 	}
@@ -2139,6 +2136,11 @@ void Application::initCommandLine() {
 		commandline().addOption("Records", "record-type", "specify a type for the records being read", (std::string*)NULL);
 	}
 
+	if ( _enableLoadCities ) {
+		commandline().addGroup("Cities");
+		commandline().addOption("Cities", "city-xml", "load the cities from the given XML file", &_cityDB, false);
+	}
+
 	createCommandLineDescription();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2273,6 +2275,9 @@ bool Application::initConfiguration() {
 	try { _configDB = configGetString("database.config"); }
 	catch ( ... ) {}
 
+	try { _cityDB = Environment::Instance()->absolutePath(configGetString("cityXML")); }
+	catch ( ... ) {}
+
 	try { _agencyID = Util::replace(configGetString("agencyID"), AppResolver(_name)); }
 	catch (...) { _agencyID = Util::replace("@user@@@@hostname@", AppResolver(_name)); }
 
@@ -2281,32 +2286,32 @@ bool Application::initConfiguration() {
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("processing.whitelist.agencies");
-		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_procWhiteList, _procWhiteList.end()));
+		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_procFirewall.allow, _procFirewall.allow.end()));
 	} catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("processing.blacklist.agencies");
-		std::copy(blackList.begin(), blackList.end(), std::inserter(_procBlackList, _procBlackList.end()));
+		std::copy(blackList.begin(), blackList.end(), std::inserter(_procFirewall.deny, _procFirewall.deny.end()));
 	} catch ( ... ) {}
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("inventory.whitelist.nettype");
-		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_networkTypeWhiteList, _networkTypeWhiteList.end()));
+		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_networkTypeFirewall.allow, _networkTypeFirewall.allow.end()));
 	} catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("inventory.blacklist.nettype");
-		std::copy(blackList.begin(), blackList.end(), std::inserter(_networkTypeBlackList, _networkTypeBlackList.end()));
+		std::copy(blackList.begin(), blackList.end(), std::inserter(_networkTypeFirewall.deny, _networkTypeFirewall.deny.end()));
 	} catch ( ... ) {}
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("inventory.whitelist.statype");
-		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_stationTypeWhiteList, _stationTypeWhiteList.end()));
+		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_stationTypeFirewall.allow, _stationTypeFirewall.allow.end()));
 	} catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("inventory.blacklist.statype");
-		std::copy(blackList.begin(), blackList.end(), std::inserter(_stationTypeBlackList, _stationTypeBlackList.end()));
+		std::copy(blackList.begin(), blackList.end(), std::inserter(_stationTypeFirewall.deny, _stationTypeFirewall.deny.end()));
 	} catch ( ... ) {}
 
 	try { _enableLoadCities = configGetBool("loadCities"); } catch ( ... ) {}
@@ -2751,6 +2756,13 @@ bool Application::loadConfig(const std::string &configDB) {
 			return false;
 		}
 	}
+	else if ( configDB.find("file://") == 0 ) {
+		try { ConfigDB::Instance()->load(configDB.substr(7).c_str()); }
+		catch ( std::exception &e ) {
+			SEISCOMP_ERROR("%s", e.what());
+			return false;
+		}
+	}
 	else {
 		SEISCOMP_INFO("Trying to connect to %s", configDB.c_str());
 		IO::DatabaseInterfacePtr db = IO::DatabaseInterface::Open(configDB.c_str());
@@ -2779,6 +2791,13 @@ bool Application::loadInventory(const std::string &inventoryDB) {
 	showMessage("Loading inventory");
 	if ( inventoryDB.find("://") == string::npos ) {
 		try { Inventory::Instance()->load(inventoryDB.c_str()); }
+		catch ( std::exception &e ) {
+			SEISCOMP_ERROR("%s", e.what());
+			return false;
+		}
+	}
+	else if ( inventoryDB.find("file://") == 0 ) {
+		try { Inventory::Instance()->load(inventoryDB.substr(7).c_str()); }
 		catch ( std::exception &e ) {
 			SEISCOMP_ERROR("%s", e.what());
 			return false;
@@ -3285,8 +3304,7 @@ const std::string& Application::author() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::isAgencyIDAllowed(const std::string &agencyID) const {
-	return (_procWhiteList.empty()?true:_procWhiteList.find(agencyID) != _procWhiteList.end())
-	    && (_procBlackList.empty()?true:_procBlackList.find(agencyID) == _procBlackList.end());
+	return _procFirewall.isAllowed(agencyID);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

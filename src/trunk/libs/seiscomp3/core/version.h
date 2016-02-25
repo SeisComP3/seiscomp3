@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(4, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(6, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x050000
+#define SC_API_VERSION 0x060000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,16 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "6.0.0"   0x060000
+   - Added virtual method Seiscomp::Record::clipMask()
+
+ "5.1.0"   0x050100
+   - Added Seiscomp::Core::BitSet
+
+ "5.0.1"   0x050001
+   - Renamed seiscomp3/math/filtering/rca.h to seiscomp3/math/filtering/average.h
+     and made it a "real" average instead of an average of absolute values
+
  "5.0.0"   0x050000
    - Removed Seiscomp::Core::RecordSequence::continuousRecord(...)
    - Removed Seiscomp::Core::RecordSequence::fillGaps
