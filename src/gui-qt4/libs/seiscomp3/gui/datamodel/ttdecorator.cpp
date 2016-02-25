@@ -163,7 +163,9 @@ void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
 
 	QPen pen;
 	QColor color(Qt::yellow);
-	color.setAlpha(static_cast<int>(255 * (1 - distanceP / (_pDistance + 15))));
+	int alpha = static_cast<int>(255 * (1 - distanceP / (_pDistance + 15)));
+	if ( alpha < 0 ) alpha = 0;
+	color.setAlpha(alpha);
 	pen.setColor(color);
 	pen.setWidth(3);
 	pen.setJoinStyle(Qt::MiterJoin);
