@@ -258,7 +258,11 @@ class ReportDataResif(ReportData):
         self.summary = summary
 
         # What units are size in? They are stored in bytes.
-        byte_size= float(summary['size'])
+        try:
+            byte_size = int(summary['size'].split()[0])
+        except ValueError:
+            byte_size = 0  # I don't want to accept floats + units
+
         self.user = (
             ('User', 'Requests', 'Lines', 'Nodata/Errors', 'Size'),
             (who, summary['requests'], summary['lines'], summary['error_count'], byte_size),
@@ -266,7 +270,7 @@ class ReportDataResif(ReportData):
         self.network = (
             ('Network', 'Requests', 'Lines', 'Nodata', 'Errors', 'Size'),
             ('unknown', summary['requests'], summary['lines'], 0, summary['error_count'], byte_size),
-	)
+    )
         return
 
 def lookup_source(con, host, port, dcid, description):
@@ -480,6 +484,10 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
 
     db - database object to insert into
     rd - ReportData object
+    @dcid - string, the data centre (EIDA node) being credited
+            with this report data.
+    @description - what this Arclink statistics source is.
+    @start_day - day as string, 'YYYY-MM-DD'.
 
     If a report was already received, nothing is inserted.
     (In future: should replace previous data for this day and source?)
@@ -489,8 +497,8 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
     """
     y = int(start_day[0:4]);
     if not db.endswith("-%i.db" % y):
-	print " *** Watch out, start day doesn't match db file; skipping"
-	return 0
+        print " *** Watch out, start day doesn't match db file; skipping"
+        return 0
 
     con = sqlite3.connect(db)
     source_id = lookup_source(con, host, port, dcid, description)
@@ -556,7 +564,7 @@ def process_html_file(f, host, port, dcid, description):
         return 3
 
     try:
-        print "Covers %(s)s to %(e)s - %(req)s requests %(lines)s lines, size %(siz)s" % {'s': rd.summary['start'],
+        summ = "Covers %(s)s to %(e)s - %(req)s requests %(lines)s lines, size %(siz)s" % {'s': rd.summary['start'],
                                                                                           'e': rd.summary['end'],
                                                                                           'req': rd.summary['requests'],
                                                                                           'lines': rd.summary['lines'],
@@ -565,38 +573,69 @@ def process_html_file(f, host, port, dcid, description):
         print "Error reading summary object", e
         print rd.summary
     start_day = rd.summary['start'].split(' ', 1)[0]
-    return insert_data(db, rd, host, port, dcid, description, start_day)
+    retval = insert_data(db, rd, host, port, dcid, description, start_day)
+    if (retval > 0): print summ
+    return retval
 
-def process_resif_string(s, host, port, dcid, description):
-    """RESIF supplies strings like this:
+def process_resif_string(s):
+    """RESIF and ODC supply one-line strings like this:
 
-    fdsnws@resif 0 0 16840.62 2015-07-29
-    ^            ^ ^ ^        ^
-    |            | | |        start day
-    |            | | size in MB
+    fdsnws@resif 0 0 16840.62 [units] 2016-01-19
+    ^            ^ ^ ^         ^      ^
+    |            | | |         |      \__start day
+    |            | | |         \__ One of {B, MiB, ...}
+    |            | | size in units (which if units is absent?)
     |            | lines?
     |            requests?
     reporter
 
+    This routine prepares a summary object and inserts it.
+
+    Returns:
+     status - int, same as process_html_file
+
     """
-    words = s.split()
-    summary = dict()
 
     def day_after(d):
         words = d.split("-");
-	ddd = datetime.date(int(words[0]), int(words[1]), int(words[2]))
-	ddd = ddd + datetime.timedelta(days=1)
+        ddd = datetime.date(int(words[0]), int(words[1]), int(words[2]))
+        ddd = ddd + datetime.timedelta(days=1)
         return ddd.isoformat()
 
+    words = s.split()
+    summary = dict()
+    num_words = len(words)
+
+    value = {"b" : 1,
+             "kib" : 1024,
+             "mib" : 1024*1024,
+             "gib" : 1024*1024*1024 }
+ 
     try:
         # No units were given in the report, but date was supplied
-        summary['start'] = words[4]
+        if num_words == 6:
+            units = words[4]
+            summary['start'] = words[5]
+        elif num_words == 5:
+            units = "MiB"
+            summary['start'] = words[4]
+        else:
+            print "Unexpected string", s
+            return 3
+
         summary['end'] = day_after(summary['start'])
         summary['requests'] = words[1]
         summary['lines'] = words[2]
-        summary['size'] = int(float(words[3])*1024*1024)  # is given in MB, maybe.
-        # Don't perpetuate crap units in the DB
-        ###summary['size'] = words[3] + " MiB"
+        #summary['size'] = str(int(float(words[3])*value[units.lower()])) + " B"
+        # Don't perpetuate crap units in the DB; store in bytes
+
+        # Okay, just pass on what the node supplied us
+        if units.lower() in value.keys():
+            summary['size'] = words[3] + " " + words[4]
+        else:
+            print "Error parsing units."
+            return 3
+
 
         summary['error_count'] = None
         summary['users'] = 1 ## words[0]
@@ -604,11 +643,27 @@ def process_resif_string(s, host, port, dcid, description):
     except KeyError as e:
         print "Error reading summary object", e
         print summary
+        return 3
     print "Covers %(start)s to %(end)s - %(requests)s requests %(lines)s lines, size %(size)s" % summary
     who = words[0]
+    # Be strict in mapping 'who' to 'dcid' - otherwise we will be too
+    # permissive in accepting reports from other DCIDs.
+    # Add a new rule here after discussion with the relevant DC that these
+    # statistics should be added.
+    dcid_list = {
+        "fdsnws@resif": "RESIF",
+        "fdsnws@odc": "ODC",
+    }
+    try:
+        dcid = dcid_list[who]
+    except KeyError:
+        print "Reporter is an unknown source;" \
+            "what DCID should I use for %s?" % (who)
+        return 3
+
     start_day = summary['start'].split(' ', 1)[0]
     rd = ReportDataResif(summary, who)
-    return insert_data(db, rd, who, -1, dcid, who, start_day)
+    return insert_data(db, rd, who, -1, dcid, "String from " + who, start_day)
 
 # ----------------------------------------------------------------------
 # This directory must match where the PHP report
@@ -655,7 +710,7 @@ filelist = []
 #filelist = glob.glob("./eida_stats/2014/01/*")
 #filelist.extend(glob.glob("./eida_stats/2014/02/*"))
 for line in sys.stdin.readlines():
-	filelist.append(line.strip())
+    filelist.append(line.strip())
 
 bodyfile="/tmp/reqlogstats.txt"
 
@@ -674,19 +729,53 @@ source_dict = {"bgr": "BGR",
 
 for myfile in filelist:
     print 70*'-'
-
+    print "Processing", myfile,
     if not os.path.exists(myfile):
-	scores[2] += 1
-	continue
-
-    if os.path.basename(myfile).startswith("fdsnws_"):
-        with open(myfile, "r") as fid:
-            for s in fid.readlines():
-                print "Read in:", s
-                result = process_resif_string(s, "resif", -1, "RESIF", "fdsnws@resif")
-                scores[result] += 1
+        scores[2] += 1
         continue
 
+    fid = open(myfile, "r")
+    msg = email.message_from_file(fid)
+    frm = msg['From']
+    subj = msg['Subject'].lower()
+
+    # Need to decide if a file is one of:
+    #   (i) the HTML report from reqlogstats, as e-mail: use From to set 'who'.
+    #  (ii) the text report from fdsnws operators, as e-mail: use payload to set 'who'
+    # (iii) the text report from fdsnws operators: payload still determines 'who'.
+    #  (iv) the HTML report from reqlogstats; 'who' must be given separately.
+
+    if subj.find('dataselect') > -1 \
+            or subj.find('fdsnws') > -1 \
+            or os.path.basename(myfile).startswith("fdsnws_"):
+
+        print "as fdsnws text from %s" % (frm)
+        # Try distinguishing (ii) from (iii)?
+        if frm:
+                # Case (ii)
+                buf = msg.get_payload()
+                lines = buf.splitlines()
+        else:
+                # Case (iii)
+                fid.seek(0)
+                lines = fid.readlines()
+
+        for s in lines:
+                if len(s.strip()) == 0: continue   # ignore blank lines
+
+                result = 0
+                if s.startswith("fdsnws"):
+                    print "Read in:", s
+                    result = process_resif_string(s)
+                    scores[result] += 1
+
+                if result == 0:
+                    print "Stopping after the first unacceptable line: '" + s[0:16] + "...'"
+                    break
+        print "End of processing for", myfile
+        continue
+
+    # Case (i); case (iv) is unhandled.
     with open(myfile, 'r') as fid:
         msg = email.message_from_file(fid)
     who = msg['From']
@@ -697,8 +786,8 @@ for myfile in filelist:
         host = emailaddr.split('@')[1]
         d = host.split('.')[-2]
     except IndexError:
-    	host = emailaddr
-	d = emailaddr    #???    
+        host = emailaddr
+        d = emailaddr    #???    
 
     port = -1
 
@@ -707,19 +796,19 @@ for myfile in filelist:
     except KeyError:
         dcid = emailaddr.lower()  ## Use the sender's name
 
-    print "Processing %s from %s: %s (%s:%i)" % (myfile, emailaddr, dcid, host, port)
+    print "as HTML from %s: %s (%s:%i)" % (emailaddr, dcid, host, port)
 
     with open(bodyfile, 'w') as fid:
-	buf = msg.get_payload()
-	# Replacements to make HTML pile of tags look like XHTML.
-	buf = buf.replace('""', '&quot;&quot;');
+        buf = msg.get_payload()
+        # Replacements to make HTML pile of tags look like XHTML.
+        buf = buf.replace('""', '&quot;&quot;');
         print >>fid, buf.replace("<hr>", "<hr />").replace("<br>", "<br />")
     result = process_html_file(bodyfile, host, port, dcid, 'E-mail from ' + emailaddr)
     os.unlink(bodyfile)
     scores[result] += 1
 
     if (result == 3):
-	unparsed_list.append(myfile)
+        unparsed_list.append(myfile)
 
 
 print 70*'-'
@@ -735,5 +824,5 @@ for (k, v) in summary.items():
 print "Database %s contains  %i source(s), and %i day summaries." % (db, summary['Source'], summary['Summary'])
 if (len(unparsed_list) > 0):
    for f in sorted(unparsed_list):
-	print "Unparsed file", f
+        print "Unparsed file", f
 
