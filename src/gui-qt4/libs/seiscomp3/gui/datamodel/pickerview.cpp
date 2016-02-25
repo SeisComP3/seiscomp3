@@ -98,7 +98,7 @@ MAKEENUM(
 		"Z12",
 		"ZNE",
 		"ZRT",
-		"ZH(RMS)"
+		"ZH(L2)"
 	)
 );
 
