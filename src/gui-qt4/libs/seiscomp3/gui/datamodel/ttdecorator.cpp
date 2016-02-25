@@ -152,11 +152,8 @@ void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
 	// Add a time contsrain here
 	// if time > 1/2 hour set _d = false ...
 
-	// std::cout << "==== P Phase ====" << std::endl;
 	double distanceP = computeTTTPolygon(_travelTimesP, _polygonP);
-	// std::cout << "==== S Phase ====" << std::endl;
 	double distanceS = computeTTTPolygon(_travelTimesS, _polygonS);
-
 	if ( distanceP == 0 && distanceS == 0 ) {
 		setVisible(false);
 		return;
@@ -218,14 +215,9 @@ void TTDecorator::computeTTT(TravelTimes& travelTimes,
 		}
 	}
 
-	//std::cout << "Amount of calculated P phases: " << _travelTimesP.size() << " for depth: " << _depth << " and distance: " << phaseDistance << std::endl;
-	//for (int i = 0; i < _travelTimesP.size(); ++i)
-	//	std::cout << "(" << i << ") P Traveltime: " << _travelTimesP[i] << " for " << i*_deltaDist << " degrees" << std::endl;
-
-	//std::cout << "Amount of calculated S phases: " << _travelTimesS.size() << " for depth: " << _depth << " and distance: " << phaseDistance << std::endl;
-	//for (int i = 0; i < _travelTimesS.size(); ++i)
-	//	std::cout << "(" << i << ") S Traveltime: " << _travelTimesS[i] << " for " << i*_deltaDist << " degrees" << std::endl;
-
+//	std::cout << "Amount of calculated " << phase << " phases: " << travelTimes.size() << " for depth: " << _depth << " and distance: " << phaseDistance << std::endl;
+//	for ( size_t i = 0; i < travelTimes.size(); ++i )
+//		std::cout << "(" << i << ") " << phase << " Traveltime: " << travelTimes[i] << " for " << i*_deltaDist << " degrees" << std::endl;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -241,39 +233,20 @@ double TTDecorator::computeTTTPolygon(const std::vector<double>& travelTimes,
 	double timeSpan = (Core::Time::GMT() - _originTime.value()).seconds();
 	//std::cout << "Calculated traveltime: " << timeSpan << std::endl;
 
-	std::vector<double>::const_iterator it =
-	    std::find_if(
-	        travelTimes.begin(), travelTimes.end(),
-	        std::bind1st(std::less_equal<double>(), timeSpan));
-
-	if ( it == travelTimes.end() ) {
-		return 0;
-	}
-
-	double p0 = 0;
-	double t1 = *it;
-	double t0 = t1;
-
-	if ( (it - 1) != travelTimes.begin() ) {
-		if ( *(it - 1) >= 0 ) {
-			p0 = std::distance(travelTimes.begin(), it - 1);
-			t0 = *(it - 1);
-		}
-		else {
-			p0 = std::distance(travelTimes.begin(), it);
-		}
-	}
-
-	// Interpolate
 	double distance = 0;
-	p0 *= _deltaDist;
-	double dt = t1 - t0;
-	double dtx = timeSpan - t0;
 
-	if (dt != 0)
-		distance = (dtx / dt * _deltaDist) + p0;
-	else
-		distance = p0;
+	for ( size_t i = 0; i < travelTimes.size(); ++i ) {
+		if ( timeSpan <= travelTimes[i] ) {
+			if ( i > 0 ) {
+				double diff = timeSpan - travelTimes[i-1];
+				double length = travelTimes[i] - travelTimes[i-1];
+				double t = diff/length;
+				distance = (i-1+t)*_deltaDist;
+			}
+
+			break;
+		}
+	}
 
 	if ( distance > 0 ) {
 		for ( int i = 0; i < 360; i += _rotDelta ) {
