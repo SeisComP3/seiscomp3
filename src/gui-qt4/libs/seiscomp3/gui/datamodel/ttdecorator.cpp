@@ -172,7 +172,7 @@ void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
 	//	pen.setStyle(Qt::DotLine);
 	painter.setPen(pen);
 
-	if ( distanceP > 0 ) {
+	if ( (distanceP > 0) && alpha ) {
 		drawPolygon(painter, _polygonP);
 		annotatePropagation(painter, distanceP, EAST_WEST);
 	}
@@ -298,51 +298,55 @@ void TTDecorator::annotatePropagation(QPainter& painter, double distance,
 
 	QString text(QString("%1").arg(distance, 0 ,'f', 1));
 	QRect bb = painter.fontMetrics().boundingRect(text);
+	bb.adjust(-2,-2,2,2);
+
 	QRect box0 = bb, box1 = bb;
-	QPoint p0, p1;
-	int textHeight = bb.height();
-	int textWidth = bb.width();
-	int textOffset = static_cast<int>(textWidth / 2 + 0.5);
+	QPoint p;
+	bool p0Ok = true, p1Ok = true;
+	double outLat = 0, outLon = 0;
 
-	bool p0Ok = true;
-	bool p1Ok = true;
-
-	if (direction == NORTH_SOUTH)
-	{
-		if ( _canvas->projection()->project(p0, QPointF(_longitude, _latitude + distance)) )
-			p0.setY(p0.y() - textHeight+4);
+	if ( direction == NORTH_SOUTH ) {
+		Math::Geo::delandaz2coord(distance, 0, _latitude, _longitude, &outLat, &outLon);
+		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+			box0.moveCenter(p);
+			box0.moveBottom(p.y()-4);
+		}
 		else
 			p0Ok = false;
-		if ( _canvas->projection()->project(p1, QPointF(_longitude, _latitude - distance)) )
-			p1.setY(p1.y() + textHeight+4);
+
+		Math::Geo::delandaz2coord(distance, 180, _latitude, _longitude, &outLat, &outLon);
+		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+			box1.moveCenter(p);
+			box1.moveTop(p.y()+4);
+		}
 		else
 			p1Ok = false;
 	}
-	else if (direction == EAST_WEST)
-	{
-		if ( _canvas->projection()->project(p0, QPointF(_longitude + distance, _latitude)) )
-			p0.setX(p0.x() + textWidth);
+	else if ( direction == EAST_WEST ) {
+		Math::Geo::delandaz2coord(distance, 90, _latitude, _longitude, &outLat, &outLon);
+		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+			box0.moveCenter(p);
+			box0.moveLeft(p.x()+4);
+		}
 		else
 			p0Ok = false;
-		if ( _canvas->projection()->project(p1, QPointF(_longitude - distance, _latitude)) )
-			p1.setX(p1.x() - textWidth);
+
+		Math::Geo::delandaz2coord(distance, 270, _latitude, _longitude, &outLat, &outLon);
+		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+			box1.moveCenter(p);
+			box1.moveRight(p.x()-4);
+		}
 		else
 			p1Ok = false;
 	}
-
-	int dy = 2; // improve vertical centering
 
 	if ( p0Ok ) {
-		box0.adjust(p0.x()-5-textOffset, p0.y()-2, p0.x()+1-textOffset, p0.y()+2);
 		painter.drawRect(box0);
-		box0.adjust(0, -dy, 0, dy);
 		painter.drawText(box0, Qt::AlignCenter, text);
 	}
 
 	if ( p1Ok ) {
-		box1.adjust(p1.x()-5-textOffset, p1.y()-2, p1.x()+1-textOffset, p1.y()+2);
 		painter.drawRect(box1);
-		box1.adjust(0, -dy, 0, dy);
 		painter.drawText(box1, Qt::AlignCenter, text);
 	}
 
