@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SeisComP3'
-copyright = u'2014, GFZ Potsdam, gempa GmbH'
+copyright = u'2016, GFZ Potsdam, gempa GmbH'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
