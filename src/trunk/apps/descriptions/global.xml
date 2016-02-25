@@ -31,6 +31,11 @@
 					Defines a list of modules loaded at startup.
 				</description>
 			</parameter>
+			<parameter name="cityXML" type="string">
+				<description>
+					The path to the city.xml file. This overrides the default paths.
+				</description>
+			</parameter>
 			<group name="logging">
 				<parameter name="level" type="int" default="2">
 					<description>
@@ -409,6 +414,14 @@
 				</option>
 			</group>
 
+			<group name="Cities">
+				<option long-flag="city-xml" argument="arg" default="" publicID="cities#city-xml">
+					<description>
+						The path to the city.xml file. This overrides the default paths.
+					</description>
+				</option>
+			</group>
+
 			<group name="User interface">
 				<option flag="F" long-flag="full-screen" argument="" default="" publicID="gui#full-screen">
 					<description>
@@ -443,6 +456,31 @@
 				</description>
 			</parameter>
 			<group name="amplitudes">
+				<group name="WoodAnderson">
+					<description>
+						Allows to configure the Wood-Anderson seismometer response.
+						The default values are according to the version of
+						Gutenberg (1935). The newer version by Uhrhammer and
+						Collins (1990) is part of the IASPEI Magnitude
+						Working Group recommendations of 2011 September 9. This
+						version uses gain=2080, T0=0.8, h=0.7.
+					</description>
+					<parameter name="gain" type="double" default="2800">
+						<description>
+						The gain of the Wood-Anderson response.
+						</description>
+					</parameter>
+					<parameter name="T0" type="double" default="0.8" unit="s">
+						<description>
+						The eigen period of the Wood-Anderson seismometer.
+						</description>
+					</parameter>
+					<parameter name="h" type="double" default="0.8">
+						<description>
+						The damping constant of the Wood-Anderson seismometer.
+						</description>
+					</parameter>
+				</group>
 				<description>
 					Defines general parameters for amplitudes of a certain type.
 				</description>
