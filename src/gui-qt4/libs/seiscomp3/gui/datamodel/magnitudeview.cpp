@@ -1061,7 +1061,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	*/
 
 	_stamagnitudes = new DiagramWidget(_ui.groupMagnitudes);
-	_stamagnitudes->setAbscissaName("Distance");
+	if ( SCScheme.unit.distanceInKM )
+		_stamagnitudes->setAbscissaName("Distance (km)");
+	else
+		_stamagnitudes->setAbscissaName("Distance");
 	_stamagnitudes->setOrdinateName("Residual");
 	_stamagnitudes->setMarkerDistance(10, 0.1);
 	_stamagnitudes->setDisplayRect(QRectF(0,-2,180,4));
@@ -3056,6 +3059,9 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 		Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
 		                  loc.latitude, loc.longitude,
 		                  &distance, &azi1, &azi2);
+
+		if ( SCScheme.unit.distanceInKM )
+			distance = Math::Geo::deg2km(distance);
 
 		/*
 		double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
