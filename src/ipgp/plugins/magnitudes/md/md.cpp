@@ -323,7 +323,7 @@ void AmplitudeProcessor_Md::initFilter(double fsamp) {
 		switch ( aFile.SEISMO ) {
 			case 1:
 				AmplitudeProcessor::setFilter(new Filtering::IIR::WoodAndersonFilter<
-				        double>(Velocity));
+				        double>(Velocity, _config.woodAndersonResponse));
 			break;
 			case 2:
 				AmplitudeProcessor::setFilter(new Filtering::IIR::Seismometer5secFilter<
@@ -448,7 +448,7 @@ bool AmplitudeProcessor_Md::deconvolveData(Response* resp,
 		gm = Math::Velocity;
 
 	Math::Restitution::FFT::TransferFunctionPtr cascade;
-	Math::SeismometerResponse::WoodAnderson woodAndersonResp(gm);
+	Math::SeismometerResponse::WoodAnderson woodAndersonResp(gm, _config.woodAndersonResponse);
 	Math::SeismometerResponse::Seismometer5sec seis5sResp(gm);
 	Math::SeismometerResponse::L4C_1Hz l4c1hzResp(gm);
 
