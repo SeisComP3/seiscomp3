@@ -1838,7 +1838,7 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void RecordWidget::createPolyline(int slot, RecordPolyline &polyline,
+void RecordWidget::createPolyline(int, RecordPolyline &polyline,
                                   RecordSequence const *seq, double pixelPerSecond,
                                   float amplMin, float amplMax, float amplOffset,
                                   int height, bool optimization) {
