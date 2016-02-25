@@ -1339,11 +1339,7 @@ class Inventory(_object):
         return _Client.Inventory_setInventory(self, *args)
 
     def filter(self, *args):
-        """
-        filter(Inventory self, Seiscomp::Client::Inventory::TypeWhiteList const & networkTypeWhitelist, Seiscomp::Client::Inventory::TypeWhiteList const & networkTypeBlacklist, 
-            Seiscomp::Client::Inventory::TypeWhiteList const & stationTypeWhitelist, 
-            Seiscomp::Client::Inventory::TypeWhiteList const & stationTypeBlacklist) -> int
-        """
+        """filter(Inventory self, Seiscomp::Util::StringFirewall const * networkTypeFW, Seiscomp::Util::StringFirewall const * stationTypeFW) -> int"""
         return _Client.Inventory_filter(self, *args)
 
     def loadStations(self, *args):

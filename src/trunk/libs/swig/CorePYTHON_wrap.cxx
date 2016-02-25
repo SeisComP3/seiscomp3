@@ -2941,135 +2941,141 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_AttachementList swig_types[1]
 #define SWIGTYPE_p_AttachementType swig_types[2]
 #define SWIGTYPE_p_DataArray swig_types[3]
-#define SWIGTYPE_p_PackType swig_types[4]
-#define SWIGTYPE_p_RootType swig_types[5]
-#define SWIGTYPE_p_Seiscomp__Array swig_types[6]
-#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[7]
-#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[8]
-#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[9]
-#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[10]
-#define SWIGTYPE_p_Seiscomp__Core__EGreensFunctionComponentNames swig_types[11]
-#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[12]
-#define SWIGTYPE_p_Seiscomp__Core__Enumeration swig_types[13]
-#define SWIGTYPE_p_Seiscomp__Core__FrameworkVersion swig_types[14]
-#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[15]
-#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[16]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[17]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[18]
-#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[19]
-#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[20]
-#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[21]
-#define SWIGTYPE_p_Seiscomp__Core__MessageIterator swig_types[22]
-#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[23]
-#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[24]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[25]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[26]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[70]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[71]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[72]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[73]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[74]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[76]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[77]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[78]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[80]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[81]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[83]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[84]
-#define SWIGTYPE_p_T swig_types[85]
-#define SWIGTYPE_p_TagType swig_types[86]
-#define SWIGTYPE_p_Type swig_types[87]
-#define SWIGTYPE_p_bool swig_types[88]
-#define SWIGTYPE_p_boost__none_t swig_types[89]
-#define SWIGTYPE_p_char swig_types[90]
-#define SWIGTYPE_p_const_iterator swig_types[91]
-#define SWIGTYPE_p_double swig_types[92]
-#define SWIGTYPE_p_float swig_types[93]
-#define SWIGTYPE_p_int swig_types[94]
-#define SWIGTYPE_p_iterator swig_types[95]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[96]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[97]
-#define SWIGTYPE_p_std__exception swig_types[98]
-#define SWIGTYPE_p_std__istream swig_types[99]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[100]
-#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[101]
-#define SWIGTYPE_p_std__ostream swig_types[102]
-#define SWIGTYPE_p_std__string swig_types[103]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[104]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[105]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[106]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[107]
-#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[108]
-#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[109]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[110]
-#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[111]
-#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[112]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[113]
-#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[114]
-#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[115]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[116]
-#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[117]
-#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[118]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[119]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[120]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[121]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[122]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[123]
-#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[124]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[125]
-#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[126]
-#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[127]
-#define SWIGTYPE_p_time_t swig_types[128]
-#define SWIGTYPE_p_timeval swig_types[129]
-#define SWIGTYPE_p_void swig_types[130]
-static swig_type_info *swig_types[132];
-static swig_module_info swig_module = {swig_types, 131, 0, 0, 0, 0};
+#define SWIGTYPE_p_ImplType swig_types[4]
+#define SWIGTYPE_p_PackType swig_types[5]
+#define SWIGTYPE_p_ReferenceType swig_types[6]
+#define SWIGTYPE_p_RootType swig_types[7]
+#define SWIGTYPE_p_Seiscomp__Array swig_types[8]
+#define SWIGTYPE_p_Seiscomp__BitSet swig_types[9]
+#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[10]
+#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[11]
+#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[12]
+#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[13]
+#define SWIGTYPE_p_Seiscomp__Core__EGreensFunctionComponentNames swig_types[14]
+#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[15]
+#define SWIGTYPE_p_Seiscomp__Core__Enumeration swig_types[16]
+#define SWIGTYPE_p_Seiscomp__Core__FrameworkVersion swig_types[17]
+#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[18]
+#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[19]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[20]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[21]
+#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[22]
+#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[23]
+#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[24]
+#define SWIGTYPE_p_Seiscomp__Core__MessageIterator swig_types[25]
+#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[26]
+#define SWIGTYPE_p_Seiscomp__Core__RTTI swig_types[27]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__Status swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__Version swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[75]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[76]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[77]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[78]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[79]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[81]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[82]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[83]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[85]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[87]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[89]
+#define SWIGTYPE_p_T swig_types[90]
+#define SWIGTYPE_p_TagType swig_types[91]
+#define SWIGTYPE_p_Type swig_types[92]
+#define SWIGTYPE_p_bool swig_types[93]
+#define SWIGTYPE_p_boost__dynamic_bitsetT_t swig_types[94]
+#define SWIGTYPE_p_boost__none_t swig_types[95]
+#define SWIGTYPE_p_char swig_types[96]
+#define SWIGTYPE_p_const_iterator swig_types[97]
+#define SWIGTYPE_p_double swig_types[98]
+#define SWIGTYPE_p_float swig_types[99]
+#define SWIGTYPE_p_int swig_types[100]
+#define SWIGTYPE_p_iterator swig_types[101]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[102]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[103]
+#define SWIGTYPE_p_std__exception swig_types[104]
+#define SWIGTYPE_p_std__istream swig_types[105]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__const_iterator swig_types[106]
+#define SWIGTYPE_p_std__listT_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl_t__iterator swig_types[107]
+#define SWIGTYPE_p_std__ostream swig_types[108]
+#define SWIGTYPE_p_std__string swig_types[109]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t swig_types[110]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__const_iterator swig_types[111]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Core__Time_t__iterator swig_types[112]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[113]
+#define SWIGTYPE_p_std__vectorT_char_t__const_iterator swig_types[114]
+#define SWIGTYPE_p_std__vectorT_char_t__iterator swig_types[115]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[116]
+#define SWIGTYPE_p_std__vectorT_double_t__const_iterator swig_types[117]
+#define SWIGTYPE_p_std__vectorT_double_t__iterator swig_types[118]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[119]
+#define SWIGTYPE_p_std__vectorT_float_t__const_iterator swig_types[120]
+#define SWIGTYPE_p_std__vectorT_float_t__iterator swig_types[121]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[122]
+#define SWIGTYPE_p_std__vectorT_int_t__const_iterator swig_types[123]
+#define SWIGTYPE_p_std__vectorT_int_t__iterator swig_types[124]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[125]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__const_iterator swig_types[126]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t__iterator swig_types[127]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t swig_types[128]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__const_iterator swig_types[129]
+#define SWIGTYPE_p_std__vectorT_std__complexT_float_t_t__iterator swig_types[130]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[131]
+#define SWIGTYPE_p_std__vectorT_std__string_t__const_iterator swig_types[132]
+#define SWIGTYPE_p_std__vectorT_std__string_t__iterator swig_types[133]
+#define SWIGTYPE_p_time_t swig_types[134]
+#define SWIGTYPE_p_timeval swig_types[135]
+#define SWIGTYPE_p_void swig_types[136]
+static swig_type_info *swig_types[138];
+static swig_module_info swig_module = {swig_types, 137, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3170,6 +3176,7 @@ namespace swig {
 #include "seiscomp3/core/baseobject.h"
 #include "seiscomp3/core/exceptions.h"
 #include "seiscomp3/core/array.h"
+#include "seiscomp3/core/bitset.h"
 #include "seiscomp3/core/enumeration.h"
 #include "seiscomp3/core/typedarray.h"
 #include "seiscomp3/core/record.h"
@@ -3769,6 +3776,23 @@ SWIGINTERN PyObject *Seiscomp_Array_setNumpy(Seiscomp::Array *self,PyObject *obj
 		fail:
 			Py_RETURN_NONE;
 	}
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  return res;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
 SWIGINTERN void Seiscomp_Core_MessageIterator_step(Seiscomp::Core::MessageIterator *self){
 		++(*self);
 	}
@@ -13334,6 +13358,1583 @@ SWIGINTERN PyObject *Array_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_BitSet_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":BitSet_ClassName")) SWIG_fail;
+  result = (char *)Seiscomp::BitSet::ClassName();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_TypeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::RTTI *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":BitSet_TypeInfo")) SWIG_fail;
+  result = (Seiscomp::Core::RTTI *) &Seiscomp::BitSet::TypeInfo();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_className(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  char *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_className",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_className" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (char *)((Seiscomp::BitSet const *)arg1)->className();
+  resultobj = SWIG_FromCharPtr((const char *)result);
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_typeInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Core::RTTI *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_typeInfo",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_typeInfo" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::Core::RTTI *) &((Seiscomp::BitSet const *)arg1)->typeInfo();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Core__RTTI, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_Cast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_Cast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
+  result = (Seiscomp::BitSet *)Seiscomp::BitSet::Cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_ConstCast__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::BaseObject *arg1 = (Seiscomp::Core::BaseObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_ConstCast",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__BaseObject, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObject const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::BaseObject * >(argp1);
+  result = (Seiscomp::BitSet *)Seiscomp::BitSet::ConstCast((Seiscomp::Core::BaseObject const *)arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_Cast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl > arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_Cast",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet_Cast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectPtr""'");
+    } else {
+      Seiscomp::Core::BaseObjectPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectPtr * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (Seiscomp::BitSet *)Seiscomp::BitSet::Cast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_Cast(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_Cast__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_Cast__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_Cast'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::Cast(Seiscomp::Core::BaseObject *)\n"
+    "    Seiscomp::BitSet::Cast(Seiscomp::Core::BaseObjectPtr)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_ConstCast__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SwigValueWrapper< Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl > arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_ConstCast",&obj0)) SWIG_fail;
+  {
+    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,  0  | 0);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet_ConstCast" "', argument " "1"" of type '" "Seiscomp::Core::BaseObjectCPtr""'");
+    } else {
+      Seiscomp::Core::BaseObjectCPtr * temp = reinterpret_cast< Seiscomp::Core::BaseObjectCPtr * >(argp1);
+      arg1 = *temp;
+      if (SWIG_IsNewObj(res1)) delete temp;
+    }
+  }
+  result = (Seiscomp::BitSet *)Seiscomp::BitSet::ConstCast(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_ConstCast(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Core__BaseObject, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_ConstCast__SWIG_0(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_ConstCast__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_ConstCast'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::ConstCast(Seiscomp::Core::BaseObject const *)\n"
+    "    Seiscomp::BitSet::ConstCast(Seiscomp::Core::BaseObjectCPtr)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_BitSet__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_BitSet")) SWIG_fail;
+  result = (Seiscomp::BitSet *)new Seiscomp::BitSet();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_BitSet__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_BitSet",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_BitSet" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  result = (Seiscomp::BitSet *)new Seiscomp::BitSet(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_BitSet__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_BitSet",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_Seiscomp__BitSet,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_BitSet" "', argument " "1"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BitSet" "', argument " "1"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet *)new Seiscomp::BitSet((Seiscomp::BitSet const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_BitSet__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet::ImplType *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_BitSet",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_boost__dynamic_bitsetT_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_BitSet" "', argument " "1"" of type '" "Seiscomp::BitSet::ImplType const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_BitSet" "', argument " "1"" of type '" "Seiscomp::BitSet::ImplType const &""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet::ImplType * >(argp1);
+  result = (Seiscomp::BitSet *)new Seiscomp::BitSet((Seiscomp::BitSet::ImplType const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_BitSet(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_BitSet__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_BitSet__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_boost__dynamic_bitsetT_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_BitSet__SWIG_3(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_BitSet__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_BitSet'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::BitSet()\n"
+    "    Seiscomp::BitSet::BitSet(int)\n"
+    "    Seiscomp::BitSet::BitSet(Seiscomp::BitSet const &)\n"
+    "    Seiscomp::BitSet::BitSet(Seiscomp::BitSet::ImplType const &)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___iand__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  Seiscomp::BitSet *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___iand__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___iand__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__BitSet,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BitSet___iand__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet___iand__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::BitSet * >(argp2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator &=((Seiscomp::BitSet const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___ior__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  Seiscomp::BitSet *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___ior__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___ior__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__BitSet,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BitSet___ior__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet___ior__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::BitSet * >(argp2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator |=((Seiscomp::BitSet const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___ixor__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  Seiscomp::BitSet *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___ixor__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___ixor__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__BitSet,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BitSet___ixor__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet___ixor__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::BitSet * >(argp2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator ^=((Seiscomp::BitSet const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  Seiscomp::BitSet *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___isub__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___isub__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_Seiscomp__BitSet,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BitSet___isub__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitSet___isub__" "', argument " "2"" of type '" "Seiscomp::BitSet const &""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::BitSet * >(argp2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator -=((Seiscomp::BitSet const &)*arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___ilshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___ilshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___ilshift__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet___ilshift__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator <<=(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___irshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___irshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___irshift__" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet___irshift__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::BitSet *) &(arg1)->operator >>=(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___lshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___lshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___lshift__" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet___lshift__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = ((Seiscomp::BitSet const *)arg1)->operator <<(arg2);
+  resultobj = SWIG_NewPointerObj((new Seiscomp::BitSet(static_cast< const Seiscomp::BitSet& >(result))), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___rshift__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet___rshift__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___rshift__" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet___rshift__" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = ((Seiscomp::BitSet const *)arg1)->operator >>(arg2);
+  resultobj = SWIG_NewPointerObj((new Seiscomp::BitSet(static_cast< const Seiscomp::BitSet& >(result))), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet___invert__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet___invert__",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet___invert__" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->operator ~();
+  resultobj = SWIG_NewPointerObj((new Seiscomp::BitSet(static_cast< const Seiscomp::BitSet& >(result))), SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:BitSet_resize",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_resize" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_resize" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "BitSet_resize" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  (arg1)->resize(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_resize" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_resize" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  (arg1)->resize(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_resize(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_BitSet_resize__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_BitSet_resize__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_resize'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::resize(size_t,bool)\n"
+    "    Seiscomp::BitSet::resize(size_t)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_clear(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_clear",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_clear" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  (arg1)->clear();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_append",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_append" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_append" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  (arg1)->append(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  bool arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:BitSet_set",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_set" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_bool(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "BitSet_set" "', argument " "3"" of type '" "bool""'");
+  } 
+  arg3 = static_cast< bool >(val3);
+  result = (Seiscomp::BitSet *) &(arg1)->set(arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_set" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_set" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::BitSet *) &(arg1)->set(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_set__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_set",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_set" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet *) &(arg1)->set();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_set(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_set__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_BitSet_set__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_bool(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_BitSet_set__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_set'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::set(size_t,bool)\n"
+    "    Seiscomp::BitSet::set(size_t)\n"
+    "    Seiscomp::BitSet::set()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_reset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_reset",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_reset" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_reset" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::BitSet *) &(arg1)->reset(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_reset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_reset" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet *) &(arg1)->reset();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_reset(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_reset__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_BitSet_reset__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_reset'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::reset(size_t)\n"
+    "    Seiscomp::BitSet::reset()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_flip__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_flip",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_flip" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_flip" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (Seiscomp::BitSet *) &(arg1)->flip(arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_flip__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_flip",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_flip" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet *) &(arg1)->flip();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_flip(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_flip__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_BitSet_flip__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_flip'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::flip(size_t)\n"
+    "    Seiscomp::BitSet::flip()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_test(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_test",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_test" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_test" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = (bool)((Seiscomp::BitSet const *)arg1)->test(arg2);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_any(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_any",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_any" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (bool)((Seiscomp::BitSet const *)arg1)->any();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_none(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_none",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_none" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (bool)((Seiscomp::BitSet const *)arg1)->none();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_numberOfBitsSet(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_numberOfBitsSet",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_numberOfBitsSet" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->numberOfBitsSet();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_toUlong(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  unsigned long result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_toUlong",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_toUlong" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (unsigned long)((Seiscomp::BitSet const *)arg1)->toUlong();
+  resultobj = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_size" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->size();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_numberOfBlocks(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_numberOfBlocks",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_numberOfBlocks" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->numberOfBlocks();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_maximumSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_maximumSize",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_maximumSize" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->maximumSize();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_empty" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (bool)((Seiscomp::BitSet const *)arg1)->empty();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_findFirst(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_findFirst",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_findFirst" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = ((Seiscomp::BitSet const *)arg1)->findFirst();
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_findNext(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:BitSet_findNext",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_findNext" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitSet_findNext" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  result = ((Seiscomp::BitSet const *)arg1)->findNext(arg2);
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_impl__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet::ImplType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_impl",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_impl" "', argument " "1"" of type '" "Seiscomp::BitSet const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet::ImplType *) &((Seiscomp::BitSet const *)arg1)->impl();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_boost__dynamic_bitsetT_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_impl__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet::ImplType *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:BitSet_impl",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitSet_impl" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  result = (Seiscomp::BitSet::ImplType *) &(arg1)->impl();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_boost__dynamic_bitsetT_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_BitSet_impl(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_impl__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__BitSet, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_BitSet_impl__SWIG_0(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'BitSet_impl'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::BitSet::impl() const\n"
+    "    Seiscomp::BitSet::impl()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_BitSet(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::BitSet *arg1 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_BitSet",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__BitSet, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_BitSet" "', argument " "1"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::BitSet * >(argp1);
+  if (arg1) arg1->decrementReferenceCount();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *BitSet_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__BitSet, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_Record_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *result = 0 ;
@@ -14220,6 +15821,28 @@ SWIGINTERN PyObject *_wrap_Record_copy(PyObject *SWIGUNUSEDPARM(self), PyObject 
   result = (Seiscomp::Record *)((Seiscomp::Record const *)arg1)->copy();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Record_clipMask(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Record *arg1 = (Seiscomp::Record *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Record_clipMask",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Record_clipMask" "', argument " "1"" of type '" "Seiscomp::Record const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Record * >(argp1);
+  result = (Seiscomp::BitSet *)((Seiscomp::Record const *)arg1)->clipMask();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16550,6 +18173,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GenericRecord_clipMask(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::GenericRecord *arg1 = (Seiscomp::GenericRecord *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::BitSet *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GenericRecord_clipMask",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__GenericRecord, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericRecord_clipMask" "', argument " "1"" of type '" "Seiscomp::GenericRecord const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::GenericRecord * >(argp1);
+  result = (Seiscomp::BitSet *)((Seiscomp::GenericRecord const *)arg1)->clipMask();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GenericRecord_setData__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::GenericRecord *arg1 = (Seiscomp::GenericRecord *) 0 ;
@@ -16683,6 +18328,36 @@ fail:
     "    Seiscomp::GenericRecord::setData(Seiscomp::Array *)\n"
     "    Seiscomp::GenericRecord::setData(int,void const *,Seiscomp::Array::DataType)\n");
   return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericRecord_setClipMask(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::GenericRecord *arg1 = (Seiscomp::GenericRecord *) 0 ;
+  Seiscomp::BitSet *arg2 = (Seiscomp::BitSet *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericRecord_setClipMask",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__GenericRecord, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericRecord_setClipMask" "', argument " "1"" of type '" "Seiscomp::GenericRecord *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::GenericRecord * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__BitSet, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GenericRecord_setClipMask" "', argument " "2"" of type '" "Seiscomp::BitSet *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::BitSet * >(argp2);
+  (arg1)->setClipMask(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
 }
 
 
@@ -34093,6 +35768,42 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Array_numpy", _wrap_Array_numpy, METH_VARARGS, NULL},
 	 { (char *)"Array_setNumpy", _wrap_Array_setNumpy, METH_VARARGS, NULL},
 	 { (char *)"Array_swigregister", Array_swigregister, METH_VARARGS, NULL},
+	 { (char *)"BitSet_ClassName", _wrap_BitSet_ClassName, METH_VARARGS, NULL},
+	 { (char *)"BitSet_TypeInfo", _wrap_BitSet_TypeInfo, METH_VARARGS, NULL},
+	 { (char *)"BitSet_className", _wrap_BitSet_className, METH_VARARGS, NULL},
+	 { (char *)"BitSet_typeInfo", _wrap_BitSet_typeInfo, METH_VARARGS, NULL},
+	 { (char *)"BitSet_Cast", _wrap_BitSet_Cast, METH_VARARGS, NULL},
+	 { (char *)"BitSet_ConstCast", _wrap_BitSet_ConstCast, METH_VARARGS, NULL},
+	 { (char *)"new_BitSet", _wrap_new_BitSet, METH_VARARGS, NULL},
+	 { (char *)"BitSet___iand__", _wrap_BitSet___iand__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___ior__", _wrap_BitSet___ior__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___ixor__", _wrap_BitSet___ixor__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___isub__", _wrap_BitSet___isub__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___ilshift__", _wrap_BitSet___ilshift__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___irshift__", _wrap_BitSet___irshift__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___lshift__", _wrap_BitSet___lshift__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___rshift__", _wrap_BitSet___rshift__, METH_VARARGS, NULL},
+	 { (char *)"BitSet___invert__", _wrap_BitSet___invert__, METH_VARARGS, NULL},
+	 { (char *)"BitSet_resize", _wrap_BitSet_resize, METH_VARARGS, NULL},
+	 { (char *)"BitSet_clear", _wrap_BitSet_clear, METH_VARARGS, NULL},
+	 { (char *)"BitSet_append", _wrap_BitSet_append, METH_VARARGS, NULL},
+	 { (char *)"BitSet_set", _wrap_BitSet_set, METH_VARARGS, NULL},
+	 { (char *)"BitSet_reset", _wrap_BitSet_reset, METH_VARARGS, NULL},
+	 { (char *)"BitSet_flip", _wrap_BitSet_flip, METH_VARARGS, NULL},
+	 { (char *)"BitSet_test", _wrap_BitSet_test, METH_VARARGS, NULL},
+	 { (char *)"BitSet_any", _wrap_BitSet_any, METH_VARARGS, NULL},
+	 { (char *)"BitSet_none", _wrap_BitSet_none, METH_VARARGS, NULL},
+	 { (char *)"BitSet_numberOfBitsSet", _wrap_BitSet_numberOfBitsSet, METH_VARARGS, NULL},
+	 { (char *)"BitSet_toUlong", _wrap_BitSet_toUlong, METH_VARARGS, NULL},
+	 { (char *)"BitSet_size", _wrap_BitSet_size, METH_VARARGS, NULL},
+	 { (char *)"BitSet_numberOfBlocks", _wrap_BitSet_numberOfBlocks, METH_VARARGS, NULL},
+	 { (char *)"BitSet_maximumSize", _wrap_BitSet_maximumSize, METH_VARARGS, NULL},
+	 { (char *)"BitSet_empty", _wrap_BitSet_empty, METH_VARARGS, NULL},
+	 { (char *)"BitSet_findFirst", _wrap_BitSet_findFirst, METH_VARARGS, NULL},
+	 { (char *)"BitSet_findNext", _wrap_BitSet_findNext, METH_VARARGS, NULL},
+	 { (char *)"BitSet_impl", _wrap_BitSet_impl, METH_VARARGS, NULL},
+	 { (char *)"delete_BitSet", _wrap_delete_BitSet, METH_VARARGS, NULL},
+	 { (char *)"BitSet_swigregister", BitSet_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Record_ClassName", _wrap_Record_ClassName, METH_VARARGS, NULL},
 	 { (char *)"Record_TypeInfo", _wrap_Record_TypeInfo, METH_VARARGS, NULL},
 	 { (char *)"Record_className", _wrap_Record_className, METH_VARARGS, NULL},
@@ -34124,6 +35835,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Record_data", _wrap_Record_data, METH_VARARGS, NULL},
 	 { (char *)"Record_raw", _wrap_Record_raw, METH_VARARGS, NULL},
 	 { (char *)"Record_copy", _wrap_Record_copy, METH_VARARGS, NULL},
+	 { (char *)"Record_clipMask", _wrap_Record_clipMask, METH_VARARGS, NULL},
 	 { (char *)"Record_saveSpace", _wrap_Record_saveSpace, METH_VARARGS, NULL},
 	 { (char *)"Record_read", _wrap_Record_read, METH_VARARGS, NULL},
 	 { (char *)"Record_write", _wrap_Record_write, METH_VARARGS, NULL},
@@ -34169,7 +35881,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GenericRecord_setSamplingFrequency", _wrap_GenericRecord_setSamplingFrequency, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_data", _wrap_GenericRecord_data, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_raw", _wrap_GenericRecord_raw, METH_VARARGS, NULL},
+	 { (char *)"GenericRecord_clipMask", _wrap_GenericRecord_clipMask, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_setData", _wrap_GenericRecord_setData, METH_VARARGS, NULL},
+	 { (char *)"GenericRecord_setClipMask", _wrap_GenericRecord_setClipMask, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_dataUpdated", _wrap_GenericRecord_dataUpdated, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_saveSpace", _wrap_GenericRecord_saveSpace, METH_VARARGS, NULL},
 	 { (char *)"GenericRecord_copy", _wrap_GenericRecord_copy, METH_VARARGS, NULL},
@@ -34653,6 +36367,9 @@ static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(voi
 static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
 }
+static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
+}
 static void *_p_Seiscomp__Core__GeneralExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *)  ((Seiscomp::Core::GeneralException *) x));
 }
@@ -34747,9 +36464,12 @@ static swig_type_info _swigt__p_Archive = {"_p_Archive", "Archive *", 0, 0, (voi
 static swig_type_info _swigt__p_AttachementList = {"_p_AttachementList", "AttachementList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_AttachementType = {"_p_AttachementType", "AttachementType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_DataArray = {"_p_DataArray", "DataArray *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ImplType = {"_p_ImplType", "ImplType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PackType = {"_p_PackType", "PackType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ReferenceType = {"_p_ReferenceType", "ReferenceType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_RootType = {"_p_RootType", "RootType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Array = {"_p_Seiscomp__Array", "Seiscomp::Array *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__BitSet = {"_p_Seiscomp__BitSet", "Seiscomp::BitSet *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__BaseObject = {"_p_Seiscomp__Core__BaseObject", "Seiscomp::Core::BaseObject *|Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject >::AttachementType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__ClassNotFound = {"_p_Seiscomp__Core__ClassNotFound", "Seiscomp::Core::ClassNotFound *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Core__DataMessage", "Seiscomp::Core::DataMessage *", 0, 0, (void*)0, 0};
@@ -34770,6 +36490,8 @@ static swig_type_info _swigt__p_Seiscomp__Core__OverflowException = {"_p_Seiscom
 static swig_type_info _swigt__p_Seiscomp__Core__RTTI = {"_p_Seiscomp__Core__RTTI", "Seiscomp::Core::RTTI *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl", "Seiscomp::ArrayCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl", "Seiscomp::ArrayPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array >::Impl *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl", "Seiscomp::BitSetCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::BitSet const >::Impl *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::BitSet >::Impl *|Seiscomp::BitSetPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl", "Seiscomp::Core::BaseObjectCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl *|Seiscomp::Core::BaseObjectPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject >::AttachementType >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl", "::Seiscomp::Core::SmartPointer< Seiscomp::Core::DataMessage >::Impl *|Seiscomp::Core::DataMessagePtr *", 0, 0, (void*)0, 0};
@@ -34832,6 +36554,7 @@ static swig_type_info _swigt__p_T = {"_p_T", "T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_bool = {"_p_bool", "bool *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__dynamic_bitsetT_t = {"_p_boost__dynamic_bitsetT_t", "Seiscomp::BitSet::ImplType *|boost::dynamic_bitset< > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__none_t = {"_p_boost__none_t", "::boost::none_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
@@ -34880,9 +36603,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_AttachementList,
   &_swigt__p_AttachementType,
   &_swigt__p_DataArray,
+  &_swigt__p_ImplType,
   &_swigt__p_PackType,
+  &_swigt__p_ReferenceType,
   &_swigt__p_RootType,
   &_swigt__p_Seiscomp__Array,
+  &_swigt__p_Seiscomp__BitSet,
   &_swigt__p_Seiscomp__Core__BaseObject,
   &_swigt__p_Seiscomp__Core__ClassNotFound,
   &_swigt__p_Seiscomp__Core__DataMessage,
@@ -34903,6 +36629,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core__RTTI,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl,
@@ -34965,6 +36693,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_TagType,
   &_swigt__p_Type,
   &_swigt__p_bool,
+  &_swigt__p_boost__dynamic_bitsetT_t,
   &_swigt__p_boost__none_t,
   &_swigt__p_char,
   &_swigt__p_const_iterator,
@@ -35013,10 +36742,13 @@ static swig_cast_info _swigc__p_Archive[] = {  {&_swigt__p_Archive, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_AttachementList[] = {  {&_swigt__p_AttachementList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_AttachementType[] = {  {&_swigt__p_AttachementType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_DataArray[] = {  {&_swigt__p_DataArray, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ImplType[] = {  {&_swigt__p_ImplType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackType[] = {  {&_swigt__p_PackType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ReferenceType[] = {  {&_swigt__p_ReferenceType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_RootType[] = {  {&_swigt__p_RootType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Array[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__Array, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Array, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__BitSet[] = {  {&_swigt__p_Seiscomp__BitSet, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__ClassNotFound[] = {  {&_swigt__p_Seiscomp__Core__ClassNotFound, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {  {&_swigt__p_Seiscomp__Core__DataMessage, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__DuplicateClassname[] = {  {&_swigt__p_Seiscomp__Core__DuplicateClassname, 0, 0, 0},{0, 0, 0, 0}};
@@ -35036,6 +36768,8 @@ static swig_cast_info _swigc__p_Seiscomp__Core__OverflowException[] = {  {&_swig
 static swig_cast_info _swigc__p_Seiscomp__Core__RTTI[] = {  {&_swigt__p_Seiscomp__Core__RTTI, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -35098,6 +36832,7 @@ static swig_cast_info _swigc__p_T[] = {  {&_swigt__p_T, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TagType[] = {  {&_swigt__p_TagType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_bool[] = {  {&_swigt__p_bool, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__dynamic_bitsetT_t[] = {  {&_swigt__p_boost__dynamic_bitsetT_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__none_t[] = {  {&_swigt__p_boost__none_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
@@ -35146,9 +36881,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_AttachementList,
   _swigc__p_AttachementType,
   _swigc__p_DataArray,
+  _swigc__p_ImplType,
   _swigc__p_PackType,
+  _swigc__p_ReferenceType,
   _swigc__p_RootType,
   _swigc__p_Seiscomp__Array,
+  _swigc__p_Seiscomp__BitSet,
   _swigc__p_Seiscomp__Core__BaseObject,
   _swigc__p_Seiscomp__Core__ClassNotFound,
   _swigc__p_Seiscomp__Core__DataMessage,
@@ -35169,6 +36907,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core__RTTI,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl,
@@ -35231,6 +36971,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_TagType,
   _swigc__p_Type,
   _swigc__p_bool,
+  _swigc__p_boost__dynamic_bitsetT_t,
   _swigc__p_boost__none_t,
   _swigc__p_char,
   _swigc__p_const_iterator,
@@ -35964,7 +37705,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x050000)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x060000)));
   SWIG_addvarlink(SWIG_globals(),(char*)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));
