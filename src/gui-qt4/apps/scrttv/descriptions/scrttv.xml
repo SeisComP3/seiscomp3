@@ -56,7 +56,7 @@
 				</group>
 				<parameter name="codes" type="list:string">
 					<description>
-						Defines a list of channels codes to be displayed. Each list item
+						Defines a list of channels codes (ex : PF.BON.00.HHZ) to be displayed. Each list item
 						can contain wildcards at any position and the given list is
 						intersected with all channels configured in inventory.
 					</description>
