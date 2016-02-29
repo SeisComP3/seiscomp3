@@ -1398,7 +1398,7 @@ void MagnitudeView::selectChannelsWithEdit() {
 void MagnitudeView::activateChannels() {
 	QModelIndexList rows = _ui.tableStationMagnitudes->selectionModel()->selectedRows();
 	foreach ( const QModelIndex &idx, rows )
-		changeStationState(idx.row(), true);
+		changeStationState(_modelStationMagnitudesProxy->mapToSource(idx).row(), true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1409,7 +1409,7 @@ void MagnitudeView::activateChannels() {
 void MagnitudeView::deactivateChannels() {
 	QModelIndexList rows = _ui.tableStationMagnitudes->selectionModel()->selectedRows();
 	foreach ( const QModelIndex &idx, rows )
-		changeStationState(idx.row(), false);
+		changeStationState(_modelStationMagnitudesProxy->mapToSource(idx).row(), false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
