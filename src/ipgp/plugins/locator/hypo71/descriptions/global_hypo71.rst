@@ -158,9 +158,9 @@ Futhermore add the plugin configuration:
    
    # Hypo71 custom profiles examples
    hypo71.profiles = ModelA
-   hypo71.profile.Tectonic.earthModelID = "My Velocity Model A"
-   hypo71.profile.Tectonic.methodID = Hypo71PC
-   hypo71.profile.Tectonic.controlFile = ${HYPO71ROOT}/profiles/profile.a.conf
+   hypo71.profile.ModelA.earthModelID = "My Velocity Model A"
+   hypo71.profile.ModelA.methodID = Hypo71PC
+   hypo71.profile.ModelA.controlFile = ${HYPO71ROOT}/profiles/profile.a.conf
 
 Copy the content of config/hypo71/ in ${HOME}/hypo71/
 Verify that everything is properly set up in the script `${HOME}/hypo71/run.sh`
