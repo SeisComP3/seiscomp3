@@ -57,4 +57,4 @@ class Module(seiscomp3.Kernel.Module):
 
 
     def stop(self):
-      pass
+      return True

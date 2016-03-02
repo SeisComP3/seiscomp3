@@ -220,6 +220,7 @@ void TTDecorator::computeTTT(TravelTimes& travelTimes,
 //	std::cout << "Amount of calculated " << phase << " phases: " << travelTimes.size() << " for depth: " << _depth << " and distance: " << phaseDistance << std::endl;
 //	for ( size_t i = 0; i < travelTimes.size(); ++i )
 //		std::cout << "(" << i << ") " << phase << " Traveltime: " << travelTimes[i] << " for " << i*_deltaDist << " degrees" << std::endl;
+
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

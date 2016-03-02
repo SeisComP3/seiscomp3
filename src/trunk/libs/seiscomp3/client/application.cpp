@@ -1776,7 +1776,7 @@ bool Application::sync(const char *syncID) {
 
 	if ( !requestSync(_currentSyncID.c_str()) ) {
 		handleEndSync();
-		SEISCOMP_INFO("End sync");
+		SEISCOMP_DEBUG("End sync");
 		return false;
 	}
 
