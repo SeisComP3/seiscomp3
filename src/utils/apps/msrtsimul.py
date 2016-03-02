@@ -96,8 +96,10 @@ def rt_simul(f, speed=1., jump=0, delaydict = None):
             skipping = False
 
         tmax = stime + speed * (time.time() - rtime)
-        if rec_time > tmax:
-            time.sleep((rec_time - tmax + 0.001) / speed)
+        last_sample_time = rec.begin_time +  datetime.timedelta(microseconds = 1000000.0 * (rec.nsamp / rec.fsamp))
+        last_sample_time = calendar.timegm(last_sample_time.timetuple())        
+        if last_sample_time > tmax:
+            time.sleep((last_sample_time - tmax + 0.001) / speed)
         yield rec
 
 
