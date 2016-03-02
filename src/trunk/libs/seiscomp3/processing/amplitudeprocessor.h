@@ -17,6 +17,7 @@
 
 #include <seiscomp3/core/interfacefactory.h>
 #include <seiscomp3/processing/timewindowprocessor.h>
+#include <seiscomp3/math/filter/seismometers.h>
 #include <seiscomp3/client.h>
 #include <boost/function.hpp>
 
@@ -39,7 +40,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 		enum Capability {
 			//! No supported capabilities
 			NoCapability  = 0x0000,
-			//! Supports differnt amplitude measure types
+			//! Supports different amplitude measure types
 			MeasureType   = 0x0001,
 			//! Supports different amplitude combiner if
 			//! the amplitude is measured on different
@@ -67,6 +68,8 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 			double respMaxFreq;
 
 			double saturationThreshold;
+
+			Math::SeismometerResponse::WoodAnderson::Config woodAndersonResponse;
 		};
 
 		struct AmplitudeIndex {

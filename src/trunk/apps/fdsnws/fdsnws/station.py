@@ -591,7 +591,7 @@ class FDSNStation(resource.Resource):
 	def _copyReferences(newInv, req, objCount, inv, ro, dataloggers, sensors,
 	                    maxObj):
 
-		respPAZ, respFIR, respPoly = set(), set(), set()
+		responses = set()
 		decCount = 0
 
 		# datalogger
@@ -615,16 +615,11 @@ class FDSNStation(resource.Resource):
 					try: filterStr += decimation.digitalFilterChain().content()
 					except ValueException: pass
 					for resp in filterStr.split():
-						if resp.startswith('ResponsePAZ'):
-							respPAZ.add(resp)
-						elif resp.startswith('ResponseFIR'):
-							respFIR.add(resp)
-						elif resp.startswith('ResponsePolynomial'):
-							respPoly.add(resp)
+						responses.add(resp)
 				decCount += newLogger.decimationCount()
 
 		objCount += newInv.dataloggerCount() + decCount
-		resCount = len(respPAZ) + len(respFIR) + len(respPoly)
+		resCount = len(responses)
 		if not HTTP.checkObjects(req, objCount + resCount, maxObj):
 			return None
 
@@ -639,19 +634,14 @@ class FDSNStation(resource.Resource):
 			resp = newSensor.response()
 			if resp:
 				if ro.includeRes:
-					if resp.startswith('ResponsePAZ'):
-						respPAZ.add(resp)
-					elif resp.startswith('ResponseFIR'):
-						respFIR.add(resp)
-					elif resp.startswith('ResponsePolynomial'):
-						respPoly.add(resp)
+					responses.add(resp)
 				else:
 					# no responses: remove response reference to avoid missing
 					# response warning of exporter
 					newSensor.setResponse("")
 
 		objCount += newInv.sensorCount()
-		resCount = len(respPAZ) + len(respFIR) + len(respPoly)
+		resCount = len(responses)
 		if not HTTP.checkObjects(req, objCount + resCount, maxObj):
 			return None
 
@@ -660,17 +650,17 @@ class FDSNStation(resource.Resource):
 			if req._disconnected: return None
 			for i in xrange(inv.responsePAZCount()):
 				resp = inv.responsePAZ(i)
-				if resp.publicID() in respPAZ:
+				if resp.publicID() in responses:
 					newInv.add(DataModel.ResponsePAZ(resp))
 			if req._disconnected: return None
 			for i in xrange(inv.responseFIRCount()):
 				resp = inv.responseFIR(i)
-				if resp.publicID() in respFIR:
+				if resp.publicID() in responses:
 					newInv.add(DataModel.ResponseFIR(resp))
 			if req._disconnected: return None
 			for i in xrange(inv.responsePolynomialCount()):
 				resp = inv.responsePolynomial(i)
-				if resp.publicID() in respPoly:
+				if resp.publicID() in responses:
 					newInv.add(DataModel.ResponsePolynomial(resp))
 
 		return decCount

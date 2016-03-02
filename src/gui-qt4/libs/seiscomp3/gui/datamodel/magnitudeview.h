@@ -24,6 +24,7 @@
 #include <seiscomp3/gui/core/diagramwidget.h>
 #include <seiscomp3/gui/datamodel/amplitudeview.h>
 #include <seiscomp3/gui/datamodel/calculateamplitudes.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/event.h>
@@ -34,6 +35,7 @@
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/datamodel/amplitude.h>
+#endif
 
 #include <set>
 

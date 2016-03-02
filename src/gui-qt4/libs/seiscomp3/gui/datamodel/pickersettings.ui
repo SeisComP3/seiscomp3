@@ -168,6 +168,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbMaplines" >
+         <property name="toolTip" >
+          <string>Enables/disables drawing of lines in the map connecting the station with the event</string>
+         </property>
+         <property name="text" >
+          <string>Draw map lines</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="cbPlotGridlines" >
          <property name="toolTip" >
           <string>Enables/disables drawing of grid lines in plots</string>
@@ -281,8 +291,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>499</width>
-        <height>438</height>
+        <width>96</width>
+        <height>26</height>
        </rect>
       </property>
       <property name="autoFillBackground" >

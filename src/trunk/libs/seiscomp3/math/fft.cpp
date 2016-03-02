@@ -15,8 +15,6 @@
 #include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/filter.h>
 
-#include <vector>
-
 
 #define TWO_PI (M_PI*2)
 
@@ -55,8 +53,8 @@ enum FFTDirection {
 #define SWAP(a,b) tempr=(a);(a)=(b);(b)=tempr
 
 template <typename T>
-void fourier(T *data, long nn, int isign) {
-	long n,mmax,m,j,istep,i;
+void fourier(T *data, int nn, int isign) {
+	int n,mmax,m,j,istep,i;
 	double wtemp,wr,wpr,wpi,wi,theta;
 	T tempr,tempi;
 
@@ -111,13 +109,13 @@ void fourier(T *data, long nn, int isign) {
 
 
 template <typename T>
-void transform(T *data, size_t n, FFTDirection dir) {
+void transform(T *data, int n, FFTDirection dir) {
 	if ( n < 4 ) return;
 
 	--data;
 	n /= 2;
 
-	long i,i1,i2,i3,i4,n2p3;
+	int i,i1,i2,i3,i4,n2p3;
 	T c1 = 0.5,c2,h1r,h1i,h2r,h2i;
 	double wr,wi,wpr,wpi,wtemp,theta;
 
@@ -172,7 +170,7 @@ void transform(T *data, size_t n, FFTDirection dir) {
 //! output: real data, N points
 //!
 template <typename T>
-void ifft(int n, T *out, vector<Complex> &coeff) {
+void ifft(int n, T *out, ComplexArray &coeff) {
 	int tn = coeff.size()*2;
 	double *inout = reinterpret_cast<double*>(&coeff[0]);
 
@@ -206,7 +204,7 @@ void ifft(int n, T *out, vector<Complex> &coeff) {
 //! output: half complex spectrum, N/2+1 Points
 //!
 template <typename T>
-void fft(vector<Complex> &out, int n, const T *data) {
+void fft(ComplexArray &out, int n, const T *data) {
 	int fftn = /*npow2?*/Filtering::next_power_of_2(n)/*:n*/;
 	if ( fftn <= 0 ) return;
 
@@ -241,16 +239,16 @@ void fft(vector<Complex> &out, int n, const T *data) {
 
 // Explicit template instantiation for float and double types
 template SC_SYSTEM_CORE_API
-void ifft<float>(int n, float *out, vector<Complex> &coeff);
+void ifft<float>(int n, float *out, ComplexArray &coeff);
 
 template SC_SYSTEM_CORE_API
-void ifft<double>(int n, double *out, vector<Complex> &coeff);
+void ifft<double>(int n, double *out, ComplexArray &coeff);
 
 template SC_SYSTEM_CORE_API
-void fft<float>(vector<Complex> &out, int n, const float *data);
+void fft<float>(ComplexArray &out, int n, const float *data);
 
 template SC_SYSTEM_CORE_API
-void fft<double>(vector<Complex> &out, int n, const double *data);
+void fft<double>(ComplexArray &out, int n, const double *data);
 
 
 }

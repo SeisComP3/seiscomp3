@@ -16,12 +16,15 @@
 #include <cstdio>
 #include <string>
 #include <iostream>
+#include <boost/bind.hpp>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/io/recordinput.h>
 
 #include "balanced.h"
+
+#include <seiscomp3/client/queue.ipp>
 
 namespace Seiscomp {
 namespace RecordStream {
@@ -32,7 +35,7 @@ using namespace std;
 using namespace Seiscomp::Core;
 using namespace Seiscomp::IO;
 
-const unsigned int BufferSize = 1024;
+const unsigned int QueueSize = 1024;
 
 
 namespace {
@@ -57,16 +60,18 @@ IMPLEMENT_SC_CLASS_DERIVED(BalancedConnection, Seiscomp::IO::RecordStream,
 
 REGISTER_RECORDSTREAM(BalancedConnection, "balanced");
 
-BalancedConnection::BalancedConnection(): _started(false), _nthreads(0),
+BalancedConnection::BalancedConnection(): _started(false), _nthreads(0), _queue(QueueSize),
 	_stream(std::istringstream::in|std::istringstream::binary) {
 }
 
-BalancedConnection::BalancedConnection(std::string serverloc): _started(false), _nthreads(0),
+BalancedConnection::BalancedConnection(std::string serverloc): _started(false), _nthreads(0), _queue(QueueSize),
 	_stream(std::istringstream::in|std::istringstream::binary) {
 	setSource(serverloc);
 }
 
-BalancedConnection::~BalancedConnection() {}
+BalancedConnection::~BalancedConnection() {
+	close();
+}
 
 bool BalancedConnection::setSource(std::string serverloc) {
 	if ( _started )
@@ -107,7 +112,7 @@ bool BalancedConnection::setSource(std::string serverloc) {
 			throw RecordStreamException("Invalid RecordStream URL");
 		}
 
-		// Source sourrounded by parenthesis
+		// Source surrounded by parentheses
 		if ( serverloc[p1] == '(' ) {
 			++p1;
 			// Find closing parenthesis
@@ -262,44 +267,21 @@ bool BalancedConnection::setTimeout(int seconds) {
 }
 
 void BalancedConnection::close() {
+	boost::mutex::scoped_lock lock(_mtx);
+
 	if ( _rsarray.empty() )
 		return;
 
 	for ( unsigned int i = 0; i < _rsarray.size(); ++i)
 		_rsarray[i].first->close();
-}
 
-void BalancedConnection::putRecord(Record* rec) {
-	{
-		boost::unique_lock<boost::mutex> lock(_mtx);
+	_queue.close();
 
-		while(_buffer.size() >= BufferSize) {
-			_buf_not_full.wait(lock);
-		}
+	for ( list<boost::thread *>::iterator it = _threads.begin(); it != _threads.end(); ++it)
+		(*it)->join();
 
-		_buffer.push_back(rec);
-	}
-
-	_buf_not_empty.notify_one();
-}
-
-Record* BalancedConnection::getRecord() {
-	Record* rec;
-
-	{
-		boost::unique_lock<boost::mutex> lock(_mtx);
-
-		while( _buffer.empty() ) {
-			_buf_not_empty.wait(lock);
-		}
-
-		rec = _buffer.front();
-		_buffer.pop_front();
-	}
-
-	_buf_not_full.notify_one();
-
-	return rec;
+	_threads.clear();
+	_started = false;
 }
 
 void BalancedConnection::acquiThread(RecordStreamPtr rs) {
@@ -309,7 +291,7 @@ void BalancedConnection::acquiThread(RecordStreamPtr rs) {
 
 	try {
 		for ( RecordIterator it = recInput.begin(); it != recInput.end(); ++it )
-			putRecord(*it);
+			_queue.push(*it);
 	}
 	catch ( OperationInterrupted& e ) {
 		SEISCOMP_DEBUG("Interrupted acquisition thread, msg: '%s'", e.what());
@@ -320,7 +302,7 @@ void BalancedConnection::acquiThread(RecordStreamPtr rs) {
 
 	SEISCOMP_DEBUG("Finished acquisition thread");
 
-	putRecord(NULL);
+	_queue.push(NULL);
 }
 
 std::istream& BalancedConnection::stream() {
@@ -336,7 +318,7 @@ std::istream& BalancedConnection::stream() {
 	}
 
 	while (_nthreads > 0) {
-		Record* rec = getRecord();
+		RecordPtr rec = _queue.pop();
 
 		if (rec == NULL) {
 			--_nthreads;
@@ -346,18 +328,11 @@ std::istream& BalancedConnection::stream() {
 		_stream.clear();
 		_stream.str(rec->raw()->str());
 
-		delete rec;
-
 		return _stream;
 	}
 
 	SEISCOMP_DEBUG("All acquisition threads finished -> set stream's eofbit");
 
-	for ( list<boost::thread *>::iterator it = _threads.begin(); it != _threads.end(); ++it)
-		(*it)->join();
-
-	_started = false;
-	_threads.clear();
 	_stream.clear(ios::eofbit);
 
 	return _stream;

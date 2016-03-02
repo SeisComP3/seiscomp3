@@ -21,9 +21,11 @@
 #include <QPolygon>
 #include <QPainter>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/record.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core/recordsequence.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

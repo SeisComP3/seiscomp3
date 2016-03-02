@@ -67,7 +67,7 @@
 #define _SEISMO 9
 #define _BUTTERWORTH ""
 
-ADD_SC_PLUGIN("Md duration magnitude plugin", "IPGP <www.ipgp.fr>", 0, 1, 1)
+ADD_SC_PLUGIN("Md duration magnitude plugin", "IPGP <www.ipgp.fr>", 0, 1, 2)
 
 #define AMPTAG "[Amp] [Md]"
 #define MAGTAG "[Mag] [Md]"
@@ -323,7 +323,7 @@ void AmplitudeProcessor_Md::initFilter(double fsamp) {
 		switch ( aFile.SEISMO ) {
 			case 1:
 				AmplitudeProcessor::setFilter(new Filtering::IIR::WoodAndersonFilter<
-				        double>(Velocity));
+				        double>(Velocity, _config.woodAndersonResponse));
 			break;
 			case 2:
 				AmplitudeProcessor::setFilter(new Filtering::IIR::Seismometer5secFilter<
@@ -448,7 +448,7 @@ bool AmplitudeProcessor_Md::deconvolveData(Response* resp,
 		gm = Math::Velocity;
 
 	Math::Restitution::FFT::TransferFunctionPtr cascade;
-	Math::SeismometerResponse::WoodAnderson woodAndersonResp(gm);
+	Math::SeismometerResponse::WoodAnderson woodAndersonResp(gm, _config.woodAndersonResponse);
 	Math::SeismometerResponse::Seismometer5sec seis5sResp(gm);
 	Math::SeismometerResponse::L4C_1Hz l4c1hzResp(gm);
 
@@ -499,9 +499,6 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 	double amax, Imax, ofs_sig, amp_sig;
 	DoubleArrayPtr d;
 
-	if ( *snr < aFile.SNR_MIN )
-		SEISCOMP_DEBUG("%s computed SNR is under configured SNR MIN", AMPTAG);
-
 	if ( _computeAbsMax ) {
 		size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
 		amax = fabs(data[imax] - offset);
@@ -521,39 +518,44 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 	SEISCOMP_DEBUG("%s Amplitude max: %.2f", AMPTAG, amax);
 
 	//! searching for Coda second by second through the end of the window
+	//! if snrMin config is not 0 (config file or waveform review window)
 	//! TODO: elevate accuracy by using a nanometers scale (maybe)
-	unsigned int i = si1;
-	bool hasEndSignal = false;
-	double calculatedSnr = -1;
+	if ( _config.snrMin != 0 ) {
 
-	for (i = (int) Imax; i < i2; i = i + 1 * (int) _stream.fsamp) {
+		unsigned int i = si1;
+		bool hasEndSignal = false;
+		double calculatedSnr = -1;
 
-		int window_end = i + 1 * (int) _stream.fsamp;
-		d = static_cast<DoubleArray*>(data.slice(i, window_end));
+		for (i = (int) Imax; i < i2; i = i + 1 * (int) _stream.fsamp) {
 
-		//! computes pre-arrival offset
-		ofs_sig = d->median();
+			int window_end = i + 1 * (int) _stream.fsamp;
+			d = static_cast<DoubleArray*>(data.slice(i, window_end));
 
-		//! computes rms after removing offset
-		amp_sig = 2 * d->rms(ofs_sig);
+			//! computes pre-arrival offset
+			ofs_sig = d->median();
 
-		if ( amp_sig / *_noiseAmplitude <= aFile.SNR_MIN ) {
-			SEISCOMP_DEBUG("%s End of signal found! (%.2f <= %.2f)", AMPTAG,
-			    (amp_sig / *_noiseAmplitude), aFile.SNR_MIN);
-			hasEndSignal = true;
-			calculatedSnr = amp_sig / *_noiseAmplitude;
-			break;
+			//! computes rms after removing offset
+			amp_sig = 2 * d->rms(ofs_sig);
+
+			if ( amp_sig / *_noiseAmplitude <= _config.snrMin ) {
+				SEISCOMP_DEBUG("%s End of signal found! (%.2f <= %.2f)", AMPTAG,
+				    (amp_sig / *_noiseAmplitude), _config.snrMin);
+				hasEndSignal = true;
+				calculatedSnr = amp_sig / *_noiseAmplitude;
+				break;
+			}
 		}
-	}
 
-	if ( !hasEndSignal ) {
-		SEISCOMP_ERROR("%s SNR stayed over configured SNR_MIN! (%.2f > %.2f), "
-			"skipping magnitude calculation for this station", AMPTAG,
-		    calculatedSnr, aFile.SNR_MIN);
-		return false;
-	}
+		if ( !hasEndSignal ) {
+			SEISCOMP_ERROR("%s SNR stayed over configured SNR_MIN! (%.2f > %.2f), "
+				"skipping magnitude calculation for this station", AMPTAG,
+			    calculatedSnr, _config.snrMin);
+			return false;
+		}
 
-	dt->index = i;
+		dt->index = i;
+	}
+	else dt->index = Imax;
 
 	//amplitude->value = 2 * amp_sig; //! actually it would have to be max. peak-to-peak
 	amplitude->value = amp_sig;
@@ -568,7 +570,7 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 	// Convert m/s to nm/s
 	amplitude->value *= 1.E09;
 
-	*period = i - i1 + (_config.signalBegin * _stream.fsamp);
+	*period = dt->index - i1 + (_config.signalBegin * _stream.fsamp);
 
 	SEISCOMP_DEBUG("%s calculated event amplitude = %.2f", AMPTAG, amplitude->value);
 	SEISCOMP_DEBUG("%s calculated signal end at %.2f ms from P phase", AMPTAG, *period);

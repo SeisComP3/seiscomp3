@@ -131,7 +131,7 @@ def dump_paths():
   print "SEISCOMP_ROOT=%s" % SEISCOMP_ROOT
   print "PATH=%s" % os.environ["PATH"]
   print "%s=%s" % (SysLibraryPathVar, os.environ[SysLibraryPathVar])
-  if SysFrameWorkPathVar:
+  if SysFrameworkPathVar:
      print "%s=%s" % (SysFrameworkPathVar, os.environ[SysFrameworkPathVar])
   print "PYTHONPATH=%s" % sys.path
   print "CWD=%s" % os.getcwd()
@@ -157,10 +157,18 @@ def start_module(mod):
 
 
 def stop_module(mod):
-  mod.stop()
+  try:
+    if not mod.stop():
+      error("Failed to stop %s: unknown error" % mod.name)
+      return 1
+  except Exception as e:
+    error("Failed to stop %s: %s" % (mod.name, str(e)))
+    return 1
+
   # Delete runfile
   try: os.remove(env.runFile(mod.name))
   except: pass
+
   return 0
 
 
@@ -168,7 +176,6 @@ def start_kernel_modules():
   for mod in mods:
     if isinstance(mod, seiscomp3.Kernel.CoreModule):
       start_module(mod)
-
 
 
 def stop_kernel_modules():
@@ -922,12 +929,21 @@ if os.getuid() == 0 and not asRoot and action != "install-deps":
 # Initialize the environment
 # ------------------------------------------------------------------------------
 
-# Resolve symlinks (if any)
+# Resolve symlinks to files (if any)
 if os.path.islink(sys.argv[0]):
-  sys.argv[0] = os.path.realpath(sys.argv[0])
+  sys.argv[0] = os.readlink(sys.argv[0])
 
-# Guess SEISCOMP_ROOT from path of called script
-SEISCOMP_ROOT = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]), ".."))
+# Guess SEISCOMP_ROOT from path of called script, directory links are not
+# resolved allowing to create separate SC3 environments
+if os.path.isabs(sys.argv[0]):
+  path = sys.argv[0]
+else:
+  cwd = os.getenv('PWD')
+  if cwd is None:
+    cwd = os.getcwd()
+  path = os.path.join(cwd, sys.argv[0])
+
+SEISCOMP_ROOT = os.path.dirname(os.path.dirname(os.path.normpath(path)))
 INIT_PATH = os.path.join(SEISCOMP_ROOT, "etc", "init")
 DESC_PATH = os.path.join(SEISCOMP_ROOT, "etc", "descriptions")
 ALIAS_FILE = os.path.join(DESC_PATH, "aliases")

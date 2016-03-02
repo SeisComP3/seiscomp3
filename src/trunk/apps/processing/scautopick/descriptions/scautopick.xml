@@ -169,6 +169,15 @@
 				<option flag="" long-flag="offline">
 					<description>Do not connect to a messaging server and do not use the database.</description>
 				</option>
+				<option flag="" long-flag="playback">
+					<description>
+					Switches to playback mode which does not request a particular time window from
+					the input data source. This implies that all records are forwarded to scautopick
+					if files are being used. Without this option scautopick sets the requested
+					start time to NOW-leadTime and therefore would not work anymore with
+					older datasets in offline mode or when running playbacks.
+					</description>
+				</option>
 				<option flag="" long-flag="ep">
 					<description>
 						Outputs an XML event parameters file containing all picks and amplitudes.
@@ -251,6 +260,12 @@
 			<parameter name="timeCorr" type="double" default="-0.8">
 				<description>
 					The time correction applied to a detected pick.
+				</description>
+			</parameter>
+			<parameter name="sensitivityCorrection" type="boolean" default="false">
+				<description>
+					Defines whether the detector applies sensitivity correction
+					(applying the gain) or not in advance to filter the data.
 				</description>
 			</parameter>
 		</configuration>

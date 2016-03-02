@@ -11,6 +11,9 @@
  ***************************************************************************/
 
 
+#define SEISCOMP_COMPONENT ComputeAmplitudes
+
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/gui/datamodel/calculateamplitudes.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/math/geo.h>
@@ -136,13 +139,10 @@ void CalculateAmplitudes::setAmplitudeTypes(const TypeSet &types) {
 
 
 int CalculateAmplitudes::exec() {
-	//
-
 	if ( !process() )
 		return QDialog::Rejected;
 
 	return QDialog::exec();
-	//return QDialog::Accepted;
 }
 
 
@@ -219,8 +219,6 @@ bool CalculateAmplitudes::process() {
 
 	_processors.clear();
 	_ui.table->setRowCount(0);
-
-	Core::TimeWindow acTimeWindow;
 
 	if ( !_origin || (_recomputeAmplitudes && !_thread) )
 		return false;
@@ -460,8 +458,6 @@ bool CalculateAmplitudes::process() {
 		_thread->setTimeWindow(_timeWindow);
 		_thread->start();
 	}
-	//else
-	//	_ui.btnOK->setEnabled(true);
 
 	QApplication::restoreOverrideCursor();
 
@@ -548,13 +544,21 @@ void CalculateAmplitudes::addProcessor(
 			pick->waveformID().networkCode(), pick->waveformID().stationCode(),
 			pick->waveformID().locationCode(), pick->waveformID().channelCode().substr(0,2),
 			&SCCoreApp->configuration(), keys)) ) {
+		pair<TableRowMap::iterator, TableRowMap::iterator> itp = _rows.equal_range(proc.get());
+		for ( TableRowMap::iterator row_it = itp.first; row_it != itp.second; ++row_it )
+			setError(row_it->second, QString("Setup failed"));
 		return;
 	}
 
 	// Set depth hint
 	try {
 		proc->setHint(WaveformProcessor::Depth, _origin->depth());
-		if ( proc->isFinished() ) return;
+		if ( proc->isFinished() ) {
+			pair<TableRowMap::iterator, TableRowMap::iterator> itp = _rows.equal_range(proc.get());
+			for ( TableRowMap::iterator row_it = itp.first; row_it != itp.second; ++row_it )
+				setError(row_it->second, QString("%1 (%2)").arg(proc->status().toString()).arg(proc->statusValue(), 0, 'f', 2));
+			return;
+		}
 	}
 	catch ( ... ) {}
 
@@ -659,11 +663,15 @@ void CalculateAmplitudes::addProcessor(Processing::AmplitudeProcessor *proc,
 void CalculateAmplitudes::subscribeData(Processing::AmplitudeProcessor *proc,
                                         const DataModel::Pick *pick,
                                         int c) {
-	if ( proc->streamConfig((WaveformProcessor::Component)c).code().empty() )
+	if ( proc->streamConfig((WaveformProcessor::Component)c).code().empty() ) {
+		SEISCOMP_WARNING("Empty channel code");
 		return;
+	}
 
-	if ( proc->streamConfig((WaveformProcessor::Component)c).gain == 0.0 )
+	if ( proc->streamConfig((WaveformProcessor::Component)c).gain == 0.0 ) {
+		SEISCOMP_WARNING("Invalid gain");
 		return;
+	}
 
 	WaveformStreamID cwid = pick->waveformID();
 	cwid.setChannelCode(proc->streamConfig((WaveformProcessor::Component)c).code());

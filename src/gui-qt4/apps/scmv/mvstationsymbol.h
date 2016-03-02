@@ -30,6 +30,7 @@ class MvStationSymbol : public Seiscomp::Gui::StationSymbol {
 		void setIdDrawingColor(const QColor& color);
 		void setIdDrawingEnabled(bool val);
 		bool isIdDrawingEnabled() const;
+		void setDrawFullID(bool);
 
 		void setCharacter(const QChar& c);
 		void setCharacterDrawingColor(const QColor& color);
@@ -65,6 +66,7 @@ class MvStationSymbol : public Seiscomp::Gui::StationSymbol {
 
 		QColor      _idDrawingColor;
 		bool        _isDrawingIdEnabled;
+		bool        _drawFullId;
 
 		QChar       _char;
 		QColor      _characterDrawingColor;

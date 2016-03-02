@@ -70,6 +70,7 @@ class PGAV : public TimeWindowProcessor {
 			bool    naturalPeriodsLog;
 			double  Tmin;
 			double  Tmax;
+			bool    clipTmax;
 			bool    fixedPeriods;
 		};
 
@@ -125,6 +126,8 @@ class PGAV : public TimeWindowProcessor {
 
 		void setSaturationThreshold(double);
 		void setPadLength(double);
+
+		void setClipTmaxToLowestFilterFrequency(bool);
 
 		bool setup(const Settings &settings);
 

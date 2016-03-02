@@ -43,6 +43,27 @@ struct SC_SYSTEM_CORE_API ConfigDelegate : Config::Logger {
 		Config::Symbol *symbol;
 	};
 
+	enum Operation {
+		Added,
+		Removed,
+		Updated
+	};
+
+	struct Change {
+		Change() {}
+		Change(Operation op, const std::string &var,
+		       const std::string &old_content, const std::string &new_content)
+		: operation(op), variable(var)
+		, oldContent(old_content), newContent(new_content) {}
+
+		Operation   operation;
+		std::string variable;
+		std::string oldContent;
+		std::string newContent;
+	};
+
+	typedef std::vector<Change> ChangeList;
+
 	virtual void aboutToRead(const char *filename) {}
 	virtual void finishedReading(const char *filename) {}
 
@@ -50,6 +71,15 @@ struct SC_SYSTEM_CORE_API ConfigDelegate : Config::Logger {
 	//! or false to go on.
 	virtual bool handleReadError(const char *filename) { return false; }
 
+	virtual void aboutToWrite(const char *filename) {}
+	virtual void finishedWriting(const char *filename, const ChangeList &changes) {}
+
+	//! Notification about a write error of a file
+	virtual void hasWriteError(const char *filename) {}
+
+	//! Return true to cause the model to skip writing to the file
+	//! or false to go on.
+	virtual bool handleWriteTimeMismatch(const char *filename, const ChangeList &changes) { return false; }
 	virtual void caseSensitivityConflict(const CSConflict &) {}
 };
 
@@ -400,7 +430,8 @@ class SC_SYSTEM_CORE_API ModuleBinding : public Binding {
 		void add(BindingCategory *);
 		BindingCategory *category(const std::string &name) const;
 
-		bool writeConfig(const std::string &filename) const;
+		bool writeConfig(const std::string &filename,
+		                 ConfigDelegate *delegate = NULL) const;
 		void dump(std::ostream &os) const;
 
 		//! Returns a container at path @path@.
@@ -569,7 +600,8 @@ class SC_SYSTEM_CORE_API Station : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		bool readConfig(const char *filename);
-		bool writeConfig(const char *filename) const;
+		bool writeConfig(const char *filename,
+		                 ConfigDelegate *delegate = NULL) const;
 
 		void setConfig(const std::string &module, const std::string &profile);
 
@@ -615,8 +647,10 @@ class SC_SYSTEM_CORE_API Model : public Core::BaseObject {
 		bool create(SchemaDefinitions *def);
 		bool readConfig(int updateMaxStage = Environment::CS_LAST,
 		                ConfigDelegate *delegate = NULL);
-		bool writeConfig(int stage = Environment::CS_CONFIG_APP);
-		bool writeConfig(Module *, const std::string &filename, int stage);
+		bool writeConfig(int stage = Environment::CS_CONFIG_APP,
+		                 ConfigDelegate *delegate = NULL);
+		bool writeConfig(Module *, const std::string &filename, int stage,
+		                 ConfigDelegate *delegate = NULL);
 
 
 	// ------------------------------------------------------------------
@@ -668,7 +702,10 @@ class SC_SYSTEM_CORE_API Model : public Core::BaseObject {
 	//  Attributes
 	// ------------------------------------------------------------------
 	public:
-		typedef std::map<std::string, SymbolMapItemPtr> SymbolFileMap;
+		struct SymbolFileMap : std::map<std::string, SymbolMapItemPtr> {
+			time_t lastModified;
+		};
+
 		typedef std::map<std::string, SymbolFileMap>    SymbolMap;
 		typedef std::map<std::string, Module*>          ModMap;
 		typedef std::set<std::string>                   Categories;

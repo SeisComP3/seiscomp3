@@ -77,7 +77,7 @@
      <x>0</x>
      <y>0</y>
      <width>824</width>
-     <height>30</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu" >
@@ -101,6 +101,7 @@
     <addaction name="showEventTableWidgetAction" />
     <addaction name="showWaveformPropagationAction" />
     <addaction name="showStationIdAction" />
+    <addaction name="actionShowStationChannelCodes" />
     <addaction name="showMapLegendAction" />
     <addaction name="showHistoricOriginsAction" />
     <addaction name="separator" />
@@ -119,9 +120,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>573</y>
+     <y>574</y>
      <width>824</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -264,6 +265,17 @@
    </property>
    <property name="text" >
     <string>Center Latest Origin</string>
+   </property>
+  </action>
+  <action name="actionShowStationChannelCodes" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Show station channel codes</string>
    </property>
   </action>
  </widget>

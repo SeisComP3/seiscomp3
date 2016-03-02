@@ -17,7 +17,9 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/map/mapwidget.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/origin.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 
@@ -61,6 +63,7 @@ class SC_GUI_API OriginLocatorMap : public MapWidget {
 
 	public slots:
 		void setDrawStations(bool);
+		void setDrawStationLines(bool);
 		void setWaveformPropagation(bool);
 
 
@@ -110,6 +113,7 @@ class SC_GUI_API OriginLocatorMap : public MapWidget {
 		DataModel::OriginPtr _origin;
 		OriginSymbol *_originSymbol;
 		bool _drawStations;
+		bool _drawStationsLines;
 		bool _interactive;
 		bool _waveformPropagation;
 		bool _enabledCreateOrigin;

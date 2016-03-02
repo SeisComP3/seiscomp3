@@ -52,7 +52,7 @@ void FileOutput::log(const char* channelName,
                      time_t time) {
 	tm currentTime;
 
-	currentTime = *localtime(&time);
+	currentTime = _useUTC ? *gmtime(&time) : *localtime(&time);
 
 	_stream << (currentTime.tm_year + 1900) << "/";
 

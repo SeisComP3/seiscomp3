@@ -227,6 +227,7 @@ WFParam::Config::Config() {
 	naturalPeriodsFixed = false;
 	Tmin = 0;
 	Tmax = 5;
+	clipTmax = true;
 
 	afterShockRemoval = true;
 	eventCutOff = true;
@@ -382,6 +383,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT(_config.naturalPeriodsLog, "wfparam.naturalPeriods.log");
 	NEW_OPT(_config.Tmin, "wfparam.Tmin");
 	NEW_OPT(_config.Tmax, "wfparam.Tmax");
+	NEW_OPT(_config.clipTmax, "wfparam.clipTmax");
 	NEW_OPT(_config.afterShockRemoval, "wfparam.afterShockRemoval");
 	NEW_OPT(_config.eventCutOff, "wfparam.eventCutOff");
 	NEW_OPT(_config.order, "wfparam.filter.order",
@@ -1618,6 +1620,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 	proc->setFilterParams(_config.order, _filter.first, _filter.second);
 	proc->setDeconvolutionEnabled(_config.enableDeconvolution);
 	proc->setDurationScale(_config.durationScale);
+	proc->setClipTmaxToLowestFilterFrequency(_config.clipTmax);
 
 	// Override used component
 	proc->setUsedComponent(component);

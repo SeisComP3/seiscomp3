@@ -653,6 +653,13 @@ bool AmplitudeProcessor::computeNoise(const DoubleArray &data, int i1, int i2, d
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool AmplitudeProcessor::setup(const Settings &settings) {
+	// Reset Wood-Anderson response to default
+	_config.woodAndersonResponse = Math::SeismometerResponse::WoodAnderson::Config();
+
+	settings.getValue(_config.woodAndersonResponse.gain, "amplitudes.WoodAnderson.gain");
+	settings.getValue(_config.woodAndersonResponse.T0, "amplitudes.WoodAnderson.T0");
+	settings.getValue(_config.woodAndersonResponse.h, "amplitudes.WoodAnderson.h");
+
 	try {
 		if ( settings.getBool("amplitudes." + _type + ".enable") == false )
 			return false;

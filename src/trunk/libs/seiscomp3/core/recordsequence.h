@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -14,31 +14,15 @@
 #ifndef __SEISCOMP_RECORDSEQUENCE_H__
 #define __SEISCOMP_RECORDSEQUENCE_H__
 
-#include <deque>
-#include <seiscomp3/core/record.h>
+
 #include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/core/timewindow.h>
 
+#include <deque>
+
+
 namespace Seiscomp {
 
-
-namespace Gap {
-
-//! predefined methods for filling up gaps
-//!
-//! fill up gaps with zeroes
-Record* fillZeroes(const Record* prev, const Record* next);
-
-//! linear interpolate between last and recurrent sample
-Record* linearInterpolate(const Record* prev, const Record* next);
-
-}
-
-//! define a gap filling function type
-typedef Record*(*gapFillingFunction)(const Record* previousRecord, const Record* nextRecord);
-
-
-DEFINE_SMARTPOINTER(RecordSequence);
 
 /**
  * RecordSequence
@@ -46,52 +30,64 @@ DEFINE_SMARTPOINTER(RecordSequence);
  * A container class for record sequences (i.e. records sorted in time)
  * The class RecordSequence is a container for Record objects. It forms
  * the basis for the implementation as RingBuffer or TimeWindowBuffer.
- *
- * Originally, it was supposed to be a derivative of Record as well,
- * offering the same interface in order to access a sequence of records
- * as a whole; this functionality comes with some problems and for the
- * time being has been postponed; maybe it's not required at all.
  */
-class SC_SYSTEM_CORE_API RecordSequence : public std::deque<RecordCPtr> // , public Record
-{
+class SC_SYSTEM_CORE_API RecordSequence : public std::deque<RecordCPtr> {
+	// ----------------------------------------------------------------------
+	//  Public types
+	// ----------------------------------------------------------------------
 	public:
 		typedef std::deque<Core::TimeWindow> TimeWindowArray;
+		typedef std::pair<double,double> Range;
 
+
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	public:
-		RecordSequence(double tolerance=0.5, double maxGapLength=600.0)
-			: _tolerance(tolerance),
-			  _maxGapLengthForFilling(maxGapLength)
-		 {}
+		//! C'tor
+		RecordSequence(double tolerance=0.5);
 
-		virtual ~RecordSequence() {}
+		//! D'tor
+		virtual ~RecordSequence();
 
+
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
 		//! Feed a record to buffer. Returns true if the record
 		//! was actually added.
 		virtual bool feed(const Record*) = 0;
 
 		//! Returns a copy of the sequence including all fed
 		//! records.
-		virtual RecordSequence* copy() const = 0;
+		virtual RecordSequence *copy() const = 0;
 
 		//! Returns a cloned sequence without containing records.
-		virtual RecordSequence* clone() const = 0;
+		virtual RecordSequence *clone() const = 0;
 
-		//! get the time tolerance in samples
+		//! Return the time tolerance in samples
 		//! The tolerance is the maximum gap/overlap (in samples)
 		//! that will not break the continuity of the sequence.
 		double tolerance() const;
 
-		//! set the time tolerance in samples
+		//! Set the time tolerance in samples
 		void setTolerance(double);
 
-		//! Return Record's as one continuous Record
-		Record* continuousRecord() const;
-
-		//! same but trim to specified time window
-		Record* continuousRecord(const Core::TimeWindow &tw) const;
+		//! Return Record's as one continuous record. Compiled in is support for
+		//! float, double and int. If interpolation is enabled gaps will be linearly
+		//! interpolated between the last and the next sample.
+		template <typename T>
+		GenericRecord *continuousRecord(const Seiscomp::Core::TimeWindow *tw = NULL,
+		                                bool interpolate = false) const;
 
 		//! Time window currently in buffer, irrespective of gaps
 		Core::TimeWindow timeWindow() const;
+
+		//! The amplitude range in a given time window.
+		//! Returns (0,0) if the sequence is empty or no records fall inside
+		//! the given optional time window.
+		Range amplitudeRange(const Seiscomp::Core::TimeWindow *tw = NULL) const;
 
 		//! returns the continuous time windows available
 		//! This is usually one time window but may be split into
@@ -104,56 +100,32 @@ class SC_SYSTEM_CORE_API RecordSequence : public std::deque<RecordCPtr> // , pub
 		//! Does the buffer contain all data for the time window?
 		bool contains(const Core::TimeWindow &tw) const;
 
-		//! Record interface to return the data array for
-		//! the record. The array returned is a copy.
-		// FIXME currently dummy implementation
-//                Array* data() const { return NULL; }
-
-		//! Record interface
-		//! 'Do nothing' should be enough for buffering only
-//		void getFrom(std::istream &in) throw(Core::StreamException) {}
-
-		//! Fill gaps using associated method
-		//! Skip filling, if gap length is greather than _maxGapLengthForFilling [seconds]
-		//! We provide this methods: Gap::fillZeroes, Gap::linearInterpolate, (Gap::spline)
-		//! Default: Gap::linearInterpolate
-		virtual bool fillGaps(gapFillingFunction=Gap::linearInterpolate);
-
-		//! return percentage of available data within TimeWindow
+		//! Returns the percentage of available data within a given time window
 		double availability(const Core::TimeWindow& tw) const;
 
+		//! Returns the number of stored records, same as size().
+		size_t recordCount() const;
 
-		unsigned int recordCount() const;
-
-		// determine average timing quality from the records stored in this sequence
-		//
-		// returns true on success; in that case, count and quality are set
+		//! Determine average timing quality from the records stored in this
+		//! sequence.
+		//! Returns true on success; in that case, count and quality are set
 		bool timingQuality(int &count, float &quality) const;
 
+
+	// ----------------------------------------------------------------------
+	//  Protected interface
+	// ----------------------------------------------------------------------
 	protected:
 		bool alreadyHasRecord(const Record*) const;
 		bool findInsertPosition(const Record*, iterator*);
 
+
+	// ----------------------------------------------------------------------
+	//  Members
+	// ----------------------------------------------------------------------
 	protected:
 		double _tolerance;
-		double _maxGapLengthForFilling; // in seconds
-
 };
-
-inline double RecordSequence::tolerance() const
-{
-	return _tolerance;
-}
-
-inline void RecordSequence::setTolerance(double dt)
-{
-	_tolerance = dt;
-}
-
-inline unsigned int RecordSequence::recordCount() const
-{
-	return size();
-}
 
 
 /**
@@ -163,49 +135,38 @@ inline unsigned int RecordSequence::recordCount() const
  * The records are stored only if they at least overlap with the fixed time
  * window. This is useful if only a certain fixed time window is of interest.
  */
-DEFINE_SMARTPOINTER(TimeWindowBuffer);
-
-class SC_SYSTEM_CORE_API TimeWindowBuffer : public RecordSequence
-{
+class SC_SYSTEM_CORE_API TimeWindowBuffer : public RecordSequence {
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	public:
-		TimeWindowBuffer(const Core::TimeWindow &tw, double tolerance=0.5)
-			: _timeWindow(tw)  { _tolerance=tolerance; }
-		~TimeWindowBuffer() {}
+		//! C'tor
+		TimeWindowBuffer(const Core::TimeWindow &tw, double tolerance=0.5);
 
-		//! Feed a record to buffer. Returns true upon acceptance
-		bool feed(const Record*);
 
-		RecordSequence* copy() const;
+	// ----------------------------------------------------------------------
+	//  Public RecordSequence interface overrides
+	// ----------------------------------------------------------------------
+	public:
+		virtual bool feed(const Record*);
+		virtual RecordSequence *copy() const;
+		virtual RecordSequence *clone() const;
 
-		RecordSequence* clone() const;
 
-		//! Fill gaps using associated method
-		//! Skip filling, if gap length is greater than _maxGapLengthForFilling [seconds]
-		//! We provide this methods: Gap::fillZeroes, Gap::linearInterpolate
-		//! Default: Gap::linearInterpolate
-		//! here: re-implemented from RecordSequence::fillGaps
-		//! --> fill up missing data at beginning/end of TimeWindowBuffer
-		//! --> assume first/last sample has value zero, then apply fill method
-		bool fillGaps(gapFillingFunction=Gap::linearInterpolate);
-
-		//! return percentage of available data within TimeWindowBuffer's TimeWindow
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		//! Return percentage of available data within TimeWindowBuffer's TimeWindow
 		double availability() const;
 
-		//! returns the gaps
-		// This will be a re-implementation because in a time window
-		// buffer, unavailable data also should count as a gap
-		// => DISCUSSION NEEDED
-//		TimeWindowArray gaps() const;
 
+	// ----------------------------------------------------------------------
+	//  Members
+	// ----------------------------------------------------------------------
 	private:
 		Core::TimeWindow _timeWindow;
 };
-
-
-
-
-
-
 
 
 /**
@@ -217,10 +178,10 @@ class SC_SYSTEM_CORE_API TimeWindowBuffer : public RecordSequence
  * stored. Note that this doesn't usually guarantee a certain time window
  * length.
  */
-DEFINE_SMARTPOINTER(RingBuffer);
-
-class SC_SYSTEM_CORE_API RingBuffer : public RecordSequence
-{
+class SC_SYSTEM_CORE_API RingBuffer : public RecordSequence {
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	public:
 		//! Create RingBuffer for fixed maximum number of records
 		//! This version stores at most nmax most recent records.
@@ -232,20 +193,49 @@ class SC_SYSTEM_CORE_API RingBuffer : public RecordSequence
 		//! end time of the last record.
 		RingBuffer(Core::TimeSpan span, double tolerance=0.5);
 
-		//! Feed a record to buffer. Returns true upon acceptance
-		bool feed(const Record*);
 
-		RecordSequence* copy() const;
+	// ----------------------------------------------------------------------
+	//  Public RecordSequence interface overrides
+	// ----------------------------------------------------------------------
+	public:
+		virtual bool feed(const Record*);
+		virtual RecordSequence *copy() const;
+		virtual RecordSequence *clone() const;
 
-		RecordSequence* clone() const;
 
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
 		//! clear the buffer
 		void reset() { clear(); }
-	private:
-		unsigned int _nmax;
-		Core::TimeSpan _span;
 
+
+	// ----------------------------------------------------------------------
+	//  Members
+	// ----------------------------------------------------------------------
+	private:
+		unsigned int   _nmax;
+		Core::TimeSpan _span;
 };
+
+
+
+// ----------------------------------------------------------------------
+//  Inline implementations
+// ----------------------------------------------------------------------
+
+inline double RecordSequence::tolerance() const {
+	return _tolerance;
+}
+
+inline void RecordSequence::setTolerance(double dt) {
+	_tolerance = dt;
+}
+
+inline size_t RecordSequence::recordCount() const {
+	return size();
+}
 
 
 }

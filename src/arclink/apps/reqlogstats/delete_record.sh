@@ -1,16 +1,22 @@
 #!/bin/sh
 #
-# Helper script to manually remove a day e.g. due to a bad report:
+# Helper script to manually remove a day from the EIDA reqlogstats
+# database. For instance, due to a bad report, or when there are
+# problems adding a new DCID or a change in source.
+#
+# First shows what should be done, leaving the actual DELETEs to you.
 #
 # Begun by Peter L. Evans, May 2014?
 # <pevans@gfz-potsdam.de>
+#
+# Copyright (C) Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
 #
 # ----------------------------------------------------------------------
 set -u
 
 progname=`basename $0`
 
-function show_usage() {
+show_usage() {
   echo "Usage: ${progname} {db} {DCID | id} {date}"
   cat <<EOF
 Remove a record from all tables for the report.
@@ -23,7 +29,7 @@ EOF
 }
 
 
-function examine() {
+examine() {
         echo "Looking into DB for relevant records..."
 
 	echo "Don't remove this row in ArcStatsSource:"
@@ -32,19 +38,35 @@ SELECT * FROM ArcStatsSource where id='${src}'; /* Don't delete this! */
 EOF
 
 	echo "Do remove all of these:"
-	sqlite3 ${db} <<EOF
-SELECT * FROM ArcStatsClientIP where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsMessages where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsNetwork where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsReport where start_day = "${day}";
-SELECT * FROM ArcStatsRequest where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsStation where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsSummary where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsUser where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsUserIP where start_day = "${day}" and src='${src}';
-SELECT * FROM ArcStatsVolume where start_day = "${day}" and src='${src}';
+	sqlite3 ${db} <<EOF | tee list
+SELECT * FROM ArcStatsClientIP where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsMessages where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsNetwork where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsReport where start_day = '${day}';
+SELECT * FROM ArcStatsRequest where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsStation where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsSummary where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsUser where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsUserIP where start_day = '${day}' and src='${src}';
+SELECT * FROM ArcStatsVolume where start_day = '${day}' and src='${src}';
 
 EOF
+	lines=$(cat list | wc -l)
+	rm list
+	echo "Number of records found: ${lines}"
+
+	if [ ${lines} -gt 0 ] ; then
+		echo
+		echo "Now carefully cut and paste from the following lines:"
+		echo "sqlite3 ${db}"
+		for table in ArcStatsClientIP ArcStatsMessages ArcStatsNetwork ArcStatsRequest ArcStatsStation ArcStatsSummary ArcStatsUser ArcStatsUserIP ArcStatsVolume ; do
+			echo "DELETE FROM ${table} WHERE start_day = '${day}' AND src='${src}';"
+		done
+		echo "## DELETE FROM ArcStatsReport WHERE start_day = '${day}';"
+		echo "SELECT * FROM ArcStatsReport where start_day = '${day}';"
+		echo "SELECT * FROM ArcStatsSummary where start_day = '${day}';"
+		echo "## (the offending report should be gone from the summary table)"
+	fi
 }
 
 if [ $# -ne 3 ] ; then
@@ -81,7 +103,7 @@ fi
 examine
 
 # Then:
-# sqlite> DELETE FROM ArcStatsSummary where start_day = "${day}" and src="${src}";
+# sqlite> DELETE FROM ArcStatsSummary where start_day = '${day}' and src="${src}";
 # and so on...
 
 # Make sure the offending e-mail isn't in ~/eida_stats, otherwise

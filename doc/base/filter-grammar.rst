@@ -53,16 +53,6 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
    :param timespan: Time span in seconds
 
 
-.. py:function:: BW(order, lo-freq, hi-freq)
-
-   Butterworth Bandpass filter (BW) realized as a causal recursive IIR (infinite impulse response)
-   filter. An arbitrary bandpass filter can be created for given order and corner frequencies.
-
-   :param order: The filter order
-   :param lo-freq: The lower corner frequency
-   :param hi-freq: The upper corner frequency
-
-
 .. py:function:: BW_LP(order, hi-freq)
 
    Butterworth lowpass filter realized as a causal recursive IIR (infinite impulse response) filter.
@@ -88,6 +78,21 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
    :param hi-freq: The upper corner frequency
 
 
+.. py:function:: BW(order, lo-freq, hi-freq)
+
+   Alias for :py:func:`high-low-pass filter<BW_HLP()>`.
+
+
+.. py:function:: BW_BP(order, lo-freq, hi-freq)
+
+   Butterworth Bandpass filter (BW) realized as a causal recursive IIR (infinite impulse response)
+   filter. An arbitrary bandpass filter can be created for given order and corner frequencies.
+
+   :param order: The filter order
+   :param lo-freq: The lower corner frequency
+   :param hi-freq: The upper corner frequency
+
+
 .. py:function:: DIFF
 
    Differentiation filter realized as a recursive IIR (infinite impulse response) differentiation
@@ -97,7 +102,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 
    .. code-block:: py
 
-      s' = (s-v1) * dt
+      s' = (s-v1) / dt
       v1 = s;
 
 
@@ -146,6 +151,19 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 
    :param timespan: The timespan in seconds
 
+.. py:function:: RM(timespan)
+
+   A running mean filter. For a given time window in seconds the running mean is
+   computed from the single amplitude values and set as output. This computation
+   is equal to :py:func:`RHMP<RMHP()>` with the exception that the mean is not
+   subtracted from single amplitudes but replaces them.
+
+   .. code-block:: sh
+
+      RMHP = self-RM
+
+   :param timespan: The timespan in seconds
+
 .. py:function:: SM5([type = 1])
 
    A simulation of a 5-second seismometer.
@@ -164,13 +182,16 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
    :param lta: Long-term time window
 
 
-.. py:function:: WA([type = 1])
+.. py:function:: WA([type = 1[,gain=2800[,T0=0.8[,h=0.8]]]])
 
    The simulation filter of a Wood-Anderson seismometer. The data format of the waveforms has
    to be given for applying the simulation filter (displacement = 0, velocity = 1, acceleration = 2),
    e.g. WA(1) is the simulation on velocity data.
 
    :param type: The data type: 0 (displacement), 1 (velocity) and 2 (acceleration)
+   :param gain: The gain of the Wood-Anderson response
+   :param T0: The eigen period in seconds
+   :param h: The damping constant
 
 
 .. py:function:: WWSSN_LP([type = 1])

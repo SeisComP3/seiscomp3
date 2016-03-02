@@ -12,8 +12,12 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import sys, seiscomp3.Seismology, seiscomp3.Core, seiscomp3.IO
-from   getopt import getopt, GetoptError
+import sys, optparse
+import seiscomp3.Seismology, seiscomp3.Core, seiscomp3.IO
+
+class MyOptionParser(optparse.OptionParser):
+    def format_epilog(self, formatter):
+        return self.epilog
 
 def str2time(timestring):
     """
@@ -44,8 +48,7 @@ def time2str(time):
     return time.toString("%Y-%m-%d %H:%M:%S.%f000000")[:23]
 
 
-def RecordInput(filename=None,
-                datatype=seiscomp3.Core.Array.INT):
+def RecordInput(filename=None, datatype=seiscomp3.Core.Array.INT):
     """
     Simple Record iterator that reads from a file (to be specified by
     filename) or -- if no filename was specified -- reads from standard input
@@ -72,133 +75,80 @@ def RecordInput(filename=None,
         yield rec
 
 
+
 tmin = str2time("1970-01-01 00:00:00")
-tmax = str2time("2030-01-01 00:00:00")
+tmax = str2time("2500-01-01 00:00:00")
 ifile = "-"
-verbose = False
-endtime = False
-unique = False
 
-usage_info = """
-mssort - read unsorted (and possibly multiplexed) MiniSEED files and
-         sort the individual records by time. This is useful e.g. for
-         simulating data acquisition.
+description = "%prog - read unsorted (and possibly multiplexed) MiniSEED files and sort the individual records by time. This is useful e.g. for simulating data acquisition."
 
-Usage: mssort.py [options] [file[s]]
-
-Options:
-    -t t1~t2    specify time window (as one -properly quoted- string)
-                times are of course UTC and separated by a tilde ~
-    -E          sort according to record end time; default is start time
-    -u          ensure uniqueness of output, i.e. skip duplicate records
-    -v          verbose mode
-    -h          display this help message
-
+epilog = """
 Example:
 
-cat f1..mseed f2.mseed f3.mseed |
-mssort -v -t '2007-03-28 15:48~2007-03-28 16:18' > sorted.mseed
-
+cat f1.mseed f2.mseed f3.mseed |
+scmssort -v -t '2007-03-28 15:48~2007-03-28 16:18' > sorted.mseed
 """
-#   -F          specify one input file
 
-def usage(exitcode=0):
-    sys.stderr.write(usage_info)
-    sys.exit(exitcode)
+p = MyOptionParser(usage="%prog [options] [files | < ] > ", description=description, epilog=epilog)
+p.add_option("-t", "--time-window", action="store", help="specify time window (as one -properly quoted- string). Times are of course UTC and separated by a tilde ~")
+p.add_option("-E", "--sort-by-end-time", action="store_true", help="sort according to record end time; default is start time")
+p.add_option("-u", "--uniqueness", action="store_true", help="ensure uniqueness of output, i.e. skip duplicate records")
+p.add_option("-v", "--verbose", action="store_true", help="run in verbose mode")
 
-try:
-    opts, files = getopt(sys.argv[1:], "EF:t:uhv")
-except GetoptError:
-    usage(exitcode=1)
+(opt, filenames) = p.parse_args()
 
-ffile = None
+if opt.time_window:
+    tmin, tmax = map(str2time, opt.time_window.split("~"))
 
-for flag, arg in opts:
-    if   flag == "-t":  tmin, tmax = map(str2time, arg.split("~"))
-    elif flag == "-E":  endtime = True
-    elif flag == "-u":  unique = True
-    elif flag == "-F":  ffile = arg
-    elif flag == "-h":  usage(exitcode=0)
-    elif flag == "-v":  verbose = True
-    else: usage(exitcode=1)
-
-if verbose:
+if opt.verbose:
     sys.stderr.write("Time window: %s~%s\n" % (time2str(tmin), time2str(tmax)))
 
 def _time(rec):
-    if endtime:
+    if opt.sort_by_end_time:
         return seiscomp3.Core.Time(rec.endTime())
     return seiscomp3.Core.Time(rec.startTime())
 
-if not ffile:
+def _in_time_window(rec, tmin, tmax):
+    return rec.endTime() >= tmin and rec.startTime() <= tmax
 
-    if not files:
-        files = [ "-" ]
+def _valid_record(rec):
+    return rec is not None # may get more complicated ;)
 
-    time_rec = []
-    for fname in files:
-        input = RecordInput(fname)
-	
-	for rec in input:
-            if rec is None:
+if not filenames:
+    filenames = [ "-" ]
+
+if filenames:
+    first = None
+    time_raw = []
+    for filename in filenames:
+        if opt.verbose:
+            sys.stderr.write("reading file '%s'\n" % filename)
+        for rec in RecordInput(filename):
+            if not _valid_record(rec):
                 continue
-            if not (rec.endTime() >= tmin and rec.startTime() <= tmax):
+            if not _in_time_window(rec, tmin, tmax):
                 continue
 
             raw = rec.raw().str()
             t = _time(rec)
-            time_rec.append( (t,raw) )
-#            time_rec.extend( [ (_time(rec), rec) for rec in input \
-#                            if  rec is not None and \
-#                                rec.endTime()   >= tmin and \
-#                                rec.startTime() <= tmax ] )
-    time_rec.sort()
+            if first is None:
+                first = t
+            t = float(t-first) # float needs less memory
+            time_raw.append( (t,raw) )
 
+    if opt.verbose:
+        sys.stderr.write("sorting records\n")
+    time_raw.sort()
+
+    if opt.verbose:
+        sys.stderr.write("writing output\n")
     previous = None
-    for item in time_rec:
-        if item == previous:
+    for item in time_raw:
+        if opt.uniqueness and item == previous:
             continue
         t,raw = item        
         sys.stdout.write(raw)
         previous = item
 
-#input = None
-#sys.stderr.write("Remaining Objects: %d\n" % seiscomp3.Core.BaseObject.ObjectCount())
-#sys.exit(0)
-
-
-
-
-
-### ffile is not None
-##
-##time_off, off = [], 0
-##for rec in seiscomp.mseed.Input(ffile):
-##    if rec==None:
-##        sys.stderr.write("A record was None\n")
-##        continue
-##    time_off.append( (rec.time, off) )
-##    off += len(rec.raw)
-##
-##time_off.sort()
-##
-##import seiscomp._mseed
-##
-##f = file(ffile)
-##for t, offset in time_off:
-##    f.seek(offset)
-##    rec = seiscomp._mseed.Record(f)
-##    if not rec:
-##        continue
-##    if rec.endtime >= tmin and rec.time <= tmax:
-##        if verbose:
-##            sys.stderr.write( "%s offset=%-10d %s\n" \
-##                % (rec.time, offset, rec.stream_id) )
-##        sys.stdout.write(rec.raw)
-##
-##
-##for rec in RecordInput(ifile):
-##
-##    print rec.data()
-##    print rec.startTime()
-##    
+    if opt.verbose:
+        sys.stderr.write("finished\n")

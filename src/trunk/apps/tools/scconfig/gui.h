@@ -15,8 +15,9 @@
 #define __SEISCOMP_CONFIGURATION_GUI_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/system/model.h>
-
+#endif
 
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>

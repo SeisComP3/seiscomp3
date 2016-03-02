@@ -19,7 +19,9 @@
 #include <QtGui>
 
 #include <seiscomp3/gui/core/application.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/config/exceptions.h>
+#endif
 
 namespace Seiscomp {
 namespace Applications {

@@ -1,19 +1,31 @@
 reqlogstats EIDA log statistics
 ===============================
 
-Collects reports sent by mail to GEOFON.
-Processes them.
-Displays summary reports on a web page.
+Copyright (C) 2013-2015 Deutsches GeoForschungsZentrum GFZ Potsdam
+
+Collects reports sent by mail to GEOFON. Processes them. There may be
+several reports from a single node for the same period. It is assumed
+that these DO NOT overlap. Displays summary reports on a web page.
 
 Requirements:
  - SQLite3
  - PHP
+ - Gnuplot >=4.6 for some nice summary plots
+ - The CSS style sheets used on the EIDA web pages
  - an ounce of good luck
 
 To install on a web server:
- * set up back-end scripts where they can handle mail, should not be servable by web server
- * copy summary report PHP to a servable directory and make sure PHP can run there
- * add a crontab entry to run reqlogstats.sh each day
+
+ * set up back-end scripts where they can handle mail, should not be servable
+   by a web server.
+
+ * copy summary report PHP to a web-servable directory and make sure PHP can
+   run there.
+
+ * add a crontab entry to run reqlogstats.sh each day e.g.
+
+     15 07 * * * (cd ${HOME}/reqlogstats; ./reqlogstats.sh) 2>&1
+
 
 The ./install.sh script provided here may help you.
 
@@ -32,10 +44,14 @@ Try the following, once you have e-mail from the node operator:
 	update ArcStatsSource set dcid = "KOERI" where dcid="comoglu@boun.edu.tr";
 	.quit
 
+   ??? Or reqlogstats.py should do that by itself...
+
+       add the hostname's second to last component (e.g. gfz-potsdam) to the source_dict dictionary in relogstats.py
+
  - Now on the web page the node should be listed by DCID, not e-mail address
 	http://eida.gfz-potsdam.de/eida/reqlogstats/
 
  - Add the new node in t2.py: it must produce an extra column in the table. Now check graphs are produced correctly...
 
- - Alter make_month_graph.sh: adjust the gnuplot commands to colour the new node; check the colours are still assigned correctly.
+ - Alter make_month_graph.sh, make_year_graph.sh, make_year_users_graph.sh: adjust the gnuplot commands to colour the new node; check the colours are still assigned correctly.
 

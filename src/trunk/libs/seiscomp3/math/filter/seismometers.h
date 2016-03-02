@@ -143,14 +143,15 @@ class WWSSN_LP_Filter : public Filter<T> {
 template <typename T>
 class WoodAndersonFilter : public Filter<T> {
 	public:
-		WoodAndersonFilter(GroundMotion input=Velocity);
+		WoodAndersonFilter(GroundMotion input=Velocity, SeismometerResponse::WoodAnderson::Config config = SeismometerResponse::WoodAnderson::Config());
 		WoodAndersonFilter(const WoodAndersonFilter &other);
 
 	public:
 		int setParameters(int n, const double *params);
 		Math::Filtering::InPlaceFilter<T>* clone() const;
 
-		void setInput(GroundMotion input);
+		void setInput(GroundMotion input,
+		              SeismometerResponse::WoodAnderson::Config config = SeismometerResponse::WoodAnderson::Config());
 };
 
 

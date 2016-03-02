@@ -18,9 +18,11 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/core/mainwindow.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/eventparameters.h>
+#endif
 #include "ui_mainframe.h"
 
 

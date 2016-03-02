@@ -235,12 +235,7 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, StationData* stationDat
 		StationData::QCData& data = it->second;
 
 		QString name = it->first.toString();
-        if ( data.status == QCStatus::NOT_SET ) {
-		    infoWidget->setQCContent(name, "", "", "", Qt::white);
-            continue;
-        }
-
-        QString value = QString("%1").arg(data.value, 0, 'f', 2);
+		QString value = QString("%1").arg(data.value, 0, 'f', 2);
 		QString lowerUncertainty = "NaN";
 		QString upperUncertainty = "NaN";
 
@@ -597,6 +592,16 @@ bool MvMainWindow::init() {
 	}
 	catch ( ... ) {}
 
+	try {
+		_ui.showStationIdAction->setChecked(SCApp->configGetBool("annotations"));
+	}
+	catch ( ... ) {}
+
+	try {
+		_ui.actionShowStationChannelCodes->setChecked(SCApp->configGetBool("annotationsWithChannels"));
+	}
+	catch ( ... ) {}
+
 	std::string displayMode;
 	try {
 		displayMode = SCApp->configGetString("displaymode");
@@ -774,6 +779,7 @@ void MvMainWindow::setupStandardUi() {
 	connect(_ui.showWaveformPropagationAction, SIGNAL(toggled(bool)), this, SLOT(setWaveformPropagationVisible(bool)));
 	connect(_ui.showEventTableWidgetAction, SIGNAL(toggled(bool)), _eventTableWidgetRef, SLOT(setVisible(bool)));
 	connect(_ui.showStationIdAction, SIGNAL(toggled(bool)), this, SLOT(setStationIdVisible(bool)));
+	connect(_ui.actionShowStationChannelCodes, SIGNAL(toggled(bool)), this, SLOT(setStationChannelCodesVisible(bool)));
 	connect(_ui.showMapLegendAction, SIGNAL(toggled(bool)), _mapWidget, SLOT(showMapLegend(bool)));
 	connect(_ui.showHistoricOriginsAction, SIGNAL(toggled(bool)), this, SLOT(updateOriginSymbolDisplay()));
 	connect(_ui.searchStationAction, SIGNAL(triggered(bool)), this, SLOT(showSearchWidget()));
@@ -802,7 +808,7 @@ void MvMainWindow::setupStandardUi() {
 	connect(_eventTableWidgetRef, SIGNAL(eventDeselected(const QString&)), this, SLOT(deselectStations()));
 
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
-			this, SLOT(handleNewMessage(Seiscomp::Core::Message*)));
+	        this, SLOT(handleNewMessage(Seiscomp::Core::Message*)));
 
 	connect(&_mapUpdateTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
 
@@ -863,11 +869,10 @@ bool MvMainWindow::initRecordStream() {
 
 		_recordStreamThread->addStream(tokens[0],tokens[1],tokens[2], tokens[3]);
 
-		OPT(double) gain = SCApp->query()->getComponentGain(tokens[0], tokens[1],
-		                                                    tokens[2], tokens[3],
-		                                                    Core::Time::GMT());
-		if ( gain )
-			it->gmGain = gain.get();
+		try {
+			it->gmGain = Client::Inventory::Instance()->getGain(tokens[0], tokens[1], tokens[2], tokens[3], Core::Time::GMT());
+		}
+		catch ( ... ) {}
 	}
 
 	_recordStreamThread->start();
@@ -1167,6 +1172,8 @@ bool MvMainWindow::readStationsFromDataBase() {
 				it->second.stationSymbolRef->setNetworkCode(station->network()->code());
 				it->second.stationSymbolRef->setStationCode(station->code());
 				it->second.stationSymbolRef->setIdDrawingColor(SCScheme.colors.map.stationAnnotations);
+				it->second.stationSymbolRef->setIdDrawingEnabled(_ui.showStationIdAction->isChecked());
+				it->second.stationSymbolRef->setDrawFullID(_ui.actionShowStationChannelCodes->isChecked());
 
 				_stationDataCollection.add(it->second);
 				_mapWidget->canvas().symbolCollection()->add(it->second.stationSymbolRef);
@@ -1751,8 +1758,8 @@ void MvMainWindow::markSearchWidgetResults() {
 
 		if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
 			SearchWidget::Matches::const_iterator found = std::find(_searchWidgetRef->matches().begin(),
-																	_searchWidgetRef->matches().end(),
-																	mapSymbol->id());
+			                                                        _searchWidgetRef->matches().end(),
+			                                                        mapSymbol->id());
 			if ( found != _searchWidgetRef->matches().end() ) {
 				mapSymbol->setVisible(true);
 				if ( idOfFirstMatch == mapSymbol->id() )
@@ -1874,12 +1881,12 @@ void MvMainWindow::handleNewMessage(Core::Message* message) {
 
 			if ( isFakeEvent(event) ||
 			     (*notifierIt)->operation() == DataModel::OP_REMOVE ) {
-                if ( eventData )  {
-                    removeEventData(eventData);
-                    updateEventWidget();
-                }
-                continue;
-            }
+				if ( eventData )  {
+					removeEventData(eventData);
+					updateEventWidget();
+				}
+				continue;
+			}
 
 			SCApp->query()->loadEventDescriptions(event);
 
@@ -2084,7 +2091,18 @@ void MvMainWindow::setStationIdVisible(bool val) {
 			it	!= _stationDataCollection.end(); it++ ) {
 		it->stationSymbolRef->setIdDrawingEnabled(val);
 	}
+
+	_mapWidget->update();
 }
 
 
 
+
+void MvMainWindow::setStationChannelCodesVisible(bool val) {
+	for ( StationDataCollection::iterator it = _stationDataCollection.begin();
+			it	!= _stationDataCollection.end(); it++ ) {
+		it->stationSymbolRef->setDrawFullID(val);
+	}
+
+	_mapWidget->update();
+}

@@ -24,6 +24,11 @@
 #include "gui.h"
 
 #include <QtGui>
+#if QT_VERSION >= 0x040400
+#include <QSharedMemory>
+#include <QSystemSemaphore>
+#include <QCryptographicHash>
+#endif
 
 
 using namespace std;
@@ -43,8 +48,102 @@ string outdir;
 }
 
 
+#if QT_VERSION >= 0x040400
+class RunGuard {
+	public:
+		RunGuard(const QString &key)
+		: key(key)
+		, memLockKey(generateKeyHash(key, "_memLockKey"))
+		, sharedmemKey(generateKeyHash(key, "_sharedmemKey"))
+		, sharedMem(sharedmemKey)
+		, memLock(memLockKey, 1)
+		{
+			memLock.acquire();
+			{
+				QSharedMemory fix(sharedmemKey);  // Fix for *nix: http://habrahabr.ru/post/173281/
+				fix.attach();
+			}
+			memLock.release();
+		}
+
+		~RunGuard() {
+			release();
+		}
+
+		bool isAnotherRunning() {
+			if ( sharedMem.isAttached() )
+				return false;
+
+			memLock.acquire();
+			const bool isRunning = sharedMem.attach();
+			if ( isRunning )
+				sharedMem.detach();
+			memLock.release();
+			return isRunning;
+		}
+
+		bool tryToRun() {
+			// Extra check
+			if ( isAnotherRunning() )
+				return false;
+
+			memLock.acquire();
+			const bool result = sharedMem.create( sizeof( quint64 ) );
+			memLock.release();
+			if ( !result )
+			{
+				release();
+				return false;
+			}
+
+			return true;
+		}
+
+		void release() {
+			memLock.acquire();
+			if ( sharedMem.isAttached() )
+				sharedMem.detach();
+			memLock.release();
+		}
+
+
+	private:
+		Q_DISABLE_COPY(RunGuard)
+
+		QString generateKeyHash(const QString& key, const QString& salt) {
+			QByteArray data;
+			data.append(key.toUtf8());
+			data.append(salt.toUtf8());
+			data = QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
+			return data;
+		}
+
+		const QString    key;
+		const QString    memLockKey;
+		const QString    sharedmemKey;
+
+		QSharedMemory    sharedMem;
+		QSystemSemaphore memLock;
+};
+#endif
+
+
 int main(int argc, char **argv) {
+	QApplication app(argc, argv);
+
 	filebase = Seiscomp::Environment::Instance()->installDir();
+
+	#if QT_VERSION >= 0x040400
+	RunGuard guard(QString("SeisComP3/apps/scconfig/%1").arg(filebase.c_str()));
+	if ( !guard.tryToRun() ) {
+		if ( QMessageBox::warning(NULL, "scconfig", app.tr("scconfig with SEISCOMP_ROOT '%1' is already running!\n"
+		                                                   "Note that modifying the configuration from two instances can result in an inconsistent configuration!\n"
+		                                                   "Do you want to continue?\n")
+		                                            .arg(filebase.c_str()), QMessageBox::Yes, QMessageBox::No) != QMessageBox::Yes )
+			return 0;
+	}
+	#endif
+
 	if ( filebase.empty() )
 		filebase = ".";
 	else if ( *filebase.rbegin() == '/' )
@@ -78,8 +177,6 @@ int main(int argc, char **argv) {
 	model.create(&defs);
 
 	cerr << "Loading stations from: " << model.stationConfigDir(true) << endl;
-
-	QApplication app(argc, argv);
 
 	Configurator c(Seiscomp::Environment::CS_CONFIG_APP);
 	c.resize(800,600);

@@ -240,7 +240,7 @@ Application::Application(int& argc, char **argv, int flags, Type type)
 
 	setDaemonEnabled(false);
 
-	if ( _instance != this ) {
+	if ( _instance != this && _instance != NULL ) {
 		SEISCOMP_WARNING("Another GUI application object exists already. "
 		                 "This usage is not intended. "
 		                 "The Application::Instance() method will return "
@@ -503,7 +503,9 @@ void Application::timerSOH() {
 void Application::handleSignalNotification() {
 	int signal;
 	_signalNotifier->setEnabled(false);
-	::read(_signalSocketFd[1], &signal, sizeof(signal));
+	ssize_t bytesRead = ::read(_signalSocketFd[1], &signal, sizeof(signal));
+	if ( bytesRead != sizeof(signal) )
+		qWarning() << "Failed to read int from pipe";
 	QApplication::quit();
 	_signalNotifier->setEnabled(true);
 }
@@ -1125,7 +1127,9 @@ bool Application::handleInitializationError(Stage stage) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::handleInterrupt(int signal) throw() {
-	::write(_signalSocketFd[0], &signal, sizeof(signal));
+	ssize_t bytesWritten = ::write(_signalSocketFd[0], &signal, sizeof(signal));
+	if ( bytesWritten != sizeof(signal) )
+		qWarning() << "Failed to write int to pipe";
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1508,7 +1512,8 @@ void Application::emitNotifier(Notifier* n) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::onConnectionEstablished() {
-	cdlg()->connectToMessaging();
+	if ( type() != QApplication::Tty)
+		cdlg()->connectToMessaging();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1517,7 +1522,8 @@ void Application::onConnectionEstablished() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::onConnectionLost() {
-	cdlg()->onConnectionError(0);
+	if ( type() != QApplication::Tty)
+		cdlg()->onConnectionError(0);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1526,6 +1532,8 @@ void Application::onConnectionLost() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::connectionError(int code) {
+	if ( type() == QApplication::Tty) return;
+
 	if ( _connection && !_connection->isConnected() ) {
 		SEISCOMP_ERROR("Connection went away...");
 		closeMessageThread();

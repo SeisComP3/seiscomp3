@@ -41,7 +41,7 @@ class InitialTaper : public InPlaceFilter<TYPE> {
 		virtual InPlaceFilter<TYPE>* clone() const;
 
 		// resets the filter, i.e. erases the filter memory
-		void reset() {}
+		void reset() { _sampleCount = 0; }
 
 		virtual void setSamplingFrequency(double fsamp) {
 			_samplingFrequency = fsamp;

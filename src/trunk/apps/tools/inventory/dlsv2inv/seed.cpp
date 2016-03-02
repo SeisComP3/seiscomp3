@@ -23,7 +23,7 @@ using namespace std;
 ****************************************************************************************************************************/
 string FromJulianDay(string date)
 {
-	long jaar, maand, dag;
+	long jaar = 0, maand = 0, dag = 0;
 	int jan, feb, mrt, apr, mei, jun, jul, aug, sep, okt, nov, dec;
 	int pos1=0, pos2;
 

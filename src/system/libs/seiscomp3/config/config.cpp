@@ -530,7 +530,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 
 	//SEISCOMP_DEBUG("Parsing entry");
 	if ( tokens.size() < 2 ) {
-		CONFIG_ERROR("Config entry malformed: To few parameter for %s", entry.c_str());
+		CONFIG_ERROR("Config entry malformed: Too few parameters for %s", entry.c_str());
 		return false;
 	}
 
@@ -543,7 +543,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 	std::vector<std::string> parsedValues;
 	if ( tokens[0] == "include" ) {
 		if ( tokens.size() > 2 ) {
-			CONFIG_ERROR("Operator %s has to many operands -> %s file",
+			CONFIG_ERROR("Operator %s has too many operands -> %s file",
 			          tokens[0].c_str(), tokens[0].c_str());
 			return false;
 		}
@@ -580,7 +580,7 @@ bool Config::handleEntry(const std::string& entry, const std::string& comment) {
 		std::vector<std::string>::const_iterator it = parsedValues.begin();
 		for ( ; it != parsedValues.end(); ++it ) {
 			if ( !_symbolTable->remove(*it) ) {
-				CONFIG_ERROR("Could not remove variable %s from symboltable", (*it).c_str());
+				CONFIG_ERROR("Could not remove variable %s from symbol table", (*it).c_str());
 				return false;
 			}
 		}
@@ -809,7 +809,7 @@ bool Config::parseRValue(const std::string& entry,
 		else if ( *it == '$' && !stringMode && resolveReferences ) {
 			std::string variable;
 			if ( ++it == entry.end() ) {
-				if ( errmsg ) *errmsg = "Standalone reference operator";
+				if ( errmsg ) *errmsg = "Stand-alone reference operator";
 				//SEISCOMP_ERROR("[%s:%d] Standalone reference operator", _fileName.c_str(), _line);
 				return false;
 			}

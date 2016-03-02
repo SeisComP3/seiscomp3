@@ -46,6 +46,7 @@ class SC_SYSTEM_CORE_API Output : public Node {
 		bool unsubscribe(Channel* channel);
 		void logComponent(bool e) { _logComponent = e; }
 		void logContext(bool e) { _logContext = e; }
+		void setUTCEnabled(bool e) { _useUTC = e; }
 
 	protected:
 		/** Callback method for receiving log messages */
@@ -72,6 +73,7 @@ class SC_SYSTEM_CORE_API Output : public Node {
 	protected:
 		bool _logComponent;
 		bool _logContext;
+		bool _useUTC;
 
 	private:
 		PublishLoc* _publisher;

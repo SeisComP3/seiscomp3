@@ -51,6 +51,7 @@ URL and supports URL encoded parameters. The default host ist set to
 
 - `user` - user name required on some servers
 - `pwd` - password required on some servers
+- `dump` - optional output file for all records being received
 
 Examples
 ^^^^^^^^
@@ -58,6 +59,7 @@ Examples
 - ``arclink://``
 - ``arclink://geofon.gfz-potsdam.de?user=foo&pwd=secret``
 - ``arclink://localhost:18042``
+- ``arclink://localhost?dump=test.mseed``
 
 .. _rs-fdsnws:
 

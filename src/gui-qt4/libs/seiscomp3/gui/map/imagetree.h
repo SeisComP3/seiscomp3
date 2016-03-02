@@ -15,7 +15,9 @@
 #define __SEISCOMP_GUI_MAP_IMAGETREE_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/interfacefactory.h>
+#endif
 #include <seiscomp3/gui/core/maps.h>
 #include <seiscomp3/gui/map/maptree.h>
 #include <seiscomp3/gui/map/texturecache.h>

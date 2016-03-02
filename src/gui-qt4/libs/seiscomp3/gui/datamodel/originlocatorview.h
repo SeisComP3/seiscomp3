@@ -21,12 +21,14 @@
 #include <seiscomp3/gui/datamodel/originlocatormap.h>
 #include <seiscomp3/gui/datamodel/pickerview.h>
 #include <seiscomp3/gui/map/mapwidget.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/datamodel/amplitude.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/seismology/locatorinterface.h>
 #include <seiscomp3/core/baseobject.h>
+#endif
 #include <set>
 
 
@@ -145,6 +147,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 	public:
 		struct SC_GUI_API Config {
 			double reductionVelocityP;
+			bool   drawMapLines;
 			bool   drawGridLines;
 			bool   computeMissingTakeOffAngles;
 			double defaultEventRadius;

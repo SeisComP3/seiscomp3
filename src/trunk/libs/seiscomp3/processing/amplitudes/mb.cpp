@@ -130,7 +130,7 @@ AmplitudeProcessor_mb::AmplitudeProcessor_mb()
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_mb::AmplitudeProcessor_mb(const Core::Time& trigger, double duration)
+AmplitudeProcessor_mb::AmplitudeProcessor_mb(const Core::Time& trigger)
 : AmplitudeProcessor(trigger, "mb") {
 	setSignalEnd(30);
 	setMinSNR(0);

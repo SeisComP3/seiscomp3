@@ -378,7 +378,6 @@ Goal
 
 Illustrate the basic record stream concepts.
 
-
 Script
 ------
 
@@ -462,3 +461,106 @@ or to ask Arclink for data
 .. code-block:: sh
 
    python testrec.py -I arclink://localhost:18001
+
+
+Waveform client and record filtering
+====================================
+
+Summary
+-------
+
+Example client that connects to a record stream service, filters the records
+with a given SeisComp3 filter and dumps the content to stdout.
+
+Goal
+----
+
+Illustrate the recordfilter concepts.
+
+Script
+------
+
+.. code-block:: python
+
+   #!/usr/bin/env python
+
+   import seiscomp3.Client, sys
+
+   class App(seiscomp3.Client.StreamApplication):
+       def __init__(self, argc, argv):
+           seiscomp3.Client.StreamApplication.__init__(self, argc, argv)
+           # Do not connect to messaging and do not use database at all
+           self.setMessagingEnabled(False)
+           self.setDatabaseEnabled(False, False)
+
+       def init(self):
+           if seiscomp3.Client.StreamApplication.init(self) == False:
+               return False
+
+           # For testing purposes we subscribe to the last 5 minutes of data.
+           # To use real-time data, do not define an end time and configure
+           # a real-time capable backend such as Seedlink.
+
+           # First, query now
+           now = seiscomp3.Core.Time.GMT()
+           # Substract 5 minutes for the start time
+           start = now - seiscomp3.Core.TimeSpan(300,0)
+           # Set the start time in our record stream
+           self.recordStream().setStartTime(start)
+           # And the end time
+           self.recordStream().setEndTime(now)
+
+           # Now add some streams to fetch
+           self.recordStream().addStream("GE", "MORC", "", "BHZ")
+           self.recordStream().addStream("GE", "MORC", "", "BHN")
+
+           # Create IIR filter instance that deals with data (samples)
+           filterIIR = seiscomp3.Math.InPlaceFilterF.Create("BW(4,1,10")
+           if not filterIIR:
+               seiscomp3.Logging.error("Failed to create filter")
+               return False
+
+           # Create a record filter that applies the given IIR filter to
+           # each record fed. Deals with gaps and sps changes on record basis.
+           self.recordFilter = seiscomp3.IO.RecordIIRFilterF(filterIIR)
+
+           # Demultiplexes record volumes and runs the passed filter
+           # on each stream.
+           self.demuxer = seiscomp3.IO.RecordDemuxFilter(self.recordFilter)
+
+           return True
+
+
+       # handleRecord is called when a new record is being read from the
+       # record stream
+       def handleRecord(self, raw_rec):
+           # Feed the raw record into the demuxer and filter it
+           rec = self.demuxer.feed(raw_rec)
+           if not rec: return
+
+           # Print the streamID which is a join of NSLC separated with '.'
+           print rec.streamID()
+           # Print the records start time in ISO format
+           print "  %s" % rec.startTime().iso()
+                   # Print the sampling frequency
+                   print "  %fHz" % rec.samplingFrequency()
+                   # If data is available
+                   if rec.data():
+                       # Print the number of samples
+                       print "  %d samples" % rec.data().size()
+                       # Try to extract a float array. If the samples are of other
+                       # data types, use rec.dataType() to query the type and use
+                       # the appropriate array classes.
+                       data = seiscomp3.Core.FloatArray.Cast(rec.data())
+                       # Print the samples
+                       if data:
+                           print "  data: %s" % str([data.get(i) for i in xrange(data.size())])
+                       else:
+                           print "  no data"
+
+   def main():
+       app = App(len(sys.argv), sys.argv)
+           return app()
+
+   if __name__ == "__main__":
+       sys.exit(main())

@@ -24,7 +24,7 @@ namespace Database {
 
 class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	DECLARE_SC_CLASS(PostgreSQLDatabase);
-	
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -39,7 +39,7 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 	public:
 		bool connect(const char *con);
 		void disconnect();
-		
+
 		bool isConnected() const;
 
 		void start();
@@ -55,6 +55,7 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 		bool fetchRow();
 		int findColumn(const char* name);
 		int getRowFieldCount() const;
+		const char *getRowFieldName(int index);
 		const void* getRowField(int index);
 		size_t getRowFieldSize(int index);
 

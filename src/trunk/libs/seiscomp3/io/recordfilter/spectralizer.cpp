@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  *   Copyright (C) by gempa GmbH                                           *
  *   Author: Jan Becker, gempa GmbH                                        *
  *                                                                         *
@@ -14,12 +14,13 @@
 
 #define SEISCOMP_COMPONENT SPEC
 
+#include "spectralizer.h"
+
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/math/fft.h>
 
-#include "spectralizer.h"
-
+#include <cstring>
 
 using namespace std;
 using namespace Seiscomp;

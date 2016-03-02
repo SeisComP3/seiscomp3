@@ -19,11 +19,13 @@
 #include <string>
 #include <set>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/focalmechanism.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/databasequery.h>
+#endif
 #include <seiscomp3/gui/map/mapwidget.h>
 #include <seiscomp3/gui/qt4.h>
 

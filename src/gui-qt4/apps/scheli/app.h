@@ -11,11 +11,13 @@
  ***************************************************************************/
 
 #include <seiscomp3/gui/core/application.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/datamodel/station.h>
 #include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/io/recordinput.h>
+#endif
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/core/recordstreamthread.h>

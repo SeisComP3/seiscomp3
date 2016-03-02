@@ -19,7 +19,9 @@
 #include <QtGui>
 #include <utility>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/waveformquality.h>
+#endif
 
 namespace Seiscomp {
 namespace Applications {

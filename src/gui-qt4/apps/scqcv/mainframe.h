@@ -17,15 +17,19 @@
 #define __MAINFRAME_H__
 
 #include <QtGui>
-#include <seiscomp3/gui/core/mainwindow.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/core/message.h>
-#include <seiscomp3/gui/core/messages.h>
 #include <seiscomp3/datamodel/configstation.h>
+#endif
+#include <seiscomp3/gui/core/mainwindow.h>
+#include <seiscomp3/gui/core/messages.h>
 
 #include <utility>
 
+#ifndef Q_MOC_RUN
 #include "qcview.h"
+#endif
 
 #include "ui_mainframe.h"
 

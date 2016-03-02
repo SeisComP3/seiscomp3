@@ -24,6 +24,7 @@ namespace Math {
 namespace Filtering {
 namespace IIR {
 
+
 // load the template class definitions
 #include<seiscomp3/math/filter/butterworth.ipp>
 
@@ -34,8 +35,10 @@ INSTANTIATE_INPLACE_FILTER(ButterworthHighLowpass, SC_SYSTEM_CORE_API);
 
 REGISTER_INPLACE_FILTER(ButterworthLowpass, "BW_LP");
 REGISTER_INPLACE_FILTER(ButterworthHighpass, "BW_HP");
-REGISTER_INPLACE_FILTER(ButterworthBandpass, "BW");
+REGISTER_INPLACE_FILTER(ButterworthBandpass, "BW_BP");
 REGISTER_INPLACE_FILTER(ButterworthHighLowpass, "BW_HLP");
+REGISTER_INPLACE_FILTER2(ButterworthHighLowpass, Proxy, "BW");
+
 
 static void _bw_coeff_lp_hp(double phi, double L, int type, double *a, double *b)
 {
@@ -200,137 +203,6 @@ _init_bw_biquads2(int order, double f1, double f2, double fsamp, int type)
 
 	return biquads;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-template<typename TYPE>
-Biquad<TYPE>::Biquad(double a0, double a1, double a2,
-			double b0, double b1, double b2)
-	: _Biquad(a0, a1, a2, b0, b1, b2) { }
-
-template<typename TYPE>
-Biquad<TYPE>::Biquad(_Biquad const &other)
-	: _Biquad(other) { }
-
-template<typename TYPE>
-Biquad<TYPE>::Biquad(Biquad<TYPE> const &bq)
-	: _Biquad(bq.a0, bq.a1, bq.a2, bq.b0, bq.b1, bq.b2) { }
-
-template<typename TYPE>
-void Biquad<TYPE>::apply(std::vector<TYPE> &f)
-{
-	// here we really need optimum performance so we *don't*
-	// use the std::vector<>::iterator - *DO* *NOT* *CHANGE*
-	// (std::vector is guaranteed to be contiguous in memory)
-	TYPE *ff = &f[0]; // no problem
-	for (int i=0, n = f.size();  i < n;  i++)
-	{	// XXX this assumes that b0==1 XXX
-		double v0 =      ff[i]  - b1*v1 - b2*v2;
-		ff[i]     =  TYPE(a0*v0 + a1*v1 + a2*v2);
-		v2 = v1; v1 = v0;
-	}
-}
-
-template<typename TYPE>
-std::vector<TYPE> Biquad<TYPE>::filter (std::vector<TYPE> const &f)
-{
-	std::vector<TYPE> copy(f.beg(), f.end());
-	apply(copy);
-	return copy;
-}
-
-
-
-
-
-
-
-
-
-
-
-template<typename TYPE>
-BiquadCascade<TYPE>::BiquadCascade() {}
-
-template<typename TYPE>
-BiquadCascade<TYPE>::BiquadCascade(BiquadCascade const &other)
-{
-	typename std::vector< Biquad<TYPE> >::const_iterator biq;
-	for (biq = other._biq.begin(); biq!=other._biq.end(); biq++)
-		_biq.push_back(*biq);
-}
-
-template<typename TYPE>
-BiquadCascade<TYPE>::~BiquadCascade() {}
-
-template<typename TYPE>
-int BiquadCascade<TYPE>::size() const { return _biq.size(); }
-
-template<typename TYPE>
-void BiquadCascade<TYPE>::apply(std::vector<TYPE> &f)
-{
-	typename std::vector< Biquad<TYPE> >::iterator biq;
-	for (biq = _biq.begin(); biq != _biq.end(); biq++)
-		biq->apply(f);
-}
-
-template<typename TYPE>
-std::vector<TYPE> BiquadCascade<TYPE>::filter (std::vector<TYPE> const &f)
-{
-	std::vector<TYPE> copy(f.beg(), f.end());
-	apply(copy);
-	return copy;
-}
-
-template<typename TYPE>
-void BiquadCascade<TYPE>::reset()
-{
-	typename std::vector< Biquad<TYPE> >::iterator biq;
-	for (biq = _biq.begin(); biq != _biq.end(); biq++)
-		biq->reset();
-}
-
-template<typename TYPE>
-void BiquadCascade<TYPE>::append(Biquad<TYPE> const &biq)
-{
-	_biq.push_back(biq);
-}
-*/
-
-/*	
-template<typename TYPE>
-void BiquadCascade<TYPE>::extend(BiquadCascade const &other)
-{
-	typename std::vector< Biquad<TYPE> >::const_iterator biq;
-	for (biq = other._biq.begin(); biq!=other._biq.end(); biq++)
-		_biq.push_back(*biq);
-}
-*/
 
 
 

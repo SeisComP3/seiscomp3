@@ -228,6 +228,9 @@ MainFrame::MainFrame(){
 	try { locatorConfig.reductionVelocityP = SCApp->configGetDouble("olv.Pvel"); }
 	catch ( ... ) { locatorConfig.reductionVelocityP = 6.0; }
 
+	try { locatorConfig.drawMapLines = SCApp->configGetBool("olv.drawMapLines"); }
+	catch ( ... ) { locatorConfig.drawMapLines = true; }
+
 	try { locatorConfig.drawGridLines = SCApp->configGetBool("olv.drawGridLines"); }
 	catch ( ... ) { locatorConfig.drawGridLines = true; }
 
@@ -938,6 +941,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetBool("olv.computeMagnitudesSilently", _computeMagnitudesSilently);
 		SCApp->configSetBool("olv.enableMagnitudeSelection", _askForMagnitudeTypes);
 		SCApp->configSetDouble("olv.Pvel", lc.reductionVelocityP);
+		SCApp->configSetBool("olv.drawMapLines", lc.drawMapLines);
 		SCApp->configSetBool("olv.drawGridLines", lc.drawGridLines);
 		SCApp->configSetBool("olv.computeMissingTakeOffAngles", lc.computeMissingTakeOffAngles);
 		SCApp->configSetDouble("olv.defaultAddStationsDistance", pc.defaultAddStationsDistance);

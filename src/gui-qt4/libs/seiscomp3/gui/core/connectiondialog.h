@@ -18,8 +18,10 @@
 #include <QtGui>
 #include <seiscomp3/gui/core/ui_connectiondialog.h>
 #include <seiscomp3/gui/qt4.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/io/database.h>
 #include <seiscomp3/communication/connection.h>
+#endif
 
 namespace Seiscomp {
 namespace Gui {

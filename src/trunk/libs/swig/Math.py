@@ -1596,6 +1596,10 @@ class AverageFilterF(InPlaceFilterF):
         this = _Math.new_AverageFilterF(timeSpan, fsamp)
         try: self.this.append(this)
         except: self.this = this
+    def setLength(self, *args):
+        """setLength(AverageFilterF self, double timeSpan)"""
+        return _Math.AverageFilterF_setLength(self, *args)
+
     def setSamplingFrequency(self, *args):
         """setSamplingFrequency(AverageFilterF self, double fsamp)"""
         return _Math.AverageFilterF_setSamplingFrequency(self, *args)
@@ -1611,6 +1615,10 @@ class AverageFilterF(InPlaceFilterF):
     def clone(self):
         """clone(AverageFilterF self) -> InPlaceFilterF"""
         return _Math.AverageFilterF_clone(self)
+
+    def reset(self):
+        """reset(AverageFilterF self)"""
+        return _Math.AverageFilterF_reset(self)
 
     __swig_destroy__ = _Math.delete_AverageFilterF
     __del__ = lambda self : None;
@@ -1635,6 +1643,10 @@ class AverageFilterD(InPlaceFilterD):
         this = _Math.new_AverageFilterD(timeSpan, fsamp)
         try: self.this.append(this)
         except: self.this = this
+    def setLength(self, *args):
+        """setLength(AverageFilterD self, double timeSpan)"""
+        return _Math.AverageFilterD_setLength(self, *args)
+
     def setSamplingFrequency(self, *args):
         """setSamplingFrequency(AverageFilterD self, double fsamp)"""
         return _Math.AverageFilterD_setSamplingFrequency(self, *args)
@@ -1650,6 +1662,10 @@ class AverageFilterD(InPlaceFilterD):
     def clone(self):
         """clone(AverageFilterD self) -> InPlaceFilterD"""
         return _Math.AverageFilterD_clone(self)
+
+    def reset(self):
+        """reset(AverageFilterD self)"""
+        return _Math.AverageFilterD_reset(self)
 
     __swig_destroy__ = _Math.delete_AverageFilterD
     __del__ = lambda self : None;
@@ -1776,13 +1792,107 @@ class STALTAFilterD(InPlaceFilterD):
 STALTAFilterD_swigregister = _Math.STALTAFilterD_swigregister
 STALTAFilterD_swigregister(STALTAFilterD)
 
-class RunningMeanHighPassFilterF(InPlaceFilterF):
-    """Proxy of C++ Seiscomp::Math::Filtering::RunningMeanHighPass<(float)> class"""
+class RunningMeanFilterF(InPlaceFilterF):
+    """Proxy of C++ Seiscomp::Math::Filtering::RunningMean<(float)> class"""
     __swig_setmethods__ = {}
     for _s in [InPlaceFilterF]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, RunningMeanHighPassFilterF, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RunningMeanFilterF, name, value)
     __swig_getmethods__ = {}
     for _s in [InPlaceFilterF]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, RunningMeanFilterF, name)
+    __repr__ = _swig_repr
+    def __init__(self, windowLength=0, fsamp=0.0): 
+        """
+        __init__(Seiscomp::Math::Filtering::RunningMean<(float)> self, double windowLength=0, double fsamp=0.0) -> RunningMeanFilterF
+        __init__(Seiscomp::Math::Filtering::RunningMean<(float)> self, double windowLength=0) -> RunningMeanFilterF
+        __init__(Seiscomp::Math::Filtering::RunningMean<(float)> self) -> RunningMeanFilterF
+        """
+        this = _Math.new_RunningMeanFilterF(windowLength, fsamp)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _Math.delete_RunningMeanFilterF
+    __del__ = lambda self : None;
+    def setLength(self, *args):
+        """setLength(RunningMeanFilterF self, double windowLength)"""
+        return _Math.RunningMeanFilterF_setLength(self, *args)
+
+    def apply(self, *args):
+        """apply(RunningMeanFilterF self, int n, float * inout)"""
+        return _Math.RunningMeanFilterF_apply(self, *args)
+
+    def clone(self):
+        """clone(RunningMeanFilterF self) -> InPlaceFilterF"""
+        return _Math.RunningMeanFilterF_clone(self)
+
+    def reset(self):
+        """reset(RunningMeanFilterF self)"""
+        return _Math.RunningMeanFilterF_reset(self)
+
+    def setSamplingFrequency(self, *args):
+        """setSamplingFrequency(RunningMeanFilterF self, double fsamp)"""
+        return _Math.RunningMeanFilterF_setSamplingFrequency(self, *args)
+
+    def setParameters(self, *args):
+        """setParameters(RunningMeanFilterF self, int n, double const * params) -> int"""
+        return _Math.RunningMeanFilterF_setParameters(self, *args)
+
+RunningMeanFilterF_swigregister = _Math.RunningMeanFilterF_swigregister
+RunningMeanFilterF_swigregister(RunningMeanFilterF)
+
+class RunningMeanFilterD(InPlaceFilterD):
+    """Proxy of C++ Seiscomp::Math::Filtering::RunningMean<(double)> class"""
+    __swig_setmethods__ = {}
+    for _s in [InPlaceFilterD]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RunningMeanFilterD, name, value)
+    __swig_getmethods__ = {}
+    for _s in [InPlaceFilterD]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, RunningMeanFilterD, name)
+    __repr__ = _swig_repr
+    def __init__(self, windowLength=0, fsamp=0.0): 
+        """
+        __init__(Seiscomp::Math::Filtering::RunningMean<(double)> self, double windowLength=0, double fsamp=0.0) -> RunningMeanFilterD
+        __init__(Seiscomp::Math::Filtering::RunningMean<(double)> self, double windowLength=0) -> RunningMeanFilterD
+        __init__(Seiscomp::Math::Filtering::RunningMean<(double)> self) -> RunningMeanFilterD
+        """
+        this = _Math.new_RunningMeanFilterD(windowLength, fsamp)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _Math.delete_RunningMeanFilterD
+    __del__ = lambda self : None;
+    def setLength(self, *args):
+        """setLength(RunningMeanFilterD self, double windowLength)"""
+        return _Math.RunningMeanFilterD_setLength(self, *args)
+
+    def apply(self, *args):
+        """apply(RunningMeanFilterD self, int n, double * inout)"""
+        return _Math.RunningMeanFilterD_apply(self, *args)
+
+    def clone(self):
+        """clone(RunningMeanFilterD self) -> InPlaceFilterD"""
+        return _Math.RunningMeanFilterD_clone(self)
+
+    def reset(self):
+        """reset(RunningMeanFilterD self)"""
+        return _Math.RunningMeanFilterD_reset(self)
+
+    def setSamplingFrequency(self, *args):
+        """setSamplingFrequency(RunningMeanFilterD self, double fsamp)"""
+        return _Math.RunningMeanFilterD_setSamplingFrequency(self, *args)
+
+    def setParameters(self, *args):
+        """setParameters(RunningMeanFilterD self, int n, double const * params) -> int"""
+        return _Math.RunningMeanFilterD_setParameters(self, *args)
+
+RunningMeanFilterD_swigregister = _Math.RunningMeanFilterD_swigregister
+RunningMeanFilterD_swigregister(RunningMeanFilterD)
+
+class RunningMeanHighPassFilterF(RunningMeanFilterF):
+    """Proxy of C++ Seiscomp::Math::Filtering::RunningMeanHighPass<(float)> class"""
+    __swig_setmethods__ = {}
+    for _s in [RunningMeanFilterF]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RunningMeanHighPassFilterF, name, value)
+    __swig_getmethods__ = {}
+    for _s in [RunningMeanFilterF]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, RunningMeanHighPassFilterF, name)
     __repr__ = _swig_repr
     def __init__(self, windowLength=0, fsamp=0.0): 
@@ -1796,10 +1906,6 @@ class RunningMeanHighPassFilterF(InPlaceFilterF):
         except: self.this = this
     __swig_destroy__ = _Math.delete_RunningMeanHighPassFilterF
     __del__ = lambda self : None;
-    def setLength(self, *args):
-        """setLength(RunningMeanHighPassFilterF self, double windowLength)"""
-        return _Math.RunningMeanHighPassFilterF_setLength(self, *args)
-
     def apply(self, *args):
         """apply(RunningMeanHighPassFilterF self, int n, float * inout)"""
         return _Math.RunningMeanHighPassFilterF_apply(self, *args)
@@ -1808,28 +1914,16 @@ class RunningMeanHighPassFilterF(InPlaceFilterF):
         """clone(RunningMeanHighPassFilterF self) -> InPlaceFilterF"""
         return _Math.RunningMeanHighPassFilterF_clone(self)
 
-    def reset(self):
-        """reset(RunningMeanHighPassFilterF self)"""
-        return _Math.RunningMeanHighPassFilterF_reset(self)
-
-    def setSamplingFrequency(self, *args):
-        """setSamplingFrequency(RunningMeanHighPassFilterF self, double fsamp)"""
-        return _Math.RunningMeanHighPassFilterF_setSamplingFrequency(self, *args)
-
-    def setParameters(self, *args):
-        """setParameters(RunningMeanHighPassFilterF self, int n, double const * params) -> int"""
-        return _Math.RunningMeanHighPassFilterF_setParameters(self, *args)
-
 RunningMeanHighPassFilterF_swigregister = _Math.RunningMeanHighPassFilterF_swigregister
 RunningMeanHighPassFilterF_swigregister(RunningMeanHighPassFilterF)
 
-class RunningMeanHighPassFilterD(InPlaceFilterD):
+class RunningMeanHighPassFilterD(RunningMeanFilterD):
     """Proxy of C++ Seiscomp::Math::Filtering::RunningMeanHighPass<(double)> class"""
     __swig_setmethods__ = {}
-    for _s in [InPlaceFilterD]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [RunningMeanFilterD]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RunningMeanHighPassFilterD, name, value)
     __swig_getmethods__ = {}
-    for _s in [InPlaceFilterD]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [RunningMeanFilterD]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, RunningMeanHighPassFilterD, name)
     __repr__ = _swig_repr
     def __init__(self, windowLength=0, fsamp=0.0): 
@@ -1843,10 +1937,6 @@ class RunningMeanHighPassFilterD(InPlaceFilterD):
         except: self.this = this
     __swig_destroy__ = _Math.delete_RunningMeanHighPassFilterD
     __del__ = lambda self : None;
-    def setLength(self, *args):
-        """setLength(RunningMeanHighPassFilterD self, double windowLength)"""
-        return _Math.RunningMeanHighPassFilterD_setLength(self, *args)
-
     def apply(self, *args):
         """apply(RunningMeanHighPassFilterD self, int n, double * inout)"""
         return _Math.RunningMeanHighPassFilterD_apply(self, *args)
@@ -1854,18 +1944,6 @@ class RunningMeanHighPassFilterD(InPlaceFilterD):
     def clone(self):
         """clone(RunningMeanHighPassFilterD self) -> InPlaceFilterD"""
         return _Math.RunningMeanHighPassFilterD_clone(self)
-
-    def reset(self):
-        """reset(RunningMeanHighPassFilterD self)"""
-        return _Math.RunningMeanHighPassFilterD_reset(self)
-
-    def setSamplingFrequency(self, *args):
-        """setSamplingFrequency(RunningMeanHighPassFilterD self, double fsamp)"""
-        return _Math.RunningMeanHighPassFilterD_setSamplingFrequency(self, *args)
-
-    def setParameters(self, *args):
-        """setParameters(RunningMeanHighPassFilterD self, int n, double const * params) -> int"""
-        return _Math.RunningMeanHighPassFilterD_setParameters(self, *args)
 
 RunningMeanHighPassFilterD_swigregister = _Math.RunningMeanHighPassFilterD_swigregister
 RunningMeanHighPassFilterD_swigregister(RunningMeanHighPassFilterD)

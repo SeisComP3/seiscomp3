@@ -22,7 +22,6 @@
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/core/baseobject.h>
 
-#include <boost/signal.hpp>
 #include <boost/any.hpp>
 #include <boost/regex.hpp>
 

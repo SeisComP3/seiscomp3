@@ -525,6 +525,15 @@ void PGAV::setPadLength(double len) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PGAV::setClipTmaxToLowestFilterFrequency(bool f) {
+	_config.clipTmax = f;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PGAV::setNonCausalFiltering(bool f, double taperLength) {
 	_config.noncausal = f;
 	_config.taperLength = taperLength;
@@ -1323,8 +1332,19 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	// -------------------------------------------------------------------
 	// Calculate response spectra
 	// -------------------------------------------------------------------
-	double Tmin = _config.Tmin;
 	double Tmax = _config.Tmax;
+
+	if ( _config.clipTmax ) {
+		double loFreq = std::max(_config.loPDFreq, _config.loFilterFreq);
+		// Use an epsilon of 1E-20 to take it as zero
+		if ( loFreq > 1E-20 ) {
+			double tmpTmax = 1.0 / loFreq;
+			if ( tmpTmax < Tmax ) {
+				Tmax = tmpTmax;
+				SEISCOMP_DEBUG(">  adjust Tmax = %f to stay within filter bands", Tmax);
+			}
+		}
+	}
 
 	vector<double> T;
 
@@ -1338,31 +1358,47 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 			int nT = _config.naturalPeriods-1;
 
 			if ( _config.naturalPeriodsLog ) {
-				if ( Tmin != 0.0 && Tmax != 0.0 ) {
-					double logTmin = log10(Tmin);
-					double logTmax = log10(Tmax);
+				if ( _config.Tmin != 0.0 && _config.Tmax != 0.0 ) {
+					double logTmin = log10(_config.Tmin);
+					double logTmax = log10(_config.Tmax);
 
 					double dT = (logTmax-logTmin)/nT;
-					for ( int i = 0; i < nT; ++i )
-						T.push_back(pow(10.0, logTmin+i*dT));
-					T.push_back(Tmax);
+					for ( int i = 0; i < nT; ++i ) {
+						double v = pow(10.0, logTmin+i*dT);
+						if ( v <= Tmax ) T.push_back(v);
+					}
+
+					if ( _config.Tmax <= Tmax ) T.push_back(_config.Tmax);
 				}
 				else
 					SEISCOMP_DEBUG(">  given natural periods ignored: log(0) is not defined");
 			}
 			else {
-				double dT = (Tmax-Tmin)/nT;
-				for ( int i = 0; i < nT; ++i )
-					T.push_back(Tmin+i*dT);
-				T.push_back(Tmax);
+				double dT = (_config.Tmax-_config.Tmin)/nT;
+				for ( int i = 0; i < nT; ++i ) {
+					double v = _config.Tmin+i*dT;
+					if ( v <= Tmax ) T.push_back(v);
+				}
+
+				if ( _config.Tmax <= Tmax ) T.push_back(_config.Tmax);
 			}
 		}
 		else
-			T.push_back(Tmin);
+			T.push_back(_config.Tmin);
 	}
 	else {
-		SEISCOMP_DEBUG(">  using fixed natural periods table");
-		T.assign(FIXED_PERIODS, FIXED_PERIODS + sizeof(FIXED_PERIODS)/sizeof(double));
+		if ( _config.clipTmax ) {
+			SEISCOMP_DEBUG(">  using fixed natural periods table cut by Tmax = %f", Tmax);
+			int len = sizeof(FIXED_PERIODS)/sizeof(double);
+			for ( int i = 0; i < len; ++i ) {
+				if ( FIXED_PERIODS[i] <= Tmax )
+					T.push_back(FIXED_PERIODS[i]);
+			}
+		}
+		else {
+			SEISCOMP_DEBUG(">  using fixed natural periods table");
+			T.assign(FIXED_PERIODS, FIXED_PERIODS + sizeof(FIXED_PERIODS)/sizeof(double));
+		}
 	}
 
 	_responseSpectra.clear();
@@ -1450,6 +1486,7 @@ void PGAV::init() {
 	setFilterParams(0,0,0);
 	setNonCausalFiltering(false, -1);
 	setPadLength(-1);
+	setClipTmaxToLowestFilterFrequency(true);
 
 	_config.saturationThreshold = -1;
 

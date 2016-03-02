@@ -117,10 +117,12 @@ void Ruler::setRange(double min, double max) {
 	_max = max;
 
 	if ( _autoScale ) {
-		if ( _max-_min > 0 )
-			setScale(rulerWidth()/(_max-_min));
-		else
-			update();
+		if ( _max-_min <= 0 ) {
+			_min = (_min+_max)*0.5-1;
+			_max = _min+2;
+		}
+
+		setScale(rulerWidth()/(_max-_min));
 	}
 	else {
 		updateIntervals();

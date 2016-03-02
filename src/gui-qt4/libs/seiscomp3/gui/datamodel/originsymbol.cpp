@@ -58,7 +58,7 @@ OriginSymbol::OriginSymbol(double latitude,
  : Symbol(decorator),
    _filled(false),
    _geoPosition(latitude, longitude),
-   _depth(latitude) {
+   _depth(depth) {
 
 	init();
 }

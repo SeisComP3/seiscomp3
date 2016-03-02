@@ -30,6 +30,12 @@
 			<parameter name="legend" type="boolean" default="true">
 				<description>Enables/disabled the display of the legend at startup.</description>
 			</parameter>
+			<parameter name="annotations" type="boolean" default="false">
+				<description>Enables/disabled drawing of station annotations at startup.</description>
+			</parameter>
+			<parameter name="annotationsWithChannels" type="boolean" default="true">
+				<description>Enables/disabled drawing of station annotations with location/channel codes.</description>
+			</parameter>
 			<group name="stations">
 				<parameter name="groundMotionFilter" type="string">
 					<description>Sets the filter applied to determine ground motion.</description>

@@ -51,6 +51,19 @@ Mw(avg)
    as Mw(mB) measurements become available, these (and in future other large-event
    magnitudes) become progressively more weight in the average.
 
+If an amplitude is updated, the corresponding magnitude is updated as well.
+This allows the computation of preliminary, real-time magnitudes even before
+the full length of the P coda is available.
+
+
+Relationship between amplitudes and origins
+===========================================
+
+scmag makes use of the fact that origins sent by scautoloc and scolv include
+the complete set of arrivals, which reference picks used for origin computation.
+The picks in turn are referenced by a number of amplitudes, some of which are
+relevant for magnitude computation.
+
 
 Summary magnitude
 =================

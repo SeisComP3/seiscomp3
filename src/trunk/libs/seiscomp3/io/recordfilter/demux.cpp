@@ -69,7 +69,6 @@ Record *RecordDemuxFilter::feed(const Record *rec) {
 
 	return itp.first->second->feed(rec);
 }
-
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -79,10 +78,8 @@ Record *RecordDemuxFilter::feed(const Record *rec) {
 Record *RecordDemuxFilter::flush() {
 	while ( _streams.begin() != _streams.end() ) {
 		Record *rec = _streams.begin()->second->flush();
+		if ( rec != NULL ) return rec;
 		_streams.erase(_streams.begin());
-
-		if ( rec != NULL )
-			return rec;
 	}
 
 	return NULL;

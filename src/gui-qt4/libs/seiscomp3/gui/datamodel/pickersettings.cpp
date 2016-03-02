@@ -229,6 +229,7 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	        this, SLOT(save()));
 
 	_ui.spinPVel->setValue(_locatorConfig.reductionVelocityP);
+	_ui.cbMaplines->setChecked(_locatorConfig.drawMapLines);
 	_ui.cbPlotGridlines->setChecked(_locatorConfig.drawGridLines);
 	_ui.cbComputeMissingTakeOffAngles->setChecked(_locatorConfig.computeMissingTakeOffAngles);
 	_ui.spinAddStationsDistance->setValue(_pickerConfig.defaultAddStationsDistance);
@@ -546,6 +547,7 @@ AmplitudeView::Config PickerSettings::amplitudeConfig() const {
 
 OriginLocatorView::Config PickerSettings::locatorConfig() const {
 	_locatorConfig.reductionVelocityP = _ui.spinPVel->value();
+	_locatorConfig.drawMapLines = _ui.cbMaplines->isChecked();
 	_locatorConfig.drawGridLines = _ui.cbPlotGridlines->isChecked();
 	_locatorConfig.computeMissingTakeOffAngles = _ui.cbComputeMissingTakeOffAngles->isChecked();
 	return _locatorConfig;

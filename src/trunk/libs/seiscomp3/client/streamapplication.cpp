@@ -34,6 +34,7 @@ StreamApplication::StreamApplication(int argc, char **argv)
 	_startAcquisition = true;
 	_closeOnAcquisitionFinished = true;
 	_recordInputHint = Record::DATA_ONLY;
+	_recordDatatype = Array::FLOAT;
 	_logRecords = NULL;
 	_receivedRecords = 0;
 	_requestSync = false;
@@ -197,6 +198,15 @@ void StreamApplication::setRecordInputHint(Record::Hint hint) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void StreamApplication::setRecordDatatype(Array::DataType datatype) {
+	_recordDatatype = datatype;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StreamApplication::startRecordThread() {
 	_recordThread = new boost::thread(boost::bind(&StreamApplication::readRecords, this, true));
 }
@@ -331,7 +341,7 @@ void StreamApplication::closeStream() {
 void StreamApplication::readRecords(bool sendEndNotification) {
 	SEISCOMP_INFO("Starting record acquisition");
 
-	IO::RecordInput recInput(_recordStream.get(), Array::FLOAT, _recordInputHint);
+	IO::RecordInput recInput(_recordStream.get(), _recordDatatype, _recordInputHint);
 	try {
 		for ( IO::RecordIterator it = recInput.begin(); it != recInput.end(); ++it ) {
 			Record* rec = *it;

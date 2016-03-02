@@ -1058,7 +1058,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 			<< formatString(getSituation(sloc->longitude(), gpLongitude), 1, 0, "hemispheric situation")
 
 			//! station elevation //! integer 4
-			<< formatString(toString((int) sloc->elevation()).c_str(), 4, 0, "station elevation")
+			<< formatString(toString((int) (sloc->elevation() / toDouble(cRL.test20))).c_str(), 4, 0, "station elevation")
 
 			//! blank space
 			<< formatString("", 1, 0)
@@ -2403,7 +2403,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 				//! hemispheric station situation E/W //! Alphanumeric 1
 				<< formatString(getSituation(sloc->longitude(), gpLongitude), 1, 0, "hemispheric situation")
 				//! station elevation //! integer 4
-				<< formatString(toString((int) sloc->elevation()).c_str(), 4, 0, "station elevation")
+				<< formatString(toString((int) (sloc->elevation() / toDouble(cRL.test20))).c_str(), 4, 0, "station elevation")
 				//! blank space
 				<< formatString("", 1, 0)
 				//! station delay //! float 5.2

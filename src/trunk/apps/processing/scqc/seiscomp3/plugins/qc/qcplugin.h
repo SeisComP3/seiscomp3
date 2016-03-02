@@ -23,8 +23,15 @@
 #include <seiscomp3/datamodel/waveformquality.h>
 
 #include <queue>
+#include <boost/version.hpp>
 #include <boost/thread.hpp>
+#if (BOOST_VERSION < 104000)
 #include <boost/signal.hpp>
+namespace bsig = boost;
+#else
+#include <boost/signals2.hpp>
+namespace bsig = boost::signals2;
+#endif
 
 
 namespace Seiscomp {
@@ -47,10 +54,10 @@ class SC_QCPLUGIN_API QcApp : public Processing::Application {
 		virtual const QcConfig* qcConfig() const { return NULL; };
 		virtual QcMessenger* qcMessenger() const { return NULL; };
 
-		typedef boost::signal<void()> TimerSignal;
+		typedef bsig::signal<void()> TimerSignal;
 		virtual void addTimeout(const TimerSignal::slot_type& onTimeout) const {};
 		virtual bool archiveMode() const { return false; };
-                virtual std::string creatorID() const = 0;
+		virtual std::string creatorID() const = 0;
 
  		TimerSignal doneSignal;
 };

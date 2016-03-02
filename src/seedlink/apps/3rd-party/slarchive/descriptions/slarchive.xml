@@ -226,7 +226,7 @@
 						are specified for a given stream with the '-S' or '-l' options.
 					</description>
 				</option>
-				<option flag="S" argument="stream[:selectors], ...">
+				<option flag="S" argument="stream[:selectors]">
 					<description>
 						The connection will be configured in multi-station mode with optional SeedLink selectors
 						for each station, see examples below. Stream should be provided in NET_STA format. If no

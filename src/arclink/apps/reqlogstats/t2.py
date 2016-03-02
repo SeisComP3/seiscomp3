@@ -4,15 +4,17 @@
 #
 import sys
 
-dcid_list = ['BGR', 'ETHZ', 'GFZ', 'INGV', 'IPGP', 'LMU', 'NIEP', 'ODC', 'RESIF']
+dcid_list = ['BGR', 'ETHZ', 'GFZ', 'INGV', 'IPGP', 'KOERI', 'LMU', 'NIEP', 'ODC', 'RESIF']
 curday = None
-row = {}
+#row = dict.fromkeys(dcid_list, 0)
 
 def flush_day(day, row):
     s = sum(float(row[x]) for x in row.keys())
     print "%s %10.1f" % (day, s),
     for dcid in dcid_list:
-        if row.has_key(dcid):
+        ##if row.has_key(dcid):
+	# Ugly: ideally would be None if there was no data
+	if row[dcid] != 0:
             print "%8.1f" % (float(row[dcid])),
         else:
             print "%8d" % 0,
@@ -28,14 +30,17 @@ for x in sys.stdin.readlines():
     val = words[2]
 
     if day == curday:
-        row[dcid] = val
+        # If there are multiple reports from a dcid, sum them:
+        #row[dcid] = val
+        row[dcid] += float(val)
     else:
         # new day, flush and reload
         if (curday != None):
             flush_day(curday, row)
         curday = day
-        row = {}
-        row[dcid] = val
+        row = dict.fromkeys(dcid_list, 0)
+        row[dcid] = float(val)
+
 if (curday != None):
     flush_day(curday, row)
 

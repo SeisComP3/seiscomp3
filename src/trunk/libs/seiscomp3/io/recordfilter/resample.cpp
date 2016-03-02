@@ -357,15 +357,36 @@ GenericRecord *RecordResampler<T>::resample(DownsampleStage *stage, const Record
 	T *buffer = &stage->buffer[0];
 
 	if ( stage->missingSamples > 0 ) {
+		if ( !stage->startTime.valid() ) {
+			Core::Time firstNewSampleStart = rec->startTime() + Core::TimeSpan(stage->dt*stage->N2);
+			double targetDt = 1.0 / stage->targetRate;
+			double mod = fmod((double)firstNewSampleStart, targetDt);
+			double skip = targetDt - mod;
+			stage->samplesToSkip = int(skip*stage->sampleRate+0.5);
+			stage->startTime = rec->startTime() + Core::TimeSpan(stage->samplesToSkip*stage->dt+5E-7);
+			// To be discussed: should we round to the next mulitple of stage->targetRate?
+		}
+
+		if ( stage->samplesToSkip > 0 ) {
+			if ( data_len >= stage->samplesToSkip ) {
+				data_len -= stage->samplesToSkip;
+				data += stage->samplesToSkip;
+				stage->samplesToSkip = 0;
+			}
+			else {
+				stage->samplesToSkip -= data_len;
+				data_len = 0;
+			}
+
+			if ( !data_len ) return NULL;
+		}
+
 		size_t toCopy = std::min(stage->missingSamples, data_len);
 		memcpy(buffer + stage->buffer.size() - stage->missingSamples,
 		       data, toCopy*sizeof(T));
 		data += toCopy;
 		data_len -= toCopy;
 		stage->missingSamples -= toCopy;
-
-		if ( !stage->startTime.valid() )
-			stage->startTime = rec->startTime();
 
 		// Still samples missing and no more data available, return
 		if ( stage->missingSamples > 0 ) return NULL;

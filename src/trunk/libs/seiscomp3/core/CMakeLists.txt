@@ -11,6 +11,7 @@ SET(CORE_SOURCES
 	strings.cpp
 	arrayfactory.cpp
 	typedarray.cpp
+	bitset.cpp
 	record.cpp
 	array.cpp
 	genericrecord.cpp
@@ -56,6 +57,8 @@ SET(CORE_HEADERS
 	arrayfactory.h
 	array.h
 	typedarray.h
+	bitset.h
+	bitset.ipp
 	record.h
 	genericrecord.h
 	greensfunction.h

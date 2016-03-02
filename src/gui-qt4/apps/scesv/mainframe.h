@@ -18,7 +18,9 @@
 
 #include <QtGui>
 #include <seiscomp3/gui/core/mainwindow.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/databasequery.h>
+#endif
 #include "ui_mainframe.h"
 #include <seiscomp3/gui/datamodel/magnitudeview.h>
 

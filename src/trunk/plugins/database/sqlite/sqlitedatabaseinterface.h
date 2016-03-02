@@ -24,7 +24,7 @@ namespace Database {
 
 class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 	DECLARE_SC_CLASS(SQLiteDatabase);
-	
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -39,7 +39,7 @@ class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 	public:
 		bool connect(const char *con);
 		void disconnect();
-		
+
 		bool isConnected() const;
 
 		void start();
@@ -56,6 +56,7 @@ class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 		bool fetchRow();
 		int findColumn(const char* name);
 		int getRowFieldCount() const;
+		const char *getRowFieldName(int index);
 		const void* getRowField(int index);
 		size_t getRowFieldSize(int index);
 
@@ -66,7 +67,7 @@ class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 	protected:
 		bool open();
 
-	
+
 	// ------------------------------------------------------------------
 	//  Implementation
 	// ------------------------------------------------------------------

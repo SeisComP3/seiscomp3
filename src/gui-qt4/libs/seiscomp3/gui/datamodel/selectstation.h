@@ -17,8 +17,10 @@
 #include <QDialog>
 #include <QAbstractTableModel>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/datamodel/station.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 #include <seiscomp3/gui/datamodel/ui_selectstation.h>

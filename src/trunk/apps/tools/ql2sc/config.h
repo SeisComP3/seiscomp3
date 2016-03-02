@@ -31,6 +31,7 @@ struct HostConfig {
 	std::string     host;
 	std::string     url;
 	bool            gzip;
+	bool            native;
 	int             options;
 	std::string     filter;
 	RoutingTable    routingTable;

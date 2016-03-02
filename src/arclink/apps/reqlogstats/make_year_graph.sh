@@ -148,6 +148,11 @@ fi
 
 gnuplot <<EOF
 set xlabel 'Day in $start_year'
+set xrange [0:366]
+set xtics out nomirror
+set xtics 0,7,366 format ""
+set mxtics 7
+set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
 
 set ylabel 'total_size, MiB'
 set yrange [0:]
@@ -168,7 +173,7 @@ set style line 3 linecolor rgb "#00589C"
 set style line 6 linecolor rgb "violet"
 set style line 10 linecolor rgb "magenta"
 
-plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf("%i", \$0):"") title 'BGR' ls 2, \
+plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \

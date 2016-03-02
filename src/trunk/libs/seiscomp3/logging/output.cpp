@@ -20,7 +20,7 @@ namespace Seiscomp {
 namespace Logging {
 
 
-Output::Output() : _logComponent(true), _logContext(false) {
+Output::Output() : _logComponent(true), _logContext(false), _useUTC(false) {
 }
 
 

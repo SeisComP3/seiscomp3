@@ -19,7 +19,9 @@
 #include <QTableWidget>
 
 #include "ui_inspector.h"
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
+#endif
 
 
 class Inspector : public QDialog {

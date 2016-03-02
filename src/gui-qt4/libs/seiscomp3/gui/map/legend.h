@@ -13,7 +13,9 @@
 #ifndef __SEISCOMP_GUI_MAP_LEGEND_H__
 #define __SEISCOMP_GUI_MAP_LEGEND_H__
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
+#endif
 
 #include <seiscomp3/gui/qt4.h>
 

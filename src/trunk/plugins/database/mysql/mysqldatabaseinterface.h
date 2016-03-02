@@ -60,6 +60,7 @@ class MySQLDatabase : public Seiscomp::IO::DatabaseInterface {
 		bool fetchRow();
 		int findColumn(const char* name);
 		int getRowFieldCount() const;
+		const char *getRowFieldName(int index);
 		const void* getRowField(int index);
 		size_t getRowFieldSize(int index);
 

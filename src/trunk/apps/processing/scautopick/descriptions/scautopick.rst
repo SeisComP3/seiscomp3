@@ -14,53 +14,52 @@ MLv a time window of 150s is estimated to make sure that S-arrivals are inside
 this time window. The precalculated amplitudes are sent out and received by
 the magnitude tool.
 
-New Features
+scautopick usually runs in the background connected to a real-time data source
+such as :ref:`Seedlink <seedlink>`. This is referred to as online mode. Another
+option to run scautopick is on offline mode with files.
+
+Online mode
+===========
+
+In online mode the workflow draws like this:
+
+* scautopicks reads all of its bindings and subscribes to stations
+  where :confval:`detecEnable` is set to ``true``
+* the data time window requested from the data source is [system-:confval:`leadTime`, NULL]
+  meaning an open end time that causes Seedlink to stream real-time data if no
+  more data are in the buffers
+* each incoming record is filtered according to :confval:`detecFilter`
+* the samples are checked for exceedance of :confval:`trigOn` and in the positive
+  case either a post picker (:confval:`picker`) is launched or a Pick object
+  will be sent
+* if :confval:`sendDetections` is set to ``true`` trigger will be sent in any
+  case for e.g. debugging
+* after the primary stage has finished (detector only or picker) a secondary
+  picker will be launched if configured with :confval:`spicker`
+
+These steps repeat for any incoming record.
+
+Offline mode
 ============
 
-New features have been added to configure the picker. These are useful when we
-would like to use a secondary picking module with different configuration or
-add specific parameter for a single station.
+.. note::
 
-global-case:
+   Due to code changes in the file data source the command line option **--playback**
+   is essential otherwise a real-time time window is set and all records are
+   most likely filtered out.
 
-.. code-block:: sh
-
-   module.trunk.global.detecStream = HH
-   module.trunk.global.detecLocID = ""
-   module.trunk.global.detecFilter = \
-       "RMHP(10)>>ITAPER(30)>>BW(4,0.7,2)>>STALTA(2,80)"
-   module.trunk.global.trigOn = 3
-   module.trunk.global.trigOff = 1.5
-
-In the above case all the channels will be picked on HH channel with same filter
-and trigOn trigOff values.
-
-station-case:
+To tune scautopick or to do playbacks it is helpful to run scautopick not with
+a real-time data source but on a data set, e.g. a multiplexed sorted MiniSEED
+volume. scautopick will apply the same workflow as in online mode but the
+acquisition of data records has to change. If the input data (file) has been
+read scautopick will exit and furthermore it must not ask for a particular
+time window, especially not for a real-time time window. To accomplish that
+the command line parameter :option:`--playback` has to be used.
 
 .. code-block:: sh
 
-   module.trunk.CH.FUORN.detecStream = EH
-   module.trunk.CH.FUORN.detecFilter = \
-       "RMHP(10)>>ITAPER(30)>>BW(4,0.7,2)>>STALTA(2,80)"
-   module.trunk.CH.FUORN.trigOn = 2
-   module.trunk.CH.FUORN.trigOff = 1
+   $ scautopick --playback -I data.mseed
 
-in this case, regardless what has been defined in the trunk/key, in the profile and
-in the module.trunk.global variable, for station FUORN we will pick on the EH
-channels with this specific parameters.
-
-We can also mix the two above cases, e.g.
-
-.. code-block:: sh
-
-   module.trunk.global.detecStream = HH
-   module.trunk.global.detecLocID = ""
-   module.trunk.global.detecFilter = \
-       "RMHP(10)>>ITAPER(30)>>BW(4,0.7,2)>>STALTA(2,80)"
-   module.trunk.global.trigOn = 3
-   module.trunk.global.trigOff = 1.5
-   module.trunk.CH.EMBD.detecStream = EH
-   module.trunk.CH.ZUR.trigOn = 10
-
-In this case we have a global config for the entire network and a specific stream
-for EMBD, and a specific trigger threshold for ZUR.
+This call will process all records in :file:`data.mseed` for which bindings
+exist and send the results to the messaging. If all data records are processed
+scautpick will exit. The processing steps are similar to the online mode.

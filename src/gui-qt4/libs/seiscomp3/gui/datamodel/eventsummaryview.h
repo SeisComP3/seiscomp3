@@ -19,6 +19,7 @@
 #include <seiscomp3/gui/datamodel/ui_eventsummaryview.h>
 #include <seiscomp3/gui/datamodel/ui_eventsummaryview_hypocenter.h>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/focalmechanism.h>
@@ -28,6 +29,7 @@
 #include <seiscomp3/gui/map/mapwidget.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/magnitude.h>
+#endif
 
 #include <seiscomp3/gui/core/application.h>
 

@@ -19,6 +19,7 @@
 #include <string>
 #include <list>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/magnitude.h>
@@ -26,6 +27,7 @@
 #include <seiscomp3/datamodel/momenttensor.h>
 #include <seiscomp3/datamodel/journalentry.h>
 #include <seiscomp3/datamodel/databasequery.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
 #include <seiscomp3/gui/datamodel/tensorsymbol.h>

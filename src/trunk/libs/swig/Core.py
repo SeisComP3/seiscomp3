@@ -765,6 +765,76 @@ def Array_ConstCast(*args):
   return _Core.Array_ConstCast(*args)
 Array_ConstCast = _Core.Array_ConstCast
 
+class BitSet(BaseObject):
+    __swig_setmethods__ = {}
+    for _s in [BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BitSet, name, value)
+    __swig_getmethods__ = {}
+    for _s in [BaseObject]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, BitSet, name)
+    __repr__ = _swig_repr
+    __swig_getmethods__["ClassName"] = lambda x: _Core.BitSet_ClassName
+    if _newclass:ClassName = staticmethod(_Core.BitSet_ClassName)
+    __swig_getmethods__["TypeInfo"] = lambda x: _Core.BitSet_TypeInfo
+    if _newclass:TypeInfo = staticmethod(_Core.BitSet_TypeInfo)
+    def className(self): return _Core.BitSet_className(self)
+    def typeInfo(self): return _Core.BitSet_typeInfo(self)
+    __swig_getmethods__["Cast"] = lambda x: _Core.BitSet_Cast
+    if _newclass:Cast = staticmethod(_Core.BitSet_Cast)
+    __swig_getmethods__["ConstCast"] = lambda x: _Core.BitSet_ConstCast
+    if _newclass:ConstCast = staticmethod(_Core.BitSet_ConstCast)
+    def __init__(self, *args): 
+        this = _Core.new_BitSet(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def __iand__(self, *args): return _Core.BitSet___iand__(self, *args)
+    def __ior__(self, *args): return _Core.BitSet___ior__(self, *args)
+    def __ixor__(self, *args): return _Core.BitSet___ixor__(self, *args)
+    def __isub__(self, *args): return _Core.BitSet___isub__(self, *args)
+    def __ilshift__(self, *args): return _Core.BitSet___ilshift__(self, *args)
+    def __irshift__(self, *args): return _Core.BitSet___irshift__(self, *args)
+    def __lshift__(self, *args): return _Core.BitSet___lshift__(self, *args)
+    def __rshift__(self, *args): return _Core.BitSet___rshift__(self, *args)
+    def __invert__(self): return _Core.BitSet___invert__(self)
+    def resize(self, *args): return _Core.BitSet_resize(self, *args)
+    def clear(self): return _Core.BitSet_clear(self)
+    def append(self, *args): return _Core.BitSet_append(self, *args)
+    def set(self, *args): return _Core.BitSet_set(self, *args)
+    def reset(self, *args): return _Core.BitSet_reset(self, *args)
+    def flip(self, *args): return _Core.BitSet_flip(self, *args)
+    def test(self, *args): return _Core.BitSet_test(self, *args)
+    def any(self): return _Core.BitSet_any(self)
+    def none(self): return _Core.BitSet_none(self)
+    def numberOfBitsSet(self): return _Core.BitSet_numberOfBitsSet(self)
+    def toUlong(self): return _Core.BitSet_toUlong(self)
+    def size(self): return _Core.BitSet_size(self)
+    def numberOfBlocks(self): return _Core.BitSet_numberOfBlocks(self)
+    def maximumSize(self): return _Core.BitSet_maximumSize(self)
+    def empty(self): return _Core.BitSet_empty(self)
+    def findFirst(self): return _Core.BitSet_findFirst(self)
+    def findNext(self, *args): return _Core.BitSet_findNext(self, *args)
+    def impl(self, *args): return _Core.BitSet_impl(self, *args)
+    __swig_destroy__ = _Core.delete_BitSet
+    __del__ = lambda self : None;
+BitSet_swigregister = _Core.BitSet_swigregister
+BitSet_swigregister(BitSet)
+
+def BitSet_ClassName():
+  return _Core.BitSet_ClassName()
+BitSet_ClassName = _Core.BitSet_ClassName
+
+def BitSet_TypeInfo():
+  return _Core.BitSet_TypeInfo()
+BitSet_TypeInfo = _Core.BitSet_TypeInfo
+
+def BitSet_Cast(*args):
+  return _Core.BitSet_Cast(*args)
+BitSet_Cast = _Core.BitSet_Cast
+
+def BitSet_ConstCast(*args):
+  return _Core.BitSet_ConstCast(*args)
+BitSet_ConstCast = _Core.BitSet_ConstCast
+
 class Record(BaseObject):
     __swig_setmethods__ = {}
     for _s in [BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
@@ -814,6 +884,7 @@ class Record(BaseObject):
     def data(self): return _Core.Record_data(self)
     def raw(self): return _Core.Record_raw(self)
     def copy(self): return _Core.Record_copy(self)
+    def clipMask(self): return _Core.Record_clipMask(self)
     def saveSpace(self): return _Core.Record_saveSpace(self)
     def read(self, *args): return _Core.Record_read(self, *args)
     def write(self, *args): return _Core.Record_write(self, *args)
@@ -953,7 +1024,9 @@ class GenericRecord(Record):
     def setSamplingFrequency(self, *args): return _Core.GenericRecord_setSamplingFrequency(self, *args)
     def data(self, *args): return _Core.GenericRecord_data(self, *args)
     def raw(self): return _Core.GenericRecord_raw(self)
+    def clipMask(self): return _Core.GenericRecord_clipMask(self)
     def setData(self, *args): return _Core.GenericRecord_setData(self, *args)
+    def setClipMask(self, *args): return _Core.GenericRecord_setClipMask(self, *args)
     def dataUpdated(self): return _Core.GenericRecord_dataUpdated(self)
     def saveSpace(self): return _Core.GenericRecord_saveSpace(self)
     def copy(self): return _Core.GenericRecord_copy(self)

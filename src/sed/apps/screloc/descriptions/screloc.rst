@@ -7,7 +7,11 @@ screloc does not yet listen to event information and does not skip origins for
 that a more recent one exists. Instead any incoming automatic origin is
 processed.
 
-The following example configuration show how to setup screloc for
+screloc can be conveniently used to test different locators and velocity model
+or to relocate events with updated velocity models. Check out the
+:ref:`Example applications <screloc_examples>` for screloc
+
+The following example configuration shows a setup of screloc for
 :ref:`NonLinLoc <global_nonlinloc>`:
 
 .. code-block:: sh
@@ -61,3 +65,31 @@ The following example configuration show how to setup screloc for
    NonLinLoc.profile.global.tablePath = ${NLLROOT}/iasp91/iasp91
    NonLinLoc.profile.global.controlFile = ${NLLROOT}/NLL.global.conf
 
+
+.. _screloc-example:
+
+Examples
+--------
+
+* Run screloc to with a specific velocity model given in a profile by :ref:`NonLinLoc <global_nonlinloc>`.
+  Use a specific userID and authorID for uniquely recognizing the relocation.
+  Changing the priority in :ref:`scevent` before running the example, e.g. to
+  TIME_AUTOMTIC, sets the latest origin (which will be created by screloc) to preferred.
+
+  .. code-block:: sh
+
+    # set specific velocity profile defined for NonLinLoc
+    profile=<your_profile>
+    # set userID
+    userID="<your_user>"
+    # set authorID
+    authorID="<screloc>"
+
+    for i in `scevtls -d mysql://sysop:sysop@localhost/seiscomp3 --begin '2015-01-01 00:00:00' --end '2015-02-01 00:00:00'`; do
+
+        orgID=`echo "select preferredOriginID from Event,PublicObject where Event._oid=PublicObject._oid and PublicObject.publicID='$i'" |\
+        mysql -u sysop -p sysop -D seiscomp3 -h localhost -N`
+
+        screloc -O $orgID -d localhost --locator NonLinLoc --profile $profile -u $userID --debug --author=$authorID
+
+    done

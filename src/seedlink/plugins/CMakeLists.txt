@@ -13,7 +13,6 @@ IF ( NOT MACOSX )
 		serial_plugin
 		sockplugin
 		naqsplugin
-		nrts_plugin
 		q330plugin
 		reftek_plugin
 		ewexport_plugin

@@ -17,7 +17,9 @@
 
 
 #include <seiscomp3/gui/qt4.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/utils.h>
+#endif
 #include <seiscomp3/gui/core/utils.h>
 #include <QCheckBox>
 

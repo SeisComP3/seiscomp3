@@ -48,8 +48,10 @@ namespace Gui {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
                                    QWidget *parent, Qt::WFlags f)
- : MapWidget(maps, parent, f), _origin(NULL), _drawStations(false),
-   _interactive(true) {
+: MapWidget(maps, parent, f)
+, _origin(NULL), _drawStations(false)
+, _drawStationsLines(true), _interactive(true)
+{
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;
@@ -64,8 +66,10 @@ OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
                                    QWidget *parent, Qt::WFlags f)
- : MapWidget(mapTree, parent, f), _origin(NULL), _drawStations(false),
-   _interactive(true) {
+: MapWidget(mapTree, parent, f), _origin(NULL)
+, _drawStations(false), _drawStationsLines(true)
+, _interactive(true)
+{
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;
@@ -165,32 +169,34 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 		}
 
 		if ( _drawStations ) {
-			int cutOff = 0;
+			if ( _drawStationsLines ) {
+				int cutOff = 0;
 
-			QPoint originLocation;
-			if ( canvas().projection()->project(originLocation, originLocationF) ) {
-				if ( canvas().symbolCollection()->size() > 0 ) {
-					(*canvas().symbolCollection()->begin())->update();
-					cutOff = (*canvas().symbolCollection()->begin())->size().width();
+				QPoint originLocation;
+				if ( canvas().projection()->project(originLocation, originLocationF) ) {
+					if ( canvas().symbolCollection()->size() > 0 ) {
+						(*canvas().symbolCollection()->begin())->update();
+						cutOff = (*canvas().symbolCollection()->begin())->size().width();
+					}
+
+					if ( cutOff ) {
+						p.setClipping(true);
+						p.setClipRegion(QRegion(rect()) -
+						                QRegion(QRect(originLocation.x() - cutOff/2, originLocation.y() - cutOff/2,
+						                              cutOff, cutOff), QRegion::Ellipse));
+					}
 				}
 
-				if ( cutOff ) {
-					p.setClipping(true);
-					p.setClipRegion(QRegion(rect()) -
-					                QRegion(QRect(originLocation.x() - cutOff/2, originLocation.y() - cutOff/2,
-					                        cutOff, cutOff), QRegion::Ellipse));
+				p.setPen(SCScheme.colors.map.lines);
+				for ( QVector<StationEntry>::iterator it = _stations.begin(); it != _stations.end(); ++it ) {
+					if ( !(*it).validLocation || !(*it).isArrival ) continue;
+					if ( !(*it).isActive ) continue;
+					canvas().drawGeoLine(p, originLocationF, (*it).location);
 				}
-			}
 
-			p.setPen(SCScheme.colors.map.lines);
-			for ( QVector<StationEntry>::iterator it = _stations.begin(); it != _stations.end(); ++it ) {
-				if ( !(*it).validLocation || !(*it).isArrival ) continue;
-				if ( !(*it).isActive ) continue;
-				canvas().drawGeoLine(p, originLocationF, (*it).location);
+				if ( cutOff )
+					p.setClipping(false);
 			}
-
-			if ( cutOff )
-				p.setClipping(false);
 
 			p.setPen(SCScheme.colors.map.outlines);
 			for ( int i = _stations.count()-1; i >= 0; --i ) {
@@ -587,6 +593,18 @@ void OriginLocatorMap::addArrival() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorMap::setDrawStations(bool draw) {
 	_drawStations = draw;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorMap::setDrawStationLines(bool draw) {
+	if ( _drawStationsLines == draw ) return;
+
+	_drawStationsLines = draw;
+	update();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

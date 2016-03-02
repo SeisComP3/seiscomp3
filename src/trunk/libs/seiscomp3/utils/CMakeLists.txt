@@ -8,6 +8,7 @@ SET(UTILS_SOURCES
 	misc.cpp
 	keyvalues.cpp
 	bindings.cpp
+	stringfirewall.cpp
 )
 
 SET(UTILS_HEADERS
@@ -22,6 +23,7 @@ SET(UTILS_HEADERS
 	mutex.h
 	keyvalues.h
 	bindings.h
+	stringfirewall.h
 )
 
 SC_SETUP_LIB_SUBDIR(UTILS)

@@ -159,6 +159,32 @@ class DuplicateNameCheck : public ModelVisitor {
 };
 
 
+struct ParameterCollector : public ModelVisitor {
+	ParameterCollector() {}
+
+	virtual bool visit(Module*) {
+		return true;
+	}
+
+	virtual bool visit(Section*) {
+		return true;
+	}
+
+	virtual bool visit(Group*) {
+		return true;
+	}
+
+	virtual bool visit(Structure*) {
+		return true;
+	}
+
+	virtual void visit(Parameter *param, bool unknown) {
+		parameters.push_back(param);
+	}
+
+	vector<Parameter*> parameters;
+};
+
 
 
 bool createPath(const std::string &pathname) {
@@ -227,6 +253,14 @@ string blockComment(const string &input, size_t lineWidth) {
 	return txt;
 }
 
+
+time_t lastModificationTime(const string &fn) {
+	struct stat fstat;
+	if ( stat(fn.c_str(), &fstat) < 0 )
+		return 0;
+
+	return fstat.st_mtime;
+}
 
 
 bool loadGroup(Container *c, SchemaGroup *group, const std::string &prefix);
@@ -413,8 +447,7 @@ void updateContainer(Container *c, int updateMaxStage) {
 
 bool write(const Parameter *param, const Section *sec, int stage,
            set<string> &symbols, ofstream &ofs, const std::string &filename,
-           bool withComment,
-           bool &firstSection, bool &firstSectionParam) {
+           bool withComment) {
 	if ( !param->symbols[stage] ) return true;
 
 	// Do nothing
@@ -430,25 +463,6 @@ bool write(const Parameter *param, const Section *sec, int stage,
 
 	// Already saved this symbol?
 	if ( symbols.find(param->variableName) != symbols.end() ) return true;
-
-	if ( sec ) {
-		if ( firstSectionParam ) {
-			/*
-			if ( !firstSection )
-				ofs << endl << endl;
-			else
-				firstSection = false;
-
-			ofs << "# --------------------------------------------" << endl;
-			ofs << "# " << sec->name << " options" << endl;
-			ofs << "# --------------------------------------------" << endl;
-			ofs << endl;
-			*/
-			firstSectionParam = false;
-		}
-	}
-	else
-		firstSection = false;
 
 	// Write description as comment.
 	if ( withComment ) {
@@ -478,22 +492,22 @@ bool write(const Parameter *param, const Section *sec, int stage,
 
 bool write(const Container *cont, const Section *sec, int stage,
            set<string> &symbols, ofstream &ofs, const std::string &filename,
-           bool withComment, bool &firstSection, bool &firstSectionParam) {
+           bool withComment) {
 	for ( size_t p = 0; p < cont->parameters.size(); ++p ) {
 		if ( !write(cont->parameters[p].get(), sec, stage,
-		            symbols, ofs, filename, withComment, firstSection, firstSectionParam) )
+		            symbols, ofs, filename, withComment) )
 			return false;
 	}
 
 	for ( size_t g = 0; g < cont->groups.size(); ++g ) {
 		if ( !write(cont->groups[g].get(), sec, stage,
-		            symbols, ofs, filename, withComment, firstSection, firstSectionParam) )
+		            symbols, ofs, filename, withComment) )
 			return false;
 	}
 
 	for ( size_t s = 0; s < cont->structures.size(); ++s ) {
 		if ( !write(cont->structures[s].get(), sec, stage,
-		            symbols, ofs, filename, withComment, firstSection, firstSectionParam) )
+		            symbols, ofs, filename, withComment) )
 			return false;
 	}
 
@@ -1097,19 +1111,16 @@ void ModuleBinding::accept(ModelVisitor *visitor) const {
 
 
 
-bool ModuleBinding::writeConfig(const string &filename) const {
+bool ModuleBinding::writeConfig(const string &filename, ConfigDelegate *delegate) const {
 	ofstream ofs(filename.c_str());
 	if ( !ofs.is_open() ) return false;
 
 	set<string> symbols;
 	int stage = Environment::CS_CONFIG_APP;
 
-	bool first = true;
-	bool firstSection = true;
-
 	for ( size_t s = 0; s < sections.size(); ++s ) {
 		Section *section = sections[s].get();
-		if ( !write(section, NULL, stage, symbols, ofs, filename, true, firstSection, first) )
+		if ( !write(section, NULL, stage, symbols, ofs, filename, true) )
 			return false;
 	}
 
@@ -1140,7 +1151,7 @@ bool ModuleBinding::writeConfig(const string &filename) const {
 
 			for ( size_t s = 0; s < curr->sections.size(); ++s ) {
 				Section *sec = curr->sections[s].get();
-				if ( !write(sec, NULL, stage, symbols, ofs, filename, true, firstSection, first) )
+				if ( !write(sec, NULL, stage, symbols, ofs, filename, true) )
 					return false;
 			}
 		}
@@ -1597,7 +1608,7 @@ bool Station::readConfig(const char *filename) {
 }
 
 
-bool Station::writeConfig(const char *filename) const {
+bool Station::writeConfig(const char *filename, ConfigDelegate *delegate) const {
 	ofstream ofs(filename, ios::out);
 	if ( !ofs.is_open() ) return false;
 
@@ -1994,11 +2005,14 @@ bool Model::readConfig(int updateMaxStage, ConfigDelegate *delegate) {
 			if ( delegate ) delegate->aboutToRead(uri.c_str());
 
 			Config::Config *cfg;
+			time_t lastModified = 0;
 
 			while ( true ) {
 				cfg = new Config::Config();
 
 				if ( delegate ) cfg->setLogger(delegate);
+
+				lastModified = lastModificationTime(uri);
 
 				if ( cfg->readConfig(uri, stage, true) ) {
 					if ( delegate ) delegate->finishedReading(uri.c_str());
@@ -2012,6 +2026,7 @@ bool Model::readConfig(int updateMaxStage, ConfigDelegate *delegate) {
 			}
 
 			symbols[uri] = SymbolFileMap();
+			symbols[uri].lastModified = lastModified;
 
 			SymbolTable *symtab = cfg->symbolTable();
 			if ( symtab == NULL ) {
@@ -2186,7 +2201,7 @@ bool Model::readConfig(int updateMaxStage, ConfigDelegate *delegate) {
 }
 
 
-bool Model::writeConfig(int stage) {
+bool Model::writeConfig(int stage, ConfigDelegate *delegate) {
 	//---------------------------------------------------
 	// Save station key files
 	//---------------------------------------------------
@@ -2252,10 +2267,9 @@ bool Model::writeConfig(int stage) {
 	for ( Stations::iterator it = stations.begin(); it != stations.end(); ++it ) {
 		string filename = keyDir + "/station_" + it->first.networkCode +
 		                  "_" + it->first.stationCode;
-		if ( !it->second->writeConfig(filename.c_str()) )
+		if ( !it->second->writeConfig(filename.c_str(), delegate) )
 			cerr << "[ERROR] writing " << filename << " failed" << endl;
 	}
-
 
 	//---------------------------------------------------
 	// Save module configurations
@@ -2263,7 +2277,7 @@ bool Model::writeConfig(int stage) {
 	for ( size_t i = 0; i < modules.size(); ++i ) {
 		Module *mod = modules[i].get();
 		string filename = configFileLocation(false, mod->definition->name, stage);
-		if ( !writeConfig(mod, filename, stage) )
+		if ( !writeConfig(mod, filename, stage, delegate) )
 			cerr << "[ERROR] writing " << filename << " failed" << endl;
 	}
 
@@ -2287,7 +2301,7 @@ bool Model::writeConfig(int stage) {
 			// Safety check, but this should never happen
 			if ( prof->name.empty() ) continue;
 			files.insert(string("profile_") + prof->name);
-			if ( !prof->writeConfig(keyDir + "/profile_" + prof->name) )
+			if ( !prof->writeConfig(keyDir + "/profile_" + prof->name, delegate) )
 				cerr << "[ERROR] writing profile " << keyDir << "/profile"
 				     << prof->name << " failed" << endl;
 		}
@@ -2302,7 +2316,8 @@ bool Model::writeConfig(int stage) {
 			             "_" + bit->first.stationCode);
 			if ( !binding->writeConfig(keyDir + "/station_" +
 			                           bit->first.networkCode + "_" +
-			                           bit->first.stationCode) )
+			                           bit->first.stationCode,
+			                           delegate) )
 				cerr << "[ERROR] writing binding " << keyDir << "/profile"
 				     << binding->name << " failed" << endl;
 		}
@@ -2326,41 +2341,132 @@ bool Model::writeConfig(int stage) {
 }
 
 
-bool Model::writeConfig(Module *mod, const std::string &filename, int stage) {
-	ofstream ofs;
-	bool firstSection = true;
-	bool first;
+bool Model::writeConfig(Module *mod, const std::string &filename, int stage, ConfigDelegate *delegate) {
+	if ( delegate )
+		delegate->aboutToWrite(filename.c_str());
 
-	set<string> symbols;
+	ofstream ofs;
+	time_t lastModified = lastModificationTime(filename);
+
+	set<string> processedSymbols;
+
+	ParameterCollector pc;
+	mod->accept(&pc);
+
+	Config::Config cfg;
+	cfg.readConfig(filename, stage);
+
+	ConfigDelegate::ChangeList changes;
+
+	// Check all available parameters for corresponding
+	vector<Parameter*>::iterator pit;
+	for ( pit = pc.parameters.begin(); pit != pc.parameters.end(); ++pit ) {
+		Parameter *param = *pit;
+		Config::Symbol *sym = cfg.symbolTable()->get(param->variableName);
+
+		processedSymbols.insert(param->variableName);
+
+		if ( !param->symbols[stage] ) {
+			if ( sym != NULL ) {
+				if ( changes.empty() ) cerr << "[" << filename << "]" << endl;
+				cerr << "- " << sym->name << "  '" << sym->content << "'" << endl;
+				changes.push_back(ConfigDelegate::Change(ConfigDelegate::Removed, sym->name, sym->content, ""));
+			}
+			continue;
+		}
+
+		if ( param->symbols[stage]->symbol.stage == Environment::CS_UNDEFINED ) {
+			if ( sym != NULL ) {
+				if ( changes.empty() ) cerr << "[" << filename << "]" << endl;
+				cerr << "- " << sym->name << "  '" << sym->content << "'" << endl;
+				changes.push_back(ConfigDelegate::Change(ConfigDelegate::Removed, sym->name, sym->content, ""));
+			}
+			continue;
+		}
+
+		if ( (sym != NULL) && (sym->content == param->symbols[stage]->symbol.content) )
+			continue;
+
+		if ( changes.empty() ) cerr << "[" << filename << "]" << endl;
+		if ( sym == NULL ) {
+			cerr << "+ " << param->variableName << "  '" << param->symbols[stage]->symbol.content << "'" << endl;
+			changes.push_back(ConfigDelegate::Change(ConfigDelegate::Added, param->variableName, "", param->symbols[stage]->symbol.content));
+		}
+		else {
+			cerr << "* " << param->variableName << "  '" << sym->content << "'  ->  '" << param->symbols[stage]->symbol.content << "'" << endl;
+			changes.push_back(ConfigDelegate::Change(ConfigDelegate::Updated, param->variableName, sym->content, param->symbols[stage]->symbol.content));
+		}
+	}
+
+	SymbolMap::iterator it = symbols.find(filename);
+
+	Config::SymbolTable::iterator cit;
+	for ( cit = cfg.symbolTable()->begin(); cit != cfg.symbolTable()->end(); ++cit ) {
+		// Symbol not part of the already known parameters at load time?
+		if ( processedSymbols.find((*cit)->name) == processedSymbols.end() ) {
+			// Need to append this to the unknowns
+			ParameterPtr newParam = new Parameter(NULL, (*cit)->name);
+			newParam->symbols[stage] = new SymbolMapItem(**cit);
+			if ( it != symbols.end() )
+				it->second[newParam->variableName] = newParam->symbols[stage];
+			mod->unknowns.push_back(newParam);
+		}
+	}
+
+	// No update required?
+	if ( changes.empty() ) {
+		if ( it != symbols.end() )
+			it->second.lastModified = lastModified;
+
+		if ( delegate )
+			delegate->finishedWriting(filename.c_str(), changes);
+		return true;
+	}
+
+	processedSymbols.clear();
+
+	if ( it != symbols.end() ) {
+		if ( lastModified > it->second.lastModified ) {
+			cerr << filename << " has changed on disk" << endl;
+
+			if ( delegate && delegate->handleWriteTimeMismatch(filename.c_str(), changes) )
+				return true;
+		}
+	}
 
 	for ( size_t s = 0; s < mod->sections.size(); ++s ) {
 		Section *sec = mod->sections[s].get();
 		Section *paramSection = sec;
 
-		//if ( sec->name == mod->definition->name )
-		//	paramSection = NULL;
-
-		first = true;
-
-		if ( !write(sec, paramSection, stage, symbols, ofs, filename, true, firstSection, first) )
+		if ( !write(sec, paramSection, stage, processedSymbols, ofs, filename, true) ) {
+			if ( delegate )
+				delegate->hasWriteError(filename.c_str());
 			return false;
+		}
 	}
-
-	first = true;
 
 	for ( size_t p = 0; p < mod->unknowns.size(); ++ p ) {
 		Parameter *param = mod->unknowns[p].get();
-		if ( !write(param, NULL, stage, symbols, ofs, filename, true, firstSection, first) )
+		if ( !write(param, NULL, stage, processedSymbols, ofs, filename, true) ) {
+			if ( delegate )
+				delegate->hasWriteError(filename.c_str());
 			return false;
+		}
 	}
 
 	// Nothing written, remove the file
-	if ( symbols.empty() ) {
+	if ( processedSymbols.empty() ) {
 		try {
 			fs::remove(SC_FS_PATH(filename));
 		}
 		catch ( ... ) {}
 	}
+
+	if ( it != symbols.end() )
+		it->second.lastModified = lastModificationTime(filename);
+
+	if ( delegate )
+		delegate->finishedWriting(filename.c_str(), changes);
 
 	return true;
 }

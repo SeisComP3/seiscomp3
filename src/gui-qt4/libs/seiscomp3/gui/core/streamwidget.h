@@ -21,6 +21,7 @@
 #include <QWidget>
 #include <QGroupBox>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/recordsequence.h>
 #include <seiscomp3/core/datetime.h>
@@ -29,7 +30,7 @@
 #include <seiscomp3/gui/core/recordwidget.h>
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/gui/qt4.h>
-
+#endif
 
 
 namespace Seiscomp { 

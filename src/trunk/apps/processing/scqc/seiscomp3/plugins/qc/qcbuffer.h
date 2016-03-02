@@ -18,8 +18,6 @@
 #include <seiscomp3/qc/qcprocessor.h>
 #include <seiscomp3/plugins/qc/api.h>
 
-#include <boost/signal.hpp>
-
 using namespace Seiscomp::Processing;
 
 namespace Seiscomp {

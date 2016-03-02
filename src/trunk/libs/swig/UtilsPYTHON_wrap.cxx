@@ -3919,6 +3919,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Timer_disable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Util::Timer *arg1 = (Seiscomp::Util::Timer *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Timer_disable",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Util__Timer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Timer_disable" "', argument " "1"" of type '" "Seiscomp::Util::Timer *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Util::Timer * >(argp1);
+  result = (bool)(arg1)->disable();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Timer_isActive(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Util::Timer *arg1 = (Seiscomp::Util::Timer *) 0 ;
@@ -3971,6 +3993,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Timer_setSingleShot", _wrap_Timer_setSingleShot, METH_VARARGS, NULL},
 	 { (char *)"Timer_start", _wrap_Timer_start, METH_VARARGS, NULL},
 	 { (char *)"Timer_stop", _wrap_Timer_stop, METH_VARARGS, NULL},
+	 { (char *)"Timer_disable", _wrap_Timer_disable, METH_VARARGS, NULL},
 	 { (char *)"Timer_isActive", _wrap_Timer_isActive, METH_VARARGS, NULL},
 	 { (char *)"Timer_swigregister", Timer_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

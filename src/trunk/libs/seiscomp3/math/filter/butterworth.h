@@ -22,75 +22,84 @@ namespace Math {
 namespace Filtering {
 namespace IIR {
 
+
 template<class TYPE>
-class ButterworthLowpass : public BiquadCascade<TYPE>
-{
-    public:
+class ButterworthLowpass : public BiquadCascade<TYPE> {
+	public:
+		ButterworthLowpass(int order = 3, double fc = 0.7, double fsamp=0);
 
-	ButterworthLowpass(int order = 3, double fc = 0.7, double fsamp=0);
-	virtual void setSamplingFrequency(double fsamp);
-	virtual int setParameters(int n, const double *params);
+	public:
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
 
-	virtual InPlaceFilter<TYPE>* clone() const;
+		virtual InPlaceFilter<TYPE>* clone() const;
 
-    private:
-
-	int _order;
-	double _fc, _fsamp;
+	private:
+		int _order;
+		double _fc, _fsamp;
 };
 
+
 template<class TYPE>
-class ButterworthHighpass : public BiquadCascade<TYPE>
-{
-    public:
+class ButterworthHighpass : public BiquadCascade<TYPE> {
+	public:
+		ButterworthHighpass(int order = 3, double fc = 2.0, double fsamp=0);
 
-	ButterworthHighpass(int order = 3, double fc = 2.0, double fsamp=0);
-	virtual void setSamplingFrequency(double fsamp);
-	virtual int setParameters(int n, const double *params);
-	virtual InPlaceFilter<TYPE>* clone() const;
+	public:
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
+		virtual InPlaceFilter<TYPE>* clone() const;
 
-    private:
-
-	int _order;
-	double _fc, _fsamp;
+	private:
+		int _order;
+		double _fc, _fsamp;
 };
 
+
 template<class TYPE>
-class ButterworthBandpass : public BiquadCascade<TYPE>
-{
-    public:
+class ButterworthBandpass : public BiquadCascade<TYPE> {
+	public:
+		ButterworthBandpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp=0, bool init=false);
 
-	ButterworthBandpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp=0, bool init=false);
-	virtual void setSamplingFrequency(double fsamp);
-	virtual int setParameters(int n, const double *params);
-	virtual InPlaceFilter<TYPE>* clone() const;
-	virtual void apply(int n, TYPE *inout);
-	void reset();
+	public:
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
+		virtual InPlaceFilter<TYPE>* clone() const;
+		virtual void apply(int n, TYPE *inout);
+		void reset();
 
-	void handleGap(int n=0) {
-		_gapLength += n;
-		// the actual handling is postponed until next apply() call
-		//_init = true;
-	}
+		void handleGap(int n=0) {
+			_gapLength += n;
+			// the actual handling is postponed until next apply() call
+			//_init = true;
+		}
 
-    protected:
-	// configuration
-	int _order;
-	double _fmin, _fmax, _fsamp;
+	protected:
+		// configuration
+		int _order;
+		double _fmin, _fmax, _fsamp;
 
-	// initialization parameters
-	bool _init;
-	InitialTaper<TYPE> _taper;
-	int _gapLength;
-	TYPE _lastSample;
+		// initialization parameters
+		bool _init;
+		InitialTaper<TYPE> _taper;
+		int _gapLength;
+		TYPE _lastSample;
 };
 
+
 template<class TYPE>
-class ButterworthHighLowpass : public ButterworthBandpass<TYPE>
-{
-    public:
-	ButterworthHighLowpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp=0);
-	virtual void setSamplingFrequency(double fsamp);
+class ButterworthHighLowpass : public BiquadCascade<TYPE> {
+	public:
+		ButterworthHighLowpass(int order = 3, double fmin = 0.7, double fmax = 2.0, double fsamp = 0);
+
+	public:
+		virtual void setSamplingFrequency(double fsamp);
+		virtual int setParameters(int n, const double *params);
+		virtual InPlaceFilter<TYPE>* clone() const;
+
+	private:
+		int _order;
+		double _fmin, _fmax, _fsamp;
 };
 
 

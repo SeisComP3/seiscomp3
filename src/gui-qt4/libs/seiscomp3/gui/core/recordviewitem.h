@@ -15,9 +15,11 @@
 #ifndef __SEISCOMP_GUI_RECORDVIEWITEM_H__
 #define __SEISCOMP_GUI_RECORDVIEWITEM_H__
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/recordsequence.h>
 #include <seiscomp3/math/filter.h>
 #include <seiscomp3/gui/core/recordwidget.h>
+#endif
 
 #include <QFrame>
 

@@ -1680,6 +1680,7 @@ DiagramFilterSettingsDialog::Filter *DiagramFilterSettingsDialog::createFilter()
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginLocatorView::OriginLocatorView::Config::Config() {
 	reductionVelocityP = 6.0;
+	drawMapLines = true;
 	drawGridLines = true;
 	computeMissingTakeOffAngles = false;
 	defaultEventRadius = -1;
@@ -2139,7 +2140,7 @@ void OriginLocatorView::locatorChanged(const QString &text) {
 	else
 		_ui.cbLocatorProfile->setCurrentIndex(0);
 
-	_ui.cbLocatorProfile->setEnabled(_ui.cbLocatorProfile->count() >= 2);
+	_ui.cbLocatorProfile->setEnabled(_ui.cbLocatorProfile->count() > 0);
 
 	_ui.cbFixedDepth->setEnabled(_locator->supports(Seismology::LocatorInterface::FixedDepth));
 	_ui.cbDistanceCutOff->setEnabled(_locator->supports(Seismology::LocatorInterface::DistanceCutOff));
@@ -2797,6 +2798,7 @@ void OriginLocatorView::setConfig(const Config &c) {
 
 	_config = c;
 	_residuals->setDrawGridLines(_config.drawGridLines);
+	_map->setDrawStationLines(c.drawMapLines);
 
 	for ( int i = 0; i < _residuals->count(); ++i ) {
 		if ( _residuals->isValueValid(i,PC_DISTANCE) && _residuals->isValueValid(i,PC_TRAVELTIME) ) {

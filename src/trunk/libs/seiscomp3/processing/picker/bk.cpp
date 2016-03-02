@@ -62,6 +62,15 @@ bool BKPicker::setup(const Settings &settings){
 	}
 
 	try {
+		_config.noiseBegin = settings.getDouble("picker.BK.noiseBegin");
+		SEISCOMP_DEBUG("noiseBegin read from config: %f",_config.noiseBegin);
+	}
+	catch (...) {
+		_config.noiseBegin = _config.signalBegin;
+		SEISCOMP_DEBUG("noiseBegin not read from config, defaults to signalBegin: %f", _config.noiseBegin);
+	}
+
+	try {
 		filterType = settings.getString("picker.BK.filterType");
 		SEISCOMP_DEBUG("filter type from config: %s",filterType.c_str());
 	}

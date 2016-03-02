@@ -2941,153 +2941,160 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_AttachementList swig_types[1]
 #define SWIGTYPE_p_AttachementType swig_types[2]
 #define SWIGTYPE_p_DataArray swig_types[3]
-#define SWIGTYPE_p_PackType swig_types[4]
-#define SWIGTYPE_p_RootType swig_types[5]
-#define SWIGTYPE_p_Seiscomp__Array swig_types[6]
-#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[7]
-#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[8]
-#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[9]
-#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[10]
-#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[11]
-#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[12]
-#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[13]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[14]
-#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[15]
-#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[16]
-#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[17]
-#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[18]
-#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[19]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[20]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[21]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[22]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[23]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[24]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[25]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[26]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[27]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[28]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[29]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[30]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[31]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[32]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[33]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[34]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[35]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[36]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[37]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[38]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[39]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[40]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[41]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[42]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[43]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[44]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[45]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[46]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[47]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[48]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[49]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[50]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[51]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[52]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[53]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[61]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AlignmentError swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Math__Geo__PositionInterpolator swig_types[95]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[96]
-#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[97]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros swig_types[98]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec swig_types[99]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson swig_types[100]
-#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config swig_types[101]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[102]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[103]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[104]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[105]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[106]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[107]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[108]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[109]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[110]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[111]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[112]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[113]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[114]
-#define SWIGTYPE_p_TYPE swig_types[115]
-#define SWIGTYPE_p_TagType swig_types[116]
-#define SWIGTYPE_p_Type swig_types[117]
-#define SWIGTYPE_p_ValueType swig_types[118]
-#define SWIGTYPE_p_allocator_type swig_types[119]
-#define SWIGTYPE_p_char swig_types[120]
-#define SWIGTYPE_p_const_iterator swig_types[121]
-#define SWIGTYPE_p_difference_type swig_types[122]
-#define SWIGTYPE_p_double swig_types[123]
-#define SWIGTYPE_p_float swig_types[124]
-#define SWIGTYPE_p_iterator swig_types[125]
-#define SWIGTYPE_p_p_PyObject swig_types[126]
-#define SWIGTYPE_p_size_type swig_types[127]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[128]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[129]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[130]
-#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[131]
-#define SWIGTYPE_p_std__allocatorT_double_t swig_types[132]
-#define SWIGTYPE_p_std__allocatorT_float_t swig_types[133]
-#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[134]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[135]
-#define SWIGTYPE_p_std__exception swig_types[136]
-#define SWIGTYPE_p_std__invalid_argument swig_types[137]
-#define SWIGTYPE_p_std__string swig_types[138]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[139]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[140]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[141]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[142]
-#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[143]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[144]
-#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[145]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[146]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[147]
-#define SWIGTYPE_p_value_type swig_types[148]
-static swig_type_info *swig_types[150];
-static swig_module_info swig_module = {swig_types, 149, 0, 0, 0, 0};
+#define SWIGTYPE_p_ImplType swig_types[4]
+#define SWIGTYPE_p_PackType swig_types[5]
+#define SWIGTYPE_p_ReferenceType swig_types[6]
+#define SWIGTYPE_p_RootType swig_types[7]
+#define SWIGTYPE_p_Seiscomp__Array swig_types[8]
+#define SWIGTYPE_p_Seiscomp__BitSet swig_types[9]
+#define SWIGTYPE_p_Seiscomp__Core__BaseObject swig_types[10]
+#define SWIGTYPE_p_Seiscomp__Core__ClassNotFound swig_types[11]
+#define SWIGTYPE_p_Seiscomp__Core__DataMessage swig_types[12]
+#define SWIGTYPE_p_Seiscomp__Core__DuplicateClassname swig_types[13]
+#define SWIGTYPE_p_Seiscomp__Core__EndOfStreamException swig_types[14]
+#define SWIGTYPE_p_Seiscomp__Core__GeneralException swig_types[15]
+#define SWIGTYPE_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t swig_types[16]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t swig_types[17]
+#define SWIGTYPE_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t swig_types[18]
+#define SWIGTYPE_p_Seiscomp__Core__GreensFunction swig_types[19]
+#define SWIGTYPE_p_Seiscomp__Core__MemoryException swig_types[20]
+#define SWIGTYPE_p_Seiscomp__Core__Message swig_types[21]
+#define SWIGTYPE_p_Seiscomp__Core__OverflowException swig_types[22]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl swig_types[23]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl swig_types[24]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl swig_types[25]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl swig_types[26]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl swig_types[27]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl swig_types[28]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl swig_types[29]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_const_t__Impl swig_types[30]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__GreensFunction_t__Impl swig_types[31]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_const_t__Impl swig_types[32]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__Message_t__Impl swig_types[33]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_const_t__Impl swig_types[34]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core___private__InterruptibleObject_t__Impl swig_types[35]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_const_t__Impl swig_types[36]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__GenericRecord_t__Impl swig_types[37]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[38]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[39]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[40]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[41]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[42]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[43]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[44]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[45]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[46]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[47]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[48]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[49]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[50]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[51]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[52]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[53]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[54]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[66]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AlignmentError swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_double_t swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadT_float_t swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR___Biquad swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[95]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[96]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[97]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[98]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[99]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[100]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[101]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__PositionInterpolator swig_types[102]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[103]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[104]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros swig_types[105]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__Seismometer5sec swig_types[106]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson swig_types[107]
+#define SWIGTYPE_p_Seiscomp__Math__SeismometerResponse__WoodAnderson__Config swig_types[108]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[109]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[110]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[111]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[112]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[113]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[114]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[115]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[116]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[117]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[118]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[119]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[120]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__string_t swig_types[121]
+#define SWIGTYPE_p_TYPE swig_types[122]
+#define SWIGTYPE_p_TagType swig_types[123]
+#define SWIGTYPE_p_Type swig_types[124]
+#define SWIGTYPE_p_ValueType swig_types[125]
+#define SWIGTYPE_p_allocator_type swig_types[126]
+#define SWIGTYPE_p_char swig_types[127]
+#define SWIGTYPE_p_const_iterator swig_types[128]
+#define SWIGTYPE_p_difference_type swig_types[129]
+#define SWIGTYPE_p_double swig_types[130]
+#define SWIGTYPE_p_float swig_types[131]
+#define SWIGTYPE_p_iterator swig_types[132]
+#define SWIGTYPE_p_p_PyObject swig_types[133]
+#define SWIGTYPE_p_size_type swig_types[134]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t swig_types[135]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t swig_types[136]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t swig_types[137]
+#define SWIGTYPE_p_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t swig_types[138]
+#define SWIGTYPE_p_std__allocatorT_double_t swig_types[139]
+#define SWIGTYPE_p_std__allocatorT_float_t swig_types[140]
+#define SWIGTYPE_p_std__allocatorT_std__complexT_double_t_t swig_types[141]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[142]
+#define SWIGTYPE_p_std__exception swig_types[143]
+#define SWIGTYPE_p_std__invalid_argument swig_types[144]
+#define SWIGTYPE_p_std__string swig_types[145]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_double_t_std__allocatorT_Seiscomp__Math__Geo__CityT_double_t_t_t swig_types[146]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__CityT_float_t_std__allocatorT_Seiscomp__Math__Geo__CityT_float_t_t_t swig_types[147]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_double_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_double_t_t_t swig_types[148]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__Geo__NamedCoordT_float_t_std__allocatorT_Seiscomp__Math__Geo__NamedCoordT_float_t_t_t swig_types[149]
+#define SWIGTYPE_p_std__vectorT__Tp__Alloc_t swig_types[150]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[151]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[152]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[153]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[154]
+#define SWIGTYPE_p_value_type swig_types[155]
+static swig_type_info *swig_types[157];
+static swig_module_info swig_module = {swig_types, 156, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3191,7 +3198,7 @@ namespace swig {
 #include "seiscomp3/math/filter.h"
 #include "seiscomp3/math/filter/rmhp.h"
 #include "seiscomp3/math/filter/taper.h"
-#include "seiscomp3/math/filter/rca.h"
+#include "seiscomp3/math/filter/average.h"
 #include "seiscomp3/math/filter/stalta.h"
 #include "seiscomp3/math/filter/chainfilter.h"
 #include "seiscomp3/math/filter/biquad.h"
@@ -21953,6 +21960,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AverageFilterF_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::Average< float > *arg1 = (Seiscomp::Math::Filtering::Average< float > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:AverageFilterF_setLength",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AverageFilterF_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::Average< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::Average< float > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AverageFilterF_setLength" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setLength(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_AverageFilterF_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::Average< float > *arg1 = (Seiscomp::Math::Filtering::Average< float > *) 0 ;
@@ -22079,6 +22116,27 @@ SWIGINTERN PyObject *_wrap_AverageFilterF_clone(PyObject *SWIGUNUSEDPARM(self), 
   result = (Seiscomp::Math::Filtering::InPlaceFilter< float > *)((Seiscomp::Math::Filtering::Average< float > const *)arg1)->clone();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AverageFilterF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::Average< float > *arg1 = (Seiscomp::Math::Filtering::Average< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:AverageFilterF_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AverageFilterF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::Average< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::Average< float > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -22232,6 +22290,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AverageFilterD_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::Average< double > *arg1 = (Seiscomp::Math::Filtering::Average< double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:AverageFilterD_setLength",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AverageFilterD_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::Average< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::Average< double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AverageFilterD_setLength" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setLength(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_AverageFilterD_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::Average< double > *arg1 = (Seiscomp::Math::Filtering::Average< double > *) 0 ;
@@ -22358,6 +22446,27 @@ SWIGINTERN PyObject *_wrap_AverageFilterD_clone(PyObject *SWIGUNUSEDPARM(self), 
   result = (Seiscomp::Math::Filtering::InPlaceFilter< double > *)((Seiscomp::Math::Filtering::Average< double > const *)arg1)->clone();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AverageFilterD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::Average< double > *arg1 = (Seiscomp::Math::Filtering::Average< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:AverageFilterD_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AverageFilterD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::Average< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::Average< double > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -23312,6 +23421,666 @@ SWIGINTERN PyObject *STALTAFilterD_swigregister(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::RunningMean< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_RunningMeanFilterF",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_RunningMeanFilterF" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_RunningMeanFilterF" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  result = (Seiscomp::Math::Filtering::RunningMean< float > *)new Seiscomp::Math::Filtering::RunningMean< float >(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterF__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::RunningMean< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_RunningMeanFilterF",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_RunningMeanFilterF" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  result = (Seiscomp::Math::Filtering::RunningMean< float > *)new Seiscomp::Math::Filtering::RunningMean< float >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterF__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_RunningMeanFilterF")) SWIG_fail;
+  result = (Seiscomp::Math::Filtering::RunningMean< float > *)new Seiscomp::Math::Filtering::RunningMean< float >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterF(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_RunningMeanFilterF__SWIG_2(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_RunningMeanFilterF__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_RunningMeanFilterF__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_RunningMeanFilterF'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::RunningMean< float >::RunningMean(double,double)\n"
+    "    Seiscomp::Math::Filtering::RunningMean< float >::RunningMean(double)\n"
+    "    Seiscomp::Math::Filtering::RunningMean< float >::RunningMean()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_RunningMeanFilterF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_RunningMeanFilterF",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_RunningMeanFilterF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  if (arg1) arg1->decrementReferenceCount();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanFilterF_setLength",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterF_setLength" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setLength(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  int arg2 ;
+  float *arg3 = (float *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanFilterF_apply",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_apply" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterF_apply" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_float, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanFilterF_apply" "', argument " "3"" of type '" "float *""'"); 
+  }
+  arg3 = reinterpret_cast< float * >(argp3);
+  (arg1)->apply(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< float > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanFilterF_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  result = (Seiscomp::Math::Filtering::InPlaceFilter< float > *)((Seiscomp::Math::Filtering::RunningMean< float > const *)arg1)->clone();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanFilterF_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanFilterF_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterF_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setSamplingFrequency(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterF_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< float > *arg1 = (Seiscomp::Math::Filtering::RunningMean< float > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanFilterF_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterF_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< float > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< float > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterF_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanFilterF_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *RunningMeanFilterF_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterD__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::Math::Filtering::RunningMean< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_RunningMeanFilterD",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_RunningMeanFilterD" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_RunningMeanFilterD" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  result = (Seiscomp::Math::Filtering::RunningMean< double > *)new Seiscomp::Math::Filtering::RunningMean< double >(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterD__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::RunningMean< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_RunningMeanFilterD",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_RunningMeanFilterD" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  result = (Seiscomp::Math::Filtering::RunningMean< double > *)new Seiscomp::Math::Filtering::RunningMean< double >(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterD__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_RunningMeanFilterD")) SWIG_fail;
+  result = (Seiscomp::Math::Filtering::RunningMean< double > *)new Seiscomp::Math::Filtering::RunningMean< double >();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_RunningMeanFilterD(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_RunningMeanFilterD__SWIG_2(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_RunningMeanFilterD__SWIG_1(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_RunningMeanFilterD__SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_RunningMeanFilterD'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Math::Filtering::RunningMean< double >::RunningMean(double,double)\n"
+    "    Seiscomp::Math::Filtering::RunningMean< double >::RunningMean(double)\n"
+    "    Seiscomp::Math::Filtering::RunningMean< double >::RunningMean()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_RunningMeanFilterD(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_RunningMeanFilterD",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_RunningMeanFilterD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  if (arg1) arg1->decrementReferenceCount();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanFilterD_setLength",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterD_setLength" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setLength(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanFilterD_apply",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_apply" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterD_apply" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanFilterD_apply" "', argument " "3"" of type '" "double *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  (arg1)->apply(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_clone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Math::Filtering::InPlaceFilter< double > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanFilterD_clone",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_clone" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  result = (Seiscomp::Math::Filtering::InPlaceFilter< double > *)((Seiscomp::Math::Filtering::RunningMean< double > const *)arg1)->clone();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanFilterD_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanFilterD_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterD_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  (arg1)->setSamplingFrequency(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_RunningMeanFilterD_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Math::Filtering::RunningMean< double > *arg1 = (Seiscomp::Math::Filtering::RunningMean< double > *) 0 ;
+  int arg2 ;
+  double *arg3 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanFilterD_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanFilterD_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMean< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMean< double > * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanFilterD_setParameters" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanFilterD_setParameters" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *RunningMeanFilterD_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_RunningMeanHighPassFilterF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   double arg1 ;
@@ -23452,36 +24221,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< float > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanHighPassFilterF_setLength",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterF_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< float > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterF_setLength" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  (arg1)->setLength(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::RunningMeanHighPass< float > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) 0 ;
@@ -23538,97 +24277,6 @@ SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_clone(PyObject *SWIGUNUSED
   result = (Seiscomp::Math::Filtering::InPlaceFilter< float > *)((Seiscomp::Math::Filtering::RunningMeanHighPass< float > const *)arg1)->clone();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< float > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanHighPassFilterF_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterF_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< float > * >(argp1);
-  (arg1)->reset();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< float > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanHighPassFilterF_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterF_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< float > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterF_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  (arg1)->setSamplingFrequency(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterF_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< float > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) 0 ;
-  int arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanHighPassFilterF_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterF_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< float > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< float > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterF_setParameters" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanHighPassFilterF_setParameters" "', argument " "3"" of type '" "double const *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
-  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -23782,36 +24430,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_setLength(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< double > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanHighPassFilterD_setLength",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterD_setLength" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterD_setLength" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  (arg1)->setLength(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_apply(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::RunningMeanHighPass< double > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) 0 ;
@@ -23868,97 +24486,6 @@ SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_clone(PyObject *SWIGUNUSED
   result = (Seiscomp::Math::Filtering::InPlaceFilter< double > *)((Seiscomp::Math::Filtering::RunningMeanHighPass< double > const *)arg1)->clone();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_OWN |  0 );
   if (result) result->incrementReferenceCount();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< double > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:RunningMeanHighPassFilterD_reset",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterD_reset" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< double > * >(argp1);
-  (arg1)->reset();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_setSamplingFrequency(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< double > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:RunningMeanHighPassFilterD_setSamplingFrequency",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterD_setSamplingFrequency" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< double > * >(argp1);
-  ecode2 = SWIG_AsVal_double(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterD_setSamplingFrequency" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  (arg1)->setSamplingFrequency(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_RunningMeanHighPassFilterD_setParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  Seiscomp::Math::Filtering::RunningMeanHighPass< double > *arg1 = (Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) 0 ;
-  int arg2 ;
-  double *arg3 = (double *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:RunningMeanHighPassFilterD_setParameters",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RunningMeanHighPassFilterD_setParameters" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::RunningMeanHighPass< double > *""'"); 
-  }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::RunningMeanHighPass< double > * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RunningMeanHighPassFilterD_setParameters" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "RunningMeanHighPassFilterD_setParameters" "', argument " "3"" of type '" "double const *""'"); 
-  }
-  arg3 = reinterpret_cast< double * >(argp3);
-  result = (int)(arg1)->setParameters(arg2,(double const *)arg3);
-  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -36193,10 +36720,12 @@ static PyMethodDef SwigMethods[] = {
 		"AverageFilterF(double timeSpan=1.0)\n"
 		"new_AverageFilterF() -> AverageFilterF\n"
 		""},
+	 { (char *)"AverageFilterF_setLength", _wrap_AverageFilterF_setLength, METH_VARARGS, (char *)"AverageFilterF_setLength(AverageFilterF self, double timeSpan)"},
 	 { (char *)"AverageFilterF_setSamplingFrequency", _wrap_AverageFilterF_setSamplingFrequency, METH_VARARGS, (char *)"AverageFilterF_setSamplingFrequency(AverageFilterF self, double fsamp)"},
 	 { (char *)"AverageFilterF_setParameters", _wrap_AverageFilterF_setParameters, METH_VARARGS, (char *)"AverageFilterF_setParameters(AverageFilterF self, int n, double const * params) -> int"},
 	 { (char *)"AverageFilterF_apply", _wrap_AverageFilterF_apply, METH_VARARGS, (char *)"AverageFilterF_apply(AverageFilterF self, int n, float * inout)"},
 	 { (char *)"AverageFilterF_clone", _wrap_AverageFilterF_clone, METH_VARARGS, (char *)"AverageFilterF_clone(AverageFilterF self) -> InPlaceFilterF"},
+	 { (char *)"AverageFilterF_reset", _wrap_AverageFilterF_reset, METH_VARARGS, (char *)"AverageFilterF_reset(AverageFilterF self)"},
 	 { (char *)"delete_AverageFilterF", _wrap_delete_AverageFilterF, METH_VARARGS, (char *)"delete_AverageFilterF(AverageFilterF self)"},
 	 { (char *)"AverageFilterF_swigregister", AverageFilterF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_AverageFilterD", _wrap_new_AverageFilterD, METH_VARARGS, (char *)"\n"
@@ -36204,10 +36733,12 @@ static PyMethodDef SwigMethods[] = {
 		"AverageFilterD(double timeSpan=1.0)\n"
 		"new_AverageFilterD() -> AverageFilterD\n"
 		""},
+	 { (char *)"AverageFilterD_setLength", _wrap_AverageFilterD_setLength, METH_VARARGS, (char *)"AverageFilterD_setLength(AverageFilterD self, double timeSpan)"},
 	 { (char *)"AverageFilterD_setSamplingFrequency", _wrap_AverageFilterD_setSamplingFrequency, METH_VARARGS, (char *)"AverageFilterD_setSamplingFrequency(AverageFilterD self, double fsamp)"},
 	 { (char *)"AverageFilterD_setParameters", _wrap_AverageFilterD_setParameters, METH_VARARGS, (char *)"AverageFilterD_setParameters(AverageFilterD self, int n, double const * params) -> int"},
 	 { (char *)"AverageFilterD_apply", _wrap_AverageFilterD_apply, METH_VARARGS, (char *)"AverageFilterD_apply(AverageFilterD self, int n, double * inout)"},
 	 { (char *)"AverageFilterD_clone", _wrap_AverageFilterD_clone, METH_VARARGS, (char *)"AverageFilterD_clone(AverageFilterD self) -> InPlaceFilterD"},
+	 { (char *)"AverageFilterD_reset", _wrap_AverageFilterD_reset, METH_VARARGS, (char *)"AverageFilterD_reset(AverageFilterD self)"},
 	 { (char *)"delete_AverageFilterD", _wrap_delete_AverageFilterD, METH_VARARGS, (char *)"delete_AverageFilterD(AverageFilterD self)"},
 	 { (char *)"AverageFilterD_swigregister", AverageFilterD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_STALTAFilterF", _wrap_new_STALTAFilterF, METH_VARARGS, (char *)"\n"
@@ -36244,18 +36775,40 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"STALTAFilterD_getLTA", _wrap_STALTAFilterD_getLTA, METH_VARARGS, (char *)"STALTAFilterD_getLTA(STALTAFilterD self) -> vectord"},
 	 { (char *)"delete_STALTAFilterD", _wrap_delete_STALTAFilterD, METH_VARARGS, (char *)"delete_STALTAFilterD(STALTAFilterD self)"},
 	 { (char *)"STALTAFilterD_swigregister", STALTAFilterD_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_RunningMeanFilterF", _wrap_new_RunningMeanFilterF, METH_VARARGS, (char *)"\n"
+		"RunningMeanFilterF(double windowLength=0, double fsamp=0.0)\n"
+		"RunningMeanFilterF(double windowLength=0)\n"
+		"new_RunningMeanFilterF() -> RunningMeanFilterF\n"
+		""},
+	 { (char *)"delete_RunningMeanFilterF", _wrap_delete_RunningMeanFilterF, METH_VARARGS, (char *)"delete_RunningMeanFilterF(RunningMeanFilterF self)"},
+	 { (char *)"RunningMeanFilterF_setLength", _wrap_RunningMeanFilterF_setLength, METH_VARARGS, (char *)"RunningMeanFilterF_setLength(RunningMeanFilterF self, double windowLength)"},
+	 { (char *)"RunningMeanFilterF_apply", _wrap_RunningMeanFilterF_apply, METH_VARARGS, (char *)"RunningMeanFilterF_apply(RunningMeanFilterF self, int n, float * inout)"},
+	 { (char *)"RunningMeanFilterF_clone", _wrap_RunningMeanFilterF_clone, METH_VARARGS, (char *)"RunningMeanFilterF_clone(RunningMeanFilterF self) -> InPlaceFilterF"},
+	 { (char *)"RunningMeanFilterF_reset", _wrap_RunningMeanFilterF_reset, METH_VARARGS, (char *)"RunningMeanFilterF_reset(RunningMeanFilterF self)"},
+	 { (char *)"RunningMeanFilterF_setSamplingFrequency", _wrap_RunningMeanFilterF_setSamplingFrequency, METH_VARARGS, (char *)"RunningMeanFilterF_setSamplingFrequency(RunningMeanFilterF self, double fsamp)"},
+	 { (char *)"RunningMeanFilterF_setParameters", _wrap_RunningMeanFilterF_setParameters, METH_VARARGS, (char *)"RunningMeanFilterF_setParameters(RunningMeanFilterF self, int n, double const * params) -> int"},
+	 { (char *)"RunningMeanFilterF_swigregister", RunningMeanFilterF_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_RunningMeanFilterD", _wrap_new_RunningMeanFilterD, METH_VARARGS, (char *)"\n"
+		"RunningMeanFilterD(double windowLength=0, double fsamp=0.0)\n"
+		"RunningMeanFilterD(double windowLength=0)\n"
+		"new_RunningMeanFilterD() -> RunningMeanFilterD\n"
+		""},
+	 { (char *)"delete_RunningMeanFilterD", _wrap_delete_RunningMeanFilterD, METH_VARARGS, (char *)"delete_RunningMeanFilterD(RunningMeanFilterD self)"},
+	 { (char *)"RunningMeanFilterD_setLength", _wrap_RunningMeanFilterD_setLength, METH_VARARGS, (char *)"RunningMeanFilterD_setLength(RunningMeanFilterD self, double windowLength)"},
+	 { (char *)"RunningMeanFilterD_apply", _wrap_RunningMeanFilterD_apply, METH_VARARGS, (char *)"RunningMeanFilterD_apply(RunningMeanFilterD self, int n, double * inout)"},
+	 { (char *)"RunningMeanFilterD_clone", _wrap_RunningMeanFilterD_clone, METH_VARARGS, (char *)"RunningMeanFilterD_clone(RunningMeanFilterD self) -> InPlaceFilterD"},
+	 { (char *)"RunningMeanFilterD_reset", _wrap_RunningMeanFilterD_reset, METH_VARARGS, (char *)"RunningMeanFilterD_reset(RunningMeanFilterD self)"},
+	 { (char *)"RunningMeanFilterD_setSamplingFrequency", _wrap_RunningMeanFilterD_setSamplingFrequency, METH_VARARGS, (char *)"RunningMeanFilterD_setSamplingFrequency(RunningMeanFilterD self, double fsamp)"},
+	 { (char *)"RunningMeanFilterD_setParameters", _wrap_RunningMeanFilterD_setParameters, METH_VARARGS, (char *)"RunningMeanFilterD_setParameters(RunningMeanFilterD self, int n, double const * params) -> int"},
+	 { (char *)"RunningMeanFilterD_swigregister", RunningMeanFilterD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_RunningMeanHighPassFilterF", _wrap_new_RunningMeanHighPassFilterF, METH_VARARGS, (char *)"\n"
 		"RunningMeanHighPassFilterF(double windowLength=0, double fsamp=0.0)\n"
 		"RunningMeanHighPassFilterF(double windowLength=0)\n"
 		"new_RunningMeanHighPassFilterF() -> RunningMeanHighPassFilterF\n"
 		""},
 	 { (char *)"delete_RunningMeanHighPassFilterF", _wrap_delete_RunningMeanHighPassFilterF, METH_VARARGS, (char *)"delete_RunningMeanHighPassFilterF(RunningMeanHighPassFilterF self)"},
-	 { (char *)"RunningMeanHighPassFilterF_setLength", _wrap_RunningMeanHighPassFilterF_setLength, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_setLength(RunningMeanHighPassFilterF self, double windowLength)"},
 	 { (char *)"RunningMeanHighPassFilterF_apply", _wrap_RunningMeanHighPassFilterF_apply, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_apply(RunningMeanHighPassFilterF self, int n, float * inout)"},
 	 { (char *)"RunningMeanHighPassFilterF_clone", _wrap_RunningMeanHighPassFilterF_clone, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_clone(RunningMeanHighPassFilterF self) -> InPlaceFilterF"},
-	 { (char *)"RunningMeanHighPassFilterF_reset", _wrap_RunningMeanHighPassFilterF_reset, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_reset(RunningMeanHighPassFilterF self)"},
-	 { (char *)"RunningMeanHighPassFilterF_setSamplingFrequency", _wrap_RunningMeanHighPassFilterF_setSamplingFrequency, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_setSamplingFrequency(RunningMeanHighPassFilterF self, double fsamp)"},
-	 { (char *)"RunningMeanHighPassFilterF_setParameters", _wrap_RunningMeanHighPassFilterF_setParameters, METH_VARARGS, (char *)"RunningMeanHighPassFilterF_setParameters(RunningMeanHighPassFilterF self, int n, double const * params) -> int"},
 	 { (char *)"RunningMeanHighPassFilterF_swigregister", RunningMeanHighPassFilterF_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_RunningMeanHighPassFilterD", _wrap_new_RunningMeanHighPassFilterD, METH_VARARGS, (char *)"\n"
 		"RunningMeanHighPassFilterD(double windowLength=0, double fsamp=0.0)\n"
@@ -36263,12 +36816,8 @@ static PyMethodDef SwigMethods[] = {
 		"new_RunningMeanHighPassFilterD() -> RunningMeanHighPassFilterD\n"
 		""},
 	 { (char *)"delete_RunningMeanHighPassFilterD", _wrap_delete_RunningMeanHighPassFilterD, METH_VARARGS, (char *)"delete_RunningMeanHighPassFilterD(RunningMeanHighPassFilterD self)"},
-	 { (char *)"RunningMeanHighPassFilterD_setLength", _wrap_RunningMeanHighPassFilterD_setLength, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_setLength(RunningMeanHighPassFilterD self, double windowLength)"},
 	 { (char *)"RunningMeanHighPassFilterD_apply", _wrap_RunningMeanHighPassFilterD_apply, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_apply(RunningMeanHighPassFilterD self, int n, double * inout)"},
 	 { (char *)"RunningMeanHighPassFilterD_clone", _wrap_RunningMeanHighPassFilterD_clone, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_clone(RunningMeanHighPassFilterD self) -> InPlaceFilterD"},
-	 { (char *)"RunningMeanHighPassFilterD_reset", _wrap_RunningMeanHighPassFilterD_reset, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_reset(RunningMeanHighPassFilterD self)"},
-	 { (char *)"RunningMeanHighPassFilterD_setSamplingFrequency", _wrap_RunningMeanHighPassFilterD_setSamplingFrequency, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_setSamplingFrequency(RunningMeanHighPassFilterD self, double fsamp)"},
-	 { (char *)"RunningMeanHighPassFilterD_setParameters", _wrap_RunningMeanHighPassFilterD_setParameters, METH_VARARGS, (char *)"RunningMeanHighPassFilterD_setParameters(RunningMeanHighPassFilterD self, int n, double const * params) -> int"},
 	 { (char *)"RunningMeanHighPassFilterD_swigregister", RunningMeanHighPassFilterD_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_InitialTaperFilterF", _wrap_new_InitialTaperFilterF, METH_VARARGS, (char *)"\n"
 		"InitialTaperFilterF(double taperLength=0, float offset=0, double fsamp=0)\n"
@@ -36653,32 +37202,20 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
+static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Math__Restitution__FFT__TransferFunction(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Restitution::FFT::TransferFunction *)  ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::Average< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::STALTA< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
+static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__TypedArrayT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::TypedArray< double > *)  ((Seiscomp::NumericArray< double > *) x));
 }
 static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__NamedCoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Geo::NamedCoord< double > *)  ((Seiscomp::Math::Geo::City< double > *) x));
@@ -36689,11 +37226,20 @@ static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Math__Ge
 static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__CoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Geo::Coord< double > *) (Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
 }
-static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__TypedArrayT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::TypedArray< double > *)  ((Seiscomp::NumericArray< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__RunningMeanT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::RunningMean< double > *)  ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
 }
-static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Math__Restitution__FFT__TransferFunction(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Restitution::FFT::TransferFunction *)  ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__TypedArrayT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::TypedArray< float > *)  ((Seiscomp::NumericArray< float > *) x));
 }
 static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__NamedCoordT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Geo::NamedCoord< float > *)  ((Seiscomp::Math::Geo::City< float > *) x));
@@ -36704,8 +37250,191 @@ static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Math__Geo
 static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__CoordT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::Geo::Coord< float > *) (Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
 }
-static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__TypedArrayT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::TypedArray< float > *)  ((Seiscomp::NumericArray< float > *) x));
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__RunningMeanT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::RunningMean< float > *)  ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
+}
+static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
+}
+static void *_p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *)(Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) ((Seiscomp::Core::DataMessage *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::Average< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *)(Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< double > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
+}
+static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
+}
+static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< Seiscomp::Core::Time > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::STALTA< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::Average< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *)(Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *) ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< float > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
+}
+static void *_p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Record *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
+}
+static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
+}
+static void *_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *) ((Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::string > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
+}
+static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Restitution::FFT::TransferFunction *) x));
+}
+static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::Average< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::STALTA< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
 }
 static void *_p_Seiscomp__Math__SeismometerResponse__WoodAndersonTo_p_Seiscomp__Math__SeismometerResponse__PolesAndZeros(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Math::SeismometerResponse::PolesAndZeros *)  ((Seiscomp::Math::SeismometerResponse::WoodAnderson *) x));
@@ -36755,200 +37484,43 @@ static void *_p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception(void *x, i
 static void *_p_Seiscomp__Math__Filtering__AlignmentErrorTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *)  ((Seiscomp::Math::Filtering::AlignmentError *) x));
 }
-static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
 }
-static void *_p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *)(Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) ((Seiscomp::Core::DataMessage *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
 }
-static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
 }
-static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
 }
-static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
+static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::Average< double > *) x));
 }
-static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
+static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::STALTA< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::Average< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
 }
-static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *)(Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< double > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
-}
-static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< Seiscomp::Core::Time > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::STALTA< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::Average< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *)(Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *) ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
-}
-static void *_p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< float > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
-}
-static void *_p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Record *) x));
-}
-static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
-}
-static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
-}
-static void *_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *) ((Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::string > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
-}
-static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
-}
-static void *_p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Restitution::FFT::TransferFunction *) x));
-}
-static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *)  ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::Average< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::STALTA< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
-}
-static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
 }
 static swig_type_info _swigt__p_Archive = {"_p_Archive", "Archive *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_AttachementList = {"_p_AttachementList", "AttachementList *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_AttachementType = {"_p_AttachementType", "AttachementType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_DataArray = {"_p_DataArray", "DataArray *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ImplType = {"_p_ImplType", "ImplType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PackType = {"_p_PackType", "PackType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ReferenceType = {"_p_ReferenceType", "ReferenceType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_RootType = {"_p_RootType", "RootType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__BaseObject = {"_p_Seiscomp__Core__BaseObject", "Seiscomp::Core::BaseObject *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_char_t = {"_p_Seiscomp__TypedArrayT_char_t", 0, 0, 0, 0, 0};
@@ -36957,6 +37529,7 @@ static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Cor
 static swig_type_info _swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t = {"_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_int_t = {"_p_Seiscomp__TypedArrayT_int_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Array = {"_p_Seiscomp__Array", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__BitSet = {"_p_Seiscomp__BitSet", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core___private__InterruptibleObject = {"_p_Seiscomp__Core___private__InterruptibleObject", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__GreensFunction = {"_p_Seiscomp__Core__GreensFunction", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Record = {"_p_Seiscomp__Record", 0, 0, 0, 0, 0};
@@ -36965,6 +37538,8 @@ static swig_type_info _swigt__p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core
 static swig_type_info _swigt__p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t = {"_p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t", "Seiscomp::Core::Generic::ClassFactoryInterface< Seiscomp::Core::BaseObject > *|Seiscomp::Core::ClassFactory *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl", "Seiscomp::ArrayCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl", "Seiscomp::ArrayPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Array >::Impl *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl", "Seiscomp::BitSetCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::BitSet const >::Impl *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::BitSet >::Impl *|Seiscomp::BitSetPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl", "Seiscomp::Core::BaseObjectCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::Core::BaseObject >::Impl *|Seiscomp::Core::BaseObjectPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl", "::Seiscomp::Core::SmartPointer< Seiscomp::Core::DataMessage >::Impl *|Seiscomp::Core::DataMessagePtr *", 0, 0, (void*)0, 0};
@@ -37021,6 +37596,8 @@ static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_float_t", "Seiscomp::Math::Filtering::InitialTaper< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t", "Seiscomp::Math::Filtering::RunningMeanHighPass< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t", "Seiscomp::Math::Filtering::RunningMeanHighPass< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_double_t", "Seiscomp::Math::Filtering::RunningMean< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_float_t", "Seiscomp::Math::Filtering::RunningMean< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t = {"_p_Seiscomp__Math__Filtering__STALTAT_double_t", "Seiscomp::Math::Filtering::STALTA< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t = {"_p_Seiscomp__Math__Filtering__STALTAT_float_t", "Seiscomp::Math::Filtering::STALTA< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Geo__CityT_double_t = {"_p_Seiscomp__Math__Geo__CityT_double_t", "std::vector< Seiscomp::Math::Geo::City< double > >::value_type *|Seiscomp::Math::Geo::City< double > *|Seiscomp::Math::Geo::CityD *", 0, 0, (void*)0, 0};
@@ -37099,9 +37676,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_AttachementList,
   &_swigt__p_AttachementType,
   &_swigt__p_DataArray,
+  &_swigt__p_ImplType,
   &_swigt__p_PackType,
+  &_swigt__p_ReferenceType,
   &_swigt__p_RootType,
   &_swigt__p_Seiscomp__Array,
+  &_swigt__p_Seiscomp__BitSet,
   &_swigt__p_Seiscomp__Core__BaseObject,
   &_swigt__p_Seiscomp__Core__ClassNotFound,
   &_swigt__p_Seiscomp__Core__DataMessage,
@@ -37117,6 +37697,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core__OverflowException,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl,
@@ -37182,6 +37764,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t,
   &_swigt__p_Seiscomp__Math__Geo__CityT_double_t,
@@ -37250,7 +37834,9 @@ static swig_cast_info _swigc__p_Archive[] = {  {&_swigt__p_Archive, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_AttachementList[] = {  {&_swigt__p_AttachementList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_AttachementType[] = {  {&_swigt__p_AttachementType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_DataArray[] = {  {&_swigt__p_DataArray, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ImplType[] = {  {&_swigt__p_ImplType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackType[] = {  {&_swigt__p_PackType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ReferenceType[] = {  {&_swigt__p_ReferenceType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_RootType[] = {  {&_swigt__p_RootType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_char_t[] = {{&_swigt__p_Seiscomp__TypedArrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Message[] = {{&_swigt__p_Seiscomp__Core__Message, 0, 0, 0},{0, 0, 0, 0}};
@@ -37258,15 +37844,18 @@ static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {{&_swigt__p_Sei
 static swig_cast_info _swigc__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t[] = {{&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_int_t[] = {{&_swigt__p_Seiscomp__TypedArrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Array[] = {{&_swigt__p_Seiscomp__Array, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__BitSet[] = {{&_swigt__p_Seiscomp__BitSet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core___private__InterruptibleObject[] = {{&_swigt__p_Seiscomp__Core___private__InterruptibleObject, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__GreensFunction[] = {{&_swigt__p_Seiscomp__Core__GreensFunction, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Record[] = {{&_swigt__p_Seiscomp__Record, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__GenericRecord[] = {{&_swigt__p_Seiscomp__GenericRecord, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__string_t, _p_Seiscomp__TypedArrayT_std__string_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t[] = {  {&_swigt__p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t[] = {  {&_swigt__p_Seiscomp__Core__Generic__ClassFactoryInterfaceT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -37317,12 +37906,14 @@ static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpa
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__WWSSN_SP_FilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR___Biquad[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR___Biquad, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Geo__CityT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -37401,9 +37992,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_AttachementList,
   _swigc__p_AttachementType,
   _swigc__p_DataArray,
+  _swigc__p_ImplType,
   _swigc__p_PackType,
+  _swigc__p_ReferenceType,
   _swigc__p_RootType,
   _swigc__p_Seiscomp__Array,
+  _swigc__p_Seiscomp__BitSet,
   _swigc__p_Seiscomp__Core__BaseObject,
   _swigc__p_Seiscomp__Core__ClassNotFound,
   _swigc__p_Seiscomp__Core__DataMessage,
@@ -37419,6 +38013,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core__OverflowException,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Array_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_const_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__BitSet_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__BaseObject_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Core__DataMessage_t__Impl,
@@ -37484,6 +38080,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__STALTAT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t,
   _swigc__p_Seiscomp__Math__Geo__CityT_double_t,

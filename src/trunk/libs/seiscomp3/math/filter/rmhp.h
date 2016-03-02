@@ -22,14 +22,15 @@ namespace Seiscomp {
 namespace Math {
 namespace Filtering {
 
+
 template<typename TYPE>
-class RunningMeanHighPass : public InPlaceFilter<TYPE>
-{
+class RunningMean : public InPlaceFilter<TYPE> {
 	public:
+		RunningMean(double windowLength=0, double fsamp=0.0);
+		~RunningMean() {}
 
-		RunningMeanHighPass(double windowLength=0, double fsamp=0.0);
-		~RunningMeanHighPass() {}
 
+	public:
 		void setLength(double windowLength) {
 			_windowLength = windowLength;
 		}
@@ -48,11 +49,26 @@ class RunningMeanHighPass : public InPlaceFilter<TYPE>
 
 		virtual int setParameters(int n, const double *params);
 
-	private:
+
+	protected:
 		double _windowLength,  _samplingFrequency;
 		int    _windowLengthI, _sampleCount;
 		double _average;
-}; // class RunningMeanHighPass
+};
+
+
+template<typename TYPE>
+class RunningMeanHighPass : public RunningMean<TYPE> {
+	public:
+		RunningMeanHighPass(double windowLength=0, double fsamp=0.0);
+		~RunningMeanHighPass() {}
+
+
+	public:
+		// apply filter to data vector **in*place**
+		void apply(int n, TYPE *inout);
+		virtual InPlaceFilter<TYPE>* clone() const;
+};
 
 
 } // namespace Seiscomp::Math::Filtering

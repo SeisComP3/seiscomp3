@@ -16,6 +16,7 @@
 <?php
 
 require 'reqlog.php';
+require 'fdsnws_stats.php';
 
 // -----------------------------------------------------------------------------
 
@@ -37,12 +38,16 @@ function mark_yesno($val) {
   } else if ($val == 0) {
     return tag('span', 'N', Array('style' => 'color: red'));
   } else {
-    return tag('span', '?', Array('style' => 'background-color: green; color: white; font-weight: bold;'));
+    return tag('span', $val, Array('style' => 'background-color: green; color: white; font-weight: bold; padding:0px 3px 0px 2px;'));
   }
 }
 
 function render_availability_table($db, $start_str, $today_str, $end_str) {
   $result = $db->makequerytable("SELECT id, host, port, dcid FROM `{table}` ORDER BY `dcid`", "ArcStatsSource", True);
+	/* TODO: Restrict this to just those sources with summaries available
+	 * between $start_str and $end_str. This involves looking into
+	 * the ArcStatsSummary table though.
+	 */
   $num_sources = count($result);
   $source_list = array();
   foreach ($result as $row) {
@@ -69,7 +74,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
     $day_list[] = tag('a', substr($day,8,3), Array('href' => "$me?date=$day"));
   }
 
-  echo tag("p", "Reports available from $num_sources sources between $start_str and $end_str:");
+  $num_dcids = 0;
 
   echo "<table>";
   echo tag('thead', tr(td('EIDA NODE') . tag_list('th', $day_list)));
@@ -116,6 +121,8 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
   }
 
   echo "</table>";
+  $num_dcids = count($dcid_seen);
+  echo tag("p", "Reports available from $num_sources sources ($num_dcids DCIDs) between $start_str and $end_str");
 }
 
 // -----------------------------------------------------------------------------
@@ -174,6 +181,9 @@ if (file_exists($year_img)) {
 }
 print tag("p", 'Summary table for <a href="../data/total-' . $year. '.txt">' . $year . '</a>');
 
+echo tag("h3", "FDSNWS for $year");
+print_fdsnws_graph("$year-01-01");
+
 echo tag('h3', 'Reports received from');
 render_availability_table($db, $month_start_str, $start_day, $month_end_str);
 
@@ -229,6 +239,7 @@ $source_data = Array('labels' => $labels);
 
 // Node IDs come from:
 //  SELECT * from ArcStatsSource where host= and port=
+// ...except that this is no longer unique1!! TODO
 $source_ids = array_flip($labels);
 $selected_node_ids = Array();
 foreach ($dcid_list as $dcid) {
@@ -255,7 +266,11 @@ foreach ($table_list as $table) {
 	$options["linkcodes"] = True;
     };
 
-    $order_col = $table_heads[$table][2];
+    if ($table == "Summary") {
+      $order_col = $table_heads[$table][1];
+    } else {
+      $order_col = $table_heads[$table][2];
+    }
 
     foreach ($selected_node_ids as $node_id) {
       if ($node_id == 0) {
@@ -263,13 +278,18 @@ foreach ($table_list as $table) {
       } else {
 	$source_constr = "AND `src` = $node_id";
       }
-      $order_col = $table_heads[$table][2];
-      $q = "SELECT * FROM `{table}` WHERE `start_day` = '?' $source_constr ORDER BY `$order_col`";
-      $tname = 'ArcStats' . $table;
-      //$v = Array( $start_day );
-      //$result = $db->makepreparetable($q, $tname, $v);
 
+      $order_col = $table_heads[$table][2];
+      if ($table == "Summary") {
+	$order_col = 'dcid'; 
+	$q = "SELECT * FROM `{table}` JOIN `ArcStatsSource` WHERE src = id AND `start_day` = '?' $source_constr ORDER BY `$order_col`";
+
+      } else {
+        $q = "SELECT * FROM `{table}` WHERE `start_day` = '?' $source_constr ORDER BY `$order_col`";
+      }
+      print "[ORDERED BY: " . $order_col . "]" . PHP_EOL;
       $q_2 = str_replace('?', $start_day, $q);
+      $tname = 'ArcStats' . $table;
       $result = $db->makequerytable($q_2, $tname);
       // echo "Got " . count($result) . " row(s)." ;
       $table_data = Array($table_heads[$table], $result);

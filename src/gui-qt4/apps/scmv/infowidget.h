@@ -23,13 +23,17 @@
 #include <QSplitter>
 #include <QTimer>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/recordsequence.h>
+#endif
 #include <seiscomp3/gui/core/recordwidget.h>
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/gui/core/recordstreamthread.h>
 
+#ifndef Q_MOC_RUN
 #include "types.h"
+#endif
 
 
 class InfoWidget : public QWidget {

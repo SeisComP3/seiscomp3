@@ -106,7 +106,7 @@ set xtics ${xtic_density}*24*3600
 set xtics format "%d\n%b"
 set ylabel 'Distinct users'
 #set logscale y
-set yrange [0:210]  # For GFZ in 2014: [0:130] is good.
+set yrange [0:260]  # For GFZ in 2014: [0:130] is good.
 
 set key top left
 set grid x

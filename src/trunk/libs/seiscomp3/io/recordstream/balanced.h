@@ -21,12 +21,12 @@
 #include <sstream>
 
 #include <boost/thread/thread.hpp>
-#include <boost/thread/condition_variable.hpp>
 
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/timewindow.h>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/core.h>
+#include <seiscomp3/client/queue.h>
 
 namespace Seiscomp {
 namespace RecordStream {
@@ -82,7 +82,7 @@ class SC_SYSTEM_CORE_API BalancedConnection : public Seiscomp::IO::RecordStream 
 
 	private:
 		int streamHash(const std::string &sta);
-		void putRecord(Record* rec);
+		void putRecord(RecordPtr rec);
 		Record* getRecord();
 		void acquiThread(IO::RecordStreamPtr rs);
 
@@ -91,11 +91,9 @@ class SC_SYSTEM_CORE_API BalancedConnection : public Seiscomp::IO::RecordStream 
 		int _nthreads;
 		std::vector<std::pair<IO::RecordStreamPtr, bool> > _rsarray;
 		std::list<boost::thread *> _threads;
-		std::list<Record*> _buffer;
+		Client::ThreadedQueue<Record*> _queue;
 		std::istringstream _stream;
 		boost::mutex _mtx;
-		boost::condition_variable _buf_not_full;
-		boost::condition_variable _buf_not_empty;
 };
 
 } // namesapce Balanced

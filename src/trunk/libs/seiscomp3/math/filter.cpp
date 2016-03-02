@@ -18,17 +18,7 @@
 #include <seiscomp3/math/filter/chainfilter.h>
 #include <seiscomp3/math/filter/abs.h>
 #include <seiscomp3/math/filter/const.h>
-#include <seiscomp3/math/filter/rca.h>
 #include <seiscomp3/math/filter/op2filter.h>
-#include <seiscomp3/math/filter/stalta.h>
-#include <seiscomp3/math/filter/seismometers.h>
-#include <seiscomp3/math/filter/iirintegrate.h>
-#include <seiscomp3/math/filter/iirdifferentiate.h>
-#include <seiscomp3/math/filter/taper.h>
-#include <seiscomp3/math/filter/rmhp.h>
-#include <seiscomp3/math/filter/biquad.h>
-#include <seiscomp3/math/filter/butterworth.h>
-#include <seiscomp3/math/filter/taper.h>
 
 #include <seiscomp3/core/interfacefactory.ipp>
 
@@ -64,22 +54,6 @@ using namespace Seiscomp;
 
 namespace {
 
-
-Math::GroundMotion int2gm(int value)
-{
-	switch (value) {
-		case 0:
-			return Math::Displacement;
-		case 1:
-			return Math::Velocity;
-		case 2:
-			return Math::Acceleration;
-		default:
-			break;
-	}
-
-	throw Core::TypeConversionException("input out of range");
-}
 
 // A production can have an associated closure, to store information
 // for that production.
@@ -169,32 +143,6 @@ struct Generator {
 
 		if ( filterType == "self" )
 			f = new Math::Filtering::SelfFilter<component_type>();
-		else if ( filterType == "BW" )
-			f = new Math::Filtering::IIR::ButterworthBandpass<component_type>();
-		else if ( filterType == "BW_LP" )
-			f = new Math::Filtering::IIR::ButterworthLowpass<component_type>();
-		else if ( filterType == "BW_HP" )
-			f = new Math::Filtering::IIR::ButterworthHighpass<component_type>();
-		else if ( filterType == "AC" || filterType == "AVG" )
-			f = new Math::Filtering::Average<component_type>();
-		else if ( filterType == "STALTA" )
-			f = new Math::Filtering::STALTA<component_type>();
-		else if ( filterType == "INT" )
-			f = new Math::Filtering::IIRIntegrate<component_type>();
-		else if ( filterType == "DIFF" )
-			f = new Math::Filtering::IIRDifferentiate<component_type>();
-		else if ( filterType == "WWSSN_SP" )
-			f = new Math::Filtering::IIR::WWSSN_SP_Filter<component_type>();
-		else if ( filterType == "WWSSN_LP" )
-			f = new Math::Filtering::IIR::WWSSN_LP_Filter<component_type>();
-		else if ( filterType == "WA" )
-			f = new Math::Filtering::IIR::WoodAndersonFilter<component_type>();
-		else if ( filterType == "SM5" )
-			f = new Math::Filtering::IIR::Seismometer5secFilter<component_type>();
-		else if ( filterType == "ITAPER" )
-			f = new Math::Filtering::InitialTaper<component_type>();
-		else if ( filterType == "RMHP" )
-			f = new Math::Filtering::RunningMeanHighPass<component_type>();
 		else {
 			f = Math::Filtering::InPlaceFilterFactory<component_type>::Create(filterType.c_str());
 			if ( f == NULL ) {

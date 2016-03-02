@@ -34,6 +34,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filter/bzip2.hpp>
 #include <boost/version.hpp>
 
 using namespace std;
@@ -295,7 +296,7 @@ void App::done() {
 bool App::dispatchNotification(int type, Core::BaseObject *obj) {
 	if ( type >= 0 ) return false;
 	size_t index = -type - 1;
-	if ( index < 0 || index >= _clients.size() ) return false;
+	if ( index >= _clients.size() ) return false;
 	QLClient *client = _clients[index];
 	const HostConfig *config = client->config();
 	const RoutingTable &routing = config->routingTable;
@@ -311,56 +312,83 @@ bool App::dispatchNotification(int type, Core::BaseObject *obj) {
 	SEISCOMP_INFO("processing message from host '%s'", config->host.c_str());
 
 	Notifiers notifiers;
-	DataModel::EventParametersPtr ep;
-
-	if ( !loadEventParam(ep, msg->data, msg->gzip) ) return false;
-
 
 	// log node is enabled for notice and debug level
 	LogNodePtr logNode;
 	if ( _verbosity > 2 )
-		logNode = new LogNode(ep->typeInfo().className(),
+		logNode = new LogNode(DataModel::EventParameters::TypeInfo().className(),
 		                      _verbosity > 3 ? LogNode::DIFFERENCES : LogNode::OPERATIONS);
-	const string &epID = ep->publicID();
 
-	// check if routing for EventParameters exists
-	string epRouting;
-	rt_it = routing.find(ep->typeInfo().className());
-	if ( rt_it != routing.end() ) epRouting = rt_it->second;
+	// event remove message
+	if ( msg->disposed ) {
+		if ( msg->type != IO::QuakeLink::ctText ) {
+			SEISCOMP_ERROR("Content-Type of message not set to text");
+			return false;
+		}
+		// search event to delete in cache
+		DataModel::Event *event = DataModel::Event::Cast(_cache.find(DataModel::Event::TypeInfo(), msg->data));
 
-	// Picks
-	if ( !epRouting.empty() ||
-	     routing.find(DataModel::Pick::TypeInfo().className()) != routing.end() ) {
-		for ( size_t i = 0; i < ep->pickCount(); ++i )
-			diffPO(ep->pick(i), epID, notifiers, logNode.get());
+		// if event was not found in cache but loaded from database, all of its
+		// child objects have to be loaded too
+		if ( event && !_cache.cached() && query() ) {
+			query()->load(event);
+			PublicObjectCacheFeeder(_cache).feed(event, true);
+		}
+
+		MyDiff diff;
+		diff.diff(event, NULL, "EventParameters", notifiers, logNode.get());
 	}
+	// event update
+	else {
+		if ( msg->type != IO::QuakeLink::ctXML ) {
+			SEISCOMP_ERROR("Content-Type of message not set to XML");
+			return false;
+		}
 
-	// Amplitudes
-	if ( !epRouting.empty() ||
-	     routing.find(DataModel::Amplitude::TypeInfo().className()) != routing.end() ) {
-		for ( size_t i = 0; i < ep->amplitudeCount(); ++i )
-			diffPO(ep->amplitude(i), epID, notifiers, logNode.get());
-	}
+		DataModel::EventParametersPtr ep;
+		if ( !loadEventParam(ep, msg->data, msg->gzip) ) return false;
 
-	// Origins
-	if ( !epRouting.empty() ||
-	     routing.find(DataModel::Origin::TypeInfo().className()) != routing.end() ) {
-		for ( size_t i = 0; i < ep->originCount(); ++i )
-			diffPO(ep->origin(i), epID, notifiers, logNode.get());
-	}
+		const string &epID = ep->publicID();
 
-	// FocalMechanisms
-	if ( !epRouting.empty() ||
-	     routing.find(DataModel::FocalMechanism::TypeInfo().className()) != routing.end() ) {
-		for ( size_t i = 0; i < ep->focalMechanismCount(); ++i )
-			diffPO(ep->focalMechanism(i), epID, notifiers, logNode.get());
-	}
+		// check if routing for EventParameters exists
+		string epRouting;
+		rt_it = routing.find(ep->typeInfo().className());
+		if ( rt_it != routing.end() ) epRouting = rt_it->second;
 
-	// Events
-	if ( !epRouting.empty() ||
-	     routing.find(DataModel::Event::TypeInfo().className()) != routing.end() ) {
-		for ( size_t i = 0; i < ep->eventCount(); ++i )
-			diffPO(ep->event(i), epID, notifiers, logNode.get());
+		// Picks
+		if ( !epRouting.empty() ||
+			 routing.find(DataModel::Pick::TypeInfo().className()) != routing.end() ) {
+			for ( size_t i = 0; i < ep->pickCount(); ++i )
+				diffPO(ep->pick(i), epID, notifiers, logNode.get());
+		}
+
+		// Amplitudes
+		if ( !epRouting.empty() ||
+			 routing.find(DataModel::Amplitude::TypeInfo().className()) != routing.end() ) {
+			for ( size_t i = 0; i < ep->amplitudeCount(); ++i )
+				diffPO(ep->amplitude(i), epID, notifiers, logNode.get());
+		}
+
+		// Origins
+		if ( !epRouting.empty() ||
+			 routing.find(DataModel::Origin::TypeInfo().className()) != routing.end() ) {
+			for ( size_t i = 0; i < ep->originCount(); ++i )
+				diffPO(ep->origin(i), epID, notifiers, logNode.get());
+		}
+
+		// FocalMechanisms
+		if ( !epRouting.empty() ||
+			 routing.find(DataModel::FocalMechanism::TypeInfo().className()) != routing.end() ) {
+			for ( size_t i = 0; i < ep->focalMechanismCount(); ++i )
+				diffPO(ep->focalMechanism(i), epID, notifiers, logNode.get());
+		}
+
+		// Events
+		if ( !epRouting.empty() ||
+			 routing.find(DataModel::Event::TypeInfo().className()) != routing.end() ) {
+			for ( size_t i = 0; i < ep->eventCount(); ++i )
+				diffPO(ep->event(i), epID, notifiers, logNode.get());
+		}
 	}
 
 	// log diffs

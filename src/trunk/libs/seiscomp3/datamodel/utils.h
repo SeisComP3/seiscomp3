@@ -44,13 +44,6 @@ SC_SYSTEM_CORE_API std::string eventRegion(const DataModel::Event *);
 
 template <typename T>
 char objectStatusToChar(const T *o) {
-	EvaluationMode mode = AUTOMATIC;
-
-	try { mode = o->evaluationMode(); } catch ( ... ) {}
-
-	// Manual origin are always tagged as M
-	if ( mode == MANUAL ) return 'M';
-
 	try {
 		switch ( o->evaluationStatus() ) {
 			case PRELIMINARY:
@@ -66,6 +59,12 @@ char objectStatusToChar(const T *o) {
 			default:
 				break;
 		}
+	}
+	catch ( ... ) {}
+
+	try {
+		if ( o->evaluationMode() == 'M' )
+			return 'M';
 	}
 	catch ( ... ) {}
 

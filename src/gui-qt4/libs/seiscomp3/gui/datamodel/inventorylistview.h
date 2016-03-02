@@ -18,7 +18,9 @@
 #include <QTreeWidget>
 #include <QStack>
 #include <QMap>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/object.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 

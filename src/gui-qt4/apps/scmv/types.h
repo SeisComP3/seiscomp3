@@ -125,7 +125,7 @@ class QCParameterImpl {
 				TIMING_QUALITY
 			),
 			ENAMES(
-				"AVAILABILTY",
+				"AVAILABILITY",
 				"GAPS_COUNT",
 				"DELAY",
 				"GAPS_INTERVAL",

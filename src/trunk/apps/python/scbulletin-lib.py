@@ -325,7 +325,10 @@ class Bulletin(object):
             except: res = "  N/A"
             pha = arr.phase().code()
             flag = "X "[wt>0.1]
-            status = seiscomp3.DataModel.EEvaluationModeNames.name(p.evaluationMode())[0].upper()
+            try:
+                status = seiscomp3.DataModel.EEvaluationModeNames.name(p.evaluationMode())[0].upper()
+            except:
+                status = "-"
             if self.polarities:
                 try:
                     pol = seiscomp3.DataModel.EPickPolarityNames.name(p.polarity())
@@ -457,8 +460,10 @@ class Bulletin(object):
             # end (MO)
             "stat":"A"
         }
-        if org.evaluationMode() == seiscomp3.DataModel.MANUAL:
-            tmp["stat"] = "M"
+        try:
+            if org.evaluationMode() == seiscomp3.DataModel.MANUAL:
+                tmp["stat"] = "M"
+        except: pass
 
         # dummy default
         tmp["mtyp"] = "M"

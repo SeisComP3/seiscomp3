@@ -209,6 +209,8 @@ bool PublicObjectCache::remove(PublicObject *po) {
 	// Remove object from lookup table
 	_lookup.erase(it);
 
+	if ( _popCallback ) _popCallback(po);
+
 	if ( item ) {
 		// Remove item
 		if ( item->prev )
@@ -225,8 +227,6 @@ bool PublicObjectCache::remove(PublicObject *po) {
 		--_size;
 	}
 
-	if ( _popCallback ) _popCallback(po);
-
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -240,8 +240,8 @@ void PublicObjectCache::clear() {
 		CacheItem *item = _front;
 		PublicObjectPtr po = item->object;
 		_front = _front->next;
-		delete item;
 		if ( _popCallback ) _popCallback(po.get());
+		delete item;
 	}
 
 	_front = _back = NULL;

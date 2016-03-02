@@ -63,7 +63,7 @@ class TimeDomain : public Filtering::InPlaceFilter<TYPE> {
 		double y0, y1, y2, a1, a2;
 		double cumsum1, cumsum2;
 
-		Filtering::IIR::ButterworthBandpass<TYPE> *bandpass;
+		Filtering::IIR::ButterworthHighLowpass<TYPE> *bandpass;
 };
 
 template<typename TYPE>

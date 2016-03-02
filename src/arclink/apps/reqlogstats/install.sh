@@ -16,7 +16,7 @@
 #  Its code and database should not go under ServerRoot.
 #
 #
-# Item 2 requires some style sheets at
+# Item 2 requires some additional style sheets at
 # http://eida.gfz-potsdam.de/css
 #
 # basic.css, gfz-backup.css
@@ -30,7 +30,7 @@
 
 set -u
 
-function show_usage() {
+show_usage() {
   echo "Usage: ${progname} {target}"
   echo "Install the reqlogstats web server files on host {target}"
   echo " e.g. geofon-open1 or geofon-open2"
@@ -38,7 +38,7 @@ function show_usage() {
 
 progname=`basename $0`
 
-function install_accumulator() {
+install_accumulator() {
 	diffs_found=0
 	mkdir -p tmp
 	for f in * ; do
@@ -73,7 +73,7 @@ if [ $# -ne 1 ] ; then
 	exit 2
 fi
 
-rsync_delay=5 # Seconds to wait before starting a dangerous rsync.
+rsync_delay=10 # Seconds to wait before starting a dangerous rsync.
 target=$1
 if [ $target == "geofon-open1" ] || [ $target == "geofon-open2" ] ; then
 	remotedir=/srv/www/webdc/eida/reqlogstats

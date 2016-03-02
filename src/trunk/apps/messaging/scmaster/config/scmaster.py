@@ -8,7 +8,7 @@ def check_output(cmd):
 
 
 def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schemapath):
-  cmd = "mysql -u root"
+  cmd = "mysql -u root -h " + rwhost
   if rootpwd: cmd += " -p" + rootpwd
 
   sys.stdout.write("+ Create MYSQL database\n")

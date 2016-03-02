@@ -444,11 +444,11 @@ void StationInfoWidget::updateQCContent() {
 	QCInfo::const_iterator it = _qcInfo.begin();
 	for ( ; it != _qcInfo.end(); it++ ) {
 		QCItemData data = it->second;
-        QString description;
-        if ( !data.value.isEmpty() )
-            description = QString("%1 [%2, %3]").arg(data.value)
-		                                        .arg(data.lowerUncertainty)
-		                                        .arg(data.upperUncertainty);
+		QString description;
+		if ( !data.value.isEmpty() )
+			description = QString("%1 [%2, %3]").arg(data.value)
+			              .arg(data.lowerUncertainty)
+			              .arg(data.upperUncertainty);
 
 		createConfigureAndAddTreeItem(_qcItem, data.name, description, data.backgroundColor);
 	}

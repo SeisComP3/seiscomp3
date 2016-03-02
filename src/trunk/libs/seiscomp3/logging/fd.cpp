@@ -61,11 +61,11 @@ void FdOutput::log(const char* channelName,
 
 	tm currentTime;
 
-	currentTime = *localtime(&time);
+	currentTime = _useUTC ? *gmtime(&time) : *localtime(&time);
 
 	const char *color = NULL;
 
-    if ( _colorize ) {
+	if ( _colorize ) {
 		sprintf(timeStamp, "%s%02i:%02i:%02i%s ",
 			kGreenColor,
 			currentTime.tm_hour,
@@ -125,7 +125,8 @@ void FdOutput::log(const char* channelName,
 	ss << std::endl;
 
 	std::string out = ss.str();
-	write(_fdOut, out.c_str(), out.length());
+	ssize_t len = write(_fdOut, out.c_str(), out.length());
+	if ( len == -1 ) {}
 }
 
 

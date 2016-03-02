@@ -133,6 +133,13 @@
 					relative displacement elastic response spectrum.
 					</description>
 				</parameter>
+				<parameter name="clipTmax" type="boolean" default="true">
+					<description>
+					Should the maximum period (Tmax) clipped against the
+					configured filter lower corner frequency, the maximum of
+					pd.loFreq or filter.loFreq.
+					</description>
+				</parameter>
 				<parameter name="afterShockRemoval" type="boolean" default="true">
 					<description>
 					Enables/disables aftershock removal (Figini, 2006; Paolucci et al., 2008)

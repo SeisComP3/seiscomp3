@@ -97,11 +97,16 @@ namespace Applications {
 namespace Picker {
 
 
-StreamConfig::StreamConfig() : enabled(true) {}
+StreamConfig::StreamConfig() : sensitivityCorrection(false), enabled(true) {}
 
 
 StreamConfig::StreamConfig(double on, double off, double tcorr, const std::string &f)
-: triggerOn(on), triggerOff(off), timeCorrection(tcorr), enabled(true), filter(f) {}
+: triggerOn(on)
+, triggerOff(off)
+, timeCorrection(tcorr)
+, sensitivityCorrection(false)
+, enabled(true)
+, filter(f) {}
 
 
 StationConfig::StationConfig() {}
@@ -119,6 +124,7 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 	std::string loc, cha, filter = _default.filter;
 	double trigOn = *_default.triggerOn, trigOff = *_default.triggerOff;
 	double tcorr = *_default.timeCorrection;
+	bool sensitivityCorrection = false;
 	bool enabled = true;
 	Util::KeyValuesPtr keys;
 
@@ -138,6 +144,7 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 		if ( filter.empty() )
 			filter = _default.filter;
 	}
+	settings.getValue(sensitivityCorrection, "sensitivityCorrection");
 	settings.getValue(enabled, "detecEnable");
 
 	StreamConfig &sc = _stationConfigs[Key(net,sta)];
@@ -149,6 +156,7 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 	sc.timeCorrection = tcorr;
 	sc.filter = filter;
 	sc.enabled = enabled;
+	sc.sensitivityCorrection = sensitivityCorrection;
 	sc.parameters = keys;
 	return &sc;
 }

@@ -16,9 +16,11 @@
 #define __SEISCOMP_GUI_CALCULATEAMPLITUDES_H__
 
 #include <seiscomp3/gui/core/recordstreamthread.h>
+#ifndef Q_MOC_RUN
 #include <seiscomp3/datamodel/timewindow.h>
 #include <seiscomp3/datamodel/waveformstreamid.h>
 #include <seiscomp3/processing/amplitudeprocessor.h>
+#endif
 #include <seiscomp3/gui/qt4.h>
 
 #include <QDialog>

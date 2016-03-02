@@ -15,7 +15,9 @@
 #define __SEISCOMP_CONFIGURATION_FANCYVIEW_H__
 
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/system/model.h>
+#endif
 
 #include <QAbstractItemView>
 #include <QScrollArea>

@@ -90,6 +90,10 @@ bool Config::init() {
 		try { cfg.gzip = app->configGetBool(prefix + "gzip"); }
 		catch ( ... ) { cfg.gzip = false; }
 
+		// native
+		try { cfg.native = app->configGetBool(prefix + "native"); }
+		catch ( ... ) { cfg.native = false; }
+
 		// data options
 		bool isSet;
 		string dataPrefix = prefix + "data.";
@@ -175,6 +179,7 @@ bool Config::init() {
 		SEISCOMP_DEBUG("Read host configuration '%s':\n"
 		               "  url         : %s\n"
 		               "  gzip        : %s\n"
+		               "  native      : %s\n"
 		               "  data\n"
 		               "    picks     : %s\n"
 		               "    amplitudes: %s\n"
@@ -185,9 +190,10 @@ bool Config::init() {
 		               "  keepAlive   : %s\n"
 		               "  filter      : %s\n"
 		               "  routing     : %s\n",
-		              it->c_str(),
+		               it->c_str(),
 		               cfg.url.c_str(),
 		               cfg.gzip                                      ? "true" : "false",
+		               cfg.native                                    ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataPicks      ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataAmplitudes ? "true" : "false",
 		               cfg.options & IO::QuakeLink::opDataArrivals   ? "true" : "false",

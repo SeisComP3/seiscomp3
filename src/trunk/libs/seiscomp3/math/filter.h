@@ -113,6 +113,10 @@ DEFINE_TEMPLATE_INTERFACE_FACTORY(InPlaceFilter);
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Math::Filtering::InPlaceFilter<float>, Class<float> > __##Class##FloatInterfaceFactory__(Service); \
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Math::Filtering::InPlaceFilter<double>, Class<double> > __##Class##DoubleInterfaceFactory__(Service)
 
+#define REGISTER_INPLACE_FILTER2(Class, FactoryPrefix, Service) \
+Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Math::Filtering::InPlaceFilter<float>, Class<float> > __##Class##FactoryPrefix##FloatInterfaceFactory__(Service); \
+Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Math::Filtering::InPlaceFilter<double>, Class<double> > __##Class##FactoryPrefix##DoubleInterfaceFactory__(Service)
+
 #define INSTANTIATE_INPLACE_FILTER(Class, APIDef) \
 template class APIDef Class<float>; \
 template class APIDef Class<double>

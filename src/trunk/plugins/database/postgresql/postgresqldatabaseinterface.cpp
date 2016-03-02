@@ -273,6 +273,15 @@ int PostgreSQLDatabase::getRowFieldCount() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const char *PostgreSQLDatabase::getRowFieldName(int index) {
+	return PQfname(_result, index);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const void* PostgreSQLDatabase::getRowField(int index) {
 	if ( PQgetisnull(_result, _row, index) )
 		return NULL;

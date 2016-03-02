@@ -86,7 +86,7 @@ class SC_SYSTEM_CORE_API Plugin : public Seiscomp::Core::BaseObject {
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
-		Description _description;	
+		Description _description;
 };
 
 
