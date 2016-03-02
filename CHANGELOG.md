@@ -58,6 +58,8 @@
 
  * Fixed crash when built as release
  * Fixed bug for stations with elevation <-999
+ * Fixed documentation
+ * Fixed plugin use of snrMin when changed in the waveform review window
 
 * scautopick
 
@@ -66,6 +68,7 @@
  * Added --playback option to not issue a time window request to the underlying
    data source which is important in connection with playbacks and offline runs
    with file sources, see documentation
+ * Fixed adding S pick comments also in --ep mode
 
 * scevent
 
