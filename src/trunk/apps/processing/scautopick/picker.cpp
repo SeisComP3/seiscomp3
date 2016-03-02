@@ -1319,6 +1319,14 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 		"")
 	);
 
+	DataModel::CommentPtr comment;
+	if ( !proc->referencingPickID().empty() ) {
+		comment = new DataModel::Comment;
+		comment->setId("RefPickID");
+		comment->setText(proc->referencingPickID());
+		pick->add(comment.get());
+	}
+
 #ifdef LOG_PICKS
 	if ( !isMessagingEnabled() && !_ep ) {
 		printf("%s %-2s %-6s %-3s %-2s %6.1f %10.3f %4.1f %c %s\n",
@@ -1339,11 +1347,8 @@ void App::emitSPick(const Processing::SecondaryPicker *proc,
 		DataModel::NotifierMessagePtr m = new DataModel::NotifierMessage;
 		m->attach(n.get());
 
-		if ( !proc->referencingPickID().empty() ) {
-			DataModel::CommentPtr c = new DataModel::Comment;
-			c->setId("RefPickID");
-			c->setText(proc->referencingPickID());
-			n = new DataModel::Notifier(pick->publicID(), DataModel::OP_ADD, c.get());
+		if ( comment ) {
+			n = new DataModel::Notifier(pick->publicID(), DataModel::OP_ADD, comment.get());
 			m->attach(n.get());
 		}
 
