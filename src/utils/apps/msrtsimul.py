@@ -4,6 +4,7 @@ import sys, os, time, datetime, calendar, stat
 from   getopt import getopt, GetoptError
 from seiscomp import mseedlite as mseed
 
+tstart = datetime.datetime.utcnow()
 ifile       = sys.stdin
 verbosity   = 0
 speed       = 1.
@@ -40,7 +41,7 @@ def read_mseed_with_delays(delaydict,reciterable):
     reciterator = itertools.chain(reciterable)
     rec = reciterator.next()
     while rec:
-        rec_time = calendar.timegm(rec.begin_time.timetuple())
+        rec_time = calendar.timegm(rec.end_time.timetuple())
         delay_time = rec_time
         stationname = "%s.%s" % (rec.net,rec.sta)
         if stationname in delaydict:
@@ -73,7 +74,7 @@ def rt_simul(f, speed=1., jump=0, delaydict = None):
     import time
 
     rtime = time.time()
-    stime = None
+    etime = None
     skipping = True
     record_iterable = mseed.Input(f)
     if delaydict:
@@ -84,18 +85,18 @@ def rt_simul(f, speed=1., jump=0, delaydict = None):
             rec_time = rec[0]
             rec = rec[1]
         else:
-            rec_time = calendar.timegm(rec.begin_time.timetuple())
-        if stime is None:
-            stime = rec_time
+            rec_time = calendar.timegm(rec.end_time.timetuple())
+        if etime is None:
+            etime = rec_time
 
         if skipping:
-            if (rec_time - stime) / 60 < jump:
+            if (rec_time - etime) / 60 < jump:
                 continue
 
-            stime = rec_time
+            etime = rec_time
             skipping = False
 
-        tmax = stime + speed * (time.time() - rtime)
+        tmax = etime + speed * (time.time() - rtime)
         last_sample_time = rec.begin_time +  datetime.timedelta(microseconds = 1000000.0 * (rec.nsamp / rec.fsamp))
         last_sample_time = calendar.timegm(last_sample_time.timetuple())        
         if last_sample_time > tmax:
@@ -198,7 +199,7 @@ try:
     
     #input = rt_simul(ifile, speed=speed, jump=jump)
     time_diff = None
-    
+    sys.stderr.write("Starting msrtsimul at %s\n" % datetime.datetime.utcnow())
     for rec in input:
         if time_diff is None:
             time_diff = datetime.datetime.utcnow() - rec.begin_time - \

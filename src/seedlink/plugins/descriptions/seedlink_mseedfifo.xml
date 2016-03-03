@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+   <plugin name="mseedfifo">
+                <extends>seedlink</extends>
+                <description>Global options for the mseedfifo plugin</description>
+                <configuration>
+                        <group name="plugins">
+                                <group name="mseedfifo">
+                                        <parameter name="fifo" type="string" default="">
+                                                <description>
+                                                	Path to named fifo pipe
+                                                </description>
+                                        </parameter>
+                                        <parameter name="noexit" type="boolean" default="false">
+                                                <description>
+		                                        Do not exit plugin if writer closes the fifo.
+						</description>
+                                        </parameter>
+                                </group>
+                        </group>
+               </configuration>
+   </plugin>
+   <binding module="seedlink" name="mseedfifo" category="sources">
+   	<description>mseedfifo_plugin</description>
+   </binding>
+   
+</seiscomp>
