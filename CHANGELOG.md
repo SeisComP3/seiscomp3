@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release yyyy.ddd
+## Release 2016.062
 
 * FDSNWS
 
