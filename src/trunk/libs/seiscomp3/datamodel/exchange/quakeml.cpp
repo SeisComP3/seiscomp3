@@ -136,11 +136,11 @@ struct EventTypeFormatter : Formatter {
 		else if ( v == EEventTypeNames::name(OTHER_EVENT) )
 			v = "other event";
 		else if ( v == EEventTypeNames::name(NOT_LOCATABLE) ||
-			      v == EEventTypeNames::name(OUTSIDE_OF_NETWORK_INTEREST) ||
-			      v == EEventTypeNames::name(DUPLICATE) ) {
-			SEISCOMP_WARNING("mapping unsupported EventType '%s' to 'other'",
+		          v == EEventTypeNames::name(OUTSIDE_OF_NETWORK_INTEREST) ||
+		          v == EEventTypeNames::name(DUPLICATE) ) {
+			SEISCOMP_WARNING("mapping unsupported EventType '%s' to 'other event'",
 			                 v.c_str());
-			v = EEventTypeNames::name(OTHER_EVENT);
+			v = "other event";
 		}
 	}
 };
