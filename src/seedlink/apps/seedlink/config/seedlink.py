@@ -366,6 +366,7 @@ class Module(TemplateModule):
         if self.msrtsimul:
             self._set('seedlink.station.sproc', '')
             station_dict[(self.net, self.sta)] = self._generateStationForIni()
+            self._getPluginHandler('mseedfifo')
             return
 
         station_sproc = set()
@@ -634,9 +635,6 @@ class Module(TemplateModule):
 
         self.__load_stations()
 
-        if self.msrtsimul:
-            self.seedlink_source['mseedfifo'] = {1:('mseedfifo',1,self.global_params.copy(),{})}
-
         try: os.makedirs(self.config_dir)
         except: pass
 
@@ -645,6 +643,9 @@ class Module(TemplateModule):
 
         for p in self.plugins.itervalues():
             p.flush(self)
+
+        if self.msrtsimul:
+            self.seedlink_source['mseedfifo'] = {1:('mseedfifo',1,self.global_params.copy(),{})}
 
         if self._get("stream_check", False).lower() == "true":
             self._set("stream_check", "enabled", False)
