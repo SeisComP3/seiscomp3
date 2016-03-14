@@ -51,6 +51,7 @@ static const char *const help_message =
     "-v                            Increase verbosity level\n"
     "    --verbosity=LEVEL         Set verbosity level\n"
     "-D, --daemon                  Daemon mode\n"
+    "-n, --noexit                  Do not exit on fifo close\n"
     "-V, --version                 Show version information\n"
     "-h, --help                    Show this help message\n";
 #else
@@ -63,12 +64,14 @@ static const char *const help_message =
     "-d PATH        Path to FIFO\n"
     "-v             Increase verbosity level\n"
     "-D             Daemon mode\n"
+    "-n, --noexit                  Do not exit on fifo close\n"
     "-V             Show version information\n"
     "-h             Show this help message\n";
 #endif
 
 static const char *plugin_name = NULL;
 static int daemon_mode = 0, daemon_init = 0;
+static int noexit = 0;
 static int verbosity = 0;
 
 static void log_print(char *msg)
@@ -144,6 +147,7 @@ int main(int argc, char **argv)
         { "fifo",           required_argument, NULL, 'd' },
         { "verbosity",      required_argument, NULL, 'X' },
         { "daemon",         no_argument,       NULL, 'D' },
+        { "noexit",         no_argument,       NULL, 'n' },
         { "version",        no_argument,       NULL, 'V' },
         { "help",           no_argument,       NULL, 'h' },
         { NULL }
@@ -152,9 +156,9 @@ int main(int argc, char **argv)
 
     int c;
 #if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
-    while((c = getopt_long(argc, argv, "d:vDVh", ops, NULL)) != EOF)
+    while((c = getopt_long(argc, argv, "d:vDnVh", ops, NULL)) != EOF)
 #else
-    while((c = getopt(argc, argv, "d:vDVh")) != EOF)
+    while((c = getopt(argc, argv, "d:vDnVh")) != EOF)
 #endif
       {
         switch(c)
@@ -171,6 +175,7 @@ int main(int argc, char **argv)
           case 'v': ++verbosity; break;
           case 'X': verbosity = atoi(optarg); break;
           case 'D': daemon_mode = 1; break;
+          case 'n': noexit = 1; break;
           case 'V': fprintf(stdout, "%s\n", ident_str);
                     exit(0);
           case 'h': fprintf(stdout, help_message, get_progname(argv[0]));
@@ -232,8 +237,18 @@ int main(int argc, char **argv)
           }
         else if(n == 0)
           {
-            log_printf("EOF reading %s: %s", fifo_path, strerror(errno));
-            break;
+            if (noexit) {
+              close(fd);
+              if((fd = open(fifo_path, O_RDONLY)) < 0)
+              {
+                  log_printf("cannot open %s: %s", fifo_path, strerror(errno));
+                  exit(1);
+              }
+              continue;
+            } else {
+              log_printf("EOF reading %s: %s", fifo_path, strerror(errno));
+              break;
+            }
           }
 
         fsdh = (struct sl_fsdh_s *)buf;
