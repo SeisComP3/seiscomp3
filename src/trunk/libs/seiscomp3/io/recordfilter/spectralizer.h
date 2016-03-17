@@ -51,7 +51,7 @@ class SC_SYSTEM_CORE_API Spectrum : public Core::BaseObject {
 		const Core::TimeSpan &dt() const { return _dt; }
 
 		Core::TimeSpan length() const { return _endTime - _startTime; }
-		Core::Time center() const { return Core::Time(double(_startTime + _endTime)*0.5); }
+		Core::Time center() const { return _startTime + Core::TimeSpan(double(length())*0.5); }
 
 		double minimumFrequency() const { return 0; }
 		double maximumFrequency() const { return _frequency; }
