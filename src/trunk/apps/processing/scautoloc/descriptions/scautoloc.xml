@@ -35,12 +35,12 @@
 						</description>
 					</parameter>
 				</group>
-				<parameter name="maxRMS" type="double" default="3.5" unit="sec">
+				<parameter name="maxRMS" type="double" default="3.5" unit="s">
 					<description>
 					Max. permissible RMS for a location to be reported.
 					</description>
 				</parameter>
-				<parameter name="maxResidual" type="double" default="7.0" unit="sec">
+				<parameter name="maxResidual" type="double" default="7.0" unit="s">
 					<description>
 					Max. individual residual (unweighted) for a pick to be used
 					in locationMax. permissible RMS for a location to be reported.
@@ -105,16 +105,18 @@
 					amplitude object. If it is empty, the pick SNR is 10.
 					</description>
 				</parameter>
-				<parameter name="publicationIntervalTimeSlope" type="double">
+				<parameter name="publicationIntervalTimeSlope" type="double" unit="s/count" default="0.5">
 					<description>
-					This is the parameter &quot;a&quot; in the equation &#x394;t = aN + b
-					for the time interval between origin updates.
+					Parameter &quot;a&quot;  in the equation t = aN + b.
+                    t is the time interval between sending updates of an origin.
+                    N is the arrival count of the origin.
 					</description>
 				</parameter>
-				<parameter name="publicationIntervalTimeIntercept" type="double">
+				<parameter name="publicationIntervalTimeIntercept" type="double" unit="s" default="0.">
 					<description>
-					This is the parameter &quot;b&quot; in the above mentioned equation
-					for the update interval &#x394;t.
+                    Parameter &quot;b&quot;  in the equation t = aN + b.
+                    t is the time interval between sending updates of an origin.
+                    N is the arrival count of the origin.
 					</description>
 				</parameter>
 				<parameter name="grid" type="string" default="@DATADIR@/scautoloc/grid.conf">
@@ -347,7 +349,7 @@
 					</description>
 				</option>
 
-				<option flag="" long-flag="wakeup-interval" argument="arg" default="5">
+				<option flag="" long-flag="wakeup-interval" argument="arg" default="5" unit="s">
 					<description>The interval in seconds to check pending operations</description>
 				</option>
 
