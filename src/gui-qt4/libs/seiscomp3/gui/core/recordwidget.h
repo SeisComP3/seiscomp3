@@ -258,6 +258,7 @@ class SC_GUI_API RecordWidget : public QWidget
 		bool setRecordPen(int slot, const QPen &pen);
 		bool setRecordAntialiasing(int slot, bool antialiasing);
 		bool setRecordOptimization(int slot, bool enable);
+		bool setRecordStepFunction(int slot, bool enable);
 		bool setRecordBackgroundColor(int slot, QColor c);
 		bool removeRecordBackgroundColor(int slot);
 		bool setRecordFilter(int slot, const Filter *f);
@@ -272,6 +273,8 @@ class SC_GUI_API RecordWidget : public QWidget
 		const Filter *recordFilter(int slot) const;
 
 		QString recordID(int slot) const;
+		bool recordStepFunction(int slot) const;
+		QColor recordColor(int slot) const;
 		const double *recordScale(int slot) const;
 		const Trace *traceInfo(int slot, bool filtered = false) const;
 
@@ -624,6 +627,7 @@ class SC_GUI_API RecordWidget : public QWidget
 			QString         id;
 			QPen            pen;
 			bool            antialiasing;
+			bool            stepFunction;
 			QColor          customBackgroundColor;
 			bool            hasCustomBackgroundColor;
 			bool            optimize;

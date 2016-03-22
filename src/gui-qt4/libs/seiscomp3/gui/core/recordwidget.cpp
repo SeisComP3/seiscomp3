@@ -616,6 +616,7 @@ RecordWidget::Stream::Stream(bool owner) {
 	filter = NULL;
 	pen = QPen(SCScheme.colors.records.foreground, SCScheme.records.lineWidth);
 	antialiasing = SCScheme.records.antiAliasing;
+	stepFunction = false;
 	hasCustomBackgroundColor = false;
 	scale = 1.0;
 	ownRawRecords = owner;
@@ -1124,6 +1125,27 @@ bool RecordWidget::setRecordOptimization(int slot, bool enable) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordWidget::setRecordStepFunction(int slot, bool enable) {
+	Stream *stream = getStream(slot);
+	if ( stream == NULL ) return false;
+
+	if ( stream->stepFunction == enable ) return true;
+
+	stream->stepFunction = enable;
+	stream->setDirty();
+	update();
+
+	if ( _shadowWidget )
+		_shadowWidget->setRecordStepFunction(slot, enable);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool RecordWidget::setRecordBackgroundColor(int slot, QColor c) {
 	Stream *stream = getStream(slot);
 	if ( stream == NULL ) return false;
@@ -1179,6 +1201,28 @@ QString RecordWidget::recordID(int slot) const {
 	const Stream *stream = getStream(slot);
 	if ( stream == NULL ) return QString();
 	return stream->id;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordWidget::recordStepFunction(int slot) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return false;
+	return stream->stepFunction;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QColor RecordWidget::recordColor(int slot) const {
+	const Stream *stream = getStream(slot);
+	if ( stream == NULL ) return QColor();
+	return stream->pen.color();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1838,11 +1882,14 @@ void RecordWidget::drawRecords(Stream *s, int slot, int h) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void RecordWidget::createPolyline(int, RecordPolyline &polyline,
+void RecordWidget::createPolyline(int slot, RecordPolyline &polyline,
                                   RecordSequence const *seq, double pixelPerSecond,
                                   float amplMin, float amplMax, float amplOffset,
                                   int height, bool optimization) {
-	polyline.create(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height, NULL, NULL, optimization);
+	if ( _streams[slot]->stepFunction )
+		polyline.createSteps(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height);
+	else
+		polyline.create(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height, NULL, NULL, optimization);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
