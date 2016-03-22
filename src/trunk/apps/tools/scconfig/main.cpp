@@ -139,7 +139,9 @@ int main(int argc, char **argv) {
 		if ( QMessageBox::warning(NULL, "scconfig", app.tr("scconfig with SEISCOMP_ROOT '%1' is already running!\n"
 		                                                   "Note that modifying the configuration from two instances can result in an inconsistent configuration!\n"
 		                                                   "Do you want to continue?\n")
-		                                            .arg(filebase.c_str()), QMessageBox::Yes, QMessageBox::No) != QMessageBox::Yes )
+		                                            .arg(filebase.c_str()),
+		                                            QMessageBox::Yes | QMessageBox::No,
+		                                            QMessageBox::No) != QMessageBox::Yes )
 			return 0;
 	}
 	#endif

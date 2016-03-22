@@ -1394,6 +1394,10 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 	QWidget *textWidget;
 	QHBoxLayout *nameLayout = new QHBoxLayout;
 
+	QString paramLabel = idx.data().toString();
+	if ( !param->definition->unit.empty() )
+		paramLabel += QString(" [%1]").arg(param->definition->unit.c_str());
+
 	if ( param->definition->type == "boolean" ) {
 		paramLayout->addStretch();
 
@@ -1401,7 +1405,7 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 		QFont f = checkBox->font();
 		f.setBold(true);
 		checkBox->setFont(f);
-		checkBox->setText(param->definition->name.c_str());
+		checkBox->setText(paramLabel);
 		checkBox->setValue(idx.sibling(idx.row(),2).data().toString());
 		inputWidget = checkBox;
 		textWidget = checkBox;
@@ -1426,7 +1430,7 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 		QFont f = name->font();
 		f.setBold(true);
 		name->setFont(f);
-		name->setText(idx.data().toString());
+		name->setText(paramLabel);
 
 		StringEdit *edit = new StringEdit;
 		edit->setValue(idx.sibling(idx.row(),2).data().toString());
@@ -1497,7 +1501,7 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 	if ( !param->definition->description.empty() ) {
 		DescLabel *desc = new DescLabel;
 		desc->setText(maxSize(param->definition->description, 60).c_str());
-		desc->setToolTip(QString("<p>%1</p>").arg(param->definition->description.c_str()));
+		desc->setToolTip(QString("<p>%1</p>").arg(param->definition->description.c_str()).replace('\n', "<br/>"));
 
 		//desc->setWordWrap(true);
 		QPalette pal = desc->palette();
