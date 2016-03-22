@@ -14,6 +14,10 @@ Initial configuration
 To configure SeisComP3 initially, run :program:`seiscomp setup`. This is the
 successor of the former :program:`./setup` script.
 
+As a wrapper to :program:`seiscomp setup`, a wizard can be started from :ref:`scconfig<scconfig>` (Ctrl-N).
+
+In :program:`seiscomp setup` default values are given in brackets []. 
+
 .. code-block:: none
 
    user@host:~$ seiscomp3/bin/seiscomp setup
@@ -158,9 +162,9 @@ without doing anything.
 Activate modules
 ================
 
-After the installation no module is activated for auto start. If :program:`seiscomp start`
-is called, nothing will happen. To activate a set of modules,
-:program:`seiscomp enable` needs to be called with a list of modules. To enable
+After the installation all module are disabled for auto start. If :program:`seiscomp start`
+is called, nothing will happen. To enable a set of modules,
+:program:`seiscomp enable` needs to be called with a list of modules. E.g. to enable
 a processing system with Seedlink for data acquisition, use:
 
 .. code-block:: sh
@@ -176,17 +180,32 @@ a processing system with Seedlink for data acquisition, use:
 
 A successive call of :program:`seiscomp start` will then start all enabled
 modules. This is also required to restart enabled modules with :program:`seiscomp check`.
-But before starting seiscomp, stations need to be added and the configuration
-needs to be updated.
+
+Alternatively, :ref:`scconfig<scconfig>` can be used to enable/disable 
+and to start/stop/restart modules.
+
+However, before starting seiscomp, station information (metadata) need to 
+be provided and the configuration needs to be updated.
 
 
-Insert networks and stations
-============================
+Supply metadata for networks and stations
+========================================
 
-SeisComP3 comes with various importers to add networks and stations including
-full response information.
+SeisComP3 requires the metadata from seismic stations for data acquisition 
+and processing. The metadata can be obtained from network operators or
+various other sources in different formats. The metadata include, e.g.:
+
+- network association
+- operation times
+- location
+- sensor and data logger specifications
+- data stream specificiations
+
+SeisComP3 comes with various importers to add metadata 
+for networks and stations including full response information.
 
 :ref:`import_inv` is the tool to import inventory data into SeisComP3.
+Alternatively can be used.
 
 .. code-block:: sh
 

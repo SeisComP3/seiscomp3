@@ -43,6 +43,7 @@ def xml_collect_params(param_nodes, struct_nodes, group_nodes, prefix):
   for param_node in param_nodes:
     name = param_node.get('name')
     type = param_node.get('type')
+    unit = param_node.get('unit')
 
     # If name is not defined, remove the trailing dot and set name
     # to an empty string
@@ -54,6 +55,8 @@ def xml_collect_params(param_nodes, struct_nodes, group_nodes, prefix):
     default = param_node.get('default')
     if type:
       options += "   Type: *%s*\n\n" % type
+    if unit:
+      options += "   Unit: *%s*\n\n" % unit
 
     desc = xml_desc_lines(param_node)
 

@@ -1,15 +1,35 @@
 screloc is an automatic relocator that receives origins from realtime
 locators such as scautoloc and relocates them with a configurable locator.
+screloc can be conveniently used to test different locators and velocity models
+or to relocate events with updated velocity models. Check the
+:ref:`Example applications <screloc-example>` for screloc.
+
+screloc processes any incoming automatic origin but does not yet listen to event
+information nor does it skip origins for that a more recent one exists.
+
 To run screloc along with all processing modules add it to the list of
 clients in the seiscomp configuration frontend.
 
-screloc does not yet listen to event information and does not skip origins for
-that a more recent one exists. Instead any incoming automatic origin is
-processed.
 
-screloc can be conveniently used to test different locators and velocity model
-or to relocate events with updated velocity models. Check out the
-:ref:`Example applications <screloc_examples>` for screloc
+.. code-block:: sh
+
+   seiscomp enable screloc
+   seiscomp start screloc
+
+Descriptions of parameters for screloc:
+
+.. code-block:: sh
+
+   seiscomp exec screloc -h
+
+Test the performance of screloc and learn from debug output:
+
+.. code-block:: sh
+
+   seiscomp exec screloc --debug
+
+Setup
+=====
 
 The following example configuration shows a setup of screloc for
 :ref:`NonLinLoc <global_nonlinloc>`:
@@ -69,7 +89,7 @@ The following example configuration shows a setup of screloc for
 .. _screloc-example:
 
 Examples
---------
+========
 
 * Run screloc to with a specific velocity model given in a profile by :ref:`NonLinLoc <global_nonlinloc>`.
   Use a specific userID and authorID for uniquely recognizing the relocation.

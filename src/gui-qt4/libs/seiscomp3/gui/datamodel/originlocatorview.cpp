@@ -2986,11 +2986,16 @@ void OriginLocatorView::updateObject(const QString& parentID, Seiscomp::DataMode
 		}
 	}
 
-	if ( _displayComment && _currentOrigin ) {
-		if ( parentID == _currentOrigin->publicID().c_str() ) {
-			Comment *comment = Comment::Cast(o);
-			if ( comment && comment->id() == _displayCommentID )
-				_ui.labelComment->setText(comment->text().c_str());
+	if ( _currentOrigin ) {
+		Origin *org = Origin::Cast(o);
+		if ( org && org->publicID() == _currentOrigin->publicID() )
+			updateContent();
+		else if ( _displayComment ) {
+			if ( parentID == _currentOrigin->publicID().c_str() ) {
+				Comment *comment = Comment::Cast(o);
+				if ( comment && comment->id() == _displayCommentID )
+					_ui.labelComment->setText(comment->text().c_str());
+			}
 		}
 	}
 }

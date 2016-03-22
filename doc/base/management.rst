@@ -9,6 +9,9 @@ archiving, processing, distribution and much more. To control all these
 module and to update their configuration the central program :program:`seiscomp`
 is used. This is a Python script and it is installed in :file:`bin/seiscomp`.
 
+The graphical tool :ref:`scconfig<scconfig>` is a user-friendly wrapper 
+tool for many commands in :program:`seiscomp`.
+
 The entire management framework is built upon Python which is portable to different
 platforms. To make :program:`seiscomp` work, ensure that Python is installed on
 your system.

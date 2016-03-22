@@ -732,6 +732,7 @@ void RecordPolyline::createStepFunction(RecordSequence const *records, double pi
 			push_back(QPolygon());
 			poly = &back();
 		}
+
 		Array::DataType datatype = rec->dataType();
 		switch ( datatype ) {
 			case Array::FLOAT:
@@ -754,6 +755,92 @@ void RecordPolyline::createStepFunction(RecordSequence const *records, double pi
 	if ( !empty() ) {
 		if ( skipCount )
 			front().remove(0, skipCount);
+	}
+
+	_tx = _ty = 0;
+}
+
+
+void RecordPolyline::createSteps(RecordSequence const *records, double pixelPerSecond,
+                                 float amplMin, float amplMax, float amplOffset,
+                                 int height, QVector<QPair<int,int> >* gaps) {
+	clear();
+
+	if (records == NULL) return;
+	if (records->size() == 0) return;
+
+	// normalize peak-to-peak amplitude to height set using setHeight()
+	double yscl;
+	double amplHeight = amplMax - amplMin;
+
+	if ( amplHeight == 0.0 ) {
+		_baseline = height/2;
+		yscl = 0;
+	}
+	else {
+		yscl = height/amplHeight;
+		_baseline = (int)(amplMax*yscl);
+	}
+
+	int skipCount = 0;
+	RecordSequence::const_iterator it = records->begin();
+	RecordSequence::const_iterator lastIt = it;
+
+	Seiscomp::Core::Time refTime = (*it)->startTime();
+
+	QPolygon *poly = NULL;
+
+	for(; it != records->end(); ++it) {
+		const Record* rec = it->get();
+		const Record* lastRec = lastIt->get();
+
+		int nsamp = rec->sampleCount();
+		if ( nsamp == 0 ) continue;
+
+		double tolerance = records->tolerance()/rec->samplingFrequency();
+		double diff;
+
+		try {
+			diff = abs(double(rec->startTime() - lastRec->endTime()));
+		}
+		catch ( ... ) {
+			diff = tolerance*2;
+		}
+
+		if ( diff > tolerance || poly == NULL ) {
+			push_back(QPolygon());
+			poly = &back();
+		}
+
+		Array::DataType datatype = rec->dataType();
+		switch ( datatype ) {
+			case Array::FLOAT:
+				pushData<float>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			case Array::DOUBLE:
+				pushData<double>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			case Array::INT:
+				pushData<int>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			default:
+				break;
+		}
+
+		lastIt = it;
+	}
+
+	if ( poly->isEmpty() )
+		pop_back();
+
+	if ( !empty() ) {
+		if ( skipCount )
+			front().remove(0, skipCount);
+
+		if ( gaps ) {
+			for ( size_t i = 1; i < size(); ++i )
+				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
+		}
 	}
 
 	_tx = _ty = 0;
