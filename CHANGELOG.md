@@ -1,5 +1,36 @@
 # Jakarta
 
+## Release 2016.082
+
+* scolv
+
+ * Fix spectrogram rendering for 32bit system
+ * Update origin content if the currently shown origin
+   received an update message
+
+* scconfig
+
+ * Set default action to "No" if scconfig is started multiple times
+ * Show units as given in the descriptions
+
+* scvoice
+
+ * Configured path can now contain variables
+
+* GUI
+
+ * Fix regression in timing qualitity computation
+
+* Seedlink
+
+ * Add noexit option for mseedfifo plugin (thanks to Roman Racine, SED/ETHZ)
+
+* doc
+
+ * Add units to parameter documentation
+ * Add balanced record stream documentation
+
+
 ## Release 2016.062
 
 * FDSNWS
