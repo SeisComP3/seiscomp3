@@ -4,6 +4,8 @@ OPTION(SC_TRUNK_DB_MYSQL "Add MYSQL support" ON)
 OPTION(SC_TRUNK_DB_SQLITE3 "Add SQLite3 support" OFF)
 OPTION(SC_TRUNK_DB_POSTGRESQL "Add PostgreSQL support" OFF)
 
+SET(PROJECT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test/data)
+
 #SET(Boost_DEBUG ON)
 
 # Static Boost libs are not compiled with -fPIC on some

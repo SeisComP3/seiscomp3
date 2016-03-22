@@ -1568,7 +1568,7 @@ void WFParam::process(Origin *origin) {
 			}
 
 			_report << "   + " << it->first << ": " << req.timeWindow.startTime().toString("%F %T")
-					<< ", " << req.timeWindow.endTime().toString("%F %T") << endl;
+			        << ", " << req.timeWindow.endTime().toString("%F %T") << endl;
 		}
 
 		_result << " + Processing" << endl;

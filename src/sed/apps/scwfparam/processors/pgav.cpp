@@ -898,7 +898,6 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	// Compute pre event cut-off
 	// -------------------------------------------------------------------
 	if ( _config.preEventCutOff ) {
-		// TODO: Implement
 		int i0 = (int)(ti - 15.0*_stream.fsamp);
 		int i1 = ti;
 

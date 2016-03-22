@@ -308,6 +308,8 @@ bool SL2Picker::applyConfig() {
 			return false;
 		}
 	}
+	else
+		_compFilter = NULL;
 
 	if ( !_l2Config.detecFilter.empty() ) {
 		Filter *filter = Filter::Create(_l2Config.detecFilter.c_str());
@@ -319,6 +321,8 @@ bool SL2Picker::applyConfig() {
 
 		setFilter(filter);
 	}
+	else
+		setFilter(NULL);
 
 	// Create a waveform operator that combines all three channels and
 	// computes the l2norm of each 3 component sample
