@@ -644,8 +644,8 @@ RecordWidget::Stream::~Stream() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordWidget::Stream::setDirty() {
-	traces[Stream::Raw] = Trace();
-	traces[Stream::Filtered] = Trace();
+	traces[Stream::Raw].reset();
+	traces[Stream::Filtered].reset();
 
 	traces[Stream::Raw].dirty = true;
 	traces[Stream::Filtered].dirty = true;

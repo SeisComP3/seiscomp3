@@ -194,7 +194,7 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 				int endIndex = srcData->size();
 
 				if ( (*rec_it)->startTime() < maxStartTime )
-					startIndex += (int)(double(maxStartTime-(*rec_it)->startTime())*(*rec_it)->samplingFrequency());
+					startIndex += (int)(double(maxStartTime-(*rec_it)->startTime())*(*rec_it)->samplingFrequency()+0.5);
 
 				if ( (*rec_it)->endTime() > minEndTime )
 					endIndex -= (int)(double((*rec_it)->endTime()-minEndTime)*(*rec_it)->samplingFrequency());

@@ -211,8 +211,10 @@ class SC_GUI_API RecordWidget : public QWidget
 		typedef Math::Filtering::InPlaceFilter<float> Filter;
 
 		struct Trace {
-			Trace() : amplMin(0), amplMax(0), offset(0),
-			          absMax(0), yMin(0), yMax(0), visible(false) {}
+			Trace() : timingQuality(-1), timingQualityCount(0) {
+				reset();
+			}
+
 			float          amplMin;
 			float          amplMax;
 			float          offset;
@@ -226,6 +228,13 @@ class SC_GUI_API RecordWidget : public QWidget
 			bool           dirty;
 			bool           visible;
 			RecordPolyline poly;
+
+			void reset() {
+				amplMin = amplMax = offset  = absMax = 0;
+				yMin = yMax = 0;
+				visible = false;
+				poly = RecordPolyline();
+			}
 		};
 
 	public:
