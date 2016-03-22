@@ -13,7 +13,7 @@
 ############################################################################
 
 import os, sys, subprocess, traceback
-import seiscomp3.Client, seiscomp3.Seismology
+import seiscomp3.Client, seiscomp3.Seismology, seiscomp3.System
 
 class VoiceAlert(seiscomp3.Client.Application):
 
@@ -110,12 +110,16 @@ class VoiceAlert(seiscomp3.Client.Application):
         try: self._ampScript = self.commandline().optionString("amp-script")
         except:
             try: self._ampScript = self.configGetString("scripts.amplitude")
-            except: seiscomp3.Logging.warning("No amplitude script defined") 
+            except: seiscomp3.Logging.warning("No amplitude script defined")
+
+        self._ampScript = seiscomp3.System.Environment.Instance().absolutePath(self._ampScript)
 
         try: self._alertScript = self.commandline().optionString("alert-script")
         except:
             try: self._alertScript = self.configGetString("scripts.alert")
             except: seiscomp3.Logging.warning("No alert script defined") 
+
+        self._alertScript = seiscomp3.System.Environment.Instance().absolutePath(self._alertScript)
 
         try: self._eventScript = self.commandline().optionString("event-script")
         except:
@@ -123,6 +127,8 @@ class VoiceAlert(seiscomp3.Client.Application):
                 self._eventScript = self.configGetString("scripts.event")
                 seiscomp3.Logging.info("Using event script: %s" % self._eventScript)
             except: seiscomp3.Logging.warning("No event script defined")
+
+        self._eventScript = seiscomp3.System.Environment.Instance().absolutePath(self._eventScript)
 
         seiscomp3.Logging.info("Creating ringbuffer for 100 objects")
         if not self.query():
