@@ -12,6 +12,7 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-odcarchive`", "``odcarchive``", "Reads records from Orpheus archive (ODC)"
    ":ref:`rs-memory`", "``memory``", "Reads records from memory"
    ":ref:`rs-combined`", "``combined``", "Combines archive and real-time stream"
+   ":ref:`rs-balanced`", "``balanced``", "Distributes requests to multiple proxy streams"
    ":ref:`rs-dec`", "``dec``", "Decimates (resamples) a proxy stream"
 
 The RecordStream used by an application is either specified on the the
@@ -160,8 +161,8 @@ real-time stream. The syntax for the source is similar to an URL:
 
 ``combined://real-time-stream;archive-stream??parameters``
 
-By default the real-time stream is set to ::ref::`rs-slink` and the
-archive-stream is set to :ref:`arclink`. Any other streams may be configured.
+By default the real-time stream is set to :ref:`rs-slink` and the
+archive-stream is set to :ref:`rs-arclink`. Any other streams may be configured.
 The parameters of the combined stream are separated by 2 question marks (`??`)
 in order to distinguish them from the parameters used in the proxy streams:
 
@@ -178,6 +179,36 @@ Examples
    "``combined://;``", "Same as above"
    "``combined://:18042;?user=foo&pwd=secret??rtMax=1800``", "Seedlink on localhost:18042 combined with Arclink on localhost 18001, real-time (SeedLink) buffer size set to 30min"
    "``combined://;sdsarchive//home/sysop/seiscomp3/var/lib/archive?``", Seedlink combined with SDS archive
+
+.. _rs-balanced:
+
+Balanced
+--------
+
+This RecordStream distributes requests quasi-equally (but deterministically) to
+multiple proxy streams. It can be used for load balancing and to improve failure
+tolerance. The algorithm to choose a proxy stream (counting from 0) is based on
+station code and can be expressed in Python as follows:
+
+.. code-block:: python
+
+   stationCode = "WLF"
+   nproxies = 2
+
+   x = 0
+   for c in stationCode:
+       x += ord(c)
+
+   print("choosing proxy stream", x % nproxies)
+
+Examples
+^^^^^^^^
+
+.. csv-table::
+   :header: "URL", "Description"
+
+   "``balanced://slink/server1:18000;slink/server2:18000``", "Distribute requests to 2 :ref:`rs-slink` RecordStreams"
+   "``balanced://combined/(server1:18000;server1:18001);combined/(server2:18000;server2:18001)``", "Distribute requests to 2 :ref:`rs-combined` RecordStreams"
 
 .. _rs-dec:
 
