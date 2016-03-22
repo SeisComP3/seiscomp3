@@ -1313,8 +1313,10 @@ void MainWindow::openAcquisition() {
 				QStringList tokens = stream.split(".");
 
 				if ( tokens.count() >= 1 ) {
-					if ( tokens.count() > 4 )
-						cout << "error in entry '" << stream.toStdString() << "': too many tokens, missing ',' ? -> ignoring" << endl;
+					if ( tokens.count() > 4 ) {
+						cerr << "error in entry '" << stream.toStdString() << "': too many tokens, missing ',' ? -> ignoring" << endl;
+						continue;
+					}
 					else
 						requestMap.append(WaveformStreamID(tokens[0].toStdString(),
 						                                   tokens.count()>1?tokens[1].toStdString():"*",
