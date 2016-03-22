@@ -2,10 +2,12 @@
 Installation
 ************
 
-SeisComP3 is distributed in the form of tar files:
+SeisComP3 is distributed in the form of tar files for different releases,
+Linux systems and architectures:
 
 * Acquisition, processing and GUIs (for each supported platform)
-* Maps
+* Maps (maps from the SeisComP3 releases Seattle and Zurich also work in Jakarta)
+* Documentation
 * Station configuration files (optional)
 
 Download these from http://www.seiscomp3.org/ .
@@ -15,6 +17,7 @@ an
 * :program:`Ubuntu 14`, 64 bit system
 * :program:`openSUSE 11`, 64 bit system
 * :program:`CentOS 6`, 64 bit system
+
 
 Requirements
 ============
@@ -78,7 +81,7 @@ Installation procedure
 ======================
 
 The next steps describe the installation of SeisComP3 with the prepared
-tar.gz files.
+tar.gz files. 
 
 * Log in as user (e.g. sysop)
 * Copy one of the :file:`seiscomp3-jakarta-[version]-[OS]-[arch].tar.gz` files to
@@ -91,7 +94,7 @@ tar.gz files.
   
      user@host:/tmp$ cd
 
-* Un-tar the SeisComP3 binary package
+* Un-tar the SeisComP3 binary packagemake 
    
   .. code-block:: sh
 
@@ -101,7 +104,7 @@ tar.gz files.
 
   .. code-block:: sh
 
-     user@host:~$ tar xzf seiscomp3-maps.tar.gz
+     user@host:~$ tar xzf seiscomp3-[release]-maps.tar.gz
 
 * If desired, un-tar the documentation into seiscomp3/share/doc
 
@@ -109,15 +112,14 @@ tar.gz files.
 
      user@host:~$ tar xzf seiscomp3-jakarta-[version]-doc.tar.gz
 
-Now everything is installed and the system can be configured. The :ref:`next chapter<getting-started>`
-chapter explains the first steps.
-
+Unpacking these file creates the :ref:`SeisComP3 directory structure<directory_structure>`.
 
 Install dependencies
 --------------------
 
 SeisComP3 depends on a number of additional packages shipped with each Linux
-distribution. The following table gives an overview:
+distribution. The following table gives an overview (the names of packages, 
+files or commands may differ slightly for other Linux systems):
 
 :program:`Packages`
 
@@ -156,7 +158,9 @@ distribution. The following table gives an overview:
 
 First the environment has to be set up. The :program:`seiscomp` tool comes with
 the command :command:`install-deps` which installs required packages.
-To use MySQL, give 'mysql-server' as parameter. 
+Read the section :ref:`System management<system-management>` for more detailed instructions.
+E.g. for installing the dependencies for using the MySQL database, 
+give 'mysql-server' as parameter. 
 
 .. code-block:: sh
 
@@ -170,7 +174,7 @@ To use MySQL, give 'mysql-server' as parameter.
 
    
 If your distribution is not supported by :command:`install-deps`
-, install the above packages manually
+, install the above packages manually:
 
 :program:`Ubuntu` `version`
 
@@ -195,6 +199,7 @@ If your distribution is not supported by :command:`install-deps`
    user@host:~$ cd seiscomp3/share/deps/centos/[version]
    ...
 
+   
    
 .. code-block:: sh
 
@@ -229,7 +234,8 @@ SQL configuration
   
   :file:`/etc/my.cnf`
   
-  Please read the documentation of your distribution .
+  Please read the documentation of your distribution. root privileges may 
+  be required to make the changes.
 
 *  After adjusting the parameters, MySQL needs to be restarted. One can run
 
@@ -274,6 +280,10 @@ SQL configuration
      user@host:~$ su root
      user@host:~$ /sbin/chkconfig mysqld on
 
+Now everything is installed and the system can be configured. The :ref:`next chapter<getting-started>`
+chapter explains the first steps.
+
+.. _directory_structure:
 
 Directory structure
 ===================
