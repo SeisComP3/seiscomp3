@@ -29,6 +29,7 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/utils/files.h>
+#include <seiscomp3/communication/networkinterface.h>
 
 #include "filter.h"
 
@@ -155,12 +156,28 @@ void Import::createCommandLineDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Import::connectToSink(const std::string& sink) {
-	_sink = new Communication::SystemConnection;
+	std::string protocol = "spread";
+	std::string server = sink;
+	size_t pos = sink.find("://");
+
+	if ( pos != std::string::npos ) {
+		protocol = sink.substr(0,pos);
+		server = sink.substr(pos+3);
+	}
+
+	Communication::NetworkInterfacePtr ni = Communication::NetworkInterface::Create(protocol.c_str());
+	if (ni == NULL)
+	{
+		SEISCOMP_ERROR("Networkinterface \"%s\" not found", protocol.c_str());
+		return Core::Status::SEISCOMP_FAILURE;
+	}
+
+	_sink = new Communication::SystemConnection(ni.get());
 
 	// Connect to the sink master and use a default name
 	int ret;
 	bool first = true;
-	while ( (ret = _sink->connect(sink, "", Communication::Protocol::IMPORT_GROUP)) !=
+	while ( (ret = _sink->connect(server, "", Communication::Protocol::IMPORT_GROUP)) !=
 			Core::Status::SEISCOMP_SUCCESS && !_exitRequested ) {
 		if ( first ) {
 			SEISCOMP_WARNING("Could not connect to the sink master %s : %s, trying again every 2s",
