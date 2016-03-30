@@ -23,6 +23,7 @@
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/io/archive/binarchive.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <seiscomp3/io/archive/bsonarchive.h>
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/device/array.hpp>
@@ -487,6 +488,48 @@ NetworkMessage* NetworkMessage::Encode(Seiscomp::Core::Message* msg,
 			}
 				break;
 
+			case Protocol::CONTENT_BSON:
+			{
+				IO::BSONArchive ar(&filtered_buf, false, schemaVersion);
+				ar << msg;
+				if ( !ar.success() )
+					throw Core::GeneralException("failed to serialize archive");
+			}
+				break;
+
+			case Protocol::CONTENT_UNCOMPRESSED_BSON:
+			{
+				boost::iostreams::stream_buffer<boost::iostreams::back_insert_device<std::string> > buf(data);
+
+				IO::BSONArchive ar(&buf, false, schemaVersion);
+				ar << msg;
+				if ( !ar.success() )
+					throw Core::GeneralException("failed to serialize archive");
+			}
+				break;
+
+			case Protocol::CONTENT_JSON:
+			{
+				IO::BSONArchive ar(&filtered_buf, false, schemaVersion);
+				ar.setJSON(true);
+				ar << msg;
+				if ( !ar.success() )
+					throw Core::GeneralException("failed to serialize archive");
+			}
+				break;
+
+			case Protocol::CONTENT_UNCOMPRESSED_JSON:
+			{
+				boost::iostreams::stream_buffer<boost::iostreams::back_insert_device<std::string> > buf(data);
+
+				IO::BSONArchive ar(&buf, false, schemaVersion);
+				ar.setJSON(true);
+				ar << msg;
+				if ( !ar.success() )
+					throw Core::GeneralException("failed to serialize archive");
+			}
+				break;
+
 			default:
 				throw Core::GeneralException("encode: unknown message content type");
 		};
@@ -554,6 +597,48 @@ Seiscomp::Core::Message* NetworkMessage::decode() const
 				ar.setRootName("");
 				if ( !ar.open(&buf) )
 					throw Core::GeneralException("decode: invalid imported XML stream");
+				ar >> msg;
+			}
+				break;
+
+			case Protocol::CONTENT_BSON:
+			{
+				IO::BSONArchive ar;
+				if ( !ar.open(&filtered_buf) )
+					throw Core::GeneralException("decode: invalid compressed BSON content");
+				ar >> msg;
+			}
+				break;
+
+			case Protocol::CONTENT_UNCOMPRESSED_BSON:
+			{
+				boost::iostreams::stream_buffer<boost::iostreams::array_source> buf(data().c_str(), data().size());
+
+				IO::BSONArchive ar;
+				if ( !ar.open(&buf) )
+					throw Core::GeneralException("decode: invalid BSON content");
+				ar >> msg;
+			}
+				break;
+
+			case Protocol::CONTENT_JSON:
+			{
+				IO::BSONArchive ar;
+				ar.setJSON(true);
+				if ( !ar.open(&filtered_buf) )
+					throw Core::GeneralException("decode: invalid compressed JSON content");
+				ar >> msg;
+			}
+				break;
+
+			case Protocol::CONTENT_UNCOMPRESSED_JSON:
+			{
+				boost::iostreams::stream_buffer<boost::iostreams::array_source> buf(data().c_str(), data().size());
+
+				IO::BSONArchive ar;
+				ar.setJSON(true);
+				if ( !ar.open(&buf) )
+					throw Core::GeneralException("decode: invalid JSON content");
 				ar >> msg;
 			}
 				break;

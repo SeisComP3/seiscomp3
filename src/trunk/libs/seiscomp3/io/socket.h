@@ -75,6 +75,7 @@ class SC_SYSTEM_CORE_API Socket: public Seiscomp::Core::InterruptibleObject {
 		std::string sendRequest(const std::string& request, bool waitResponse);
 		bool isInterrupted();
 		void interrupt();
+		int poll();
 
 	protected:
 		void handleInterrupt(int) throw();

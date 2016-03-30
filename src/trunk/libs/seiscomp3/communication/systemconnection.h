@@ -267,6 +267,17 @@ class SC_SYSTEM_CLIENT_API SystemConnection : public Seiscomp::Core::BaseObject 
 
 		const NetworkInterface* networkInterface() const;
 
+		/** Sets the sequence number of the next message
+		 * if implemented by the network interface
+		 */
+		void setSequenceNumber(int64_t seq);
+
+		/** Gets the sequence number of the next message
+		 * if implemented by the network interface
+		 * @return sequence number
+		 */
+		int64_t getSequenceNumber() const;
+
 		Core::Version schemaVersion() const;
 
 
