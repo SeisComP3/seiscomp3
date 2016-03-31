@@ -150,6 +150,17 @@ class SC_SYSTEM_CLIENT_API NetworkInterface : public Core::BaseObject {
 		 */
 		virtual std::string groupOfLastSender() const = 0;
 
+		/** Sets the sequence number of the next message
+		 * if implemented
+		 */
+		virtual void setSequenceNumber(int64_t seq) { }
+
+		/** Gets the sequence number of the next message
+		 * if implemented
+		 * @return sequence number
+		 */
+		virtual int64_t getSequenceNumber() const { return -1; }
+
 };	
 
 

@@ -25,7 +25,7 @@ class L2Norm {
 	L2Norm();
 
 	// Process N traces in place of length n
-	void operator()(const Record *, T *data[N], int n, double sfreq) const;
+	void operator()(const Record *, T *data[N], int n, const Core::Time &stime, double sfreq) const;
 
 	// publishs a processed component
 	bool publish(int c) const;

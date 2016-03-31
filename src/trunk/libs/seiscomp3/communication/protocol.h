@@ -97,7 +97,13 @@ class SC_SYSTEM_CLIENT_API Protocol {
 			CONTENT_UNCOMPRESSED_XML  = 2,
 			// XML stream
 			CONTENT_IMPORTED_XML      = 3,
-			MCT_QUANTITY              = 4
+			// BSON
+			CONTENT_BSON              = 4,
+			CONTENT_UNCOMPRESSED_BSON = 5,
+			// JSON
+			CONTENT_JSON              = 6,
+			CONTENT_UNCOMPRESSED_JSON = 7,
+			MCT_QUANTITY              = 8
 		};
 
 

@@ -253,7 +253,7 @@ bool BSONArchive::open() {
 			int major;
 			int minor;
 
-			if (Core::fromString(major, version.substr(0, pos)) &&
+			if ( Core::fromString(major, version.substr(0, pos)) &&
 					Core::fromString(minor, version.substr(pos + 1, std::string::npos)) )
 				setVersion(Core::Version(major, minor));
 			else
@@ -262,7 +262,7 @@ bool BSONArchive::open() {
 		else {
 			int major;
 
-			if (Core::fromString(major, version.substr(0, pos)) )
+			if ( Core::fromString(major, version.substr(0, pos)) )
 				setVersion(Core::Version(major ,0));
 			else
 				setVersion(Core::Version(0,0));
@@ -379,7 +379,7 @@ void BSONArchive::close() {
 
 		if ( _buf ) {
 			std::streambuf *buf = _buf;
-			boost::iostreams::filtering_istreambuf filtered_buf;
+			boost::iostreams::filtering_ostreambuf filtered_buf;
 
 			if ( _compression ) {
 				filtered_buf.push(boost::iostreams::zlib_compressor());
@@ -627,7 +627,7 @@ void BSONArchive::read(char& value) {
 			uint32_t len;
 			const char* tmp = bson_iter_utf8(&_impl->iter, &len);
 
-			if (len == 1) {
+			if ( len == 1 ) {
 				value = tmp[0];
 				setValidity(true);
 				break;
@@ -652,7 +652,7 @@ void BSONArchive::readVector(std::vector<T>& value) {
 
 	switch ( bson_iter_type (&_impl->iter) ) {
 		case BSON_TYPE_ARRAY:
-			if (bson_iter_recurse(&iter, &_impl->iter) ) {
+			if ( bson_iter_recurse(&iter, &_impl->iter) ) {
 				std::vector<T> tmpvec;
 
 				while ( bson_iter_next(&_impl->iter) ) {
@@ -802,7 +802,7 @@ void BSONArchive::write(Seiscomp::Core::Time& value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BSONArchive::write(int value) {
-	if ((value >= std::numeric_limits<int32_t>::min() && value <= std::numeric_limits<int32_t>::max()))
+	if ( (value >= std::numeric_limits<int32_t>::min() && value <= std::numeric_limits<int32_t>::max()) )
 		bson_append_int32(_impl->current, _attribName.c_str(), -1, value);
 	else
 		bson_append_int64(_impl->current, _attribName.c_str(), -1, value);
@@ -980,7 +980,7 @@ bool BSONArchive::locateObjectByName(const char* name, const char* targetClass, 
 			if ( isReading() ) {
 				_impl->iter = _impl->iterParent;
 
-				if (bson_iter_find(&_impl->iter, name) ) {
+				if ( bson_iter_find(&_impl->iter, name) ) {
 					if ( _startSequence ) {
 						if ( bson_iter_type(&_impl->iter) == BSON_TYPE_ARRAY &&
 								bson_iter_recurse(&_impl->iter, &_impl->iterChildren) &&

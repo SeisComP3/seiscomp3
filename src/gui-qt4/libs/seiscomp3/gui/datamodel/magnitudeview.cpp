@@ -3047,7 +3047,6 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 	double distance;
 
 	try {
-		//Entfernung station-origin
 		StationLocation loc = Client::Inventory::Instance()->stationLocation(
 			stationMagnitude->waveformID().networkCode(),
 			stationMagnitude->waveformID().stationCode(),
@@ -3059,15 +3058,6 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 		Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
 		                  loc.latitude, loc.longitude,
 		                  &distance, &azi1, &azi2);
-
-		if ( SCScheme.unit.distanceInKM )
-			distance = Math::Geo::deg2km(distance);
-
-		/*
-		double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
-		_stamagnitudes->addValue(QPointF(distance, residual),
-		                                 SCScheme.colors.magnitudes.residuals.colorAt(residual));
-		*/
 	}
 	catch ( ValueException& ) {
 		SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: Station %s not found. Not added.", stationMagnitude->waveformID().stationCode().c_str());
@@ -3075,7 +3065,12 @@ double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
 	}
 
 	double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
-	_stamagnitudes->addValue(QPointF(distance, residual), SCScheme.colors.magnitudes.set);
+
+	if ( SCScheme.unit.distanceInKM )
+		_stamagnitudes->addValue(QPointF(Math::Geo::deg2km(distance), residual), SCScheme.colors.magnitudes.set);
+	else
+		_stamagnitudes->addValue(QPointF(distance, residual), SCScheme.colors.magnitudes.set);
+
 	_stamagnitudes->setValueSelected(_stamagnitudes->count()-1, weight > 0.0);
 	changeMagnitudeState(_stamagnitudes->count()-1, _stamagnitudes->isValueSelected(_stamagnitudes->count()-1));
 

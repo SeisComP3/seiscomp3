@@ -1544,7 +1544,10 @@ class ArclinkSynchronizer(Client.Application):
                 logs.warning("Sg [+] %s" % sgcode)
 
             # Update attributes
+            sg.start = sgref.start
             sg.end = sgref.end
+            sg.type = sgref.type
+            sg.description = sgref.description
             sg.latitude = sgref.latitude
             sg.longitude = sgref.longitude
             sg.elevation = sgref.elevation
@@ -1588,6 +1591,11 @@ class ArclinkSynchronizer(Client.Application):
                         logs.warning("Sg  [!] Linking to a different publicID %s -> %s" % (sid, newSID))
                     sg.insert_stationReference(newSID)
                     logs.warning("Sg [+] %s %s %s %s %s" % ((sgcode,)+invmap[newSID]))
+
+        if self.keep:
+            tmpinv = GInventory()
+            tmpinv.stationGroup = inv.stationGroup
+            tmpinv.save_xml("StationGroup-SYNC.xml", False)
 
     def run(self):
         sc3wrap.dbQuery = self.query()

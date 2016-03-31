@@ -218,7 +218,7 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 					int nBits = data[i]->size() + len;
 					if ( !clipMask )
 						clipMask = new BitSet(nBits);
-					else if ( clipMask->size() < nBits )
+					else if ( (int)clipMask->size() < nBits )
 						clipMask->resize(nBits, false);
 
 					for ( int i = startIndex; i < len; ++i, ++ofs )
@@ -240,7 +240,7 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 
 		// Trim clip mask to sample array size
 		if ( clipMask ) {
-			if ( clipMask->size() > minLen )
+			if ( (int)clipMask->size() > minLen )
 				clipMask->resize(minLen);
 			// Destroy clip mask if no bit is set
 			if ( !clipMask->any() )

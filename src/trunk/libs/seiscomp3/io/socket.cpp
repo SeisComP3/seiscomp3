@@ -20,6 +20,7 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
 #include <openssl/err.h>
 #ifndef WIN32
 #include <sys/socket.h>
@@ -567,6 +568,17 @@ int Socket::checkSocket(int secs, int usecs) {
 	return ret;
 }
 
+int Socket::poll() {
+	int num_bytes;
+	int ret = ioctl(_sockfd, FIONREAD, &num_bytes);
+
+	if ( ret < 0 ) {
+		SEISCOMP_ERROR("socket: %s",strerror(errno));
+		throw SocketException("Socket error");
+	}
+
+	return num_bytes;
+}
 
 
 

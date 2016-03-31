@@ -11,6 +11,7 @@ SET(RECORDSTREAM_SOURCES
 	decimation.cpp
 	resample.cpp
 	fdsnws.cpp
+	httpmsgbus.cpp
 	remez/remez.c
 )
 
@@ -27,6 +28,7 @@ SET(RECORDSTREAM_HEADERS
 	decimation.h
 	resample.h
 	fdsnws.h
+	httpmsgbus.h
 )
 
 SC_SETUP_LIB_SUBDIR(RECORDSTREAM)

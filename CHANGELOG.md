@@ -1,35 +1,34 @@
 # Jakarta
 
-## Release 2016.082
+## Release YYYY.DDD
+
+* documentation
+
+  * Enhance documentation of scqc and others
+
+* trunk
+
+  * Add support for HMB (http messaging bus) messaging protocol
+  * Add recordstream implementation for HMB (http messaging bus) protocol
+
+* scimport
+
+  * Allow to configure the sink protocol
+
+* scimex
+
+  * Allow to configure the sink protocol
+
+* msrtsimul
+
+  * Wait until the time of the last data point in record has been reached
+  * Add option to reopen the pipe if closed
 
 * scolv
 
- * Fix spectrogram rendering for 32bit system
- * Update origin content if the currently shown origin
-   received an update message
-
-* scconfig
-
- * Set default action to "No" if scconfig is started multiple times
- * Show units as given in the descriptions
-
-* scvoice
-
- * Configured path can now contain variables
-
-* GUI
-
- * Fix regression in timing qualitity computation
-
-* Seedlink
-
- * Add noexit option for mseedfifo plugin (thanks to Roman Racine, SED/ETHZ)
-
-* doc
-
- * Add units to parameter documentation
- * Add balanced record stream documentation
-
+  * Fix timing quality rendering in picker
+  * Fix magnitude table distance entries if distance is displayed in km
+  * Fix spectrum display on 32bit systems
 
 ## Release 2016.062
 

@@ -23,6 +23,8 @@ SET(IO_HEADERS
 	recordoutputstream.h
 	gfarchive.h
 	socket.h
+	httpsocket.h
+	httpsocket.ipp
 )
 
 SC_ADD_SUBDIR_SOURCES(IO archive)

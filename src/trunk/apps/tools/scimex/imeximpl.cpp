@@ -29,6 +29,7 @@
 #include <seiscomp3/core/status.h>
 #include <seiscomp3/system/environment.h>
 #include <seiscomp3/communication/systemmessages.h>
+#include <seiscomp3/communication/networkinterface.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/datamodel/magnitude.h>
@@ -204,7 +205,7 @@ ImExImpl::ImExImpl(ImEx* imex, const std::string& sinkName)
    _filter(true),
    _useDefinedRoutingTable(false),
    _isRunning(false),
-   _maxQueueSize(50),
+   _maxQueueSize(5000),
    _messageQueue(_maxQueueSize),
    _messageEncoding(Communication::Protocol::CONTENT_BINARY),
    isOriginEligibleImpl(&ImExImpl::isOriginEligibleImport),
@@ -330,11 +331,27 @@ bool ImExImpl::init()
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int ImExImpl::connectToSink()
 {
-	_sink = new Communication::SystemConnection;
+	std::string protocol = "spread";
+	std::string server = _sinkAddress;
+	size_t pos = _sinkAddress.find("://");
+
+	if ( pos != std::string::npos ) {
+		protocol = _sinkAddress.substr(0,pos);
+		server = _sinkAddress.substr(pos+3);
+	}
+
+	Communication::NetworkInterfacePtr ni = Communication::NetworkInterface::Create(protocol.c_str());
+	if (ni == NULL)
+	{
+		SEISCOMP_ERROR("Networkinterface \"%s\" not found", protocol.c_str());
+		return Core::Status::SEISCOMP_FAILURE;
+	}
+
+	_sink = new Communication::SystemConnection(ni.get());
 
 	// Connect to the sink master and use a default name
 	int ret = 0;
-	while ( (ret = _sink->connect(_sinkAddress, _userName, Communication::Protocol::IMPORT_GROUP)) != Core::Status::SEISCOMP_SUCCESS ) {
+	while ( (ret = _sink->connect(server, _userName, Communication::Protocol::IMPORT_GROUP)) != Core::Status::SEISCOMP_SUCCESS ) {
 		if ( _imex->isExitRequested() )
 			return Core::Status::SEISCOMP_FAILURE;
 

@@ -9,6 +9,7 @@ SET(COM_SOURCES
 	clientstatus.cpp
 	masterplugininterface.cpp
 	spread/spreaddriver.cpp
+	httpmsgbus/httpdriver.cpp
 )
 
 SET(COM_HEADERS
