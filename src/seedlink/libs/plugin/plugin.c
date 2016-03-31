@@ -147,6 +147,24 @@ int send_mseed(const char *station, const void *dataptr, int packet_size)
     return send_packet(&head, dataptr, packet_size);
   }
 
+int send_mseed2(const char *station, const char *channel, int seq,
+  const void *dataptr, int packet_size)
+  {
+    struct PluginPacketHeader head;
+
+    if(packet_size != PLUGIN_MSEED_SIZE) return 0;
+
+    memset(&head, 0, sizeof(struct PluginPacketHeader));
+    strncpy(head.station, station, PLUGIN_SIDLEN);
+    strncpy(head.channel, channel, PLUGIN_CIDLEN);
+    // save sequence number on the unused timing_quality field
+    head.timing_quality = seq;
+    head.packtype = PluginMSEEDPacket;
+    head.data_size = packet_size;
+
+    return send_packet(&head, dataptr, packet_size);
+  }
+
 int send_log3(const char *station, const struct ptime *pt, const char *fmt, ...)
   {
     int retval;

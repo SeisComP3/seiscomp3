@@ -70,6 +70,8 @@ int send_flush3(const char *station, const char *channel);
 int send_log3(const char *station, const struct ptime *pt, const char *fmt,
   ...);
 int send_mseed(const char *station, const void *dataptr, int packet_size);
+int send_mseed2(const char *station, const char *channel, int seq,
+  const void *dataptr, int packet_size);
 int send_raw_depoch(const char *station, const char *channel, double depoch,
   int usec_correction, int timing_quality, const int32_t *dataptr,
   int number_of_samples);

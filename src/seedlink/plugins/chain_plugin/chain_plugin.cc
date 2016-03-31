@@ -653,7 +653,7 @@ class Station
     void set_trigger_off(int year, int month, int day, int hour, int minute,
       int second);
 
-    void process_mseed(char *pseed, int packtype, int size);
+    void process_mseed(char *pseed, int packtype, int seq, int size);
   };
 
 Station::Station(const string &myid_init, const string &out_name_init,
@@ -801,7 +801,7 @@ void Station::set_trigger_off(int year, int month, int day, int hour,
         p->second->set_trigger_off(year, month, day, hour, minute, second);
   }
 
-void Station::process_mseed(char *pseed, int packtype, int size)
+void Station::process_mseed(char *pseed, int packtype, int seq, int size)
   {
     if(out_name.length() == 0)
         return;
@@ -842,7 +842,7 @@ void Station::process_mseed(char *pseed, int packtype, int size)
     
     if(packtype != SLDATA)
       {
-        int r = send_mseed(myid.c_str(), pseed, SLRECSIZE);
+        int r = send_mseed2(myid.c_str(), (loc + "_" + chn + "_" + packet_type2string(packtype)).c_str(), seq, pseed, SLRECSIZE);
             
         if(r < 0) throw PluginBrokenLink(strerror(errno));
         else if(r == 0) throw PluginBrokenLink();
@@ -860,7 +860,7 @@ void Station::process_mseed(char *pseed, int packtype, int size)
       }
     else
       {
-        int r = send_mseed(myid.c_str(), pseed, SLRECSIZE);
+        int r = send_mseed2(myid.c_str(), (loc + "_" + chn + "_" + packet_type2string(packtype)).c_str(), seq, pseed, SLRECSIZE);
         
         if(r < 0) throw PluginBrokenLink(strerror(errno));
         else if(r == 0) throw PluginBrokenLink();
@@ -2147,7 +2147,7 @@ int Chain::process_slpacket(int fd)
         return bytes_read;
       }
 
-    sp->second->process_mseed(slpack->msrecord, packtype, SLRECSIZE);
+    sp->second->process_mseed(slpack->msrecord, packtype, sl_sequence(slpack), SLRECSIZE);
 
     list<rc_ptr<Extension> >::iterator ep;
     for(ep = extensions.begin(); ep != extensions.end(); ++ep)
