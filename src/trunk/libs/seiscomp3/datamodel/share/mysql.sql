@@ -109,9 +109,6 @@ CREATE TABLE EventDescription (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,type)
 ) ENGINE=INNODB;
 
@@ -136,9 +133,6 @@ CREATE TABLE Comment (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,id)
 ) ENGINE=INNODB;
 
@@ -153,9 +147,6 @@ CREATE TABLE DataUsed (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -204,9 +195,6 @@ CREATE TABLE CompositeTime (
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -219,9 +207,6 @@ CREATE TABLE PickReference (
 	INDEX(_parent_oid),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,pickID)
@@ -238,9 +223,6 @@ CREATE TABLE AmplitudeReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,amplitudeID)
 ) ENGINE=INNODB;
 
@@ -250,9 +232,6 @@ CREATE TABLE Reading (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -272,9 +251,6 @@ CREATE TABLE MomentTensorComponentContribution (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,phaseCode,component)
@@ -297,9 +273,6 @@ CREATE TABLE MomentTensorStationContribution (
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -315,9 +288,6 @@ CREATE TABLE MomentTensorPhaseSetting (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code)
@@ -397,9 +367,6 @@ CREATE TABLE MomentTensor (
 	INDEX(_parent_oid),
 	INDEX(derivedOriginID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -512,9 +479,6 @@ CREATE TABLE FocalMechanism (
 	INDEX(triggeringOriginID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -577,9 +541,6 @@ CREATE TABLE Amplitude (
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -594,9 +555,6 @@ CREATE TABLE StationMagnitudeContribution (
 	INDEX(_parent_oid),
 	INDEX(stationMagnitudeID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,stationMagnitudeID)
@@ -630,9 +588,6 @@ CREATE TABLE Magnitude (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -670,9 +625,6 @@ CREATE TABLE StationMagnitude (
 	INDEX(_parent_oid),
 	INDEX(amplitudeID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -729,9 +681,6 @@ CREATE TABLE Pick (
 	INDEX(time_value_ms),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -746,9 +695,6 @@ CREATE TABLE OriginReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,originID)
 ) ENGINE=INNODB;
 
@@ -761,9 +707,6 @@ CREATE TABLE FocalMechanismReference (
 	INDEX(_parent_oid),
 	INDEX(focalMechanismID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,focalMechanismID)
@@ -794,9 +737,6 @@ CREATE TABLE Event (
 	INDEX(preferredMagnitudeID),
 	INDEX(preferredFocalMechanismID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -834,9 +774,6 @@ CREATE TABLE Arrival (
 	INDEX(_parent_oid),
 	INDEX(pickID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,pickID)
@@ -919,9 +856,6 @@ CREATE TABLE Origin (
 	INDEX(time_value_ms),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -934,9 +868,6 @@ CREATE TABLE Parameter (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -954,9 +885,6 @@ CREATE TABLE ParameterSet (
 	INDEX(baseID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -971,9 +899,6 @@ CREATE TABLE Setup (
 	INDEX(_parent_oid),
 	INDEX(parameterSetID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
@@ -991,9 +916,6 @@ CREATE TABLE ConfigStation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode)
 ) ENGINE=INNODB;
 
@@ -1008,9 +930,6 @@ CREATE TABLE ConfigModule (
 	INDEX(_parent_oid),
 	INDEX(parameterSetID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
@@ -1035,9 +954,6 @@ CREATE TABLE QCLog (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
@@ -1074,9 +990,6 @@ CREATE TABLE WaveformQuality (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,type,parameter)
 ) ENGINE=INNODB;
 
@@ -1101,9 +1014,6 @@ CREATE TABLE Outage (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,start,start_ms)
 ) ENGINE=INNODB;
 
@@ -1116,9 +1026,6 @@ CREATE TABLE StationReference (
 	INDEX(_parent_oid),
 	INDEX(stationID),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,stationID)
@@ -1141,9 +1048,6 @@ CREATE TABLE StationGroup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code)
 ) ENGINE=INNODB;
 
@@ -1164,9 +1068,6 @@ CREATE TABLE AuxSource (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 ) ENGINE=INNODB;
 
@@ -1183,9 +1084,6 @@ CREATE TABLE AuxDevice (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
@@ -1206,9 +1104,6 @@ CREATE TABLE SensorCalibration (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,serialNumber,channel,start)
@@ -1232,9 +1127,6 @@ CREATE TABLE Sensor (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
@@ -1263,9 +1155,6 @@ CREATE TABLE ResponsePAZ (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 ) ENGINE=INNODB;
 
@@ -1291,9 +1180,6 @@ CREATE TABLE ResponsePolynomial (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 ) ENGINE=INNODB;
 
@@ -1314,9 +1200,6 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,serialNumber,channel,start)
 ) ENGINE=INNODB;
 
@@ -1333,9 +1216,6 @@ CREATE TABLE Decimation (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,sampleRateNumerator,sampleRateDenominator)
@@ -1363,9 +1243,6 @@ CREATE TABLE Datalogger (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 ) ENGINE=INNODB;
 
@@ -1389,9 +1266,6 @@ CREATE TABLE ResponseFIR (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name)
 ) ENGINE=INNODB;
 
@@ -1412,9 +1286,6 @@ CREATE TABLE AuxStream (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start)
@@ -1451,9 +1322,6 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start)
 ) ENGINE=INNODB;
 
@@ -1470,9 +1338,6 @@ CREATE TABLE SensorLocation (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start)
@@ -1504,9 +1369,6 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start)
 ) ENGINE=INNODB;
 
@@ -1532,9 +1394,6 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,code,start)
 ) ENGINE=INNODB;
 
@@ -1551,9 +1410,6 @@ CREATE TABLE RouteArclink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,address,start)
 ) ENGINE=INNODB;
 
@@ -1566,9 +1422,6 @@ CREATE TABLE RouteSeedlink (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,address)
@@ -1585,9 +1438,6 @@ CREATE TABLE Route (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode)
@@ -1609,9 +1459,6 @@ CREATE TABLE Access (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode,user,start)
 ) ENGINE=INNODB;
 
@@ -1630,9 +1477,6 @@ CREATE TABLE JournalEntry (
 	INDEX(objectID),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
@@ -1646,9 +1490,6 @@ CREATE TABLE ArclinkUser (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,name,email)
@@ -1666,9 +1507,6 @@ CREATE TABLE ArclinkStatusLine (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,volumeID,type,status)
@@ -1701,9 +1539,6 @@ CREATE TABLE ArclinkRequestLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,start,start_ms,end,end_ms,streamID_networkCode,streamID_stationCode,streamID_locationCode,streamID_channelCode,streamID_resourceURI)
 ) ENGINE=INNODB;
 
@@ -1730,9 +1565,6 @@ CREATE TABLE ArclinkRequest (
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,created,created_ms,requestID,userID)
