@@ -116,6 +116,10 @@ class Protocol(_object):
     CONTENT_XML = _Communication.Protocol_CONTENT_XML
     CONTENT_UNCOMPRESSED_XML = _Communication.Protocol_CONTENT_UNCOMPRESSED_XML
     CONTENT_IMPORTED_XML = _Communication.Protocol_CONTENT_IMPORTED_XML
+    CONTENT_BSON = _Communication.Protocol_CONTENT_BSON
+    CONTENT_UNCOMPRESSED_BSON = _Communication.Protocol_CONTENT_UNCOMPRESSED_BSON
+    CONTENT_JSON = _Communication.Protocol_CONTENT_JSON
+    CONTENT_UNCOMPRESSED_JSON = _Communication.Protocol_CONTENT_UNCOMPRESSED_JSON
     MCT_QUANTITY = _Communication.Protocol_MCT_QUANTITY
     __swig_getmethods__["MsgTypeToString"] = lambda x: _Communication.Protocol_MsgTypeToString
     if _newclass:MsgTypeToString = staticmethod(_Communication.Protocol_MsgTypeToString)
@@ -590,6 +594,8 @@ class NetworkInterface(Core.BaseObject):
     if _newclass:Create = staticmethod(_Communication.NetworkInterface_Create)
     def privateGroup(self): return _Communication.NetworkInterface_privateGroup(self)
     def groupOfLastSender(self): return _Communication.NetworkInterface_groupOfLastSender(self)
+    def setSequenceNumber(self, *args): return _Communication.NetworkInterface_setSequenceNumber(self, *args)
+    def getSequenceNumber(self): return _Communication.NetworkInterface_getSequenceNumber(self)
 NetworkInterface_swigregister = _Communication.NetworkInterface_swigregister
 NetworkInterface_swigregister(NetworkInterface)
 
@@ -659,6 +665,8 @@ class SystemConnection(Core.BaseObject):
     def setPassword(self, *args): return _Communication.SystemConnection_setPassword(self, *args)
     def queuedMessageCount(self): return _Communication.SystemConnection_queuedMessageCount(self)
     def networkInterface(self): return _Communication.SystemConnection_networkInterface(self)
+    def setSequenceNumber(self, *args): return _Communication.SystemConnection_setSequenceNumber(self, *args)
+    def getSequenceNumber(self): return _Communication.SystemConnection_getSequenceNumber(self)
     def schemaVersion(self): return _Communication.SystemConnection_schemaVersion(self)
 SystemConnection_swigregister = _Communication.SystemConnection_swigregister
 SystemConnection_swigregister(SystemConnection)

@@ -3059,13 +3059,14 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_char swig_types[119]
 #define SWIGTYPE_p_const_iterator swig_types[120]
 #define SWIGTYPE_p_int swig_types[121]
-#define SWIGTYPE_p_iterator swig_types[122]
-#define SWIGTYPE_p_long swig_types[123]
-#define SWIGTYPE_p_p_Seiscomp__Communication__NetworkMessage swig_types[124]
-#define SWIGTYPE_p_p_Seiscomp__Communication__ServiceMessage swig_types[125]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[126]
-static swig_type_info *swig_types[128];
-static swig_module_info swig_module = {swig_types, 127, 0, 0, 0, 0};
+#define SWIGTYPE_p_int64_t swig_types[122]
+#define SWIGTYPE_p_iterator swig_types[123]
+#define SWIGTYPE_p_long swig_types[124]
+#define SWIGTYPE_p_p_Seiscomp__Communication__NetworkMessage swig_types[125]
+#define SWIGTYPE_p_p_Seiscomp__Communication__ServiceMessage swig_types[126]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[127]
+static swig_type_info *swig_types[129];
+static swig_module_info swig_module = {swig_types, 128, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -9315,6 +9316,66 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_NetworkInterface_setSequenceNumber(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::NetworkInterface *arg1 = (Seiscomp::Communication::NetworkInterface *) 0 ;
+  int64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NetworkInterface_setSequenceNumber",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__NetworkInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NetworkInterface_setSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::NetworkInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::NetworkInterface * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int64_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NetworkInterface_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "NetworkInterface_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
+    } else {
+      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->setSequenceNumber(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_NetworkInterface_getSequenceNumber(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::NetworkInterface *arg1 = (Seiscomp::Communication::NetworkInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int64_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:NetworkInterface_getSequenceNumber",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__NetworkInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NetworkInterface_getSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::NetworkInterface const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::NetworkInterface * >(argp1);
+  result = ((Seiscomp::Communication::NetworkInterface const *)arg1)->getSequenceNumber();
+  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *NetworkInterface_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
@@ -10985,6 +11046,66 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SystemConnection_setSequenceNumber(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::SystemConnection *arg1 = (Seiscomp::Communication::SystemConnection *) 0 ;
+  int64_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:SystemConnection_setSequenceNumber",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__SystemConnection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SystemConnection_setSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::SystemConnection *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::SystemConnection * >(argp1);
+  {
+    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_int64_t,  0  | 0);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "SystemConnection_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'"); 
+    }  
+    if (!argp2) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "SystemConnection_setSequenceNumber" "', argument " "2"" of type '" "int64_t""'");
+    } else {
+      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
+      arg2 = *temp;
+      if (SWIG_IsNewObj(res2)) delete temp;
+    }
+  }
+  (arg1)->setSequenceNumber(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SystemConnection_getSequenceNumber(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::SystemConnection *arg1 = (Seiscomp::Communication::SystemConnection *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  int64_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:SystemConnection_getSequenceNumber",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__SystemConnection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SystemConnection_getSequenceNumber" "', argument " "1"" of type '" "Seiscomp::Communication::SystemConnection const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::SystemConnection * >(argp1);
+  result = ((Seiscomp::Communication::SystemConnection const *)arg1)->getSequenceNumber();
+  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SystemConnection_schemaVersion(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Communication::SystemConnection *arg1 = (Seiscomp::Communication::SystemConnection *) 0 ;
@@ -12539,6 +12660,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NetworkInterface_Create", _wrap_NetworkInterface_Create, METH_VARARGS, NULL},
 	 { (char *)"NetworkInterface_privateGroup", _wrap_NetworkInterface_privateGroup, METH_VARARGS, NULL},
 	 { (char *)"NetworkInterface_groupOfLastSender", _wrap_NetworkInterface_groupOfLastSender, METH_VARARGS, NULL},
+	 { (char *)"NetworkInterface_setSequenceNumber", _wrap_NetworkInterface_setSequenceNumber, METH_VARARGS, NULL},
+	 { (char *)"NetworkInterface_getSequenceNumber", _wrap_NetworkInterface_getSequenceNumber, METH_VARARGS, NULL},
 	 { (char *)"NetworkInterface_swigregister", NetworkInterface_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_SystemConnection", _wrap_new_SystemConnection, METH_VARARGS, NULL},
 	 { (char *)"delete_SystemConnection", _wrap_delete_SystemConnection, METH_VARARGS, NULL},
@@ -12571,6 +12694,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SystemConnection_setPassword", _wrap_SystemConnection_setPassword, METH_VARARGS, NULL},
 	 { (char *)"SystemConnection_queuedMessageCount", _wrap_SystemConnection_queuedMessageCount, METH_VARARGS, NULL},
 	 { (char *)"SystemConnection_networkInterface", _wrap_SystemConnection_networkInterface, METH_VARARGS, NULL},
+	 { (char *)"SystemConnection_setSequenceNumber", _wrap_SystemConnection_setSequenceNumber, METH_VARARGS, NULL},
+	 { (char *)"SystemConnection_getSequenceNumber", _wrap_SystemConnection_getSequenceNumber, METH_VARARGS, NULL},
 	 { (char *)"SystemConnection_schemaVersion", _wrap_SystemConnection_schemaVersion, METH_VARARGS, NULL},
 	 { (char *)"SystemConnection_swigregister", SystemConnection_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_EMessageEncodingNames", _wrap_new_EMessageEncodingNames, METH_VARARGS, NULL},
@@ -12884,6 +13009,7 @@ static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_const_iterator = {"_p_const_iterator", "const_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_iterator = {"_p_iterator", "iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "long *|time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_Seiscomp__Communication__NetworkMessage = {"_p_p_Seiscomp__Communication__NetworkMessage", "Seiscomp::Communication::NetworkMessage **", 0, 0, (void*)0, 0};
@@ -13013,6 +13139,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_const_iterator,
   &_swigt__p_int,
+  &_swigt__p_int64_t,
   &_swigt__p_iterator,
   &_swigt__p_long,
   &_swigt__p_p_Seiscomp__Communication__NetworkMessage,
@@ -13142,6 +13269,7 @@ static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_const_iterator[] = {  {&_swigt__p_const_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_iterator[] = {  {&_swigt__p_iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_Seiscomp__Communication__ServiceMessage[] = {{&_swigt__p_p_Seiscomp__Communication__ServiceMessage, 0, 0, 0},{0, 0, 0, 0}};
@@ -13271,6 +13399,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_const_iterator,
   _swigc__p_int,
+  _swigc__p_int64_t,
   _swigc__p_iterator,
   _swigc__p_long,
   _swigc__p_p_Seiscomp__Communication__NetworkMessage,
@@ -13999,6 +14128,10 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "Protocol_CONTENT_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_XML)));
   SWIG_Python_SetConstant(d, "Protocol_CONTENT_UNCOMPRESSED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_UNCOMPRESSED_XML)));
   SWIG_Python_SetConstant(d, "Protocol_CONTENT_IMPORTED_XML",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_IMPORTED_XML)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_BSON",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_BSON)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_UNCOMPRESSED_BSON",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_UNCOMPRESSED_BSON)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_JSON",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_JSON)));
+  SWIG_Python_SetConstant(d, "Protocol_CONTENT_UNCOMPRESSED_JSON",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::CONTENT_UNCOMPRESSED_JSON)));
   SWIG_Python_SetConstant(d, "Protocol_MCT_QUANTITY",SWIG_From_int(static_cast< int >(Seiscomp::Communication::Protocol::MCT_QUANTITY)));
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Protocol_PROTOCOL_VERSION",Swig_var_Protocol_PROTOCOL_VERSION_get, Swig_var_Protocol_PROTOCOL_VERSION_set);
