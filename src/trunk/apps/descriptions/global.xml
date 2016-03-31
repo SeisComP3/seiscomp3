@@ -444,9 +444,12 @@
 		<configuration>
 			<parameter name="detecStream" type="string">
 				<description>
-					Defines the channel code of the preferred stream used eg
-					by scautopick and scrttv. If no component code is given,
-					'Z' will be used by default.
+					Defines the channel code of the preferred stream used by
+					e.g. scautopick and scrttv. If no component code is given,
+					the vertical component will be fetched from inventory.
+					For that the channel orientation (azimuth, dip) will be used.
+					If that approach fails, 'Z' will be appended and used as
+					fallback.
 				</description>
 			</parameter>
 			<parameter name="detecLocid" type="string">
