@@ -166,9 +166,19 @@ class FDSNDataSelectRealm(object):
 	implements(portal.IRealm)
 
 	#---------------------------------------------------------------------------
+	def __init__(self, inv, access, userdb):
+		self.__inv = inv
+		self.__access = access
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
-			return resource.IResource, FDSNDataSelect(avatarId), lambda: None
+			return (resource.IResource,
+				FDSNDataSelect(self.__inv, self.__access,
+					self.__userdb.getAttributes(avatarId)),
+				lambda: None)
+
 		raise NotImplementedError()
 
 
@@ -179,18 +189,19 @@ class FDSNDataSelect(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, userName=None):
+	def __init__(self, inv, access, user=None):
 		resource.Resource.__init__(self)
 		self._rsURL = Application.Instance().recordStreamURL()
-		self.userName = userName
-		self.inv = inv
+		self.__inv = inv
+		self.__access = access
+		self.__user = user
 
 
 	#---------------------------------------------------------------------------
 	def render_GET(self, req):
 		# Parse and validate POST parameters
 		ro = _DataSelectRequestOptions(req.args)
-		ro.userName = self.userName
+		ro.userName = self.__user and self.__user.get('mail')
 		try:
 			ro.parse()
 			# the GET operation supports exactly one stream filter
@@ -206,7 +217,7 @@ class FDSNDataSelect(resource.Resource):
 	def render_POST(self, req):
 		# Parse and validate POST parameters
 		ro = _DataSelectRequestOptions()
-		ro.userName = self.userName
+		ro.userName = self.__user and self.__user.get('mail')
 		try:
 			ro.parsePOST(req.content)
 			ro.parse()
@@ -219,8 +230,8 @@ class FDSNDataSelect(resource.Resource):
 
 	#-----------------------------------------------------------------------
 	def _networkIter(self, ro):
-		for i in xrange(self.inv.networkCount()):
-			net = self.inv.network(i)
+		for i in xrange(self.__inv.networkCount()):
+			net = self.__inv.network(i)
 
 			# network code
 			if ro.channel and not ro.channel.matchNet(net.code()):
@@ -324,9 +335,9 @@ class FDSNDataSelect(resource.Resource):
 
 		app = Application.Instance()
 		if app._trackdbEnabled:
-			user = ro.userName or app._trackdbDefaultUser
+			userid = ro.userName or app._trackdbDefaultUser
 			reqid = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
-			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", user, "REQUEST WAVEFORM " + reqid, "fdsnws", req.getClientIP(), req.getClientIP())
+			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", userid, "REQUEST WAVEFORM " + reqid, "fdsnws", req.getClientIP(), req.getClientIP())
 
 		else:
 			tracker = None
@@ -335,13 +346,19 @@ class FDSNDataSelect(resource.Resource):
 		# iterate over inventory networks
 		for s in ro.streams:
 			for net in self._networkIter(s):
-				if ro.userName is None and utils.isRestricted(net):
-					continue
 				for sta in self._stationIter(net, s):
-					if ro.userName is None and utils.isRestricted(sta):
-						continue
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
+							if utils.isRestricted(cha) and (self.__user is None or \
+								not self.__access.authorize(self.__user,
+											    net.code(),
+											    sta.code(),
+											    loc.code(),
+											    cha.code(),
+											    s.time.start,
+											    s.time.end)):
+								continue
+
 							# enforce maximum sample per request restriction
 							if maxSamples is not None:
 								try:

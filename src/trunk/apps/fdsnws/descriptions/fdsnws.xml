@@ -156,11 +156,27 @@
 				</description>
 			</parameter>
 			<group name="trackdb">
-				<parameter name="enabled" type="boolean" default="false">
-					<description>Save request log to database</description>
+				<parameter name="enable" type="boolean" default="false">
+					<description>
+					Save request log to database.
+					</description>
 				</parameter>
 				<parameter name="defaultUser" type="string" default="fdsnws">
-					<description>Default user</description>
+					<description>
+					Default user.
+					</description>
+				</parameter>
+			</group>
+			<group name="auth">
+				<parameter name="enable" type="boolean" default="false">
+					<description>
+					Enable auth extension.
+					</description>
+				</parameter>
+				<parameter name="gnupgHome" type="string" default="@ROOTDIR@/var/lib/gpg">
+					<description>
+					GnuPG home directory.
+					</description>
 				</parameter>
 			</group>
 		</configuration>
