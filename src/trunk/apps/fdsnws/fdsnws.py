@@ -108,7 +108,7 @@ class FDSNWS(Application):
 	#---------------------------------------------------------------------------
 	def __init__(self):
 		Application.__init__(self, len(sys.argv), sys.argv)
-		self.setMessagingEnabled(False)
+		self.setMessagingEnabled(True)
 		self.setDatabaseEnabled(True, True)
 		self.setRecordStreamEnabled(True)
 		self.setLoadInventoryEnabled(True)
@@ -139,6 +139,9 @@ class FDSNWS(Application):
 		self._accessLog     = None
 
 		self._fileNamePrefix = 'fdsnws'
+
+		self._trackdbEnabled = False
+		self._trackdbDefaultUser = 'fdsnws'
 
 		# Leave signal handling to us
 		Application.HandleSignals(False, False)
@@ -237,6 +240,14 @@ class FDSNWS(Application):
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = self.configGetString('fileNamePrefix')
 		except ConfigException: pass
+
+		# save request logs in database?
+		try: self._trackdbEnabled = cfg.getBool('trackdb.enabled')
+		except: pass
+
+		# default user
+		try: self._trackdbDefaultUser = cfg.getString('trackdb.defaultUser')
+		except: pass
 
 		return True
 

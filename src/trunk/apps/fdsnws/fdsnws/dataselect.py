@@ -28,6 +28,8 @@ from http import HTTP
 from request import RequestOptions
 import utils
 
+import time
+from reqtrack import RequestTrackerDB
 
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
@@ -100,7 +102,7 @@ class _DataSelectRequestOptions(RequestOptions):
 
 ################################################################################
 class _WaveformProducer:
-	def __init__(self, req, ro, rs, fileName):
+	def __init__(self, req, ro, rs, fileName, tracker):
 		self.req = req
 		self.ro = ro
 		self.rs = rs # keep a reference to avoid crash
@@ -108,6 +110,8 @@ class _WaveformProducer:
 
 		self.fileName = fileName
 		self.written = 0
+
+		self.tracker = tracker
 
 
 	def resumeProducing(self):
@@ -125,6 +129,11 @@ class _WaveformProducer:
 					self.req.write(data)
 				self.req.unregisterProducer()
 				self.req.finish()
+
+				if self.tracker:
+					self.tracker.volume_status("fdsnws", "NODATA", 0, "")
+					self.tracker.request_status("END", "")
+
 				return
 
 			self.req.setHeader('Content-Type', 'application/vnd.fdsn.mseed')
@@ -137,6 +146,11 @@ class _WaveformProducer:
 			               self.ro.service, self.written))
 			utils.accessLog(self.req, self.ro, http.OK, self.written, None)
 			self.req.finish()
+
+			if self.tracker:
+				self.tracker.volume_status("fdsnws", "OK", self.written, "")
+				self.tracker.request_status("END", "")
+
 			return
 
 		data = rec.raw().str()
@@ -308,6 +322,15 @@ class FDSNDataSelect(resource.Resource):
 			maxSamples = app._samplesM * 1000000
 			samples = 0
 
+		app = Application.Instance()
+		if app._trackdbEnabled:
+			user = ro.userName or app._trackdbDefaultUser
+			reqid = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
+			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", user, "REQUEST WAVEFORM " + reqid, "fdsnws", req.getClientIP(), req.getClientIP())
+
+		else:
+			tracker = None
+
 		# Add request streams
 		# iterate over inventory networks
 		for s in ro.streams:
@@ -350,11 +373,16 @@ class FDSNDataSelect(resource.Resource):
 							rs.addStream(net.code(), sta.code(), loc.code(),
 							             cha.code(), s.time.start, s.time.end)
 
+							if tracker:
+								tracker.line_status(s.time.start, s.time.end,
+								    net.code(), sta.code(), cha.code(), loc.code(),
+								    False, "", True, [], "fdsnws", "OK", 0, "")
+
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix+'.mseed'
 
 		# Create producer for async IO
-		req.registerProducer(_WaveformProducer(req, ro, rs, fileName), False)
+		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker), False)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET

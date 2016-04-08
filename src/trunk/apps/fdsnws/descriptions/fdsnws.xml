@@ -155,6 +155,14 @@
 				For data loaded using dataselect, it is thus fdsnws.mseed by default.
 				</description>
 			</parameter>
+			<group name="trackdb">
+				<parameter name="enabled" type="boolean" default="false">
+					<description>Save request log to database</description>
+				</parameter>
+				<parameter name="defaultUser" type="string" default="fdsnws">
+					<description>Default user</description>
+				</parameter>
+			</group>
 		</configuration>
 	</module>
 </seiscomp>
