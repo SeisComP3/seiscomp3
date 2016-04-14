@@ -103,6 +103,21 @@ class BugfixedDigest(credentials.DigestCredentialFactory):
 
 
 ################################################################################
+# Make CORS work with queryauth
+class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
+	def __init__(self, *args, **kwargs):
+		guard.HTTPAuthSessionWrapper.__init__(self, *args, **kwargs)
+
+	def render(self, request):
+		if request.method == 'OPTIONS':
+			request.setHeader('Allow', 'GET,HEAD,POST,OPTIONS')
+			return ''
+
+		else:
+			return guard.HTTPAuthSessionWrapper.render(self, request)
+
+
+################################################################################
 class UsernamePasswordChecker(object):
 	implements(checkers.ICredentialsChecker)
 
@@ -838,7 +853,7 @@ class FDSNWS(Application):
 		p = portal.Portal(realm, [checker])
 		f = guard.DigestCredentialFactory('MD5', msg)
 		f.digest = BugfixedDigest('MD5', msg)
-		return guard.HTTPAuthSessionWrapper(p, [f])
+		return HTTPAuthSessionWrapper(p, [f])
 
 
 

@@ -231,4 +231,7 @@ class Site(server.Site):
 		Logging.debug("request (%s): %s" % (request.getClientIP(),
 		              request.uri))
 		request.setHeader('Server', "SeisComP3-FDSNWS/%s" % VERSION)
+		request.setHeader('Access-Control-Allow-Origin', '*')
+		request.setHeader('Access-Control-Allow-Headers', 'Authorization')
+		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)
