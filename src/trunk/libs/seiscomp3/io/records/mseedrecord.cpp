@@ -407,7 +407,7 @@ void MSeedRecord::read(std::istream &is) throw(Core::StreamException) {
 	if (is.eof()) { /* retrieve the record length of the last record */
 		is.clear();
 		is.seekg(0,std::ios::end);
-		reclen = static_cast<int>(is.tellg())-pos;
+		reclen = static_cast<int>(is.tellg())-pos+LEN;
 		is.seekg(-reclen,std::ios::cur);
 		is.read(header,LEN);
 		myeof = true;
