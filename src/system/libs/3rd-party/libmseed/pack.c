@@ -7,7 +7,7 @@
  * Written by Chad Trabant,
  *   IRIS Data Management Center
  *
- * modified: 2011.129
+ * modified: 2015.213
  ***************************************************************************/
 
 #include <stdio.h>
@@ -23,7 +23,7 @@ static int msr_pack_header_raw (MSRecord *msr, char *rawrec, int maxheaderlen,
 				flag swapflag, flag normalize,
 				struct blkt_1001_s **blkt1001, flag verbose);
 static int msr_update_header (MSRecord * msr, char *rawrec, flag swapflag,
-			      struct blkt_1001_s *blkt1001, flag verbose);
+			      struct blkt_1001_s *blkt1001, flag verbose);   
 static int msr_pack_data (void *dest, void *src, int maxsamples, int maxdatabytes,
 			  int *packsamples, int32_t *lastintsample, flag comphistory,
 			  char sampletype, flag encoding, flag swapflag,
@@ -279,6 +279,7 @@ msr_pack ( MSRecord * msr, void (*record_handler) (char *, int, void *),
       if ( ! msr_addblockette (msr, (char *) &blkt1000, sizeof(struct blkt_1000_s), 1000, 0) )
 	{
 	  ms_log (2, "msr_pack(%s): Error adding 1000 Blockette\n", PACK_SRCNAME);
+          free (rawrec);
 	  return -1;
 	}
     }
@@ -288,6 +289,7 @@ msr_pack ( MSRecord * msr, void (*record_handler) (char *, int, void *),
   if ( headerlen == -1 )
     {
       ms_log (2, "msr_pack(%s): Error packing header\n", PACK_SRCNAME);
+      free (rawrec);
       return -1;
     }
   
@@ -335,13 +337,14 @@ msr_pack ( MSRecord * msr, void (*record_handler) (char *, int, void *),
     {
       packret = msr_pack_data (rawrec + dataoffset,
 			       (char *) msr->datasamples + packoffset,
-			       (msr->numsamples - totalpackedsamples), maxdatabytes,
+			       (int)(msr->numsamples - totalpackedsamples), maxdatabytes,
 			       &packsamples, &msr->ststate->lastintsample, msr->ststate->comphistory,
 			       msr->sampletype, msr->encoding, dataswapflag, verbose);
       
       if ( packret )
 	{
 	  ms_log (2, "msr_pack(%s): Error packing record\n", PACK_SRCNAME);
+          free (rawrec);
 	  return -1;
 	}
       
@@ -553,7 +556,7 @@ msr_pack_header_raw ( MSRecord *msr, char *rawrec, int maxheaderlen,
       return -1;
     }
   
-  if ( maxheaderlen < sizeof(struct fsdh_s) )
+  if ( maxheaderlen < (int)sizeof(struct fsdh_s) )
     {
       ms_log (2, "msr_pack_header_raw(%s): maxheaderlen of %d is too small, must be >= %d\n",
 	      PACK_SRCNAME, maxheaderlen, sizeof(struct fsdh_s));
@@ -844,6 +847,8 @@ msr_update_header ( MSRecord *msr, char *rawrec, flag swapflag,
 		    struct blkt_1001_s *blkt1001, flag verbose )
 {
   struct fsdh_s *fsdh;
+  hptime_t hptimems;
+  int8_t usecoffset;
   char seqnum[7];
   
   if ( ! msr || ! rawrec )
@@ -858,8 +863,11 @@ msr_update_header ( MSRecord *msr, char *rawrec, flag swapflag,
   snprintf (seqnum, 7, "%06d", msr->sequence_number);
   memcpy (fsdh->sequence_number, seqnum, 6);
   
+  /* Get start time rounded to tenths of milliseconds and microsecond offset */
+  ms_hptime2tomsusecoffset (msr->starttime, &hptimems, &usecoffset);
+  
   /* Update fixed-section start time */
-  ms_hptime2btime (msr->starttime, &(fsdh->start_time));
+  ms_hptime2btime (hptimems, &(fsdh->start_time));
   
   /* Swap byte order? */
   if ( swapflag )
@@ -867,21 +875,14 @@ msr_update_header ( MSRecord *msr, char *rawrec, flag swapflag,
       MS_SWAPBTIME (&fsdh->start_time);
     }
   
-  /* Update microseconds if Blockette 1001 is present */
+  /* Update microsecond offset value if Blockette 1001 is present */
   if ( msr->Blkt1001 && blkt1001 )
     {
-      hptime_t sec, usec;
-      
-      /* Calculate microseconds offset */
-      sec = msr->starttime / (HPTMODULUS / 10000);
-      usec = msr->starttime - (sec * (HPTMODULUS / 10000));
-      usec /= (HPTMODULUS / 1000000);
-      
       /* Update microseconds offset in blockette chain entry */
-      msr->Blkt1001->usec = (int8_t) usec;
+      msr->Blkt1001->usec = usecoffset;
       
       /* Update microseconds offset in packed header */
-      blkt1001->usec = (int8_t) usec;
+      blkt1001->usec = usecoffset;
     }
   
   return 0;

@@ -1,4 +1,191 @@
-2010.304: 2.6.2
+2015.213: 2.17
+	- Round Fixed Section Data Header start time values to the nearest
+	tenth of millisecond and restrict the microsecond offset value
+	to a range between -50 and +49 as recommended in SEED.  Previously
+	start times were truncated at tenths of millisecond resolution
+	and the microsecond offset value was between 0 and +99.  This also
+	addresses a bug where microsecond offsets were off by 100ms for times
+	before Jan 1 1970.  Thanks to Lion Krischer for reporting.
+
+	Note to future hackers: the definition of HPTMODULUS governing the
+	time tick interval for high precision time values implies that this
+	tick interval may be changed.  In reality, this should not be changed
+	from the default, microsecond tick value without thorough testing.
+	Some logic is know to be dependent on the microsecond tick.
+
+2015.134: 2.16m
+	- Add defines for needed integer types and macros from inttypes.h
+	missing in older MSVC versions.  MSVC 2010 and later appear to have
+	enough C99 support.
+	- Add define tests for _WIN32 and _WIN64 to cover all WINs.
+	- ms_fread(): Add cast to quiet warning for conversion from size_t
+	to int.  In this case the read will always be <= MAXRECLEN, much
+	smaller than int, making the conversion safe.
+
+2015.113: 2.16
+	- Update minor release version in Makefile.
+
+2015.108:
+	- Cleanup of lmplatform.h removing unneeded headers and using C99
+	standard headers except for a few platform specific cases.
+	- Convert all printf() and scanf() usage of %lld for 64-bit integers
+	to use the C99 PRId64 and SCNd64 macros for portability (MingGW).
+	- Change detection of Linux/Cygwin to set global define LMP_LINUX
+	instead of LMP_GLIB2 (now marked as deprecated).
+	- Change detection of Windows to set global define LMP_WIN instead
+	of LMP_WIN32 (now marked as deprecated).
+	- Add detection of __MINGW64__ define.
+	- Tested building on Win7 with: Open Watcom 1.9, MinGW gcc 4.8.1 and
+	Cygwin 1.7.35 (gcc 2.9.2).
+
+2015.074:
+	- Define NTP-Posix time epoch conversion constant specifically as
+	a long long integer to avoid warnings on some compilers.
+
+2015.070: 2.15
+	- Fix infinite loop if blockette chain is corrupt.  Patch submitted
+	by Elliott Sales de Andrade.
+
+2015.062: 2.14
+	- Fix memory leak when msr_pack() returns after an error. Patch
+	contributed by Larry Baker and Eric Thomas.
+	- Change casting of values passed to isdigit() to int intead of
+	unsigned character.  Apparently this was consufing on ARM archs.
+	
+2015.061:
+	- Add ms_readleapseconds() and ms_readleapsecondfile() routines to
+	read a leap seconds file into an internal list.
+	- Modify msr_endtime() to check for an internal leap second list,
+	check for overlap with the record and adjust the end time as needed
+	when leap seconds are present.  When a leap second list is present
+	any indication of positive leap seconds in the fixed section data
+	header are ignored.
+
+2014.248:
+	- Add casting to size_t and int to avoid build warnings on certain
+	build systems (e.g. older MS Visual Studio).
+	The effective maximum sample buffer and record buffer size is ~2GB.
+
+2014.234: 2.13
+	- Clean up Makefile and example/Makefile, remove all GCC-specific and
+	debug targets.  Makefiles are compatible with both GNU and BSD make. 
+	As before, the shared target works only for GCC-compatible compilers.
+	Thanks to Elliott Sales de Andrade for pointing out that shared library
+	targets did not work with parallel builds, prompting this clean up.
+
+2014.197: 2.13rc
+	- Support 128-byte record length by changing MINRECLEN to 128 (was 256).
+	The current SEED specification is a minimum record length of 256-bytes,
+	but there are cases (e.g. low latency data flow) using 128-byte records.
+	- Add declarations, casting and string truncation to clear warnings
+	uncovered in ObsPy testing (thanks to Elliott Sales de Andrade).
+
+2014.074:
+	- Add __CYGWIN__ defined test to Linux section of lmplatform.h.
+
+2013.273: 2.12
+	- Add mst_convertsamples() and mstl_convertsamples() to convert sample
+	types.  When converting from float & double types to integer type
+	a simple rounding is employed to compensate for machine representation
+	of floating point numbers.
+
+2013.267:
+	- msr_endtime(): Check activity flags in fixed section of data header,
+	if bit 4 is set then a positive leap occurred during the record and
+	the end time should be reduced by one second to properly match the now
+	shifted UTC time.  As long as the next record in the series is
+	properly marked with the correct UTC time no artificial time tear
+	will be generated when reconstructing the time series.
+
+2013.137:
+	- Update docs for transition to 64-bit sample counts done in 2011!
+
+2013.117: 2.11
+	- Initialize internal counters in mst_pack() to avoid their use 
+	in error conditions. Thanks to D. Ketchum and M. Potter for help. 
+	- Add 'const' qualifier to the msfile argument of the file reading and
+	writing family of routines to stop compiler warnings resulting from
+	generated binding functions.  Thanks to M. Bach for reporting.
+
+2013.056: 2.10
+	- Add more sanity checks to msr_unpack_data() to catch bad/corrupted
+	data records and avoid crashes due to impossible pointer construction.
+
+2013.053: 2.9
+	- Extend parsing of day-of-year style time strings to allow parsing
+	of time fields separated by dashes in addition to allowing the day
+	and time fields to be separated by a 'T' or space.  Modifications 
+	were made to ms_seedtimestr2hptime().
+	- Extend parsing of year-month-day style time strings to allow parsing
+	of time fields separated by commas.  Modifications were made to
+	ms_timestr2hptime().
+
+2013.050:
+	- Add MS_ISVALIDYEARDAY() macro to test range for year and day values,
+	years between 1900 and 2100 and days between 1 and 366.
+	- Use new macro to determine when byte swapping is needed.  This test
+	leaves a non-determination of byte order for days 1, 256 and 257 in
+	the year 2056, beware future data users.
+
+2013.007: 2.8 (again)
+	- Add msr_parse_selection() to libmseed.def for Windows builds.
+	- Fix errors in pseudo code in doc/msr_parse.3.
+
+2012.363: 2.8
+	- Implement msr_parse_selection() which is a wrapper of msr_parse()
+	that searches for the first parsable miniSEED record in a memory
+	buffer and returns it.  Optionally a Selections list may be specified
+	to limit the returned data to records matching specific criteria.
+
+2012.357:
+	- Fix corruption of float sample types when opposite byte order than
+	host in certain architecture combinations.  By not addressing
+	individual float samples directly as floats prior to byte swapping
+	we avoid the values being placed into the FPU where they may be
+	corrupted.  Thanks to Moritz Beyreuther and Lion Krischer for discovery
+	and testing.
+	- Expose the msr_unpack_data() function for use by removing the static
+	declaration.  Change verbose flag type to match others and document.
+	- Fix some logging messages, typos, etc.
+
+2012.138: 2.7
+	Add define for MINGW32 to use _fstat and _stat.
+
+2012.114: 2.7rc2
+	- Change record parsing code to trim trailing spaces from network,
+	station, location and channel parameters.  Spaces in between non-space
+	characters remain.
+
+2012.111:
+	- Update example/test.mseed to new data with an earthquake to make it
+	more recognizable compared to ambient noise in the previous example.
+
+2012.105: 2.7rc1
+	- Add many type casts to quiet newer GCC and MSVC compilers.
+	For 32-bit programs there are some places, mostly in packing routines,
+	where 64-bit integers are converted to 32-bit values for sample buffer
+	sizes and counts leaving the potential for overflow.  This will become
+	a problem when byte counts for sample buffers are beyond 2^31, for
+	32-bit integer sample values that is more than 536 million samples.
+	So programmer beware if using such buffer sizes for packing miniSEED.
+
+2012.088:
+	- When parsing records copy the ASCII string fields (sequence number,
+	network, station, location, channel) directly without removing spaces.
+	This makes the parser more lenient to unallowed characters and
+	synchronizes read and write capabilities.
+
+	- For sampling rates above 32,767 Hz only print a warning for high
+	verbosity settings and set the sample rate factor and multipler to zero.
+	Previously an error was printed during rational approximation.
+	The expectation is that a record with such a high sample rate will
+	include a blockette 100 to specify the actual sample rate.
+	This is not an official convention for SEED, but is a kludge to
+	support extremly high sample rates without printing errors.
+
+	- Fix conversion to doubles in examples/msrepack.c.
+
+2011.304: 2.6.2
 	- Increase precision of sample rate in SYNC printing routines to
 	avoid trucation of rate values.
 
