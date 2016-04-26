@@ -2,14 +2,23 @@
 
 ## Release YYYY.DDD
 
+* system
+
+  * Upgrade libmseed to 2.17
+
 * documentation
 
   * Enhance documentation of scqc and others
+
+* seiscomp
+
+ * Fixed resolving the path to the seiscomp script when it is a symlink
 
 * trunk
 
   * Add support for HMB (http messaging bus) messaging protocol
   * Add recordstream implementation for HMB (http messaging bus) protocol
+  * Remove parent_oid foreign key constraint in database tables
 
 * scimport
 
