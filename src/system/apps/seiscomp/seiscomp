@@ -931,7 +931,18 @@ if os.getuid() == 0 and not asRoot and action != "install-deps":
 
 # Resolve symlinks to files (if any)
 if os.path.islink(sys.argv[0]):
-  sys.argv[0] = os.readlink(sys.argv[0])
+  # Read the link target
+  target = os.readlink(sys.argv[0])
+  # Is the target an absolute path then take it as is
+  if os.path.isabs(target):
+    sys.argv[0] = target
+  # Otherwise join the dirname of the script with the target
+  # to get the semi-real path of the seiscomp script. Semi-real
+  # refers to the fact that symlinks are not completely resolved
+  # and why the usage of os.path.realpath is avoided. If the
+  # seiscomp3 directory itself is a symlink it should be preserved.
+  else:
+    sys.argv[0] = os.path.join(os.path.dirname(sys.argv[0]), target)
 
 # Guess SEISCOMP_ROOT from path of called script, directory links are not
 # resolved allowing to create separate SC3 environments
