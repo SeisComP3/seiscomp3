@@ -173,8 +173,10 @@ class Listener(seiscomp3.Client.Application):
         if self.isDatabaseEnabled():
             self.cache.setDatabaseArchive(self.query());
             seiscomp3.Logging.info('Cache connected to database.')
-
-        seiscomp3.Logging.info("Reports are stored in %s" % self.report_directory)
+        if self.storeReport:
+            seiscomp3.Logging.info("Reports are stored in %s" % self.report_directory)
+        else:
+            seiscomp3.Logging.info("Saving reports to disk has been DISABLED!")
         try:
             import ud_interface
             self.udevt = ud_interface.CoreEventInfo(self.amqHost, self.amqPort,
