@@ -525,6 +525,8 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 
 
 		bool setup(const Settings &settings) {
+			list_of_parametersets.clear();
+
 			try {
 				// Read the settings variable MLh.params. This can be found in the applications
 				// configuration file at:
