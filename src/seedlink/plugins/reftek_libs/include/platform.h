@@ -70,6 +70,13 @@
 #   endif
 #endif
 
+#ifdef _APPLE_
+#   ifndef MACOSX
+#       define MACOSX
+#   endif
+#endif
+
+
 /* Solaris */
 
 #ifdef SOLARIS
@@ -175,6 +182,42 @@
 #ifdef DOS
 #   define X86_16BIT
 #endif                                 /* DOS */
+
+
+/* Mac OSX */
+
+#ifdef MACOSX
+#   include <stdio.h>
+#   include <time.h>
+#   include <ctype.h>
+#   include <fcntl.h>
+#   include <unistd.h>
+#   include <stdlib.h>
+#   include <string.h>
+#   include <stdlib.h>
+#   include <stdarg.h>
+#   include <errno.h>
+#   include <signal.h>
+#   include <sys/time.h>
+#   include <sys/types.h>
+#   include <sys/timeb.h>
+#   include <sys/stat.h>
+#   include <sys/param.h>
+#   include <sys/socket.h>
+#   include <netinet/in.h>
+#   include <arpa/inet.h>
+#   include <netdb.h>
+#   define HAVE_POSIX_THREADS
+#   define HAVE_POSIX_SEMAPHORES
+#   define HAVE_SYSLOGD
+#   define HAVE_SVR4_IPC
+#   ifdef __i386__
+#       define X86_UNIX32
+#   endif
+#   ifdef __x86_64__
+#       define X86_UNIX64
+#   endif
+#endif                                 /* MACOSX */
 
 /* Portable data types key off the platform type defined above */
 
@@ -296,7 +339,7 @@
 
 /* Macros for socket portability (sort of...) */
 
-#if defined unix
+#if defined (unix) || defined (MACOSX)
     typedef int SOCKET;
 #   define INVALID_SOCKET -1
 #   ifndef INADDR_NONE

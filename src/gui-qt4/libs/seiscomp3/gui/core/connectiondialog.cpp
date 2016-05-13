@@ -217,7 +217,7 @@ bool ConnectionDialog::fetchDatabase() {
 		Util::StopWatch timer;
 		while ( timer.elapsed() < TimeSpan(5.0) ) {
 			(*_connection)->poll();
-			while ( msg = (*_connection)->readMessage(false) ) {
+			while ( msg == (*_connection)->readMessage(false) ) {
 				DatabaseProvideMessage* dbResp = DatabaseProvideMessage::Cast(msg);
 				if ( dbResp ) {
 					setDatabaseParameters(dbResp->service(), dbResp->parameters());

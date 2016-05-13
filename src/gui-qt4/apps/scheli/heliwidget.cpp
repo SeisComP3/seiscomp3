@@ -282,7 +282,7 @@ bool HeliCanvas::setCurrentTime(const Seiscomp::Core::Time &time) {
 
 	if ( shift == 0 ) return false;
 
-	if ( abs(shift) >= _rows.size() ) {
+	if ( std::abs(shift) >= _rows.size() ) {
 		for ( int i = 0; i < _rows.size(); ++i ) {
 			_rows[_rows.size()-1-i].time = Core::Time(newEndSeconds - i*_rowTimeSpan);
 			_rows[_rows.size()-1-i].update();

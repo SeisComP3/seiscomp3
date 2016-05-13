@@ -72,6 +72,14 @@ typedef unsigned int uint32_t;
 #endif
 #endif
 
+#if defined(__APPLE__)
+#include <stdint.h>
+#include <machine/endian.h>
+#ifndef __LITTLE_ENDIAN
+#define __LITTLE_ENDIAN 1
+#endif
+#endif
+
 #ifdef _OS2
 #define INCL_DOSMEMMGR
 #define INCL_DOSSEMAPHORES

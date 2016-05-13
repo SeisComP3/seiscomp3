@@ -34,7 +34,7 @@ static char rcsid[] = "$Id: g2net.c,v 1.2 2004/05/02 10:12:20 root Exp $";
 /* Example program using the network calls in libgcf2 */
 
 int
-main (int argc, char *argv)
+main (int argc, char **argv)
 {
 #if 0
   extern int G2NetLookup (char *namecolonport, G2NetAddr * a);
