@@ -221,7 +221,8 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplit
 void setInfoWidgetContent(StationInfoWidget* infoWidget, DataModel::Station* station) {
 	infoWidget->setLongitude(QString("%1").arg(station->longitude()));
 	infoWidget->setLatitude(QString("%1").arg(station->latitude()));
-	infoWidget->setElevation(QString("%1").arg(station->elevation()));
+	try { infoWidget->setElevation(QString("%1").arg(station->elevation())); }
+	catch ( ... ) {}
 	/* TODO: Find a replacement
 	infoWidget->setDepth(QString("%1").arg(station->depth()));
 	*/
@@ -1555,6 +1556,8 @@ void MvMainWindow::showOriginSymbols(bool val) {
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
 		if ( it->originSymbol()->TypeInfo() == Gui::OriginSymbol::TypeInfo() )
 			it->originSymbol()->setVisible(val);
+		if ( it->tensorSymbol() != NULL )
+			it->tensorSymbol()->setVisible(val);
 	}
 }
 
@@ -1565,14 +1568,7 @@ void MvMainWindow::removeExpiredEvents() {
 	while ( true ) {
 		EventData* expiredEvent = _eventDataRepository.findNextExpiredEvent();
 		if ( !expiredEvent ) break;
-
-        removeEventData(expiredEvent);
-
-		//Gui::OriginSymbol* originSymbol = expiredEvent->originSymbol();
-		//_mapWidget->canvas().symbolCollection()->remove(originSymbol);
-
-		//std::string id = expiredEvent->id();
-		//_eventDataRepository.removeEvent(id);
+		removeEventData(expiredEvent);
 	}
 }
 
