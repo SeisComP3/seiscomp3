@@ -1,11 +1,15 @@
 #!/usr/bin/python
 #
-# Extract messages from a mail folder, which a unique file for each sender and
-# time. Looks at the "From:" (not "From") and "Date:" headers of the original
-# message.
+# Extract messages from a mail folder, which a unique file for each
+# sender and time. Looks at the "From:" (not "From") and "Date:"
+# headers of the original message.
 #
 # Begun by Peter L. Evans, January 2014
 # <pevans@gfz-potsdam.de>
+#
+# Copyright (C) 2014-2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with NO WARRANTY.
 #
 # ----------------------------------------------------------------------
 
@@ -61,9 +65,9 @@ for line in sys.stdin.readlines():
   count_lines += 1
   if line.startswith("From "):  # or EOF
       count += 1
-    
+
       msg, m_date, m_from = parse_msg(buf)
-      
+
       #fname = base + ".seq%04d" % count  ## fname = base + "." + day
 
       if m_date != None:
@@ -75,7 +79,7 @@ for line in sys.stdin.readlines():
 
           if os.path.exists(fname):
               if (verbose):
-	          print "Skipping existing file %s" % (fname)
+                  print "Skipping existing file %s" % (fname)
               buf = ""
               skipped_count += 1
           else:
@@ -97,10 +101,10 @@ if len(buf) > 0:
         if not os.path.exists(fdir): os.makedirs(fdir)
 
         if os.path.exists(fname):
-	  if (verbose):
-	      print "Skipping existing file %s" % (fname)
-          buf = ""
-          skipped_count += 1
+            if (verbose):
+                print "Skipping existing file %s" % (fname)
+            buf = ""
+            skipped_count += 1
         else:
           print "Writing to %s (%i lines)" % (fname, count_lines)
           with open(fname, "w") as fid:

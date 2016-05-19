@@ -3,13 +3,26 @@ reqlogstats EIDA log statistics
 
 Copyright (C) 2013-2015 Deutsches GeoForschungsZentrum GFZ Potsdam
 
+This software is free software.
+
+DISCLAIMER: This software is provided "as is" without
+warranty of any kind, either expressed or implied.
+It may be unfit for any particular, purpose, whether
+that be defense against plagues of rampaging kangaroos
+or detection of failure in a data centre, or any
+other thing. The entire risk as to the quality and
+performance of the software is with you. Neither the
+author(s) nor GFZ Potsdam will be responsible for any
+harm incurred from its use.
+
+
 Collects reports sent by mail to GEOFON. Processes them. There may be
 several reports from a single node for the same period. It is assumed
 that these DO NOT overlap. Displays summary reports on a web page.
 
 Requirements:
  - SQLite3
- - PHP
+ - PHP 5.2 or so.
  - Gnuplot >=4.6 for some nice summary plots
  - The CSS style sheets used on the EIDA web pages
  - an ounce of good luck

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Make graph of size of usage by FDSNWS per day or month over a whole year.
 #
@@ -55,7 +55,7 @@ else
 fi
 if [ $# -gt 0 ] ; then
     first=$1
-    if [ "$first" == "--dcid" ] ; then
+    if [ "$first" = "--dcid" ] ; then
 	dcid=$2
 	dcid_constr="AND Y.dcid = '${dcid}'"
 	shift 2;
@@ -97,6 +97,7 @@ echo ${cmd} \
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
     echo "Nothing in db with '${dcid_constr}'."
+    rm days3.dat
     exit 0
 fi
 

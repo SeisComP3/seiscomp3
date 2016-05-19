@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Make graph of bytes per day or month over a whole year.
 #
@@ -48,7 +48,7 @@ table=
 
 if [ $# -gt 0 ] ; then
     first=$1
-    if [ "$first" == "--code" ] ; then
+    if [ "$first" = "--code" ] ; then
 	code=$2
 	code_constr="AND X.networkCode = '${code}'"
 	shift 2;
@@ -56,7 +56,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 echo "Restricted to code=${code}; setting constraint: '${code_constr}'"
-code2=${code/\//_}
+#code2=$(echo $code | sed -e "s:\/:_:")  # used in file names, so no slashes.
 
 if [ $# -ge 1 ] ; then
     start_month=$1  # Should be a two-digit number
@@ -170,6 +170,7 @@ set output 'out.svg'
 
 # Default for ls 6 is dark blue, too close to pure blue for GFZ:
 set style line 3 linecolor rgb "#00589C"
+set style line 5 linecolor rgb "skyblue"
 set style line 6 linecolor rgb "violet"
 set style line 10 linecolor rgb "magenta"
 
@@ -181,8 +182,9 @@ plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
      '' using  8 title 'KOERI' ls 1, \
      '' using  9 title 'LMU' ls 7, \
      '' using 10 title 'NIEP' ls 10, \
-     '' using 11 title 'ODC' ls 9, \
-     '' using 12 title 'RESIF' ls 8
+     '' using 11 title 'NOA' ls 5, \
+     '' using 12 title 'ODC' ls 9, \
+     '' using 13 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output
