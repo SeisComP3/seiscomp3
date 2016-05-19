@@ -17,6 +17,7 @@
 
 #include <seiscomp3/core/interfacefactory.h>
 #include <seiscomp3/core/baseobject.h>
+#include <seiscomp3/math/coord.h>
 #include <seiscomp3/core.h>
 
 
@@ -29,6 +30,22 @@ class GreensFunction;
 }
 
 namespace IO {
+
+
+struct GFSource : Math::Geo::CoordD {
+	explicit GFSource(double lat = 0.0, double lon = 0.0, double d = 0.0)
+	: Math::Geo::CoordD(lat, lon), depth(d) {}
+
+	double depth; //!< Depth in kilometer
+};
+
+
+struct GFReceiver : Math::Geo::CoordD {
+	explicit GFReceiver(double lat = 0.0, double lon = 0.0, double e = 0.0)
+	: Math::Geo::CoordD(lat, lon), elevation(e) {}
+
+	double elevation; //!< Elevation in meter
+};
 
 
 DEFINE_SMARTPOINTER(GFArchive);
@@ -63,14 +80,15 @@ class SC_SYSTEM_CORE_API GFArchive : public Core::BaseObject {
 		virtual bool setTimeSpan(const Core::TimeSpan &span) = 0;
 
 		//! Adds a request for a greensfunction.
-		//! Distance is in km.
 		virtual bool addRequest(const std::string &id,
-		                        const std::string &model, double distance,
-		                        double depth) = 0;
+		                        const std::string &model,
+		                        const GFSource &source,
+		                        const GFReceiver &receiver) = 0;
 
 		virtual bool addRequest(const std::string &id,
-		                        const std::string &model, double distance,
-		                        double depth,
+		                        const std::string &model,
+		                        const GFSource &source,
+		                        const GFReceiver &receiver,
 		                        const Core::TimeSpan &span) = 0;
 
 		//! Retrieves a greensfunction from the archive. The end of

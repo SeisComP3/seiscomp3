@@ -177,6 +177,7 @@ class Convert2SC3 : public Converter {
 		ObjectLookup          _dataloggerLookup;
 		ObjectLookup          _sensorLookup;
 		ObjectLookup          _respPAZLookup;
+		ObjectLookup          _respFAPLookup;
 		ObjectLookup          _respPolyLookup;
 		ObjectLookup          _respFIRLookup;
 

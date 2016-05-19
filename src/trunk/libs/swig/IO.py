@@ -281,6 +281,42 @@ def DatabaseInterface_Open(*args):
   return _IO.DatabaseInterface_Open(*args)
 DatabaseInterface_Open = _IO.DatabaseInterface_Open
 
+class GFSource(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GFSource, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GFSource, name)
+    __repr__ = _swig_repr
+    def __init__(self, lat=0.0, lon=0.0, d=0.0): 
+        this = _IO.new_GFSource(lat, lon, d)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_setmethods__["depth"] = _IO.GFSource_depth_set
+    __swig_getmethods__["depth"] = _IO.GFSource_depth_get
+    if _newclass:depth = _swig_property(_IO.GFSource_depth_get, _IO.GFSource_depth_set)
+    __swig_destroy__ = _IO.delete_GFSource
+    __del__ = lambda self : None;
+GFSource_swigregister = _IO.GFSource_swigregister
+GFSource_swigregister(GFSource)
+
+class GFReceiver(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GFReceiver, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, GFReceiver, name)
+    __repr__ = _swig_repr
+    def __init__(self, lat=0.0, lon=0.0, e=0.0): 
+        this = _IO.new_GFReceiver(lat, lon, e)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_setmethods__["elevation"] = _IO.GFReceiver_elevation_set
+    __swig_getmethods__["elevation"] = _IO.GFReceiver_elevation_get
+    if _newclass:elevation = _swig_property(_IO.GFReceiver_elevation_get, _IO.GFReceiver_elevation_set)
+    __swig_destroy__ = _IO.delete_GFReceiver
+    __del__ = lambda self : None;
+GFReceiver_swigregister = _IO.GFReceiver_swigregister
+GFReceiver_swigregister(GFReceiver)
+
 class GFArchive(Core.BaseObject):
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))

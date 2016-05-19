@@ -29,8 +29,23 @@ namespace SeismometerResponse {
 typedef std::complex<double> Pole;
 typedef std::complex<double> Zero;
 
+struct FAP {
+	FAP() {}
+	FAP(double f, double a, double p)
+	: frequency(f), amplitude(a), phaseAngle(p) {}
+
+	bool operator<(const FAP &other) const {
+		return frequency < other.frequency;
+	}
+
+	double frequency;  //! Frequency in Hz
+	double amplitude;  //! Amplitude
+	double phaseAngle; //! Phase angle in degree
+};
+
 typedef std::vector<Pole> Poles;
 typedef std::vector<Zero> Zeros;
+typedef std::vector<FAP> FAPs;
 
 class PolesAndZeros {
 	public:
@@ -46,7 +61,6 @@ class PolesAndZeros {
 		Zeros  zeros;
 		double norm;
 };
-
 
 class WoodAnderson : public PolesAndZeros {
 	public:

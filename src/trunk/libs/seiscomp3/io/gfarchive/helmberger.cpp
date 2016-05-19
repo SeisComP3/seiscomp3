@@ -21,6 +21,7 @@
 #include <seiscomp3/core/greensfunction.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/io/gfarchive/helmberger.h>
+#include <seiscomp3/math/geo.h>
 
 #include <iostream>
 #include <fstream>
@@ -238,17 +239,23 @@ bool HelmbergerArchive::setTimeSpan(const Core::TimeSpan &span) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool HelmbergerArchive::addRequest(const std::string &id,
                                    const std::string &model,
-                                   double distance, double depth) {
+                                   const GFSource &source,
+                                   const GFReceiver &receiver) {
 	if ( !hasModel(model) ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
 	}
 
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);
+	_requests.back().depth = source.depth;
 
 	return true;
 }
@@ -260,18 +267,24 @@ bool HelmbergerArchive::addRequest(const std::string &id,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool HelmbergerArchive::addRequest(const std::string &id,
                                    const std::string &model,
-                                   double distance, double depth,
+                                   const GFSource &source,
+                                   const GFReceiver &receiver,
                                    const Core::TimeSpan &span) {
 	if ( !hasModel(model) ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
 	}
 
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);
+	_requests.back().depth = source.depth;
 	_requests.back().timeSpan = span;
 
 	return true;

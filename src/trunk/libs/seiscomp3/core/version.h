@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(7, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(8, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x070000
+#define SC_API_VERSION 0x080000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,11 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "8.0.0"   0x080000
+   - Added class Seiscomp::DataModel::ResponseFAP
+   - Changed Seiscomp::IO::GFArchive::addRequest from 1D request signature to
+     3D request signature (distance,depth) -> (source,receiver)
+
  "7.0.0"   0x070000
    - Added support for httpmsgbus messaging protocol
    - Added Seiscomp::IO::HttpSocket
@@ -45,6 +50,7 @@ namespace Core {
    - Added Seiscomp::Communication::NetworkInterface::getSequenceNumber
    - Added Seiscomp::Communication::SystemConnection::setSequenceNumber
    - Added Seiscomp::Communication::SystemConnection::getSequenceNumber
+   - Modify Seiscomp::IO::Socket don't start timeout stopwatch automatically
 
  "6.1.0"   0x060100
    - Added Seiscomp::Gui::RecordWidget::setRecordStepFunction

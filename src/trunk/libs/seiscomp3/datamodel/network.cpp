@@ -652,10 +652,10 @@ Station* Network::station(const StationIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Station* Network::findStation(const std::string& publicID) const {
-	Station* object = Station::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<StationPtr>::const_iterator it = _stations.begin(); it != _stations.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -784,7 +784,7 @@ bool Network::removeStation(const StationIndex& i) {
 void Network::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Network skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -80,7 +80,7 @@ void FileRotatorOutput::renameLog(int oldIndex, int newIndex) {
 		oldFile << "." << oldIndex;
 
 	newFile << _filename;
-	if ( newFile > 0 )
+	if ( newIndex > 0 )
 		newFile << "." << newIndex;
 
 	rename(oldFile.str().c_str(), newFile.str().c_str());

@@ -27,6 +27,7 @@
 #include <seiscomp3/datamodel/sensor.h>
 #include <seiscomp3/datamodel/responsepaz.h>
 #include <seiscomp3/datamodel/responsepolynomial.h>
+#include <seiscomp3/datamodel/responsefap.h>
 #include <seiscomp3/datamodel/dataloggercalibration.h>
 #include <seiscomp3/datamodel/decimation.h>
 #include <seiscomp3/datamodel/datalogger.h>

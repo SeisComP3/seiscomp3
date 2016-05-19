@@ -41,9 +41,18 @@ class SC_SYSTEM_CORE_API StopWatch {
 		//! Constructor
 		StopWatch();
 
+		//! Constructor
+		StopWatch(bool autorun);
+
 	public:
 		//! restarts the timer
 		void restart();
+
+		//! resets the timer
+		void reset();
+
+		//! returns true if the timer is active
+		bool isActive() const;
 
 		//! returns the elapsed time in seconds from
 		//! restart to now

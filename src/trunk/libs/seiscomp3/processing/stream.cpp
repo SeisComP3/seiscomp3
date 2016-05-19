@@ -107,6 +107,27 @@ void Stream::init(const DataModel::Stream *stream) {
 				proc_sensor->setResponse(proc_response.get());
 			}
 		}
+		else {
+			DataModel::ResponseFAP *fap = DataModel::ResponseFAP::Find(sensor->response());
+			if ( fap ) {
+				ResponseFAPPtr proc_response = new ResponseFAP;
+
+				try {
+					Math::SeismometerResponse::FAPs faps;
+
+					const std::vector<double> &tuples = fap->tuples().content();
+					for ( size_t i = 0; i < tuples.size(); i += 3 )
+						faps.push_back(Math::SeismometerResponse::FAP(tuples[i], tuples[i+1], tuples[i+2]));
+
+					std::sort(faps.begin(), faps.end());
+
+					proc_response->setFAPs(faps);
+				}
+				catch ( ... ) {}
+
+				proc_sensor->setResponse(proc_response.get());
+			}
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

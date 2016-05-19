@@ -236,10 +236,10 @@ Route* Routing::route(const RouteIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Route* Routing::findRoute(const std::string& publicID) const {
-	Route* object = Route::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<RoutePtr>::const_iterator it = _routes.begin(); it != _routes.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -509,7 +509,7 @@ bool Routing::removeAccess(const AccessIndex& i) {
 void Routing::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Routing skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

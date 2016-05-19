@@ -161,7 +161,7 @@ class SC_SYSTEM_CORE_API Sensor : public PublicObject {
 		double highFrequency() const throw(Seiscomp::Core::ValueException);
 
 		//! Reference to responsePAZ/@publicID or
-		//! responsePolynomial/@publicID
+		//! responsePolynomial/@publicID or responseFAP/@publicID
 		void setResponse(const std::string& response);
 		const std::string& response() const;
 

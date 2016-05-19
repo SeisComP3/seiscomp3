@@ -46,6 +46,7 @@ class Sensor;
 class Datalogger;
 class ResponseFIR;
 class ResponsePAZ;
+class ResponseFAP;
 class ResponsePolynomial;
 
 }
@@ -88,6 +89,7 @@ class Convert2FDSNStaXML : public Converter {
 		const DataModel::Sensor *findSensor(const std::string &publicID);
 		const DataModel::ResponseFIR *findFIR(const std::string &publicID);
 		const DataModel::ResponsePAZ *findPAZ(const std::string &publicID);
+		const DataModel::ResponseFAP *findFAP(const std::string &publicID);
 		const DataModel::ResponsePolynomial *findPoly(const std::string &publicID);
 
 
@@ -101,6 +103,7 @@ class Convert2FDSNStaXML : public Converter {
 		ObjectLookup                _sensorLookup;
 		ObjectLookup                _firLookup;
 		ObjectLookup                _pazLookup;
+		ObjectLookup                _fapLookup;
 		ObjectLookup                _polyLookup;
 
 		FDSNXML::FDSNStationXML    *_msg;

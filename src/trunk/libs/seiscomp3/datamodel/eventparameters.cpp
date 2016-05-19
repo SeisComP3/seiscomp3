@@ -302,10 +302,10 @@ Pick* EventParameters::pick(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Pick* EventParameters::findPick(const std::string& publicID) const {
-	Pick* object = Pick::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<PickPtr>::const_iterator it = _picks.begin(); it != _picks.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -439,10 +439,10 @@ Amplitude* EventParameters::amplitude(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Amplitude* EventParameters::findAmplitude(const std::string& publicID) const {
-	Amplitude* object = Amplitude::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<AmplitudePtr>::const_iterator it = _amplitudes.begin(); it != _amplitudes.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -576,10 +576,10 @@ Reading* EventParameters::reading(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Reading* EventParameters::findReading(const std::string& publicID) const {
-	Reading* object = Reading::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ReadingPtr>::const_iterator it = _readings.begin(); it != _readings.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -713,10 +713,10 @@ Origin* EventParameters::origin(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* EventParameters::findOrigin(const std::string& publicID) const {
-	Origin* object = Origin::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<OriginPtr>::const_iterator it = _origins.begin(); it != _origins.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -850,10 +850,10 @@ FocalMechanism* EventParameters::focalMechanism(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FocalMechanism* EventParameters::findFocalMechanism(const std::string& publicID) const {
-	FocalMechanism* object = FocalMechanism::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<FocalMechanismPtr>::const_iterator it = _focalMechanisms.begin(); it != _focalMechanisms.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -987,10 +987,10 @@ Event* EventParameters::event(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Event* EventParameters::findEvent(const std::string& publicID) const {
-	Event* object = Event::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<EventPtr>::const_iterator it = _events.begin(); it != _events.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1108,7 +1108,7 @@ bool EventParameters::removeEvent(size_t i) {
 void EventParameters::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: EventParameters skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

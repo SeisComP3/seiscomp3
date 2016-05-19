@@ -1139,6 +1139,38 @@ void StationControl::ParseVolumeRecord(string record)
 }
 
 /****************************************************************************************************************************
+* Function:     Flush                                                                                                       *
+* Parameters:   None                                                                                                        *
+* Returns:      Nothing                                                                                                     *
+* Description:  Merges channel responses after reading has finished                                                         *
+****************************************************************************************************************************/
+void StationControl::Flush()
+{
+	for ( size_t eos = 0; eos < si.size(); ++eos ) {
+		for ( size_t eoc = 0; eoc < si[eos]->ci.size(); ++eoc ) {
+			ResponseListList &rl = si[eos]->ci[eoc]->rl;
+			for ( size_t i = 1; i < rl.size(); ) {
+				ResponseList *last = rl[i-1].get();
+				ResponseList *curr = rl[i].get();
+
+				int lastStage = last->GetStageSequenceNumber();
+				int stage = curr->GetStageSequenceNumber();
+				if ( stage == lastStage ) {
+					// Merge records
+					last->number_of_responses += curr->number_of_responses;
+					last->responses_listed.insert(last->responses_listed.end(),
+					                              curr->responses_listed.begin(),
+					                              curr->responses_listed.end());
+					rl.erase(rl.begin()+i);
+				}
+				else
+					++i;
+			}
+		}
+	}
+}
+
+/****************************************************************************************************************************
 * Function:     AddChannelToStation											    *
 * Parameters:   chan	ChannelIdentifier										    *
 * Returns:      number of station in vector										    *
@@ -1534,9 +1566,14 @@ string ResponseCoefficients::GetDenominators()
 ParseResult ResponseList::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
-	signal_in_units = FromString<int>(substr(record, 2, 3));
-	signal_out_units = FromString<int>(substr(record, 5, 3));
-	number_of_responses = FromString<int>(substr(record, 8, 4));
+
+	// No merging
+	if ( responses_listed.empty() ) {
+		signal_in_units = FromString<int>(substr(record, 2, 3));
+		signal_out_units = FromString<int>(substr(record, 5, 3));
+		number_of_responses = FromString<int>(substr(record, 8, 4));
+	}
+
 	int pos1 = 12;
 	ListedResponses lr;
 

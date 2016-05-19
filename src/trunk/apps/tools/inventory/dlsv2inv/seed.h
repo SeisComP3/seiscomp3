@@ -445,6 +445,8 @@ DECLARE_BLOCKETTE2(ResponseList, SequenceRecord) {
 		int	number_of_responses;
 		int	signal_in_units, signal_out_units;
 		std::vector<ListedResponses> responses_listed;
+
+	friend class StationControl;
 };
 
 DECLARE_BLOCKETTE2(ResponseListDictionary, ResponseList) {
@@ -700,8 +702,11 @@ class StationControl : public Control
 	public:
 		void ParseVolumeRecord(std::string);
 		void EmptyVectors();
+		// Reading is finished, do post processing such as merging responses
+		void Flush();
+
 		StationIdentifierList si;
- 	protected:
+
 	private:
 		Logging log;
 		int last_blockette, rest_size, eos, eoc;

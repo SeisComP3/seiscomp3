@@ -19,6 +19,7 @@
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core/greensfunction.h>
+#include <seiscomp3/math/geo.h>
 #include <seiscomp3/io/gfarchive/arclink.h>
 
 #include <seiscomp3/io/socket.h>
@@ -113,12 +114,18 @@ bool ArclinkArchive::setTimeSpan(const Core::TimeSpan &span) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ArclinkArchive::addRequest(const std::string &id,
                                 const std::string &model,
-                                double distance, double depth) {
+                                const GFSource &source,
+                                const GFReceiver &receiver) {
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);;
+	_requests.back().depth = source.depth;
 
 	return true;
 }
@@ -130,13 +137,19 @@ bool ArclinkArchive::addRequest(const std::string &id,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ArclinkArchive::addRequest(const std::string &id,
                                 const std::string &model,
-                                double distance, double depth,
+                                const GFSource &source,
+                                const GFReceiver &receiver,
                                 const Core::TimeSpan &span) {
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);;
+	_requests.back().depth = source.depth;
 	_requests.back().timeSpan = span;
 
 	return true;

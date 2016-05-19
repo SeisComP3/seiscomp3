@@ -52,7 +52,7 @@ using namespace Seiscomp::Core;
 
 
 Socket::Socket()
-    : _sockfd(-1), _rp(0), _wp(0), _timeout(0),
+    : _sockfd(-1), _rp(0), _wp(0), _timeout(0), _timer(false),
       _interrupt(false), _reconnect(false), _eol("\r\n") {
 #ifdef WIN32
 	//if (_pipe(_pipefd, 2, O_BINARY) < 0) {
@@ -93,6 +93,10 @@ void Socket::setTimeout(int seconds) {
 
 void Socket::startTimer() {
 	_timer.restart();
+}
+
+void Socket::stopTimer() {
+	_timer.reset();
 }
 
 void Socket::open(const string& serverLocation) {

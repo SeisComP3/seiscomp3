@@ -37,6 +37,7 @@ Inventory::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Meta
 	addProperty(arrayObjectProperty("responsePAZ", "ResponsePAZ", &Inventory::responsePAZCount, &Inventory::responsePAZ, static_cast<bool (Inventory::*)(ResponsePAZ*)>(&Inventory::add), &Inventory::removeResponsePAZ, static_cast<bool (Inventory::*)(ResponsePAZ*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responseFIR", "ResponseFIR", &Inventory::responseFIRCount, &Inventory::responseFIR, static_cast<bool (Inventory::*)(ResponseFIR*)>(&Inventory::add), &Inventory::removeResponseFIR, static_cast<bool (Inventory::*)(ResponseFIR*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responsePolynomial", "ResponsePolynomial", &Inventory::responsePolynomialCount, &Inventory::responsePolynomial, static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::add), &Inventory::removeResponsePolynomial, static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::remove)));
+	addProperty(arrayObjectProperty("responseFAP", "ResponseFAP", &Inventory::responseFAPCount, &Inventory::responseFAP, static_cast<bool (Inventory::*)(ResponseFAP*)>(&Inventory::add), &Inventory::removeResponseFAP, static_cast<bool (Inventory::*)(ResponseFAP*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("network", "Network", &Inventory::networkCount, &Inventory::network, static_cast<bool (Inventory::*)(Network*)>(&Inventory::add), &Inventory::removeNetwork, static_cast<bool (Inventory::*)(Network*)>(&Inventory::remove)));
 }
 
@@ -91,6 +92,10 @@ Inventory::~Inventory() {
 	              std::compose1(std::bind2nd(std::mem_fun(&ResponsePolynomial::setParent),
 	                                         (PublicObject*)NULL),
 	                            std::mem_fun_ref(&ResponsePolynomialPtr::get)));
+	std::for_each(_responseFAPs.begin(), _responseFAPs.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&ResponseFAP::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&ResponseFAPPtr::get)));
 	std::for_each(_networks.begin(), _networks.end(),
 	              std::compose1(std::bind2nd(std::mem_fun(&Network::setParent),
 	                                         (PublicObject*)NULL),
@@ -270,6 +275,17 @@ bool Inventory::updateChild(Object* child) {
 		return false;
 	}
 
+	ResponseFAP* responseFAPChild = ResponseFAP::Cast(child);
+	if ( responseFAPChild != NULL ) {
+		ResponseFAP* responseFAPElement
+			= ResponseFAP::Cast(PublicObject::Find(responseFAPChild->publicID()));
+		if ( responseFAPElement && responseFAPElement->parent() == this ) {
+			*responseFAPElement = *responseFAPChild;
+			return true;
+		}
+		return false;
+	}
+
 	Network* networkChild = Network::Cast(child);
 	if ( networkChild != NULL ) {
 		Network* networkElement
@@ -303,6 +319,8 @@ void Inventory::accept(Visitor* visitor) {
 	for ( std::vector<ResponseFIRPtr>::iterator it = _responseFIRs.begin(); it != _responseFIRs.end(); ++it )
 		(*it)->accept(visitor);
 	for ( std::vector<ResponsePolynomialPtr>::iterator it = _responsePolynomials.begin(); it != _responsePolynomials.end(); ++it )
+		(*it)->accept(visitor);
+	for ( std::vector<ResponseFAPPtr>::iterator it = _responseFAPs.begin(); it != _responseFAPs.end(); ++it )
 		(*it)->accept(visitor);
 	for ( std::vector<NetworkPtr>::iterator it = _networks.begin(); it != _networks.end(); ++it )
 		(*it)->accept(visitor);
@@ -345,10 +363,10 @@ StationGroup* Inventory::stationGroup(const StationGroupIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationGroup* Inventory::findStationGroup(const std::string& publicID) const {
-	StationGroup* object = StationGroup::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<StationGroupPtr>::const_iterator it = _stationGroups.begin(); it != _stationGroups.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -506,10 +524,10 @@ AuxDevice* Inventory::auxDevice(const AuxDeviceIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxDevice* Inventory::findAuxDevice(const std::string& publicID) const {
-	AuxDevice* object = AuxDevice::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<AuxDevicePtr>::const_iterator it = _auxDevices.begin(); it != _auxDevices.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -667,10 +685,10 @@ Sensor* Inventory::sensor(const SensorIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Sensor* Inventory::findSensor(const std::string& publicID) const {
-	Sensor* object = Sensor::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<SensorPtr>::const_iterator it = _sensors.begin(); it != _sensors.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -828,10 +846,10 @@ Datalogger* Inventory::datalogger(const DataloggerIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Datalogger* Inventory::findDatalogger(const std::string& publicID) const {
-	Datalogger* object = Datalogger::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<DataloggerPtr>::const_iterator it = _dataloggers.begin(); it != _dataloggers.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -989,10 +1007,10 @@ ResponsePAZ* Inventory::responsePAZ(const ResponsePAZIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponsePAZ* Inventory::findResponsePAZ(const std::string& publicID) const {
-	ResponsePAZ* object = ResponsePAZ::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ResponsePAZPtr>::const_iterator it = _responsePAZs.begin(); it != _responsePAZs.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1150,10 +1168,10 @@ ResponseFIR* Inventory::responseFIR(const ResponseFIRIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponseFIR* Inventory::findResponseFIR(const std::string& publicID) const {
-	ResponseFIR* object = ResponseFIR::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ResponseFIRPtr>::const_iterator it = _responseFIRs.begin(); it != _responseFIRs.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1311,10 +1329,10 @@ ResponsePolynomial* Inventory::responsePolynomial(const ResponsePolynomialIndex&
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponsePolynomial* Inventory::findResponsePolynomial(const std::string& publicID) const {
-	ResponsePolynomial* object = ResponsePolynomial::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ResponsePolynomialPtr>::const_iterator it = _responsePolynomials.begin(); it != _responsePolynomials.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1440,6 +1458,167 @@ bool Inventory::removeResponsePolynomial(const ResponsePolynomialIndex& i) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Inventory::responseFAPCount() const {
+	return _responseFAPs.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP* Inventory::responseFAP(size_t i) const {
+	return _responseFAPs[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP* Inventory::responseFAP(const ResponseFAPIndex& i) const {
+	for ( std::vector<ResponseFAPPtr>::const_iterator it = _responseFAPs.begin(); it != _responseFAPs.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP* Inventory::findResponseFAP(const std::string& publicID) const {
+	for ( std::vector<ResponseFAPPtr>::const_iterator it = _responseFAPs.begin(); it != _responseFAPs.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::add(ResponseFAP* responseFAP) {
+	if ( responseFAP == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( responseFAP->parent() != NULL ) {
+		SEISCOMP_ERROR("Inventory::add(ResponseFAP*) -> element has already a parent");
+		return false;
+	}
+
+	if ( PublicObject::IsRegistrationEnabled() ) {
+		ResponseFAP* responseFAPCached = ResponseFAP::Find(responseFAP->publicID());
+		if ( responseFAPCached ) {
+			if ( responseFAPCached->parent() ) {
+				if ( responseFAPCached->parent() == this )
+					SEISCOMP_ERROR("Inventory::add(ResponseFAP*) -> element with same publicID has been added already");
+				else
+					SEISCOMP_ERROR("Inventory::add(ResponseFAP*) -> element with same publicID has been added already to another object");
+				return false;
+			}
+			else
+				responseFAP = responseFAPCached;
+		}
+	}
+
+	// Add the element
+	_responseFAPs.push_back(responseFAP);
+	responseFAP->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		responseFAP->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(responseFAP);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::remove(ResponseFAP* responseFAP) {
+	if ( responseFAP == NULL )
+		return false;
+
+	if ( responseFAP->parent() != this ) {
+		SEISCOMP_ERROR("Inventory::remove(ResponseFAP*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<ResponseFAPPtr>::iterator it;
+	it = std::find(_responseFAPs.begin(), _responseFAPs.end(), responseFAP);
+	// Element has not been found
+	if ( it == _responseFAPs.end() ) {
+		SEISCOMP_ERROR("Inventory::remove(ResponseFAP*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_responseFAPs.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::removeResponseFAP(size_t i) {
+	// index out of bounds
+	if ( i >= _responseFAPs.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_responseFAPs[i]->accept(&nc);
+	}
+
+	_responseFAPs[i]->setParent(NULL);
+	childRemoved(_responseFAPs[i].get());
+	
+	_responseFAPs.erase(_responseFAPs.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::removeResponseFAP(const ResponseFAPIndex& i) {
+	ResponseFAP* object = responseFAP(i);
+	if ( object == NULL ) return false;
+	return remove(object);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t Inventory::networkCount() const {
 	return _networks.size();
 }
@@ -1472,10 +1651,10 @@ Network* Inventory::network(const NetworkIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Network* Inventory::findNetwork(const std::string& publicID) const {
-	Network* object = Network::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<NetworkPtr>::const_iterator it = _networks.begin(); it != _networks.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1604,7 +1783,7 @@ bool Inventory::removeNetwork(const NetworkIndex& i) {
 void Inventory::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Inventory skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -1640,6 +1819,11 @@ void Inventory::serialize(Archive& ar) {
 	                       Seiscomp::Core::Generic::containerMember(_responsePolynomials,
 	                       Seiscomp::Core::Generic::bindMemberFunction<ResponsePolynomial>(static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::add), this)),
 	                       Archive::STATIC_TYPE);
+	if ( ar.supportsVersion<0,8>() )
+		ar & NAMED_OBJECT_HINT("responseFAP",
+		                       Seiscomp::Core::Generic::containerMember(_responseFAPs,
+		                       Seiscomp::Core::Generic::bindMemberFunction<ResponseFAP>(static_cast<bool (Inventory::*)(ResponseFAP*)>(&Inventory::add), this)),
+		                       Archive::STATIC_TYPE);
 	ar & NAMED_OBJECT_HINT("network",
 	                       Seiscomp::Core::Generic::containerMember(_networks,
 	                       Seiscomp::Core::Generic::bindMemberFunction<Network>(static_cast<bool (Inventory::*)(Network*)>(&Inventory::add), this)),

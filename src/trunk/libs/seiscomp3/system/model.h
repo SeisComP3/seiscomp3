@@ -504,7 +504,7 @@ class SC_SYSTEM_CORE_API Module : public Core::BaseObject {
 		//! Returns a container at path @path@.
 		Container *findContainer(const std::string &path) const;
 
-		bool supportsBindings() const { return bindingTemplate; }
+		bool supportsBindings() const { return bindingTemplate.get() != NULL; }
 
 		int loadProfiles(const std::string &dir, ConfigDelegate *delegate = NULL);
 

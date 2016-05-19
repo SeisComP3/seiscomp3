@@ -2457,7 +2457,16 @@ bool Application::initLogging() {
 			return false;
 	}
 
-	if ( !_logToStdout ) SEISCOMP_NOTICE("Starting");
+	if ( !_logToStdout ) {
+		const char *appVersion = version();
+		SEISCOMP_NOTICE("Starting %s %s", name().c_str(), appVersion?appVersion:"");
+		SEISCOMP_NOTICE("  Framework   : %s", frameworkVersion());
+		SEISCOMP_NOTICE("  API Version : %d.%d.%d",
+		                SC_API_VERSION_MAJOR(SC_API_VERSION),
+		                SC_API_VERSION_MINOR(SC_API_VERSION),
+		                SC_API_VERSION_PATCH(SC_API_VERSION));
+		SEISCOMP_NOTICE("  Version     : %s", CurrentVersion.systemInfo().c_str());
+	}
 
 	return true;
 }

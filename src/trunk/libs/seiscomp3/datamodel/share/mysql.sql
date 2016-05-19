@@ -36,6 +36,7 @@ DROP TABLE IF EXISTS SensorCalibration;
 DROP TABLE IF EXISTS Sensor;
 DROP TABLE IF EXISTS ResponsePAZ;
 DROP TABLE IF EXISTS ResponsePolynomial;
+DROP TABLE IF EXISTS ResponseFAP;
 DROP TABLE IF EXISTS DataloggerCalibration;
 DROP TABLE IF EXISTS Decimation;
 DROP TABLE IF EXISTS Datalogger;
@@ -80,7 +81,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -1173,6 +1174,26 @@ CREATE TABLE ResponsePolynomial (
 	numberOfCoefficients SMALLINT UNSIGNED,
 	coefficients_content BLOB,
 	coefficients_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+) ENGINE=INNODB;
+
+CREATE TABLE ResponseFAP (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	gain DOUBLE UNSIGNED,
+	gainFrequency DOUBLE UNSIGNED,
+	numberOfTuples SMALLINT UNSIGNED,
+	tuples_content BLOB,
+	tuples_used TINYINT(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),

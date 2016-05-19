@@ -36,6 +36,7 @@ DROP TABLE SensorCalibration;
 DROP TABLE Sensor;
 DROP TABLE ResponsePAZ;
 DROP TABLE ResponsePolynomial;
+DROP TABLE ResponseFAP;
 DROP TABLE DataloggerCalibration;
 DROP TABLE Decimation;
 DROP TABLE Datalogger;
@@ -87,7 +88,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (DEFAULT);
@@ -1339,6 +1340,30 @@ CREATE TABLE ResponsePolynomial (
 CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 
 CREATE TRIGGER ResponsePolynomial_update BEFORE UPDATE ON ResponsePolynomial FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
+CREATE TABLE ResponseFAP (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
+	m_numberOfTuples SMALLINT,
+	m_tuples_content BYTEA,
+	m_tuples_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
+
+CREATE TRIGGER ResponseFAP_update BEFORE UPDATE ON ResponseFAP FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
 CREATE TABLE DataloggerCalibration (

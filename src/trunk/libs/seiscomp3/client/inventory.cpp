@@ -254,6 +254,15 @@ void Inventory::load(DataModel::DatabaseReader* reader) {
 			_inventory->add(poly.get());
 	}
 	it.close();
+
+	// Read FAP responses
+	it = reader->getObjects(_inventory.get(), DataModel::ResponseFAP::TypeInfo());
+	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+		DataModel::ResponseFAPPtr fap = DataModel::ResponseFAP::Cast(obj);
+		if ( fap )
+			_inventory->add(fap.get());
+	}
+	it.close();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

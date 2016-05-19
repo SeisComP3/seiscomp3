@@ -61,7 +61,13 @@ std::string FrameworkVersion::toString() const {
 std::string FrameworkVersion::systemInfo() const {
 	std::string s;
 #ifndef WIN32
+#ifdef WITH_GIT_REVISION
+	s += std::string("GIT HEAD: ") + git_revision();
+#endif
 #ifdef WITH_BUILD_INFOS
+	#ifdef WITH_GIT_REVISION
+	s += "\n";
+	#endif
 	s += std::string("Compiler: ") + compiler_version() + "\n";
 	s += std::string("Build system: ") + build_system() + "\n";
 	s += std::string("OS: ") + os_version();

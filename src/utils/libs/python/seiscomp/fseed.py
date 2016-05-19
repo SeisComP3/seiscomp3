@@ -117,6 +117,44 @@ def _mkseedpaz(nblk, nfld, npaz, s):
 
     return (c,n)
 
+def _mkseedfap(nblk, nfld, nfap, s):
+    pos = 0
+    n = 0
+    c = ""
+
+    values = s.split()
+    l = len(values)
+    while pos < l:
+      try:
+        f = float(values[pos])
+      except:
+        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+
+      pos += 1
+
+      try:
+        a = float(values[pos])
+      except:
+        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+
+      pos += 1
+
+      try:
+        p = float(values[pos])
+      except:
+        raise SEEDError, "blockette %d, field %d: error parsing FAP at '%s'" % (nblk, nfld, values[pos])
+
+      pos += 1
+
+      c += "%12.5E%12.5E 0.00000E-00%12.5E 0.00000E-00" % (f, a, p)
+
+      n += 1
+
+    if not nfap is None and (n != nfap):
+        raise SEEDError, "blockette %d, field %d: expected %d FAP, found %d" % (nblk, nfld, nfap, n)
+
+    return (c,n)
+
 def _mkseedstring(nblk, nfld, s, min_length, max_length, flags):
     U = L = N = P = S = X = False
     rx_list = []
@@ -208,6 +246,9 @@ def _is_paz_response(obj):
 
 def _is_poly_response(obj):
     return hasattr(obj, "approximationType")
+
+def _is_fap_response(obj):
+    return hasattr(obj, "tuples")
 
 class _Blockette10(object):
     def __init__(self, record_length, start_time, end_time, vol_time,
@@ -490,7 +531,63 @@ class _Blockette44(object):
             raise SEEDError, "blockette 44 has invalid length: %d instead of %d" % (len(blk), self.__len)
         
         f.write_blk(blk)
-        
+
+class _Blockette45(object):
+    def __init__(self, key, name, type, input_units, output_units, ntuples, tuples):
+
+        self.__key = key
+        self.__name = _mkseedstring(45, 4, name, 1, 25, "UN")
+        self.__input_units = input_units
+        self.__output_units = output_units
+        self.__tuples, ntuples = _mkseedfap(55, 7, ntuples, tuples)
+        self.__ntuples = ntuples
+        self.__len = 21 + 60 * ntuples + len(self.__name)
+
+    def output(self, f):
+        if self.__len < 10000:
+            blk = "055%4d%4d%s%3d%3d%4d%s" % \
+                (self.__len, self.__key, self.__name,
+                 self.__input_units, self.__output_units,
+                 self.__ntuples, self.__tuples)
+
+            if len(blk) != self.__len:
+                raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), self.__len)
+
+            f.write_blk(blk)
+        else:
+            btuples = int((9999-21-len(self.__name))/60)
+            l = 21 + 60 * btuples + len(self.__name)
+            blk = "055%4d%4d%s%3d%3d%4d%s" % \
+                (l, self.__key, self.__name,
+                 self.__input_units, self.__output_units,
+                 btuples, self.__tuples[:btuples*60])
+
+            if len(blk) != l:
+                raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), l)
+
+            f.write_blk(blk)
+
+            left_tuples = self.__ntuples-btuples
+            ofs = btuples*60
+            while left_tuples > 0:
+                if left_tuples > btuples:
+                    ntuples = btuples
+                else:
+                    ntuples = left_tuples
+                l = 21 + ntuples * 60 + len(self.__name)
+                blk = "055%4d%4d%s%3d%3d%4d" % \
+                (l, self.__key, self.__name,
+                 self.__input_units, self.__output_units,
+                 ntuples, self.__tuples[ofs:ofs+ntuples*60])
+
+                if len(blk) != l:
+                    raise SEEDError, "blockette 45 has invalid length: %d instead of %d" % (len(blk), l)
+
+                f.write_blk(blk)
+
+                ofs += ntuples*60
+                left_tuples -= ntuples
+
 class _Blockette47(object):
     def __init__(self, key, name, input_rate, deci_fac, deci_offset,
         delay, correction):
@@ -678,6 +775,62 @@ class _Blockette54(object):
             raise SEEDError, "blockette 54 has invalid length: %d instead of %d" % (len(blk), self.__len)
         
         f.write_blk(blk)
+
+class _Blockette55(object):
+    def __init__(self, input_units, output_units, ntuples, tuples):
+        self.__stage = 0
+        self.__input_units = input_units
+        self.__output_units = output_units
+        self.__tuples, ntuples = _mkseedfap(55, 7, ntuples, tuples)
+        self.__ntuples = ntuples
+        self.__len = 19 + 60 * ntuples
+
+    def set_stage(self, stage):
+        self.__stage = stage
+
+    def output(self, f):
+        if self.__len < 10000:
+            blk = "055%4d%2d%3d%3d%4d%s" % \
+                (self.__len, self.__stage,
+                 self.__input_units, self.__output_units,
+                 self.__ntuples, self.__tuples)
+
+            if len(blk) != self.__len:
+                raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), self.__len)
+
+            f.write_blk(blk)
+        else:
+            l = 19 + 166*60
+            blk = "055%4d%2d%3d%3d%4d%s" % \
+                (l, self.__stage,
+                 self.__input_units, self.__output_units,
+                 166, self.__tuples[:166*60])
+
+            if len(blk) != l:
+                raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), l)
+
+            f.write_blk(blk)
+
+            left_tuples = self.__ntuples-166
+            ofs = 166*60
+            while left_tuples > 0:
+                if left_tuples > 166:
+                    ntuples = 166
+                else:
+                    ntuples = left_tuples
+                l = 19 + ntuples * 60
+                blk = "055%4d%2d%3d%3d%4d%s" % \
+                (l, self.__stage,
+                 self.__input_units, self.__output_units,
+                 ntuples, self.__tuples[ofs:ofs+ntuples*60])
+
+                if len(blk) != l:
+                    raise SEEDError, "blockette 55 has invalid length: %d instead of %d" % (len(blk), l)
+
+                f.write_blk(blk)
+
+                ofs += ntuples*60
+                left_tuples -= ntuples
         
 class _Blockette57(object):
     def __init__(self, input_rate, deci_fac, deci_offset, delay, correction):
@@ -1121,6 +1274,12 @@ class _ResponseContainer(object):
         self._add_stage(x1, x2)
         return gain
 
+    def add_analogue_fap(self, name):
+        (x1, x2, gain) = self.__fac._lookup_analogue_fap(name)
+
+        self._add_stage(x1, x2)
+        return gain
+
     def add_digitizer(self, name, dev_id, compn, sample_rate, sample_rate_div):
         (x1, x2, x3, rate, gain) = self.__fac._lookup_digitizer(name,
             dev_id, compn, sample_rate, sample_rate_div)
@@ -1178,6 +1337,7 @@ class _Response4xFactory(object):
         self.__used_digitizer = {}
         self.__used_digitizer_calib = {}
         self.__used_analogue_paz = {}
+        self.__used_analogue_fap = {}
         self.__used_digital_paz = {}
         self.__used_fir = {}
         self.__used_fir_deci = {}
@@ -1185,6 +1345,7 @@ class _Response4xFactory(object):
         self.__blk42 = []
         self.__blk43 = []
         self.__blk44 = []
+        self.__blk45 = []
         self.__blk47 = []
         self.__blk48 = []
 
@@ -1254,6 +1415,16 @@ class _Response4xFactory(object):
                     coeff = resp.coefficients) 
 
                 self.__blk42.append(b1)
+
+            elif _is_fap_response(resp):
+                b1 = _Blockette45(key = k1,
+                    name = "RS" + name,
+                    input_units = input_units,
+                    output_units = self.__unit_dict.lookup("V"),
+                    ntuples = resp.numberOfTuples,
+                    tuples = resp.tuples)
+
+                self.__blk45.append(b1)
 
             self.__num += 1
             self.__used_sensor[name] = k1
@@ -1334,6 +1505,37 @@ class _Response4xFactory(object):
         self.__num += 2
         self.__used_analogue_paz[name] = (k1, k2)
         return (k1, k2, resp_paz.gain)
+
+    def _lookup_analogue_fap(self, name):
+        resp_fap = self.__inventory.object.get(name)
+        if resp_fap is None:
+            raise SEEDError, "unknown FAP response: " + name
+
+        k = self.__used_analogue_fap.get(name)
+        if k is not None:
+            (k1, k2) = k
+            return (k1, k2, resp_fap.gain)
+
+        k1 = self.__num + 1
+        k2 = self.__num + 2
+
+        b1 = _Blockette45(key = k1,
+            name = "RA" + name,
+            input_units = self.__unit_dict.lookup("V"),
+            output_units = self.__unit_dict.lookup("V"),
+            ntuples = resp_fap.numberOfTuples,
+            tuples = resp_fap.tuples)
+
+        b2 = _Blockette48(key = k2,
+            name = "GA" + name,
+            gain = resp_fap.gain,
+            gain_freq = resp_fap.gainFrequency)
+
+        self.__blk45.append(b1)
+        self.__blk48.append(b2)
+        self.__num += 2
+        self.__used_analogue_fap[name] = (k1, k2)
+        return (k1, k2, resp_fap.gain)
 
     def _lookup_digitizer(self, name, dev_id, compn, sample_rate, sample_rate_div):
         digi = self.__inventory.object.get(name)
@@ -1534,12 +1736,15 @@ class _Response4xFactory(object):
         for b in self.__blk44:
             b.output(f)
             
+        for b in self.__blk45:
+            b.output(f)
+
         for b in self.__blk47:
             b.output(f)
             
         for b in self.__blk48:
             b.output(f)
-            
+
 class _Response5xFactory(object):
     def __init__(self, inventory, unit_dict):
         self.__inventory = inventory
@@ -1600,6 +1805,12 @@ class _Response5xFactory(object):
                 ncoeff = resp.numberOfCoefficients,
                 coeff = resp.coefficients) 
 
+        elif _is_fap_response(resp):
+            b1 = _Blockette55(input_units = input_units,
+                output_units = self.__unit_dict.lookup("V"),
+                ntuples = resp.numberOfTuples,
+                tuples = resp.tuples)
+
         try:
             calib = sensor.calibration[dev_id][compn]
 
@@ -1644,6 +1855,23 @@ class _Response5xFactory(object):
             gain_freq = resp_paz.gainFrequency)
 
         return (b1, b2, resp_paz.gain)
+
+    def _lookup_analogue_fap(self, name):
+        resp_fap = self.__inventory.object.get(name)
+        if resp_fap is None:
+            raise SEEDError, "unknown FAP response: " + name
+
+        gain = resp_fap.gain
+        if gain is None: gain = 1.0
+
+        b1 = _Blockette55(input_units = self.__unit_dict.lookup("V"),
+            output_units = self.__unit_dict.lookup("V"),
+            ntuples = resp_fap.numberOfTuples, tuples = resp_fap.tuples)
+
+        b2 = _Blockette58(gain = gain,
+            gain_freq = resp_fap.gainFrequency)
+
+        return (b1, b2, gain)
 
     def _lookup_digitizer(self, name, dev_id, compn, sample_rate, sample_rate_div):
         digi = self.__inventory.object.get(name)
@@ -1778,22 +2006,24 @@ class _Channel(object):
             raise SEEDError, "cannot find response for sensor " + sensor.name
         
         digi = inventory.object.get(strmcfg.datalogger)
-        if digi is None:
-            raise SEEDError, "unknown datalogger: " + strmcfg.datalogger
+        #if digi is None:
+        #    raise SEEDError, "unknown datalogger referenced in channel %s: %s" % (strmcfg.code, strmcfg.datalogger)
 
-        try:
-            stream_deci = digi.decimation[strmcfg.sampleRateNumerator][strmcfg.sampleRateDenominator]
+        stream_deci = None
+        if digi:
+            try:
+                stream_deci = digi.decimation[strmcfg.sampleRateNumerator][strmcfg.sampleRateDenominator]
 
-        except KeyError:
-            raise SEEDError, "cannot find filter chain for stream " + \
-                str(strmcfg.sampleRateNumerator) + "/" + \
-                str(strmcfg.sampleRateDenominator) + " of datalogger " + \
-                digi.name
+            except KeyError:
+                raise SEEDError, "cannot find filter chain for stream " + \
+                    str(strmcfg.sampleRateNumerator) + "/" + \
+                    str(strmcfg.sampleRateDenominator) + " of datalogger " + \
+                    digi.name
  
         unit = None
         try:
             unit = sensor.unit
-        
+
         except AttributeError:
             pass
 
@@ -1815,8 +2045,9 @@ class _Channel(object):
             float(strmcfg.sampleRateDenominator)
         
         clock_drift = 0
-        if digi.maxClockDrift is not None:
-            clock_drift = digi.maxClockDrift / sample_rate
+        if digi:
+            if digi.maxClockDrift is not None:
+                clock_drift = digi.maxClockDrift / sample_rate
 
         self.__chan_blk = _Blockette52(loc_id = loccfg.code,
             chan_id = strmcfg.code,
@@ -1840,39 +2071,43 @@ class _Channel(object):
 
         (sens, sens_freq) = resp_container.add_sensor(strmcfg.sensor,
             strmcfg.sensorSerialNumber, strmcfg.sensorChannel)
+
+        if stream_deci:
+            if stream_deci.analogueFilterChain:
+                if len(stream_deci.analogueFilterChain) > 0:
+                    for f in stream_deci.analogueFilterChain.split():
+                        obj = inventory.object[f]
+                        if _is_paz_response(obj):
+                            gain = resp_container.add_analogue_paz(f)
+                            sens *= gain
+                        elif _is_fap_response(obj):
+                            gain = resp_container.add_analogue_fap(f)
+                            sens *= gain
+                        else:
+                            raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
+
+            (rate, gain) = resp_container.add_digitizer(strmcfg.datalogger,
+                strmcfg.dataloggerSerialNumber, strmcfg.dataloggerChannel,
+                strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator)
+
+            sens *= gain
         
-        if stream_deci.analogueFilterChain:
-            if len(stream_deci.analogueFilterChain) > 0:
-                for f in stream_deci.analogueFilterChain.split():
-                    obj = inventory.object[f]
-                    if _is_paz_response(obj):
-                        gain = resp_container.add_analogue_paz(f)
+            if stream_deci.digitalFilterChain:
+                if len(stream_deci.digitalFilterChain) > 0:
+                    for f in stream_deci.digitalFilterChain.split():
+                        obj = inventory.object[f]
+                        if _is_paz_response(obj):
+                            gain = resp_container.add_digital_paz(f, rate)
+                        elif _is_fir_response(obj):
+                            (rate, gain) = resp_container.add_fir(f, rate)
+                        else:
+                            raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
+
                         sens *= gain
-                    else:
-                        raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
-    
-        (rate, gain) = resp_container.add_digitizer(strmcfg.datalogger,
-            strmcfg.dataloggerSerialNumber, strmcfg.dataloggerChannel,
-            strmcfg.sampleRateNumerator, strmcfg.sampleRateDenominator)
 
-        sens *= gain
-        
-        if stream_deci.digitalFilterChain:
-            if len(stream_deci.digitalFilterChain) > 0:
-                for f in stream_deci.digitalFilterChain.split():
-                    obj = inventory.object[f]
-                    if _is_paz_response(obj):
-                        gain = resp_container.add_digital_paz(f, rate)
-                    elif _is_fir_response(obj):
-                        (rate, gain) = resp_container.add_fir(f, rate)
-                    else:
-                        raise SEEDError, "invalid filter type: %s (%s)" % (f, obj.name)
+            if sens_freq > rate / 5:
+                sens_freq = rate / 5
 
-                    sens *= gain
-
-        if sens_freq > rate / 5:
-            sens_freq = rate / 5
-        
         #if sample_rate != rate:
         #    print digi.name, netcfg.code, statcfg.code, strmcfg.code, "expected sample rate", sample_rate, "actual", rate
         

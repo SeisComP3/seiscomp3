@@ -313,7 +313,7 @@ Autoloc::Pick *Seiscomp::Applications::Autoloc::App::convertFromSC3(const Seisco
 	if (pick->loc=="")
 		pick->loc = "__";
 
-	pick->attachement = sc3pick;
+	pick->attachment = sc3pick;
 
 	return pick;
 }

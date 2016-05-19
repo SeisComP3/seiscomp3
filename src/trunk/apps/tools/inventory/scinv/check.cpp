@@ -238,6 +238,7 @@ bool Check::check() {
 		Sensor *sensor = _inv->sensor(i);
 		Object *o = findPAZ(sensor->response());
 		if ( o == NULL ) o = findPoly(sensor->response());
+		if ( o == NULL ) o = findFAP(sensor->response());
 		if ( o == NULL ) {
 			// Done in merge
 			/*
@@ -360,3 +361,23 @@ ResponsePolynomial *Check::findPoly(const string &id) const {
 
 	return NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *Check::findFAP(const std::string &id) const {
+	for ( size_t i = 0; i < _inv->responseFAPCount(); ++i ) {
+		ResponseFAP *fap = _inv->responseFAP(i);
+		if ( fap->publicID() == id ) return fap;
+	}
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

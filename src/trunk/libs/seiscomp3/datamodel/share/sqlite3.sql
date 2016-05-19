@@ -36,6 +36,7 @@ DROP TABLE SensorCalibration;
 DROP TABLE Sensor;
 DROP TABLE ResponsePAZ;
 DROP TABLE ResponsePolynomial;
+DROP TABLE ResponseFAP;
 DROP TABLE DataloggerCalibration;
 DROP TABLE Decimation;
 DROP TABLE Datalogger;
@@ -80,7 +81,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -1409,6 +1410,32 @@ CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 CREATE TRIGGER ResponsePolynomialUpdate UPDATE ON ResponsePolynomial
 BEGIN
   UPDATE ResponsePolynomial SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE ResponseFAP (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	gain DOUBLE UNSIGNED,
+	gainFrequency DOUBLE UNSIGNED,
+	numberOfTuples SMALLINT UNSIGNED,
+	tuples_content BLOB,
+	tuples_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
+
+CREATE TRIGGER ResponseFAPUpdate UPDATE ON ResponseFAP
+BEGIN
+  UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE DataloggerCalibration (

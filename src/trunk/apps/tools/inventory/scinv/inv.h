@@ -67,6 +67,7 @@ class InventoryTask : public Task {
 		const Seiscomp::DataModel::ResponseFIR *findFIR(const std::string &) const;
 		const Seiscomp::DataModel::ResponsePAZ *findPAZ(const std::string &) const;
 		const Seiscomp::DataModel::ResponsePolynomial *findPoly(const std::string &) const;
+		const Seiscomp::DataModel::ResponseFAP *findFAP(const std::string &) const;
 
 
 	// ------------------------------------------------------------------
@@ -78,6 +79,7 @@ class InventoryTask : public Task {
 		Seiscomp::DataModel::AuxDevice *auxDeviceByName(const std::string &) const;
 		Seiscomp::DataModel::ResponseFIR *respFIRByName(const std::string &) const;
 		Seiscomp::DataModel::ResponsePAZ *respPAZByName(const std::string &) const;
+		Seiscomp::DataModel::ResponseFAP *respFAPByName(const std::string &) const;
 		Seiscomp::DataModel::ResponsePolynomial *respPolynomialByName(const std::string &) const;
 
 		void log(LogHandler::Level level, const char *message,
@@ -99,6 +101,8 @@ class InventoryTask : public Task {
 		process(const Seiscomp::DataModel::ResponsePAZ *);
 		Seiscomp::DataModel::ResponsePolynomial *
 		process(const Seiscomp::DataModel::ResponsePolynomial *);
+		Seiscomp::DataModel::ResponseFAP *
+		process(const Seiscomp::DataModel::ResponseFAP *);
 
 
 	// ------------------------------------------------------------------
@@ -118,6 +122,7 @@ class InventoryTask : public Task {
 			ObjectLookup firLookup;
 			ObjectLookup pazLookup;
 			ObjectLookup polyLookup;
+			ObjectLookup fapLookup;
 			ObjectSet    touchedPublics;
 		};
 
@@ -129,6 +134,7 @@ class InventoryTask : public Task {
 		ObjectLookup  _FIRNames;
 		ObjectLookup  _PAZNames;
 		ObjectLookup  _PolyNames;
+		ObjectLookup  _FAPNames;
 
 		Session       _session;
 

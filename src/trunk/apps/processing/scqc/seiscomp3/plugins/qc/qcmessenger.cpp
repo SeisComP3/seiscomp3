@@ -132,7 +132,7 @@ bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation 
 
 
 //! scheduler: send Qc messages every '_sendInterval' seconds or
-//! if attachement count reaches limit of '_maxSize'
+//! if attachment count reaches limit of '_maxSize'
 //!
 void QcMessenger::scheduler(){
 
@@ -141,7 +141,7 @@ void QcMessenger::scheduler(){
 	if (_notifierMsg) {
 		try {
 			if (((_timer.elapsed() > _sendInterval) && (_notifierMsg->size() > 0)) || (_notifierMsg->size() >=_maxSize)) {
-// 				SEISCOMP_DEBUG("sending Qc NOTIFIER message with %d attachements", _notifierMsg->size());
+// 				SEISCOMP_DEBUG("sending Qc NOTIFIER message with %d attachments", _notifierMsg->size());
 				sendMessage((Message*)_notifierMsg.get());
 				msgSend = true;
 			}
@@ -157,7 +157,7 @@ void QcMessenger::scheduler(){
 	if (_dataMsg) {
 		try {
 			if (((_timer.elapsed() > _sendInterval) && (_dataMsg->size() > 0)) || (_dataMsg->size() >=_maxSize)) {
-// 				SEISCOMP_DEBUG("sending Qc DATA message with %d attachements", _dataMsg->size());
+// 				SEISCOMP_DEBUG("sending Qc DATA message with %d attachments", _dataMsg->size());
 				sendMessage((Message*)_dataMsg.get());
 				msgSend = true;
 			}

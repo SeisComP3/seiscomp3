@@ -750,10 +750,10 @@ MomentTensor* FocalMechanism::momentTensor(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensor* FocalMechanism::findMomentTensor(const std::string& publicID) const {
-	MomentTensor* object = MomentTensor::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<MomentTensorPtr>::const_iterator it = _momentTensors.begin(); it != _momentTensors.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -871,7 +871,7 @@ bool FocalMechanism::removeMomentTensor(size_t i) {
 void FocalMechanism::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: FocalMechanism skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

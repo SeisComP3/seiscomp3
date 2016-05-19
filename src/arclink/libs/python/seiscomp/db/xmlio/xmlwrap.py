@@ -1686,6 +1686,114 @@ class xml_ResponsePolynomial(object):
         return locals()
 
 
+# Inventory::ResponseFAP
+class xml_ResponseFAP(object):
+    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
+    def __init__(self, e = None):
+        if e is None:
+            self._element = ET.Element(xml_ResponseFAP._xmlns + "responseFAP")
+        else:
+            self._element = e
+
+    def _append_child(self, obj):
+        self._element.append(obj._element)
+
+    def _copy_from(self, src):
+        self.name = src.name
+        self.gain = src.gain
+        self.gainFrequency = src.gainFrequency
+        self.numberOfTuples = src.numberOfTuples
+        self.tuples = src.tuples
+        self.remark = src.remark
+        self.publicID = src.publicID
+
+    def _copy_to(self, dest):
+        if self._element.get("name") is not None:
+            dest.name = self.name
+        if self._element.get("gain") is not None:
+            dest.gain = self.gain
+        if self._element.get("gainFrequency") is not None:
+            dest.gainFrequency = self.gainFrequency
+        if self._element.get("numberOfTuples") is not None:
+            dest.numberOfTuples = self.numberOfTuples
+        if self._element.find(xml_ResponseFAP._xmlns + "tuples") is not None:
+            dest.tuples = self.tuples
+        if self._element.find(xml_ResponseFAP._xmlns + "remark") is not None:
+            dest.remark = self.remark
+        if self._element.get("publicID") is not None:
+            dest.publicID = self.publicID
+
+    @Property
+    def publicID():
+        def fget(self):
+            return _string_fromxml(self._element.get("publicID"))
+        def fset(self, value):
+            self._element.set("publicID", _string_toxml(value))
+        return locals()
+
+    @Property
+    def action():
+        def fget(self):
+            return _string_fromxml(self._element.get("action"))
+        def fset(self, value):
+            self._element.set("action", _string_toxml(value))
+        return locals()
+
+    @Property
+    def name():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("name"))
+        def fset(self, value):
+            self._element.set("name", _string_toxml(value))
+        return locals()
+
+    @Property
+    def gain():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gain"))
+        def fset(self, value):
+            self._element.set("gain", _float_toxml(value))
+        return locals()
+
+    @Property
+    def gainFrequency():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gainFrequency"))
+        def fset(self, value):
+            self._element.set("gainFrequency", _float_toxml(value))
+        return locals()
+
+    @Property
+    def numberOfTuples():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("numberOfTuples"))
+        def fset(self, value):
+            self._element.set("numberOfTuples", _int_toxml(value))
+        return locals()
+
+    @Property
+    def tuples():
+    # type: RealArray
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFAP._xmlns + "tuples")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFAP._xmlns + "tuples", value)
+        return locals()
+
+    @Property
+    def remark():
+    # type: Blob
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFAP._xmlns + "remark")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFAP._xmlns + "remark", value)
+        return locals()
+
+
 # Inventory::DataloggerCalibration
 class xml_DataloggerCalibration(object):
     _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
@@ -3268,6 +3376,14 @@ class xml_Inventory(object):
     def responsePolynomial(self):
         for e1 in self._element.findall(xml_ResponsePolynomial._xmlns + "responsePolynomial"):
             yield xml_ResponsePolynomial(e1)
+
+    # Aggregation: ResponseFAP
+    def _new_responseFAP(self):
+        return xml_ResponseFAP(ET.Element(xml_ResponseFAP._xmlns + "responseFAP"))
+    @property
+    def responseFAP(self):
+        for e1 in self._element.findall(xml_ResponseFAP._xmlns + "responseFAP"):
+            yield xml_ResponseFAP(e1)
 
     # Aggregation: Network
     def _new_network(self):

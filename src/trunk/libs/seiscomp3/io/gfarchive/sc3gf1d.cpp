@@ -19,6 +19,7 @@
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/core/greensfunction.h>
 #include <seiscomp3/core/system.h>
+#include <seiscomp3/math/geo.h>
 #include <seiscomp3/io/gfarchive/sc3gf1d.h>
 #include <seiscomp3/io/records/sacrecord.h>
 
@@ -330,18 +331,24 @@ bool SC3GF1DArchive::setTimeSpan(const Core::TimeSpan &span) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SC3GF1DArchive::addRequest(const std::string &id,
-                             const std::string &model,
-                             double distance, double depth) {
+                                const std::string &model,
+                                const GFSource &source,
+		                        const GFReceiver &receiver) {
 	if ( !hasModel(model) ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
 	}
 
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);
+	_requests.back().depth = source.depth;
 
 	return true;
 }
@@ -352,19 +359,24 @@ bool SC3GF1DArchive::addRequest(const std::string &id,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SC3GF1DArchive::addRequest(const std::string &id,
-                                   const std::string &model,
-                                   double distance, double depth,
-                                   const Core::TimeSpan &span) {
+                                const std::string &model,
+                                const GFSource &source, const GFReceiver &receiver,
+                                const Core::TimeSpan &span) {
 	if ( !hasModel(model) ) {
 		SEISCOMP_DEBUG("Wrong model: %s", model.c_str());
 		return false;
 	}
 
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
 	_requests.push_back(Request());
 	_requests.back().id = id;
 	_requests.back().model = model;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = Math::Geo::deg2km(dist);
+	_requests.back().depth = source.depth;
 	_requests.back().timeSpan = span;
 
 	return true;
