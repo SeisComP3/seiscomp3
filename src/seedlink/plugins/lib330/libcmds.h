@@ -25,7 +25,7 @@ Edit History:
 #ifndef libcmds_h
 /* Flag this file as included */
 #define libcmds_h
-#define VER_LIBCMDS 24
+#define VER_LIBCMDS 25
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h

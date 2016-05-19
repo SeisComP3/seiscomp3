@@ -42,7 +42,7 @@ Edit History:
 #ifndef libstrucs_h
 /* Flag this file as included */
 #define libstrucs_h
-#define VER_LIBSTRUCS 17
+#define VER_LIBSTRUCS 18
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h

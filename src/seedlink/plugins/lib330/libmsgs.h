@@ -29,7 +29,7 @@ Edit History:
 #ifndef libmsgs_h
 /* Flag this file as included */
 #define libmsgs_h
-#define VER_LIBMSGS 11
+#define VER_LIBMSGS 12
 
 /* Make sure libtypes.h is included */
 #ifndef libtypes_h
