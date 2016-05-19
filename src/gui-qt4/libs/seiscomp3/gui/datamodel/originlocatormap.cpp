@@ -52,6 +52,7 @@ OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
 , _origin(NULL), _drawStations(false)
 , _drawStationsLines(true), _interactive(true)
 {
+	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;
@@ -624,7 +625,7 @@ bool OriginLocatorMap::drawStations() const {
 void OriginLocatorMap::setWaveformPropagation(bool p) {
 	if ( _waveformPropagation == p ) return;
 	_waveformPropagation = p;
-	if ( _originSymbol ) {
+	if ( _originSymbol && _originSymbol->decorator() ) {
 		// TTDecorator::ShowWaveformPropagation(_waveformPropagation);
 		_originSymbol->decorator()->setVisible(_waveformPropagation);
 		update();
