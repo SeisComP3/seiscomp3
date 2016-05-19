@@ -85,6 +85,9 @@ class Reloc : public Client::Application {
 			try { _locatorType = configGetString("reloc.locator"); }
 			catch ( ... ) {}
 
+			try { _locatorProfile = configGetString("reloc.profile"); }
+			catch ( ... ) {}
+
 			try { _ignoreRejected = configGetBool("reloc.ignoreRejectedOrigins"); }
 			catch ( ... ) {}
 
