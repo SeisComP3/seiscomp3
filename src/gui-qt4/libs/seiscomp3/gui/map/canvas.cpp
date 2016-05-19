@@ -192,7 +192,10 @@ bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
 
 
 Canvas::Canvas(const MapsDesc &meta)
-    : _geoReference(-180.0, -90.0, 360.0, 180.0), _margin(10), _delegate(NULL), _polyCache(10) {
+: _geoReference(-180.0, -90.0, 360.0, 180.0)
+, _margin(10)
+, _delegate(NULL)
+, _polyCache(10) {
 	_maptree = new ImageTree(meta);
 	if ( !_maptree->valid() )
 		_maptree = NULL;
@@ -202,8 +205,13 @@ Canvas::Canvas(const MapsDesc &meta)
 
 
 Canvas::Canvas(ImageTree *mapTree)
-    : _geoReference(-180.0, -90.0, 360.0, 180.0), _dirtyImage(true), _dirtyLayers(true), _margin(10),
-    _isDrawLegendsEnabled(true), _delegate(NULL), _polyCache(10) {
+: _geoReference(-180.0, -90.0, 360.0, 180.0)
+, _dirtyImage(true)
+, _dirtyLayers(true)
+, _margin(10)
+, _isDrawLegendsEnabled(true)
+, _delegate(NULL)
+, _polyCache(10) {
 	_maptree = mapTree;
 
 	if ( _maptree && !_maptree->valid() )
@@ -291,7 +299,7 @@ void Canvas::init() {
 	if ( !SCScheme.map.projection.empty() ) {
 		Map::ProjectionFactory::ServiceNames* services = Map::ProjectionFactory::Services();
 		if ( services && std::find(services->begin(), services->end(),
-				           SCScheme.map.projection) != services->end() )
+		                           SCScheme.map.projection) != services->end() )
 			projection = SCScheme.map.projection.c_str();
 		else
 			SEISCOMP_WARNING("Projection %s not available, defaulting to %s",
@@ -1011,6 +1019,7 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 	if ( _isDrawLegendsEnabled ) drawLegends(painter);
 }
 
+
 void Canvas::drawLegends(QPainter& painter) {
 	if ( _delegate ) {
 		delegate()->drawLegends(painter);
@@ -1127,32 +1136,13 @@ void Canvas::drawLegends(QPainter& painter) {
 	painter.setRenderHints(hints);
 }
 
+
 void Canvas::draw(QPainter& painter) {
 	drawImageLayer(painter);
 	drawVectorLayer(painter);
 
 	if ( !_maptree || !_maptree->hasPendingRequests() )
 		renderingCompleted();
-}
-
-void Canvas::zoomGridIn() {
-	if ( isDrawGridEnabled() ) {
-		QPointF gridDistance = _gridLayer.gridDistance();
-		gridDistance -= QPointF(5.0, 5.0);
-		if ( gridDistance.x() < 5.0 || gridDistance.y() < 5.0 )
-			gridDistance = QPointF(5.0, 5.0);
-		_gridLayer.setGridDistance(gridDistance);
-	}
-}
-
-void Canvas::zoomGridOut() {
-	if ( isDrawGridEnabled() ) {
-		QPointF gridDistance = _gridLayer.gridDistance();
-		gridDistance += QPointF(5.0, 5.0);
-		if ( gridDistance.x() > 180.0 || gridDistance.y() > 180.0 )
-			gridDistance = QPointF(180.0, 180.0);
-		_gridLayer.setGridDistance(gridDistance);
-	}
 }
 
 

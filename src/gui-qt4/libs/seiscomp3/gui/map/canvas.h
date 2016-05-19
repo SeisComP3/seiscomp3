@@ -247,9 +247,6 @@ class SC_GUI_API Canvas : public QObject {
 	private:
 		void init();
 
-		void zoomGridIn();
-		void zoomGridOut();
-
 		void updateDrawablePositions() const;
 
 		void drawCity(QPainter &painter, const Math::Geo::CityD &,
