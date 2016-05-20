@@ -30,8 +30,8 @@ PolesAndZeros::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaOb
 	addProperty(enumProperty("PzTransferFunctionType", "PzTransferFunctionType", false, false, &metaPzTransferFunctionType, &PolesAndZeros::setPzTransferFunctionType, &PolesAndZeros::pzTransferFunctionType));
 	addProperty(Core::simpleProperty("NormalizationFactor", "float", false, false, false, false, false, false, NULL, &PolesAndZeros::setNormalizationFactor, &PolesAndZeros::normalizationFactor));
 	addProperty(objectProperty<FrequencyType>("NormalizationFrequency", "FDSNXML::FrequencyType", false, false, &PolesAndZeros::setNormalizationFrequency, &PolesAndZeros::normalizationFrequency));
-	addProperty(arrayClassProperty<PoleAndZero>("Zero", "FDSNXML::PoleAndZero", &PolesAndZeros::zeroCount, &PolesAndZeros::zero, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::addZero), &PolesAndZeros::removeZero, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::removeZero)));
 	addProperty(arrayClassProperty<PoleAndZero>("Pole", "FDSNXML::PoleAndZero", &PolesAndZeros::poleCount, &PolesAndZeros::pole, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::addPole), &PolesAndZeros::removePole, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::removePole)));
+	addProperty(arrayClassProperty<PoleAndZero>("Zero", "FDSNXML::PoleAndZero", &PolesAndZeros::zeroCount, &PolesAndZeros::zero, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::addZero), &PolesAndZeros::removeZero, static_cast<bool (PolesAndZeros::*)(PoleAndZero*)>(&PolesAndZeros::removeZero)));
 }
 
 
@@ -157,74 +157,6 @@ PolesAndZeros& PolesAndZeros::operator=(const PolesAndZeros &other) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-size_t PolesAndZeros::zeroCount() const {
-	return _zeros.size();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PoleAndZero* PolesAndZeros::zero(size_t i) const {
-	return _zeros[i].get();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool PolesAndZeros::addZero(PoleAndZero *obj) {
-	if ( obj == NULL )
-		return false;
-
-	// Add the element
-	_zeros.push_back(obj);
-	
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool PolesAndZeros::removeZero(PoleAndZero *obj) {
-	if ( obj == NULL )
-		return false;
-
-	std::vector<PoleAndZeroPtr>::iterator it;
-	it = std::find(_zeros.begin(), _zeros.end(), obj);
-	// Element has not been found
-	if ( it == _zeros.end() ) {
-		SEISCOMP_ERROR("PolesAndZeros::removeZero(PoleAndZero*) -> child object has not been found although the parent pointer matches???");
-		return false;
-	}
-
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool PolesAndZeros::removeZero(size_t i) {
-	// index out of bounds
-	if ( i >= _zeros.size() )
-		return false;
-
-	_zeros.erase(_zeros.begin() + i);
-
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t PolesAndZeros::poleCount() const {
 	return _poles.size();
 }
@@ -284,6 +216,74 @@ bool PolesAndZeros::removePole(size_t i) {
 		return false;
 
 	_poles.erase(_poles.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t PolesAndZeros::zeroCount() const {
+	return _zeros.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+PoleAndZero* PolesAndZeros::zero(size_t i) const {
+	return _zeros[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PolesAndZeros::addZero(PoleAndZero *obj) {
+	if ( obj == NULL )
+		return false;
+
+	// Add the element
+	_zeros.push_back(obj);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PolesAndZeros::removeZero(PoleAndZero *obj) {
+	if ( obj == NULL )
+		return false;
+
+	std::vector<PoleAndZeroPtr>::iterator it;
+	it = std::find(_zeros.begin(), _zeros.end(), obj);
+	// Element has not been found
+	if ( it == _zeros.end() ) {
+		SEISCOMP_ERROR("PolesAndZeros::removeZero(PoleAndZero*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool PolesAndZeros::removeZero(size_t i) {
+	// index out of bounds
+	if ( i >= _zeros.size() )
+		return false;
+
+	_zeros.erase(_zeros.begin() + i);
 
 	return true;
 }
