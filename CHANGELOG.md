@@ -76,6 +76,11 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
   * Add support for response list (blockette 55) which are converted to
     ResponseFAP
 
+* fdsnxml2inv
+
+  * Add support for reponse list
+  * Prefer SampleRateRatio over SampleRate when converting to SC3
+
 * scinv
 
   * Synchronize ResponseFAP objects
