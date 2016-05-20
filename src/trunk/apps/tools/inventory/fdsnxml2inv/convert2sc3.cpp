@@ -1969,11 +1969,17 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 
 	// Set sample rate
 	try {
-		pair<int,int> rat = double2frac(cha->sampleRate().value());
-		sc_stream->setSampleRateNumerator(rat.first);
-		sc_stream->setSampleRateDenominator(rat.second);
+		sc_stream->setSampleRateNumerator(cha->sampleRateRatio().numberSamples());
+		sc_stream->setSampleRateDenominator(cha->sampleRateRatio().numberSeconds());
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		try {
+			pair<int,int> rat = double2frac(cha->sampleRate().value());
+			sc_stream->setSampleRateNumerator(rat.first);
+			sc_stream->setSampleRateDenominator(rat.second);
+		}
+		catch ( ... ) {}
+	}
 
 	// Set orientation
 	bool hasOrientation = false;
@@ -2226,12 +2232,19 @@ Convert2SC3::updateDatalogger(const std::string &name,
 
 	try {
 		// Convert fdsnxml clockdrift (seconds/sample) to seconds/second
-		double drift = epoch->clockDrift().value() * epoch->sampleRate().value();
+		double drift = epoch->clockDrift().value() * epoch->sampleRateRatio().numberSamples() / epoch->sampleRateRatio().numberSeconds();
 		sc_dl->setMaxClockDrift(drift);
 		emptyDL = false;
 	}
 	catch ( ... ) {
-		sc_dl->setMaxClockDrift(Core::None);
+		try {
+			double drift = epoch->clockDrift().value() * epoch->sampleRate().value();
+			sc_dl->setMaxClockDrift(drift);
+			emptyDL = false;
+		}
+		catch ( ... ) {
+			sc_dl->setMaxClockDrift(Core::None);
+		}
 	}
 
 	if ( resp ) {
