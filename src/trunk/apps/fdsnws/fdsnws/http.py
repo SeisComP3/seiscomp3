@@ -141,6 +141,8 @@ class ListingResource(resource.Resource):
 		for child in self.children.items():
 			if child[1].isLeaf:
 				continue
+			if hasattr(child[1], 'hideInListing') and child[1].hideInListing:
+				continue
 			name = child[0]
 			lis += """<li><a href="%s/">%s/</a></li>\n""" % (name, name)
 		return ListingResource.html % (request.path, lis)
