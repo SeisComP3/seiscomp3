@@ -704,14 +704,14 @@ void VsMagnitude::processEvents() {
 		EventPtr event = _cache.get<Event>(it->first);
 		if ( event != NULL ) {
 			if ( _currentTime < evt->expirationTime ) {
-				process(evt, event->publicID());
+				process(evt, event.get());
 				// only send the message / update the database if the event has a VS magnitude
 				if ( evt->vsMagnitude ) {
 					evt->update++;
 					updateVSMagnitude(event.get(), evt);
 				}
 			} else {
-				process(evt, event->publicID());
+				process(evt, event.get());
 				// only send the message / update the database if the event has a VS magnitude
 				if ( evt->vsMagnitude )
 					updateVSMagnitude(event.get(), evt);
@@ -743,13 +743,14 @@ void VsMagnitude::processEvents() {
 
  This is called by processEvents() when iterating over all events in the cache
  */
-void VsMagnitude::process(VsEvent *evt, std::string eventID) {
+void VsMagnitude::process(VsEvent *evt, Event *event) {
 	if ( evt->stations.empty() )
 		return;
 	Client::Inventory *inv = Client::Inventory::Instance();
 
 	double stmag;
 	double distdg, epicdist, azi1, azi2;
+	WaveformStreamID wid;
 	ReturnCode ret;
 	Timeline::StationList unused;
 	evt->allThresholdStationsCount = 0;
@@ -759,9 +760,18 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 	vector<VsInput> inputs;
 
 	SEISCOMP_LOG(_processingInfoChannel,
-			"Start logging for event: %s", eventID.c_str());
+			"Start logging for event: %s", event->publicID().c_str());
 	SEISCOMP_LOG(_processingInfoChannel, "update number: %d", evt->update);
 
+	OriginPtr org = _cache.get<Origin>(event->preferredOriginID());
+		if ( !org ){
+			SEISCOMP_WARNING("Object %s not found in cache\nIs the cache size big enough?\n"
+								"Have you subscribed to all necessary message groups?",
+								event->preferredOriginID().c_str());
+			return;
+	}
+
+	evt->staMags.clear();
 	VsWindows::iterator it;
 	for ( it = evt->stations.begin(); it != evt->stations.end(); ++it ) {
 		Envelope venv, henv;
@@ -844,6 +854,23 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 		input.mest = vs.mest(vs.ground_motion_ratio(input.ZA, input.ZD),
 				input.PSclass);
 
+		// Record single station magnitudes
+		Notifier::SetEnabled(true);
+		_creationInfo.setCreationTime(_currentTime);
+		_creationInfo.setModificationTime(Core::None);
+		DataModel::StationMagnitudePtr staMag = DataModel::StationMagnitude::Create();
+		staMag->setMagnitude(RealQuantity(input.mest));
+		staMag->setType("MVS");
+		staMag->setCreationInfo(_creationInfo);
+		wid.setNetworkCode(it->first.first);
+		wid.setStationCode(it->first.second);
+		wid.setLocationCode(locationCode);
+		wid.setChannelCode(channelCode);
+		staMag->setWaveformID(wid);
+		org->add(staMag.get());
+		evt->staMags.push_back(staMag);
+		Notifier::SetEnabled(false);
+
 		// Logging
 		string resultstr;
 		ostringstream out;
@@ -880,7 +907,7 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 
 	if ( inputs.empty() ) {
 		SEISCOMP_LOG(_processingInfoChannel,
-				"End logging for event: %s", eventID.c_str());
+				"End logging for event: %s", event->publicID().c_str());
 		return;
 	}
 
@@ -1012,7 +1039,7 @@ void VsMagnitude::process(VsEvent *evt, std::string eventID) {
 	SEISCOMP_LOG(_processingInfoChannel, "%s", resultstr.c_str());
 
 	SEISCOMP_LOG(_processingInfoChannel,
-			"End logging for event: %s", eventID.c_str());
+			"End logging for event: %s", event->publicID().c_str());
 }
 
 /*!
@@ -1038,43 +1065,21 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 		return;
 	}
 
-	MagnitudePtr nmag = NULL;
-
-	/// check if the origin already contains a vs magnitude
-	for ( size_t i = 0; i < org->magnitudeCount(); ++i ) {
-		Magnitude *m = org->magnitude(i);
-		if ( m->type() == "MVS" ) {
-			nmag = m;
-			break;
-		}
-	}
-
 	Notifier::SetEnabled(true);
-
-	/// if the vs magnitude does not yet exist, create a new magnitude object
-	/// containing the vs magnitude
-	if ( !nmag ) {
-		_creationInfo.setCreationTime(_currentTime);
-		_creationInfo.setModificationTime(Core::None);
-		nmag = Magnitude::Create();
-		nmag->setMagnitude(RealQuantity(*vsevt->vsMagnitude));
-		nmag->setType("MVS");
-		nmag->setStationCount(vsevt->vsStationCount);
-		nmag->setCreationInfo(_creationInfo);
-		org->add(nmag.get());
+	_creationInfo.setCreationTime(_currentTime);
+	_creationInfo.setModificationTime(Core::None);
+	_creationInfo.setVersion(Core::toString(vsevt->update));
+	MagnitudePtr nmag = Magnitude::Create();
+	nmag->setMagnitude(RealQuantity(*vsevt->vsMagnitude));
+	nmag->setType("MVS");
+	nmag->setStationCount(vsevt->vsStationCount);
+	nmag->setCreationInfo(_creationInfo);
+	org->add(nmag.get());
+	for (StaMagArray::iterator it = vsevt->staMags.begin(); it != vsevt->staMags.end(); ++it) {
+			const DataModel::StationMagnitude *staMag = (*it).get();
+			nmag->add(new StationMagnitudeContribution(staMag->publicID(),staMag->magnitude().value()- *vsevt->vsMagnitude,1.0));
 	}
-	/// else update the value of the vs magnitude in the existing magnitude object
-	else {
-		nmag->setMagnitude(RealQuantity(*vsevt->vsMagnitude));
-		nmag->setStationCount(vsevt->vsStationCount);
-		try {
-			nmag->creationInfo().setModificationTime(_currentTime);
-		} catch ( ... ) {
-			_creationInfo.setModificationTime(_currentTime);
-			nmag->setCreationInfo(_creationInfo);
-		}
-		nmag->update();
-	}
+	vsevt->staMags.clear();
 
 	/// set a comment containing the update number
 	/// if the update numbers of two successive comments for the
@@ -1090,7 +1095,6 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	Core::MessagePtr msg = Notifier::GetMessage();
 	if ( connection() && msg )
 		connection()->send(msg.get());
-
 	Notifier::SetEnabled(false);
 }
 

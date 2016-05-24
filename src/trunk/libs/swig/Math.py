@@ -2619,6 +2619,39 @@ ChainFilterD_swigregister(ChainFilterD)
 Displacement = _Math.Displacement
 Velocity = _Math.Velocity
 Acceleration = _Math.Acceleration
+class FAP(_object):
+    """Proxy of C++ Seiscomp::Math::SeismometerResponse::FAP class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FAP, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FAP, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(Seiscomp::Math::SeismometerResponse::FAP self) -> FAP
+        __init__(Seiscomp::Math::SeismometerResponse::FAP self, double f, double a, double p) -> FAP
+        """
+        this = _Math.new_FAP(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def __lt__(self, *args):
+        """__lt__(FAP self, FAP other) -> bool"""
+        return _Math.FAP___lt__(self, *args)
+
+    __swig_setmethods__["frequency"] = _Math.FAP_frequency_set
+    __swig_getmethods__["frequency"] = _Math.FAP_frequency_get
+    if _newclass:frequency = _swig_property(_Math.FAP_frequency_get, _Math.FAP_frequency_set)
+    __swig_setmethods__["amplitude"] = _Math.FAP_amplitude_set
+    __swig_getmethods__["amplitude"] = _Math.FAP_amplitude_get
+    if _newclass:amplitude = _swig_property(_Math.FAP_amplitude_get, _Math.FAP_amplitude_set)
+    __swig_setmethods__["phaseAngle"] = _Math.FAP_phaseAngle_set
+    __swig_getmethods__["phaseAngle"] = _Math.FAP_phaseAngle_get
+    if _newclass:phaseAngle = _swig_property(_Math.FAP_phaseAngle_get, _Math.FAP_phaseAngle_set)
+    __swig_destroy__ = _Math.delete_FAP
+    __del__ = lambda self : None;
+FAP_swigregister = _Math.FAP_swigregister
+FAP_swigregister(FAP)
+
 class PolesAndZeros(_object):
     """Proxy of C++ Seiscomp::Math::SeismometerResponse::PolesAndZeros class"""
     __swig_setmethods__ = {}
@@ -2924,6 +2957,36 @@ class TransferFunctionPAZ(TransferFunction):
     __del__ = lambda self : None;
 TransferFunctionPAZ_swigregister = _Math.TransferFunctionPAZ_swigregister
 TransferFunctionPAZ_swigregister(TransferFunctionPAZ)
+
+class ResponseList(TransferFunction):
+    """Proxy of C++ Seiscomp::Math::Restitution::FFT::ResponseList class"""
+    __swig_setmethods__ = {}
+    for _s in [TransferFunction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseList, name, value)
+    __swig_getmethods__ = {}
+    for _s in [TransferFunction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseList, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(Seiscomp::Math::Restitution::FFT::ResponseList self, Seiscomp::Math::SeismometerResponse::FAPs const & faps, int addZeros=0) -> ResponseList
+        __init__(Seiscomp::Math::Restitution::FFT::ResponseList self, Seiscomp::Math::SeismometerResponse::FAPs const & faps) -> ResponseList
+        __init__(Seiscomp::Math::Restitution::FFT::ResponseList self, int n_tuples, FAP faps, int addZeros=0) -> ResponseList
+        __init__(Seiscomp::Math::Restitution::FFT::ResponseList self, int n_tuples, FAP faps) -> ResponseList
+        """
+        this = _Math.new_ResponseList(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_setmethods__["faps"] = _Math.ResponseList_faps_set
+    __swig_getmethods__["faps"] = _Math.ResponseList_faps_get
+    if _newclass:faps = _swig_property(_Math.ResponseList_faps_get, _Math.ResponseList_faps_set)
+    __swig_setmethods__["nZeros"] = _Math.ResponseList_nZeros_set
+    __swig_getmethods__["nZeros"] = _Math.ResponseList_nZeros_get
+    if _newclass:nZeros = _swig_property(_Math.ResponseList_nZeros_get, _Math.ResponseList_nZeros_set)
+    __swig_destroy__ = _Math.delete_ResponseList
+    __del__ = lambda self : None;
+ResponseList_swigregister = _Math.ResponseList_swigregister
+ResponseList_swigregister(ResponseList)
 
 class vectorc(_object):
     """Proxy of C++ std::vector<(Seiscomp::Math::Complex)> class"""

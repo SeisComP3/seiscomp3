@@ -58,6 +58,11 @@ InventoryTask::InventoryTask(Seiscomp::DataModel::Inventory *inv) : _inv(inv) {
 		ResponsePolynomial *r = _inv->responsePolynomial(i);
 		_PolyNames[r->name()] = r;
 	}
+
+	for ( size_t i = 0; i < _inv->responseFAPCount(); ++i ) {
+		ResponseFAP *r = _inv->responseFAP(i);
+		_FAPNames[r->name()] = r;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -141,6 +146,17 @@ ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *InventoryTask::respFAPByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _FAPNames.find(name);
+	if ( it == _FAPNames.end() ) return NULL;
+	return (ResponseFAP*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponsePolynomial *InventoryTask::respPolynomialByName(const std::string &name) const {
 	ObjectLookup::const_iterator it = _PolyNames.find(name);
 	if ( it == _PolyNames.end() ) return NULL;
@@ -189,6 +205,12 @@ void InventoryTask::prepareSession(const Seiscomp::DataModel::Inventory *inv) {
 		ResponsePolynomial *r = inv->responsePolynomial(i);
 		_session.polyLookup[r->publicID()] = r;
 	}
+
+	_session.fapLookup.clear();
+	for ( size_t i = 0; i < inv->responseFAPCount(); ++i ) {
+		ResponseFAP *r = inv->responseFAP(i);
+		_session.fapLookup[r->publicID()] = r;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -204,6 +226,7 @@ void InventoryTask::cleanUp() {
 	_FIRNames.clear();
 	_PAZNames.clear();
 	_PolyNames.clear();
+	_FAPNames.clear();
 
 	_session.dataloggerLookup.clear();
 	_session.sensorLookup.clear();
@@ -211,6 +234,7 @@ void InventoryTask::cleanUp() {
 	_session.firLookup.clear();
 	_session.pazLookup.clear();
 	_session.polyLookup.clear();
+	_session.fapLookup.clear();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -277,6 +301,17 @@ const ResponsePolynomial *InventoryTask::findPoly(const std::string &publicID) c
 	ObjectLookup::const_iterator it = _session.polyLookup.find(publicID);
 	if ( it == _session.polyLookup.end() ) return NULL;
 	return (const ResponsePolynomial*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const ResponseFAP *InventoryTask::findFAP(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.fapLookup.find(publicID);
+	if ( it == _session.fapLookup.end() ) return NULL;
+	return (const ResponseFAP*)it->second;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -372,6 +407,38 @@ ResponsePolynomial *InventoryTask::process(const ResponsePolynomial *poly) {
 
 	return sc_poly.get();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *InventoryTask::process(const ResponseFAP *fap) {
+	ResponseFAPPtr sc_fap = respFAPByName(fap->name());
+	//ResponseFAPPtr sc_fap = _inv->responseFAP(fap->name());
+
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	if ( !sc_fap ) {
+		sc_fap = create<ResponseFAP>(fap->publicID());
+		newInstance = true;
+	}
+	else
+		needUpdate = !sc_fap->equal(*fap);
+
+	*sc_fap = *fap;
+
+	if ( newInstance ) {
+		_FAPNames[sc_fap->name()] = sc_fap.get();
+		_inv->add(sc_fap.get());
+	}
+	else if ( needUpdate )
+		sc_fap->update();
+
+	return sc_fap.get();
+}
+
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

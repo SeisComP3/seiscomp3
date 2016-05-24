@@ -54,12 +54,14 @@ class SC_SYSTEM_CORE_API SC3GF1DArchive : public GFArchive {
 
 		//! Adds a request for a greensfunction.
 		bool addRequest(const std::string &id,
-		                const std::string &model, double distance,
-		                double depth);
+		                const std::string &model,
+		                const GFSource &source,
+		                const GFReceiver &receiver);
 
 		bool addRequest(const std::string &id,
-		                const std::string &model, double distance,
-		                double depth,
+		                const std::string &model,
+		                const GFSource &source,
+		                const GFReceiver &receiver,
 		                const Core::TimeSpan &span);
 
 		Core::GreensFunction* get();

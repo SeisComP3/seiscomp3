@@ -77,9 +77,11 @@ class Inventory
 		void ProcessDataloggerPAZ(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr strm);
 		void ProcessPAZSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
 		void ProcessPolySensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
+		void ProcessFAPSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
 		void ProcessSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr);
 		void ProcessSensorPAZ(ChannelIdentifier& ci, Seiscomp::DataModel::SensorPtr sm);
 		void ProcessSensorPolynomial(ChannelIdentifier& ci, Seiscomp::DataModel::SensorPtr sm);
+		void ProcessSensorFAP(ChannelIdentifier& ci, Seiscomp::DataModel::SensorPtr sm);
 		Seiscomp::DataModel::StationPtr InsertStation(StationIdentifier&, Seiscomp::DataModel::NetworkPtr);
 		Seiscomp::DataModel::SensorLocationPtr InsertSensorLocation(ChannelIdentifier& ci, Seiscomp::DataModel::StationPtr station, const Seiscomp::Core::Time& loc_start, const OPT(Seiscomp::Core::Time)& loc_end);
 		Seiscomp::DataModel::StreamPtr InsertStream(ChannelIdentifier&, Seiscomp::DataModel::SensorLocationPtr, bool restricted, bool shared);
@@ -92,6 +94,7 @@ class Inventory
 		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const char* unit, const std::string& name);
 		void InsertSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr);
 		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, std::string);
+		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, std::string);
 		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, std::string);
 		void UpdateStation(StationIdentifier&, Seiscomp::DataModel::StationPtr);
 		void UpdateSensorLocation(ChannelIdentifier& ci, Seiscomp::DataModel::SensorLocationPtr loc, const Seiscomp::Core::Time& loc_start, const OPT(Seiscomp::Core::Time)& loc_end);
@@ -105,6 +108,7 @@ class Inventory
 		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const char* unit);
 		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr);
+		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr);
 		void UpdateResponsePolynomial(ChannelIdentifier&, Seiscomp::DataModel::ResponsePolynomialPtr);
 		std::string GetNetworkDescription(int);
 		std::string GetInstrumentName(int);
@@ -112,10 +116,12 @@ class Inventory
 		std::string GetInstrumentType(int);
 		std::string GetStationInstrument(int);
 		int GetPAZSequence(ChannelIdentifier&, std::string, std::string);
+		int GetFAPSequence(ChannelIdentifier&, std::string, std::string);
 		int GetPolySequence(ChannelIdentifier&, std::string, std::string);
 		int GetDataloggerSensitivity(ChannelIdentifier&) const;
 		bool IsDummy(ResponseCoefficients &rc) const;
 		bool IsPAZStream(ChannelIdentifier& ci);
 		bool IsPolyStream(ChannelIdentifier& ci);
+		bool IsFAPStream(ChannelIdentifier& ci);
 };
 #endif /* MYINVENTORY_H */

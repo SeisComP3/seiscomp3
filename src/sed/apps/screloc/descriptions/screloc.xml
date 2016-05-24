@@ -9,6 +9,11 @@
 					Defines the locator to be used such as NonLinLoc.
 					</description>
 				</parameter>
+				<parameter name="profile" type="string">
+					<description>
+					The locator profile to use.
+					</description>
+				</parameter>
 				<parameter name="ignoreRejectedOrigins" type="boolean" default="false">
 					<description>
 					Ignores origins with status REJECTED.

@@ -5,7 +5,7 @@
  * Written by Chad Trabant
  *   IRIS Data Management Center
  *
- * modified: 2011.129
+ * modified: 2015.108
  ***************************************************************************/
 
 #include <stdio.h>
@@ -75,7 +75,7 @@ msr_parse ( char *record, int recbuflen, MSRecord **ppmsr, int reclen,
       /* Found record but could not determine length */
       if ( detlen == 0 )
 	{
-	  return 256;
+	  return MINRECLEN;
 	}
       
       if ( verbose > 2 )
@@ -117,6 +117,97 @@ msr_parse ( char *record, int recbuflen, MSRecord **ppmsr, int reclen,
 }  /* End of msr_parse() */
 
 
+/**********************************************************************
+ * msr_parse_selection:
+ *
+ * This routine wraps msr_parse() to parse and return the first record
+ * from a memory buffer that matches optional Selections.  If the
+ * selections pointer is NULL the effect is to search the buffer for
+ * the first parsable record.
+ *
+ * The offset value specifies the starting offset in the buffer and,
+ * on success, the offset in the buffer to record parsed.
+ *
+ * The caller should manage the value of the offset in two ways:
+ * 
+ * 1) on subsequent calls after a record has been parsed the caller
+ * should increment the offset by the record length returned or
+ * properly manipulate the record buffer pointer, buffer length and
+ * offset to the same effect.
+ *
+ * 2) when the end of the buffer is reached MS_GENERROR (-1) is
+ * returned, the caller should check the offset value against the
+ * record buffer length to determine when the entire buffer has been
+ * searched.
+ * 
+ * Return values: same as msr_parse() except that MS_GENERROR is
+ * returned when end-of-buffer is reached.
+ *********************************************************************/
+int
+msr_parse_selection ( char *recbuf, int recbuflen, int64_t *offset,
+		      MSRecord **ppmsr, int reclen,
+		      Selections *selections, flag dataflag, flag verbose )
+{
+  int retval = MS_GENERROR;
+  int unpackretval;
+  flag dataswapflag = 0;
+  flag bigendianhost = ms_bigendianhost();
+  
+  if ( ! ppmsr )
+    return MS_GENERROR;
+  
+  if ( ! recbuf )
+    return MS_GENERROR;
+  
+  if ( ! offset )
+    return MS_GENERROR;
+  
+  while ( *offset < recbuflen )
+    {
+      retval = msr_parse (recbuf+*offset, (int)(recbuflen-*offset), ppmsr, reclen, 0, verbose);
+      
+      if ( retval )
+        {
+          if ( verbose )
+            ms_log (2, "Error parsing record at offset %"PRId64"\n", *offset);
+	  
+          *offset += MINRECLEN;
+        }
+      else
+        {
+	  if ( selections && ! msr_matchselect (selections, *ppmsr, NULL) )
+	    {
+	      *offset += (*ppmsr)->reclen;
+	      retval = MS_GENERROR;
+	    }
+	  else
+	    {
+	      if ( dataflag )
+		{
+		  /* If BE host and LE data need swapping */
+		  if ( bigendianhost && (*ppmsr)->byteorder == 0 )
+		    dataswapflag = 1;
+		  /* If LE host and BE data (or bad byte order value) need swapping */
+		  else if ( !bigendianhost && (*ppmsr)->byteorder > 0 )
+		    dataswapflag = 1;
+		  
+		  unpackretval = msr_unpack_data (*ppmsr, dataswapflag, verbose);
+		  
+		  if ( unpackretval < 0 )
+		    return unpackretval;
+		  else
+		    (*ppmsr)->numsamples = unpackretval;
+		}
+	      
+	      break;
+	    }
+        }
+    }
+  
+  return retval;
+}  /* End of msr_parse_selection() */
+
+
 /********************************************************************
  * ms_detect:
  *
@@ -127,9 +218,9 @@ msr_parse ( char *record, int recbuflen, MSRecord **ppmsr, int reclen,
  *
  * 2) search the record up to recbuflen bytes for a 1000 blockette.
  *
- * 3) If no blockette 1000 is found search at 256-byte offsets for the
- * fixed section of the next header or blank/noise record, thereby
- * implying the record length.
+ * 3) If no blockette 1000 is found search at MINRECLEN-byte offsets
+ * for the fixed section of the next header or blank/noise record,
+ * thereby implying the record length.
  *
  * Returns:
  * -1 : data record not detected or error
@@ -161,9 +252,8 @@ ms_detect ( const char *record, int recbuflen )
   
   fsdh = (struct fsdh_s *) record;
   
-  /* Check to see if byte swapping is needed by checking for sane year */
-  if ( (fsdh->start_time.year < 1900) ||
-       (fsdh->start_time.year > 2050) )
+  /* Check to see if byte swapping is needed by checking for sane year and day */
+  if ( ! MS_ISVALIDYEARDAY(fsdh->start_time.year, fsdh->start_time.day) )
     swapflag = 1;
   
   blkt_offset = fsdh->blockette_offset;
@@ -186,7 +276,7 @@ ms_detect ( const char *record, int recbuflen )
       
       /* Found a 1000 blockette, not truncated */
       if ( blkt_type == 1000  &&
-	   (blkt_offset + 4 + sizeof(struct blkt_1000_s)) <= recbuflen )
+	   (int)(blkt_offset + 4 + sizeof(struct blkt_1000_s)) <= recbuflen )
 	{
           blkt_1000 = (struct blkt_1000_s *) (record + blkt_offset + 4);
 	  
@@ -194,14 +284,14 @@ ms_detect ( const char *record, int recbuflen )
 	  
           /* Calculate record size in bytes as 2^(blkt_1000->reclen) */
 	  reclen = (unsigned int) 1 << blkt_1000->reclen;
-	  
+          
 	  break;
         }
       
-      /* Saftey check for invalid offset */
-      if ( next_blkt != 0 && next_blkt < blkt_offset )
+      /* Safety check for invalid offset */
+      if ( next_blkt != 0 && ( next_blkt < 4 || (next_blkt - 4) <= blkt_offset ) )
 	{
-	  ms_log (2, "Invalid blockette offset (%d) less than current offset (%d)\n",
+	  ms_log (2, "Invalid blockette offset (%d) less than or equal to current offset (%d)\n",
 		  next_blkt, blkt_offset);
 	  return -1;
 	}
@@ -213,9 +303,9 @@ ms_detect ( const char *record, int recbuflen )
    * and search for the next record */
   if ( reclen == -1 )
     {
-      nextfsdh = record + 256;
+      nextfsdh = record + MINRECLEN;
       
-      /* Check for record header or blank/noise record at 256 byte offsets */
+      /* Check for record header or blank/noise record at MINRECLEN byte offsets */
       while ( ((nextfsdh - record) + 48) < recbuflen )
 	{
 	  if ( MS_ISVALIDHEADER(nextfsdh) || MS_ISVALIDBLANK(nextfsdh) )
@@ -225,7 +315,7 @@ ms_detect ( const char *record, int recbuflen )
 	      break;
 	    }
 	  
-	  nextfsdh += 256;
+	  nextfsdh += MINRECLEN;
 	}
     }
   
@@ -291,10 +381,8 @@ ms_parse_raw ( char *record, int maxreclen, flag details, flag swapflag )
   
   fsdh = (struct fsdh_s *) record;
   
-  /* Check to see if byte swapping is needed by testing the year */
-  if ( swapflag == -1 &&
-       ((fsdh->start_time.year < 1900) ||
-	(fsdh->start_time.year > 2050)) )
+  /* Check to see if byte swapping is needed by testing the year and day */
+  if ( swapflag == -1 && ! MS_ISVALIDYEARDAY(fsdh->start_time.year, fsdh->start_time.day) )
     swapflag = 1;
   else
     swapflag = 0;
@@ -323,9 +411,9 @@ ms_parse_raw ( char *record, int maxreclen, flag details, flag swapflag )
   X = record;  /* Pointer of convenience */
   
   /* Check record sequence number, 6 ASCII digits */
-  if ( ! isdigit((unsigned char) *(X)) || ! isdigit ((unsigned char) *(X+1)) ||
-       ! isdigit((unsigned char) *(X+2)) || ! isdigit ((unsigned char) *(X+3)) ||
-       ! isdigit((unsigned char) *(X+4)) || ! isdigit ((unsigned char) *(X+5)) )
+  if ( ! isdigit((int) *(X))   || ! isdigit ((int) *(X+1)) ||
+       ! isdigit((int) *(X+2)) || ! isdigit ((int) *(X+3)) ||
+       ! isdigit((int) *(X+4)) || ! isdigit ((int) *(X+5)) )
     {
       ms_log (2, "%s: Invalid sequence number: '%c%c%c%c%c%c'\n", srcname, X, X+1, X+2, X+3, X+4, X+5);
       retval++;
@@ -382,9 +470,9 @@ ms_parse_raw ( char *record, int maxreclen, flag details, flag swapflag )
     }
   
   /* Check start time fields */
-  if ( fsdh->start_time.year < 1920 || fsdh->start_time.year > 2050 )
+  if ( fsdh->start_time.year < 1900 || fsdh->start_time.year > 2100 )
     {
-      ms_log (2, "%s: Unlikely start year (1920-2050): '%d'\n", srcname, fsdh->start_time.year);
+      ms_log (2, "%s: Unlikely start year (1900-2100): '%d'\n", srcname, fsdh->start_time.year);
       retval++;
     }
   if ( fsdh->start_time.day < 1 || fsdh->start_time.day > 366 )

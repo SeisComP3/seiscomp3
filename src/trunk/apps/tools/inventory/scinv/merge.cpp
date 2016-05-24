@@ -213,6 +213,35 @@ bool equal(const ResponsePolynomial *p1, const ResponsePolynomial *p2) {
 }
 
 
+bool equal(const ResponseFAP *p1, const ResponseFAP *p2) {
+	COMPARE_AND_RETURN(double, p1, p2, gain())
+	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
+
+	COMPARE_AND_RETURN(int, p1, p2, numberOfTuples())
+
+	const RealArray *coeff1 = NULL;
+	const RealArray *coeff2 = NULL;
+
+	try { coeff1 = &p1->tuples(); } catch ( ... ) {}
+	try { coeff2 = &p2->tuples(); } catch ( ... ) {}
+
+	// One set and not the other?
+	if ( (!coeff1 && coeff2) || (coeff1 && !coeff2) ) return false;
+
+	// Both unset?
+	if ( !coeff1 && !coeff2 ) return true;
+
+	// Both set, compare content
+	const vector<double> &c1 = coeff1->content();
+	const vector<double> &c2 = coeff2->content();
+	if ( c1.size() != c2.size() ) return false;
+	for ( size_t i = 0; i < c1.size(); ++i )
+		if ( c1[i] != c2[i] ) return false;
+
+	return true;
+}
+
+
 bool equal(const Datalogger *d1, const Datalogger *d2) {
 	if ( d1->description() != d2->description() ) return false;
 	if ( d1->digitizerModel() != d2->digitizerModel() ) return false;
@@ -298,6 +327,8 @@ bool Merge::push(Inventory *inv) {
 	if ( _interrupted ) return false;
 	MOVE_GEN_NAME(_tmpInv, inv, ResponsePAZ, responsePAZ)
 	if ( _interrupted ) return false;
+	MOVE_GEN_NAME(_tmpInv, inv, ResponseFAP, responseFAP)
+	if ( _interrupted ) return false;
 	MOVE_GEN_NAME(_tmpInv, inv, ResponseFIR, responseFIR)
 	if ( _interrupted ) return false;
 	MOVE_GEN_NAME(_tmpInv, inv, ResponsePolynomial, responsePolynomial)
@@ -378,6 +409,13 @@ bool Merge::merge(bool stripUnreferenced) {
 	for ( size_t i = 0; i < inv->responsePolynomialCount(); ++i ) {
 		if ( _interrupted ) return false;
 		ResponsePolynomial *r = inv->responsePolynomial(i);
+		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
+			process(r);
+	}
+
+	for ( size_t i = 0; i < inv->responseFAPCount(); ++i ) {
+		if ( _interrupted ) return false;
+		ResponseFAP *r = inv->responseFAP(i);
 		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
 			process(r);
 	}
@@ -792,17 +830,24 @@ bool Merge::process(Datalogger *dl, const Decimation *deci) {
 			if ( paz == NULL ) {
 				const ResponsePolynomial *poly = findPoly(filters[i]);
 				if ( poly == NULL ) {
-					log(LogHandler::Unresolved,
-					    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
-					    "analogue filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
-					/*
-					SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
-					                 dl->publicID().c_str(),
-					                 sc_deci->sampleRateNumerator(),
-					                 sc_deci->sampleRateDenominator(),
-					                 filters[i].c_str());
-					*/
-					deciAnalogueChain += filters[i];
+					const ResponseFAP *fap = findFAP(filters[i]);
+					if ( fap == NULL ) {
+						log(LogHandler::Unresolved,
+						    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
+						    "analogue filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
+						/*
+						SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
+						                 dl->publicID().c_str(),
+						                 sc_deci->sampleRateNumerator(),
+						                 sc_deci->sampleRateDenominator(),
+						                 filters[i].c_str());
+						*/
+						deciAnalogueChain += filters[i];
+					}
+					else {
+						ResponseFAPPtr sc_fap = process(fap);
+						deciAnalogueChain += sc_fap->publicID();
+					}
 				}
 				else {
 					ResponsePolynomialPtr sc_poly = process(poly);
@@ -931,14 +976,21 @@ bool Merge::process(Stream *cha, const Sensor *sensor) {
 		if ( paz == NULL ) {
 			const ResponsePolynomial *poly = findPoly(sensor->response());
 			if ( poly == NULL ) {
-				log(LogHandler::Unresolved,
-				    (string(sensor->className()) + " " + id(sensor) + "\n  "
-				     "referenced response is not available").c_str(), NULL, NULL);
-				/*
-				SEISCOMP_WARNING("Sensor %s: response not found: %s",
-				                 sensor->publicID().c_str(),
-				                 sensor->response().c_str());
-				*/
+				const ResponseFAP *fap = findFAP(sensor->response());
+				if ( fap == NULL ) {
+					log(LogHandler::Unresolved,
+					    (string(sensor->className()) + " " + id(sensor) + "\n  "
+					     "referenced response is not available").c_str(), NULL, NULL);
+					/*
+					SEISCOMP_WARNING("Sensor %s: response not found: %s",
+					                 sensor->publicID().c_str(),
+					                 sensor->response().c_str());
+					*/
+				}
+				else {
+					ResponseFAPPtr sc_fap = process(fap);
+					sc_sensor->setResponse(sc_fap->publicID());
+				}
 			}
 			else {
 				ResponsePolynomialPtr sc_poly = process(poly);
@@ -1067,6 +1119,17 @@ ResponsePolynomial *Merge::process(const ResponsePolynomial *poly) {
 	if ( !_stripUnreferenced )
 		_session.touchedPublics.insert(poly);
 	return InventoryTask::process(poly);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *Merge::process(const ResponseFAP *fap) {
+	if ( !_stripUnreferenced )
+		_session.touchedPublics.insert(fap);
+	return InventoryTask::process(fap);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

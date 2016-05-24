@@ -159,6 +159,48 @@ exceeded, 'Azimuthal Gap Check' is set to 0.2, otherwise it is set to 1.0.
 A likelihood of 0.024, therefore, indicates, that all three quality checks failed. 
 If all quality checks succeeded the likelihood is set to 0.99.
  
+scautoloc and scevent configuration
+===================================
+
+Because :ref:`scautoloc` was not designed with EEW in mind, there are a few 
+settings necessary to ensure that location estimates are sent to scvsmag as 
+quickly as possible:
+
+.. code-block:: sh
+
+   # If this string is non-empty, an amplitude obtained from an amplitude object
+   # is used by ... . If this string is "mb", a period obtained from the amplitude
+   # object is also used; if it has some other value, then 1 is used. If
+   # this string is empty, then the amplitude is set to 0.5 * thresholdXXL, and 1
+   # is used for the period.
+   autoloc.amplTypeAbs = snr
+   
+   # This is the parameter "a" in the equation Δt = aN + b for the time interval
+   # between origin updates.
+   autoloc.publicationIntervalTimeSlope = 0
+   
+   # This is the parameter "b" in the above mentioned equation for the update
+   # interval Δt.
+   autoloc.publicationIntervalTimeIntercept = 0
+   
+   # Minimum number of phases.
+   autoloc.minPhaseCount = 6
+
+For :ref:`scevent` to create an event from an origin with 6 phases requires the 
+following setting:
+
+.. code-block:: sh
+
+   # Minimum number of Picks for an Origin that is automatic and cannot be
+   # associated with an Event to be allowed to form an new Event.
+   eventAssociation.minimumDefiningPhases = 6
+
+:ref:`scautoloc` also has a so-called XXL feature that allows you to create a 
+location estimate with 4 P-wave detections (otherwise 6 is the minimum). 
+Although this feature is reserved for large magnitude events you can, in 
+principle, adapt the XXL thresholds to also locate moderate seismicity with the 
+first four picks. This may, however, lead to a larger number of false alerts 
+and it is, therefore, recommended to used this feature only as intended.
 
 References
 ==========

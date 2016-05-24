@@ -41,8 +41,25 @@ const qreal ooLat = 1.0 / 90.0;
 const qreal ooLon = 1.0 / 180.0;
 
 
+bool checkPrecision(double val, int scale) {
+	double sval = val*scale;
+	return fabs(sval-round(sval)) < 1E-8;
+}
+
+
 QString lat2String(qreal lat) {
-	return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
+	if ( checkPrecision(lat, 1) )
+		return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 10) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 1).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 100) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 2).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 1000) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 3).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 10000) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 4).arg(lat < 0?" S":lat > 0?" N":"");
+	else
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 5).arg(lat < 0?" S":lat > 0?" N":"");
 }
 
 
@@ -51,7 +68,18 @@ QString lon2String(qreal lon) {
 	if ( lon < 0 ) lon += 360.0;
 	if ( lon > 180.0 ) lon -= 360.0;
 
-	return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
+	if ( checkPrecision(lon, 1) )
+		return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 10) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 1).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 100) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 2).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 1000) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 3).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 10000) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 4).arg(lon < 0?" W":lon > 0?" E":"");
+	else
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 5).arg(lon < 0?" W":lon > 0?" E":"");
 }
 
 
@@ -708,9 +736,6 @@ bool RectangularProjection::lineTo(QPainter &p, const QPointF &to) {
 bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 	QPoint pp;
 
-	// Round to nearest integer since the text label is without decimals
-	lon = round(lon);
-
 	if ( project(pp, QPointF(lon, 90)) ) {
 		if ( pp.x() >= 0 && pp.x() < _width ) {
 			int top = std::max(0, pp.y());
@@ -729,9 +754,6 @@ bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 
 bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 	QPoint pp;
-
-	// Round to nearest integer since the text label is without decimals
-	lat = round(lat);
 
 	if ( project(pp, QPointF(0, lat)) ) {
 		if ( pp.y() >= 0 && pp.y() < _height ) {

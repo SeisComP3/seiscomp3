@@ -416,6 +416,47 @@ class _ResponsePolynomial(object):
 
 
 # ---------------------------------------------------------------------------------------
+class _ResponseFAP(object):
+	__slots__ = (
+		"my",
+		"object",
+		"publicID",
+		"name",
+		"gain",
+		"gainFrequency",
+		"numberOfTuples",
+		"tuples",
+		"remark",
+		"last_modified",
+	)
+
+	def __init__(self, my, name, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
+		self.name = ""
+		self.gain = None
+		self.gainFrequency = None
+		self.numberOfTuples = None
+		self.tuples = ""
+		self.remark = ""
+		self.my = my
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.name = name
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
 class _DataloggerCalibration(object):
 	__slots__ = (
 		"myDatalogger",
@@ -1003,6 +1044,7 @@ class Inventory(object):
 		"responsePAZ",
 		"responseFIR",
 		"responsePolynomial",
+		"responseFAP",
 		"network",
 	)
 
@@ -1019,6 +1061,7 @@ class Inventory(object):
 		self.responsePAZ = {}
 		self.responseFIR = {}
 		self.responsePolynomial = {}
+		self.responseFAP = {}
 		self.network = {}
 
 	def __setattr__(self, name, value):
@@ -1123,6 +1166,20 @@ class Inventory(object):
 		except KeyError:
 			raise DBError, "ResponsePolynomial [%s] not found" % (name)
 
+	def insert_responseFAP(self, name, **args):
+		if name in self.responseFAP:
+			raise DBError, "ResponseFAP %s already defined" % name
+		obj = _ResponseFAP(self, name, args)
+		self.responseFAP[name] = obj
+		self.object[obj.publicID] = obj
+		return obj
+
+	def remove_responseFAP(self, name):
+		try:
+			del self.responseFAP[name]
+		except KeyError:
+			raise DBError, "ResponseFAP [%s] not found" % (name)
+
 	def insert_network(self, code, start, **args):
 		if code not in self.network:
 			self.network[code] = {}
@@ -1149,6 +1206,7 @@ class Inventory(object):
 		self.responsePAZ = {}
 		self.responseFIR = {}
 		self.responsePolynomial = {}
+		self.responseFAP = {}
 
 	def clear_stations(self):
 		self.network = {}

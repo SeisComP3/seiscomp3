@@ -5,7 +5,7 @@
  *
  * Written by Chad Trabant, IRIS Data Management Center
  *
- * modified: 2011.304
+ * modified: 2015.108
  ***************************************************************************/
 
 #include <stdio.h>
@@ -635,14 +635,14 @@ mstl_msr2seg (MSRecord *msr, hptime_t endtime)
     {
       samplesize = ms_samplesize (msr->sampletype);
       
-      if ( ! (seg->datasamples = malloc (samplesize * msr->numsamples)) )
+      if ( ! (seg->datasamples = malloc ((size_t) (samplesize * msr->numsamples))) )
 	{
 	  ms_log (2, "mstl_msr2seg(): Error allocating memory\n");
 	  return 0;
 	}
       
       /* Copy data samples from MSRecord to MSTraceSeg */
-      memcpy (seg->datasamples, msr->datasamples, samplesize * msr->numsamples);
+      memcpy (seg->datasamples, msr->datasamples, (size_t) (samplesize * msr->numsamples));
     }
   
   return seg;
@@ -686,7 +686,7 @@ mstl_addmsrtoseg (MSTraceSeg *seg, MSRecord *msr, hptime_t endtime, flag whence)
 	  return 0;
 	}
       
-      if ( ! (newdatasamples = realloc (seg->datasamples, (seg->numsamples + msr->numsamples) * samplesize)) )
+      if ( ! (newdatasamples = realloc (seg->datasamples, (size_t) ((seg->numsamples + msr->numsamples) * samplesize))) )
 	{
 	  ms_log (2, "mstl_addmsrtoseg(): Error allocating memory\n");
 	  return 0;
@@ -705,7 +705,7 @@ mstl_addmsrtoseg (MSTraceSeg *seg, MSRecord *msr, hptime_t endtime, flag whence)
 	{
 	  memcpy ((char *)seg->datasamples + (seg->numsamples * samplesize),
                   msr->datasamples,
-                  msr->numsamples * samplesize);
+                  (size_t) (msr->numsamples * samplesize));
 	  
 	  seg->numsamples += msr->numsamples;
 	}
@@ -720,11 +720,11 @@ mstl_addmsrtoseg (MSTraceSeg *seg, MSRecord *msr, hptime_t endtime, flag whence)
 	{
 	  memmove ((char *)seg->datasamples + (msr->numsamples * samplesize),
 		   seg->datasamples,
-		   seg->numsamples * samplesize);
+		   (size_t) (seg->numsamples * samplesize));
 	  
 	  memcpy (seg->datasamples,
                   msr->datasamples,
-                  msr->numsamples * samplesize);
+                  (size_t) (msr->numsamples * samplesize));
 	  
 	  seg->numsamples += msr->numsamples;
 	}
@@ -771,7 +771,7 @@ mstl_addsegtoseg (MSTraceSeg *seg1, MSTraceSeg *seg2)
 	  return 0;
 	}
       
-      if ( ! (newdatasamples = realloc (seg1->datasamples, (seg1->numsamples + seg2->numsamples) * samplesize)) )
+      if ( ! (newdatasamples = realloc (seg1->datasamples, (size_t) ((seg1->numsamples + seg2->numsamples) * samplesize))) )
 	{
 	  ms_log (2, "mstl_addsegtoseg(): Error allocating memory\n");
 	  return 0;
@@ -788,13 +788,156 @@ mstl_addsegtoseg (MSTraceSeg *seg1, MSTraceSeg *seg2)
     {
       memcpy ((char *)seg1->datasamples + (seg1->numsamples * samplesize),
 	      seg2->datasamples,
-	      seg2->numsamples * samplesize);
+	      (size_t) (seg2->numsamples * samplesize));
       
       seg1->numsamples += seg2->numsamples;
     }
   
   return seg1;
 } /* End of mstl_addsegtoseg() */
+
+
+/***************************************************************************
+ * mstl_convertsamples:
+ *
+ * Convert the data samples associated with an MSTraceSeg to another
+ * data type.  ASCII data samples cannot be converted, if supplied or
+ * requested an error will be returned.
+ *
+ * When converting float & double sample types to integer type a
+ * simple rounding is applied by adding 0.5 to the sample value before
+ * converting (truncating) to integer.
+ *
+ * If the truncate flag is true data samples will be truncated to
+ * integers even if loss of sample precision is detected.  If the
+ * truncate flag is false (0) and loss of precision is detected an
+ * error is returned.
+ *
+ * Returns 0 on success, and -1 on failure.
+ ***************************************************************************/
+int
+mstl_convertsamples ( MSTraceSeg *seg, char type, flag truncate )
+{
+  int32_t *idata;
+  float *fdata;
+  double *ddata;
+  int64_t idx;
+  
+  if ( ! seg )
+    return -1;
+  
+  /* No conversion necessary, report success */
+  if ( seg->sampletype == type )
+    return 0;
+  
+  if ( seg->sampletype == 'a' || type == 'a' )
+    {
+      ms_log (2, "mstl_convertsamples: cannot convert ASCII samples to/from numeric type\n");
+      return -1;
+    }
+  
+  idata = (int32_t *) seg->datasamples;
+  fdata = (float *) seg->datasamples;
+  ddata = (double *) seg->datasamples;
+
+  /* Convert to 32-bit integers */
+  if ( type == 'i' )
+    {
+      if ( seg->sampletype == 'f' )      /* Convert floats to integers with simple rounding */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    {
+	      /* Check for loss of sub-integer */
+	      if ( ! truncate && (fdata[idx] - (int32_t)fdata[idx]) > 0.000001 )
+		{
+		  ms_log (1, "mstl_convertsamples: Warning, loss of precision when converting floats to integers, loss: %g\n",
+			  (fdata[idx] - (int32_t)fdata[idx]));
+		  return -1;
+		}
+	      
+	      idata[idx] = (int32_t) (fdata[idx] + 0.5);
+	    }
+	}
+      else if ( seg->sampletype == 'd' ) /* Convert doubles to integers with simple rounding */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    {
+	      /* Check for loss of sub-integer */
+	      if ( ! truncate && (ddata[idx] - (int32_t)ddata[idx]) > 0.000001 )
+		{
+		  ms_log (1, "mstl_convertsamples: Warning, loss of precision when converting doubles to integers, loss: %g\n",
+			  (ddata[idx] - (int32_t)ddata[idx]));
+		  return -1;
+		}
+	      
+	      idata[idx] = (int32_t) (ddata[idx] + 0.5);
+	    }
+	  
+	  /* Reallocate buffer for reduced size needed */
+	  if ( ! (seg->datasamples = realloc (seg->datasamples, (size_t) (seg->numsamples * sizeof(int32_t)))) )
+	    {
+	      ms_log (2, "mstl_convertsamples: cannot re-allocate buffer for sample conversion\n");
+	      return -1;
+	    }
+	}
+      
+      seg->sampletype = 'i';
+    }  /* Done converting to 32-bit integers */
+  
+  /* Convert to 32-bit floats */
+  else if ( type == 'f' )
+    {
+      if ( seg->sampletype == 'i' )      /* Convert integers to floats */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    fdata[idx] = (float) idata[idx];
+	}
+      else if ( seg->sampletype == 'd' ) /* Convert doubles to floats */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    fdata[idx] = (float) ddata[idx];
+          
+	  /* Reallocate buffer for reduced size needed */
+	  if ( ! (seg->datasamples = realloc (seg->datasamples, (size_t) (seg->numsamples * sizeof(float)))) )
+	    {
+	      ms_log (2, "mstl_convertsamples: cannot re-allocate buffer after sample conversion\n");
+	      return -1;
+	    }
+	}
+          
+      seg->sampletype = 'f';
+    }  /* Done converting to 32-bit floats */
+  
+  /* Convert to 64-bit doubles */
+  else if ( type == 'd' )
+    {
+      if ( ! (ddata = (double *) malloc ((size_t) (seg->numsamples * sizeof(double)))) )
+	{
+	  ms_log (2, "mstl_convertsamples: cannot allocate buffer for sample conversion to doubles\n");
+	  return -1;
+	}
+      
+      if ( seg->sampletype == 'i' )      /* Convert integers to doubles */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    ddata[idx] = (double) idata[idx];
+	  
+	  free (idata);
+	}
+      else if ( seg->sampletype == 'f' ) /* Convert floats to doubles */
+	{
+	  for (idx = 0; idx < seg->numsamples; idx++)
+	    ddata[idx] = (double) fdata[idx];
+	  
+	  free (fdata);
+	}
+      
+      seg->datasamples = ddata;
+      seg->sampletype = 'd';
+    }  /* Done converting to 64-bit doubles */
+  
+  return 0;
+} /* End of mstl_convertsamples() */
 
 
 /***************************************************************************
@@ -911,12 +1054,12 @@ mstl_printtracelist ( MSTraceList *mstl, flag timeformat,
 		ms_log (0, "%-17s %-24s %-24s %-4s\n",
 			id->srcname, stime, etime, gapstr);
 	      else
-		ms_log (0, "%-17s %-24s %-24s %-s %-3.3g %-lld\n",
-			id->srcname, stime, etime, gapstr, seg->samprate, (long long int)seg->samplecnt);
+		ms_log (0, "%-17s %-24s %-24s %-s %-3.3g %-"PRId64"\n",
+			id->srcname, stime, etime, gapstr, seg->samprate, seg->samplecnt);
 	    }
 	  else if ( details > 0 && gaps <= 0 )
-	    ms_log (0, "%-17s %-24s %-24s %-3.3g %-lld\n",
-		    id->srcname, stime, etime, seg->samprate, (long long int)seg->samplecnt);
+	    ms_log (0, "%-17s %-24s %-24s %-3.3g %-"PRId64"\n",
+		    id->srcname, stime, etime, seg->samprate, seg->samplecnt);
 	  else
 	    ms_log (0, "%-17s %-24s %-24s\n", id->srcname, stime, etime);
 	  
@@ -987,9 +1130,9 @@ mstl_printsynclist ( MSTraceList *mstl, char *dccid, flag subsecond )
 	  ms_hptime2seedtimestr (seg->endtime, endtime, subsecond);
 	  
 	  /* Print SYNC line */
-	  ms_log (0, "%s|%s|%s|%s|%s|%s||%.10g|%lld|||||||%s\n",
+	  ms_log (0, "%s|%s|%s|%s|%s|%s||%.10g|%"PRId64"|||||||%s\n",
 		  id->network, id->station, id->location, id->channel,
-		  starttime, endtime, seg->samprate, (long long int)seg->samplecnt,
+		  starttime, endtime, seg->samprate, seg->samplecnt,
 		  yearday);
 	  
 	  seg = seg->next;

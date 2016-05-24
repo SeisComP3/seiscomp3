@@ -237,10 +237,10 @@ ArclinkRequest* ArclinkLog::arclinkRequest(const ArclinkRequestIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkRequest* ArclinkLog::findArclinkRequest(const std::string& publicID) const {
-	ArclinkRequest* object = ArclinkRequest::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ArclinkRequestPtr>::const_iterator it = _arclinkRequests.begin(); it != _arclinkRequests.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -398,10 +398,10 @@ ArclinkUser* ArclinkLog::arclinkUser(const ArclinkUserIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkUser* ArclinkLog::findArclinkUser(const std::string& publicID) const {
-	ArclinkUser* object = ArclinkUser::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ArclinkUserPtr>::const_iterator it = _arclinkUsers.begin(); it != _arclinkUsers.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -530,7 +530,7 @@ bool ArclinkLog::removeArclinkUser(const ArclinkUserIndex& i) {
 void ArclinkLog::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ArclinkLog skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

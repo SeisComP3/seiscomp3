@@ -65,6 +65,7 @@ class SC_SYSTEM_CORE_API Socket: public Seiscomp::Core::InterruptibleObject {
 	public:
 		void setTimeout(int seconds);
 		void startTimer();
+		void stopTimer();
 		virtual void open(const std::string& serverLocation);
 		virtual void close();
 		bool isOpen();

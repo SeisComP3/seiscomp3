@@ -27,6 +27,8 @@
 #include <fdsnxml/polynomialcoefficient.h>
 #include <fdsnxml/polesandzeros.h>
 #include <fdsnxml/poleandzero.h>
+#include <fdsnxml/responselist.h>
+#include <fdsnxml/responselistelement.h>
 
 #include <seiscomp3/core/timewindow.h>
 #include <seiscomp3/datamodel/inventory_package.h>
@@ -214,7 +216,7 @@ void checkFIR(DataModel::ResponseFIR *rf) {
 
 	if ( rf->numberOfCoefficients() != nc ) {
 		SEISCOMP_WARNING("expected %d coefficients, found %d: will be corrected",
-						 rf->numberOfCoefficients(), nc);
+		                 rf->numberOfCoefficients(), nc);
 		rf->setNumberOfCoefficients(nc);
 	}
 
@@ -245,14 +247,23 @@ void checkFIR(DataModel::ResponseFIR *rf) {
 void checkPAZ(DataModel::ResponsePAZ *rp) {
 	if ( rp->numberOfPoles() != (int)rp->poles().content().size() ) {
 		SEISCOMP_WARNING("expected %d poles, found %lu", rp->numberOfPoles(),
-						 (unsigned long)rp->poles().content().size());
+		                 (unsigned long)rp->poles().content().size());
 		rp->setNumberOfPoles(rp->poles().content().size());
 	}
 
 	if ( rp->numberOfZeros() != (int)rp->zeros().content().size() ) {
 		SEISCOMP_WARNING("expected %d zeros, found %lu", rp->numberOfZeros(),
-						 (unsigned long)rp->zeros().content().size());
+		                 (unsigned long)rp->zeros().content().size());
 		rp->setNumberOfZeros(rp->zeros().content().size());
+	}
+}
+
+
+void checkFAP(DataModel::ResponseFAP *rp) {
+	if ( rp->numberOfTuples() != (int)(rp->tuples().content().size()*3) ) {
+		SEISCOMP_WARNING("expected %d tuples, found %lu", rp->numberOfTuples(),
+		                 (unsigned long)(rp->tuples().content().size()/3));
+		rp->setNumberOfTuples(rp->tuples().content().size()/3);
 	}
 }
 
@@ -260,7 +271,7 @@ void checkPAZ(DataModel::ResponsePAZ *rp) {
 void checkPoly(DataModel::ResponsePolynomial *rp) {
 	if ( rp->numberOfCoefficients() != (int)rp->coefficients().content().size() ) {
 		SEISCOMP_WARNING("expected %d coefficients, found %lu", rp->numberOfCoefficients(),
-						 (unsigned long)rp->coefficients().content().size());
+		                 (unsigned long)rp->coefficients().content().size());
 		rp->setNumberOfCoefficients(rp->coefficients().content().size());
 	}
 }
@@ -389,6 +400,35 @@ bool equal(const DataModel::ResponsePAZ *p1, const DataModel::ResponsePAZ *p2) {
 }
 
 
+bool equal(const DataModel::ResponseFAP *p1, const DataModel::ResponseFAP *p2) {
+	COMPARE_AND_RETURN(double, p1, p2, gain())
+	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
+
+	COMPARE_AND_RETURN(int, p1, p2, numberOfTuples())
+
+	const DataModel::RealArray *tuples1 = NULL;
+	const DataModel::RealArray *tuples2 = NULL;
+
+	try { tuples1 = &p1->tuples(); } catch ( ... ) {}
+	try { tuples2 = &p2->tuples(); } catch ( ... ) {}
+
+	// One set and not the other?
+	if ( (!tuples1 && tuples2) || (tuples1 && !tuples2) ) return false;
+
+	// Both unset?
+	if ( !tuples1 && !tuples2 ) return true;
+
+	// Both set, compare content
+	const vector<double> &t1 = tuples1->content();
+	const vector<double> &t2 = tuples2->content();
+	if ( t1.size() != t2.size() ) return false;
+	for ( size_t i = 0; i < t1.size(); ++i )
+		if ( t1[i] != t2[i] ) return false;
+
+	return true;
+}
+
+
 bool equal(const DataModel::ResponsePolynomial *p1, const DataModel::ResponsePolynomial *p2) {
 	COMPARE_AND_RETURN(double, p1, p2, gain())
 	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
@@ -500,6 +540,14 @@ bool isPAZResponse(const FDSNXML::ResponseStage *resp) {
 }
 
 
+bool isFAPResponse(const FDSNXML::ResponseStage *resp) {
+	if ( resp == NULL ) return false;
+	try { resp->responseList(); return true; }
+	catch ( ... ) {}
+	return false;
+}
+
+
 bool isPolyResponse(const FDSNXML::ResponseStage *resp) {
 	if ( resp == NULL ) return false;
 	try { resp->polynomial(); return true; }
@@ -592,8 +640,10 @@ findSensorResponse(const FDSNXML::Channel *chan) {
 
 const char *sensorUnit(const FDSNXML::ResponseStage *resp,
                        const FDSNXML::PolesAndZeros *&paz,
+                       const FDSNXML::ResponseList *&rl,
                        const FDSNXML::Polynomial *&poly) {
 	paz = NULL;
+	rl = NULL;
 	poly = NULL;
 
 	if ( isPAZResponse(resp) ) {
@@ -601,6 +651,36 @@ const char *sensorUnit(const FDSNXML::ResponseStage *resp,
 
 		string inputUnits = getBaseUnit(paz->inputUnits());
 		string outputUnits = getBaseUnit(paz->outputUnits());
+
+		if ( inputUnits == VELOCITY && outputUnits == CURRENT )
+			return VELOCITY;
+
+		if ( inputUnits == ACCEL1 && outputUnits == CURRENT )
+			return ACCEL1;
+
+		if ( inputUnits == ACCEL2 && outputUnits == CURRENT )
+			return ACCEL1;
+
+		if ( inputUnits == DISPLACE && outputUnits == CURRENT )
+			return DISPLACE;
+
+		if ( inputUnits == VELOCITY && outputUnits == DIGITAL )
+			return VELOCITY;
+
+		if ( inputUnits == ACCEL1 && outputUnits == DIGITAL )
+			return ACCEL1;
+
+		if ( inputUnits == ACCEL2 && outputUnits == DIGITAL )
+			return ACCEL1;
+
+		if ( inputUnits == DISPLACE && outputUnits == DIGITAL )
+			return DISPLACE;
+	}
+	else if ( isFAPResponse(resp) ) {
+		rl = &resp->responseList();
+
+		string inputUnits = getBaseUnit(rl->inputUnits());
+		string outputUnits = getBaseUnit(rl->outputUnits());
 
 		if ( inputUnits == VELOCITY && outputUnits == CURRENT )
 			return VELOCITY;
@@ -864,12 +944,43 @@ DataModel::ResponsePAZPtr convert(const FDSNXML::ResponseStage *resp,
 }
 
 
+bool orderByFreq(const FDSNXML::ResponseListElement *e1,
+                 const FDSNXML::ResponseListElement *e2) {
+	return e1->frequency().value() < e2->frequency().value();
+}
+
+
+DataModel::ResponseFAPPtr convert(const FDSNXML::ResponseStage *resp,
+                                  const FDSNXML::ResponseList *rl) {
+	DataModel::ResponseFAPPtr rp = create<DataModel::ResponseFAP>(rl);
+
+	rp->setGain(resp->stageGain().value());
+	try { rp->setGainFrequency(resp->stageGain().frequency()); }
+	catch ( ... ) {}
+
+	vector<FDSNXML::ResponseListElement*> sortedFAP;
+	for ( size_t i = 0; i < rl->elementCount(); ++i )
+		sortedFAP.push_back(rl->element(i));
+
+	sort(sortedFAP.begin(), sortedFAP.end(), orderByFreq);
+
+	rp->setTuples(DataModel::RealArray());
+	vector<double> &tuples = rp->tuples().content();
+
+	for ( size_t i = 0; i < sortedFAP.size(); ++i ) {
+		FDSNXML::ResponseListElement *elem = rl->element(i);
+		tuples.push_back(elem->frequency().value());
+		tuples.push_back(elem->amplitude().value());
+		tuples.push_back(elem->phase().value());
+	}
+
+	return rp;
+}
+
+
 DataModel::ResponsePolynomialPtr convert(const FDSNXML::ResponseStage *resp,
                                          const FDSNXML::Polynomial *poly) {
 	DataModel::ResponsePolynomialPtr rp = create<DataModel::ResponsePolynomial>(poly);
-
-	// NOTE: The type is currently not supported by fdsnxml
-	//rp->setType(paz->???)
 
 	rp->setGain(resp->stageGain().value());
 	try { rp->setGainFrequency(resp->stageGain().frequency()); }
@@ -969,6 +1080,11 @@ Convert2SC3::Convert2SC3(DataModel::Inventory *inv) : _inv(inv) {
 		_respPAZLookup[r->name()] = r;
 	}
 
+	for ( size_t i = 0; i < _inv->responseFAPCount(); ++i ) {
+		DataModel::ResponseFAP *r = _inv->responseFAP(i);
+		_respFAPLookup[r->name()] = r;
+	}
+
 	for ( size_t i = 0; i < _inv->responsePolynomialCount(); ++i ) {
 		DataModel::ResponsePolynomial *r = _inv->responsePolynomial(i);
 		_respPolyLookup[r->name()] = r;
@@ -1008,6 +1124,16 @@ void add(DataModel::Inventory *inv,
 template <>
 void Convert2SC3::addRespToInv<DataModel::ResponsePAZ>(DataModel::ResponsePAZ *o) {
 	add(_inv, _respPAZLookup, o);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <>
+void Convert2SC3::addRespToInv<DataModel::ResponseFAP>(DataModel::ResponseFAP *o) {
+	add(_inv, _respFAPLookup, o);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1843,11 +1969,17 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 
 	// Set sample rate
 	try {
-		pair<int,int> rat = double2frac(cha->sampleRate().value());
-		sc_stream->setSampleRateNumerator(rat.first);
-		sc_stream->setSampleRateDenominator(rat.second);
+		sc_stream->setSampleRateNumerator(cha->sampleRateRatio().numberSamples());
+		sc_stream->setSampleRateDenominator(cha->sampleRateRatio().numberSeconds());
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		try {
+			pair<int,int> rat = double2frac(cha->sampleRate().value());
+			sc_stream->setSampleRateNumerator(rat.first);
+			sc_stream->setSampleRateDenominator(rat.second);
+		}
+		catch ( ... ) {}
+	}
 
 	// Set orientation
 	bool hasOrientation = false;
@@ -2100,12 +2232,19 @@ Convert2SC3::updateDatalogger(const std::string &name,
 
 	try {
 		// Convert fdsnxml clockdrift (seconds/sample) to seconds/second
-		double drift = epoch->clockDrift().value() * epoch->sampleRate().value();
+		double drift = epoch->clockDrift().value() * epoch->sampleRateRatio().numberSamples() / epoch->sampleRateRatio().numberSeconds();
 		sc_dl->setMaxClockDrift(drift);
 		emptyDL = false;
 	}
 	catch ( ... ) {
-		sc_dl->setMaxClockDrift(Core::None);
+		try {
+			double drift = epoch->clockDrift().value() * epoch->sampleRate().value();
+			sc_dl->setMaxClockDrift(drift);
+			emptyDL = false;
+		}
+		catch ( ... ) {
+			sc_dl->setMaxClockDrift(Core::None);
+		}
 	}
 
 	if ( resp ) {
@@ -2299,6 +2438,36 @@ void Convert2SC3::updateDataloggerDigital(DataModel::Datalogger *sc_dl,
 
 			respID = rp->publicID();
 		}
+		else if ( isFAPResponse(*it) ) {
+			const FDSNXML::ResponseList *rl = &(*it)->responseList();
+			if ( rl->inputUnits().name() != DIGITAL || rl->outputUnits().name() != DIGITAL )
+				continue;
+
+			bool newFAP = true;
+
+			// Create FAP ...
+			DataModel::ResponseFAPPtr rp = convert(*it, rl);
+			checkFAP(rp.get());
+
+			for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
+				DataModel::ResponseFAP *tmp = _inv->responseFAP(f);
+				if ( equal(tmp, rp.get()) ) {
+					rp = tmp;
+					newFAP = false;
+					break;
+				}
+			}
+
+			if ( newFAP ) {
+				addRespToInv(rp.get());
+				//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
+			}
+			else {
+				//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
+			}
+
+			respID = rp->publicID();
+		}
 		else if ( isCoeffResponse(*it) || isFIRResponse(*it) ) {
 			// Check COEFF or FIR responses
 			bool newFIR = true;
@@ -2366,32 +2535,68 @@ void Convert2SC3::updateDataloggerAnalogue(DataModel::Datalogger *sc_dl,
 
 	// Find PAZ for V->V
 	for ( it = _responses.begin(); it != _responses.end(); ++it ) {
-		if ( !isPAZResponse(*it) ) continue;
-		const FDSNXML::PolesAndZeros *paz = &(*it)->polesZeros();
-		if ( paz->inputUnits().name() != CURRENT || paz->outputUnits().name() != CURRENT ) continue;
+		DataModel::PublicObject *po;
 
-		bool newPAZ = true;
+		if ( isPAZResponse(*it) ) {
+			const FDSNXML::PolesAndZeros *paz = &(*it)->polesZeros();
+			if ( paz->inputUnits().name() != CURRENT || paz->outputUnits().name() != CURRENT ) continue;
 
-		// Create PAZ ...
-		DataModel::ResponsePAZPtr rp = convert(*it, paz);
-		checkPAZ(rp.get());
+			bool newPAZ = true;
 
-		for ( size_t f = 0; f < _inv->responsePAZCount(); ++f ) {
-			DataModel::ResponsePAZ *paz = _inv->responsePAZ(f);
-			if ( equal(paz, rp.get()) ) {
-				rp = paz;
-				newPAZ = false;
-				break;
+			// Create PAZ ...
+			DataModel::ResponsePAZPtr rp = convert(*it, paz);
+			checkPAZ(rp.get());
+
+			for ( size_t f = 0; f < _inv->responsePAZCount(); ++f ) {
+				DataModel::ResponsePAZ *paz = _inv->responsePAZ(f);
+				if ( equal(paz, rp.get()) ) {
+					rp = paz;
+					newPAZ = false;
+					break;
+				}
 			}
-		}
 
-		if ( newPAZ ) {
-			addRespToInv(rp.get());
-			//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
+			if ( newPAZ ) {
+				addRespToInv(rp.get());
+				//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
+			}
+			else {
+				//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
+			}
+
+			po = rp.get();
 		}
-		else {
-			//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
+		else if ( isFAPResponse(*it) ) {
+			const FDSNXML::ResponseList *rl = &(*it)->responseList();
+			if ( rl->inputUnits().name() != CURRENT || rl->outputUnits().name() != CURRENT ) continue;
+
+			bool newFAP = true;
+
+			// Create FAP ...
+			DataModel::ResponseFAPPtr rp = convert(*it, rl);
+			checkFAP(rp.get());
+
+			for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
+				DataModel::ResponseFAP *fap = _inv->responseFAP(f);
+				if ( equal(fap, rp.get()) ) {
+					rp = fap;
+					newFAP = false;
+					break;
+				}
+			}
+
+			if ( newFAP ) {
+				addRespToInv(rp.get());
+				//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
+			}
+			else {
+				//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
+			}
+
+			po = rp.get();
 		}
+		else
+			continue;
 
 		string dfc;
 
@@ -2399,7 +2604,7 @@ void Convert2SC3::updateDataloggerAnalogue(DataModel::Datalogger *sc_dl,
 		catch( ... ) {}
 
 		if ( !dfc.empty() ) dfc += " ";
-		dfc += rp->publicID();
+		dfc += po->publicID();
 		DataModel::Blob blob;
 		blob.setContent(dfc);
 		sc_deci->setAnalogueFilterChain(blob);
@@ -2415,12 +2620,13 @@ DataModel::Sensor *
 Convert2SC3::updateSensor(const std::string &name,
                           const FDSNXML::Channel *epoch,
                           const FDSNXML::ResponseStage *resp) {
-	const FDSNXML::PolesAndZeros *paz = NULL;
-	const FDSNXML::Polynomial *poly = NULL;
+	const FDSNXML::PolesAndZeros *paz;
+	const FDSNXML::ResponseList *rl;
+	const FDSNXML::Polynomial *poly;
 
 	const char* unit;
 
-	unit = sensorUnit(resp, paz, poly);
+	unit = sensorUnit(resp, paz, rl, poly);
 
 	DataModel::SensorPtr sc_sens = DataModel::Sensor::Create();
 	//sc_sens->setName(sc_sens->publicID());
@@ -2474,6 +2680,31 @@ Convert2SC3::updateSensor(const std::string &name,
 
 		SEISCOMP_DEBUG("Update Sensor.response: %s -> %s",
 		               sc_sens->publicID().c_str(), rp->publicID().c_str());
+
+		sc_sens->setResponse(rp->publicID());
+		emptySensor = false;
+	}
+	else if ( rl ) {
+		DataModel::ResponseFAPPtr rp = convert(resp, rl);
+		checkFAP(rp.get());
+
+		bool newFAP = true;
+		for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
+			DataModel::ResponseFAP *fap = _inv->responseFAP(f);
+			if ( equal(fap, rp.get()) ) {
+				rp = fap;
+				newFAP = false;
+				break;
+			}
+		}
+
+		if ( newFAP ) {
+			addRespToInv(rp.get());
+			//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
+		}
+		else {
+			//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
+		}
 
 		sc_sens->setResponse(rp->publicID());
 		emptySensor = false;

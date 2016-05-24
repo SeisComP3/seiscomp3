@@ -2,6 +2,62 @@
 
 ## Release YYYY.DDD
 
+The database schema has changed since previous version. To upgrade your
+database from version 0.7 to 0.8 the following SQL script can be used:
+
+**MYSQL**
+
+```sql
+CREATE TABLE ResponseFAP (
+  _oid INTEGER(11) NOT NULL,
+  _parent_oid INTEGER(11) NOT NULL,
+  _last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  name VARCHAR(255),
+  gain DOUBLE UNSIGNED,
+  gainFrequency DOUBLE UNSIGNED,
+  numberOfTuples SMALLINT UNSIGNED,
+  tuples_content BLOB,
+  tuples_used TINYINT(1) NOT NULL DEFAULT '0',
+  remark_content BLOB,
+  remark_used TINYINT(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY(_oid),
+  INDEX(_parent_oid),
+  FOREIGN KEY(_oid)
+    REFERENCES Object(_oid)
+    ON DELETE CASCADE,
+  UNIQUE(_parent_oid,name)
+) ENGINE=INNODB;
+
+UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+CREATE TABLE ResponseFAP (
+  _oid BIGINT NOT NULL,
+  _parent_oid BIGINT NOT NULL,
+  _last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  m_name VARCHAR(255),
+  m_gain DOUBLE PRECISION,
+  m_gainFrequency DOUBLE PRECISION,
+  m_numberOfTuples SMALLINT,
+  m_tuples_content BYTEA,
+  m_tuples_used BOOLEAN NOT NULL DEFAULT '0',
+  m_remark_content BYTEA,
+  m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+  PRIMARY KEY(_oid),
+  FOREIGN KEY(_oid)
+    REFERENCES Object(_oid)
+    ON DELETE CASCADE,
+  UNIQUE(_parent_oid,m_name)
+);
+
+UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
+```
+
+----
+
 * documentation
 
   * Enhance documentation of scqc and others
@@ -10,6 +66,24 @@
 
   * Add support for HMB (http messaging bus) messaging protocol
   * Add recordstream implementation for HMB (http messaging bus) protocol
+  * Remove parent_oid foreign key constraint in database tables
+  * Add support for FAP responses (response list) to datamodel
+  * Add support for FAP responses to processing
+  * Make ML logA0 configurable in bindings and add documentation
+
+* dlsv2inv
+
+  * Add support for response list (blockette 55) which are converted to
+    ResponseFAP
+
+* fdsnxml2inv
+
+  * Add support for reponse list
+  * Prefer SampleRateRatio over SampleRate when converting to SC3
+
+* scinv
+
+  * Synchronize ResponseFAP objects
 
 * scimport
 
@@ -29,6 +103,22 @@
   * Fix timing quality rendering in picker
   * Fix magnitude table distance entries if distance is displayed in km
   * Fix spectrum display on 32bit systems
+
+* scmv
+
+  * Add plotting of event focal mechanism if available
+
+* fseed
+
+  * Add conversion from ResponseFAP to blockette 55
+
+* system
+
+  * Upgrade libmseed to 2.17
+
+* seiscomp
+
+  * Fixed resolving the path to the seiscomp script when it is a symlink
 
 ## Release 2016.062
 

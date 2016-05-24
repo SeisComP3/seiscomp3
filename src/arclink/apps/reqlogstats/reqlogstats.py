@@ -1,6 +1,13 @@
 #
 # Populate an SQLite database from Arclink webreqlog statistics HTML pages.
 #
+# Begun by Peter L. Evans 
+# <pevans@gfz-potsdam.de>
+#
+# Copyright (C) 2013-2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with NO WARRANTY.
+#
 import glob
 import email
 import os
@@ -205,7 +212,7 @@ class ReportData(object):
                    'error_count': attribs['ErrorCount'],
                    'users': attribs['Users'],
                    'lines': attribs['TotalLines'],
-                   'size': ts,  
+                   'size': ts,
                    'start': attribs['Start'],
                    'end': attribs['End']
                    }
@@ -257,9 +264,21 @@ class ReportDataResif(ReportData):
     def __init__(self, summary, who):
         self.summary = summary
 
+        value = {"b" : 1,
+                 "kib" : 1024,
+                 "mib" : 1024*1024,
+                 "gib" : 1024*1024*1024 }
+
         # What units are size in? They are stored in bytes.
         try:
-            byte_size = int(summary['size'].split()[0])
+            words = summary['size'].split()
+            byte_size = int(float(words[0]))
+            if len(words) > 1:
+                try:
+                    factor = value[words[1].lower()]
+                    byte_size = int(float(words[0]) * factor)
+                except KeyError:
+                    byte_size = 0
         except ValueError:
             byte_size = 0  # I don't want to accept floats + units
 
@@ -322,7 +341,7 @@ def has_summary(con, k):
     cursor.execute(q, k)
     result = cursor.fetchall()  # Not present: get [(0,)]
     assert len(result) == 1
-    
+
     found = (result[0][0] != 0)
     return found
 
@@ -368,7 +387,7 @@ def insert_summary(con, k, summary):
         print "Start day:", k[0]
         print "Source:   ", k[1]
         print e
-       
+
 
 def report_insert(tablename, heads):
     global verbose
@@ -506,7 +525,7 @@ def insert_data(db, rd, host, port, dcid, description, start_day):
     if has_summary(con, k):
         print " *** FOUND Existing summary for", k, "in the db; skipping"
         return 0
-    
+
     print "Inserting tables... ",
     insert_summary(con, k, rd.summary)
     if len(rd.user) > 0:     insert_user(con, k, rd.user)        # HACK
@@ -610,7 +629,7 @@ def process_resif_string(s):
              "kib" : 1024,
              "mib" : 1024*1024,
              "gib" : 1024*1024*1024 }
- 
+
     try:
         # No units were given in the report, but date was supplied
         if num_words == 6:
@@ -714,12 +733,14 @@ for line in sys.stdin.readlines():
 
 bodyfile="/tmp/reqlogstats.txt"
 
-# Used to map e-mail sender e-mail addresses to nodes:
+# Used to map e-mail sender e-mail addresses to nodes/DCIDs,
+# the key is the penultimate component of the mail address hostname.
 source_dict = {"bgr": "BGR",
                "edu": "KOERI",   # eida@boun.edu.tr
                "ethz": "ETHZ",
                "gfz-potsdam": "GFZ",
                "infp": "NIEP",
+               "noa": "NOA",
                "ingv": "INGV",
                "ipgp": "IPGP",
                "knmi": "ODC",
@@ -737,7 +758,6 @@ for myfile in filelist:
     fid = open(myfile, "r")
     msg = email.message_from_file(fid)
     frm = msg['From']
-    subj = msg['Subject'].lower()
 
     # Need to decide if a file is one of:
     #   (i) the HTML report from reqlogstats, as e-mail: use From to set 'who'.
@@ -745,10 +765,20 @@ for myfile in filelist:
     # (iii) the text report from fdsnws operators: payload still determines 'who'.
     #  (iv) the HTML report from reqlogstats; 'who' must be given separately.
 
-    if subj.find('dataselect') > -1 \
-            or subj.find('fdsnws') > -1 \
-            or os.path.basename(myfile).startswith("fdsnws_"):
+    contentType = "html"
+    if os.path.basename(myfile).startswith("fdsnws_"):
+        contentType = "text"
 
+    try:
+        subj = msg['Subject'].lower()
+    except AttributeError:
+        subj = None
+
+    if subj and (subj.find('dataselect') > -1 \
+            or subj.find('fdsnws') > -1):
+        contentType = "text"
+
+    if contentType == "text":
         print "as fdsnws text from %s" % (frm)
         # Try distinguishing (ii) from (iii)?
         if frm:
@@ -762,6 +792,7 @@ for myfile in filelist:
 
         for s in lines:
                 if len(s.strip()) == 0: continue   # ignore blank lines
+                if s.strip().startswith("#"): continue   # comment with hash.
 
                 result = 0
                 if s.startswith("fdsnws"):
@@ -787,7 +818,7 @@ for myfile in filelist:
         d = host.split('.')[-2]
     except IndexError:
         host = emailaddr
-        d = emailaddr    #???    
+        d = emailaddr    #???
 
     port = -1
 
@@ -819,7 +850,7 @@ for k in range(len(scores)):
 print
 
 summary = summary_data(db)
-for (k, v) in summary.items():
+for (k, v) in sorted(summary.items()):
     print k ,":", v
 print "Database %s contains  %i source(s), and %i day summaries." % (db, summary['Source'], summary['Summary'])
 if (len(unparsed_list) > 0):

@@ -18,6 +18,7 @@
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/math/restitution/transferfunction.h>
+#include <seiscomp3/math/filter/seismometers.h>
 #include <seiscomp3/client.h>
 
 #include <vector>
@@ -141,6 +142,48 @@ class SC_SYSTEM_CLIENT_API ResponsePAZ : public Response {
 
 		Poles       _poles;
 		Zeros       _zeros;
+};
+
+
+DEFINE_SMARTPOINTER(ResponseFAP);
+
+class SC_SYSTEM_CLIENT_API ResponseFAP : public Response {
+	DECLARE_CASTS(ResponseFAP);
+
+
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		// C'tor
+		ResponseFAP();
+		// D'tor
+		virtual ~ResponseFAP();
+
+
+	// ----------------------------------------------------------------------
+	//  Public attributes
+	// ----------------------------------------------------------------------
+	public:
+		void setFAPs(const Math::SeismometerResponse::FAPs& faps);
+		const Math::SeismometerResponse::FAPs& faps() const;
+
+		void convertFromHz();
+
+
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		Math::Restitution::FFT::TransferFunction *
+			getTransferFunction(int numberOfIntegrations = 0);
+
+
+	// ----------------------------------------------------------------------
+	//  Private interface
+	// ----------------------------------------------------------------------
+	private:
+		Math::SeismometerResponse::FAPs _faps;
 };
 
 

@@ -159,6 +159,26 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponsePolynomial> &out) 
 }
 
 
+ostream &operator<<(ostream &os, const Out<DataModel::ResponseFAP> &out) {
+	const DataModel::ResponseFAP *fap = out.obj;
+	os << Fill(out.indent) << "tuples       ";
+	try {
+		const vector<double> &tuples = fap->tuples().content();
+		for ( size_t i = 0; i < tuples.size(); i += 3 ) {
+			if ( i > 0 ) os << "," << endl << Fill(out.indent) << "             ";
+			os << scientific;
+			os << "(" << setw(13) << tuples[i] << ", " << tuples[i+1] << ", " << tuples[i+2] << ")";
+		}
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	os << endl;
+	return os;
+}
+
+
 ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
 	const DataModel::ResponseFIR *fir = out.obj;
 
@@ -215,7 +235,13 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 					os << tabular(poly, out.indent);
 				}
 				else {
-					os << Fill(out.indent) << "UNKNOWN" << endl;
+					const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
+					if ( fap == NULL )
+						os << Fill(out.indent) << "UNKNOWN" << endl;
+					else {
+						os << Fill(out.indent) << "FAP" << endl;
+						os << tabular(fap, out.indent);
+					}
 				}
 			}
 			else {
@@ -244,7 +270,13 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 						os << tabular(poly, out.indent);
 					}
 					else {
-						os << Fill(out.indent) << "UNKNOWN" << endl;
+						const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
+						if ( fap == NULL )
+							os << Fill(out.indent) << "UNKNOWN" << endl;
+						else {
+							os << Fill(out.indent) << "FAP" << endl;
+							os << tabular(fap, out.indent);
+						}
 					}
 				}
 				else {
@@ -1430,6 +1462,7 @@ class InventoryManager : public Client::Application,
 								const DataModel::Datalogger *dl;
 								const DataModel::ResponsePAZ *paz;
 								const DataModel::ResponsePolynomial *poly;
+								const DataModel::ResponseFAP *fap;
 
 								try {
 									int sr_num = str->sampleRateNumerator();
@@ -1462,8 +1495,17 @@ class InventoryManager : public Client::Application,
 									}
 									else {
 										poly = merger.findPoly(sens->response());
-										if ( poly )
+										if ( poly ) {
 											cout << "          resp  polynomial" << endl;
+											cout << tabular(poly, 16) << endl;
+										}
+										else {
+											fap = merger.findFAP(sens->response());
+											if ( fap ) {
+												cout << "          resp  fap" << endl;
+												cout << tabular(fap, 16) << endl;
+											}
+										}
 									}
 								}
 

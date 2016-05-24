@@ -144,6 +144,15 @@ class _StationRequestOptions(RequestOptions):
 		for i in xrange(net.stationCount()):
 			sta = net.station(i)
 
+			# geographic location
+			if self.geo:
+				try:
+					lat = sta.latitude()
+					lon = sta.longitude()
+				except ValueException: continue
+				if not self.geo.match(lat, lon):
+					continue
+
 			for ro in self.streams:
 				# station code
 				if ro.channel and not ro.channel.matchSta(sta.code()):
@@ -154,15 +163,6 @@ class _StationRequestOptions(RequestOptions):
 					try: end = sta.end()
 					except ValueException: end = None
 					if not ro.time.match(sta.start(), end):
-						continue
-
-				# geographic location
-				if ro.geo:
-					try:
-						lat = sta.latitude()
-						lon = sta.longitude()
-					except ValueException: continue
-					if not ro.geo.match(lat, lon):
 						continue
 
 				yield sta

@@ -57,12 +57,12 @@ class GenericMessage : public ::Seiscomp::Core::Message {
 	public:
 		/**
 		 * Attaches an object to the message
-		 * @param  attachement A pointer to the object
+		 * @param  attachment A pointer to the object
 		 * @retval true The operation was successfull and the object has been attached properly
 		 * @retval false The object is NULL or the object has been attached already
 		 */
-		bool attach(AttachementType* attachement);
-		bool attach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachement);
+		bool attach(AttachementType* attachment);
+		bool attach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachment);
 
 		/**
 		 * Detaches an already attached object from the message
@@ -70,8 +70,8 @@ class GenericMessage : public ::Seiscomp::Core::Message {
 		 * @retval true The object has been detached successfully
 		 * @retval false The object has not been attached before
 		 */
-		bool detach(AttachementType* attachement);
-		bool detach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachement);
+		bool detach(AttachementType* attachment);
+		bool detach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachment);
 
 		/**
 		 * Detaches an object from the message
@@ -81,11 +81,11 @@ class GenericMessage : public ::Seiscomp::Core::Message {
 		 */
 		iterator detach(iterator it);
 
-		//! Removes all attachements from the message
+		//! Removes all attachments from the message
 		void clear();
 
 		//! Returns the iterators for begin and end of
-		//! the attachement list
+		//! the attachment list
 		iterator begin();
 		const_iterator begin() const;
 
@@ -111,7 +111,7 @@ class GenericMessage : public ::Seiscomp::Core::Message {
 	//  Implementation
 	// ----------------------------------------------------------------------
 	protected:
-		AttachementList _attachements;
+		AttachementList _attachments;
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

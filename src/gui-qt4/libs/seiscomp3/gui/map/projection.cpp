@@ -237,7 +237,13 @@ void Projection::setVisibleRadius(qreal r) {
 
 QPointF Projection::gridDistance() const {
 	qreal dist = std::min(double((_width / 4) / pixelPerDegree()), 180.0);
-	if ( dist < 5 )
+	if ( dist < 0.01 )
+		dist = std::max(int((dist*1000 + 0.6f)), 1)*0.001;
+	else if ( dist < 0.1 )
+		dist = std::max(int((dist*100 + 0.6f)), 1)*0.01;
+	else if ( dist < 1 )
+		dist = std::max(int((dist*10 + 0.6f)), 1)*0.1;
+	else if ( dist < 5 )
 		dist = std::max(int((dist + 0.6f)), 1);
 	else
 		dist = std::max(int((dist + 0.6f*5) / 5) * 5, 5);

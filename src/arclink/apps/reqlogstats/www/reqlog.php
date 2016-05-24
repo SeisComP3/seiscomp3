@@ -306,6 +306,7 @@ function render_table($format, $sources, $data, $options) {
 	  $col_sums[0] = "Column sums";
 	  echo '  ' . tr(tag_list("td", $col_sums)) . PHP_EOL;
 	}
+        echo '  <tr><td>Rows: ' . count($rows) . '</td></tr>' . PHP_EOL;
 	echo '  </tbody>' . PHP_EOL;
 	echo '</table>';
     } else {
@@ -314,5 +315,4 @@ function render_table($format, $sources, $data, $options) {
  
 }
 
-
-?>
+/* end of reqlog.php */

@@ -36,6 +36,7 @@ DROP TABLE SensorCalibration;
 DROP TABLE Sensor;
 DROP TABLE ResponsePAZ;
 DROP TABLE ResponsePolynomial;
+DROP TABLE ResponseFAP;
 DROP TABLE DataloggerCalibration;
 DROP TABLE Decimation;
 DROP TABLE Datalogger;
@@ -87,7 +88,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (DEFAULT);
@@ -113,9 +114,6 @@ CREATE TABLE EventDescription (
 	m_type VARCHAR(64) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_type)
@@ -146,9 +144,6 @@ CREATE TABLE Comment (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_id)
 );
 
@@ -167,9 +162,6 @@ CREATE TABLE DataUsed (
 	m_shortestPeriod DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -222,9 +214,6 @@ CREATE TABLE CompositeTime (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -240,9 +229,6 @@ CREATE TABLE PickReference (
 	m_pickID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_pickID)
@@ -263,9 +249,6 @@ CREATE TABLE AmplitudeReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_amplitudeID)
 );
 
@@ -280,9 +263,6 @@ CREATE TABLE Reading (
 	_parent_oid BIGINT NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -305,9 +285,6 @@ CREATE TABLE MomentTensorComponentContribution (
 	m_snr DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_phaseCode,m_component)
@@ -334,9 +311,6 @@ CREATE TABLE MomentTensorStationContribution (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -356,9 +330,6 @@ CREATE TABLE MomentTensorPhaseSetting (
 	m_maximumTimeShift DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code)
@@ -441,9 +412,6 @@ CREATE TABLE MomentTensor (
 	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -560,9 +528,6 @@ CREATE TABLE FocalMechanism (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -627,9 +592,6 @@ CREATE TABLE Amplitude (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -650,9 +612,6 @@ CREATE TABLE StationMagnitudeContribution (
 	m_weight DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_stationMagnitudeID)
@@ -691,9 +650,6 @@ CREATE TABLE Magnitude (
 	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -734,9 +690,6 @@ CREATE TABLE StationMagnitude (
 	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -796,9 +749,6 @@ CREATE TABLE Pick (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -818,9 +768,6 @@ CREATE TABLE OriginReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_originID)
 );
 
@@ -837,9 +784,6 @@ CREATE TABLE FocalMechanismReference (
 	m_focalMechanismID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_focalMechanismID)
@@ -872,9 +816,6 @@ CREATE TABLE Event (
 	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -918,9 +859,6 @@ CREATE TABLE Arrival (
 	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_pickID)
@@ -1006,9 +944,6 @@ CREATE TABLE Origin (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -1027,9 +962,6 @@ CREATE TABLE Parameter (
 	m_value BYTEA,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -1050,9 +982,6 @@ CREATE TABLE ParameterSet (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -1071,9 +1000,6 @@ CREATE TABLE Setup (
 	m_enabled BOOLEAN NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
@@ -1096,9 +1022,6 @@ CREATE TABLE ConfigStation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode)
 );
 
@@ -1116,9 +1039,6 @@ CREATE TABLE ConfigModule (
 	m_enabled BOOLEAN NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
@@ -1148,9 +1068,6 @@ CREATE TABLE QCLog (
 	m_message BYTEA NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI)
@@ -1187,9 +1104,6 @@ CREATE TABLE WaveformQuality (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_type,m_parameter)
 );
 
@@ -1222,9 +1136,6 @@ CREATE TABLE Outage (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_start,m_start_ms)
 );
 
@@ -1240,9 +1151,6 @@ CREATE TABLE StationReference (
 	m_stationID VARCHAR(255) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_stationID)
@@ -1270,9 +1178,6 @@ CREATE TABLE StationGroup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code)
 );
 
@@ -1297,9 +1202,6 @@ CREATE TABLE AuxSource (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
 );
 
@@ -1320,9 +1222,6 @@ CREATE TABLE AuxDevice (
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
@@ -1347,9 +1246,6 @@ CREATE TABLE SensorCalibration (
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
@@ -1377,9 +1273,6 @@ CREATE TABLE Sensor (
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
@@ -1412,9 +1305,6 @@ CREATE TABLE ResponsePAZ (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
 );
 
@@ -1444,15 +1334,36 @@ CREATE TABLE ResponsePolynomial (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
 
 CREATE TRIGGER ResponsePolynomial_update BEFORE UPDATE ON ResponsePolynomial FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
+CREATE TABLE ResponseFAP (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
+	m_numberOfTuples SMALLINT,
+	m_tuples_content BYTEA,
+	m_tuples_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
+
+CREATE TRIGGER ResponseFAP_update BEFORE UPDATE ON ResponseFAP FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
 CREATE TABLE DataloggerCalibration (
@@ -1469,9 +1380,6 @@ CREATE TABLE DataloggerCalibration (
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
@@ -1494,9 +1402,6 @@ CREATE TABLE Decimation (
 	m_digitalFilterChain_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_sampleRateNumerator,m_sampleRateDenominator)
@@ -1528,9 +1433,6 @@ CREATE TABLE Datalogger (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
 );
 
@@ -1558,9 +1460,6 @@ CREATE TABLE ResponseFIR (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name)
 );
 
@@ -1585,9 +1484,6 @@ CREATE TABLE AuxStream (
 	m_shared BOOLEAN,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code,m_start)
@@ -1628,9 +1524,6 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
@@ -1651,9 +1544,6 @@ CREATE TABLE SensorLocation (
 	m_elevation DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code,m_start)
@@ -1689,9 +1579,6 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
@@ -1721,9 +1608,6 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_code,m_start)
 );
 
@@ -1744,9 +1628,6 @@ CREATE TABLE RouteArclink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_address,m_start)
 );
 
@@ -1763,9 +1644,6 @@ CREATE TABLE RouteSeedlink (
 	m_priority SMALLINT,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_address)
@@ -1786,9 +1664,6 @@ CREATE TABLE Route (
 	m_streamCode VARCHAR(8) NOT NULL,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode)
@@ -1814,9 +1689,6 @@ CREATE TABLE Access (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode,m_user,m_start)
 );
 
@@ -1838,9 +1710,6 @@ CREATE TABLE JournalEntry (
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE
 );
 
@@ -1859,9 +1728,6 @@ CREATE TABLE ArclinkUser (
 	m_password VARCHAR(80),
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_name,m_email)
@@ -1883,9 +1749,6 @@ CREATE TABLE ArclinkStatusLine (
 	m_volumeID VARCHAR(80),
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_volumeID,m_type,m_status)
@@ -1922,9 +1785,6 @@ CREATE TABLE ArclinkRequestLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_start,m_start_ms,m_end,m_end_ms,m_streamID_networkCode,m_streamID_stationCode,m_streamID_locationCode,m_streamID_channelCode,m_streamID_resourceURI)
 );
 
@@ -1955,9 +1815,6 @@ CREATE TABLE ArclinkRequest (
 	m_summary_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	FOREIGN KEY(_parent_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
 	UNIQUE(_parent_oid,m_created,m_created_ms,m_requestID,m_userID)

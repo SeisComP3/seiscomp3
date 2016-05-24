@@ -67,7 +67,7 @@ inline GenericMessage<T>::~GenericMessage() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 MessageIterator::Impl* GenericMessage<T>::iterImpl() const {
-	return new MessageIteratorImplT<T>(_attachements.begin(), _attachements.end());
+	return new MessageIteratorImplT<T>(_attachments.begin(), _attachments.end());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -76,14 +76,14 @@ MessageIterator::Impl* GenericMessage<T>::iterImpl() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-inline bool GenericMessage<T>::attach(AttachementType* attachement) {
+inline bool GenericMessage<T>::attach(AttachementType* attachment) {
 	// When the object can be found in the objectlist
 	// no double insertion will be done
-	iterator it = std::find(_attachements.begin(), _attachements.end(), attachement);
-	if ( it != _attachements.end() )
+	iterator it = std::find(_attachments.begin(), _attachments.end(), attachment);
+	if ( it != _attachments.end() )
 		return false;
 		
-	_attachements.push_back(attachement);
+	_attachments.push_back(attachment);
 	return true;	
 	
 }
@@ -94,8 +94,8 @@ inline bool GenericMessage<T>::attach(AttachementType* attachement) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-inline bool GenericMessage<T>::attach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachement) {
-	return attach(attachement.get());
+inline bool GenericMessage<T>::attach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachment) {
+	return attach(attachment.get());
 	
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -105,12 +105,12 @@ inline bool GenericMessage<T>::attach(typename Seiscomp::Core::SmartPointer<Atta
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-inline bool GenericMessage<T>::detach(AttachementType* attachement) {
-	iterator it = std::find(_attachements.begin(), _attachements.end(), attachement);
-	if ( it == _attachements.end() )
+inline bool GenericMessage<T>::detach(AttachementType* attachment) {
+	iterator it = std::find(_attachments.begin(), _attachments.end(), attachment);
+	if ( it == _attachments.end() )
 		return false;
 
-	_attachements.erase(it);
+	_attachments.erase(it);
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -120,8 +120,8 @@ inline bool GenericMessage<T>::detach(AttachementType* attachement) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-inline bool GenericMessage<T>::detach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachement) {
-	return detach(attachement.get());
+inline bool GenericMessage<T>::detach(typename Seiscomp::Core::SmartPointer<AttachementType>::Impl& attachment) {
+	return detach(attachment.get());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -131,7 +131,7 @@ inline bool GenericMessage<T>::detach(typename Seiscomp::Core::SmartPointer<Atta
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline typename GenericMessage<T>::iterator GenericMessage<T>::detach(iterator it) {
-	return _attachements.erase(it);
+	return _attachments.erase(it);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -141,7 +141,7 @@ inline typename GenericMessage<T>::iterator GenericMessage<T>::detach(iterator i
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline void GenericMessage<T>::clear() {
-	_attachements.clear();
+	_attachments.clear();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -151,7 +151,7 @@ inline void GenericMessage<T>::clear() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline typename GenericMessage<T>::iterator GenericMessage<T>::begin() {
-	return _attachements.begin();
+	return _attachments.begin();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -161,7 +161,7 @@ inline typename GenericMessage<T>::iterator GenericMessage<T>::begin() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline typename GenericMessage<T>::const_iterator GenericMessage<T>::begin() const {
-	return _attachements.begin();
+	return _attachments.begin();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -171,7 +171,7 @@ inline typename GenericMessage<T>::const_iterator GenericMessage<T>::begin() con
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline typename GenericMessage<T>::iterator GenericMessage<T>::end() {
-	return _attachements.end();
+	return _attachments.end();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -181,7 +181,7 @@ inline typename GenericMessage<T>::iterator GenericMessage<T>::end() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline typename GenericMessage<T>::const_iterator GenericMessage<T>::end() const {
-	return _attachements.end();
+	return _attachments.end();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -191,7 +191,7 @@ inline typename GenericMessage<T>::const_iterator GenericMessage<T>::end() const
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline bool GenericMessage<T>::empty() const {
-	return _attachements.empty();
+	return _attachments.empty();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -201,7 +201,7 @@ inline bool GenericMessage<T>::empty() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 inline int GenericMessage<T>::size() const {
-	return (int)_attachements.size();
+	return (int)_attachments.size();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -212,7 +212,7 @@ inline int GenericMessage<T>::size() const {
 template <typename T>
 inline void GenericMessage<T>::serialize(Archive& ar) {
 	Message::serialize(ar);
-	ar & NAMED_OBJECT("", _attachements);
+	ar & NAMED_OBJECT("", _attachments);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

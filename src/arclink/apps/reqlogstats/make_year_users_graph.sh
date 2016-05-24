@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Make graph of number of users per day or month over a whole year.
 #
@@ -48,7 +48,7 @@ table=
 
 if [ $# -gt 0 ] ; then
     first=$1
-    if [ "$first" == "--dcid" ] ; then
+    if [ "$first" = "--dcid" ] ; then
 	dcid=$2
 	dcid_constr="AND Y.dcid = '${dcid}'"
 	shift 2;
@@ -88,6 +88,7 @@ echo ${cmd} \
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then
     echo "Nothing in db with '${dcid_constr}'."
+    rm days3.dat
     exit 0
 fi
 
@@ -162,6 +163,7 @@ set output 'out.svg'
 
 # Default for ls 6 is dark blue, too close to pure blue for GFZ:
 set style line 3 linecolor rgb "#00589C"
+set style line 5 linecolor rgb "skyblue"
 set style line 6 linecolor rgb "violet"
 set style line 10 linecolor rgb "magenta"
 
@@ -173,8 +175,9 @@ plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf(
      '' using  8 title 'KOERI' ls 1, \
      '' using  9 title 'LMU' ls 7, \
      '' using 10 title 'NIEP' ls 10, \
-     '' using 11 title 'ODC' ls 9, \
-     '' using 12 title 'RESIF' ls 8
+     '' using 11 title 'NOA' ls 5, \
+     '' using 12 title 'ODC' ls 9, \
+     '' using 13 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output

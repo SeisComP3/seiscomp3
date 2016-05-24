@@ -3294,32 +3294,6 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
 }
 
 
-#include <limits.h>
-#if !defined(SWIG_NO_LLONG_MAX)
-# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
-#   define LLONG_MAX __LONG_LONG_MAX__
-#   define LLONG_MIN (-LLONG_MAX - 1LL)
-#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
-# endif
-#endif
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned int >(v);
-    }
-  }  
-  return res;
-}
-
-
 SWIGINTERN int
 SWIG_AsVal_long (PyObject *obj, long* val)
 {
@@ -3370,6 +3344,32 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
     return SWIG_ERROR;
   if (val) *val = r ? true : false;
   return SWIG_OK;
+}
+
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
+
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UINT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< unsigned int >(v);
+    }
+  }  
+  return res;
 }
 
 #ifdef __cplusplus
@@ -3609,7 +3609,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_StopWatch(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_StopWatch__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Util::StopWatch *result = 0 ;
   
@@ -3619,6 +3619,61 @@ SWIGINTERN PyObject *_wrap_new_StopWatch(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StopWatch__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  bool arg1 ;
+  bool val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Util::StopWatch *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_StopWatch",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_bool(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_StopWatch" "', argument " "1"" of type '" "bool""'");
+  } 
+  arg1 = static_cast< bool >(val1);
+  result = (Seiscomp::Util::StopWatch *)new Seiscomp::Util::StopWatch(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Util__StopWatch, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_StopWatch(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[2];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 1) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_StopWatch__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_bool(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_StopWatch__SWIG_1(self, args);
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_StopWatch'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Util::StopWatch::StopWatch()\n"
+    "    Seiscomp::Util::StopWatch::StopWatch(bool)\n");
+  return 0;
 }
 
 
@@ -3637,6 +3692,49 @@ SWIGINTERN PyObject *_wrap_StopWatch_restart(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< Seiscomp::Util::StopWatch * >(argp1);
   (arg1)->restart();
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StopWatch_reset(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Util::StopWatch *arg1 = (Seiscomp::Util::StopWatch *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StopWatch_reset",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Util__StopWatch, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StopWatch_reset" "', argument " "1"" of type '" "Seiscomp::Util::StopWatch *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Util::StopWatch * >(argp1);
+  (arg1)->reset();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StopWatch_isActive(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Util::StopWatch *arg1 = (Seiscomp::Util::StopWatch *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StopWatch_isActive",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Util__StopWatch, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StopWatch_isActive" "', argument " "1"" of type '" "Seiscomp::Util::StopWatch const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Util::StopWatch * >(argp1);
+  result = (bool)((Seiscomp::Util::StopWatch const *)arg1)->isActive();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -3983,6 +4081,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"file2istream", _wrap_file2istream, METH_VARARGS, NULL},
 	 { (char *)"new_StopWatch", _wrap_new_StopWatch, METH_VARARGS, NULL},
 	 { (char *)"StopWatch_restart", _wrap_StopWatch_restart, METH_VARARGS, NULL},
+	 { (char *)"StopWatch_reset", _wrap_StopWatch_reset, METH_VARARGS, NULL},
+	 { (char *)"StopWatch_isActive", _wrap_StopWatch_isActive, METH_VARARGS, NULL},
 	 { (char *)"StopWatch_elapsed", _wrap_StopWatch_elapsed, METH_VARARGS, NULL},
 	 { (char *)"delete_StopWatch", _wrap_delete_StopWatch, METH_VARARGS, NULL},
 	 { (char *)"StopWatch_swigregister", StopWatch_swigregister, METH_VARARGS, NULL},

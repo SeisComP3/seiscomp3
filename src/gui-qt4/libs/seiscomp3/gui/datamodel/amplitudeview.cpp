@@ -3151,7 +3151,7 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 		AmplitudeViewMarker *marker;
 		marker = new AmplitudeViewMarker(widget, amp->timeWindow().reference(), AmplitudeViewMarker::Amplitude, false);
 		marker->setAmplitude(amp);
-		marker->setText(_amplitudeType.c_str());
+		marker->setText(_magnitudeType.c_str());
 		marker->setId(id);
 
 		if ( amp->waveformID().channelCode().size() > 2 )

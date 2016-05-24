@@ -61,6 +61,7 @@ SET(
 		sensor.h
 		responsepaz.h
 		responsepolynomial.h
+		responsefap.h
 		dataloggercalibration.h
 		decimation.h
 		datalogger.h
@@ -159,6 +160,7 @@ SET(
 		sensor.cpp
 		responsepaz.cpp
 		responsepolynomial.cpp
+		responsefap.cpp
 		dataloggercalibration.cpp
 		decimation.cpp
 		datalogger.cpp

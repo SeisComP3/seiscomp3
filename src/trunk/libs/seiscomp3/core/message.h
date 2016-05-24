@@ -29,7 +29,7 @@ DEFINE_SMARTPOINTER(Message);
 
 /**
  * The MessageIterator is an iterator that iterates over the objects
- * attached to a message. Not all message types support attachements
+ * attached to a message. Not all message types support attachments
  * what resulted in a generic iterator concept. Each derived message
  * type that wants to implement its iteration has to provide an
  * implementation class derived from MessageType::Impl
@@ -105,7 +105,7 @@ class SC_SYSTEM_CORE_API Message : public Seiscomp::Core::BaseObject {
 	// ----------------------------------------------------------------------
 	public:
 		/**
-		 * Returns an iterator to iterate through the attachements.
+		 * Returns an iterator to iterate through the attachments.
 		 * To filter a particular object type, a class typeinfo can
 		 * be used to do that.
 		 * E.g., to filter only object of type A (and derived), use

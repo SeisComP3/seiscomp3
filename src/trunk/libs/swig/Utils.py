@@ -111,11 +111,13 @@ class StopWatch(_object):
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, StopWatch, name)
     __repr__ = _swig_repr
-    def __init__(self): 
-        this = _Utils.new_StopWatch()
+    def __init__(self, *args): 
+        this = _Utils.new_StopWatch(*args)
         try: self.this.append(this)
         except: self.this = this
     def restart(self): return _Utils.StopWatch_restart(self)
+    def reset(self): return _Utils.StopWatch_reset(self)
+    def isActive(self): return _Utils.StopWatch_isActive(self)
     def elapsed(self): return _Utils.StopWatch_elapsed(self)
     __swig_destroy__ = _Utils.delete_StopWatch
     __del__ = lambda self : None;

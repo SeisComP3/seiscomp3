@@ -35,6 +35,7 @@
 #include <seiscomp3/datamodel/publicobjectcache.h>
 #include <seiscomp3/datamodel/vs/vs_package.h>
 #include <seiscomp3/datamodel/magnitude.h>
+#include <seiscomp3/datamodel/stationmagnitude.h>
 
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/application.h>
@@ -48,6 +49,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <vector>
 
 #include "util.h"
 #include "timeline.h"
@@ -76,6 +78,7 @@ public:
 
 protected:
 	typedef std::map<Timeline::StationID, VsTimeWindow> VsWindows;
+	typedef std::vector<DataModel::StationMagnitudeCPtr> StaMagArray;
 
 	DEFINE_SMARTPOINTER(VsEvent);
 	struct VsEvent: Core::BaseObject {
@@ -88,6 +91,7 @@ protected:
 		OPT(double) vsMagnitude;
 		Core::Time originArrivalTime;
 		Core::Time originCreationTime;
+		StaMagArray staMags;
 		int vsStationCount;
 		Timeline::StationList pickedStations; // all stations contributing picks to an origin
 		int pickedStationsCount;
@@ -122,7 +126,7 @@ protected:
 	void handleOrigin(DataModel::Origin *og);
 
 	void processEvents();
-	void process(VsEvent *event, std::string eventID);
+	void process(VsEvent *vsevt, DataModel::Event *event);
 	void updateVSMagnitude(DataModel::Event *event, VsEvent *vsevt);
 	template<typename T>
 	bool setComments(DataModel::Magnitude *mag, const std::string id,

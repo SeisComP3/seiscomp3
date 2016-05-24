@@ -1,10 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Specific to GEOFON (geofon-open*); could be merged into reqlogstats.sh?
 #
 # Begun by Peter L. Evans, 2013-2014
 # <pevans@gfz-potsdam.de>
 # 
+# Copyright (C) 2013-2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with NO WARRANTY.
+#
 # ----------------------------------------------------------------------
 
 set -u

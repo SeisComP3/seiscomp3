@@ -3482,104 +3482,106 @@ namespace Swig {
 #define SWIGTYPE_p_Seiscomp__IO__ExportSink swig_types[101]
 #define SWIGTYPE_p_Seiscomp__IO__Exporter swig_types[102]
 #define SWIGTYPE_p_Seiscomp__IO__GFArchive swig_types[103]
-#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[104]
-#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[105]
-#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[106]
-#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[107]
-#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[108]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[109]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[110]
-#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[111]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[112]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[113]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[114]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[115]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[116]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[117]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[118]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[119]
-#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[120]
-#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[121]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t swig_types[122]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[123]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[124]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[125]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[126]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[127]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[128]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[129]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[130]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[131]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[132]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[133]
-#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[134]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[135]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[136]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[137]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[138]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[139]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[140]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[141]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[142]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[143]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[144]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[145]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[146]
-#define SWIGTYPE_p_TagType swig_types[147]
-#define SWIGTYPE_p_Type swig_types[148]
-#define SWIGTYPE_p_allocator_type swig_types[149]
-#define SWIGTYPE_p_bool swig_types[150]
-#define SWIGTYPE_p_char swig_types[151]
-#define SWIGTYPE_p_char_type swig_types[152]
-#define SWIGTYPE_p_const_iterator swig_types[153]
-#define SWIGTYPE_p_const_reference swig_types[154]
-#define SWIGTYPE_p_difference_type swig_types[155]
-#define SWIGTYPE_p_double swig_types[156]
-#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[157]
-#define SWIGTYPE_p_float swig_types[158]
-#define SWIGTYPE_p_fmtflags swig_types[159]
-#define SWIGTYPE_p_int swig_types[160]
-#define SWIGTYPE_p_int_type swig_types[161]
-#define SWIGTYPE_p_iostate swig_types[162]
-#define SWIGTYPE_p_iterator swig_types[163]
-#define SWIGTYPE_p_long swig_types[164]
-#define SWIGTYPE_p_off_type swig_types[165]
-#define SWIGTYPE_p_openmode swig_types[166]
-#define SWIGTYPE_p_p_void swig_types[167]
-#define SWIGTYPE_p_pos_type swig_types[168]
-#define SWIGTYPE_p_reference swig_types[169]
-#define SWIGTYPE_p_seekdir swig_types[170]
-#define SWIGTYPE_p_size_t swig_types[171]
-#define SWIGTYPE_p_size_type swig_types[172]
-#define SWIGTYPE_p_state_type swig_types[173]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[174]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[175]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[176]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[177]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[178]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[179]
-#define SWIGTYPE_p_std__exception swig_types[180]
-#define SWIGTYPE_p_std__invalid_argument swig_types[181]
-#define SWIGTYPE_p_std__ios_base swig_types[182]
-#define SWIGTYPE_p_std__istream swig_types[183]
-#define SWIGTYPE_p_std__listT_double_t swig_types[184]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[185]
-#define SWIGTYPE_p_std__locale swig_types[186]
-#define SWIGTYPE_p_std__ostream swig_types[187]
-#define SWIGTYPE_p_std__streambuf swig_types[188]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[189]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[190]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[191]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[192]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[193]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[194]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[195]
-#define SWIGTYPE_p_time_t swig_types[196]
-#define SWIGTYPE_p_traits_type swig_types[197]
-#define SWIGTYPE_p_value_type swig_types[198]
-#define SWIGTYPE_p_void swig_types[199]
-static swig_type_info *swig_types[201];
-static swig_module_info swig_module = {swig_types, 200, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__IO__GFReceiver swig_types[104]
+#define SWIGTYPE_p_Seiscomp__IO__GFSource swig_types[105]
+#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[106]
+#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[107]
+#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[108]
+#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[109]
+#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[110]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[111]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[112]
+#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[113]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[114]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[115]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[116]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[117]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[118]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[119]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[120]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[121]
+#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[122]
+#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[123]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t swig_types[124]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[125]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[126]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[127]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[128]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[129]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[130]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[131]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[132]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[133]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[134]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[135]
+#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[136]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[137]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[138]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[139]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[140]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[141]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[142]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[143]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[144]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[145]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[146]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[147]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[148]
+#define SWIGTYPE_p_TagType swig_types[149]
+#define SWIGTYPE_p_Type swig_types[150]
+#define SWIGTYPE_p_allocator_type swig_types[151]
+#define SWIGTYPE_p_bool swig_types[152]
+#define SWIGTYPE_p_char swig_types[153]
+#define SWIGTYPE_p_char_type swig_types[154]
+#define SWIGTYPE_p_const_iterator swig_types[155]
+#define SWIGTYPE_p_const_reference swig_types[156]
+#define SWIGTYPE_p_difference_type swig_types[157]
+#define SWIGTYPE_p_double swig_types[158]
+#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[159]
+#define SWIGTYPE_p_float swig_types[160]
+#define SWIGTYPE_p_fmtflags swig_types[161]
+#define SWIGTYPE_p_int swig_types[162]
+#define SWIGTYPE_p_int_type swig_types[163]
+#define SWIGTYPE_p_iostate swig_types[164]
+#define SWIGTYPE_p_iterator swig_types[165]
+#define SWIGTYPE_p_long swig_types[166]
+#define SWIGTYPE_p_off_type swig_types[167]
+#define SWIGTYPE_p_openmode swig_types[168]
+#define SWIGTYPE_p_p_void swig_types[169]
+#define SWIGTYPE_p_pos_type swig_types[170]
+#define SWIGTYPE_p_reference swig_types[171]
+#define SWIGTYPE_p_seekdir swig_types[172]
+#define SWIGTYPE_p_size_t swig_types[173]
+#define SWIGTYPE_p_size_type swig_types[174]
+#define SWIGTYPE_p_state_type swig_types[175]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[176]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[177]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[178]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[179]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[180]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[181]
+#define SWIGTYPE_p_std__exception swig_types[182]
+#define SWIGTYPE_p_std__invalid_argument swig_types[183]
+#define SWIGTYPE_p_std__ios_base swig_types[184]
+#define SWIGTYPE_p_std__istream swig_types[185]
+#define SWIGTYPE_p_std__listT_double_t swig_types[186]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[187]
+#define SWIGTYPE_p_std__locale swig_types[188]
+#define SWIGTYPE_p_std__ostream swig_types[189]
+#define SWIGTYPE_p_std__streambuf swig_types[190]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[191]
+#define SWIGTYPE_p_std__vectorT_double_t swig_types[192]
+#define SWIGTYPE_p_std__vectorT_float_t swig_types[193]
+#define SWIGTYPE_p_std__vectorT_int_t swig_types[194]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[195]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[196]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[197]
+#define SWIGTYPE_p_time_t swig_types[198]
+#define SWIGTYPE_p_traits_type swig_types[199]
+#define SWIGTYPE_p_value_type swig_types[200]
+#define SWIGTYPE_p_void swig_types[201]
+static swig_type_info *swig_types[203];
+static swig_module_info swig_module = {swig_types, 202, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5383,6 +5385,9 @@ SWIG_AsPtr_std_basic_string_Sl_char_Sg_ (PyObject* obj, std::string **val)
 }  
 
 
+  #define SWIG_From_double   PyFloat_FromDouble 
+
+
 /* Getting isfinite working pre C99 across multiple platforms is non-trivial. Users can provide SWIG_isfinite on older platforms. */
 #ifndef SWIG_isfinite
 # if defined(isfinite)
@@ -5418,9 +5423,6 @@ SWIG_AsVal_float (PyObject * obj, float *val)
   }  
   return res;
 }
-
-
-  #define SWIG_From_double   PyFloat_FromDouble 
 
 
 SWIGINTERNINLINE PyObject *
@@ -9235,6 +9237,524 @@ SWIGINTERN PyObject *DatabaseInterface_swigregister(PyObject *SWIGUNUSEDPARM(sel
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::IO::GFSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_GFSource",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFSource" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_GFSource" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_GFSource" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::IO::GFSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_GFSource",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFSource" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_GFSource" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::IO::GFSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_GFSource",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFSource" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFSource *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_GFSource")) SWIG_fail;
+  result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFSource(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_GFSource__SWIG_3(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_GFSource__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_GFSource__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_GFSource__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_GFSource'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::IO::GFSource::GFSource(double,double,double)\n"
+    "    Seiscomp::IO::GFSource::GFSource(double,double)\n"
+    "    Seiscomp::IO::GFSource::GFSource(double)\n"
+    "    Seiscomp::IO::GFSource::GFSource()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_GFSource_depth_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFSource *arg1 = (Seiscomp::IO::GFSource *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GFSource_depth_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFSource, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GFSource_depth_set" "', argument " "1"" of type '" "Seiscomp::IO::GFSource *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GFSource_depth_set" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->depth = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GFSource_depth_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFSource *arg1 = (Seiscomp::IO::GFSource *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GFSource_depth_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFSource, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GFSource_depth_get" "', argument " "1"" of type '" "Seiscomp::IO::GFSource *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp1);
+  result = (double) ((arg1)->depth);
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GFSource(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFSource *arg1 = (Seiscomp::IO::GFSource *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_GFSource",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GFSource" "', argument " "1"" of type '" "Seiscomp::IO::GFSource *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GFSource_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::IO::GFReceiver *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_GFReceiver",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFReceiver" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_GFReceiver" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_GFReceiver" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Seiscomp::IO::GFReceiver *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_GFReceiver",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFReceiver" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_GFReceiver" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1,arg2);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::IO::GFReceiver *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_GFReceiver",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_GFReceiver" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFReceiver *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_GFReceiver")) SWIG_fail;
+  result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_GFReceiver(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[4];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_GFReceiver__SWIG_3(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_GFReceiver__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_new_GFReceiver__SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_double(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_GFReceiver__SWIG_0(self, args);
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_GFReceiver'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::IO::GFReceiver::GFReceiver(double,double,double)\n"
+    "    Seiscomp::IO::GFReceiver::GFReceiver(double,double)\n"
+    "    Seiscomp::IO::GFReceiver::GFReceiver(double)\n"
+    "    Seiscomp::IO::GFReceiver::GFReceiver()\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_GFReceiver_elevation_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFReceiver *arg1 = (Seiscomp::IO::GFReceiver *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GFReceiver_elevation_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFReceiver, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GFReceiver_elevation_set" "', argument " "1"" of type '" "Seiscomp::IO::GFReceiver *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GFReceiver_elevation_set" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->elevation = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GFReceiver_elevation_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFReceiver *arg1 = (Seiscomp::IO::GFReceiver *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GFReceiver_elevation_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFReceiver, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GFReceiver_elevation_get" "', argument " "1"" of type '" "Seiscomp::IO::GFReceiver *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp1);
+  result = (double) ((arg1)->elevation);
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_GFReceiver(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFReceiver *arg1 = (Seiscomp::IO::GFReceiver *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_GFReceiver",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GFReceiver" "', argument " "1"" of type '" "Seiscomp::IO::GFReceiver *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp1);
+  delete arg1;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *GFReceiver_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_GFArchive_ClassName(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *result = 0 ;
@@ -9659,16 +10179,16 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest__SWIG_0(PyObject *SWIGUNUSEDPARM
   Seiscomp::IO::GFArchive *arg1 = (Seiscomp::IO::GFArchive *) 0 ;
   std::string *arg2 = 0 ;
   std::string *arg3 = 0 ;
-  double arg4 ;
-  double arg5 ;
+  Seiscomp::IO::GFSource *arg4 = 0 ;
+  Seiscomp::IO::GFReceiver *arg5 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
   int res3 = SWIG_OLDOBJ ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -9704,17 +10224,23 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest__SWIG_0(PyObject *SWIGUNUSEDPARM
     }
     arg3 = ptr;
   }
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "double""'");
-  } 
-  arg5 = static_cast< double >(val5);
-  result = (bool)(arg1)->addRequest((std::string const &)*arg2,(std::string const &)*arg3,arg4,arg5);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_Seiscomp__IO__GFSource,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  arg4 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__IO__GFReceiver,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  arg5 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp5);
+  result = (bool)(arg1)->addRequest((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::IO::GFSource const &)*arg4,(Seiscomp::IO::GFReceiver const &)*arg5);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
@@ -9731,17 +10257,17 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest__SWIG_1(PyObject *SWIGUNUSEDPARM
   Seiscomp::IO::GFArchive *arg1 = (Seiscomp::IO::GFArchive *) 0 ;
   std::string *arg2 = 0 ;
   std::string *arg3 = 0 ;
-  double arg4 ;
-  double arg5 ;
+  Seiscomp::IO::GFSource *arg4 = 0 ;
+  Seiscomp::IO::GFReceiver *arg5 = 0 ;
   Seiscomp::Core::TimeSpan *arg6 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
   int res3 = SWIG_OLDOBJ ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
   void *argp6 = 0 ;
   int res6 = 0 ;
   PyObject * obj0 = 0 ;
@@ -9780,16 +10306,22 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest__SWIG_1(PyObject *SWIGUNUSEDPARM
     }
     arg3 = ptr;
   }
-  ecode4 = SWIG_AsVal_double(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "double""'");
-  } 
-  arg5 = static_cast< double >(val5);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_Seiscomp__IO__GFSource,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_addRequest" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  arg4 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__IO__GFReceiver,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_addRequest" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  arg5 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp5);
   res6 = SWIG_ConvertPtr(obj5, &argp6, SWIGTYPE_p_Seiscomp__Core__TimeSpan,  0  | 0);
   if (!SWIG_IsOK(res6)) {
     SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "GFArchive_addRequest" "', argument " "6"" of type '" "Seiscomp::Core::TimeSpan const &""'"); 
@@ -9798,7 +10330,7 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest__SWIG_1(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_addRequest" "', argument " "6"" of type '" "Seiscomp::Core::TimeSpan const &""'"); 
   }
   arg6 = reinterpret_cast< Seiscomp::Core::TimeSpan * >(argp6);
-  result = (bool)(arg1)->addRequest((std::string const &)*arg2,(std::string const &)*arg3,arg4,arg5,(Seiscomp::Core::TimeSpan const &)*arg6);
+  result = (bool)(arg1)->addRequest((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::IO::GFSource const &)*arg4,(Seiscomp::IO::GFReceiver const &)*arg5,(Seiscomp::Core::TimeSpan const &)*arg6);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   if (SWIG_IsNewObj(res2)) delete arg2;
   if (SWIG_IsNewObj(res3)) delete arg3;
@@ -9832,15 +10364,11 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest(PyObject *self, PyObject *args) 
         int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_Seiscomp__IO__GFSource, 0);
+          _v = SWIG_CheckState(res);
           if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__IO__GFReceiver, 0);
+            _v = SWIG_CheckState(res);
             if (_v) {
               return _wrap_GFArchive_addRequest__SWIG_0(self, args);
             }
@@ -9861,15 +10389,11 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest(PyObject *self, PyObject *args) 
         int res = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(argv[2], (std::basic_string<char>**)(0));
         _v = SWIG_CheckState(res);
         if (_v) {
-          {
-            int res = SWIG_AsVal_double(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_Seiscomp__IO__GFSource, 0);
+          _v = SWIG_CheckState(res);
           if (_v) {
-            {
-              int res = SWIG_AsVal_double(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
+            int res = SWIG_ConvertPtr(argv[4], 0, SWIGTYPE_p_Seiscomp__IO__GFReceiver, 0);
+            _v = SWIG_CheckState(res);
             if (_v) {
               int res = SWIG_ConvertPtr(argv[5], 0, SWIGTYPE_p_Seiscomp__Core__TimeSpan, 0);
               _v = SWIG_CheckState(res);
@@ -9886,8 +10410,8 @@ SWIGINTERN PyObject *_wrap_GFArchive_addRequest(PyObject *self, PyObject *args) 
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'GFArchive_addRequest'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Seiscomp::IO::GFArchive::addRequest(std::string const &,std::string const &,double,double)\n"
-    "    Seiscomp::IO::GFArchive::addRequest(std::string const &,std::string const &,double,double,Seiscomp::Core::TimeSpan const &)\n");
+    "    Seiscomp::IO::GFArchive::addRequest(std::string const &,std::string const &,Seiscomp::IO::GFSource const &,Seiscomp::IO::GFReceiver const &)\n"
+    "    Seiscomp::IO::GFArchive::addRequest(std::string const &,std::string const &,Seiscomp::IO::GFSource const &,Seiscomp::IO::GFReceiver const &,Seiscomp::Core::TimeSpan const &)\n");
   return 0;
 }
 
@@ -29073,6 +29597,16 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DatabaseInterface_columnPrefix", _wrap_DatabaseInterface_columnPrefix, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_convertColumnName", _wrap_DatabaseInterface_convertColumnName, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_swigregister", DatabaseInterface_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_GFSource", _wrap_new_GFSource, METH_VARARGS, NULL},
+	 { (char *)"GFSource_depth_set", _wrap_GFSource_depth_set, METH_VARARGS, NULL},
+	 { (char *)"GFSource_depth_get", _wrap_GFSource_depth_get, METH_VARARGS, NULL},
+	 { (char *)"delete_GFSource", _wrap_delete_GFSource, METH_VARARGS, NULL},
+	 { (char *)"GFSource_swigregister", GFSource_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_GFReceiver", _wrap_new_GFReceiver, METH_VARARGS, NULL},
+	 { (char *)"GFReceiver_elevation_set", _wrap_GFReceiver_elevation_set, METH_VARARGS, NULL},
+	 { (char *)"GFReceiver_elevation_get", _wrap_GFReceiver_elevation_get, METH_VARARGS, NULL},
+	 { (char *)"delete_GFReceiver", _wrap_delete_GFReceiver, METH_VARARGS, NULL},
+	 { (char *)"GFReceiver_swigregister", GFReceiver_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GFArchive_ClassName", _wrap_GFArchive_ClassName, METH_VARARGS, NULL},
 	 { (char *)"GFArchive_TypeInfo", _wrap_GFArchive_TypeInfo, METH_VARARGS, NULL},
 	 { (char *)"GFArchive_className", _wrap_GFArchive_className, METH_VARARGS, NULL},
@@ -30003,6 +30537,8 @@ static swig_type_info _swigt__p_Seiscomp__IO__DatabaseInterface = {"_p_Seiscomp_
 static swig_type_info _swigt__p_Seiscomp__IO__ExportSink = {"_p_Seiscomp__IO__ExportSink", "Seiscomp::IO::ExportSink *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__Exporter = {"_p_Seiscomp__IO__Exporter", "Seiscomp::IO::Exporter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__GFArchive = {"_p_Seiscomp__IO__GFArchive", "Seiscomp::IO::GFArchive *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__IO__GFReceiver = {"_p_Seiscomp__IO__GFReceiver", "Seiscomp::IO::GFReceiver *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__IO__GFSource = {"_p_Seiscomp__IO__GFSource", "Seiscomp::IO::GFSource *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__Importer = {"_p_Seiscomp__IO__Importer", "Seiscomp::IO::Importer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__LibmseedException = {"_p_Seiscomp__IO__LibmseedException", "Seiscomp::IO::LibmseedException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__MSeedRecord = {"_p_Seiscomp__IO__MSeedRecord", "Seiscomp::IO::MSeedRecord *", 0, 0, (void*)0, 0};
@@ -30202,6 +30738,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__IO__ExportSink,
   &_swigt__p_Seiscomp__IO__Exporter,
   &_swigt__p_Seiscomp__IO__GFArchive,
+  &_swigt__p_Seiscomp__IO__GFReceiver,
+  &_swigt__p_Seiscomp__IO__GFSource,
   &_swigt__p_Seiscomp__IO__Importer,
   &_swigt__p_Seiscomp__IO__LibmseedException,
   &_swigt__p_Seiscomp__IO__MSeedRecord,
@@ -30407,6 +30945,8 @@ static swig_cast_info _swigc__p_Seiscomp__IO__DatabaseInterface[] = {  {&_swigt_
 static swig_cast_info _swigc__p_Seiscomp__IO__ExportSink[] = {  {&_swigt__p_Seiscomp__IO__ExportSink, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__Exporter[] = {  {&_swigt__p_Seiscomp__IO__Exporter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__GFArchive[] = {  {&_swigt__p_Seiscomp__IO__GFArchive, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__IO__GFReceiver[] = {  {&_swigt__p_Seiscomp__IO__GFReceiver, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__IO__GFSource[] = {  {&_swigt__p_Seiscomp__IO__GFSource, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__Importer[] = {  {&_swigt__p_Seiscomp__IO__Importer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__LibmseedException[] = {  {&_swigt__p_Seiscomp__IO__LibmseedException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__MSeedRecord[] = {  {&_swigt__p_Seiscomp__IO__MSeedRecord, 0, 0, 0},{0, 0, 0, 0}};
@@ -30606,6 +31146,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__IO__ExportSink,
   _swigc__p_Seiscomp__IO__Exporter,
   _swigc__p_Seiscomp__IO__GFArchive,
+  _swigc__p_Seiscomp__IO__GFReceiver,
+  _swigc__p_Seiscomp__IO__GFSource,
   _swigc__p_Seiscomp__IO__Importer,
   _swigc__p_Seiscomp__IO__LibmseedException,
   _swigc__p_Seiscomp__IO__MSeedRecord,

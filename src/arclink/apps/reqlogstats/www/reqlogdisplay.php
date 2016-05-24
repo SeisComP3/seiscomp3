@@ -42,7 +42,8 @@ function mark_yesno($val) {
   }
 }
 
-function render_availability_table($db, $start_str, $today_str, $end_str) {
+function render_availability_table($db, $start_str, $today_str, $end_str)
+{
   $result = $db->makequerytable("SELECT id, host, port, dcid FROM `{table}` ORDER BY `dcid`", "ArcStatsSource", True);
 	/* TODO: Restrict this to just those sources with summaries available
 	 * between $start_str and $end_str. This involves looking into
@@ -76,7 +77,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
 
   $num_dcids = 0;
 
-  echo "<table>";
+  echo PHP_EOL . '<table>' . PHP_EOL;
   echo tag('thead', tr(td('EIDA NODE') . tag_list('th', $day_list)));
 
   $dcid_seen = array();
@@ -95,6 +96,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
 
     $day = $start_str;  // DateTime::createFromFormat('Y-m-d', $start_str);
     $presence_list = Array();
+	$present_count = 0;
     for (; $day <= $finish; $day = offset($day, 1)) {
       $day_str = $day;
       //TODO $result = queryexecute($thing, Array($day_str, $source_id));
@@ -105,22 +107,24 @@ function render_availability_table($db, $start_str, $today_str, $end_str) {
       //print "QUERY: " . $q_2 . PHP_EOL;
 
       $result = $db->makequerytable($q_2, 'ArcStatsSummary');
-      if (is_array($result)) {
-	$ans = $result[0];
-	$yesno = intval($ans[0]);  // (intval($ans[0]) > 0);
-      } else {
-	$yesno = False;
-      }
+	if (is_array($result)) {
+		$ans = $result[0];
+		$yesno = intval($ans[0]);  // (intval($ans[0]) > 0);
+		if ($yesno > 0) $present_count += 1;
+	} else {
+		$yesno = False;
+	}
       $presence_list[] = mark_yesno($yesno);
     }
     unset($row);
     $header = tag("a", "$dcid", Array("href" => "$me?date=$today_str&amp;dcid=$dcid")); // "$dcid ($host:$port)";
+	$header .= ' (' . strval($present_count) . ')';
     $tmp = explode("-", $today_str);
     $highlight = Array(intval($tmp[2]) => 'style="border-style: Solid; border-color: yellow; border-width: 0px 1px; background-color: lightyellow;"');
     echo tr(td($header) . tag_list('td', $presence_list, "", $highlight)) . PHP_EOL;
   }
 
-  echo "</table>";
+  echo '</table>' . PHP_EOL;
   $num_dcids = count($dcid_seen);
   echo tag("p", "Reports available from $num_sources sources ($num_dcids DCIDs) between $start_str and $end_str");
 }
@@ -166,7 +170,7 @@ $img_base_url = "../data";
 $img1 = "$img_base_url/total-$year-$month.svg";
 $img2 = "$img_base_url/sources-$year-$month.svg";
 
-echo tag('h1', 'Arclink Request Statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year)));
+echo tag('h1', 'Arclink Request Statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year))) . PHP_EOL;
 
 if (file_exists($img1)) {
         print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '" alt="Monthly chart total bytes" width="480" /></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
@@ -181,10 +185,10 @@ if (file_exists($year_img)) {
 }
 print tag("p", 'Summary table for <a href="../data/total-' . $year. '.txt">' . $year . '</a>');
 
-echo tag("h3", "FDSNWS for $year");
+echo tag("h3", "FDSNWS for $year") . PHP_EOL;
 print_fdsnws_graph("$year-01-01");
 
-echo tag('h3', 'Reports received from');
+echo tag('h3', 'Reports received from') . PHP_EOL;
 render_availability_table($db, $month_start_str, $start_day, $month_end_str);
 
 // echo tag("pick node or nodes to combine");
@@ -225,7 +229,7 @@ foreach ($table_list as $item) {
   $marked_table_list[] = tag("a", $item, Array('href' => "#Table$item"));
 }
 $table_nav = tag("ol", tag_list("li", $marked_table_list), Array('class' => 'nav'));
-print tag("p", "Tables:") . $table_nav;
+print tag("p", "Tables:") . PHP_EOL . $table_nav;
 
 // Source data is needed for all tables:
 
@@ -252,7 +256,7 @@ foreach ($selected_node_ids as $node_id) {
 }
 
 foreach ($table_list as $table) {
-  echo h2("Table $table" . tag("a", "", Array('name' => "Table$table")));
+  echo h2("Table $table" . tag("a", "", Array('name' => "Table$table"))) . PHP_EOL;
 
     $options = Array();
     if (($table == "UserIP") || ($table == "ClientIP")) {
@@ -303,7 +307,7 @@ foreach ($table_list as $table) {
 // One extra table:
 
 $table = "Messages this month";
-echo tag("h3", "Table $table" . tag("a", "", Array('name' => "TableMessages_this_month")));
+echo tag("h3", "Table $table" . tag("a", "", Array('name' => "TableMessages_this_month"))) . PHP_EOL;
 
 $order_col = "message" ; // $table_heads[$table][2];
 foreach ($selected_node_ids as $node_id) {

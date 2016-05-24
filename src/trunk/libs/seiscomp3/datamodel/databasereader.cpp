@@ -1816,6 +1816,8 @@ int DatabaseReader::load(Inventory* inventory) {
 
 	count += loadResponsePolynomials(inventory);
 
+	count += loadResponseFAPs(inventory);
+
 	count += loadNetworks(inventory);
 	{
 		size_t elementCount = inventory->networkCount();
@@ -2027,6 +2029,36 @@ int DatabaseReader::loadResponsePolynomials(Inventory* inventory) {
 		}
 		else
 			SEISCOMP_INFO("Inventory::add(ResponsePolynomial) -> ResponsePolynomial has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadResponseFAPs(Inventory* inventory) {
+	if ( !validInterface() || inventory == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(inventory, ResponseFAP::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			inventory->add(ResponseFAP::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("Inventory::add(ResponseFAP) -> ResponseFAP has already another parent");
 		++it;
 	}
 	it.close();

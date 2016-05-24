@@ -17,8 +17,8 @@ namespace FDSNXML {
 
 
 SampleRateRatioType::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
-	addProperty(Core::simpleProperty("numberSamples", "float", false, false, false, false, false, false, NULL, &SampleRateRatioType::setNumberSamples, &SampleRateRatioType::numberSamples));
-	addProperty(Core::simpleProperty("numberSeconds", "float", false, false, false, false, false, false, NULL, &SampleRateRatioType::setNumberSeconds, &SampleRateRatioType::numberSeconds));
+	addProperty(Core::simpleProperty("numberSamples", "int", false, false, false, false, false, false, NULL, &SampleRateRatioType::setNumberSamples, &SampleRateRatioType::numberSamples));
+	addProperty(Core::simpleProperty("numberSeconds", "int", false, false, false, false, false, false, NULL, &SampleRateRatioType::setNumberSeconds, &SampleRateRatioType::numberSeconds));
 }
 
 
@@ -67,7 +67,7 @@ bool SampleRateRatioType::operator==(const SampleRateRatioType &rhs) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SampleRateRatioType::setNumberSamples(double numberSamples) {
+void SampleRateRatioType::setNumberSamples(int numberSamples) {
 	_numberSamples = numberSamples;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -76,7 +76,7 @@ void SampleRateRatioType::setNumberSamples(double numberSamples) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SampleRateRatioType::numberSamples() const {
+int SampleRateRatioType::numberSamples() const {
 	return _numberSamples;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -85,7 +85,7 @@ double SampleRateRatioType::numberSamples() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SampleRateRatioType::setNumberSeconds(double numberSeconds) {
+void SampleRateRatioType::setNumberSeconds(int numberSeconds) {
 	_numberSeconds = numberSeconds;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -94,7 +94,7 @@ void SampleRateRatioType::setNumberSeconds(double numberSeconds) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SampleRateRatioType::numberSeconds() const {
+int SampleRateRatioType::numberSeconds() const {
 	return _numberSeconds;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

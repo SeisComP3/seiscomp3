@@ -238,11 +238,16 @@
 
             <!-- Add the MVS likelihood as child of event -->
             <xsl:for-each select="../scs:origin/scs:magnitude/scs:type[.='MVS']">
-            	<xsl:for-each select="../scs:comment/scs:id[.='likelihood']">
-            		<xsl:element name='vs:likelihood'>
-	            		<xsl:value-of select="../scs:text"/>
-	            	</xsl:element>
-	            </xsl:for-each>
+	      <xsl:sort select="../@publicID"/>
+	      <xsl:choose>
+		<xsl:when test="position() = last()">
+		  <xsl:for-each select="../scs:comment/scs:id[.='likelihood']">
+		    <xsl:element name='vs:likelihood'>
+		      <xsl:value-of select="../scs:text"/>
+		    </xsl:element>
+		  </xsl:for-each>
+		</xsl:when>
+	      </xsl:choose>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
@@ -327,7 +332,7 @@
         <xsl:element name="{local-name()}">
             <xsl:attribute name="{$PID}">
                 <xsl:call-template name="convertID">
-                    <xsl:with-param name="id" select="concat(scs:pickID, '#', ../@publicID)"/>
+                    <xsl:with-param name="id" select="concat(scs:pickID, '/', ../@publicID)"/>
                 </xsl:call-template>
             </xsl:attribute>
             <!--comment/-->
@@ -488,7 +493,7 @@
     <!-- Converts a scs id to a quakeml id -->
     <xsl:template name="convertID">
         <xsl:param name="id"/>
-        <xsl:value-of select="concat($ID_PREFIX, translate($id, ' :', '__'))"/>
+        <xsl:value-of select="concat($ID_PREFIX, translate(translate($id, ' :', '__'),'#','/'))"/>
     </xsl:template>
 </xsl:stylesheet>
 

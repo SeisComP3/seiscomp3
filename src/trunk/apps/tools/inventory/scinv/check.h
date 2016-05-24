@@ -56,6 +56,7 @@ class Check : public InventoryTask {
 		Seiscomp::DataModel::Sensor *findSensor(const std::string &) const;
 		Seiscomp::DataModel::ResponsePAZ *findPAZ(const std::string &) const;
 		Seiscomp::DataModel::ResponsePolynomial *findPoly(const std::string &) const;
+		Seiscomp::DataModel::ResponseFAP *findFAP(const std::string &) const;
 };
 
 

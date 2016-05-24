@@ -199,6 +199,7 @@ Classes
   * :ref:`Decimation <api-python-datamodel-decimation>`
   * :ref:`Network <api-python-datamodel-network>`
   * :ref:`RealArray <api-python-datamodel-realarray>`
+  * :ref:`ResponseFAP <api-python-datamodel-responsefap>`
   * :ref:`ResponseFIR <api-python-datamodel-responsefir>`
   * :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
   * :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
@@ -235,6 +236,7 @@ Classes
         ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponsePolynomial [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePolynomial</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="frequencyUnit"><font color="#8b0000">+ frequencyUnit: string</font></td></tr><tr><td align="left" port="approximationType"><font color="#8b0000">+ approximationType: string</font></td></tr><tr><td align="left" port="approximationLowerBound"><font color="#8b0000">+ approximationLowerBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationUpperBound"><font color="#8b0000">+ approximationUpperBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationError"><font color="#8b0000">+ approximationError: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponseFAP [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFAP</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfTuples"><font color="#8b0000">+ numberOfTuples: int  [0..1]</font></td></tr><tr><td align="left" port="tuples"><font color="#8b0000">+ tuples: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Network [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Network</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="institutions"><font color="#8b0000">+ institutions: string</font></td></tr><tr><td align="left" port="region"><font color="#8b0000">+ region: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="netClass"><font color="#8b0000">+ netClass: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ station: Station [0..*]</font></td></tr></table>>]
         Station [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Station</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left" port="place"><font color="#8b0000">+ place: string</font></td></tr><tr><td align="left" port="country"><font color="#8b0000">+ country: string</font></td></tr><tr><td align="left" port="affiliation"><font color="#8b0000">+ affiliation: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="archiveNetworkCode"><font color="#8b0000">+ archiveNetworkCode: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ sensorLocation: SensorLocation [0..*]</font></td></tr></table>>]
         SensorLocation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>SensorLocation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ auxStream: AuxStream [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stream: Stream [0..*]</font></td></tr></table>>]
@@ -252,6 +254,7 @@ Classes
         Inventory -> ResponsePAZ
         Inventory -> ResponseFIR
         Inventory -> ResponsePolynomial
+        Inventory -> ResponseFAP
         Inventory -> Network
         Network -> Station
         Station -> SensorLocation
@@ -6425,6 +6428,15 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: add(responseFAP)
+
+      :param responseFAP: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A boolean value indicating success with True, False otherwise.
+
+      Adds a ResponseFAP object to Inventory. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
    .. py:method:: add(network)
 
       :param network: Object of type :ref:`Network <api-python-datamodel-network>`
@@ -6482,6 +6494,13 @@ Reference
       :rtype: A boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponsePolynomial object from Inventory.
+
+   .. py:method:: remove(responseFAP)
+
+      :param responseFAP: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A boolean value indicating success with True, False otherwise.
+
+      Removes a previously added ResponseFAP object from Inventory.
 
    .. py:method:: remove(network)
 
@@ -6560,6 +6579,16 @@ Reference
       :param responsePolynomialIndex: The index of the object to be removed of type ResponsePolynomialIndex.
       :rtype: A boolean value indicating success with True, False otherwise.
 
+   .. py:method:: removeResponseFAP(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseFAP(responseFAPIndex);
+
+      :param responseFAPIndex: The index of the object to be removed of type ResponseFAPIndex.
+      :rtype: A boolean value indicating success with True, False otherwise.
+
    .. py:method:: removeNetwork(idx)
 
       :param idx: An integer index of the object to be removed.
@@ -6611,6 +6640,12 @@ Reference
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of ResponsePolynomial child objects.
+
+   .. py:method:: responseFAPCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of ResponseFAP child objects.
 
    .. py:method:: networkCount()
 
@@ -6730,6 +6765,22 @@ Reference
       are compared by value which makes this function slower than the direct
       integer index lookup.
 
+   .. py:method:: responseFAP(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
+
+      Returns the ResponseFAP at index idx.
+
+   .. py:method:: responseFAP(responseFAPIndex)
+
+      :param responseFAPIndex: The index of the object to be removed of type ResponseFAPIndex.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
+
+      Returns the ResponseFAP at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index lookup.
+
    .. py:method:: network(idx)
 
       :param idx: An integer index of the object to be returned.
@@ -6792,6 +6843,13 @@ Reference
 
       :param publicID: The publicID of the object to find.
       :rtype: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
+   .. py:method:: findResponseFAP(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
 
       Returns the child object with a certain publicID, None otherwise.
 
@@ -11505,6 +11563,203 @@ Reference
          As this attribute is optional this method throws a ValueException if
          the value of the attribute is not set.
 
+.. _api-python-datamodel-responsefap:
+
+.. py:class:: ResponseFAP
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type describes a sensor response composed of frequency\/amplitude\/phase
+   angle tuples. According to the SEED manual \(blockette 55\) this description
+   alone is not an acceptable response description.
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type ResponseFAP if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to ResponseFAP if the internal wrapped
+      representation is an ResponseFAP object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type ResponseFAP.
+
+      Creates and registeres (if enabled) a ResponseFAP instance. The
+      publicID is autogenerated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type ResponseFAP.
+
+      Creates and registeres (if enabled) a ResponseFAP instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type ResponseFAPIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setName(name)
+
+      :param name: string
+
+      Unique response name
+
+   .. py:method:: name()
+
+      :rtype: string
+
+   .. py:method:: setGain(gain)
+
+      :param gain: float
+
+      Gain of response \(48.05\/58.04\)
+
+   .. py:method:: gain()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfTuples(numberOfTuples)
+
+      :param numberOfTuples: int
+
+      The number of fap tuples in the response
+
+   .. py:method:: numberOfTuples()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
+
+   .. py:method:: setTuples(tuples)
+
+      :param tuples: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      The tuples organized as linear array. The array size must be numberOfTuples
+      * 3. Each tuple consists of frequency \(in Hz\), amplitude and phase angle
+      \(in degree\).
+
+   .. py:method:: tuples()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
+
+   .. py:method:: setRemark(remark)
+
+      :param remark: :ref:`Blob <api-python-datamodel-blob>`
+
+      Optional remark
+
+   .. py:method:: remark()
+
+      :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
+
+   .. py:method:: inventory()
+
+      :rtype: Inventory
+
+      Returns the parent Inventory if available. Returns None
+      if the parent is not a Inventory. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned ResponseFAP.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Childs of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
 .. _api-python-datamodel-responsefir:
 
 .. py:class:: ResponseFIR
@@ -13067,7 +13322,8 @@ Reference
 
       :param response: string
 
-      Reference to responsePAZ\/\@publicID or responsePolynomial\/\@publicID
+      Reference to responsePAZ\/\@publicID or responsePolynomial\/\@publicID or
+      responseFAP\/\@publicID
 
    .. py:method:: response()
 

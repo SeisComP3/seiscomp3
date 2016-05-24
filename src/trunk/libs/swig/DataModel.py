@@ -4379,6 +4379,107 @@ def ResponsePolynomial_Find(*args):
   return _DataModel.ResponsePolynomial_Find(*args)
 ResponsePolynomial_Find = _DataModel.ResponsePolynomial_Find
 
+class ResponseFAPIndex(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFAPIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFAPIndex, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        this = _DataModel.new_ResponseFAPIndex(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def __eq__(self, *args): return _DataModel.ResponseFAPIndex___eq__(self, *args)
+    def __ne__(self, *args): return _DataModel.ResponseFAPIndex___ne__(self, *args)
+    __swig_setmethods__["name"] = _DataModel.ResponseFAPIndex_name_set
+    __swig_getmethods__["name"] = _DataModel.ResponseFAPIndex_name_get
+    if _newclass:name = _swig_property(_DataModel.ResponseFAPIndex_name_get, _DataModel.ResponseFAPIndex_name_set)
+    __swig_destroy__ = _DataModel.delete_ResponseFAPIndex
+    __del__ = lambda self : None;
+ResponseFAPIndex_swigregister = _DataModel.ResponseFAPIndex_swigregister
+ResponseFAPIndex_swigregister(ResponseFAPIndex)
+
+class ResponseFAP(PublicObject):
+    __swig_setmethods__ = {}
+    for _s in [PublicObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFAP, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PublicObject]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFAP, name)
+    __repr__ = _swig_repr
+    __swig_getmethods__["ClassName"] = lambda x: _DataModel.ResponseFAP_ClassName
+    if _newclass:ClassName = staticmethod(_DataModel.ResponseFAP_ClassName)
+    __swig_getmethods__["TypeInfo"] = lambda x: _DataModel.ResponseFAP_TypeInfo
+    if _newclass:TypeInfo = staticmethod(_DataModel.ResponseFAP_TypeInfo)
+    def className(self): return _DataModel.ResponseFAP_className(self)
+    def typeInfo(self): return _DataModel.ResponseFAP_typeInfo(self)
+    __swig_getmethods__["Cast"] = lambda x: _DataModel.ResponseFAP_Cast
+    if _newclass:Cast = staticmethod(_DataModel.ResponseFAP_Cast)
+    __swig_getmethods__["ConstCast"] = lambda x: _DataModel.ResponseFAP_ConstCast
+    if _newclass:ConstCast = staticmethod(_DataModel.ResponseFAP_ConstCast)
+    def serialize(self, *args): return _DataModel.ResponseFAP_serialize(self, *args)
+    def __init__(self, *args): 
+        this = _DataModel.new_ResponseFAP(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _DataModel.delete_ResponseFAP
+    __del__ = lambda self : None;
+    __swig_getmethods__["Create"] = lambda x: _DataModel.ResponseFAP_Create
+    if _newclass:Create = staticmethod(_DataModel.ResponseFAP_Create)
+    __swig_getmethods__["Find"] = lambda x: _DataModel.ResponseFAP_Find
+    if _newclass:Find = staticmethod(_DataModel.ResponseFAP_Find)
+    def __eq__(self, *args): return _DataModel.ResponseFAP___eq__(self, *args)
+    def __ne__(self, *args): return _DataModel.ResponseFAP___ne__(self, *args)
+    def equal(self, *args): return _DataModel.ResponseFAP_equal(self, *args)
+    def setName(self, *args): return _DataModel.ResponseFAP_setName(self, *args)
+    def name(self): return _DataModel.ResponseFAP_name(self)
+    def setGain(self, *args): return _DataModel.ResponseFAP_setGain(self, *args)
+    def gain(self): return _DataModel.ResponseFAP_gain(self)
+    def setGainFrequency(self, *args): return _DataModel.ResponseFAP_setGainFrequency(self, *args)
+    def gainFrequency(self): return _DataModel.ResponseFAP_gainFrequency(self)
+    def setNumberOfTuples(self, *args): return _DataModel.ResponseFAP_setNumberOfTuples(self, *args)
+    def numberOfTuples(self): return _DataModel.ResponseFAP_numberOfTuples(self)
+    def setTuples(self, *args): return _DataModel.ResponseFAP_setTuples(self, *args)
+    def tuples(self, *args): return _DataModel.ResponseFAP_tuples(self, *args)
+    def setRemark(self, *args): return _DataModel.ResponseFAP_setRemark(self, *args)
+    def remark(self, *args): return _DataModel.ResponseFAP_remark(self, *args)
+    def index(self): return _DataModel.ResponseFAP_index(self)
+    def equalIndex(self, *args): return _DataModel.ResponseFAP_equalIndex(self, *args)
+    def inventory(self): return _DataModel.ResponseFAP_inventory(self)
+    def assign(self, *args): return _DataModel.ResponseFAP_assign(self, *args)
+    def attachTo(self, *args): return _DataModel.ResponseFAP_attachTo(self, *args)
+    def detachFrom(self, *args): return _DataModel.ResponseFAP_detachFrom(self, *args)
+    def detach(self): return _DataModel.ResponseFAP_detach(self)
+    def clone(self): return _DataModel.ResponseFAP_clone(self)
+    def updateChild(self, *args): return _DataModel.ResponseFAP_updateChild(self, *args)
+    def accept(self, *args): return _DataModel.ResponseFAP_accept(self, *args)
+ResponseFAP_swigregister = _DataModel.ResponseFAP_swigregister
+ResponseFAP_swigregister(ResponseFAP)
+
+def ResponseFAP_ClassName():
+  return _DataModel.ResponseFAP_ClassName()
+ResponseFAP_ClassName = _DataModel.ResponseFAP_ClassName
+
+def ResponseFAP_TypeInfo():
+  return _DataModel.ResponseFAP_TypeInfo()
+ResponseFAP_TypeInfo = _DataModel.ResponseFAP_TypeInfo
+
+def ResponseFAP_Cast(*args):
+  return _DataModel.ResponseFAP_Cast(*args)
+ResponseFAP_Cast = _DataModel.ResponseFAP_Cast
+
+def ResponseFAP_ConstCast(*args):
+  return _DataModel.ResponseFAP_ConstCast(*args)
+ResponseFAP_ConstCast = _DataModel.ResponseFAP_ConstCast
+
+def ResponseFAP_Create(*args):
+  return _DataModel.ResponseFAP_Create(*args)
+ResponseFAP_Create = _DataModel.ResponseFAP_Create
+
+def ResponseFAP_Find(*args):
+  return _DataModel.ResponseFAP_Find(*args)
+ResponseFAP_Find = _DataModel.ResponseFAP_Find
+
 class DataloggerCalibrationIndex(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, DataloggerCalibrationIndex, name, value)
@@ -5413,6 +5514,7 @@ class Inventory(PublicObject):
     def removeResponsePAZ(self, *args): return _DataModel.Inventory_removeResponsePAZ(self, *args)
     def removeResponseFIR(self, *args): return _DataModel.Inventory_removeResponseFIR(self, *args)
     def removeResponsePolynomial(self, *args): return _DataModel.Inventory_removeResponsePolynomial(self, *args)
+    def removeResponseFAP(self, *args): return _DataModel.Inventory_removeResponseFAP(self, *args)
     def removeNetwork(self, *args): return _DataModel.Inventory_removeNetwork(self, *args)
     def stationGroupCount(self): return _DataModel.Inventory_stationGroupCount(self)
     def auxDeviceCount(self): return _DataModel.Inventory_auxDeviceCount(self)
@@ -5421,6 +5523,7 @@ class Inventory(PublicObject):
     def responsePAZCount(self): return _DataModel.Inventory_responsePAZCount(self)
     def responseFIRCount(self): return _DataModel.Inventory_responseFIRCount(self)
     def responsePolynomialCount(self): return _DataModel.Inventory_responsePolynomialCount(self)
+    def responseFAPCount(self): return _DataModel.Inventory_responseFAPCount(self)
     def networkCount(self): return _DataModel.Inventory_networkCount(self)
     def stationGroup(self, *args): return _DataModel.Inventory_stationGroup(self, *args)
     def auxDevice(self, *args): return _DataModel.Inventory_auxDevice(self, *args)
@@ -5429,6 +5532,7 @@ class Inventory(PublicObject):
     def responsePAZ(self, *args): return _DataModel.Inventory_responsePAZ(self, *args)
     def responseFIR(self, *args): return _DataModel.Inventory_responseFIR(self, *args)
     def responsePolynomial(self, *args): return _DataModel.Inventory_responsePolynomial(self, *args)
+    def responseFAP(self, *args): return _DataModel.Inventory_responseFAP(self, *args)
     def network(self, *args): return _DataModel.Inventory_network(self, *args)
     def findStationGroup(self, *args): return _DataModel.Inventory_findStationGroup(self, *args)
     def findAuxDevice(self, *args): return _DataModel.Inventory_findAuxDevice(self, *args)
@@ -5437,6 +5541,7 @@ class Inventory(PublicObject):
     def findResponsePAZ(self, *args): return _DataModel.Inventory_findResponsePAZ(self, *args)
     def findResponseFIR(self, *args): return _DataModel.Inventory_findResponseFIR(self, *args)
     def findResponsePolynomial(self, *args): return _DataModel.Inventory_findResponsePolynomial(self, *args)
+    def findResponseFAP(self, *args): return _DataModel.Inventory_findResponseFAP(self, *args)
     def findNetwork(self, *args): return _DataModel.Inventory_findNetwork(self, *args)
     def assign(self, *args): return _DataModel.Inventory_assign(self, *args)
     def attachTo(self, *args): return _DataModel.Inventory_attachTo(self, *args)
@@ -8385,6 +8490,7 @@ class DatabaseReader(DatabaseArchive):
     def loadResponsePAZs(self, *args): return _DataModel.DatabaseReader_loadResponsePAZs(self, *args)
     def loadResponseFIRs(self, *args): return _DataModel.DatabaseReader_loadResponseFIRs(self, *args)
     def loadResponsePolynomials(self, *args): return _DataModel.DatabaseReader_loadResponsePolynomials(self, *args)
+    def loadResponseFAPs(self, *args): return _DataModel.DatabaseReader_loadResponseFAPs(self, *args)
     def loadNetworks(self, *args): return _DataModel.DatabaseReader_loadNetworks(self, *args)
     def loadStationReferences(self, *args): return _DataModel.DatabaseReader_loadStationReferences(self, *args)
     def loadAuxSources(self, *args): return _DataModel.DatabaseReader_loadAuxSources(self, *args)

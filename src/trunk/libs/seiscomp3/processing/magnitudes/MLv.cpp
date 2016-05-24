@@ -11,16 +11,11 @@
  ***************************************************************************/
 
 
-#define SEISCOMP_COMPONENT MLv
-
-#include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/processing/magnitudes/MLv.h>
-#include <seiscomp3/seismology/magnitudes.h>
 
 
 namespace Seiscomp {
-
 namespace Processing {
 
 
@@ -71,9 +66,6 @@ bool MagnitudeProcessor_MLv::setup(const Settings &settings) {
 		maxDistanceKm = -1; // distance according to the logA0 range
 	}
 
-
-
-
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -82,13 +74,14 @@ bool MagnitudeProcessor_MLv::setup(const Settings &settings) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double  MagnitudeProcessor_MLv::logA0(double dist_km) const throw(Core::ValueException) {
+double MagnitudeProcessor_MLv::logA0(double dist_km) const throw(Core::ValueException) {
 	for ( size_t i=1; i<logA0_dist.size(); ++i ) {
 		if ( logA0_dist[i-1] <= dist_km && dist_km <= logA0_dist[i] ) {
 			double q = (dist_km-logA0_dist[i-1])/(logA0_dist[i]-logA0_dist[i-1]);
 			return q*(logA0_val[i]-logA0_val[i-1])+logA0_val[i-1];
 		}
 	}
+
 	throw Core::ValueException("distance out of range");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -111,13 +104,13 @@ MagnitudeProcessor::Status MagnitudeProcessor_MLv::computeMagnitude(
 	if ( depth < 0 ) depth = 0;
 
 	double distanceKm = Math::Geo::deg2km(delta);
-	if (maxDistanceKm > 0 && distanceKm > maxDistanceKm)
+	if ( maxDistanceKm > 0 && distanceKm > maxDistanceKm )
 		return DistanceOutOfRange;
 
 	try {
 		value = log10(amplitude) - logA0(distanceKm);
 	}
-	catch ( Core::ValueException &e ) {
+	catch ( Core::ValueException & ) {
 		return DistanceOutOfRange;
 	}
 
@@ -125,8 +118,11 @@ MagnitudeProcessor::Status MagnitudeProcessor_MLv::computeMagnitude(
 
 	return OK;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
-
 }

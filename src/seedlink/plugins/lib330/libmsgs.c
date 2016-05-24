@@ -33,6 +33,7 @@ Edit History:
    10 2010-08-21 rdr Change order of evaluation in msgadd and dump_msgqueue.
    11 2013-08-09 rdr Add conditional compilation to make string parameter to msgadd,
                      libmsgadd and libdataadd a const.
+   12 2016-01-26 rdr Change LIBMSG_INVREG to indicate number of seconds.
 */
 #ifndef libmsgs_h
 #include "libmsgs.h"
@@ -141,7 +142,7 @@ begin
         case LIBMSG_PERM : strcpy(s, "No Permission") ; break ;
         case LIBMSG_PIU : strcpy(s, "Port in Use, Will retry registration in ") ; break ;
         case LIBMSG_SNR : strcpy(s, "Not Registered, Will retry registration in ") ; break ;
-        case LIBMSG_INVREG : strcpy(s, "Invalid Registration Request") ; break ;
+        case LIBMSG_INVREG : strcpy(s, "Invalid Registration Request, Will retry registration in ") ; break ;
         case LIBMSG_CALPROG : strcpy(s, "Calibration in Progress") ; break ;
         case LIBMSG_CMDABT : strcpy(s, "Command Aborted") ; break ;
         case LIBMSG_CONTIN : strcpy(s, "Continuity Error: ") ; break ;

@@ -16,6 +16,7 @@
 
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/focalmechanism.h>
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/amplitude.h>
 #include <seiscomp3/datamodel/arrival.h>
@@ -23,6 +24,7 @@
 
 #include <seiscomp3/datamodel/databasearchive.h>
 #include <seiscomp3/gui/datamodel/originsymbol.h>
+#include <seiscomp3/gui/datamodel/tensorsymbol.h>
 #include <seiscomp3/datamodel/publicobjectcache.h>
 
 
@@ -61,12 +63,15 @@ class Data {
 
 class EventData : public Data<Seiscomp::DataModel::Event> {
 	public:
-		EventData(Seiscomp::DataModel::Event* event, Seiscomp::Gui::OriginSymbol* originSymbol)
-		 : Data<Seiscomp::DataModel::Event>(event),
-		   _originSymbolRef(originSymbol),
-		   _isActive(false),
-		   _isSelected(false) {
-		}
+		EventData(Seiscomp::DataModel::Event* event,
+		          Seiscomp::Gui::OriginSymbol* originSymbol,
+		          Seiscomp::Gui::TensorSymbol* tensorSymbol)
+		: Data<Seiscomp::DataModel::Event>(event)
+		, _originSymbolRef(originSymbol)
+		, _tensorSymbolRef(tensorSymbol)
+		, _isActive(false)
+		, _isSelected(false)
+		{}
 
 	public:
 		virtual const std::string& id() const {
@@ -97,8 +102,13 @@ class EventData : public Data<Seiscomp::DataModel::Event> {
 			return _originSymbolRef;
 		}
 
+		Seiscomp::Gui::TensorSymbol* tensorSymbol() const {
+			return _tensorSymbolRef;
+		}
+
 	private:
-		Seiscomp::Gui::OriginSymbol*  _originSymbolRef;
+		Seiscomp::Gui::OriginSymbol *_originSymbolRef;
+		Seiscomp::Gui::TensorSymbol *_tensorSymbolRef;
 
 		bool _isActive;
 		bool _isSelected;
@@ -150,8 +160,11 @@ class EventDataRepository {
 		void setDatabaseArchive(Seiscomp::DataModel::DatabaseArchive* dataBaseArchive);
 		void setEventDataLifeSpan(const Seiscomp::Core::TimeSpan& timeSpan);
 
-		bool addEvent(Seiscomp::DataModel::Event* event, Seiscomp::Gui::OriginSymbol* originSymbol);
+		bool addEvent(Seiscomp::DataModel::Event* event,
+		              Seiscomp::Gui::OriginSymbol* originSymbol,
+		              Seiscomp::Gui::TensorSymbol* tensorSymbol);
 		void addOrigin(Seiscomp::DataModel::Origin* origin);
+		void addFocalMechanism(Seiscomp::DataModel::FocalMechanism* fm);
 		void addMagnitude(Seiscomp::DataModel::Magnitude* magnitude);
 		void addAmplitude(Seiscomp::DataModel::Amplitude* amplitude);
 		void addArrival(Seiscomp::DataModel::Arrival* arrival);
@@ -162,6 +175,7 @@ class EventDataRepository {
 		EventData* findLatestEvent();
 		ArrivalData* findArrivalwithPickId(const std::string& pickId);
 		Seiscomp::DataModel::Origin* findOrigin(const std::string& id);
+		Seiscomp::DataModel::FocalMechanism* findFocalMechanism(const std::string& id);
 		Seiscomp::DataModel::Magnitude* findMagnitude(const std::string& id);
 
 		void removeEvent(const std::string& id);

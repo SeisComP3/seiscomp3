@@ -80,7 +80,9 @@ bool Dataless::ParseDataless(const string &file)
 					invent->sc->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
 				}
 			}
-		
+
+			invent->sc->Flush();
+
 			invent->SynchronizeInventory();
 			invent->vic->EmptyVectors();
 			invent->adc->EmptyVectors();

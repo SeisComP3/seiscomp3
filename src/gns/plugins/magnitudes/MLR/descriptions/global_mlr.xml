@@ -4,15 +4,17 @@
 		<extends>global</extends>
 		<description>
 		The MLr plugin is designed to use the MLv station amplitudes
-		and provides a GNS/Geonet local magnitude  (Jristau this study: - REF-).	
-		The magnitude uses a station correction term and the hypocentral distance
-		Hard coded range are 0-20 degrees maximum distance, and 800 km max depth.
+		and provides a GNS/Geonet local magnitude. 
+		The magnitude uses a station correction term and the hypocentral distance.
+		Hard coded range are 0-20 degrees maximum distance and 800 km maximum depth.
+		 (Reference:"A Revised Local Magnitude (ML) Scale for New Zealand Earthquakes"
+		J. Ristau, D. Harte, J. Salichon, BSSA Mar 2016, DOI: 10.1785/0120150293)
 		</description>
 	</plugin>
 	<binding name="MLr" module="global">
 		<description>
 		The MLr plugin is designed to use MLv station amplitudes
-		and a GNS/Geonet local magnitude (Jristau study - REF-).
+		and a GNS/Geonet local magnitude.
 		It is a modified version of the gempa ML plugin developed
 		at the Liverpool developer meeting (Gempa).
 		It is a modified version of the SED MLh plugin (J.Becker Gempa + S. Heimers SED)
@@ -21,7 +23,7 @@
 			<group name="MLr">
 				<parameter name="params" type="string">
 					<description>
-					Defines Stations Corrections parameters for MLr.
+					Defines Stations Corrections parameters for MLr (GNS/Geonet Local magnitude).
 					Format: &quot;UpToKilometers A ; UpToNextKilometers A ;&quot;.
 					Example: &quot;30 nomag; 60 0.018 ; 700 0.0038 &quot;.
 					The first parameter set &quot;30 nomag&quot; means that up to 30km

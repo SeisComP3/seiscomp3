@@ -2259,6 +2259,138 @@ class base_responsepolynomial(object):
 
 
 # package: Inventory
+class base_responsefap(object):
+    def __init__(self, obj):
+        self.obj = obj
+        self._needsUpdate = False
+
+    def _sync_update(self):
+        if self._needsUpdate:
+            self.obj.lastModified = Core.Time.GMT()
+            self.obj.update()
+            self._needsUpdate = False
+
+    def _delete(self):
+        self.obj.detach()
+
+    def __get_last_modified(self):
+        return datetime.datetime(
+            *(time.strptime(
+                self.obj.lastModified.toString("%Y-%m-%dT%H:%M:%SZ"),
+                "%Y-%m-%dT%H:%M:%SZ")[0:6]
+            )
+        )    
+    last_modified = property(__get_last_modified)
+
+    def __get_publicID(self):
+        return self.obj.publicID()
+
+    def __set_publicID(self, arg):
+        if self.__get_publicID() != arg:
+            self._needsUpdate = True
+        self.obj.setPublicID(arg)
+    publicID = property(__get_publicID,__set_publicID)
+
+    def __get_name(self):
+        try: # @return: const std::string&
+            return self.obj.name()
+        except Core.ValueException:
+            return None
+    def __set_name(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_name() != value:
+            self._needsUpdate = True
+        self.obj.setName(value)
+    name = property(__get_name, __set_name)
+
+    def __get_gain(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gain()
+        except Core.ValueException:
+            return None
+    def __set_gain(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gain() != value:
+            self._needsUpdate = True
+        self.obj.setGain(value)
+    gain = property(__get_gain, __set_gain)
+
+    def __get_gainFrequency(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gainFrequency()
+        except Core.ValueException:
+            return None
+    def __set_gainFrequency(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gainFrequency() != value:
+            self._needsUpdate = True
+        self.obj.setGainFrequency(value)
+    gainFrequency = property(__get_gainFrequency, __set_gainFrequency)
+
+    def __get_numberOfTuples(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.numberOfTuples()
+        except Core.ValueException:
+            return None
+    def __set_numberOfTuples(self, arg):
+        if self.__get_numberOfTuples() != arg:
+            self._needsUpdate = True
+        self.obj.setNumberOfTuples(arg)
+    numberOfTuples = property(__get_numberOfTuples, __set_numberOfTuples)
+
+    def __get_tuples(self):
+        # optional Attribute
+        try: # @return: RealArray
+            return RealArray2str(self.obj.tuples().content())
+        except Core.ValueException:
+            return None
+    def __set_tuples(self, arg):
+        try: value = str2RealArray(arg)
+        except: value = None
+        ret = self.__get_tuples()
+        if not str2RealArray(ret) == value:
+            self._needsUpdate = True
+        self.obj.setTuples(value)
+    tuples = property(__get_tuples, __set_tuples)
+
+    def __get_remark(self):
+        # optional Attribute
+        try: # @return: Blob
+            B = self.obj.remark()
+            return B.content()
+        except Core.ValueException:
+            return None
+    def __set_remark(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+            blob = DataModel.Blob()
+            if value:
+                blob.setContent(value)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_remark() != value:
+            self._needsUpdate = True
+        self.obj.setRemark(blob)
+    remark = property(__get_remark, __set_remark)
+
+
+# package: Inventory
 class base_dataloggercalibration(object):
     def __init__(self, obj):
         self.obj = obj
@@ -4987,6 +5119,48 @@ class base_inventory(object):
                 it.step()
         return list
     _responsePolynomial = property(__get_responsepolynomial)
+
+    def _new_responsefap(self, **args):
+        publicID = args.get("publicID")
+        if publicID and DataModel.ResponseFAP.Find(publicID): publicID = None
+        if publicID: obj = DataModel.ResponseFAP.Create(publicID)
+        else: obj = DataModel.ResponseFAP.Create()
+        try: obj.setName(args["name"])
+        except KeyError: pass
+        try: obj.setGain(args["gain"])
+        except KeyError: pass
+        try: obj.setGainFrequency(args["gainFrequency"])
+        except KeyError: pass
+        try: obj.setNumberOfTuples(args["numberOfTuples"])
+        except KeyError: pass
+        try: obj.setTuples(args["tuples"])
+        except KeyError: pass
+        try: obj.setRemark(args["remark"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.Inventory: error adding ResponseFAP"
+        return obj
+    def __get_responsefap(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.responseFAPCount()):
+                for i in xrange(self.obj.responseFAPCount()):
+                    obj = self.obj.responseFAP(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_responsefap(obj))
+        else:
+            # HACK to make last_modified usable ...
+            it = dbQuery.getObjects(self.obj, DataModel.ResponseFAP.TypeInfo())
+            while it.get():
+                try:
+                    obj = DataModel.ResponseFAP.Cast(it.get())
+                    obj.lastModified = it.lastModified()
+                    list.append(base_responsefap(obj))
+                except Core.ValueException, e:
+                    print e.what()
+                it.step()
+        return list
+    _responseFAP = property(__get_responsefap)
 
     def _new_network(self, **args):
         publicID = args.get("publicID")

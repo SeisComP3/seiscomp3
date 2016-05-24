@@ -31,6 +31,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_ML : public MagnitudeProcessor {
 
 
 	public:
+		bool setup(const Settings &settings);
+
 		std::string amplitudeType() const;
 
 		Status computeMagnitude(
@@ -39,6 +41,15 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_ML : public MagnitudeProcessor {
 			double delta,     // in degrees
 			double depth,     // in kilometers
 			double &value);
+
+
+	private:
+		double logA0(double dist_km) const throw(Core::ValueException);
+
+
+	private:
+		std::vector<double> logA0_dist, logA0_val;
+		double maxDistanceKm;
 };
 
 

@@ -29,6 +29,9 @@
 #include <seiscomp3/gui/map/projection.h>
 
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/focalmechanism.h>
+#include <seiscomp3/datamodel/momenttensor.h>
+#include <seiscomp3/datamodel/nodalplane.h>
 #include <seiscomp3/datamodel/parameterset.h>
 #include <seiscomp3/datamodel/parameter.h>
 #include <seiscomp3/datamodel/inventory.h>
@@ -38,6 +41,7 @@
 
 #include <seiscomp3/math/math.h>
 #include <seiscomp3/math/filter.h>
+#include <seiscomp3/math/conversions.h>
 
 #include "types.h"
 #include "infowidget.h"
@@ -217,7 +221,8 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplit
 void setInfoWidgetContent(StationInfoWidget* infoWidget, DataModel::Station* station) {
 	infoWidget->setLongitude(QString("%1").arg(station->longitude()));
 	infoWidget->setLatitude(QString("%1").arg(station->latitude()));
-	infoWidget->setElevation(QString("%1").arg(station->elevation()));
+	try { infoWidget->setElevation(QString("%1").arg(station->elevation())); }
+	catch ( ... ) {}
 	/* TODO: Find a replacement
 	infoWidget->setDepth(QString("%1").arg(station->depth()));
 	*/
@@ -431,10 +436,10 @@ class GMStationRenderParameter : public StationRenderParameter {
 			                 stationData()->isSelected;
 
 			if ( emphasize )
-				return Gui::Map::Symbol::HIGH;
+				return Gui::Map::Symbol::MEDIUM;
 
 			if ( stationData()->gmColor != SCScheme.colors.gm.gmNotSet )
-				return Gui::Map::Symbol::MEDIUM;
+				return Gui::Map::Symbol::LOW;
 
 			return Gui::Map::Symbol::NONE;
 		}
@@ -478,7 +483,7 @@ class QCStationRenderParameter : public StationRenderParameter {
 			                 stationData()->qcGlobalStatus == QCStatus::ERROR ||
 			                 stationData()->isSelected;
 			if ( emphasize )
-				return Gui::Map::Symbol::HIGH;
+				return Gui::Map::Symbol::MEDIUM;
 
 			if ( stationData()->qcGlobalStatus == QCStatus::OK )
 				return Gui::Map::Symbol::LOW;
@@ -675,7 +680,7 @@ bool MvMainWindow::init() {
 
 	EventDataRepository::const_event_iterator eventIt = _eventDataRepository.eventsBegin();
 	for ( ; eventIt != _eventDataRepository.eventsEnd(); eventIt++ )
-		std::cout << eventIt->id() << std::endl;
+		std::cerr << eventIt->id() << std::endl;
 #endif
 
 	try {
@@ -1218,11 +1223,11 @@ void MvMainWindow::readPicksFromDataBaseNotOlderThan(const Core::TimeSpan& timeS
 			handleNewAmplitude(amplitude);
 		}
 		else {
-			std::cout << "Could not get amplitude for pick " << *it << " from database" << std::endl;
+			std::cerr << "Could not get amplitude for pick " << *it << " from database" << std::endl;
 			count++;
 		}
 	}
-	std::cout << "A total of " << count << " could not be retrieved from database" << std::endl;
+	std::cerr << "A total of " << count << " could not be retrieved from database" << std::endl;
 #endif
 
 }
@@ -1336,7 +1341,7 @@ void MvMainWindow::handleNewAmplitude(DataModel::Amplitude* amplitude) {
 	std::string stationId = getStationId(amplitude);
 	StationData* stationData = _stationDataCollection.find(stationId);
 #ifdef DEBUG_AMPLITUDES
-	std::cout << "Delivering Amplitude " << amplitude->publicID() << " to station " << stationId << std::endl;
+	std::cerr << "Delivering Amplitude " << amplitude->publicID() << " to station " << stationId << std::endl;
 #endif
 	if ( stationData ) {
 		_triggerHandler.handle(stationData, amplitude);
@@ -1355,6 +1360,13 @@ void MvMainWindow::handleNewOrigin(Seiscomp::DataModel::Origin* origin) {
 
 
 
+void MvMainWindow::handleNewFocalMechanism(Seiscomp::DataModel::FocalMechanism* fm) {
+	_eventDataRepository.addFocalMechanism(fm);
+}
+
+
+
+
 void MvMainWindow::handleNewMagnitude(Seiscomp::DataModel::Magnitude* magnitude) {
 	_eventDataRepository.addMagnitude(magnitude);
 }
@@ -1364,14 +1376,20 @@ void MvMainWindow::handleNewMagnitude(Seiscomp::DataModel::Magnitude* magnitude)
 
 void MvMainWindow::handleNewEvent(DataModel::Event* event) {
 	Gui::OriginSymbol* originSymbol = createOriginSymbolFromEvent(event);
+
 	if ( !originSymbol ) return;
 
-	if ( !_eventDataRepository.addEvent(event, originSymbol) ) {
+	Gui::TensorSymbol* tensorSymbol = createTensorSymbolFromEvent(event);
+
+	if ( !_eventDataRepository.addEvent(event, originSymbol, tensorSymbol) ) {
 		delete originSymbol;
+		if ( tensorSymbol ) delete tensorSymbol;
 		return;
 	}
 
 	_mapWidget->canvas().symbolCollection()->add(originSymbol);
+	if ( tensorSymbol )
+		_mapWidget->canvas().symbolCollection()->add(tensorSymbol);
 }
 
 
@@ -1383,7 +1401,7 @@ void MvMainWindow::handleEventUpdate(DataModel::Event* event, EventData* eventDa
 
 	//Gui::OriginSymbol* originSymbol = eventData->originSymbol();
 	//_mapWidget->canvas().symbolCollection()->remove(originSymbol);
-    removeEventData(eventData);
+	removeEventData(eventData);
 	handleNewEvent(event);
 }
 
@@ -1538,6 +1556,8 @@ void MvMainWindow::showOriginSymbols(bool val) {
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
 		if ( it->originSymbol()->TypeInfo() == Gui::OriginSymbol::TypeInfo() )
 			it->originSymbol()->setVisible(val);
+		if ( it->tensorSymbol() != NULL )
+			it->tensorSymbol()->setVisible(val);
 	}
 }
 
@@ -1548,14 +1568,7 @@ void MvMainWindow::removeExpiredEvents() {
 	while ( true ) {
 		EventData* expiredEvent = _eventDataRepository.findNextExpiredEvent();
 		if ( !expiredEvent ) break;
-
-        removeEventData(expiredEvent);
-
-		//Gui::OriginSymbol* originSymbol = expiredEvent->originSymbol();
-		//_mapWidget->canvas().symbolCollection()->remove(originSymbol);
-
-		//std::string id = expiredEvent->id();
-		//_eventDataRepository.removeEvent(id);
+		removeEventData(expiredEvent);
 	}
 }
 
@@ -1564,10 +1577,14 @@ void MvMainWindow::removeExpiredEvents() {
 
 void MvMainWindow::removeEventData(const EventData* eventData) {
     Gui::OriginSymbol* originSymbol = eventData->originSymbol();
-    _mapWidget->canvas().symbolCollection()->remove(originSymbol);
+	Gui::TensorSymbol* tensorSymbol = eventData->tensorSymbol();
 
-    std::string eventId = eventData->id();
-    _eventDataRepository.removeEvent(eventId);
+	_mapWidget->canvas().symbolCollection()->remove(originSymbol);
+	if ( tensorSymbol )
+		_mapWidget->canvas().symbolCollection()->remove(tensorSymbol);
+
+	std::string eventId = eventData->id();
+	_eventDataRepository.removeEvent(eventId);
 }
 
 
@@ -1691,36 +1708,110 @@ void MvMainWindow::updateInfoWidget(const DataModel::Event* event) {
 
 
 Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* event) {
-	DataModel::Origin* origin = _eventDataRepository.findOrigin(event->preferredOriginID());
+	DataModel::Origin *origin = _eventDataRepository.findOrigin(event->preferredOriginID());
 	if ( !origin ) {
 		SEISCOMP_ERROR("Could not get preferred origin %s for event %s",
-					   event->preferredOriginID().c_str(),
+		               event->preferredOriginID().c_str(),
 		               event->publicID().c_str());
 		return NULL;
 	}
 
-	Gui::TTDecorator* ttDecorator = new Gui::TTDecorator(&_mapWidget->canvas());
+	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator(&_mapWidget->canvas());
 	ttDecorator->setDepth(origin->depth());
 	ttDecorator->setOriginTime(origin->time());
 	ttDecorator->setLatitude(origin->latitude());
 	ttDecorator->setLongitude(origin->longitude());
 
 	double magnitudeValue = 0.0;
-	DataModel::Magnitude* magnitude= _eventDataRepository.findMagnitude(event->preferredMagnitudeID());
-	if ( magnitude ) {
+	DataModel::Magnitude *magnitude= _eventDataRepository.findMagnitude(event->preferredMagnitudeID());
+	if ( magnitude )
 		magnitudeValue = magnitude->magnitude().value();
-	}
+
 	ttDecorator->setPreferredMagnitudeValue(magnitudeValue);
 	ttDecorator->setVisible(_ui.showWaveformPropagationAction->isChecked());
 
-	Gui::OriginSymbol* originSymbol = new Gui::OriginSymbol(ttDecorator);
+	Gui::OriginSymbol *originSymbol = new Gui::OriginSymbol(ttDecorator);
 	originSymbol->setLatitude(origin->latitude());
 	originSymbol->setLongitude(origin->longitude());
 	originSymbol->setID(event->publicID());
 	originSymbol->setDepth(origin->depth());
 	originSymbol->setPreferredMagnitudeValue(magnitudeValue);
+	originSymbol->setPriority(Gui::Map::Symbol::MEDIUM);
 
 	return originSymbol;
+}
+
+
+Seiscomp::Gui::TensorSymbol* MvMainWindow::createTensorSymbolFromEvent(Seiscomp::DataModel::Event* event) {
+	if ( event->preferredFocalMechanismID().empty() )
+		return NULL;
+
+	DataModel::FocalMechanism *fm = _eventDataRepository.findFocalMechanism(event->preferredFocalMechanismID());
+	if ( !fm )
+		return NULL;
+
+	if ( fm->momentTensorCount() == 0 )
+		SCApp->query()->loadMomentTensors(fm);
+
+	const DataModel::NodalPlane *np = NULL;
+	try { np = &(fm->nodalPlanes().nodalPlane1()); }
+	catch ( Core::ValueException& ) {}
+
+	if ( np == NULL )
+		return NULL;
+
+	DataModel::Origin *origin = NULL;
+	DataModel::MomentTensor *mt = NULL;
+	DataModel::Magnitude *magnitude = NULL;
+
+	double magnitudeValue = 0.0;
+
+	if ( fm->momentTensorCount() > 0 ) {
+		mt = fm->momentTensor(0);
+		origin = _eventDataRepository.findOrigin(mt->derivedOriginID());
+		magnitude= _eventDataRepository.findMagnitude(mt->momentMagnitudeID());
+	}
+
+	if ( magnitude == NULL )
+		magnitude = _eventDataRepository.findMagnitude(event->preferredMagnitudeID());
+
+	if ( origin == NULL )
+		origin = _eventDataRepository.findOrigin(fm->triggeringOriginID());
+
+	if ( origin == NULL )
+		origin = _eventDataRepository.findOrigin(event->preferredOriginID());
+
+	double depth = 10;
+	try { depth = origin->depth().value(); }
+	catch ( ... ) {}
+
+	if ( magnitude )
+		magnitudeValue = magnitude->magnitude().value();
+
+	Math::Tensor2Sd tensor;
+	Math::NODAL_PLANE plane;
+	plane.str = np->strike();
+	plane.dip = np->dip();
+	plane.rake = np->rake();
+	Math::np2tensor(plane, tensor);
+
+	Gui::TensorSymbol *tensorSymbol = new Gui::TensorSymbol(tensor);
+
+	int size;
+	if ( magnitudeValue > 0 )
+		size = std::max(SCScheme.map.originSymbolMinSize, int(4.9 * (magnitudeValue - 1.2)));
+	else
+		size = SCScheme.map.originSymbolMinSize;
+
+	tensorSymbol->setSize(QSize(size*3/2,size*3/2));
+	tensorSymbol->setShadingEnabled(true);
+	tensorSymbol->setPosition(QPointF(origin->longitude(), origin->latitude()));
+	tensorSymbol->setTColor(SCScheme.colors.originSymbol.depth.gradient.colorAt(depth, SCScheme.colors.originSymbol.depth.discrete));
+	tensorSymbol->setOffset(QPoint(-16,-32));
+	tensorSymbol->setDrawConnectorEnabled(true);
+	tensorSymbol->setPriority(Gui::Map::Symbol::HIGH);
+
+	return tensorSymbol;
 }
 
 
@@ -1874,6 +1965,12 @@ void MvMainWindow::handleNewMessage(Core::Message* message) {
 			continue;
 		}
 
+		DataModel::FocalMechanism* fm = DataModel::FocalMechanism::Cast(object);
+		if ( fm ) {
+			handleNewFocalMechanism(fm);
+			continue;
+		}
+
 		DataModel::Event* event = DataModel::Event::Cast(object);
 		if ( event ) {
 			std::string eventId = event->publicID();
@@ -1892,13 +1989,13 @@ void MvMainWindow::handleNewMessage(Core::Message* message) {
 
 			bool handleAsEventUpdate = eventData;
 			if ( handleAsEventUpdate ) {
-				std::cout << "Event update for:" << event->publicID()  << std::endl;
+				std::cerr << "Event update for:" << event->publicID()  << std::endl;
 
 				handleEventUpdate(event, eventData);
 				updateInfoWidget(event);
 			}
 			else {
-				std::cout << "New event: " << event->publicID() << std::endl;
+				std::cerr << "New event: " << event->publicID() << std::endl;
 				handleNewEvent(event);
 			}
 
@@ -1973,6 +2070,7 @@ void MvMainWindow::updateOriginSymbolDisplay() {
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
 		EventData& eventData = *it;
 		Gui::OriginSymbol* originSymbol = eventData.originSymbol();
+		Gui::TensorSymbol* tensorSymbol = eventData.tensorSymbol();
 
 		bool eventIsActive = eventData.isActive();
 		bool eventIsSelected = eventData.isSelected();
@@ -1984,16 +2082,19 @@ void MvMainWindow::updateOriginSymbolDisplay() {
 
 		if ( eventIsActive || isLatestEventAndHistoricOriginsAreVisible ) {
 			originSymbol->setVisible(true);
+			if ( tensorSymbol ) tensorSymbol->setVisible(true);
 			originSymbol->setFilled(false);
 			if ( ApplicationStatus::Instance()->isTriggering() )
 				originSymbol->setFilled(true);
 		}
 		else if ( eventIsSelected || isLatestEventAndHistoricOriginsAreNotVisible ) {
 			originSymbol->setVisible(true);
+			if ( tensorSymbol ) tensorSymbol->setVisible(true);
 			originSymbol->setFilled(false);
 		}
 		else {
 			originSymbol->setVisible(areHistoricOriginsVisible);
+			if ( tensorSymbol ) tensorSymbol->setVisible(areHistoricOriginsVisible);
 			originSymbol->setFilled(false);
 		}
 	}

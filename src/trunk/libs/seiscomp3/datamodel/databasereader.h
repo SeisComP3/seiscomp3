@@ -71,6 +71,7 @@ class Decimation;
 class ResponsePAZ;
 class ResponseFIR;
 class ResponsePolynomial;
+class ResponseFAP;
 class Network;
 class Station;
 class SensorLocation;
@@ -196,6 +197,7 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int loadResponsePAZs(Inventory*);
 		int loadResponseFIRs(Inventory*);
 		int loadResponsePolynomials(Inventory*);
+		int loadResponseFAPs(Inventory*);
 		int loadNetworks(Inventory*);
 		int load(StationGroup*);
 		int loadStationReferences(StationGroup*);

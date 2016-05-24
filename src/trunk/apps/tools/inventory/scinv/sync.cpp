@@ -136,6 +136,13 @@ bool Sync::push(const Seiscomp::DataModel::Inventory *inv) {
 			process(r);
 	}
 
+	for ( size_t i = 0; i < inv->responseFAPCount(); ++i ) {
+		if ( _interrupted ) return false;
+		ResponseFAP *r = inv->responseFAP(i);
+		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
+			process(r);
+	}
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -586,14 +593,21 @@ bool Sync::process(Datalogger *dl, const Decimation *deci) {
 			if ( paz == NULL ) {
 				const ResponsePolynomial *poly = findPoly(filters[i]);
 				if ( poly == NULL ) {
-					/*
-					SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
-					                 dl->publicID().c_str(),
-					                 sc_deci->sampleRateNumerator(),
-					                 sc_deci->sampleRateDenominator(),
-					                 filters[i].c_str());
-					*/
-					deciAnalogueChain += filters[i];
+					const ResponseFAP *fap = findFAP(filters[i]);
+					if ( fap == NULL ) {
+						/*
+						SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
+						                 dl->publicID().c_str(),
+						                 sc_deci->sampleRateNumerator(),
+						                 sc_deci->sampleRateDenominator(),
+						                 filters[i].c_str());
+						*/
+						deciAnalogueChain += filters[i];
+					}
+					else {
+						ResponseFAPPtr sc_fap = process(fap);
+						deciAnalogueChain += sc_fap->publicID();
+					}
 				}
 				else {
 					ResponsePolynomialPtr sc_poly = process(poly);
@@ -737,11 +751,18 @@ bool Sync::process(Stream *cha, const Sensor *sensor) {
 		if ( paz == NULL ) {
 			const ResponsePolynomial *poly = findPoly(tmpSens.response());
 			if ( poly == NULL ) {
-				/*
-				SEISCOMP_WARNING("Sensor %s: response not found: %s",
-				                 sensor->publicID().c_str(),
-				                 sensor->response().c_str());
-				*/
+				const ResponseFAP *fap = findFAP(tmpSens.response());
+				if ( fap == NULL ) {
+					/*
+					SEISCOMP_WARNING("Sensor %s: response not found: %s",
+					                 sensor->publicID().c_str(),
+					                 sensor->response().c_str());
+					*/
+				}
+				else {
+					ResponseFAPPtr sc_fap = process(fap);
+					tmpSens.setResponse(sc_fap->publicID());
+				}
 			}
 			else {
 				ResponsePolynomialPtr sc_poly = process(poly);
@@ -938,6 +959,18 @@ ResponsePolynomial *Sync::process(const ResponsePolynomial *poly) {
 	ResponsePolynomial *sc_poly = InventoryTask::process(poly);
 	_touchedObjects.insert(sc_poly);
 	return sc_poly;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *Sync::process(const ResponseFAP *fap) {
+	_session.touchedPublics.insert(fap);
+	ResponseFAP *sc_fap = InventoryTask::process(fap);
+	_touchedObjects.insert(sc_fap);
+	return sc_fap;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

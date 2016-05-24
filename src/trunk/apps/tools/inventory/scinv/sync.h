@@ -76,6 +76,8 @@ class Sync : public InventoryTask {
 		process(const Seiscomp::DataModel::ResponsePAZ *);
 		Seiscomp::DataModel::ResponsePolynomial *
 		process(const Seiscomp::DataModel::ResponsePolynomial *);
+		Seiscomp::DataModel::ResponseFAP *
+		process(const Seiscomp::DataModel::ResponseFAP *);
 
 
 	// ------------------------------------------------------------------

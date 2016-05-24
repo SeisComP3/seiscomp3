@@ -41,6 +41,13 @@ class _ResponsePAZ(_sc3wrap.base_responsepaz):
 class _ResponsePolynomial(_sc3wrap.base_responsepolynomial):
 	def __init__(self, so):
 		_sc3wrap.base_responsepolynomial.__init__(self, so)
+
+	def flush(self):
+		self._sync_update()
+
+class _ResponseFAP(_sc3wrap.base_responsefap):
+	def __init__(self, so):
+		_sc3wrap.base_responsefap.__init__(self, so)
 	
 	def flush(self):
 		self._sync_update()
@@ -528,6 +535,7 @@ class Inventory(_sc3wrap.base_inventory):
 		self.responseFIR = {}
 		self.responsePAZ = {}
 		self.responsePolynomial = {}
+		self.responseFAP = {}
 		self.datalogger = {}
 		self.sensor = {}
 		self.auxDevice = {}
@@ -545,6 +553,10 @@ class Inventory(_sc3wrap.base_inventory):
 
 	def _link_responsePolynomial(self, obj):
 		self.responsePolynomial[obj.name] = obj
+		self.object[obj.publicID] = obj
+
+	def _link_responseFAP(self, obj):
+		self.responseFAP[obj.name] = obj
 		self.object[obj.publicID] = obj
 
 	def _link_datalogger(self, obj):
@@ -581,6 +593,11 @@ class Inventory(_sc3wrap.base_inventory):
 	def insert_responsePolynomial(self, name, **args):
 		obj = _ResponsePolynomial(self._new_responsepolynomial(name=name, **args))
 		self._link_responsePolynomial(obj)
+		return obj
+
+	def insert_responseFAP(self, name, **args):
+		obj = _ResponseFAP(self._new_responsefap(name=name, **args))
+		self._link_responseFAP(obj)
 		return obj
 	
 	def insert_datalogger(self, name, **args):
@@ -632,6 +649,14 @@ class Inventory(_sc3wrap.base_inventory):
 		except KeyError:
 			raise DBError, "Polynomial response %s not found" % (name,)
 			
+	def remove_responseFAP(self, name):
+		try:
+			self.responseFAP[name]._delete()
+			del self.responseFAP[name]
+
+		except KeyError:
+			raise DBError, "FAP response %s not found" % (name,)
+
 	def remove_datalogger(self, name):
 		try:
 			self.datalogger[name]._delete()
@@ -679,6 +704,9 @@ class Inventory(_sc3wrap.base_inventory):
 			i.flush()
 
 		for i in self.responsePAZ.itervalues():
+			i.flush()
+
+		for i in self.responseFAP.itervalues():
 			i.flush()
 
 		for i in self.datalogger.itervalues():
@@ -746,16 +774,23 @@ class Inventory(_sc3wrap.base_inventory):
 		for resppoly in self._responsePolynomial:
 			if not _modifiedAfter(resppoly, modified_after):
 				continue
-			
+
 			RP = _ResponsePolynomial(resppoly.obj)
 			self._link_responsePolynomial(RP)
-		
+
+		for respfap in self._responseFAP:
+			if not _modifiedAfter(respfap, modified_after):
+				continue
+
+			RP = _ResponseFAP(respfap.obj)
+			self._link_responseFAP(RP)
+
 		for respfir in self._responseFIR:
 			if not _modifiedAfter(respfir, modified_after):
 				continue
 			RF = _ResponseFIR(respfir.obj)
 			self._link_responseFIR(RF)
-			
+
 		for datalogger in self._datalogger:
 			if not _modifiedAfter(datalogger, modified_after):
 				continue
@@ -784,6 +819,7 @@ class Inventory(_sc3wrap.base_inventory):
 		self.flush()
 		self.responseFIR = {}
 		self.responsePAZ = {}
+		self.responseFAP = {}
 		self.datalogger = {}
 		self.sensor = {}
 		self.auxDevice = {}

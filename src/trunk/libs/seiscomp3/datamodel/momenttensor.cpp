@@ -1204,10 +1204,10 @@ MomentTensorStationContribution* MomentTensor::momentTensorStationContribution(s
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorStationContribution* MomentTensor::findMomentTensorStationContribution(const std::string& publicID) const {
-	MomentTensorStationContribution* object = MomentTensorStationContribution::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<MomentTensorStationContributionPtr>::const_iterator it = _momentTensorStationContributions.begin(); it != _momentTensorStationContributions.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1325,7 +1325,7 @@ bool MomentTensor::removeMomentTensorStationContribution(size_t i) {
 void MomentTensor::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,8>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: MomentTensor skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -7,12 +7,13 @@
  * ORFEUS/EC-Project MEREDIAN
  * IRIS Data Management Center
  *
- * modified: 2011.124
+ * modified: 2015.213
  ***************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <time.h>
 
 #include "lmplatform.h"
@@ -22,6 +23,13 @@ static hptime_t ms_time2hptime_int (int year, int day, int hour,
 				    int min, int sec, int usec);
 
 static struct tm *ms_gmtime_r (int64_t *timep, struct tm *result);
+
+
+/* A constant number of seconds between the NTP and Posix/Unix time epoch */
+#define NTPPOSIXEPOCHDELTA 2208988800LL
+
+/* Global variable to hold a leap second list */
+LeapSecond *leapsecondlist = NULL;
 
 
 /***************************************************************************
@@ -103,7 +111,7 @@ ms_splitsrcname (char *srcname, char *net, char *sta, char *loc, char *chan,
   /* Duplicate srcname */
   if ( ! (id = strdup(srcname)) )
     {
-      fprintf (stderr, "ms_splitsrcname(): Error duplicating srcname string");
+      ms_log (2, "ms_splitsrcname(): Error duplicating srcname string");
       return -1;
     }
   
@@ -217,6 +225,52 @@ ms_strncpclean (char *dest, const char *source, int length)
   
   return didx;
 }  /* End of ms_strncpclean() */
+
+
+/***************************************************************************
+ * ms_strncpcleantail:
+ *
+ * Copy up to 'length' characters from 'source' to 'dest' without any
+ * trailing spaces.  The result is left justified and always null
+ * terminated.  The destination string must have enough room needed
+ * for the characters within 'length' and the null terminator, a
+ * maximum of 'length + 1'.
+ *
+ * Returns the number of characters (not including the null terminator) in
+ * the destination string.
+ ***************************************************************************/
+int
+ms_strncpcleantail (char *dest, const char *source, int length)
+{
+  int idx, pretail;
+  
+  if ( ! dest )
+    return 0;
+  
+  if ( ! source )
+    {
+      *dest = '\0';
+      return 0;
+    }
+  
+  *(dest+length) = '\0';
+  
+  pretail = 0;
+  for ( idx=length-1; idx >= 0 ; idx-- )
+    {
+      if ( ! pretail && *(source+idx) == ' ' )
+	{
+	  *(dest+idx) = '\0';
+	}
+      else
+	{
+	  pretail++;
+	  *(dest+idx) = *(source+idx);
+	}
+    }
+  
+  return pretail;
+}  /* End of ms_strncpcleantail() */
 
 
 /***************************************************************************
@@ -536,6 +590,46 @@ ms_btime2seedtimestr (BTime *btime, char *seedtimestr)
 
 
 /***************************************************************************
+ * ms_hptime2tomsusecoffset:
+ *
+ * Convert a high precision epoch time to a time value in tenths of
+ * milliseconds (aka toms) and a microsecond offset (aka usecoffset).
+ *
+ * The tenths of milliseconds value will be rounded to the nearest
+ * value having a microsecond offset value between -50 to +49.
+ *
+ * Returns 0 on success and -1 on error.
+ ***************************************************************************/
+int
+ms_hptime2tomsusecoffset (hptime_t hptime, hptime_t *toms, int8_t *usecoffset)
+{
+  if ( toms == NULL || usecoffset == NULL )
+    return -1;
+  
+  /* Split time into tenths of milliseconds and microseconds */
+  *toms = hptime / (HPTMODULUS / 10000);
+  *usecoffset = hptime - (*toms * (HPTMODULUS / 10000));
+  
+  /* Round tenths and adjust microsecond offset to -50 to +49 range */
+  if ( *usecoffset > 49 && *usecoffset < 100 )
+    {
+      *toms += 1;
+      *usecoffset -= 100;
+    }
+  else if ( *usecoffset < -50 && *usecoffset > -100 )
+    {
+      *toms -= 1;
+      *usecoffset += 100;
+    }
+  
+  /* Convert tenths of milliseconds to be in hptime_t (HPTMODULUS) units */
+  *toms *= (HPTMODULUS / 10000);
+  
+  return 0;
+}  /* End of ms_hptime2tomsusecoffset() */
+
+
+/***************************************************************************
  * ms_hptime2btime:
  *
  * Convert a high precision epoch time to a SEED binary time
@@ -744,7 +838,6 @@ ms_hptime2seedtimestr (hptime_t hptime, char *seedtimestr, flag subseconds)
 		    tms.tm_year + 1900, tms.tm_yday + 1,
 		    tms.tm_hour, tms.tm_min, tms.tm_sec, ifract);
   else
-    /* Assuming ifract has at least microsecond precision */
     ret = snprintf (seedtimestr, 18, "%4d,%03d,%02d:%02d:%02d",
                     tms.tm_year + 1900, tms.tm_yday + 1,
                     tms.tm_hour, tms.tm_min, tms.tm_sec);
@@ -860,10 +953,12 @@ ms_time2hptime (int year, int day, int hour, int min, int sec, int usec)
 /***************************************************************************
  * ms_seedtimestr2hptime:
  * 
- * Convert a SEED time string to a high precision epoch time.  SEED
- * time format is "YYYY[,DDD,HH,MM,SS.FFFFFF]", the delimiter can be a
- * comma [,], colon [:] or period [.] except for the fractional
- * seconds which must start with a period [.].
+ * Convert a SEED time string (day-of-year style) to a high precision
+ * epoch time.  The time format expected is
+ * "YYYY[,DDD,HH,MM,SS.FFFFFF]", the delimiter can be a dash [-],
+ * comma [,], colon [:] or period [.].  Additionally a [T] or space
+ * may be used to seprate the day and hour fields.  The fractional
+ * seconds ("FFFFFF") must begin with a period [.] if present.
  *
  * The time string can be "short" in which case the omitted values are
  * assumed to be zero (with the exception of DDD which is assumed to
@@ -886,7 +981,7 @@ ms_seedtimestr2hptime (char *seedtimestr)
   float fusec = 0.0;
   int usec = 0;
   
-  fields = sscanf (seedtimestr, "%d%*[,:.]%d%*[,:.]%d%*[,:.]%d%*[,:.]%d%f",
+  fields = sscanf (seedtimestr, "%d%*[-,:.]%d%*[-,:.Tt ]%d%*[-,:.]%d%*[-,:.]%d%f",
 		   &year, &day, &hour, &min, &sec, &fusec);
   
   /* Convert fractional seconds to microseconds */
@@ -944,11 +1039,12 @@ ms_seedtimestr2hptime (char *seedtimestr)
 /***************************************************************************
  * ms_timestr2hptime:
  * 
- * Convert a generic time string to a high precision epoch time.
- * SEED time format is "YYYY[/MM/DD HH:MM:SS.FFFF]", the delimiter can
- * be a dash [-], slash [/], colon [:], or period [.] and between the
- * date and time a 'T' or a space may be used.  The fracttional
- * seconds must begin with a period [.].
+ * Convert a generic time string to a high precision epoch time.  The
+ * time format expected is "YYYY[/MM/DD HH:MM:SS.FFFF]", the delimiter
+ * can be a dash [-], comma[,], slash [/], colon [:], or period [.].
+ * Additionally a 'T' or space may be used between the date and time
+ * fields.  The fractional seconds ("FFFFFF") must begin with a period
+ * [.] if present.
  *
  * The time string can be "short" in which case the omitted values are
  * assumed to be zero (with the exception of month and day which are
@@ -973,7 +1069,7 @@ ms_timestr2hptime (char *timestr)
   float fusec = 0.0;
   int usec = 0;
   
-  fields = sscanf (timestr, "%d%*[-/:.]%d%*[-/:.]%d%*[-/:.Tt ]%d%*[-/:.]%d%*[- /:.]%d%f",
+  fields = sscanf (timestr, "%d%*[-,/:.]%d%*[-,/:.]%d%*[-,/:.Tt ]%d%*[-,/:.]%d%*[-,/:.]%d%f",
 		   &year, &mon, &mday, &hour, &min, &sec, &fusec);
   
   /* Convert fractional seconds to microseconds */
@@ -1067,6 +1163,140 @@ ms_nomsamprate (int factor, int multiplier)
 
 
 /***************************************************************************
+ * ms_readleapseconds:
+ *
+ * Read leap seconds from a file indicated by the specified
+ * environment variable and populate the global leapsecondlist.
+ * 
+ * Returns positive number of leap seconds read, -1 on file read
+ * error, and -2 when the environment variable is not set.
+ ***************************************************************************/
+int
+ms_readleapseconds (char *envvarname)
+{
+  char *filename;
+  
+  if ( (filename = getenv(envvarname)) )
+    {
+      return ms_readleapsecondfile (filename);
+    }
+  
+  return -2;
+}  /* End of ms_readleapseconds() */
+
+
+/***************************************************************************
+ * ms_readleapsecondfile:
+ *
+ * Read leap seconds from the specified file and populate the global
+ * leapsecondlist.  The file is expected to be standard IETF leap
+ * second list format.  The list is usually available from:
+ * http://www.ietf.org/timezones/data/leap-seconds.list
+ * 
+ * Returns positive number of leap seconds read on success and -1 on error.
+ ***************************************************************************/
+int
+ms_readleapsecondfile (char *filename)
+{
+  FILE *fp = NULL;
+  LeapSecond *ls = NULL;
+  LeapSecond *lastls = NULL;
+  int64_t expires;
+  char readline[200];
+  char *cp;
+  int64_t leapsecond;
+  int TAIdelta;
+  int fields;
+  int count = 0;
+  
+  if ( ! filename )
+    return -1;
+  
+  if ( ! (fp = fopen(filename, "rb")) )
+    {
+      ms_log (2, "Cannot open file %s: %s\n", filename, strerror(errno));
+      return -1;
+    }
+  
+  while ( fgets (readline, sizeof(readline)-1, fp) )
+    {
+      /* Guarantee termination */
+      readline[sizeof(readline)-1] = '\0';
+      
+      /* Terminate string at first newline character if any */
+      if ( (cp = strchr(readline, '\n')) )
+        *cp = '\0';
+      
+      /* Skip empty lines */
+      if ( ! strlen (readline) )
+        continue;
+      
+      /* Check for and parse expiration date */
+      if ( ! strncmp (readline, "#@", 2) )
+        {
+          expires = 0;
+          fields = sscanf (readline, "#@ %"SCNd64, &expires);
+          
+          if ( fields == 1 )
+            {
+              /* Convert expires to Unix epoch */
+              expires = expires - NTPPOSIXEPOCHDELTA;
+
+              /* Compare expire time to current time */
+              if ( time(NULL) > expires )
+                {
+                  char timestr[100];
+                  ms_hptime2mdtimestr (MS_EPOCH2HPTIME(expires), timestr, 0);
+                  ms_log (1, "Warning: leap second file (%s) has expired as of %s\n",
+                          filename, timestr);
+                }
+            }
+          
+          continue;
+        }
+      
+      /* Skip comment lines */
+      if ( *readline == '#' )
+        continue;
+      
+      fields = sscanf (readline, "%"SCNd64" %d ", &leapsecond, &TAIdelta);
+      
+      if ( fields == 2 )
+        {
+          if ( (ls = malloc (sizeof(LeapSecond))) == NULL )
+            {
+              ms_log (2, "Cannot allocate LeapSecond, out of memory?\n");
+              return -1;
+            }
+          
+          /* Convert NTP epoch time to Unix epoch time and then to HPT */
+          ls->leapsecond = MS_EPOCH2HPTIME( (leapsecond - NTPPOSIXEPOCHDELTA) );
+          ls->TAIdelta = TAIdelta;
+          ls->next = NULL;
+          
+          /* Add leap second to global list */
+          if ( ! leapsecondlist )
+            {
+              leapsecondlist = ls;
+              lastls = ls;
+            }
+          else
+            {
+              lastls->next = ls;
+              lastls = ls;
+            }
+        }
+      else
+        {
+          ms_log (1, "Unrecognized leap second file line: '%s'\n", readline);
+        }
+    }
+  
+  return count;
+}  /* End of ms_readleapsecondfile() */
+
+
+/***************************************************************************
  * ms_genfactmult:
  *
  * Generate an approriate SEED sample rate factor and multiplier from
@@ -1081,7 +1311,7 @@ ms_genfactmult (double samprate, int16_t *factor, int16_t *multiplier)
   
   /* This routine does not support very high or negative sample rates,
      even though high rates are possible in Mini-SEED */
-  if ( samprate > 32727.0 || samprate < 0.0 )
+  if ( samprate > 32767.0 || samprate < 0.0 )
     {
       ms_log (2, "ms_genfactmult(): samprate out of range: %g\n", samprate);
       return -1;
@@ -1098,7 +1328,7 @@ ms_genfactmult (double samprate, int16_t *factor, int16_t *multiplier)
     }
   else
     {
-      ms_ratapprox (samprate, &num, &den, 32727, 1e-12);
+      ms_ratapprox (samprate, &num, &den, 32767, 1e-12);
       
       /* Negate the multiplier to denote a division factor */
       *factor = (int16_t ) num;
@@ -1184,7 +1414,7 @@ ms_ratapprox (double real, int *num, int *den, int maxval, double precision)
  * Returns 0 if the host is little endian, otherwise 1.
  ***************************************************************************/
 int
-ms_bigendianhost ()
+ms_bigendianhost (void)
 {
   int16_t host = 1;
   return !(*((int8_t *)(&host)));

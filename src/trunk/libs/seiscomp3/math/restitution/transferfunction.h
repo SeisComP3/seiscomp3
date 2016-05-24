@@ -103,6 +103,25 @@ class PolesAndZeros : public TransferFunction {
 };
 
 
+/**
+ * @brief The ResponseList class evaluates a FAP response list. Phase angles
+ *        are expected in degrees.
+ */
+class ResponseList : public TransferFunction {
+	public:
+		ResponseList(const SeismometerResponse::FAPs &faps, int addZeros = 0);
+		ResponseList(int n_tuples, const SeismometerResponse::FAP *faps, int addZeros = 0);
+
+	protected:
+		void evaluate_(Complex *out, int n, const double *x) const;
+		void deconvolve_(int n, Complex *spec, double startFreq, double df) const;
+		void convolve_(int n, Complex *spec, double startFreq, double df) const;
+
+	public:
+		SeismometerResponse::FAPs faps;
+		int                       nZeros;
+};
+
 
 }
 }

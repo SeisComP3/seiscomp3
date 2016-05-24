@@ -5,7 +5,7 @@
  * Written by Chad Trabant
  *   IRIS Data Management Center
  *
- * modified: 2011.129
+ * modified: 2015.108
  ***************************************************************************/
 
 #include <stdio.h>
@@ -98,7 +98,7 @@ MSFileParam gMSFileParam = {NULL, "", NULL, 0, 0, 0, 0, 0, 0, 0};
  * further description of arguments.
  *********************************************************************/
 int
-ms_readmsr (MSRecord **ppmsr, char *msfile, int reclen, off_t *fpos,
+ms_readmsr (MSRecord **ppmsr, const char *msfile, int reclen, off_t *fpos,
 	    int *last, flag skipnotdata, flag dataflag, flag verbose)
 {
   MSFileParam *msfp = &gMSFileParam;
@@ -120,7 +120,7 @@ ms_readmsr (MSRecord **ppmsr, char *msfile, int reclen, off_t *fpos,
  * further description of arguments.
  *********************************************************************/
 int
-ms_readmsr_r (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
+ms_readmsr_r (MSFileParam **ppmsfp, MSRecord **ppmsr, const char *msfile,
 	      int reclen, off_t *fpos, int *last, flag skipnotdata,
 	      flag dataflag, flag verbose)
 {
@@ -220,7 +220,7 @@ ms_shift_msfp (MSFileParam *msfp, int shift)
  * NULL.
  *********************************************************************/
 int
-ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
+ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, const char *msfile,
 		 int reclen, off_t *fpos, int *last, flag skipnotdata,
 		 flag dataflag, Selections *selections, flag verbose)
 {
@@ -420,7 +420,7 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 	    {
 	      if ( ! feof (msfp->fp) )
 		{
-		  ms_log (2, "Short read of %d bytes starting from %lld\n",
+		  ms_log (2, "Short read of %d bytes starting from %"PRId64"\n",
 			  readsize, msfp->filepos);
 		  retcode = MS_GENERROR;
 		  break;
@@ -460,7 +460,7 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
       if ( msfp->packtype && (msfp->packtype < 0 || msfp->filepos == msfp->packhdroffset) && MSFPBUFLEN(msfp) >= 48 )
 	{
 	  char hdrstr[30];
-	  long long datasize;
+	  int64_t datasize;
 	  
 	  /* Determine bytes to skip before header: either initial ID block or type-specific chksum block */
 	  packskipsize = ( msfp->packtype < 0 ) ? 10 : packtypes[msfp->packtype][2];
@@ -472,7 +472,7 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 	  memset (hdrstr, 0, sizeof(hdrstr));
 	  memcpy (hdrstr, MSFPREADPTR(msfp) + (packtypes[msfp->packtype][0] + packskipsize - packtypes[msfp->packtype][1]),
 		  packtypes[msfp->packtype][1]);
-	  sscanf (hdrstr, " %lld", &datasize);
+	  sscanf (hdrstr, " %"SCNd64, &datasize);
 	  packdatasize = (off_t) datasize;
 	  
 	  /* Next pack header = File position + skipsize + header size + data size
@@ -481,10 +481,10 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 	  msfp->packhdroffset = msfp->filepos + packskipsize + packtypes[msfp->packtype][0] + packdatasize;
 	  
 	  if ( verbose > 1 )
-	    ms_log (1, "Read packed file header at offset %lld (%d bytes follow), chksum offset: %lld\n",
-		    (long long int) (msfp->filepos + packskipsize), packdatasize,
-		    (long long int) msfp->packhdroffset);
-	  
+	    ms_log (1, "Read packed file header at offset %"PRId64" (%d bytes follow), chksum offset: %"PRId64"\n",
+		    (msfp->filepos + packskipsize), packdatasize,
+		    msfp->packhdroffset);
+
 	  /* Shift buffer to new reading offset (aligns records in buffer) */
 	  ms_shift_msfp (msfp, msfp->readoffset + (packskipsize + packtypes[msfp->packtype][0]));
 	} /* End of packed header processing */
@@ -504,8 +504,8 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 		{
 		  if ( verbose > 1 )
 		    {
-		      ms_log (1, "Skipping (jump) packed section for %s (%d bytes) starting at offset %lld\n",
-			      srcname, (msfp->packhdroffset - msfp->filepos), (long long int) msfp->filepos);
+		      ms_log (1, "Skipping (jump) packed section for %s (%d bytes) starting at offset %"PRId64"\n",
+			      srcname, (msfp->packhdroffset - msfp->filepos), msfp->filepos);
 		    }
 		  
 		  msfp->readoffset += (msfp->packhdroffset - msfp->filepos);
@@ -518,8 +518,8 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 		{
 		  if ( verbose > 1 )
 		    {
-		      ms_log (1, "Skipping (seek) packed section for %s (%d bytes) starting at offset %lld\n",
-			      srcname, (msfp->packhdroffset - msfp->filepos), (long long int) msfp->filepos);
+		      ms_log (1, "Skipping (seek) packed section for %s (%d bytes) starting at offset %"PRId64"\n",
+			      srcname, (msfp->packhdroffset - msfp->filepos), msfp->filepos);
 		    }
 
 		  if ( lmp_fseeko (msfp->fp, msfp->packhdroffset, SEEK_SET) )
@@ -583,11 +583,11 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 		  if ( verbose > 1 )
 		    {
 		      if ( MS_ISVALIDBLANK((char *)MSFPREADPTR(msfp)) )
-			ms_log (1, "Skipped %d bytes of blank/noise record at byte offset %lld\n",
-				MINRECLEN, (long long) msfp->filepos);
+			ms_log (1, "Skipped %d bytes of blank/noise record at byte offset %"PRId64"\n",
+				MINRECLEN, msfp->filepos);
 		      else
-			ms_log (1, "Skipped %d bytes of non-data record at byte offset %lld\n",
-				MINRECLEN, (long long) msfp->filepos);
+			ms_log (1, "Skipped %d bytes of non-data record at byte offset %"PRId64"\n",
+				MINRECLEN, msfp->filepos);
 		    }
 		  
 		  /* Skip MINRECLEN bytes, update reading offset and file position */
@@ -597,8 +597,8 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 	      /* Parsing errors */ 
 	      else
 		{
-		  ms_log (2, "Cannot detect record at byte offset %lld: %s\n",
-			  (long long) msfp->filepos, msfile);
+		  ms_log (2, "Cannot detect record at byte offset %"PRId64": %s\n",
+			  msfp->filepos, msfile);
 		  
 		  /* Print common errors and raw details if verbose */
 		  ms_parse_raw (MSFPREADPTR(msfp), MSFPBUFLEN(msfp), verbose, -1);
@@ -670,11 +670,11 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
 		      if ( verbose )
 			{
 			  if ( msfp->filesize )
-			    ms_log (1, "Truncated record at byte offset %lld, filesize %d: %s\n",
-				    (long long) msfp->filepos, msfp->filesize, msfile);
+			    ms_log (1, "Truncated record at byte offset %"PRId64", filesize %d: %s\n",
+				    msfp->filepos, msfp->filesize, msfile);
 			  else
-			    ms_log (1, "Truncated record at byte offset %lld\n",
-				    (long long) msfp->filepos);
+			    ms_log (1, "Truncated record at byte offset %"PRId64"\n",
+				    msfp->filepos);
 			}
 		      
 		      retcode = MS_ENDOFFILE;
@@ -722,7 +722,7 @@ ms_readmsr_main (MSFileParam **ppmsfp, MSRecord **ppmsr, char *msfile,
  * and further description of arguments.
  *********************************************************************/
 int
-ms_readtraces (MSTraceGroup **ppmstg, char *msfile, int reclen,
+ms_readtraces (MSTraceGroup **ppmstg, const char *msfile, int reclen,
 	       double timetol, double sampratetol, flag dataquality,
 	       flag skipnotdata, flag dataflag, flag verbose)
 {
@@ -743,7 +743,7 @@ ms_readtraces (MSTraceGroup **ppmstg, char *msfile, int reclen,
  * and further description of arguments.
  *********************************************************************/
 int
-ms_readtraces_timewin (MSTraceGroup **ppmstg, char *msfile, int reclen,
+ms_readtraces_timewin (MSTraceGroup **ppmstg, const char *msfile, int reclen,
 		       double timetol, double sampratetol,
 		       hptime_t starttime, hptime_t endtime, flag dataquality,
 		       flag skipnotdata, flag dataflag, flag verbose)
@@ -784,8 +784,8 @@ ms_readtraces_timewin (MSTraceGroup **ppmstg, char *msfile, int reclen,
  * in libmseed.h).
  *********************************************************************/
 int
-ms_readtraces_selection (MSTraceGroup **ppmstg, char *msfile, int reclen,
-			 double timetol, double sampratetol,
+ms_readtraces_selection (MSTraceGroup **ppmstg, const char *msfile,
+			 int reclen, double timetol, double sampratetol,
 			 Selections *selections, flag dataquality,
 			 flag skipnotdata, flag dataflag, flag verbose)
 {
@@ -848,7 +848,7 @@ ms_readtraces_selection (MSTraceGroup **ppmstg, char *msfile, int reclen,
  * values and further description of arguments.
  *********************************************************************/
 int
-ms_readtracelist (MSTraceList **ppmstl, char *msfile, int reclen,
+ms_readtracelist (MSTraceList **ppmstl, const char *msfile, int reclen,
 		  double timetol, double sampratetol, flag dataquality,
 		  flag skipnotdata, flag dataflag, flag verbose)
 {
@@ -869,8 +869,8 @@ ms_readtracelist (MSTraceList **ppmstl, char *msfile, int reclen,
  * and further description of arguments.
  *********************************************************************/
 int
-ms_readtracelist_timewin (MSTraceList **ppmstl, char *msfile, int reclen,
-			  double timetol, double sampratetol,
+ms_readtracelist_timewin (MSTraceList **ppmstl, const char *msfile,
+			  int reclen, double timetol, double sampratetol,
 			  hptime_t starttime, hptime_t endtime, flag dataquality,
 			  flag skipnotdata, flag dataflag, flag verbose)
 {
@@ -910,8 +910,8 @@ ms_readtracelist_timewin (MSTraceList **ppmstl, char *msfile, int reclen,
  * in libmseed.h).
  *********************************************************************/
 int
-ms_readtracelist_selection (MSTraceList **ppmstl, char *msfile, int reclen,
-			    double timetol, double sampratetol,
+ms_readtracelist_selection (MSTraceList **ppmstl, const char *msfile,
+			    int reclen, double timetol, double sampratetol,
 			    Selections *selections, flag dataquality,
 			    flag skipnotdata, flag dataflag, flag verbose)
 {
@@ -976,7 +976,7 @@ ms_fread (char *buf, int size, int num, FILE *stream)
 {
   int read = 0;
   
-  read = fread (buf, size, num, stream);
+  read = (int) fread (buf, size, num, stream);
   
   if ( read <= 0 && size && num )
     {
@@ -1017,8 +1017,8 @@ ms_record_handler_int (char *record, int reclen, void *ofp)
  * Returns the number of records written on success and -1 on error.
  ***************************************************************************/
 int
-msr_writemseed ( MSRecord *msr, char *msfile, flag overwrite, int reclen,
-		 flag encoding, flag byteorder, flag verbose )
+msr_writemseed ( MSRecord *msr, const char *msfile, flag overwrite,
+		 int reclen, flag encoding, flag byteorder, flag verbose )
 {
   FILE *ofp;
   char srcname[50];
@@ -1072,8 +1072,8 @@ msr_writemseed ( MSRecord *msr, char *msfile, flag overwrite, int reclen,
  * Returns the number of records written on success and -1 on error.
  ***************************************************************************/
 int
-mst_writemseed ( MSTrace *mst, char *msfile, flag overwrite, int reclen,
-		 flag encoding, flag byteorder, flag verbose )
+mst_writemseed ( MSTrace *mst, const char *msfile, flag overwrite,
+		 int reclen, flag encoding, flag byteorder, flag verbose )
 {
   FILE *ofp;
   char srcname[50];
@@ -1124,7 +1124,7 @@ mst_writemseed ( MSTrace *mst, char *msfile, flag overwrite, int reclen,
  * Returns the number of records written on success and -1 on error.
  ***************************************************************************/
 int
-mst_writemseedgroup ( MSTraceGroup *mstg, char *msfile, flag overwrite,
+mst_writemseedgroup ( MSTraceGroup *mstg, const char *msfile, flag overwrite,
 		      int reclen, flag encoding, flag byteorder, flag verbose )
 {
   MSTrace *mst;
