@@ -103,6 +103,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
   * Fix timing quality rendering in picker
   * Fix magnitude table distance entries if distance is displayed in km
   * Fix spectrum display on 32bit systems
+  * Fall back to detecStream for vertical component in picker if 3 components are not available in inventory
 
 * scmv
 

@@ -3720,7 +3720,7 @@ void PickerView::loadNextStations(float distance) {
 				if ( stream ) {
 					WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
 
-					RecordViewItem* item = addStream(stream->sensorLocation(), streamID, delta, streamID.stationCode().c_str(), false, true);
+					RecordViewItem* item = addStream(stream->sensorLocation(), streamID, delta, streamID.stationCode().c_str(), false, true, stream);
 					if ( item ) {
 						_stations.insert(code);
 						item->setVisible(!_ui.actionShowUsedStations->isChecked());
@@ -4443,7 +4443,7 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
                                       double distance,
                                       const std::string& text,
                                       bool showDisabled,
-                                      bool theoreticalArrivals) {
+                                      bool theoreticalArrivals, const Stream *base) {
 	bool isEnabled = true;
 	if ( !showDisabled ) {
 		isEnabled = SCApp->isStationEnabled(streamID.networkCode(), streamID.stationCode());
@@ -4487,7 +4487,7 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 
 	}
 
-	RecordViewItem *item = addRawStream(sloc, streamID, distance, text, theoreticalArrivals);
+	RecordViewItem *item = addRawStream(sloc, streamID, distance, text, theoreticalArrivals, base);
 	if ( item == NULL ) return NULL;
 
 	item->setValue(ITEM_PRIORITY_INDEX, 0);
@@ -5023,12 +5023,13 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
                                          const WaveformStreamID& sid,
                                          double distance,
                                          const std::string& text,
-                                         bool theoreticalArrivals) {
+                                         bool theoreticalArrivals,
+                                         const Stream *base) {
 	WaveformStreamID streamID(sid);
 
 	// Lookup station channel mapping
 	QList<Config::ChannelMapItem> channelMapping = _config.channelMap.values((streamID.networkCode() + "." + streamID.stationCode()).c_str());
-	if ( channelMapping.isEmpty() )
+ 	if ( channelMapping.isEmpty() )
 		channelMapping = _config.channelMap.values((std::string("*.") + streamID.stationCode()).c_str());
 	if ( channelMapping.isEmpty() )
 		channelMapping = _config.channelMap.values((streamID.networkCode() + ".*").c_str());
@@ -5083,26 +5084,33 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 	applyFilter(item);
 
 	if ( loc ) {
-		getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time());
-		if ( tc.comps[ThreeComponents::Vertical] )
-			comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
-		else {
-			allComponents = false;
-			comps[0] = COMP_NO_METADATA;
-		}
+		if ( getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time()) ) {
+			if ( tc.comps[ThreeComponents::Vertical] )
+				comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
+			else {
+				allComponents = false;
+				comps[0] = COMP_NO_METADATA;
+			}
 
-		if ( tc.comps[ThreeComponents::FirstHorizontal] )
-			comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
-		else {
-			allComponents = false;
+			if ( tc.comps[ThreeComponents::FirstHorizontal] )
+				comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
+			else {
+				allComponents = false;
+				comps[1] = COMP_NO_METADATA;
+			}
+
+			if ( tc.comps[ThreeComponents::SecondHorizontal] )
+				comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
+			else {
+				allComponents = false;
+				comps[2] = COMP_NO_METADATA;
+			}
+		}
+		else if ( base ) {
+			comps[0] = *base->code().rbegin();
 			comps[1] = COMP_NO_METADATA;
-		}
-
-		if ( tc.comps[ThreeComponents::SecondHorizontal] )
-			comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
-		else {
-			allComponents = false;
 			comps[2] = COMP_NO_METADATA;
+			allComponents = false;
 		}
 
 		label->latitude = loc->latitude();
@@ -7266,7 +7274,7 @@ void PickerView::addStations() {
 
 			RecordViewItem* item = addStream(stream->sensorLocation(), streamID,
 			                                 delta, streamID.stationCode().c_str(),
-			                                 false, true);
+			                                 false, true, stream);
 			if ( item ) {
 				_stations.insert(code);
 				item->setVisible(!_ui.actionShowUsedStations->isChecked());

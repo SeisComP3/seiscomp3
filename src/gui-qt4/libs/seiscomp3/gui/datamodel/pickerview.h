@@ -493,13 +493,15 @@ class SC_GUI_API PickerView : public QMainWindow {
 		                          double distance,
 		                          const std::string& text,
 		                          bool showDisabled,
-		                          bool addTheoreticalArrivals);
+		                          bool addTheoreticalArrivals,
+		                          const DataModel::Stream *base = NULL);
 
 		RecordViewItem* addRawStream(const DataModel::SensorLocation *,
 		                             const DataModel::WaveformStreamID& streamID,
 		                             double distance,
 		                             const std::string& text,
-		                             bool addTheoreticalArrivals);
+		                             bool addTheoreticalArrivals,
+		                             const DataModel::Stream *base = NULL);
 
 		void queueStream(double dist, const DataModel::WaveformStreamID& streamID, char component);
 
