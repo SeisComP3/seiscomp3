@@ -307,6 +307,12 @@ class EventHistory(seiscomp3.Client.Application):
       self.query().loadEventDescriptions(evt)
 
     org = self._cache.get(seiscomp3.DataModel.Origin, evt.preferredOriginID())
+
+    if evt.preferredFocalMechanismID():
+      fm = self._cache.get(seiscomp3.DataModel.FocalMechanism, evt.preferredFocalMechanismID())
+    else:
+      fm = None
+
     # Load comments
     if org.commentCount() == 0:
       self.query().loadComments(org)
@@ -324,6 +330,55 @@ class EventHistory(seiscomp3.Client.Application):
     ep.add(evt_cloned)
 
     summary = self.getSummary(now, org, prefmag)
+
+    if fm:
+      ep.add(fm)
+
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+
+      # Load focal mechainsm references
+      if evt.focalMechanismReferenceCount() == 0:
+        self.query().loadFocalMechanismReferences(evt)
+
+      # Load moment tensors
+      if fm.momentTensorCount() == 0:
+        self.query().loadMomentTensors(fm)
+
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+      # Copy focal mechanism reference
+      fm_ref = evt.focalMechanismReference(seiscomp3.DataModel.FocalMechanismReferenceIndex(fm.publicID()))
+      if fm_ref:
+        fm_ref_cloned = seiscomp3.DataModel.FocalMechanismReference.Cast(fm_ref.clone())
+        if fm_ref_cloned is None: fm_ref_cloned = seiscomp3.DataModel.FocalMechanismReference(fm.publicID())
+        evt_cloned.add(fm_ref_cloned)
+
+      nmt = fm.momentTensorCount()
+      for i in xrange(nmt):
+        mt = fm.momentTensor(i)
+        if not mt.derivedOriginID(): continue
+
+        # Origin already added
+        if ep.findOrigin(mt.derivedOriginID()) != None:
+          continue
+
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+        derivedOrigin = self._cache.get(seiscomp3.DataModel.Origin, mt.derivedOriginID())
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+        if derivedOrigin is None:
+          seiscomp3.Logging.warning("derived origin for MT %s not found" % mt.derivedOriginID())
+          continue
+
+        # Origin has been read from database -> read all childs
+        if not self._cache.cached():
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+          self.query().load(derivedOrigin);
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+        # Add it to the event parameters
+        ep.add(derivedOrigin)
+
 
     if org:
       seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
