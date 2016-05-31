@@ -112,14 +112,16 @@ class VoiceAlert(seiscomp3.Client.Application):
             try: self._ampScript = self.configGetString("scripts.amplitude")
             except: seiscomp3.Logging.warning("No amplitude script defined")
 
-        self._ampScript = seiscomp3.System.Environment.Instance().absolutePath(self._ampScript)
+        if self._ampScript:
+            self._ampScript = seiscomp3.System.Environment.Instance().absolutePath(self._ampScript)
 
         try: self._alertScript = self.commandline().optionString("alert-script")
         except:
             try: self._alertScript = self.configGetString("scripts.alert")
             except: seiscomp3.Logging.warning("No alert script defined") 
 
-        self._alertScript = seiscomp3.System.Environment.Instance().absolutePath(self._alertScript)
+        if self._alertScript:
+            self._alertScript = seiscomp3.System.Environment.Instance().absolutePath(self._alertScript)
 
         try: self._eventScript = self.commandline().optionString("event-script")
         except:
@@ -134,13 +136,6 @@ class VoiceAlert(seiscomp3.Client.Application):
         if not self.query():
             seiscomp3.Logging.warning("No valid database interface to read from")
         self._cache = seiscomp3.DataModel.PublicObjectRingBuffer(self.query(), 100)
-
-#   self.setMessagingEnabled(True)
-#   self.setDatabaseEnabled(True, True)
-#   self.setPrimaryMessagingGroup(seiscomp3.Communication.Protocol.LISTENER_GROUP)
-#   self.addMessagingSubscription("EVENT")
-#   self.addMessagingSubscription("LOCATION")
-#   self.addMessagingSubscription("MAGNITUDE")
 
         if self._ampScript and self.connection():
             self.connection().subscribe("AMPLITUDE")
