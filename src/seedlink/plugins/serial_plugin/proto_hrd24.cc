@@ -289,7 +289,7 @@ void HRD24Protocol::process_gps_satellite_status_bundle(const GPSSatelliteStatus
       {
         logs(LOG_DEBUG) << ((b->sat_chan[i] >> 8) & 0x3f);
 
-        if((b->sat_chan[i] >> 14) & 0x3 == 3)
+        if(((b->sat_chan[i] >> 14) & 0x3) == 3)
           {
             ++ntracked;
             logs(LOG_DEBUG) << "* ";

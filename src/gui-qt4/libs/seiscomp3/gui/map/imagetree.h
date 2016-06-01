@@ -88,7 +88,7 @@ class SC_GUI_API ImageTree : public QObject, public Core::BaseObject {
 
 
 	public:
-		bool valid() const { return _store; }
+		bool valid() const { return _store.get(); }
 
 		//! This function was introduced in API 1.1
 		bool hasPendingRequests() const { return _store && _store->hasPendingRequests(); }

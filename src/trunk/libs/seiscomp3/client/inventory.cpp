@@ -13,6 +13,7 @@
 
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <seiscomp3/datamodel/responsefap.h>
 #include <seiscomp3/datamodel/inventory_package.h>
 
 #include <set>

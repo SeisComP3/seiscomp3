@@ -257,7 +257,7 @@ struct Parser : bs::grammar< Parser<T> >
 
 			abs
 			= '|'
-			  >> expression[abs.value = bind(&generator_type::abs)(self.generator, arg1)]
+			  >> expression[abs.value = phoenix::bind(&generator_type::abs)(self.generator, arg1)]
 			  >> '|'
 			  ;
 
@@ -265,21 +265,21 @@ struct Parser : bs::grammar< Parser<T> >
 			= (
 			      identifier[filter.name = arg1]
 			      >> ! ( '('
-			             >> !list_p.direct(literal[bind(&Parser::add_parameter)(self, arg1)], ',')
+			             >> !list_p.direct(literal[phoenix::bind(&Parser::add_parameter)(self, arg1)], ',')
 			             >> ')'
 			           )
 			  )
-			  [filter.value = bind(&Parser::initialize)(self, filter.name)][ErrorCheck<Parser>(self)]
+			  [filter.value = phoenix::bind(&Parser::initialize)(self, filter.name)][ErrorCheck<Parser>(self)]
 			  ;
 
 			constant
-			= literal[constant.value = bind(&generator_type::constant)(self.generator, arg1)]
+			= literal[constant.value = phoenix::bind(&generator_type::constant)(self.generator, arg1)]
 			  ;
 
 			// A statement can end at the end of the line, or with a semicolon.
 			statement
 			= guard<int>()
-			  ( expression[bind(&Parser::setResult)(self, arg1)]
+			  ( expression[phoenix::bind(&Parser::setResult)(self, arg1)]
 			    >> (end_p | ';')
 			  ) [Handler()]
 			  ;
@@ -293,26 +293,26 @@ struct Parser : bs::grammar< Parser<T> >
 
 			factor
 			= value[factor.value = arg1]
-			  >> * ( '^' >> value[factor.value = bind(&generator_type::pow)(self.generator, factor.value, arg1)])
+			  >> * ( '^' >> value[factor.value = phoenix::bind(&generator_type::pow)(self.generator, factor.value, arg1)])
 			  ;
 
 			multiplication
 			= factor[multiplication.value = arg1]
-			  >> * ( ( '*' >> factor[multiplication.value = bind(&generator_type::mul)(self.generator, multiplication.value, arg1)])
-			       | ( '/' >> factor[multiplication.value = bind(&generator_type::div)(self.generator, multiplication.value, arg1)])
+			  >> * ( ( '*' >> factor[multiplication.value = phoenix::bind(&generator_type::mul)(self.generator, multiplication.value, arg1)])
+			       | ( '/' >> factor[multiplication.value = phoenix::bind(&generator_type::div)(self.generator, multiplication.value, arg1)])
 			       )
 			  ;
 
 			addition
 			= multiplication[addition.value = arg1]
-			  >> * ( ( '+' >> multiplication[addition.value = bind(&generator_type::add)(self.generator, addition.value, arg1)])
-			       | ( '-' >> multiplication[addition.value = bind(&generator_type::sub)(self.generator, addition.value, arg1)])
+			  >> * ( ( '+' >> multiplication[addition.value = phoenix::bind(&generator_type::add)(self.generator, addition.value, arg1)])
+			       | ( '-' >> multiplication[addition.value = phoenix::bind(&generator_type::sub)(self.generator, addition.value, arg1)])
 			       )
 			  ;
 
 			expression
 			= addition[expression.value = arg1]
-			  >> * ( ( str_p ( "->" ) | ">>" ) >> addition[expression.value = bind(&generator_type::chain)(self.generator, expression.value, arg1)])
+			  >> * ( ( str_p ( "->" ) | ">>" ) >> addition[expression.value = phoenix::bind(&generator_type::chain)(self.generator, expression.value, arg1)])
 			  ;
 		}
 
