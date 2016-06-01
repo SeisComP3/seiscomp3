@@ -690,10 +690,11 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	std::sort(azi.begin(), azi.end());
 	azi.push_back(azi.front()+360.);
 	double azGap = 0.;
-	if (azi.size() > 2)
-		for (size_t i = 0; i < azi.size()-1; i++)
+	if ( azi.size() > 2 )
+		for ( size_t i = 0; i < azi.size()-1; ++i )
 			azGap = (azi[i+1]-azi[i]) > azGap ? (azi[i+1]-azi[i]) : azGap;
-	if (0. < azGap && azGap < 360.)
+
+	if ( 0. < azGap && azGap < 360. )
 		originQuality.setAzimuthalGap(azGap);
 
 	std::sort(dist.begin(), dist.end());
@@ -720,7 +721,6 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 //	SEISCOMP_DEBUG("------------------------------------------------------");
 // #endif
 
-
 	if ( _computeConfidenceEllipsoid ) {
 
 	// IGN additions: OriginUncertainty computation
@@ -730,24 +730,25 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	// where G is the proper cov matrix and s2 the variance
 
 	// M4d is the 4D matrix coming from LocSAT with the axis changed properly
-	double M4d[16] = {	loc->origerr->syy, loc->origerr->sxy, loc->origerr->syz,loc->origerr->sty,
-						loc->origerr->sxy, loc->origerr->sxx, loc->origerr->sxz,loc->origerr->stx,
-						loc->origerr->syz, loc->origerr->sxz, loc->origerr->szz,loc->origerr->stz,
-						loc->origerr->sty, loc->origerr->stx, loc->origerr->stz,loc->origerr->stt
-					 };
+	double M4d[16] = {
+		loc->origerr->syy, loc->origerr->sxy, loc->origerr->syz,loc->origerr->sty,
+		loc->origerr->sxy, loc->origerr->sxx, loc->origerr->sxz,loc->origerr->stx,
+		loc->origerr->syz, loc->origerr->sxz, loc->origerr->szz,loc->origerr->stz,
+		loc->origerr->sty, loc->origerr->stx, loc->origerr->stz,loc->origerr->stt
+	};
 
 	// M3d is the matrix in space
 	double M3d[9] = {
-						M4d[0], M4d[1], M4d[2],
-						M4d[4], M4d[5], M4d[6],
-						M4d[8], M4d[9], M4d[10]
-					};
+		M4d[0], M4d[1], M4d[2],
+		M4d[4], M4d[5], M4d[6],
+		M4d[8], M4d[9], M4d[10]
+	};
 
 	// M2d is the matrix in the XY plane
 	double M2d[4] = {
-						M4d[0], M4d[1],
-						M4d[4], M4d[5]
-					};
+		M4d[0], M4d[1],
+		M4d[4], M4d[5]
+	};
 
 	// Diagonalize 3D and 2D matrixes
 	// We use EISPACK code
@@ -780,12 +781,13 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	*
 	*/
 
-	if (ierr3 == 0 && ierr2 == 0) {
+	if ( ierr3 == 0 && ierr2 == 0 ) {
 		double kppf[3];
 		double g;
 		int ifault;
 		double dof;
-		for (int i = 0; i < 3; i++) {
+
+		for ( int i = 0; i < 3; ++i ) {
 			dof = i + 1;
 			g = alngam(dof/2.0, &ifault);
 			kppf[i] = pow(ppchi2(_locator_params->conf_level, dof, g, &ifault), 0.5);
@@ -794,8 +796,8 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		double sx, sy, smajax, sminax, strike;
 
 		// 1D confidence intervals
-		sx     = kppf[0] * pow(M4d[0], 0.5); // sxx
-		sy     = kppf[0] * pow(M4d[5], 0.5); // syy
+		sx = kppf[0] * pow(M4d[0], 0.5); // sxx
+		sy = kppf[0] * pow(M4d[5], 0.5); // syy
 
 
 		// 1D confidence intervals
@@ -809,12 +811,11 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		smajax = kppf[1] * pow(eigval2d[1], 0.5);
 		strike = rad2deg * atan(eigvec2d[3] / eigvec2d[2]);
 		// give the strike in the [0.0, 180.0] interval
-		if (strike < 0.0) {
+		if ( strike < 0.0 )
 			strike += 180.0;
-		}
-		if (strike > 180.0) {
+
+		if ( strike > 180.0 )
 			strike -= 180.0;
-		}
 
 		// 3D confidence intervals
 		double s3dMajAxis, s3dMinAxis, s3dIntAxis, MajAxisPlunge, MajAxisAzimuth, MajAxisRotation;
@@ -824,40 +825,35 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		s3dMajAxis = kppf[2] * pow(eigval3d[2], 0.5);
 
 		MajAxisPlunge   = rad2deg * atan(eigvec3d[8] / pow(pow(eigvec3d[6], 2.0) + pow(eigvec3d[7], 2.0), 0.5));
-		if (MajAxisPlunge < 0.0) {
+		if ( MajAxisPlunge < 0.0 )
 			MajAxisPlunge += 180.0;
-		}
-		if (MajAxisPlunge > 180.0) {
+
+		if ( MajAxisPlunge > 180.0 )
 			MajAxisPlunge -= 180.0;
-		}
 
 		MajAxisAzimuth  = rad2deg * atan(eigvec3d[7] / eigvec3d[6]);
-		if (MajAxisAzimuth < 0.0) {
+		if ( MajAxisAzimuth < 0.0 )
 			MajAxisAzimuth += 180.0;
-		}
-		if (MajAxisAzimuth > 180.0) {
+
+		if ( MajAxisAzimuth > 180.0 )
 			MajAxisAzimuth -= 180.0;
-		}
 
 		MajAxisRotation = rad2deg * atan(eigvec3d[2] / pow(pow(eigvec3d[0], 2.0) + pow(eigvec3d[1], 2.0), 0.5));
-		if (loc->origerr->szz == 0.0) {
+		if ( loc->origerr->szz == 0.0 )
 			MajAxisRotation = 0.0;
-		}
-		if (MajAxisRotation < 0.0) {
+
+		if ( MajAxisRotation < 0.0 )
 			MajAxisRotation += 180.0;
-		}
-		if (MajAxisRotation > 180.0) {
+
+		if ( MajAxisRotation > 180.0 )
 			MajAxisRotation -= 180.0;
-		}
-
-
 
 		DataModel::ConfidenceEllipsoid confidenceEllipsoid;
 		DataModel::OriginUncertainty originUncertainty;
 
-		confidenceEllipsoid.setSemiMinorAxisLength(s3dMinAxis * 1000.0);
-		confidenceEllipsoid.setSemiIntermediateAxisLength(s3dIntAxis * 1000.0);
-		confidenceEllipsoid.setSemiMajorAxisLength(s3dMajAxis* 1000.0);
+		confidenceEllipsoid.setSemiMinorAxisLength(s3dMinAxis*1000.0);
+		confidenceEllipsoid.setSemiIntermediateAxisLength(s3dIntAxis*1000.0);
+		confidenceEllipsoid.setSemiMajorAxisLength(s3dMajAxis*1000.0);
 		confidenceEllipsoid.setMajorAxisPlunge(MajAxisPlunge);
 		confidenceEllipsoid.setMajorAxisAzimuth(MajAxisAzimuth);
 		confidenceEllipsoid.setMajorAxisRotation(MajAxisRotation);
@@ -949,20 +945,40 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		SEISCOMP_DEBUG("    2D: %+10.5f", kppf[1]);
 		SEISCOMP_DEBUG("    3D: %+10.5f", kppf[2]);
 #endif
+	}
+	else {
+		SEISCOMP_DEBUG("Unable to calculate eigenvalues/eigenvectors. No Confidence ellipsoid will be computed");
 
+		OriginUncertainty originUncertainty;
 
-	} else {
-		SEISCOMP_DEBUG("Unable to calculate eigenvalues/eigenvectors. No Origin uncertainty will be computed");
+		// Convert to m
+		originUncertainty.setMinHorizontalUncertainty(loc->origerr->sminax);
+		originUncertainty.setMaxHorizontalUncertainty(loc->origerr->smajax);
+		originUncertainty.setAzimuthMaxHorizontalUncertainty(loc->origerr->strike);
+		originUncertainty.setPreferredDescription(Seiscomp::DataModel::OriginUncertaintyDescription(Seiscomp::DataModel::HORIZONTAL));
+
+		origin->setUncertainty(originUncertainty);
 	}
 
 	} // Closing bracket for _computeConfidenceEllipsoid == true
+	else {
+		OriginUncertainty originUncertainty;
+
+		// Convert to m
+		originUncertainty.setMinHorizontalUncertainty(loc->origerr->sminax);
+		originUncertainty.setMaxHorizontalUncertainty(loc->origerr->smajax);
+		originUncertainty.setAzimuthMaxHorizontalUncertainty(loc->origerr->strike);
+		originUncertainty.setPreferredDescription(Seiscomp::DataModel::OriginUncertaintyDescription(Seiscomp::DataModel::HORIZONTAL));
+
+		origin->setUncertainty(originUncertainty);
+	}
 
 	origin->setQuality(originQuality);
 
-	_errorEllipsoid.smajax = loc->origerr->smajax * 1000.0;
-	_errorEllipsoid.sminax = loc->origerr->sminax * 1000.0;
+	_errorEllipsoid.smajax = loc->origerr->smajax;
+	_errorEllipsoid.sminax = loc->origerr->sminax;
 	_errorEllipsoid.strike = loc->origerr->strike;
-	_errorEllipsoid.sdepth = loc->origerr->sdepth * 1000.0;
+	_errorEllipsoid.sdepth = loc->origerr->sdepth;
 	_errorEllipsoid.stime  = loc->origerr->stime;
 	_errorEllipsoid.sdobs  = loc->origerr->sdobs;
 	_errorEllipsoid.conf   = loc->origerr->conf * 100.0;
@@ -970,7 +986,6 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	return origin;
 }
 
-	//! --------------------------------------------------
 
 void LocSAT::setDefaultLocatorParams(){
 	_locator_params->cor_level      = 0;
