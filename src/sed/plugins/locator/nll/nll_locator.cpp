@@ -1383,9 +1383,9 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 	ConfidenceEllipsoid ce;
 
 	// Create confidence ellipsoid
-	ce.setSemiMajorAxisLength(phypo->ellipsoid.len3);
-	ce.setSemiMinorAxisLength(phypo->ellipsoid.len1);
-	ce.setSemiIntermediateAxisLength(phypo->ellipsoid.len2);
+	ce.setSemiMajorAxisLength(phypo->ellipsoid.len3 * 1000.0);
+	ce.setSemiMinorAxisLength(phypo->ellipsoid.len1 * 1000.0);
+	ce.setSemiIntermediateAxisLength(phypo->ellipsoid.len2 * 1000.0);
 
 	Math::Vector3d a,b,c;
 
