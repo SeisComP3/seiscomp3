@@ -156,11 +156,11 @@ namespace {
 	void   setTimeFromGPSFull(const void *);
 	void   setTimeFromGPSPartial(const void *);
 	string getFirmwareVersion();
-	void   setGMT(char);
-	void   setTime(char sec=0x00, char min=0x00, char hour=0x00);
-	void   setDate(char year=0x00, char month=0x00, char day=0x00);
-	void   setCrystalErrorCompensationTrim(char lowTrim=0xFF, char medTrim=0xFF,
-					       char highTrim=0xFF, char dirTrim=0xFF);
+	void   setGMT(unsigned char);
+	void   setTime(unsigned char sec=0x00, unsigned char min=0x00, unsigned char hour=0x00);
+	void   setDate(unsigned char year=0x00, unsigned char month=0x00, unsigned char day=0x00);
+	void   setCrystalErrorCompensationTrim(unsigned char lowTrim=0xFF, unsigned char medTrim=0xFF,
+					       unsigned char highTrim=0xFF, unsigned char dirTrim=0xFF);
 	void   setSamplingRate3Channels(int samplingRate=100);
 	void   setSamplingRate4Channels(int samplingRate=100);
 	void   setSamplingRate16Channels(int smaplingRate=100,
@@ -606,10 +606,10 @@ namespace {
 	return string(timeStr);
     }
     
-    void SADCdataProtocol::setGMT(char GMT = 0x00)
+    void SADCdataProtocol::setGMT(unsigned char GMT = 0x00)
     {
 	unsigned char acknowledgeByte = 0xF8;
-	char commandGMT[] =
+	unsigned char commandGMT[] =
 	    { 0x82, GMT, 0x00, 0x00, 0x00, 0x00 };
 	int commandSize = 6;
 	
@@ -633,10 +633,10 @@ namespace {
 	}
     }
 
-    void SADCdataProtocol::setTime(char sec, char min, char hour)
+    void SADCdataProtocol::setTime(unsigned char sec, unsigned char min, unsigned char hour)
     {
 	unsigned char ackByte = 0xF8;
-	char timeCmd[] =
+	unsigned char timeCmd[] =
 	    { 0x83, sec, min, hour, 0x00, 0x00 };
 	int cmdSize = 6;
 	
@@ -659,10 +659,10 @@ namespace {
 	}
     }
 
-    void SADCdataProtocol::setDate(char year, char month, char day)
+    void SADCdataProtocol::setDate(unsigned char year, unsigned char month, unsigned char day)
     {
 	unsigned char ackByte = 0xF8;
-	char dateCmd[] =
+	unsigned char dateCmd[] =
 	    { 0x87, year, month, day, 0x00, 0x00 };
 	int cmdSize = 6;
 	
@@ -686,11 +686,13 @@ namespace {
 	}
     }
     
-    void SADCdataProtocol::setCrystalErrorCompensationTrim(char lowTrim, char medTrim,
-							   char highTrim, char dirTrim)
-    {
+	void SADCdataProtocol::setCrystalErrorCompensationTrim(unsigned char lowTrim,
+	                                                       unsigned char medTrim,
+	                                                       unsigned char highTrim,
+	                                                       unsigned char dirTrim)
+	{
 	unsigned char ackByte = 0xF8;
-	char dateCmd[] =
+	unsigned char dateCmd[] =
 	    { 0x85, lowTrim, medTrim, highTrim, dirTrim, 0x00 };
 	int cmdSize = 6;
 	
@@ -719,19 +721,19 @@ namespace {
 						     unsigned char channelsLow,
 						     unsigned char channelsHigh)
     {
- 	if (samplingRate > _maxSamplingRate || samplingRate < 0)
- 	{
- 	    logs(LOG_WARNING) << "sample rate has to be between "
-			      << _maxSamplingRate << " and 0" << endl;
+	if (samplingRate > _maxSamplingRate || samplingRate < 0)
+	{
+		logs(LOG_WARNING) << "sample rate has to be between "
+		                  << _maxSamplingRate << " and 0" << endl;
  	    return;
- 	}
+	}
 	
- 	char spsX = 0x00;
- 	if (samplingRate > 0)
- 	    spsX = static_cast<char>(_maxSamplingRate / samplingRate);
+	unsigned char spsX = 0x00;
+	if (samplingRate > 0)
+	    spsX = static_cast<unsigned char>(_maxSamplingRate / samplingRate);
 
 	int commandSize = 6;
-	char samplingCommand[] =
+	unsigned char samplingCommand[] =
 	    { 0x84, spsX, channelsLow, channelsHigh, 0x00, 0x00 };
 	
 	if (write(_fd, samplingCommand, commandSize) == -1 )
@@ -741,18 +743,18 @@ namespace {
     
     void SADCdataProtocol::setSamplingRate4Channels(int samplingRate)
     {
- 	if (samplingRate > _maxSamplingRate || samplingRate < 0)
- 	{
- 	    logs(LOG_WARNING) << "sample rate has to be between " << _maxSamplingRate << " and 0" << endl;
- 	    return;
- 	}
+	if (samplingRate > _maxSamplingRate || samplingRate < 0)
+	{
+	    logs(LOG_WARNING) << "sample rate has to be between " << _maxSamplingRate << " and 0" << endl;
+	    return;
+	}
 	
- 	char spsX = 0x00;
- 	if (samplingRate > 0)
- 	    spsX = static_cast<char>(_maxSamplingRate / samplingRate);
+	unsigned char spsX = 0x00;
+	if (samplingRate > 0)
+	    spsX = static_cast<unsigned char>(_maxSamplingRate / samplingRate);
 
 	int commandSize = 6;
-	char samplingCommand[] =
+	unsigned char samplingCommand[] =
 	    { 0x84, spsX, spsX, spsX, spsX, 0x00 };
 	
 	if (write(_fd, samplingCommand, commandSize) == -1 )
@@ -762,18 +764,18 @@ namespace {
 
      void SADCdataProtocol::setSamplingRate3Channels(int samplingRate)
      {
- 	if (samplingRate > _maxSamplingRate || samplingRate < 0)
- 	{
- 	    logs(LOG_WARNING) << "sample rate has to be between " << _maxSamplingRate << " and 0" << endl;
- 	    return;
- 	}
+	if (samplingRate > _maxSamplingRate || samplingRate < 0)
+	{
+	    logs(LOG_WARNING) << "sample rate has to be between " << _maxSamplingRate << " and 0" << endl;
+	    return;
+	}
 	
- 	char spsX = 0x00;
- 	if (samplingRate > 0)
- 	    spsX = static_cast<char>(_maxSamplingRate / samplingRate);
+	unsigned char spsX = 0x00;
+	if (samplingRate > 0)
+	    spsX = static_cast<unsigned char>(_maxSamplingRate / samplingRate);
 
 	int commandSize = 6;
-	char samplingCommand[] =
+	unsigned char samplingCommand[] =
 	    { 0x84, spsX, spsX, spsX, 0x00, 0x00 };
 	
 	if (write(_fd, samplingCommand, commandSize) == -1 )

@@ -3256,7 +3256,7 @@ void OriginLocatorView::updateContent() {
 	//_ui.tableArrivals->resize(_ui.tableArrivals->size());
 	_ui.tableArrivals->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-	_ui.buttonEditComment->setEnabled(_baseEvent);
+	_ui.buttonEditComment->setEnabled(_baseEvent.get());
 
 	// Reset custom labels and set background
 	resetCustomLabels();

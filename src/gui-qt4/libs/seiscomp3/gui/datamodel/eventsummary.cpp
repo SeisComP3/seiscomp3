@@ -872,7 +872,7 @@ void EventSummary::setFocalMechanism(FocalMechanism* fm) {
 			toolTip += "Depth: n/a\n";
 		}
 
-		if ( depth != NULL ) {
+		if ( depth ) {
 			if ( *depth < 50 )
 				c = Qt::red;
 			else if ( *depth < 100 )

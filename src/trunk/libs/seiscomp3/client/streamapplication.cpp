@@ -318,7 +318,7 @@ bool StreamApplication::openStream() {
 	if ( _recordStream ) return false;
 
 	_recordStream = IO::RecordStream::Open(recordStreamURL().c_str());
-	return _recordStream;
+	return _recordStream.get();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
