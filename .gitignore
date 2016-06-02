@@ -112,6 +112,8 @@
 /src/trunk/libs/3rd-party/spread/libspread/*.lo
 /src/trunk/libs/3rd-party/spread/libspread/*.o
 /src/trunk/libs/3rd-party/spread/libspread/*.so
+/src/trunk/libs/3rd-party/spread/libspread/*.dylib
+/src/trunk/libs/3rd-party/spread/libspread/__.SYMDEF SORTED
 
 # /src/trunk/libs/3rd-party/spread/stdutil/
 /src/trunk/libs/3rd-party/spread/stdutil/config.log
@@ -171,6 +173,7 @@
 /src/trunk/libs/3rd-party/spread/libspread-util/src/memory.lo
 /src/trunk/libs/3rd-party/spread/libspread-util/src/memory.o
 /src/trunk/libs/3rd-party/spread/libspread-util/src/libspread-util.so.4.2.0
+/src/trunk/libs/3rd-party/spread/libspread-util/src/*.dylib
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.do
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.ldo
 /src/trunk/libs/3rd-party/spread/stdutil/src/stdarr.lo

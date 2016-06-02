@@ -41,6 +41,13 @@ static char rcsid[] = "$Id: scream.c 1364 2008-10-24 18:42:33Z andres $";
 
 #include "project.h"
 
+// Note: MSG_CONFIRM flag for send() does not exist on Darwin (OS X & FreeBSD)
+//
+#ifdef __APPLE__
+#include <sys/types.h>
+#define MSG_CONFIRM 1
+#endif
+
 #include <sys/socket.h>
 #include <netdb.h>
 
@@ -97,7 +104,7 @@ scm_init (int _protocol, char *server, int port)
         cmd = SCREAM_CMD_START_XMIT;
         printf("send SCREAM_CMD_START_XMIT\n");
 
-        if (send (sockfd, &cmd, 1,  MSG_CONFIRM) != 1)
+        if ( send (sockfd, &cmd, 1,  MSG_CONFIRM) != 1 )
            fatal (("write to socket failed: %m"));
 
       }

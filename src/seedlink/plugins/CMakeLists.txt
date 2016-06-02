@@ -6,6 +6,27 @@ SET(
 	chain_plugin
 )
 
+IF ( MACOSX )
+	SET(
+		_DIR_LIST 
+		${_DIR_LIST}
+		serial_plugin
+		sockplugin
+		naqsplugin
+		q330plugin
+		reftek_plugin
+		ewexport_plugin
+		ewexport_pasv_plugin
+		scream_plugin
+		scream2_plugin
+		wave24_plugin
+		minilogger_plugin
+		mseedscan_plugin
+		fs_plugin
+		win_plugin
+	)
+ENDIF (MACOSX)
+
 IF ( NOT MACOSX )
 	SET(
 		_DIR_LIST 

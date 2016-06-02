@@ -21,6 +21,13 @@
 #include <netdb.h>
 #include <unistd.h>
 
+// Note: MSG_CONFIRM flag for send() does not exist on Darwin (OS X & FreeBSD)
+//
+#ifdef __APPLE__
+#include <sys/types.h>
+#define MSG_CONFIRM 1
+#endif
+
 #define MAXSTREAMS            	500        /* max number of streams accepted from SCREAM */
 
 #define G_OK          0

@@ -39,6 +39,13 @@
 /*             for the SCREAM plugin in SeedLink          */
 
 
+// Note: MSG_CONFIRM flag for send() does not exist on Darwin (OS X & FreeBSD)
+//
+#ifdef __APPLE__
+//#include <sys/types.h>
+#define MSG_CONFIRM 1
+#endif
+
 #include "project.h"
 #include <sys/socket.h>
 #include <netdb.h>

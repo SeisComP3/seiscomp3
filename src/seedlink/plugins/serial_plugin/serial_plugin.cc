@@ -31,7 +31,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__APPLE__) || defined(__GNU_LIBRARY__) || defined(__GLIBC__)
 #include <getopt.h>
 #endif
 
@@ -55,6 +55,7 @@
 #ifndef SYSLOG_FACILITY
 #define SYSLOG_FACILITY LOG_LOCAL0
 #endif
+
 
 namespace SeedlinkPlugin_private {
 
@@ -218,7 +219,8 @@ class SEEDLog
       }
   };
 
-#if !defined(__GNU_LIBRARY__) && !defined(__GLIBC__)
+
+#if !defined(__APPLE__) && !defined(__GNU_LIBRARY__) && !defined(__GLIBC__)
 //*****************************************************************************
 // cfmakeraw()
 //*****************************************************************************
@@ -226,23 +228,23 @@ class SEEDLog
 int cfmakeraw(struct termios *termios_p)
   {
     termios_p->c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
-                    /* echo off, canonical mode off, extended input
-                       processing off, signal chars off */
+                    // echo off, canonical mode off, extended input
+                    //   processing off, signal chars off
 
     termios_p->c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
-                    /* no SIGINT on BREAK, CR-to-NL off, input parity
-                       check off, don't strip 8th bit on input,
-                       output flow control off */
+                    // no SIGINT on BREAK, CR-to-NL off, input parity
+                    //   check off, don't strip 8th bit on input,
+                    //   output flow control off 
 
     termios_p->c_cflag &= ~(CSIZE | PARENB);
-                    /* clear size bits, parity checking off */
+                    // clear size bits, parity checking off 
     termios_p->c_cflag |= CS8;
-                    /* set 8 bits/char */
+                    // set 8 bits/char 
 
     termios_p->c_oflag &= ~(OPOST);
-                    /* output processing off */
+                    // output processing off 
 
-    termios_p->c_cc[VMIN] = 1; /* Case B: 1 byte at a time, no timer */
+    termios_p->c_cc[VMIN] = 1; // Case B: 1 byte at a time, no timer 
     termios_p->c_cc[VTIME] = 0;
 
     return 0;
@@ -641,12 +643,24 @@ Stream logs = make_stream(SystemLog());
 
 }
 
+// For Mac OS X: define the template here, since clang gives error:
+//   cannot define or redeclare 'registered' here because namespace 'PluginModule'
+//   does not enclose namespace 'RegisteredModule<SeedlinkPlugin_private::Proto>'
+
+#if defined(__APPLE__)
+template<>
+RegisteredModule<Proto>* RegisteredModule<Proto>::registered = NULL;
+#endif
+
+#if !defined(__APPLE__)
+
 namespace PluginModule {
 
 template<>
 RegisteredModule<Proto>* RegisteredModule<Proto>::registered = NULL;
 
 }
+#endif
 
 //*****************************************************************************
 // Main

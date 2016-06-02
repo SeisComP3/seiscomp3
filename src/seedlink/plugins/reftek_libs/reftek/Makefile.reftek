@@ -24,8 +24,19 @@ OBJS   += $(OUTPUT)(com.o)
 OBJS   += $(OUTPUT)(type.o)
 OBJS   += $(OUTPUT)(steim.o)
 OBJS   += $(OUTPUT)(string.o)
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+    LDLIBS = -lpthread -lrt -lm
+endif
+
+ifeq ($(UNAME_S),Darwin)
+    LDLIBS = -lpthread -lm
+endif
+
  
 .PRECIOUS : $(OUTPUT)
+
  
 all: OBJS/$(PLATFORM) $(LIBDIR) FORCE
 	cd OBJS/$(PLATFORM); \

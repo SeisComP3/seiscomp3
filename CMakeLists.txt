@@ -39,11 +39,7 @@ EXEC_PROGRAM(
 )
 
 IF (SC_GLOBAL_PYTHON_WRAPPER)
-	IF (APPLE)
-		FIND_PACKAGE(PythonLibsApple REQUIRED)
-	ELSE (APPLE)
-		FIND_PACKAGE(PythonLibs REQUIRED)
-	ENDIF (APPLE)
+	FIND_PACKAGE(PythonLibs REQUIRED)
 	FIND_PACKAGE(PythonInterp REQUIRED)
 ENDIF (SC_GLOBAL_PYTHON_WRAPPER)
 
@@ -84,10 +80,10 @@ SET(SC3_PACKAGE_TEMPLATES_DIR templates)
 # Platform check
 #
 IF (APPLE AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	SET (MACOSX 1)
+	SET (MACOSX TRUE)
 	MESSAGE(STATUS "MACOSX detected")
 ELSEIF (UNIX AND ${CMAKE_SYSTEM_NAME} MATCHES "Linux")
- 	SET (LINUX 1)
+ 	SET (LINUX TRUE)
 ENDIF (APPLE AND ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 # If gcc is installed add -wall and -pedantic to the commandline
@@ -100,6 +96,39 @@ IF (CMAKE_COMPILER_IS_GNUCC)
 		ADD_DEFINITIONS(-Wall)
 	ENDIF ( ${CMAKE_BUILD_TYPE} MATCHES "Debug" )
 ENDIF (CMAKE_COMPILER_IS_GNUCC)
+
+
+# Set some specific settings for Mac OS X - Darwin
+#
+IF (MACOSX)
+    
+    # For MAC OS X we set the GUI to ON for ssconfig etc.
+    SET(SC_GLOBAL_GUI ON)
+    
+    # Set RPATH for Mac OS X - Darwin
+	SET(CMAKE_MACOSX_RPATH ON)
+	SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib") 
+	SET(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+	
+	# MYSQL with Homebrew
+	SET(MYSQL_INCLUDE_DIR /usr/local/include/mysql/)
+	
+	# Use clang compiler
+	if (NOT DEFINED CMAKE_CXX_COMPILER)
+		set(CMAKE_CXX_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++")
+		if (NOT EXISTS "${CMAKE_CXX_COMPILER}")
+			set(CMAKE_CXX_COMPILER "clang++")
+		endif()
+	endif()
+	
+	if (NOT DEFINED CMAKE_C_COMPILER)
+		set(CMAKE_C_COMPILER "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang")
+		if (NOT EXISTS "${CMAKE_C_COMPILER}")
+			set(CMAKE_C_COMPILER "clang")
+		endif()
+	endif()
+ENDIF (MACOSX)
 
 # Set the platform specific suffix for dynamic libraries
 ADD_DEFINITIONS(
