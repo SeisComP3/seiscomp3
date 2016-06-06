@@ -26,24 +26,6 @@ using namespace Seiscomp::Core;
 using namespace std;
 
 
-namespace {
-
-Time getStartTime(const string &file) {
-	MSRecord *prec = NULL;
-	MSFileParam *pfp = NULL;
-
-	int retcode = ms_readmsr_r(&pfp,&prec,const_cast<char*>(file.c_str()),0,NULL,NULL,1,0,0);
-	if ( retcode == MS_NOERROR ) {
-		Time start((hptime_t)prec->starttime/HPTMODULUS,(hptime_t)prec->starttime%HPTMODULUS);
-		ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
-		return start;
-	}
-
-	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
-	return Time();
-}
-
-}
 
 IMPLEMENT_SC_CLASS_DERIVED(SDSArchive,
                            Seiscomp::IO::RecordStream,
@@ -154,6 +136,21 @@ string SDSArchive::archiveRoot() const {
 	return _arcroot;
 }
 
+Time SDSArchive::getStartTime(const string &file) {
+	MSRecord *prec = NULL;
+	MSFileParam *pfp = NULL;
+
+	int retcode = ms_readmsr_r(&pfp,&prec,const_cast<char*>(file.c_str()),0,NULL,NULL,1,0,0);
+	if ( retcode == MS_NOERROR ) {
+		Time start((hptime_t)prec->starttime/HPTMODULUS,(hptime_t)prec->starttime%HPTMODULUS);
+		ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
+		return start;
+	}
+
+	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
+	return Time();
+}
+
 int SDSArchive::getDoy(const Time &time) {
 	int year;
 
@@ -163,7 +160,7 @@ int SDSArchive::getDoy(const Time &time) {
 	return (365-((int)(Time(year,12,31,23,59,59)-time)/86400));
 }
 
-string SDSArchive::SDSfilename(int doy, int year) {
+string SDSArchive::filename(int doy, int year) {
 	string net = _curidx->network();
 	string sta = _curidx->station();
 	string cha = _curidx->channel();
@@ -194,13 +191,13 @@ void SDSArchive::setFilenames() {
 	for ( int year = syear; year <= eyear; ++year ) {
 		tmpdoy = (year == eyear)?edoy:getDoy(Time(year,12,31,23,59,59));
 		for ( int doy = sdoy; doy <= tmpdoy; ++doy ) {
-			string file = SDSfilename(doy,year);
+			string file = filename(doy,year);
 			if ( first ) {
 				if ( getStartTime(file) > stime ) {
 					Time tmptime = stime - TimeSpan(86400,0);
 					int tmpdoy2;
 					tmptime.get2(&tmpyear, &tmpdoy2);
-					_fnames.push(SDSfilename(tmpdoy2+1, tmpyear));
+					_fnames.push(filename(tmpdoy2+1, tmpyear));
 				}
 			}
 

@@ -42,6 +42,8 @@ namespace Core {
    - Added class Seiscomp::DataModel::ResponseFAP
    - Changed Seiscomp::IO::GFArchive::addRequest from 1D request signature to
      3D request signature (distance,depth) -> (source,receiver)
+   - Made Seiscomp::RecordStream::SDSArchive private members and methods
+     protected
 
  "7.0.0"   0x070000
    - Added support for httpmsgbus messaging protocol

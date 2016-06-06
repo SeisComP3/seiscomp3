@@ -62,6 +62,11 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
 
   * Enhance documentation of scqc and others
 
+* NonLinLoc
+
+  * Fixed bug that caused wrong confidence ellipsoid axis length measures.
+    Values are expected in meters but the wrapper exported then as kilometers.
+
 * trunk
 
   * Add support for HMB (http messaging bus) messaging protocol
