@@ -1326,7 +1326,12 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 				try { return a->azimuth(); } catch ( ValueException& ) {}
 				break;
 			case TAKEOFF:
-				try { return a->takeOffAngle(); } catch ( ValueException& ) {}
+				try {
+					return a->takeOffAngle();
+				}
+				catch ( ValueException& ) {
+					return _takeOffs[index.row()];
+				}
 				break;
 			case WEIGHT:
 				try { return a->weight(); } catch ( ValueException& ) {}
