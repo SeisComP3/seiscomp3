@@ -1841,6 +1841,8 @@ void OriginLocatorView::init() {
 	_modelArrivalsProxy = NULL;
 	_modelArrivals.setDisabledForeground(palette().color(QPalette::Disabled, QPalette::Text));
 
+	_ui.tableArrivals->horizontalHeader()->setMovable(true);
+
 	connect(_ui.tableArrivals->horizontalHeader(), SIGNAL(sectionClicked(int)),
 	        _ui.tableArrivals, SLOT(sortByColumn(int)));
 
