@@ -15,7 +15,7 @@
 #include <QPainter>
 
 #define SEISCOMP_COMPONENT Gui::RecordWidget
-#include <seiscomp3/core/record.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/core/typedarray.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/math.h>

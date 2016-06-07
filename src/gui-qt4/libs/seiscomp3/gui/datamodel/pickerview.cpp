@@ -23,12 +23,14 @@
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/gui/core/uncertainties.h>
 #include <seiscomp3/gui/core/spectrogramrenderer.h>
+#include <seiscomp3/gui/core/spectrumwidget.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/arrival.h>
 #include <seiscomp3/datamodel/parameter.h>
 #include <seiscomp3/datamodel/utils.h>
+#include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/filter.h>
 #include <seiscomp3/core/strings.h>
@@ -72,6 +74,10 @@ using namespace Seiscomp::Math;
 using namespace Seiscomp::Util;
 using namespace Seiscomp::Gui;
 using namespace Seiscomp::Gui::PrivatePickerView;
+
+
+QSize PickerView::_defaultSpectrumWidgetSize = QSize(500,400);
+QByteArray PickerView::_spectrumWidgetGeometry;
 
 
 IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Gui::PickerMarkerActionPlugin, SC_GUI_API);
@@ -884,6 +890,119 @@ class PickerMarker : public RecordMarker {
 		int               _rot;
 		bool              _drawUncertaintyValues;
 };
+
+
+class SpectrumView : public QWidget {
+	public:
+		SpectrumView(QWidget *parent = 0, Qt::WindowFlags f = 0)
+		: QWidget(parent, f) {
+			QFrame *frame = new QFrame;
+			QHBoxLayout *hl = new QHBoxLayout;
+
+			spectrumWidget = new SpectrumWidget;
+			_infoLabel = new QLabel;
+
+			QToolButton *toggleLogX = new QToolButton;
+			toggleLogX->setText(tr("Log scale X"));
+			toggleLogX->setCheckable(true);
+			toggleLogX->setChecked(true);
+			connect(toggleLogX, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleX(bool)));
+
+			QToolButton *toggleLogY = new QToolButton;
+			toggleLogY->setText(tr("Log scale Y"));
+			toggleLogY->setCheckable(true);
+			toggleLogY->setChecked(true);
+			connect(toggleLogY, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleY(bool)));
+
+			QToolButton *toggleAmplitude = new QToolButton;
+			toggleAmplitude->setText(tr("Amplitude"));
+			toggleAmplitude->setCheckable(true);
+			toggleAmplitude->setChecked(true);
+			connect(toggleAmplitude, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setAmplitudeSpectrum(bool)));
+
+			hl->addWidget(toggleLogX);
+			hl->addWidget(toggleLogY);
+			hl->addWidget(toggleAmplitude);
+			hl->addStretch();
+
+			QToolButton *toggleSpec = new QToolButton;
+			toggleSpec->setText(tr("Raw spectrum"));
+			toggleSpec->setCheckable(true);
+			toggleSpec->setChecked(true);
+			connect(toggleSpec, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowSpectrum(bool)));
+
+			QToolButton *toggleCorrSpec = new QToolButton;
+			toggleCorrSpec->setText(tr("Corrected spectrum"));
+			toggleCorrSpec->setCheckable(true);
+			toggleCorrSpec->setChecked(false);
+			connect(toggleCorrSpec, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowCorrected(bool)));
+
+			QToolButton *toggleResp = new QToolButton;
+			toggleResp->setText(tr("Response"));
+			toggleResp->setCheckable(true);
+			toggleResp->setChecked(false);
+			connect(toggleResp, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowResponse(bool)));
+
+			hl->addWidget(toggleSpec);
+			hl->addWidget(toggleCorrSpec);
+			hl->addWidget(toggleResp);
+
+			QVBoxLayout *vl = new QVBoxLayout;
+
+			vl->addWidget(_infoLabel);
+			vl->addWidget(frame);
+			vl->addLayout(hl);
+
+			hl = new QHBoxLayout;
+			QPushButton *exportButton = new QPushButton;
+			exportButton->setText(tr("Export"));
+			connect(exportButton, SIGNAL(clicked()), spectrumWidget, SLOT(exportSpectra()));
+			hl->addWidget(exportButton);
+			hl->addStretch();
+			QPushButton *closeButton = new QPushButton;
+			closeButton->setText(tr("Close"));
+			connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+			hl->addWidget(closeButton);
+			vl->addLayout(hl);
+
+			setLayout(vl);
+
+			frame->setFrameShadow(QFrame::Sunken);
+			frame->setFrameShape(QFrame::StyledPanel);
+
+			vl = new QVBoxLayout;
+			vl->setMargin(0);
+			vl->addWidget(spectrumWidget);
+			frame->setLayout(vl);
+
+			spectrumWidget->setLogScaleX(toggleLogX->isChecked());
+			spectrumWidget->setLogScaleY(toggleLogY->isChecked());
+			spectrumWidget->setShowSpectrum(toggleSpec->isChecked());
+			spectrumWidget->setShowCorrected(toggleCorrSpec->isChecked());
+			spectrumWidget->setShowResponse(toggleResp->isChecked());
+		}
+
+		void setInfo(Processing::Sensor *sensor) {
+			if ( sensor == NULL ) {
+				_infoLabel->setText(QString());
+				return;
+			}
+
+			_infoLabel->setText(QString("%1, %2, %3, %4")
+			                    .arg(sensor->manufacturer().c_str())
+			                    .arg(sensor->model().c_str())
+			                    .arg(sensor->type().c_str())
+			                    .arg(sensor->unit().c_str()));
+		}
+
+
+	private:
+		QLabel *_infoLabel;
+
+	public:
+		SpectrumWidget *spectrumWidget;
+};
+
 
 
 bool isTraceUsed(Seiscomp::Gui::RecordWidget* w) {
@@ -1919,6 +2038,8 @@ void PickerView::init() {
 	_centerSelection = false;
 	_checkVisibility = true;
 
+	_spectrumView = NULL;
+
 	_recordView->setSelectionMode(RecordView::SingleSelection);
 	_recordView->setMinimumRowHeight(fontMetrics().ascent()*2+6);
 	_recordView->setDefaultRowHeight(fontMetrics().ascent()*2+6);
@@ -2153,10 +2274,8 @@ void PickerView::init() {
 	connect(_ui.actionShowSpectrogram, SIGNAL(triggered(bool)),
 	        this, SLOT(showSpectrogram(bool)));
 
-	/*
-	connect(_ui.actionOpenSprectrum, SIGNAL(triggered(bool)),
+	connect(_ui.actionOpenSpectrum, SIGNAL(triggered(bool)),
 	        this, SLOT(showSpectrum()));
-	*/
 
 	_spinDistance = new QDoubleSpinBox;
 	_spinDistance->setValue(15);
@@ -5019,6 +5138,20 @@ void PickerView::openConnectionInfo(const QPoint &p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::destroyedSpectrumWidget(QObject *o) {
+	QWidget *w = static_cast<QWidget*>(o);
+	if ( w == _spectrumView ) {
+		_spectrumView = NULL;
+		_defaultSpectrumWidgetSize = w->size();
+		_spectrumWidgetGeometry = w->saveGeometry();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
                                          const WaveformStreamID& sid,
                                          double distance,
@@ -5106,8 +5239,11 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 				comps[2] = COMP_NO_METADATA;
 			}
 		}
-		else if ( base ) {
-			comps[0] = *base->code().rbegin();
+		else {
+			if ( base )
+				comps[0] = *base->code().rbegin();
+			else
+				comps[0] = COMP_NO_METADATA;
 			comps[1] = COMP_NO_METADATA;
 			comps[2] = COMP_NO_METADATA;
 			allComponents = false;
@@ -6247,7 +6383,14 @@ void PickerView::pickP(bool) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::pickNone(bool) {
+	if ( _recordView->currentItem() ) {
+		// Only close widget if picking is already disabled
+		if ( _recordView->currentItem()->widget()->cursorText().isEmpty() && _spectrumView )
+			_spectrumView->close();
+	}
+
 	setCursorText("");
+
 	if ( _recordView->currentItem() )
 		_recordView->currentItem()->widget()->setCurrentMarker(NULL);
 }
@@ -7450,6 +7593,9 @@ void PickerView::setPick() {
 		onSelectedTime(item->widget(), item->widget()->cursorPos());
 		onSelectedTime(_currentRecord, _currentRecord->cursorPos());
 	}
+	else
+		// Only show spectrum if picking is not enabled
+		showSpectrum();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7715,7 +7861,68 @@ void PickerView::showSpectrogram(bool v) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::showSpectrum() {
-	//
+	RecordViewItem *item = _recordView->currentItem();
+	if ( !item ) return;
+
+	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+
+	if ( (_currentSlot < 0) || (_currentSlot > 2) ) {
+		statusBar()->showMessage(tr("Error: invalid component selected"));
+		return;
+	}
+
+	RecordSequence *seq = label->data.traces[_currentSlot].filter ? label->data.traces[_currentSlot].transformed : label->data.traces[_currentSlot].raw;
+	if ( !seq ) {
+		statusBar()->showMessage(tr("Error: cannot show spectrum, no data for current slot"));
+		return;
+	}
+
+	Core::TimeWindow tw = _currentRecord->visibleTimeWindow();
+	GenericRecordPtr trace = seq->continuousRecord<double>(&tw);
+	if ( !trace ) {
+		statusBar()->showMessage(tr("Error: failed to extract trace for spectrum"));
+		return;
+	}
+
+	Processing::Stream tmp;
+	tmp.init(trace->networkCode(), trace->stationCode(), trace->locationCode(), trace->channelCode(), trace->startTime());
+
+	// Correct for gain if given
+	if ( tmp.gain > 0.0 )
+		tmp.applyGain(*static_cast<DoubleArray*>(trace->data()));
+
+	// Remove mean
+	*static_cast<DoubleArray*>(trace->data()) -= static_cast<DoubleArray*>(trace->data())->mean();
+
+	Math::ComplexArray spectrum;
+	Math::fft(spectrum, static_cast<DoubleArray*>(trace->data())->impl());
+
+	if ( _spectrumView != NULL ) {
+		_spectrumView->setWindowTitle(tr("Spectrum of %1").arg(trace->streamID().c_str()));
+		static_cast<SpectrumView*>(_spectrumView)->spectrumWidget->setSpectrum(trace->samplingFrequency()*0.5, spectrum, tmp.sensor() && tmp.sensor()->response() ? tmp.sensor()->response() : NULL,
+		                                                                       trace->streamID().c_str());
+		static_cast<SpectrumView*>(_spectrumView)->setInfo(tmp.sensor());
+		return;
+	}
+
+	SpectrumView *spectrumView = new SpectrumView(this, Qt::Tool);
+	_spectrumView = spectrumView;
+
+	spectrumView->setAttribute(Qt::WA_DeleteOnClose);
+	spectrumView->setWindowTitle(tr("Spectrum of %1").arg(trace->streamID().c_str()));
+
+	connect(spectrumView, SIGNAL(destroyed(QObject*)), this, SLOT(destroyedSpectrumWidget(QObject*)));
+
+	spectrumView->setInfo(tmp.sensor());
+	spectrumView->spectrumWidget->setSpectrum(trace->samplingFrequency()*0.5, spectrum,
+	                                          tmp.sensor() && tmp.sensor()->response() ? tmp.sensor()->response() : NULL,
+	                                          trace->streamID().c_str());
+
+	if ( _spectrumWidgetGeometry.isEmpty() )
+		spectrumView->resize(_defaultSpectrumWidgetSize);
+	else
+		spectrumView->restoreGeometry(_spectrumWidgetGeometry);
+	spectrumView->show();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

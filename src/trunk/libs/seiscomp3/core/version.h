@@ -44,6 +44,7 @@ namespace Core {
      3D request signature (distance,depth) -> (source,receiver)
    - Made Seiscomp::RecordStream::SDSArchive private members and methods
      protected
+   - Added GUI plotting library
 
  "7.0.0"   0x070000
    - Added support for httpmsgbus messaging protocol
