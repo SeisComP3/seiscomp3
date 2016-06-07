@@ -1816,7 +1816,8 @@ int DatabaseReader::load(Inventory* inventory) {
 
 	count += loadResponsePolynomials(inventory);
 
-	count += loadResponseFAPs(inventory);
+	if ( supportsVersion<0,8>() )
+		count += loadResponseFAPs(inventory);
 
 	count += loadNetworks(inventory);
 	{

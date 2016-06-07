@@ -17,6 +17,7 @@
 
 
 #include <seiscomp3/processing/waveformoperator.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/core/recordsequence.h>
 
 

@@ -880,19 +880,14 @@
     <addaction name="actionRepickAutomatically" />
     <addaction name="separator" />
    </widget>
-   <widget class="QMenu" name="menu_Filter" >
+   <widget class="QMenu" name="menu_Navigation" >
     <property name="title" >
-     <string>&amp;Filter</string>
+     <string>&amp;Navigation</string>
     </property>
-    <addaction name="actionToggleFilter" />
-    <addaction name="actionLimitFilterToZoomTrace" />
-   </widget>
-   <widget class="QMenu" name="menu_Locate" >
-    <property name="title" >
-     <string>&amp;Locator</string>
-    </property>
-    <addaction name="actionRelocate" />
-    <addaction name="actionModifyOrigin" />
+    <addaction name="actionScrollLeft" />
+    <addaction name="actionScrollRight" />
+    <addaction name="actionScrollFineLeft" />
+    <addaction name="actionScrollFineRight" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -962,19 +957,31 @@
     <addaction name="menuTraces" />
     <addaction name="menuComponents" />
    </widget>
-   <widget class="QMenu" name="menu_Navigation" >
+   <widget class="QMenu" name="menu_Filter" >
     <property name="title" >
-     <string>&amp;Navigation</string>
+     <string>&amp;Filter</string>
     </property>
-    <addaction name="actionScrollLeft" />
-    <addaction name="actionScrollRight" />
-    <addaction name="actionScrollFineLeft" />
-    <addaction name="actionScrollFineRight" />
+    <addaction name="actionToggleFilter" />
+    <addaction name="actionLimitFilterToZoomTrace" />
+   </widget>
+   <widget class="QMenu" name="menu_Locate" >
+    <property name="title" >
+     <string>&amp;Locator</string>
+    </property>
+    <addaction name="actionRelocate" />
+    <addaction name="actionModifyOrigin" />
+   </widget>
+   <widget class="QMenu" name="menu_Tools" >
+    <property name="title" >
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionOpenSpectrum" />
    </widget>
    <addaction name="menuView" />
    <addaction name="menu_Navigation" />
    <addaction name="menuPicking" />
    <addaction name="menu_Filter" />
+   <addaction name="menu_Tools" />
    <addaction name="menu_Locate" />
   </widget>
   <action name="actionIncreaseAmplitudeScale" >
@@ -1786,6 +1793,17 @@
    </property>
    <property name="text" >
     <string>Sort by azimuth</string>
+   </property>
+  </action>
+  <action name="actionOpenSpectrum" >
+   <property name="text" >
+    <string>Spectrum for current component</string>
+   </property>
+   <property name="iconText" >
+    <string>Spectrum for current component</string>
+   </property>
+   <property name="toolTip" >
+    <string>Spectrum for current component. This can be also achieved by pressing Space while not in picking mode.</string>
    </property>
   </action>
  </widget>

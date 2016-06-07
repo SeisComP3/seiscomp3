@@ -55,6 +55,7 @@ namespace Gui {
 
 class TimeScale;
 class PickerView;
+class SpectrumWidget;
 
 
 namespace PrivatePickerView {
@@ -470,6 +471,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void previewUncertainty(double lower, double upper);
 
 		void openConnectionInfo(const QPoint &);
+		void destroyedSpectrumWidget(QObject *);
 
 
 	protected:
@@ -603,6 +605,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 		QLineEdit *_searchStation;
 		QLabel *_searchLabel;
 
+		static QSize _defaultSpectrumWidgetSize;
+		static QByteArray _spectrumWidgetGeometry;
 		Config::UncertaintyList _uncertainties;
 
 		//QScrollArea* _zoomTrace;
@@ -669,6 +673,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 		Config _config;
 		SpectrogramOptions _specOpts;
+
+		QWidget *_spectrumView;
 
 		::Ui::PickerView _ui;
 		bool _settingsRestored;

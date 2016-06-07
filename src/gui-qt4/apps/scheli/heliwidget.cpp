@@ -11,8 +11,9 @@
  ***************************************************************************/
 
 #include "heliwidget.h"
-#include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/math/filter/butterworth.h>
+#include <seiscomp3/gui/core/application.h>
 
 
 using namespace Seiscomp;

@@ -28,6 +28,7 @@ SET(
 		uncertainties.cpp
 		spectrogramrenderer.cpp
 		spectrogramwidget.cpp
+		spectrumwidget.cpp
 )
 
 IF(MACOSX)
@@ -73,6 +74,7 @@ SET(
 		inspector.h
 		uncertainties.h
 		spectrogramwidget.h
+		spectrumwidget.h
 )
 
 SET(

@@ -16,6 +16,7 @@
 
 #include "amplitudeview.h"
 #include <seiscomp3/core/platform/platform.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/gui/datamodel/selectstation.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/core/application.h>
