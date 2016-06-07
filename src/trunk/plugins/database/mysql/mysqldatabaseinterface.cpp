@@ -93,15 +93,15 @@ bool MySQLDatabase::open() {
 	}
 	if ( mysql_real_connect(_handle, _host.c_str(), _user.c_str(), _password.c_str(),
 	                        _database.c_str(), _port, NULL, 0) == NULL ) {
-		SEISCOMP_ERROR("Connect to %s:%s@%s:%d/%s failed", _user.c_str(), _password.c_str(),
+		SEISCOMP_ERROR("Connect to %s:******@%s:%d/%s failed", _user.c_str(),
 		               _host.c_str(), _port, _database.c_str());
 		mysql_close(_handle);
 		_handle = NULL;
 		return false;
 	}
 
-	SEISCOMP_DEBUG("Connected to %s:%s@%s:%d/%s (%s)", _user.c_str(),
-	               _password.c_str(), _host.c_str(), _port, _database.c_str(),
+	SEISCOMP_DEBUG("Connected to %s:******@%s:%d/%s (%s)", _user.c_str(),
+	               _host.c_str(), _port, _database.c_str(),
 	               _handle->host_info);
 
 	// Regarding some newsgroup results it is better to set the option AFTER
