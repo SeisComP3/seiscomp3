@@ -172,11 +172,12 @@ void MapWidget::draw(QPainter &painter) {
 		double dist = _canvas.drawGeoLine(painter, _measureStart, _measureEnd);
 
 		QFont f = painter.font();
-		f.setBold(true);
 		painter.setFont(f);
 		painter.setPen(QPen(Qt::red));
 		painter.drawText(rect(), Qt::AlignLeft | Qt::AlignBottom | Qt::TextSingleLine,
-		                 QString("Distance: %1 km").arg(Math::Geo::deg2km(dist), 0, 'f', 1));
+		                 QString("Distance: %1 km / %2 deg")
+		                 .arg(Math::Geo::deg2km(dist), 0, 'f', 1)
+		                 .arg(dist, 0, 'f', 1));
 
 		painter.restore();
 	}
