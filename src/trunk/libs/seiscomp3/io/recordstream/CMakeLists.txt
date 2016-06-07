@@ -18,6 +18,7 @@ SET(RECORDSTREAM_SOURCES
 SET(RECORDSTREAM_HEADERS
 	file.h
 	memory.h
+	archive.h
 	sdsarchive.h
 	odcarchive.h
 	arclink.h
