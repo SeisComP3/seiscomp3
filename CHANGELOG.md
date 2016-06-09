@@ -62,6 +62,11 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
 
   * Enhance documentation of scqc and others
 
+* scart
+
+  * Fix bug that caused wrong or no data to be returned if a request spans
+    multiple years
+
 * NonLinLoc
 
   * Fixed bug that caused wrong confidence ellipsoid axis length measures.
@@ -75,6 +80,7 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
   * Add support for FAP responses (response list) to datamodel
   * Add support for FAP responses to processing
   * Make ML logA0 configurable in bindings and add documentation
+  * Hide database passwords in logfiles
 
 * dlsv2inv
 
@@ -103,6 +109,10 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
   * Wait until the time of the last data point in record has been reached
   * Add option to reopen the pipe if closed
 
+* GUI
+
+  * Display also degrees when measuring distance in a map
+
 * scolv
 
   * Fix timing quality rendering in picker
@@ -112,6 +122,8 @@ UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
     components are not available in inventory
   * Add spectra plotting in picker (hit space if picking is disabled) for
     the current trace
+  * Fix sorting of take off column in Arrival table
+  * Allow columns to be reorderd for the current session
 
 * scmv
 
