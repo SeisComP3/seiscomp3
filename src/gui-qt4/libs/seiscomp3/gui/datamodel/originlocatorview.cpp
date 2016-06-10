@@ -1326,7 +1326,12 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 				try { return a->azimuth(); } catch ( ValueException& ) {}
 				break;
 			case TAKEOFF:
-				try { return a->takeOffAngle(); } catch ( ValueException& ) {}
+				try {
+					return a->takeOffAngle();
+				}
+				catch ( ValueException& ) {
+					return _takeOffs[index.row()];
+				}
 				break;
 			case WEIGHT:
 				try { return a->weight(); } catch ( ValueException& ) {}
@@ -1835,6 +1840,8 @@ void OriginLocatorView::init() {
 
 	_modelArrivalsProxy = NULL;
 	_modelArrivals.setDisabledForeground(palette().color(QPalette::Disabled, QPalette::Text));
+
+	_ui.tableArrivals->horizontalHeader()->setMovable(true);
 
 	connect(_ui.tableArrivals->horizontalHeader(), SIGNAL(sectionClicked(int)),
 	        _ui.tableArrivals, SLOT(sortByColumn(int)));

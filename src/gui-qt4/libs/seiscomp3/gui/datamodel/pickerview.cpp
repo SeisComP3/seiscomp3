@@ -5217,36 +5217,30 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 	applyFilter(item);
 
 	if ( loc ) {
-		if ( getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time()) ) {
-			if ( tc.comps[ThreeComponents::Vertical] )
-				comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
-			else {
-				allComponents = false;
-				comps[0] = COMP_NO_METADATA;
-			}
+		getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time());
 
-			if ( tc.comps[ThreeComponents::FirstHorizontal] )
-				comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
-			else {
-				allComponents = false;
-				comps[1] = COMP_NO_METADATA;
-			}
-
-			if ( tc.comps[ThreeComponents::SecondHorizontal] )
-				comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
-			else {
-				allComponents = false;
-				comps[2] = COMP_NO_METADATA;
-			}
-		}
+		if ( tc.comps[ThreeComponents::Vertical] )
+			comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
 		else {
+			allComponents = false;
 			if ( base )
 				comps[0] = *base->code().rbegin();
 			else
 				comps[0] = COMP_NO_METADATA;
-			comps[1] = COMP_NO_METADATA;
-			comps[2] = COMP_NO_METADATA;
+		}
+
+		if ( tc.comps[ThreeComponents::FirstHorizontal] )
+			comps[1] = *tc.comps[ThreeComponents::FirstHorizontal]->code().rbegin();
+		else {
 			allComponents = false;
+			comps[1] = COMP_NO_METADATA;
+		}
+
+		if ( tc.comps[ThreeComponents::SecondHorizontal] )
+			comps[2] = *tc.comps[ThreeComponents::SecondHorizontal]->code().rbegin();
+		else {
+			allComponents = false;
+			comps[2] = COMP_NO_METADATA;
 		}
 
 		label->latitude = loc->latitude();
