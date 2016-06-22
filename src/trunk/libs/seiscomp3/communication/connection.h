@@ -182,35 +182,39 @@ public:
 	/**
 	 * Send a message.
 	 * @param  msg The message
+	 * @param  error The optional error value returned in case false is returned
 	 * @retval true The message has been send or queued properly
 	 * @retval false The message has been rejected
 	 */
-	bool send(Seiscomp::Core::Message* msg);
+	bool send(Seiscomp::Core::Message* msg, int *error = NULL);
 
 	/**
 	 * Send a message to the primary group.
 	 * @param  msg The message
+	 * @param  error The optional error value returned in case false is returned
 	 * @retval true The message has been send or queued properly
 	 * @retval false The message has been rejected
 	 */
-	bool send(NetworkMessage* msg);
+	bool send(NetworkMessage* msg, int *error = NULL);
 
 	/**
 	 * Send a message to a given group.
 	 * @param  groupname The name of the destination group
 	 * @param  msg The message
+	 * @param  error The optional error value returned in case false is returned
 	 * @retval true The message has been send or queued properly
 	 * @retval false The message has been rejected
 	 */
-	bool send(const std::string& groupname, Seiscomp::Core::Message* msg);
+	bool send(const std::string& groupname, Core::Message* msg, int *error = NULL);
 
 	/**
 	 * Sends a network message.
 	 * @param groupname The target group
 	 * @param  msg The network message
+	 * @param  error The optional error value returned in case false is returned
 	 * @return The result of the request
 	 */
-	bool send(const std::string& groupname, NetworkMessage* msg);
+	bool send(const std::string& groupname, NetworkMessage* msg, int *error = NULL);
 
 	/**
 	 * Connects to the message system
@@ -249,7 +253,6 @@ private:
 	MessageEncoding _encoding;
 	int _transmittedBytes;
 	int _receivedBytes;
-	
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

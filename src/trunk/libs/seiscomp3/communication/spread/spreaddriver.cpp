@@ -196,12 +196,11 @@ NetworkMessage* SpreadDriver::receive(int* error)
 	int ret = SP_receive(_spMBox, &_spServiceType, _spSender, Protocol::MAX_GROUPS, &_spNumGroups, _spTargetGroups,
 	                     &_spMessageType, &_spEndianMismatch, Protocol::STD_MSG_LEN, _spMessageReadBuffer);
 
-	if (ret < 0)
-	{
+	if ( ret < 0 ) {
 		// Only print an error message when the mbox has not been released from another thread
 		if (_spMBox != -1)
 			SP_error(ret);
-		if (error)
+		if ( error )
 			*error = handleError(ret);
 		else
 			handleError(ret);
@@ -314,11 +313,11 @@ int SpreadDriver::send(const std::string& group, int type, NetworkMessage* msg, 
 	int ret = SP_multicast(_spMBox, service, group.c_str(),
 	                       type, size, _spMessageWriteBuffer);
 
-	if (ret < 0)
-	{
+	if ( ret < 0 ) {
 		SP_error(ret);
 		return handleError(ret);
 	}
+
 	return Core::Status::SEISCOMP_SUCCESS;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -330,8 +329,7 @@ int SpreadDriver::send(const std::string& group, int type, NetworkMessage* msg, 
 int SpreadDriver::subscribe(const std::string& group)
 {
 	int ret = SP_join(_spMBox, group.c_str());
-	if (ret < 0)
-	{
+	if ( ret < 0 ) {
 		SP_error(ret);
 		return handleError(ret);
 	}
@@ -346,8 +344,7 @@ int SpreadDriver::subscribe(const std::string& group)
 int SpreadDriver::unsubscribe(const std::string& group)
 {
 	int ret = SP_leave(_spMBox, group.c_str());
-	if (ret < 0)
-	{
+	if ( ret < 0 ) {
 		SP_error(ret);
 		return handleError(ret);
 	}
@@ -362,17 +359,15 @@ int SpreadDriver::unsubscribe(const std::string& group)
 bool SpreadDriver::poll(int* error)
 {
 	int ret = SP_poll(_spMBox);
-	if (ret < 0)
-	{
+	if ( ret < 0 ) {
 		SP_error(ret);
 		if (error)
 			*error = handleError(ret);
 		else
 			handleError(ret);
 	}
-	else
-	{
-		if (error)
+	else {
+		if ( error )
 			*error = Core::Status::SEISCOMP_SUCCESS;
 	}
 
@@ -570,19 +565,26 @@ std::string SpreadDriver::groupOfLastSender() const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int SpreadDriver::handleError(int error)
-{
-	_isConnected = false;
-	if (error == NET_ERROR_ON_SESSION)
-	{
-		return Core::Status::SEISCOMP_NETWORKING_ERROR;
-	}
-	else if (error == ILLEGAL_SESSION  || error == CONNECTION_CLOSED)
-	{
-		return Core::Status::SEISCOMP_NOT_CONNECTED_ERROR;
+int SpreadDriver::handleError(int error) {
+	switch ( error ) {
+		case NET_ERROR_ON_SESSION:
+			_isConnected = false;
+			return Core::Status::SEISCOMP_NETWORKING_ERROR;
+
+		case ILLEGAL_SESSION:
+		case CONNECTION_CLOSED:
+			_isConnected = false;
+			return Core::Status::SEISCOMP_NOT_CONNECTED_ERROR;
+
+		case MESSAGE_TOO_LONG:
+			return Core::Status::SEISCOMP_MESSAGE_SIZE_ERROR;
+
+		default:
+			break;
 	}
 
- 	return Core::Status::SEISCOMP_NETWORKING_ERROR;
+	_isConnected = false;
+	return Core::Status::SEISCOMP_NETWORKING_ERROR;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

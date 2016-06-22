@@ -56,8 +56,7 @@ Connection::Connection(NetworkInterface* networkInterface) :
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Connection::~Connection()
-{}
+Connection::~Connection() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -69,8 +68,7 @@ Connection* Connection::Create(const std::string& netName,
                                const std::string& group,
                                Protocol::ClientPriority priority,
                                int timeout,
-                               int* status)
-{
+                               int* status) {
 	if (netName.empty())
 		return NULL;
 
@@ -84,20 +82,19 @@ Connection* Connection::Create(const std::string& netName,
 	}
 
 	NetworkInterfacePtr ni = NetworkInterface::Create(protocol.c_str());
-	if (ni == NULL)
-	{
+	if ( ni == NULL ) {
 		SEISCOMP_DEBUG("Networkinterface \"%s\" not found", protocol.c_str());
 		return NULL;
 	}
 
-	Connection* con = new Connection(ni.get());
+	Connection *con = new Connection(ni.get());
 
 	int ret = con->connect(server, user, group, Protocol::TYPE_DEFAULT,
 	                       priority, timeout);
-	if (status != NULL)
+	if ( status != NULL )
 		*status = ret;
-	if (ret != Core::Status::SEISCOMP_SUCCESS)
-	{
+
+	if ( ret != Core::Status::SEISCOMP_SUCCESS ) {
 		delete con;
 		return NULL;
 	}
@@ -112,8 +109,7 @@ Connection* Connection::Create(const std::string& netName,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Connection::setEncoding(MessageEncoding enc)
-{
+void Connection::setEncoding(MessageEncoding enc) {
 	_encoding = enc;
 	if ( _encoding < 0 || _encoding >= MessageEncoding::Quantity )
 		_encoding = BINARY_ENCODING;
@@ -133,17 +129,12 @@ MessageEncoding Connection::encoding() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Connection::send(Seiscomp::Core::Message* msg)
-{
-	if (!isConnected())
-	{
-		SEISCOMP_ERROR("send::error: not connected");
+bool Connection::send(Seiscomp::Core::Message* msg, int *error) {
+	if ( !isConnected() )
 		return false;
-	}
 
-	if (msg->empty())
-	{
-		SEISCOMP_DEBUG("send::error: empty message rejected");
+	if ( msg->empty() ) {
+		SEISCOMP_DEBUG("Rejected sending the message because message is empty");
 		return false;
 	}
 
@@ -153,12 +144,12 @@ bool Connection::send(Seiscomp::Core::Message* msg)
 	_transmittedBytes += msg->dataSize();
 
 	int ret = SystemConnection::send(clientMsg);
+	if ( error != NULL ) *error = ret;
 
 	delete clientMsg;
 
-	if (ret !=  Core::Status::SEISCOMP_SUCCESS)
-	{
-		SEISCOMP_ERROR("send::error = %d", ret);
+	if ( ret !=  Core::Status::SEISCOMP_SUCCESS ) {
+		SEISCOMP_ERROR("Sending the message failed: %s", Core::Status::StatusToStr(ret));
 		return false;
 	}
 
@@ -170,23 +161,18 @@ bool Connection::send(Seiscomp::Core::Message* msg)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Connection::send(const std::string& groupname, Seiscomp::Core::Message* msg)
-{
-	if (!isConnected())
-	{
-		SEISCOMP_ERROR("send::error: not connected");
+bool Connection::send(const std::string& groupname,
+                      Core::Message* msg, int *error) {
+	if ( !isConnected() )
+		return false;
+
+	if ( groupname.empty() ) {
+		SEISCOMP_ERROR("Rejected sending the message because groupname is empty");
 		return false;
 	}
 
-	if (groupname.empty())
-	{
-		SEISCOMP_ERROR("send::invalid groupname");
-		return false;
-	}
-
-	if (msg->empty())
-	{
-		SEISCOMP_DEBUG("send::error: empty message rejected");
+	if ( msg->empty() ) {
+		SEISCOMP_DEBUG("Rejected sending the message because message is empty");
 		return false;
 	}
 
@@ -196,12 +182,12 @@ bool Connection::send(const std::string& groupname, Seiscomp::Core::Message* msg
 	_transmittedBytes += msg->dataSize();
 
 	int ret = SystemConnection::send(groupname, clientMsg);
+	if ( error != NULL ) *error = ret;
 
 	delete clientMsg;
 
-	if (ret != Core::Status::SEISCOMP_SUCCESS)
-	{
-		SEISCOMP_ERROR("send::error = %d", ret);
+	if ( ret != Core::Status::SEISCOMP_SUCCESS ) {
+		SEISCOMP_ERROR("Sending the message failed: %s", Core::Status::StatusToStr(ret));
 		return false;
 	}
 
@@ -213,21 +199,18 @@ bool Connection::send(const std::string& groupname, Seiscomp::Core::Message* msg
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Connection::send(NetworkMessage* msg)
+bool Connection::send(NetworkMessage* msg, int *error)
 {
-	if (!isConnected())
-	{
-		SEISCOMP_ERROR("send::error: not connected");
+	if ( !isConnected() )
 		return false;
-	}
 
 	_transmittedBytes += msg->dataSize();
 
 	int ret = SystemConnection::send(msg);
+	if ( error != NULL ) *error = ret;
 
-	if (ret != Core::Status::SEISCOMP_SUCCESS)
-	{
-		SEISCOMP_ERROR("send::error = %d", ret);
+	if ( ret != Core::Status::SEISCOMP_SUCCESS ) {
+		SEISCOMP_ERROR("Sending the message failed: %s", Core::Status::StatusToStr(ret));
 		return false;
 	}
 
@@ -239,21 +222,17 @@ bool Connection::send(NetworkMessage* msg)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Connection::send(const std::string& groupname, NetworkMessage* msg)
-{
-	if (!isConnected())
-	{
-		SEISCOMP_ERROR("send::error: not connected");
+bool Connection::send(const std::string& groupname, NetworkMessage* msg, int *error) {
+	if ( !isConnected() )
 		return false;
-	}
 
 	_transmittedBytes += msg->dataSize();
 
 	int ret = SystemConnection::send(groupname, msg);
+	if ( error != NULL ) *error = ret;
 
-	if (ret != Core::Status::SEISCOMP_SUCCESS)
-	{
-		SEISCOMP_ERROR("send::error = %d", ret);
+	if ( ret != Core::Status::SEISCOMP_SUCCESS ) {
+		SEISCOMP_ERROR("Sending the message failed: %s", Core::Status::StatusToStr(ret));
 		return false;
 	}
 
