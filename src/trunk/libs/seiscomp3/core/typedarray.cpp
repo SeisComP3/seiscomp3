@@ -107,16 +107,6 @@ TypedArray<T>& TypedArray<T>::operator=(const TypedArray &array) {
 }
 
 template<typename T>
-T TypedArray<T>::operator[](int index) const {
-	return _data[index];
-}
-
-template<typename T>
-T& TypedArray<T>::operator[](int index) {
-	return _data[index];
-}
-
-template<typename T>
 Array* TypedArray<T>::copy(DataType dt) const {
 	return ArrayFactory::Create(dt,this);
 }
@@ -142,11 +132,6 @@ const T* TypedArray<T>::typedData() const {
 }
 
 template<typename T>
-int TypedArray<T>::size() const {
-	return _data.size();
-}
-
-template<typename T>
 int TypedArray<T>::bytes() const {
 	return sizeof(T);
 }
@@ -164,16 +149,6 @@ void TypedArray<T>::clear() {
 template<typename T>
 void TypedArray<T>::fill(const T &v) {
 	std::fill(_data.begin(), _data.end(), v);
-}
-
-template<typename T>
-void TypedArray<T>::set(int index, T v) {
-	_data[index] = v;
-}
-
-template<typename T>
-T TypedArray<T>::get(int index) const {
-	return _data.at(index);
 }
 
 template<typename T>
@@ -210,27 +185,6 @@ void TypedArray<T>::prepend(int size, const T* data) {
 template<typename T>
 void TypedArray<T>::prepend(int n, T value) {
 	_data.insert(_data.begin(), n, value);
-}
-
-
-template<typename T>
-typename TypedArray<T>::iterator TypedArray<T>::begin() {
-	return _data.begin();
-}
-
-template<typename T>
-typename TypedArray<T>::const_iterator TypedArray<T>::begin() const {
-	return _data.begin();
-}
-
-template<typename T>
-typename TypedArray<T>::iterator TypedArray<T>::end() {
-	return _data.end();
-}
-
-template<typename T>
-typename TypedArray<T>::const_iterator TypedArray<T>::end() const {
-	return _data.end();
 }
 
 

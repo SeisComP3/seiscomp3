@@ -238,6 +238,52 @@ TYPEDEF_SMARTPOINTER(ComplexDoubleArray);
 TYPEDEF_CONST_SMARTPOINTER(ComplexDoubleArray);
 
 
+template<typename T>
+inline T TypedArray<T>::operator[](int index) const {
+	return _data[index];
+}
+
+template<typename T>
+inline T& TypedArray<T>::operator[](int index) {
+	return _data[index];
+}
+
+template<typename T>
+inline int TypedArray<T>::size() const {
+	return _data.size();
+}
+
+template<typename T>
+inline void TypedArray<T>::set(int index, T v) {
+	_data[index] = v;
+}
+
+template<typename T>
+inline T TypedArray<T>::get(int index) const {
+	return _data.at(index);
+}
+
+template<typename T>
+inline typename TypedArray<T>::iterator TypedArray<T>::begin() {
+	return _data.begin();
+}
+
+template<typename T>
+inline typename TypedArray<T>::const_iterator TypedArray<T>::begin() const {
+	return _data.begin();
+}
+
+template<typename T>
+inline typename TypedArray<T>::iterator TypedArray<T>::end() {
+	return _data.end();
+}
+
+template<typename T>
+inline typename TypedArray<T>::const_iterator TypedArray<T>::end() const {
+	return _data.end();
+}
+
+
 }
 
 #endif
