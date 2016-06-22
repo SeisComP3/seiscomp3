@@ -256,6 +256,11 @@ void Application::removeProcessors(const std::string& networkCode,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::removeProcessor(Processing::WaveformProcessor *wp) {
+	if ( _registrationBlocked ) {
+		_waveformProcessorRemovalQueue.push_back(wp);
+		return;
+	}
+
 	for ( ProcessorMap::iterator it = _processors.begin();
 	      it != _processors.end(); )
 	{
@@ -383,6 +388,13 @@ void Application::handleRecord(Record *rec) {
 	}
 
 	_registrationBlocked = false;
+
+	// Remove outdated processors
+	while ( !_waveformProcessorRemovalQueue.empty() ) {
+		WaveformProcessorPtr wp = _waveformProcessorRemovalQueue.front();
+		_waveformProcessorRemovalQueue.pop_front();
+		removeProcessor(wp.get());
+	}
 
 	// Register pending processors
 	while ( !_waveformProcessorQueue.empty() ) {
