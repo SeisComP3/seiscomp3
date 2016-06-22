@@ -17,6 +17,8 @@
 
 #include "app.h"
 
+#include <seiscomp3/logging/log.h>
+
 int main(int argc, char **argv) {
 	Seiscomp::QL2SC::App app(argc, argv);
 	int retCode;

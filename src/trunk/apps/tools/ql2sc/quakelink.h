@@ -21,11 +21,8 @@
 #include "config.h"
 
 #include <seiscomp3/core/datetime.h>
-#include <seiscomp3/logging/log.h>
 #include <seiscomp3/io/quakelink/connection.h>
 
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 
 #include <string>
@@ -41,7 +38,6 @@ class QLClient : public IO::QuakeLink::Connection {
 		virtual ~QLClient();
 
 		void run();
-//		bool abort();
 		void join(const Seiscomp::Core::Time &until);
 
 		const HostConfig* config() const { return _config; }
@@ -66,7 +62,6 @@ class QLClient : public IO::QuakeLink::Connection {
 		int                         _notificationID;
 		const HostConfig           *_config;
 		size_t                      _backLog;
-//		bool                        _reconnect;
 		boost::thread              *_thread;
 
 		Seiscomp::Core::Time        _lastUpdate;

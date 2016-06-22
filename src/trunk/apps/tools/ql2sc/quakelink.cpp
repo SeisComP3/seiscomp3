@@ -17,10 +17,6 @@
 
 #include "quakelink.h"
 
-#if BOOST_VERSION >= 103500
-	#include <seiscomp3/core/datetime.h>
-#endif
-
 #include <seiscomp3/client/application.h>
 #include <seiscomp3/logging/log.h>
 
@@ -44,7 +40,7 @@ boost::posix_time::time_duration wait(const Core::Time &until) {
 
 QLClient::QLClient(int notificationID, const HostConfig *config, size_t backLog)
  : IO::QuakeLink::Connection(), _notificationID(notificationID), _config(config),
-   _backLog(backLog), /*_reconnect(false),*/ _thread(NULL) {
+   _backLog(backLog), _thread(NULL) {
 	setLogPrefix("[QL " + _config->host + "] ");
 }
 
@@ -65,16 +61,10 @@ void QLClient::run() {
 	_thread = new boost::thread(boost::bind(&QLClient::listen, this));
 }
 
-//bool QLClient::abort() {
-//	_reconnect = false;
-//	if ( connected() )
-//		SEISCOMP_INFO("%ssending abort", _logPrefix.c_str());
-//	return IO::QuakeLink::Connection::abort();
-//}
 
 void QLClient::join(const Core::Time &until) {
 	if ( _thread ) {
-		SEISCOMP_INFO("%swaiting for thread to terminate", _logPrefix.c_str());
+		SEISCOMP_DEBUG("%swaiting for thread to terminate", _logPrefix.c_str());
 #if BOOST_VERSION < 103500
 		_thread->join();
 #else
@@ -111,6 +101,17 @@ void QLClient::listen() {
 	IO::QuakeLink::RequestFormat rf = _config->gzip ?
 	                                 (_config->native ? IO::QuakeLink::rfGZNative : IO::QuakeLink::rfGZXML) :
 	                                 (_config->native ? IO::QuakeLink::rfNative : IO::QuakeLink::rfXML);
+	// activate socket timeout if keepAlive was requested
+	if ( _config->options & IO::QuakeLink::opKeepAlive ) {
+		if ( _sock ) {
+			_sock->setTimeout(60);
+		}
+		else {
+			SEISCOMP_ERROR("%sinstance not initialized", _logPrefix.c_str());
+			return;
+		}
+	}
+
 	while ( !interrupted() ) {
 		// determine start time of request
 		Core::Time from;
@@ -129,15 +130,27 @@ void QLClient::listen() {
 		try {
 			select(from.valid(), Core::Time(), Core::Time(), rf, filter);
 		}
-		catch ( Core::GeneralException& ) {}
+		catch ( Core::GeneralException& e) {
+			if ( interrupted() )
+				break;
+			SEISCOMP_DEBUG("%sselect exception: %s", _logPrefix.c_str(), e.what());
+		}
 
-		if ( !interrupted() )
-			SEISCOMP_WARNING("%sconnection closed, trying to reconnect in 5s",
-			                 _logPrefix.c_str());
+		_sock->close(); // clears interrupt flag
+		SEISCOMP_WARNING("%sQuakeLink connection closed, trying to reconnect "
+		                 "in 5s", _logPrefix.c_str());
 
-		for ( int i = 0; i < 50 && !interrupted(); ++i )
+		for ( int i = 0; i < 50; ++i ) {
 			usleep(100000); // 100ms
+
+			if ( interrupted() )
+				break;
+		}
 	}
+
+	if ( interrupted() )
+		SEISCOMP_INFO("%sQuakeLink connection interrupted", _logPrefix.c_str());
+	_sock->close();
 }
 
 
