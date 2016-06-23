@@ -1,5 +1,18 @@
 # Jakarta
 
+## Release YYYY.DDD
+
+* scinv
+
+  * Split Spread messages into smaller chunks if the payload size exceeds
+    allowed limit
+
+* scautopick
+
+  * Fixed removal of expired secondary pickers that caused a segmentation
+    fault
+
+
 ## Release 2016.161
 
 The database schema has changed since previous version. To upgrade your
