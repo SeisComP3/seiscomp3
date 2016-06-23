@@ -37,7 +37,7 @@
 #define INC_SCATTER
 
 #include "spu_system.h"
-#define	MAX_SCATTER_ELEMENTS	100
+#define	MAX_SCATTER_ELEMENTS	10000
 
 /* scat_element is EXACTLY as defined in iovec */
 

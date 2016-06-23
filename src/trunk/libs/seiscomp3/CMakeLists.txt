@@ -144,7 +144,9 @@ IF(NOT WIN32)
         IF(CMAKE_HOST_ARCHITECTURE)
                 ADD_CUSTOM_COMMAND(
                         OUTPUT ${SPREAD_LIBRARIES}
+                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
                         COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR} --host ${CMAKE_HOST_ARCHITECTURE}
+                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
                         COMMAND ${CMAKE_MAKE_PROGRAM}
                         COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
                         WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
@@ -153,7 +155,9 @@ IF(NOT WIN32)
         ELSE(CMAKE_HOST_ARCHITECTURE)
                 ADD_CUSTOM_COMMAND(
                         OUTPUT ${SPREAD_LIBRARIES}
+                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
                         COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR}
+                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
                         COMMAND ${CMAKE_MAKE_PROGRAM}
                         COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
                         WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}

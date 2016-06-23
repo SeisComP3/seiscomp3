@@ -467,6 +467,32 @@ class InventoryManager : public Client::Application,
 		}
 
 
+		bool send(DataModel::NotifierMessage *nmsg) {
+			int error;
+			if ( !connection()->send(nmsg, &error) ) {
+				if ( error == Core::Status::SEISCOMP_MESSAGE_SIZE_ERROR ) {
+					SEISCOMP_WARNING("Message with %d notifiers is too big, will split it",
+					                 nmsg->size());
+
+					DataModel::NotifierMessagePtr tmp = new DataModel::NotifierMessage;
+					int halfSize = nmsg->size() / 2;
+					if ( halfSize <= 0 ) {
+						SEISCOMP_ERROR("Not enough notifiers to split message, need at least 2");
+						return false;
+					}
+
+					while ( halfSize-- ) {
+						tmp->attach(*nmsg->begin());
+						nmsg->detach(nmsg->begin());
+					}
+
+					return send(tmp.get()) && send(nmsg);
+				}
+			}
+
+			return true;
+		}
+
 		void collectFiles(std::vector<std::string> &files) {
 			if ( _filebase.empty() ) {
 				files = commandline().unrecognizedOptions();
@@ -793,7 +819,10 @@ class InventoryManager : public Client::Application,
 								if ( count % 100 == 0 ) {
 									cerr << "\rSending notifiers: " << (int)(count*100/notifierCount) << "%" << flush;
 
-									connection()->send(tmp.get());
+									if ( !send(tmp.get()) ) {
+										SEISCOMP_ERROR("Failed to send message, abort");
+										return false;
+									}
 
 									tmp->clear();
 									sync();
@@ -802,7 +831,11 @@ class InventoryManager : public Client::Application,
 						}
 
 						if ( !_exitRequested && !tmp->empty() ) {
-							connection()->send(tmp.get());
+							if ( !send(tmp.get()) ) {
+								SEISCOMP_ERROR("Failed to send message, abort");
+								return false;
+							}
+
 							cerr << "\rSending notifiers: " << (int)(count*100/notifierCount) << "%" << flush;
 						}
 
@@ -1261,7 +1294,10 @@ class InventoryManager : public Client::Application,
 						if ( count % 100 == 0 ) {
 							cerr << "\rSending notifiers: " << (int)(count*100/notifierCount) << "%" << flush;
 
-							connection()->send(tmp.get());
+							if ( !send(tmp.get()) ) {
+								SEISCOMP_ERROR("Failed to send message, abort");
+								return false;
+							}
 
 							tmp->clear();
 							sync();
@@ -1271,7 +1307,11 @@ class InventoryManager : public Client::Application,
 					sync();
 
 					if ( !tmp->empty() ) {
-						connection()->send(tmp.get());
+						if ( !send(tmp.get()) ) {
+							SEISCOMP_ERROR("Failed to send message, abort");
+							return false;
+						}
+
 						cerr << "\rSending notifiers: " << (int)(count*100/notifierCount) << "%" << flush;
 					}
 				}
