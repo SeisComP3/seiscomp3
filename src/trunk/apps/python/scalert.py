@@ -13,7 +13,7 @@
 ############################################################################
 
 import os, sys, subprocess, traceback
-import seiscomp3.Client, seiscomp3.Seismology
+import seiscomp3.Client, seiscomp3.Seismology, seiscomp3.System
 
 class VoiceAlert(seiscomp3.Client.Application):
 
