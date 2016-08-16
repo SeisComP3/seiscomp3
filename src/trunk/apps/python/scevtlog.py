@@ -359,7 +359,7 @@ class EventHistory(seiscomp3.Client.Application):
         if not mt.derivedOriginID(): continue
 
         # Origin already added
-        if ep.findOrigin(mt.derivedOriginID()) != None:
+        if ep.findOrigin(mt.derivedOriginID()) is not None:
           continue
 
         seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
