@@ -532,7 +532,7 @@ struct CommentHandler : public IO::XML::TypedClassHandler<Comment> {
 		addProperty("Value", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "value");
 		addProperty("BeginEffectiveTime", "http://www.fdsn.org/xml/station/1", Optional, Element, "beginEffectiveTime");
 		addProperty("EndEffectiveTime", "http://www.fdsn.org/xml/station/1", Optional, Element, "endEffectiveTime");
-		addProperty("id", "", Mandatory, Attribute, "id");
+		addProperty("id", "", Optional, Attribute, "id");
 		addChildProperty("Author", "http://www.fdsn.org/xml/station/1", "author");
 	}
 };

@@ -29,9 +29,9 @@ Polynomial::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObjec
 	addProperty(enumProperty("ApproximationType", "ApproximationType", false, false, &metaApproximationType, &Polynomial::setApproximationType, &Polynomial::approximationType));
 	addProperty(objectProperty<FrequencyType>("FrequencyLowerBound", "FDSNXML::FrequencyType", false, false, &Polynomial::setFrequencyLowerBound, &Polynomial::frequencyLowerBound));
 	addProperty(objectProperty<FrequencyType>("FrequencyUpperBound", "FDSNXML::FrequencyType", false, false, &Polynomial::setFrequencyUpperBound, &Polynomial::frequencyUpperBound));
-	addProperty(Core::simpleProperty("ApproximationLowerBound", "string", false, false, false, false, false, false, NULL, &Polynomial::setApproximationLowerBound, &Polynomial::approximationLowerBound));
-	addProperty(Core::simpleProperty("ApproximationUpperBound", "string", false, false, false, false, false, false, NULL, &Polynomial::setApproximationUpperBound, &Polynomial::approximationUpperBound));
-	addProperty(Core::simpleProperty("MaximumError", "string", false, false, false, false, false, false, NULL, &Polynomial::setMaximumError, &Polynomial::maximumError));
+	addProperty(Core::simpleProperty("ApproximationLowerBound", "float", false, false, false, false, false, false, NULL, &Polynomial::setApproximationLowerBound, &Polynomial::approximationLowerBound));
+	addProperty(Core::simpleProperty("ApproximationUpperBound", "float", false, false, false, false, false, false, NULL, &Polynomial::setApproximationUpperBound, &Polynomial::approximationUpperBound));
+	addProperty(Core::simpleProperty("MaximumError", "float", false, false, false, false, false, false, NULL, &Polynomial::setMaximumError, &Polynomial::maximumError));
 	addProperty(arrayClassProperty<PolynomialCoefficient>("Coefficient", "FDSNXML::PolynomialCoefficient", &Polynomial::coefficientCount, &Polynomial::coefficient, static_cast<bool (Polynomial::*)(PolynomialCoefficient*)>(&Polynomial::addCoefficient), &Polynomial::removeCoefficient, static_cast<bool (Polynomial::*)(PolynomialCoefficient*)>(&Polynomial::removeCoefficient)));
 }
 
@@ -42,6 +42,9 @@ IMPLEMENT_METAOBJECT_DERIVED(Polynomial, BaseFilter)
 
 
 Polynomial::Polynomial() {
+	_approximationLowerBound = 0;
+	_approximationUpperBound = 0;
+	_maximumError = 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -159,7 +162,7 @@ const FrequencyType& Polynomial::frequencyUpperBound() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Polynomial::setApproximationLowerBound(const std::string& approximationLowerBound) {
+void Polynomial::setApproximationLowerBound(double approximationLowerBound) {
 	_approximationLowerBound = approximationLowerBound;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -168,7 +171,7 @@ void Polynomial::setApproximationLowerBound(const std::string& approximationLowe
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& Polynomial::approximationLowerBound() const {
+double Polynomial::approximationLowerBound() const {
 	return _approximationLowerBound;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -177,7 +180,7 @@ const std::string& Polynomial::approximationLowerBound() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Polynomial::setApproximationUpperBound(const std::string& approximationUpperBound) {
+void Polynomial::setApproximationUpperBound(double approximationUpperBound) {
 	_approximationUpperBound = approximationUpperBound;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -186,7 +189,7 @@ void Polynomial::setApproximationUpperBound(const std::string& approximationUppe
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& Polynomial::approximationUpperBound() const {
+double Polynomial::approximationUpperBound() const {
 	return _approximationUpperBound;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -195,7 +198,7 @@ const std::string& Polynomial::approximationUpperBound() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Polynomial::setMaximumError(const std::string& maximumError) {
+void Polynomial::setMaximumError(double maximumError) {
 	_maximumError = maximumError;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -204,7 +207,7 @@ void Polynomial::setMaximumError(const std::string& maximumError) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const std::string& Polynomial::maximumError() const {
+double Polynomial::maximumError() const {
 	return _maximumError;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

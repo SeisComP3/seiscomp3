@@ -2,6 +2,19 @@
 
 ## Release YYYY.DDD
 
+* scconfig
+
+  * Fix parameter tooltip if description text contains special HTML characters
+    such as < (less than) or > (greater than)
+
+* fdsnws
+
+  * Add URL builder page to each service
+
+* ql2sc
+
+  * Use socket timeout of 60s if keepAlive is activated
+
 * scinv
 
   * Split Spread messages into smaller chunks if the payload size exceeds
@@ -11,6 +24,17 @@
 
   * Fixed removal of expired secondary pickers that caused a segmentation
     fault
+
+* fdsnxml2inv *
+
+  * Correct types of some attributes of FDSNXML::PolynomialResponse
+  * Convert polynomial responses correctly
+  * Made FDSNXML::Comment::id optional according to the standard
+  * Output line numbers in case of errors
+
+* inv2dlsv *
+
+  * Fix handling of blockette62
 
 
 ## Release 2016.161
