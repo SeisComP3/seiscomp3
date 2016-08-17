@@ -200,7 +200,7 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
 	catch ( ... ) { os << "-"; }
 	os << endl;
 
-	os << Fill(out.indent) << "symmetrie    ";
+	os << Fill(out.indent) << "symmetry     ";
 	if ( fir->symmetry().empty() )
 		os << "-";
 	else
