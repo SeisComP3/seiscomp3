@@ -967,7 +967,7 @@ class _Blockette62(object):
     def output(self, f):
         blk = "062%4dP%2d%3d%3d%1s%1s%12.5E%12.5E%12.5E%12.5E%12.5E%3d%s" % (self.__len,
             self.__stage, self.__input_units, self.__output_units,
-            self.__approx_type, self.__freq_unit, self.__low_freq, self.__high_freq,
+            self.__approx_type[:1], self.__freq_unit[:1], self.__low_freq, self.__high_freq,
             self.__approx_lower_bound, self.__approx_upper_bound, self.__approx_error,
             self.__ncoeff, self.__coeff)
             
