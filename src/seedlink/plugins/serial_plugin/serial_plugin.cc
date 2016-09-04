@@ -46,6 +46,8 @@
 #include "serial_plugin.h"
 #include "diag.h"
 
+#include "serial_config.h"
+
 #define MYVERSION "2.2 (2010.256)"
 
 #ifndef CONFIG_FILE
@@ -218,7 +220,8 @@ class SEEDLog
       }
   };
 
-#if !defined(__GNU_LIBRARY__) && !defined(__GLIBC__)
+#if !defined(__GNU_LIBRARY__) && !defined(__GLIBC__) 
+#ifndef HAVE_CFMAKERAW
 //*****************************************************************************
 // cfmakeraw()
 //*****************************************************************************
@@ -247,6 +250,7 @@ int cfmakeraw(struct termios *termios_p)
 
     return 0;
   }
+#endif
 #endif
 
 //*****************************************************************************

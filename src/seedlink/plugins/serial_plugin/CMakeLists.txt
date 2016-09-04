@@ -1,6 +1,9 @@
 SET(GCF_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../libgcf2-2.3.2)
 SET(GCF_INC ${GCF_DIR}/src/gcf2.h)
 
+CHECK_FUNCTION_EXISTS(cfmakeraw HAVE_CFMAKERAW)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/serial_config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/serial_config.h)
+
 SET(SERIALPLUGIN_SOURCES
 	serial_plugin.cc
 	rw2300.c
@@ -15,6 +18,7 @@ SET(SERIALPLUGIN_SOURCES
 	proto_ws2300.cc
 	proto_mws.cc
 	proto_solar.cc
+        serial_config.h
 )
 
 INCLUDE_DIRECTORIES(../../libs/plugin)

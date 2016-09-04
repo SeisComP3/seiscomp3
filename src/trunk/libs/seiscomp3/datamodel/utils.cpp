@@ -611,12 +611,12 @@ void DiffMerge::LogNode::show(std::ostream &os, int padding, int indent,
 
 	padding += indent;
 
-	for ( uint i = 0; i < _messages.size(); ++i ) {
+	for ( size_t i = 0; i < _messages.size(); ++i ) {
 		for ( int p = 0; p < padding; ++p ) os << " ";
 		os << _messages[i] << std::endl;
 	}
 
-	for ( uint i = 0; i < _childs.size(); ++i )
+	for ( size_t i = 0; i < _childs.size(); ++i )
 		_childs[i]->show(os, padding, indent);
 
 	return;
