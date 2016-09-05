@@ -46,8 +46,6 @@
 #include "serial_plugin.h"
 #include "diag.h"
 
-#include "serial_config.h"
-
 #define MYVERSION "2.2 (2010.256)"
 
 #ifndef CONFIG_FILE
@@ -220,7 +218,6 @@ class SEEDLog
       }
   };
 
-#if !defined(__GNU_LIBRARY__) && !defined(__GLIBC__) 
 #ifndef HAVE_CFMAKERAW
 //*****************************************************************************
 // cfmakeraw()
@@ -248,7 +245,6 @@ void cfmakeraw(struct termios *termios_p)
     termios_p->c_cc[VMIN] = 1; /* Case B: 1 byte at a time, no timer */
     termios_p->c_cc[VTIME] = 0;
   }
-#endif
 #endif
 
 //*****************************************************************************
