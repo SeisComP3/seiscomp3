@@ -226,7 +226,7 @@ class SEEDLog
 // cfmakeraw()
 //*****************************************************************************
 
-int cfmakeraw(struct termios *termios_p)
+void cfmakeraw(struct termios *termios_p)
   {
     termios_p->c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
                     /* echo off, canonical mode off, extended input
@@ -247,8 +247,6 @@ int cfmakeraw(struct termios *termios_p)
 
     termios_p->c_cc[VMIN] = 1; /* Case B: 1 byte at a time, no timer */
     termios_p->c_cc[VTIME] = 0;
-
-    return 0;
   }
 #endif
 #endif
