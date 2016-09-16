@@ -30,8 +30,17 @@ class SeedlinkPluginHandler:
       except: udpbase = 5500;
       seedlink.setParam('sources.q330.udpport', udpbase + 2*seedlink.station_count)
 
-    # Key is per station (one instance per station)
-    return seedlink.net + "." + seedlink.sta + "." + seedlink._get('seedlink.source.id')
+    # Key is per station and configuration settings
+    key = ";".join([
+        str(seedlink.param('sources.q330.address')),
+        str(seedlink.param('sources.q330.port')),
+        str(seedlink.param('sources.q330.udpport')),
+        str(seedlink.param('sources.q330.slot')),
+        seedlink.param('sources.q330.serial'),
+        seedlink.param('sources.q330.auth'),
+        str(seedlink._get('sources.q330.udpport'))])
+    return key
+
 
   # Flush does nothing
   def flush(self, seedlink):
