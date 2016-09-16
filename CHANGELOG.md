@@ -40,6 +40,10 @@
 
   * Fix Q330 setup if multiple instances are configured per station
 
+* scwfparam
+
+  * Apply lost patch again to use the same path name as earthquake.id for input files
+
 
 ## Release 2016.161
 
