@@ -36,6 +36,10 @@
 
   * Fix handling of blockette62
 
+* seedlink *
+
+  * Fix Q330 setup if multiple instances are configured per station
+
 
 ## Release 2016.161
 
