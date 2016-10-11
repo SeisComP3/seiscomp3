@@ -17,6 +17,10 @@
 
 #include <libxml/xmlreader.h>
 
+#if LIBXML_VERSION < 20900
+#  define XML_PARSE_BIG_LINES 4194304
+#endif
+
 
 namespace Seiscomp {
 namespace IO {
