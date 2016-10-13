@@ -288,4 +288,97 @@ to port 80.
 Please refer to the documentation of your particular firewall solution on how to
 set up this rule permanently.
 
+Authentication extension
+------------------------
 
+The FDSNWS standard requires HTTP digest authentication as the
+authentication mechanism. The "htpasswd" configuration option is used to
+define the location of the file storing usernames and passwords of users
+who are allowed to get restricted data. Any user with valid credentials
+would have access to all restricted data.
+
+An extension to the FDSNWS protocol has been developed in order to use
+email-pattern-based access control lists, which is an established
+authorization mechanism in SC3 (used by Arclink). It works as follows:
+
+* The user contacts an authentication service (based on eduGAIN AAI,
+  e-mail, etc.) and receives a list of attributes (a token), signed by the
+  authentication service. The validity of the token is typically 30 days.
+
+* The user presents the token to /auth method (HTTPS) of the dataselect
+  service. This method is the only extension to standard FDSNWS that is
+  required.
+
+* If the digital signature is valid, a temporary account for /queryauth
+  is created. The /auth method returns username and password of this
+  account, separated by ':'. The account is typically valid for 24 hours.
+
+* The username and password are to be used with /queryauth as usual.
+
+* Authorization is based on user's e-mail address in the token and
+  arclink-access bindings.
+
+Configuration
+^^^^^^^^^^^^^
+
+The authentication extension is enabled by setting the "auth.enable"
+configuration option to "true" and pointing "auth.gnupgHome" to a directory
+where GPG stores its files. Let's use the directory
+~/seiscomp3/var/lib/gpg, which is the default.
+
+* First create the direcory and your own signing key:
+
+.. code-block:: sh
+
+  sysop@host:~$ mkdir -m 700 ~/seiscomp3/var/lib/gpg
+  sysop@host:~$ gpg --homedir ~/seiscomp3/var/lib/gpg --gen-key
+
+* Now import GPG keys of all authentication services you trust:
+
+.. code-block:: sh
+
+  sysop@host:~$ gpg --homedir ~/seiscomp3/var/lib/gpg --import <keys.asc
+
+* Finally sign all imported keys with your own key (XXXXXXXX is the ID of
+  an imported key):
+
+.. code-block:: sh
+
+  sysop@host:~$ gpg --homedir ~/seiscomp3/var/lib/gpg --edit-key XXXXXXXX sign save
+
+* ...and set auth.enable, either using the "scconfig" tool or:
+
+.. code-block:: sh
+
+  sysop@host:~$ echo "auth.enable = true" >>~/seiscomp3/etc/fdsnws.cfg
+
+Usage example
+^^^^^^^^^^^^^
+
+A client like fdsnws_fetch is recommended, but also tools like wget and
+curl can be used. As an example, let's request data from the restricted
+station AAI (assuming that we are authorized to get data of this station).
+
+* The first step is to obtain the token from an athentication service.
+  Assuming that the token is saved in "token.asc", credentials of the
+  temporary account can be requsted using one of the following commands:
+
+.. code-block:: sh
+
+  sysop@host:~$ wget --post-file token.asc https://geofon.gfz-potsdam.de/fdsnws/dataselect/1/auth -O cred.txt
+  sysop@host:~$ curl --data-binary @token.asc https://geofon.gfz-potsdam.de/fdsnws/dataselect/1/auth -o cred.txt
+
+* The resulting file "cred.txt" contains username and password separated by
+  a colon, so one can conveniently use a shell expansion:
+
+.. code-block:: sh
+
+  sysop@host:~$ wget "http://`cat cred.txt`@geofon.gfz-potsdam.de/fdsnws/dataselect/1/queryauth?starttime=2015-12-15T16:00:00Z&endtime=2015-12-15T16:10:00Z&network=IA&station=AAI" -O data.mseed
+  sysop@host:~$ curl --digest "http://`cat cred.txt`@geofon.gfz-potsdam.de/fdsnws/dataselect/1/queryauth?starttime=2015-12-15T16:00:00Z&endtime=2015-12-15T16:10:00Z&network=IA&station=AAI" -o data.mseed
+
+* Using the fdsnws_fetch utility, the two steps above can be combined into
+  one:
+
+.. code-block:: sh
+
+  sysop@host:~$ fdsnws_fetch -a token.asc -s 2015-12-15T16:00:00Z -e 2015-12-15T16:10:00Z -N IA -S AAI -o data.mseed

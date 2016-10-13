@@ -16,13 +16,14 @@
 ################################################################################
 
 
-import os, sys, fnmatch
+import os, sys, time, fnmatch, base64
 
 try:
 	from twisted.cred import checkers, credentials, error, portal
-	from twisted.internet import reactor, defer
+	from twisted.internet import reactor, defer, task
 	from twisted.web import guard, resource, server, static
-	from twisted.python import log
+	from twisted.python import log, failure
+	from zope.interface import implements
 except ImportError, e:
 	sys.exit("%s\nIs python twisted installed?" % str(e))
 
@@ -39,7 +40,7 @@ from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm
 from seiscomp3.fdsnws.event import FDSNEvent
 from seiscomp3.fdsnws.station import FDSNStation
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
-                                  Site, ServiceVersion
+                                  Site, ServiceVersion, AuthResource
 from seiscomp3.fdsnws.log import Log
 
 def logSC3(entry):
@@ -101,6 +102,140 @@ class BugfixedDigest(credentials.DigestCredentialFactory):
 			                                       auth)
 
 
+################################################################################
+# Make CORS work with queryauth
+class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
+	def __init__(self, *args, **kwargs):
+		guard.HTTPAuthSessionWrapper.__init__(self, *args, **kwargs)
+
+	def render(self, request):
+		if request.method == 'OPTIONS':
+			request.setHeader('Allow', 'GET,HEAD,POST,OPTIONS')
+			return ''
+
+		else:
+			return guard.HTTPAuthSessionWrapper.render(self, request)
+
+
+################################################################################
+class UsernamePasswordChecker(object):
+	implements(checkers.ICredentialsChecker)
+
+	credentialInterfaces = (credentials.IUsernamePassword,
+				credentials.IUsernameHashedPassword)
+
+	#---------------------------------------------------------------------------
+	def __init__(self, userdb):
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
+	def __cbPasswordMatch(self, matched, username):
+		if matched:
+			return username
+		else:
+			return failure.Failure(error.UnauthorizedLogin())
+
+	#---------------------------------------------------------------------------
+	def requestAvatarId(self, credentials):
+		return defer.maybeDeferred(self.__userdb.checkPassword, credentials) \
+			.addCallback(self.__cbPasswordMatch, str(credentials.username))
+
+
+################################################################################
+class UserDB(object):
+
+	#---------------------------------------------------------------------------
+	def __init__(self):
+		self.__users = {}
+		task.LoopingCall(self.__expireUsers).start(60, False)
+
+	#---------------------------------------------------------------------------
+	def __expireUsers(self):
+		for (user, (password, attributes, expires)) in self.__users.items():
+			if time.time() > expires:
+				del self.__users[user]
+
+	#---------------------------------------------------------------------------
+	def addUser(self, name, attributes, expires):
+		try:
+			password = self.__users[name][0]
+
+		except KeyError:
+			password = base64.urlsafe_b64encode(os.urandom(12))
+
+		self.__users[name] = (password, attributes, expires)
+		return password
+
+	#---------------------------------------------------------------------------
+	def checkPassword(self, credentials):
+		try:
+			pw = self.__users[str(credentials.username)][0]
+
+		except KeyError:
+			return False
+
+		return credentials.checkPassword(pw)
+
+	#---------------------------------------------------------------------------
+	def getAttributes(self, name):
+		return self.__users[name][1]
+
+
+################################################################################
+class Access(object):
+
+	#---------------------------------------------------------------------------
+	def __init__(self):
+		self.__access = {}
+
+	#---------------------------------------------------------------------------
+	def initFromSC3Routing(self, routing):
+		for i in xrange(routing.accessCount()):
+			acc = routing.access(i)
+			net = acc.networkCode()
+			sta = acc.stationCode()
+			loc = acc.locationCode()
+			cha = acc.streamCode()
+			user = acc.user()
+			start = acc.start()
+
+			try:
+				end = acc.end()
+
+			except Core.ValueException:
+				end = None
+
+			self.__access.setdefault((net, sta, loc, cha), []) \
+				.append((user, start, end))
+
+	#---------------------------------------------------------------------------
+	def __matchTime(self, t1, t2, start, end):
+		return (not start or (t1 and t1 >= start)) and \
+			(not end or (t2 and t2 <= end))
+
+	#---------------------------------------------------------------------------
+	def authorize(self, user, net, sta, loc, cha, t1, t2):
+		try:
+			# OID 0.9.2342.19200300.100.1.3 (RFC 2798)
+			emailAddress = user['mail']
+
+		except KeyError:
+			return False
+
+		for (u, start, end) in self.__access.get((net, '', '', ''), []):
+			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+				return True
+
+		for (u, start, end) in self.__access.get((net, sta, '', ''), []):
+			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+				return True
+
+		for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
+			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+				return True
+
+		return False
+
 
 ################################################################################
 class FDSNWS(Application):
@@ -108,7 +243,7 @@ class FDSNWS(Application):
 	#---------------------------------------------------------------------------
 	def __init__(self):
 		Application.__init__(self, len(sys.argv), sys.argv)
-		self.setMessagingEnabled(False)
+		self.setMessagingEnabled(True)
 		self.setDatabaseEnabled(True, True)
 		self.setRecordStreamEnabled(True)
 		self.setLoadInventoryEnabled(True)
@@ -139,6 +274,15 @@ class FDSNWS(Application):
 		self._accessLog     = None
 
 		self._fileNamePrefix = 'fdsnws'
+
+		self._trackdbEnabled = False
+		self._trackdbDefaultUser = 'fdsnws'
+
+		self._authEnabled   = False
+		self._authGnupgHome = '@ROOTDIR@/var/lib/gpg'
+
+		self._userdb        = UserDB()
+		self._access        = Access()
 
 		# Leave signal handling to us
 		Application.HandleSignals(False, False)
@@ -232,11 +376,28 @@ class FDSNWS(Application):
 
 		# output filter debug information
 		try: self._debugFilter = self.configGetBool('debugFilter')
-		except: pass
+		except ConfigException: pass
 
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = self.configGetString('fileNamePrefix')
 		except ConfigException: pass
+
+		# save request logs in database?
+		try: self._trackdbEnabled = self.configGetBool('trackdb.enable')
+		except ConfigException: pass
+
+		# default user
+		try: self._trackdbDefaultUser = self.configGetString('trackdb.defaultUser')
+		except ConfigException: pass
+
+		# enable authentication extension?
+		try: self._authEnabled = self.configGetBool('auth.enable')
+		except ConfigException: pass
+
+		# GnuPG home directory
+		try: self._authGnupgHome = self.configGetString('auth.gnupgHome')
+		except ConfigException: pass
+		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
 
 		return True
 
@@ -293,14 +454,22 @@ class FDSNWS(Application):
 		               "  inventory filter\n" \
 		               "    station       : %s\n" \
 		               "    dataSelect    : %s\n" \
-		               "    debug enabled : %s\n" % (
+		               "    debug enabled : %s\n" \
+		               "  trackdb\n" \
+		               "    enabled       : %s\n" \
+		               "    defaultUser   : %s\n" \
+		               "  auth\n" \
+		               "    enabled       : %s\n" \
+		               "    gnupgHome     : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
 		               self._allowRestricted, self._hideAuthor, modeStr,
 		               whitelistStr, blacklistStr, stationFilterStr,
-		               dataSelectFilterStr, self._debugFilter))
+		               dataSelectFilterStr, self._debugFilter,
+		               self._trackdbEnabled, self._trackdbDefaultUser,
+		               self._authEnabled, self._authGnupgHome))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
@@ -335,6 +504,8 @@ class FDSNWS(Application):
 			if not retn:
 				return False
 
+		if self._serveDataSelect:
+			self._access.initFromSC3Routing(self.query().loadRouting())
 
 		DataModel.PublicObject.SetRegistrationEnabled(False)
 
@@ -368,14 +539,21 @@ class FDSNWS(Application):
 			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
 			dataselect.putChild('1', dataselect1)
 
-			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv))
+			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._access))
 			msg = 'authorization for restricted time series data required'
-			authSession = self._getAuthSessionWrapper(FDSNDataSelectRealm(), msg)
+			authSession = self._getAuthSessionWrapper(FDSNDataSelectRealm(dataSelectInv,
+										      self._access,
+										      self._userdb),
+										      msg)
 			dataselect1.putChild('queryauth', authSession)
 			dataselect1.putChild('version', serviceVersion)
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
 			fileRes.childNotFound = NoResource()
 			dataselect1.putChild('application.wadl', fileRes)
+
+			if self._authEnabled:
+				dataselect1.putChild('auth', AuthResource(self._authGnupgHome,
+									  self._userdb))
 
 		# event
 		if self._serveEvent:
@@ -668,11 +846,14 @@ class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
 	def _getAuthSessionWrapper(self, realm, msg):
-		checker = checkers.FilePasswordDB(self._htpasswd)
+		if self._authEnabled:
+			checker = UsernamePasswordChecker(self._userdb)
+		else:
+			checker = checkers.FilePasswordDB(self._htpasswd)
 		p = portal.Portal(realm, [checker])
-		f = guard.DigestCredentialFactory('md5', msg)
-		f.digest = BugfixedDigest('md5', msg)
-		return guard.HTTPAuthSessionWrapper(p, [f])
+		f = guard.DigestCredentialFactory('MD5', msg)
+		f.digest = BugfixedDigest('MD5', msg)
+		return HTTPAuthSessionWrapper(p, [f])
 
 
 
