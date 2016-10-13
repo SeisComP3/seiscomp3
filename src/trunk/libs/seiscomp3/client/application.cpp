@@ -1948,6 +1948,10 @@ bool Application::processEvent() {
 				break;
 		}
 	}
+	catch ( QueueClosedException& ex ) {
+		SEISCOMP_INFO("%s, returning", ex.what());
+		return false;
+	}
 	catch ( GeneralException& ex ) {
 		SEISCOMP_INFO("Exception: %s, returning", ex.what());
 		return false;

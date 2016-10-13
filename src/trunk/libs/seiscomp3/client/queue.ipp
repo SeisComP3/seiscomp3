@@ -101,7 +101,7 @@ bool ThreadedQueue<T>::canPush() const {
 	lock lk(_monitor);
 
 	if ( _closed )
-		throw Core::GeneralException("Queue has been closed");
+		throw QueueClosedException();
 
 	return _buffered < _buffer.size();
 }
@@ -137,7 +137,7 @@ bool ThreadedQueue<T>::canPop() const {
 	lock lk(_monitor);
 
 	if ( _closed )
-		throw Core::GeneralException("Queue has been closed");
+		throw QueueClosedException();
 
 	return _buffered > 0;
 }
@@ -154,7 +154,7 @@ T ThreadedQueue<T>::pop() {
 		_notEmpty.wait(lk);
 	}
 	if ( _closed )
-		throw Core::GeneralException("Queue has been closed");
+		throw QueueClosedException();
 	T v = _buffer[_begin];
 	_buffer[_begin] = QueueHelper<T, boost::is_pointer<T>::value>::defaultValue();
 	_begin = (_begin+1) % _buffer.size();
