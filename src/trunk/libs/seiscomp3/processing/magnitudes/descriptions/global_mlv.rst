@@ -7,7 +7,8 @@ it is measured on the vertical component.
 Station Magnitude
 -----------------
 
-The individual station MLv is calculated using the following formula: 
+The individual station MLv is calculated up to the epicentral distance maxDistanceKm
+using the following formula:
 
 .. math::
 
@@ -15,11 +16,7 @@ The individual station MLv is calculated using the following formula:
 
 A is the MLv Wood-Anderson amplitude in millimeters. The second term
 is the empirical calibration function, which in turn is a function
-of the epicentral distance (see Richter, 1935). This calibration
-function can be configured globally or per station using the config
-variable module.trunk.global.MLv.logA0, e.g.
-
-module.trunk.global.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
+of the epicentral distance (see Richter, 1935).
 
 The logA0 configuration string consists of an arbitrary number of
 distance-value pairs separated by semicolons. The distance is in km
@@ -41,5 +38,22 @@ logA0 is millimeters for historical reasons, while internally in
 SeisComP 3 the Wood-Anderson amplitudes are measured and stored
 micrometers.
 
+Configuration
+-------------
+
 Several distance-value pairs can be configured for different ranges of
-epicenter distance.
+epicentral distance.
+The calibration function and maximum distance can be configured globally,
+per network or per station using the configuration variables, e.g.
+
+| global:
+| module.trunk.global.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
+| module.trunk.global.MLv.maxDistanceKm = -1
+
+| or per network:
+| module.trunk.GR.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
+| module.trunk.GR.MLv.maxDistanceKm = -1
+
+| or per station:
+| module.trunk.GR.MOX.MLv.logA0 = "0 -1.3;60 -2.8;400 -4.5;1000 -5.85"
+| module.trunk.GR.MOX.MLv.maxDistanceKm = -1
