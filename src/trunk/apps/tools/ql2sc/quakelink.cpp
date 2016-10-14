@@ -20,6 +20,9 @@
 #include <seiscomp3/client/application.h>
 #include <seiscomp3/logging/log.h>
 
+#include <boost/bind.hpp>
+
+
 using namespace std;
 
 namespace Seiscomp {

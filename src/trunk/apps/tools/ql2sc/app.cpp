@@ -206,7 +206,7 @@ bool resolveRouting(string &result, const DataModel::Object *o, const RoutingTab
 	RoutingTable::const_iterator it = routing.find(o->typeInfo().className());
 	if ( it != routing.end() ) {
 		result = it->second;
-		return true;
+		return !result.empty();
 	}
 
 	return resolveRouting(result, o->parent(), routing);
