@@ -189,7 +189,7 @@ be provided and the configuration needs to be updated.
 
 
 Supply metadata for networks and stations
-========================================
+=========================================
 
 SeisComP3 requires the metadata from seismic stations for data acquisition 
 and processing. The metadata can be obtained from network operators or
