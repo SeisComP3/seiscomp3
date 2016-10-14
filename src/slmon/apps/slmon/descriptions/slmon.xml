@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="slmon" category="Utilities" standalone="true">
+		<description>SeedLink monitor creating web pages</description>
+		<configuration>
+			<parameter name="title" type="string" default="&quot;SeedLink Monitor&quot;">
+				<description>
+				Title of the web page used as heading.
+				</description>
+			</parameter>
+			<parameter name="refresh" type="double" default="180" unit="s">
+				<description>
+				Refresh interval of the generated web page. The interval should
+				be similar to the interval for starting slmon. If empty, the web page
+				must be refreshed manually.
+				</description>
+			</parameter>
+			<parameter name="address" type="string" default="127.0.0.1">
+				<description>
+				Host of the Seedlink server to connect to. If the acquisition
+				is running on one system nothing needs to be changed.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="18000">
+				<description>
+				The port of the Seedlink server to connect to. If the acquisition
+				is running on one system this port must match the configured
+				local Seedlink port.
+				</description>
+			</parameter>
+			<parameter name="email" type="string">
+				<description>
+				e-mail address added to web pages.
+				</description>
+			</parameter>
+            <parameter name="wwwdir" type="string" default="@ROOTDIR@/var/run/@NAME@">
+                <description>
+                Output directory of the web pages.
+                </description>
+            </parameter>
+            <parameter name="icon" type="string" default="http://www.gfz-potsdam.de/favicon.ico">
+                <description>
+                Favicon URL of the web pages. Not mandatory.
+                </description>
+            </parameter>
+            <parameter name="linkname" type="string" default="GEOFON">
+                <description>
+                Name of Link shown in footer of web pages.
+                </description>
+            </parameter>
+            <parameter name="linkurl" type="string" default="http://www.gfz-potsdam.de/geofon/">
+                <description>
+                URL referred to by linkname in footer of web pages.
+                </description>
+            </parameter>
+            <parameter name="liveurl" type="string" default="http://geofon.gfz-potsdam.de/waveform/liveseis.php?station=%s">
+                <description>
+                URL to live seismograms. %s will be replaced by station name. 
+                Not mandatory.
+                </description>
+            </parameter>
+		</configuration>
+	</module>
+	<binding module="slmon">
+		<configuration>
+			<parameter name="group" type="string" default="local">
+				<description>
+				Defines the group of the station that is monitored.
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

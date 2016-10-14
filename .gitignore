@@ -144,6 +144,7 @@
 !/src/system/
 !/src/trunk/
 !/src/utils/
+!/src/slmon/
 
 
 # Libspread builds
