@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(8, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(9, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x080000
+#define SC_API_VERSION 0x090000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,18 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "9.0.0"   0x090000
+   - Added member creationInfo to class Seiscomp::DataModel::ConfigStation
+     and increased datamodel version to 0.9
+   - Added optional error code to Seiscomp::Communication class methods
+   - Changed internal Seiscomp::Util::Timer API
+   - Added Seiscomp::Util::Timer::setTimeout2
+   - Added Seiscomp::Core::Archive::setStrictMode
+   - Added Seiscomp::Core::Archive::isStrictMode
+   - Added Seiscomp::IO::DatabaseInterface::numberOfAffectedRows
+   - Added optional error code to Seiscomp::Inventory class
+   - Added macro REREGISTER_CLASS which allows to overwrite class registrations
+
  "8.0.0"   0x080000
    - Added class Seiscomp::DataModel::ResponseFAP
    - Changed Seiscomp::IO::GFArchive::addRequest from 1D request signature to

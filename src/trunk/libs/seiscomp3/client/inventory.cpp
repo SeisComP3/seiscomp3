@@ -438,10 +438,11 @@ StationLocation Inventory::stationLocation(const std::string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::Station* Inventory::getStation(const std::string& networkCode,
-                                          const std::string& stationCode,
-                                          const Core::Time& time) const {
-	return DataModel::getStation(_inventory.get(), networkCode, stationCode, time);
+DataModel::Station* Inventory::getStation(const std::string &networkCode,
+                                          const std::string &stationCode,
+                                          const Core::Time &time,
+                                          DataModel::InventoryError *error) const {
+	return DataModel::getStation(_inventory.get(), networkCode, stationCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -453,8 +454,10 @@ DataModel::SensorLocation*
 Inventory::getSensorLocation(const std::string &networkCode,
                              const std::string &stationCode,
                              const std::string &locationCode,
-                             const Core::Time &time) const {
-	return DataModel::getSensorLocation(_inventory.get(), networkCode, stationCode, locationCode, time);
+                             const Core::Time &time,
+                             DataModel::InventoryError *error) const {
+	return DataModel::getSensorLocation(_inventory.get(), networkCode, stationCode,
+	                                    locationCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -488,12 +491,14 @@ Inventory::getThreeComponents(const std::string& networkCode,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Stream*
-Inventory::getStream(const std::string& networkCode,
-                     const std::string& stationCode,
-                     const std::string& locationCode,
-                     const std::string& channelCode,
-                     const Core::Time &time) const {
-	return DataModel::getStream(_inventory.get(), networkCode, stationCode, locationCode, channelCode, time);
+Inventory::getStream(const std::string &networkCode,
+                     const std::string &stationCode,
+                     const std::string &locationCode,
+                     const std::string &channelCode,
+                     const Core::Time &time,
+                     DataModel::InventoryError *error) const {
+	return DataModel::getStream(_inventory.get(), networkCode, stationCode,
+	                            locationCode, channelCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

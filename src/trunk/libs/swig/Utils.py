@@ -137,6 +137,7 @@ class Timer(_object):
     __swig_destroy__ = _Utils.delete_Timer
     __del__ = lambda self : None;
     def setTimeout(self, *args): return _Utils.Timer_setTimeout(self, *args)
+    def setTimeout2(self, *args): return _Utils.Timer_setTimeout2(self, *args)
     def setCallback(self, *args): return _Utils.Timer_setCallback(self, *args)
     def setSingleShot(self, *args): return _Utils.Timer_setSingleShot(self, *args)
     def start(self): return _Utils.Timer_start(self)

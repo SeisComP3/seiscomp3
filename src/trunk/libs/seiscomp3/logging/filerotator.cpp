@@ -28,12 +28,19 @@ namespace Seiscomp {
 namespace Logging {
 
 
-FileRotatorOutput::FileRotatorOutput(int timeSpan, int historySize)
- : _timeSpan(timeSpan), _historySize(historySize), _lastInterval(-1) {
+FileRotatorOutput::FileRotatorOutput(int timeSpan, int historySize, int maxFileSize)
+: _timeSpan(timeSpan)
+, _historySize(historySize)
+, _maxFileSize(maxFileSize)
+, _lastInterval(-1) {
 }
 
-FileRotatorOutput::FileRotatorOutput(const char* filename, int timeSpan, int historySize)
- : FileOutput(filename), _timeSpan(timeSpan), _historySize(historySize), _lastInterval(-1) {
+FileRotatorOutput::FileRotatorOutput(const char* filename, int timeSpan, int historySize, int maxFileSize)
+: FileOutput(filename)
+, _timeSpan(timeSpan)
+, _historySize(historySize)
+, _maxFileSize(maxFileSize)
+, _lastInterval(-1) {
 }
 
 bool FileRotatorOutput::open(const char* filename) {
@@ -62,6 +69,10 @@ void FileRotatorOutput::log(const char* channelName,
 	if ( _lastInterval != currentInterval ) {
 		rotateLogs();
 		_lastInterval = currentInterval;
+	}
+	else if ( _maxFileSize > 0 ) {
+		if ( _stream.tellp() > (std::ofstream::pos_type)_maxFileSize )
+			rotateLogs();
 	}
 
 	FileOutput::log(channelName, level, msg, time);

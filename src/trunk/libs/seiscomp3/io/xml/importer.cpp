@@ -17,6 +17,10 @@
 
 #include <libxml/xmlreader.h>
 
+#if LIBXML_VERSION < 20900
+#  define XML_PARSE_BIG_LINES 4194304
+#endif
+
 
 namespace Seiscomp {
 namespace IO {
@@ -86,7 +90,7 @@ Core::BaseObject *Importer::get(std::streambuf* buf) {
 	xmlDocPtr doc;
 	doc = xmlReadIO(streamBufReadCallback,
 	                streamBufCloseCallback,
-	                buf, NULL, NULL, 0);
+	                buf, NULL, NULL, XML_PARSE_BIG_LINES);
 
 	if ( doc == NULL )
 		return NULL;
@@ -145,7 +149,9 @@ bool Importer::traverse(NodeHandler *handler, void *n, void *c, Core::BaseObject
 		}
 		catch ( std::exception &e ) {
 			if ( handler->isOptional )
-				SEISCOMP_WARNING("(optional) %s.%s: %s", node->name, child->name, e.what());
+				SEISCOMP_WARNING("L%ld: (optional) %s.%s: %s",
+				                 xmlGetLineNo(node),
+				                 node->name, child->name, e.what());
 			else
 				throw e;
 		}
@@ -194,25 +200,31 @@ bool Importer::traverse(NodeHandler *handler, void *n, void *c, Core::BaseObject
 					delete newTarget;
 				newTarget = NULL;
 				if ( optional )
-					SEISCOMP_INFO("Invalid %s element: ignoring", child->name);
+					SEISCOMP_INFO("L%ld: Invalid %s element: ignoring",
+					              xmlGetLineNo(child), child->name);
 				else {
-					SEISCOMP_WARNING("%s is not optional within %s", child->name, node->name);
+					SEISCOMP_WARNING("L%ld: %s is not optional within %s",
+					                 xmlGetLineNo(child),
+					                 child->name, node->name);
 					result = false;
 				}
 			}
 		}
 		catch ( std::exception &e ) {
-			SEISCOMP_WARNING("%s: %s", child->name, e.what());
+			SEISCOMP_WARNING("L%ld: %s: %s", xmlGetLineNo(child), child->name, e.what());
 			if ( newTarget ) {
 				if ( newInstance )
 					delete newTarget;
 
 				if ( !optional ) {
-					SEISCOMP_WARNING("%s is not optional within %s", child->name, node->name);
+					SEISCOMP_WARNING("L%ld: %s is not optional within %s",
+					                 xmlGetLineNo(child), child->name, node->name);
 					result = false;
 				}
 				else
-					SEISCOMP_WARNING("%s: ignoring optional member %s: invalid", node->name, child->name);
+					SEISCOMP_WARNING("L%ld: %s: ignoring optional member %s: invalid",
+					                 xmlGetLineNo(child),
+					                 node->name, child->name);
 
 				newTarget = NULL;
 			}
@@ -249,7 +261,9 @@ bool Importer::traverse(NodeHandler *handler, void *n, void *c, Core::BaseObject
 			if ( it != mandatory.begin() ) attribs += ", ";
 			attribs += *it;
 		}
-		SEISCOMP_WARNING("%s: missing mandatory attribute%s: %s", node->name, mandatory.size() == 1?"":"s", attribs.c_str());
+		SEISCOMP_WARNING("L%ld: %s: missing mandatory attribute%s: %s",
+		                 xmlGetLineNo(node), node->name,
+		                 mandatory.size() == 1?"":"s", attribs.c_str());
 		return false;
 	}
 

@@ -991,17 +991,10 @@ DataModel::ResponsePolynomialPtr convert(const FDSNXML::ResponseStage *resp,
 	const char *atstr = poly->approximationType().toString();
 	if ( atstr != NULL )
 		rp->setApproximationType(atstr);
-	rp->setApproximationLowerBound(poly->frequencyLowerBound().value());
-	rp->setApproximationUpperBound(poly->frequencyUpperBound().value());
+	rp->setApproximationLowerBound(poly->approximationLowerBound());
+	rp->setApproximationUpperBound(poly->approximationUpperBound());
 
-	double maxError;
-	if ( !poly->maximumError().empty() && !Core::fromString(maxError, poly->maximumError()) ) {
-		SEISCOMP_WARNING("Invalid polynomial maximum error: %s, setting to None",
-		                 poly->maximumError().c_str());
-		rp->setApproximationError(Core::None);
-	}
-	else
-		rp->setApproximationError(maxError);
+	rp->setApproximationError(poly->maximumError());
 
 	rp->setNumberOfCoefficients(poly->coefficientCount());
 
@@ -2731,6 +2724,8 @@ Convert2SC3::updateSensor(const std::string &name,
 			//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
 		}
 
+		sc_sens->setLowFrequency(poly->frequencyLowerBound().value());
+		sc_sens->setHighFrequency(poly->frequencyUpperBound().value());
 		sc_sens->setResponse(rp->publicID());
 		emptySensor = false;
 	}

@@ -32,8 +32,8 @@ ROOT_TYPE* AbstractClassFactory<ROOT_TYPE, TYPE>::create() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE, typename TYPE>
-ClassFactory<ROOT_TYPE, TYPE>::ClassFactory(const char*)
-: ClassFactoryInterface<ROOT_TYPE>(&TYPE::TypeInfo())
+ClassFactory<ROOT_TYPE, TYPE>::ClassFactory(const char*, bool reregister)
+: ClassFactoryInterface<ROOT_TYPE>(&TYPE::TypeInfo(), reregister)
 {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

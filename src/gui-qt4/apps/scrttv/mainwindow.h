@@ -260,6 +260,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		Seiscomp::Core::Time _startTime;
 		size_t _bufferSize;
 
+		bool _autoApplyFilter;
 		bool _automaticSortEnabled;
 		bool _inventoryEnabled;
 		int _maxDelay;

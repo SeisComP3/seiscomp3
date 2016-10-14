@@ -638,7 +638,8 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		}
 
 		arrival->setDistance(loc->assoc[i].delta);
-		arrival->setTimeResidual(loc->assoc[i].timeres < -990. ? 0. : loc->assoc[i].timeres);
+//		arrival->setTimeResidual(loc->assoc[i].timeres < -990. ? 0. : loc->assoc[i].timeres);
+		arrival->setTimeResidual(loc->assoc[i].timeres);
 		arrival->setAzimuth(loc->assoc[i].esaz);
 		arrival->setPhase(Phase(loc->assoc[i].phase));
 		if (arrival->phase().code()[0] == 'p' || arrival->phase().code()[0] == 's')

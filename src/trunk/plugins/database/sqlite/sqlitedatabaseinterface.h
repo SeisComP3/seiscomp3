@@ -52,6 +52,7 @@ class SQLiteDatabase : public Seiscomp::IO::DatabaseInterface {
 
 		const char* defaultValue() const;
 		unsigned long lastInsertId(const char*);
+		uint64_t numberOfAffectedRows();
 
 		bool fetchRow();
 		int findColumn(const char* name);

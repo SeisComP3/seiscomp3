@@ -22,14 +22,23 @@
 			</parameter>
 			<parameter name="filter" type="string" default="BW(3, 0.5, 10.0)">
 				<description>
-					Defines the filter to be used when filtering is activated.
+					Defines the filter to be used when filtering is activated. This
+					is only being used if filters is not set otherwise it is
+					overridden. This option is mainly for backward compatibility.
 				</description>
 			</parameter>
 			<parameter name="filters" type="list:string">
 				<description>
 					Defines a list of filters that is cycles through when pressing 'f'.
 					This options supersedes the filter option. If not defined then
-					filter is used instead.
+					filter is used instead. If defined then this filter list is
+					used exclusively and the filter option is ignored.
+				</description>
+			</parameter>
+			<parameter name="autoApplyFilter" type="boolean" default="false">
+				<description>
+					Activates the first filter of the configured filter list
+					after startup. This is equivalent to pressing 'f'.
 				</description>
 			</parameter>
 			<parameter name="bufferSize" type="int" unit="s" default="1800">

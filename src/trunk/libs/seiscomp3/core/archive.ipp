@@ -17,7 +17,9 @@ namespace Generic {
 
 template <typename ROOT_TYPE>
 Archive<ROOT_TYPE>::Archive()
- : _hint(NONE), _isReading(true), _validObject(true), _first(true) {
+: _hint(NONE), _isReading(true)
+, _validObject(true), _first(true)
+, _strict(false) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -146,6 +148,26 @@ void Archive<ROOT_TYPE>::serialize(SerializeDispatcher& disp) {
 	disp(*this);
 	_first = iterFlag;
 	_found = oldFound;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+void Archive<ROOT_TYPE>::setStrictMode(bool strict) {
+	_strict = strict;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <typename ROOT_TYPE>
+bool Archive<ROOT_TYPE>::isStrictMode() const {
+	return _strict;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

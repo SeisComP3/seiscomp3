@@ -87,6 +87,7 @@ class EventDump : public Seiscomp::Client::Application {
 				}
 
 				setMessagingEnabled(false);
+				setLoggingToStdErr(true);
 			}
 
 			return true;

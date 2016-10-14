@@ -11,7 +11,7 @@
  ***************************************************************************/
 
 
-#define SEISCOMP_COMPONENT Utils
+#define SEISCOMP_COMPONENT Utils/Replace
 #include <seiscomp3/utils/replace.h>
 #include <stdlib.h>
 

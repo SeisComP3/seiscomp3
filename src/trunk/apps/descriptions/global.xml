@@ -88,6 +88,14 @@
 								How many historic log files to keep.
 							</description>
 						</parameter>
+						<parameter name="maxFileSize" type="int" default="104857600" unit="byte">
+							<description>
+							The maximum size of a logfile in byte. The default value
+							is 100 megabyte. If a logfile exceeds that size then it
+							is rotated. To disable the size limit give 0 or a negative
+							value.
+							</description>
+						</parameter>
 					</group>
 				</group>
 				<group name="syslog">
@@ -485,7 +493,7 @@
 					</parameter>
 				</group>
 				<description>
-					Defines general parameters for amplitudes of a certain type.
+					Defines general parameters for amplitude of a certain type, e.g. time windows to derive magnitudes.
 				</description>
 				<parameter name="enable" type="boolean" default="true">
 					<description>
@@ -602,11 +610,11 @@
 			</group>
 			<group name="mag">
 				<description>
-					Defines general parameters for magnitudes of a certain type.
+					Defines correction parameters for magnitudes, e.g. station corrections.
 				</description>
 				<struct type="Magnitude type profile">
 					<description>
-					An magnitude profile configures global parameters for a
+					A magnitude profile configures global parameters for a
 					particular magnitude type. The available magnitude types
 					are not fixed and can be extended by plugins. The name of
 					the type must match the one defined in the corresponding
@@ -616,7 +624,7 @@
 						<description>
 						Part of the magnitude station correction. The final
 						magnitude value is multiplier*M+offset. This value
-						is usually not required but there for completeness.
+						is usually not required but is here for completeness.
 						</description>
 					</parameter>
 					<parameter name="offset" type="double" default="0">

@@ -243,6 +243,7 @@ class DatabaseInterface(Core.BaseObject):
     def endQuery(self): return _IO.DatabaseInterface_endQuery(self)
     def defaultValue(self): return _IO.DatabaseInterface_defaultValue(self)
     def lastInsertId(self, *args): return _IO.DatabaseInterface_lastInsertId(self, *args)
+    def numberOfAffectedRows(self): return _IO.DatabaseInterface_numberOfAffectedRows(self)
     def fetchRow(self): return _IO.DatabaseInterface_fetchRow(self)
     def findColumn(self, *args): return _IO.DatabaseInterface_findColumn(self, *args)
     def getRowFieldCount(self): return _IO.DatabaseInterface_getRowFieldCount(self)

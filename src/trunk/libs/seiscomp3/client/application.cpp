@@ -2269,50 +2269,56 @@ bool Application::initConfiguration() {
 	}
 	catch (...) {}
 
-	try { _inventoryDB = configGetString("database.inventory"); }
+	try { _inventoryDB = configGetPath("database.inventory"); }
 	catch ( ... ) {}
 
-	try { _configDB = configGetString("database.config"); }
+	try { _configDB = configGetPath("database.config"); }
 	catch ( ... ) {}
 
-	try { _cityDB = Environment::Instance()->absolutePath(configGetString("cityXML")); }
+	try { _cityDB = configGetPath("cityXML"); }
 	catch ( ... ) {}
 
 	try { _agencyID = Util::replace(configGetString("agencyID"), AppResolver(_name)); }
-	catch (...) { _agencyID = Util::replace("@user@@@@hostname@", AppResolver(_name)); }
+	catch (...) { _agencyID = "UNSET"; }
 
 	try { _author = Util::replace(configGetString("author"), AppResolver(_name)); }
-	catch (...) { _author = Util::replace("@user@@@@hostname@", AppResolver(_name)); }
+	catch (...) { _author = Util::replace("@appname@@@@hostname@", AppResolver(_name)); }
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("processing.whitelist.agencies");
 		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_procFirewall.allow, _procFirewall.allow.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("processing.blacklist.agencies");
 		std::copy(blackList.begin(), blackList.end(), std::inserter(_procFirewall.deny, _procFirewall.deny.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("inventory.whitelist.nettype");
 		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_networkTypeFirewall.allow, _networkTypeFirewall.allow.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("inventory.blacklist.nettype");
 		std::copy(blackList.begin(), blackList.end(), std::inserter(_networkTypeFirewall.deny, _networkTypeFirewall.deny.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try {
 		std::vector<std::string> whiteList = configGetStrings("inventory.whitelist.statype");
 		std::copy(whiteList.begin(), whiteList.end(), std::inserter(_stationTypeFirewall.allow, _stationTypeFirewall.allow.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try {
 		std::vector<std::string> blackList = configGetStrings("inventory.blacklist.statype");
 		std::copy(blackList.begin(), blackList.end(), std::inserter(_stationTypeFirewall.deny, _stationTypeFirewall.deny.end()));
-	} catch ( ... ) {}
+	}
+	catch ( ... ) {}
 
 	try { _enableLoadCities = configGetBool("loadCities"); } catch ( ... ) {}
 	try { _enableLoadRegions = configGetBool("loadRegions"); } catch ( ... ) {}
@@ -2337,6 +2343,7 @@ bool Application::initLogging() {
 	bool logRotator = true;
 	int logRotateTime = 60*60*24; /* one day*/
 	int logRotateArchiveSize = 7; /* one week archive */
+	int logRotateMaxFileSize = 100*1024*1024; /* max 100MB per logfile */
 
 	Logging::disableConsoleLogging();
 
@@ -2346,6 +2353,7 @@ bool Application::initLogging() {
 	try { logRotator = configGetBool("logging.file.rotator"); } catch (...) {}
 	try { logRotateTime = configGetInt("logging.file.rotator.timeSpan"); } catch (...) {}
 	try { logRotateArchiveSize = configGetInt("logging.file.rotator.archiveSize"); } catch (...) {}
+	try { logRotateMaxFileSize = configGetInt("logging.file.rotator.maxFileSize"); } catch (...) {}
 
 	bool enableLogging = _verbosity > 0;
 	bool syslog = false;
@@ -2400,7 +2408,7 @@ bool Application::initLogging() {
 
 			Logging::FileOutput* logger;
 			if ( logRotator )
-				logger = new Logging::FileRotatorOutput(logRotateTime, logRotateArchiveSize);
+				logger = new Logging::FileRotatorOutput(logRotateTime, logRotateArchiveSize, logRotateMaxFileSize);
 			else
 				logger = new Logging::FileOutput();
 

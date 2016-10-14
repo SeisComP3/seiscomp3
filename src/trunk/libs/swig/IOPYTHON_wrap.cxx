@@ -3578,10 +3578,11 @@ namespace Swig {
 #define SWIGTYPE_p_swig__SwigPyIterator swig_types[197]
 #define SWIGTYPE_p_time_t swig_types[198]
 #define SWIGTYPE_p_traits_type swig_types[199]
-#define SWIGTYPE_p_value_type swig_types[200]
-#define SWIGTYPE_p_void swig_types[201]
-static swig_type_info *swig_types[203];
-static swig_module_info swig_module = {swig_types, 202, 0, 0, 0, 0};
+#define SWIGTYPE_p_uint64_t swig_types[200]
+#define SWIGTYPE_p_value_type swig_types[201]
+#define SWIGTYPE_p_void swig_types[202]
+static swig_type_info *swig_types[204];
+static swig_module_info swig_module = {swig_types, 203, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -8896,6 +8897,28 @@ SWIGINTERN PyObject *_wrap_DatabaseInterface_lastInsertId(PyObject *SWIGUNUSEDPA
   return resultobj;
 fail:
   if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_DatabaseInterface_numberOfAffectedRows(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::DatabaseInterface *arg1 = (Seiscomp::IO::DatabaseInterface *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  uint64_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:DatabaseInterface_numberOfAffectedRows",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__DatabaseInterface, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DatabaseInterface_numberOfAffectedRows" "', argument " "1"" of type '" "Seiscomp::IO::DatabaseInterface *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::DatabaseInterface * >(argp1);
+  result = (arg1)->numberOfAffectedRows();
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
   return NULL;
 }
 
@@ -29585,6 +29608,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DatabaseInterface_endQuery", _wrap_DatabaseInterface_endQuery, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_defaultValue", _wrap_DatabaseInterface_defaultValue, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_lastInsertId", _wrap_DatabaseInterface_lastInsertId, METH_VARARGS, NULL},
+	 { (char *)"DatabaseInterface_numberOfAffectedRows", _wrap_DatabaseInterface_numberOfAffectedRows, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_fetchRow", _wrap_DatabaseInterface_fetchRow, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_findColumn", _wrap_DatabaseInterface_findColumn, METH_VARARGS, NULL},
 	 { (char *)"DatabaseInterface_getRowFieldCount", _wrap_DatabaseInterface_getRowFieldCount, METH_VARARGS, NULL},
@@ -30630,6 +30654,7 @@ static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_t = {"_p_std
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_time_t = {"_p_time_t", "time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_traits_type = {"_p_traits_type", "traits_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
@@ -30834,6 +30859,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_time_t,
   &_swigt__p_traits_type,
+  &_swigt__p_uint64_t,
   &_swigt__p_value_type,
   &_swigt__p_void,
 };
@@ -31038,6 +31064,7 @@ static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_t[] = {  {&_
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_time_t[] = {  {&_swigt__p_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_traits_type[] = {  {&_swigt__p_traits_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
@@ -31242,6 +31269,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_time_t,
   _swigc__p_traits_type,
+  _swigc__p_uint64_t,
   _swigc__p_value_type,
   _swigc__p_void,
 };

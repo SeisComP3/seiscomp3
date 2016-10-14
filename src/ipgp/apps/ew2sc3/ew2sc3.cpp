@@ -1071,7 +1071,7 @@ int EW2SC3::extractOrigin(char* msg) {
 				p_idx++;
 			}
 
-			if ( pPhase.find("S") != string::npos ) {
+			if ( sPhase.find("S") != string::npos ) {
 
 				Time st;
 				st.set(to_int(year), to_int(mdhm.substr(0, 2)),

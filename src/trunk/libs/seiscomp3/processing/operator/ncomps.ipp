@@ -24,6 +24,12 @@ namespace Processing {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+struct ScopedUnsetFlag {
+	ScopedUnsetFlag(bool &f) : flag(f) {}
+	~ScopedUnsetFlag() { flag = false; }
+	bool &flag;
+};
+
 template <typename T, int N, class PROC, int BSIZE>
 WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Record *rec) {
 	Core::Time minStartTime;
@@ -32,6 +38,9 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 	WaveformProcessor::Status status;
 
 	status = WaveformProcessor::WaitingForData;
+
+	ScopedUnsetFlag unsetProcessingFlagOnReturn(_processing);
+	_processing = true;
 
 	for ( int i = 0; i < N; ++i ) {
 		// Not all traces available, nothing to do
@@ -65,9 +74,8 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::process(int, const Rec
 		if ( minStartTime ) {
 			for ( int i = 0; i < N; ++i ) {
 				while ( it[i] != _states[i].buffer.end() ) {
-					if ( (*it[i])->endTime() <= minStartTime ) {
+					if ( (*it[i])->endTime() <= minStartTime )
 						it[i] = _states[i].buffer.erase(it[i]);
-					}
 					else
 						break;
 				}
@@ -313,6 +321,9 @@ WaveformProcessor::Status NCompsOperator<T,N,PROC,BSIZE>::feed(const Record *rec
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T, int N, class PROC, int BSIZE>
 void NCompsOperator<T,N,PROC,BSIZE>::reset() {
+	// No reset while in processing
+	if ( _processing ) return;
+
 	for ( int i = 0; i < N; ++i )
 		_states[i] = State();
 }

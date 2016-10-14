@@ -43,7 +43,7 @@ class Proc {
 template <typename T, int N, class PROC, int BSIZE=-1>
 class NCompsOperator : public WaveformOperator {
 	public:
-		NCompsOperator(const PROC &proc) : _proc(proc) {}
+		NCompsOperator(const PROC &proc) : _proc(proc), _processing(false) {}
 
 		WaveformProcessor::Status feed(const Record *record);
 		void reset();
@@ -61,6 +61,7 @@ class NCompsOperator : public WaveformOperator {
 		// Stores the N channel codes and the according record buffer
 		State _states[N];
 		PROC  _proc;
+		bool  _processing;
 };
 
 

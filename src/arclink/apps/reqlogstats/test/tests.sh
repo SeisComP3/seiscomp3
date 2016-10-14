@@ -103,3 +103,8 @@ if [ 1 -eq 1 ] ; then
 	test_web_content
 fi
 
+
+# Unit test of t1.py, belongs higher up here...
+python ../t1.py < /dev/null
+# expect no errors, all values coverted to MiB
+

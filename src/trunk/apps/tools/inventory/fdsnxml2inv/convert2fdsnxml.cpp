@@ -364,17 +364,14 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponsePolynomial *poly,
 	else
 		sx_poly.setApproximationType(FDSNXML::AT_MACLAURIN);
 
-	try { freq.setValue(poly->approximationLowerBound()); }
-	catch ( ... ) { freq.setValue(0); }
-	sx_poly.setFrequencyLowerBound(freq);
+	try { sx_poly.setApproximationLowerBound(poly->approximationLowerBound()); }
+	catch ( ... ) { sx_poly.setApproximationLowerBound(0); }
 
-	try { freq.setValue(poly->approximationUpperBound()); }
-	catch ( ... ) { freq.setValue(0); }
-	sx_poly.setFrequencyUpperBound(freq);
+	try { sx_poly.setApproximationUpperBound(poly->approximationUpperBound()); }
+	catch ( ... ) { sx_poly.setApproximationUpperBound(0); }
 
-	try { freq.setValue(poly->approximationError()); }
-	catch ( ... ) { freq.setValue(0); }
-	sx_poly.setMaximumError(Core::toString(freq.value()));
+	try { sx_poly.setMaximumError(poly->approximationError()); }
+	catch ( ... ) { sx_poly.setMaximumError(0); }
 
 	int idx = 0;
 	try {
@@ -974,6 +971,28 @@ bool Convert2FDSNStaXML::process(FDSNXML::Channel *sx_chan,
 		else {
 			// Insert ResponseList response
 			FDSNXML::ResponseStagePtr sx_stage = convert(poly, unit, CURRENT);
+
+			// Set lower and upper frequency bound
+			FDSNXML::FrequencyType freq;
+
+			try {
+				freq.setValue(sensor->lowFrequency());
+			}
+			catch ( ... ) {
+				freq.setValue(0);
+			}
+
+			sx_stage->polynomial().setFrequencyLowerBound(freq);
+
+			try {
+				freq.setValue(sensor->highFrequency());
+			}
+			catch ( ... ) {
+				freq.setValue(0);
+			}
+
+			sx_stage->polynomial().setFrequencyUpperBound(freq);
+
 			FDSNXML::CounterType cnt;
 			cnt.setValue(resp->stageCount()+1);
 			sx_stage->setNumber(cnt);

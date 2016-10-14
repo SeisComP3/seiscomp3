@@ -258,7 +258,8 @@ void Import::handleNetworkMessage(const Communication::NetworkMessage* networkMe
 						++it;
 				}
 				newNetworkMessagePtr = Communication::NetworkMessage::Encode(
-						messagePtr.get(), networkMessage->contentType());
+						messagePtr.get(), networkMessage->contentType(),
+						_sink->schemaVersion().packed);
 			}
 			else if (DataModel::NotifierMessage* notifierMessage = DataModel::NotifierMessage::Cast(messagePtr))
 			{
@@ -271,7 +272,8 @@ void Import::handleNetworkMessage(const Communication::NetworkMessage* networkMe
 						++it;
 				}
 				newNetworkMessagePtr = Communication::NetworkMessage::Encode(
-						messagePtr.get(), networkMessage->contentType());
+						messagePtr.get(), networkMessage->contentType(),
+						_sink->schemaVersion().packed);
 			}
 			else {
 				// Unknown message
@@ -282,7 +284,8 @@ void Import::handleNetworkMessage(const Communication::NetworkMessage* networkMe
 		}
 		else {
 			newNetworkMessagePtr = Communication::NetworkMessage::Encode(
-					messagePtr.get(), networkMessage->contentType());
+					messagePtr.get(), networkMessage->contentType(),
+					_sink->schemaVersion().packed);
 		}
 
 		/*

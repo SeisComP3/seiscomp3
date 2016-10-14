@@ -162,6 +162,7 @@ bool GeoFeatureSet::readBNAHeader(std::ifstream& infile, std::string& segment,
 	if ( (pos1 = line.find('"')) == std::string::npos ) return false;
 	if ( (pos2 = line.find('"', pos1+1)) == std::string::npos ) return false;
 	segment = line.substr(pos1+1, pos2-pos1-1);
+	Core::trim(segment);
 
 	// rank
 	if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ) return false;

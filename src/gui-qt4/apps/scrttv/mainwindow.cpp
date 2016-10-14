@@ -383,6 +383,7 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	_recordStreamThread = NULL;
 	_tabWidget = NULL;
 	_currentFilterIdx = -1;
+	_autoApplyFilter = false;
 
 	_statusBarFile   = new QLabel;
 	_statusBarFilter = new QLabel(" Filter OFF ");
@@ -484,6 +485,11 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	QPen defaultMinPen, defaultMaxPen;
 	QBrush defaultMinBrush, defaultMaxBrush;
 	OPT(double) defaultMinMaxMargin;
+
+	try {
+		_autoApplyFilter = SCApp->configGetBool("autoApplyFilter");
+	}
+	catch ( ... ) {}
 
 	try {
 		defaultMinMaxMargin = SCApp->configGetDouble("streams.defaults.minMaxMargin");
@@ -670,6 +676,9 @@ void MainWindow::setBufferSize(size_t bs) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainWindow::setFiltersByName(const std::vector<std::string> &filters) {
 	_filters = filters;
+
+	if ( _autoApplyFilter )
+		cycleFilters(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -726,6 +735,13 @@ void MainWindow::setStationEnabled(const string& networkCode,
 		newCs->setStationCode(stationCode);
 		newCs->setEnabled(enable);
 
+		CreationInfo ci;
+		ci.setAuthor(SCApp->author());
+		ci.setAgencyID(SCApp->agencyID());
+		ci.setCreationTime(Core::Time::GMT());
+
+		newCs->setCreationInfo(ci);
+
 		Notifier::Enable();
 		module->add(newCs.get());
 		Notifier::Disable();
@@ -739,6 +755,20 @@ void MainWindow::setStationEnabled(const string& networkCode,
 		              cs->networkCode().c_str(),
 		              cs->stationCode().c_str(),
 		              enable);
+
+		CreationInfo *ci;
+		try {
+			ci = &cs->creationInfo();
+			ci->setModificationTime(Core::Time::GMT());
+		}
+		catch ( ... ) {
+			cs->setCreationInfo(CreationInfo());
+			ci = &cs->creationInfo();
+			ci->setCreationTime(Core::Time::GMT());
+		}
+
+		ci->setAuthor(SCApp->author());
+		ci->setAgencyID(SCApp->agencyID());
 
 		Notifier::Enable();
 		cs->update();

@@ -419,17 +419,37 @@ void MainFrame::prepareNotifier(QString streamID, bool enable) {
 		newCs->setStationCode(stationCode);
 		newCs->setEnabled(enable);
 
+		CreationInfo ci;
+		ci.setAuthor(SCApp->author());
+		ci.setAgencyID(SCApp->agencyID());
+		ci.setCreationTime(Core::Time::GMT());
+
+		newCs->setCreationInfo(ci);
+
 		Notifier::Enable();
 		module->add(newCs.get());
 		Notifier::Disable();
 	}
-
 	else {
 		cs->setEnabled(enable);
 		SEISCOMP_INFO("Set station %s.%s state to: %d",
 		              cs->networkCode().c_str(),
 		              cs->stationCode().c_str(),
 		              enable);
+
+		CreationInfo *ci;
+		try {
+			ci = &cs->creationInfo();
+			ci->setModificationTime(Core::Time::GMT());
+		}
+		catch ( ... ) {
+			cs->setCreationInfo(CreationInfo());
+			ci = &cs->creationInfo();
+			ci->setCreationTime(Core::Time::GMT());
+		}
+
+		ci->setAuthor(SCApp->author());
+		ci->setAgencyID(SCApp->agencyID());
 
 		Notifier::Enable();
 		cs->update();

@@ -124,6 +124,14 @@ Out2<R,T> tabular(const R *reg, const T *src, int indentation) {
 
 ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
 	const DataModel::ResponsePAZ *paz = out.obj;
+	os << Fill(out.indent) << "gain         ";
+	try { os << paz->gain(); }
+	catch (...) { os << "-"; }
+	os << endl;
+	os << Fill(out.indent) << "gain freq    ";
+	try { os << paz->gainFrequency(); }
+	catch (...) { os << "-"; }
+	os << endl;
 	os << Fill(out.indent) << "norm freq    ";
 	try { os << paz->normalizationFrequency() << "Hz"; }
 	catch (...) { os << "-"; }
@@ -192,7 +200,7 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
 	catch ( ... ) { os << "-"; }
 	os << endl;
 
-	os << Fill(out.indent) << "symmetrie    ";
+	os << Fill(out.indent) << "symmetry     ";
 	if ( fir->symmetry().empty() )
 		os << "-";
 	else

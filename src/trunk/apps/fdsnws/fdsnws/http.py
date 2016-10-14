@@ -12,6 +12,15 @@ from twisted.web import http, resource, server, static, util
 from seiscomp3 import Core, Logging
 
 import utils
+import json
+import gnupg
+import base64
+import hashlib
+import random
+import os
+import time
+import datetime
+import dateutil.parser
 
 VERSION = "1.1.0"
 
@@ -170,6 +179,51 @@ class DirectoryResource(static.File):
 
 
 ################################################################################
+class AuthResource(resource.Resource):
+	isLeaf = True
+
+	def __init__(self, gnupghome, userdb):
+		resource.Resource.__init__(self)
+		self.__gpg = gnupg.GPG(gnupghome=gnupghome)
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
+	def render_POST(self, request):
+		request.setHeader('Content-Type', 'text/plain')
+
+		try:
+			verified = self.__gpg.decrypt(request.content.getvalue())
+
+		except Exception, e:
+			req.setResponseCode(400)
+			return str(e)
+
+		if verified.trust_level is None or verified.trust_level < verified.TRUST_FULLY:
+			request.setResponseCode(400)
+			return "invalid signature"
+
+		try:
+			attributes = json.loads(verified.data)
+			td = dateutil.parser.parse(attributes['valid_until']) - \
+					datetime.datetime.now(dateutil.tz.tzutc())
+			lifetime = td.seconds + td.days * 24 * 3600
+
+		except Exception, e:
+			request.setResponseCode(400)
+			return str(e)
+
+		if lifetime <= 0:
+			request.setResponseCode(400)
+			return "token expired"
+
+		userid = base64.urlsafe_b64encode(hashlib.sha256(verified.data).digest()[:18])
+		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600))
+
+		return '%s:%s' % (userid, password)
+
+
+
+################################################################################
 class Site(server.Site):
 
 	#---------------------------------------------------------------------------
@@ -177,4 +231,7 @@ class Site(server.Site):
 		Logging.debug("request (%s): %s" % (request.getClientIP(),
 		              request.uri))
 		request.setHeader('Server', "SeisComP3-FDSNWS/%s" % VERSION)
+		request.setHeader('Access-Control-Allow-Origin', '*')
+		request.setHeader('Access-Control-Allow-Headers', 'Authorization')
+		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)

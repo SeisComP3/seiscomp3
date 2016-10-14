@@ -338,6 +338,19 @@ unsigned long MySQLDatabase::lastInsertId(const char*) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+uint64_t MySQLDatabase::numberOfAffectedRows() {
+	my_ulonglong r = mysql_affected_rows(_handle);
+	if ( r != (my_ulonglong)~0 )
+		return r;
+
+	return (uint64_t)~0;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MySQLDatabase::fetchRow() {
 	_row = mysql_fetch_row(_result);
 	_lengths = mysql_fetch_lengths(_result);

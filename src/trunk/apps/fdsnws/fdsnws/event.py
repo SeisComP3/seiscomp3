@@ -31,7 +31,7 @@ from twisted.web import http, resource, server
 from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
 from seiscomp3.Core import ValueException
-from seiscomp3.IO import Exporter
+from seiscomp3.IO import DatabaseInterface, Exporter
 
 from http import HTTP
 from request import RequestOptions
@@ -245,10 +245,12 @@ class FDSNEvent(resource.Resource):
 				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
 		# Create database query
-		dbq = DataModel.DatabaseQuery(Application.Instance().database())
-		if dbq.hasError():
+		db = DatabaseInterface.Open(Application.Instance().databaseURI())
+		if db is None:
 			msg = "could not connect to database: %s" % dbq.errorMsg()
 			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+
+		dbq = DataModel.DatabaseQuery(db)
 
 		# Process request in separate thread
 		d = deferToThread(self._processRequest, req, ro, dbq, exp)

@@ -7,13 +7,13 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-arclink`", "``arclink``", "Connects to :ref:`ArcLink server <arclink>`"
    ":ref:`rs-fdsnws`", "``fdsnws``", "Connects to :ref:`FDSN Web service <fdsnws>`"
    ":ref:`rs-file`", "``file``", "Reads records from file"
-   ":ref:`rs-archive`", "``archive``", "Reads all record files found in directory (and subdirectories)"
    ":ref:`rs-sdsarchive`", "``sdsarchive``", "Reads records from SeisComP archive (SDS)"
    ":ref:`rs-odcarchive`", "``odcarchive``", "Reads records from Orpheus archive (ODC)"
    ":ref:`rs-memory`", "``memory``", "Reads records from memory"
    ":ref:`rs-combined`", "``combined``", "Combines archive and real-time stream"
    ":ref:`rs-balanced`", "``balanced``", "Distributes requests to multiple proxy streams"
    ":ref:`rs-dec`", "``dec``", "Decimates (resamples) a proxy stream"
+   ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
 The RecordStream used by an application is either specified on the the
 commandline (`-I URI`) or configured through using the parameters
@@ -99,20 +99,6 @@ Examples
 
 - ``file://-``
 - ``file:///tmp/input.mseed``
-
-.. _rs-archive:
-
-Archive
--------
-
-This RecordStream recursively traverses a directory and reads records from all
-files found using the :ref:`rs-file` RecordStream. The source is interpreted as
-a directory path.
-
-Example
-^^^^^^^
-
-- ``archive:///path/to/record/archive``
 
 .. _rs-sdsarchive:
 
@@ -233,4 +219,31 @@ Examples
 - ``dec://slink/localhost:18000``
 - ``dec://file?rate=2/-``
 - ``dec://combined/;``
+
+.. _rs-resample:
+
+Resample
+--------
+
+This RecordStream resamples (up or down) a proxy stream, e.g. :ref:`rs-slink`,
+to a given sampling rate. The syntax for the source is similar to an URL:
+
+``resample://proxy-stream?parameters/address``
+
+Optional parameters are:
+
+- `rate` - target sampling rate in Hz, default: 1
+- `fp` - default: 0.7
+- `fs` - default: 0.9
+- `cs` - coefficient scale, default: 10
+- `lw` - lanczos kernel width, default: 3
+- `debug` - enables debug output, default: false
+
+
+Examples
+^^^^^^^^
+
+- ``resample://slink/localhost:18000``
+- ``resample://file?rate=2/-``
+- ``resample://combined/;``
 

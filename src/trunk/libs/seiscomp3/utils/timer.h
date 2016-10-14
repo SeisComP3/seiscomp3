@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -17,14 +17,21 @@
 #include <seiscomp3/core/datetime.h>
 #include <seiscomp3/core.h>
 
+#include <boost/function.hpp>
+
+#ifdef WIN32
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/function.hpp>
 #include <list>
+#else
+#include <signal.h>
+#include <time.h>
+#endif
 
 
 namespace Seiscomp {
 namespace Util {
+
 
 /** \brief A stopwatch to measure a timespan
   * The stopwatch substracts the timestamps at the time of a
@@ -98,8 +105,13 @@ class SC_SYSTEM_CORE_API Timer {
 		//! Sets the timeout in seconds
 		void setTimeout(unsigned int seconds);
 
+		//! Sets the timeout with possible nanosecond precision.
+		//! @return Success flag. Systems that do not support nanosecond
+		//!        timers might fail.
+		bool setTimeout2(unsigned int seconds, unsigned int nanoseconds);
+
 		//! Sets the callback for the timeout
-		void setCallback(const Callback&);
+		void setCallback(const Callback &);
 
 		//! Sets whether the timer is a single-shot timer.
 		//! Single-shot timers stop after the first timeout.
@@ -120,23 +132,35 @@ class SC_SYSTEM_CORE_API Timer {
 
 
 	private:
-		static void Loop();
-		static bool Update();
-
+#ifdef WIN32
 		bool deactivate(bool remove);
 
+		static void Loop();
+		static bool Update();
+#else
+		bool destroy();
+
+		static void handleTimeout(sigval_t self);
+#endif
 
 	private:
+#ifdef WIN32
 		typedef std::list<Timer*> TimerList;
 		static TimerList _timers;
 		static boost::thread *_thread;
 		static boost::mutex _mutex;
-
-		Callback _callback;
-		unsigned int _timeout;
+		bool         _isActive;
 		unsigned int _value;
-		bool _singleShot;
-		bool _isActive;
+#else
+		timer_t      _timerID;
+#endif
+
+		Callback     _callback;
+		unsigned int _timeout;
+#ifndef WIN32
+		unsigned int _timeoutNs;
+#endif
+		bool         _singleShot;
 };
 
 

@@ -148,7 +148,7 @@ Classes
         Parameter [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Parameter</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="value"><font color="#8b0000">+ value: string</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
         ConfigModule [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigModule</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ configStation: ConfigStation [0..*]</font></td></tr></table>>]
-        ConfigStation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigStation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="networkCode"><font color="#8b0000">+ networkCode: string</font></td></tr><tr><td align="left" port="stationCode"><font color="#8b0000">+ stationCode: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ setup: Setup [0..*]</font></td></tr></table>>]
+        ConfigStation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigStation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="networkCode"><font color="#8b0000">+ networkCode: string</font></td></tr><tr><td align="left" port="stationCode"><font color="#8b0000">+ stationCode: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ setup: Setup [0..*]</font></td></tr></table>>]
         Setup [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Setup</td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr></table>>]
         Config -> ParameterSet
         ParameterSet -> Parameter
@@ -4025,6 +4025,21 @@ Reference
    .. py:method:: enabled()
 
       :rtype: boolean
+
+   .. py:method:: setCreationInfo(creationInfo)
+
+      :param creationInfo: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
+
+      CreationInfo for the ConfigStation object.
+
+   .. py:method:: creationInfo()
+
+      :rtype: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
+
+      .. note::
+
+         As this attribute is optional this method throws a ValueException if
+         the value of the attribute is not set.
 
    .. py:method:: add(setup)
 

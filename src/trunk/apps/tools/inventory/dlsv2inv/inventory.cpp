@@ -2305,8 +2305,9 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 	{
 		bool found = false;
 
-		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
-			if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber() ) {
+		for ( int j = 0; j < (int)ci.rpz.size(); ++j ) {
+			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
+			  && (j == sequence_number) ) {
 				cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 				cal->setGainFrequency(ci.csg[i]->GetFrequency());
 				found = true;
@@ -2315,8 +2316,9 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		}
 
 		if ( !found ) {
-			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
-				if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber() ) {
+			for ( int j = 0; j < (int)ci.rl.size(); ++j ) {
+				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
+				  && (j == sequence_number) ) {
 					cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 					cal->setGainFrequency(ci.csg[i]->GetFrequency());
 					found = true;
@@ -2324,6 +2326,8 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 				}
 			}
 		}
+
+		if ( found ) break;
 	}
 
 	sm->add(cal.get());
@@ -2355,8 +2359,9 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 	{
 		bool found = false;
 
-		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
-			if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber() ) {
+		for ( int j = 0; j < (int)ci.rpz.size(); ++j ) {
+			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
+			  && (j == sequence_number) ) {
 				cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 				cal->setGainFrequency(ci.csg[i]->GetFrequency());
 				found = true;
@@ -2365,8 +2370,9 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		}
 
 		if ( !found ) {
-			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
-				if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber() ) {
+			for ( int j = 0; j < (int)ci.rl.size(); ++j ) {
+				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
+				  && (j == sequence_number) ) {
 					cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 					cal->setGainFrequency(ci.csg[i]->GetFrequency());
 					found = true;
@@ -2374,6 +2380,8 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 				}
 			}
 		}
+
+		if ( found ) break;
 	}
 
 	cal->update();

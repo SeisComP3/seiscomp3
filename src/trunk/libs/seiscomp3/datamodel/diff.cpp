@@ -206,7 +206,7 @@ void Diff2::LogNode::write(ostream &os, int padding, int indent,
 
 	padding += indent;
 
-	for ( uint i = 0; i < _children.size(); ++i )
+	for ( size_t i = 0; i < _children.size(); ++i )
 		_children[i]->write(os, padding, indent);
 
 	return;

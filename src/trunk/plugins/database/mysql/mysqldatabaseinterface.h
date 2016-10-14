@@ -56,6 +56,7 @@ class MySQLDatabase : public Seiscomp::IO::DatabaseInterface {
 		void endQuery();
 
 		unsigned long lastInsertId(const char*);
+		uint64_t numberOfAffectedRows();
 
 		bool fetchRow();
 		int findColumn(const char* name);

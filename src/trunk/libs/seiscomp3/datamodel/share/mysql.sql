@@ -81,7 +81,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -912,6 +912,16 @@ CREATE TABLE ConfigStation (
 	networkCode CHAR(8) NOT NULL,
 	stationCode CHAR(8) NOT NULL,
 	enabled TINYINT(1) NOT NULL,
+	creationInfo_agencyID VARCHAR(64),
+	creationInfo_agencyURI VARCHAR(255),
+	creationInfo_author VARCHAR(128),
+	creationInfo_authorURI VARCHAR(255),
+	creationInfo_creationTime DATETIME,
+	creationInfo_creationTime_ms INTEGER,
+	creationInfo_modificationTime DATETIME,
+	creationInfo_modificationTime_ms INTEGER,
+	creationInfo_version VARCHAR(64),
+	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)

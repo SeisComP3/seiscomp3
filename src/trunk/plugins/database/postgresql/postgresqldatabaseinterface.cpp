@@ -16,6 +16,8 @@
 #include <seiscomp3/core/plugin.h>
 #include "postgresqldatabaseinterface.h"
 
+#include <stdlib.h>
+
 
 namespace Seiscomp {
 namespace Database {
@@ -234,6 +236,23 @@ unsigned long PostgreSQLDatabase::lastInsertId(const char* table) {
 	endQuery();
 
 	return value?atoi(value):0;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+uint64_t PostgreSQLDatabase::numberOfAffectedRows() {
+	char *number = PQcmdTuples(_result);
+	if ( number == NULL || *number == '\0' )
+		return (uint64_t)~0;
+
+	uint64_t count;
+	if ( sscanf(number, "%lud", &count) == 1 )
+		return count;
+
+	return (uint64_t)~0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

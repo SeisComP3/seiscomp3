@@ -259,7 +259,8 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
     del obsoleteStationConfigs
 
     for staid, setups in self.stationSetups.items():
-      try: cs = stationConfigs[staid]
+      try:
+        cs = stationConfigs[staid]
       except:
         cs = seiscomp3.DataModel.ConfigStation.Find("Config/%s/%s/%s" % (configMod.name(), staid[0], staid[1]))
         if not cs:
@@ -268,6 +269,12 @@ class ConfigDBUpdater(seiscomp3.Client.Application):
         cs.setNetworkCode(staid[0])
         cs.setStationCode(staid[1])
         cs.setEnabled(True)
+
+        ci = seiscomp3.DataModel.CreationInfo()
+        ci.setCreationTime(seiscomp3.Core.Time.GMT())
+        ci.setAgencyID(self.agencyID())
+        ci.setAuthor(self.name())
+        cs.setCreationInfo(ci)
 
       stationSetups = {}
       obsoleteSetups = []

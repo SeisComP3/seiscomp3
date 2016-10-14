@@ -28,6 +28,8 @@ from http import HTTP
 from request import RequestOptions
 import utils
 
+import time
+from reqtrack import RequestTrackerDB
 
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
@@ -100,7 +102,7 @@ class _DataSelectRequestOptions(RequestOptions):
 
 ################################################################################
 class _WaveformProducer:
-	def __init__(self, req, ro, rs, fileName):
+	def __init__(self, req, ro, rs, fileName, tracker):
 		self.req = req
 		self.ro = ro
 		self.rs = rs # keep a reference to avoid crash
@@ -108,6 +110,8 @@ class _WaveformProducer:
 
 		self.fileName = fileName
 		self.written = 0
+
+		self.tracker = tracker
 
 
 	def resumeProducing(self):
@@ -125,6 +129,11 @@ class _WaveformProducer:
 					self.req.write(data)
 				self.req.unregisterProducer()
 				self.req.finish()
+
+				if self.tracker:
+					self.tracker.volume_status("fdsnws", "NODATA", 0, "")
+					self.tracker.request_status("END", "")
+
 				return
 
 			self.req.setHeader('Content-Type', 'application/vnd.fdsn.mseed')
@@ -137,6 +146,11 @@ class _WaveformProducer:
 			               self.ro.service, self.written))
 			utils.accessLog(self.req, self.ro, http.OK, self.written, None)
 			self.req.finish()
+
+			if self.tracker:
+				self.tracker.volume_status("fdsnws", "OK", self.written, "")
+				self.tracker.request_status("END", "")
+
 			return
 
 		data = rec.raw().str()
@@ -152,9 +166,19 @@ class FDSNDataSelectRealm(object):
 	implements(portal.IRealm)
 
 	#---------------------------------------------------------------------------
+	def __init__(self, inv, access, userdb):
+		self.__inv = inv
+		self.__access = access
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
-			return resource.IResource, FDSNDataSelect(avatarId), lambda: None
+			return (resource.IResource,
+				FDSNDataSelect(self.__inv, self.__access,
+					self.__userdb.getAttributes(avatarId)),
+				lambda: None)
+
 		raise NotImplementedError()
 
 
@@ -165,18 +189,19 @@ class FDSNDataSelect(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, userName=None):
+	def __init__(self, inv, access, user=None):
 		resource.Resource.__init__(self)
 		self._rsURL = Application.Instance().recordStreamURL()
-		self.userName = userName
-		self.inv = inv
+		self.__inv = inv
+		self.__access = access
+		self.__user = user
 
 
 	#---------------------------------------------------------------------------
 	def render_GET(self, req):
 		# Parse and validate POST parameters
 		ro = _DataSelectRequestOptions(req.args)
-		ro.userName = self.userName
+		ro.userName = self.__user and self.__user.get('mail')
 		try:
 			ro.parse()
 			# the GET operation supports exactly one stream filter
@@ -192,7 +217,7 @@ class FDSNDataSelect(resource.Resource):
 	def render_POST(self, req):
 		# Parse and validate POST parameters
 		ro = _DataSelectRequestOptions()
-		ro.userName = self.userName
+		ro.userName = self.__user and self.__user.get('mail')
 		try:
 			ro.parsePOST(req.content)
 			ro.parse()
@@ -205,8 +230,8 @@ class FDSNDataSelect(resource.Resource):
 
 	#-----------------------------------------------------------------------
 	def _networkIter(self, ro):
-		for i in xrange(self.inv.networkCount()):
-			net = self.inv.network(i)
+		for i in xrange(self.__inv.networkCount()):
+			net = self.__inv.network(i)
 
 			# network code
 			if ro.channel and not ro.channel.matchNet(net.code()):
@@ -308,17 +333,32 @@ class FDSNDataSelect(resource.Resource):
 			maxSamples = app._samplesM * 1000000
 			samples = 0
 
+		app = Application.Instance()
+		if app._trackdbEnabled:
+			userid = ro.userName or app._trackdbDefaultUser
+			reqid = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
+			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", userid, "REQUEST WAVEFORM " + reqid, "fdsnws", req.getClientIP(), req.getClientIP())
+
+		else:
+			tracker = None
+
 		# Add request streams
 		# iterate over inventory networks
 		for s in ro.streams:
 			for net in self._networkIter(s):
-				if ro.userName is None and utils.isRestricted(net):
-					continue
 				for sta in self._stationIter(net, s):
-					if ro.userName is None and utils.isRestricted(sta):
-						continue
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
+							if utils.isRestricted(cha) and (self.__user is None or \
+								not self.__access.authorize(self.__user,
+											    net.code(),
+											    sta.code(),
+											    loc.code(),
+											    cha.code(),
+											    s.time.start,
+											    s.time.end)):
+								continue
+
 							# enforce maximum sample per request restriction
 							if maxSamples is not None:
 								try:
@@ -350,11 +390,16 @@ class FDSNDataSelect(resource.Resource):
 							rs.addStream(net.code(), sta.code(), loc.code(),
 							             cha.code(), s.time.start, s.time.end)
 
+							if tracker:
+								tracker.line_status(s.time.start, s.time.end,
+								    net.code(), sta.code(), cha.code(), loc.code(),
+								    False, "", True, [], "fdsnws", "OK", 0, "")
+
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix+'.mseed'
 
 		# Create producer for async IO
-		req.registerProducer(_WaveformProducer(req, ro, rs, fileName), False)
+		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker), False)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET

@@ -208,6 +208,19 @@ unsigned long SQLiteDatabase::lastInsertId(const char*) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+uint64_t SQLiteDatabase::numberOfAffectedRows() {
+	int count = sqlite3_changes(_handle);
+	if ( count < 0 )
+		return (uint64_t)~0;
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SQLiteDatabase::fetchRow() {
 	return sqlite3_step(_stmt) == SQLITE_ROW;
 }

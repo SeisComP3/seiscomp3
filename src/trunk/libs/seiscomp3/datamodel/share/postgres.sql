@@ -88,7 +88,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (DEFAULT);
@@ -1018,6 +1018,16 @@ CREATE TABLE ConfigStation (
 	m_networkCode VARCHAR(8) NOT NULL,
 	m_stationCode VARCHAR(8) NOT NULL,
 	m_enabled BOOLEAN NOT NULL,
+	m_creationInfo_agencyID VARCHAR(64),
+	m_creationInfo_agencyURI VARCHAR(255),
+	m_creationInfo_author VARCHAR(128),
+	m_creationInfo_authorURI VARCHAR(255),
+	m_creationInfo_creationTime TIMESTAMP,
+	m_creationInfo_creationTime_ms INTEGER,
+	m_creationInfo_modificationTime TIMESTAMP,
+	m_creationInfo_modificationTime_ms INTEGER,
+	m_creationInfo_version VARCHAR(64),
+	m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
