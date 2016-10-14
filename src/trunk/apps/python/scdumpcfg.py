@@ -40,6 +40,8 @@ class DumpCfg(seiscomp3.Client.Application):
       print >> sys.stderr, "scdumpcfg {modname} [options]"
       raise RuntimeError
 
+    self.appName = argv[1]
+
     # Remove first parameter to replace appname with passed module name
     argc = argc-1
     argv = argv[1:]
@@ -79,6 +81,14 @@ class DumpCfg(seiscomp3.Client.Application):
       self.setLoadConfigModuleEnabled(False)
 
     return True
+
+
+  def initConfiguration(self):
+    if self.appName == "-h" or self.appName == "--help":
+      self.printUsage()
+      return False
+
+    return seiscomp3.Client.Application.initConfiguration(self)
 
 
   # Do nothing.
