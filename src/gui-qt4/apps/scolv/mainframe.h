@@ -83,6 +83,12 @@ class MainFrame : public MainWindow {
 	private:
 		void populateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool);
 
+		// This creates an EventParameters instance containing copies
+		// of all event attributes relevant for publication incl.
+		// focal mechanisms, moment magnitude etc. if available.
+		// TODO: evaluate if this fits better somewhere else.
+		Seiscomp::DataModel::EventParametersPtr _createEventParametersForPublication(const Seiscomp::DataModel::Event *event);
+
 	protected:
 		void toggledFullScreen(bool);
 		void closeEvent(QCloseEvent *e);

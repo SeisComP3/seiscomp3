@@ -43,6 +43,15 @@ trace and the time the click was made on the trace. Pressing "Send" sends this o
 LOCATION group. This artificial origin is received e.g. by :ref:`scolv` and enables an immediate
 manual analysis of the closest traces.
 
+Filtering
+=========
+
+scrttv allows filtering of waveforms. The hotkey :kbd:`f` can be used to 
+toggle the list of filters pre-defined in :confval:`filters`. Note that the
+list of filters defined in :confval:`filters` overwrites :confval:`filter`.
+Activate :confval:`autoApplyFilter` to filter all traces at start-up of scrttv
+with the first filter defined in :confval:`filters`.
+
 Hotkeys
 =======
 

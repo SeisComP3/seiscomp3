@@ -39,6 +39,7 @@
 #include <seiscomp3/datamodel/stationmagnitude.h>
 #include <seiscomp3/datamodel/configstation.h>
 #include <seiscomp3/datamodel/journalentry.h>
+#include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/core/system.h>
 
@@ -1321,6 +1322,103 @@ void MainFrame::showWaveforms() {
 }
 
 
+EventParametersPtr MainFrame::_createEventParametersForPublication(const Event *event) {
+	EventParametersPtr ep = new EventParameters;
+SEISCOMP_DEBUG("EventParametersPtr _createEventParametersForPublication(%s)",event->publicID().c_str());
+	// Event
+	EventPtr clonedEvent = Event::Cast( event->clone());
+	clonedEvent->add(new OriginReference(clonedEvent->preferredOriginID()));
+	// Copy event descriptions
+	for ( size_t i = 0; i < event->eventDescriptionCount(); ++i )
+		clonedEvent->add(EventDescription::Cast(event->eventDescription(i)->clone()));
+	ep->add(clonedEvent.get());
+
+	// preferred origin
+	string originID = event->preferredOriginID();
+	Origin *origin = Origin::Find(originID);
+	if (origin == NULL) {
+		// not having a preferred origin is a fatal error
+		SEISCOMP_ERROR("_createEventParametersForPublication(%s): preferredOrigin not found",event->publicID().c_str());
+		return NULL;
+	}
+
+	// Even though we normally have the arrivals loaded, this might not be
+	// the case under certain circumstances. For instance, an event was
+	// loaded and then the preferred origin was set to another origin that
+	// was not yet loaded completely. In that case we would miss the
+	// arrivals.
+	if (origin->arrivalCount() == 0) {
+		SEISCOMP_DEBUG("loading arrivals...");
+		SCApp->query()->loadArrivals(origin);
+		SEISCOMP_DEBUG("...done");
+	}
+
+	OriginPtr preferredOrigin = Origin::Cast(copy(origin));
+	ep->add(preferredOrigin.get());
+
+	// focal mechanism
+	string focalMechanismID = event->preferredFocalMechanismID();
+	FocalMechanism *focalMechanism = FocalMechanism::Find(focalMechanismID);
+	// not necessarily an error if NULL
+	if (focalMechanism) {
+		SEISCOMP_DEBUG("Focal mechanism <%s> found", focalMechanism->publicID().c_str());
+		FocalMechanismPtr preferredFocalMechanism = FocalMechanism::Cast(copy(focalMechanism));
+		ep->add(preferredFocalMechanism.get());
+
+		OriginPtr triggeringOrigin = NULL;
+		if (preferredFocalMechanism->triggeringOriginID().size()) {
+			if (event->preferredOriginID() == preferredFocalMechanism->triggeringOriginID())
+				triggeringOrigin = preferredOrigin;
+			else {
+				string originID = preferredFocalMechanism->triggeringOriginID();
+				Origin *origin = Origin::Find(originID);
+				if (origin) {
+					triggeringOrigin = Origin::Cast(copy(origin));
+					if (triggeringOrigin) {
+						// for a triggering origin that is not
+						// the preferred origin, we don't need
+						// to keep arrivals or station magnitudes
+						while (triggeringOrigin->arrivalCount() > 0)
+							triggeringOrigin->removeArrival(0);
+						while (triggeringOrigin->stationMagnitudeCount() > 0)
+							triggeringOrigin->removeStationMagnitude(0);
+					}
+				}
+			}
+			// note that triggeringOrigin may still be NULL
+			if (triggeringOrigin) {
+				clonedEvent->add(new OriginReference(triggeringOrigin->publicID()));
+				ep->add(triggeringOrigin.get());
+			}
+		}
+
+		if (preferredFocalMechanism->momentTensorCount() > 0) {
+			MomentTensorPtr momentTensor =
+				preferredFocalMechanism->momentTensor(0); // FIXME What if there is more than one MT?
+			if (momentTensor->derivedOriginID().size() > 0) {
+				string originID = momentTensor->derivedOriginID();
+				Origin *origin = Origin::Find(originID);
+				if (origin) {
+					OriginPtr derivedOrigin = Origin::Cast(copy(origin));
+					if (derivedOrigin) {
+						while (triggeringOrigin->arrivalCount() > 0)
+							triggeringOrigin->removeArrival(0);
+						while (triggeringOrigin->stationMagnitudeCount() > 0)
+							triggeringOrigin->removeStationMagnitude(0);
+						clonedEvent->add(new OriginReference(derivedOrigin->publicID()));
+						ep->add(derivedOrigin.get());
+					}
+				}
+				
+			}
+
+		}
+	}
+
+	return ep;
+}
+
+
 void MainFrame::publishEvent() {
 #if defined(WITH_SMALL_SUMMARY)
 
@@ -1335,28 +1433,15 @@ void MainFrame::publishEvent() {
 	bool wasEnabled = PublicObject::IsRegistrationEnabled();
 	PublicObject::SetRegistrationEnabled(false);
 
+	EventParametersPtr ep = _createEventParametersForPublication(event);
+
+/*
 	string origID = event->preferredOriginID();
-
-	string user = Core::getLogin();
-	string host = Core::getHostname();
-	unsigned int pid = Core::pid();
-	std::stringstream tmp;
-	tmp << pid;
-	std::string spid = tmp.str();
-	string clientID = host + "_" + spid + "_" + user;
-
-	EventParameters epShort;
-	EventPtr clonedEvent = Event::Cast( event->clone());
-	clonedEvent->add(new OriginReference(clonedEvent->preferredOriginID()));
-	// Copy event descriptions
-	for ( size_t i = 0; i < event->eventDescriptionCount(); ++i )
-		clonedEvent->add(EventDescription::Cast(event->eventDescription(i)->clone()));
-	epShort.add( clonedEvent.get() );
 	Origin *orig = Origin::Find( origID );
 	EventParameters *oldParent = orig->eventParameters();
 	orig->detach();
 
-	epShort.add( orig );
+	epShort->add( orig );
 
 	Origin *magOrigin = NULL;
 	EventParameters *oldMagParent = NULL;
@@ -1368,14 +1453,14 @@ void MainFrame::publishEvent() {
 			magOrigin = mag->origin();
 			oldMagParent = magOrigin->eventParameters();
 			magOrigin->detach();
-			epShort.add(magOrigin);
-			clonedEvent->add(new OriginReference(magOrigin->publicID()));
+			epShort->add(magOrigin);
+// XXX			clonedEvent->add(new OriginReference(magOrigin->publicID()));
 		}
 	}
 
 	string tmpFileName;
 	stringstream tmpss;
-	tmpss << "/tmp/seiscomp_" <<   clonedEvent->publicID() <<  "." << Core::pid() << "." << Core::Time::GMT().iso() << ".xml";
+	tmpss << "/tmp/seiscomp_" <<   event->publicID() <<  "." << Core::pid() << "." << Core::Time::GMT().iso() << ".xml";
 	tmpFileName = tmpss.str();
 	IO::XMLArchive ar;
 	if( !ar.create(tmpFileName.c_str()) ) {
@@ -1394,13 +1479,23 @@ void MainFrame::publishEvent() {
 
 		return;
 	}
-
-	EventParameters *p_ep = &epShort;
+*/
+	string tmpFileName;
+	stringstream tmpss;
+	tmpss << "/tmp/seiscomp_" <<   event->publicID() <<  "." << Core::pid() << "." << Core::Time::GMT().iso() << ".xml";
+	tmpFileName = tmpss.str();
+	IO::XMLArchive ar;
+	if( !ar.create(tmpFileName.c_str()) ) {
+		SEISCOMP_ERROR(" Can't open tmpFile (%s)!", tmpFileName.c_str());
+		PublicObject::SetRegistrationEnabled(wasEnabled);
+		return;
+	}
 	ar.setFormattedOutput(true);
+	EventParameters *p_ep = ep.get();
 	ar << p_ep;
 	ar.close();
 	SEISCOMP_DEBUG("--> created tempFile:%s", tmpFileName.c_str());
-
+/*
 	if ( oldParent != NULL ) {
 		orig->detach();
 		oldParent->add(orig);
@@ -1410,6 +1505,16 @@ void MainFrame::publishEvent() {
 		magOrigin->detach();
 		oldMagParent->add(magOrigin);
 	}
+*/
+
+	string user = Core::getLogin();
+	string host = Core::getHostname();
+	unsigned int pid = Core::pid();
+	std::stringstream tmp;
+	tmp << pid;
+	std::string spid = tmp.str();
+	string clientID = host + "_" + spid + "_" + user;
+
 
 	//mit QProcess
 	if( _exportProcess.state() != QProcess::NotRunning ) {
