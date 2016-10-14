@@ -79,7 +79,7 @@ structure has been added to ConfigStation.
   * Made FDSNXML::Comment::id optional according to the standard
   * Output line numbers in case of errors
 
-* inv2dlsv *
+* inv2dlsv
 
   * Fix handling of blockette62
 
