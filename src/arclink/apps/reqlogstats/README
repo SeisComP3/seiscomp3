@@ -53,8 +53,8 @@ Try the following, once you have e-mail from the node operator:
  - Adjust the database so the new source (e-mail address) is assigned a DCID:
 
 	sqlite3 ~/reqlogstats/var/reqlogstats-2015.db
-	select * from ArcStatsSource;
-	update ArcStatsSource set dcid = "KOERI" where dcid="comoglu@boun.edu.tr";
+	SELECT * FROM ArcStatsSource WHERE dcid LIKE '%@%';
+	UPDATE ArcStatsSource SET dcid = "KOERI" WHERE dcid="comoglu@boun.edu.tr";
 	.quit
 
    ??? Or reqlogstats.py should do that by itself...
