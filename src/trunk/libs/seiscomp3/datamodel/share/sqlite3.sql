@@ -1,63 +1,63 @@
-DROP TABLE EventDescription;
-DROP TABLE Comment;
-DROP TABLE DataUsed;
-DROP TABLE CompositeTime;
-DROP TABLE PickReference;
-DROP TABLE AmplitudeReference;
-DROP TABLE Reading;
-DROP TABLE MomentTensorComponentContribution;
-DROP TABLE MomentTensorStationContribution;
-DROP TABLE MomentTensorPhaseSetting;
-DROP TABLE MomentTensor;
-DROP TABLE FocalMechanism;
-DROP TABLE Amplitude;
-DROP TABLE StationMagnitudeContribution;
-DROP TABLE Magnitude;
-DROP TABLE StationMagnitude;
-DROP TABLE Pick;
-DROP TABLE OriginReference;
-DROP TABLE FocalMechanismReference;
-DROP TABLE Event;
-DROP TABLE Arrival;
-DROP TABLE Origin;
-DROP TABLE Parameter;
-DROP TABLE ParameterSet;
-DROP TABLE Setup;
-DROP TABLE ConfigStation;
-DROP TABLE ConfigModule;
-DROP TABLE QCLog;
-DROP TABLE WaveformQuality;
-DROP TABLE Outage;
-DROP TABLE StationReference;
-DROP TABLE StationGroup;
-DROP TABLE AuxSource;
-DROP TABLE AuxDevice;
-DROP TABLE SensorCalibration;
-DROP TABLE Sensor;
-DROP TABLE ResponsePAZ;
-DROP TABLE ResponsePolynomial;
-DROP TABLE ResponseFAP;
-DROP TABLE DataloggerCalibration;
-DROP TABLE Decimation;
-DROP TABLE Datalogger;
-DROP TABLE ResponseFIR;
-DROP TABLE AuxStream;
-DROP TABLE Stream;
-DROP TABLE SensorLocation;
-DROP TABLE Station;
-DROP TABLE Network;
-DROP TABLE RouteArclink;
-DROP TABLE RouteSeedlink;
-DROP TABLE Route;
-DROP TABLE Access;
-DROP TABLE JournalEntry;
-DROP TABLE ArclinkUser;
-DROP TABLE ArclinkStatusLine;
-DROP TABLE ArclinkRequestLine;
-DROP TABLE ArclinkRequest;
-DROP TABLE PublicObject;
-DROP TABLE Object;
-DROP TABLE Meta;
+DROP TABLE IF EXISTS EventDescription;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS DataUsed;
+DROP TABLE IF EXISTS CompositeTime;
+DROP TABLE IF EXISTS PickReference;
+DROP TABLE IF EXISTS AmplitudeReference;
+DROP TABLE IF EXISTS Reading;
+DROP TABLE IF EXISTS MomentTensorComponentContribution;
+DROP TABLE IF EXISTS MomentTensorStationContribution;
+DROP TABLE IF EXISTS MomentTensorPhaseSetting;
+DROP TABLE IF EXISTS MomentTensor;
+DROP TABLE IF EXISTS FocalMechanism;
+DROP TABLE IF EXISTS Amplitude;
+DROP TABLE IF EXISTS StationMagnitudeContribution;
+DROP TABLE IF EXISTS Magnitude;
+DROP TABLE IF EXISTS StationMagnitude;
+DROP TABLE IF EXISTS Pick;
+DROP TABLE IF EXISTS OriginReference;
+DROP TABLE IF EXISTS FocalMechanismReference;
+DROP TABLE IF EXISTS Event;
+DROP TABLE IF EXISTS Arrival;
+DROP TABLE IF EXISTS Origin;
+DROP TABLE IF EXISTS Parameter;
+DROP TABLE IF EXISTS ParameterSet;
+DROP TABLE IF EXISTS Setup;
+DROP TABLE IF EXISTS ConfigStation;
+DROP TABLE IF EXISTS ConfigModule;
+DROP TABLE IF EXISTS QCLog;
+DROP TABLE IF EXISTS WaveformQuality;
+DROP TABLE IF EXISTS Outage;
+DROP TABLE IF EXISTS StationReference;
+DROP TABLE IF EXISTS StationGroup;
+DROP TABLE IF EXISTS AuxSource;
+DROP TABLE IF EXISTS AuxDevice;
+DROP TABLE IF EXISTS SensorCalibration;
+DROP TABLE IF EXISTS Sensor;
+DROP TABLE IF EXISTS ResponsePAZ;
+DROP TABLE IF EXISTS ResponsePolynomial;
+DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS DataloggerCalibration;
+DROP TABLE IF EXISTS Decimation;
+DROP TABLE IF EXISTS Datalogger;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS AuxStream;
+DROP TABLE IF EXISTS Stream;
+DROP TABLE IF EXISTS SensorLocation;
+DROP TABLE IF EXISTS Station;
+DROP TABLE IF EXISTS Network;
+DROP TABLE IF EXISTS RouteArclink;
+DROP TABLE IF EXISTS RouteSeedlink;
+DROP TABLE IF EXISTS Route;
+DROP TABLE IF EXISTS Access;
+DROP TABLE IF EXISTS JournalEntry;
+DROP TABLE IF EXISTS ArclinkUser;
+DROP TABLE IF EXISTS ArclinkStatusLine;
+DROP TABLE IF EXISTS ArclinkRequestLine;
+DROP TABLE IF EXISTS ArclinkRequest;
+DROP TABLE IF EXISTS PublicObject;
+DROP TABLE IF EXISTS Object;
+DROP TABLE IF EXISTS Meta;
 
 CREATE TABLE Meta (
 	name CHAR NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.8');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -1062,6 +1062,16 @@ CREATE TABLE ConfigStation (
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
 	enabled INTEGER(1) NOT NULL,
+	creationInfo_agencyID VARCHAR,
+	creationInfo_agencyURI VARCHAR,
+	creationInfo_author VARCHAR,
+	creationInfo_authorURI VARCHAR,
+	creationInfo_creationTime DATETIME,
+	creationInfo_creationTime_ms INTEGER,
+	creationInfo_modificationTime DATETIME,
+	creationInfo_modificationTime_ms INTEGER,
+	creationInfo_version VARCHAR,
+	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)

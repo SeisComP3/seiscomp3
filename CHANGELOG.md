@@ -2,6 +2,53 @@
 
 ## Release YYYY.DDD
 
+The database schema has changed since the previous version. To upgrade your
+database from version 0.8 to 0.9 to following SQL script can be used:
+
+
+**MYSQL**
+
+```sql
+ALTER TABLE ConfigStation ADD creationInfo_agencyID VARCHAR(64);
+ALTER TABLE ConfigStation ADD creationInfo_agencyURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD creationInfo_author VARCHAR(128);
+ALTER TABLE ConfigStation ADD creationInfo_authorURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD creationInfo_creationTime DATETIME;
+ALTER TABLE ConfigStation ADD creationInfo_creationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD creationInfo_modificationTime DATETIME;
+ALTER TABLE ConfigStation ADD creationInfo_modificationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD creationInfo_version VARCHAR(64);
+ALTER TABLE ConfigStation ADD creationInfo_used TINYINT(1) NOT NULL DEFAULT '0';
+
+UPDATE Meta SET value='0.9' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+ALTER TABLE ConfigStation ADD m_creationInfo_agencyID VARCHAR(64);
+ALTER TABLE ConfigStation ADD m_creationInfo_agencyURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD m_creationInfo_author VARCHAR(128);
+ALTER TABLE ConfigStation ADD m_creationInfo_authorURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD m_creationInfo_creationTime TIMESTAMP;
+ALTER TABLE ConfigStation ADD m_creationInfo_creationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD m_creationInfo_modificationTime TIMESTAMP;
+ALTER TABLE ConfigStation ADD m_creationInfo_modificationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD m_creationInfo_version VARCHAR(64);
+ALTER TABLE ConfigStation ADD m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0';
+
+UPDATE Meta SET value='0.9' WHERE name='Schema-Version';
+```
+
+**Rationale**
+
+The ConfigStation object will be updated by three instances in SeisComP3:
+```seiscomp update-config```, ```scrttv``` and ```scqcv```. To track which
+module has disabled or enabled a particular station the CreationInfo
+structure has been added to ConfigStation.
+
+----
+
 * scconfig
 
   * Fix parameter tooltip if description text contains special HTML characters
@@ -25,7 +72,7 @@
   * Fixed removal of expired secondary pickers that caused a segmentation
     fault
 
-* fdsnxml2inv *
+* fdsnxml2inv
 
   * Correct types of some attributes of FDSNXML::PolynomialResponse
   * Convert polynomial responses correctly
@@ -36,13 +83,17 @@
 
   * Fix handling of blockette62
 
-* seedlink *
+* seedlink
 
   * Fix Q330 setup if multiple instances are configured per station
 
 * scwfparam
 
   * Apply lost patch again to use the same path name as earthquake.id for input files
+
+* scrttv
+
+  * Add option `autoApplyFilter` to apply the configured filter initially
 
 
 ## Release 2016.161

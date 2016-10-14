@@ -34,6 +34,7 @@ ConfigStation::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::
 	addProperty(Core::simpleProperty("networkCode", "string", false, false, true, false, false, false, NULL, &ConfigStation::setNetworkCode, &ConfigStation::networkCode));
 	addProperty(Core::simpleProperty("stationCode", "string", false, false, true, false, false, false, NULL, &ConfigStation::setStationCode, &ConfigStation::stationCode));
 	addProperty(Core::simpleProperty("enabled", "boolean", false, false, false, false, false, false, NULL, &ConfigStation::setEnabled, &ConfigStation::enabled));
+	addProperty(objectProperty<CreationInfo>("creationInfo", "CreationInfo", false, false, true, &ConfigStation::setCreationInfo, &ConfigStation::creationInfo));
 	addProperty(arrayClassProperty<Setup>("setup", "Setup", &ConfigStation::setupCount, &ConfigStation::setup, static_cast<bool (ConfigStation::*)(Setup*)>(&ConfigStation::add), &ConfigStation::removeSetup, static_cast<bool (ConfigStation::*)(Setup*)>(&ConfigStation::remove)));
 }
 
@@ -169,6 +170,7 @@ ConfigStation* ConfigStation::Find(const std::string& publicID) {
 bool ConfigStation::operator==(const ConfigStation& rhs) const {
 	if ( _index != rhs._index ) return false;
 	if ( _enabled != rhs._enabled ) return false;
+	if ( _creationInfo != rhs._creationInfo ) return false;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -249,6 +251,37 @@ bool ConfigStation::enabled() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ConfigStation::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
+	_creationInfo = creationInfo;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CreationInfo& ConfigStation::creationInfo() throw(Seiscomp::Core::ValueException) {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigStation.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const CreationInfo& ConfigStation::creationInfo() const throw(Seiscomp::Core::ValueException) {
+	if ( _creationInfo )
+		return *_creationInfo;
+	throw Seiscomp::Core::ValueException("ConfigStation.creationInfo is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const ConfigStationIndex& ConfigStation::index() const {
 	return _index;
 }
@@ -281,6 +314,7 @@ ConfigStation& ConfigStation::operator=(const ConfigStation& other) {
 	PublicObject::operator=(other);
 	_index = other._index;
 	_enabled = other._enabled;
+	_creationInfo = other._creationInfo;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -557,7 +591,7 @@ bool ConfigStation::removeSetup(const SetupIndex& i) {
 void ConfigStation::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,8>() ) {
+	if ( ar.isHigherVersion<0,9>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ConfigStation skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -570,6 +604,8 @@ void ConfigStation::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("networkCode", _index.networkCode, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("stationCode", _index.stationCode, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("enabled", _enabled, Archive::XML_MANDATORY);
+	if ( ar.supportsVersion<0,9>() )
+		ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
 	ar & NAMED_OBJECT_HINT("setup",
 	                       Seiscomp::Core::Generic::containerMember(_setups,
