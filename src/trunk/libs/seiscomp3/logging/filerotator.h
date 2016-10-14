@@ -23,14 +23,16 @@ namespace Logging {
 
 class SC_SYSTEM_CORE_API FileRotatorOutput : public FileOutput {
 	public:
-		FileRotatorOutput(int timeSpan = 60*60*24, int historySize = 7);
+		FileRotatorOutput(int timeSpan = 60*60*24, int historySize = 7,
+		                  int maxFileSize = 100*1024*1024);
 		/**
 		 * Creates a new FileRotatorOutput instance
 		 * @param filename The filename to log to
 		 * @param timeSpan The timespan in seconds for the log time before rotating
 		 * @param count The number of historic files to store
 		 */
-		FileRotatorOutput(const char* filename, int timeSpan = 60*60*24, int historySize = 7);
+		FileRotatorOutput(const char* filename, int timeSpan = 60*60*24,
+		                  int historySize = 7, int maxFileSize = 100*1024*1024);
 
 		bool open(const char* filename);
 
@@ -53,6 +55,9 @@ class SC_SYSTEM_CORE_API FileRotatorOutput : public FileOutput {
 
 		//! number of log files to keep
 		int _historySize;
+
+		//! maximum file size of a log file
+		int _maxFileSize;
 
 		//! last log file written to
 		int _lastInterval;
