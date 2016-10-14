@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 FDSNWS - Station</title>
+  <link rel="stylesheet" type="text/css" href="../../css/fdsnws.css">
+  <link rel="stylesheet" type="text/css" href="../../js/tcal/tcal.css">
+  <script type="text/javascript" src="../../js/tcal/tcal.js"></script>
+  <script type="text/javascript" src="../../js/fdsnws-query.js"></script>
+  <script type="text/javascript">
+    A_TCALCONF['format'] = 'Y-m-dT00:00:00';
+
+    window.onload = fdsnwsInitQueryForm;
+  </script>
+</head>
+<body>
+  <h1>SeisComP3 FDSNWS Station - URL Builder</h1>
+  <form id="query-form" action="query" method="GET">
+  <fieldset>
+    <legend>Time constraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Start Time</td>
+          <td><input type="text" size="10" maxlength="26" name="starttime" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>End Time</td>
+          <td><input type="text" size="10" maxlength="26" name="endtime" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>Start Before</td>
+          <td><input type="text" size="10" maxlength="26" name="startbefore" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>Start After</td>
+          <td><input type="text" size="10" maxlength="26" name="startafter" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>End Before</td>
+          <td><input type="text" size="10" maxlength="26" name="endbefore" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>End After</td>
+          <td><input type="text" size="10" maxlength="26" name="endafter" value="" class="tcal"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Channel constraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Network</td>
+          <td><input type="text" size="10" name="network" value="" placeholder="AB,C?" /></td>
+        </tr>
+        <tr>
+          <td>Station</td>
+          <td><input type="text" size="10" name="station" value="" placeholder="ABC,D*" /></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td><input type="text" size="10" name="location" value="" placeholder="00" /></td>
+        </tr>
+        <tr>
+          <td>Channel</td>
+          <td><input type="text" size="10" name="channel" value="" placeholder="BH?" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Geographic constraints</legend>
+    <input type="radio" id="loc-none" name="location" value=""><label for="loc-none">None</label><br>
+    <input type="radio" id="loc-bbox" name="location" value=""><label for="loc-bbox">Bounding Box</label><br>
+    <input type="radio" id="loc-circle" name="location" value=""><label for="loc-circle">Circle</label><br>
+    <table class="builder" id="loc-bbox-input">
+      <tbody>
+        <tr>
+          <td>Minimum Latitude</td>
+          <td><input type="number" name="minlatitude" min="-90" max="90" step="1" value="" placeholder="-90.0" /></td>
+        </tr>
+        <tr>
+          <td>Maximum Latitude</td>
+          <td><input type="number" name="maxlatitude" min="-90" max="90" step="1" value="" placeholder="90.0" /></td>
+        </tr>
+        <tr>
+          <td>Minimum Longitude</td>
+          <td><input type="number" name="minlongitude" min="-180" max="180" step="1" value="" placeholder="-180.0" /></td>
+        </tr>
+        <tr>
+          <td>Maximum Longitude</td>
+          <td><input type="number" name="maxlongitude" min="-180" max="180" step="1" value="" placeholder="180.0" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="builder" id="loc-circle-input">
+      <tbody>
+        <tr>
+          <td>Latitude</td>
+          <td><input type="number" name="latitude" min="-90" max="90" step="1" value="" placeholder="0.0" /></td>
+        </tr>
+        <tr>
+          <td>Longitude</td>
+          <td><input type="number" name="longitude" min="-180" max="180" step="1" value="" placeholder="0.0" /></td>
+        </tr>
+        <tr>
+          <td>Minimum Radius</td>
+          <td><input type="number" name="minradius" min="0" max="180" step="1" value="" placeholder="0.0" /></td>
+        </tr>
+        <tr>
+          <td>Maximum Radius</td>
+          <td><input type="number" name="maxradius" min="0" max="180" step="1" value="" placeholder="180" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Service specific contraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Level</td>
+          <td>
+            <select name="level">
+              <option value="network">Network</option>
+              <option value="" selected="selected">Station (default)</option>
+              <option value="channel">Channel</option>
+              <option value="response">Response</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Exclude Restricted Channels</td>
+          <td><input type="checkbox" name="includerestricted" value="false" /></td>
+        </tr>
+        <tr>
+          <td>Include Data Availability</td>
+          <td><input type="checkbox" name="includeavailability" value="true" disabled="disabled" /></td>
+        </tr>
+        <tr>
+          <td>Update After</td>
+          <td><input type="text" size="10" maxlength="26" name="updateafter" value="" class="tcal" disabled="disabled"/></td>
+        </tr>
+        <tr>
+          <td>Match Time Series</td>
+          <td><input type="checkbox" name="matchtimeseries" disabled="disabled" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Output control</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Format</td>
+          <td>
+            <select name="format">
+              <option value="">FDSN Station XML (default)</option>
+              <option value="text">Text (| delimited)</option>
+              <option value="sc3ml">SeisComP3 XML</option>
+              <option value="stationxml">Station XML (deprecated)</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>No Data 404</td>
+          <td><input type="checkbox" name="nodata" value="404" checked="checked" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  </form>
+  <fieldset>
+    <legend>URL</legend>
+    <p><a id="query-url" href=""></a></p>
+  </fieldset>
+</body>
+</html>

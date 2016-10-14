@@ -550,6 +550,9 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
 			fileRes.childNotFound = NoResource()
 			dataselect1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'dataselect-builder.html'))
+			fileRes.childNotFound = NoResource()
+			dataselect1.putChild('builder', fileRes)
 
 			if self._authEnabled:
 				dataselect1.putChild('auth', AuthResource(self._authGnupgHome,
@@ -576,6 +579,9 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
+			fileRes.childNotFound = NoResource()
+			event1.putChild('builder', fileRes)
 
 		# station
 		if self._serveStation:
@@ -591,6 +597,21 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
 			fileRes.childNotFound = NoResource()
 			station1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
+			fileRes.childNotFound = NoResource()
+			station1.putChild('builder', fileRes)
+
+
+		# static files
+		fileRes = static.File(os.path.join(shareDir, 'js'))
+		fileRes.childNotFound = NoResource()
+		fileRes.hideInListing = True
+		prefix.putChild('js', fileRes)
+
+		fileRes = static.File(os.path.join(shareDir, 'css'))
+		fileRes.childNotFound = NoResource()
+		fileRes.hideInListing = True
+		prefix.putChild('css', fileRes)
 
 		retn = False
 		try:
@@ -859,3 +880,6 @@ class FDSNWS(Application):
 
 app = FDSNWS()
 sys.exit(app())
+
+
+# vim: ts=4 noet
