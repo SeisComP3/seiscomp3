@@ -422,8 +422,8 @@ void MSeedRecord::read(std::istream &is) throw(Core::StreamException) {
 			std::vector<char> rawrec(reclen);
 			memmove(&rawrec[0],header,LEN);
 			is.read(&rawrec[LEN],reclen-LEN);
-			if (is.good()) {
-				if (msr_unpack(&rawrec[0],reclen,&prec,0,0) == MS_NOERROR) {
+			if ( is.good() ) {
+				if ( msr_unpack(&rawrec[0],reclen,&prec,0,0) == MS_NOERROR ) {
 					*this = MSeedRecord(prec,this->_datatype,this->_hint);
 					msr_free(&prec);
 					if ( _fsamp <= 0 )
@@ -432,21 +432,23 @@ void MSeedRecord::read(std::istream &is) throw(Core::StreamException) {
 				else
 					throw LibmseedException("Unpacking of Mini SEED record failed.");
 			}
-			else if (is.bad() || !is.eof())
+			else if ( is.bad() || !is.eof() )
 				throw Core::StreamException("Fatal error occured during reading from stream.");
+			else if ( is.eof() )
+				throw Core::EndOfStreamException();
 		}
 		else {
-			if (!myeof)
+			if ( !myeof )
 				return read(is);
 			else
-				throw Core::EndOfStreamException();
+				throw Core::EndOfStreamException("Invalid miniSEED header");
 		}
 	}
 	else {
 		if ( !myeof )
 			throw LibmseedException("Retrieving the record length failed.");
 		else
-			throw Core::EndOfStreamException();
+			throw Core::EndOfStreamException("Invalid miniSEED record, too small");
 	}
 }
 
