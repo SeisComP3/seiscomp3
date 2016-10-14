@@ -541,6 +541,8 @@ class GenericArchive(_object):
     def open(self, *args): return _Core.GenericArchive_open(self, *args)
     def create(self, *args): return _Core.GenericArchive_create(self, *args)
     def close(self): return _Core.GenericArchive_close(self)
+    def setStrictMode(self, *args): return _Core.GenericArchive_setStrictMode(self, *args)
+    def isStrictMode(self): return _Core.GenericArchive_isStrictMode(self)
     def isReading(self): return _Core.GenericArchive_isReading(self)
     def success(self): return _Core.GenericArchive_success(self)
     def hint(self): return _Core.GenericArchive_hint(self)

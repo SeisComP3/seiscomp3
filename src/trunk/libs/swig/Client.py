@@ -1353,12 +1353,15 @@ class Inventory(_object):
     def getStream(self, *args):
         """
         getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, 
+            std::string const & channelCode, Time arg6, Seiscomp::DataModel::InventoryError * error=None) -> Stream
+        getStream(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, 
             std::string const & channelCode, Time arg6) -> Stream
         """
         return _Client.Inventory_getStream(self, *args)
 
     def getStation(self, *args):
         """
+        getStation(Inventory self, std::string const & networkCode, std::string const & stationCode, Time arg4, Seiscomp::DataModel::InventoryError * error=None) -> Station
         getStation(Inventory self, std::string const & networkCode, std::string const & stationCode, Time arg4) -> Station
         getStation(Inventory self, Pick arg2) -> Station
         """
@@ -1366,6 +1369,8 @@ class Inventory(_object):
 
     def getSensorLocation(self, *args):
         """
+        getSensorLocation(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, 
+            Time arg5, Seiscomp::DataModel::InventoryError * error=None) -> SensorLocation
         getSensorLocation(Inventory self, std::string const & networkCode, std::string const & stationCode, std::string const & locationCode, 
             Time arg5) -> SensorLocation
         getSensorLocation(Inventory self, Pick arg2) -> SensorLocation

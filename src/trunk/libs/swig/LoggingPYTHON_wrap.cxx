@@ -4412,6 +4412,46 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_0(PyObject *SWIGUNUSEDPAR
   PyObject *resultobj = 0;
   int arg1 ;
   int arg2 ;
+  int arg3 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Seiscomp::Logging::FileRotatorOutput *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:new_FileRotatorOutput",&obj0,&obj1,&obj2)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_FileRotatorOutput" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_FileRotatorOutput" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_FileRotatorOutput" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (Seiscomp::Logging::FileRotatorOutput *)new Seiscomp::Logging::FileRotatorOutput(arg1,arg2,arg3);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Logging__FileRotatorOutput, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -4439,7 +4479,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
   int val1 ;
@@ -4461,7 +4501,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Logging::FileRotatorOutput *result = 0 ;
   
@@ -4474,7 +4514,59 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  char *arg1 = (char *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  Seiscomp::Logging::FileRotatorOutput *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:new_FileRotatorOutput",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileRotatorOutput" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = reinterpret_cast< char * >(buf1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_FileRotatorOutput" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_FileRotatorOutput" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_FileRotatorOutput" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  result = (Seiscomp::Logging::FileRotatorOutput *)new Seiscomp::Logging::FileRotatorOutput((char const *)arg1,arg2,arg3,arg4);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Logging__FileRotatorOutput, SWIG_POINTER_NEW |  0 );
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return resultobj;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   int arg2 ;
@@ -4517,7 +4609,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   int arg2 ;
@@ -4551,7 +4643,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_new_FileRotatorOutput__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   char *arg1 = (char *) 0 ;
   int res1 ;
@@ -4578,16 +4670,16 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[5];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 0) {
-    return _wrap_new_FileRotatorOutput__SWIG_2(self, args);
+    return _wrap_new_FileRotatorOutput__SWIG_3(self, args);
   }
   if (argc == 1) {
     int _v;
@@ -4596,7 +4688,7 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      return _wrap_new_FileRotatorOutput__SWIG_1(self, args);
+      return _wrap_new_FileRotatorOutput__SWIG_2(self, args);
     }
   }
   if (argc == 1) {
@@ -4604,7 +4696,7 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
     int res = SWIG_AsCharPtrAndSize(argv[0], 0, NULL, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_new_FileRotatorOutput__SWIG_5(self, args);
+      return _wrap_new_FileRotatorOutput__SWIG_7(self, args);
     }
   }
   if (argc == 2) {
@@ -4619,7 +4711,7 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_FileRotatorOutput__SWIG_0(self, args);
+        return _wrap_new_FileRotatorOutput__SWIG_1(self, args);
       }
     }
   }
@@ -4633,7 +4725,29 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_new_FileRotatorOutput__SWIG_4(self, args);
+        return _wrap_new_FileRotatorOutput__SWIG_6(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      int res = SWIG_AsVal_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_FileRotatorOutput__SWIG_0(self, args);
+        }
       }
     }
   }
@@ -4652,7 +4766,33 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_new_FileRotatorOutput__SWIG_3(self, args);
+          return _wrap_new_FileRotatorOutput__SWIG_5(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    int res = SWIG_AsCharPtrAndSize(argv[0], 0, NULL, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_new_FileRotatorOutput__SWIG_4(self, args);
+          }
         }
       }
     }
@@ -4661,9 +4801,11 @@ SWIGINTERN PyObject *_wrap_new_FileRotatorOutput(PyObject *self, PyObject *args)
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'new_FileRotatorOutput'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(int,int,int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(int,int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput()\n"
+    "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(char const *,int,int,int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(char const *,int,int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(char const *,int)\n"
     "    Seiscomp::Logging::FileRotatorOutput::FileRotatorOutput(char const *)\n");

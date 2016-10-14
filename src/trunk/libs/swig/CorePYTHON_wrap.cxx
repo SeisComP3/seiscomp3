@@ -7428,6 +7428,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GenericArchive_setStrictMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:GenericArchive_setStrictMode",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_setStrictMode" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GenericArchive_setStrictMode" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  (arg1)->setStrictMode(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GenericArchive_isStrictMode(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:GenericArchive_isStrictMode",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Core__Generic__ArchiveT_Seiscomp__Core__BaseObject_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GenericArchive_isStrictMode" "', argument " "1"" of type '" "Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > * >(argp1);
+  result = (bool)((Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > const *)arg1)->isStrictMode();
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GenericArchive_isReading(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *arg1 = (Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject > *) 0 ;
@@ -35686,6 +35738,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GenericArchive_open", _wrap_GenericArchive_open, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_create", _wrap_GenericArchive_create, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_close", _wrap_GenericArchive_close, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_setStrictMode", _wrap_GenericArchive_setStrictMode, METH_VARARGS, NULL},
+	 { (char *)"GenericArchive_isStrictMode", _wrap_GenericArchive_isStrictMode, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_isReading", _wrap_GenericArchive_isReading, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_success", _wrap_GenericArchive_success, METH_VARARGS, NULL},
 	 { (char *)"GenericArchive_hint", _wrap_GenericArchive_hint, METH_VARARGS, NULL},
@@ -37705,7 +37759,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x080000)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x090000)));
   SWIG_addvarlink(SWIG_globals(),(char*)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));

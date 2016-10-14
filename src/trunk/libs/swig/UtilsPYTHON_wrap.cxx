@@ -3910,6 +3910,46 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Timer_setTimeout2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Util::Timer *arg1 = (Seiscomp::Util::Timer *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Timer_setTimeout2",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Util__Timer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Timer_setTimeout2" "', argument " "1"" of type '" "Seiscomp::Util::Timer *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Util::Timer * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Timer_setTimeout2" "', argument " "2"" of type '" "unsigned int""'");
+  } 
+  arg2 = static_cast< unsigned int >(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Timer_setTimeout2" "', argument " "3"" of type '" "unsigned int""'");
+  } 
+  arg3 = static_cast< unsigned int >(val3);
+  result = (bool)(arg1)->setTimeout2(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Timer_setCallback(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Util::Timer *arg1 = (Seiscomp::Util::Timer *) 0 ;
@@ -4089,6 +4129,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Timer", _wrap_new_Timer, METH_VARARGS, NULL},
 	 { (char *)"delete_Timer", _wrap_delete_Timer, METH_VARARGS, NULL},
 	 { (char *)"Timer_setTimeout", _wrap_Timer_setTimeout, METH_VARARGS, NULL},
+	 { (char *)"Timer_setTimeout2", _wrap_Timer_setTimeout2, METH_VARARGS, NULL},
 	 { (char *)"Timer_setCallback", _wrap_Timer_setCallback, METH_VARARGS, NULL},
 	 { (char *)"Timer_setSingleShot", _wrap_Timer_setSingleShot, METH_VARARGS, NULL},
 	 { (char *)"Timer_start", _wrap_Timer_start, METH_VARARGS, NULL},

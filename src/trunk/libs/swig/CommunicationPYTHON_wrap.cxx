@@ -11766,6 +11766,46 @@ SWIGINTERN PyObject *_wrap_Connection_send__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   PyObject *resultobj = 0;
   Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
   Seiscomp::Core::Message *arg2 = (Seiscomp::Core::Message *) 0 ;
+  int *arg3 = (int *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Connection_send",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__Connection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Connection_send" "', argument " "1"" of type '" "Seiscomp::Communication::Connection *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::Connection * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Core__Message, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Connection_send" "', argument " "2"" of type '" "Seiscomp::Core::Message *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Core::Message * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Connection_send" "', argument " "3"" of type '" "int *""'"); 
+  }
+  arg3 = reinterpret_cast< int * >(argp3);
+  result = (bool)(arg1)->send(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
+  Seiscomp::Core::Message *arg2 = (Seiscomp::Core::Message *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -11793,7 +11833,47 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Connection_send__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
+  Seiscomp::Communication::NetworkMessage *arg2 = (Seiscomp::Communication::NetworkMessage *) 0 ;
+  int *arg3 = (int *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Connection_send",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__Connection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Connection_send" "', argument " "1"" of type '" "Seiscomp::Communication::Connection *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::Connection * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Connection_send" "', argument " "2"" of type '" "Seiscomp::Communication::NetworkMessage *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::Communication::NetworkMessage * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Connection_send" "', argument " "3"" of type '" "int *""'"); 
+  }
+  arg3 = reinterpret_cast< int * >(argp3);
+  result = (bool)(arg1)->send(arg2,arg3);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
   Seiscomp::Communication::NetworkMessage *arg2 = (Seiscomp::Communication::NetworkMessage *) 0 ;
@@ -11824,7 +11904,63 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Connection_send__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
+  std::string *arg2 = 0 ;
+  Seiscomp::Core::Message *arg3 = (Seiscomp::Core::Message *) 0 ;
+  int *arg4 = (int *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Connection_send",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__Connection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Connection_send" "', argument " "1"" of type '" "Seiscomp::Communication::Connection *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::Connection * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Connection_send" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Connection_send" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Core__Message, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Connection_send" "', argument " "3"" of type '" "Seiscomp::Core::Message *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::Core::Message * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Connection_send" "', argument " "4"" of type '" "int *""'"); 
+  }
+  arg4 = reinterpret_cast< int * >(argp4);
+  result = (bool)(arg1)->send((std::string const &)*arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
   std::string *arg2 = 0 ;
@@ -11871,7 +12007,63 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Connection_send__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
+  std::string *arg2 = 0 ;
+  Seiscomp::Communication::NetworkMessage *arg3 = (Seiscomp::Communication::NetworkMessage *) 0 ;
+  int *arg4 = (int *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:Connection_send",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Communication__Connection, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Connection_send" "', argument " "1"" of type '" "Seiscomp::Communication::Connection *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Communication::Connection * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Connection_send" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Connection_send" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Connection_send" "', argument " "3"" of type '" "Seiscomp::Communication::NetworkMessage *""'"); 
+  }
+  arg3 = reinterpret_cast< Seiscomp::Communication::NetworkMessage * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Connection_send" "', argument " "4"" of type '" "int *""'"); 
+  }
+  arg4 = reinterpret_cast< int * >(argp4);
+  result = (bool)(arg1)->send((std::string const &)*arg2,arg3,arg4);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Connection_send__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Communication::Connection *arg1 = (Seiscomp::Communication::Connection *) 0 ;
   std::string *arg2 = 0 ;
@@ -11920,12 +12112,12 @@ fail:
 
 SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
   int argc;
-  PyObject *argv[4];
+  PyObject *argv[5];
   int ii;
   
   if (!PyTuple_Check(args)) SWIG_fail;
   argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
+  for (ii = 0; (ii < 4) && (ii < argc); ii++) {
     argv[ii] = PyTuple_GET_ITEM(args,ii);
   }
   if (argc == 2) {
@@ -11938,7 +12130,7 @@ SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__Message, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Connection_send__SWIG_0(self, args);
+        return _wrap_Connection_send__SWIG_1(self, args);
       }
     }
   }
@@ -11952,7 +12144,45 @@ SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
       int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
-        return _wrap_Connection_send__SWIG_1(self, args);
+        return _wrap_Connection_send__SWIG_3(self, args);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Communication__Connection, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_int, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Connection_send__SWIG_2(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Communication__Connection, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_Seiscomp__Core__Message, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_int, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Connection_send__SWIG_0(self, args);
+        }
       }
     }
   }
@@ -11969,7 +12199,7 @@ SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__Message, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_Connection_send__SWIG_2(self, args);
+          return _wrap_Connection_send__SWIG_5(self, args);
         }
       }
     }
@@ -11987,7 +12217,53 @@ SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
         int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0);
         _v = SWIG_CheckState(res);
         if (_v) {
-          return _wrap_Connection_send__SWIG_3(self, args);
+          return _wrap_Connection_send__SWIG_7(self, args);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Communication__Connection, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Communication__NetworkMessage, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_int, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Connection_send__SWIG_6(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Seiscomp__Communication__Connection, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Seiscomp__Core__Message, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_int, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Connection_send__SWIG_4(self, args);
+          }
         }
       }
     }
@@ -11996,9 +12272,13 @@ SWIGINTERN PyObject *_wrap_Connection_send(PyObject *self, PyObject *args) {
 fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'Connection_send'.\n"
     "  Possible C/C++ prototypes are:\n"
+    "    Seiscomp::Communication::Connection::send(Seiscomp::Core::Message *,int *)\n"
     "    Seiscomp::Communication::Connection::send(Seiscomp::Core::Message *)\n"
+    "    Seiscomp::Communication::Connection::send(Seiscomp::Communication::NetworkMessage *,int *)\n"
     "    Seiscomp::Communication::Connection::send(Seiscomp::Communication::NetworkMessage *)\n"
+    "    Seiscomp::Communication::Connection::send(std::string const &,Seiscomp::Core::Message *,int *)\n"
     "    Seiscomp::Communication::Connection::send(std::string const &,Seiscomp::Core::Message *)\n"
+    "    Seiscomp::Communication::Connection::send(std::string const &,Seiscomp::Communication::NetworkMessage *,int *)\n"
     "    Seiscomp::Communication::Connection::send(std::string const &,Seiscomp::Communication::NetworkMessage *)\n");
   return 0;
 }

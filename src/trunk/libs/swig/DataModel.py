@@ -896,6 +896,36 @@ ArtificialOriginMessage_ConstCast = _DataModel.ArtificialOriginMessage_ConstCast
 def eventRegion(*args):
   return _DataModel.eventRegion(*args)
 eventRegion = _DataModel.eventRegion
+NETWORK_CODE_NOT_FOUND = _DataModel.NETWORK_CODE_NOT_FOUND
+NETWORK_EPOCH_NOT_FOUND = _DataModel.NETWORK_EPOCH_NOT_FOUND
+STATION_CODE_NOT_FOUND = _DataModel.STATION_CODE_NOT_FOUND
+STATION_EPOCH_NOT_FOUND = _DataModel.STATION_EPOCH_NOT_FOUND
+SENSOR_CODE_NOT_FOUND = _DataModel.SENSOR_CODE_NOT_FOUND
+SENSOR_EPOCH_NOT_FOUND = _DataModel.SENSOR_EPOCH_NOT_FOUND
+STREAM_CODE_NOT_FOUND = _DataModel.STREAM_CODE_NOT_FOUND
+STREAM_EPOCH_NOT_FOUND = _DataModel.STREAM_EPOCH_NOT_FOUND
+EInventoryErrorQuantity = _DataModel.EInventoryErrorQuantity
+class EInventoryErrorNames(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EInventoryErrorNames, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, EInventoryErrorNames, name)
+    __repr__ = _swig_repr
+    def __init__(self): 
+        this = _DataModel.new_EInventoryErrorNames()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_getmethods__["name"] = lambda x: _DataModel.EInventoryErrorNames_name
+    if _newclass:name = staticmethod(_DataModel.EInventoryErrorNames_name)
+    __swig_destroy__ = _DataModel.delete_EInventoryErrorNames
+    __del__ = lambda self : None;
+EInventoryErrorNames_swigregister = _DataModel.EInventoryErrorNames_swigregister
+EInventoryErrorNames_swigregister(EInventoryErrorNames)
+
+def EInventoryErrorNames_name(*args):
+  return _DataModel.EInventoryErrorNames_name(*args)
+EInventoryErrorNames_name = _DataModel.EInventoryErrorNames_name
+
 
 def getStation(*args):
   return _DataModel.getStation(*args)
@@ -7800,6 +7830,8 @@ class ConfigStation(PublicObject):
     def stationCode(self): return _DataModel.ConfigStation_stationCode(self)
     def setEnabled(self, *args): return _DataModel.ConfigStation_setEnabled(self, *args)
     def enabled(self): return _DataModel.ConfigStation_enabled(self)
+    def setCreationInfo(self, *args): return _DataModel.ConfigStation_setCreationInfo(self, *args)
+    def creationInfo(self, *args): return _DataModel.ConfigStation_creationInfo(self, *args)
     def index(self): return _DataModel.ConfigStation_index(self)
     def equalIndex(self, *args): return _DataModel.ConfigStation_equalIndex(self, *args)
     def add(self, *args): return _DataModel.ConfigStation_add(self, *args)
