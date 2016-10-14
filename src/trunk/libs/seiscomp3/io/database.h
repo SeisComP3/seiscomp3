@@ -21,6 +21,7 @@
 #include <seiscomp3/core.h>
 #include <vector>
 #include <string>
+#include <stdint.h>
 
 
 namespace Seiscomp {
@@ -167,10 +168,22 @@ DEFINE_SMARTPOINTER(DatabaseInterface);
 		                 \endcode
 		                 assuming the sequence names are created as
 		                 [tablename]_seq.
-			@return The last generated ID > 0 or 0 of there hasn't been
-			        created an ID yet.
+		    @return The last generated ID > 0 or 0 of there hasn't been
+		            created an ID yet.
 		  */
 		virtual unsigned long lastInsertId(const char* table) = 0;
+
+		/** Returns the number of rows affected by a SQL statement.
+		    This function should only be used after a UPDATE or DELETE
+		    statement.
+		    @return An integer greater than zero indicates the number
+		            of rows affected or retrieved. Zero indicates that
+		            no records were updated for an UPDATE statement,
+		            no rows matched the WHERE clause in the query or
+		            that no query has yet been executed. 0xFFFFFFFF (-1)
+		            indicates an error.
+		  */
+		virtual uint64_t numberOfAffectedRows() = 0;
 
 		/** Fetches a row from the results of a query.
 		    @return True, a row has been fetched
