@@ -1501,7 +1501,14 @@ FancyViewItem FancyView::add(QLayout *layout, const QModelIndex &idx) {
 	if ( !param->definition->description.empty() ) {
 		DescLabel *desc = new DescLabel;
 		desc->setText(maxSize(param->definition->description, 60).c_str());
-		desc->setToolTip(QString("<p>%1</p>").arg(param->definition->description.c_str()).replace('\n', "<br/>"));
+		QString content(param->definition->description.c_str());
+		content
+		.replace("<", "&lt;")
+		.replace(">", "&gt;")
+		.replace('\n', "<br/>");
+
+		QString toolTip = QString("<p>%1</p>").arg(content);
+		desc->setToolTip(toolTip);
 
 		//desc->setWordWrap(true);
 		QPalette pal = desc->palette();
