@@ -58,7 +58,7 @@ class ClassFactoryInterface {
 	// ----------------------------------------------------------------------
 	protected:
 		//! Constructor
-		ClassFactoryInterface(const RTTI* typeInfo);
+		ClassFactoryInterface(const RTTI* typeInfo, bool reregister = false);
 
 	public:
 		//! Destructor
@@ -112,7 +112,7 @@ class ClassFactoryInterface {
 
 		//! Adds a factory to the classpool
 		//! \return whether the factory has been added or not
-		static bool RegisterFactory(ClassFactoryInterface* factory);
+		static bool RegisterFactory(ClassFactoryInterface* factory, bool reregister = false);
 
 		//! Removes a factory from the classpool
 		//! \return whether the factory has been removed or not
@@ -184,7 +184,7 @@ class ClassFactory : public ClassFactoryInterface<ROOT_TYPE> {
 		typedef TYPE Type;
 
 	public:
-		ClassFactory(const char*);
+		ClassFactory(const char*, bool reregister = false);
 
  protected:
 		//! The actual creation
@@ -197,7 +197,10 @@ Seiscomp::Core::Generic::AbstractClassFactory<BaseClass, Class> __##Class##Facto
 
 
 #define REGISTER_CLASS(BaseClass, Class) \
-Seiscomp::Core::Generic::ClassFactory<BaseClass, Class> __##Class##Factory__(#Class)
+Seiscomp::Core::Generic::ClassFactory<BaseClass, Class> __##Class##Factory__(#Class, false)
+
+#define REREGISTER_CLASS(BaseClass, Class) \
+Seiscomp::Core::Generic::ClassFactory<BaseClass, Class> __##Class##Factory__(#Class, true)
 
 #define DECLARE_CLASSFACTORY_FRIEND(BaseClass, Class) \
 friend class Seiscomp::Core::Generic::ClassFactory<BaseClass, Class>
