@@ -1540,7 +1540,8 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 	}
 
 	sc_sta->setPlace(place);
-	sc_sta->setRestricted(false);
+	try { sc_sta->setRestricted(sta->restrictedStatus() != FDSNXML::RST_OPEN); }
+	catch ( ... ) { sc_sta->setRestricted(Core::None); }
 	sc_sta->setShared(true);
 
 	UPD(needUpdate, oldLat, double, sc_sta->latitude());
