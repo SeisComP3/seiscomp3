@@ -34,3 +34,40 @@ Mw(mB)
 
 Note that in order to be used by scmag, the input amplitude names for the
 various magnitude types must match exactly.
+
+Re-processing
+============
+
+*scamp* can be used to reprocess and to update amplitudes, e.g. when inventory paramters
+had to be changed retrospectively. Updating ampitudes requires waveform access.
+The update can be performed in
+
+1. offline processing based on xml files (:confval:`--ep<`). :confval:`--reprocess<reprocess>`
+   will replace exisiting amplitudes. Updated values can be dispatched to the messing by
+   :ref:`scdispatch` making them available for further processing, e.g. by :ref:`scmag`.
+#. with messaging by setting :confval:`start-time` or :confval:`end-time`. All parameters
+   are read from the database. :confval:`--commit<commit>` will send the
+   updated parameters to the messing system making them available for further processing,
+   e.g. by :ref:`scmag`. Otherwise, XML output is generated.
+
+Offline amplitude update
+------------------------
+
+**Example:**
+
+.. code-block:: sh
+
+   seiscomp exec scamp --ep evtID.xml --inventory-db inventory.xml --config-db config.xml \
+                       --reprocess --debug > evtID_update.xml
+   scdispatch -O merge -H host -i evtID_update.xml
+
+Amplitude update with messaging
+-------------------------------
+
+**Example:**
+
+.. code-block:: sh
+
+   scamp -u testuser --inventory-db inventory.xml --config-db config.xml -H host \
+         --start-time '2016-10-15 00:00:00' --end-time '2016-10-16 19:20:00' \
+         --commit

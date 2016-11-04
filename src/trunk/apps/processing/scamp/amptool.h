@@ -72,7 +72,8 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 
 	private:
 		typedef std::multimap<std::string, Seiscomp::DataModel::AmplitudePtr> AmplitudeMap;
-		typedef std::pair<AmplitudeMap::iterator, AmplitudeMap::iterator> AmplitudeRange;
+		typedef std::pair<AmplitudeMap::iterator, AmplitudeMap::iterator>     AmplitudeRange;
+		typedef std::map<std::string, Seiscomp::DataModel::AmplitudePtr>      SingleAmplitudeMap;
 
 		void process(Seiscomp::DataModel::Origin *origin);
 
@@ -81,21 +82,27 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 
 		int addProcessor(Seiscomp::Processing::AmplitudeProcessor *,
 		                 const Seiscomp::DataModel::Pick *pick,
-		                 double distance, OPT(double) depth);
+		                 OPT(double) distance, OPT(double) depth);
 
 		size_t loadAmplitudes(const std::string &pickID,
 		                      Seiscomp::DataModel::Amplitude *ignoreAmp = NULL);
 
 		AmplitudeRange getAmplitudes(const std::string &pickID);
-		bool hasAmplitude(const AmplitudeRange &range, const std::string &type) const;
+		Seiscomp::DataModel::Amplitude *hasAmplitude(const AmplitudeRange &range, const std::string &type) const;
 
 		void createDummyAmplitude(const Seiscomp::Processing::AmplitudeProcessor *proc);
 		void emitAmplitude(const Seiscomp::Processing::AmplitudeProcessor *,
 		                   const Seiscomp::Processing::AmplitudeProcessor::Result &);
 
+		void storeLocalAmplitude(const Seiscomp::Processing::AmplitudeProcessor *,
+		                         const Seiscomp::Processing::AmplitudeProcessor::Result &);
+
 		void removedFromCache(Seiscomp::DataModel::PublicObject *);
 
 		void printReport();
+
+		Seiscomp::DataModel::AmplitudePtr createAmplitude(const Seiscomp::Processing::AmplitudeProcessor *,
+		                                                  const Seiscomp::Processing::AmplitudeProcessor::Result &);
 
 
 	private:
@@ -109,6 +116,8 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 			Seiscomp::Core::TimeWindow timeWindow;
 			WaveformIDSet streams;
 		};
+
+		typedef std::map<const Seiscomp::Processing::AmplitudeProcessor*, Seiscomp::DataModel::AmplitudePtr> ProcAmpReuseMap;
 
 		typedef Seiscomp::Processing::AmplitudeProcessorFactory::ServiceNames AmplitudeTypeList;
 		typedef std::set<std::string> AmplitudeList;
@@ -126,6 +135,8 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		double                     _fetchMissingAmplitudes;
 		double                     _minWeight;
 		std::string                _originID;
+		std::string                _strTimeWindowStartTime;
+		std::string                _strTimeWindowEndTime;
 
 		AmplitudeTypeList          _registeredAmplitudeTypes;
 		AmplitudeList              _amplitudeTypes;
@@ -134,12 +145,14 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		ParameterMap               _parameters;
 
 		AmplitudeMap               _pickAmplitudes;
+		ProcAmpReuseMap            _ampIDReuse;
 
 		Cache                      _cache;
 
 		bool                       _testMode;
 		bool                       _firstRecord;
 		bool                       _dumpRecords;
+		bool                       _reprocessAmplitudes;
 		std::string                _epFile;
 		EventParametersPtr         _ep;
 
@@ -158,8 +171,10 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 		Seiscomp::Logging::Channel *_processingInfoChannel;
 		Seiscomp::Logging::Output  *_processingInfoOutput;
 
-		std::stringstream _report;
-		std::stringstream _result;
+		std::stringstream           _report;
+		std::stringstream           _result;
+
+		SingleAmplitudeMap          _reprocessMap;
 
 		ObjectLog                  *_inputPicks;
 		ObjectLog                  *_inputAmps;
