@@ -157,7 +157,7 @@ inline void TimeWindow::setLength(double length)
 
 inline bool TimeWindow::contains(const Time &t) const
 {
-	return t >= _startTime && t <= _endTime;
+	return t >= _startTime && t < _endTime;
 }
 
 inline bool TimeWindow::contains(const TimeWindow &tw) const
