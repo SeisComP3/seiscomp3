@@ -163,7 +163,7 @@ pair<int,int> double2frac(double d) {
 
 // Special overlap check for time windows where end time might be open
 bool overlaps(const Core::TimeWindow &tw1, const Core::TimeWindow &tw2) {
-    if(tw2.startTime() < tw1.startTime()) return overlaps(tw2, tw1);
+    if ( tw2.startTime() < tw1.startTime() ) return overlaps(tw2, tw1);
     return !tw1.endTime().valid() || tw1.endTime() > tw2.startTime();
 }
 
