@@ -20,7 +20,6 @@
 #include <iostream>
 
 #ifndef WIN32
-#include <pthread.h>
 #include <errno.h>
 #include <string.h>
 
@@ -311,6 +310,8 @@ bool Timer::deactivate(bool remove) {
 }
 #else
 bool Timer::destroy() {
+	boost::mutex::scoped_lock lock(_callbackMutex);
+
 	if ( !_timerID ) return false;
 
 	if ( timer_delete(_timerID) ) {
@@ -395,8 +396,14 @@ bool Timer::Update() {
 }
 #else
 void Timer::handleTimeout(sigval_t self) {
-	if ( reinterpret_cast<Timer*>(self.sival_ptr)->_callback ) {
-		reinterpret_cast<Timer*>(self.sival_ptr)->_callback();
+	Timer *timer = reinterpret_cast<Timer*>(self.sival_ptr);
+	if ( timer->_callback ) {
+		boost::mutex::scoped_lock lock(timer->_callbackMutex, boost::try_to_lock);
+		if ( lock )
+			timer->_callback();
+		else
+			SEISCOMP_WARNING("Timer function with interval %d.%ds already running",
+			                 timer->_timeout, timer->_timeoutNs);
 	}
 }
 #endif
