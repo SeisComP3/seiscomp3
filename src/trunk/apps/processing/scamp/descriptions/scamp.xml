@@ -80,6 +80,38 @@
 					contains the amplitudes.
 					</description>
 				</option>
+				<option long-flag="reprocess">
+					<description>
+					Reprocess and update existing amplitudes in combination with --ep.
+					This option can be used, e.g. for reprocessing amplitudes with
+					new inventory information. Waveform access is required.
+					</description>
+				</option>
+			</group>
+
+			<group name="Reprocess">
+				<description>
+					Amplitudes can be re-processed, e.g. in order to consider inventory
+					changes. The re-processing is time-window based and triggerd by
+					setting start-time or end-time. Re-processing will either create
+					output to stdout in XML format. Using --commit will send the
+					updated amplitudes to the messaging system. Waveform access is
+					required.
+				</description>
+				<option long-flag="start-time" argument="time">
+					<description>
+					</description>
+				</option>
+				<option long-flag="end-time" argument="time">
+					<description>
+					</description>
+				</option>
+				<option long-flag="commit">
+					<description>
+						Send amplitude updates to the messaging otherwise an XML
+						document will be output.
+					</description>
+				</option>
 			</group>
 		</command-line>
 	</module>

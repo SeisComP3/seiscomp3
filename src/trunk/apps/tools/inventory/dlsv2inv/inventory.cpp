@@ -1011,7 +1011,7 @@ DataModel::StreamPtr Inventory::InsertStream(ChannelIdentifier& ci, DataModel::S
 		SEISCOMP_WARNING("%s: invalid sample rate %.2f -> checking for valid decimations",
 		                 ci.GetChannel().c_str(), ci.GetSampleRate());
 
-		samprate = float2rational(ci.GetMaximumInputDecimationSampleRate());
+		samprate = float2rational(ci.GetMinimumInputDecimationSampleRate());
 		if ( samprate.first == 0 || samprate.second == 0 ) {
 			SEISCOMP_WARNING("%s: invalid sample rate %.2f, keeping it",
 			                 ci.GetChannel().c_str(), ci.GetSampleRate());

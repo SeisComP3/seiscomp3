@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.DDD
+## Release YYYY.ddd
 
 The database schema has changed since the previous version. To upgrade your
 database from version 0.8 to 0.9 to following SQL script can be used:
@@ -49,6 +49,11 @@ structure has been added to ConfigStation.
 
 ----
 
+* trunk
+
+  * Set default author to appname@hostname instead of user@hostname
+  * Upgraded rapidjson library to 1.1.0
+
 * scconfig
 
   * Fix parameter tooltip if description text contains special HTML characters
@@ -95,10 +100,22 @@ structure has been added to ConfigStation.
 
   * Add option `autoApplyFilter` to apply the configured filter initially
 
+* scalert
+
+  * Fix Python import issue
+
+* fdsnws
+
+  * Add support for logging Arclink-style request statistics
+  * Add support for EIDA authentication scheme
+  * Set CORS headers to allow cross-site Javascript use
+  * Fix geo filter for POST queries
+  * Allow access to non-restricted streams even if network or station is marked as restricted
+  * Include fdsnws_fetch client
 
 ## Release 2016.161
 
-The database schema has changed since previous version. To upgrade your
+The database schema has changed since the previous version. To upgrade your
 database from version 0.7 to 0.8 the following SQL script can be used:
 
 **MYSQL**

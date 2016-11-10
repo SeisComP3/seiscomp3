@@ -15,6 +15,7 @@
 #define __SEISCOMP_UTILS_TIMER_H__
 
 #include <seiscomp3/core/datetime.h>
+#include <seiscomp3/utils/mutex.h>
 #include <seiscomp3/core.h>
 
 #include <boost/function.hpp>
@@ -156,6 +157,7 @@ class SC_SYSTEM_CORE_API Timer {
 #endif
 
 		Callback     _callback;
+		mutex        _callbackMutex;
 		unsigned int _timeout;
 #ifndef WIN32
 		unsigned int _timeoutNs;

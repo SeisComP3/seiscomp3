@@ -16,7 +16,7 @@ class SeedlinkPluginHandler:
     except: seedlink.setParam('sources.hrd24.baudrate', 19200)
 
     try: seedlink.param('sources.hrd24.bundles')
-    except: seedlink.setParam('sources.hrd24.baudrate', 59)
+    except: seedlink.setParam('sources.hrd24.bundles', 59)
 
     try: seedlink.param('sources.hrd24.proc')
     except: seedlink.setParam('sources.hrd24.proc', 'hrd24_100')

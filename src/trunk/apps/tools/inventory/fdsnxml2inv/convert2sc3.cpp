@@ -161,21 +161,10 @@ pair<int,int> double2frac(double d) {
 }
 
 
-bool contains(const Core::TimeWindow &tw, const Core::Time &time) {
-	if ( !time.valid() ) return false;
-	if ( tw.endTime().valid() )
-		return tw.contains(time);
-	return time >= tw.startTime();
-}
-
-
 // Special overlap check for time windows where end time might be open
 bool overlaps(const Core::TimeWindow &tw1, const Core::TimeWindow &tw2) {
-	if ( contains(tw1, tw2.startTime()) ) return true;
-	if ( contains(tw1, tw2.endTime()) ) return true;
-	if ( contains(tw2, tw1.startTime()) ) return true;
-	if ( contains(tw2, tw1.endTime()) ) return true;
-	return false;
+    if ( tw2.startTime() < tw1.startTime() ) return overlaps(tw2, tw1);
+    return !tw1.endTime().valid() || tw1.endTime() > tw2.startTime();
 }
 
 
@@ -1540,7 +1529,8 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 	}
 
 	sc_sta->setPlace(place);
-	sc_sta->setRestricted(false);
+	try { sc_sta->setRestricted(sta->restrictedStatus() != FDSNXML::RST_OPEN); }
+	catch ( ... ) { sc_sta->setRestricted(Core::None); }
 	sc_sta->setShared(true);
 
 	UPD(needUpdate, oldLat, double, sc_sta->latitude());

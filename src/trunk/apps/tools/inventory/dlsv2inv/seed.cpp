@@ -1360,6 +1360,26 @@ void ChannelIdentifier::EmptyVectors()
 	rp.clear();
 }
 
+
+/*******************************************************************************
+* Function:     GetMinimumInputDecimationSampleRate                            *
+* Parameters:   none                                                           *
+* Returns:      The minimum sample rate of all decimation stages or 0          *
+* Description:  clear all vectors after the data has been written to inventory *
+********************************************************************************/
+double ChannelIdentifier::GetMinimumInputDecimationSampleRate() const {
+	int maxStage = -1;
+	double samprate = 0.0;
+	for( size_t i = 0; i < dec.size(); ++i ) {
+		if ( maxStage < 0 || maxStage < dec[i]->GetStageSequenceNumber() ) {
+			maxStage = dec[i]->GetStageSequenceNumber();
+			samprate = dec[i]->GetInputSampleRate() / dec[i]->GetDecimationFactor();
+		}
+	}
+	return samprate;
+}
+
+
 /*******************************************************************************
 * Function:     GetMaximumInputDecimationSampleRate                            *
 * Parameters:   none                                                           *

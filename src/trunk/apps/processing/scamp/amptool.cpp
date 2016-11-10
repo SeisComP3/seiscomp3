@@ -31,6 +31,7 @@
 #include <seiscomp3/processing/amplitudeprocessor.h>
 
 #include <boost/bind.hpp>
+#include <iomanip>
 
 
 using namespace std;
@@ -40,6 +41,8 @@ using namespace Seiscomp::Client;
 using namespace Seiscomp::Processing;
 using namespace Seiscomp::DataModel;
 using namespace Private;
+
+#define _T(name) database()->convertColumnName(name)
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -124,6 +127,12 @@ void AmpTool::createCommandLineDescription() {
 	commandline().addGroup("Input");
 	commandline().addOption("Input", "ep", "Event parameters XML file for offline processing of all contained origins",
 	                        &_epFile);
+	commandline().addOption("Input", "reprocess", "Reprocess and update existing amplitudes in combination with --ep");
+
+	commandline().addGroup("Reprocess");
+	commandline().addOption("Reprocess", "start-time", "Start time for amplitude request window", &_strTimeWindowStartTime);
+	commandline().addOption("Reprocess", "end-time", "End time for amplitude request window", &_strTimeWindowEndTime);
+	commandline().addOption("Reprocess", "commit", "Send amplitude updates to the messaging otherwise an XML document will be output");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -166,6 +175,7 @@ bool AmpTool::initConfiguration() {
 	catch ( ... ) {}
 
 	_dumpRecords = commandline().hasOption("dump-records");
+	_reprocessAmplitudes = commandline().hasOption("reprocess");
 
 	return true;
 }
@@ -250,7 +260,7 @@ bool AmpTool::run() {
 	if ( !_originID.empty() ) {
 		OriginPtr org = Origin::Cast(query()->getObject(Origin::TypeInfo(), _originID));
 		if ( !org ) {
-			std::cerr << "Origin not found!" << std::endl;
+			cerr << "Origin not found!" << endl;
 			return false;
 		}
 
@@ -260,11 +270,225 @@ bool AmpTool::run() {
 		return true;
 	}
 
+	if ( !_strTimeWindowStartTime.empty() || !_strTimeWindowEndTime.empty() ) {
+		if ( database() == NULL ) {
+			cerr << "No database currently active for time window reprocessing" << endl;
+			return false;
+		}
+
+		Core::Time startTime, endTime;
+
+		if ( !_strTimeWindowStartTime.empty()
+		  && !startTime.fromString(_strTimeWindowStartTime.c_str(), "%F %T") ) {
+			cerr << "Invalid start time: " << _strTimeWindowStartTime << endl;
+			return false;
+		}
+
+		if ( !_strTimeWindowEndTime.empty()
+		  && !endTime.fromString(_strTimeWindowEndTime.c_str(), "%F %T") ) {
+			cerr << "Invalid end time: " << _strTimeWindowEndTime << endl;
+			return false;
+		}
+
+		std::string dbQuery;
+		dbQuery += "select PPick." + _T("publicID") + ", Pick.* from Pick,PublicObject as PPick,Amplitude "
+		           "where Pick._oid=PPick._oid and Amplitude." + _T("pickID") + "=PPick." + _T("publicID");
+
+		if ( startTime.valid() )
+			 dbQuery += " and Pick." + _T("time_value") + ">='" + startTime.toString("%F %T") + "'";
+
+		if ( endTime.valid() )
+			 dbQuery += " and Pick." + _T("time_value") + "<'" + endTime.toString("%F %T") + "'";
+
+		dbQuery += " group by Amplitude." + _T("pickID");
+
+		if ( !commandline().hasOption("commit") )
+			_testMode = true;
+
+		EventParametersPtr ep;
+		if ( _testMode )
+			ep = new EventParameters;
+
+		typedef list<PickPtr> PickList;
+		PickList picks;
+
+		cerr << "Collecting picks ... " << flush;
+		DatabaseIterator db_it = query()->getObjectIterator(dbQuery, Pick::TypeInfo());
+		ObjectPtr obj;
+		while ( obj = db_it.get() ) {
+			Pick *pick = static_cast<Pick*>(obj.get());
+			try {
+				pick->waveformID().networkCode();
+				pick->waveformID().stationCode();
+				pick->waveformID().locationCode();
+				pick->waveformID().channelCode();
+
+				pick->time().value();
+			}
+			catch ( ... ) {
+				continue;
+			}
+
+			++db_it;
+
+			picks.push_back(pick);
+			if ( ep ) ep->add(pick);
+		}
+
+		db_it.close();
+
+		cerr << picks.size() << endl;
+
+		_report << std::endl;
+		_report << "Reprocessing report" << std::endl;
+		_report << "-------------------" << std::endl;
+
+		_report << " + Picks" << std::endl;
+
+		int errors = 0;
+		int ampsRecomputed = 0;
+		int messagesSent = 0;
+
+		int idx = 1;
+		for ( PickList::iterator it = picks.begin(); it != picks.end(); ++it, ++idx ) {
+			PickPtr pick = *it;
+			SingleAmplitudeMap dbAmps;
+
+			if ( isExitRequested() ) break;
+
+			// Clear all processors
+			_processors.clear();
+
+			// Clear all station time windows
+			_stationRequests.clear();
+
+			_report << "   + " << pick->publicID() << std::endl;
+			cerr << "[" << idx << "]" << " " << (*it)->publicID() << endl;
+			db_it = query()->getAmplitudesForPick((*it)->publicID());
+			while ( obj = db_it.get() ) {
+				Amplitude *amp = static_cast<Amplitude*>(obj.get());
+				cerr << "  [" << setw(10) << left << amp->type() << "]  ";
+
+				AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(amp->type().c_str());
+				if ( !proc ) {
+					if ( _amplitudeTypes.find(amp->type()) == _amplitudeTypes.end() )
+						cerr << "No processor";
+					else {
+						cerr << "No processor but enabled";
+						++errors;
+					}
+				}
+				else {
+					cerr << "Fetch data";
+					dbAmps[amp->type()] = amp;
+					proc->setTrigger(pick->time().value());
+					proc->setReferencingPickID(pick->publicID());
+					proc->setPublishFunction(boost::bind(&AmpTool::storeLocalAmplitude, this, _1, _2));
+					_report << "     + Data" << std::endl;
+					addProcessor(proc.get(), pick.get(), None, None);
+				}
+
+				cerr << endl;
+				++db_it;
+			}
+
+			db_it.close();
+
+			cerr << "  --------------------------------" << endl;
+
+			if ( _stationRequests.empty() ) continue;
+
+			for ( RequestMap::iterator it = _stationRequests.begin(); it != _stationRequests.end(); ++it ) {
+				StationRequest &req = it->second;
+				for ( WaveformIDSet::iterator wit = req.streams.begin(); wit != req.streams.end(); ++wit ) {
+					const WaveformStreamID &wsid = *wit;
+					recordStream()->addStream(wsid.networkCode(), wsid.stationCode(),
+					                          wsid.locationCode(), wsid.channelCode(),
+					                          req.timeWindow.startTime(),
+					                          req.timeWindow.endTime());
+				}
+
+				_report << " + TimeWindow (" << it->first << "): " << req.timeWindow.startTime().toString("%F %T")
+				        << ", " << req.timeWindow.endTime().toString("%F %T") << std::endl;
+			}
+
+			_reprocessMap.clear();
+			readRecords(false);
+
+			list<AmplitudePtr> updates;
+
+			for ( AmplitudeMap::iterator it = dbAmps.begin();
+			      it != dbAmps.end(); ++it ) {
+				AmplitudePtr oldAmp = it->second;
+				AmplitudePtr newAmp = _reprocessMap[oldAmp->type()];
+
+				cerr << "  [" << setw(10) << left << oldAmp->type() << "]  " << oldAmp->amplitude().value() << "  ";
+				if ( newAmp ) {
+					if ( newAmp->amplitude().value() != oldAmp->amplitude().value() ) {
+						*oldAmp = *newAmp;
+						if ( ep )
+							ep->add(oldAmp.get());
+						else
+							updates.push_back(oldAmp);
+						cerr << "->  " << newAmp->amplitude().value();
+					}
+					else
+						cerr << "  no changes";
+
+					++ampsRecomputed;
+				}
+				else {
+					cerr << "-";
+					++errors;
+				}
+				cerr << endl;
+			}
+
+			if ( !updates.empty() ) {
+				if ( !_testMode ) {
+					NotifierMessagePtr nmsg = new NotifierMessage;
+					for ( list<AmplitudePtr>::iterator it = updates.begin();
+					      it != updates.end(); ++it ) {
+						nmsg->attach(new Notifier("EventParameters", OP_UPDATE, it->get()));
+					}
+
+					connection()->send(nmsg.get());
+					++messagesSent;
+
+					if ( messagesSent % 100 == 0 )
+						sync();
+				}
+				else {
+					cerr << "  --------------------------------" << endl;
+					cerr << "  Test mode, nothing sent" << endl;
+				}
+			}
+		}
+
+		if ( ep ) {
+			IO::XMLArchive ar;
+			ar.create("-");
+			ar.setFormattedOutput(true);
+			ar << ep;
+			ar.close();
+		}
+
+		cerr << "----------------------------------" << endl;
+		cerr << "Recomputed " << ampsRecomputed << " amplitudes" << endl;
+		cerr << "Sent " << messagesSent << " messages" << endl;
+		if ( errors )
+			cerr << errors << " errors occurred, check the processing log" << endl;
+
+		return true;
+	}
+
+
 	if ( !_epFile.empty() ) {
 		_fetchMissingAmplitudes = false;
 
 		// Disable database
 		setDatabase(NULL);
+		_cache.setDatabaseArchive(NULL);
 
 		IO::XMLArchive ar;
 		if ( !ar.open(_epFile.c_str()) ) {
@@ -278,6 +502,13 @@ bool AmpTool::run() {
 		if ( !_ep ) {
 			SEISCOMP_ERROR("No event parameters found in %s", _epFile.c_str());
 			return false;
+		}
+
+		if ( commandline().hasOption("reprocess") ) {
+			for ( size_t i = 0; i < _ep->amplitudeCount(); ++i ) {
+				AmplitudePtr amp = _ep->amplitude(i);
+				feed(amp.get());
+			}
 		}
 
 		for ( size_t i = 0; i < _ep->originCount(); ++i ) {
@@ -397,6 +628,8 @@ void AmpTool::process(Origin *origin) {
 	// a certain stream
 	PickStreamMap pickStreamMap;
 
+	_ampIDReuse.clear();
+
 	_report << std::endl;
 	_report << "Processing report for Origin: " << origin->publicID() << std::endl;
 	_report << "-----------------------------------------------------------------" << std::endl;
@@ -462,11 +695,15 @@ void AmpTool::process(Origin *origin) {
 		for ( AmplitudeList::iterator ait = _amplitudeTypes.begin();
 		      ait != _amplitudeTypes.end(); ++ait ) {
 
-			if ( hasAmplitude(amps, *ait) ) {
-				SEISCOMP_INFO("Skipping %s calculation for pick %s, amplitude exists already",
-				              ait->c_str(), pickID.c_str());
-				_report << "     - " << *ait << " [amplitude exists already]" << std::endl;
-				continue;
+			AmplitudePtr existingAmp = hasAmplitude(amps, *ait);
+
+			if ( existingAmp ) {
+				if ( !_reprocessAmplitudes ) {
+					SEISCOMP_INFO("Skipping %s calculation for pick %s, amplitude exists already",
+					              ait->c_str(), pickID.c_str());
+					_report << "     - " << *ait << " [amplitude exists already]" << std::endl;
+					continue;
+				}
 			}
 
 			AmplitudeProcessorPtr proc = AmplitudeProcessorFactory::Create(ait->c_str());
@@ -475,6 +712,9 @@ void AmpTool::process(Origin *origin) {
 				_report << "     - " << *ait << " [amplitudeprocessor NULL]" << std::endl;
 				continue;
 			}
+
+			if ( existingAmp )
+				_ampIDReuse[proc.get()] = existingAmp;
 
 			proc->setTrigger(pickTime);
 			proc->setReferencingPickID(pickID);
@@ -533,7 +773,7 @@ void AmpTool::process(Origin *origin) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
                           const DataModel::Pick *pick,
-                          double distance, OPT(double) depth) {
+                          OPT(double) distance, OPT(double) depth) {
 	WaveformProcessor::Component components[3];
 	int componentCount = 0;
 
@@ -676,10 +916,12 @@ int AmpTool::addProcessor(Processing::AmplitudeProcessor *proc,
 		}
 	}
 
-	proc->setHint(WaveformProcessor::Distance, distance);
-	if ( proc->isFinished() ) {
-		_report << "     - " << proc->type() << " [" << proc->status().toString() << " (" << proc->statusValue() << ")]" << std::endl;
-		return -1;
+	if ( distance ) {
+		proc->setHint(WaveformProcessor::Distance, *distance);
+		if ( proc->isFinished() ) {
+			_report << "     - " << proc->type() << " [" << proc->status().toString() << " (" << proc->statusValue() << ")]" << std::endl;
+			return -1;
+		}
 	}
 
 	proc->computeTimeWindow();
@@ -816,12 +1058,12 @@ AmpTool::AmplitudeRange AmpTool::getAmplitudes(const std::string &pickID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AmpTool::hasAmplitude(const AmplitudeRange &range,
-                           const std::string &type) const {
+Amplitude *AmpTool::hasAmplitude(const AmplitudeRange &range,
+                                 const std::string &type) const {
 	for ( AmplitudeMap::iterator it = range.first; it != range.second; ++it )
-		if ( it->second->type() == type ) return true;
+		if ( it->second->type() == type ) return it->second.get();
 
-	return false;
+	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -842,16 +1084,14 @@ void AmpTool::createDummyAmplitude(const AmplitudeProcessor *proc) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmpTool::emitAmplitude(const AmplitudeProcessor *proc,
-                            const AmplitudeProcessor::Result &res) {
-	if ( _dumpRecords && !_originID.empty() )
-		proc->writeData();
-
+Seiscomp::DataModel::AmplitudePtr
+AmpTool::createAmplitude(const Seiscomp::Processing::AmplitudeProcessor *proc,
+                         const Seiscomp::Processing::AmplitudeProcessor::Result &res) {
 	AmplitudePtr amp = Amplitude::Create();
 	CreationInfo ci;
 	if ( amp == NULL ) {
 		SEISCOMP_LOG(_errorChannel, "Failed to create Amplitude %s for %s", proc->type().c_str(), res.record->streamID().c_str());
-		return;
+		return NULL;
 	}
 
 	amp->setAmplitude(
@@ -895,23 +1135,100 @@ void AmpTool::emitAmplitude(const AmplitudeProcessor *proc,
 
 	logObject(_outputAmps, now);
 
-	if ( connection() && !_testMode ) {
-		EventParameters ep;
-		Notifier::Enable();
-		ep.add(amp.get());
-		Notifier::Disable();
+	return amp;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-		NotifierMessagePtr nmsg = Notifier::GetMessage();
-		if ( nmsg )
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmpTool::emitAmplitude(const AmplitudeProcessor *proc,
+                            const AmplitudeProcessor::Result &res) {
+	if ( _dumpRecords && !_originID.empty() )
+		proc->writeData();
+
+	AmplitudePtr amp = createAmplitude(proc, res);
+	if ( !amp ) return;
+
+	ProcAmpReuseMap::iterator it = _ampIDReuse.find(proc);
+
+	if ( connection() && !_testMode ) {
+		NotifierMessagePtr nmsg = new NotifierMessage;
+
+		if ( it != _ampIDReuse.end() ) {
+			bool changed = it->second->amplitude().value() != amp->amplitude().value();
+			Core::Time ct_new, ct_old;
+
+			try {
+				ct_new = amp->creationInfo().creationTime();
+				ct_old = it->second->creationInfo().modificationTime();
+			}
+			catch ( ... ) {}
+
+			*it->second = *amp;
+
+			try {
+				it->second->creationInfo().setCreationTime(ct_old);
+				it->second->creationInfo().setModificationTime(ct_new);
+			}
+			catch ( ... ) {}
+
+			if ( changed )
+				nmsg->attach(new Notifier("EventParameters", OP_UPDATE, it->second.get()));
+		}
+		else
+			nmsg->attach(new Notifier("EventParameters", OP_ADD, amp.get()));
+
+		if ( nmsg && !nmsg->empty() )
 			connection()->send(nmsg.get());
 	}
 	else if ( !_originID.empty() || _testMode )
 		cerr << *amp << endl;
-	else if ( _ep )
-		_ep->add(amp.get());
+	else if ( _ep ) {
+		if ( it == _ampIDReuse.end() ) {
+			_ep->add(amp.get());
+			cerr << "+ " << amp->publicID() << "  " << amp->type() << endl;
+		}
+		else {
+			cerr << "U " << it->second->publicID() << "  " << it->second->type()
+			     << "  " << it->second->amplitude().value() << " -> " << amp->amplitude().value()
+			     << endl;
+
+			Core::Time ct_new, ct_old;
+
+			try {
+				ct_new = amp->creationInfo().creationTime();
+				ct_old = it->second->creationInfo().modificationTime();
+			}
+			catch ( ... ) {}
+
+			*it->second = *amp;
+
+			try {
+				it->second->creationInfo().setCreationTime(ct_old);
+				it->second->creationInfo().setModificationTime(ct_new);
+			}
+			catch ( ... ) {}
+		}
+	}
 
 	// Store the amplitude for pickID
-	feed(amp.get());
+	if ( it == _ampIDReuse.end() )
+		feed(amp.get());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmpTool::storeLocalAmplitude(const Seiscomp::Processing::AmplitudeProcessor *proc,
+                                  const Seiscomp::Processing::AmplitudeProcessor::Result &res) {
+	AmplitudePtr amp = createAmplitude(proc, res);
+	if ( !amp ) return;
+
+	_reprocessMap[amp->type()] = amp;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

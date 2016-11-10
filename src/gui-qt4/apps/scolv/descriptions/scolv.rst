@@ -1,6 +1,6 @@
 scolv is the main interactive tool to revise or review the origin information
-like picks, location, depth, time, magnitudes and event association. Therefore
-scolv is divided in 5 logical units (tabs):
+such as picks, location, depth, time, magnitudes and event association.
+Therefore scolv is divided into five logical units (tabs):
 
 - :ref:`Location <fig-scolv-location>`
 - :ref:`Magnitudes <fig-scolv-magnitudes>`
@@ -14,7 +14,7 @@ parameters.
 Units and digits
 ================
 
-Local network users prefer the distance unit in km while others prefer degree.
+Local network users prefer the distance unit in kilometres while others prefer degrees.
 scolv (as any other GUI) can be configured to show either the one or the other.
 
 .. code-block:: sh
@@ -28,7 +28,7 @@ Furthermore the precision of various values can be configured:
 
    # Precision of depth values.
    scheme.precision.depth = 0
-   # Precision of lat/lon values.
+   # Precision of latitude/longitude values.
    scheme.precision.location = 2
    # Precision of pick times (fractions of seconds).
    scheme.precision.pickTime = 1
@@ -37,7 +37,7 @@ Furthermore the precision of various values can be configured:
 Summary widget
 ==============
 
-The summary widget contains now 2 tabs: *Preferred* and *Current*. *Preferred*
+The summary widget contains two tabs: *Preferred* and *Current*. *Preferred*
 reflects the current official (database) state of the event while *Current*
 shows the current solution (location and magnitudes).
 
@@ -45,7 +45,7 @@ shows the current solution (location and magnitudes).
 Plots
 =====
 
-Some tabs in scolv are plotting data (e.g. arrival residuals). Each plot are
+Some tabs in scolv are for plotting data (e.g. arrival residuals). Each plot 
 is also interactive to select a subset of data or to zoom into a region.
 
 
@@ -58,7 +58,7 @@ epicenter can be applied.
 .. figure:: media/scolv/plot-filter-setup.png
    :width: 8cm
 
-Select the center azimuth and the extent to either side. If Ok is pressed all
+Select the center azimuth and the extent to either side. If OK is pressed all
 arrivals that fall outside the defined azimuthal area are hidden from the plot
 and the line below the tabs turns into "Filter is active". Clicking on the
 link again and select the "None" filter will show all arrivals in the plot again.
@@ -115,8 +115,8 @@ corresponding tab.
 
    Additional arrival plots
 
-   From upper left to lower right: **1**) azimuth vs distance, **2**) traveltime vs distance,
-   **3**) traveltime - predicted traveltime vs distance, **4**) azimuth vs distance polar
+   From upper left to lower right: **1**) azimuth vs distance, **2**) travel time vs distance,
+   **3**) travel time - predicted travel time vs distance, **4**) azimuth vs distance polar
 
 The move out plot uses the reduced travel time with a default reduction velocity
 of 6km/s. This value is configurable, either in the configuration file or in
@@ -139,7 +139,7 @@ before they are computed manually by :ref:`scmag`.
    Compute magnitudes status window
 
 
-:ref:`A window <fig-scolv-location-mag-status>` will popup giving the progress
+:ref:`A window <fig-scolv-location-mag-status>` will pop up giving the progress
 information of computation. The amplitudes are either fetched from database if
 the pick is unchanged and already in the system. For new manual picks,
 waveforms are requested to compute the amplitudes. The popup window contains
@@ -211,7 +211,7 @@ The *Picker* button opens the interactive waveform picker window. It allows
 to pick additional phases, to confirm picks, to add additional pick information
 such as polarity and uncertainty, to rotate traces and much more.
 
-It is devided into 2 parts, the zoom trace and the trace list. The zoom trace
+It is divided into two parts, the zoom trace and the trace list. The zoom trace
 shows a sub area of the active trace in the list.
 
 .. _fig-scolv-picker:
@@ -221,7 +221,7 @@ shows a sub area of the active trace in the list.
 
 Initially the picker shows only the vertical channels for each station that
 have been associated with the current location. It can be
-:ref:`configured <scolv-settings>` to show all 3 components.
+:ref:`configured <scolv-settings>` to show all three components.
 
 Initially the picker allows to pick the following phases:
 
@@ -246,7 +246,7 @@ and teleseismic profiles. An example configuration looks like this:
    # Define all phases of group "teleseismic"
    picker.phases.groups.teleseismic = pP, PKP, PKP
 
-   # Define a list of favourite phase for quick access
+   # Define a list of favourite phases for quick access
    picker.phases.favourites = Pn, P, Pg, PmP, P1, Pg, Sg, S, Sn, SmS
 
 The list of favourites is used to assign shortcuts to. :kbd:`1` is assigned
@@ -265,7 +265,7 @@ among a predefined set of uncertainties is a lot faster.
 
 If the mouse hovers a pick a dashed rectangle is drawn around this pick. Then
 the pick is active and the right mouse button can be pressed to open the context
-menu where the polarity and uncertainty can be defined. The following screenshot
+menu where the polarity and uncertainty can be defined. The following screen shot
 shows the available uncertainties.
 
 .. figure:: media/scolv/pick-context2.png
@@ -284,7 +284,7 @@ They can be configured in scolv.cfg with:
    # Define an uncertainty profile for local events
    picker.uncertainties.profile.local = 0.05, 0.1, 0.2, 0.3, "(0.1,0.2)"
 
-   # Define an uncertainty profile for teleseimis events
+   # Define an uncertainty profile for teleseismic events
    picker.uncertainties.profile.teleseismic = 0.5, 1, 2, 3, "(1,2)"
 
    # Define the list of uncertainty sets that are active in scolv.
@@ -320,7 +320,7 @@ When waveforms are requested the corresponding widget background is changed
 according to the current state:
 
 - yellow: waveforms requested but not yet received
-- red: acquisition finished and not data available
+- red: acquisition finished and data is not available
 - green: waveforms received and acquisition still in progress
 
 
@@ -328,7 +328,7 @@ according to the current state:
    :scale: 50%
 
 
-If a trace displays all 3 components and amplitudes are scaled up, they are
+If a trace displays all three components and amplitudes are scaled up, they are
 not clipped to their window area. The clipping behaviour can be toggled by
 either pressing :kbd:`C` or in the menu
 :menuselection:`View --> Zoomtrace --> Clip components to viewport`.
@@ -384,7 +384,7 @@ brings up another window where the different options can be set.
 
 .. figure:: media/scolv/commit-options2.png
 
-It allows to fix the origin to be comittet as preferred origin and to set the
+It allows to fix the origin to be committed as preferred origin and to set the
 event type in one go. If *Return to event list after commit* is ticked the
 event list is activated after pressing OK to select another event quickly.
 
@@ -441,7 +441,7 @@ the result against a few outliers.
 Waveform review
 ---------------
 
-The magnitude review page allow also the review of waveforms.
+The magnitude review page also allows the review of waveforms.
 The button *Waveforms* brings up the amplitude waveform review page.
 The waveform review magnitude type is the same as the currently active tab.
 
@@ -461,12 +461,13 @@ Picker, the second line is amplitude picker specific.
 
 .. figure:: media/scolv/magnitudes-toolbar.png
 
-   Second toolbar line: filter selection, filter toggle, min snr editor,
+   Second toolbar line: filter selection, filter toggle, min SNR editor,
    amplitude measurement type selector, amplitude combiner selector,
    (re)calculate amplitudes, apply amplitudes.
 
 
 A station trace is divided into three areas:
+
 - dark gray: unused data
 - light gray: data used for noise offset and noise amplitude
 - white: data used for amplitude calculation
@@ -496,13 +497,13 @@ Processing settings
 ^^^^^^^^^^^^^^^^^^^
 
 A basic amplitude processor uses two basic settings: Minimum signal/noise
-ratio (SNR) and data time windows. The default minimum snr is defined by the
-implementation of the amplitude algorithm. This default snr is shown in the
+ratio (SNR) and data time windows. The default minimum SNR is defined by the
+implementation of the amplitude algorithm. This default SNR is shown in the
 toolbar right from *Min SNR:*. In some situations an operator might want to
-increase or decrease the minimum snr for some reason. This can be done by
+increase or decrease the minimum SNR for some reason. This can be done by
 modifying the value in the corresponding spin box.
 
-In the time scale of the zoom widget and the overview are three black triangles
+In the time scale of the zoom widget and the overview three black triangles are
 visible. Those triangles can be used to adjust the data time windows of either
 the zoom trace (upper part) or all traces (lower part) by dragging the handle
 with the left mouse button.
@@ -559,8 +560,9 @@ activate picking by pressing :kbd:`1` or in the main menu:
 :menuselection:`Amplitudes --> Pick amplitudes`.
 
 There are two modes of picking:
- 1. create a time window by pressing with left mouse button at start time and
-    releasing at the end time
+
+ 1. create a time window by pressing with left mouse button at the start time and
+    releasing at the end time, or
  2. double click at a time and use a time window of [t-0.5sec;t+0.5sec]
 
 Add stations in range
@@ -580,7 +582,7 @@ Confirm the amplitudes
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The red button in the toolbar confirms all amplitudes and transfers them to the
-magnitude review page. Only activated amplitudes are transfered. Disabled
+magnitude review page. Only activated amplitudes are transferred. Disabled
 stations or disabled amplitudes are ignored. At this stage all magnitudes are
 calculated and the network magnitude is calculated according to the available
 settings: *Mean*, *Median* or *Trimmed mean*.
@@ -588,10 +590,10 @@ settings: *Mean*, *Median* or *Trimmed mean*.
 Event tab
 =========
 
-The Event tab gives all information of associated orgins and magnitude of the
+The Event tab gives all information of associated origins and magnitude of the
 actual event. Here the selection of the preferred origin and preferred magnitude
 can be influenced independent from :ref:`scevent`. The messaging between
-scevent and scolv about the selected orgins and magnitudes can be viewed in
+scevent and scolv about the selected origins and magnitudes can be viewed in
 a window that has to be opened by pulling the left side frame to the right.
 
 .. _fig-scolv-event:
@@ -615,7 +617,7 @@ selected origin (**Origin list**) is drawn filled.
 Events tab
 ==========
 
-The Events tab gives an overview of the events in a defined timespan.
+The Events tab gives an overview of the events in a defined time span.
 Information about origin time, preferred ("best") magnitude, preferred magnitude
 type, number of phases, epicenter and depth, origin status, region, agency and
 event/origin ID are similar to the event list in :ref:`scesv`. Additionally,
@@ -684,7 +686,7 @@ The available identifiers are:
 * **Region**
 * **ID**
 
-The bold identifiers are visible initially. This list can also be custumized
+The bold identifiers are visible initially. This list can also be customized
 with
 
 .. code-block:: sh
@@ -700,7 +702,7 @@ table header and check or uncheck the corresponding column.
 Custom quantities
 =================
 
-Since the internal data model is limited, scolv allows to add custom quantities
+Since the internal data model is limited, scolv allows addition of custom quantities
 derived from the origin objects to the information panel, to the origin list of
 Event tab and to the Event list. This can help to evaluate origins in a better
 way.
@@ -710,7 +712,7 @@ Two source are supported, origin comments and custom scripts.
 Origin comments
 ---------------
 
-Currently on one comment can be added to the different panels.
+Currently only one comment can be added to the different panels.
 
 To add a comment value to the information panel of the Location tab, the
 following configuration can be used:
@@ -843,10 +845,10 @@ configuration can be used:
 
 .. code-block:: sh
 
-   # Define the available addons to be used
+   # Define the available add-ons to be used
    display.origin.addons = qual1, qual2
 
-   # Configure each addon
+   # Configure each add-on
    display.origin.addon.qual1.label = "Qual1"
    display.origin.addon.qual1.script = "@CONFIGDIR@/scripts/scolv/qual1"
 
@@ -912,7 +914,7 @@ This section contains settings for all the main tabs and *all* waveform windows.
 
 *Compute magnitudes silently*
  Automatically closes the compute magnitudes dialog if the computation is
- finished and no error occured.
+ finished and no error occurred.
 
 *Draw grid lines*
  Enables dashed grid lines in all plots.
@@ -922,7 +924,7 @@ This section contains settings for all the main tabs and *all* waveform windows.
 
 *Default distance for "add station"*
  The default value to add stations (traces) that have not been picked or
- associated is 15 degree. A lower value can be defined, e.g. if mainly local events are analyzed.
+ associated is 15 degrees. A lower value can be defined, e.g. if mainly local events are analyzed.
 
 *Hide station traces without data*
  If new stations are added during pick review or amplitude review and if no
@@ -1034,7 +1036,7 @@ actions in scolv.
 +----------------------+-------------------------------------------------------------+
 | Ctrl+N               | Default trace view                                          |
 +----------------------+-------------------------------------------------------------+
-| Ctrl+T               | Toggle display of theorectical arrivals                     |
+| Ctrl+T               | Toggle display of theoretical arrivals                      |
 +----------------------+-------------------------------------------------------------+
 | Ctrl+P               | Toggle display of picks (not arrivals). If picks should     |
 |                      | be shown for the first, all picks within the time span of   |
@@ -1065,13 +1067,13 @@ actions in scolv.
 +----------------------+-------------------------------------------------------------+
 | Ctrl+Shift+WheelDown | Time and amplitude zoom out                                 |
 +----------------------+-------------------------------------------------------------+
-| Left                 | Move traceview to left (fine)                               |
+| Left                 | Move trace view to left (fine)                              |
 +----------------------+-------------------------------------------------------------+
-| Right                | Move traceview to right (fine)                              |
+| Right                | Move trace view to right (fine)                             |
 +----------------------+-------------------------------------------------------------+
-| Shift+Left           | Move traceview to left (rough)                              |
+| Shift+Left           | Move trace view to left (rough)                             |
 +----------------------+-------------------------------------------------------------+
-| Shift+Right          | Move traceview to left (rough)                              |
+| Shift+Right          | Move trace view to left (rough)                             |
 +----------------------+-------------------------------------------------------------+
 | Up                   | Scroll up (through the traces)                              |
 +----------------------+-------------------------------------------------------------+

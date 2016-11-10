@@ -645,6 +645,7 @@ DECLARE_BLOCKETTE(ChannelIdentifier) {
 		double GetDip(){return dip;}
 		double GetSampleRate(){return sample_rate;}
 		double GetMaxClockDrift(){return max_clock_drift;}
+		double GetMinimumInputDecimationSampleRate() const;
 		double GetMaximumInputDecimationSampleRate() const;
 		std::string GetLocation(){return location;}
 		std::string GetChannel(){return channel;}
