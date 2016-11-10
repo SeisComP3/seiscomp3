@@ -133,7 +133,7 @@ void Application::registerProcessor(const std::string& networkCode,
 	              locationCode.c_str(), channelCode.c_str(),
 	              (unsigned long)_processors.size(), (unsigned long)_stationProcessors.size(),
 	              Core::BaseObject::ObjectCount());
-	SEISCOMP_DEBUG("Added proc %ld", (long)wp);
+	SEISCOMP_DEBUG("Added proc 0x%lx", (long)wp);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -265,7 +265,7 @@ void Application::removeProcessor(Processing::WaveformProcessor *wp) {
 	      it != _processors.end(); )
 	{
 		if ( it->second.get() == wp ) {
-			SEISCOMP_DEBUG("Removed proc %ld", (long)wp);
+			SEISCOMP_DEBUG("Removed proc 0x%lx", (long)wp);
 			SEISCOMP_DEBUG("Removed processor from stream %s", it->first.c_str());
 			_processors.erase(it++);
 		}
@@ -376,7 +376,13 @@ void Application::handleRecord(Record *rec) {
 	_registrationBlocked = true;
 
 	std::pair<ProcessorMap::iterator, ProcessorMap::iterator> itq = _processors.equal_range(streamID);
-	for (ProcessorMap::iterator it = itq.first; it != itq.second; ++it) {
+	for ( ProcessorMap::iterator it = itq.first; it != itq.second; ++it ) {
+		// The proc must not be already on the removal list
+		if ( std::find(_waveformProcessorRemovalQueue.begin(),
+		               _waveformProcessorRemovalQueue.end(),
+		               it->second) != _waveformProcessorRemovalQueue.end() )
+			continue;
+
 		// Schedule the processor for deletion when finished
 		if ( it->second->isFinished() )
 			trashList.push_back(it->second.get());
@@ -389,7 +395,7 @@ void Application::handleRecord(Record *rec) {
 
 	_registrationBlocked = false;
 
-	// Remove outdated processors
+	// Remove outdated processors if not already on the trash list
 	while ( !_waveformProcessorRemovalQueue.empty() ) {
 		WaveformProcessorPtr wp = _waveformProcessorRemovalQueue.front();
 		_waveformProcessorRemovalQueue.pop_front();

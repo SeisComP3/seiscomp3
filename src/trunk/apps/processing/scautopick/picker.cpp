@@ -947,7 +947,7 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 	// ...
 	for ( ProcList::iterator it = list.begin(); it != list.end(); ) {
 		if ( it->dataEndTime <= onset ) {
-			SEISCOMP_DEBUG("Remove expired proc %ld", (long int)it->proc);
+			SEISCOMP_DEBUG("Remove expired proc 0x%lx", (long int)it->proc);
 			if ( /*it->proc != NULL*/true ) {
 				SEISCOMP_INFO("Remove expired running processor %s on %s",
 				              it->proc->className(), rec->streamID().c_str());
@@ -983,7 +983,7 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 		// Register the secondary procs running on the verticals
 		list.push_back(ProcEntry(proc->safetyTimeWindow().endTime(), proc.get()));
 		_procLookup[proc.get()] = rec->streamID();
-		SEISCOMP_DEBUG("%s: registered proc %ld",
+		SEISCOMP_DEBUG("%s: registered proc 0x%lx",
 		               rec->streamID().data(), (long int)proc.get());
 	}
 	else
@@ -1562,7 +1562,7 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 	}
 #endif
 
-	SEISCOMP_DEBUG("Emit amplitude %s, proc = %ld, %s", amp->publicID().c_str(), (long int)ampProc, ampProc->type().c_str());
+	SEISCOMP_DEBUG("Emit amplitude %s, proc = 0x%lx, %s", amp->publicID().c_str(), (long int)ampProc, ampProc->type().c_str());
 	logObject(_logAmps, now);
 
 	if ( connection() && !_config.test ) {
