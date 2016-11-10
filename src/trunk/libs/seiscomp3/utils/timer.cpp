@@ -401,9 +401,6 @@ void Timer::handleTimeout(sigval_t self) {
 		boost::mutex::scoped_lock lock(timer->_callbackMutex, boost::try_to_lock);
 		if ( lock )
 			timer->_callback();
-		else
-			SEISCOMP_WARNING("Timer function with interval %d.%ds already running",
-			                 timer->_timeout, timer->_timeoutNs);
 	}
 }
 #endif
