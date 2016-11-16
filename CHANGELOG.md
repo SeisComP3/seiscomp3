@@ -88,6 +88,10 @@ structure has been added to ConfigStation.
 
   * Fix handling of blockette62
 
+* dlsv2inv
+
+  * Fix bug that caused wrong sensor calibration gain
+
 * seedlink
 
   * Fix Q330 setup if multiple instances are configured per station
