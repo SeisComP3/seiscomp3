@@ -116,7 +116,7 @@ bool transformFFT(int n, T *inout, double fsamp,
 	int fftn2 = data_coeff.size();
 
 	// Initial spectra taper
-	double df = nyquist_freq / fftn2;
+	double df = nyquist_freq / (fftn2-1);
 
 	if ( min_freq > 0 ) {
 		iTaperEnd = (int)(min_freq / df);
@@ -144,9 +144,9 @@ bool transformFFT(int n, T *inout, double fsamp,
 	}
 
 	// Multiply by freqs
-	df = nyquist_freq/fftn2;
+	df = nyquist_freq/(fftn2-1);
 
-	tf->deconvolve(data_coeff, df, df);
+	tf->deconvolve(data_coeff.size()-1, &data_coeff[1], df, df);
 
 	costaper(data_coeff.size(), &data_coeff[0], iTaperStart, iTaperEnd, eTaperStart, eTaperEnd);
 
