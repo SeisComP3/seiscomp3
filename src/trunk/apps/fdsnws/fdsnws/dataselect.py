@@ -166,6 +166,27 @@ class FDSNDataSelectRealm(object):
 	implements(portal.IRealm)
 
 	#---------------------------------------------------------------------------
+	def __init__(self, inv, access):
+		self.__inv = inv
+		self.__access = access
+
+	#---------------------------------------------------------------------------
+	def requestAvatar(self, avatarId, mind, *interfaces):
+		if resource.IResource in interfaces:
+			return (resource.IResource,
+				FDSNDataSelect(self.__inv, self.__access,
+					{"mail": avatarId}),
+				lambda: None)
+
+		raise NotImplementedError()
+
+
+
+################################################################################
+class FDSNDataSelectAuthRealm(object):
+	implements(portal.IRealm)
+
+	#---------------------------------------------------------------------------
 	def __init__(self, inv, access, userdb):
 		self.__inv = inv
 		self.__access = access

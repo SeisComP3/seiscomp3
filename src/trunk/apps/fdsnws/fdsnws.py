@@ -36,7 +36,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
 
-from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm
+from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, FDSNDataSelectAuthRealm
 from seiscomp3.fdsnws.event import FDSNEvent
 from seiscomp3.fdsnws.station import FDSNStation
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
@@ -541,10 +541,7 @@ class FDSNWS(Application):
 
 			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._access))
 			msg = 'authorization for restricted time series data required'
-			authSession = self._getAuthSessionWrapper(FDSNDataSelectRealm(dataSelectInv,
-										      self._access,
-										      self._userdb),
-										      msg)
+			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
 			dataselect1.putChild('version', serviceVersion)
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
@@ -866,11 +863,15 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def _getAuthSessionWrapper(self, realm, msg):
-		if self._authEnabled:
+	def _getAuthSessionWrapper(self, inv, msg):
+		if self._authEnabled:  # auth extension
+			realm = FDSNDataSelectAuthRealm(inv, self._access, self._userdb)
 			checker = UsernamePasswordChecker(self._userdb)
-		else:
+
+		else:  # htpasswd
+			realm = FDSNDataSelectRealm(inv, self._access)
 			checker = checkers.FilePasswordDB(self._htpasswd)
+
 		p = portal.Portal(realm, [checker])
 		f = guard.DigestCredentialFactory('MD5', msg)
 		f.digest = BugfixedDigest('MD5', msg)
