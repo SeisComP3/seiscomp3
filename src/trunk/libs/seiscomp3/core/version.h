@@ -49,6 +49,9 @@ namespace Core {
    - Added Seiscomp::IO::DatabaseInterface::numberOfAffectedRows
    - Added optional error code to Seiscomp::Inventory class
    - Added macro REREGISTER_CLASS which allows to overwrite class registrations
+   - Added method Seiscomp::Gui::Alg::MapTreeNode::parent()
+   - Allow Seiscomp::Gui::Map::TileStore::load to return null images
+   - Increased TILESTORE version to 2
 
  "8.0.0"   0x080000
    - Added class Seiscomp::DataModel::ResponseFAP

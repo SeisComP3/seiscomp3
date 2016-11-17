@@ -103,6 +103,7 @@ struct SC_GUI_API Texture : public Core::BaseObject {
 	quint32     w;
 	quint32     h;
 	qint64      lastUsed;
+	bool        isDummy;
 };
 
 

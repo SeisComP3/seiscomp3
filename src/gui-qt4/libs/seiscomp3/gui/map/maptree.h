@@ -55,6 +55,9 @@ class SC_GUI_API MapTreeNode : public Seiscomp::Core::BaseObject {
 		int row() const { return _row; }
 		int column() const { return _column; }
 
+		MapTreeNode *parent() const { return _parent; }
+
+
 	protected:
 		static MapTreeNode* Create(MapTree* root, MapTreeNode *parent,
 		                           int level, int column, int row,
