@@ -47,10 +47,11 @@ int Texture::numBytes() const {
 
 bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 	data = NULL;
-	if ( node == NULL || !cache->load(image, node) ) {
+	if ( node == NULL || !cache->load(image, node) || image.isNull() ) {
 		image = QImage(1,1, QImage::Format_RGB32);
 		QRgb *bits = (QRgb*)image.bits();
 		*bits = qRgb(224,224,224);
+		isDummy = true;
 	}
 
 	if ( node ) {
@@ -77,6 +78,7 @@ void Texture::setImage(QImage &img) {
 	w = image.width();
 	h = image.height();
 	data = (const QRgb*)image.bits();
+	isDummy = false;
 }
 
 
@@ -346,31 +348,47 @@ Texture *TextureCache::get(const TextureID &id) {
 		++_currentTick;
 	}
 
+	Alg::MapTreeNode *node = NULL;
 	Lookup::iterator lit = _firstLevel.find(id);
-	if ( lit != _firstLevel.end() ) {
+	if ( lit != _firstLevel.end() )
 		tex = *lit;
-		tex->lastUsed = _currentTick;
-		return tex;
-	}
-
-	Alg::MapTreeNode *node = getNode(_mapTree, id);
-
-	it = _storage.find(node);
-	if ( it != _storage.end() ) {
-		tex = it.value().get();
-	}
 	else {
-		tex = new Texture;
-		tex->load(this, node);
+		node = getNode(_mapTree, id);
+		it = _storage.find(node);
+		if ( it != _storage.end() )
+			tex = it.value().get();
+		else {
+			tex = new Texture;
+			tex->load(this, node);
 
-		_storage[node] = tex;
-		_storedBytes += tex->numBytes();
+			_storage[node] = tex;
+			_storedBytes += tex->numBytes();
 
-		checkResources(tex);
+			checkResources(tex);
+		}
+
+		_firstLevel[id] = tex;
 	}
 
 	tex->lastUsed = _currentTick;
-	_firstLevel[id] = tex;
+
+	// If its a dummy texture then travel up the parent chain to check
+	// for valid textures
+	if ( tex->isDummy ) {
+		if ( node == NULL ) node = getNode(_mapTree, id);
+
+		while ( (node = node->parent()) != NULL ) {
+			it = _storage.find(node);
+			if ( it == _storage.end() )
+				continue;
+
+			Texture *tmp = it.value().get();
+			if ( !tmp->isDummy ) {
+				tex = tmp;
+				break;
+			}
+		}
+	}
 
 	return tex;
 }

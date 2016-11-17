@@ -285,19 +285,34 @@ bool isValid() {
 
 	ifstream f;
 
-	f.open(licenseFile.c_str(), ios_base::in);
+	try {
+		f.open(licenseFile.c_str(), ios_base::in);
+	}
+	catch ( std::exception &e ) {
+		cerr << "FATAL ERROR: Failed to open license file: " << licenseFile << endl;
+		validates = false;
+		return false;
+	}
 
 	if ( !f.good() ) {
-		cerr << "FATAL ERROR: Invalid license file: " << licenseFile << endl;
+		cerr << "FATAL ERROR: Failed to open license file: " << licenseFile << endl;
 		validates = false;
 		return false;
 	}
 
 	licenseText.clear();
 
-	while ( (len = f.rdbuf()->sgetn(data, 64)) > 0 ) {
-		licenseText.append(data, len);
-		MD5_Update(&ctx, data, len);
+	try {
+		while ( (len = f.rdbuf()->sgetn(data, sizeof(data))) > 0 ) {
+			licenseText.append(data, len);
+			MD5_Update(&ctx, data, len);
+		}
+	}
+	catch ( ... ) {
+		cerr << "FATAL ERROR: Invalid license file: " << licenseFile << endl;
+		f.close();
+		validates = false;
+		return false;
 	}
 
 	f.close();
