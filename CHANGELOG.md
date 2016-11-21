@@ -53,6 +53,8 @@ structure has been added to ConfigStation.
 
   * Set default author to appname@hostname instead of user@hostname
   * Upgraded rapidjson library to 1.1.0
+  * Apply processing stage0 gain correction if streams gain frequency
+    does not match the sensors gain frequency
 
 * scconfig
 
