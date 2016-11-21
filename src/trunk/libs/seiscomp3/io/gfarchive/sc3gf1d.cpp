@@ -193,7 +193,8 @@ bool SC3GF1DArchive::setSource(std::string source) {
 
 			std::ifstream ifDesc;
 
-			int depthFrom = -1, depthTo = -1, depthSpacing = -1;
+			int depthFrom = -1, depthTo = -1;
+			double depthSpacing = -1;
 			int distanceFrom = -1, distanceTo = -1, distanceSpacing = -1;
 			std::string line;
 
@@ -228,8 +229,9 @@ bool SC3GF1DArchive::setSource(std::string source) {
 					if ( depthSpacing == 0 )
 						depths.insert(depthFrom);
 					else {
-						for ( int i = depthFrom; i <= depthTo; i += depthSpacing )
+						for ( double i = depthFrom; i <= depthTo; i += depthSpacing ) {
 							depths.insert(i);
+						}
 					}
 
 				}
@@ -246,8 +248,9 @@ bool SC3GF1DArchive::setSource(std::string source) {
 					if ( distanceSpacing == 0 )
 						dists.insert(distanceFrom);
 					else {
-						for ( int i = distanceFrom; i <= distanceTo; i += distanceSpacing )
+						for ( int i = distanceFrom; i <= distanceTo; i += distanceSpacing ) {
 							dists.insert(i);
+						}
 					}
 				}
 			}

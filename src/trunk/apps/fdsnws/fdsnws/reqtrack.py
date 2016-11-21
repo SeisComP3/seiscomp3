@@ -1,4 +1,12 @@
+from twisted.internet import reactor
 from seiscomp3 import Core, Communication, DataModel
+
+
+def callFromThread(f):
+    def wrap(*args, **kwargs):
+        reactor.callFromThread(f, *args, **kwargs)
+    return wrap
+
 
 def enableNotifier(f):
     def wrap(*args, **kwargs):
@@ -11,13 +19,12 @@ def enableNotifier(f):
 
 class RequestTrackerDB(object):
 
-    @enableNotifier
     def __init__(self, appName, msgConn, req_id, req_type, user, header, label, user_ip, client_ip):
         self.msgConn = msgConn
         self.arclinkRequest = DataModel.ArclinkRequest.Create()
         self.arclinkRequest.setCreated(Core.Time.GMT())
         self.arclinkRequest.setRequestID(req_id)
-        self.arclinkRequest.setUserID(user)
+        self.arclinkRequest.setUserID(str(user))
         self.arclinkRequest.setClientID(appName)
         if user_ip: self.arclinkRequest.setUserIP(user_ip)
         if client_ip: self.arclinkRequest.setClientIP(client_ip)
@@ -29,20 +36,16 @@ class RequestTrackerDB(object):
         self.totalLineCount = 0
         self.okLineCount = 0
 
-        al = DataModel.ArclinkLog()
-        al.add(self.arclinkRequest)
+        self.requestLines = []
+        self.statusLines = []
 
 
-
-    @enableNotifier
     def send(self):
         msg = DataModel.Notifier.GetMessage(True)
         if msg:
             self.msgConn.send("LOGGING", msg)
 
 
-
-    @enableNotifier
     def line_status(self, start_time, end_time, network, station, channel,
         location, restricted, net_class, shared, constraints, volume, status, size, message):
         if network is None or network == "":
@@ -81,14 +84,13 @@ class RequestTrackerDB(object):
         arclinkStatusLine.setMessage(message)
         #
         arclinkRequestLine.setStatus(arclinkStatusLine)
-        self.arclinkRequest.add(arclinkRequestLine)
+        self.requestLines.append(arclinkRequestLine)
 
         self.averageTimeWindow += end_time - start_time
         self.totalLineCount += 1
         if status == "OK": self.okLineCount += 1
 
 
-    @enableNotifier
     def volume_status(self, volume, status, size, message):
         if volume is None:
             volume = "NODATA"
@@ -102,9 +104,10 @@ class RequestTrackerDB(object):
         arclinkStatusLine.setStatus(status)
         arclinkStatusLine.setSize(size)
         arclinkStatusLine.setMessage(message)
-        self.arclinkRequest.add(arclinkStatusLine)
+        self.statusLines.append(arclinkStatusLine)
 
 
+    @callFromThread
     @enableNotifier
     def request_status(self, status, message):
         if message is None:
@@ -122,6 +125,15 @@ class RequestTrackerDB(object):
         ars.setTotalLineCount(self.totalLineCount)
         ars.setOkLineCount(self.okLineCount)
         self.arclinkRequest.setSummary(ars)
+
+        al = DataModel.ArclinkLog()
+        al.add(self.arclinkRequest)
+
+        for obj in self.requestLines:
+            self.arclinkRequest.add(obj)
+
+        for obj in self.statusLines:
+            self.arclinkRequest.add(obj)
 
         self.send()
 

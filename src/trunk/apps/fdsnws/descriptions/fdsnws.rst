@@ -9,6 +9,16 @@ and record source. The following services are available:
    "**fdsnws-station**", "network, station, channel, response metadata", "`FDSN Station XML <http://www.fdsn.org/xml/station/>`_, `StationXML <http://www.data.scec.org/station/xml.html>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
    "**fdsnws-event**", "contributed earthquake origin and magnitude estimates", "`QuakeML <https://quake.ethz.ch/quakeml>`_, `SC3ML <http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/>`_"
 
+
+The available services can be reached from the fdsnws start page.
+The services also provide an interactive URL builder providing the URL based on
+the selection.
+
+URL
+^^^
+
+* http://localhost:8080/fdsnws
+
 If ``fdsnws`` is started, it accepts connections by default on port 8080 which
 can be changed in the configuration. Also please read :ref:`sec-port` for
 running the services on a privileged port, e.g. port 80 as requested by the
@@ -32,6 +42,7 @@ DataSelect
 URL
 ^^^
 
+* http://localhost:8080/fdsnws/dataselect/1/builder
 * http://localhost:8080/fdsnws/dataselect/1/query
 * http://localhost:8080/fdsnws/dataselect/1/queryauth
 * http://localhost:8080/fdsnws/dataselect/1/version
@@ -74,6 +85,7 @@ Station
 URL
 ^^^
 
+* http://localhost:8080/fdsnws/station/1/builder
 * http://localhost:8080/fdsnws/station/1/query
 * http://localhost:8080/fdsnws/station/1/version
 * http://localhost:8080/fdsnws/station/1/application.wadl
@@ -119,6 +131,7 @@ Event
 URL
 ^^^
 
+* http://localhost:8080/fdsnws/event/1/builder
 * http://localhost:8080/fdsnws/event/1/query
 * http://localhost:8080/fdsnws/event/1/catalogs
 * http://localhost:8080/fdsnws/event/1/contributors
