@@ -36,6 +36,7 @@ Texture::Texture() {
 	data = NULL;
 	w = 0;
 	h = 0;
+	isDummy = false;
 }
 
 
@@ -68,6 +69,7 @@ bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 	w = image.width();
 	h = image.height();
 	data = (const QRgb*)image.bits();
+	isDummy = false;
 
 	return true;
 }
