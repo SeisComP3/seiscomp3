@@ -56,7 +56,7 @@ ConnectionDialog::ConnectionDialog(ConnectionPtr* con, DatabaseInterfacePtr* db,
 	if ( _db == NULL ) _ui.groupDatabase->setEnabled(false);
 
 	connect(_ui.btnConnect, SIGNAL(clicked(bool)), this, SLOT(onConnect()));
-	connect(_ui.btnDbFetch, SIGNAL(clicked(bool)), this, SLOT(onFetch()));
+	connect(_ui.btnDbSwitchToReported, SIGNAL(clicked(bool)), this, SLOT(onSwitchToReported()));
 	connect(_ui.btnDbConnect, SIGNAL(clicked(bool)), this, SLOT(onDatabaseConnect()));
 	connect(_ui.listSubscriptions, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(onItemChanged(QListWidgetItem*)));
 	connect(_ui.btnSelectAll, SIGNAL(clicked()), this, SLOT(onSelectAll()));
@@ -134,6 +134,28 @@ bool ConnectionDialog::setDatabaseParameters(const QString& type, const QString&
 }
 
 
+bool ConnectionDialog::setDefaultDatabaseParameters(const QString &uri) {
+	QStringList tmp = uri.split("://");
+	QString type, connection;
+	type = tmp.size() > 0?tmp[0]:"";
+	connection = tmp.size() > 1?tmp[1]:"";
+
+	return setDefaultDatabaseParameters(type, connection);
+}
+
+
+bool ConnectionDialog::setDefaultDatabaseParameters(const QString &type, const QString &connection) {
+	_reportedDbType = type;
+	_reportedDbParameters = connection;
+
+	if ( !type.isEmpty() || !connection.isEmpty() )
+		_ui.labelDbReported->setText(type + "://" + connection);
+	else
+		_ui.labelDbReported->setText(QString());
+	return true;
+}
+
+
 std::string ConnectionDialog::databaseURI() const {
 	return (_ui.comboDbType->currentText() + "://" + _ui.editDbConnection->text()).toStdString();
 }
@@ -150,7 +172,7 @@ void ConnectionDialog::onConnectionError(int /*code*/) {
 		_ui.groupSubscriptions->setEnabled(false);
 		_ui.listSubscriptions->clear();
 
-		_ui.btnDbFetch->setEnabled(false);
+		_ui.btnDbSwitchToReported->setEnabled(false);
 	}
 }
 
@@ -166,7 +188,9 @@ void ConnectionDialog::onConnect() {
 		_ui.groupSubscriptions->setEnabled(false);
 		_ui.listSubscriptions->clear();
 
-		_ui.btnDbFetch->setEnabled(false);
+		_ui.btnDbSwitchToReported->setEnabled(false);
+
+		setDefaultDatabaseParameters("","");
 
 		emit aboutToDisconnect();
 		_changedConnection = true;
@@ -195,39 +219,38 @@ void ConnectionDialog::onConnect() {
 }
 
 
-void ConnectionDialog::onFetch() {
-	if ( _connection ) {
-		QCursor c = cursor();
-		setCursor(Qt::WaitCursor);
+void ConnectionDialog::onSwitchToReported() {
+	QCursor c = cursor();
+	setCursor(Qt::WaitCursor);
 
-		if ( fetchDatabase() )
-			_ui.btnDbConnect->setText("Disconnect");
-
+	if ( _reportedDbType.isEmpty() || _reportedDbParameters.isEmpty() ) {
 		setCursor(c);
-	}
-}
-
-
-bool ConnectionDialog::fetchDatabase() {
-	if ( _connection && *_connection ) {
-		MessagePtr msg = new DatabaseRequestMessage(NULL);
-		if ( !(*_connection)->send("SERVICE_REQUEST", msg.get()) )
-			return false;
-
-		Util::StopWatch timer;
-		while ( timer.elapsed() < TimeSpan(5.0) ) {
-			(*_connection)->poll();
-			while ( (msg = (*_connection)->readMessage(false)) != NULL ) {
-				DatabaseProvideMessage* dbResp = DatabaseProvideMessage::Cast(msg);
-				if ( dbResp ) {
-					setDatabaseParameters(dbResp->service(), dbResp->parameters());
-					return connectToDatabase();
-				}
-			}
-		}
+		QMessageBox::critical(this, "Error", "Insufficent database parameters");
+		return;
 	}
 
-	return false;
+	if ( _ui.comboDbType->currentText() == _reportedDbType &&
+	     _ui.editDbConnection->text() == _reportedDbParameters ) {
+		setCursor(c);
+		QMessageBox::information(this, "Not modified", "Database parameters are already in use");
+		return;
+	}
+
+	setDatabaseParameters(_reportedDbType, _reportedDbParameters);
+
+	// Disconnect from database
+	if ( *_db && (*_db)->isConnected() ) {
+		(*_db)->disconnect();
+		(*_db) = NULL;
+		_ui.btnDbConnect->setText("Connect");
+		_ui.comboDbType->setEnabled(true);
+		_ui.editDbConnection->setEnabled(true);
+	}
+
+	if ( connectToDatabase() )
+		_ui.btnDbConnect->setText("Disconnect");
+
+	setCursor(c);
 }
 
 
@@ -260,7 +283,7 @@ bool ConnectionDialog::connectToMessaging() {
 
 	_changedConnection = _lastConnection != _connection->get();
 
-	_ui.btnDbFetch->setEnabled(true);
+	_ui.btnDbSwitchToReported->setEnabled(true);
 
 	_ui.groupSubscriptions->setEnabled(true);
 

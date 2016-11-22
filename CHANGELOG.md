@@ -119,6 +119,12 @@ structure has been added to ConfigStation.
   * Allow access to non-restricted streams even if network or station is marked as restricted
   * Include fdsnws_fetch client
 
+* GUIs
+
+  * Connection setup dialog removes the fetch database parameters button
+    and replaces it with "Switch to reported" action that connects to the
+    database as reported by scmaster while handshaking
+
 ## Release 2016.161
 
 The database schema has changed since the previous version. To upgrade your
