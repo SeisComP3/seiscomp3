@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 
+################################################################################
+# Copyright (C) 2012-2013 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# tabinvmodifier -- Tool for inventory modification using nettab files.
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
+#
+# Author:  Marcelo Bianchi
+# Email:   mbianchi@gfz-potsdam.de
+################################################################################
+
 import os
 import sys
 import datetime, time
@@ -159,12 +170,17 @@ class InventoryModifier(Client.Application):
         if self.commandline().unrecognizedOptions():
             print >>sys.stderr,"Invalid options: ",
             for i in self.commandline().unrecognizedOptions():
-                print >>sys.stderr,i,
+                print >>sys.stderr, i,
             print >>sys.stderr,""
             return False
 
         if not rulesFile:
-            print >>sys.stderr,"No rule file was supplied for processing"
+            print >>sys.stderr, "No rule file was supplied for processing"
+            return False
+
+        if not os.path.isfile(rulesFile):
+            argv0 = os.path.basename(self.arguments()[0])
+            print >>sys.stderr, "%s: %s: No such file or directory" % (argv0, rulesFile)
             return False
 
         if self.commandline().hasOption("inventory-db"):
