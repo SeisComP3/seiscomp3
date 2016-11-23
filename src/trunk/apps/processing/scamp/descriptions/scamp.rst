@@ -36,7 +36,7 @@ Note that in order to be used by scmag, the input amplitude names for the
 various magnitude types must match exactly.
 
 Re-processing
-============
+=============
 
 *scamp* can be used to reprocess and to update amplitudes, e.g. when inventory paramters
 had to be changed retrospectively. Updating ampitudes requires waveform access.
