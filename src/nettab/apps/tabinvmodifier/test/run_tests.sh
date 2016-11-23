@@ -1,5 +1,17 @@
 #!/bin/sh
 
+######################################################################
+# Copyright (C) 2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# A few tests of 'tabinvmodifier'.
+#
+# There is a 'gotcha' here - is inventory already loaded for our test
+# network (4A:2003) or not?
+#
+# Author:  Peter Evans
+# E-mail:  pevans@gfz-potsdam.de
+######################################################################
+
 set -u
 
 setup () {
@@ -25,7 +37,7 @@ EOF
 teardown () {
 	rm -f 1 expected
 	rm -f rules?
-	rm -f foo.xml 4a_new.xml
+	rm -f foo.xml ge_inv.xml ??_new.xml
 }
 
 # ----------------------------------------------------------------------
@@ -44,9 +56,13 @@ EOF
 
 grep -A 5 "<network" ge_inv.xml
 
-~/seiscomp3/bin/seiscomp exec tabinvmodifier -r ge_mod.rules --inventory-db ge_inv.xml -o foo.xml
+~/seiscomp3/bin/seiscomp exec tabinvmodifier -r ge_mod.rules --inventory-db ge_inv.xml -o ge_new.xml
 
-grep -A 6 "<network" foo.xml 
+grep -A 6 "<network" ge_new.xml 
+
+diff ge_inv.xml ge_new.xml
+
+rm -f ge_some.xml ge_mod.rules
 
 }
 
@@ -114,8 +130,7 @@ test2 () {
 # Wrong case on attribute names. Based on Valentino L.'s example.
 	echo "test2"
 
-	echo "Expect key error..."
-	~/seiscomp3/bin/seiscomp exec tabinvmodifier -r rules1
+	~/seiscomp3/bin/seiscomp exec tabinvmodifier -r rules1 >1 2>&1
 
 # First version (Nov 2016) threw KeyError:
 #
@@ -123,13 +138,24 @@ test2 () {
 #      p = valid['attributes'][k]['validator'](p)
 #   KeyError: 'archive'
 
+	num=$(grep -c 'netClass.*not a valid key' 1)
+	if [ $num -ne 1 ] ; then echo "Unexpected netClass message(s)" && cat 1 && exit 1 ; fi
+
+	num=$(grep -c 'archive.*not a valid key' 1)
+	if [ $num -lt 3 ] ; then echo "Unexpected archive message(s)" && cat 1 && exit 1 ; fi
+
+}
+
+test_online () {
+	echo "test_online"
+
 	echo "Expect write to DB..."
 	~/seiscomp3/bin/seiscomp exec tabinvmodifier -r rules2 --debug
 }
 
 test_offline () {
 # Expect success - set netClass and archive on <network>, and archive on <stations>.
-	echo "test 3"
+	echo "test_offline"
 	~/seiscomp3/bin/seiscomp exec tabinvmodifier -r rules2 --inventory-db 4a_inv.xml -o 4a_new.xml
 	diff 4a_inv.xml	4a_new.xml
 }
@@ -137,7 +163,9 @@ test_offline () {
 setup
 test_nosuchrulesfile
 test_usage
+test1
 test2
+test_online
 test_offline
 teardown
 

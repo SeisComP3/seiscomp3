@@ -276,8 +276,15 @@ class InventoryModifier(Client.Application):
         valid = sc3._findValidOnes(mode)
         if att:
             for (k,p) in att.iteritems():
-                p = valid['attributes'][k]['validator'](p)
-                getattr(obj, 'set'+k)(p)
+                try:
+                    p = valid['attributes'][k]['validator'](p)
+                    getattr(obj, 'set'+k)(p)
+                except KeyError:
+                    import string
+                    hint = ''
+                    if k[0] in string.lowercase:
+                        hint = " (try '%s' instead)" % ( k[0].upper() + k[1:])
+                    print >>sys.stderr, 'Modifiying %s: \'%s\' is not a valid key%s' % (mode, k, hint)
             obj.update()
         return
 
