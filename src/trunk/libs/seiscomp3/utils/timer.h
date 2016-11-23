@@ -15,14 +15,13 @@
 #define __SEISCOMP_UTILS_TIMER_H__
 
 #include <seiscomp3/core/datetime.h>
-#include <seiscomp3/utils/mutex.h>
 #include <seiscomp3/core.h>
 
 #include <boost/function.hpp>
-
-#ifdef WIN32
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
+
+#ifdef WIN32
 #include <list>
 #else
 #include <signal.h>
@@ -150,19 +149,20 @@ class SC_SYSTEM_CORE_API Timer {
 		static TimerList _timers;
 		static boost::thread *_thread;
 		static boost::mutex _mutex;
-		bool         _isActive;
-		unsigned int _value;
+
+		bool             _isActive;
+		unsigned int     _value;
 #else
-		timer_t      _timerID;
+		timer_t          _timerID;
 #endif
 
-		Callback     _callback;
-		mutex        _callbackMutex;
-		unsigned int _timeout;
+		Callback         _callback;
+		boost::try_mutex _callbackMutex;
+		unsigned int     _timeout;
 #ifndef WIN32
-		unsigned int _timeoutNs;
+		unsigned int     _timeoutNs;
 #endif
-		bool         _singleShot;
+		bool             _singleShot;
 };
 
 
