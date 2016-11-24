@@ -419,6 +419,11 @@
 							attribute, the publicID, lat, lon otherwise.
 							</description>
 						</parameter>
+						<parameter name="encoding" type="string" default="UTF-8">
+							<description>
+							The XML encoding string written to the Shakemap XML file.
+							</description>
+						</parameter>
 					</group>
 				</group>
 				<parameter name="magnitudeTolerance" type="double" default="0.5">
