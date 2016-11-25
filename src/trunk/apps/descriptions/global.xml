@@ -467,6 +467,9 @@
 				</description>
 			</parameter>
 			<group name="amplitudes">
+				<description>
+					Defines general parameters for amplitude of a certain type, e.g. time windows to derive magnitudes.
+				</description>
 				<group name="WoodAnderson">
 					<description>
 						Allows to configure the Wood-Anderson seismometer response.
@@ -492,21 +495,27 @@
 						</description>
 					</parameter>
 				</group>
-				<description>
-					Defines general parameters for amplitude of a certain type, e.g. time windows to derive magnitudes.
-				</description>
+				<parameter name="saturationThreshold" type="string" default="false">
+					<description>
+					Defines the saturation threshold for the optional saturation check.
+					By default the saturation check is disabled but giving a value above
+					0 will enable it. Waveforms that are saturated are not used
+					for amplitude calculations.
+
+					This value can either be an absolute value such as &quot;100000&quot;
+					or a relative value (optionally in percent) with respect to
+					the number of effective bits, e.g. &quot;0.8@23&quot; or
+					&quot;80%@23&quot;. The first version uses 1**23 * 0.8
+					whereas the latter uses 1**23 * 80/100.
+
+					The special value &quot;false&quot; explicitly disables
+					the check.
+					</description>
+				</parameter>
 				<parameter name="enable" type="boolean" default="true">
 					<description>
 					Defines if amplitude calculation is enabled. If disabled then
 					this station will be skipped for amplitudes and magnitudes.
-					</description>
-				</parameter>
-				<parameter name="saturationThreshold" type="double" default="-1">
-					<description>
-					Defines the saturation threshold for the optional saturation check.
-					By default the saturation check is disabled but giving a value above
-					0 will enable it. Waveforms that are saturated are not used  at all
-					for amplitude calculations.
 					</description>
 				</parameter>
 				<parameter name="enableResponses" type="boolean" default="false">
@@ -523,6 +532,23 @@
 					the type must match the one defined in the corresponding
 					AmplitudeProcessor.
 					</description>
+					<parameter name="saturationThreshold" type="string" default="false">
+						<description>
+						Defines the saturation threshold for the optional saturation check.
+						By default the saturation check is disabled but giving a value above
+						0 will enable it. Waveforms that are saturated are not used
+						for amplitude calculations.
+
+						This value can either be an absolute value such as &quot;100000&quot;
+						or a relative value (optionally in percent) with respect to
+						the number of effective bits, e.g. &quot;0.8@23&quot; or
+						&quot;80%@23&quot;. The first version uses 1**23 * 0.8
+						whereas the latter uses 1**23 * 80/100.
+
+						The special value &quot;false&quot; explicitly disables
+						the check.
+						</description>
+					</parameter>
 					<parameter name="enable" type="boolean" default="true">
 						<description>
 						Defines if amplitude calculation of certain type is enabled.
@@ -533,13 +559,6 @@
 						Activates deconvolution for this amplitude type. If not
 						set the global flag &quot;amplitudes.enableResponses&quot;
 						will be used instead.
-						</description>
-					</parameter>
-					<parameter name="saturationThreshold" type="double" default="-1">
-						<description>
-						If greater than 0 and the absolute value of an incoming
-						unfiltered sample exceeds this value, the trace data is rejected and
-						not used (saturation check).
 						</description>
 					</parameter>
 					<parameter name="minSNR" type="double">

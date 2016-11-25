@@ -83,8 +83,6 @@ void AmplitudeProcessor::init() {
 	_enableResponses = false;
 	_responseApplied = false;
 
-	_config.saturationThreshold = -1;
-
 	_config.noiseBegin = -35;
 	_config.noiseEnd = -5;
 	_config.signalBegin = -5;
@@ -653,12 +651,21 @@ bool AmplitudeProcessor::computeNoise(const DoubleArray &data, int i1, int i2, d
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool AmplitudeProcessor::setup(const Settings &settings) {
+	if ( !TimeWindowProcessor::setup(settings) )
+		return false;
+
 	// Reset Wood-Anderson response to default
 	_config.woodAndersonResponse = Math::SeismometerResponse::WoodAnderson::Config();
 
 	settings.getValue(_config.woodAndersonResponse.gain, "amplitudes.WoodAnderson.gain");
 	settings.getValue(_config.woodAndersonResponse.T0, "amplitudes.WoodAnderson.T0");
 	settings.getValue(_config.woodAndersonResponse.h, "amplitudes.WoodAnderson.h");
+
+	if ( !parseSaturationThreshold(settings, "amplitudes.saturationThreshold") )
+		return false;
+
+	if ( !parseSaturationThreshold(settings, "amplitudes." + _type + ".saturationThreshold") )
+		return false;
 
 	try {
 		if ( settings.getBool("amplitudes." + _type + ".enable") == false )
@@ -677,7 +684,6 @@ bool AmplitudeProcessor::setup(const Settings &settings) {
 	if ( !settings.getValue(_enableResponses, "amplitudes." + _type + ".enableResponses") )
 		settings.getValue(_enableResponses, "amplitudes.enableResponses");
 
-	settings.getValue(_config.saturationThreshold, "amplitudes.saturationThreshold");
 	settings.getValue(_config.snrMin, "amplitudes." + _type + ".minSNR");
 	settings.getValue(_config.noiseBegin, "amplitudes." + _type + ".noiseBegin");
 	settings.getValue(_config.noiseEnd, "amplitudes." + _type + ".noiseEnd");
@@ -691,7 +697,7 @@ bool AmplitudeProcessor::setup(const Settings &settings) {
 	settings.getValue(_config.respMinFreq, "amplitudes." + _type + ".resp.minFreq");
 	settings.getValue(_config.respMaxFreq, "amplitudes." + _type + ".resp.maxFreq");
 
-	return TimeWindowProcessor::setup(settings);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -741,27 +747,6 @@ void AmplitudeProcessor::emitAmplitude(const Result &res) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double AmplitudeProcessor::timeWindowLength(double distance) const {
 	return _config.signalEnd;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeProcessor::fill(size_t n, double *samples) {
-	if ( _config.saturationThreshold > 0 ) {
-		for ( size_t i = 0; i < n; ++i ) {
-			if ( fabs(samples[i]) > _config.saturationThreshold ) {
-				SEISCOMP_WARNING("%s: data clipped: %f > %f",
-				                 _stream.lastRecord->streamID().c_str(),
-				                 fabs(samples[i]), _config.saturationThreshold);
-				setStatus(DataClipped, samples[i]);
-				break;
-			}
-		}
-	}
-
-	TimeWindowProcessor::fill(n, samples);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
