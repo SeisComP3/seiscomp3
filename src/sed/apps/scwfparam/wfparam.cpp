@@ -346,7 +346,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	setInterpretNotifierEnabled(true);
 
 	setLoadInventoryEnabled(true);
-	setLoadConfigModuleEnabled(false);
+	setLoadConfigModuleEnabled(true);
 
 	setPrimaryMessagingGroup("AMPLITUDE");
 

@@ -550,6 +550,24 @@ bool PGAV::setup(const Settings &settings) {
 
 	if ( !TimeWindowProcessor::setup(settings) ) return false;
 
+	// Preset with internal config
+	setSaturationCheckEnabled(_config.saturationThreshold >= 0);
+	setSaturationThreshold(_config.saturationThreshold);
+
+	if ( !parseSaturationThreshold(settings, "amplitudes.saturationThreshold") )
+		return false;
+
+	if ( !parseSaturationThreshold(settings, "amplitudes.PGAV.saturationThreshold") )
+		return false;
+
+	if ( isSaturationCheckEnabled() )
+		_config.saturationThreshold = saturationThreshold();
+	else
+		_config.saturationThreshold = -1;
+
+	// Disable native saturation check because it is performed here anyways
+	setSaturationCheckEnabled(false);
+
 	settings.getValue(_config.preEventWindowLength, "PGAV.preEventWindowLength");
 	settings.getValue(_config.totalTimeWindowLength, "PGAV.totalTimeWindowLength");
 	settings.getValue(_config.STAlength, "PGAV.STA");
