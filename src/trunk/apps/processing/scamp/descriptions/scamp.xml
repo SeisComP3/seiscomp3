@@ -4,7 +4,7 @@
 		<description>Calculates amplitudes on basis of incoming origins and the associated picks.</description>
 		<configuration>
 			<parameter name="amplitudes" type="list:string" default="MLv, mb, mB, Mwp">
-				<description>Definition of amplitude types to be calculated.</description>
+				<description>Definition of magnitude types for which amplitudes are to be calculated.</description>
 			</parameter>
 		</configuration>
 		<command-line>

@@ -45,7 +45,7 @@
 				</group>
 			</group>
 			<parameter name="magnitudes" type="list:string" default="MLv, mb, mB, Mwp">
-				<description>Definition of amplitude types to be calculated.</description>
+				<description>Definition of magnitude types to be calculated from amplitudes.</description>
 			</parameter>
 			<group name="magnitudes">
 				<parameter name="average" type="list:string" default="default">
