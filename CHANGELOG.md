@@ -97,10 +97,14 @@ structure has been added to ConfigStation.
 * seedlink
 
   * Fix Q330 setup if multiple instances are configured per station
+  * Fix scream_ring setup in combination with a configured map file
 
 * scwfparam
 
   * Apply lost patch again to use the same path name as earthquake.id for input files
+  * Add configuration of output XML encoding due to Shakemap issues with non ASCII
+    characters
+  * Add station bindings to configure saturation threshold
 
 * scrttv
 
@@ -118,6 +122,10 @@ structure has been added to ConfigStation.
   * Fix geo filter for POST queries
   * Allow access to non-restricted streams even if network or station is marked as restricted
   * Include fdsnws_fetch client
+
+* scevent
+
+  * Fix segfault
 
 * GUIs
 
