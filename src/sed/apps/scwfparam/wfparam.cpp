@@ -1614,7 +1614,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 		proc->setResponseSpectrumParameters(_config.dampings, _config.naturalPeriods, _config.Tmin, _config.Tmax, _config.naturalPeriodsLog);
 	proc->setAftershockRemovalEnabled(_config.afterShockRemoval);
 	proc->setPreEventCutOffEnabled(_config.eventCutOff);
-	proc->setSaturationThreshold(_config.saturationThreshold);
+	proc->setSaturationThreshold((_config.saturationThreshold * 0.01) * (1 << 23));
 	proc->setNonCausalFiltering(_config.enableNonCausalFilters, _config.taperLength);
 	proc->setPadLength(_config.padLength);
 	// -1 as hifreq: let the algorithm define the best frequency
