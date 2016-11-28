@@ -1851,8 +1851,12 @@ void EventTool::updatedOrigin(DataModel::Origin *org,
 	// Get the cached origin, not the one sent in this message
 	// If there is no cached origin the same instance is passed back
 	Origin *origin = Origin::Find(org->publicID());
-	if ( origin != org )
-		*origin = *org;
+	if ( origin != NULL ) {
+		if ( origin != org )
+			*origin = *org;
+	}
+	else
+		origin = org;
 
 	EventInformationPtr info = findAssociatedEvent(origin);
 	if ( !info ) {
@@ -2013,11 +2017,15 @@ EventInformationPtr EventTool::associateFocalMechanism(FocalMechanism *fm) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventTool::updatedFocalMechanism(FocalMechanism *focalMechanism) {
-	// Get the cached origin, not the one sent in this message
+	// Get the cached focal mechanism, not the one sent in this message
 	// If there is no cached origin the same instance is passed back
 	FocalMechanism *fm = FocalMechanism::Find(focalMechanism->publicID());
-	if ( focalMechanism != fm )
-		*fm = *focalMechanism;
+	if ( fm != NULL ) {
+		if ( focalMechanism != fm )
+			*fm = *focalMechanism;
+	}
+	else
+		fm = focalMechanism;
 
 	EventInformationPtr info = findAssociatedEvent(fm);
 	if ( !info ) {
