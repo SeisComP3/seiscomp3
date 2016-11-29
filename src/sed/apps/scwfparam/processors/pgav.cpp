@@ -830,9 +830,8 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 			}
 		}
 	}
-	else {
-		SEISCOMP_DEBUG(">  saturation threshold = %f", _config.saturationThreshold);
-	}
+	else
+		SEISCOMP_DEBUG(">  saturation threshold = %f, check disabled", _config.saturationThreshold);
 
 
 	// -------------------------------------------------------------------
