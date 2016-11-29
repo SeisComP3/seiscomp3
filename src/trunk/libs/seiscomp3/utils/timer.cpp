@@ -310,7 +310,7 @@ bool Timer::deactivate(bool remove) {
 }
 #else
 bool Timer::destroy() {
-	boost::mutex::scoped_lock lock(_callbackMutex);
+	boost::try_mutex::scoped_lock lock(_callbackMutex);
 
 	if ( !_timerID ) return false;
 
@@ -398,8 +398,13 @@ bool Timer::Update() {
 void Timer::handleTimeout(sigval_t self) {
 	Timer *timer = reinterpret_cast<Timer*>(self.sival_ptr);
 	if ( timer->_callback ) {
-		boost::mutex::scoped_lock lock(timer->_callbackMutex, boost::try_to_lock);
-		if ( lock )
+#if (BOOST_VERSION >= 103500)
+			boost::try_mutex::scoped_try_lock l(timer->_callbackMutex, boost::defer_lock);
+#else
+			boost::try_mutex::scoped_try_lock l(timer->_callbackMutex, false);
+#endif
+
+		if ( l.try_lock() )
 			timer->_callback();
 	}
 }

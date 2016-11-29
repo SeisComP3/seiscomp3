@@ -1018,6 +1018,8 @@ bool Application::init() {
 	}
 
 	if ( isDatabaseEnabled() && (type() != QApplication::Tty) ) {
+		cdlg()->setDefaultDatabaseParameters(_db.c_str());
+
 		if ( !cdlg()->hasDatabaseChanged() )
 			cdlg()->setDatabaseParameters(_db.c_str());
 
@@ -1355,6 +1357,8 @@ void Application::destroyConnection() {
 
 	closeMessageThread();
 
+	cdlg()->setDefaultDatabaseParameters("","");
+
 	_connection = NULL;
 	emit changedConnection();
 }
@@ -1440,14 +1444,17 @@ void Application::messagesAvailable() {
 			continue;
 		}
 
-		if ( isDatabaseEnabled() && (database() == NULL) ) {
+		if ( isDatabaseEnabled() ) {
 			Communication::DatabaseProvideMessage* dbmsg = Communication::DatabaseProvideMessage::Cast(msg);
-			if ( dbmsg && !_database ) {
-				cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
-				cdlg()->connectToDatabase();
-				if ( cdlg()->hasDatabaseChanged() ) {
-					_db = cdlg()->databaseURI();
-					setDatabase(database());
+			if ( dbmsg ) {
+				cdlg()->setDefaultDatabaseParameters(dbmsg->service(), dbmsg->parameters());
+				if ( database() == NULL ) {
+					cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
+					cdlg()->connectToDatabase();
+					if ( cdlg()->hasDatabaseChanged() ) {
+						_db = cdlg()->databaseURI();
+						setDatabase(database());
+					}
 				}
 			}
 		}

@@ -67,8 +67,6 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 			double respMinFreq;
 			double respMaxFreq;
 
-			double saturationThreshold;
-
 			Math::SeismometerResponse::WoodAnderson::Config woodAndersonResponse;
 		};
 
@@ -324,9 +322,6 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 
 		//! This method gets called when an amplitude has to be published
 		void emitAmplitude(const Result &result);
-
-		//! Checks for clipped data if enabled
-		virtual void fill(size_t n, double *samples);
 
 
 	private:

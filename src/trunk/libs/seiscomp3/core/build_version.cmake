@@ -1,6 +1,6 @@
 # Get the latest abbreviated commit hash of the working branch
 EXECUTE_PROCESS(
-	COMMAND git rev-parse HEAD
+	COMMAND git rev-parse --short HEAD
 	WORKING_DIRECTORY ${ROOT}
 	OUTPUT_VARIABLE SC3_GIT_REVISION
 	OUTPUT_STRIP_TRAILING_WHITESPACE

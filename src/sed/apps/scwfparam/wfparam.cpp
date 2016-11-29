@@ -255,6 +255,7 @@ WFParam::Config::Config() {
 	shakeMapOutputScriptWait = true;
 	shakeMapOutputSC3EventID = false;
 	shakeMapOutputRegionName = false;
+	shakeMapXMLEncoding = "UTF-8";
 
 	waveformOutputPath = "@LOGDIR@/shakemaps/waveforms";
 	waveformOutputEventDirectory = false;
@@ -345,7 +346,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	setInterpretNotifierEnabled(true);
 
 	setLoadInventoryEnabled(true);
-	setLoadConfigModuleEnabled(false);
+	setLoadConfigModuleEnabled(true);
 
 	setPrimaryMessagingGroup("AMPLITUDE");
 
@@ -424,6 +425,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	NEW_OPT(_config.shakeMapOutputScriptWait, "wfparam.output.shakeMap.synchronous");
 	NEW_OPT(_config.shakeMapOutputSC3EventID, "wfparam.output.shakeMap.SC3EventID");
 	NEW_OPT(_config.shakeMapOutputRegionName, "wfparam.output.shakeMap.regionName");
+	NEW_OPT(_config.shakeMapXMLEncoding, "wfparam.output.shakeMap.encoding");
 	NEW_OPT(_config.magnitudeTolerance, "wfparam.magnitudeTolerance");
 	NEW_OPT_CLI(_config.fExpiry, "Generic", "expiry,x",
 	            "Time span in hours after which objects expire", true);
@@ -1612,7 +1614,7 @@ int WFParam::addProcessor(const DataModel::WaveformStreamID &waveformID,
 		proc->setResponseSpectrumParameters(_config.dampings, _config.naturalPeriods, _config.Tmin, _config.Tmax, _config.naturalPeriodsLog);
 	proc->setAftershockRemovalEnabled(_config.afterShockRemoval);
 	proc->setPreEventCutOffEnabled(_config.eventCutOff);
-	proc->setSaturationThreshold(_config.saturationThreshold);
+	proc->setSaturationThreshold((_config.saturationThreshold * 0.01) * (1 << 23));
 	proc->setNonCausalFiltering(_config.enableNonCausalFilters, _config.taperLength);
 	proc->setPadLength(_config.padLength);
 	// -1 as hifreq: let the algorithm define the best frequency
@@ -2476,7 +2478,7 @@ void WFParam::collectResults() {
 			try {
 				int year, mon, day, hour, min, sec;
 				org->time().value().get(&year, &mon, &day, &hour, &min, &sec);
-				*os << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" << endl;
+				*os << "<?xml version=\"1.0\" encoding=\"" << _config.shakeMapXMLEncoding << "\" standalone=\"yes\"?>" << endl;
 				*os << "<!DOCTYPE earthquake SYSTEM \"earthquake.dtd\">" << endl;
 				*os << "<earthquake id=\"" << shakeMapEventID << "\""
 				    << " lat=\"" << org->latitude().value() << "\""
@@ -2503,7 +2505,7 @@ void WFParam::collectResults() {
 			os = &of;
 		}
 
-		*os << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" << endl;
+		*os << "<?xml version=\"1.0\" encoding=\"" << _config.shakeMapXMLEncoding << "\" standalone=\"yes\"?>" << endl;
 		*os << "<!DOCTYPE earthquake SYSTEM \"stationlist.dtd\">" << endl;
 		*os << "<stationlist created=\"\" xmlns=\"ch.ethz.sed.shakemap.usgs.xml\">" << endl;
 

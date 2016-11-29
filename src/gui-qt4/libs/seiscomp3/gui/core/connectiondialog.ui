@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>447</width>
-    <height>393</height>
+    <width>508</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -80,7 +80,7 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="2" column="1" >
+      <item row="3" column="1" >
        <layout class="QHBoxLayout" >
         <property name="margin" >
          <number>0</number>
@@ -89,12 +89,12 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QPushButton" name="btnDbFetch" >
+         <widget class="QPushButton" name="btnDbSwitchToReported" >
           <property name="enabled" >
            <bool>false</bool>
           </property>
           <property name="text" >
-           <string>Fetch</string>
+           <string>Switch to reported</string>
           </property>
          </widget>
         </item>
@@ -120,20 +120,6 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="labelDbConnection" >
-        <property name="text" >
-         <string>Connection:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="labelDbType" >
-        <property name="text" >
-         <string>Type:</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1" >
        <widget class="QComboBox" name="comboDbType" >
         <property name="modelColumn" >
@@ -143,6 +129,34 @@
       </item>
       <item row="1" column="1" >
        <widget class="QLineEdit" name="editDbConnection" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="labelDbType" >
+        <property name="text" >
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="labelDbConnection" >
+        <property name="text" >
+         <string>Connection:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>Reported:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLineEdit" name="labelDbReported" >
+        <property name="readOnly" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -359,7 +373,7 @@
   <tabstop>listSubscriptions</tabstop>
   <tabstop>comboDbType</tabstop>
   <tabstop>editDbConnection</tabstop>
-  <tabstop>btnDbFetch</tabstop>
+  <tabstop>btnDbSwitchToReported</tabstop>
   <tabstop>btnDbConnect</tabstop>
   <tabstop>btnClose</tabstop>
  </tabstops>

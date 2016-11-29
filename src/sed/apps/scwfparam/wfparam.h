@@ -168,6 +168,7 @@ class WFParam : public Application {
 			bool        shakeMapOutputScriptWait;
 			bool        shakeMapOutputSC3EventID;
 			bool        shakeMapOutputRegionName;
+			std::string shakeMapXMLEncoding;
 
 			bool        enableMessagingOutput;
 

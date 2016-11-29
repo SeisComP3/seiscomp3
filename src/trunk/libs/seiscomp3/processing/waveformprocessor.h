@@ -187,7 +187,7 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 		//! Initialize the filter for the given sampling frequency
 		virtual void initFilter(double fsamp);
 
-		//! Sets the filter to apply 
+		//! Sets the filter to apply
 		virtual void setFilter(Filter *filter);
 
 		//! Sets a operator for all fed records. An operator sits between
@@ -221,11 +221,15 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 		//! not performed.
 		void setSaturationCheckEnabled(bool enable);
 
-		//! Sets the saturation threshold. The default is 0.9 * 2**23-1
+		//! Sets the saturation threshold. The default is -1
 		void setSaturationThreshold(double t);
 
 		//! Returns whether saturation check is enabled
 		bool isSaturationCheckEnabled() const;
+
+		//! Returns the saturation threshold that is applied if saturation
+		//! check is enabled.
+		double saturationThreshold() const { return _saturationThreshold; }
 
 		//! Resets the processor completely. The configured init time
 		//! is going to be processed again.
@@ -296,6 +300,9 @@ class SC_SYSTEM_CLIENT_API WaveformProcessor : public Processor {
 		virtual bool store(const Record *rec);
 
 		void setStatus(Status status, double value);
+
+		bool parseSaturationThreshold(const Settings &settings,
+		                              const std::string &optionName);
 
 
 	// ----------------------------------------------------------------------

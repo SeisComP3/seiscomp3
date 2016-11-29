@@ -52,12 +52,12 @@ class SeedlinkPluginHandler:
 
     except KeyError:
       try:
-        map = seedlink.param('sources.scream.map')
+        map = seedlink.param('sources.scream_ring.map')
         if not os.path.isabs(map):
           map = os.path.join(seedlink.config_dir, map)
       except: map = os.path.join(seedlink.config_dir, 'scream2sl.map')
 
-      seedlink.setParam('sources.scream.mapFlag',map)
+      seedlink.setParam('sources.scream_ring.mapFlag',map)
       channelItems = []
 
     for item in channelItems:
