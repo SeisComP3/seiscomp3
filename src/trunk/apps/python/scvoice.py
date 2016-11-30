@@ -368,7 +368,7 @@ class VoiceAlert(seiscomp3.Client.Application):
 
                 org = self._cache.get(seiscomp3.DataModel.Origin, evt.preferredOriginID())
                 if org:
-                    try: param3 = org.quality().definingPhaseCount()
+                    try: param3 = org.quality().associatedPhaseCount()
                     except: pass
 
                 nmag = self._cache.get(seiscomp3.DataModel.Magnitude, evt.preferredMagnitudeID())
