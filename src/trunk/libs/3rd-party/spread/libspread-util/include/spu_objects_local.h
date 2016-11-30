@@ -82,6 +82,7 @@
 #define MEMBER                  32
 #define MSG_LIST_ENTRY          33
 #define SESS_SEQ_ENTRY          34
+#define QUEUE_LINK              35
 
 #define ROUTE_WEIGHTS           36
 #define PROF_FUNCT              37

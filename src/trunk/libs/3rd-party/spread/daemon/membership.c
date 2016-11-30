@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -31,7 +32,6 @@
  *    Dan Schoenblum       dansch@cnds.jhu.edu - Java interface.
  *
  */
-
 
 #include <string.h>
 #include <stdio.h>
@@ -79,11 +79,14 @@ typedef struct	dummy_ring_info{
 	int16		num_trans;
 } ring_info;
 
+bool                    Memb_Just_Installed = FALSE;  /* tracks if we just installed a reg memb due to last token we sent */
+
 static	configuration	Membership;
 static	membership_id	Membership_id;
 static	configuration	Future_membership;
 static	membership_id	Future_membership_id;
 
+static  membership_id   Form1_memb_id;
 static  membership_id   Trans_memb_id;
 static  int32           F_trans_memb_time;
 static  int32           Last_time_used;
@@ -112,14 +115,19 @@ static	void	Memb_handle_refer  ( sys_scatter *scat );
 static	void	Memb_handle_foreign( sys_scatter *scat );
 static	void	Memb_handle_form1  ( sys_scatter *scat );
 static	void	Memb_handle_form2  ( sys_scatter *scat );
-static	void	Shift_to_op();
-static	void	Shift_to_seg();
-static	void	Gather_or_represented();
-static	void	Shift_to_gather();
-static	void	Shift_to_represented();
-static	void	Form_or_fail();
-static	void	Scast_alive();
-static	void	Send_join();
+static	void	Shift_to_op(void);
+static	void	Shift_to_seg(void);
+static	void	Gather_or_represented(void);
+static	void	Shift_to_seg_event(int dmy, void *dmy_ptr);
+static	void	Gather_or_represented_event(int dmy, void *dmy_ptr);
+static	void	Shift_to_gather(void);
+static	void	Shift_to_represented(void);
+static	void	Form_or_fail(void);
+static	void	Scast_alive(int code);
+static	void	Send_join(void);
+static	void	Form_or_fail_event(int dmy, void *dmy_ptr);
+static	void	Scast_alive_event(int code, void *dmy_ptr);
+static	void	Send_join_event(int dmy, void *dmy_ptr);
 static	int	Insert_member( members_info *m, int32 proc_id );
 static	int	Insert_rep( reps_info *r, rep_info rep );
 static	int32	Smallest_member( members_info *m, int *index );
@@ -134,7 +142,7 @@ static	void	Flip_members( members_info *members_ptr );
 static	void	Flip_reps( reps_info *reps_ptr );
 static	void	Flip_rings( char *buf );
 
-void		Memb_init()
+void		Memb_init( void )
 {
 	packet_header	*pack_ptr;
 	int32		reference_subnet;
@@ -151,19 +159,22 @@ void		Memb_init()
 	reference_subnet = Cn->segments[0].procs[0]->id;
 	reference_subnet = reference_subnet & 0xffff0000;
 
-	if (!Conf_memb_timeouts_set()) {
+	Wide_network = 0;
+	for( i=1; i < num_seg; i++ ) {
+	  current_subnet = Cn->segments[i].procs[0]->id;
+	  current_subnet = current_subnet & 0xffff0000;
 
-		Wide_network = 0;
-		for( i=1; i < num_seg; i++ )
-		{
-			current_subnet = Cn->segments[i].procs[0]->id;
-			current_subnet = current_subnet & 0xffff0000;
-			if( current_subnet != reference_subnet )
-			{
-				Wide_network = 1;
-				break;
-			}
-		}
+	  if( current_subnet != reference_subnet ) {
+	    Wide_network = 1;
+	    break;
+	  }
+	}
+
+	if (!Conf_get_accelerated_ring_flag()) {
+	    Conf_set_accelerated_ring(!Wide_network);
+	}
+
+	if (!Conf_memb_timeouts_set()) {
 
 		if( Wide_network )
 		{
@@ -230,6 +241,10 @@ void		Memb_init()
 	Transitional	      = 0;
 	Reg_membership    = Membership;
 
+        Commit_set.num_pending = 1;
+	Commit_set.num_members = 1;
+	Commit_set.members[0] = My.id;
+
 	pack_ptr = new(PACK_HEAD_OBJ);
 	pack_ptr->proc_id = My.id;
 
@@ -239,23 +254,27 @@ void		Memb_init()
 	Memb_token_loss();
 }
 
-void    Memb_signal_conf_reload(void)
+void    Memb_signal_conf_reload( void )
 {
         My = Conf_my();
 
 }
-configuration	*Memb_active_ptr()
+configuration	*Memb_active_ptr( void )
 {
-	if( State == EVS ) return ( &Future_membership );
-	else return( &Membership );
+        return ( State != EVS ? &Membership : &Future_membership );
 }
 
-membership_id	Memb_id()
+membership_id Memb_active_id( void )
+{
+        return ( State != EVS ? Membership_id : Future_membership_id );
+}
+
+membership_id	Memb_id( void )
 {
 	return( Membership_id );
 }
 
-membership_id   Memb_trans_id()
+membership_id   Memb_trans_id( void )
 {
         return( Trans_memb_id );
 }
@@ -268,12 +287,12 @@ int	Memb_is_equal( membership_id m1, membership_id m2 )
 		return( 0 );
 }
 
-int32	Memb_state()
+int32	Memb_state( void )
 {
 	return( State );
 }
 
-int	Memb_token_alive()
+int	Memb_token_alive( void )
 { 
 	return( Token_alive );
 }
@@ -373,7 +392,7 @@ static	void	Memb_handle_alive( sys_scatter *scat )
 
 	case REPRESENTED:
 	    Alarm( MEMB, "Handle_alive in REPRESENTED\n");
-	    E_queue( Shift_to_seg, 0, NULL, Rep_timeout );
+	    E_queue( Shift_to_seg_event, 0, NULL, Rep_timeout );
 
 	    break;
 
@@ -387,7 +406,7 @@ static	void	Memb_handle_alive( sys_scatter *scat )
 	    if( ! Token_alive ) Insert_member( &F_members, pack_ptr->proc_id );
 	    else if( Conf_id_in_conf( &Membership, pack_ptr->proc_id ) != -1 ){
 		/* sender belongs to my ring - my token is lost */
-		Memb_token_loss();
+                Memb_token_loss();
 		/* update my F_members list */
 		Insert_member( &F_members, pack_ptr->proc_id );
 	    }
@@ -511,10 +530,10 @@ static	void	Memb_handle_join( sys_scatter *scat )
 			My_seg_rep, pack_ptr->proc_id );
 		    My_seg_rep = pack_ptr->proc_id;
 		}
-		E_queue( Shift_to_seg, 0, NULL, Rep_timeout );
+		E_queue( Shift_to_seg_event, 0, NULL, Rep_timeout );
 		for( i=0; i < members_ptr->num_members; i++ )
 		    if( members_ptr->members[i] == My.id ) break;
-		Scast_alive( 1 );
+                Scast_alive( 1 );
 	    }else{
 		/* if My_seg_rep is determined -  send it to this guy */
 		/* My_seg_rep can be undetermined if it did not issue a join yet */
@@ -543,7 +562,7 @@ static	void	Memb_handle_join( sys_scatter *scat )
 	    }
 	    /* if sender is my Smallest rep - advance Gather_timeout */
 	    if( Smallest_rep( &F_reps, &dummy ) ==  reps_ptr->reps[0].proc_id )
-		E_queue( Form_or_fail, 0, NULL, Gather_timeout );
+		E_queue( Form_or_fail_event, 0, NULL, Gather_timeout );
 
 	    break;
 
@@ -637,7 +656,7 @@ static	void	Memb_handle_foreign( sys_scatter *scat )
 		}
 		if( Conf_leader( &Membership ) == My.id )
 		{
-			Memb_lookup_new_members();
+                        Memb_lookup_new_members();
 		}else if( Conf_seg_leader( &Membership, My.seg_index ) == My.id &&
 			  (!Foreign_found) ){
 			/*
@@ -691,36 +710,34 @@ static	void	Memb_handle_form1( sys_scatter *scat )
     switch( State )
     {
 	case OP:
-	    Alarm( MEMB, "Handle_form1 in OP\n");
-		if( Conf_leader( &Membership ) == My.id ) /* do nothing */;
-		else Fill_form1( scat );
-		break;
+	        if( Conf_leader( &Membership ) == My.id ) { Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in OP (leader swallow)\n");
+	        } else { Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in OP\n"); Fill_form1( scat ); }
+	        break;
 
 	case SEG:
-	    Alarm( MEMB, "Handle_form1 in SEG\n");
+	        Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in SEG (swallow)\n");
 		/* swallow this token */
 		break;
 
 	case REPRESENTED:
-	    Alarm( MEMB, "Handle_form1 in REPRESENTED\n");
+	        Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in REPRESENTED\n");
 		Fill_form1( scat );
 		break;
 
 	case GATHER:
-	    Alarm( MEMB, "Handle_form1 in GATHER\n");
+	        Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in GATHER\n");
 		Fill_form1( scat );
 		break;
 
 	case FORM:
-	    Alarm( MEMB, "Handle_form1 in FORM\n");
+	        Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in FORM (swallow)\n");
 		/* swallow this token */
 		break;
 
 	case EVS:
-	    Alarm( MEMB, "Handle_form1 in EVS\n");
+	        Alarmp( SPLOG_INFO, MEMB, "Handle_form1 in EVS (swallow)\n");
 		/* swallow this token */
 		break;
-
     }
 }
 
@@ -729,22 +746,22 @@ static	void	Memb_handle_form2( sys_scatter *scat )
     switch( State )
     {
 	case OP:
-		Alarm( MEMB, "Handle_form2 in OP\n");
+		Alarm( MEMB, "Handle_form2 in OP (swallow)\n");
 		/* swallow this token */
 		break;
 
 	case SEG:
-		Alarm( MEMB, "Handle_form2 in SEG\n");
+		Alarm( MEMB, "Handle_form2 in SEG (swallow)\n");
 		/* swallow this token */
 		break;
 
 	case REPRESENTED:
-		Alarm( MEMB, "Handle_form2 in REPRESENTED\n");
+		Alarm( MEMB, "Handle_form2 in REPRESENTED (swallow)\n");
 		/* swallow this token */
 		break;
 
 	case GATHER:
-		Alarm( MEMB, "Handle_form2 in GATHER\n");
+		Alarm( MEMB, "Handle_form2 in GATHER (swallow)\n");
 		/* swallow this token */
 		break;
 
@@ -754,13 +771,13 @@ static	void	Memb_handle_form2( sys_scatter *scat )
 		break;
 
 	case EVS:
-		Alarm( MEMB, "Handle_form2 in EVS\n");
+		Alarm( MEMB, "Handle_form2 in EVS (swallow)\n");
 		/* swallow this token */
 		break;
     }
 }
 
-void	Memb_token_loss()
+void	Memb_token_loss( void )
 {
 	rep_info	temp_rep;
 	int		i;
@@ -769,9 +786,6 @@ void	Memb_token_loss()
     {
 	case OP:
 	    /* my token is lost - shift to seg */
-
-	    Commit_set.num_members = 1;
-	    Commit_set.members[0] = My.id;
 
 	    Potential_reps.num_reps = 0;
 	    temp_rep.type = POTENTIAL_REP;
@@ -792,18 +806,15 @@ void	Memb_token_loss()
 	case SEG:
 	case REPRESENTED:
 	    Alarm( EXIT, "Memb_token_loss: bug !!! state is %d\n",State);
-
 	    break;
 
 	case GATHER:
 	    /* I think I totally solved it */
 	    /* If I am not a ring leader it is a bug */
 	    if( ! Token_alive )
-		Alarm( EXIT, "Memb_token_loss: bug !!! state is %d\n",State);
+		Alarm( EXIT, "Memb_token_loss: bug !!! state is %d but !Token_alive\n",State);
 
 	    /* I am a ring leader and I lost my ring */
-	    Commit_set.num_members = 1;
-	    Commit_set.members[0] = My.id;
 
 	    Potential_reps.num_reps = 0;
 	    temp_rep.type = POTENTIAL_REP;
@@ -861,24 +872,33 @@ void	Memb_token_loss()
     }
 
     Token_alive = 0;
-    E_dequeue( Memb_token_loss,    0, NULL );
-    E_dequeue( Send_join,	   0, NULL );
-    E_dequeue( Form_or_fail,	   0, NULL );
-    E_dequeue( Prot_token_hurry,   0, NULL );
-    E_dequeue( Memb_lookup_new_members, 0, NULL );
+    Prot_set_delivery_threshold( BLOCK_REGULAR_DELIVERY );
+
+    Memb_Just_Installed = FALSE;
+    E_dequeue( Memb_token_loss_event,         0, NULL );
+    E_dequeue( Send_join_event,               0, NULL );
+    E_dequeue( Form_or_fail_event,            0, NULL );
+    E_dequeue( Prot_token_hurry_event,        0, NULL );
+    E_dequeue( Memb_lookup_new_members_event, 0, NULL );
     Last_token->type = 0;
     Last_token->seq  = 0;
     Last_token->aru  = 0;
 
     for( i=0; i < Conf_num_segments( Cn ); i++ )
 	Membership.segments[i].num_procs = 0;
+
     Conf_append_id_to_seg(&Membership.segments[My.seg_index], My.id);
 
-    Alarm( MEMB, "Memb_token_loss: I lost my token, state is %d\n",State);
+    Alarmp( SPLOG_WARNING, MEMB, "Memb_token_loss: ############### I lost my token, state was %d\n\n", State);
     Shift_to_seg();
 }
 
-static	void	Shift_to_op()
+void	Memb_token_loss_event(int dmy, void *dmy_ptr)
+{
+        Memb_token_loss();
+}
+
+static	void	Shift_to_op( void )
 {
        	State = OP;
 	GlobalStatus.state = OP;
@@ -888,7 +908,7 @@ static	void	Shift_to_op()
         }
 }
 
-static	void	Shift_to_seg()
+static	void	Shift_to_seg( void )
 {
 	State = SEG;
 	GlobalStatus.state = SEG;
@@ -896,11 +916,16 @@ static	void	Shift_to_seg()
 	F_members.num_members = 1;
 	F_members.members[0] = My.id;
 	F_members.num_pending = 0;
-	E_queue( Scast_alive, 0, NULL, Zero_timeout );
-	E_queue( Gather_or_represented,  0, NULL, Seg_timeout );
+	E_queue( Scast_alive_event, 0, NULL, Zero_timeout );
+	E_queue( Gather_or_represented_event,  0, NULL, Seg_timeout );
 }
 
-static	void	Gather_or_represented()
+static	void	Shift_to_seg_event( int dmy, void *dmy_ptr )
+{
+        Shift_to_seg();
+}
+
+static	void	Gather_or_represented( void )
 {
 	int	dummy;
 
@@ -914,7 +939,12 @@ static	void	Gather_or_represented()
 	}
 }
 
-static	void	Shift_to_gather()
+static	void	Gather_or_represented_event( int dmy, void *dmy_ptr )
+{
+        Gather_or_represented();
+}
+
+static	void	Shift_to_gather( void )
 {
 	State = GATHER;
 	GlobalStatus.state = GATHER;
@@ -926,23 +956,23 @@ static	void	Shift_to_gather()
 		F_reps.reps[0].type = RING_REP;
 	else	F_reps.reps[0].type = SEG_REP;
 
-	E_dequeue( Scast_alive,        0, NULL );
-	E_dequeue( Memb_lookup_new_members, 0, NULL );
-	E_queue( Send_join,    0, NULL, Zero_timeout );
-	E_queue( Form_or_fail, 0, NULL, Gather_timeout );
+	E_dequeue( Scast_alive_event,        0, NULL );
+	E_dequeue( Memb_lookup_new_members_event, 0, NULL );
+	E_queue( Send_join_event,    0, NULL, Zero_timeout );
+	E_queue( Form_or_fail_event, 0, NULL, Gather_timeout );
 }
 
-static	void	Shift_to_represented()
+static	void	Shift_to_represented( void )
 {
 	State = REPRESENTED;
 	GlobalStatus.state = REPRESENTED;
 
-	E_dequeue( Scast_alive, 0, NULL );
-	E_dequeue( Gather_or_represented, 0, NULL );
-	E_queue( Shift_to_seg, 0, NULL, Rep_timeout );
+	E_dequeue( Scast_alive_event, 0, NULL );
+	E_dequeue( Gather_or_represented_event, 0, NULL );
+	E_queue( Shift_to_seg_event, 0, NULL, Rep_timeout );
 }
 
-static	void	Form_or_fail()
+static	void	Form_or_fail( void )
 {
 
 	rep_info	temp_rep;
@@ -954,8 +984,8 @@ static	void	Form_or_fail()
 		if( Token_alive && F_reps.num_reps == 1 )
 		{
 			/* clear everything and go back to op */
-			E_dequeue( Send_join, 0, NULL);
-			E_queue( Memb_lookup_new_members, 0, NULL, Lookup_timeout );
+			E_dequeue( Send_join_event, 0, NULL);
+			E_queue( Memb_lookup_new_members_event, 0, NULL, Lookup_timeout );
                         Shift_to_op();
 		}else{
 			/* create and send form token */
@@ -966,8 +996,8 @@ static	void	Form_or_fail()
 		{
 			/* clear everything and go back to op */
 			Alarm( MEMB, "Form_or_fail:failed, return to OP\n");
-			E_dequeue( Send_join, 0, NULL );
-			E_queue( Memb_lookup_new_members, 0, NULL, Lookup_timeout );
+			E_dequeue( Send_join_event, 0, NULL );
+			E_queue( Memb_lookup_new_members_event, 0, NULL, Lookup_timeout );
                         Shift_to_op();
 		}else{
 			Alarm( MEMB, "Form_or_fail: failed to gather\n");
@@ -990,7 +1020,12 @@ static	void	Form_or_fail()
 	}
 }
 
-static	void	Scast_alive( int code, void *dummy )
+static	void	Form_or_fail_event( int dmy, void *dmy_ptr )
+{
+        Form_or_fail();
+}
+
+static	void	Scast_alive( int code )
 {
 	packet_header	*pack_ptr;
 
@@ -1006,10 +1041,15 @@ static	void	Scast_alive( int code, void *dummy )
 	Send_pack.num_elements = 2;
 	Net_scast( My.seg_index, &Send_pack );
 	if( code == 0 )
-		E_queue( Scast_alive, 0, NULL, Alive_timeout );
+		E_queue( Scast_alive_event, 0, NULL, Alive_timeout );
 }
 
-static	void	Send_join()
+static	void	Scast_alive_event( int code, void *dummy )
+{
+        Scast_alive(code);
+}
+
+static	void	Send_join( void )
 {
 	packet_header	*pack_ptr;
 	int		i;
@@ -1037,10 +1077,15 @@ static	void	Send_join()
 		Net_ucast( Potential_reps.reps[i].proc_id, &Send_pack );
 	}
 
-	E_queue( Send_join, 0, NULL, Join_timeout );
+	E_queue( Send_join_event, 0, NULL, Join_timeout );
 }
 
-void	Memb_lookup_new_members()
+static	void	Send_join_event( int dmy, void *dmy_ptr )
+{
+        Send_join();
+}
+
+void	Memb_lookup_new_members( void )
 {
 	packet_header	*pack_ptr;
 	int		num_missing;
@@ -1095,6 +1140,11 @@ void	Memb_lookup_new_members()
 	if( num_missing ) Shift_to_gather();
 }
 
+void	Memb_lookup_new_members_event( int dmy, void *dmy_ptr )
+{
+        Memb_lookup_new_members();
+}
+
 static	int	Insert_member( members_info *m, int32 proc_id )
 {
 	int 	i;
@@ -1108,7 +1158,8 @@ static	int	Insert_member( members_info *m, int32 proc_id )
        if (m->num_members == MAX_PROCS_RING) 
        {
             /* members structure is full -- so we ignore this new member */
-            Alarmp( SPLOG_WARNING, MEMB, "Insert_member: members structure full (%u members) so ignore new member (ID %u.%u.%u.%u)\n", m->num_members, IP1(proc_id), IP2(proc_id), IP3(proc_id), IP4(proc_id) );
+            Alarmp( SPLOG_WARNING, MEMB, "Insert_member: members structure full (%u members) so ignore new member (ID %u.%u.%u.%u)\n", 
+		    m->num_members, IP1(proc_id), IP2(proc_id), IP3(proc_id), IP4(proc_id) );
             return( 0 );
         }
 	m->members[m->num_members] = proc_id;
@@ -1307,9 +1358,9 @@ static	void	Sort_reps( reps_info *r )
 	}
 }
 
-static	void	Create_form1()
+static	void	Create_form1( void )
 {
-	token_header	form_token;
+        token_header	form_token = { 0 };
 	ring_info	*rg_info;
 	int32		*num_rings;
 	int32		*holes_procs_ptr;
@@ -1323,9 +1374,18 @@ static	void	Create_form1()
         int             cur_num_members;
         members_info    valid_members;
 
-	form_token.seq = Highest_seq+3333;
-	form_token.proc_id = My.id;
-	form_token.type = FORM1_TYPE;
+	form_token.type            = FORM1_TYPE;
+	form_token.proc_id         = My.id;
+        form_token.memb_id.proc_id = My.id;             /* NOTE: this memb_id is only used to ensure a FORM2 token matches up with the most recent FORM1 token we processed */
+        form_token.memb_id.time    = E_get_time().sec;
+	form_token.seq             = Highest_seq+3333;
+
+        if ( form_token.memb_id.time <= Last_time_used ) 
+                form_token.memb_id.time = Last_time_used + 1;
+
+        Last_time_used = form_token.memb_id.time;
+
+        Form1_memb_id = form_token.memb_id;
 
 	/* if I am a ring leader - update my F_members */
 	if( F_reps.reps[0].type == RING_REP )
@@ -1392,20 +1452,27 @@ static	void	Create_form1()
 	rg_info->aru		= Aru;
 	rg_info->highest_seq	= Highest_seq;
 
+	Alarmp(SPLOG_INFO, MEMB, "Create_form1: putting Aru = %d and Highest_Seq = %d on rg_info form1 token\n", Aru, Highest_seq);
+
 	/* update holes */
-	rg_info->num_holes	= 0;
+
+	rg_info->num_holes = 0;
+
 	for( index = My_aru+1; index <= Highest_seq; index++ )
 	{
 	    pack_entry = index & PACKET_MASK;
 	    if( ! Packets[pack_entry].exist )
 	    {
-		*holes_procs_ptr = index;
-		Alarm( MEMB ,
-		    "INSERT HOLE 1 IS %d My_aru is %d, Highest_seq is %d\n",
-		    index,My_aru, Highest_seq);
-		holes_procs_ptr++;
 		num_bytes += sizeof(int32);
 		rg_info->num_holes++;
+
+		if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		    Alarmp( SPLOG_FATAL, MEMB, "Create_form1:%d: token too big; num_bytes (%d); too many holes (%d)?\n", __LINE__, num_bytes, rg_info->num_holes );
+		}
+
+		Alarmp( SPLOG_INFO, MEMB, "INSERT HOLE 1 IS %d My_aru is %d, Highest_seq is %d\n", index, My_aru, Highest_seq );
+		*holes_procs_ptr = index;
+		holes_procs_ptr++;
 	    }
 	}
 
@@ -1414,8 +1481,13 @@ static	void	Create_form1()
 	/* insert self in trans and commit */
 	rg_info->num_commit	= 1;
 	rg_info->num_trans	= 1;
-	*holes_procs_ptr = My.id;
 	num_bytes += sizeof(int32);
+
+	if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+	    Alarmp( SPLOG_FATAL, MEMB, "Create_form1:%d: token too big; num_bytes (%d); too many holes (%d)?\n", __LINE__, num_bytes, rg_info->num_holes );
+	}
+
+	*holes_procs_ptr = My.id;
 	holes_procs_ptr++;
 
 	/* insert other members of commit set */
@@ -1425,10 +1497,16 @@ static	void	Create_form1()
 		if( Commit_set.members[i] == My.id ) continue;
 
 		/* insert this member */
-		*holes_procs_ptr = Commit_set.members[i];
-		holes_procs_ptr++;
 		num_bytes += sizeof(int32);
 		rg_info->num_commit++;
+
+		if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		    Alarmp( SPLOG_FATAL, MEMB, "Create_form1:%d: token too big; num_bytes (%d); too many holes (%d), too many num_commit (%d)?\n", 
+			    __LINE__, num_bytes, rg_info->num_holes, rg_info->num_commit );
+		}
+
+		*holes_procs_ptr = Commit_set.members[i];
+		holes_procs_ptr++;
 	}
 	
 	send_scat.num_elements = 4;
@@ -1441,40 +1519,55 @@ static	void	Create_form1()
 	send_scat.elements[3].buf = rg_info_buf;
 	send_scat.elements[3].len = num_bytes;
 
-	form_token.rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + 
-			      send_scat.elements[3].len;
+	form_token.rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + send_scat.elements[3].len;
 
 	/* compute whom to send to */
 	if( F_members.num_pending > 0 )
 	{
 		/* send to next member in pending list */
-		Net_ucast_token( F_members.members[F_members.num_members], 
-			   &send_scat );
-		Net_ucast_token( F_members.members[F_members.num_members], 
-			   &send_scat );
+		Net_ucast_token( F_members.members[F_members.num_members], &send_scat );
+		Net_ucast_token( F_members.members[F_members.num_members], &send_scat );
+		/*Net_ucast_token( F_members.members[F_members.num_members], &send_scat );*/
+
 	}else if( F_reps.rep_index < F_reps.num_reps){
 		/* send to next rep */
 		Net_ucast_token( F_reps.reps[F_reps.rep_index].proc_id, &send_scat );
 		Net_ucast_token( F_reps.reps[F_reps.rep_index].proc_id, &send_scat );
+		/*Net_ucast_token( F_reps.reps[F_reps.rep_index].proc_id, &send_scat );*/
+
 	}else{
 		/* singleton membership */
 		F_members.num_pending = 1;
 		F_members.num_members = 0;
 		form_token.type = FORM2_TYPE;
 		send_scat.elements[2].len = sizeof(membership_id);
-		form_token.rtr_len = send_scat.elements[1].len +
-			send_scat.elements[2].len + send_scat.elements[3].len;
+		form_token.rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + send_scat.elements[3].len;
 		Net_ucast_token( My.id, &send_scat );
+		Net_ucast_token( My.id, &send_scat );
+		/*Net_ucast_token( My.id, &send_scat );*/
 	}
 
-	E_dequeue( Send_join, 0, NULL );
-	E_queue( Memb_token_loss, 0, NULL, Form_timeout );
-    	E_dequeue( Prot_token_hurry, 0, NULL );
+	if ( Alarm_get_priority() >= SPLOG_INFO && ( Alarm_get_types() & MEMB ) != 0 ) {
+		Alarmp( SPLOG_INFO, MEMB, "Create_form1: SENT following token:\n" );
+	        Memb_print_form_token( &send_scat );
+	}
+
+	E_dequeue( Send_join_event, 0, NULL );
+	E_queue( Memb_token_loss_event, 0, NULL, Form_timeout );
+    	E_dequeue( Prot_token_hurry_event, 0, NULL );
+
 	Token_alive = 0;
+	Prot_set_delivery_threshold( BLOCK_REGULAR_DELIVERY );
 
 	State = FORM;
 	GlobalStatus.state = FORM;
 }
+
+/* TODO: there are all sorts of memory accesses offset from the token
+ * based on information written in the token itself.  This is highly
+ * dangerous without careful bounds checking at the very least.  A
+ * malformed packet could easily cause a seg fault or worse.
+ */
 
 static	void	Fill_form1( sys_scatter *scat )
 {
@@ -1498,7 +1591,12 @@ static	void	Fill_form1( sys_scatter *scat )
 	int             cur_num_members;
         int             num_to_copy;
         members_info    valid_members;
-	
+
+	if ( Alarm_get_priority() >= SPLOG_INFO && ( Alarm_get_types() & MEMB ) != 0 ) {
+		Alarmp( SPLOG_INFO, MEMB, "Fill_form1: RECEIVED following token:\n" );
+	        Memb_print_form_token( scat );
+	}
+
 	num_bytes  = 0;
 
 	form_token = (token_header *)scat->elements[0].buf;
@@ -1540,6 +1638,8 @@ static	void	Fill_form1( sys_scatter *scat )
 
 		/* validity check */
 		if( r_info->reps[r_info->rep_index].proc_id != My.id ||
+		    ( Token_alive  && r_info->reps[r_info->rep_index].type == SEG_REP ) ||
+		    ( !Token_alive && r_info->reps[r_info->rep_index].type == RING_REP ) ||
 		    m_info->num_pending != 0 ) 
 		{
 			return;
@@ -1608,16 +1708,18 @@ static	void	Fill_form1( sys_scatter *scat )
 			i = m_info->num_members;
 			for( j=0; j < Membership.num_segments; j++ )
 			    for( k=0; k < Membership.segments[j].num_procs; k++, i++ )
-				m_info->members[i] = 
-					Membership.segments[j].procs[k]->id;
+				m_info->members[i] = Membership.segments[j].procs[k]->id;
+
 			m_info->num_pending = i - m_info->num_members -1;
 			m_info->num_members += 1;
-		}else Alarm( EXIT, "Fill_form1: invalid rep type: %d\n",
-			r_info->reps[r_info->rep_index].type );
+
+		}else Alarm( EXIT, "Fill_form1: invalid rep type: %d\n", r_info->reps[r_info->rep_index].type );
 
 		r_info->rep_index++;
 
 	}else Alarm( EXIT, "Fill_form1: invalid State: %d\n",State );
+
+        Form1_memb_id = form_token->memb_id;
 
 	/* update potential in case of failure */
 	Potential_reps.num_reps = 0;
@@ -1644,20 +1746,26 @@ static	void	Fill_form1( sys_scatter *scat )
 				     is too subtle for it) */
 	for( i=0; i < *old_num_rings; i++ )
 	{
-	    bytes_to_copy = sizeof(ring_info) +
-			( old_rg_info->num_holes + old_rg_info->num_commit )* sizeof(int32);
+	    bytes_to_copy = sizeof(ring_info) + ( old_rg_info->num_holes + old_rg_info->num_commit ) * sizeof(int32);
+
 	    if( Memb_is_equal( old_rg_info->memb_id, Membership_id ) )
 	    {
 		my_rg_info = old_rg_info;
 		c_ptr = (char *) old_rg_info;
 		my_holes_procs_ptr = (int32 *)&c_ptr[sizeof(ring_info)];
                 old_rg_info = (ring_info *)&c_ptr[bytes_to_copy];
-	    }else{
+
+	    } else {
 		new_rg_info= (ring_info    *)&rg_info_buf[num_bytes];
+		num_bytes += bytes_to_copy;
+
+		if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+		}
+
 		memmove((char *)new_rg_info, (char *)old_rg_info, bytes_to_copy );
 		c_ptr = (char *) old_rg_info;
 		old_rg_info = (ring_info *)&c_ptr[bytes_to_copy];
-		num_bytes   += bytes_to_copy;
 		(*new_num_rings)++;
 	    }
 	}
@@ -1666,6 +1774,10 @@ static	void	Fill_form1( sys_scatter *scat )
 	num_bytes += sizeof(ring_info);
 	(*new_num_rings)++;
 
+	if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+	    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+	}
+
 	new_rg_info->memb_id	 = Membership_id;
         new_rg_info->trans_time  = 0;
 	new_rg_info->num_holes	 = 0;
@@ -1673,6 +1785,8 @@ static	void	Fill_form1( sys_scatter *scat )
 
 	new_rg_info->aru	 = Aru;
 	new_rg_info->highest_seq = Highest_seq;
+
+	Alarmp(SPLOG_INFO, MEMB, "Fill_form1: Putting Aru = %d and Highest_seq = %d on new_rg_info of form1 token\n", Aru, Highest_seq);
 
 	if( my_rg_info == NULL )
 	{
@@ -1685,7 +1799,10 @@ static	void	Fill_form1( sys_scatter *scat )
                  * to remove ourselves from the m_info list and not
                  * create this ring_info 
                  */
-                Alarmp( SPLOG_WARNING, MEMB, "Fill_form1: ring_info entry for %u.%u.%u.%u will not fit in FORM token. Removing self from current membership attempt by removing IP from m_info list\n", IP1(My.id), IP2(My.id), IP3(My.id), IP4(My.id));
+                Alarmp( SPLOG_WARNING, MEMB, 
+			"Fill_form1: ring_info entry for %u.%u.%u.%u will not fit in FORM token. Removing self from current membership attempt and m_info list\n", 
+			IP1(My.id), IP2(My.id), IP3(My.id), IP4(My.id));
+
                 /* since new ring is always at the end, we just decrease current byte count */
                 num_bytes = num_bytes - sizeof(ring_info);
                 (*new_num_rings)--;
@@ -1709,11 +1826,16 @@ static	void	Fill_form1( sys_scatter *scat )
                     pack_entry = index & PACKET_MASK;
                     if( ! Packets[pack_entry].exist )
                     {
-			*new_holes_procs_ptr = index;
-			Alarm( MEMB , "INSERT HOLE 2 IS %d\n",index);
-			new_holes_procs_ptr++;
-			num_bytes     += sizeof(int32);
+			num_bytes += sizeof(int32);
 			new_rg_info->num_holes++;
+
+			if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+			    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+			}
+
+			Alarmp( SPLOG_INFO, MEMB , "INSERT HOLE 2 IS %d\n", index);
+			*new_holes_procs_ptr = index;
+			new_holes_procs_ptr++;
                     }
                 }
 
@@ -1722,9 +1844,14 @@ static	void	Fill_form1( sys_scatter *scat )
                 /* insert self in trans and commit */
                 new_rg_info->num_commit	= 1;
                 new_rg_info->num_trans	= 1;
+                num_bytes += sizeof(int32);
+
+		if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+		}
+
                 *new_holes_procs_ptr = My.id;
                 new_holes_procs_ptr++;
-                num_bytes += sizeof(int32);
 
                 /* insert other members of commit set */
                 for( i=0; i < Commit_set.num_members; i++ )
@@ -1733,54 +1860,71 @@ static	void	Fill_form1( sys_scatter *scat )
                     if( Commit_set.members[i] == My.id ) continue;
 
                     /* insert this member */
-                    *new_holes_procs_ptr = Commit_set.members[i];
-                    new_holes_procs_ptr++;
                     num_bytes += sizeof(int32);
                     new_rg_info->num_commit++;
+
+		    if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		        Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+		    }
+
+                    *new_holes_procs_ptr = Commit_set.members[i];
+                    new_holes_procs_ptr++;
                 }
             }
 	}else{
 	
 	    members_info temp_set;
 
-	    if( my_rg_info->aru         > Aru )
-		new_rg_info->aru 	= my_rg_info->aru;
+	    if( my_rg_info->aru > Aru ) {
+		new_rg_info->aru = my_rg_info->aru;
+		Alarmp( SPLOG_INFO, MEMB, "my_rg_info->aru (%d) > Aru (%d) -> setting new_rg_info->aru to my_rg_info\n", my_rg_info->aru, Aru );
+	    }
 
-	    if( my_rg_info->highest_seq > Highest_seq )
+	    if( my_rg_info->highest_seq > Highest_seq ) {
 		new_rg_info->highest_seq= my_rg_info->highest_seq;
+		Alarmp( SPLOG_INFO, MEMB, "my_rg_info->highest_seq (%d) > Highest_seq (%d) -> setting new_rg_info->highest_seq to my_rg_info\n", my_rg_info->highest_seq, Highest_seq );
+	    }
 
 	    for( i=0; i < my_rg_info->num_holes; i++ )
 	    {
 		pack_entry = *my_holes_procs_ptr & PACKET_MASK;
 		if( ! Packets[pack_entry].exist )
 		{
-			*new_holes_procs_ptr	= *my_holes_procs_ptr;
-			Alarm( MEMB ,
-		"INSERT HOLE 3 IS %d My_aru is %d, Highest_seq is %d\n",
-				*new_holes_procs_ptr,My_aru, Highest_seq);
-			new_holes_procs_ptr++;
-			num_bytes	+= sizeof(int32);
+			num_bytes += sizeof(int32);
 			new_rg_info->num_holes++;
+
+			if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+  			    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+			}
+
+			*new_holes_procs_ptr = *my_holes_procs_ptr;
+			Alarmp( SPLOG_INFO, MEMB, "INSERT HOLE 3 IS %d, My_aru is %d, Highest_seq is %d\n", *new_holes_procs_ptr, My_aru, Highest_seq );
+			new_holes_procs_ptr++;
 		}
 		my_holes_procs_ptr++;
 	    }
 
 	    if( my_rg_info->highest_seq < Highest_seq )
             {
-		for( index = my_rg_info->highest_seq+1; 
-			index <= Highest_seq; index++ )
+		for( index = my_rg_info->highest_seq+1; index <= Highest_seq; index++ )
 		{
 		    pack_entry = index & PACKET_MASK;
 		    if( ! Packets[pack_entry].exist )
 		    {
+			num_bytes += sizeof(int32);
+			new_rg_info->num_holes++;
+
+			if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+  			    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+			}
+
 			Alarm( MEMB , "INSERT HOLE 4 IS %d\n",index);
 			*new_holes_procs_ptr = index;
 			new_holes_procs_ptr++;
-			num_bytes     += sizeof(int32);
-			new_rg_info->num_holes++;
 		    }
 		} 
             }
+
 	    /* setting temp_set to be trans members only */
 	    temp_set.num_members = 0;
 	    for( i = 0; i < my_rg_info->num_trans; i++ )
@@ -1815,9 +1959,14 @@ static	void	Fill_form1( sys_scatter *scat )
 	    new_rg_info->num_trans  = temp_set.num_pending;
 	    for( i = 0; i < temp_set.num_members; i++ )
 	    {
+		num_bytes += sizeof(int32);
+
+		if ( num_bytes > (int) sizeof( rg_info_buf ) ) {
+		    Alarmp( SPLOG_FATAL, MEMB, "Fill_form1:%d: token too big; num_bytes (%d)\n", __LINE__, num_bytes );
+		}
+
 		*new_holes_procs_ptr = temp_set.members[i];
 		new_holes_procs_ptr++;
-		num_bytes += sizeof(int32);
 	    }
 	}
 
@@ -1831,23 +1980,22 @@ static	void	Fill_form1( sys_scatter *scat )
 	send_scat.elements[3].buf = rg_info_buf;
 	send_scat.elements[3].len = num_bytes;
 
-	form_token->rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + 
-			      send_scat.elements[3].len;
+	form_token->rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + send_scat.elements[3].len;
 
 	/* compute whom to send to */
 	if( m_info->num_pending > 0 )
 	{
 		/* send to next member in pending list */
-		Net_ucast_token( m_info->members[m_info->num_members], 
-			&send_scat );
-		Net_ucast_token( m_info->members[m_info->num_members], 
-			&send_scat );
+		Net_ucast_token( m_info->members[m_info->num_members], &send_scat );
+		Net_ucast_token( m_info->members[m_info->num_members], &send_scat );
+		/*Net_ucast_token( m_info->members[m_info->num_members], &send_scat );*/
+
 	}else if( r_info->rep_index < r_info->num_reps){
 		/* send to next rep */
-		Net_ucast_token( r_info->reps[r_info->rep_index].proc_id, 
-			&send_scat );
-		Net_ucast_token( r_info->reps[r_info->rep_index].proc_id, 
-			&send_scat );
+		Net_ucast_token( r_info->reps[r_info->rep_index].proc_id, &send_scat );
+		Net_ucast_token( r_info->reps[r_info->rep_index].proc_id, &send_scat );
+		/*Net_ucast_token( r_info->reps[r_info->rep_index].proc_id, &send_scat );*/
+
 	}else{
 		/* prepare form2 token */
 		Sort_members( m_info );
@@ -1856,18 +2004,25 @@ static	void	Fill_form1( sys_scatter *scat )
 		form_token->type = FORM2_TYPE;
 		/* this is the only difference between form1 and form2 tokens */
 		send_scat.elements[2].len = sizeof(membership_id);
-		form_token->rtr_len = send_scat.elements[1].len + 
-				send_scat.elements[2].len + send_scat.elements[3].len;
+		form_token->rtr_len = send_scat.elements[1].len + send_scat.elements[2].len + send_scat.elements[3].len;
 		Net_ucast_token( m_info->members[0], &send_scat );
 		Net_ucast_token( m_info->members[0], &send_scat );
+		/*Net_ucast_token( m_info->members[0], &send_scat );*/
 	}
 
-	E_dequeue( Send_join, 0, NULL );
-	E_dequeue( Form_or_fail, 0, NULL );
-	E_dequeue( Shift_to_seg, 0, NULL );
-	E_queue( Memb_token_loss, 0, NULL, Form_timeout );
-    	E_dequeue( Prot_token_hurry, 0, NULL );
+	if ( Alarm_get_priority() >= SPLOG_INFO && ( Alarm_get_types() & MEMB ) != 0 ) {
+		Alarmp( SPLOG_INFO, MEMB, "Fill_form1: SENT following token:\n" );
+	        Memb_print_form_token( &send_scat );
+	}
+
+	E_dequeue( Send_join_event, 0, NULL );
+	E_dequeue( Form_or_fail_event, 0, NULL );
+	E_dequeue( Shift_to_seg_event, 0, NULL );
+	E_queue( Memb_token_loss_event, 0, NULL, Form_timeout );
+    	E_dequeue( Prot_token_hurry_event, 0, NULL );
+
 	Token_alive = 0;
+	Prot_set_delivery_threshold( BLOCK_REGULAR_DELIVERY );
 
 	State = FORM;
 	GlobalStatus.state = FORM;
@@ -1888,14 +2043,22 @@ static	void	Read_form2( sys_scatter *scat )
 	char		*rings_buf;
 	int		num_bytes;
 	int		bytes_to_skip;
+	int             tot_len;
 	proc		p;
 	int		ret;
 	int		i;
         int32           memb_time = 0;
-	
+
 	num_bytes  = 0;
 
 	form_token = (token_header *)scat->elements[0].buf;
+
+	if ( scat->elements[0].len != (int) sizeof(token_header) ) {
+	  Alarmp( SPLOG_WARNING, MEMB, "Read_form2: WARNING!!! Wrong size header %d (should be %d)\n", (int) scat->elements[0].len, (int) sizeof(token_header) );
+	  return;
+	}
+
+	tot_len    = (int) scat->elements[1].len;
 
 	m_info	   = (members_info *)scat->elements[1].buf;
 	num_bytes  += sizeof(members_info);
@@ -1907,7 +2070,13 @@ static	void	Read_form2( sys_scatter *scat )
 	num_rings  = (int32        *)&scat->elements[1].buf[num_bytes];
 	num_bytes  += sizeof(int32);
 
-	rg_info= (ring_info    *)&scat->elements[1].buf[num_bytes];
+	rg_info = (ring_info    *)&scat->elements[1].buf[num_bytes];
+
+	if ( num_bytes > tot_len ) 
+        {
+	        Alarmp( SPLOG_WARNING, MEMB, "Read_form2:%d: WARNING!!! Malformed packet; num_bytes (%d), tot_len (%d)\n", __LINE__, num_bytes, tot_len );
+		return;
+	}
 
 	if( !Same_endian( form_token->type ) )
 	{
@@ -1917,11 +2086,67 @@ static	void	Read_form2( sys_scatter *scat )
 		Flip_rings( rings_buf );	
 	}
 
-	form_token->proc_id = My.id;
+	/* print */
+	if ( Alarm_get_priority() >= SPLOG_INFO && ( Alarm_get_types() & MEMB ) != 0 ) 
+        {
+		Alarmp( SPLOG_INFO, MEMB, "Read_form2: RECEIVED following token:\n" );
+	        Memb_print_form_token( scat );
+	}
 
-	/* validity check */
-	if( m_info->members[m_info->num_members] != My.id ||
-	    m_info->num_pending <= 0 ) return;
+	/* validity checks */
+
+        if ( !Memb_is_equal( form_token->memb_id, Form1_memb_id ) )
+        {
+                Alarmp( SPLOG_WARNING, MEMB, "Read_form2: WARNING!!! Wrong memb_id on token (0x%08X, %d) should be (0x%08X, %d) -- dropping!\n", 
+                        form_token->memb_id.proc_id, form_token->memb_id.time, Form1_memb_id.proc_id, Form1_memb_id.time );
+                return;
+        }
+
+	if( m_info->num_members < 0 || m_info->num_pending <= 0 || (int) m_info->num_members + m_info->num_pending >= MAX_PROCS_RING ||
+	    m_info->members[m_info->num_members] != My.id ) 
+        {
+	        Alarmp( SPLOG_WARNING, MEMB, "Read_form2:%d: WARNING!!! Malformed packet; num_members (%hd), num_pending (%hd), next (0x%08X) -- dropping!\n", 
+                        __LINE__, m_info->num_members, m_info->num_pending, ( m_info->num_members < MAX_PROCS_RING ? m_info->members[m_info->num_members] : -1 ) );
+		return;
+	}
+
+	/* get my ring info */
+	my_rg_info = NULL;
+	my_holes_procs_ptr = NULL;
+
+	for( i=0; i < *num_rings; i++ )
+	{
+            if ( rg_info->num_trans < 1 || rg_info->num_trans > rg_info->num_commit || rg_info->num_commit > MAX_PROCS_RING || 
+                 rg_info->num_holes < 0 || rg_info->num_holes > MAX_SEQ_GAP )
+            {
+                Alarmp( SPLOG_WARNING, MEMB, "Read_form2: WARNING!!! Malformed ring info; num_trans (%d), num_commit (%d), num_holes (%d) -- dropping!\n", 
+                        rg_info->num_trans, rg_info->num_commit, rg_info->num_holes );
+                return;
+            }
+
+	    bytes_to_skip = sizeof(ring_info) + ( rg_info->num_holes + rg_info->num_commit ) * sizeof(int32);
+	    if( Memb_is_equal( rg_info->memb_id, Membership_id ) )
+	    {
+		my_rg_info = rg_info;
+		my_holes_procs_ptr = (int32 *)&scat->elements[1].buf[num_bytes+sizeof(ring_info)];
+	    }
+	    c_ptr = (char *) rg_info;
+	    rg_info = (ring_info *)&c_ptr[bytes_to_skip];
+	    num_bytes   += bytes_to_skip;
+	    
+	    if ( num_bytes > tot_len ) {
+	            Alarmp( SPLOG_WARNING, MEMB, "Read_form2:%d: WARNING!!! Malformed packet; num_bytes (%d), tot_len (%d) -- dropping!\n", __LINE__, num_bytes, tot_len );
+		    return;
+	    }
+	}
+
+        if (my_rg_info == NULL) {
+	        Alarmp( SPLOG_WARNING, MEMB, "Read_form2: WARNING!!! My ring ID not on token! Num_rings = %d, num_bytes = %d, Memb_id = (%d %d) -- dropping\n",
+			*num_rings, num_bytes, Membership_id.proc_id, Membership_id.time); 
+                return;
+        }
+
+	form_token->proc_id = My.id;
 
 	m_info->num_members++;
 	m_info->num_pending--;
@@ -1948,42 +2173,27 @@ static	void	Read_form2( sys_scatter *scat )
 	/* build Future membership and Future membership id */
 	Future_membership_id.proc_id = m_id_info->proc_id;
 	Future_membership_id.time    = m_id_info->time;
-	Future_membership = Conf();
+	Future_membership            = Conf();
+
 	for( i=0; i < Future_membership.num_segments; i++ )
 		Future_membership.segments[i].num_procs = 0;
-	for( i=0; i < (m_info->num_members + m_info->num_pending); i++ )
+
+	for( i=0; i < (int) m_info->num_members + m_info->num_pending; i++ )
 	{
 		ret = Conf_proc_by_id( m_info->members[i], &p );
-		if( ret < 0 ) Alarm( EXIT, "Read_form2: no such id %u\n",
-				m_info->members[i] );
+
+		if( ret < 0 ) 
+                        Alarm( EXIT, "Read_form2: no such id %u\n", m_info->members[i] );
+
                 if ( Conf_append_id_to_seg( &Future_membership.segments[p.seg_index], p.id) == -1)
                         Alarm( EXIT, "Read_form2: BUG2 no such id %u\n", p.id);
 	}
+
 	Net_set_membership( Future_membership );
+        Prot_set_prev_proc(&Future_membership);
 	FC_new_configuration( );
 
-	/* get my ring info */
-	my_rg_info = NULL;
-	my_holes_procs_ptr = NULL;
-	for( i=0; i < *num_rings; i++ )
-	{
-	    bytes_to_skip = sizeof(ring_info) +
-			    ( rg_info->num_holes + rg_info->num_commit ) * sizeof(int32);
-	    if( Memb_is_equal( rg_info->memb_id, Membership_id ) )
-	    {
-		my_rg_info = rg_info;
-		my_holes_procs_ptr = 
-		    (int32 *)&scat->elements[1].buf[num_bytes+sizeof(ring_info)];
-	    }
-	    c_ptr = (char *) rg_info;
-	    rg_info = (ring_info *)&c_ptr[bytes_to_skip];
-	    num_bytes   += bytes_to_skip;
-	}
-
-        if (my_rg_info == NULL) {
-                Alarm(EXIT, "Read_form2: num_rings = %d, num_bytes = %d, Memb_id = (%d %d)\n",
-                      *num_rings, num_bytes, Membership_id.proc_id, Membership_id.time); 
-        }
+	Alarmp( SPLOG_INFO, MEMB, "Read_form2: updating Highest_seq %d -> %d; Aru %d -> %d\n", Highest_seq, my_rg_info->highest_seq, Aru, my_rg_info->aru );
 
 	Highest_seq = my_rg_info->highest_seq;
 	Aru	    = my_rg_info->aru;
@@ -1991,15 +2201,43 @@ static	void	Read_form2( sys_scatter *scat )
          *       from the old membership with sequence numbers prior to the old Aru.
          */
 	Discard_packets();
+
+	/* NOTE: my_holes_procs_ptr already bounds checked above */
 	
 	for( i=0; i < my_rg_info->num_holes; i++ )
 	{
-		/* create dummy messages */
+	        /* create dummy messages */ 
 		pack_entry = *my_holes_procs_ptr & PACKET_MASK;
 		Alarm( MEMB , "EXTRACT HOLE IS %d\n",*my_holes_procs_ptr);
+
 		if( Packets[pack_entry].exist != 0 )
-		    Alarm( EXIT, "Read_form2: seq %d should be a hole, but is %d\n",
-			*my_holes_procs_ptr, Packets[pack_entry].exist );
+                {
+                        if ( !Memb_is_equal( Packets[pack_entry].head->memb_id, Membership_id ) )
+                                Alarmp( SPLOG_FATAL, MEMB, "Read_form2: %d is a hole on token, but I have it, but it's memb_id (0x%08X, %d) is wrong (0x%08X, %d)!\n",
+                                        *my_holes_procs_ptr, Packets[pack_entry].head->memb_id.proc_id, Packets[pack_entry].head->memb_id.time, 
+                                        Membership_id.proc_id, Membership_id.time );
+
+                        if ( Packets[pack_entry].head->seq != *my_holes_procs_ptr )
+                                Alarmp( SPLOG_FATAL, MEMB, "Read_form2: %d is a hole on token, but I have an entry for it in Packets, but it's seq (%d) is wrong!\n",
+                                        *my_holes_procs_ptr, Packets[pack_entry].head->seq );
+                        
+                        if ( Conf_proc_by_id_in_conf( &Future_membership, Packets[pack_entry].head->proc_id, &p ) != -1 )
+                                Alarmp( SPLOG_FATAL, MEMB, "Read_form2: %d is a hole on token, but I have it, but sender (0x%08X) is on the token!\n",
+                                        *my_holes_procs_ptr, Packets[pack_entry].head->proc_id );
+
+                        /* NOTE: We received a packet sent from a partitioning daemon after we processed the
+                         * FORM1 token and it is still listed as a hole on the FORM2 token.  Therefore, some
+                         * of the daemons have it (including this daemon) while others might not.  To be
+                         * consistent across all daemons, all who did get it must now forget it.  This won't
+                         * violate any form of self delivery because the originator is not in this attempt. */
+
+                        Alarmp( SPLOG_WARNING, MEMB, "Read_form2: WARNING!!! Dropping packet %d from partitioning member 0x%08X received after FORM1 processed!\n", 
+                                *my_holes_procs_ptr, Packets[pack_entry].head->proc_id );
+
+                        dispose( Packets[pack_entry].head );
+                        dispose( Packets[pack_entry].body );
+                }
+
 		Packets[pack_entry].exist = 3;
 		my_holes_procs_ptr++;
 	}
@@ -2014,7 +2252,7 @@ static	void	Read_form2( sys_scatter *scat )
 	}
 
         /* The token circulates in conf order, which also defines the order
-         * by which we choose "leaders."  So, if noone else has set the id
+         * by which we choose "leaders."  So, if no one else has set the id
          * for my ring, I get to, and I'll be leader. */
         if( !my_rg_info->trans_time )
         {
@@ -2041,27 +2279,54 @@ static	void	Read_form2( sys_scatter *scat )
 	{
 		Net_send_token( &send_scat );
 		Net_send_token( &send_scat );
+		/*Net_send_token( &send_scat );*/
 		Token_rounds = 0;
+
+		if ( Alarm_get_priority() >= SPLOG_INFO && ( Alarm_get_types() & MEMB ) != 0 ) {
+		  Alarmp( SPLOG_INFO, MEMB, "Read_form2: SENT following token:\n" );
+		  Memb_print_form_token( &send_scat );
+		}
 
 	}else{
 		/* build first regular token */
 		send_scat.num_elements = 1;
 
 		form_token->type = 0;
+		form_token->memb_id = Future_membership_id;
 		form_token->seq = 0;
-		form_token->aru = Last_seq;
+		form_token->aru = INT32_MAX;   /* leader will lower to his My_aru */
+		form_token->aru_last_id = -1;  /* leader will set to My.id */
 		form_token->flow_control = 0;
 		form_token->rtr_len = 0;
 
 		Net_send_token( &send_scat );
+		Net_send_token( &send_scat );
+		/*Net_send_token( &send_scat );*/
 		Token_rounds = 1;
 	}
 	Token_alive = 1;
-	E_queue( Memb_token_loss, 0, NULL, Token_timeout );
+	E_queue( Memb_token_loss_event, 0, NULL, Token_timeout );
     	
+        Received_token_rounds = 0; /* ### Used for priority switching*/
 	Last_token->type = 0;
 	Last_token->seq  = 0;
 	Last_token->aru  = 0;
+
+        /* NOTE: We set Aru = 0 here so that we can enforce the
+         * invariant that Aru never decreases during the protocol.
+         * This is legitimate because when rings try to merge they
+         * share their Aru's and so a "foreign" ring could always
+         * lower (even to 0) this daemon's Aru, regardless of what it
+         * was before.  So, ARU never had any truly invariant meaning.
+         * Furthermore, the daemons will try to raise Aru to My_aru in
+         * EVS, so we aren't forgetting anything important.  Finally,
+         * if the ring fails in EVS before we move to OP then
+         * Backoff_membership sets this daemon's Aru back to what it
+         * should be for his ring (i.e. - Last_discarded) regardless.
+         */
+        
+	Aru = 0;
+	Alarmp( SPLOG_INFO, MEMB, "Read_form2: updating Aru to %d!\n", Aru );
 
 	State = EVS;
 	GlobalStatus.state = EVS;
@@ -2220,18 +2485,22 @@ void	Memb_print_form_token( sys_scatter *scat )
         Alarmp( SPLOG_PRINT, PRINT, "====================================================\n");
 }
 
-static	void	Backoff_membership()
+static	void	Backoff_membership( void )
 {
 	int	pack_entry;
 	int	i;
+
+	Alarmp( SPLOG_INFO, MEMB, "Backoff_membership entered: Last_discarded = %d; Highest_seq = %d; Aru = %d; My_aru = %d\n", Last_discarded, Highest_seq, Aru, My_aru );
 
 	pack_entry=-1;
 	for( i=Last_discarded+1; i <= Highest_seq; i++ )
 	{
 		/* clear dummy messages */
 		pack_entry = i & PACKET_MASK;
-		if( Packets[pack_entry].exist == 3 )
+		if( Packets[pack_entry].exist == 3 ) {
+		        Alarmp( SPLOG_INFO, MEMB, "Backoff_membership: reverting dummy hole to true hole for packet %d\n", pack_entry );
 			Packets[pack_entry].exist = 0;
+		}
 	}
 
 	/* return Aru and My_aru */
@@ -2240,17 +2509,20 @@ static	void	Backoff_membership()
 	My_aru = Last_discarded;
 	for( i=Last_discarded+1; i <= Highest_seq; i++ )
 	{
+		pack_entry = i & PACKET_MASK;
 		if( !Packets[pack_entry].exist ) break;
 		My_aru++;
 	}
+
+	Alarmp( SPLOG_INFO, MEMB, "Backoff_membership leaving: Last_discarded = %d; Highest_seq = %d; Aru = %d; My_aru = %d\n", Last_discarded, Highest_seq, Aru, My_aru );
 }
 
-void	Memb_commit()
+void	Memb_commit( void )
 {
 	Commit_set = Future_commit_set;
 }
 
-void	Memb_transitional()
+void	Memb_transitional( void )
 {
 	int	i, j, k;
         int     num_seg, num_proc;
@@ -2305,18 +2577,23 @@ void	Memb_transitional()
 	}
 }
 
-void	Memb_regular()
+void	Memb_regular( void )
 {
 	int	i;
 
 	Alarm( MEMB, "Memb_regular\n");
 	Transitional = 0;
+	Memb_Just_Installed = TRUE;
 
 	GlobalStatus.membership_changes++;
 
 	Membership = Future_membership;
 	Membership_id = Future_membership_id;
 	Reg_membership = Membership;
+
+        Commit_set.num_pending = 1;
+        Commit_set.num_members = 1;
+        Commit_set.members[0] = My.id;
 
 	GlobalStatus.num_procs = 0;
 	GlobalStatus.num_segments = 0;
@@ -2332,9 +2609,11 @@ void	Memb_regular()
 
 	Foreign_found = 0;
 	if( Conf_leader( &Membership ) == My.id )
-		E_queue( Memb_lookup_new_members, 0, NULL, Lookup_timeout );
-	printf("Membership id is ( %d, %d)\n", Membership_id.proc_id, Membership_id.time );
-	printf("%c", Conf_print( &Membership ) );
+		E_queue( Memb_lookup_new_members_event, 0, NULL, Lookup_timeout );
+
+	Alarm( PRINT, "Membership id is ( %d, %d)\n", Membership_id.proc_id, Membership_id.time );
+	Conf_print( &Membership );
+	Alarm( PRINT, "\n" );
 
         Shift_to_op();
 }

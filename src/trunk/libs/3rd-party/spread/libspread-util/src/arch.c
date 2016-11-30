@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 #ifdef ARCH_PC_WIN95
-#include <winsock.h>
+#  include <winsock.h>
 #endif
 
 #ifndef HAVE_STRERROR
@@ -60,7 +60,7 @@ static  char buf[32];
 #ifdef ARCH_PC_WIN95
 /* return value only valid until next call to sock_strerror */
 
-char    *sock_strerror(int err)
+char *sock_strerror( int err )
 {
         switch( err ) {
         case WSANOTINITIALISED:
@@ -68,11 +68,11 @@ char    *sock_strerror(int err)
         case WSAENETDOWN:
             return "WSAENETDOWN: The network subsystem has failed.";
         case WSAEACCES:
-            return "WSAEACCES: The requested address is a broadcast address, but the appropriate flag was not set. Call setsockopt with the SO_BROADCAST parameter to allow the use of the broadcast address.";
+            return "WSAEACCES: The requested address is a broadcast address. Call setsockopt with the SO_BROADCAST parameter to allow the use of the broadcast address.";
         case WSAEINTR:
-            return "WSAEINTR: A blocking Windows Sockets 1.1 call was canceled through WSACancelBlockingCall.";
+            return "WSAEINTR: A blocking Windows Sockets call was canceled through WSACancelBlockingCall.";
         case WSAEINPROGRESS:
-            return "WSAEINPROGRESS: A blocking Windows Sockets 1.1 call is in progress, or the service provider is still processing a callback function.";
+            return "WSAEINPROGRESS: A blocking Windows Sockets call is in progress, or the service provider is still processing a callback function.";
         case WSAEFAULT:
             return "WSAEFAULT: The buf parameter is not completely contained in a valid part of the user address space." ;
         case WSAENETRESET:
@@ -84,7 +84,7 @@ char    *sock_strerror(int err)
         case WSAENOTSOCK:
             return "WSAENOTSOCK: The descriptor is not a socket.";
         case WSAEOPNOTSUPP:
-            return "WSAEOPNOTSUPP: MSG_OOB was specified, but the socket is not stream-style such as type SOCK_STREAM, out-of-band data is not supported in the communication domain associated with this socket, or the socket is unidirectional and supports only receive operations.";
+            return "WSAEOPNOTSUPP: Operation not supported.";
         case WSAESHUTDOWN:
             return "WSAESHUTDOWN The socket has been shut down; it is not possible to send on a socket after shutdown has been invoked with how set to SD_SEND or SD_BOTH.";
         case WSAEWOULDBLOCK:
@@ -98,7 +98,7 @@ char    *sock_strerror(int err)
         case WSAECONNABORTED:
             return "WSAECONNABORTED: The virtual circuit was terminated due to a time-out or other failure. The application should close the socket as it is no longer usable.";
         case WSAECONNRESET:
-            return "WSAECONNRESET: The virtual circuit was reset by the remote side executing a hard or abortive close. For UPD sockets, the remote host was unable to deliver a previously sent UDP datagram and responded with a Port Unreachable ICMP packet. The application should close the socket as it is no longer usable.";
+            return "WSAECONNRESET: The connection was reset by the remote side executing a hard or abortive close. For a UDP socket, the remote host responded with a Port Unreachable ICMP packet.";
         case WSAETIMEDOUT:
             return "WSAETIMEDOUT: The connection has been dropped, because of a network failure or because the system on the other end went down without notice.";
         default:

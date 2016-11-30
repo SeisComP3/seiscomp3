@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -32,7 +33,9 @@
  *
  */
 
-
+/* TODO: some of this code needs to be reviewed in light of scatter's
+   now using size_t's instead of ints or longs 
+*/
 
 #include <errno.h>
 #include <assert.h>
@@ -44,12 +47,10 @@ long scat_capacity(const scatter *scat)
   const scat_element *curr = scat->elements, *end = scat->elements + scat->num_elements;
   long ret = 0;
 
-  if (scat->num_elements < 0 || scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
+  if (scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
     return ILLEGAL_MESSAGE;
 
   for (; curr != end; ++curr) {
-    if (curr->len < 0)
-      return ILLEGAL_MESSAGE;
     ret += curr->len;
   }
   return ret;
@@ -59,13 +60,10 @@ int scatp_begin(scatp *pos, const scatter *scat)
 {
   int i;
 
-  if (scat->num_elements < 0 ||  scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
+  if (scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
     return ILLEGAL_MESSAGE;
 
-  for (i = 0; i < scat->num_elements && scat->elements[i].len == 0; ++i);
-
-  if (i != scat->num_elements && scat->elements[i].len < 0)
-    return ILLEGAL_MESSAGE;
+  for (i = 0; i < (int) scat->num_elements && scat->elements[i].len == 0; ++i);
 
   pos->scat     = (scatter*) scat;
   pos->elem_ind = i;
@@ -75,7 +73,7 @@ int scatp_begin(scatp *pos, const scatter *scat)
 
 int scatp_end(scatp *pos, const scatter *scat) 
 {
-  if (scat->num_elements < 0 || scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
+  if (scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
     return ILLEGAL_MESSAGE;
 
   pos->scat     = (scatter*) scat;
@@ -101,25 +99,25 @@ int scatp_is_legal(const scatp *pos)
 {
   const scatter *scat = pos->scat;
 
-  return (scat->num_elements >= 0 && scat->num_elements <= MAX_CLIENT_SCATTER_ELEMENTS &&
+  return (scat->num_elements <= MAX_CLIENT_SCATTER_ELEMENTS &&
 	  (scatp_is_end(pos) ||
-	   (pos->elem_ind >= 0 && pos->elem_ind < scat->num_elements &&
-	    pos->buff_ind >= 0 && pos->buff_ind < scat->elements[pos->elem_ind].len)));
+	   (pos->elem_ind >= 0 && pos->elem_ind < (int) scat->num_elements &&
+	    pos->buff_ind >= 0 && pos->buff_ind < (int) scat->elements[pos->elem_ind].len)));
 }
 
 int scatp_is_not_legal(const scatp *pos) 
 {
   const scatter *scat = pos->scat;
 
-  return (scat->num_elements < 0 || scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS ||
+  return (scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS ||
 	  (!scatp_is_end(pos) && 
-	   (pos->elem_ind < 0 || pos->elem_ind >= scat->num_elements || 
-	    pos->buff_ind < 0 || pos->buff_ind >= scat->elements[pos->elem_ind].len)));
+	   (pos->elem_ind < 0 || pos->elem_ind >= (int) scat->num_elements || 
+	    pos->buff_ind < 0 || pos->buff_ind >= (int) scat->elements[pos->elem_ind].len)));
 }
 
 int scatp_is_end(const scatp *pos) 
 {
-  if (pos->scat->num_elements < 0 || pos->scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
+  if (pos->scat->num_elements > MAX_CLIENT_SCATTER_ELEMENTS)
     return ILLEGAL_MESSAGE;
 
   return pos->elem_ind == pos->scat->num_elements && pos->buff_ind == 0;
@@ -156,8 +154,6 @@ long scatp_comp(const scatp *pos1, const scatp *pos2)
     curr = scat->elements + pos1->elem_ind;
     end  = scat->elements + pos2->elem_ind;
     while (++curr != end) {
-      if (curr->len < 0)
-	return ILLEGAL_MESSAGE;
       ret -= curr->len;
     }
   } else {
@@ -165,8 +161,6 @@ long scatp_comp(const scatp *pos1, const scatp *pos2)
     curr = scat->elements + pos2->elem_ind;
     end  = scat->elements + pos1->elem_ind;
     while (++curr != end) {
-      if (curr->len < 0)
-	return ILLEGAL_MESSAGE;
       ret += curr->len;
     }
   }
@@ -203,10 +197,7 @@ long scatp_jforward(scatp *pos, long num_bytes)
   elem_ind   = pos->elem_ind + 1;
   skip_bytes = num_bytes - tmp;   /* how many bytes left to skip */
   
-  for (; elem_ind < scat->num_elements; ++elem_ind) {
-    if (scat->elements[elem_ind].len < 0)
-      return ILLEGAL_MESSAGE;
-
+  for (; elem_ind < (int) scat->num_elements; ++elem_ind) {
     /* use < 0 because it jumps over any zero length buffers */
     if ((skip_bytes -= scat->elements[elem_ind].len) < 0) {
       skip_bytes += scat->elements[elem_ind].len; /* restore to positive */
@@ -245,9 +236,6 @@ long scatp_jbackward(scatp *pos, long num_bytes)
   skip_bytes = num_bytes - pos->buff_ind;
   
   for (e_ind = pos->elem_ind - 1; e_ind >= 0; --e_ind) {
-    if (scat->elements[e_ind].len < 0)
-      return ILLEGAL_MESSAGE;
-
     /* again we want to ignore any zero length buffers */
     if (scat->elements[e_ind].len > 0) {
       elem_ind = e_ind; /* elem_ind must reference a non-empty element buffer */
@@ -358,7 +346,7 @@ long scatp_adv_cpy0(scatp *dst, scatp *src, long num_bytes, int adv_dst, int adv
 
   bytes_left = num_bytes;
 
-  while (dst_elem < dscat->num_elements && src_elem < sscat->num_elements && bytes_left) {
+  while (dst_elem < (int) dscat->num_elements && src_elem < (int) sscat->num_elements && bytes_left) {
     dst_left  = dst_end - dst_curr;
     src_left  = src_end - src_curr;
     copy_size = (dst_left < src_left) ? dst_left : src_left;
@@ -375,8 +363,8 @@ long scatp_adv_cpy0(scatp *dst, scatp *src, long num_bytes, int adv_dst, int adv
     if (copy_size != dst_left)
       dst_curr += copy_size;
     else {
-      while (++dst_elem < dscat->num_elements && dscat->elements[dst_elem].len == 0);
-      if (dst_elem < dscat->num_elements) {
+      while (++dst_elem < (int) dscat->num_elements && dscat->elements[dst_elem].len == 0);
+      if (dst_elem < (int) dscat->num_elements) {
 	dst_curr = dscat->elements[dst_elem].buf;
 	dst_end  = dscat->elements[dst_elem].buf + dscat->elements[dst_elem].len;
       }
@@ -384,8 +372,8 @@ long scatp_adv_cpy0(scatp *dst, scatp *src, long num_bytes, int adv_dst, int adv
     if (copy_size != src_left)
       src_curr += copy_size;
     else {
-      while (++src_elem < sscat->num_elements && sscat->elements[src_elem].len == 0);
-      if (src_elem < sscat->num_elements) {
+      while (++src_elem < (int) sscat->num_elements && sscat->elements[src_elem].len == 0);
+      if (src_elem < (int) sscat->num_elements) {
 	src_curr = sscat->elements[src_elem].buf;
 	src_end  = sscat->elements[src_elem].buf + sscat->elements[src_elem].len;
       }

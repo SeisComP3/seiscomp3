@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -32,10 +33,10 @@
  *
  */
 
-
-
-
+#include <stdlib.h>
 #include <string.h>
+#include <signal.h>
+
 #include "arch.h"
 #include "spread_params.h"
 #include "session.h"
@@ -43,27 +44,27 @@
 #include "spu_events.h"
 #include "status.h"
 #include "log.h"
+#include "sess_body.h"
 #include "spu_alarm.h"
 
+#include "stdutil/stdutil.h"
+
 #ifndef ARCH_PC_WIN95
-#include <grp.h>
-#include <pwd.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#  include <grp.h>
+#  include <pwd.h>
+#  include <unistd.h>
+#  include <sys/types.h>
+#  include <sys/stat.h>
 #endif
 
 #ifdef	ARCH_PC_WIN95
-
-#include	<winsock.h>
-
+#  include	<winsock.h>
 WSADATA		WSAData;
-
 #endif	/* ARCH_PC_WIN95 */
 
 static	char		*My_name;
 static	char		My_name_buf[80];
-static	char		Config_file[80];
+static	char		Config_file[512];
 static	int		Log;
 
 static  const char            Spread_build_date[] = SPREAD_BUILD_DATE;
@@ -78,7 +79,21 @@ void ip_init(void);
 /* acp-permit.c: */
 void permit_init(void);
 
+static void Bye( void ) 
+{
+        Alarmp( SPLOG_PRINT, PRINT, "Spread daemon exiting normally!\n" );
+}
+
+static void E_exit_events_wrapper( int signum )
+{
+        E_exit_events_async_safe();
+}
+
+#ifdef USE_SPREAD_MAIN
+int SpreadMain(int argc, char *argv[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
 #ifdef	ARCH_PC_WIN95
 	int	ret;
@@ -89,12 +104,16 @@ int main(int argc, char *argv[])
 	struct passwd *pwd;
 #endif
 
+        atexit( Bye );
+        signal( SIGINT,  E_exit_events_wrapper );
+        signal( SIGTERM, E_exit_events_wrapper );
+
 	Alarm_set_types( CONF_SYS ); 
         Alarm_set_priority( SPLOG_INFO );
 
 	Alarmp( SPLOG_PRINT, SYSTEM, "/===========================================================================\\\n");
-	Alarmp( SPLOG_PRINT, SYSTEM, "| The Spread Toolkit.                                                       |\n");
-	Alarmp( SPLOG_PRINT, SYSTEM, "| Copyright (c) 1993-2013 Spread Concepts LLC                               |\n"); 
+	Alarmp( SPLOG_PRINT, SYSTEM, "| The Spread Toolkit                                                        |\n");
+	Alarmp( SPLOG_PRINT, SYSTEM, "| Copyright (c) 1993-2014 Spread Concepts LLC                               |\n"); 
 	Alarmp( SPLOG_PRINT, SYSTEM, "| All rights reserved.                                                      |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "|                                                                           |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "| The Spread toolkit is licensed under the Spread Open-Source License.      |\n");
@@ -115,6 +134,7 @@ int main(int argc, char *argv[])
         Alarmp( SPLOG_PRINT, SYSTEM, "|    John Schultz          jschultz@spreadconcepts.com                      |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "|                                                                           |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "| Major Contributors:                                                       |\n");
+        Alarmp( SPLOG_PRINT, SYSTEM, "|    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.     |\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Ryan Caudy           rcaudy@gmail.com - contribution to process groups.|\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Claudiu Danilov      claudiu@acm.org - scalable, wide-area support.    |\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Cristina Nita-Rotaru crisn@cs.purdue.edu - GC security.                |\n");
@@ -162,6 +182,12 @@ int main(int argc, char *argv[])
 	Conf_init( Config_file, My_name );
 
 	E_init();
+	
+	{
+	  sp_time t = E_get_time();
+
+	  set_rand( (int) stdhcode_oaat( &t, sizeof( t ) ) ^ (int) stdhcode_oaat( &My.id, sizeof( My.id ) ) );
+	}
 
 #ifndef	ARCH_PC_WIN95
         /* Verify that unix socket dir is safe if runing as root user */
@@ -211,6 +237,8 @@ int main(int argc, char *argv[])
 
 	E_handle_events();
 
+        Sess_fini();
+
 	return 0;
 }
 
@@ -254,6 +282,9 @@ static	void	Usage(int argc, char *argv[])
 
 		}else if( !strncmp( *argv, "-c", 2 ) ){
                         if (argc < 2) Print_help();
+			if (strlen(argv[1]) >= sizeof(Config_file)) {
+				Alarmp(SPLOG_FATAL, SYSTEM, "Usage: config file name too long\n", argv[1]);
+			}
 			strcpy( Config_file, argv[1] );
 
 			argc--; argv++;

@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -42,14 +43,20 @@
 
 static	int16	Window;
 static	int16	Personal_window;
+static  int16   Accelerated_window;
+static  bool    Accelerated_ring;
 
 void	FC_init( )
 {
 	Window = Conf_get_window();
 	Personal_window = Conf_get_personal_window();
+	Accelerated_ring = Conf_get_accelerated_ring();
+	Accelerated_window = Conf_get_accelerated_window();
 
 	GlobalStatus.window = Window;
 	GlobalStatus.personal_window = Personal_window;
+	GlobalStatus.accelerated_ring = Accelerated_ring;
+	GlobalStatus.accelerated_window = Accelerated_window;
 }
 
 void	FC_new_configuration( )
@@ -72,14 +79,24 @@ int	FC_allowed( int flow_control, int num_retrans )
 	return(allowed);
 }
 
+bool    FC_accelerated_ring(void)
+{
+	return Accelerated_ring;
+}
+
+int     FC_accelerated_window(void)
+{
+        return Accelerated_window;
+}
+
 void	FC_handle_message( sys_scatter *scat )
 {
 
-	int16		*cur_fc_buf;
+        int16		(*cur_fc_buf)[2];
 	packet_header	*pack_ptr;
 	proc		dummy_proc;
 	int		my_index;
-	int16		temp_window,temp_personal_window;
+	int16		temp_window,temp_personal_window, temp_accelerated_window;
         configuration   *Cn;
 
         Cn = Conf_ref();
@@ -96,24 +113,29 @@ void	FC_handle_message( sys_scatter *scat )
 			"FC_handle_message: Illegal monitor request\n");
 		return;
 	}
-	cur_fc_buf = (int16 *)scat->elements[1].buf;
+	cur_fc_buf = (int16 (*)[2])scat->elements[1].buf;
 
 	my_index = Conf_proc_by_id( Conf_my().id, &dummy_proc );
 
 	if( Same_endian( pack_ptr->type ) ) {
-		temp_window = cur_fc_buf[Conf_num_procs( Cn )];
-		temp_personal_window = cur_fc_buf[my_index];
+		temp_window = cur_fc_buf[Conf_num_procs( Cn )][0];
+		temp_personal_window = cur_fc_buf[my_index][0];
+		temp_accelerated_window = cur_fc_buf[my_index][1];
 	}else{
-		temp_window = Flip_int16( cur_fc_buf[Conf_num_procs( Cn )] );
-		temp_personal_window = Flip_int16( cur_fc_buf[my_index] );
+		temp_window = Flip_int16( cur_fc_buf[Conf_num_procs( Cn )][0] );
+		temp_personal_window = Flip_int16( cur_fc_buf[my_index][0] );
+		temp_accelerated_window = Flip_int16( cur_fc_buf[my_index][1] );
 	}
 	if( temp_window != -1 ) Window = temp_window;
 	if( temp_personal_window != -1 ) Personal_window = temp_personal_window;
+	if( temp_accelerated_window != -1) Accelerated_window = temp_accelerated_window;
+
 	GlobalStatus.window = Window;
 	GlobalStatus.personal_window = Personal_window;
+	GlobalStatus.accelerated_window = Accelerated_window;
 	Alarm( FLOW_CONTROL, 
-		"FC_handle_message: Got monitor mess, Window %d Personal %d\n", 
-			Window, Personal_window );
+		"FC_handle_message: Got monitor mess, Window %d Personal %d Accelerated %d\n", 
+	        Window, Personal_window, Accelerated_window );
 }
 
 void FC_signal_conf_reload( )
