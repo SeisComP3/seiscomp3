@@ -15,7 +15,7 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-dec`", "``dec``", "Decimates (resamples) a proxy stream"
    ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
-The RecordStream used by an application is either specified on the the
+The RecordStream used by an application is either specified on the
 commandline (`-I URI`) or configured through using the parameters
 :confval:`recordstream.service` and :confval:`recordstream.source`. While the
 `service` defines the RecordSteam implementation, the `source` supplies
@@ -27,7 +27,7 @@ SeedLink
 --------
 
 This RecordStream fetches data from a SeedLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18000`. Optional parameters are:
 
 - `timeout` - connection timeout in seconds, default: 300
@@ -47,7 +47,7 @@ ArcLink
 -------
 
 This RecordStream fetches data from a ArcLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18001`. Optional parameters are:
 
 - `user` - user name required on some servers

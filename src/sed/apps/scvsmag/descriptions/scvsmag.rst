@@ -63,7 +63,7 @@ The following table comments each line in the above output.
 +---------+---------------------------------------------------------------------+
 | 3 - 18  | Information about the stations that contribute to a VS magnitude    |
 |         | estimate. Each station has four lines with the first line giving    |
-|         | the the stream name, the wavetype of the contributing amplitude,    |
+|         | the stream name, the wavetype of the contributing amplitude,        |
 |         | the soil type at the site and the single station magnitude. The     |
 |         | next line shows the location and epicentral distance of the sensor. |
 |         | On the two following lines peak-ground-acceleration (PGA) -velocity |
