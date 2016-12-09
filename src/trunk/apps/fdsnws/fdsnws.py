@@ -209,9 +209,15 @@ class Access(object):
 				.append((user, start, end))
 
 	#---------------------------------------------------------------------------
-	def __matchTime(self, t1, t2, start, end):
-		return (not start or (t1 and t1 >= start)) and \
-			(not end or (t2 and t2 <= end))
+	def __matchTime(self, t1, t2, accessStart, accessEnd):
+		return (not accessStart or (t1 and t1 >= accessStart)) and \
+			(not accessEnd or (t2 and t2 <= accessEnd))
+
+	#---------------------------------------------------------------------------
+	def __matchUser(self, emailAddress, accessUser):
+		return (emailAddress.upper() == accessUser.upper() or \
+				(accessUser[:1] == '@' and emailAddress[:1] != '@' and \
+					emailAddress.upper().endswith(accessUser.upper())))
 
 	#---------------------------------------------------------------------------
 	def authorize(self, user, net, sta, loc, cha, t1, t2):
@@ -223,15 +229,15 @@ class Access(object):
 			return False
 
 		for (u, start, end) in self.__access.get((net, '', '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		for (u, start, end) in self.__access.get((net, sta, '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		return False
