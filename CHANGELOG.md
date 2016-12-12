@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2016.333
 
 The database schema has changed since the previous version. To upgrade your
 database from version 0.8 to 0.9 to following SQL script can be used:
