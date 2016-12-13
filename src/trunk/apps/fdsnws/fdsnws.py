@@ -502,7 +502,7 @@ class FDSNWS(Application):
 					       self._filterInventory(dataSelectInv, self._dataSelectFilter, "dataSelect")
 				else:
 					retn = self._filterInventory(stationInv, self._stationFilter)
-			elif self._serveDataSelect:
+			elif self._serveStation:
 				retn = self._filterInventory(stationInv, self._stationFilter)
 			else:
 				retn = self._filterInventory(dataSelectInv, self._dataSelectFilter)
