@@ -133,6 +133,10 @@ structure has been added to ConfigStation.
     and replaces it with "Switch to reported" action that connects to the
     database as reported by scmaster while handshaking
 
+* NonLinLoc
+
+  * Fix compilation and linking for gcc >= 5
+
 ## Release 2016.161
 
 The database schema has changed since the previous version. To upgrade your
