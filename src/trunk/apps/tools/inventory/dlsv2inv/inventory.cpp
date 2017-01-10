@@ -861,7 +861,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		}
 
 // For debugging reasons
-#if 0
+#if 1
 		cerr << "[" << strm_code << "]" << endl;
 		for(unsigned int i=0; i<ci.rpz.size(); i++)
 		{
@@ -3006,6 +3006,31 @@ bool Inventory::IsDummy(ResponseCoefficients &rc) const
 *******************************************************************************/
 bool Inventory::IsSensorPAZStream(ChannelIdentifier &ci)
 {
+	for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
+		int seq_in = -1, seq_out = -2;
+		int siu = ci.rpz[i]->GetSignalInUnits();
+		int sou = ci.rpz[i]->GetSignalOutUnits();
+
+		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
+			UnitsAbbreviations ua = *adc->ua[j];
+			if ( siu == ua.GetLookup() ) {
+				if ( ua.GetName() != VOLTAGE &&
+				     ua.GetName() != DIGITAL )
+					seq_in = i;
+			}
+
+			if ( sou == ua.GetLookup() ) {
+				if ( ua.GetName() == VOLTAGE ||
+				     ua.GetName() == DIGITAL )
+					seq_out = i;
+			}
+		}
+
+		if ( seq_in == seq_out )
+			return true;
+	}
+
+	/*
 	if(GetPAZSequence(ci, VELOCITY, VOLTAGE) != -1)
 		return true;
 
@@ -3047,6 +3072,7 @@ bool Inventory::IsSensorPAZStream(ChannelIdentifier &ci)
 
 	if(GetPAZSequence(ci, TEMPERATURE2, DIGITAL) != -1)
 		return true;
+	*/
 
 	return false;
 }
@@ -3056,6 +3082,31 @@ bool Inventory::IsSensorPAZStream(ChannelIdentifier &ci)
 *******************************************************************************/
 bool Inventory::IsSensorPolyStream(ChannelIdentifier& ci)
 {
+	for ( size_t i = 0; i < ci.rp.size(); ++i ) {
+		int seq_in = -1, seq_out = -2;
+		int siu = ci.rp[i]->GetSignalInUnits();
+		int sou = ci.rp[i]->GetSignalOutUnits();
+
+		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
+			UnitsAbbreviations ua = *adc->ua[j];
+			if ( siu == ua.GetLookup() ) {
+				if ( ua.GetName() != VOLTAGE &&
+				     ua.GetName() != DIGITAL )
+					seq_in = i;
+			}
+
+			if ( sou == ua.GetLookup() ) {
+				if ( ua.GetName() == VOLTAGE ||
+				     ua.GetName() == DIGITAL )
+					seq_out = i;
+			}
+		}
+
+		if ( seq_in == seq_out )
+			return true;
+	}
+
+	/*
 	if(GetPolySequence(ci, TEMPERATURE, VOLTAGE) != -1)
 		return true;
 
@@ -3073,6 +3124,7 @@ bool Inventory::IsSensorPolyStream(ChannelIdentifier& ci)
 
 	if(GetPolySequence(ci, PRESSURE, DIGITAL) != -1)
 		return true;
+	*/
 
 	return false;
 }
@@ -3082,6 +3134,31 @@ bool Inventory::IsSensorPolyStream(ChannelIdentifier& ci)
  ******************************************************************************/
 bool Inventory::IsSensorFAPStream(ChannelIdentifier& ci)
 {
+	for ( size_t i = 0; i < ci.rl.size(); ++i ) {
+		int seq_in = -1, seq_out = -2;
+		int siu = ci.rl[i]->GetSignalInUnits();
+		int sou = ci.rl[i]->GetSignalOutUnits();
+
+		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
+			UnitsAbbreviations ua = *adc->ua[j];
+			if ( siu == ua.GetLookup() ) {
+				if ( ua.GetName() != VOLTAGE &&
+				     ua.GetName() != DIGITAL )
+					seq_in = i;
+			}
+
+			if ( sou == ua.GetLookup() ) {
+				if ( ua.GetName() == VOLTAGE ||
+				     ua.GetName() == DIGITAL )
+					seq_out = i;
+			}
+		}
+
+		if ( seq_in == seq_out )
+			return true;
+	}
+
+	/*
 	if(GetFAPSequence(ci, VELOCITY, VOLTAGE) != -1)
 		return true;
 
@@ -3123,6 +3200,7 @@ bool Inventory::IsSensorFAPStream(ChannelIdentifier& ci)
 
 	if(GetFAPSequence(ci, TEMPERATURE2, DIGITAL) != -1)
 		return true;
+	*/
 
 	return false;
 }
