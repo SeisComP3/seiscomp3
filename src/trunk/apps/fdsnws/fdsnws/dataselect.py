@@ -417,7 +417,7 @@ class FDSNDataSelect(resource.Resource):
 								    False, "", True, [], "fdsnws", "OK", 0, "")
 
 		# Build output filename
-		fileName = Application.Instance()._fileNamePrefix+'.mseed'
+		fileName = Application.Instance()._fileNamePrefix.replace("%time", time.strftime('%Y-%m-%dT%H:%M:%S'))+'.mseed'
 
 		# Create producer for async IO
 		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker), False)
