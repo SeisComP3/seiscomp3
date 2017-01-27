@@ -9,6 +9,9 @@
         <file>icons/info.png</file>
         <file>icons/inventory.png</file>
         <file>icons/bindings.png</file>
+        <file>icons/help.png</file>
+        <file>icons/help-doc.png</file>
+        <file>icons/help-changelog.png</file>
         <file>icons/document.png</file>
         <file>icons/document_link.png</file>
         <file>icons/document_folder.png</file>
