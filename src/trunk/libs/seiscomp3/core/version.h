@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(9, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(9, 1, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x090000
+#define SC_API_VERSION 0x090100
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,9 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "9.1.0"   0x090100
+   - Added Seiscomp::Client::Application::Stage enum PLUGINS
+
  "9.0.0"   0x090000
    - Added member creationInfo to class Seiscomp::DataModel::ConfigStation
      and increased datamodel version to 0.9

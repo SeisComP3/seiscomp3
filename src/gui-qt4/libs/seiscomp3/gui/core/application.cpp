@@ -1095,8 +1095,18 @@ void Application::createSettingsDialog() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::handleInitializationError(Stage stage) {
-	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) )
+	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) ) {
+		if ( stage == PLUGINS ) {
+			std::cerr << "Failed to load plugins: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+		else if ( stage == LOGGING ) {
+			std::cerr << "Failed to initialize logging: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+
 		return false;
+	}
 
 	if ( (_flags & OPEN_CONNECTION_DIALOG) && !_settingsOpened ) {
 		const set<string>& subscriptions = subscribedGroups();

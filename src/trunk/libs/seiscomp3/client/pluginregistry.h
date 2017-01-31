@@ -86,7 +86,7 @@ class SC_SYSTEM_CLIENT_API PluginRegistry {
 		/**
 		 * Loads all plugins in the defined search paths
 		 * added with addPluginName
-		 * @return The number of loaded plugins
+		 * @return The number of loaded plugins or -1 in case of an error
 		 */
 		int loadPlugins();
 
@@ -97,7 +97,7 @@ class SC_SYSTEM_CLIENT_API PluginRegistry {
 		 * plugin names in "core.plugins" if there are any.
 		 * Otherwise the default plugin list will be extended by
 		 * "plugins".
-		 * @return The number of loaded plugins
+		 * @return The number of loaded plugins or -1 in case of an error
 		 */
 		int loadConfiguredPlugins(const Config::Config *config);
 

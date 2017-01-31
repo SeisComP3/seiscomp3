@@ -157,6 +157,7 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 			LOGGING,
 			MESSAGING,
 			DATABASE,
+			PLUGINS,
 			ST_QUANTITY
 		};
 
