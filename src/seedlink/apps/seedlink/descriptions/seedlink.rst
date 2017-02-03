@@ -175,13 +175,13 @@ General format of selectors is LLCCC.T where LL is location, CCC is channel, and
 SELECT is a modifier command (it modifies the function of subsequent DATA, FETCH or TIME commands) so a response follows with "OK" on success, "ERROR" otherwise.
 
 DATA [n [begin time]]
-    in multi-station mode this sets the current station into real-time mode and (optionally) the current sequence number to n; in uni-station mode this starts data transfer in real-time mode from packet n or from the next packet available if used without arguments. If begin time is used, any older packets are filtered out. begin time should be in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00’. DATA is a modifier command in multi-station mode (responds with "OK" or "ERROR"); in uni-station mode it is an action command (no explicit response is sent).
+    in multi-station mode this sets the current station into real-time mode and (optionally) the current sequence number to n; in uni-station mode this starts data transfer in real-time mode from packet n or from the next packet available if used without arguments. If begin time is used, any older packets are filtered out. begin time should be in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00,00’. DATA is a modifier command in multi-station mode (responds with "OK" or "ERROR"); in uni-station mode it is an action command (no explicit response is sent).
 
 FETCH [n [begin time]]
     works like DATA but sets the station to dial-up mode instead of real-time mode.
 
 TIME [begin time [end time]]
-    extracts the time window from begin time to end time. The times are specified in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00’.
+    extracts the time window from begin time to end time. The times are specified in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00,00’.
 
 INFO level
     requests an INFO packet containing XML data embedded in a Mini-SEED log record. level should be one of the following: ID, CAPABILITIES, STATIONS, STREAMS, GAPS, CONNECTIONS, ALL. The XML document conforms to the Document Type Definition (DTD) shown in section ???. The amount of info available depends on the configuration of the SeedLink server.
