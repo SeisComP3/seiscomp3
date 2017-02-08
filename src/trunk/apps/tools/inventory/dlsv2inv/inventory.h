@@ -120,8 +120,8 @@ class Inventory
 		int GetPolySequence(ChannelIdentifier&, std::string, std::string);
 		int GetDataloggerSensitivity(ChannelIdentifier&) const;
 		bool IsDummy(ResponseCoefficients &rc) const;
-		bool IsPAZStream(ChannelIdentifier& ci);
-		bool IsPolyStream(ChannelIdentifier& ci);
-		bool IsFAPStream(ChannelIdentifier& ci);
+		bool IsSensorPAZStream(ChannelIdentifier& ci);
+		bool IsSensorPolyStream(ChannelIdentifier& ci);
+		bool IsSensorFAPStream(ChannelIdentifier& ci);
 };
 #endif /* MYINVENTORY_H */
