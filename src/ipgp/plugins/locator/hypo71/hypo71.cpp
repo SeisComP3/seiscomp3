@@ -27,6 +27,7 @@
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/system/environment.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/datamodel/comment.h>
 #include <seiscomp3/math/geo.h>
@@ -163,42 +164,44 @@ bool Hypo71::init(const Config::Config& config) {
 		_useHypo71PatternID = false;
 	}
 
+	Seiscomp::Environment *env = Seiscomp::Environment::Instance();
+
 	try {
-		_logFile = config.getString("hypo71.logFile");
+		_logFile = env->absolutePath(config.getString("hypo71.logFile"));
 		SEISCOMP_DEBUG("%s | logFile              | %s", MSG_HEADER, _logFile.c_str());
 	}
 	catch ( ... ) {
-		_logFile = "HYPO71.LOG";
+		_logFile = env->absolutePath("@LOGDIR@/HYPO71.LOG");
 		SEISCOMP_ERROR("%s |   logFile            | DEFAULT value: %s",
 		    MSG_HEADER, _logFile.c_str());
 	}
 
 	try {
-		_h71inputFile = config.getString("hypo71.inputFile");
+		_h71inputFile = env->absolutePath(config.getString("hypo71.inputFile"));
 		SEISCOMP_DEBUG("%s | inputFile            | %s", MSG_HEADER, _h71inputFile.c_str());
 	}
 	catch ( ... ) {
-		_h71inputFile = "HYPO71.INP";
+		_h71inputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.INP");
 		SEISCOMP_ERROR("%s | inputFile            | DEFAULT value: %s",
 		    MSG_HEADER, _h71inputFile.c_str());
 	}
 
 	try {
-		_h71outputFile = config.getString("hypo71.outputFile");
+		_h71outputFile = env->absolutePath(config.getString("hypo71.outputFile"));
 		SEISCOMP_DEBUG("%s | outputFile           | %s", MSG_HEADER, _h71outputFile.c_str());
 	}
 	catch ( ... ) {
-		_h71outputFile = "HYPO71.PRT";
+		_h71outputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.PRT");
 		SEISCOMP_ERROR("%s | outputFile           | DEFAULT value: %s",
 		    MSG_HEADER, _h71outputFile.c_str());
 	}
 
 	try {
-		_controlFilePath = config.getString("hypo71.defaultControlFile");
+		_controlFilePath = env->absolutePath(config.getString("hypo71.defaultControlFile"));
 		SEISCOMP_DEBUG("%s | defaultControlFile   | %s", MSG_HEADER, _controlFilePath.c_str());
 	}
 	catch ( ... ) {
-		_controlFilePath = "";
+		_controlFilePath = env->absolutePath("@DATADIR@/hypo71/profiles/default.hypo71.conf");
 		SEISCOMP_ERROR("%s | defaultControlFile   | DEFAULT value: %s",
 		    MSG_HEADER, _controlFilePath.c_str());
 	}
@@ -209,14 +212,15 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 
 	try {
-		_hypo71ScriptFile = config.getString("hypo71.hypo71ScriptFile");
-		SEISCOMP_DEBUG("%s | hypo71ScriptFile     | %s", MSG_HEADER,
+		_hypo71ScriptFile = env->absolutePath(config.getString("hypo71.hypo71ScriptFile"));
+		SEISCOMP_DEBUG("%s | hypo71ScriptFile   | DEFAULT value: %s", MSG_HEADER,
 		    _hypo71ScriptFile.c_str());
 	}
 	catch ( ... ) {
-		SEISCOMP_ERROR("%s | hypo71ScriptFile     | can't read value", MSG_HEADER);
+		_hypo71ScriptFile = env->absolutePath("@DATADIR@/hypo71/run.sh");
+		SEISCOMP_ERROR("%s | hypo71ScriptFile     | DEFAULT value: %s",
+		    MSG_HEADER, _hypo71ScriptFile.c_str());
 	}
-
 	if ( !Util::fileExists(_hypo71ScriptFile) ) {
 		SEISCOMP_ERROR("%s | hypo71ScriptFile     | %s does not exist",
 		    MSG_HEADER, _hypo71ScriptFile.c_str());
@@ -229,7 +233,7 @@ bool Hypo71::init(const Config::Config& config) {
 		_profileNames = config.getStrings("hypo71.profiles");
 	}
 	catch ( ... ) {
-		SEISCOMP_ERROR("%s CONFIGURATION FILE IS NOT CORRECTLY IMPLEMENTED!!", MSG_HEADER);
+		SEISCOMP_ERROR("%s CHECK hypo71.profiles in the CONFIGURATION FILE - INCORRECT IMPLEMENTATION!", MSG_HEADER);
 	}
 
 	for ( IDList::iterator it = _profileNames.begin();
@@ -254,13 +258,13 @@ bool Hypo71::init(const Config::Config& config) {
 			SEISCOMP_DEBUG("%s |   methodID           | %s", MSG_HEADER, prof.methodID.c_str());
 		}
 		catch ( ... ) {
-			prof.methodID = "hypo71";
+			prof.methodID = "Hypo71";
 			SEISCOMP_ERROR("%s |   methodID           | DEFAULT value: %s",
 			    MSG_HEADER, prof.methodID.c_str());
 		}
 
 		try {
-			prof.controlFile = config.getString(prefix + "controlFile");
+			prof.controlFile = env->absolutePath(config.getString(prefix + "controlFile"));
 			SEISCOMP_DEBUG("%s |   configFile         | %s", MSG_HEADER, prof.controlFile.c_str());
 		}
 		catch ( ... ) {
