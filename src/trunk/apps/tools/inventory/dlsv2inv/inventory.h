@@ -25,6 +25,8 @@
 class Inventory
 {
 	public:
+		typedef OPT(size_t) SequenceNumber;
+
 		Inventory(INIT_MAP& init, Seiscomp::DataModel::Inventory *inv);
 		Inventory(const std::string &dcid, const std::string &net_description,
 		const std::string &net_type, const Seiscomp::Core::Time &net_start,
@@ -39,6 +41,14 @@ class Inventory
 
 	protected:
 	private:
+		enum SensorResponseType {
+			SRT_None,
+			SRT_PAZ,
+			SRT_Poly,
+			SRT_FAP
+		};
+
+
 		//std::stringstream command, output;
 		std::string station_name;
 		std::string channel_name;
@@ -60,7 +70,7 @@ class Inventory
 		std::map<std::vector<std::string>, std::string> encoding;
 		//STATION_INFO info;
 		//Logging *log;
-		int sequence_number;
+		SequenceNumber sequence_number;
 		void ProcessStation();
 		void CleanupDatabase();
 		void GetComment(StationIdentifier&);
@@ -89,9 +99,9 @@ class Inventory
 		Seiscomp::DataModel::DataloggerPtr InsertDatalogger(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string& name);
 		void InsertDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void InsertDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
-		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, unsigned int&);
-		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIRr(ChannelIdentifier&, unsigned int&);
-		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const char* unit, const std::string& name);
+		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, size_t&);
+		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIRr(ChannelIdentifier&, size_t&);
+		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string &unit, const std::string& name);
 		void InsertSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr);
 		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, std::string);
 		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, std::string);
@@ -103,9 +113,9 @@ class Inventory
 		void UpdateDatalogger(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDecimation(ChannelIdentifier&, Seiscomp::DataModel::DecimationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerCalibrationPtr, Seiscomp::DataModel::StreamPtr);
-		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, unsigned int&);
-		void UpdateResponseFIRr(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, unsigned int&);
-		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const char* unit);
+		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
+		void UpdateResponseFIRr(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
+		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
 		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr);
 		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr);
@@ -115,13 +125,11 @@ class Inventory
 		std::string GetInstrumentManufacturer(int);
 		std::string GetInstrumentType(int);
 		std::string GetStationInstrument(int);
-		int GetPAZSequence(ChannelIdentifier&, std::string, std::string);
-		int GetFAPSequence(ChannelIdentifier&, std::string, std::string);
-		int GetPolySequence(ChannelIdentifier&, std::string, std::string);
-		int GetDataloggerSensitivity(ChannelIdentifier&) const;
+		SequenceNumber GetPAZSequence(ChannelIdentifier&, std::string, std::string);
+		SequenceNumber GetFAPSequence(ChannelIdentifier&, std::string, std::string);
+		SequenceNumber GetPolySequence(ChannelIdentifier&, std::string, std::string);
+		SequenceNumber GetDataloggerSensitivity(ChannelIdentifier&) const;
 		bool IsDummy(ResponseCoefficients &rc) const;
-		bool IsSensorPAZStream(ChannelIdentifier& ci);
-		bool IsSensorPolyStream(ChannelIdentifier& ci);
-		bool IsSensorFAPStream(ChannelIdentifier& ci);
+		SensorResponseType GetSensorResponseType(ChannelIdentifier& ci);
 };
 #endif /* MYINVENTORY_H */

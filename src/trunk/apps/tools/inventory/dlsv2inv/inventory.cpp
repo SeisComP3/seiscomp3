@@ -28,6 +28,10 @@
 using namespace std;
 using namespace Seiscomp;
 
+
+namespace {
+
+
 inline string strip(string s)
 {
 	unsigned int i = 0, j = 0;
@@ -252,6 +256,69 @@ struct NetworkDescriptionResolver : public Util::VariableResolver {
 
 	DataModel::Network *net;
 };
+
+
+bool isElectric(const UnitsAbbreviations &ua) {
+	return ua.GetName() == AMPERE || ua.GetName() == VOLTAGE;
+}
+
+
+template <typename C>
+bool hasSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
+	for ( size_t i = 0; i < objects.size(); ++i ) {
+		int seq_in = -1, seq_out = -2;
+		int siu = objects[i]->GetSignalInUnits();
+		int sou = objects[i]->GetSignalOutUnits();
+
+		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
+			UnitsAbbreviations ua = *adc->ua[j];
+			if ( siu == ua.GetLookup() ) {
+				if ( !isElectric(ua) )
+					seq_in = i;
+			}
+
+			if ( sou == ua.GetLookup() ) {
+				if ( isElectric(ua) )
+					seq_out = i;
+			}
+		}
+
+		if ( seq_in == seq_out )
+			return true;
+	}
+
+	return false;
+}
+
+
+template <typename C>
+Inventory::SequenceNumber getSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
+	for ( size_t i = 0; i < objects.size(); ++i ) {
+		int seq_in = -1, seq_out = -2;
+		int siu = objects[i]->GetSignalInUnits();
+		int sou = objects[i]->GetSignalOutUnits();
+		for( size_t j = 0; j < adc->ua.size(); ++j ) {
+			UnitsAbbreviations ua = *adc->ua[j];
+			if ( siu == ua.GetLookup() ) {
+				if ( !isElectric(ua) )
+					seq_in = i;
+			}
+
+			if ( sou == ua.GetLookup() ) {
+				if ( isElectric(ua) )
+					seq_out = i;
+			}
+		}
+
+		if ( seq_in == seq_out )
+			return seq_in;
+	}
+
+	return Core::None;
+}
+
+
+}
 
 
 Inventory::Inventory(const std::string &dcid, const std::string &net_description,
@@ -704,8 +771,7 @@ void Inventory::UpdateStation(StationIdentifier& si, DataModel::StationPtr stati
 *		- loop through all returned seisstreams and compare starttime, endtime and location code with that from	    *
 *		  the dataless												    *
 *******************************************************************************/
-void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr station)
-{
+void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr station) {
 	SEISCOMP_DEBUG("Start processing stream information");
 
 	string net_code = strip(si.GetNetworkCode());
@@ -714,8 +780,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 	//cerr << net_code << "." << sta_code << endl;
 
 	map<pair<pair<double, double>, string>, pair<Core::Time, OPT(Core::Time)> > loc_map;
-	for(unsigned int i=0; i<si.ci.size(); i++)
-	{
+	for ( size_t i = 0; i < si.ci.size(); ++i ) {
 		ChannelIdentifier ci = *si.ci[i];
 		string loc_code = strip(ci.GetLocation());
 		Core::Time loc_start = GetTime(ci.GetStartDate());
@@ -724,26 +789,22 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		//cerr << "  + " << loc_code << ci.GetChannel() << "   " << loc_start.toString("%F %T") << endl;
 
 		map<pair<pair<double, double>, string>, pair<Core::Time, OPT(Core::Time)> >::iterator p;
-		if((p = loc_map.find(make_pair(make_pair(ci.GetLatitude(), ci.GetLongitude()), loc_code))) == loc_map.end())
-		{
+		if ( (p = loc_map.find(make_pair(make_pair(ci.GetLatitude(), ci.GetLongitude()), loc_code))) == loc_map.end() ) {
 			p = loc_map.insert(make_pair(make_pair(make_pair(ci.GetLatitude(), ci.GetLongitude()), loc_code), make_pair(loc_start, loc_end))).first;
 		}
-		else
-		{
-			if(p->second.first > loc_start)
+		else {
+			if ( p->second.first > loc_start )
 				p->second.first = loc_start;
 
-			if(p->second.second && !loc_end)
+			if ( p->second.second && !loc_end )
 				p->second.second = loc_end;
-			else if (p->second.second && loc_end && *p->second.second < *loc_end)
+			else if ( p->second.second && loc_end && *p->second.second < *loc_end )
 				p->second.second = *loc_end;
 		}
 
 		map<pair<pair<double, double>, string>, pair<Core::Time, OPT(Core::Time)> >::iterator p1 = loc_map.begin();
-		while(p1 != loc_map.end())
-		{
-			if(p1 != p && p1->first.second == p->first.second && p1->second.first == p->second.first)
-			{
+		while ( p1 != loc_map.end() ) {
+			if ( p1 != p && p1->first.second == p->first.second && p1->second.first == p->second.first ) {
 				SEISCOMP_ERROR((net_code + " " + sta_code + " " + ci.GetChannel() + " sensor location '" + loc_code + "' starting " + loc_start.toString("%Y-%m-%d %H:%M:%S") + " has conflicting coordinates: "
 				               "%f/%f vs. %f/%f: increasing start time by 1 sec.").c_str(),
 				               p->first.first.first, p->first.first.second,
@@ -758,8 +819,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		}
 	}
 
-	for(unsigned int i=0; i<si.ci.size(); i++)
-	{
+	for( size_t i = 0; i < si.ci.size(); ++i ) {
 		ChannelIdentifier ci = *si.ci[i];
 		station_name = strip(si.GetStationCallLetters()) + "." + date2str(GetTime(ci.GetStartDate()));
 		channel_name = strip(si.GetStationCallLetters()) + "." + strip(ci.GetLocation()) + "." + ci.GetChannel() + "." + date2str(GetTime(ci.GetStartDate()));
@@ -772,13 +832,11 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		OPT(Core::Time) loc_end;
 
 		map<pair<pair<double, double>, string>, pair<Core::Time, OPT(Core::Time)> >::iterator p;
-		if((p = loc_map.find(make_pair(make_pair(ci.GetLatitude(), ci.GetLongitude()), loc_code))) != loc_map.end())
-		{
+		if ( (p = loc_map.find(make_pair(make_pair(ci.GetLatitude(), ci.GetLongitude()), loc_code))) != loc_map.end() ) {
 			loc_start = p->second.first;
 			loc_end = p->second.second;
 		}
-		else
-		{
+		else {
 			SEISCOMP_ERROR("cannot find location (should not happen)");
 			exit(1);
 		}
@@ -787,14 +845,13 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 
 		DataModel::SensorLocationPtr loc = station->sensorLocation(DataModel::SensorLocationIndex(loc_code, loc_start));
 
-		if(!loc)
+		if ( !loc )
 			loc = InsertSensorLocation(ci, station, loc_start, loc_end);
 		else
 			UpdateSensorLocation(ci, loc, loc_start, loc_end);
 
 		// Resolve references and copy them into the channel info
-		for(unsigned int i=0; i<ci.rr.size(); i++)
-		{
+		for ( size_t i=0; i<ci.rr.size(); ++i ) {
 			int stages = ci.rr[i]->GetNumberOfStages();
 			for ( int s = 0; s < stages; ++s ) {
 				const ResponseReferenceStage &stage = ci.rr[i]->GetStages()[s];
@@ -863,24 +920,20 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 // For debugging reasons
 #if 1
 		cerr << "[" << strm_code << "]" << endl;
-		for(unsigned int i=0; i<ci.rpz.size(); i++)
-		{
+		for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
 			int siu = ci.rpz[i]->GetSignalInUnits();
 			int sou = ci.rpz[i]->GetSignalOutUnits();
 			int seq_in = -1, seq_out = -2;
 			cerr << " + PAZ ";
-			for(unsigned int j=0; j<adc->ua.size(); j++)
-			{
+
+			for ( size_t j = 0; j < adc->ua.size(); ++j ) {
 				UnitsAbbreviations ua = *adc->ua[j];
-				if(siu == ua.GetLookup())
-				{
+				if ( siu == ua.GetLookup() )
 					seq_in = j;
-				}
-				if(sou == ua.GetLookup())
-				{
+				if ( sou == ua.GetLookup() )
 					seq_out = j;
-				}
 			}
+
 			if ( seq_in >= 0 )
 				cerr << adc->ua[seq_in]->GetName();
 			else
@@ -892,24 +945,22 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 				cerr << "-";
 			cerr << endl;
 		}
-		for(unsigned int i=0; i<ci.rp.size(); i++)
-		{
+
+		for ( size_t i = 0; i < ci.rp.size(); ++i ) {
 			int siu = ci.rp[i]->GetSignalInUnits();
 			int sou = ci.rp[i]->GetSignalOutUnits();
 			int seq_in = -1, seq_out = -2;
+
 			cerr << " + POLY ";
-			for(unsigned int j=0; j<adc->ua.size(); j++)
-			{
+
+			for ( size_t j=0; j < adc->ua.size(); ++j ) {
 				UnitsAbbreviations ua = *adc->ua[j];
-				if(siu == ua.GetLookup())
-				{
+				if ( siu == ua.GetLookup() )
 					seq_in = j;
-				}
-				if(sou == ua.GetLookup())
-				{
+				if ( sou == ua.GetLookup() )
 					seq_out = j;
-				}
 			}
+
 			if ( seq_in >= 0 )
 				cerr << adc->ua[seq_in]->GetName();
 			else
@@ -921,23 +972,19 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 				cerr << "-";
 			cerr << endl;
 		}
-		for(unsigned int i=0; i<ci.firr.size(); i++)
-		{
+
+		for ( size_t i = 0; i < ci.firr.size(); ++i ) {
 			int siu = ci.firr[i]->GetSignalInUnits();
 			int sou = ci.firr[i]->GetSignalOutUnits();
 			int seq_in = -1, seq_out = -2;
 			cerr << " + FIRR ";
-			for(unsigned int j=0; j<adc->ua.size(); j++)
-			{
+
+			for ( size_t j = 0; j < adc->ua.size(); ++j ) {
 				UnitsAbbreviations ua = *adc->ua[j];
-				if(siu == ua.GetLookup())
-				{
+				if ( siu == ua.GetLookup() )
 					seq_in = j;
-				}
-				if(sou == ua.GetLookup())
-				{
+				if ( sou == ua.GetLookup() )
 					seq_out = j;
-				}
 			}
 			if ( seq_in >= 0 )
 				cerr << adc->ua[seq_in]->GetName();
@@ -952,36 +999,39 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		}
 #endif
 
-		if ( IsSensorPAZStream(ci) || IsSensorPolyStream(ci) || IsSensorFAPStream(ci) )
-		{
-			/* pair<set<pair<pair<pair<pair<pair<string, string>, string>, string>, Core::Time>, Core::Time> >::iterator, bool> ins = \
-			*/
+		SensorResponseType srt = GetSensorResponseType(ci);
+		if ( srt != SRT_None ) {
 			seis_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
 
 			DataModel::StreamPtr strm = loc->stream(DataModel::StreamIndex(strm_code, strm_start));
 
-			if(!strm)
+			if ( !strm )
 				strm = InsertStream(ci, loc, station->restricted(), station->shared());
 			else
-				UpdateStream(ci, strm, station->restricted(), station->shared()); //, ins.second);
+				UpdateStream(ci, strm, station->restricted(), station->shared());
 
-			// ProcessComponent(ci, strm);
 			ProcessDatalogger(ci, strm);
 
-			if(IsSensorPAZStream(ci))
-				ProcessPAZSensor(ci, strm);
-			else if (IsSensorPolyStream(ci))
-				ProcessPolySensor(ci, strm);
-			else
-				ProcessFAPSensor(ci, strm);
+			switch ( srt ) {
+				case SRT_PAZ:
+					ProcessPAZSensor(ci, strm);
+					break;
+				case SRT_Poly:
+					ProcessPolySensor(ci, strm);
+					break;
+				case SRT_FAP:
+					ProcessFAPSensor(ci, strm);
+					break;
+				default:
+					break;
+			}
 		}
-		else
-		{
+		else {
 			aux_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
 
 			DataModel::AuxStreamPtr strm = loc->auxStream(DataModel::AuxStreamIndex(strm_code, strm_start));
 
-			if(!strm)
+			if ( !strm )
 				strm = InsertAuxStream(ci, loc, station->restricted(), station->shared());
 			else
 				UpdateAuxStream(ci, strm, station->restricted(), station->shared());
@@ -1270,14 +1320,13 @@ void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr s
 * Returns:      nothing                                                                                                     *
 * Description:  check whether a datalogger has to be added or updated                                                       *
 *******************************************************************************/
-void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing datalogger information ");
 
 	string dataloggerName = station_name + "." + ci.GetChannel() + strip(ci.GetLocation());
 
 	DataModel::DataloggerPtr dlg = inventory->datalogger(DataModel::DataloggerIndex(dataloggerName));
-	if(!dlg)
+	if ( !dlg )
 		dlg = InsertDatalogger(ci, strm, dataloggerName);
 	else
 		UpdateDatalogger(ci, dlg, strm);
@@ -1297,8 +1346,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 * Returns:	nothing													    *
 * Description:	add a datalogger											    *
 *******************************************************************************/
-DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm, const string& name)
-{
+DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm, const string& name) {
 	SEISCOMP_DEBUG("Voeg nieuwe datalogger toe");
 
 	double drift = ci.GetMaxClockDrift() * \
@@ -1311,9 +1359,9 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 
 	dlg->setGain(1.0);
 
-	int sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage >= 0 )
-		dlg->setGain(fabs(ci.csg[sensitivity_stage]->GetSensitivityGain()));
+	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage )
+		dlg->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
 
 	inventory->add(dlg.get());
 
@@ -1327,8 +1375,7 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 * Returns:      nothing                                                                                                     *
 * Description:	update a datalogger											    *
 *******************************************************************************/
-void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("wijzig datalogger");
 
 	double drift = ci.GetMaxClockDrift() * \
@@ -1338,9 +1385,9 @@ void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr
 
 	dlg->setGain(1.0);
 
-	int sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage >= 0 )
-		dlg->setGain(fabs(ci.csg[sensitivity_stage]->GetSensitivityGain()));
+	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage )
+		dlg->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
 
 	dlg->update();
 }
@@ -1353,8 +1400,7 @@ void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr
 * Returns:      nothing                                                                                                     *
 * Description:	check whether a decimation should be added or updated							    *
 *******************************************************************************/
-void Inventory::ProcessDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing decimation for %d/%d sps", strm->sampleRateNumerator(), strm->sampleRateDenominator());
 
 	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
@@ -1372,8 +1418,7 @@ void Inventory::ProcessDecimation(ChannelIdentifier& ci, DataModel::DataloggerPt
 * Returns:      nothing                                                                                                     *
 * Description:	add a new decimation											    *
 *******************************************************************************/
-void Inventory::InsertDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::InsertDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Voeg nieuwe decimation toe");
 
 	DataModel::DecimationPtr deci = new DataModel::Decimation();
@@ -1393,8 +1438,7 @@ void Inventory::InsertDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr
 * Returns:      nothing                                                                                                     *
 * Description:	update an existing decimation belonging to the datalogger in process					    *
 *******************************************************************************/
-void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr deci, DataModel::StreamPtr strm)
-{
+void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr deci, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Wijzig decimation");
 
 	deci->setAnalogueFilterChain(Core::None);
@@ -1411,8 +1455,7 @@ void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr
 * Returns:      nothing                                                                                                     *
 * Description:	check whether a datalogger calibration should be added or updated					    *
 *******************************************************************************/
-void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("start processing datalogger calibration");
 
 	DataModel::DataloggerCalibrationPtr cal = dlg->dataloggerCalibration(DataModel::DataloggerCalibrationIndex(strm->dataloggerSerialNumber(), strm->dataloggerChannel(), strm->start()));
@@ -1430,8 +1473,7 @@ void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::D
 * Returns:      nothing                                                                                                     *
 * Description:	add a new dataloggercalibration										    *
 *******************************************************************************/
-void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Voeg datalogger calibration toe");
 
 	DataModel::DataloggerCalibrationPtr cal = new DataModel::DataloggerCalibration();
@@ -1442,17 +1484,17 @@ void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 	try {
 		cal->setEnd(strm->end());
 	}
-	catch(Core::ValueException) {
+	catch ( Core::ValueException ) {
 		cal->setEnd(Core::None);
 	}
 
 	cal->setGain(1.0);
 	cal->setGainFrequency(0.0);
 
-	int sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage >= 0 ) {
-		cal->setGain(fabs(ci.csg[sensitivity_stage]->GetSensitivityGain()));
-		cal->setGainFrequency(ci.csg[sensitivity_stage]->GetFrequency());
+	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage ) {
+		cal->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
+		cal->setGainFrequency(ci.csg[*sensitivity_stage]->GetFrequency());
 	}
 
 	dlg->add(cal.get());
@@ -1466,24 +1508,23 @@ void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 * Returns:      nothing                                                                                                     *
 * Description:	update an existing dataloggercalibration								    *
 *******************************************************************************/
-void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerCalibrationPtr cal, DataModel::StreamPtr strm)
-{
+void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerCalibrationPtr cal, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Wijzig datalogger calibration");
 
 	try {
 		cal->setEnd(strm->end());
 	}
-	catch(Core::ValueException) {
+	catch ( Core::ValueException ) {
 		cal->setEnd(Core::None);
 	}
 
 	cal->setGain(1.0);
 	cal->setGainFrequency(0.0);
 
-	int sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage >= 0 ) {
-		cal->setGain(fabs(ci.csg[sensitivity_stage]->GetSensitivityGain()));
-		cal->setGainFrequency(ci.csg[sensitivity_stage]->GetFrequency());
+	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
+	if ( sensitivity_stage ) {
+		cal->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
+		cal->setGainFrequency(ci.csg[*sensitivity_stage]->GetFrequency());
 	}
 
 	cal->update();
@@ -1498,28 +1539,25 @@ void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 * Description:	check whether a new respfir has to be added or an existing should be updated				    *
 *		after that the decimation table has to be updated with a new respfir name				    *
 *******************************************************************************/
-void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing ResponseFIR information");
 
 	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
-	if(!deci)
-	{
+	if ( !deci ) {
 		SEISCOMP_ERROR("decimation %d/%d sps of %s not found", strm->sampleRateNumerator(),
 			strm->sampleRateDenominator(), dlg->name().c_str());
 		return;
 	}
 
-	unsigned int i=0;
-	if(ci.rc.size() > 0 && IsDummy(*ci.rc[0]))
+	size_t i = 0;
+	if ( ci.rc.size() > 0 && IsDummy(*ci.rc[0]) )
 		++i;
 
-	for(; i<ci.rc.size(); i++)
-	{
+	for(; i < ci.rc.size(); ++i ) {
 		string instr = channel_name + ".stage_" + ToString<int>(ci.rc[i]->GetStageSequenceNumber());
 
 		DataModel::ResponseFIRPtr rf = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
-		if(!rf)
+		if ( !rf )
 			rf = InsertRespCoeff(ci, i);
 		else
 			UpdateRespCoeff(ci, rf, i);
@@ -1527,16 +1565,17 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 		bool add = true;
 		string dfc;
 
-		try { dfc = blob2str(deci->digitalFilterChain()); } catch(Core::ValueException) {}
+		try { dfc = blob2str(deci->digitalFilterChain()); }
+		catch( Core::ValueException ) {}
 
 		string new_dfc = rf->publicID();
 		vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-		for(unsigned int i=0; i<digital.size(); i++)
-			if(digital[i]==new_dfc)
+		for ( size_t j = 0; j < digital.size(); ++j )
+			if ( digital[j] == new_dfc )
 				add = false;
-		if(add)
-		{
-			if(!dfc.empty())
+
+		if ( add ) {
+			if ( !dfc.empty() )
 				dfc += " ";
 
 			dfc += new_dfc;
@@ -1544,12 +1583,11 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 		}
 	}
 
-	for(i = 0; i<ci.firr.size(); i++)
-	{
+	for ( i = 0; i < ci.firr.size(); ++i ) {
 		string instr = channel_name + ".stage_" + ToString<int>(ci.firr[i]->GetStageSequenceNumber());
 
 		DataModel::ResponseFIRPtr rf = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
-		if(!rf)
+		if ( !rf )
 			rf = InsertResponseFIRr(ci, i);
 		else
 			UpdateResponseFIRr(ci, rf, i);
@@ -1557,16 +1595,18 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 		bool add = true;
 		string dfc;
 
-		try { dfc = blob2str(deci->digitalFilterChain()); } catch(Core::ValueException) {}
+		try { dfc = blob2str(deci->digitalFilterChain()); }
+		catch ( Core::ValueException ) {}
 
 		string new_dfc = rf->publicID();
 		vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-		for(unsigned int i=0; i<digital.size(); i++)
-			if(digital[i]==new_dfc)
+
+		for ( size_t j = 0; j < digital.size(); ++j )
+			if ( digital[j] == new_dfc )
 				add = false;
-		if(add)
-		{
-			if(!dfc.empty())
+
+		if ( add ) {
+			if ( !dfc.empty() )
 				dfc += " ";
 
 			dfc += new_dfc;
@@ -1582,8 +1622,7 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 * Returns:      nothing                                                                                                     *
 * Description:	add a new respfir											    *
 *******************************************************************************/
-DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier& ci, unsigned int &seq)
-{
+DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier& ci, size_t &seq) {
 	int seqnum = ci.rc[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
 	string numerators;
@@ -1638,7 +1677,7 @@ DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier& ci, unsi
 * Returns:      nothing                                                                                                     *
 * Description:	update the respfir											    *
 *******************************************************************************/
-void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, unsigned int &seq)
+void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
 {
 	int seqnum = ci.rc[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1688,7 +1727,7 @@ void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr
 * Returns:      nothing                                                                                                     *
 * Description:	add a new respfir											    *
 *******************************************************************************/
-DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, unsigned int &seq)
+DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1746,7 +1785,7 @@ DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, u
 * Returns:      nothing                                                                                                     *
 * Description:	update the respfir											    *
 *******************************************************************************/
-void Inventory::UpdateResponseFIRr(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, unsigned int &seq)
+void Inventory::UpdateResponseFIRr(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1814,20 +1853,19 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 
 	// get the analogue poles- and zero responses
 	sequence_number = GetPAZSequence(ci, VOLTAGE, VOLTAGE);
-	if(sequence_number != -1)
-	{
-		int in_unit = ci.rpz[sequence_number]->GetSignalInUnits();
-		int out_unit = ci.rpz[sequence_number]->GetSignalOutUnits();
+	if ( sequence_number ) {
+		int in_unit = ci.rpz[*sequence_number]->GetSignalInUnits();
+		int out_unit = ci.rpz[*sequence_number]->GetSignalOutUnits();
 
-		for(; sequence_number<(int)ci.rpz.size(); ++sequence_number)
-		{
-			if(ci.rpz[sequence_number]->GetSignalInUnits() != in_unit || ci.rpz[sequence_number]->GetSignalOutUnits() != out_unit)
+		for (; *sequence_number < ci.rpz.size(); ++*sequence_number ) {
+			if ( ci.rpz[*sequence_number]->GetSignalInUnits() != in_unit
+			  || ci.rpz[*sequence_number]->GetSignalOutUnits() != out_unit )
 				break;
 
-			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[sequence_number]->GetStageSequenceNumber());
+			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[*sequence_number]->GetStageSequenceNumber());
 
 			DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
-			if(!rp)
+			if ( !rp )
 				rp = InsertResponsePAZ(ci, instr);
 			else
 				UpdateResponsePAZ(ci, rp);
@@ -1835,17 +1873,17 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 			bool add = true;
 			string afc;
 
-			try { afc = blob2str(deci->analogueFilterChain()); } catch(Core::ValueException) {}
+			try { afc = blob2str(deci->analogueFilterChain()); }
+			catch ( Core::ValueException ) {}
 
 			string new_afc = rp->publicID();
 			vector<string> analog = SplitStrings(afc, LINE_SEPARATOR);
-			for(unsigned int i=0; i<analog.size(); i++)
-				if(analog[i]==new_afc)
+			for ( size_t j = 0; j < analog.size(); ++j )
+				if ( analog[j] == new_afc )
 					add = false;
 
-			if(add)
-			{
-				if(!afc.empty())
+			if ( add ) {
+				if ( !afc.empty() )
 					afc += " ";
 
 				afc += new_afc;
@@ -1855,17 +1893,16 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 	}
 	else {
 		sequence_number = GetFAPSequence(ci, VOLTAGE, VOLTAGE);
-		if(sequence_number != -1)
-		{
-			int in_unit = ci.rl[sequence_number]->GetSignalInUnits();
-			int out_unit = ci.rl[sequence_number]->GetSignalOutUnits();
+		if ( sequence_number ) {
+			int in_unit = ci.rl[*sequence_number]->GetSignalInUnits();
+			int out_unit = ci.rl[*sequence_number]->GetSignalOutUnits();
 
-			for(; sequence_number<(int)ci.rl.size(); ++sequence_number)
-			{
-				if(ci.rl[sequence_number]->GetSignalInUnits() != in_unit || ci.rl[sequence_number]->GetSignalOutUnits() != out_unit)
+			for(; *sequence_number < ci.rl.size(); ++*sequence_number ) {
+				if ( ci.rl[*sequence_number]->GetSignalInUnits() != in_unit
+				  || ci.rl[*sequence_number]->GetSignalOutUnits() != out_unit )
 					break;
 
-				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[sequence_number]->GetStageSequenceNumber());
+				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[*sequence_number]->GetStageSequenceNumber());
 
 				DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(instr));
 				if(!rp)
@@ -1880,7 +1917,8 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 
 				string new_afc = rp->publicID();
 				vector<string> analog = SplitStrings(afc, LINE_SEPARATOR);
-				for(unsigned int i=0; i<analog.size(); i++)
+
+				for ( unsigned int i=0; i<analog.size(); i++)
 					if(analog[i]==new_afc)
 						add = false;
 
@@ -1898,17 +1936,17 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 
 	// get the digital poles- and zero responses
 	sequence_number = GetPAZSequence(ci, DIGITAL, DIGITAL);
-	if(sequence_number != -1)
-	{
-		int in_unit = ci.rpz[sequence_number]->GetSignalInUnits();
-		int out_unit = ci.rpz[sequence_number]->GetSignalOutUnits();
+	if ( sequence_number ) {
+		int in_unit = ci.rpz[*sequence_number]->GetSignalInUnits();
+		int out_unit = ci.rpz[*sequence_number]->GetSignalOutUnits();
 
-		for(; sequence_number<(int)ci.rpz.size(); ++sequence_number)
+		for ( ; *sequence_number < ci.rpz.size(); ++*sequence_number)
 		{
-			if(ci.rpz[sequence_number]->GetSignalInUnits() != in_unit || ci.rpz[sequence_number]->GetSignalOutUnits() != out_unit)
+			if ( ci.rpz[*sequence_number]->GetSignalInUnits() != in_unit
+			  || ci.rpz[*sequence_number]->GetSignalOutUnits() != out_unit)
 				break;
 
-			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[sequence_number]->GetStageSequenceNumber());
+			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[*sequence_number]->GetStageSequenceNumber());
 			DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
 			if(!rp)
 				rp = InsertResponsePAZ(ci, instr);
@@ -1919,17 +1957,18 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 			bool add = true;
 			string dfc;
 
-			try { dfc = blob2str(deci->digitalFilterChain()); } catch(Core::ValueException) {}
+			try { dfc = blob2str(deci->digitalFilterChain()); }
+			catch ( Core::ValueException ) {}
 
 			string new_dfc = rp->publicID();
 			vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-			for(unsigned int i=0; i<digital.size(); i++)
-				if(digital[i]==new_dfc)
+
+			for ( size_t j = 0; j < digital.size(); ++j )
+				if ( digital[j] == new_dfc )
 					add = false;
 
-			if(add)
-			{
-				if(!dfc.empty())
+			if ( add ) {
+				if ( !dfc.empty() )
 					dfc += " ";
 
 				dfc += new_dfc;
@@ -1939,20 +1978,19 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 	}
 	else {
 		sequence_number = GetFAPSequence(ci, DIGITAL, DIGITAL);
-		if(sequence_number != -1)
-		{
-			int in_unit = ci.rl[sequence_number]->GetSignalInUnits();
-			int out_unit = ci.rl[sequence_number]->GetSignalOutUnits();
+		if ( sequence_number ) {
+			int in_unit = ci.rl[*sequence_number]->GetSignalInUnits();
+			int out_unit = ci.rl[*sequence_number]->GetSignalOutUnits();
 
-			for(; sequence_number<(int)ci.rl.size(); ++sequence_number)
-			{
-				if(ci.rl[sequence_number]->GetSignalInUnits() != in_unit || ci.rl[sequence_number]->GetSignalOutUnits() != out_unit)
+			for ( ; *sequence_number < ci.rl.size(); ++*sequence_number) {
+				if ( ci.rl[*sequence_number]->GetSignalInUnits() != in_unit
+				  || ci.rl[*sequence_number]->GetSignalOutUnits() != out_unit )
 					break;
 
-				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[sequence_number]->GetStageSequenceNumber());
+				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[*sequence_number]->GetStageSequenceNumber());
 
 				DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(instr));
-				if(!rp)
+				if ( !rp )
 					rp = InsertResponseFAP(ci, instr);
 				else
 					UpdateResponseFAP(ci, rp);
@@ -1960,17 +1998,18 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 				bool add = true;
 				string dfc;
 
-				try { dfc = blob2str(deci->digitalFilterChain()); } catch(Core::ValueException) {}
+				try { dfc = blob2str(deci->digitalFilterChain()); }
+				catch ( Core::ValueException ) {}
 
 				string new_dfc = rp->publicID();
 				vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-				for(unsigned int i=0; i<digital.size(); i++)
-					if(digital[i]==new_dfc)
+
+				for ( size_t j = 0; j < digital.size(); ++j )
+					if ( digital[j] == new_dfc )
 						add = false;
 
-				if(add)
-				{
-					if(!dfc.empty())
+				if ( add ) {
+					if ( !dfc.empty() )
 						dfc += " ";
 
 					dfc += new_dfc;
@@ -1988,96 +2027,29 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 * Returns:      nothing                                                                                                     *
 * Description:  check whether a new sensor should be added or an existing updated					    *
 *******************************************************************************/
-void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
-{
-	SEISCOMP_DEBUG("Start processing sensor information ");
+void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
+	sequence_number = getSensorStage(ci.rpz, adc);
+	if ( sequence_number )
+		strm->setGainUnit(adc->UnitName(ci.rpz[*sequence_number]->GetSignalInUnits()));
 
-	const char* unit = VELOCITY;
-	sequence_number = GetPAZSequence(ci, VELOCITY, VOLTAGE);
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetPAZSequence(ci, ACCEL1, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetPAZSequence(ci, ACCEL2, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = DISPLACE;
-		sequence_number = GetPAZSequence(ci, DISPLACE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = PRESSURE;
-		sequence_number = GetPAZSequence(ci, PRESSURE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPAZSequence(ci, TEMPERATURE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPAZSequence(ci, TEMPERATURE2, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = VELOCITY;
-		sequence_number = GetPAZSequence(ci, VELOCITY, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetPAZSequence(ci, ACCEL1, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetPAZSequence(ci, ACCEL2, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = DISPLACE;
-		sequence_number = GetPAZSequence(ci, DISPLACE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = PRESSURE;
-		sequence_number = GetPAZSequence(ci, PRESSURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPAZSequence(ci, TEMPERATURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPAZSequence(ci, TEMPERATURE2, DIGITAL);
-	}
+	SEISCOMP_DEBUG("Start processing paz sensor information of stage %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
 
 	DataModel::SensorPtr sm = inventory->sensor(DataModel::SensorIndex(sensorName));
-	if(!sm)
-		sm = InsertSensor(ci, strm, unit, sensorName);
+	if ( !sm )
+		sm = InsertSensor(ci, strm, strm->gainUnit(), sensorName);
 	else
-		UpdateSensor(ci, sm, unit);
+		UpdateSensor(ci, sm, strm->gainUnit());
 
 	strm->setSensor(sm->publicID());
-	strm->setGainUnit(sm->unit());
 
 	ProcessSensorCalibration(ci, sm, strm);
-	//ProcessSensorGain(ci, sm, strm);
 	ProcessSensorPAZ(ci, sm);
-	//ProcessRespPoly(ci, strm->sensor());
 
 	DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(sm->name()));
-	if(!rp)
+	if ( !rp )
 		SEISCOMP_ERROR("poles & zeros response of sensor %s not found", strm->sensor().c_str());
 }
 
@@ -2090,52 +2062,30 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 *******************************************************************************/
 void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
 {
-	SEISCOMP_DEBUG("Start processing sensor information ");
+	SEISCOMP_DEBUG("Start processing poly sensor information ");
 
-	const char* unit = PRESSURE;
-	sequence_number = GetPolySequence(ci, PRESSURE, VOLTAGE);
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPolySequence(ci, TEMPERATURE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPolySequence(ci, TEMPERATURE2, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = PRESSURE;
-		sequence_number = GetPolySequence(ci, PRESSURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPolySequence(ci, TEMPERATURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetPolySequence(ci, TEMPERATURE2, DIGITAL);
-	}
+	sequence_number = getSensorStage(ci.rp, adc);
+	if ( sequence_number )
+		strm->setGainUnit(adc->UnitName(ci.rp[*sequence_number]->GetSignalInUnits()));
+
+	SEISCOMP_DEBUG("Start processing poly sensor information of stage %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
 
 	DataModel::SensorPtr sm = inventory->sensor(DataModel::SensorIndex(sensorName));
-	if(!sm)
-		sm = InsertSensor(ci, strm, unit, sensorName);
+	if ( !sm )
+		sm = InsertSensor(ci, strm, strm->gainUnit(), sensorName);
 	else
-		UpdateSensor(ci, sm, unit);
+		UpdateSensor(ci, sm, strm->gainUnit());
 
 	strm->setSensor(sm->publicID());
-	strm->setGainUnit(sm->unit());
 
-	// ProcessSensorCalibration(ci, sm, strm);
+	ProcessSensorCalibration(ci, sm, strm);
 	ProcessSensorPolynomial(ci, sm);
 
 	DataModel::ResponsePolynomialPtr rp = inventory->responsePolynomial(DataModel::ResponsePolynomialIndex(sm->name()));
-	if(!rp)
+	if ( !rp )
 		SEISCOMP_ERROR("polynomial response of sensor %s not found", strm->sensor().c_str());
 }
 
@@ -2148,94 +2098,30 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 *******************************************************************************/
 void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
 {
-	SEISCOMP_DEBUG("Start processing sensor information");
+	SEISCOMP_DEBUG("Start processing fap sensor information");
 
-	const char* unit = VELOCITY;
-	sequence_number = GetFAPSequence(ci, VELOCITY, VOLTAGE);
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetFAPSequence(ci, ACCEL1, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetFAPSequence(ci, ACCEL2, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = DISPLACE;
-		sequence_number = GetFAPSequence(ci, DISPLACE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = PRESSURE;
-		sequence_number = GetFAPSequence(ci, PRESSURE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetFAPSequence(ci, TEMPERATURE, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetFAPSequence(ci, TEMPERATURE2, VOLTAGE);
-	}
-	if(sequence_number == -1)
-	{
-		unit = VELOCITY;
-		sequence_number = GetFAPSequence(ci, VELOCITY, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetFAPSequence(ci, ACCEL1, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = ACCEL1;
-		sequence_number = GetFAPSequence(ci, ACCEL2, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = DISPLACE;
-		sequence_number = GetFAPSequence(ci, DISPLACE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = PRESSURE;
-		sequence_number = GetFAPSequence(ci, PRESSURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetFAPSequence(ci, TEMPERATURE, DIGITAL);
-	}
-	if(sequence_number == -1)
-	{
-		unit = TEMPERATURE;
-		sequence_number = GetFAPSequence(ci, TEMPERATURE2, DIGITAL);
-	}
+	sequence_number = getSensorStage(ci.rl, adc);
+	if ( sequence_number )
+		strm->setGainUnit(adc->UnitName(ci.rl[*sequence_number]->GetSignalInUnits()));
+
+	SEISCOMP_DEBUG("Start processing fap sensor information of stage %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
 	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
 
 	DataModel::SensorPtr sm = inventory->sensor(DataModel::SensorIndex(sensorName));
-	if(!sm)
-		sm = InsertSensor(ci, strm, unit, sensorName);
+	if ( !sm )
+		sm = InsertSensor(ci, strm, strm->gainUnit(), sensorName);
 	else
-		UpdateSensor(ci, sm, unit);
+		UpdateSensor(ci, sm, strm->gainUnit());
 
 	strm->setSensor(sm->publicID());
-	strm->setGainUnit(sm->unit());
 
 	ProcessSensorCalibration(ci, sm, strm);
-	//ProcessSensorGain(ci, sm, strm);
 	ProcessSensorFAP(ci, sm);
-	//ProcessRespPoly(ci, strm->sensor());
 
 	DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(sm->name()));
-	if(!rp)
+	if ( !rp )
 		SEISCOMP_ERROR("response list of sensor %s not found", strm->sensor().c_str());
 }
 
@@ -2245,8 +2131,7 @@ void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 * Returns:	nothing													    *
 * Description:	add new sensor											    *
 *******************************************************************************/
-DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, const char* unit, const string& name)
-{
+DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, const string &unit, const string &name) {
 	SEISCOMP_DEBUG("Insert sensor");
 
 	int instr = ci.GetInstrument();
@@ -2273,8 +2158,7 @@ DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::S
 * Returns:	nothing													    *
 * Description:	update an existing sensor										    *
 *******************************************************************************/
-void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, const char* unit)
-{
+void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, const string &unit) {
 	SEISCOMP_DEBUG("Update sensor");
 
 	int instr = ci.GetInstrument();
@@ -2297,8 +2181,7 @@ void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, con
 * Returns:	nothing													    *
 * Description:	check whether a new sensorcalibration should be added or an existing updated			    *
 *******************************************************************************/
-void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Process sensor calibration");
 
 	DataModel::SensorCalibrationPtr cal = sm->sensorCalibration(DataModel::SensorCalibrationIndex(strm->sensorSerialNumber(), strm->sensorChannel(), strm->start()));
@@ -2316,8 +2199,7 @@ void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::Senso
 * Returns:      nothing                                                                                                     *
 * Description:  add of a new sensorcalibration                                                                         *
 *******************************************************************************/
-void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm)
-{
+void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Insert sensor calibration");
 
 	DataModel::SensorCalibrationPtr cal = new DataModel::SensorCalibration();
@@ -2328,20 +2210,19 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 	try {
 		cal->setEnd(strm->end());
 	}
-	catch(Core::ValueException) {
+	catch ( Core::ValueException ) {
 		cal->setEnd(Core::None);
 	}
 
 	cal->setGain(0.0);
 	cal->setGainFrequency(0.0);
 
-	for(unsigned int i=0; i< ci.csg.size(); i++)
-	{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		bool found = false;
 
-		for ( int j = 0; j < (int)ci.rpz.size(); ++j ) {
+		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
 			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
-			  && (j == sequence_number) ) {
+			  && (j == *sequence_number) ) {
 				cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 				cal->setGainFrequency(ci.csg[i]->GetFrequency());
 				found = true;
@@ -2350,9 +2231,9 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		}
 
 		if ( !found ) {
-			for ( int j = 0; j < (int)ci.rl.size(); ++j ) {
+			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
 				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
-				  && (j == sequence_number) ) {
+				  && (j == *sequence_number) ) {
 					cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 					cal->setGainFrequency(ci.csg[i]->GetFrequency());
 					found = true;
@@ -2375,25 +2256,23 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 * Returns:	nothing													    *
 * Description:	update of a sensorcalibration									    *
 *******************************************************************************/
-void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::SensorCalibrationPtr cal, DataModel::StreamPtr strm)
-{
+void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::SensorCalibrationPtr cal, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Update sensor calibration");
 
 	try {
 		cal->setEnd(strm->end());
 	}
-	catch(Core::ValueException) {
+	catch ( Core::ValueException ) {
 		cal->setEnd(Core::None);
 	}
 
 	cal->setGain(0.0);
 	cal->setGainFrequency(0.0);
 
-	for(unsigned int i=0; i< ci.csg.size(); i++)
-	{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		bool found = false;
 
-		for ( int j = 0; j < (int)ci.rpz.size(); ++j ) {
+		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
 			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
 			  && (j == sequence_number) ) {
 				cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
@@ -2404,7 +2283,7 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		}
 
 		if ( !found ) {
-			for ( int j = 0; j < (int)ci.rl.size(); ++j ) {
+			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
 				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
 				  && (j == sequence_number) ) {
 					cal->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
@@ -2428,14 +2307,13 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 * Returns:	nothing													    *
 * Description:	check if a new resppaz should be added or an existing should be updated					    *
 *******************************************************************************/
-void Inventory::ProcessSensorPAZ(ChannelIdentifier& ci, DataModel::SensorPtr sm)
-{
-	SEISCOMP_DEBUG("Start processing response poles & zeros, for sequence: %d", sequence_number);
+void Inventory::ProcessSensorPAZ(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
+	SEISCOMP_DEBUG("Start processing response poles & zeros, for sequence: %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
-	if(sequence_number != -1)
-	{
+	if ( sequence_number ) {
 		DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(sm->name()));
-		if(!rp)
+		if ( !rp )
 			rp = InsertResponsePAZ(ci, sm->name());
 		else
 			UpdateResponsePAZ(ci, rp);
@@ -2451,34 +2329,31 @@ void Inventory::ProcessSensorPAZ(ChannelIdentifier& ci, DataModel::SensorPtr sm)
 * Returns:	nothing													    *
 * Description:	add a new resppaz											    *
 *******************************************************************************/
-DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, string instrument)
-{
+DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, string instrument) {
 	SEISCOMP_DEBUG("Voeg nieuwe response poles & zeros");
 
 	DataModel::ResponsePAZPtr rp = DataModel::ResponsePAZ::Create();
 
 	rp->setName(instrument);
 
-	char c = ci.rpz[sequence_number]->GetTransferFunctionType();
+	char c = ci.rpz[*sequence_number]->GetTransferFunctionType();
 	rp->setType(string(&c, 1));
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
 
-	for(unsigned int i=0; i<ci.csg.size(); i++)
-	{
-		if(ci.csg[i]->GetStageSequenceNumber() == ci.rpz[sequence_number]->GetStageSequenceNumber())
-		{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
 	}
 
-	rp->setNormalizationFactor(ci.rpz[sequence_number]->GetAoNormalizationFactor());
-	rp->setNormalizationFrequency(ci.rpz[sequence_number]->GetNormalizationFrequency());
-	rp->setNumberOfZeros(ci.rpz[sequence_number]->GetNumberOfZeros());
-	rp->setNumberOfPoles(ci.rpz[sequence_number]->GetNumberOfPoles());
-	rp->setZeros(parseComplexArray(ci.rpz[sequence_number]->GetComplexZeros()));
-	rp->setPoles(parseComplexArray(ci.rpz[sequence_number]->GetComplexPoles()));
+	rp->setNormalizationFactor(ci.rpz[*sequence_number]->GetAoNormalizationFactor());
+	rp->setNormalizationFrequency(ci.rpz[*sequence_number]->GetNormalizationFrequency());
+	rp->setNumberOfZeros(ci.rpz[*sequence_number]->GetNumberOfZeros());
+	rp->setNumberOfPoles(ci.rpz[*sequence_number]->GetNumberOfPoles());
+	rp->setZeros(parseComplexArray(ci.rpz[*sequence_number]->GetComplexZeros()));
+	rp->setPoles(parseComplexArray(ci.rpz[*sequence_number]->GetComplexPoles()));
 	check_paz(rp, _fixedErrors);
 
 	inventory->add(rp.get());
@@ -2493,28 +2368,27 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, st
 * Returns:	nothing													    *
 * Description:	update of existing resppaz										    *
 *******************************************************************************/
-void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp)
-{
+void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp) {
 	SEISCOMP_DEBUG("Update response poles & zeros");
 
-	char c = ci.rpz[sequence_number]->GetTransferFunctionType();
+	char c = ci.rpz[*sequence_number]->GetTransferFunctionType();
 	rp->setType(string(&c, 1));
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
 
-	for(unsigned int i = 0; i < ci.csg.size(); ++i ) {
-		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[sequence_number]->GetStageSequenceNumber() ) {
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
 	}
 
-	rp->setNormalizationFactor(ci.rpz[sequence_number]->GetAoNormalizationFactor());
-	rp->setNormalizationFrequency(ci.rpz[sequence_number]->GetNormalizationFrequency());
-	rp->setNumberOfZeros(ci.rpz[sequence_number]->GetNumberOfZeros());
-	rp->setNumberOfPoles(ci.rpz[sequence_number]->GetNumberOfPoles());
-	rp->setZeros(parseComplexArray(ci.rpz[sequence_number]->GetComplexZeros()));
-	rp->setPoles(parseComplexArray(ci.rpz[sequence_number]->GetComplexPoles()));
+	rp->setNormalizationFactor(ci.rpz[*sequence_number]->GetAoNormalizationFactor());
+	rp->setNormalizationFrequency(ci.rpz[*sequence_number]->GetNormalizationFrequency());
+	rp->setNumberOfZeros(ci.rpz[*sequence_number]->GetNumberOfZeros());
+	rp->setNumberOfPoles(ci.rpz[*sequence_number]->GetNumberOfPoles());
+	rp->setZeros(parseComplexArray(ci.rpz[*sequence_number]->GetComplexZeros()));
+	rp->setPoles(parseComplexArray(ci.rpz[*sequence_number]->GetComplexPoles()));
 	check_paz(rp, _fixedErrors);
 
 	rp->update();
@@ -2528,14 +2402,13 @@ void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZP
  * Description: check if a new resppaz should be added or an existing should  *
  *              be updated                                                    *
  ******************************************************************************/
-void Inventory::ProcessSensorFAP(ChannelIdentifier& ci, DataModel::SensorPtr sm)
-{
-	SEISCOMP_DEBUG("Start processing response list, for sequence: %d", sequence_number);
+void Inventory::ProcessSensorFAP(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
+	SEISCOMP_DEBUG("Start processing response list, for sequence: %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
-	if(sequence_number != -1)
-	{
+	if ( sequence_number ) {
 		DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(sm->name()));
-		if(!rp)
+		if ( !rp )
 			rp = InsertResponseFAP(ci, sm->name());
 		else
 			UpdateResponseFAP(ci, rp);
@@ -2559,20 +2432,20 @@ DataModel::ResponseFAPPtr Inventory::InsertResponseFAP(ChannelIdentifier &ci, st
 	rp->setName(instrument);
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
-	rp->setNumberOfTuples(ci.rl[sequence_number]->GetNumberOfResponses());
+	rp->setNumberOfTuples(ci.rl[*sequence_number]->GetNumberOfResponses());
 
 	rp->setTuples(DataModel::RealArray());
 	DataModel::RealArray &tuples = rp->tuples();
 
-	const std::vector<ListedResponses> &rl = ci.rl[sequence_number]->GetResponsesListed();
+	const std::vector<ListedResponses> &rl = ci.rl[*sequence_number]->GetResponsesListed();
 	for ( size_t i = 0; i < rl.size(); ++i ) {
 		tuples.content().push_back(rl[i].frequency);
 		tuples.content().push_back(rl[i].amplitude);
 		tuples.content().push_back(rl[i].phase_angle);
 	}
 
-	for( unsigned int i = 0; i < ci.csg.size(); ++i ) {
-		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[sequence_number]->GetStageSequenceNumber() ) {
+	for( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
@@ -2595,20 +2468,20 @@ void Inventory::UpdateResponseFAP(ChannelIdentifier &ci, Seiscomp::DataModel::Re
 
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
-	rp->setNumberOfTuples(ci.rl[sequence_number]->GetNumberOfResponses());
+	rp->setNumberOfTuples(ci.rl[*sequence_number]->GetNumberOfResponses());
 
 	rp->setTuples(DataModel::RealArray());
 	DataModel::RealArray &tuples = rp->tuples();
 
-	const std::vector<ListedResponses> &rl = ci.rl[sequence_number]->GetResponsesListed();
+	const std::vector<ListedResponses> &rl = ci.rl[*sequence_number]->GetResponsesListed();
 	for ( size_t i = 0; i < rl.size(); ++i ) {
 		tuples.content().push_back(rl[i].frequency);
 		tuples.content().push_back(rl[i].amplitude);
 		tuples.content().push_back(rl[i].phase_angle);
 	}
 
-	for ( unsigned int i = 0; i < ci.csg.size(); ++i ) {
-		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[sequence_number]->GetStageSequenceNumber() ) {
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rl[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
@@ -2624,12 +2497,11 @@ void Inventory::UpdateResponseFAP(ChannelIdentifier &ci, Seiscomp::DataModel::Re
 * Returns:	nothing													    *
 * Description:	check if a new resppaz should be added or an existing should be updated					    *
 *******************************************************************************/
-void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::SensorPtr sm)
-{
-	SEISCOMP_DEBUG("Start processing response polynomial, for sequence: %d", sequence_number);
+void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
+	SEISCOMP_DEBUG("Start processing response polynomial, for sequence: %d",
+	               sequence_number ? (int)*sequence_number : -1);
 
-	if(sequence_number != -1)
-	{
+	if ( sequence_number ) {
 		DataModel::ResponsePolynomialPtr rp = inventory->responsePolynomial(DataModel::ResponsePolynomialIndex(sm->name()));
 		if(!rp)
 			rp = InsertResponsePolynomial(ci, sm->name());
@@ -2637,8 +2509,8 @@ void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::Sensor
 			UpdateResponsePolynomial(ci, rp);
 
 		sm->setResponse(rp->publicID());
-		sm->setLowFrequency(ci.rp[sequence_number]->GetLowerValidFrequencyBound());
-		sm->setHighFrequency(ci.rp[sequence_number]->GetUpperValidFrequencyBound());
+		sm->setLowFrequency(ci.rp[*sequence_number]->GetLowerValidFrequencyBound());
+		sm->setHighFrequency(ci.rp[*sequence_number]->GetUpperValidFrequencyBound());
 	}
 }
 
@@ -2649,8 +2521,7 @@ void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::Sensor
 * Returns:	nothing													    *
 * Description:	add a new resppaz											    *
 *******************************************************************************/
-DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIdentifier& ci, string instrument)
-{
+DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIdentifier& ci, string instrument) {
 	SEISCOMP_DEBUG("Voeg nieuwe response polynomial");
 
 	DataModel::ResponsePolynomialPtr rp = DataModel::ResponsePolynomial::Create();
@@ -2660,25 +2531,23 @@ DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIden
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
 
-	for(unsigned int i=0; i<ci.csg.size(); i++)
-	{
-		if(ci.csg[i]->GetStageSequenceNumber() == ci.rp[sequence_number]->GetStageSequenceNumber())
-		{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rp[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
 	}
 
 	char a;
-	a = ci.rp[sequence_number]->GetValidFrequencyUnits();
+	a = ci.rp[*sequence_number]->GetValidFrequencyUnits();
 	rp->setFrequencyUnit(string(&a, 1));
-	a = ci.rp[sequence_number]->GetPolynomialApproximationType();
+	a = ci.rp[*sequence_number]->GetPolynomialApproximationType();
 	rp->setApproximationType(string(&a, 1));
-	rp->setApproximationLowerBound(ci.rp[sequence_number]->GetLowerBoundOfApproximation());
-	rp->setApproximationUpperBound(ci.rp[sequence_number]->GetUpperBoundOfApproximation());
-	rp->setApproximationError(ci.rp[sequence_number]->GetMaximumAbsoluteError());
-	rp->setNumberOfCoefficients(ci.rp[sequence_number]->GetNumberOfPcoeff());
-	rp->setCoefficients(parseRealArray(ci.rp[sequence_number]->GetPolynomialCoefficients()));
+	rp->setApproximationLowerBound(ci.rp[*sequence_number]->GetLowerBoundOfApproximation());
+	rp->setApproximationUpperBound(ci.rp[*sequence_number]->GetUpperBoundOfApproximation());
+	rp->setApproximationError(ci.rp[*sequence_number]->GetMaximumAbsoluteError());
+	rp->setNumberOfCoefficients(ci.rp[*sequence_number]->GetNumberOfPcoeff());
+	rp->setCoefficients(parseRealArray(ci.rp[*sequence_number]->GetPolynomialCoefficients()));
 
 	inventory->add(rp.get());
 
@@ -2692,31 +2561,28 @@ DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIden
 * Returns:	nothing													    *
 * Description:	update of existing resppaz										    *
 *******************************************************************************/
-void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::ResponsePolynomialPtr rp)
-{
+void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::ResponsePolynomialPtr rp) {
 	SEISCOMP_DEBUG("Wijzig response polynomial");
 
 	rp->setGain(0.0);
 	rp->setGainFrequency(0.0);
 
-	for(unsigned int i=0; i<ci.csg.size(); i++)
-	{
-		if(ci.csg[i]->GetStageSequenceNumber() == ci.rp[sequence_number]->GetStageSequenceNumber())
-		{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rp[*sequence_number]->GetStageSequenceNumber() ) {
 			rp->setGain(fabs(ci.csg[i]->GetSensitivityGain()));
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
 	}
 
 	char a;
-	a = ci.rp[sequence_number]->GetValidFrequencyUnits();
+	a = ci.rp[*sequence_number]->GetValidFrequencyUnits();
 	rp->setFrequencyUnit(string(&a, 1));
-	a = ci.rp[sequence_number]->GetPolynomialApproximationType();
-	rp->setApproximationLowerBound(ci.rp[sequence_number]->GetLowerBoundOfApproximation());
-	rp->setApproximationUpperBound(ci.rp[sequence_number]->GetUpperBoundOfApproximation());
-	rp->setApproximationError(ci.rp[sequence_number]->GetMaximumAbsoluteError());
-	rp->setNumberOfCoefficients(ci.rp[sequence_number]->GetNumberOfPcoeff());
-	rp->setCoefficients(parseRealArray(ci.rp[sequence_number]->GetPolynomialCoefficients()));
+	a = ci.rp[*sequence_number]->GetPolynomialApproximationType();
+	rp->setApproximationLowerBound(ci.rp[*sequence_number]->GetLowerBoundOfApproximation());
+	rp->setApproximationUpperBound(ci.rp[*sequence_number]->GetUpperBoundOfApproximation());
+	rp->setApproximationError(ci.rp[*sequence_number]->GetMaximumAbsoluteError());
+	rp->setNumberOfCoefficients(ci.rp[*sequence_number]->GetNumberOfPcoeff());
+	rp->setCoefficients(parseRealArray(ci.rp[*sequence_number]->GetPolynomialCoefficients()));
 
 	rp->update();
 }
@@ -2727,16 +2593,13 @@ void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::Respo
 * Returns:	description of network											    *
 * Description:  get the network description from Generic Abbreviation with the lookup key provided			    *
 *******************************************************************************/
-string Inventory::GetNetworkDescription(int lookup)
-{
+string Inventory::GetNetworkDescription(int lookup) {
 	SEISCOMP_DEBUG("Getting the description of the network");
 
 	string desc;
-	for(unsigned int i=0; i<adc->ga.size(); i++)
-	{
+	for ( size_t i = 0; i < adc->ga.size(); ++i ) {
 		GenericAbbreviation genabb = *adc->ga[i];
-		if(lookup == genabb.GetLookup())
-		{
+		if ( lookup == genabb.GetLookup() ) {
 			desc = genabb.GetDescription();
 			break;
 		}
@@ -2751,33 +2614,31 @@ string Inventory::GetNetworkDescription(int lookup)
 * Returns:	name of instrument											    *
 * Description:  get the instrument name from Generic Abbreviation with the lookup key provided				    *
 *******************************************************************************/
-string Inventory::GetInstrumentName(int lookup)
-{
+string Inventory::GetInstrumentName(int lookup) {
 	SEISCOMP_DEBUG("Getting the name of the instrument");
 
 	string name;
-	for(unsigned int i=0; i<adc->ga.size(); i++)
-	{
+	for ( size_t i = 0; i < adc->ga.size(); ++i ) {
 		GenericAbbreviation genabb = *adc->ga[i];
-		if(lookup == genabb.GetLookup())
-		{
+
+		if ( lookup == genabb.GetLookup() ) {
 			name = genabb.GetDescription();
 			vector<string> instrument_info = SplitStrings(name, LINE_SEPARATOR);
 			int size = instrument_info.size();
-			if(size == 1)
-			{
+			if ( size == 1 ) {
 				vector<string> extra = SplitStrings(name, ':');
-				if(extra.size() == 1)
+				if ( extra.size() == 1 )
 					name = instrument_info[0];
 				else
 					name = extra[0];
 			}
-			else if(size == 3)
+			else if ( size == 3 )
 				name = SplitString(instrument_info[1], '/');
-			else if (size>1)
+			else if ( size > 1 )
 				name = instrument_info[1];
 		}
 	}
+
 	return name;
 }
 
@@ -2787,24 +2648,21 @@ string Inventory::GetInstrumentName(int lookup)
 * Returns:      type of instrument                                                                                          *
 * Description:  get the instrument type from Generic Abbreviation with the lookup key provided                              *
 *******************************************************************************/
-string Inventory::GetInstrumentType(int lookup)
-{
+string Inventory::GetInstrumentType(int lookup) {
 	SEISCOMP_DEBUG("Getting the type of the instrument");
 
 	string name;
-	for(unsigned int i=0; i<adc->ga.size(); i++)
-	{
+	for ( size_t i = 0; i < adc->ga.size(); ++i ) {
 		GenericAbbreviation genabb = *adc->ga[i];
-		if(lookup == genabb.GetLookup())
-		{
+
+		if ( lookup == genabb.GetLookup() ) {
 			name = genabb.GetDescription();
 			vector<string> instrument_info = SplitStrings(name, LINE_SEPARATOR);
 			int size = instrument_info.size();
-			if(size == 3)
-			{
+			if ( size == 3 ) {
 				vector<string> name_type = SplitStrings(instrument_info[1], '/');
 				size = name_type.size();
-				if(size == 2)
+				if ( size == 2 )
 					name = name_type[1];
 				else
 					name = "";
@@ -2813,6 +2671,7 @@ string Inventory::GetInstrumentType(int lookup)
 				name = "";
 		}
 	}
+
 	return name;
 }
 
@@ -2822,25 +2681,25 @@ string Inventory::GetInstrumentType(int lookup)
 * Returns:      name of instrument manufacturer                                                                             *
 * Description:  get the instrument manufacturer from Generic Abbreviation with the lookup key provided                      *
 *******************************************************************************/
-string Inventory::GetInstrumentManufacturer(int lookup)
-{
+string Inventory::GetInstrumentManufacturer(int lookup) {
 	SEISCOMP_DEBUG("Getting the manufacturer of the instrument");
 
 	string name;
-	for(unsigned int i=0; i<adc->ga.size(); i++)
-	{
+	for ( size_t i = 0; i < adc->ga.size(); ++i ) {
 		GenericAbbreviation genabb = *adc->ga[i];
-		if(lookup == genabb.GetLookup())
-		{
+
+		if ( lookup == genabb.GetLookup() ) {
 			name = genabb.GetDescription();
 			vector<string> instrument_info = SplitStrings(name, LINE_SEPARATOR);
 			int size = instrument_info.size();
-			if(size > 2)
+
+			if ( size > 2 )
 				name = instrument_info[0];
 			else
 				name = "";
 		}
 	}
+
 	return name;
 }
 
@@ -2851,13 +2710,14 @@ string Inventory::GetInstrumentManufacturer(int lookup)
 * Description:	each ChannelIdentifier blockette contains an lookup key for the instrument used. This function get the	    *
 *		description and retrieves the instrument name out of it							    *
 *******************************************************************************/
-string Inventory::GetStationInstrument(int lookup)
-{
+string Inventory::GetStationInstrument(int lookup) {
 	string instr;
-	if(!GetInstrumentName(lookup).empty())
+
+	if ( !GetInstrumentName(lookup).empty() )
 		instr = SplitString(station_name, LINE_SEPARATOR)+"."+ GetInstrumentName(lookup);
 	else
 		instr = SplitString(station_name, LINE_SEPARATOR);
+
 	return instr;
 }
 
@@ -2865,8 +2725,7 @@ string Inventory::GetStationInstrument(int lookup)
 * Function:     GetPAZSequence												    *
 * Parameters:   none													    *
 *******************************************************************************/
-int Inventory::GetPAZSequence(ChannelIdentifier& ci, string in, string out)
-{
+Inventory::SequenceNumber Inventory::GetPAZSequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
 		int siu = ci.rpz[i]->GetSignalInUnits();
@@ -2888,14 +2747,14 @@ int Inventory::GetPAZSequence(ChannelIdentifier& ci, string in, string out)
 			return seq_in;
 	}
 
-	return -1;
+	return Core::None;
 }
+
 /*******************************************************************************
 * Function:     GetPolySequence												    *
 * Parameters:   none													    *
 *******************************************************************************/
-int Inventory::GetPolySequence(ChannelIdentifier& ci, string in, string out)
-{
+Inventory::SequenceNumber Inventory::GetPolySequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rp.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
 		int siu = ci.rp[i]->GetSignalInUnits();
@@ -2917,14 +2776,14 @@ int Inventory::GetPolySequence(ChannelIdentifier& ci, string in, string out)
 			return seq_in;
 	}
 
-	return -1;
+	return Core::None;
 }
+
 /******************************************************************************
  * Function:     GetFAPSequence                                               *
  * Parameters:   none                                                         *
  ******************************************************************************/
-int Inventory::GetFAPSequence(ChannelIdentifier& ci, string in, string out)
-{
+Inventory::SequenceNumber Inventory::GetFAPSequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rl.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
 		int siu = ci.rl[i]->GetSignalInUnits();
@@ -2946,21 +2805,18 @@ int Inventory::GetFAPSequence(ChannelIdentifier& ci, string in, string out)
 			return seq_in;
 	}
 
-	return -1;
+	return Core::None;
 }
+
 /*******************************************************************************
 * Function:     GetDataloggerSensitivity                                       *
 * Parameters:   none                                                           *
 *******************************************************************************/
-int Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const
-{
-	if(ci.rc.size() > 0)
-	{
-		if(IsDummy(*ci.rc[0]))
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i]->GetStageSequenceNumber() == ci.rc[0]->GetStageSequenceNumber())
+Inventory::SequenceNumber Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const {
+	if ( ci.rc.size() > 0 ) {
+		if ( IsDummy(*ci.rc[0]) ) {
+			for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+				if ( ci.csg[i]->GetStageSequenceNumber() == ci.rc[0]->GetStageSequenceNumber() )
 					return i;
 			}
 		}
@@ -2975,233 +2831,41 @@ int Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const
 		}
 #endif
 	}
-	else
-	{
-			for(unsigned int j=0; j< ci.rpz.size(); j++)
-			{
-					if(ci.rpz[j]->GetNumberOfPoles() == 0 && ci.rpz[j]->GetNumberOfZeros() == 0)
-					{
-							for(unsigned int i=0; i< ci.csg.size(); i++)
-							{
-									if(ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
-										return i;
-							}
-					}
+	else {
+		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
+			if ( ci.rpz[j]->GetNumberOfPoles() == 0 && ci.rpz[j]->GetNumberOfZeros() == 0 ) {
+				for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+					if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber() )
+						return i;
+				}
 			}
+		}
 	}
 
-	return -1;
+	return Core::None;
 }
+
 /*******************************************************************************
 * Function:     IsDummy                                                        *
 * Parameters:   none                                                           *
 *******************************************************************************/
-bool Inventory::IsDummy(ResponseCoefficients &rc) const
-{
+bool Inventory::IsDummy(ResponseCoefficients &rc) const {
 	return rc.GetNumberOfNumerators() == 0;
 }
+
 /*******************************************************************************
-* Function:     IsPAZStream                                                    *
+* Function:     IsSensorStream                                                 *
 * Parameters:   none                                                           *
 *******************************************************************************/
-bool Inventory::IsSensorPAZStream(ChannelIdentifier &ci)
-{
-	for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
-		int seq_in = -1, seq_out = -2;
-		int siu = ci.rpz[i]->GetSignalInUnits();
-		int sou = ci.rpz[i]->GetSignalOutUnits();
+Inventory::SensorResponseType Inventory::GetSensorResponseType(ChannelIdentifier &ci) {
+	if ( hasSensorStage(ci.rpz, adc) )
+		return SRT_PAZ;
 
-		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
-			UnitsAbbreviations ua = *adc->ua[j];
-			if ( siu == ua.GetLookup() ) {
-				if ( ua.GetName() != VOLTAGE &&
-				     ua.GetName() != DIGITAL )
-					seq_in = i;
-			}
+	if ( hasSensorStage(ci.rp, adc) )
+		return SRT_Poly;
 
-			if ( sou == ua.GetLookup() ) {
-				if ( ua.GetName() == VOLTAGE ||
-				     ua.GetName() == DIGITAL )
-					seq_out = i;
-			}
-		}
+	if ( hasSensorStage(ci.rl, adc) )
+		return SRT_FAP;
 
-		if ( seq_in == seq_out )
-			return true;
-	}
-
-	/*
-	if(GetPAZSequence(ci, VELOCITY, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, ACCEL1, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, ACCEL2, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, DISPLACE, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, PRESSURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, TEMPERATURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, TEMPERATURE2, VOLTAGE) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, VELOCITY, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, ACCEL1, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, ACCEL2, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, DISPLACE, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, PRESSURE, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, TEMPERATURE, DIGITAL) != -1)
-		return true;
-
-	if(GetPAZSequence(ci, TEMPERATURE2, DIGITAL) != -1)
-		return true;
-	*/
-
-	return false;
+	return SRT_None;
 }
-/*******************************************************************************
-* Function:     IsPolyStream                                                   *
-* Parameters:   none                                                           *
-*******************************************************************************/
-bool Inventory::IsSensorPolyStream(ChannelIdentifier& ci)
-{
-	for ( size_t i = 0; i < ci.rp.size(); ++i ) {
-		int seq_in = -1, seq_out = -2;
-		int siu = ci.rp[i]->GetSignalInUnits();
-		int sou = ci.rp[i]->GetSignalOutUnits();
-
-		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
-			UnitsAbbreviations ua = *adc->ua[j];
-			if ( siu == ua.GetLookup() ) {
-				if ( ua.GetName() != VOLTAGE &&
-				     ua.GetName() != DIGITAL )
-					seq_in = i;
-			}
-
-			if ( sou == ua.GetLookup() ) {
-				if ( ua.GetName() == VOLTAGE ||
-				     ua.GetName() == DIGITAL )
-					seq_out = i;
-			}
-		}
-
-		if ( seq_in == seq_out )
-			return true;
-	}
-
-	/*
-	if(GetPolySequence(ci, TEMPERATURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetPolySequence(ci, TEMPERATURE2, VOLTAGE) != -1)
-		return true;
-
-	if(GetPolySequence(ci, PRESSURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetPolySequence(ci, TEMPERATURE, DIGITAL) != -1)
-		return true;
-
-	if(GetPolySequence(ci, TEMPERATURE2, DIGITAL) != -1)
-		return true;
-
-	if(GetPolySequence(ci, PRESSURE, DIGITAL) != -1)
-		return true;
-	*/
-
-	return false;
-}
-/******************************************************************************
- * Function:     IsFAPStream                                                  *
- * Parameters:   none                                                         *
- ******************************************************************************/
-bool Inventory::IsSensorFAPStream(ChannelIdentifier& ci)
-{
-	for ( size_t i = 0; i < ci.rl.size(); ++i ) {
-		int seq_in = -1, seq_out = -2;
-		int siu = ci.rl[i]->GetSignalInUnits();
-		int sou = ci.rl[i]->GetSignalOutUnits();
-
-		for ( size_t j = 0; j < adc->ua.size(); ++j ) {
-			UnitsAbbreviations ua = *adc->ua[j];
-			if ( siu == ua.GetLookup() ) {
-				if ( ua.GetName() != VOLTAGE &&
-				     ua.GetName() != DIGITAL )
-					seq_in = i;
-			}
-
-			if ( sou == ua.GetLookup() ) {
-				if ( ua.GetName() == VOLTAGE ||
-				     ua.GetName() == DIGITAL )
-					seq_out = i;
-			}
-		}
-
-		if ( seq_in == seq_out )
-			return true;
-	}
-
-	/*
-	if(GetFAPSequence(ci, VELOCITY, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, ACCEL1, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, ACCEL2, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, DISPLACE, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, PRESSURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, TEMPERATURE, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, TEMPERATURE2, VOLTAGE) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, VELOCITY, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, ACCEL1, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, ACCEL2, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, DISPLACE, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, PRESSURE, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, TEMPERATURE, DIGITAL) != -1)
-		return true;
-
-	if(GetFAPSequence(ci, TEMPERATURE2, DIGITAL) != -1)
-		return true;
-	*/
-
-	return false;
-}
-

@@ -235,18 +235,21 @@ DECLARE_BLOCKETTE(UnitsAbbreviations) {
 	public:
 		virtual ParseResult Parse(std::string record);
 
-		int GetLookup(){return lookup_code;}
-		std::string GetName(){return name;}
-		std::string GetDescription(){return description;}
+		int GetLookup() const { return lookup_code; }
+		std::string GetName() const { return name; }
+		std::string GetDescription() const { return description; }
 
 	private:
 		int         lookup_code;
 		std::string name, description;
 };
 
-struct Component
-{
-	std::string	station, location, channel, subchannel, component_weight;
+struct Component {
+	std::string station,
+	            location,
+	            channel,
+	            subchannel,
+	            component_weight;
 };
 
 DECLARE_BLOCKETTE(BeamConfiguration) {
@@ -568,6 +571,15 @@ class AbbreviationDictionaryControl : public Control
 		GenericResponseDictionaryList        grd;
 		DecimationDictionaryList             dd;
 		ChannelSensitivityGainDictionaryList csgd;
+
+		std::string UnitName(int lookup) const {
+			for ( size_t i = 0; i < ua.size(); ++i ) {
+				if ( lookup == ua[i]->GetLookup() )
+					return ua[i]->GetName();
+			}
+
+			return std::string();
+		}
 };
 
 // definition of all Station Control Headers blockettes
