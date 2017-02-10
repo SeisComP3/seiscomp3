@@ -1,15 +1,24 @@
-/*===========================================================================================================================
-    Name:       inventory.C
+/***************************************************************************
+ * Copyright (C) 2016 by KNMI, gempa GmbH                                  *
+ *                                                                         *
+ * All Rights Reserved.                                                    *
+ *                                                                         *
+ * NOTICE: All information contained herein is, and remains                *
+ * the property of gempa GmbH and its suppliers, if any. The intellectual  *
+ * and technical concepts contained herein are proprietary to gempa GmbH   *
+ * and its suppliers.                                                      *
+ * Dissemination of this information or reproduction of this material      *
+ * is strictly forbidden unless prior written permission is obtained       *
+ * from gempa GmbH.                                                        *
+ *                                                                         *
+ * Author: Peter de Boer, KNMI                                             *
+ * Date: 2008-01-17                                                        *
+ *                                                                         *
+ * Maintainance and improvements: Jan Becker                               *
+ * Email: jabe@gempa.de                                                    *
+ ***************************************************************************/
 
-    Purpose:  	synchronising inventory information
 
-    Language:   C++, ANSI standard.
-
-    Author:     Peter de Boer, KNMI
-
-    Revision:	2008-01-17	0.1	initial version
-
-===========================================================================================================================*/
 #include <complex>
 #include <cstdio>
 #include "inventory.h"
@@ -25,6 +34,7 @@
 #define snprintf _snprintf
 #endif
 
+
 using namespace std;
 using namespace Seiscomp;
 
@@ -32,35 +42,30 @@ using namespace Seiscomp;
 namespace {
 
 
-inline string strip(string s)
-{
-	unsigned int i = 0, j = 0;
+inline string strip(string s) {
+	size_t i = 0, j = 0;
 
-	for(i = 0; i < s.length(); ++i)
-	{
-		if(s[i] != ' ')
+	for ( i = 0; i < s.length(); ++i ) {
+		if ( s[i] != ' ' )
 			break;
 	}
 
-	for(j = s.length(); j; --j)
-	{
-		if(s[j-1] != ' ')
+	for ( j = s.length(); j; --j ) {
+		if ( s[j-1] != ' ' )
 			break;
 	}
 
 	return string(s, i, j);
 }
 
-inline DataModel::RealArray parseRealArray(const string &s)
-{
+inline DataModel::RealArray parseRealArray(const string &s) {
 	DataModel::RealArray a;
 	vector<double> v;
 
-	if(s.empty())
+	if ( s.empty() )
 		return a;
 
-	if(!Core::fromString(v, strip(s)))
-	{
+	if ( !Core::fromString(v, strip(s)) ) {
 		SEISCOMP_ERROR("invalid real array: %s", s.c_str());
 		return a;
 	}
@@ -69,16 +74,14 @@ inline DataModel::RealArray parseRealArray(const string &s)
 	return a;
 }
 
-inline DataModel::ComplexArray parseComplexArray(const string &s)
-{
+inline DataModel::ComplexArray parseComplexArray(const string &s) {
 	DataModel::ComplexArray a;
 	vector<complex<double> > v;
 
-	if(s.empty())
+	if ( s.empty() )
 		return a;
 
-	if(!Core::fromString(v, strip(s)))
-	{
+	if ( !Core::fromString(v, strip(s)) ) {
 		SEISCOMP_ERROR("invalid complex array: %s", s.c_str());
 		return a;
 	}
@@ -87,36 +90,30 @@ inline DataModel::ComplexArray parseComplexArray(const string &s)
 	return a;
 }
 
-inline string blob2str(const DataModel::Blob &b)
-{
+inline string blob2str(const DataModel::Blob &b) {
 	return b.content();
 }
 
-inline DataModel::Blob str2blob(const string &s)
-{
+inline DataModel::Blob str2blob(const string &s) {
 	DataModel::Blob b;
 	b.setContent(s);
 	return b;
 }
 
-inline bool _is_leap(int y)
-{
+inline bool _is_leap(int y) {
 	return (y % 400 == 0 || (y % 4 == 0 && y % 100 != 0));
 }
 
-inline int _ldoy(int y, int m)
-{
+inline int _ldoy(int y, int m) {
 	static const int DOY[] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
 	return (DOY[m] + (_is_leap(y) && m >= 2));
 }
 
-inline string date2str(const Core::Time& t)
-{
+inline string date2str(const Core::Time& t) {
 	int year, month, day;
 	t.get(&year, &month, &day);
 
-	if(month < 1 || month > 12 || day < 1 || day > 31)
-	{
+	if ( month < 1 || month > 12 || day < 1 || day > 31 ) {
 		SEISCOMP_ERROR("invalid date: month=%d, day=%d", month, day);
 		month = 1;
 		day = 0;
@@ -172,56 +169,47 @@ Fraction double2frac(double d) {
 	return Fraction(ctop,cbot);
 }
 
-inline void check_fir(DataModel::ResponseFIRPtr rf, int &errors)
-{
+inline void check_fir(DataModel::ResponseFIRPtr rf, int &errors) {
 	vector<double> &v = rf->coefficients().content();
-	int nc = v.size();
+	int nc = (int)v.size();
 
-	if(rf->numberOfCoefficients() != nc)
-	{
+	if ( rf->numberOfCoefficients() != nc ) {
 		SEISCOMP_ERROR("expected %d coefficients, found %d", rf->numberOfCoefficients(), nc);
 		rf->setNumberOfCoefficients(nc);
 		++errors;
 	}
 
-	if(nc == 0 || rf->symmetry() != "A")
+	if ( nc == 0 || rf->symmetry() != "A" )
 		return;
 
 	int i = 0;
-	for(; 2 * i < nc; ++i)
-		if(v[i] != v[nc - 1 - i]) break;
+	for (; 2 * i < nc; ++i )
+		if ( v[i] != v[nc - 1 - i]) break;
 
-	if(2 * i > nc)
-	{
+	if ( 2 * i > nc ) {
 		rf->setNumberOfCoefficients(i);
 		rf->setSymmetry("B");
 		v.resize(i);
 		SEISCOMP_DEBUG("A(%d) -> B(%d)", nc, i);
 	}
-	else if(2 * i == nc)
-	{
+	else if ( 2 * i == nc ) {
 		rf->setNumberOfCoefficients(i);
 		rf->setSymmetry("C");
 		v.resize(i);
 		SEISCOMP_DEBUG("A(%d) -> C(%d)", nc, i);
 	}
 	else
-	{
 		SEISCOMP_DEBUG("A(%d) -> A(%d)", nc, nc);
-	}
 }
 
-inline void check_paz(DataModel::ResponsePAZPtr rp, int &errors)
-{
-	if(rp->numberOfPoles() != (int)rp->poles().content().size())
-	{
+inline void check_paz(DataModel::ResponsePAZPtr rp, int &errors) {
+	if ( rp->numberOfPoles() != (int)rp->poles().content().size() ) {
 		SEISCOMP_ERROR("expected %d poles, found %lu", rp->numberOfPoles(), (unsigned long)rp->poles().content().size());
 		rp->setNumberOfPoles(rp->poles().content().size());
 		++errors;
 	}
 
-	if(rp->numberOfZeros() != (int)rp->zeros().content().size())
-	{
+	if ( rp->numberOfZeros() != (int)rp->zeros().content().size() ) {
 		SEISCOMP_ERROR("expected %d zeros, found %lu", rp->numberOfZeros(), (unsigned long)rp->zeros().content().size());
 		rp->setNumberOfZeros(rp->zeros().content().size());
 		++errors;
@@ -319,8 +307,12 @@ Inventory::SequenceNumber getSensorStage(const C &objects, AbbreviationDictionar
 
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::Inventory(const std::string &dcid, const std::string &net_description,
 	const std::string &net_type, const Seiscomp::Core::Time &net_start,
 	const OPT(Seiscomp::Core::Time) &net_end, bool temporary, bool restricted, bool shared,
@@ -371,29 +363,25 @@ Inventory::Inventory(const std::string &dcid, const std::string &net_description
 
 	_fixedErrors = 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     SynchronizeInventory                                           *
-* Parameters:   none                                                           *
-* Returns:      nothing                                                        *
-* Description:  start synchronizing the dataless with the inventory database   *
-*******************************************************************************/
-void Inventory::SynchronizeInventory()
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::SynchronizeInventory() {
 	_fixedErrors = 0;
 	ProcessStation();
 	SEISCOMP_INFO("Finished.");
 	// CleanupDatabase();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     CleanupDatabase                                                *
-* Parameters:   none                                                           *
-* Returns:      nothing                                                        *
-* Description:  start synchronizing the dataless with the inventory database   *
-*******************************************************************************/
-void Inventory::CleanupDatabase()
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::CleanupDatabase() {
 	SEISCOMP_INFO("Cleaning up the database");
 
 	set<pair<string, string> > stat_codes;
@@ -471,15 +459,13 @@ void Inventory::CleanupDatabase()
 		++i;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetComment                                                     *
-* Parameters:   StationIdentifier si                                           *
-* Returns:      nothing                                                        *
-* Description:  adds station comment to qclog                                  *
-*******************************************************************************/
-void Inventory::GetComment(StationIdentifier& si)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::GetComment(StationIdentifier& si) {
 	DataModel::WaveformStreamID *wf = new DataModel::WaveformStreamID();
 	wf->setNetworkCode(strip(si.GetNetworkCode()));
 	wf->setStationCode(strip(si.GetStationCallLetters()));
@@ -491,9 +477,13 @@ void Inventory::GetComment(StationIdentifier& si)
 		GetChannelComment(*si.ci[component], wf);
 	delete wf;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void Inventory::GetStationComment(Comment &sc, DataModel::WaveformStreamID *wf)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::GetStationComment(Comment &sc, DataModel::WaveformStreamID *wf) {
 	int code_key = sc.GetCommentCodeKey();
 	for(unsigned int j=0; j<adc->cd.size(); j++)
 	{
@@ -512,9 +502,13 @@ void Inventory::GetStationComment(Comment &sc, DataModel::WaveformStreamID *wf)
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void Inventory::GetChannelComment(ChannelIdentifier& ci, DataModel::WaveformStreamID *wf)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::GetChannelComment(ChannelIdentifier& ci, DataModel::WaveformStreamID *wf) {
 	wf->setLocationCode(strip(ci.GetLocation()));
 	wf->setChannelCode(strip(ci.GetChannel()));
 	for(unsigned int noc=0; noc<ci.cc.size();noc++)
@@ -539,9 +533,13 @@ void Inventory::GetChannelComment(ChannelIdentifier& ci, DataModel::WaveformStre
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-Core::Time Inventory::GetTime(string strTime, bool *ok)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Core::Time Inventory::GetTime(string strTime, bool *ok) {
 	int year=0, yday=0, month=0, day=0, hour=0, minute=0, second=0;
 	int ondergrens, bovengrens;
 	std::vector<std::string> date, time;
@@ -589,24 +587,25 @@ Core::Time Inventory::GetTime(string strTime, bool *ok)
 
 	return Core::Time(year, month, day, hour, minute, second);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-OPT(Core::Time) Inventory::GetOptTime(string strTime)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(Core::Time) Inventory::GetOptTime(string strTime) {
 	bool ok;
 	Core::Time t = GetTime(strTime, &ok);
 	if ( !ok ) return Core::None;
 	return t;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessStation                                                 *
-* Parameters:   none                                                           *
-* Returns:      nothing                                                        *
-* Description:  check if the current station is under control of ODC, if yes   *
-*               than check the start- and endtimes                             *
-*******************************************************************************/
-void Inventory::ProcessStation()
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::ProcessStation() {
 	SEISCOMP_DEBUG("Start processing station information");
 
 	for(unsigned int i = 0; i < inventory->networkCount(); ++i)
@@ -696,15 +695,13 @@ void Inventory::ProcessStation()
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertStation												    *
-* Parameters:   si      	- StationIdentifier with information of the station to check (from dataless)		    *
-* Return:	nothing													    *
-* Description:	insert the station information in the database with that of the dataless				    *
-*******************************************************************************/
-DataModel::StationPtr Inventory::InsertStation(StationIdentifier& si, DataModel::NetworkPtr network)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::StationPtr Inventory::InsertStation(StationIdentifier& si, DataModel::NetworkPtr network) {
 	SEISCOMP_DEBUG("Insert station");
 
 	DataModel::StationPtr station = DataModel::Station::Create();
@@ -732,16 +729,13 @@ DataModel::StationPtr Inventory::InsertStation(StationIdentifier& si, DataModel:
 	network->add(station.get());
 	return station;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateStation												    *
-* Parameters:   si      	- StationIdentifier with information of the station to check (from dataless)		    *
-*		db_start	- starttime that is currently in the database						    *
-* Return:	nothing													    *
-* Description:	update the station information in the database with that of the dataless				    *
-*******************************************************************************/
-void Inventory::UpdateStation(StationIdentifier& si, DataModel::StationPtr station)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::UpdateStation(StationIdentifier& si, DataModel::StationPtr station) {
 	SEISCOMP_DEBUG("Update station");
 
 	string desc = si.GetSiteName();
@@ -761,16 +755,12 @@ void Inventory::UpdateStation(StationIdentifier& si, DataModel::StationPtr stati
 
 	station->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:	ProcessStream												    *
-* Parameters:   si 	- information about the station being processed							    *
-*		station - information of the station being processed now in the database				    *
-* Returns:      nothing                                                                                                     *
-* Description:  - select all seisstreams currently present in the database for a given station                              *
-*		- loop through all returned seisstreams and compare starttime, endtime and location code with that from	    *
-*		  the dataless												    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr station) {
 	SEISCOMP_DEBUG("Start processing stream information");
 
@@ -1000,54 +990,41 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 #endif
 
 		SensorResponseType srt = GetSensorResponseType(ci);
-		if ( srt != SRT_None ) {
-			seis_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
+		seis_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
 
-			DataModel::StreamPtr strm = loc->stream(DataModel::StreamIndex(strm_code, strm_start));
+		DataModel::StreamPtr strm = loc->stream(DataModel::StreamIndex(strm_code, strm_start));
 
-			if ( !strm )
-				strm = InsertStream(ci, loc, station->restricted(), station->shared());
-			else
-				UpdateStream(ci, strm, station->restricted(), station->shared());
+		if ( !strm )
+			strm = InsertStream(ci, loc, station->restricted(), station->shared());
+		else
+			UpdateStream(ci, strm, station->restricted(), station->shared());
 
-			ProcessDatalogger(ci, strm);
+		ProcessDatalogger(ci, strm);
 
-			switch ( srt ) {
-				case SRT_PAZ:
-					ProcessPAZSensor(ci, strm);
-					break;
-				case SRT_Poly:
-					ProcessPolySensor(ci, strm);
-					break;
-				case SRT_FAP:
-					ProcessFAPSensor(ci, strm);
-					break;
-				default:
-					break;
-			}
-		}
-		else {
-			aux_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
-
-			DataModel::AuxStreamPtr strm = loc->auxStream(DataModel::AuxStreamIndex(strm_code, strm_start));
-
-			if ( !strm )
-				strm = InsertAuxStream(ci, loc, station->restricted(), station->shared());
-			else
-				UpdateAuxStream(ci, strm, station->restricted(), station->shared());
+		switch ( srt ) {
+			case SRT_PAZ:
+				ProcessPAZSensor(ci, strm);
+				break;
+			case SRT_Poly:
+				ProcessPolySensor(ci, strm);
+				break;
+			case SRT_FAP:
+				ProcessFAPSensor(ci, strm);
+				break;
+			default:
+				break;
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertSensorLocation											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless					    *
-*		station	- information of the station being processed now in the database				    *
-* Returns:	nothing													    *
-* Description:	insert a new channel(seisstream)									    *
-*******************************************************************************/
-DataModel::SensorLocationPtr Inventory::InsertSensorLocation(ChannelIdentifier& ci, DataModel::StationPtr station, const Core::Time& loc_start, const OPT(Core::Time)& loc_end)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::SensorLocationPtr
+Inventory::InsertSensorLocation(ChannelIdentifier& ci, DataModel::StationPtr station,
+                                const Core::Time& loc_start, const OPT(Core::Time)& loc_end) {
 	SEISCOMP_DEBUG("Insert sensor location information (%s)", ci.GetChannel().c_str());
 
 	DataModel::SensorLocationPtr loc = DataModel::SensorLocation::Create();
@@ -1061,15 +1038,16 @@ DataModel::SensorLocationPtr Inventory::InsertSensorLocation(ChannelIdentifier& 
 	station->add(loc.get());
 	return loc;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateSensorLocation											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless                                          *
-*               channel - information of a channel as it is stored in the database                                          *
-* Returns:	nothing													    *
-* Description:	update the current channel with information from dataless						    *
-*******************************************************************************/
-void Inventory::UpdateSensorLocation(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc, const Core::Time& loc_start, const OPT(Core::Time)& loc_end)
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::UpdateSensorLocation(ChannelIdentifier& ci,
+                                     DataModel::SensorLocationPtr loc,
+                                     const Core::Time& loc_start,
+                                     const OPT(Core::Time)& loc_end)
 {
 	SEISCOMP_DEBUG("Update sensor location information (%s)", ci.GetChannel().c_str());
 
@@ -1080,16 +1058,15 @@ void Inventory::UpdateSensorLocation(ChannelIdentifier& ci, DataModel::SensorLoc
 
 	loc->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertStream											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless					    *
-*		station	- information of the station being processed now in the database				    *
-* Returns:	nothing													    *
-* Description:	insert a new channel(seisstream)									    *
-*******************************************************************************/
-DataModel::StreamPtr Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc, bool restricted, bool shared)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::StreamPtr
+Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc,
+                        bool restricted, bool shared) {
 	Fraction samprate = double2frac(ci.GetSampleRate());
 	if ( samprate.first == 0 || samprate.second == 0 ) {
 		SEISCOMP_WARNING("%s: invalid sample rate %.2f -> checking for valid decimations",
@@ -1186,16 +1163,14 @@ DataModel::StreamPtr Inventory::InsertStream(ChannelIdentifier& ci, DataModel::S
 	loc->add(strm.get());
 	return strm;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateStream											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless                                          *
-*               channel - information of a channel as it is stored in the database                                          *
-* Returns:	nothing													    *
-* Description:	update the current channel with information from dataless						    *
-*******************************************************************************/
-void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm, bool restricted, bool shared) //, bool FirstComponent)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm,
+                             bool restricted, bool shared) {
 	SEISCOMP_DEBUG("Update seisstream information (%s)", ci.GetChannel().c_str());
 
 	strm->setEnd(GetOptTime(ci.GetEndDate()));
@@ -1261,16 +1236,16 @@ void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm, b
 
 	strm->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertAuxStream											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless					    *
-*		station	- information of the station being processed now in the database				    *
-* Returns:	nothing													    *
-* Description:	insert a new channel(auxstream)									    *
-*******************************************************************************/
-DataModel::AuxStreamPtr Inventory::InsertAuxStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc, bool restricted, bool shared)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::AuxStreamPtr
+Inventory::InsertAuxStream(ChannelIdentifier& ci,
+                           DataModel::SensorLocationPtr loc,
+                           bool restricted, bool shared) {
 	SEISCOMP_DEBUG("Insert auxstream information");
 
 	// Adjust strm_start if loc_start was adjusted earlier
@@ -1291,16 +1266,14 @@ DataModel::AuxStreamPtr Inventory::InsertAuxStream(ChannelIdentifier& ci, DataMo
 	loc->add(strm.get());
 	return strm;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateAuxStream											    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless                                          *
-*               channel - information of a channel as it is stored in the database                                          *
-* Returns:	nothing													    *
-* Description:	update the current channel with information from dataless						    *
-*******************************************************************************/
-void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr strm, bool restricted, bool shared)
-{
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr strm,
+                                bool restricted, bool shared) {
 	SEISCOMP_DEBUG("Update auxstream information");
 
 	strm->setEnd(GetTime(ci.GetEndDate()));
@@ -1312,14 +1285,12 @@ void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr s
 
 	strm->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessDatalogger                                                                                           *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:  check whether a datalogger has to be added or updated                                                       *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing datalogger information ");
 
@@ -1338,14 +1309,12 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	ProcessDataloggerFIR(ci, dlg, strm);
 	ProcessDataloggerPAZ(ci, dlg, strm);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertDatalogger											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:	nothing													    *
-* Description:	add a datalogger											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm, const string& name) {
 	SEISCOMP_DEBUG("Voeg nieuwe datalogger toe");
 
@@ -1367,14 +1336,12 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 
 	return dlg;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateDatalogger											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-* Returns:      nothing                                                                                                     *
-* Description:	update a datalogger											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("wijzig datalogger");
 
@@ -1391,15 +1358,12 @@ void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr
 
 	dlg->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessDecimation											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	check whether a decimation should be added or updated							    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing decimation for %d/%d sps", strm->sampleRateNumerator(), strm->sampleRateDenominator());
 
@@ -1409,15 +1373,12 @@ void Inventory::ProcessDecimation(ChannelIdentifier& ci, DataModel::DataloggerPt
 	else
 		UpdateDecimation(ci, deci, strm);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertDecimation											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	add a new decimation											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::InsertDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Voeg nieuwe decimation toe");
 
@@ -1429,15 +1390,12 @@ void Inventory::InsertDecimation(ChannelIdentifier& ci, DataModel::DataloggerPtr
 
 	dlg->add(deci.get());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateDecimation											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               decimation      - the decimation that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	update an existing decimation belonging to the datalogger in process					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr deci, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Wijzig decimation");
 
@@ -1446,15 +1404,12 @@ void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr
 
 	deci->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessDataloggerCalibration										    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               dl      	- the datalogger that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	check whether a datalogger calibration should be added or updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("start processing datalogger calibration");
 
@@ -1464,15 +1419,12 @@ void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::D
 	else
 		UpdateDataloggerCalibration(ci, cal, strm);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertDataloggerCalibration										    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	add a new dataloggercalibration										    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Voeg datalogger calibration toe");
 
@@ -1499,15 +1451,12 @@ void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 
 	dlg->add(cal.get());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateDataloggerCalibration										    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	update an existing dataloggercalibration								    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerCalibrationPtr cal, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Wijzig datalogger calibration");
 
@@ -1530,15 +1479,12 @@ void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::Da
 	cal->update();
 
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessDataloggerFIR											    	    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               datalogger      - the datalogger that is in the database                                                    *
-* Returns:      nothing                                                                                                     *
-* Description:	check whether a new respfir has to be added or an existing should be updated				    *
-*		after that the decimation table has to be updated with a new respfir name				    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing ResponseFIR information");
 
@@ -1614,14 +1560,12 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertRespCoeff												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless	                                    *
-* 		seq	- starting number of Response Coefficient							    *
-* Returns:      nothing                                                                                                     *
-* Description:	add a new respfir											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier& ci, size_t &seq) {
 	int seqnum = ci.rc[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1668,15 +1612,12 @@ DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier& ci, size
 
 	return rf;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateRespCoeff												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless 	                                    *
-*               resp	- the respfir that is in the database 		                                                    *
-*		seq	- starting number of the Response Coefficients							    *
-* Returns:      nothing                                                                                                     *
-* Description:	update the respfir											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
 {
 	int seqnum = ci.rc[seq]->GetStageSequenceNumber();
@@ -1720,13 +1661,12 @@ void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr
 	rf->update();
 }
 
-/*******************************************************************************
-* Function:     InsertResponseFIRr												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless	                                    *
-* 		seq	- starting number of Response Coefficient							    *
-* Returns:      nothing                                                                                                     *
-* Description:	add a new respfir											    *
-*******************************************************************************/
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
@@ -1776,15 +1716,12 @@ DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, s
 
 	return rf;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateResponseFIRr												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless 	                                    *
-*               resp	- the respfir that is in the database 		                                                    *
-*		seq	- starting number of the Response Coefficients							    *
-* Returns:      nothing                                                                                                     *
-* Description:	update the respfir											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponseFIRr(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
@@ -1829,16 +1766,12 @@ void Inventory::UpdateResponseFIRr(ChannelIdentifier& ci, DataModel::ResponseFIR
 
 	rf->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessDataloggerPAZ											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*		datalogger	- the datalogger that is in the database						    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:	this function processes the update/addition of decimation, datalogger_calibration, datalogger_gain, 	    *
-*		resp_fir and resp_paz											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
 {
 	SEISCOMP_DEBUG("Start processing datalogger analog filter chain");
@@ -2019,14 +1952,12 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:	ProcessPAZSensor											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:  check whether a new sensor should be added or an existing updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
 	sequence_number = getSensorStage(ci.rpz, adc);
 	if ( sequence_number )
@@ -2052,14 +1983,12 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 	if ( !rp )
 		SEISCOMP_ERROR("poles & zeros response of sensor %s not found", strm->sensor().c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:	ProcessPolySensor											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:  check whether a new sensor should be added or an existing updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
 {
 	SEISCOMP_DEBUG("Start processing poly sensor information ");
@@ -2088,14 +2017,12 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 	if ( !rp )
 		SEISCOMP_ERROR("polynomial response of sensor %s not found", strm->sensor().c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:	ProcessFAPSensor											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:      nothing                                                                                                     *
-* Description:  check whether a new sensor should be added or an existing updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
 {
 	SEISCOMP_DEBUG("Start processing fap sensor information");
@@ -2124,13 +2051,12 @@ void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 	if ( !rp )
 		SEISCOMP_ERROR("response list of sensor %s not found", strm->sensor().c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertSensor											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-* Returns:	nothing													    *
-* Description:	add new sensor											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, const string &unit, const string &name) {
 	SEISCOMP_DEBUG("Insert sensor");
 
@@ -2150,14 +2076,12 @@ DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::S
 
 	return sm;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateSensor											    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*               sensor     - information of a sensor as it is stored in the database                              *
-* Returns:	nothing													    *
-* Description:	update an existing sensor										    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, const string &unit) {
 	SEISCOMP_DEBUG("Update sensor");
 
@@ -2172,15 +2096,12 @@ void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, con
 
 	sm->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessSensorCalibration										    *
-* Parameters:   ci              - information of a channel as it is stored in the dataless                                  *
-*		sensor	- information of a sensor as it is stored in the database				    *
-*               seis_stream     - information of a channel as it is stored in the database                                  *
-* Returns:	nothing													    *
-* Description:	check whether a new sensorcalibration should be added or an existing updated			    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Process sensor calibration");
 
@@ -2190,15 +2111,12 @@ void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::Senso
 	else
 		UpdateSensorCalibration(ci, cal, strm);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertSensorCalibration										    *
-* Parameters:   ci    	- information of a channel as it is stored in the dataless              	            	    *
-*               seismo	- id of the sensor										    *
-*               seisid	- sensor_id as it is stored in the seis_stream table	                                    *
-* Returns:      nothing                                                                                                     *
-* Description:  add of a new sensorcalibration                                                                         *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Insert sensor calibration");
 
@@ -2247,15 +2165,12 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 
 	sm->add(cal.get());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateSensorCalibration										    *
-* Parameters:   ci      - information of a channel as it is stored in the dataless                          		    *
-*               seiscal	- information of a sensorcalibration as it is stored in the database           		    *
-*               seisid	- sensor_id as it is stored in the seis_stream table                           		    *
-* Returns:	nothing													    *
-* Description:	update of a sensorcalibration									    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::SensorCalibrationPtr cal, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Update sensor calibration");
 
@@ -2299,14 +2214,12 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 
 	cal->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessSensorPAZ												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless					    *
-*		instr	- name of instrument the response paz is created for						    *
-* Returns:	nothing													    *
-* Description:	check if a new resppaz should be added or an existing should be updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessSensorPAZ(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
 	SEISCOMP_DEBUG("Start processing response poles & zeros, for sequence: %d",
 	               sequence_number ? (int)*sequence_number : -1);
@@ -2321,14 +2234,12 @@ void Inventory::ProcessSensorPAZ(ChannelIdentifier& ci, DataModel::SensorPtr sm)
 		sm->setResponse(rp->publicID());
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertResponsePAZ											    	    *
-* Parameters:   ci		- information of a channel as it is stored in the dataless				    *
-*		instrument	- name of instrument the response paz is created for 					    *
-* Returns:	nothing													    *
-* Description:	add a new resppaz											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, string instrument) {
 	SEISCOMP_DEBUG("Voeg nieuwe response poles & zeros");
 
@@ -2360,14 +2271,12 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, st
 
 	return rp;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateResponsePAZ											    	    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless					    *
-*		paz	- existing resppaz from the database								    *
-* Returns:	nothing													    *
-* Description:	update of existing resppaz										    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp) {
 	SEISCOMP_DEBUG("Update response poles & zeros");
 
@@ -2393,15 +2302,12 @@ void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZP
 
 	rp->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/******************************************************************************
- * Function:    ProcessSensorFAP                                              *
- * Parameters:  ci - information of a channel as it is stored in the dataless *
- *              instr - name of instrument the response paz is created for    *
- * Returns:     nothing                                                       *
- * Description: check if a new resppaz should be added or an existing should  *
- *              be updated                                                    *
- ******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessSensorFAP(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
 	SEISCOMP_DEBUG("Start processing response list, for sequence: %d",
 	               sequence_number ? (int)*sequence_number : -1);
@@ -2416,14 +2322,12 @@ void Inventory::ProcessSensorFAP(ChannelIdentifier& ci, DataModel::SensorPtr sm)
 		sm->setResponse(rp->publicID());
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/******************************************************************************
- * Function:     InsertResponseFAP                                            *
- * Parameters:   ci - information of a channel as stored in the dataless      *
- *               instrument - name of instrument the response is created for  *
- * Returns:      nothing                                                      *
- * Description:	 add a new respfap                                            *
- ******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ResponseFAPPtr Inventory::InsertResponseFAP(ChannelIdentifier &ci, std::string instrument) {
 	SEISCOMP_DEBUG("Insert response list");
 
@@ -2455,14 +2359,12 @@ DataModel::ResponseFAPPtr Inventory::InsertResponseFAP(ChannelIdentifier &ci, st
 
 	return rp;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/******************************************************************************
- * Function:    UpdateResponseFAP                                             *
- * Parameters:  ci  - information of a channel as stored in the dataless      *
- *              paz - existing resppaz from the database                      *
- * Returns:     nothing                                                       *
- * Description: update of existing respfap                                    *
- ******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponseFAP(ChannelIdentifier &ci, Seiscomp::DataModel::ResponseFAPPtr rp) {
 	SEISCOMP_DEBUG("Update response list");
 
@@ -2489,14 +2391,12 @@ void Inventory::UpdateResponseFAP(ChannelIdentifier &ci, Seiscomp::DataModel::Re
 
 	rp->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     ProcessSensorPolynomial												    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless					    *
-*		instr	- name of instrument the response paz is created for						    *
-* Returns:	nothing													    *
-* Description:	check if a new resppaz should be added or an existing should be updated					    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::SensorPtr sm) {
 	SEISCOMP_DEBUG("Start processing response polynomial, for sequence: %d",
 	               sequence_number ? (int)*sequence_number : -1);
@@ -2513,14 +2413,12 @@ void Inventory::ProcessSensorPolynomial(ChannelIdentifier& ci, DataModel::Sensor
 		sm->setHighFrequency(ci.rp[*sequence_number]->GetUpperValidFrequencyBound());
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     InsertResponsePolynomial											    	    *
-* Parameters:   ci		- information of a channel as it is stored in the dataless				    *
-*		instrument	- name of instrument the response paz is created for 					    *
-* Returns:	nothing													    *
-* Description:	add a new resppaz											    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIdentifier& ci, string instrument) {
 	SEISCOMP_DEBUG("Voeg nieuwe response polynomial");
 
@@ -2553,14 +2451,12 @@ DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIden
 
 	return rp;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     UpdateResponsePolynomial											    	    *
-* Parameters:   ci	- information of a channel as it is stored in the dataless					    *
-*		paz	- existing resppaz from the database								    *
-* Returns:	nothing													    *
-* Description:	update of existing resppaz										    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::ResponsePolynomialPtr rp) {
 	SEISCOMP_DEBUG("Wijzig response polynomial");
 
@@ -2586,13 +2482,12 @@ void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::Respo
 
 	rp->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetNetworkDescription											    *
-* Parameters:   lookup	- key to lookup information in the Generic Abbreviation blockette				    *
-* Returns:	description of network											    *
-* Description:  get the network description from Generic Abbreviation with the lookup key provided			    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string Inventory::GetNetworkDescription(int lookup) {
 	SEISCOMP_DEBUG("Getting the description of the network");
 
@@ -2607,13 +2502,12 @@ string Inventory::GetNetworkDescription(int lookup) {
 
 	return desc;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetInstrumentName											    *
-* Parameters:   lookup	- key to lookup information in the Generic Abbreviation blockette				    *
-* Returns:	name of instrument											    *
-* Description:  get the instrument name from Generic Abbreviation with the lookup key provided				    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string Inventory::GetInstrumentName(int lookup) {
 	SEISCOMP_DEBUG("Getting the name of the instrument");
 
@@ -2641,13 +2535,12 @@ string Inventory::GetInstrumentName(int lookup) {
 
 	return name;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetInstrumentType											    *
-* Parameters:   lookup  - key to lookup information in the Generic Abbreviation blockette                                   *
-* Returns:      type of instrument                                                                                          *
-* Description:  get the instrument type from Generic Abbreviation with the lookup key provided                              *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string Inventory::GetInstrumentType(int lookup) {
 	SEISCOMP_DEBUG("Getting the type of the instrument");
 
@@ -2674,13 +2567,12 @@ string Inventory::GetInstrumentType(int lookup) {
 
 	return name;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetInstrumentManufacturer										    *
-* Parameters:   lookup  - key to lookup information in the Generic Abbreviation blockette                                   *
-* Returns:      name of instrument manufacturer                                                                             *
-* Description:  get the instrument manufacturer from Generic Abbreviation with the lookup key provided                      *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string Inventory::GetInstrumentManufacturer(int lookup) {
 	SEISCOMP_DEBUG("Getting the manufacturer of the instrument");
 
@@ -2702,14 +2594,12 @@ string Inventory::GetInstrumentManufacturer(int lookup) {
 
 	return name;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetStationInstrument											    *
-* Parameters:   lookup	- key for looking up the description of the instrument in de Generic Abbreviation Blockette	    *
-* Return:	name of instrument 											    *
-* Description:	each ChannelIdentifier blockette contains an lookup key for the instrument used. This function get the	    *
-*		description and retrieves the instrument name out of it							    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string Inventory::GetStationInstrument(int lookup) {
 	string instr;
 
@@ -2720,11 +2610,12 @@ string Inventory::GetStationInstrument(int lookup) {
 
 	return instr;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetPAZSequence												    *
-* Parameters:   none													    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::SequenceNumber Inventory::GetPAZSequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
@@ -2749,11 +2640,12 @@ Inventory::SequenceNumber Inventory::GetPAZSequence(ChannelIdentifier& ci, strin
 
 	return Core::None;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetPolySequence												    *
-* Parameters:   none													    *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::SequenceNumber Inventory::GetPolySequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rp.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
@@ -2778,11 +2670,12 @@ Inventory::SequenceNumber Inventory::GetPolySequence(ChannelIdentifier& ci, stri
 
 	return Core::None;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/******************************************************************************
- * Function:     GetFAPSequence                                               *
- * Parameters:   none                                                         *
- ******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::SequenceNumber Inventory::GetFAPSequence(ChannelIdentifier& ci, string in, string out) {
 	for ( size_t i = 0; i < ci.rl.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
@@ -2807,11 +2700,12 @@ Inventory::SequenceNumber Inventory::GetFAPSequence(ChannelIdentifier& ci, strin
 
 	return Core::None;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     GetDataloggerSensitivity                                       *
-* Parameters:   none                                                           *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::SequenceNumber Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const {
 	if ( ci.rc.size() > 0 ) {
 		if ( IsDummy(*ci.rc[0]) ) {
@@ -2844,19 +2738,21 @@ Inventory::SequenceNumber Inventory::GetDataloggerSensitivity(ChannelIdentifier 
 
 	return Core::None;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     IsDummy                                                        *
-* Parameters:   none                                                           *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Inventory::IsDummy(ResponseCoefficients &rc) const {
 	return rc.GetNumberOfNumerators() == 0;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-/*******************************************************************************
-* Function:     IsSensorStream                                                 *
-* Parameters:   none                                                           *
-*******************************************************************************/
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::SensorResponseType Inventory::GetSensorResponseType(ChannelIdentifier &ci) {
 	if ( hasSensorStage(ci.rpz, adc) )
 		return SRT_PAZ;
