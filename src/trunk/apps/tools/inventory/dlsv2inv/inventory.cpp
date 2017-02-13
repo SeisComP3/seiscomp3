@@ -246,8 +246,26 @@ struct NetworkDescriptionResolver : public Util::VariableResolver {
 };
 
 
+bool isElectric(const string &unit) {
+	return unit == AMPERE || unit == VOLTAGE;
+}
+
+
 bool isElectric(const UnitsAbbreviations &ua) {
-	return ua.GetName() == AMPERE || ua.GetName() == VOLTAGE;
+	return isElectric(ua.GetName());
+}
+
+
+bool isAnalogDataloggerStage(AbbreviationDictionaryControl *adc,
+                             const Inventory::StageItem &item) {
+	return isElectric(adc->UnitName(item.inputUnit))
+	    && isElectric(adc->UnitName(item.outputUnit));
+}
+
+
+bool isDigitalDataloggerStage(AbbreviationDictionaryControl *adc,
+                              const Inventory::StageItem &item) {
+	return !isElectric(adc->UnitName(item.outputUnit));
 }
 
 
@@ -304,6 +322,22 @@ Inventory::SequenceNumber getSensorStage(const C &objects, AbbreviationDictionar
 
 	return Core::None;
 }
+
+
+template <typename C>
+void populateStages(Inventory::Stages &stages, const C &objects, Inventory::ResponseType rt) {
+	for ( size_t i = 0; i < objects.size(); ++i )
+		stages.push_back(Inventory::StageItem(objects[i]->GetStageSequenceNumber(), i,
+		                                      rt,
+		                                      objects[i]->GetSignalInUnits(),
+		                                      objects[i]->GetSignalOutUnits()));
+}
+
+
+bool bySequenceNumber(const Inventory::StageItem &i1, const Inventory::StageItem &i2) {
+	return i1.stage < i2.stage;
+}
+
 
 
 }
@@ -908,88 +942,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		}
 
 // For debugging reasons
-#if 1
-		cerr << "[" << strm_code << "]" << endl;
-		for ( size_t i = 0; i < ci.rpz.size(); ++i ) {
-			int siu = ci.rpz[i]->GetSignalInUnits();
-			int sou = ci.rpz[i]->GetSignalOutUnits();
-			int seq_in = -1, seq_out = -2;
-			cerr << " + PAZ ";
-
-			for ( size_t j = 0; j < adc->ua.size(); ++j ) {
-				UnitsAbbreviations ua = *adc->ua[j];
-				if ( siu == ua.GetLookup() )
-					seq_in = j;
-				if ( sou == ua.GetLookup() )
-					seq_out = j;
-			}
-
-			if ( seq_in >= 0 )
-				cerr << adc->ua[seq_in]->GetName();
-			else
-				cerr << "-";
-			cerr << ":";
-			if ( seq_out >= 0 )
-				cerr << adc->ua[seq_out]->GetName();
-			else
-				cerr << "-";
-			cerr << endl;
-		}
-
-		for ( size_t i = 0; i < ci.rp.size(); ++i ) {
-			int siu = ci.rp[i]->GetSignalInUnits();
-			int sou = ci.rp[i]->GetSignalOutUnits();
-			int seq_in = -1, seq_out = -2;
-
-			cerr << " + POLY ";
-
-			for ( size_t j=0; j < adc->ua.size(); ++j ) {
-				UnitsAbbreviations ua = *adc->ua[j];
-				if ( siu == ua.GetLookup() )
-					seq_in = j;
-				if ( sou == ua.GetLookup() )
-					seq_out = j;
-			}
-
-			if ( seq_in >= 0 )
-				cerr << adc->ua[seq_in]->GetName();
-			else
-				cerr << "-";
-			cerr << ":";
-			if ( seq_out >= 0 )
-				cerr << adc->ua[seq_out]->GetName();
-			else
-				cerr << "-";
-			cerr << endl;
-		}
-
-		for ( size_t i = 0; i < ci.firr.size(); ++i ) {
-			int siu = ci.firr[i]->GetSignalInUnits();
-			int sou = ci.firr[i]->GetSignalOutUnits();
-			int seq_in = -1, seq_out = -2;
-			cerr << " + FIRR ";
-
-			for ( size_t j = 0; j < adc->ua.size(); ++j ) {
-				UnitsAbbreviations ua = *adc->ua[j];
-				if ( siu == ua.GetLookup() )
-					seq_in = j;
-				if ( sou == ua.GetLookup() )
-					seq_out = j;
-			}
-			if ( seq_in >= 0 )
-				cerr << adc->ua[seq_in]->GetName();
-			else
-				cerr << "-";
-			cerr << ":";
-			if ( seq_out >= 0 )
-				cerr << adc->ua[seq_out]->GetName();
-			else
-				cerr << "-";
-			cerr << endl;
-		}
-#endif
-
-		SensorResponseType srt = GetSensorResponseType(ci);
+		ResponseType srt = GetSensorResponseType(ci);
 		seis_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
 
 		DataModel::StreamPtr strm = loc->stream(DataModel::StreamIndex(strm_code, strm_start));
@@ -999,16 +952,22 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		else
 			UpdateStream(ci, strm, station->restricted(), station->shared());
 
+#if 1
+		cerr << "[" << strm_code << "]" << endl;
+		if ( srt != RT_None )
+			cerr << " + S " << srt.toString() << endl;
+#endif
+
 		ProcessDatalogger(ci, strm);
 
 		switch ( srt ) {
-			case SRT_PAZ:
+			case RT_PAZ:
 				ProcessPAZSensor(ci, strm);
 				break;
-			case SRT_Poly:
+			case RT_Poly:
 				ProcessPolySensor(ci, strm);
 				break;
-			case SRT_FAP:
+			case RT_FAP:
 				ProcessFAPSensor(ci, strm);
 				break;
 			default:
@@ -1306,8 +1265,116 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 
 	ProcessDecimation(ci, dlg, strm);
 	ProcessDataloggerCalibration(ci, dlg, strm);
+
+#if 1
+	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
+	if ( !deci ) {
+		SEISCOMP_ERROR("decimation %d/%d Hz of %s not found",
+		               strm->sampleRateNumerator(),
+		               strm->sampleRateDenominator(), dlg->name().c_str());
+		return;
+	}
+
+	Stages stages;
+	GetStages(stages, ci);
+
+	string analogueChain, digitalChain;
+
+	for ( size_t i = 0; i < stages.size(); ++i ) {
+		bool isAnalogue;
+		if ( isAnalogDataloggerStage(adc, stages[i]) ) {
+			isAnalogue = true;
+		}
+		else if ( isDigitalDataloggerStage(adc, stages[i]) ) {
+			isAnalogue = false;
+		}
+		else
+			continue;
+
+		string instr = channel_name + ".stage_" + ToString<int>(stages[i].stage);
+		string responseID;
+
+		switch ( stages[i].type ) {
+			case RT_FIR:
+			{
+				DataModel::ResponseFIRPtr fir = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
+				if ( !fir )
+					fir = InsertResponseFIR(ci, stages[i].index);
+				else
+					UpdateResponseFIR(ci, fir, stages[i].index);
+				responseID = fir->publicID();
+				break;
+			}
+			case RT_RC:
+			{
+				DataModel::ResponseFIRPtr fir = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
+				if ( !fir )
+					fir = InsertRespCoeff(ci, stages[i].index);
+				else
+					UpdateRespCoeff(ci, fir, stages[i].index);
+				responseID = fir->publicID();
+				break;
+			}
+			case RT_PAZ:
+			{
+				DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
+				if ( !rp )
+					rp = InsertResponsePAZ(ci, instr);
+				else
+					UpdateResponsePAZ(ci, rp);
+				responseID = rp->publicID();
+				break;
+			}
+			case RT_Poly:
+			{
+				DataModel::ResponsePolynomialPtr poly = inventory->responsePolynomial(DataModel::ResponsePolynomialIndex(instr));
+				if ( !poly )
+					poly = InsertResponsePolynomial(ci, instr);
+				else
+					UpdateResponsePolynomial(ci, poly);
+				responseID = poly->publicID();
+				break;
+			}
+			case RT_FAP:
+			{
+				DataModel::ResponseFAPPtr fap = inventory->responseFAP(DataModel::ResponseFAPIndex(instr));
+				if ( !fap )
+					fap = InsertResponseFAP(ci, instr);
+				else
+					UpdateResponseFAP(ci, fap);
+				responseID = fap->publicID();
+				break;
+			}
+			default:
+				SEISCOMP_ERROR("Invalid response type");
+				continue;
+		}
+
+		if ( isAnalogue ) {
+			if ( !analogueChain.empty() ) analogueChain += " ";
+			analogueChain += responseID;
+		}
+		else {
+			if ( !digitalChain.empty() ) digitalChain += " ";
+			digitalChain += responseID;
+		}
+
+#if 1
+		cerr << " + D " << stages[i].type.toString() << " "
+		     << adc->UnitName(stages[i].inputUnit) << " "
+		     << adc->UnitName(stages[i].outputUnit) << endl;
+#endif
+	}
+
+	if ( !analogueChain.empty() )
+		deci->setAnalogueFilterChain(str2blob(analogueChain));
+
+	if ( !digitalChain.empty() )
+		deci->setDigitalFilterChain(str2blob(digitalChain));
+#else
 	ProcessDataloggerFIR(ci, dlg, strm);
 	ProcessDataloggerPAZ(ci, dlg, strm);
+#endif
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1534,9 +1601,9 @@ void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::Datalogge
 
 		DataModel::ResponseFIRPtr rf = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
 		if ( !rf )
-			rf = InsertResponseFIRr(ci, i);
+			rf = InsertResponseFIR(ci, i);
 		else
-			UpdateResponseFIRr(ci, rf, i);
+			UpdateResponseFIR(ci, rf, i);
 
 		bool add = true;
 		string dfc;
@@ -1667,7 +1734,7 @@ void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, size_t &seq)
+DataModel::ResponseFIRPtr Inventory::InsertResponseFIR(ChannelIdentifier& ci, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1722,7 +1789,7 @@ DataModel::ResponseFIRPtr Inventory::InsertResponseFIRr(ChannelIdentifier& ci, s
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::UpdateResponseFIRr(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
+void Inventory::UpdateResponseFIR(ChannelIdentifier& ci, DataModel::ResponseFIRPtr rf, size_t &seq)
 {
 	int seqnum = ci.firr[seq]->GetStageSequenceNumber();
 	int non = 0, number_of_loops = 0;
@@ -1777,10 +1844,10 @@ void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::Datalogge
 	SEISCOMP_DEBUG("Start processing datalogger analog filter chain");
 
 	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
-	if(!deci)
-	{
-		SEISCOMP_ERROR("decimation %d/%d Hz of %s not found", strm->sampleRateNumerator(),
-			strm->sampleRateDenominator(), dlg->name().c_str());
+	if ( !deci ) {
+		SEISCOMP_ERROR("decimation %d/%d Hz of %s not found",
+		               strm->sampleRateNumerator(),
+		               strm->sampleRateDenominator(), dlg->name().c_str());
 		return;
 	}
 
@@ -2753,15 +2820,47 @@ bool Inventory::IsDummy(ResponseCoefficients &rc) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Inventory::SensorResponseType Inventory::GetSensorResponseType(ChannelIdentifier &ci) {
+Inventory::ResponseType Inventory::GetSensorResponseType(const ChannelIdentifier &ci) {
+	if ( hasSensorStage(ci.rc, adc) )
+		return RT_RC;
+
+	if ( hasSensorStage(ci.firr, adc) )
+		return RT_FIR;
+
 	if ( hasSensorStage(ci.rpz, adc) )
-		return SRT_PAZ;
+		return RT_PAZ;
 
 	if ( hasSensorStage(ci.rp, adc) )
-		return SRT_Poly;
+		return RT_Poly;
 
 	if ( hasSensorStage(ci.rl, adc) )
-		return SRT_FAP;
+		return RT_FAP;
 
-	return SRT_None;
+	return RT_None;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::GetStages(Stages &stages, const ChannelIdentifier &ci) {
+	stages.clear();
+
+	populateStages(stages, ci.rpz, RT_PAZ);
+	populateStages(stages, ci.rp, RT_Poly);
+	populateStages(stages, ci.rl, RT_FAP);
+	populateStages(stages, ci.rc, RT_RC);
+	populateStages(stages, ci.firr, RT_FIR);
+
+	sort(stages.begin(), stages.end(), bySequenceNumber);
+
+#if 0
+	Stages::iterator it = stages.begin();
+	for ( ; it != stages.end(); ++it ) {
+		cerr << it->stage << "  " << it->type.toString() << "  "
+		     << adc->UnitName(it->inputUnit) << "  "
+		     << adc->UnitName(it->outputUnit) << endl;
+	}
+#endif
 }

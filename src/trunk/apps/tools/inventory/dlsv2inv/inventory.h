@@ -39,16 +39,41 @@ class Inventory
 
 		int fixedErrors() const { return _fixedErrors; }
 
-	protected:
-	private:
-		enum SensorResponseType {
-			SRT_None,
-			SRT_PAZ,
-			SRT_Poly,
-			SRT_FAP
+
+	public:
+		MAKEENUM(ResponseType,
+			EVALUES(
+				RT_None,
+				RT_FIR,
+				RT_RC,
+				RT_PAZ,
+				RT_Poly,
+				RT_FAP
+			),
+			ENAMES(
+				"None",
+				"FIR",
+				"RC",
+				"PAZ",
+				"Poly",
+				"FAP"
+			)
+		);
+
+		struct StageItem {
+			StageItem(size_t idx, size_t i, ResponseType rt, int iu, int ou)
+			: stage(idx), index(i), type(rt), inputUnit(iu), outputUnit(ou) {}
+			size_t       stage;
+			size_t       index;
+			ResponseType type;
+			int          inputUnit;
+			int          outputUnit;
 		};
 
+		typedef std::vector<StageItem> Stages;
 
+
+	private:
 		//std::stringstream command, output;
 		std::string station_name;
 		std::string channel_name;
@@ -100,7 +125,7 @@ class Inventory
 		void InsertDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void InsertDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, size_t&);
-		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIRr(ChannelIdentifier&, size_t&);
+		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, size_t&);
 		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string &unit, const std::string& name);
 		void InsertSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr);
 		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, std::string);
@@ -114,7 +139,7 @@ class Inventory
 		void UpdateDecimation(ChannelIdentifier&, Seiscomp::DataModel::DecimationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
-		void UpdateResponseFIRr(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
+		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
 		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
 		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr);
@@ -130,6 +155,7 @@ class Inventory
 		SequenceNumber GetPolySequence(ChannelIdentifier&, std::string, std::string);
 		SequenceNumber GetDataloggerSensitivity(ChannelIdentifier&) const;
 		bool IsDummy(ResponseCoefficients &rc) const;
-		SensorResponseType GetSensorResponseType(ChannelIdentifier& ci);
+		ResponseType GetSensorResponseType(const ChannelIdentifier& ci);
+		void GetStages(Stages &stages, const ChannelIdentifier &ci);
 };
 #endif /* MYINVENTORY_H */
