@@ -95,7 +95,7 @@ class Inventory
 		std::map<std::vector<std::string>, std::string> encoding;
 		//STATION_INFO info;
 		//Logging *log;
-		SequenceNumber sequence_number;
+		SequenceNumber response_index;
 		void ProcessStation();
 		void CleanupDatabase();
 		void GetComment(StationIdentifier&);
@@ -120,26 +120,30 @@ class Inventory
 		Seiscomp::DataModel::AuxStreamPtr InsertAuxStream(ChannelIdentifier&, Seiscomp::DataModel::SensorLocationPtr, bool restricted, bool shared);
 		Seiscomp::DataModel::DataloggerPtr InsertDatalogger(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string& name);
 		void InsertDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
-		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, size_t&);
-		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, size_t&);
+
+		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, const std::string &name);
+		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, const std::string &name);
+		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, const std::string &name);
+		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, const std::string &name);
+		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, const std::string &name);
+
 		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string &unit, const std::string& name);
 		void InsertSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr);
-		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, std::string);
-		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, std::string);
-		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, std::string);
 		void UpdateStation(StationIdentifier&, Seiscomp::DataModel::StationPtr);
 		void UpdateSensorLocation(ChannelIdentifier& ci, Seiscomp::DataModel::SensorLocationPtr loc, const Seiscomp::Core::Time& loc_start, const OPT(Seiscomp::Core::Time)& loc_end);
 		void UpdateStream(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, bool restricted, bool shared);
 		void UpdateAuxStream(ChannelIdentifier&, Seiscomp::DataModel::AuxStreamPtr, bool restricted, bool shared);
 		void UpdateDatalogger(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDecimation(ChannelIdentifier&, Seiscomp::DataModel::DecimationPtr, Seiscomp::DataModel::StreamPtr);
-		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
-		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
-		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
-		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr);
+
+		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr);
+		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr);
 		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr);
 		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr);
 		void UpdateResponsePolynomial(ChannelIdentifier&, Seiscomp::DataModel::ResponsePolynomialPtr);
+
+		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
+		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		std::string GetNetworkDescription(int);
 		std::string GetInstrumentName(int);
 		std::string GetInstrumentManufacturer(int);

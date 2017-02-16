@@ -119,11 +119,11 @@ bool Dataless::ParseDataless(const string &file)
 	}
 	catch(Seiscomp::Core::ValueException &o)
 	{
-		SEISCOMP_ERROR("Seiscomp::Core::ValueException: %s", o.what());
+		SEISCOMP_ERROR("Value error: %s", o.what());
 	}
 	catch(Seiscomp::Core::GeneralException &o)
 	{
-		SEISCOMP_ERROR("Seiscomp::Core::GeneralException: %s", o.what());
+		SEISCOMP_ERROR("Error: %s", o.what());
 	}
 	catch(...)
 	{
