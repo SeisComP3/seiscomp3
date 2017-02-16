@@ -701,7 +701,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
                                const double& max) {
 
 	int weight = 4;
-	double upper = 0, lower = 0;
+	double upper = 0, lower = 0, uncertainty = 0;
 	string pickID;
 
 	for ( PickList::const_iterator it = pickList.begin();
@@ -721,13 +721,19 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		pickID = pick->publicID();
 		try {
-			upper = pick->time().upperUncertainty();
+			uncertainty = pick->time().uncertainty();
 		}
-		catch ( ... ) {}
-		try {
-			lower = pick->time().lowerUncertainty();
+		catch ( ... ) {
+			try {
+				upper = pick->time().upperUncertainty();
+			}
+			catch ( ... ) {}
+			try {
+				lower = pick->time().lowerUncertainty();
+			}
+			catch ( ... ) {}
+			uncertainty = lower + upper;
 		}
-		catch ( ... ) {}
 
 		// Pick found, break the loop
 		break;
@@ -737,7 +743,77 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 		if ( weight != 1.0 )
 			weight = 4;
 		else
-			weight = (int) round((3 / max) * (upper + lower));
+			weight = (int) round((3 / max) * (uncertainty));
+	}
+
+	return weight;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const int Hypo71::getH71Weight(const PickList& pickList,
+                               const string& networkCode,
+                               const string& stationCode,
+                               const string& phaseCode,
+							   const string& weightBoundaries) {
+
+	int weight = 4;
+	double upper = 0, lower = 0, uncertainty = 0;
+	string pickID;
+	vector<string> TweightBoundaries;
+
+	stringExplode(weightBoundaries, ",", &TweightBoundaries);
+
+	for ( PickList::const_iterator it = pickList.begin();
+	      it != pickList.end(); ++it ) {
+
+		PickPtr pick = it->first;
+		weight = it->second;
+
+		if ( pick->phaseHint().code() != phaseCode )
+			continue;
+
+		if ( pick->waveformID().networkCode() != networkCode )
+			continue;
+
+		if ( pick->waveformID().stationCode() != stationCode )
+			continue;
+
+		pickID = pick->publicID();
+		try {
+			uncertainty = pick->time().uncertainty();
+		}
+		catch ( ... ) {
+			try {
+				upper = pick->time().upperUncertainty();
+			}
+			catch ( ... ) {}
+			try {
+				lower = pick->time().lowerUncertainty();
+			}
+			catch ( ... ) {}
+			uncertainty = lower + upper;
+		}
+
+		// Pick found, break the loop
+		break;
+	}
+
+	if ( pickID != "" ) {
+		if ( weight != 1.0 )
+			weight = 4;
+		else {
+			weight = 0;
+			for (size_t i = 0; i < TweightBoundaries.size(); ++i) {
+				if ( (uncertainty) > toDouble(TweightBoundaries.at(i)) )
+					weight = i+1;
+			}
+			if ( weight > 4 )
+				weight = 4;
+		}
 	}
 
 	return weight;
@@ -774,8 +850,6 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 	vector<string> Tvelocity;
 	vector<string> Tdepth;
-
-	vector<string> Tuncertainties;
 
 	//! Not really used but may be useful to store debug log
 	_lastWarning = "";
@@ -1251,6 +1325,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	// Uncertainty values
 	double maxUncertainty = -1, minUncertainty = 100;
 	string maxWeight = "0";
+	string uncertaintyList = "";
 
 
 	for (PickList::iterator i = pickList.begin();
@@ -1378,7 +1453,11 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 				    pick->waveformID().stationCode(), "P");
 
 				try {
-					h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
+					if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
+					}
+					else
+						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 				}
 				catch ( ... ) {
 					h71PWeight = maxWeight;
@@ -1398,7 +1477,11 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 					isSPhase = true;
 					try {
-						h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+						}
+						else
+							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
 					}
 					catch ( ... ) {
 						h71SWeight = maxWeight;
@@ -2537,6 +2620,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 		double maxUncertainty = -1, minUncertainty = 100;
 		string maxWeight = "0";
 		string minWeight = "4";
+		string uncertaintyList = "";
 
 
 		for ( PickList::const_iterator i = pickList.begin();
@@ -2651,7 +2735,11 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 					pSec = toString(buffer);
 
 					try {
-						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
+						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
+						}
+						else
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 					}
 					catch ( ... ) {
 						h71PWeight = maxWeight;
@@ -2670,7 +2758,11 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 						sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "S");
 						isSPhase = true;
 						try {
-							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+							if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+							}
+							else
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
 						}
 						catch ( ... ) {
 							h71SWeight = maxWeight;
