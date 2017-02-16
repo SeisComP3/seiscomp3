@@ -107,9 +107,6 @@ class Inventory
 		void ProcessComponent(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr); 
 		void ProcessDatalogger(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
 		void ProcessDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
-		void ProcessDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
-		void ProcessDataloggerFIR(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr strm);
-		void ProcessDataloggerPAZ(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr strm);
 		void ProcessPAZSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
 		void ProcessPolySensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
 		void ProcessFAPSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr);
@@ -123,7 +120,6 @@ class Inventory
 		Seiscomp::DataModel::AuxStreamPtr InsertAuxStream(ChannelIdentifier&, Seiscomp::DataModel::SensorLocationPtr, bool restricted, bool shared);
 		Seiscomp::DataModel::DataloggerPtr InsertDatalogger(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string& name);
 		void InsertDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
-		void InsertDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, size_t&);
 		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, size_t&);
 		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string &unit, const std::string& name);
@@ -137,7 +133,6 @@ class Inventory
 		void UpdateAuxStream(ChannelIdentifier&, Seiscomp::DataModel::AuxStreamPtr, bool restricted, bool shared);
 		void UpdateDatalogger(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDecimation(ChannelIdentifier&, Seiscomp::DataModel::DecimationPtr, Seiscomp::DataModel::StreamPtr);
-		void UpdateDataloggerCalibration(ChannelIdentifier&, Seiscomp::DataModel::DataloggerCalibrationPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
 		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, size_t&);
 		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
@@ -153,8 +148,6 @@ class Inventory
 		SequenceNumber GetPAZSequence(ChannelIdentifier&, std::string, std::string);
 		SequenceNumber GetFAPSequence(ChannelIdentifier&, std::string, std::string);
 		SequenceNumber GetPolySequence(ChannelIdentifier&, std::string, std::string);
-		SequenceNumber GetDataloggerSensitivity(ChannelIdentifier&) const;
-		bool IsDummy(ResponseCoefficients &rc) const;
 		ResponseType GetSensorResponseType(const ChannelIdentifier& ci);
 		void GetStages(Stages &stages, const ChannelIdentifier &ci);
 };

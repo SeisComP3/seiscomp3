@@ -269,6 +269,41 @@ bool isDigitalDataloggerStage(AbbreviationDictionaryControl *adc,
 }
 
 
+bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item, double &stageGain) {
+	stageGain = 1.0;
+
+	for ( size_t i = 0; i< ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == (int)item.stage ) {
+			stageGain = ci.csg[i]->GetSensitivityGain();
+			break;
+		}
+	}
+
+	switch ( item.type ) {
+		case Inventory::RT_FIR:
+			if ( ci.firr[item.index]->GetNumberOfCoefficients() == 0 ) {
+				return true;
+			}
+			break;
+		case Inventory::RT_RC:
+			if ( ci.rc[item.index]->GetNumberOfNumerators() == 0 &&
+			     ci.rc[item.index]->GetNumberOfDenominators() == 0 ) {
+				return true;
+			}
+		case Inventory::RT_PAZ:
+			if ( ci.rpz[item.index]->GetNumberOfPoles() == 0 &&
+			     ci.rpz[item.index]->GetNumberOfZeros() == 0 ) {
+				return true;
+			}
+			break;
+		default:
+			break;
+	}
+
+	return false;
+}
+
+
 template <typename C>
 bool hasSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
 	for ( size_t i = 0; i < objects.size(); ++i ) {
@@ -1264,7 +1299,6 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	strm->setDatalogger(dlg->publicID());
 
 	ProcessDecimation(ci, dlg, strm);
-	ProcessDataloggerCalibration(ci, dlg, strm);
 
 #if 1
 	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
@@ -1279,6 +1313,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	GetStages(stages, ci);
 
 	string analogueChain, digitalChain;
+	bool hasPreAmplifierGain = false;
 
 	for ( size_t i = 0; i < stages.size(); ++i ) {
 		bool isAnalogue;
@@ -1290,6 +1325,19 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 		}
 		else
 			continue;
+
+		double stageGain;
+		if ( IsDummy(ci, stages[i], stageGain) ) {
+			if ( stageGain == 1.0 )
+				continue;
+
+			// Potential pre-amplifier gain
+			if ( !hasPreAmplifierGain ) {
+				hasPreAmplifierGain = true;
+				dlg->setGain(stageGain);
+				continue;
+			}
+		}
 
 		string instr = channel_name + ".stage_" + ToString<int>(stages[i].stage);
 		string responseID;
@@ -1392,12 +1440,7 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 	dlg->setName(name);
 	dlg->setDescription(name);
 	dlg->setMaxClockDrift(drift);
-
 	dlg->setGain(1.0);
-
-	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage )
-		dlg->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
 
 	inventory->add(dlg.get());
 
@@ -1412,16 +1455,10 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 void Inventory::UpdateDatalogger(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("wijzig datalogger");
 
-	double drift = ci.GetMaxClockDrift() * \
-		double(strm->sampleRateNumerator()) / double(strm->sampleRateDenominator());
+	double drift = ci.GetMaxClockDrift() * (double)strm->sampleRateNumerator() / (double)strm->sampleRateDenominator();
 
 	dlg->setMaxClockDrift(drift);
-
 	dlg->setGain(1.0);
-
-	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage )
-		dlg->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
 
 	dlg->update();
 }
@@ -1470,162 +1507,6 @@ void Inventory::UpdateDecimation(ChannelIdentifier& ci, DataModel::DecimationPtr
 	deci->setDigitalFilterChain(Core::None);
 
 	deci->update();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
-	SEISCOMP_DEBUG("start processing datalogger calibration");
-
-	DataModel::DataloggerCalibrationPtr cal = dlg->dataloggerCalibration(DataModel::DataloggerCalibrationIndex(strm->dataloggerSerialNumber(), strm->dataloggerChannel(), strm->start()));
-	if(!cal)
-		InsertDataloggerCalibration(ci, dlg, strm);
-	else
-		UpdateDataloggerCalibration(ci, cal, strm);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::InsertDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
-	SEISCOMP_DEBUG("Voeg datalogger calibration toe");
-
-	DataModel::DataloggerCalibrationPtr cal = new DataModel::DataloggerCalibration();
-	cal->setSerialNumber(strm->dataloggerSerialNumber());
-	cal->setChannel(strm->dataloggerChannel());
-	cal->setStart(strm->start());
-
-	try {
-		cal->setEnd(strm->end());
-	}
-	catch ( Core::ValueException ) {
-		cal->setEnd(Core::None);
-	}
-
-	cal->setGain(1.0);
-	cal->setGainFrequency(0.0);
-
-	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage ) {
-		cal->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
-		cal->setGainFrequency(ci.csg[*sensitivity_stage]->GetFrequency());
-	}
-
-	dlg->add(cal.get());
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::UpdateDataloggerCalibration(ChannelIdentifier& ci, DataModel::DataloggerCalibrationPtr cal, DataModel::StreamPtr strm) {
-	SEISCOMP_DEBUG("Wijzig datalogger calibration");
-
-	try {
-		cal->setEnd(strm->end());
-	}
-	catch ( Core::ValueException ) {
-		cal->setEnd(Core::None);
-	}
-
-	cal->setGain(1.0);
-	cal->setGainFrequency(0.0);
-
-	SequenceNumber sensitivity_stage = GetDataloggerSensitivity(ci);
-	if ( sensitivity_stage ) {
-		cal->setGain(fabs(ci.csg[*sensitivity_stage]->GetSensitivityGain()));
-		cal->setGainFrequency(ci.csg[*sensitivity_stage]->GetFrequency());
-	}
-
-	cal->update();
-
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessDataloggerFIR(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm) {
-	SEISCOMP_DEBUG("Start processing ResponseFIR information");
-
-	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
-	if ( !deci ) {
-		SEISCOMP_ERROR("decimation %d/%d sps of %s not found", strm->sampleRateNumerator(),
-			strm->sampleRateDenominator(), dlg->name().c_str());
-		return;
-	}
-
-	size_t i = 0;
-	if ( ci.rc.size() > 0 && IsDummy(*ci.rc[0]) )
-		++i;
-
-	for(; i < ci.rc.size(); ++i ) {
-		string instr = channel_name + ".stage_" + ToString<int>(ci.rc[i]->GetStageSequenceNumber());
-
-		DataModel::ResponseFIRPtr rf = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
-		if ( !rf )
-			rf = InsertRespCoeff(ci, i);
-		else
-			UpdateRespCoeff(ci, rf, i);
-
-		bool add = true;
-		string dfc;
-
-		try { dfc = blob2str(deci->digitalFilterChain()); }
-		catch( Core::ValueException ) {}
-
-		string new_dfc = rf->publicID();
-		vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-		for ( size_t j = 0; j < digital.size(); ++j )
-			if ( digital[j] == new_dfc )
-				add = false;
-
-		if ( add ) {
-			if ( !dfc.empty() )
-				dfc += " ";
-
-			dfc += new_dfc;
-			deci->setDigitalFilterChain(str2blob(dfc));
-		}
-	}
-
-	for ( i = 0; i < ci.firr.size(); ++i ) {
-		string instr = channel_name + ".stage_" + ToString<int>(ci.firr[i]->GetStageSequenceNumber());
-
-		DataModel::ResponseFIRPtr rf = inventory->responseFIR(DataModel::ResponseFIRIndex(instr));
-		if ( !rf )
-			rf = InsertResponseFIR(ci, i);
-		else
-			UpdateResponseFIR(ci, rf, i);
-
-		bool add = true;
-		string dfc;
-
-		try { dfc = blob2str(deci->digitalFilterChain()); }
-		catch ( Core::ValueException ) {}
-
-		string new_dfc = rf->publicID();
-		vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-
-		for ( size_t j = 0; j < digital.size(); ++j )
-			if ( digital[j] == new_dfc )
-				add = false;
-
-		if ( add ) {
-			if ( !dfc.empty() )
-				dfc += " ";
-
-			dfc += new_dfc;
-			deci->setDigitalFilterChain(str2blob(dfc));
-		}
-	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1832,192 +1713,6 @@ void Inventory::UpdateResponseFIR(ChannelIdentifier& ci, DataModel::ResponseFIRP
 	check_fir(rf, _fixedErrors);
 
 	rf->update();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessDataloggerPAZ(ChannelIdentifier& ci, DataModel::DataloggerPtr dlg, DataModel::StreamPtr strm)
-{
-	SEISCOMP_DEBUG("Start processing datalogger analog filter chain");
-
-	DataModel::DecimationPtr deci = dlg->decimation(DataModel::DecimationIndex(strm->sampleRateNumerator(), strm->sampleRateDenominator()));
-	if ( !deci ) {
-		SEISCOMP_ERROR("decimation %d/%d Hz of %s not found",
-		               strm->sampleRateNumerator(),
-		               strm->sampleRateDenominator(), dlg->name().c_str());
-		return;
-	}
-
-	// get the analogue poles- and zero responses
-	sequence_number = GetPAZSequence(ci, VOLTAGE, VOLTAGE);
-	if ( sequence_number ) {
-		int in_unit = ci.rpz[*sequence_number]->GetSignalInUnits();
-		int out_unit = ci.rpz[*sequence_number]->GetSignalOutUnits();
-
-		for (; *sequence_number < ci.rpz.size(); ++*sequence_number ) {
-			if ( ci.rpz[*sequence_number]->GetSignalInUnits() != in_unit
-			  || ci.rpz[*sequence_number]->GetSignalOutUnits() != out_unit )
-				break;
-
-			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[*sequence_number]->GetStageSequenceNumber());
-
-			DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
-			if ( !rp )
-				rp = InsertResponsePAZ(ci, instr);
-			else
-				UpdateResponsePAZ(ci, rp);
-
-			bool add = true;
-			string afc;
-
-			try { afc = blob2str(deci->analogueFilterChain()); }
-			catch ( Core::ValueException ) {}
-
-			string new_afc = rp->publicID();
-			vector<string> analog = SplitStrings(afc, LINE_SEPARATOR);
-			for ( size_t j = 0; j < analog.size(); ++j )
-				if ( analog[j] == new_afc )
-					add = false;
-
-			if ( add ) {
-				if ( !afc.empty() )
-					afc += " ";
-
-				afc += new_afc;
-				deci->setAnalogueFilterChain(str2blob(afc));
-			}
-		}
-	}
-	else {
-		sequence_number = GetFAPSequence(ci, VOLTAGE, VOLTAGE);
-		if ( sequence_number ) {
-			int in_unit = ci.rl[*sequence_number]->GetSignalInUnits();
-			int out_unit = ci.rl[*sequence_number]->GetSignalOutUnits();
-
-			for(; *sequence_number < ci.rl.size(); ++*sequence_number ) {
-				if ( ci.rl[*sequence_number]->GetSignalInUnits() != in_unit
-				  || ci.rl[*sequence_number]->GetSignalOutUnits() != out_unit )
-					break;
-
-				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[*sequence_number]->GetStageSequenceNumber());
-
-				DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(instr));
-				if(!rp)
-					rp = InsertResponseFAP(ci, instr);
-				else
-					UpdateResponseFAP(ci, rp);
-
-				bool add = true;
-				string afc;
-
-				try { afc = blob2str(deci->analogueFilterChain()); } catch(Core::ValueException) {}
-
-				string new_afc = rp->publicID();
-				vector<string> analog = SplitStrings(afc, LINE_SEPARATOR);
-
-				for ( unsigned int i=0; i<analog.size(); i++)
-					if(analog[i]==new_afc)
-						add = false;
-
-				if(add)
-				{
-					if(!afc.empty())
-						afc += " ";
-
-					afc += new_afc;
-					deci->setAnalogueFilterChain(str2blob(afc));
-				}
-			}
-		}
-	}
-
-	// get the digital poles- and zero responses
-	sequence_number = GetPAZSequence(ci, DIGITAL, DIGITAL);
-	if ( sequence_number ) {
-		int in_unit = ci.rpz[*sequence_number]->GetSignalInUnits();
-		int out_unit = ci.rpz[*sequence_number]->GetSignalOutUnits();
-
-		for ( ; *sequence_number < ci.rpz.size(); ++*sequence_number)
-		{
-			if ( ci.rpz[*sequence_number]->GetSignalInUnits() != in_unit
-			  || ci.rpz[*sequence_number]->GetSignalOutUnits() != out_unit)
-				break;
-
-			string instr = channel_name + ".stage_" + ToString<int>(ci.rpz[*sequence_number]->GetStageSequenceNumber());
-			DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
-			if(!rp)
-				rp = InsertResponsePAZ(ci, instr);
-			else
-				UpdateResponsePAZ(ci, rp);
-
-
-			bool add = true;
-			string dfc;
-
-			try { dfc = blob2str(deci->digitalFilterChain()); }
-			catch ( Core::ValueException ) {}
-
-			string new_dfc = rp->publicID();
-			vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-
-			for ( size_t j = 0; j < digital.size(); ++j )
-				if ( digital[j] == new_dfc )
-					add = false;
-
-			if ( add ) {
-				if ( !dfc.empty() )
-					dfc += " ";
-
-				dfc += new_dfc;
-				deci->setDigitalFilterChain(str2blob(dfc));
-			}
-		}
-	}
-	else {
-		sequence_number = GetFAPSequence(ci, DIGITAL, DIGITAL);
-		if ( sequence_number ) {
-			int in_unit = ci.rl[*sequence_number]->GetSignalInUnits();
-			int out_unit = ci.rl[*sequence_number]->GetSignalOutUnits();
-
-			for ( ; *sequence_number < ci.rl.size(); ++*sequence_number) {
-				if ( ci.rl[*sequence_number]->GetSignalInUnits() != in_unit
-				  || ci.rl[*sequence_number]->GetSignalOutUnits() != out_unit )
-					break;
-
-				string instr = channel_name + ".stage_" + ToString<int>(ci.rl[*sequence_number]->GetStageSequenceNumber());
-
-				DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(instr));
-				if ( !rp )
-					rp = InsertResponseFAP(ci, instr);
-				else
-					UpdateResponseFAP(ci, rp);
-
-				bool add = true;
-				string dfc;
-
-				try { dfc = blob2str(deci->digitalFilterChain()); }
-				catch ( Core::ValueException ) {}
-
-				string new_dfc = rp->publicID();
-				vector<string> digital = SplitStrings(dfc, LINE_SEPARATOR);
-
-				for ( size_t j = 0; j < digital.size(); ++j )
-					if ( digital[j] == new_dfc )
-						add = false;
-
-				if ( add ) {
-					if ( !dfc.empty() )
-						dfc += " ";
-
-					dfc += new_dfc;
-					deci->setDigitalFilterChain(str2blob(dfc));
-				}
-			}
-		}
-	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2766,53 +2461,6 @@ Inventory::SequenceNumber Inventory::GetFAPSequence(ChannelIdentifier& ci, strin
 	}
 
 	return Core::None;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Inventory::SequenceNumber Inventory::GetDataloggerSensitivity(ChannelIdentifier &ci) const {
-	if ( ci.rc.size() > 0 ) {
-		if ( IsDummy(*ci.rc[0]) ) {
-			for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-				if ( ci.csg[i]->GetStageSequenceNumber() == ci.rc[0]->GetStageSequenceNumber() )
-					return i;
-			}
-		}
-#if 0
-		else
-		{
-			for(unsigned int i=0; i< ci.csg.size(); i++)
-			{
-				if(ci.csg[i].GetStageSequenceNumber() == ci.rc[0].GetStageSequenceNumber() - 1)
-					return i;
-			}
-		}
-#endif
-	}
-	else {
-		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
-			if ( ci.rpz[j]->GetNumberOfPoles() == 0 && ci.rpz[j]->GetNumberOfZeros() == 0 ) {
-				for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-					if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber() )
-						return i;
-				}
-			}
-		}
-	}
-
-	return Core::None;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Inventory::IsDummy(ResponseCoefficients &rc) const {
-	return rc.GetNumberOfNumerators() == 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
