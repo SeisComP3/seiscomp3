@@ -775,6 +775,8 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	vector<string> Tvelocity;
 	vector<string> Tdepth;
 
+	vector<string> Tuncertainties;
+
 	//! Not really used but may be useful to store debug log
 	_lastWarning = "";
 
@@ -2996,7 +2998,23 @@ Origin* Hypo71::relocate(const Origin* origin) throw (Core::GeneralException) {
 
 		PickPtr pick = getPick(origin->arrival(i));
 
-		if ( !pick )
+		if ( pick != NULL ) {
+			try {
+				// Phase definition of arrival and pick different ?
+				if ( pick->phaseHint().code() != origin->arrival(i)->phase().code() ) {
+					PickPtr np = new Pick(*pick);
+					np->setPhaseHint(origin->arrival(i)->phase());
+					pick = np;
+				}
+			}
+			catch ( ... ) {
+				// Pick has no phase hint ?
+				PickPtr np = new Pick(*pick);
+				np->setPhaseHint(origin->arrival(i)->phase());
+				pick = np;
+			}
+		}
+		else
 			continue;
 
 		SensorLocationPtr sloc = getSensorLocation(pick.get());
