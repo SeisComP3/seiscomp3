@@ -20,7 +20,11 @@ import random
 import os
 import time
 import datetime
-import dateutil.parser
+import sys
+try:
+	import dateutil.parser
+except ImportError, e:
+	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
 VERSION = "1.1.0"
 
