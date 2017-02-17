@@ -721,7 +721,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		pickID = pick->publicID();
 		try {
-			uncertainty = pick->time().uncertainty();
+			uncertainty = 2 * pick->time().uncertainty();
 		}
 		catch ( ... ) {
 			try {
@@ -784,7 +784,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		pickID = pick->publicID();
 		try {
-			uncertainty = pick->time().uncertainty();
+			uncertainty = 2 * pick->time().uncertainty();
 		}
 		catch ( ... ) {
 			try {
