@@ -15,6 +15,7 @@ IF (SC_GLOBAL_GUI)
 			panels/inventory.h
 			panels/modules.h
 			panels/system.h
+			panels/help.h
 	)
 
 	SET(
@@ -55,6 +56,7 @@ IF (SC_GLOBAL_GUI)
 			panels/inventory.cpp
 			panels/modules.cpp
 			panels/system.cpp
+			panels/help.cpp
 			${NEWCONFIG_MOC_SOURCES}
 			${NEWCONFIG_RESOURCE_SOURCES}
 			${NEWCONFIG_UI_HEADERS}
