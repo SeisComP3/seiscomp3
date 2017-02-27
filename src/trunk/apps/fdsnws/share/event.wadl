@@ -58,16 +58,15 @@
 					</param>
 
 					<!-- additional, non standard parameters, effective only in XML output -->
-					<param name="includepicks" style="query" type="xsd:boolean" default="false">
+					<param name="includepicks" style="query" type="xsd:boolean" default="true">
 						<doc title="definition">
-							Adds pick information to arrivals. Since this is a
-							expensive operation picks are disabled by default
-							and must be enabled explicitly.
+							Adds pick information to arrivals. Note: Picks will
+							only be available if arrivals are requested.
 						</doc>
 					</param>
-					<param name="includecomments" style="query" type="xsd:boolean" default="true">
+					<param name="includecomments" style="query" type="xsd:boolean" default="false">
 						<doc title="definition">
-							SeisComP supports comments for most datamodel
+							SeisComP3 supports comments for most datamodel
 							objects. This parameter controls whether or not
 							comments are included in the output document.
 						</doc>

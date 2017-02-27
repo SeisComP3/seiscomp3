@@ -12,8 +12,9 @@
 #     preferred origin resp. preferred magnitude
 #   - 'updateafter' request parameter not implemented
 #   - additional request parameters:
-#     - includepicks:    boolean, default: false
-#     - includecomments: boolean, default: true
+#     - includepicks:    boolean, default: true,
+#                        available only in combination with includearrivals=true
+#     - includecomments: boolean, default: false
 #     - formatted:       boolean, default: false
 #   - additional values of request parameters:
 #     - format
