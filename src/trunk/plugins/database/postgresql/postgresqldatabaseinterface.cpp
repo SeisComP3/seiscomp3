@@ -61,12 +61,16 @@ bool PostgreSQLDatabase::open() {
 
 	/* Check to see that the backend connection was successfully made */
 	if ( PQstatus(_handle) != CONNECTION_OK ) {
-		SEISCOMP_ERROR("Connection to database '%s' with user %s failed.", PQdb(_handle), _user.c_str());
-		SEISCOMP_ERROR("%s", PQerrorMessage(_handle));
+		SEISCOMP_ERROR("Connect to %s:******@%s:%d/%s failed: %s", _user.c_str(),
+		               _host.c_str(), _port, _database.c_str(),
+		               PQerrorMessage(_handle));
 
 		disconnect();
 		return false;
 	}
+
+	SEISCOMP_DEBUG("Connected to %s:******@%s:%d/%s", _user.c_str(),
+	               _host.c_str(), _port, _database.c_str());
 
 	return true;
 }
