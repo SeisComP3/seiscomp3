@@ -34,7 +34,7 @@
 #define snprintf _snprintf
 #endif
 
-#define LOG_PROCS 1
+#define LOG_STAGES 1
 
 
 using namespace std;
@@ -988,7 +988,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		else
 			UpdateStream(ci, strm, station->restricted(), station->shared());
 
-#if LOG_PROCS
+#if LOG_STAGES
 		cerr << "[" << strm_code << "]" << endl;
 		if ( srt != RT_None )
 			cerr << " + S " << srt.toString() << endl;
@@ -1346,7 +1346,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 		double stageGain;
 		if ( IsDummy(ci, stages[i], stageGain) ) {
 			if ( stageGain == 1.0 ) {
-#if LOG_PROCS
+#if LOG_STAGES
 				cerr << " + D " << stages[i].type.toString() << " "
 				     << adc->UnitName(stages[i].inputUnit) << " "
 				     << adc->UnitName(stages[i].outputUnit) << " (dummy)"
@@ -1359,7 +1359,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 			if ( !hasPreAmplifierGain ) {
 				hasPreAmplifierGain = true;
 				dlg->setGain(stageGain);
-#if LOG_PROCS
+#if LOG_STAGES
 				cerr << " + D pre-amplifier gain = " << stageGain << endl;
 #endif
 				continue;
@@ -1434,7 +1434,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 			digitalChain += responseID;
 		}
 
-#if LOG_PROCS
+#if LOG_STAGES
 		cerr << " + D " << stages[i].type.toString() << " "
 		     << adc->UnitName(stages[i].inputUnit) << " "
 		     << adc->UnitName(stages[i].outputUnit) << endl;
