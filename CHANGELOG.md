@@ -44,6 +44,11 @@
   * Use symbolic links to module defaults and configurations instead of
     copying when creating module aliases
 
+* seiscomp
+
+  * Use symbolic links to module defaults and configurations instead of 
+    copying when creating module aliases
+
 * doc
 
   * Added plugin section to module documentation with all documented
