@@ -398,7 +398,7 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 		std::string pathprefix = _baseDirectory + "/" + req.model + "/";
 
 		int distKm = (int)req.distance;
-		int iDepth = (int)req.depth;
+		double fDepth = req.depth;
 
 		ModelMap::iterator mit = _models.find(req.model);
 		if ( mit == _models.end() ) continue;
@@ -459,8 +459,8 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 				dep2 = dep1;
 
 			double maxDepError = dep2 - dep1;
-			if ( dep1 - iDepth > maxDepError ) {
-				SEISCOMP_DEBUG("Depth too low: %d km < %d km", iDepth, (int)dep1);
+			if ( dep1 - fDepth > maxDepError ) {
+				SEISCOMP_DEBUG("Depth too low: %f km < %d km", fDepth, (int)dep1);
 				continue;
 			}
 
@@ -474,8 +474,8 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 			dep1 = *lbdep;
 
 			double maxDepError = dep2 - dep1;
-			if ( iDepth - dep2 > maxDepError ) {
-				SEISCOMP_DEBUG("Depth too high: %d km", iDepth);
+			if ( fDepth - dep2 > maxDepError ) {
+				SEISCOMP_DEBUG("Depth too high: %f km", fDepth);
 				continue;
 			}
 
@@ -493,7 +493,7 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 			dist = dist2;
 		}
 
-		if ( fabs(iDepth - dep1) < fabs(iDepth - dep2) ) {
+		if ( fabs(fDepth - dep1) < fabs(fDepth - dep2) ) {
 			dep = dep1;
 		}
 		else {
@@ -640,12 +640,12 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 				}
 			}
 
-			gf_11->setDepth(iDepth);
+			gf_11->setDepth(fDepth);
 		}
 
 		if ( !interpolate(gf_11, gf_12, gf_21, gf_22,
-		                  distKm, dist1, dist2, iDepth, dep, alt_dep) ) {
-			SEISCOMP_ERROR("Interpolation for %d / %d failed", distKm, iDepth);
+		                  distKm, dist1, dist2, fDepth, dep, alt_dep) ) {
+			SEISCOMP_ERROR("Interpolation for %d / %f failed", distKm, fDepth);
 
 			if ( gf_11 ) delete gf_11;
 			if ( gf_12 && (gf_11 != gf_12) ) delete gf_12;
