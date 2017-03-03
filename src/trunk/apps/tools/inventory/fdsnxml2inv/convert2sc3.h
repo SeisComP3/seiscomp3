@@ -17,6 +17,7 @@
 
 #include "converter.h"
 
+#include <seiscomp3/core/enumeration.h>
 #include <list>
 #include <set>
 
@@ -118,21 +119,9 @@ class Convert2SC3 : public Converter {
 		DataModel::Datalogger *
 		updateDatalogger(const std::string &name, const FDSNXML::Channel *);
 
-		DataModel::Decimation *
-		updateDecimation(DataModel::Datalogger *, DataModel::Stream *,
-		                 const FDSNXML::Channel *);
-
 		DataModel::DataloggerCalibration *
 		updateDataloggerCalibration(DataModel::Datalogger *, DataModel::Stream *,
 		                            const FDSNXML::Channel *);
-
-		void
-		updateDataloggerDigital(DataModel::Datalogger *, DataModel::Decimation *,
-		                        const FDSNXML::Channel *);
-
-		void
-		updateDataloggerAnalogue(DataModel::Datalogger *, DataModel::Decimation *,
-		                         const FDSNXML::Channel *);
 
 		DataModel::Sensor *
 		updateSensor(const std::string &name,
@@ -144,8 +133,6 @@ class Convert2SC3 : public Converter {
 		                        const FDSNXML::Channel *,
 		                        const FDSNXML::ResponseStage *resp);
 
-
-		const FDSNXML::ResponseStage *findDataloggerResponse() const;
 
 		DataModel::Datalogger *pushDatalogger(DataModel::Datalogger *);
 		DataModel::Sensor *pushSensor(DataModel::Sensor *);
@@ -181,9 +168,6 @@ class Convert2SC3 : public Converter {
 		ObjectLookup          _respPolyLookup;
 		ObjectLookup          _respFIRLookup;
 		ObjectLookup          _respIIRLookup;
-
-		// List of responses of a certain channel epoch
-		Responses             _responses;
 };
 
 
