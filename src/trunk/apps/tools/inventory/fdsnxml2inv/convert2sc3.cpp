@@ -2314,7 +2314,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Convert2SC3::process(DataModel::Datalogger *sc_dl, DataModel::Stream *sc_stream,
                           const FDSNXML::Channel *epoch) {
-	updateDataloggerCalibration(sc_dl, sc_stream, epoch);
+	//updateDataloggerCalibration(sc_dl, sc_stream, epoch);
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2326,7 +2326,12 @@ bool Convert2SC3::process(DataModel::Datalogger *sc_dl, DataModel::Stream *sc_st
 bool Convert2SC3::process(DataModel::Sensor *sc_sens, DataModel::Stream *sc_stream,
                           const FDSNXML::Channel *epoch,
                           const FDSNXML::ResponseStage *resp) {
-	updateSensorCalibration(sc_sens, sc_stream, epoch, resp);
+	/*
+	 * Actually a sensor calibration should not be created automatically. That
+	 * be used from the historic values of the sensitivity blockette. In FDSN
+	 * StationXML this information is not available anymore.
+	*/
+	//updateSensorCalibration(sc_sens, sc_stream, epoch, resp);
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
