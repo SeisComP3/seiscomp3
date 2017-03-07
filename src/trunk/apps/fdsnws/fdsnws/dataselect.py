@@ -210,7 +210,7 @@ class FDSNDataSelect(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, access, user=None):
+	def __init__(self, inv, access=None, user=None):
 		resource.Resource.__init__(self)
 		self._rsURL = Application.Instance().recordStreamURL()
 		self.__inv = inv
@@ -370,14 +370,15 @@ class FDSNDataSelect(resource.Resource):
 				for sta in self._stationIter(net, s):
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
-							if utils.isRestricted(cha) and (self.__user is None or \
+							if utils.isRestricted(cha) and \
+							    (not self.__user or (self.__access and
 								not self.__access.authorize(self.__user,
 											    net.code(),
 											    sta.code(),
 											    loc.code(),
 											    cha.code(),
 											    s.time.start,
-											    s.time.end)):
+											    s.time.end))):
 								continue
 
 							# enforce maximum sample per request restriction

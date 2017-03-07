@@ -265,6 +265,7 @@ class FDSNWS(Application):
 		self._accessLogFile = ''
 
 		self._allowRestricted   = True
+		self._useArclinkAccess  = False
 		self._serveDataSelect   = True
 		self._serveEvent        = True
 		self._serveStation      = True
@@ -338,6 +339,10 @@ class FDSNWS(Application):
 
 		# access to restricted inventory information
 		try: self._allowRestricted = self.configGetBool('allowRestricted')
+		except: pass
+
+		# use arclink-access bindings
+		try: self._useArclinkAccess = self.configGetBool('useArclinkAccess')
 		except: pass
 
 		# services to enable
@@ -452,6 +457,7 @@ class FDSNWS(Application):
 		               "  realtimeGap     : %s\n" \
 		               "  samples (M)     : %s\n" \
 		               "  allowRestricted : %s\n" \
+		               "  useArclinkAccess: %s\n" \
 		               "  hideAuthor      : %s\n" \
 		               "  evaluationMode  : %s\n" \
 		               "  eventType\n" \
@@ -471,7 +477,8 @@ class FDSNWS(Application):
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted, self._hideAuthor, modeStr,
+		               self._allowRestricted, self._useArclinkAccess,
+		               self._hideAuthor, modeStr,
 		               whitelistStr, blacklistStr, stationFilterStr,
 		               dataSelectFilterStr, self._debugFilter,
 		               self._trackdbEnabled, self._trackdbDefaultUser,
@@ -545,7 +552,7 @@ class FDSNWS(Application):
 			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
 			dataselect.putChild('1', dataselect1)
 
-			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._access))
+			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv))
 			msg = 'authorization for restricted time series data required'
 			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
@@ -870,12 +877,18 @@ class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
 	def _getAuthSessionWrapper(self, inv, msg):
+		if self._useArclinkAccess:
+			access = self._access
+
+		else:
+			access = None
+
 		if self._authEnabled:  # auth extension
-			realm = FDSNDataSelectAuthRealm(inv, self._access, self._userdb)
+			realm = FDSNDataSelectAuthRealm(inv, access, self._userdb)
 			checker = UsernamePasswordChecker(self._userdb)
 
 		else:  # htpasswd
-			realm = FDSNDataSelectRealm(inv, self._access)
+			realm = FDSNDataSelectRealm(inv, access)
 			checker = checkers.FilePasswordDB(self._htpasswd)
 
 		p = portal.Portal(realm, [checker])

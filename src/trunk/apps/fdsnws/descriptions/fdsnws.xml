@@ -100,6 +100,13 @@
 				Enables/disables access to restricted inventory data.
 				</description>
 			</parameter>
+			<parameter name="useArclinkAccess" type="boolean" default="false">
+				<description>
+				If enabled, then access to restricted waveform data is controlled
+				by arclink-access bindings. By default authenticated users have
+				access to all data.
+				</description>
+			</parameter>
 			<parameter name="hideAuthor" type="boolean" default="false">
 				<description>
 				If enabled removes author information from any event creationInfo element.
