@@ -60,6 +60,15 @@ inline string strip(string s) {
 	return string(s, i, j);
 }
 
+string join(const vector<string> &list, const string &sep) {
+	string result;
+	for ( size_t i = 0; i < list.size(); ++i ) {
+		if ( i ) result += sep;
+		result += list[i];
+	}
+	return result;
+}
+
 inline DataModel::RealArray parseRealArray(const string &s) {
 	DataModel::RealArray a;
 	vector<double> v;
@@ -307,7 +316,7 @@ bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item, doub
 
 
 template <typename C>
-bool hasSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
+Inventory::SequenceNumber hasSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
 	for ( size_t i = 0; i < objects.size(); ++i ) {
 		int seq_in = -1, seq_out = -2;
 		int siu = objects[i]->GetSignalInUnits();
@@ -327,10 +336,10 @@ bool hasSensorStage(const C &objects, AbbreviationDictionaryControl *adc) {
 		}
 
 		if ( seq_in == seq_out )
-			return true;
+			return objects[seq_in]->GetStageSequenceNumber();
 	}
 
-	return false;
+	return Core::None;
 }
 
 
@@ -978,7 +987,8 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 			}
 		}
 
-		ResponseType srt = GetSensorResponseType(ci);
+		SequenceNumber sensorStage;
+		ResponseType srt = GetSensorResponseType(ci, sensorStage);
 		seis_streams.insert(make_pair(make_pair(make_pair(make_pair(make_pair(make_pair(net_code, sta_code), strm_code), loc_code), sta_start), strm_start), loc_start));
 
 		DataModel::StreamPtr strm = loc->stream(DataModel::StreamIndex(strm_code, strm_start));
@@ -1000,13 +1010,13 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 			case RT_None:
 				break;
 			case RT_PAZ:
-				ProcessPAZSensor(ci, strm);
+				ProcessPAZSensor(ci, strm, *sensorStage);
 				break;
 			case RT_Poly:
-				ProcessPolySensor(ci, strm);
+				ProcessPolySensor(ci, strm, *sensorStage);
 				break;
 			case RT_FAP:
-				ProcessFAPSensor(ci, strm);
+				ProcessFAPSensor(ci, strm, *sensorStage);
 				break;
 			default:
 				SEISCOMP_ERROR("Sensor response type is %s, but only %s, %s and %s are "
@@ -1119,42 +1129,49 @@ Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc,
 	strm->setDepth(ci.GetLocalDepth());
 	strm->setAzimuth(ci.GetAzimuth());
 	strm->setDip(ci.GetDip());
-	strm->setGain(0.0);
-	strm->setGainFrequency(0.0);
 
-	for(unsigned int i = 0; i < ci.csg.size(); ++i)
-	{
-		if(ci.csg[i]->GetStageSequenceNumber() == 0)
-		{
+	strm->setGain(Core::None);
+	strm->setGainFrequency(Core::None);
+
+	for( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == 0 ) {
 			strm->setGain(ci.csg[i]->GetSensitivityGain());
 			strm->setGainFrequency(ci.csg[i]->GetFrequency());
 
-			if(ci.csg[i]->GetSensitivityGain() < 0)
-			{
-				if(ci.GetAzimuth() < 180.0)
+			/*
+			if ( ci.csg[i]->GetSensitivityGain() < 0 ) {
+				if ( ci.GetAzimuth() < 180.0 )
 					strm->setAzimuth(ci.GetAzimuth() + 180.0);
 				else
 					strm->setAzimuth(ci.GetAzimuth() - 180.0);
 
 				strm->setDip(-ci.GetDip());
 			}
+			*/
 
 			break;
 		}
 	}
 
 	strm->setFlags(ci.GetFlags());
-	strm->setFormat("Steim2");
+	//strm->setFormat("Steim2");
 
 	int identifier_code = ci.GetDataFormatIdentifierCode();
-	for(unsigned int i=0; i<adc->dfd.size(); i++)
-	{
+	for ( size_t i=0; i<adc->dfd.size(); ++i ) {
 		DataFormatDictionary dataformat = *adc->dfd[i];
-		if(identifier_code == dataformat.GetDataFormatIdentifierCode())
-		{
+		if ( identifier_code == dataformat.GetDataFormatIdentifierCode() ) {
+			const std::vector<std::string> &keys = dataformat.GetDecoderKeys();
+			/*
+			for ( size_t k = 0; k < keys.size(); ++k )
+				cerr << "  " << keys[k];
+			cerr << endl;
+			*/
 			map<vector<string>, string>::iterator p;
-			if((p = encoding.find(dataformat.GetDecoderKeys())) != encoding.end())
+			if ( (p = encoding.find(keys)) != encoding.end() )
 				strm->setFormat(p->second);
+			else
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+				                 join(keys, "; ").c_str());
 
 			break;
 		}
@@ -1203,32 +1220,31 @@ void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm,
 	strm->setDepth(ci.GetLocalDepth());
 	strm->setAzimuth(ci.GetAzimuth());
 	strm->setDip(ci.GetDip());
-	strm->setGain(0.0);
-	strm->setGainFrequency(0.0);
+	strm->setGain(Core::None);
+	strm->setGainFrequency(Core::None);
 
-	for(unsigned int i = 0; i < ci.csg.size(); ++i)
-	{
-		if(ci.csg[i]->GetStageSequenceNumber() == 0)
-		{
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == 0 ) {
 			strm->setGain(ci.csg[i]->GetSensitivityGain());
 			strm->setGainFrequency(ci.csg[i]->GetFrequency());
 			break;
 		}
 	}
 
-
 	strm->setFlags(ci.GetFlags());
 	strm->setFormat("Steim2");
 
 	int identifier_code = ci.GetDataFormatIdentifierCode();
-	for(unsigned int i=0; i<adc->dfd.size(); i++)
-	{
+	for ( size_t i = 0; i < adc->dfd.size(); ++i ) {
 		DataFormatDictionary dataformat = *adc->dfd[i];
-		if(identifier_code == dataformat.GetDataFormatIdentifierCode())
-		{
+		if ( identifier_code == dataformat.GetDataFormatIdentifierCode()) {
+			const std::vector<std::string> &keys = dataformat.GetDecoderKeys();
 			map<vector<string>, string>::iterator p;
-			if((p = encoding.find(dataformat.GetDecoderKeys())) != encoding.end())
+			if ( (p = encoding.find(keys)) != encoding.end() )
 				strm->setFormat(p->second);
+			else
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+				                 join(keys, "; ").c_str());
 
 			break;
 		}
@@ -1551,10 +1567,10 @@ DataModel::ResponseFIRPtr Inventory::InsertRespCoeff(ChannelIdentifier &ci, cons
 	DataModel::ResponseFIRPtr rf = DataModel::ResponseFIR::Create();
 
 	rf->setName(name);
-	rf->setGain(0.0);
-	rf->setDecimationFactor(1);
-	rf->setDelay(0.0);
-	rf->setCorrection(0.0);
+	rf->setGain(Core::None);
+	rf->setDecimationFactor(Core::None);
+	rf->setDelay(Core::None);
+	rf->setCorrection(Core::None);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum )
@@ -1599,10 +1615,10 @@ void Inventory::UpdateRespCoeff(ChannelIdentifier& ci, DataModel::ResponseFIRPtr
 
 	SEISCOMP_DEBUG("Update response fir, for sequence number: %d", seqnum);
 
-	rf->setGain(0.0);
-	rf->setDecimationFactor(1);
-	rf->setDelay(0.0);
-	rf->setCorrection(0.0);
+	rf->setGain(Core::None);
+	rf->setDecimationFactor(Core::None);
+	rf->setDelay(Core::None);
+	rf->setCorrection(Core::None);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum )
@@ -1649,10 +1665,10 @@ DataModel::ResponseFIRPtr Inventory::InsertResponseFIR(ChannelIdentifier& ci, co
 	DataModel::ResponseFIRPtr rf = DataModel::ResponseFIR::Create();
 
 	rf->setName(name);
-	rf->setGain(0.0);
-	rf->setDecimationFactor(1);
-	rf->setDelay(0.0);
-	rf->setCorrection(0.0);
+	rf->setGain(Core::None);
+	rf->setDecimationFactor(Core::None);
+	rf->setDelay(Core::None);
+	rf->setCorrection(Core::None);
 
 	char sc = ci.firr[seq]->GetSymmetryCode();
 
@@ -1699,10 +1715,10 @@ void Inventory::UpdateResponseFIR(ChannelIdentifier& ci, DataModel::ResponseFIRP
 
 	SEISCOMP_DEBUG("Update response fir, for sequence number: %d", seqnum);
 
-	rf->setGain(0.0);
-	rf->setDecimationFactor(1);
-	rf->setDelay(0.0);
-	rf->setCorrection(0.0);
+	rf->setGain(Core::None);
+	rf->setDecimationFactor(Core::None);
+	rf->setDelay(Core::None);
+	rf->setCorrection(Core::None);
 
 	char sc = ci.firr[seq]->GetSymmetryCode();
 
@@ -1739,7 +1755,7 @@ void Inventory::UpdateResponseFIR(ChannelIdentifier& ci, DataModel::ResponseFIRP
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
+void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, int stageSequenceNumber) {
 	response_index = getSensorStage(ci.rpz, adc);
 	if ( response_index )
 		strm->setGainUnit(adc->UnitName(ci.rpz[*response_index]->GetSignalInUnits()));
@@ -1757,8 +1773,8 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 
 	strm->setSensor(sm->publicID());
 
-	ProcessSensorCalibration(ci, sm, strm);
 	ProcessSensorPAZ(ci, sm);
+	ProcessSensorCalibration(ci, sm, strm, stageSequenceNumber);
 
 	DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(sm->name()));
 	if ( !rp )
@@ -1770,8 +1786,7 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, int stageSequenceNumber) {
 	SEISCOMP_DEBUG("Start processing poly sensor information ");
 
 	response_index = getSensorStage(ci.rp, adc);
@@ -1791,8 +1806,8 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 
 	strm->setSensor(sm->publicID());
 
-	ProcessSensorCalibration(ci, sm, strm);
 	ProcessSensorPolynomial(ci, sm);
+	ProcessSensorCalibration(ci, sm, strm, stageSequenceNumber);
 
 	DataModel::ResponsePolynomialPtr rp = inventory->responsePolynomial(DataModel::ResponsePolynomialIndex(sm->name()));
 	if ( !rp )
@@ -1804,8 +1819,7 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm)
-{
+void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr strm, int stageSequenceNumber) {
 	SEISCOMP_DEBUG("Start processing fap sensor information");
 
 	response_index = getSensorStage(ci.rl, adc);
@@ -1825,8 +1839,8 @@ void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 
 	strm->setSensor(sm->publicID());
 
-	ProcessSensorCalibration(ci, sm, strm);
 	ProcessSensorFAP(ci, sm);
+	ProcessSensorCalibration(ci, sm, strm, stageSequenceNumber);
 
 	DataModel::ResponseFAPPtr rp = inventory->responseFAP(DataModel::ResponseFAPIndex(sm->name()));
 	if ( !rp )
@@ -1883,14 +1897,21 @@ void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, con
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
+void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm, int stageSequenceNumber) {
+	/*
+	 * Actually a sensor calibration should not be created automatically. That
+	 * be used from the historic values of the sensitivity blockette.
+	*/
+
+	/*
 	SEISCOMP_DEBUG("Process sensor calibration");
 
 	DataModel::SensorCalibrationPtr cal = sm->sensorCalibration(DataModel::SensorCalibrationIndex(strm->sensorSerialNumber(), strm->sensorChannel(), strm->start()));
-	if(!cal)
-		InsertSensorCalibration(ci, sm, strm);
+	if ( !cal )
+		InsertSensorCalibration(ci, sm, strm, stageSequenceNumber);
 	else
-		UpdateSensorCalibration(ci, cal, strm);
+		UpdateSensorCalibration(ci, cal, strm, stageSequenceNumber);
+	*/
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1898,7 +1919,7 @@ void Inventory::ProcessSensorCalibration(ChannelIdentifier& ci, DataModel::Senso
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm) {
+void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::SensorPtr sm, DataModel::StreamPtr strm, int stageSequenceNumber) {
 	SEISCOMP_DEBUG("Insert sensor calibration");
 
 	DataModel::SensorCalibrationPtr cal = new DataModel::SensorCalibration();
@@ -1913,38 +1934,21 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		cal->setEnd(Core::None);
 	}
 
-	cal->setGain(0.0);
-	cal->setGainFrequency(0.0);
+	cal->setGain(Core::None);
+	cal->setGainFrequency(Core::None);
 
+	bool found = false;
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-		bool found = false;
-
-		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
-			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
-			  && (j == *response_index) ) {
-				cal->setGain(ci.csg[i]->GetSensitivityGain());
-				cal->setGainFrequency(ci.csg[i]->GetFrequency());
-				found = true;
-				break;
-			}
+		if ( ci.csg[i]->GetStageSequenceNumber() == stageSequenceNumber ) {
+			cal->setGain(ci.csg[i]->GetSensitivityGain());
+			cal->setGainFrequency(ci.csg[i]->GetFrequency());
+			found = true;
+			break;
 		}
-
-		if ( !found ) {
-			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
-				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
-				  && (j == *response_index) ) {
-					cal->setGain(ci.csg[i]->GetSensitivityGain());
-					cal->setGainFrequency(ci.csg[i]->GetFrequency());
-					found = true;
-					break;
-				}
-			}
-		}
-
-		if ( found ) break;
 	}
 
-	sm->add(cal.get());
+	if ( found )
+		sm->add(cal.get());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1952,7 +1956,7 @@ void Inventory::InsertSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::SensorCalibrationPtr cal, DataModel::StreamPtr strm) {
+void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::SensorCalibrationPtr cal, DataModel::StreamPtr strm, int stageSequenceNumber) {
 	SEISCOMP_DEBUG("Update sensor calibration");
 
 	try {
@@ -1962,38 +1966,23 @@ void Inventory::UpdateSensorCalibration(ChannelIdentifier& ci, DataModel::Sensor
 		cal->setEnd(Core::None);
 	}
 
-	cal->setGain(0.0);
-	cal->setGainFrequency(0.0);
+	cal->setGain(Core::None);
+	cal->setGainFrequency(Core::None);
 
+	bool found = false;
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-		bool found = false;
-
-		for ( size_t j = 0; j < ci.rpz.size(); ++j ) {
-			if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rpz[j]->GetStageSequenceNumber())
-			  && (j == *response_index) ) {
-				cal->setGain(ci.csg[i]->GetSensitivityGain());
-				cal->setGainFrequency(ci.csg[i]->GetFrequency());
-				found = true;
-				break;
-			}
+		if ( ci.csg[i]->GetStageSequenceNumber() == stageSequenceNumber ) {
+			cal->setGain(ci.csg[i]->GetSensitivityGain());
+			cal->setGainFrequency(ci.csg[i]->GetFrequency());
+			found = true;
+			break;
 		}
-
-		if ( !found ) {
-			for ( size_t j = 0; j < ci.rl.size(); ++j ) {
-				if ( (ci.csg[i]->GetStageSequenceNumber() == ci.rl[j]->GetStageSequenceNumber())
-				  && (j == *response_index) ) {
-					cal->setGain(ci.csg[i]->GetSensitivityGain());
-					cal->setGainFrequency(ci.csg[i]->GetFrequency());
-					found = true;
-					break;
-				}
-			}
-		}
-
-		if ( found ) break;
 	}
 
-	cal->update();
+	if ( found )
+		cal->update();
+	else
+		cal->detach();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2033,11 +2022,9 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, co
 
 	char c = ci.rpz[seq]->GetTransferFunctionType();
 	rp->setType(string(&c, 1));
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[seq]->GetStageSequenceNumber() ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum ) {
 			rp->setGain(ci.csg[i]->GetSensitivityGain());
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
@@ -2063,16 +2050,17 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, co
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp) {
 	int seq = (int)*response_index;
+	int seqnum = ci.rpz[seq]->GetStageSequenceNumber();
 
 	SEISCOMP_DEBUG("Update response poles & zeros");
 
 	char c = ci.rpz[seq]->GetTransferFunctionType();
 	rp->setType(string(&c, 1));
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
+	rp->setGain(Core::None);
+	rp->setGainFrequency(Core::None);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
-		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rpz[seq]->GetStageSequenceNumber() ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum ) {
 			rp->setGain(ci.csg[i]->GetSensitivityGain());
 			rp->setGainFrequency(ci.csg[i]->GetFrequency());
 		}
@@ -2122,8 +2110,6 @@ DataModel::ResponseFAPPtr Inventory::InsertResponseFAP(ChannelIdentifier &ci, co
 	DataModel::ResponseFAPPtr rp = DataModel::ResponseFAP::Create();
 
 	rp->setName(name);
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
 	rp->setNumberOfTuples(ci.rl[seq]->GetNumberOfResponses());
 
 	rp->setTuples(DataModel::RealArray());
@@ -2158,8 +2144,8 @@ void Inventory::UpdateResponseFAP(ChannelIdentifier &ci, Seiscomp::DataModel::Re
 
 	SEISCOMP_DEBUG("Update response list");
 
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
+	rp->setGain(Core::None);
+	rp->setGainFrequency(Core::None);
 	rp->setNumberOfTuples(ci.rl[seq]->GetNumberOfResponses());
 
 	rp->setTuples(DataModel::RealArray());
@@ -2217,8 +2203,6 @@ DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIden
 	DataModel::ResponsePolynomialPtr rp = DataModel::ResponsePolynomial::Create();
 
 	rp->setName(name);
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rp[seq]->GetStageSequenceNumber() ) {
@@ -2251,10 +2235,8 @@ DataModel::ResponsePolynomialPtr Inventory::InsertResponsePolynomial(ChannelIden
 void Inventory::UpdateResponsePolynomial(ChannelIdentifier& ci, DataModel::ResponsePolynomialPtr rp) {
 	int seq = (int)*response_index;
 
-	SEISCOMP_DEBUG("Wijzig response polynomial");
-
-	rp->setGain(0.0);
-	rp->setGainFrequency(0.0);
+	rp->setGain(Core::None);
+	rp->setGainFrequency(Core::None);
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		if ( ci.csg[i]->GetStageSequenceNumber() == ci.rp[seq]->GetStageSequenceNumber() ) {
@@ -2414,6 +2396,7 @@ Inventory::SequenceNumber Inventory::GetPAZSequence(ChannelIdentifier& ci, strin
 		int seq_in = -1, seq_out = -2;
 		int siu = ci.rpz[i]->GetSignalInUnits();
 		int sou = ci.rpz[i]->GetSignalOutUnits();
+
 		for( size_t j = 0; j < adc->ua.size(); ++j ) {
 			UnitsAbbreviations ua = *adc->ua[j];
 			if ( siu == ua.GetLookup() ) {
@@ -2499,22 +2482,23 @@ Inventory::SequenceNumber Inventory::GetFAPSequence(ChannelIdentifier& ci, strin
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Inventory::ResponseType Inventory::GetSensorResponseType(const ChannelIdentifier &ci) {
-	if ( hasSensorStage(ci.rc, adc) )
+Inventory::ResponseType Inventory::GetSensorResponseType(const ChannelIdentifier &ci, SequenceNumber &stageSequenceNumber) {
+	if ( stageSequenceNumber = hasSensorStage(ci.rc, adc) )
 		return RT_RC;
 
-	if ( hasSensorStage(ci.firr, adc) )
+	if ( stageSequenceNumber = hasSensorStage(ci.firr, adc) )
 		return RT_FIR;
 
-	if ( hasSensorStage(ci.rpz, adc) )
+	if ( stageSequenceNumber = hasSensorStage(ci.rpz, adc) )
 		return RT_PAZ;
 
-	if ( hasSensorStage(ci.rp, adc) )
+	if ( stageSequenceNumber = hasSensorStage(ci.rp, adc) )
 		return RT_Poly;
 
-	if ( hasSensorStage(ci.rl, adc) )
+	if ( stageSequenceNumber = hasSensorStage(ci.rl, adc) )
 		return RT_FAP;
 
+	stageSequenceNumber = Core::None;
 	return RT_None;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
