@@ -44,8 +44,8 @@
 #define _LINEAR_CORRECTION 1.0
 #define _OFFSET 0.0
 #define _SNR_MIN 1.2
-#define _TAPER 60
-#define _SIGNAL_LENGTH 20
+#define _TAPER 5
+#define _SIGNAL_LENGTH 150
 #define _DELTA_MAX 400.0
 #define _MD_MAX 5.0
 #define _FMA -0.87
@@ -112,7 +112,6 @@ AmplitudeProcessor_Md::AmplitudeProcessor_Md() :
 		AmplitudeProcessor("Md") {
 
 	setSignalStart(0.);
-	//setSignalEnd(150.);
     setSignalEnd(aFile.SIGNAL_LENGTH);
 	setMinSNR(aFile.SNR_MIN);
 	setMaxDist(8);
@@ -129,7 +128,6 @@ AmplitudeProcessor_Md::AmplitudeProcessor_Md(const Core::Time& trigger) :
 		AmplitudeProcessor(trigger, "Md") {
 
 	setSignalStart(0.);
-	//setSignalEnd(150.);
     setSignalEnd(aFile.SIGNAL_LENGTH);
 	setMinSNR(aFile.SNR_MIN);
 	setMaxDist(8);
@@ -509,7 +507,7 @@ bool AmplitudeProcessor_Md::deconvolveData(Response* resp,
 	Math::Statistics::computeLinearTrend(data.size(), data.typedData(), m, n);
 	Math::Statistics::detrend(data.size(), data.typedData(), m, n);
 
-    _config.respTaper = aFile.TAPER; // default is 60 sec
+    _config.respTaper = aFile.TAPER;
     SEISCOMP_DEBUG("%s TAPER is set to %.2f", AMPTAG, aFile.TAPER);
 
 	return Math::Restitution::transformFFT(data.size(), data.typedData(),
