@@ -1480,7 +1480,6 @@ DataModel::DataloggerPtr Inventory::InsertDatalogger(ChannelIdentifier& ci, Data
 
 	DataModel::DataloggerPtr dlg = DataModel::Datalogger::Create();
 	dlg->setName(name);
-	dlg->setDescription(name);
 	dlg->setMaxClockDrift(drift);
 	dlg->setGain(1.0);
 
@@ -1860,7 +1859,7 @@ DataModel::SensorPtr Inventory::InsertSensor(ChannelIdentifier& ci, DataModel::S
 	DataModel::SensorPtr sm = DataModel::Sensor::Create();
 
 	sm->setName(name);
-	sm->setDescription(GetInstrumentName(instr));
+	sm->setDescription(GetInstrumentDescription(instr));
 	sm->setModel(GetInstrumentName(instr));
 	sm->setManufacturer(GetInstrumentManufacturer(instr));
 	sm->setType(GetInstrumentType(instr));
@@ -1882,7 +1881,7 @@ void Inventory::UpdateSensor(ChannelIdentifier& ci, DataModel::SensorPtr sm, con
 
 	int instr = ci.GetInstrument();
 
-	sm->setDescription(GetInstrumentName(instr));
+	sm->setDescription(GetInstrumentDescription(instr));
 	sm->setModel(GetInstrumentName(instr));
 	sm->setManufacturer(GetInstrumentManufacturer(instr));
 	sm->setType(GetInstrumentType(instr));
@@ -2276,6 +2275,22 @@ string Inventory::GetNetworkDescription(int lookup) {
 	}
 
 	return desc;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+string Inventory::GetInstrumentDescription(int lookup) {
+	for ( size_t i = 0; i < adc->ga.size(); ++i ) {
+		GenericAbbreviation genabb = *adc->ga[i];
+		if ( lookup == genabb.GetLookup() ) {
+			return genabb.GetDescription();
+		}
+	}
+
+	return string();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

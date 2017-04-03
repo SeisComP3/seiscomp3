@@ -146,6 +146,7 @@ class Inventory
 		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
 		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr, int stageSequenceNumber);
 		std::string GetNetworkDescription(int);
+		std::string GetInstrumentDescription(int);
 		std::string GetInstrumentName(int);
 		std::string GetInstrumentManufacturer(int);
 		std::string GetInstrumentType(int);
