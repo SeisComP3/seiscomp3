@@ -5607,11 +5607,11 @@ void AmplitudeView::receivedRecord(Seiscomp::Record *rec) {
 	// Check for out-of-order records
 	if ( (label->data.traces[i].filter || label->data.enableTransformation) &&
 	     label->data.traces[i].raw->back() != (const Record*)rec ) {
-		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
-		               rec->networkCode().c_str(),
-		               rec->stationCode().c_str(),
-		               rec->locationCode().c_str(),
-		               rec->channelCode().c_str());
+//		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
+//		               rec->networkCode().c_str(),
+//		               rec->stationCode().c_str(),
+//		               rec->locationCode().c_str(),
+//		               rec->channelCode().c_str());
 		RecordWidget::Filter *f = label->data.traces[i].filter->clone();
 		label->data.setFilter(f, label->data.filterID);
 		delete f;

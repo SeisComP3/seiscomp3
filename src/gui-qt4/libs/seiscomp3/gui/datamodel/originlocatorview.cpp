@@ -1874,10 +1874,13 @@ void OriginLocatorView::init() {
 	_map = new OriginLocatorMap(_maptree.get(), _ui.frameMap);
 	_map->setMouseTracking(true);
 	_map->setOriginCreationEnabled(true);
+
 	try {
 		_map->setStationsMaxDist(SCApp->configGetDouble("olv.map.stations.unassociatedMaxDist"));
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		_map->setStationsMaxDist(360);
+	}
 
 	// Read custom column configuration
 	try {

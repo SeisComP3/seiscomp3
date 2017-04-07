@@ -120,15 +120,19 @@ void OriginSymbol::drawOriginSymbol(const Map::Canvas*, QPainter& painter) {
 
 	QPen pen;
 	pen.setColor(_color);
-	pen.setWidth(4);
+	pen.setWidth(SCScheme.colors.originSymbol.classic ? 4 : 2);
 	pen.setJoinStyle(Qt::MiterJoin);
 	painter.setPen(pen);
 
 	QBrush brush;
-	brush.setColor(_color);
-	brush.setStyle(Qt::NoBrush);
-	if ( isFilled() )
+	if ( SCScheme.colors.originSymbol.classic ) {
+		brush.setColor(_color);
+		brush.setStyle(isFilled() ? Qt::SolidPattern : Qt::NoBrush);
+	}
+	else {
+		brush.setColor(isFilled() ? _color : QColor(_color.red(), _color.green(), _color.black(), 128));
 		brush.setStyle(Qt::SolidPattern);
+	}
 
 	/*
 	QBrush brush;

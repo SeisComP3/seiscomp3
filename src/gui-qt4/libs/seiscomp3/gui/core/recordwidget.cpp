@@ -61,6 +61,7 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
             float &ofs, float &min, float &max, bool globalOffset = false,
             const Core::TimeWindow &ofsTw = Core::TimeWindow()) {
 	ofs = 0;
+	double tmpOfs = 0;
 	int sampleCount = 0;
 	int offsetSampleCount = 0;
 	bool isFirst = true;
@@ -77,7 +78,7 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 
 		if ( globalOffset ) {
 			for ( int i = 0; i < ns; ++i )
-				ofs += (*arr)[i];
+				tmpOfs += (*arr)[i];
 			offsetSampleCount += ns;
 		}
 
@@ -128,11 +129,11 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 
 						dt = rec->endTime() - ofsTw.endTime();
 						imax = ns;
-						if(dt>0)
+						if ( dt > 0 )
 							imax -= int(dt*fs);
 
 						for ( int i = imin; i < imax; ++i )
-							ofs += (*arr)[i];
+							tmpOfs += f[i];
 						offsetSampleCount = sampleCount;
 					}
 				}
@@ -141,12 +142,12 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 			}
 			else {
 				for ( int i = imin; i < imax; ++i )
-					ofs += (*arr)[i];
+					tmpOfs += f[i];
 				offsetSampleCount = sampleCount;
 			}
 		}
 
-		if( min==max && isFirst ) {
+		if( isFirst ) {
 			min = xmin;
 			max = xmax;
 			isFirst = false;
@@ -157,7 +158,9 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 		}
 	}
 
-	ofs /= (offsetSampleCount?offsetSampleCount:1);
+	tmpOfs /= (offsetSampleCount?offsetSampleCount:1);
+	ofs = tmpOfs;
+
 	return sampleCount > 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2427,7 +2430,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QColor gridColor[2] = {QColor(192,192,255), QColor(224,225,255)};
 
-	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_tmin) ) {
+	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_pixelPerSecond) && !Math::isNaN(_tmin) ) {
 		double left = _tmin + _gridOffset;
 
 		//for ( int k = 1; k >= 0; --k ) {

@@ -254,6 +254,7 @@ Scheme::Colors::QC::QC() :
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Colors::OriginSymbol::OriginSymbol() {
+	classic = false;
 	depth.discrete = true;
 	depth.gradient.setColorAt(0, Qt::red);
 	depth.gradient.setColorAt(50, QColor(255, 165, 0));
@@ -552,6 +553,7 @@ void Scheme::fetch() {
 	READ_COLOR(colors.legend.text);
 	READ_COLOR(colors.legend.headerText);
 
+	READ_BOOL(colors.originSymbol.classic);
 	READ_COLOR_GRADIENT(colors.originSymbol.depth.gradient);
 	READ_BOOL(colors.originSymbol.depth.discrete);
 

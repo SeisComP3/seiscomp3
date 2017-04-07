@@ -67,8 +67,9 @@ class SC_GUI_API SpectrumWidget : public QWidget {
 	//  Public slots
 	// ----------------------------------------------------------------------
 	public slots:
-		void setAmplitudeSpectrum(bool amplitudeSpectrum);
-		void setPhaseSpectrum(bool phaseSpectrum);
+		void setAmplitudeSpectrum();
+		void setPhaseSpectrum();
+		void setPowerSpectrum();
 		void setLogScaleX(bool logScale);
 		void setLogScaleY(bool logScale);
 
@@ -97,17 +98,24 @@ class SC_GUI_API SpectrumWidget : public QWidget {
 		void updateData();
 		void draw(QPainter &, const Graph *);
 		void updateRanges();
+		void updateAxisLabels();
 
 
 	// ----------------------------------------------------------------------
 	//  Private members
 	// ----------------------------------------------------------------------
 	private:
+		enum Mode {
+			Amplitude,
+			Power,
+			Phase
+		};
+
 		QString                 _exportBasename;
 		double                  _freqNyquist;
 		Math::ComplexArray      _spec;
 		Processing::ResponsePtr _resp;
-		bool                    _phaseSpectrum;
+		Mode                    _mode;
 		Graph                   _graphPowerSpectrum;
 		Graph                   _graphResponseCorrectedPowerSpectrum;
 		Graph                   _graphResponsePowerSpectrum;

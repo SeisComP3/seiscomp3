@@ -3079,7 +3079,10 @@ void EventListView::readFromDatabase(const Filter& filter) {
 					update = true;
 					OriginTreeItem *originItem = addOrigin(o, eventItem, prefOrg == o);
 					for ( size_t c = 0; c < o->commentCount(); ++c ) {
-						if ( o->comment(c)->text() == "OriginPublished" ) {
+						// "OriginPublished" shall be superseded by "published"
+					        // but here we accept both
+						if ( o->comment(c)->text() == "OriginPublished" ||
+						     o->comment(c)->text() == "published" ) {
 							originItem->setPublishState(true);
 							originItem->update(this);
 							break;
@@ -3783,7 +3786,10 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 					else if ( _withOrigins ) {
 						OriginTreeItem *origItem = findOrigin( n->parentID() );
 						if ( origItem ) {
-							if( comment->text() == "OriginPublished")
+							// "OriginPublished" shall be superseded by "published"
+							// but here we accept both
+							if( comment->text() == "OriginPublished" ||
+							    comment->text() == "published")
 								origItem->setPublishState(true);
 							updateOriginProcessColumns(origItem, true);
 							origItem->update(this);
