@@ -46,17 +46,18 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 			commandline().addOption("Mode", "buffer-size", "Sets the size of the waveformbuffer in seconds, default: 1800", (int*)NULL);
 			commandline().addOption("Mode", "max-delay", "The maximum delay in seconds to keep a trace visible (0 to disable)", (int*)NULL);
 			commandline().addOption("Mode", "initially-visible-all", "Show all traces initially");
+			commandline().addOption("Mode", "rt", "Don't ask for time window at data server. This might be important if e.g. Seedlink does not allow time window extraction.");
 		}
 
 		bool validateParameters() {
 			if ( !Kicker<Seiscomp::Applications::TraceView::MainWindow>::validateParameters() )
 				return false;
 
-			bool offline = false;
+			_offline = false;
 			_inventoryEnabled = true;
 
 			if ( commandline().hasOption("offline") )
-				offline = true;
+				_offline = true;
 
 			if ( commandline().hasOption("no-inventory") )
 				_inventoryEnabled = false;
@@ -99,9 +100,9 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 			}
 
 			if ( hasPositionals )
-				offline = true;
+				_offline = true;
 
-			if ( offline ) {
+			if ( _offline ) {
 				setMessagingEnabled(false);
 				setDatabaseEnabled(false, false);
 			}
@@ -156,12 +157,15 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 			}
 			catch ( ... ) {}
 
+			_forceRT = commandline().hasOption("rt");
+
 			return true;
 		}
 
 		virtual void setupUi(Seiscomp::Applications::TraceView::MainWindow* w) {
 			if ( _initStartTime )
 				w->setStartTime(Seiscomp::Core::Time::GMT());
+			w->setAllowTimeWindowExtraction(!_forceRT);
 			w->setMaximumDelay(_maxDelay);
 			w->setEndTime(_endTime);
 			w->setBufferSize(_bufferSize);
@@ -173,6 +177,7 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 		}
 
 	private:
+		bool _offline;
 		int _maxDelay;
 		std::vector<std::string> _filterNames;
 		Seiscomp::Core::Time _endTime;
@@ -181,6 +186,7 @@ class TraceViewApp : public Kicker<Seiscomp::Applications::TraceView::MainWindow
 		bool _showPicks;
 		bool _inventoryEnabled;
 		size_t _bufferSize;
+		bool _forceRT;
 };
 
 int main(int argc, char *argv[])
