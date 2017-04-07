@@ -3,7 +3,7 @@
 	<plugin name="Hypo71">
 		<extends>global</extends>
 		<description>
-		This plugin allows the use of traditionnal Hypo71PC locator with SeisComP3
+		This plugin allows the use of the traditional Hypo71PC locator with SeisComP3.
 		</description>
 		<configuration>
 			<group name="hypo71">
@@ -56,7 +56,7 @@
 						<parameter name="methodID" type="string" default="Hypo71">
 							<description>
 							Profile's method.
-							It's generally the locator's name (Hypo71).
+							It is generally the locator's name (Hypo71).
 							</description>
 						</parameter>
 						<parameter name="controlFile" type="string">
