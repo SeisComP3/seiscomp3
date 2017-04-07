@@ -3,11 +3,11 @@ Configuration
 *************
 
 The SeisComP3 configuration uses a unified schema to configure modules.
-Modules which use  the SeisComP3 libraries can read this configuration
+Modules which use the SeisComP3 libraries can read this configuration
 directly and share global configuration options like messaging connections,
 database configurations, logging and much more.
-There are still some modules that do not use
-the libraries and are called **standalone** modules as :ref:`seedLink`, :ref:`arclink`
+There are still some modules that do not use the libraries and are called
+**standalone** modules such as :ref:`seedlink`, :ref:`arclink`
 or :ref:`slarchive`. They need wrappers to generate their native configuration when
 :command:`seiscomp update-config` is run.
 
