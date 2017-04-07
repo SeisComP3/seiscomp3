@@ -4,7 +4,7 @@
 
 * seiscomp
 
-  * Use symbolic links to module defaults and configurations instead of 
+  * Use symbolic links to module defaults and configurations instead of
     copying when creating module aliases
 
 * doc
@@ -22,6 +22,12 @@
     Prior to that fix the structure was not deleted.
   * Added documentation section which allows to browse changelogs and
     documentations of installed modules
+
+* scrttv
+
+  * If loading data from a file then all data is loaded and --buffer-size
+    is being ignored. Furthermore XML event parameter files can be loaded
+    (File->Open) and picks will be shown on top of loaded traces.
 
 * scolv
 
@@ -50,7 +56,21 @@
 * dlsv2inv, fdsn2inv
 
   * Make sample rate conversion from float to fraction more stable
-    
+
+* fdsnws
+
+  * Make arclink-access bindings optional through configuration parameter
+    useArclinkAccess
+
+* seedlink
+
+  * Added ps2400_eth plugin configuration
+
+* GUI
+
+  * Fixed bug in map tilestore that caused custom tilestore implementations
+    to crash under certain circumstances
+
 
 ## Release 2016.333
 
@@ -100,6 +120,10 @@ module has disabled or enabled a particular station the CreationInfo
 structure has been added to ConfigStation.
 
 ----
+
+* slmon
+
+  * Ported package from SeisComP 2.5
 
 * trunk
 
