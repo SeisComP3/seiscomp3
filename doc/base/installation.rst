@@ -124,7 +124,7 @@ files or commands may differ slightly for other Linux systems):
 :program:`Packages`
 
 +--------------------+--------------------+----------------------+----------------------------------------+
-|:program:`Ubuntu 14`|:program:`OpenSUSE` |:program:`CentOS 6`   | SC3 component                          |
+|:program:`Ubuntu 14`|:program:`OpenSUSE` |:program:`CentOS 6`   | SeisComP3 component                    |
 +====================+====================+======================+========================================+
 | flex               | flex               | flex                 | Seedlink (compilation only)            |
 +--------------------+--------------------+----------------------+----------------------------------------+
@@ -159,7 +159,7 @@ files or commands may differ slightly for other Linux systems):
 First the environment has to be set up. The :program:`seiscomp` tool comes with
 the command :command:`install-deps` which installs required packages.
 Read the section :ref:`System management<system-management>` for more detailed instructions.
-E.g. for installing the dependencies for using the MySQL database, 
+For example, to install the dependencies for using the MySQL database,
 give 'mysql-server' as parameter. 
 
 .. code-block:: sh
@@ -262,7 +262,7 @@ SQL configuration
 * To start MySQL automatically during boot set
 
   :program:`OpenSUSE`
-	
+
   .. code-block:: sh
 
      user@host:~$ insserv mysql
@@ -298,7 +298,7 @@ following table.
 +---------------------+--------------------------------------------------------------------+
 | *lib*               | The base library directory used by all modules.                    |
 +---------------------+--------------------------------------------------------------------+
-| *lib/python*        | The python library directory.                                      |
+| *lib/python*        | The Python library directory.                                      |
 +---------------------+--------------------------------------------------------------------+
 | *man*               | The manual pages.                                                  |
 +---------------------+--------------------------------------------------------------------+

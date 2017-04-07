@@ -462,6 +462,9 @@ if not os.path.exists(out_struct_plugin_dir):
     sys.stderr.write("ERROR: creating build directory '%s' failed: %s\n" % (out_struct_plugin_dir, str(e)))
     sys.exit(1)
 
+# Save the global reference for each plugin
+plugins_with_ref = {}
+
 for app in sorted(app_plugin_nodes.keys()):
   plugins = app_plugin_nodes.get(app)
   plugin_files = []
@@ -475,6 +478,7 @@ for app in sorted(app_plugin_nodes.keys()):
 
     plugin_refs[p] = desc_name
 
+    plugins_with_ref[p] = desc_name
     pf = codecs.open(plugin_file, "w", "utf-8")
 
     pf.write(".. _%s:\n\n" % desc_name)
@@ -687,6 +691,7 @@ Description
    %s is a standalone module and does not inherit :ref:`global options <global-configuration>`.
 
 ''' % app_name
+
       cfgs = '''\
 | :file:`etc/defaults/%s.cfg`
 | :file:`etc/%s.cfg`
@@ -712,6 +717,29 @@ Description
 ''' % (app_name, app_name, app_name, app_name)
     else:
       cfgs = ""
+
+  documented_plugins = []
+  if plugins and len(plugins) > 0:
+    for p in plugins:
+      if plugins_with_ref.has_key(p): documented_plugins.append(p)
+
+  if len(documented_plugins) > 0:
+    f.write('''
+
+Plugins
+=======
+
+''')
+
+    for p in documented_plugins:
+      name = p.get('name')
+      desc_node = p.find('description')
+      if desc_node is not None and desc_node.text is not None:
+        desc = [l.strip() for l in desc_node.text.strip().replace("\r","").split('\n')]
+      else:
+        desc = []
+
+      f.write("* :ref:`%s <%s>`\n\n  %s\n" % (name, plugins_with_ref[p], " ".join(desc)))
 
   if options or note or cfgs:
     f.write('''
