@@ -410,6 +410,18 @@ class FDSNWS(Application):
 		except ConfigException: pass
 		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
 
+		# If the database connection is passed via command line or configuration
+		# file then messaging is disabled. Messaging is only used to get
+		# the configured database connection URI.
+		if self.databaseURI() != "":
+			self.setMessagingEnabled(False)
+		else:
+			# Without the event service, event a database connection is not
+			# required if the inventory is loaded from file
+			if not self._serveEvent and not self._useArclinkAccess and not self.isInventoryDatabaseEnabled():
+				self.setMessagingEnabled(False)
+				self.setDatabaseEnabled(False, False)
+
 		return True
 
 
@@ -517,7 +529,7 @@ class FDSNWS(Application):
 			if not retn:
 				return False
 
-		if self._serveDataSelect:
+		if self._serveDataSelect and self._useArclinkAccess:
 			self._access.initFromSC3Routing(self.query().loadRouting())
 
 		DataModel.PublicObject.SetRegistrationEnabled(False)
