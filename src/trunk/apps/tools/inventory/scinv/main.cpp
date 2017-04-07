@@ -1561,6 +1561,15 @@ class InventoryManager : public Client::Application,
 								if ( dl ) {
 									if ( !dl->description().empty() )
 										cout << "          dl    " << dl->description() << endl;
+									else
+										cout << "          dl    -" << endl;
+
+									try {
+										double gain = dl->gain();
+										cout << "                gain         " << gain << endl;
+									}
+									catch ( ... ) {}
+
 									try {
 										DataModel::Decimation *deci = dl->decimation(DataModel::DecimationIndex(str->sampleRateNumerator(), str->sampleRateDenominator()));
 										if ( deci ) {
