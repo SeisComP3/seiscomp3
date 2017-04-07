@@ -46,21 +46,21 @@
 					<parameter name="rect" type = "string" >
 						<description>
 							Region in which scevent is allowed to create events.
-						</description>	
-					</parameter>	
+						</description>
+					</parameter>
 				</group>
 
 				<group name="depths">
 					<parameter name="minimum" type = "double" >
 						<description>
 							Minimum depth for which scevent is allowed to create events.
-						</description>	
-					</parameter>	
-				
+						</description>
+					</parameter>
+
 					<parameter name="maximum" type = "double" >
 						<description>
 							Maximum depth for which scevent is allowed to create events.
-						</description>	
+						</description>
 					</parameter>
 				</group>
 
@@ -80,8 +80,8 @@
 
 				<parameter name="maximumMatchingArrivalTimeDiff" type="float" unit="s" default="-1">
 					<description>
-						If this time window in seconds is negative, pickIDs
-						are compared to find matching arrivals. A non negative
+						Negative time window: compare only pickIDs to find
+						matching arrivals. A non negative
 						value (including 0) compares pick times regardless
 						of the pickID. Pass: |pick1.time - pick2.time| &lt;= threshold
 					</description>
@@ -96,6 +96,12 @@
 						of a new pick to all arrivals must be within
 						eventAssociation.maximumMatchingArrivalTimeDiff
 						or if one matching arrival is enough.
+					</description>
+				</parameter>
+
+				<parameter name="allowLooseAssociatedArrivals" type="boolean" default="false">
+					<description>
+						Allows to match picks that are associated with weight 0.
 					</description>
 				</parameter>
 
@@ -205,6 +211,16 @@
 					</description>
 				</parameter>
 
+				<parameter name="methods" type="list:string">
+					<description>
+						The method priority list. When the eventtool comes to the point to
+						select a preferred origin it orders all origins by its methodID priority and
+						selects then the best one among the highest priority method. It also defines the
+						method priority for custom priority checks (eventAssociation.priorities).
+						A defined method string must match exactly the string in Origin.methodID.
+					</description>
+				</parameter>
+
 				<parameter name="priorities" type="list:string">
 					<description>
 						The general priority list to decide if an origin becomes preferred.
@@ -293,7 +309,7 @@
 					</description>
 				</option>
 			</group>
-			
+
 			<group name="Verbosity">
 				<optionReference>verbosity#verbosity</optionReference>
 				<optionReference>verbosity#v</optionReference>
@@ -305,7 +321,7 @@
 				<optionReference>verbosity#debug</optionReference>
 				<optionReference>verbosity#log-file</optionReference>
 			</group>
-			
+
 			<group name="Messaging">
 				<optionReference>messaging#user</optionReference>
 				<optionReference>messaging#host</optionReference>
@@ -315,7 +331,7 @@
 				<optionReference>messaging#encoding</optionReference>
 				<optionReference>messaging#start-stop-msg</optionReference>
 			</group>
-			
+
 			<group name="Database">
 				<optionReference>database#db-driver-list</optionReference>
 				<optionReference>database#database</optionReference>

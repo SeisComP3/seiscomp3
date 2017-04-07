@@ -56,6 +56,7 @@ struct Config {
 	size_t          minMatchingPicks;
 	double          maxMatchingPicksTimeDiff;
 	bool            matchingPicksTimeDiffAND;
+	bool            matchingLooseAssociatedPicks;
 	size_t          minStationMagnitudes;
 	double          maxDist;
 	Core::TimeSpan  maxTimeDiff;

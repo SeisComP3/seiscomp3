@@ -208,6 +208,7 @@ bool EventTool::initConfiguration() {
 	try { _config.minMatchingPicks = configGetInt("eventAssociation.minimumMatchingArrivals"); } catch (...) {}
 	try { _config.maxMatchingPicksTimeDiff = configGetDouble("eventAssociation.maximumMatchingArrivalTimeDiff"); } catch (...) {}
 	try { _config.matchingPicksTimeDiffAND = configGetBool("eventAssociation.compareAllArrivalTimes"); } catch (...) {}
+	try { _config.matchingLooseAssociatedPicks = configGetBool("eventAssociation.allowLooseAssociatedArrivals"); } catch (...) {}
 	try { _config.minAutomaticArrivals = configGetInt("eventAssociation.minimumDefiningPhases"); } catch (...) {}
 
 	Config::RegionFilter regionFilter;
@@ -309,6 +310,7 @@ bool EventTool::init() {
 	_config.minStationMagnitudes = 4;
 	_config.minMatchingPicks = 3;
 	_config.maxMatchingPicksTimeDiff = -1;
+	_config.matchingLooseAssociatedPicks = false;
 	_config.maxTimeDiff = Core::TimeSpan(60.);
 	_config.maxDist = 5.0;
 	_config.minMwCount = 8;
