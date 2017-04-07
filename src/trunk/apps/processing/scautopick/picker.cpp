@@ -1092,7 +1092,9 @@ void App::emitPPick(const Processing::Picker *proc,
 	PickMap::iterator it = _lastPicks.find(res.record->streamID());
 	if ( it != _lastPicks.end() ) {
 		if ( it->second->time().value() == res.time ) {
-			SEISCOMP_WARNING("Duplicate pick on %s: ignoring", res.record->streamID().c_str());
+			SEISCOMP_WARNING("Duplicate pick on %s at %s: ignoring",
+			                 res.record->streamID().c_str(),
+			                 res.time.iso().c_str());
 			return;
 		}
 	}
