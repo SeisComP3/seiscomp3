@@ -464,6 +464,7 @@ class Application(Core.InterruptibleObject):
     LOGGING = _Client.Application_LOGGING
     MESSAGING = _Client.Application_MESSAGING
     DATABASE = _Client.Application_DATABASE
+    PLUGINS = _Client.Application_PLUGINS
     ST_QUANTITY = _Client.Application_ST_QUANTITY
     def __init__(self, *args): 
         """__init__(Seiscomp::Client::Application self, int argc, char ** argv) -> Application"""

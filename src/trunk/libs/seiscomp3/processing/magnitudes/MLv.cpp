@@ -91,7 +91,7 @@ double MagnitudeProcessor_MLv::logA0(double dist_km) const throw(Core::ValueExce
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_MLv::computeMagnitude(
-	double amplitude, // in micrometers per second
+	double amplitude, // in millimeters per second
 	double,           // period is unused
 	double delta,     // in degrees
 	double depth,     // in kilometers

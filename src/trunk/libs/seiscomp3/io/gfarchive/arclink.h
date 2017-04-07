@@ -64,6 +64,11 @@ class SC_SYSTEM_CORE_API ArclinkArchive : public GFArchive {
 
 		Core::GreensFunction* get();
 
+		OPT(double) getTravelTime(const std::string &phase,
+		                          const std::string &model,
+		                          const GFSource &source,
+		                          const GFReceiver &receiver);
+
 
 	private:
 		int handshake();

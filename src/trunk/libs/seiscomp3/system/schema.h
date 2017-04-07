@@ -27,6 +27,8 @@ namespace Seiscomp {
 namespace System {
 
 
+class SchemaVisitor;
+
 DEFINE_SMARTPOINTER(SchemaParameter);
 class SC_SYSTEM_CORE_API SchemaParameter : public Core::BaseObject {
 	DECLARE_SC_CLASS(SchemaParameter);
@@ -88,6 +90,8 @@ class SC_SYSTEM_CORE_API SchemaParameters : public Core::BaseObject {
 		size_t structureCount() const;
 		SchemaStructure *structure(size_t i);
 		bool add(SchemaStructure *structure);
+
+		void accept(SchemaVisitor *) const;
 
 
 	// ------------------------------------------------------------------
@@ -284,6 +288,8 @@ class SC_SYSTEM_CORE_API SchemaModule : public Core::BaseObject {
 			return standalone && *standalone;
 		}
 
+		void accept(SchemaVisitor *) const;
+
 
 	// ------------------------------------------------------------------
 	//  Serialization
@@ -444,6 +450,25 @@ class SC_SYSTEM_CORE_API SchemaDefinitions : public Core::BaseObject {
 		std::vector<SchemaModulePtr>  _modules;
 		std::vector<SchemaPluginPtr>  _plugins;
 		std::vector<SchemaBindingPtr> _bindings;
+};
+
+
+class SC_SYSTEM_CORE_API SchemaVisitor {
+	protected:
+		SchemaVisitor() {}
+		virtual ~SchemaVisitor() {}
+
+	protected:
+		virtual bool visit(const SchemaModule*) = 0;
+		virtual bool visit(const SchemaGroup*) = 0;
+		virtual bool visit(const SchemaStructure*) = 0;
+		virtual void visit(const SchemaParameter*) = 0;
+		virtual void finished() = 0;
+
+	friend class SchemaModule;
+	friend class SchemaParameters;
+	friend class SchemaGroup;
+	friend class SchemaStructure;
 };
 
 

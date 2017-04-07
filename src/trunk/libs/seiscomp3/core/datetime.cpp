@@ -342,7 +342,7 @@ TimeSpan& TimeSpan::operator=(double t) {
 	if( t > MaxTime || t < MinTime )
 		throw Core::OverflowException("TimeSpan::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
-	_timeval.tv_usec = (long)((t-_timeval.tv_sec)*MICROS);
+	_timeval.tv_usec = (long)((t-_timeval.tv_sec)*MICROS + 0.5);
 
 	return *this;
 }
@@ -614,7 +614,7 @@ Time& Time::operator=(double t) {
 	if( t > MaxTime || t < MinTime )
 		throw Core::OverflowException("Time::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
-	_timeval.tv_usec = (long)((t-(double)_timeval.tv_sec)*MICROS);
+	_timeval.tv_usec = (long)((t-(double)_timeval.tv_sec)*MICROS + 0.5);
 
 	return *this;
 }
@@ -1014,7 +1014,16 @@ bool Time::fromString(const char* str, const char* fmt) {
 		return false;
 	}
 	else {
-		*this = timegm(&t);
+		time_t calendartime = timegm(&t);
+		if ( calendartime == -1 ) {
+			*this = (time_t)0;
+			return false;
+		}
+
+		*this = (time_t)0;
+		setUSecs(usec);
+
+		*this = calendartime;
 		setUSecs(usec);
 	}
 

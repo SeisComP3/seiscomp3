@@ -35,10 +35,7 @@ distance the magnitude would be
    mag = \log10(A) - (-3) = \log10(A) + 3
 
 which is according to the original Richter (1935) formula if the
-amplitude is measured in millimeters. Note that the baseline for
-logA0 is millimeters for historical reasons, while internally in
-SeisComP 3 the Wood-Anderson amplitudes are measured and stored
-micrometers.
+amplitude is measured in millimeters.
 
 Several distance-value pairs can be configured for different ranges of
 epicenter distance.

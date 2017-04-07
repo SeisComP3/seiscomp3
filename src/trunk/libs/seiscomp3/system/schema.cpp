@@ -196,6 +196,24 @@ bool SchemaParameters::add(SchemaStructure *structure) {
 }
 
 
+void SchemaParameters::accept(SchemaVisitor *v) const {
+	for ( size_t i = 0; i < _parameters.size(); ++i )
+		v->visit(_parameters[i].get());
+
+	for ( size_t i = 0; i < _groups.size(); ++i ) {
+		if ( v->visit(_groups[i].get()) )
+			_groups[i]->accept(v);
+	}
+
+	for ( size_t i = 0; i < _structs.size(); ++i ) {
+		if ( v->visit(_structs[i].get()) )
+			_structs[i]->accept(v);
+	}
+
+	v->finished();
+}
+
+
 void SchemaSetupInputOption::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("value", value, Archive::XML_MANDATORY);
 	ar & NAMED_OBJECT_HINT("description", description, Archive::XML_ELEMENT);
@@ -222,6 +240,12 @@ void SchemaSetupGroup::serialize(Archive& ar) {
 
 void SchemaSetup::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("group", groups, Archive::STATIC_TYPE);
+}
+
+
+void SchemaModule::accept(SchemaVisitor *v) const {
+	if ( v->visit(this) )
+		parameters->accept(v);
 }
 
 

@@ -68,6 +68,11 @@ class SC_SYSTEM_CORE_API Instaseis : public GFArchive {
 
 		Core::GreensFunction* get();
 
+		OPT(double) getTravelTime(const std::string &phase,
+		                          const std::string &model,
+		                          const GFSource &source,
+		                          const GFReceiver &receiver);
+
 
 	// ----------------------------------------------------------------------
 	//  Private interface

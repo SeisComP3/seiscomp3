@@ -95,7 +95,23 @@ class SC_SYSTEM_CORE_API GFArchive : public Core::BaseObject {
 		//! sequence is marked with a NULL pointer.
 		virtual Core::GreensFunction* get() = 0;
 
+		/**
+		 * @brief Returns the travel time of a given phase from the source
+		 *        to the receiver.
+		 * @param phase The phase code
+		 * @param model The requested model.
+		 * @param source The source location.
+		 * @param receiver The receiver location.
+		 * @return The relative travel time in seconds. If not supported then
+		 *         None must be returned.
+		 */
+		virtual OPT(double) getTravelTime(const std::string &phase,
+		                                  const std::string &model,
+		                                  const GFSource &source,
+		                                  const GFReceiver &receiver) = 0;
 
+
+	public:
 		static GFArchive* Create(const char* service);
 		static GFArchive* Open(const char* url);
 };

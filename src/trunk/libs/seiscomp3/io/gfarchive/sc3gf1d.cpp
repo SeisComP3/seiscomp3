@@ -51,27 +51,6 @@ DeprecatedInterface("saul");
 namespace {
 
 
-void interpolate(Core::GreensFunction *gf1, const Core::GreensFunction *gf2,
-                 double dist, double lower, double upper) {
-	double coeff2 = (dist-lower) / (upper-lower);
-	double coeff1 = 1.0 - coeff2;
-
-	//std::cerr << "Interpolate: " << lower << ", " << dist << ", " << upper << ": "
-	//          << coeff1 << ", " << coeff2 << std::endl;
-
-	for ( int i = 0; i < 8; ++i ) {
-		FloatArray *ar1 = (FloatArray*)gf1->data(i);
-		FloatArray *ar2 = (FloatArray*)gf2->data(i);
-
-		if ( ar1->size() != ar2->size() )
-			SEISCOMP_ERROR("GF: Interpolation sizes do not match");
-
-		for ( int s = 0; s < ar1->size(); ++s )
-			(*ar1)[s] = coeff1*(*ar1)[s] + coeff2*(*ar2)[s];
-	}
-}
-
-
 bool interpolate(Core::GreensFunction *gf1, const Core::GreensFunction *gf2,
                  const Core::GreensFunction *gf3, const Core::GreensFunction *gf4,
                  double dist, double lowerDist, double upperDist,
@@ -779,6 +758,18 @@ Core::GreensFunction* SC3GF1DArchive::read(const std::string &file,
 	}
 
 	return gf;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(double) SC3GF1DArchive::getTravelTime(const std::string &phase,
+                                          const std::string &model,
+                                          const GFSource &source,
+                                          const GFReceiver &receiver) {
+	return Core::None;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

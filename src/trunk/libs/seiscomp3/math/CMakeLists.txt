@@ -11,6 +11,7 @@ SET(MATH_SOURCES
 	conversions.cpp
 	filter.cpp
 	fft.cpp
+	windowfunc.cpp
 )
 
 SET(MATH_HEADERS
@@ -32,10 +33,12 @@ SET(MATH_HEADERS
 	conversions.ipp
 	filter.h
 	fft.h
+	windowfunc.h
 )
 
 SC_ADD_SUBDIR_SOURCES(MATH filter)
 SC_ADD_SUBDIR_SOURCES(MATH restitution)
+SC_ADD_SUBDIR_SOURCES(MATH windows)
 
 SET(MATH_DEFINITIONS ${FFTW3_DEFINITIONS})
 SC_SETUP_LIB_SUBDIR(MATH)

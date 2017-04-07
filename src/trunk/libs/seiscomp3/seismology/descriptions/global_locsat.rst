@@ -25,7 +25,7 @@ the code:
 
 However the SeisComP wrapper adds this feature. It allows to define a
 :file:`.stacor` file which defines corrections of observation times
-in seconds. A correction is **substracted** (not added) from
+in seconds. A correction is **subtracted** (not added) from
 the observation time to be compatible with the NonLinLoc station correction
 definitions (http://alomax.free.fr/nlloc/soft3.03/control.html#_NLLoc_locdelay_).
 
@@ -40,7 +40,7 @@ A station correction table looks like this:
    # LOCDELAY code phase numReadings delay
    LOCDELAY GE.MORC P 1 -0.1
 
-The forth column (numReadings) is ignored and just provided for compatibility
+The fourth column (numReadings) is ignored and just provided for compatibility
 reasons with NonLinLoc.
 
 Format

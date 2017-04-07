@@ -19,6 +19,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/math/fft.h>
+#include <seiscomp3/math/windows/hann.h>
 
 #include <cstring>
 
@@ -116,23 +117,6 @@ void detrend(int n, T *data) {
 
 	for ( int i = 0; i < n; ++i )
 		data[i] = data[i] - (b + a*(T)i);
-}
-
-
-template <typename T>
-void hann(int n, T *inout, double width) {
-	if ( width > 0.5 ) width = 0.5;
-	else if ( width < 0 ) width = 0;
-
-	double n2 = n*width;
-	if ( n2 > n ) n2 = n;
-	int in2 = (int)n2;
-	int w = in2*2;
-
-	for ( int i = 0; i < in2; ++i ) {
-		inout[i] *= 0.5+0.5*cos(2*M_PI*(i-n2)/w);
-		inout[n-i-1] *= 0.5+0.5*cos(2*M_PI*(i-n2)/w);
-	}
 }
 
 
@@ -377,7 +361,7 @@ Record *Spectralizer::fft(const Record *rec) {
 			// Detrend data excluding the padding window
 			detrend(_buffer->tmp.size()-_buffer->tmpOffset*2, _buffer->tmp.typedData()+_buffer->tmpOffset);
 			// Apply Von-Hann window
-			hann(_buffer->tmp.size()-_buffer->tmpOffset*2, _buffer->tmp.typedData()+_buffer->tmpOffset, _taperWidth);
+			Math::HannWindow<double>().apply(_buffer->tmp.size()-_buffer->tmpOffset*2, _buffer->tmp.typedData()+_buffer->tmpOffset, _taperWidth);
 
 			spec = new ComplexDoubleArray;
 			Math::fft(spec->impl(), _buffer->tmp.size(), _buffer->tmp.typedData());

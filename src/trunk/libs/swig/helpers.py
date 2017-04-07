@@ -80,15 +80,17 @@ import Communication
 import Core
 import DataModel
 import IO
+import Math
 
 def _readobj(*args):
+  """_readobj(BaseObject obj, char const * file) -> bool"""
   return _helpers._readobj(*args)
-_readobj = _helpers._readobj
 
 def _writeobj(*args):
+  """_writeobj(BaseObject obj, char const * file) -> bool"""
   return _helpers._writeobj(*args)
-_writeobj = _helpers._writeobj
 class _DatabaseQuery(DataModel.DatabaseQuery):
+    """Proxy of C++ Seiscomp::Sc3py::_private::_DatabaseQuery class"""
     __swig_setmethods__ = {}
     for _s in [DataModel.DatabaseQuery]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, _DatabaseQuery, name, value)
@@ -97,12 +99,24 @@ class _DatabaseQuery(DataModel.DatabaseQuery):
     __getattr__ = lambda self, name: _swig_getattr(self, _DatabaseQuery, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """__init__(Seiscomp::Sc3py::_private::_DatabaseQuery self, DatabaseInterface dbDriver) -> _DatabaseQuery"""
         this = _helpers.new__DatabaseQuery(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _helpers.delete__DatabaseQuery
     __del__ = lambda self : None;
-    def getEvents(self, *args): return _helpers._DatabaseQuery_getEvents(self, *args)
+    def getEvents(self, *args):
+        """
+        getEvents(_DatabaseQuery self, int limit, int offset, bool newestFirst, Seiscomp::Core::Optional< Seiscomp::Core::Time >::Impl const & minTime, 
+            Seiscomp::Core::Optional< Seiscomp::Core::Time >::Impl const & maxTime, 
+            Seiscomp::Core::Optional< double >::Impl const & minLatitude, 
+            Seiscomp::Core::Optional< double >::Impl const & maxLatitude, 
+            Seiscomp::Core::Optional< double >::Impl const & minLongitude, Seiscomp::Core::Optional< double >::Impl const & maxLongitude, 
+            Seiscomp::Core::Optional< double >::Impl const & minMagnitude, 
+            Seiscomp::Core::Optional< int >::Impl const & minArrivals) -> DatabaseIterator
+        """
+        return _helpers._DatabaseQuery_getEvents(self, *args)
+
 _DatabaseQuery_swigregister = _helpers._DatabaseQuery_swigregister
 _DatabaseQuery_swigregister(_DatabaseQuery)
 
