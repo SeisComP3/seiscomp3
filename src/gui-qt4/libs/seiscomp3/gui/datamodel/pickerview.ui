@@ -1803,7 +1803,10 @@
     <string>Spectrum for current component</string>
    </property>
    <property name="toolTip" >
-    <string>Spectrum for current component. This can be also achieved by pressing Space while not in picking mode.</string>
+    <string>Spectrum for current component. This can be also achieved by pressing Space while not in picking mode. (SPACE)</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
    </property>
   </action>
  </widget>
