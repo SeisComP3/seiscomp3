@@ -1313,7 +1313,10 @@ void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr s
 void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr strm) {
 	SEISCOMP_DEBUG("Start processing datalogger information ");
 
-	string dataloggerName = station_name + "." + ci.GetChannel() + strip(ci.GetLocation());
+	string dataloggerName = strm->sensorLocation()->station()->network()->code() + "." +
+	                        strm->sensorLocation()->station()->code() + "." + strm->sensorLocation()->code() +
+	                        strm->code() + "." +
+	                        date2str(strm->start());
 
 	DataModel::DataloggerPtr dlg = inventory->datalogger(DataModel::DataloggerIndex(dataloggerName));
 	if ( !dlg )
@@ -1762,7 +1765,10 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 	SEISCOMP_DEBUG("Start processing paz sensor information of stage %d",
 	               response_index ? ci.rpz[*response_index]->GetStageSequenceNumber() : -1);
 
-	string sensorName = station_name + "." + ci.GetChannel().substr(1,2) + strip(ci.GetLocation());
+	string sensorName = strm->sensorLocation()->station()->network()->code() + "." +
+	                    strm->sensorLocation()->station()->code() + "." + strm->sensorLocation()->code() +
+	                    strm->code() + "." +
+	                    date2str(strm->start());
 
 	DataModel::SensorPtr sm = inventory->sensor(DataModel::SensorIndex(sensorName));
 	if ( !sm )
