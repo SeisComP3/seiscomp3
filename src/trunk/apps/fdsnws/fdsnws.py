@@ -254,15 +254,16 @@ class FDSNWS(Application):
 		self.setRecordStreamEnabled(True)
 		self.setLoadInventoryEnabled(True)
 
-		self._serverRoot    = os.path.dirname(__file__)
-		self._listenAddress = '0.0.0.0' # all interfaces
-		self._port          = 8080
-		self._connections   = 5
-		self._queryObjects  = 100000    # maximum number of objects per query
-		self._realtimeGap   = None      # minimum data age: 5min
-		self._samplesM      = None      # maximum number of samples per query
-		self._htpasswd      = '@CONFIGDIR@/fdsnws.htpasswd'
-		self._accessLogFile = ''
+		self._serverRoot     = os.path.dirname(__file__)
+		self._listenAddress  = '0.0.0.0' # all interfaces
+		self._port           = 8080
+		self._connections    = 5
+		self._queryObjects   = 100000    # maximum number of objects per query
+		self._realtimeGap    = None      # minimum data age: 5min
+		self._samplesM       = None      # maximum number of samples per query
+		self._recordBulkSize = 102400    # desired record bulk size
+		self._htpasswd       = '@CONFIGDIR@/fdsnws.htpasswd'
+		self._accessLogFile  = ''
 
 		self._allowRestricted   = True
 		self._useArclinkAccess  = False
@@ -324,6 +325,13 @@ class FDSNWS(Application):
 		# fdsnws-dataselect to limit bandwidth
 		try: self._samplesM = self.configGetDouble('samplesM')
 		except ConfigException: pass
+
+		try: self._recordBulkSize = self.configGetInt('recordBulkSize')
+		except ConfigException: pass
+
+		if self._recordBulkSize < 1:
+			print >> sys.stderr, "Invalid recordBulkSize, must be larger than 0"
+			return False
 
 		# location of htpasswd file
 		try:
@@ -564,7 +572,7 @@ class FDSNWS(Application):
 			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
 			dataselect.putChild('1', dataselect1)
 
-			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv))
+			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._recordBulkSize))
 			msg = 'authorization for restricted time series data required'
 			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
@@ -896,11 +904,11 @@ class FDSNWS(Application):
 			access = None
 
 		if self._authEnabled:  # auth extension
-			realm = FDSNDataSelectAuthRealm(inv, access, self._userdb)
+			realm = FDSNDataSelectAuthRealm(inv, self._recordBulkSize, access, self._userdb)
 			checker = UsernamePasswordChecker(self._userdb)
 
 		else:  # htpasswd
-			realm = FDSNDataSelectRealm(inv, access)
+			realm = FDSNDataSelectRealm(inv, self._recordBulkSize, access)
 			checker = checkers.FilePasswordDB(self._htpasswd)
 
 		p = portal.Portal(realm, [checker])

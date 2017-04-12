@@ -61,6 +61,8 @@
 
   * Make arclink-access bindings optional through configuration parameter
     useArclinkAccess
+  * Add option ```recordBulkSize``` which defaults to 100kb and improves
+    the dataselect performance significantly
 
 * seedlink
 
