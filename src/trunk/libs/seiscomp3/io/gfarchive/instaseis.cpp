@@ -671,5 +671,17 @@ Core::GreensFunction *Instaseis::get() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(double) Instaseis::getTravelTime(const std::string &phase,
+                                     const std::string &model,
+                                     const GFSource &source,
+                                     const GFReceiver &receiver) {
+	return Core::None;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

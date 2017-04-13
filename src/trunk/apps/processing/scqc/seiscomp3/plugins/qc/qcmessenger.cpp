@@ -79,7 +79,7 @@ std::string i2s (DataModel::Object* obj) {
 
 
 
-IMPLEMENT_SC_CLASS(QcMessenger, "QcMessenger");	
+IMPLEMENT_SC_CLASS(QcMessenger, "QcMessenger");
 
 QcMessenger::QcMessenger(){}
 
@@ -109,22 +109,22 @@ bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation 
 				operation = OP_ADD;
 				_qcIndex.insert(i2s(obj));
 			}
-		} 
-		
+		}
+
 		if ( !_notifierMsg ) _notifierMsg = new NotifierMessage;
 		NotifierPtr notifier = new Notifier(myPackage, operation, obj);
 		_notifierMsg->attach(notifier);
-		
+
 	}
 	//! send data msg
 	else {
 		if ( !_dataMsg ) _dataMsg = new DataMessage;
 		_dataMsg->attach(obj);
 	}
-	
+
 	//! let scheduler decide, when to send the message
 	scheduler();
-	
+
 	return true;
 }
 
@@ -136,7 +136,7 @@ bool QcMessenger::attachObject(DataModel::Object* obj, bool notifier, Operation 
 //!
 void QcMessenger::scheduler(){
 
-	bool msgSend = false;	
+	bool msgSend = false;
 
 	if (_notifierMsg) {
 		try {
@@ -193,8 +193,7 @@ void QcMessenger::flushMessages(){
 
 //! sending the message
 bool QcMessenger::sendMessage(Message* msg) throw (ConnectionException) {
-
-	Communication::Connection* con;
+	Communication::Connection *con;
 
 	try { con = _app->connection(); }
 	catch (...) {
@@ -202,19 +201,19 @@ bool QcMessenger::sendMessage(Message* msg) throw (ConnectionException) {
 		return false;
 	};
 
-if (msg && msg->size() > 0) {
-	if (!con->isConnected())
-	if (con->reconnect() != Status::SEISCOMP_SUCCESS)
-		throw ConnectionException("Could not send Qc message -> reconnection failed");
+	if ( msg && msg->size() > 0 ) {
+		if ( !con->isConnected() )
+			if ( con->reconnect() != Status::SEISCOMP_SUCCESS )
+				throw ConnectionException("Could not send Qc message -> reconnection failed");
 
-	if (!con->send(msg))
-	throw ConnectionException("Could not send Qc message");
+		if ( !con->send(msg) )
+			throw ConnectionException("Could not send Qc message");
 
-	msg->clear();
-	return true;
-}
+		msg->clear();
+		return true;
+	}
 
-return false;
+	return false;
 }
 
 

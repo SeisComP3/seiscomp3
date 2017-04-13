@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -77,6 +78,7 @@ typedef	struct	dummy_session {
 } session;
 
 void	Sess_init(void);
+void    Sess_fini(void);
 void    Sess_signal_conf_reload(void);
 void	Sess_block_users_level(void);
 void	Sess_unblock_users_level(void);

@@ -164,8 +164,9 @@ Activate modules
 
 After the installation all module are disabled for auto start. If :program:`seiscomp start`
 is called, nothing will happen. To enable a set of modules,
-:program:`seiscomp enable` needs to be called with a list of modules. E.g. to enable
-a processing system with Seedlink for data acquisition, use:
+:program:`seiscomp enable` needs to be called with a list of modules.
+For example, for a processing system with Seedlink for data acquisition,
+you may use:
 
 .. code-block:: sh
 

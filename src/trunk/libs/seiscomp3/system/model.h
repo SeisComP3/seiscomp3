@@ -141,7 +141,7 @@ class SC_SYSTEM_CORE_API Container : public Core::BaseObject {
 
 		Structure *findStructureType(const std::string &type) const;
 
-		//! Returns a parameters in the tree where the fully expanded name
+		//! Returns a parameter in the tree where the fully expanded name
 		//! matches @fullName@.
 		Parameter *findParameter(const std::string &fullName) const;
 

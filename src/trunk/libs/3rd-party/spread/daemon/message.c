@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -57,7 +58,7 @@ void    Message_populate_with_buffers(message_obj *msg)
 {
         int i;
         msg->num_elements = MAX_SCATTER_ELEMENTS;
-	for( i=0; i < msg->num_elements; i++ )
+	for( i=0; i < (int) msg->num_elements; i++ )
 	{
 		msg->elements[i].len = sizeof(packet_body);
 		msg->elements[i].buf = (char *) new(PACKET_BODY);
@@ -171,13 +172,13 @@ char    *Message_get_groups_array(message_obj *msg)
                 first_scat_index = 0;
         }
         /* if groups array didn't fit in first scat element, then copy it into Temp_buf */
-	if( groups_bytes > scat->elements[first_scat_index].len )
+	if( groups_bytes > (int) scat->elements[first_scat_index].len )
 	{
 		num_bytes = 0;
-		for( i=first_scat_index; i < scat->num_elements && num_bytes < groups_bytes; i++ )
+		for( i=first_scat_index; i < (int) scat->num_elements && num_bytes < groups_bytes; i++ )
 		{ 
                     int copy_bytes;
-                    if (groups_bytes - num_bytes < scat->elements[i].len)
+                    if (groups_bytes - num_bytes < (int) scat->elements[i].len)
                         copy_bytes = groups_bytes - num_bytes;
                     else 
                         copy_bytes = scat->elements[i].len;
@@ -253,7 +254,7 @@ void    Message_dispose_message(message_obj *msg)
 	packet_body	*body_ptr;
 	int		i;
 
-	for( i=0; i < msg->num_elements; i++ )
+	for( i=0; i < (int) msg->num_elements; i++ )
 	{
 		body_ptr = (packet_body *)msg->elements[i].buf;
 		dispose( body_ptr );
@@ -299,7 +300,7 @@ message_obj     *Message_copy_message(message_obj *msg)
         message_obj *tmp_scat;
         tmp_scat = new( SCATTER );
         tmp_scat->num_elements = msg->num_elements;
-	for( i=0; i < msg->num_elements; i++ )
+	for( i=0; i < (int) msg->num_elements; i++ )
         {
 		tmp_scat->elements[i].len = msg->elements[i].len;
 		tmp_scat->elements[i].buf = (char *)new( PACKET_BODY );
@@ -333,11 +334,11 @@ void            Message_Buffer_to_Message_Fragments( message_obj *msg, char buf[
             return;
         }
         copied_bytes = 0;
-	for( i=0; i < scat->num_elements ; i++ )
+	for( i=0; i < (int) scat->num_elements ; i++ )
 	{
                 if ( 0 == i ) {
                         bytes_to_copy = num_bytes;
-                        if( bytes_to_copy > ( sizeof( packet_body ) - head_size ) )
+                        if( bytes_to_copy > (int) ( sizeof( packet_body ) - head_size ) )
                                 bytes_to_copy = sizeof( packet_body ) - head_size ;
                         memcpy( &scat->elements[i].buf[head_size], &buf[ 0 ], bytes_to_copy );
                         scat->elements[i].len += bytes_to_copy;
@@ -427,9 +428,9 @@ void    Message_calculate_current_location(message_obj  *msg, int len_sent, stru
 {
         int i, len;
 	len = len_sent;
-	for( i=0; i < msg->num_elements; i++ )
+	for( i=0; i < (int) msg->num_elements; i++ )
 	{
-		if( len < msg->elements[i].len ) break;
+		if( len < (int) msg->elements[i].len ) break;
 		len -= msg->elements[i].len;
 	}
         cur_msg->cur_element = i;

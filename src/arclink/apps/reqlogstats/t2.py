@@ -25,6 +25,8 @@ print "# DAY    ", "      TOTAL", " ".join("%8s" % x for x in dcid_list)
 for x in sys.stdin.readlines():
     line = x.strip()
     words = line.split()
+    if len(words) == 0: continue   # Tolerate blank lines
+
     day = words[0]
     dcid = words[1]
     val = words[2]

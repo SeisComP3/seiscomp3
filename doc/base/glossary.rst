@@ -159,7 +159,8 @@ is taken from Modern Global Seismology.
    event   
       a) General term used for a localized disturbance (earthquake, explosion, etc.) which generates seismic waves.
       b) QuakeML object. The event is the parent object of several origins. Among these origins a preferred origin
-         and its preferred magnitude is selected to represent the event. An event can be seen as a earthquake folder
+         and its preferred magnitude is selected to represent the event.
+         An event can be seen as an earthquake folder
          which contains information about earthquake parameters.
 
    fault-plane solution   
@@ -774,7 +775,7 @@ is taken from Modern Global Seismology.
       depths occur much less frequent than shallow earthquakes. Additionally, deep
       earthquakes excite small surface waves compared to the body waves and relatively
       simple P and S waveforms with more impulsive onsets. A more reliable way to
-      determine the depth of an earthquake is to identify depth phases (e.g.  pP, sP)
+      determine the depth of an earthquake is to identify depth phases (e.g. pP, sP)
       in the waveforms. At stations with large distance to the epicenter the pP wave
       follows the direct P wave by a time interval that slighty increase with distance
       but rapidly with depth. The depth can be derived from this time interval by using

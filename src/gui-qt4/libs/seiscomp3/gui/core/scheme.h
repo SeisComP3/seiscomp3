@@ -123,6 +123,7 @@ class SC_GUI_API Scheme {
 
 			struct OriginSymbol {
 				OriginSymbol();
+				bool           classic;
 				ConfigGradient depth;
 			};
 

@@ -118,32 +118,32 @@ class Tensor2S {
 		void spheric(T k = 1.0);
 
 		//! Add scaled tensor
-		void sum(Tensor2S<T> &A, T k = 1.0);
+		void sum(const Tensor2S<T> &A, T k = 1.0);
 
 		//! Multiply by a scalar
 		void scale(T k);
 
 		//! Strain tensor
-		void strain(Tensor2N<T> &U);
+		void strain(const Tensor2N<T> &U);
 
 		//! Strain deviator
-		void deviator(Tensor2N<T> &U);
+		void deviator(const Tensor2N<T> &U);
 
 		//! Green-Lagrange strain tensor
-		void GLStrain(Tensor2N<T> &F);
+		void GLStrain(const Tensor2N<T> &F);
 
 		//! Left Cauchy-Green deformation tensor
-		void leftCG(Tensor2N<T> &F);
+		void leftCG(const Tensor2N<T> &F);
 
 		//! Right Cauchy-Green deformation tensor
-		void rightCG(Tensor2N<T> &F);
+		void rightCG(const Tensor2N<T> &F);
 
 		//! Square of symmetric tensor C^2 = C^t*C
-		void square(Tensor2S<T> &C);
+		void square(const Tensor2S<T> &C);
 
 		//! Stress Push-Forward (PF)
-		void pshFrwd(Tensor2N<T> &F,
-		             Tensor2S<T> &S);
+		void pshFrwd(const Tensor2N<T> &F,
+		             const Tensor2S<T> &S);
 
 		//! Spatial to unrotated tensor transf.
 		void unrotate(const Matrix3<T> &R);

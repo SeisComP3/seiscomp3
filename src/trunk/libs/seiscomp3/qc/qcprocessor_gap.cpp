@@ -24,29 +24,32 @@ IMPLEMENT_SC_CLASS_DERIVED(QcProcessorGap, QcProcessor, "QcProcessorGap");
 
 
 QcProcessorGap::QcProcessorGap() 
-    : QcProcessor() {}
+: QcProcessor() {}
 
 bool QcProcessorGap::setState(const Record *record, const DoubleArray &data) {
-    if (_stream.lastRecord && record->samplingFrequency() > 0) {
-        try {
-            double diff = (double)(record->startTime() - _stream.lastRecord->endTime());
+	if ( _stream.lastRecord && record->samplingFrequency() > 0 ) {
+		try {
+			double diff = (double)(record->startTime() - _stream.lastRecord->endTime());
+			if (diff >= (0.5 / record->samplingFrequency())) {
+				_qcp->parameter = diff;
+				return true;
+			}
+		}
+		catch ( Core::ValueException & ) {}
+	}
 
-            if (diff >= (0.5 / record->samplingFrequency())) {
-                _qcp->parameter = diff;
-                return true;
-            }
-        } catch (Core::ValueException) {}
-    }
-    return false;
+	return false;
 }
 
 double QcProcessorGap::getGap() throw(Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch ( const boost::bad_any_cast & ) {
+		throw Core::ValueException("no data");
+	}
 }
+
 
 }
 }

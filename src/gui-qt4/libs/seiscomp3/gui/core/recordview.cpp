@@ -2926,6 +2926,26 @@ TimeScale* RecordView::timeWidget() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Core::TimeWindow RecordView::coveredTimeRange() const {
+	Core::TimeWindow tw;
+	foreach ( RecordViewItem *trace, _rows ) {
+		int slotCount = trace->widget()->slotCount();
+		for ( int i = 0; i < slotCount; ++i ) {
+			Seiscomp::RecordSequence *seq = trace->widget()->records(i);
+			if ( seq == NULL ) continue;
+			tw = tw | seq->timeWindow();
+		}
+	}
+
+	return tw;
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordView::closeThread() {
 	stop();
 	if ( _thread ) {

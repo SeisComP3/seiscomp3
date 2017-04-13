@@ -34,11 +34,20 @@
 #undef max
 #endif
 
+
+#define CFG_LAYER_PREFIX "map.layers"
+#define CFG_LAYER_INTERFACES_PREFIX "map.customLayers"
+
+
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace {
 
 
@@ -132,7 +141,6 @@ QImage getDecorationSymbol(const QSize& size) {
 
 
 void readLayerProperties(LayerProperties *props) {
-	const static std::string cfgMapLayers = "map.layers";
 	const static std::string cfgVisible = ".visible";
 	const static std::string cfgPen = ".pen";
 	const static std::string cfgBrush = ".brush";
@@ -143,7 +151,7 @@ void readLayerProperties(LayerProperties *props) {
 	const static std::string cfgRoughness = ".roughness";
 
 	// Query properties from config
-	std::string query = cfgMapLayers;
+	std::string query = CFG_LAYER_PREFIX;
 	if ( !props->name.empty() ) query += "." + props->name;
 
 	try { props->visible = SCApp->configGetBool(query + cfgVisible); } catch( ... ) {}
@@ -160,8 +168,12 @@ void readLayerProperties(LayerProperties *props) {
 
 
 } // ns anonymous
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool LayerProperties::isChild(const LayerProperties* child) const {
 	while ( child ) {
 		if ( child == this ) return true;
@@ -169,8 +181,12 @@ bool LayerProperties::isChild(const LayerProperties* child) const {
 	}
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define MAX_ZOOM (1 << 24)
 
 bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
@@ -189,11 +205,18 @@ bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
 	}
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::Canvas(const MapsDesc &meta)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
+, _dirtyImage(true)
+, _dirtyLayers(true)
 , _margin(10)
+, _isDrawLegendsEnabled(true)
 , _delegate(NULL)
 , _polyCache(10) {
 	_maptree = new ImageTree(meta);
@@ -202,8 +225,12 @@ Canvas::Canvas(const MapsDesc &meta)
 
 	init();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::Canvas(ImageTree *mapTree)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
 , _dirtyImage(true)
@@ -219,8 +246,12 @@ Canvas::Canvas(ImageTree *mapTree)
 
 	init();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::~Canvas() {
 	delete _projection;
 	symbolCollection()->clear();
@@ -233,13 +264,21 @@ Canvas::~Canvas() {
 
 	if ( _delegate ) delete _delegate;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setBackgroundColor(QColor c) {
 	_backgroundColor = c;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::setProjectionByName(const char *name) {
 	Projection *newProjection = Map::ProjectionFactory::Create(name);
 	if ( newProjection == NULL )
@@ -257,35 +296,55 @@ bool Canvas::setProjectionByName(const char *name) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setPreviewMode(bool previewMode) {
 	if ( _previewMode == previewMode ) return;
 	_previewMode = previewMode;
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setBilinearFilter(bool filter) {
 	if ( _filterMap == filter ) return;
 	_filterMap = filter;
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setFont(QFont f) {
 	_font = f;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSize(int w, int h) {
 	_buffer = QImage(w, h, (_projection && !_projection->isRectangular())?QImage::Format_ARGB32:QImage::Format_RGB32);
 	updateBuffer();
 
 	updateLayout();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::init() {
 	_font = SCScheme.fonts.base;
 	_projection = NULL;
@@ -327,6 +386,7 @@ void Canvas::init() {
 	_zoomLevel = 1;
 
 	_grayScale = false;
+	_drawLayers = false;
 
 	_projection->setView(_center, _zoomLevel);
 
@@ -338,29 +398,49 @@ void Canvas::init() {
 
 	setDrawLayers(SCScheme.map.showLayers);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setGrayScale(bool e) {
 	if ( _grayScale != e ) _dirtyImage = true;
 	_grayScale = e;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isGrayScale() const {
 	return _grayScale;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawGrid(bool e) {
 	_gridLayer.setVisible(e);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawGridEnabled() const {
 	return _gridLayer.isVisible();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLayers(bool e) {
 	if ( e != _drawLayers ) {
 		_drawLayers = e;
@@ -371,22 +451,39 @@ void Canvas::setDrawLayers(bool e) {
 		// Load all layers and initialize the layer property vector
 		initLayerProperites();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawLayersEnabled() const {
 	return _drawLayers;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawCities(bool e) {
 	_citiesLayer.setVisible(e);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawCitiesEnabled() const {
 	return _citiesLayer.isVisible();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLegends(bool e) {
 	_isDrawLegendsEnabled = e;
 	foreach ( const LegendArea& area, _legendAreas ) {
@@ -400,36 +497,61 @@ void Canvas::setDrawLegends(bool e) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawLegendsEnabled() const {
 	return _isDrawLegendsEnabled;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const QRectF& Canvas::geoRect() const {
 	return _geoReference;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateBuffer() {
 	_dirtyImage = true;
 	_dirtyLayers = true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setMapCenter(QPointF c) {
 	if ( _center == c ) return;
 	_center = c;
 	_projection->centerOn(_center);
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const QPointF& Canvas::mapCenter() const {
 	return _center;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::setZoomLevel(float l) {
 	// Assure: 1 <= l <= maxZoom
 	l = l < 1.0f ? 1.0f : l > _maxZoom ? _maxZoom : l;
@@ -443,18 +565,30 @@ bool Canvas::setZoomLevel(float l) {
 	updateBuffer();
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 float Canvas::zoomLevel() const {
 	return _zoomLevel;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 float Canvas::pixelPerDegree() const {
 	return _projection->pixelPerDegree();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setView(QPoint c, float zoom) {
 	QPointF fc;
 	if ( !_projection->unproject(fc, c) )
@@ -462,8 +596,12 @@ void Canvas::setView(QPoint c, float zoom) {
 
 	setView(fc, zoom);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setView(QPointF c, float zoom) {
 	if ( _center == c && _zoomLevel == zoom ) return;
 
@@ -473,8 +611,12 @@ void Canvas::setView(QPointF c, float zoom) {
 	_projection->setView(_center, _zoomLevel);
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::displayRect(const QRectF& rect) {
 	_projection->displayRect(rect);
 	_center = _projection->center();
@@ -482,8 +624,12 @@ bool Canvas::displayRect(const QRectF& rect) {
 	updateBuffer();
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Canvas::drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end) const {
 	QPoint pp0, pp1;
 
@@ -510,8 +656,12 @@ double Canvas::drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end
 
 	return dist;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
                         uint minPixelDist) const {
 	if ( n == 0 || !poly ) return 0;
@@ -547,8 +697,12 @@ int Canvas::polyToCache(size_t n, const Math::Geo::CoordF *poly,
 
 	return polySize;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t Canvas::drawGeoPolygon(QPainter& painter, size_t n, const Math::Geo::CoordF *poly,
                               uint minPixelDist) const {
 	int polySize = polyToCache(n, poly, minPixelDist);
@@ -556,8 +710,12 @@ size_t Canvas::drawGeoPolygon(QPainter& painter, size_t n, const Math::Geo::Coor
 	painter.drawPolygon(&_polyCache[0], polySize);
 	return polySize-1;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::CoordF *line,
                                bool isClosedPolygon, uint minPixelDist, bool interpolate) const {
 	if ( n == 0 || !line ) return 0;
@@ -627,7 +785,12 @@ size_t Canvas::drawGeoPolyline(QPainter& painter, size_t n, const Math::Geo::Coo
 
 	return linesPlotted;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t Canvas::drawGeoFeature(QPainter& painter, const Geo::GeoFeature *f,
                               uint minPixelDist, bool interpolate,
                               bool filled) const {
@@ -696,35 +859,60 @@ size_t Canvas::drawGeoFeature(QPainter& painter, const Geo::GeoFeature *f,
 
 	return lines;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isInside(double lon, double lat) const {
 	return _geoReference.contains(QPointF(lon, lat));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isVisible(double lon, double lat) const {
 	QPoint p;
 	if ( !_projection->project(p, QPointF(lon, lat)) ) return false;
 	return (p.x() >= 0) && (p.x() < _buffer.width()) &&
 	       (p.y() >= 0) && (p.y() < _buffer.height());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SymbolCollection* Canvas::symbolCollection() const {
 	return _mapSymbolCollection.get();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSymbolCollection(SymbolCollection *collection) {
 	_mapSymbolCollection = boost::shared_ptr<SymbolCollection>(collection);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSelectedCity(const Math::Geo::CityD *c) {
 	_citiesLayer.setSelectedCity(c);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 /**
  * Initializes the layer property vector with properties read
  * from the symbol collection.
@@ -755,9 +943,66 @@ void Canvas::initLayerProperites() {
 		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
 		readLayerProperties(_layerProperties.back());
 	}
+
+	// Read custom layers
+	try {
+		std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
+		for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
+			LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
+			if ( !customLayer ) {
+				SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
+				continue;
+			}
+
+			customLayer->setName(customLayerInterfaces[i].c_str());
+			customLayer->init(SCApp->configuration());
+
+			_customLayers.append(customLayer);
+			prependLayer(customLayer.get());
+		}
+	}
+	catch ( ... ) {}
+
+	// Read layer order
+	try {
+		std::vector<std::string> layerOrder;
+
+		layerOrder = SCApp->configGetStrings(CFG_LAYER_PREFIX);
+		if ( !layerOrder.empty() ) {
+			QMap<std::string, Layer*> layerNameMap;
+
+			// Create layer lookup
+			foreach ( Layer *layer, _layers )
+				layerNameMap[layer->name().toStdString()] = layer;
+
+			Layers orderedLayers;
+			for ( size_t i = 0; i < layerOrder.size(); ++i ) {
+				Layer *layer = layerNameMap.value(layerOrder[i]);
+				if ( layer == NULL )
+					SEISCOMP_WARNING("Layer '%s' in layer list not found", layerOrder[i].c_str());
+				else
+					orderedLayers.append(layer);
+			}
+
+			// Append layers that are not already in ordered list
+			foreach ( Layer *layer, _layers )
+				if ( !orderedLayers.contains(layer) )
+					orderedLayers.append(layer);
+
+			// Finally copy the ordered layer list to the current layer list
+			_layers = orderedLayers;
+		}
+
+
+	}
+	catch ( ... ) {}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
                             const LayerProperties *layProp, const QPen &debugPen,
                             size_t &linesPlotted, size_t &polysPlotted,
@@ -830,8 +1075,12 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 	++polysPlotted;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawGeoFeatures(QPainter& painter) {
 	if ( !_drawLayers ) return;
 
@@ -893,7 +1142,12 @@ void Canvas::drawGeoFeatures(QPainter& painter) {
 	}
 	*/
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLayers(QPainter& painter) {
 	foreach ( Layer* layer, _layers ) {
 		if ( !layer->isVisible() ) continue;
@@ -901,7 +1155,12 @@ void Canvas::drawLayers(QPainter& painter) {
 		layer->draw(this, painter);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
 	for ( SymbolCollection::const_iterator it = symbolCollection()->begin(); it != symbolCollection()->end(); ++it ) {
 		Symbol* mapSymbol = *it;
@@ -916,8 +1175,12 @@ void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
 			mapSymbol->draw(this, painter);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawDrawables(QPainter& painter) {
 	painter.setPen(Qt::white);
 	painter.setBrush(Qt::NoBrush);
@@ -930,13 +1193,21 @@ void Canvas::drawDrawables(QPainter& painter) {
 	Symbol* tmp = symbolCollection()->top();
 	if ( tmp ) tmp->draw(this, painter);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawImage(const QRectF &geoReference, const QImage &image) {
 	_projection->drawImage(_buffer, geoReference, image, _filterMap && !_previewMode);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawImageLayer(QPainter &painter) {
 	static QMutex mapRenderMutex;
 
@@ -994,8 +1265,12 @@ void Canvas::drawImageLayer(QPainter &painter) {
 
 	painter.drawImage(0,0,_buffer);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawVectorLayer(QPainter &painter) {
 	if ( isDrawGridEnabled() || !_maptree ) {
 		_gridLayer.setAntiAliasingEnabled(_projection->wantsGridAntialiasing() &&
@@ -1018,8 +1293,12 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 
 	if ( _isDrawLegendsEnabled ) drawLegends(painter);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLegends(QPainter& painter) {
 	if ( _delegate ) {
 		delegate()->drawLegends(painter);
@@ -1135,8 +1414,12 @@ void Canvas::drawLegends(QPainter& painter) {
 
 	painter.setRenderHints(hints);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::draw(QPainter& painter) {
 	drawImageLayer(painter);
 	drawVectorLayer(painter);
@@ -1144,8 +1427,12 @@ void Canvas::draw(QPainter& painter) {
 	if ( !_maptree || !_maptree->hasPendingRequests() )
 		renderingCompleted();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateDrawablePositions() const {
 	if ( _buffer.width() <= 0 || _buffer.height() <= 0 ) return;
 
@@ -1158,15 +1445,23 @@ void Canvas::updateDrawablePositions() const {
 		(*it)->calculateMapPosition(this);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::centerMap(const QPoint& centerPnt) {
 	if ( !_projection->unproject(_center, centerPnt) ) return;
 	_projection->centerOn(_center);
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::translate(const QPoint &delta) {
 	if ( _center.y() > 90 || _center.y() < -90 )
 		_center.setX(_center.x() + delta.x() / _projection->pixelPerDegree());
@@ -1178,14 +1473,23 @@ void Canvas::translate(const QPoint &delta) {
 	_center = _projection->center();
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::translate(const QPointF &delta) {
 	_center += delta;
 	_projection->centerOn(_center);
 	updateBuffer();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::onObjectDestroyed(QObject *object) {
 	Legend *legend = static_cast<Legend*>(object);
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
@@ -1195,9 +1499,13 @@ void Canvas::onObjectDestroyed(QObject *object) {
 			it->remove(index);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-void Canvas::addLayer(Layer* layer) {
-	_layers.append(layer);
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::setupLayer(Layer *layer) {
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
@@ -1222,7 +1530,45 @@ void Canvas::addLayer(Layer* layer) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::prependLayer(Layer* layer) {
+	_layers.prepend(layer);
+	setupLayer(layer);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::addLayer(Layer* layer) {
+	_layers.append(layer);
+	setupLayer(layer);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::insertLayerBefore(const Layer *referenceLayer, Layer *layer) {
+	int index = _layers.indexOf(const_cast<Layer*>(referenceLayer));
+	if ( index >= 0 )
+		_layers.insert(index, layer);
+	else
+		_layers.append(layer);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::removeLayer(Layer* layer) {
 	_layers.removeAll(layer);
 	disconnect(layer, SIGNAL(updateRequested()));
@@ -1250,7 +1596,12 @@ void Canvas::removeLayer(Layer* layer) {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::raise(Layer* layer) {
 	int index = _layers.indexOf(layer);
 	if ( index == -1 ) return;
@@ -1260,7 +1611,12 @@ void Canvas::raise(Layer* layer) {
 
 	_layers.move(index, next);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::lower(Layer* layer) {
 	int index = _layers.indexOf(layer);
 	if ( index == -1 ) return;
@@ -1269,13 +1625,22 @@ void Canvas::lower(Layer* layer) {
 	if ( prev < 0 ) return;
 
 	_layers.move(index, prev);
-
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
 	if ( !_isDrawLegendsEnabled ) return false;
 
@@ -1286,7 +1651,12 @@ bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMousePressEvent(QMouseEvent* e) {
 	if ( !_isDrawLegendsEnabled ) return false;
 
@@ -1297,7 +1667,12 @@ bool Canvas::filterMousePressEvent(QMouseEvent* e) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 	foreach ( Layer* layer, _layers ) {
 		if ( layer->filterContextMenuEvent(e, parent) )
@@ -1306,7 +1681,12 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QMenu* Canvas::menu(QWidget* parent) const {
 	QMenu* menu = new QMenu("Layers", parent);
 	foreach ( Layer* layer, _layers ) {
@@ -1316,7 +1696,12 @@ QMenu* Canvas::menu(QWidget* parent) const {
 	}
 	return menu->isEmpty() ? NULL : menu;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateLayer(const Layer::UpdateHints& hints) {
 	if ( hints.testFlag(Layer::Position) ) {
 		Layer* layer = static_cast<Layer*>(sender());
@@ -1325,19 +1710,34 @@ void Canvas::updateLayer(const Layer::UpdateHints& hints) {
 
 	updateRequested();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updatedTiles() {
 	updateBuffer();
 	updateRequested();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::reload() {
 	if ( !_maptree ) return;
 	_maptree->refresh();
 	updateBuffer();
 	updateRequested();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
@@ -1353,7 +1753,12 @@ void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
 	it->lastIndex = it->currentIndex;
 	it->currentIndex = index;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
@@ -1377,21 +1782,41 @@ void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) 
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDelegate(CanvasDelegate *delegate) {
 	if ( _delegate ) delete _delegate;
 
 	_delegate = delegate;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateLayout() {
 	if ( _delegate ) _delegate->doLayout();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::renderingComplete() const {
 	return !_maptree || !_maptree->hasPendingRequests();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

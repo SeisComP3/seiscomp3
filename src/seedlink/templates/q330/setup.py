@@ -28,7 +28,8 @@ class SeedlinkPluginHandler:
     if seedlink._get('sources.q330.udpport').lower() == "auto":
       try: udpbase = int(seedlink._get('plugins.q330.udpbase', False))
       except: udpbase = 5500;
-      seedlink.setParam('sources.q330.udpport', udpbase + 2*seedlink.station_count)
+      source_count = len(seedlink.seedlink_source['q330'])+1
+      seedlink.setParam('sources.q330.udpport', udpbase + 2*source_count)
 
     # Key is per station and configuration settings
     key = ";".join([

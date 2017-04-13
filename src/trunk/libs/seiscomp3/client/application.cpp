@@ -2720,7 +2720,7 @@ bool Application::initDatabase() {
 				_db = dbType + "://" + dbParameters;
 
 				SEISCOMP_INFO("Received database service parameters");
-				SEISCOMP_INFO("Trying to connect to %s://%s", dbrmsg->service(), dbrmsg->parameters());
+				SEISCOMP_INFO("Trying to connect to %s database", dbrmsg->service());
 				IO::DatabaseInterfacePtr db = dbrmsg->database();
 				if (db) {
 					setDatabase(db.get());

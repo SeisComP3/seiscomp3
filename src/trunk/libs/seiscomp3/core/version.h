@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(9, 1, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(10, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x090100
+#define SC_API_VERSION 0x0A0000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,8 +38,20 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "10.0.0"   0x0A0000
+   - Added Seiscomp::IO::GFArchive::getTravelTime(...)
+   - Added Seiscomp::Math::WindowFunc and several implementations
+   - Changed Seiscomp::Util::Bindings::getKeys to const
+   - Added Seiscomp::Gui::Map:Canvas::prependLayer(...)
+   - Added Seiscomp::Gui::Map:Canvas::insertLayerBefore(...)
+   - Fixed bug in Seiscomp::Gui::Map::TextureCache that affected custom
+     Seiscomp::Gui::Map::TileStore implementations
+   - Added Seiscomp::Gui::RecordView::coveredTimeRange()
+
  "9.1.0"   0x090100
    - Added Seiscomp::Client::Application::Stage enum PLUGINS
+   - Added Seiscomp::Gui::TensorRenderer::renderNP
+   - Fixed parameter const'ness of Seiscomp::Math::Tensor2S
 
  "9.0.0"   0x090000
    - Added member creationInfo to class Seiscomp::DataModel::ConfigStation

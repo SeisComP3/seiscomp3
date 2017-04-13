@@ -89,6 +89,7 @@ int	E_attach_fd( int fd, int fd_type,
 		     void (* func)( int fd, int code, void *data), int code,
 		     void *data, int priority );
 int 	E_detach_fd( int fd, int fd_type );
+int 	E_detach_fd_priority( int fd, int fd_type, int priority );
 int 	E_set_active_threshold( int priority );
 int     E_activate_fd( int fd, int fd_type );
 int     E_deactivate_fd( int fd, int fd_type );
@@ -96,5 +97,6 @@ int	E_num_active( int priority );
 
 void 	E_handle_events(void);
 void 	E_exit_events(void);
+void    E_exit_events_async_safe(void);
 
 #endif	/* INC_SP_EVENTS */

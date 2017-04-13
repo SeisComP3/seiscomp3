@@ -227,7 +227,7 @@ bool Detector::handleGap(Filter *filter, const Core::TimeSpan& gapLength,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Detector::emitPick(const Record* rec, const Core::Time& t) {
+bool Detector::emitPick(const Record *rec, const Core::Time &t) {
 	// Is there a last pick and a last snr amplitude? Then defer the pick
 	// until the max amplitude has been calculated
 	if ( _lastAmplitude && (bool)_lastPick ) {

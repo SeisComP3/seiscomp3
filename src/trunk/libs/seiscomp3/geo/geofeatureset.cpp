@@ -277,11 +277,13 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 			v.lon = atof(tmpStr.c_str());
 			std::getline(infile, tmpStr);
 			v.lat = atof(tmpStr.c_str());
+
 			if ( v.lon < -180 || v.lon > 180 ) {
 				SEISCOMP_DEBUG("invalid longitude in file %s at line %i",
-						       filename.c_str(), lineNum);
+				               filename.c_str(), lineNum);
 				continue;
 			}
+
 			if ( v.lat < -90 || v.lat > 90 ) {
 				SEISCOMP_DEBUG("invalid latitude in file %s at line %i",
 				               filename.c_str(), lineNum);
@@ -304,6 +306,7 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 					continue;
 				}
 			}
+
 			feature->addVertex(v, startSubFeature);
 			startSubFeature = false;
 		}

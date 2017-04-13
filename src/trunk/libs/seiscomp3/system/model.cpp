@@ -186,6 +186,74 @@ struct ParameterCollector : public ModelVisitor {
 };
 
 
+struct ParameterNameValidator : public SchemaVisitor {
+	ParameterNameValidator(const std::string &n)
+	: name(n)
+	, currentToken(0)
+	, valid(false) {
+		Token t;
+		size_t cpos = 0;
+		while ( true ) {
+			t.first = cpos;
+			size_t p = name.find('.', cpos);
+			if ( p == string::npos ) {
+				t.second = name.size()-t.first;
+				tokens.push_back(t);
+				break;
+			}
+
+			t.second = p-t.first;
+			tokens.push_back(t);
+			cpos = p+1;
+		}
+	}
+
+	virtual bool visit(const SchemaModule *module) {
+		++currentToken;
+		return currentToken <= tokens.size();
+	}
+
+	virtual bool visit(const SchemaGroup *group) {
+		// Already validated?
+		if ( valid )
+			return false;
+
+		// Substring does not match?
+		if ( name.compare(tokens[currentToken-1].first, tokens[currentToken-1].second, group->name) )
+			return false;
+
+		++currentToken;
+		return currentToken <= tokens.size();
+	}
+
+	virtual bool visit(const SchemaStructure *structure) {
+		// Already validated?
+		if ( valid )
+			return false;
+
+		++currentToken;
+		return currentToken <= tokens.size();
+	}
+
+	virtual void visit(const SchemaParameter *param) {
+		if ( !name.compare(tokens[currentToken-1].first, tokens[currentToken-1].second, param->name) )
+			valid = true;
+	}
+
+	virtual void finished() {
+		if ( currentToken == 0 )
+			throw runtime_error("Unhandled schema traversal error");
+		--currentToken;
+	}
+
+	typedef std::pair<size_t, size_t> Token;
+	const std::string &name;
+	std::vector<Token> tokens;
+	size_t currentToken;
+	bool valid;
+};
+
+
 
 bool createPath(const std::string &pathname) {
 	if ( mkdir(pathname.c_str(), 0755) < 0 ) {
@@ -2350,11 +2418,15 @@ bool Model::writeConfig(Module *mod, const std::string &filename, int stage, Con
 
 	set<string> processedSymbols;
 
-	ParameterCollector pc;
-	mod->accept(&pc);
+	bool dump = false;
+	if ( dump )
+		cerr << mod->definition->name << endl;
 
 	Config::Config cfg;
 	cfg.readConfig(filename, stage);
+
+	ParameterCollector pc;
+	mod->accept(&pc);
 
 	ConfigDelegate::ChangeList changes;
 
@@ -2363,6 +2435,12 @@ bool Model::writeConfig(Module *mod, const std::string &filename, int stage, Con
 	for ( pit = pc.parameters.begin(); pit != pc.parameters.end(); ++pit ) {
 		Parameter *param = *pit;
 		Config::Symbol *sym = cfg.symbolTable()->get(param->variableName);
+
+		if ( dump ) {
+			cerr << " + " << param->variableName;
+			if ( sym ) cerr << " [cfg]";
+			cerr << endl;
+		}
 
 		processedSymbols.insert(param->variableName);
 
@@ -2404,6 +2482,20 @@ bool Model::writeConfig(Module *mod, const std::string &filename, int stage, Con
 	for ( cit = cfg.symbolTable()->begin(); cit != cfg.symbolTable()->end(); ++cit ) {
 		// Symbol not part of the already known parameters at load time?
 		if ( processedSymbols.find((*cit)->name) == processedSymbols.end() ) {
+			ParameterNameValidator validator((*cit)->name);
+			mod->definition->accept(&validator);
+			if ( validator.valid ) {
+				if ( dump )
+					cerr << " ! " << (*cit)->name << endl;
+				changes.push_back(ConfigDelegate::Change(ConfigDelegate::Removed,
+				                                         (*cit)->name, "",
+				                                         (*cit)->content));
+				continue;
+			}
+
+			if ( dump )
+				cerr << " U " << (*cit)->name << endl;
+
 			// Need to append this to the unknowns
 			ParameterPtr newParam = new Parameter(NULL, (*cit)->name);
 			newParam->symbols[stage] = new SymbolMapItem(**cit);

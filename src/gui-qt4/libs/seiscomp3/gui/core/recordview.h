@@ -238,6 +238,12 @@ class SC_GUI_API RecordView : public QWidget {
 		QWidget* infoWidget() const;
 		TimeScale* timeWidget() const;
 
+		/**
+		 * @brief Returns the time window covered by all available data
+		 * @return The data time window
+		 */
+		Core::TimeWindow coveredTimeRange() const;
+
 
 	public slots:
 		void setRecordUpdateInterval(int ms);

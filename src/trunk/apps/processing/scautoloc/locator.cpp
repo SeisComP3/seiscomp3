@@ -37,6 +37,7 @@ Locator::Locator()
 	_count = 0;
 	_usingFixedDepth = false;
 	_minDepth = 5;
+	setFixedDepth(_minDepth, _usingFixedDepth);
 }
 
 Locator::~Locator()
@@ -114,7 +115,6 @@ Origin *Locator::relocate(const Origin *origin)
 	// if the origin to relocate has a fixed depth, keep it fixed!
 	if (fixedDepth(origin)) {
 		setFixedDepth(origin->dep);
-		useFixedDepth(true);
 	}
 // ^^^^^^^^^^^^^^^^
 /*

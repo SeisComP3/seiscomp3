@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -105,6 +106,10 @@ static  int     MaxSessionMessages = DEFAULT_MAX_SESSION_MESSAGES;
 
 static  int     Window = DEFAULT_WINDOW;
 static  int     PersonalWindow = DEFAULT_PERSONAL_WINDOW;
+
+static  bool    AcceleratedRingFlag = FALSE;
+static  bool    AcceleratedRing     = FALSE;
+static  int     AcceleratedWindow   = DEFAULT_ACCELERATED_WINDOW;
 
 enum 
 {
@@ -353,7 +358,7 @@ static  int    conf_convert_version_to_string(char *segstr, int strsize)
     strncat( segstr, "\n", strsize - curlen);
     curlen += 1;
 
-    if (curlen > strsize) {
+    if ((int) curlen > strsize) {
         /* ran out of space in string -- should never happen. */
         Alarmp( SPLOG_ERROR, CONF_SYS, "The conf hash string is too long! %d characters attemped is more then %d characters allowed", curlen, strsize);
         Alarmp( SPLOG_ERROR, CONF_SYS, "The error occured when adding the version number. Successful string was: %s\n", segstr);
@@ -432,6 +437,14 @@ void	Conf_load_conf_file( char *file_name, char *my_name )
             Alarmp( SPLOG_FATAL, CONF_SYS, "Failed to update string with version number!\n");
         ConfStringLen += added_len;
 
+	/* append whether we are running with accelerated token or not */
+
+	if (ConfStringLen >= MAX_CONF_STRING) {
+	  Alarmp( SPLOG_FATAL, CONF_SYS, "Failed to update string with accelerated ring type!\n");
+	}
+
+	ConfStringRep[ConfStringLen++] = '0' + AcceleratedRing;
+	
         /* calculate hash value of configuration. 
          * This daemon will only work with other daemons who have an identical hash value.
          */
@@ -486,7 +499,16 @@ void	Conf_load_conf_file( char *file_name, char *my_name )
 	}
 
 	Conf_id_to_str( My.id, ip );
-	Alarm( CONF_SYS, "Conf_load_conf_file: My name: %s, id: %s, port: %hd\n",
+
+	if (PersonalWindow > Window) {
+	  Alarmp(SPLOG_FATAL, CONF_SYS, "Conf_load_conf_file: PersonalWindow (%d) > Window (%d)!\n", PersonalWindow, Window);
+	}
+
+	if (AcceleratedRing && AcceleratedWindow > PersonalWindow) {
+	  Alarmp(SPLOG_FATAL, CONF_SYS, "Conf_load_conf_file: AcceleratedWindow (%d) > PersonalWindow (%d)!\n", AcceleratedWindow, PersonalWindow);
+	}
+
+	Alarm( CONF_SYS, "Conf_load_conf_file: My name: %s, id: %s, port: %hu\n",
 		My.name, ip, My.port );
 
 	return;
@@ -684,7 +706,8 @@ int32u	Conf_leader( configuration *config )
                 if( config->segments[i].num_procs > 0 )
                         return( config->segments[i].procs[0]->id );
         }
-        Alarm( EXIT, "Conf_leader: Empty configuration %c",Conf_print(config));
+	Conf_print( config );
+        Alarm( EXIT, "Conf_leader: Empty configuration\n" );
 	return( -1 );
 }
 
@@ -700,8 +723,48 @@ int32u	Conf_last( configuration *config )
                         return( config->segments[i].procs[j]->id );
 		}
         }
-        Alarm( EXIT, "Conf_last: Empty configuration %c",Conf_print(config));
+	Conf_print( config );
+        Alarm( EXIT, "Conf_last: Empty configuration\n" );
 	return( -1 );
+}
+
+int32u Conf_previous( configuration *config )
+{
+        segment *seg_ptr;
+        int index_in_seg;
+        int i;
+
+        seg_ptr      = &config->segments[My.seg_index];
+        index_in_seg = Conf_id_in_seg( seg_ptr, My.id );
+
+        if( index_in_seg > 0 )
+        {
+                /* I am not first in my segment; previous is previous proc in segment */
+                return seg_ptr->procs[index_in_seg - 1]->id;
+        }
+
+        for( i = My.seg_index - 1; i >= 0; --i )
+        {
+                if( config->segments[i].num_procs > 0 )
+                {
+                        /* There is a segment before mine; previous is last in that segment */
+                        seg_ptr = &config->segments[i];
+                        return seg_ptr->procs[seg_ptr->num_procs - 1]->id;
+                }
+        }
+
+        /* I am first in first non-empty segment; previous is last in last segment */
+
+        for( i = config->num_segments - 1; i >= My.seg_index; --i )
+        {
+                if( config->segments[i].num_procs > 0 )
+                {
+                        seg_ptr = &(config->segments[i]);
+                        return seg_ptr->procs[seg_ptr->num_procs - 1]->id;
+                }
+        }
+        Alarm( EXIT, "Conf_previous: No process found\n" );
+        return( -1 );
 }
 
 int32u	Conf_seg_leader( configuration *config, int16 seg_index )
@@ -710,8 +773,8 @@ int32u	Conf_seg_leader( configuration *config, int16 seg_index )
 	{
 		return( config->segments[seg_index].procs[0]->id );
 	}
-        Alarm( EXIT, "Conf_seg_leader: Empty segment %d in Conf %c",
-		seg_index, Conf_print(config));
+	Conf_print( config );
+        Alarm( EXIT, "Conf_seg_leader: Empty segment %d in Conf\n", seg_index );
 	return( -1 );
 }
 
@@ -724,8 +787,8 @@ int32u	Conf_seg_last( configuration *config, int16 seg_index )
 		j = config->segments[seg_index].num_procs-1;
 		return( config->segments[seg_index].procs[j]->id );
 	}
-        Alarm( EXIT, "Conf_seg_leader: Empty segment %d in Conf %c",
-		seg_index, Conf_print(config));
+	Conf_print( config );
+        Alarm( EXIT, "Conf_seg_leader: Empty segment %d in Conf\n", seg_index );
         return(-1);
 }
 
@@ -745,7 +808,7 @@ void	Conf_id_to_str( int32u id, char *str )
 	sprintf( str, "%u.%u.%u.%u", i1, i2, i3, i4 );
 }
 
-char	Conf_print(configuration *config)
+int	Conf_print(configuration *config)
 {
 	int 	s,p,ret;
 	char	ip[16];
@@ -757,7 +820,7 @@ char	Conf_print(configuration *config)
 	for ( s=0; s < config->num_segments; s++ )
 	{
 		Conf_id_to_str( config->segments[s].bcast_address, ip );
-		Alarm( PRINT, "\t%d\t%-16s  %hd\n",
+		Alarm( PRINT, "\t%d\t%-16s  %hu\n",
 			config->segments[s].num_procs, ip,
 			config->segments[s].port );
 		for( p=0; p < config->segments[s].num_procs; p++)
@@ -769,11 +832,11 @@ char	Conf_print(configuration *config)
 		}
 	}
 	Alarm( PRINT, "====================\n" );
-	return( '\n' );
+	return( 0 );
 }
 
 
-char	Conf_print_procs(configuration *config)
+int	Conf_print_procs(configuration *config)
 {
 	int 	i;
 	char	ip[16];
@@ -789,7 +852,7 @@ char	Conf_print_procs(configuration *config)
                        ip, config->allprocs[i].num_if);
         }
 	Alarm( PRINT, "====================\n" );
-	return( '\n' );
+	return( 0 );
 }
 
 bool    Conf_get_dangerous_monitor_state(void)
@@ -937,6 +1000,40 @@ void    Conf_set_personal_window(int pwindow)
 int     Conf_get_personal_window(void)
 {
 	return PersonalWindow;
+}
+
+void Conf_set_accelerated_ring_flag(bool new_state)
+{
+  AcceleratedRingFlag = new_state;
+}
+
+bool Conf_get_accelerated_ring_flag(void)
+{
+  return AcceleratedRingFlag;
+}
+
+void Conf_set_accelerated_ring(bool new_state)
+{
+  AcceleratedRing = new_state;
+}
+
+bool Conf_get_accelerated_ring(void)
+{
+  return AcceleratedRing;
+}
+
+void Conf_set_accelerated_window(int pwindow)
+{
+        if (pwindow < 0) {
+	    Alarmp(SPLOG_FATAL, CONF_SYS, "Conf_set_accelerated_window: Attempt to set window to non-positive (%d)!\n", pwindow);
+        }
+        Alarmp(SPLOG_DEBUG, CONF_SYS, "Conf_set_accelerated_window: Set Window to %d\n", pwindow);
+	AcceleratedWindow = pwindow;
+}
+
+int Conf_get_accelerated_window(void)
+{
+  return AcceleratedWindow;
 }
 
 int Conf_memb_timeouts_set(void)

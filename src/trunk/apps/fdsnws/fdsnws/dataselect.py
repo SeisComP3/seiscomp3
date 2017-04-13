@@ -102,10 +102,11 @@ class _DataSelectRequestOptions(RequestOptions):
 
 ################################################################################
 class _WaveformProducer:
-	def __init__(self, req, ro, rs, fileName, tracker):
+	def __init__(self, req, ro, rs, fileName, tracker, bufSize = 1):
 		self.req = req
 		self.ro = ro
 		self.rs = rs # keep a reference to avoid crash
+		self.bufSize = bufSize
 		self.rsInput = RecordInput(rs, Array.INT, Record.SAVE_RAW)
 
 		self.fileName = fileName
@@ -116,13 +117,19 @@ class _WaveformProducer:
 
 	def resumeProducing(self):
 		rec = None
-
-		try: rec = self.rsInput.next()
-		except Exception, e: Logging.warning("%s" % str(e))
+		data = ""
+		while len(data) < self.bufSize:
+			try:
+				rec = self.rsInput.next()
+				if rec: data += rec.raw().str()
+				else: break
+			except Exception, e:
+				Logging.warning("%s" % str(e))
+				break
 
 		if self.written == 0:
 			# read first record to test if any data exists at all
-			if not rec:
+			if not data:
 				msg = "no waveform data found"
 				data = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
 				if data:
@@ -140,7 +147,7 @@ class _WaveformProducer:
 			self.req.setHeader('Content-Disposition', "attachment; " \
 			                   "filename=%s" % self.fileName)
 
-		if not rec:
+		if not data:
 			self.req.unregisterProducer()
 			Logging.debug("%s: returned %i bytes of mseed data" % (
 			               self.ro.service, self.written))
@@ -153,7 +160,6 @@ class _WaveformProducer:
 
 			return
 
-		data = rec.raw().str()
 		self.req.write(data)
 		self.written += len(data)
 
@@ -166,15 +172,16 @@ class FDSNDataSelectRealm(object):
 	implements(portal.IRealm)
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, access):
+	def __init__(self, inv, bufferSize, access):
 		self.__inv = inv
+		self.__bufferSize = bufferSize
 		self.__access = access
 
 	#---------------------------------------------------------------------------
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
 			return (resource.IResource,
-				FDSNDataSelect(self.__inv, self.__access,
+				FDSNDataSelect(self.__inv, self.__bufferSize, self.__access,
 					{"mail": avatarId}),
 				lambda: None)
 
@@ -187,8 +194,9 @@ class FDSNDataSelectAuthRealm(object):
 	implements(portal.IRealm)
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, access, userdb):
+	def __init__(self, inv, bufferSize, access, userdb):
 		self.__inv = inv
+		self.__bufferSize = bufferSize
 		self.__access = access
 		self.__userdb = userdb
 
@@ -196,8 +204,8 @@ class FDSNDataSelectAuthRealm(object):
 	def requestAvatar(self, avatarId, mind, *interfaces):
 		if resource.IResource in interfaces:
 			return (resource.IResource,
-				FDSNDataSelect(self.__inv, self.__access,
-					self.__userdb.getAttributes(avatarId)),
+				FDSNDataSelect(self.__inv, self.__bufferSize,
+					self.__access, self.__userdb.getAttributes(avatarId)),
 				lambda: None)
 
 		raise NotImplementedError()
@@ -210,12 +218,13 @@ class FDSNDataSelect(resource.Resource):
 	isLeaf = True
 
 	#---------------------------------------------------------------------------
-	def __init__(self, inv, access, user=None):
+	def __init__(self, inv, bufferSize, access=None, user=None):
 		resource.Resource.__init__(self)
 		self._rsURL = Application.Instance().recordStreamURL()
 		self.__inv = inv
 		self.__access = access
 		self.__user = user
+		self.__bufferSize = bufferSize
 
 
 	#---------------------------------------------------------------------------
@@ -370,14 +379,15 @@ class FDSNDataSelect(resource.Resource):
 				for sta in self._stationIter(net, s):
 					for loc in self._locationIter(sta, s):
 						for cha in self._streamIter(loc, s):
-							if utils.isRestricted(cha) and (self.__user is None or \
+							if utils.isRestricted(cha) and \
+							    (not self.__user or (self.__access and
 								not self.__access.authorize(self.__user,
 											    net.code(),
 											    sta.code(),
 											    loc.code(),
 											    cha.code(),
 											    s.time.start,
-											    s.time.end)):
+											    s.time.end))):
 								continue
 
 							# enforce maximum sample per request restriction
@@ -420,7 +430,7 @@ class FDSNDataSelect(resource.Resource):
 		fileName = Application.Instance()._fileNamePrefix.replace("%time", time.strftime('%Y-%m-%dT%H:%M:%S'))+'.mseed'
 
 		# Create producer for async IO
-		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker), False)
+		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker, self.__bufferSize), False)
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET

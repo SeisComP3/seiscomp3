@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -138,6 +139,8 @@
 #define         MAXPATHLEN      _MAX_PATH
 #define         snprintf        _snprintf
 #define         alloca          _alloca
+#define         strdup          _strdup
+#define         fileno          _fileno
 /* Sockets are not file descriptors on windows so they need a special close function. */
 #define         close           closesocket
 /* Windows defines a default size of 64. However, the size of fd_set array for select
@@ -177,28 +180,27 @@ typedef         int             sockopt_len_t;
  */
 
 #ifndef int16
-#define int16 short
-char *soch_strerror(int err);  /* forward declare this func from the arch.c file (win32 only) */
-
+#  define int16 short
 #endif
 
 #ifndef int16u
-#define int16u unsigned short
+#  define int16u unsigned short
 #endif
 
 #ifndef int32
-#define int32 int
+#  define int32 int
 #endif
 
 #ifndef int32u
-#define int32u unsigned int
+#  define int32u unsigned int
 #endif
 
 #ifndef UINT32_MAX
-#define         UINT32_MAX      UINT_MAX
+#  define         UINT32_MAX      UINT_MAX
 #endif
+
 #ifndef INT32_MAX
-#define         INT32_MAX       INT_MAX
+#  define         INT32_MAX       INT_MAX
 #endif
 
 /* Declare functions from arch.c */
@@ -208,9 +210,11 @@ char    *sock_strerror(int err);
 
 /* Pick which rand version to use */
 #ifdef HAVE_LRAND48
-#define get_rand lrand48
+#  define get_rand lrand48
+#  define set_rand srand48
 #else
-#define get_rand rand
+#  define get_rand rand
+#  define set_rand srand
 #endif
 
 /* Useful CPP macros to make strings from #defines */  

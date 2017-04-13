@@ -48,6 +48,8 @@ namespace  sc = Seiscomp::Core;
 		}                                      \
 	}                                          \
 
+#define RENDER_VISIBLE
+
 namespace {
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -59,6 +61,7 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
             float &ofs, float &min, float &max, bool globalOffset = false,
             const Core::TimeWindow &ofsTw = Core::TimeWindow()) {
 	ofs = 0;
+	double tmpOfs = 0;
 	int sampleCount = 0;
 	int offsetSampleCount = 0;
 	bool isFirst = true;
@@ -75,7 +78,7 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 
 		if ( globalOffset ) {
 			for ( int i = 0; i < ns; ++i )
-				ofs += (*arr)[i];
+				tmpOfs += (*arr)[i];
 			offsetSampleCount += ns;
 		}
 
@@ -126,11 +129,11 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 
 						dt = rec->endTime() - ofsTw.endTime();
 						imax = ns;
-						if(dt>0)
+						if ( dt > 0 )
 							imax -= int(dt*fs);
 
 						for ( int i = imin; i < imax; ++i )
-							ofs += (*arr)[i];
+							tmpOfs += f[i];
 						offsetSampleCount = sampleCount;
 					}
 				}
@@ -139,12 +142,12 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 			}
 			else {
 				for ( int i = imin; i < imax; ++i )
-					ofs += (*arr)[i];
+					tmpOfs += f[i];
 				offsetSampleCount = sampleCount;
 			}
 		}
 
-		if( min==max && isFirst ) {
+		if( isFirst ) {
 			min = xmin;
 			max = xmax;
 			isFirst = false;
@@ -155,7 +158,9 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 		}
 	}
 
-	ofs /= (offsetSampleCount?offsetSampleCount:1);
+	tmpOfs /= (offsetSampleCount?offsetSampleCount:1);
+	ofs = tmpOfs;
+
 	return sampleCount > 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1612,6 +1617,9 @@ void RecordWidget::setTimeRange (double t1, double t2) {
 	if ( _autoMaxScale )
 		setNormalizationWindow(visibleTimeWindow());
 
+#ifdef RENDER_VISIBLE
+	setDirty();
+#endif
 	update();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1887,9 +1895,22 @@ void RecordWidget::createPolyline(int slot, RecordPolyline &polyline,
                                   float amplMin, float amplMax, float amplOffset,
                                   int height, bool optimization) {
 	if ( _streams[slot]->stepFunction )
+#ifdef RENDER_VISIBLE
+		polyline.createSteps(seq, leftTime(), rightTime(), pixelPerSecond,
+		                     amplMin, amplMax, amplOffset, height);
+#else
 		polyline.createSteps(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height);
+#endif
 	else
-		polyline.create(seq, pixelPerSecond, amplMin, amplMax, amplOffset, height, NULL, NULL, optimization);
+#ifdef RENDER_VISIBLE
+		polyline.create(seq, leftTime(), rightTime(), pixelPerSecond,
+		                amplMin, amplMax, amplOffset,
+		                height, NULL, NULL, optimization);
+#else
+		polyline.create(seq, pixelPerSecond,
+		                amplMin, amplMax, amplOffset,
+		                height, NULL, NULL, optimization);
+#endif
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2341,9 +2362,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					int x_tmin[2];
 
 					if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+						offset[0] = -_tmin;
+#else
 						offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 					if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+						offset[1] = -_tmin;
+#else
 						offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 					x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 					x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -2373,9 +2402,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					int x_tmin[2];
 
 					if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+						offset[0] = -_tmin;
+#else
 						offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 					if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+						offset[1] = -_tmin;
+#else
 						offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 					x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 					x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -2393,7 +2430,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QColor gridColor[2] = {QColor(192,192,255), QColor(224,225,255)};
 
-	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_tmin) ) {
+	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_pixelPerSecond) && !Math::isNaN(_tmin) ) {
 		double left = _tmin + _gridOffset;
 
 		//for ( int k = 1; k >= 0; --k ) {
@@ -2427,9 +2464,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				int x_tmin[2];
 
 				if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+					offset[0] = -_tmin;
+#else
 					offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 				if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+					offset[1] = -_tmin;
+#else
 					offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 				x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 				x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -2473,9 +2518,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				int x_tmin[2];
 
 				if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+					offset[0] = -_tmin;
+#else
 					offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 				if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+					offset[1] = -_tmin;
+#else
 					offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 				x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 				x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -2549,9 +2602,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 					int x_tmin[2];
 
 					if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+						offset[0] = -_tmin;
+#else
 						offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 					if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+						offset[1] = -_tmin;
+#else
 						offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 					x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 					x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -2575,9 +2636,17 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 				int x_tmin[2];
 
 				if ( stream->records[Stream::Raw] )
+#ifdef RENDER_VISIBLE
+					offset[0] = -_tmin;
+#else
 					offset[0] = _alignment - stream->records[Stream::Raw]->timeWindow().startTime();
+#endif
 				if ( stream->records[Stream::Filtered] )
+#ifdef RENDER_VISIBLE
+					offset[1] = -_tmin;
+#else
 					offset[1] = _alignment - stream->records[Stream::Filtered]->timeWindow().startTime();
+#endif
 
 				x_tmin[0] = int(-(offset[0] + _tmin)*_pixelPerSecond);
 				x_tmin[1] = int(-(offset[1] + _tmin)*_pixelPerSecond);
@@ -3162,7 +3231,9 @@ void RecordWidget::setAlignment(Core::Time t) {
 	if ( _alignment == t ) return;
 
 	_alignment = t;
-	//setDirty();
+#ifdef RENDER_VISIBLE
+	setDirty();
+#endif
 	update();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

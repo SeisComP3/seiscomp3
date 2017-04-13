@@ -206,8 +206,10 @@ class ios(ios_base):
 ios_swigregister = _IO.ios_swigregister
 ios_swigregister(ios)
 
+import Math
 import Core
 class DatabaseInterface(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::DatabaseInterface class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, DatabaseInterface, name, value)
@@ -216,79 +218,199 @@ class DatabaseInterface(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, DatabaseInterface, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.DatabaseInterface_ClassName
-    if _newclass:ClassName = staticmethod(_IO.DatabaseInterface_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.DatabaseInterface_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.DatabaseInterface_TypeInfo)
-    def className(self): return _IO.DatabaseInterface_className(self)
-    def typeInfo(self): return _IO.DatabaseInterface_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.DatabaseInterface_Cast
-    if _newclass:Cast = staticmethod(_IO.DatabaseInterface_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.DatabaseInterface_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.DatabaseInterface_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.DatabaseInterface_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.DatabaseInterface_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(DatabaseInterface self) -> char const *"""
+        return _IO.DatabaseInterface_className(self)
+
+    def typeInfo(self):
+        """typeInfo(DatabaseInterface self) -> RTTI"""
+        return _IO.DatabaseInterface_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> DatabaseInterface
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> DatabaseInterface
+        """
+        return _IO.DatabaseInterface_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> DatabaseInterface
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DatabaseInterface
+        """
+        return _IO.DatabaseInterface_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     __swig_destroy__ = _IO.delete_DatabaseInterface
     __del__ = lambda self : None;
-    __swig_getmethods__["Create"] = lambda x: _IO.DatabaseInterface_Create
-    if _newclass:Create = staticmethod(_IO.DatabaseInterface_Create)
-    __swig_getmethods__["Open"] = lambda x: _IO.DatabaseInterface_Open
-    if _newclass:Open = staticmethod(_IO.DatabaseInterface_Open)
-    def connect(self, *args): return _IO.DatabaseInterface_connect(self, *args)
-    def disconnect(self): return _IO.DatabaseInterface_disconnect(self)
-    def isConnected(self): return _IO.DatabaseInterface_isConnected(self)
-    def start(self): return _IO.DatabaseInterface_start(self)
-    def commit(self): return _IO.DatabaseInterface_commit(self)
-    def rollback(self): return _IO.DatabaseInterface_rollback(self)
-    def execute(self, *args): return _IO.DatabaseInterface_execute(self, *args)
-    def beginQuery(self, *args): return _IO.DatabaseInterface_beginQuery(self, *args)
-    def endQuery(self): return _IO.DatabaseInterface_endQuery(self)
-    def defaultValue(self): return _IO.DatabaseInterface_defaultValue(self)
-    def lastInsertId(self, *args): return _IO.DatabaseInterface_lastInsertId(self, *args)
-    def numberOfAffectedRows(self): return _IO.DatabaseInterface_numberOfAffectedRows(self)
-    def fetchRow(self): return _IO.DatabaseInterface_fetchRow(self)
-    def findColumn(self, *args): return _IO.DatabaseInterface_findColumn(self, *args)
-    def getRowFieldCount(self): return _IO.DatabaseInterface_getRowFieldCount(self)
-    def getRowFieldName(self, *args): return _IO.DatabaseInterface_getRowFieldName(self, *args)
-    def getRowField(self, *args): return _IO.DatabaseInterface_getRowField(self, *args)
-    def getRowFieldString(self, *args): return _IO.DatabaseInterface_getRowFieldString(self, *args)
-    def getRowFieldSize(self, *args): return _IO.DatabaseInterface_getRowFieldSize(self, *args)
-    def timeToString(self, *args): return _IO.DatabaseInterface_timeToString(self, *args)
-    def stringToTime(self, *args): return _IO.DatabaseInterface_stringToTime(self, *args)
-    def columnPrefix(self): return _IO.DatabaseInterface_columnPrefix(self)
-    def convertColumnName(self, *args): return _IO.DatabaseInterface_convertColumnName(self, *args)
+    def Create(*args):
+        """Create(char const * service) -> DatabaseInterface"""
+        return _IO.DatabaseInterface_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def Open(*args):
+        """Open(char const * uri) -> DatabaseInterface"""
+        return _IO.DatabaseInterface_Open(*args)
+
+    if _newclass:Open = staticmethod(Open)
+    __swig_getmethods__["Open"] = lambda x: Open
+    def connect(self, *args):
+        """connect(DatabaseInterface self, char const * connection) -> bool"""
+        return _IO.DatabaseInterface_connect(self, *args)
+
+    def disconnect(self):
+        """disconnect(DatabaseInterface self)"""
+        return _IO.DatabaseInterface_disconnect(self)
+
+    def isConnected(self):
+        """isConnected(DatabaseInterface self) -> bool"""
+        return _IO.DatabaseInterface_isConnected(self)
+
+    def start(self):
+        """start(DatabaseInterface self)"""
+        return _IO.DatabaseInterface_start(self)
+
+    def commit(self):
+        """commit(DatabaseInterface self)"""
+        return _IO.DatabaseInterface_commit(self)
+
+    def rollback(self):
+        """rollback(DatabaseInterface self)"""
+        return _IO.DatabaseInterface_rollback(self)
+
+    def execute(self, *args):
+        """execute(DatabaseInterface self, char const * command) -> bool"""
+        return _IO.DatabaseInterface_execute(self, *args)
+
+    def beginQuery(self, *args):
+        """beginQuery(DatabaseInterface self, char const * query) -> bool"""
+        return _IO.DatabaseInterface_beginQuery(self, *args)
+
+    def endQuery(self):
+        """endQuery(DatabaseInterface self)"""
+        return _IO.DatabaseInterface_endQuery(self)
+
+    def defaultValue(self):
+        """defaultValue(DatabaseInterface self) -> char const *"""
+        return _IO.DatabaseInterface_defaultValue(self)
+
+    def lastInsertId(self, *args):
+        """lastInsertId(DatabaseInterface self, char const * table) -> unsigned long"""
+        return _IO.DatabaseInterface_lastInsertId(self, *args)
+
+    def numberOfAffectedRows(self):
+        """numberOfAffectedRows(DatabaseInterface self) -> uint64_t"""
+        return _IO.DatabaseInterface_numberOfAffectedRows(self)
+
+    def fetchRow(self):
+        """fetchRow(DatabaseInterface self) -> bool"""
+        return _IO.DatabaseInterface_fetchRow(self)
+
+    def findColumn(self, *args):
+        """findColumn(DatabaseInterface self, char const * name) -> int"""
+        return _IO.DatabaseInterface_findColumn(self, *args)
+
+    def getRowFieldCount(self):
+        """getRowFieldCount(DatabaseInterface self) -> int"""
+        return _IO.DatabaseInterface_getRowFieldCount(self)
+
+    def getRowFieldName(self, *args):
+        """getRowFieldName(DatabaseInterface self, int index) -> char const *"""
+        return _IO.DatabaseInterface_getRowFieldName(self, *args)
+
+    def getRowField(self, *args):
+        """getRowField(DatabaseInterface self, int index) -> void const *"""
+        return _IO.DatabaseInterface_getRowField(self, *args)
+
+    def getRowFieldString(self, *args):
+        """getRowFieldString(DatabaseInterface self, int index) -> string"""
+        return _IO.DatabaseInterface_getRowFieldString(self, *args)
+
+    def getRowFieldSize(self, *args):
+        """getRowFieldSize(DatabaseInterface self, int index) -> size_t"""
+        return _IO.DatabaseInterface_getRowFieldSize(self, *args)
+
+    def timeToString(self, *args):
+        """timeToString(DatabaseInterface self, Time arg2) -> string"""
+        return _IO.DatabaseInterface_timeToString(self, *args)
+
+    def stringToTime(self, *args):
+        """stringToTime(DatabaseInterface self, char const * arg2) -> Time"""
+        return _IO.DatabaseInterface_stringToTime(self, *args)
+
+    def columnPrefix(self):
+        """columnPrefix(DatabaseInterface self) -> string"""
+        return _IO.DatabaseInterface_columnPrefix(self)
+
+    def convertColumnName(self, *args):
+        """convertColumnName(DatabaseInterface self, string name) -> string"""
+        return _IO.DatabaseInterface_convertColumnName(self, *args)
+
 DatabaseInterface_swigregister = _IO.DatabaseInterface_swigregister
 DatabaseInterface_swigregister(DatabaseInterface)
 
 def DatabaseInterface_ClassName():
+  """DatabaseInterface_ClassName() -> char const *"""
   return _IO.DatabaseInterface_ClassName()
-DatabaseInterface_ClassName = _IO.DatabaseInterface_ClassName
 
 def DatabaseInterface_TypeInfo():
+  """DatabaseInterface_TypeInfo() -> RTTI"""
   return _IO.DatabaseInterface_TypeInfo()
-DatabaseInterface_TypeInfo = _IO.DatabaseInterface_TypeInfo
 
 def DatabaseInterface_Cast(*args):
+  """
+    Cast(BaseObject o) -> DatabaseInterface
+    DatabaseInterface_Cast(Seiscomp::Core::BaseObjectPtr o) -> DatabaseInterface
+    """
   return _IO.DatabaseInterface_Cast(*args)
-DatabaseInterface_Cast = _IO.DatabaseInterface_Cast
 
 def DatabaseInterface_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> DatabaseInterface
+    DatabaseInterface_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DatabaseInterface
+    """
   return _IO.DatabaseInterface_ConstCast(*args)
-DatabaseInterface_ConstCast = _IO.DatabaseInterface_ConstCast
 
 def DatabaseInterface_Create(*args):
+  """DatabaseInterface_Create(char const * service) -> DatabaseInterface"""
   return _IO.DatabaseInterface_Create(*args)
-DatabaseInterface_Create = _IO.DatabaseInterface_Create
 
 def DatabaseInterface_Open(*args):
+  """DatabaseInterface_Open(char const * uri) -> DatabaseInterface"""
   return _IO.DatabaseInterface_Open(*args)
-DatabaseInterface_Open = _IO.DatabaseInterface_Open
 
-class GFSource(_object):
+class GFSource(Math.CoordD):
+    """Proxy of C++ Seiscomp::IO::GFSource class"""
     __swig_setmethods__ = {}
+    for _s in [Math.CoordD]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFSource, name, value)
     __swig_getmethods__ = {}
+    for _s in [Math.CoordD]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, GFSource, name)
     __repr__ = _swig_repr
     def __init__(self, lat=0.0, lon=0.0, d=0.0): 
+        """
+        __init__(Seiscomp::IO::GFSource self, double lat=0.0, double lon=0.0, double d=0.0) -> GFSource
+        __init__(Seiscomp::IO::GFSource self, double lat=0.0, double lon=0.0) -> GFSource
+        __init__(Seiscomp::IO::GFSource self, double lat=0.0) -> GFSource
+        __init__(Seiscomp::IO::GFSource self) -> GFSource
+        """
         this = _IO.new_GFSource(lat, lon, d)
         try: self.this.append(this)
         except: self.this = this
@@ -300,13 +422,22 @@ class GFSource(_object):
 GFSource_swigregister = _IO.GFSource_swigregister
 GFSource_swigregister(GFSource)
 
-class GFReceiver(_object):
+class GFReceiver(Math.CoordD):
+    """Proxy of C++ Seiscomp::IO::GFReceiver class"""
     __swig_setmethods__ = {}
+    for _s in [Math.CoordD]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFReceiver, name, value)
     __swig_getmethods__ = {}
+    for _s in [Math.CoordD]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, GFReceiver, name)
     __repr__ = _swig_repr
     def __init__(self, lat=0.0, lon=0.0, e=0.0): 
+        """
+        __init__(Seiscomp::IO::GFReceiver self, double lat=0.0, double lon=0.0, double e=0.0) -> GFReceiver
+        __init__(Seiscomp::IO::GFReceiver self, double lat=0.0, double lon=0.0) -> GFReceiver
+        __init__(Seiscomp::IO::GFReceiver self, double lat=0.0) -> GFReceiver
+        __init__(Seiscomp::IO::GFReceiver self) -> GFReceiver
+        """
         this = _IO.new_GFReceiver(lat, lon, e)
         try: self.this.append(this)
         except: self.this = this
@@ -319,6 +450,7 @@ GFReceiver_swigregister = _IO.GFReceiver_swigregister
 GFReceiver_swigregister(GFReceiver)
 
 class GFArchive(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::GFArchive class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, GFArchive, name, value)
@@ -327,57 +459,128 @@ class GFArchive(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, GFArchive, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.GFArchive_ClassName
-    if _newclass:ClassName = staticmethod(_IO.GFArchive_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.GFArchive_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.GFArchive_TypeInfo)
-    def className(self): return _IO.GFArchive_className(self)
-    def typeInfo(self): return _IO.GFArchive_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.GFArchive_Cast
-    if _newclass:Cast = staticmethod(_IO.GFArchive_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.GFArchive_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.GFArchive_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.GFArchive_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.GFArchive_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(GFArchive self) -> char const *"""
+        return _IO.GFArchive_className(self)
+
+    def typeInfo(self):
+        """typeInfo(GFArchive self) -> RTTI"""
+        return _IO.GFArchive_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> GFArchive
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> GFArchive
+        """
+        return _IO.GFArchive_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> GFArchive
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> GFArchive
+        """
+        return _IO.GFArchive_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     __swig_destroy__ = _IO.delete_GFArchive
     __del__ = lambda self : None;
-    def setSource(self, *args): return _IO.GFArchive_setSource(self, *args)
-    def close(self): return _IO.GFArchive_close(self)
-    def availableModels(self): return _IO.GFArchive_availableModels(self)
-    def availableDepths(self, *args): return _IO.GFArchive_availableDepths(self, *args)
-    def setTimeSpan(self, *args): return _IO.GFArchive_setTimeSpan(self, *args)
-    def addRequest(self, *args): return _IO.GFArchive_addRequest(self, *args)
-    def get(self): return _IO.GFArchive_get(self)
-    __swig_getmethods__["Create"] = lambda x: _IO.GFArchive_Create
-    if _newclass:Create = staticmethod(_IO.GFArchive_Create)
-    __swig_getmethods__["Open"] = lambda x: _IO.GFArchive_Open
-    if _newclass:Open = staticmethod(_IO.GFArchive_Open)
+    def setSource(self, *args):
+        """setSource(GFArchive self, string arg2) -> bool"""
+        return _IO.GFArchive_setSource(self, *args)
+
+    def close(self):
+        """close(GFArchive self)"""
+        return _IO.GFArchive_close(self)
+
+    def availableModels(self):
+        """availableModels(GFArchive self) -> std::list< std::string >"""
+        return _IO.GFArchive_availableModels(self)
+
+    def availableDepths(self, *args):
+        """availableDepths(GFArchive self, string model) -> std::list< double >"""
+        return _IO.GFArchive_availableDepths(self, *args)
+
+    def setTimeSpan(self, *args):
+        """setTimeSpan(GFArchive self, TimeSpan span) -> bool"""
+        return _IO.GFArchive_setTimeSpan(self, *args)
+
+    def addRequest(self, *args):
+        """
+        addRequest(GFArchive self, string id, string model, GFSource source, GFReceiver receiver) -> bool
+        addRequest(GFArchive self, string id, string model, GFSource source, GFReceiver receiver, TimeSpan span) -> bool
+        """
+        return _IO.GFArchive_addRequest(self, *args)
+
+    def get(self):
+        """get(GFArchive self) -> GreensFunction"""
+        return _IO.GFArchive_get(self)
+
+    def getTravelTime(self, *args):
+        """getTravelTime(GFArchive self, string phase, string model, GFSource source, GFReceiver receiver) -> Seiscomp::Core::Optional< double >::Impl"""
+        return _IO.GFArchive_getTravelTime(self, *args)
+
+    def Create(*args):
+        """Create(char const * service) -> GFArchive"""
+        return _IO.GFArchive_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def Open(*args):
+        """Open(char const * url) -> GFArchive"""
+        return _IO.GFArchive_Open(*args)
+
+    if _newclass:Open = staticmethod(Open)
+    __swig_getmethods__["Open"] = lambda x: Open
 GFArchive_swigregister = _IO.GFArchive_swigregister
 GFArchive_swigregister(GFArchive)
 
 def GFArchive_ClassName():
+  """GFArchive_ClassName() -> char const *"""
   return _IO.GFArchive_ClassName()
-GFArchive_ClassName = _IO.GFArchive_ClassName
 
 def GFArchive_TypeInfo():
+  """GFArchive_TypeInfo() -> RTTI"""
   return _IO.GFArchive_TypeInfo()
-GFArchive_TypeInfo = _IO.GFArchive_TypeInfo
 
 def GFArchive_Cast(*args):
+  """
+    Cast(BaseObject o) -> GFArchive
+    GFArchive_Cast(Seiscomp::Core::BaseObjectPtr o) -> GFArchive
+    """
   return _IO.GFArchive_Cast(*args)
-GFArchive_Cast = _IO.GFArchive_Cast
 
 def GFArchive_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> GFArchive
+    GFArchive_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> GFArchive
+    """
   return _IO.GFArchive_ConstCast(*args)
-GFArchive_ConstCast = _IO.GFArchive_ConstCast
 
 def GFArchive_Create(*args):
+  """GFArchive_Create(char const * service) -> GFArchive"""
   return _IO.GFArchive_Create(*args)
-GFArchive_Create = _IO.GFArchive_Create
 
 def GFArchive_Open(*args):
+  """GFArchive_Open(char const * url) -> GFArchive"""
   return _IO.GFArchive_Open(*args)
-GFArchive_Open = _IO.GFArchive_Open
 
 class RecordStream(Core.InterruptibleObject):
+    """Proxy of C++ Seiscomp::IO::RecordStream class"""
     __swig_setmethods__ = {}
     for _s in [Core.InterruptibleObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordStream, name, value)
@@ -386,82 +589,190 @@ class RecordStream(Core.InterruptibleObject):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordStream, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.RecordStream_ClassName
-    if _newclass:ClassName = staticmethod(_IO.RecordStream_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.RecordStream_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.RecordStream_TypeInfo)
-    def className(self): return _IO.RecordStream_className(self)
-    def typeInfo(self): return _IO.RecordStream_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.RecordStream_Cast
-    if _newclass:Cast = staticmethod(_IO.RecordStream_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.RecordStream_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.RecordStream_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.RecordStream_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.RecordStream_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(RecordStream self) -> char const *"""
+        return _IO.RecordStream_className(self)
+
+    def typeInfo(self):
+        """typeInfo(RecordStream self) -> RTTI"""
+        return _IO.RecordStream_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> RecordStream
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> RecordStream
+        """
+        return _IO.RecordStream_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> RecordStream
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> RecordStream
+        """
+        return _IO.RecordStream_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     __swig_destroy__ = _IO.delete_RecordStream
     __del__ = lambda self : None;
-    def setRecordType(self, *args): return _IO.RecordStream_setRecordType(self, *args)
-    def setSource(self, *args): return _IO.RecordStream_setSource(self, *args)
-    def close(self): return _IO.RecordStream_close(self)
-    def addStream(self, *args): return _IO.RecordStream_addStream(self, *args)
-    def setStartTime(self, *args): return _IO.RecordStream_setStartTime(self, *args)
-    def setEndTime(self, *args): return _IO.RecordStream_setEndTime(self, *args)
-    def setTimeWindow(self, *args): return _IO.RecordStream_setTimeWindow(self, *args)
-    def setTimeout(self, *args): return _IO.RecordStream_setTimeout(self, *args)
-    def stream(self): return _IO.RecordStream_stream(self)
-    def createRecord(self, *args): return _IO.RecordStream_createRecord(self, *args)
-    def recordStored(self, *args): return _IO.RecordStream_recordStored(self, *args)
-    def filterRecord(self, *args): return _IO.RecordStream_filterRecord(self, *args)
-    __swig_getmethods__["Create"] = lambda x: _IO.RecordStream_Create
-    if _newclass:Create = staticmethod(_IO.RecordStream_Create)
-    __swig_getmethods__["Open"] = lambda x: _IO.RecordStream_Open
-    if _newclass:Open = staticmethod(_IO.RecordStream_Open)
+    def setRecordType(self, *args):
+        """setRecordType(RecordStream self, char const * arg2) -> bool"""
+        return _IO.RecordStream_setRecordType(self, *args)
+
+    def setSource(self, *args):
+        """setSource(RecordStream self, string arg2) -> bool"""
+        return _IO.RecordStream_setSource(self, *args)
+
+    def close(self):
+        """close(RecordStream self)"""
+        return _IO.RecordStream_close(self)
+
+    def addStream(self, *args):
+        """
+        addStream(RecordStream self, string net, string sta, string loc, string cha) -> bool
+        addStream(RecordStream self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        """
+        return _IO.RecordStream_addStream(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(RecordStream self, Time stime) -> bool"""
+        return _IO.RecordStream_setStartTime(self, *args)
+
+    def setEndTime(self, *args):
+        """setEndTime(RecordStream self, Time etime) -> bool"""
+        return _IO.RecordStream_setEndTime(self, *args)
+
+    def setTimeWindow(self, *args):
+        """setTimeWindow(RecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"""
+        return _IO.RecordStream_setTimeWindow(self, *args)
+
+    def setTimeout(self, *args):
+        """setTimeout(RecordStream self, int seconds) -> bool"""
+        return _IO.RecordStream_setTimeout(self, *args)
+
+    def stream(self):
+        """stream(RecordStream self) -> std::istream &"""
+        return _IO.RecordStream_stream(self)
+
+    def createRecord(self, *args):
+        """createRecord(RecordStream self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"""
+        return _IO.RecordStream_createRecord(self, *args)
+
+    def recordStored(self, *args):
+        """recordStored(RecordStream self, Record arg2)"""
+        return _IO.RecordStream_recordStored(self, *args)
+
+    def filterRecord(self, *args):
+        """filterRecord(RecordStream self, Record arg2) -> bool"""
+        return _IO.RecordStream_filterRecord(self, *args)
+
+    def Create(*args):
+        """
+        Create(char const * service) -> RecordStream
+        Create(char const * service, char const * recordType) -> RecordStream
+        """
+        return _IO.RecordStream_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def Open(*args):
+        """Open(char const * url) -> RecordStream"""
+        return _IO.RecordStream_Open(*args)
+
+    if _newclass:Open = staticmethod(Open)
+    __swig_getmethods__["Open"] = lambda x: Open
 RecordStream_swigregister = _IO.RecordStream_swigregister
 RecordStream_swigregister(RecordStream)
 
 def RecordStream_ClassName():
+  """RecordStream_ClassName() -> char const *"""
   return _IO.RecordStream_ClassName()
-RecordStream_ClassName = _IO.RecordStream_ClassName
 
 def RecordStream_TypeInfo():
+  """RecordStream_TypeInfo() -> RTTI"""
   return _IO.RecordStream_TypeInfo()
-RecordStream_TypeInfo = _IO.RecordStream_TypeInfo
 
 def RecordStream_Cast(*args):
+  """
+    Cast(BaseObject o) -> RecordStream
+    RecordStream_Cast(Seiscomp::Core::BaseObjectPtr o) -> RecordStream
+    """
   return _IO.RecordStream_Cast(*args)
-RecordStream_Cast = _IO.RecordStream_Cast
 
 def RecordStream_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> RecordStream
+    RecordStream_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> RecordStream
+    """
   return _IO.RecordStream_ConstCast(*args)
-RecordStream_ConstCast = _IO.RecordStream_ConstCast
 
 def RecordStream_Create(*args):
+  """
+    Create(char const * service) -> RecordStream
+    RecordStream_Create(char const * service, char const * recordType) -> RecordStream
+    """
   return _IO.RecordStream_Create(*args)
-RecordStream_Create = _IO.RecordStream_Create
 
 def RecordStream_Open(*args):
+  """RecordStream_Open(char const * url) -> RecordStream"""
   return _IO.RecordStream_Open(*args)
-RecordStream_Open = _IO.RecordStream_Open
 
 class RecordIterator(_object):
+    """Proxy of C++ Seiscomp::IO::RecordIterator class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordIterator, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, RecordIterator, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordIterator self) -> RecordIterator
+        __init__(Seiscomp::IO::RecordIterator self, RecordIterator iter) -> RecordIterator
+        """
         this = _IO.new_RecordIterator(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordIterator
     __del__ = lambda self : None;
-    def __ref__(self): return _IO.RecordIterator___ref__(self)
-    def __ne__(self, *args): return _IO.RecordIterator___ne__(self, *args)
-    def __eq__(self, *args): return _IO.RecordIterator___eq__(self, *args)
-    def source(self): return _IO.RecordIterator_source(self)
-    def current(self): return _IO.RecordIterator_current(self)
+    def __ref__(self):
+        """__ref__(RecordIterator self) -> Record"""
+        return _IO.RecordIterator___ref__(self)
+
+    def __ne__(self, *args):
+        """__ne__(RecordIterator self, RecordIterator iter) -> bool"""
+        return _IO.RecordIterator___ne__(self, *args)
+
+    def __eq__(self, *args):
+        """__eq__(RecordIterator self, RecordIterator iter) -> bool"""
+        return _IO.RecordIterator___eq__(self, *args)
+
+    def source(self):
+        """source(RecordIterator self) -> RecordInput"""
+        return _IO.RecordIterator_source(self)
+
+    def current(self):
+        """current(RecordIterator self) -> Record"""
+        return _IO.RecordIterator_current(self)
+
 RecordIterator_swigregister = _IO.RecordIterator_swigregister
 RecordIterator_swigregister(RecordIterator)
 
 class RecordInput(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::RecordInput class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordInput, name, value)
@@ -470,12 +781,26 @@ class RecordInput(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordInput, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordInput self, RecordStream _in, Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW) -> RecordInput
+        __init__(Seiscomp::IO::RecordInput self, RecordStream _in, Seiscomp::Array::DataType dt=DOUBLE) -> RecordInput
+        __init__(Seiscomp::IO::RecordInput self, RecordStream _in) -> RecordInput
+        """
         this = _IO.new_RecordInput(*args)
         try: self.this.append(this)
         except: self.this = this
-    def begin(self): return _IO.RecordInput_begin(self)
-    def end(self): return _IO.RecordInput_end(self)
-    def next(self): return _IO.RecordInput_next(self)
+    def begin(self):
+        """begin(RecordInput self) -> RecordIterator"""
+        return _IO.RecordInput_begin(self)
+
+    def end(self):
+        """end(RecordInput self) -> RecordIterator"""
+        return _IO.RecordInput_end(self)
+
+    def next(self):
+        """next(RecordInput self) -> Record"""
+        return _IO.RecordInput_next(self)
+
     def __iter__(self):
         while 1:
             rec = self.next()
@@ -490,6 +815,7 @@ RecordInput_swigregister = _IO.RecordInput_swigregister
 RecordInput_swigregister(RecordInput)
 
 class RecordFilterInterface(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::RecordFilterInterface class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordFilterInterface, name, value)
@@ -500,14 +826,27 @@ class RecordFilterInterface(Core.BaseObject):
     __repr__ = _swig_repr
     __swig_destroy__ = _IO.delete_RecordFilterInterface
     __del__ = lambda self : None;
-    def feed(self, *args): return _IO.RecordFilterInterface_feed(self, *args)
-    def flush(self): return _IO.RecordFilterInterface_flush(self)
-    def reset(self): return _IO.RecordFilterInterface_reset(self)
-    def clone(self): return _IO.RecordFilterInterface_clone(self)
+    def feed(self, *args):
+        """feed(RecordFilterInterface self, Record rec) -> Record"""
+        return _IO.RecordFilterInterface_feed(self, *args)
+
+    def flush(self):
+        """flush(RecordFilterInterface self) -> Record"""
+        return _IO.RecordFilterInterface_flush(self)
+
+    def reset(self):
+        """reset(RecordFilterInterface self)"""
+        return _IO.RecordFilterInterface_reset(self)
+
+    def clone(self):
+        """clone(RecordFilterInterface self) -> RecordFilterInterface"""
+        return _IO.RecordFilterInterface_clone(self)
+
 RecordFilterInterface_swigregister = _IO.RecordFilterInterface_swigregister
 RecordFilterInterface_swigregister(RecordFilterInterface)
 
 class RecordDemuxFilter(RecordFilterInterface):
+    """Proxy of C++ Seiscomp::IO::RecordDemuxFilter class"""
     __swig_setmethods__ = {}
     for _s in [RecordFilterInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordDemuxFilter, name, value)
@@ -516,20 +855,40 @@ class RecordDemuxFilter(RecordFilterInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordDemuxFilter, name)
     __repr__ = _swig_repr
     def __init__(self, recordFilter=None): 
+        """
+        __init__(Seiscomp::IO::RecordDemuxFilter self, RecordFilterInterface recordFilter=None) -> RecordDemuxFilter
+        __init__(Seiscomp::IO::RecordDemuxFilter self) -> RecordDemuxFilter
+        """
         this = _IO.new_RecordDemuxFilter(recordFilter)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordDemuxFilter
     __del__ = lambda self : None;
-    def setFilter(self, *args): return _IO.RecordDemuxFilter_setFilter(self, *args)
-    def feed(self, *args): return _IO.RecordDemuxFilter_feed(self, *args)
-    def flush(self): return _IO.RecordDemuxFilter_flush(self)
-    def reset(self): return _IO.RecordDemuxFilter_reset(self)
-    def clone(self): return _IO.RecordDemuxFilter_clone(self)
+    def setFilter(self, *args):
+        """setFilter(RecordDemuxFilter self, RecordFilterInterface recordFilter)"""
+        return _IO.RecordDemuxFilter_setFilter(self, *args)
+
+    def feed(self, *args):
+        """feed(RecordDemuxFilter self, Record rec) -> Record"""
+        return _IO.RecordDemuxFilter_feed(self, *args)
+
+    def flush(self):
+        """flush(RecordDemuxFilter self) -> Record"""
+        return _IO.RecordDemuxFilter_flush(self)
+
+    def reset(self):
+        """reset(RecordDemuxFilter self)"""
+        return _IO.RecordDemuxFilter_reset(self)
+
+    def clone(self):
+        """clone(RecordDemuxFilter self) -> RecordFilterInterface"""
+        return _IO.RecordDemuxFilter_clone(self)
+
 RecordDemuxFilter_swigregister = _IO.RecordDemuxFilter_swigregister
 RecordDemuxFilter_swigregister(RecordDemuxFilter)
 
 class RecordResamplerBase(RecordFilterInterface):
+    """Proxy of C++ Seiscomp::IO::RecordResamplerBase class"""
     __swig_setmethods__ = {}
     for _s in [RecordFilterInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordResamplerBase, name, value)
@@ -538,12 +897,19 @@ class RecordResamplerBase(RecordFilterInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordResamplerBase, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    def flush(self): return _IO.RecordResamplerBase_flush(self)
-    def reset(self): return _IO.RecordResamplerBase_reset(self)
+    def flush(self):
+        """flush(RecordResamplerBase self) -> Record"""
+        return _IO.RecordResamplerBase_flush(self)
+
+    def reset(self):
+        """reset(RecordResamplerBase self)"""
+        return _IO.RecordResamplerBase_reset(self)
+
 RecordResamplerBase_swigregister = _IO.RecordResamplerBase_swigregister
 RecordResamplerBase_swigregister(RecordResamplerBase)
 
 class RecordStreamException(Core.StreamException):
+    """Proxy of C++ Seiscomp::IO::RecordStreamException class"""
     __swig_setmethods__ = {}
     for _s in [Core.StreamException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordStreamException, name, value)
@@ -552,6 +918,10 @@ class RecordStreamException(Core.StreamException):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordStreamException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordStreamException self) -> RecordStreamException
+        __init__(Seiscomp::IO::RecordStreamException self, string what) -> RecordStreamException
+        """
         this = _IO.new_RecordStreamException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -561,6 +931,7 @@ RecordStreamException_swigregister = _IO.RecordStreamException_swigregister
 RecordStreamException_swigregister(RecordStreamException)
 
 class RecordStreamTimeout(RecordStreamException):
+    """Proxy of C++ Seiscomp::IO::RecordStreamTimeout class"""
     __swig_setmethods__ = {}
     for _s in [RecordStreamException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordStreamTimeout, name, value)
@@ -569,6 +940,10 @@ class RecordStreamTimeout(RecordStreamException):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordStreamTimeout, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordStreamTimeout self) -> RecordStreamTimeout
+        __init__(Seiscomp::IO::RecordStreamTimeout self, string what) -> RecordStreamTimeout
+        """
         this = _IO.new_RecordStreamTimeout(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -578,6 +953,7 @@ RecordStreamTimeout_swigregister = _IO.RecordStreamTimeout_swigregister
 RecordStreamTimeout_swigregister(RecordStreamTimeout)
 
 class Importer(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::Importer class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Importer, name, value)
@@ -586,46 +962,94 @@ class Importer(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, Importer, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.Importer_ClassName
-    if _newclass:ClassName = staticmethod(_IO.Importer_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.Importer_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.Importer_TypeInfo)
-    def className(self): return _IO.Importer_className(self)
-    def typeInfo(self): return _IO.Importer_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.Importer_Cast
-    if _newclass:Cast = staticmethod(_IO.Importer_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.Importer_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.Importer_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.Importer_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.Importer_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(Importer self) -> char const *"""
+        return _IO.Importer_className(self)
+
+    def typeInfo(self):
+        """typeInfo(Importer self) -> RTTI"""
+        return _IO.Importer_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> Importer
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> Importer
+        """
+        return _IO.Importer_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> Importer
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Importer
+        """
+        return _IO.Importer_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     __swig_destroy__ = _IO.delete_Importer
     __del__ = lambda self : None;
-    __swig_getmethods__["Create"] = lambda x: _IO.Importer_Create
-    if _newclass:Create = staticmethod(_IO.Importer_Create)
-    def read(self, *args): return _IO.Importer_read(self, *args)
-    def withoutErrors(self): return _IO.Importer_withoutErrors(self)
+    def Create(*args):
+        """Create(char const * type) -> Importer"""
+        return _IO.Importer_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def read(self, *args):
+        """
+        read(Importer self, std::streambuf * buf) -> BaseObject
+        read(Importer self, string filename) -> BaseObject
+        """
+        return _IO.Importer_read(self, *args)
+
+    def withoutErrors(self):
+        """withoutErrors(Importer self) -> bool"""
+        return _IO.Importer_withoutErrors(self)
+
 Importer_swigregister = _IO.Importer_swigregister
 Importer_swigregister(Importer)
 
 def Importer_ClassName():
+  """Importer_ClassName() -> char const *"""
   return _IO.Importer_ClassName()
-Importer_ClassName = _IO.Importer_ClassName
 
 def Importer_TypeInfo():
+  """Importer_TypeInfo() -> RTTI"""
   return _IO.Importer_TypeInfo()
-Importer_TypeInfo = _IO.Importer_TypeInfo
 
 def Importer_Cast(*args):
+  """
+    Cast(BaseObject o) -> Importer
+    Importer_Cast(Seiscomp::Core::BaseObjectPtr o) -> Importer
+    """
   return _IO.Importer_Cast(*args)
-Importer_Cast = _IO.Importer_Cast
 
 def Importer_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> Importer
+    Importer_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Importer
+    """
   return _IO.Importer_ConstCast(*args)
-Importer_ConstCast = _IO.Importer_ConstCast
 
 def Importer_Create(*args):
+  """Importer_Create(char const * type) -> Importer"""
   return _IO.Importer_Create(*args)
-Importer_Create = _IO.Importer_Create
 
 class ExportSink(_object):
+    """Proxy of C++ Seiscomp::IO::ExportSink class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ExportSink, name, value)
     __swig_getmethods__ = {}
@@ -633,8 +1057,12 @@ class ExportSink(_object):
     __repr__ = _swig_repr
     __swig_destroy__ = _IO.delete_ExportSink
     __del__ = lambda self : None;
-    def write(self, *args): return _IO.ExportSink_write(self, *args)
+    def write(self, *args):
+        """write(ExportSink self, char const * data, int size) -> int"""
+        return _IO.ExportSink_write(self, *args)
+
     def __init__(self): 
+        """__init__(Seiscomp::IO::ExportSink self) -> ExportSink"""
         if self.__class__ == ExportSink:
             _self = None
         else:
@@ -650,6 +1078,7 @@ ExportSink_swigregister = _IO.ExportSink_swigregister
 ExportSink_swigregister(ExportSink)
 
 class Exporter(Core.BaseObject):
+    """Proxy of C++ Seiscomp::IO::Exporter class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Exporter, name, value)
@@ -658,47 +1087,99 @@ class Exporter(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, Exporter, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.Exporter_ClassName
-    if _newclass:ClassName = staticmethod(_IO.Exporter_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.Exporter_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.Exporter_TypeInfo)
-    def className(self): return _IO.Exporter_className(self)
-    def typeInfo(self): return _IO.Exporter_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.Exporter_Cast
-    if _newclass:Cast = staticmethod(_IO.Exporter_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.Exporter_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.Exporter_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.Exporter_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.Exporter_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(Exporter self) -> char const *"""
+        return _IO.Exporter_className(self)
+
+    def typeInfo(self):
+        """typeInfo(Exporter self) -> RTTI"""
+        return _IO.Exporter_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> Exporter
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> Exporter
+        """
+        return _IO.Exporter_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> Exporter
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Exporter
+        """
+        return _IO.Exporter_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     __swig_destroy__ = _IO.delete_Exporter
     __del__ = lambda self : None;
-    __swig_getmethods__["Create"] = lambda x: _IO.Exporter_Create
-    if _newclass:Create = staticmethod(_IO.Exporter_Create)
-    def setFormattedOutput(self, *args): return _IO.Exporter_setFormattedOutput(self, *args)
-    def setIndent(self, *args): return _IO.Exporter_setIndent(self, *args)
-    def write(self, *args): return _IO.Exporter_write(self, *args)
+    def Create(*args):
+        """Create(char const * type) -> Exporter"""
+        return _IO.Exporter_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def setFormattedOutput(self, *args):
+        """setFormattedOutput(Exporter self, bool enable)"""
+        return _IO.Exporter_setFormattedOutput(self, *args)
+
+    def setIndent(self, *args):
+        """setIndent(Exporter self, int arg2)"""
+        return _IO.Exporter_setIndent(self, *args)
+
+    def write(self, *args):
+        """
+        write(Exporter self, std::streambuf * buf, BaseObject arg3) -> bool
+        write(Exporter self, string filename, BaseObject arg3) -> bool
+        write(Exporter self, ExportSink sink, BaseObject arg3) -> bool
+        """
+        return _IO.Exporter_write(self, *args)
+
 Exporter_swigregister = _IO.Exporter_swigregister
 Exporter_swigregister(Exporter)
 
 def Exporter_ClassName():
+  """Exporter_ClassName() -> char const *"""
   return _IO.Exporter_ClassName()
-Exporter_ClassName = _IO.Exporter_ClassName
 
 def Exporter_TypeInfo():
+  """Exporter_TypeInfo() -> RTTI"""
   return _IO.Exporter_TypeInfo()
-Exporter_TypeInfo = _IO.Exporter_TypeInfo
 
 def Exporter_Cast(*args):
+  """
+    Cast(BaseObject o) -> Exporter
+    Exporter_Cast(Seiscomp::Core::BaseObjectPtr o) -> Exporter
+    """
   return _IO.Exporter_Cast(*args)
-Exporter_Cast = _IO.Exporter_Cast
 
 def Exporter_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> Exporter
+    Exporter_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Exporter
+    """
   return _IO.Exporter_ConstCast(*args)
-Exporter_ConstCast = _IO.Exporter_ConstCast
 
 def Exporter_Create(*args):
+  """Exporter_Create(char const * type) -> Exporter"""
   return _IO.Exporter_Create(*args)
-Exporter_Create = _IO.Exporter_Create
 
 class XMLArchive(Core.GenericArchive):
+    """Proxy of C++ Seiscomp::IO::XMLArchive class"""
     __swig_setmethods__ = {}
     for _s in [Core.GenericArchive]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, XMLArchive, name, value)
@@ -707,26 +1188,108 @@ class XMLArchive(Core.GenericArchive):
     __getattr__ = lambda self, name: _swig_getattr(self, XMLArchive, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::XMLArchive self) -> XMLArchive
+        __init__(Seiscomp::IO::XMLArchive self, std::streambuf * buf, bool isReading=True, int forceWriteVersion=-1) -> XMLArchive
+        __init__(Seiscomp::IO::XMLArchive self, std::streambuf * buf, bool isReading=True) -> XMLArchive
+        __init__(Seiscomp::IO::XMLArchive self, std::streambuf * buf) -> XMLArchive
+        """
         this = _IO.new_XMLArchive(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_XMLArchive
     __del__ = lambda self : None;
-    def open(self, *args): return _IO.XMLArchive_open(self, *args)
-    def create(self, *args): return _IO.XMLArchive_create(self, *args)
-    def close(self): return _IO.XMLArchive_close(self)
-    def setRootName(self, *args): return _IO.XMLArchive_setRootName(self, *args)
-    def setFormattedOutput(self, *args): return _IO.XMLArchive_setFormattedOutput(self, *args)
-    def setCompression(self, *args): return _IO.XMLArchive_setCompression(self, *args)
-    def rootNamespace(self): return _IO.XMLArchive_rootNamespace(self)
-    def rootNamespaceUri(self): return _IO.XMLArchive_rootNamespaceUri(self)
-    def setRootNamespace(self, *args): return _IO.XMLArchive_setRootNamespace(self, *args)
-    def read(self, *args): return _IO.XMLArchive_read(self, *args)
-    def write(self, *args): return _IO.XMLArchive_write(self, *args)
+    def open(self, *args):
+        """
+        open(XMLArchive self, std::streambuf * arg2) -> bool
+        open(XMLArchive self, char const * filename) -> bool
+        """
+        return _IO.XMLArchive_open(self, *args)
+
+    def create(self, *args):
+        """
+        create(XMLArchive self, std::streambuf * buf, bool writeVersion=True, bool headerNode=True) -> bool
+        create(XMLArchive self, std::streambuf * buf, bool writeVersion=True) -> bool
+        create(XMLArchive self, std::streambuf * buf) -> bool
+        create(XMLArchive self, char const * filename, bool writeVersion=True, bool headerNode=True) -> bool
+        create(XMLArchive self, char const * filename, bool writeVersion=True) -> bool
+        create(XMLArchive self, char const * filename) -> bool
+        """
+        return _IO.XMLArchive_create(self, *args)
+
+    def close(self):
+        """close(XMLArchive self)"""
+        return _IO.XMLArchive_close(self)
+
+    def setRootName(self, *args):
+        """setRootName(XMLArchive self, string name)"""
+        return _IO.XMLArchive_setRootName(self, *args)
+
+    def setFormattedOutput(self, *args):
+        """setFormattedOutput(XMLArchive self, bool enable)"""
+        return _IO.XMLArchive_setFormattedOutput(self, *args)
+
+    def setCompression(self, *args):
+        """setCompression(XMLArchive self, bool enable)"""
+        return _IO.XMLArchive_setCompression(self, *args)
+
+    def rootNamespace(self):
+        """rootNamespace(XMLArchive self) -> string"""
+        return _IO.XMLArchive_rootNamespace(self)
+
+    def rootNamespaceUri(self):
+        """rootNamespaceUri(XMLArchive self) -> string"""
+        return _IO.XMLArchive_rootNamespaceUri(self)
+
+    def setRootNamespace(self, *args):
+        """setRootNamespace(XMLArchive self, string name, string uri)"""
+        return _IO.XMLArchive_setRootNamespace(self, *args)
+
+    def read(self, *args):
+        """
+        read(XMLArchive self, int & value)
+        read(XMLArchive self, float & value)
+        read(XMLArchive self, double & value)
+        read(XMLArchive self, std::vector< char,std::allocator< char > > & value)
+        read(XMLArchive self, std::vector< int,std::allocator< int > > & value)
+        read(XMLArchive self, vectorf value)
+        read(XMLArchive self, vectord value)
+        read(XMLArchive self, std::vector< std::string,std::allocator< std::string > > & value)
+        read(XMLArchive self, std::complex< float > & value)
+        read(XMLArchive self, std::complex< double > & value)
+        read(XMLArchive self, bool & value)
+        read(XMLArchive self, vectorc value)
+        read(XMLArchive self, string value)
+        read(XMLArchive self, time_t & value)
+        read(XMLArchive self, Time value)
+        """
+        return _IO.XMLArchive_read(self, *args)
+
+    def write(self, *args):
+        """
+        write(XMLArchive self, int value)
+        write(XMLArchive self, float value)
+        write(XMLArchive self, double value)
+        write(XMLArchive self, std::vector< char,std::allocator< char > > & value)
+        write(XMLArchive self, std::vector< int,std::allocator< int > > & value)
+        write(XMLArchive self, vectorf value)
+        write(XMLArchive self, vectord value)
+        write(XMLArchive self, std::vector< std::string,std::allocator< std::string > > & value)
+        write(XMLArchive self, std::complex< float > & value)
+        write(XMLArchive self, std::complex< double > & value)
+        write(XMLArchive self, bool value)
+        write(XMLArchive self, vectorc value)
+        write(XMLArchive self, string value)
+        write(XMLArchive self, time_t value)
+        write(XMLArchive self, Time value)
+        """
+        return _IO.XMLArchive_write(self, *args)
+
 XMLArchive_swigregister = _IO.XMLArchive_swigregister
 XMLArchive_swigregister(XMLArchive)
 
 class BinaryArchive(Core.GenericArchive):
+    """Proxy of C++ Seiscomp::IO::BinaryArchive class"""
     __swig_setmethods__ = {}
     for _s in [Core.GenericArchive]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, BinaryArchive, name, value)
@@ -735,20 +1298,79 @@ class BinaryArchive(Core.GenericArchive):
     __getattr__ = lambda self, name: _swig_getattr(self, BinaryArchive, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::BinaryArchive self) -> BinaryArchive
+        __init__(Seiscomp::IO::BinaryArchive self, std::streambuf * buf, bool isReading=True) -> BinaryArchive
+        __init__(Seiscomp::IO::BinaryArchive self, std::streambuf * buf) -> BinaryArchive
+        """
         this = _IO.new_BinaryArchive(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_BinaryArchive
     __del__ = lambda self : None;
-    def open(self, *args): return _IO.BinaryArchive_open(self, *args)
-    def create(self, *args): return _IO.BinaryArchive_create(self, *args)
-    def close(self): return _IO.BinaryArchive_close(self)
-    def read(self, *args): return _IO.BinaryArchive_read(self, *args)
-    def write(self, *args): return _IO.BinaryArchive_write(self, *args)
+    def open(self, *args):
+        """
+        open(BinaryArchive self, char const * file) -> bool
+        open(BinaryArchive self, std::streambuf * arg2) -> bool
+        """
+        return _IO.BinaryArchive_open(self, *args)
+
+    def create(self, *args):
+        """
+        create(BinaryArchive self, char const * file) -> bool
+        create(BinaryArchive self, std::streambuf * arg2) -> bool
+        """
+        return _IO.BinaryArchive_create(self, *args)
+
+    def close(self):
+        """close(BinaryArchive self)"""
+        return _IO.BinaryArchive_close(self)
+
+    def read(self, *args):
+        """
+        read(BinaryArchive self, int & value)
+        read(BinaryArchive self, float & value)
+        read(BinaryArchive self, double & value)
+        read(BinaryArchive self, std::vector< char,std::allocator< char > > & value)
+        read(BinaryArchive self, std::vector< int,std::allocator< int > > & value)
+        read(BinaryArchive self, vectorf value)
+        read(BinaryArchive self, vectord value)
+        read(BinaryArchive self, std::vector< std::string,std::allocator< std::string > > & value)
+        read(BinaryArchive self, std::complex< float > & value)
+        read(BinaryArchive self, std::complex< double > & value)
+        read(BinaryArchive self, bool & value)
+        read(BinaryArchive self, vectorc value)
+        read(BinaryArchive self, string value)
+        read(BinaryArchive self, time_t & value)
+        read(BinaryArchive self, Time value)
+        """
+        return _IO.BinaryArchive_read(self, *args)
+
+    def write(self, *args):
+        """
+        write(BinaryArchive self, int value)
+        write(BinaryArchive self, float value)
+        write(BinaryArchive self, double value)
+        write(BinaryArchive self, std::vector< char,std::allocator< char > > & value)
+        write(BinaryArchive self, std::vector< int,std::allocator< int > > & value)
+        write(BinaryArchive self, vectorf value)
+        write(BinaryArchive self, vectord value)
+        write(BinaryArchive self, std::vector< std::string,std::allocator< std::string > > & value)
+        write(BinaryArchive self, std::complex< float > & value)
+        write(BinaryArchive self, std::complex< double > & value)
+        write(BinaryArchive self, bool value)
+        write(BinaryArchive self, vectorc value)
+        write(BinaryArchive self, string value)
+        write(BinaryArchive self, time_t value)
+        write(BinaryArchive self, Time value)
+        """
+        return _IO.BinaryArchive_write(self, *args)
+
 BinaryArchive_swigregister = _IO.BinaryArchive_swigregister
 BinaryArchive_swigregister(BinaryArchive)
 
 class VBinaryArchive(BinaryArchive):
+    """Proxy of C++ Seiscomp::IO::VBinaryArchive class"""
     __swig_setmethods__ = {}
     for _s in [BinaryArchive]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, VBinaryArchive, name, value)
@@ -757,14 +1379,42 @@ class VBinaryArchive(BinaryArchive):
     __getattr__ = lambda self, name: _swig_getattr(self, VBinaryArchive, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::VBinaryArchive self, int forceWriteVersion=-1) -> VBinaryArchive
+        __init__(Seiscomp::IO::VBinaryArchive self) -> VBinaryArchive
+        __init__(Seiscomp::IO::VBinaryArchive self, std::streambuf * buf, bool isReading=True, int forceWriteVersion=-1) -> VBinaryArchive
+        __init__(Seiscomp::IO::VBinaryArchive self, std::streambuf * buf, bool isReading=True) -> VBinaryArchive
+        __init__(Seiscomp::IO::VBinaryArchive self, std::streambuf * buf) -> VBinaryArchive
+        """
         this = _IO.new_VBinaryArchive(*args)
         try: self.this.append(this)
         except: self.this = this
-    def setWriteVersion(self, *args): return _IO.VBinaryArchive_setWriteVersion(self, *args)
-    def open(self, *args): return _IO.VBinaryArchive_open(self, *args)
-    def create(self, *args): return _IO.VBinaryArchive_create(self, *args)
-    def close(self): return _IO.VBinaryArchive_close(self)
-    def errorMsg(self): return _IO.VBinaryArchive_errorMsg(self)
+    def setWriteVersion(self, *args):
+        """setWriteVersion(VBinaryArchive self, int version)"""
+        return _IO.VBinaryArchive_setWriteVersion(self, *args)
+
+    def open(self, *args):
+        """
+        open(VBinaryArchive self, char const * file) -> bool
+        open(VBinaryArchive self, std::streambuf * arg2) -> bool
+        """
+        return _IO.VBinaryArchive_open(self, *args)
+
+    def create(self, *args):
+        """
+        create(VBinaryArchive self, char const * file) -> bool
+        create(VBinaryArchive self, std::streambuf * arg2) -> bool
+        """
+        return _IO.VBinaryArchive_create(self, *args)
+
+    def close(self):
+        """close(VBinaryArchive self)"""
+        return _IO.VBinaryArchive_close(self)
+
+    def errorMsg(self):
+        """errorMsg(VBinaryArchive self) -> char const *"""
+        return _IO.VBinaryArchive_errorMsg(self)
+
     __swig_destroy__ = _IO.delete_VBinaryArchive
     __del__ = lambda self : None;
 VBinaryArchive_swigregister = _IO.VBinaryArchive_swigregister
@@ -778,6 +1428,7 @@ AH_DATATYPE_VECTOR = _IO.AH_DATATYPE_VECTOR
 AH_DATATYPE_TENSOR = _IO.AH_DATATYPE_TENSOR
 AH_DATATYPE_DOUBLE = _IO.AH_DATATYPE_DOUBLE
 class AHRecord(Core.Record):
+    """Proxy of C++ Seiscomp::IO::AHRecord class"""
     __swig_setmethods__ = {}
     for _s in [Core.Record]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, AHRecord, name, value)
@@ -785,34 +1436,123 @@ class AHRecord(Core.Record):
     for _s in [Core.Record]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, AHRecord, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.AHRecord_ClassName
-    if _newclass:ClassName = staticmethod(_IO.AHRecord_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.AHRecord_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.AHRecord_TypeInfo)
-    def className(self): return _IO.AHRecord_className(self)
-    def typeInfo(self): return _IO.AHRecord_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.AHRecord_Cast
-    if _newclass:Cast = staticmethod(_IO.AHRecord_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.AHRecord_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.AHRecord_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.AHRecord_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.AHRecord_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(AHRecord self) -> char const *"""
+        return _IO.AHRecord_className(self)
+
+    def typeInfo(self):
+        """typeInfo(AHRecord self) -> RTTI"""
+        return _IO.AHRecord_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> AHRecord
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord
+        """
+        return _IO.AHRecord_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> AHRecord
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord
+        """
+        return _IO.AHRecord_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ", Time stime=Seiscomp::Core::Time(), 
+            double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt=DOUBLE, 
+            Seiscomp::Record::Hint h=DATA_ONLY) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ", Time stime=Seiscomp::Core::Time(), 
+            double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt=DOUBLE) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ", Time stime=Seiscomp::Core::Time(), 
+            double fsamp=0., int tqual=-1) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ", Time stime=Seiscomp::Core::Time(), 
+            double fsamp=0.) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ", Time stime=Seiscomp::Core::Time()) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="", string cha="XYZ") -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC", string loc="") -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB", string sta="ABC") -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, string net="AB") -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, AHRecord rec) -> AHRecord
+        __init__(Seiscomp::IO::AHRecord self, Record rec) -> AHRecord
+        """
         this = _IO.new_AHRecord(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_AHRecord
     __del__ = lambda self : None;
-    def setSamplingFrequency(self, *args): return _IO.AHRecord_setSamplingFrequency(self, *args)
-    def data(self, *args): return _IO.AHRecord_data(self, *args)
-    def raw(self): return _IO.AHRecord_raw(self)
-    def setData(self, *args): return _IO.AHRecord_setData(self, *args)
-    def saveSpace(self): return _IO.AHRecord_saveSpace(self)
-    def copy(self): return _IO.AHRecord_copy(self)
-    def read(self, *args): return _IO.AHRecord_read(self, *args)
-    def write(self, *args): return _IO.AHRecord_write(self, *args)
-    def gain(self): return _IO.AHRecord_gain(self)
-    def setGain(self, *args): return _IO.AHRecord_setGain(self, *args)
-    def extra(self, *args): return _IO.AHRecord_extra(self, *args)
-    def setExtra(self, *args): return _IO.AHRecord_setExtra(self, *args)
+    def setSamplingFrequency(self, *args):
+        """setSamplingFrequency(AHRecord self, double freq)"""
+        return _IO.AHRecord_setSamplingFrequency(self, *args)
+
+    def data(self, *args):
+        """
+        data(AHRecord self) -> Array
+        data(AHRecord self) -> Array
+        """
+        return _IO.AHRecord_data(self, *args)
+
+    def raw(self):
+        """raw(AHRecord self) -> Array"""
+        return _IO.AHRecord_raw(self)
+
+    def setData(self, *args):
+        """
+        setData(AHRecord self, Array data)
+        setData(AHRecord self, int size, void const * data, Seiscomp::Array::DataType datatype)
+        """
+        return _IO.AHRecord_setData(self, *args)
+
+    def saveSpace(self):
+        """saveSpace(AHRecord self)"""
+        return _IO.AHRecord_saveSpace(self)
+
+    def copy(self):
+        """copy(AHRecord self) -> AHRecord"""
+        return _IO.AHRecord_copy(self)
+
+    def read(self, *args):
+        """read(AHRecord self, std::istream & _in)"""
+        return _IO.AHRecord_read(self, *args)
+
+    def write(self, *args):
+        """write(AHRecord self, std::ostream & out)"""
+        return _IO.AHRecord_write(self, *args)
+
+    def gain(self):
+        """gain(AHRecord self) -> float"""
+        return _IO.AHRecord_gain(self)
+
+    def setGain(self, *args):
+        """setGain(AHRecord self, float value)"""
+        return _IO.AHRecord_setGain(self, *args)
+
+    def extra(self, *args):
+        """extra(AHRecord self, int i) -> float"""
+        return _IO.AHRecord_extra(self, *args)
+
+    def setExtra(self, *args):
+        """setExtra(AHRecord self, int i, float value)"""
+        return _IO.AHRecord_setExtra(self, *args)
+
     __swig_setmethods__["elat"] = _IO.AHRecord_elat_set
     __swig_getmethods__["elat"] = _IO.AHRecord_elat_get
     if _newclass:elat = _swig_property(_IO.AHRecord_elat_get, _IO.AHRecord_elat_set)
@@ -868,46 +1608,61 @@ AHRecord_swigregister = _IO.AHRecord_swigregister
 AHRecord_swigregister(AHRecord)
 
 def AHRecord_ClassName():
+  """AHRecord_ClassName() -> char const *"""
   return _IO.AHRecord_ClassName()
-AHRecord_ClassName = _IO.AHRecord_ClassName
 
 def AHRecord_TypeInfo():
+  """AHRecord_TypeInfo() -> RTTI"""
   return _IO.AHRecord_TypeInfo()
-AHRecord_TypeInfo = _IO.AHRecord_TypeInfo
 
 def AHRecord_Cast(*args):
+  """
+    Cast(BaseObject o) -> AHRecord
+    AHRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord
+    """
   return _IO.AHRecord_Cast(*args)
-AHRecord_Cast = _IO.AHRecord_Cast
 
 def AHRecord_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> AHRecord
+    AHRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord
+    """
   return _IO.AHRecord_ConstCast(*args)
-AHRecord_ConstCast = _IO.AHRecord_ConstCast
 
 class AHOutput(_object):
+    """Proxy of C++ Seiscomp::IO::AHOutput class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, AHOutput, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, AHOutput, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::AHOutput self) -> AHOutput
+        __init__(Seiscomp::IO::AHOutput self, string filename) -> AHOutput
+        """
         this = _IO.new_AHOutput(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_AHOutput
     __del__ = lambda self : None;
-    def put(self, *args): return _IO.AHOutput_put(self, *args)
+    def put(self, *args):
+        """put(AHOutput self, AHRecord rec) -> bool"""
+        return _IO.AHOutput_put(self, *args)
+
 AHOutput_swigregister = _IO.AHOutput_swigregister
 AHOutput_swigregister(AHOutput)
 
 
 def read_one(*args):
+  """read_one(std::istream & _is) -> AHRecord"""
   return _IO.read_one(*args)
-read_one = _IO.read_one
 
 def write_one(*args):
+  """write_one(AHRecord rec, std::ostream & os) -> bool"""
   return _IO.write_one(*args)
-write_one = _IO.write_one
 class LibmseedException(Core.StreamException):
+    """Proxy of C++ Seiscomp::IO::LibmseedException class"""
     __swig_setmethods__ = {}
     for _s in [Core.StreamException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LibmseedException, name, value)
@@ -916,6 +1671,10 @@ class LibmseedException(Core.StreamException):
     __getattr__ = lambda self, name: _swig_getattr(self, LibmseedException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::LibmseedException self) -> LibmseedException
+        __init__(Seiscomp::IO::LibmseedException self, string what) -> LibmseedException
+        """
         this = _IO.new_LibmseedException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -925,6 +1684,7 @@ LibmseedException_swigregister = _IO.LibmseedException_swigregister
 LibmseedException_swigregister(LibmseedException)
 
 class MSeedRecord(Core.Record):
+    """Proxy of C++ Seiscomp::IO::MSeedRecord class"""
     __swig_setmethods__ = {}
     for _s in [Core.Record]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, MSeedRecord, name, value)
@@ -932,71 +1692,204 @@ class MSeedRecord(Core.Record):
     for _s in [Core.Record]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, MSeedRecord, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.MSeedRecord_ClassName
-    if _newclass:ClassName = staticmethod(_IO.MSeedRecord_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.MSeedRecord_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.MSeedRecord_TypeInfo)
-    def className(self): return _IO.MSeedRecord_className(self)
-    def typeInfo(self): return _IO.MSeedRecord_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.MSeedRecord_Cast
-    if _newclass:Cast = staticmethod(_IO.MSeedRecord_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.MSeedRecord_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.MSeedRecord_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.MSeedRecord_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.MSeedRecord_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(MSeedRecord self) -> char const *"""
+        return _IO.MSeedRecord_className(self)
+
+    def typeInfo(self):
+        """typeInfo(MSeedRecord self) -> RTTI"""
+        return _IO.MSeedRecord_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> MSeedRecord
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> MSeedRecord
+        """
+        return _IO.MSeedRecord_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> MSeedRecord
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> MSeedRecord
+        """
+        return _IO.MSeedRecord_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::MSeedRecord self, Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, Seiscomp::Array::DataType dt=DOUBLE) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, MSRecord * msrec, Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, MSRecord * msrec, Seiscomp::Array::DataType dt=DOUBLE) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, MSRecord * msrec) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, MSeedRecord ms) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, Record rec, int reclen=512) -> MSeedRecord
+        __init__(Seiscomp::IO::MSeedRecord self, Record rec) -> MSeedRecord
+        """
         this = _IO.new_MSeedRecord(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_MSeedRecord
     __del__ = lambda self : None;
-    def setNetworkCode(self, *args): return _IO.MSeedRecord_setNetworkCode(self, *args)
-    def setStationCode(self, *args): return _IO.MSeedRecord_setStationCode(self, *args)
-    def setLocationCode(self, *args): return _IO.MSeedRecord_setLocationCode(self, *args)
-    def setChannelCode(self, *args): return _IO.MSeedRecord_setChannelCode(self, *args)
-    def setStartTime(self, *args): return _IO.MSeedRecord_setStartTime(self, *args)
-    def sequenceNumber(self): return _IO.MSeedRecord_sequenceNumber(self)
-    def setSequenceNumber(self, *args): return _IO.MSeedRecord_setSequenceNumber(self, *args)
-    def dataQuality(self): return _IO.MSeedRecord_dataQuality(self)
-    def setDataQuality(self, *args): return _IO.MSeedRecord_setDataQuality(self, *args)
-    def sampleRateFactor(self): return _IO.MSeedRecord_sampleRateFactor(self)
-    def setSampleRateFactor(self, *args): return _IO.MSeedRecord_setSampleRateFactor(self, *args)
-    def sampleRateMultiplier(self): return _IO.MSeedRecord_sampleRateMultiplier(self)
-    def setSampleRateMultiplier(self, *args): return _IO.MSeedRecord_setSampleRateMultiplier(self, *args)
-    def byteOrder(self): return _IO.MSeedRecord_byteOrder(self)
-    def encoding(self): return _IO.MSeedRecord_encoding(self)
-    def sampleRateNumerator(self): return _IO.MSeedRecord_sampleRateNumerator(self)
-    def sampleRateDenominator(self): return _IO.MSeedRecord_sampleRateDenominator(self)
-    def frameNumber(self): return _IO.MSeedRecord_frameNumber(self)
-    def endTime(self): return _IO.MSeedRecord_endTime(self)
-    def recordLength(self): return _IO.MSeedRecord_recordLength(self)
-    def leapSeconds(self): return _IO.MSeedRecord_leapSeconds(self)
-    def data(self): return _IO.MSeedRecord_data(self)
-    def raw(self): return _IO.MSeedRecord_raw(self)
-    def saveSpace(self): return _IO.MSeedRecord_saveSpace(self)
-    def copy(self): return _IO.MSeedRecord_copy(self)
-    def useEncoding(self, *args): return _IO.MSeedRecord_useEncoding(self, *args)
-    def setOutputRecordLength(self, *args): return _IO.MSeedRecord_setOutputRecordLength(self, *args)
-    def read(self, *args): return _IO.MSeedRecord_read(self, *args)
-    def write(self, *args): return _IO.MSeedRecord_write(self, *args)
+    def setNetworkCode(self, *args):
+        """setNetworkCode(MSeedRecord self, string net)"""
+        return _IO.MSeedRecord_setNetworkCode(self, *args)
+
+    def setStationCode(self, *args):
+        """setStationCode(MSeedRecord self, string sta)"""
+        return _IO.MSeedRecord_setStationCode(self, *args)
+
+    def setLocationCode(self, *args):
+        """setLocationCode(MSeedRecord self, string loc)"""
+        return _IO.MSeedRecord_setLocationCode(self, *args)
+
+    def setChannelCode(self, *args):
+        """setChannelCode(MSeedRecord self, string cha)"""
+        return _IO.MSeedRecord_setChannelCode(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(MSeedRecord self, Time time)"""
+        return _IO.MSeedRecord_setStartTime(self, *args)
+
+    def sequenceNumber(self):
+        """sequenceNumber(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_sequenceNumber(self)
+
+    def setSequenceNumber(self, *args):
+        """setSequenceNumber(MSeedRecord self, int seqno)"""
+        return _IO.MSeedRecord_setSequenceNumber(self, *args)
+
+    def dataQuality(self):
+        """dataQuality(MSeedRecord self) -> char"""
+        return _IO.MSeedRecord_dataQuality(self)
+
+    def setDataQuality(self, *args):
+        """setDataQuality(MSeedRecord self, char qual)"""
+        return _IO.MSeedRecord_setDataQuality(self, *args)
+
+    def sampleRateFactor(self):
+        """sampleRateFactor(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_sampleRateFactor(self)
+
+    def setSampleRateFactor(self, *args):
+        """setSampleRateFactor(MSeedRecord self, int srfact)"""
+        return _IO.MSeedRecord_setSampleRateFactor(self, *args)
+
+    def sampleRateMultiplier(self):
+        """sampleRateMultiplier(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_sampleRateMultiplier(self)
+
+    def setSampleRateMultiplier(self, *args):
+        """setSampleRateMultiplier(MSeedRecord self, int srmult)"""
+        return _IO.MSeedRecord_setSampleRateMultiplier(self, *args)
+
+    def byteOrder(self):
+        """byteOrder(MSeedRecord self) -> unsigned short"""
+        return _IO.MSeedRecord_byteOrder(self)
+
+    def encoding(self):
+        """encoding(MSeedRecord self) -> unsigned short"""
+        return _IO.MSeedRecord_encoding(self)
+
+    def sampleRateNumerator(self):
+        """sampleRateNumerator(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_sampleRateNumerator(self)
+
+    def sampleRateDenominator(self):
+        """sampleRateDenominator(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_sampleRateDenominator(self)
+
+    def frameNumber(self):
+        """frameNumber(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_frameNumber(self)
+
+    def endTime(self):
+        """endTime(MSeedRecord self) -> Time"""
+        return _IO.MSeedRecord_endTime(self)
+
+    def recordLength(self):
+        """recordLength(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_recordLength(self)
+
+    def leapSeconds(self):
+        """leapSeconds(MSeedRecord self) -> int"""
+        return _IO.MSeedRecord_leapSeconds(self)
+
+    def data(self):
+        """data(MSeedRecord self) -> Array"""
+        return _IO.MSeedRecord_data(self)
+
+    def raw(self):
+        """raw(MSeedRecord self) -> Array"""
+        return _IO.MSeedRecord_raw(self)
+
+    def saveSpace(self):
+        """saveSpace(MSeedRecord self)"""
+        return _IO.MSeedRecord_saveSpace(self)
+
+    def copy(self):
+        """copy(MSeedRecord self) -> Record"""
+        return _IO.MSeedRecord_copy(self)
+
+    def useEncoding(self, *args):
+        """useEncoding(MSeedRecord self, bool flag)"""
+        return _IO.MSeedRecord_useEncoding(self, *args)
+
+    def setOutputRecordLength(self, *args):
+        """setOutputRecordLength(MSeedRecord self, int reclen)"""
+        return _IO.MSeedRecord_setOutputRecordLength(self, *args)
+
+    def read(self, *args):
+        """read(MSeedRecord self, std::istream & _in)"""
+        return _IO.MSeedRecord_read(self, *args)
+
+    def write(self, *args):
+        """write(MSeedRecord self, std::ostream & out)"""
+        return _IO.MSeedRecord_write(self, *args)
+
 MSeedRecord_swigregister = _IO.MSeedRecord_swigregister
 MSeedRecord_swigregister(MSeedRecord)
 
 def MSeedRecord_ClassName():
+  """MSeedRecord_ClassName() -> char const *"""
   return _IO.MSeedRecord_ClassName()
-MSeedRecord_ClassName = _IO.MSeedRecord_ClassName
 
 def MSeedRecord_TypeInfo():
+  """MSeedRecord_TypeInfo() -> RTTI"""
   return _IO.MSeedRecord_TypeInfo()
-MSeedRecord_TypeInfo = _IO.MSeedRecord_TypeInfo
 
 def MSeedRecord_Cast(*args):
+  """
+    Cast(BaseObject o) -> MSeedRecord
+    MSeedRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> MSeedRecord
+    """
   return _IO.MSeedRecord_Cast(*args)
-MSeedRecord_Cast = _IO.MSeedRecord_Cast
 
 def MSeedRecord_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> MSeedRecord
+    MSeedRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> MSeedRecord
+    """
   return _IO.MSeedRecord_ConstCast(*args)
-MSeedRecord_ConstCast = _IO.MSeedRecord_ConstCast
 
 class FileRecordStream(RecordStream):
+    """Proxy of C++ Seiscomp::RecordStream::File class"""
     __swig_setmethods__ = {}
     for _s in [RecordStream]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, FileRecordStream, name, value)
@@ -1008,27 +1901,75 @@ class FileRecordStream(RecordStream):
     Current = _IO.FileRecordStream_Current
     End = _IO.FileRecordStream_End
     def __init__(self, *args): 
+        """
+        File() -> FileRecordStream
+        File(string name) -> FileRecordStream
+        __init__(Seiscomp::RecordStream::File self, FileRecordStream f) -> FileRecordStream
+        """
         this = _IO.new_FileRecordStream(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_FileRecordStream
     __del__ = lambda self : None;
-    def setSource(self, *args): return _IO.FileRecordStream_setSource(self, *args)
-    def addStream(self, *args): return _IO.FileRecordStream_addStream(self, *args)
-    def setStartTime(self, *args): return _IO.FileRecordStream_setStartTime(self, *args)
-    def setEndTime(self, *args): return _IO.FileRecordStream_setEndTime(self, *args)
-    def setTimeWindow(self, *args): return _IO.FileRecordStream_setTimeWindow(self, *args)
-    def setTimeout(self, *args): return _IO.FileRecordStream_setTimeout(self, *args)
-    def close(self): return _IO.FileRecordStream_close(self)
-    def name(self): return _IO.FileRecordStream_name(self)
-    def stream(self): return _IO.FileRecordStream_stream(self)
-    def filterRecord(self, *args): return _IO.FileRecordStream_filterRecord(self, *args)
-    def tell(self): return _IO.FileRecordStream_tell(self)
-    def seek(self, *args): return _IO.FileRecordStream_seek(self, *args)
+    def setSource(self, *args):
+        """setSource(FileRecordStream self, string arg2) -> bool"""
+        return _IO.FileRecordStream_setSource(self, *args)
+
+    def addStream(self, *args):
+        """
+        addStream(FileRecordStream self, string net, string sta, string loc, string cha) -> bool
+        addStream(FileRecordStream self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        """
+        return _IO.FileRecordStream_addStream(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(FileRecordStream self, Time stime) -> bool"""
+        return _IO.FileRecordStream_setStartTime(self, *args)
+
+    def setEndTime(self, *args):
+        """setEndTime(FileRecordStream self, Time etime) -> bool"""
+        return _IO.FileRecordStream_setEndTime(self, *args)
+
+    def setTimeWindow(self, *args):
+        """setTimeWindow(FileRecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"""
+        return _IO.FileRecordStream_setTimeWindow(self, *args)
+
+    def setTimeout(self, *args):
+        """setTimeout(FileRecordStream self, int seconds) -> bool"""
+        return _IO.FileRecordStream_setTimeout(self, *args)
+
+    def close(self):
+        """close(FileRecordStream self)"""
+        return _IO.FileRecordStream_close(self)
+
+    def name(self):
+        """name(FileRecordStream self) -> string"""
+        return _IO.FileRecordStream_name(self)
+
+    def stream(self):
+        """stream(FileRecordStream self) -> std::istream &"""
+        return _IO.FileRecordStream_stream(self)
+
+    def filterRecord(self, *args):
+        """filterRecord(FileRecordStream self, Record arg2) -> bool"""
+        return _IO.FileRecordStream_filterRecord(self, *args)
+
+    def tell(self):
+        """tell(FileRecordStream self) -> size_t"""
+        return _IO.FileRecordStream_tell(self)
+
+    def seek(self, *args):
+        """
+        seek(FileRecordStream self, size_t pos) -> FileRecordStream
+        seek(FileRecordStream self, int off, Seiscomp::RecordStream::File::SeekDir dir) -> FileRecordStream
+        """
+        return _IO.FileRecordStream_seek(self, *args)
+
 FileRecordStream_swigregister = _IO.FileRecordStream_swigregister
 FileRecordStream_swigregister(FileRecordStream)
 
 class SeedlinkException(RecordStreamException):
+    """Proxy of C++ Seiscomp::RecordStream::SeedlinkException class"""
     __swig_setmethods__ = {}
     for _s in [RecordStreamException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SeedlinkException, name, value)
@@ -1037,6 +1978,10 @@ class SeedlinkException(RecordStreamException):
     __getattr__ = lambda self, name: _swig_getattr(self, SeedlinkException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::SeedlinkException self) -> SeedlinkException
+        __init__(Seiscomp::RecordStream::SeedlinkException self, string what) -> SeedlinkException
+        """
         this = _IO.new_SeedlinkException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -1046,6 +1991,7 @@ SeedlinkException_swigregister = _IO.SeedlinkException_swigregister
 SeedlinkException_swigregister(SeedlinkException)
 
 class SeedlinkCommandException(SeedlinkException):
+    """Proxy of C++ Seiscomp::RecordStream::SeedlinkCommandException class"""
     __swig_setmethods__ = {}
     for _s in [SeedlinkException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SeedlinkCommandException, name, value)
@@ -1054,6 +2000,10 @@ class SeedlinkCommandException(SeedlinkException):
     __getattr__ = lambda self, name: _swig_getattr(self, SeedlinkCommandException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::SeedlinkCommandException self) -> SeedlinkCommandException
+        __init__(Seiscomp::RecordStream::SeedlinkCommandException self, string what) -> SeedlinkCommandException
+        """
         this = _IO.new_SeedlinkCommandException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -1063,32 +2013,72 @@ SeedlinkCommandException_swigregister = _IO.SeedlinkCommandException_swigregiste
 SeedlinkCommandException_swigregister(SeedlinkCommandException)
 
 class SLStreamIdx(_object):
+    """Proxy of C++ Seiscomp::RecordStream::SLStreamIdx class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, SLStreamIdx, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, SLStreamIdx, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::SLStreamIdx self) -> SLStreamIdx
+        __init__(Seiscomp::RecordStream::SLStreamIdx self, string net, string sta, string loc, string cha) -> SLStreamIdx
+        __init__(Seiscomp::RecordStream::SLStreamIdx self, string net, string sta, string loc, string cha, Time stime, Time etime) -> SLStreamIdx
+        """
         this = _IO.new_SLStreamIdx(*args)
         try: self.this.append(this)
         except: self.this = this
-    def __lt__(self, *args): return _IO.SLStreamIdx___lt__(self, *args)
-    def __eq__(self, *args): return _IO.SLStreamIdx___eq__(self, *args)
-    def network(self): return _IO.SLStreamIdx_network(self)
-    def station(self): return _IO.SLStreamIdx_station(self)
-    def channel(self): return _IO.SLStreamIdx_channel(self)
-    def location(self): return _IO.SLStreamIdx_location(self)
-    def selector(self): return _IO.SLStreamIdx_selector(self)
-    def startTime(self): return _IO.SLStreamIdx_startTime(self)
-    def endTime(self): return _IO.SLStreamIdx_endTime(self)
-    def timestamp(self): return _IO.SLStreamIdx_timestamp(self)
-    def setTimestamp(self, *args): return _IO.SLStreamIdx_setTimestamp(self, *args)
+    def __lt__(self, *args):
+        """__lt__(SLStreamIdx self, SLStreamIdx other) -> bool"""
+        return _IO.SLStreamIdx___lt__(self, *args)
+
+    def __eq__(self, *args):
+        """__eq__(SLStreamIdx self, SLStreamIdx other) -> bool"""
+        return _IO.SLStreamIdx___eq__(self, *args)
+
+    def network(self):
+        """network(SLStreamIdx self) -> string"""
+        return _IO.SLStreamIdx_network(self)
+
+    def station(self):
+        """station(SLStreamIdx self) -> string"""
+        return _IO.SLStreamIdx_station(self)
+
+    def channel(self):
+        """channel(SLStreamIdx self) -> string"""
+        return _IO.SLStreamIdx_channel(self)
+
+    def location(self):
+        """location(SLStreamIdx self) -> string"""
+        return _IO.SLStreamIdx_location(self)
+
+    def selector(self):
+        """selector(SLStreamIdx self) -> string"""
+        return _IO.SLStreamIdx_selector(self)
+
+    def startTime(self):
+        """startTime(SLStreamIdx self) -> Time"""
+        return _IO.SLStreamIdx_startTime(self)
+
+    def endTime(self):
+        """endTime(SLStreamIdx self) -> Time"""
+        return _IO.SLStreamIdx_endTime(self)
+
+    def timestamp(self):
+        """timestamp(SLStreamIdx self) -> Time"""
+        return _IO.SLStreamIdx_timestamp(self)
+
+    def setTimestamp(self, *args):
+        """setTimestamp(SLStreamIdx self, Time rectime)"""
+        return _IO.SLStreamIdx_setTimestamp(self, *args)
+
     __swig_destroy__ = _IO.delete_SLStreamIdx
     __del__ = lambda self : None;
 SLStreamIdx_swigregister = _IO.SLStreamIdx_swigregister
 SLStreamIdx_swigregister(SLStreamIdx)
 
 class SLConnection(RecordStream):
+    """Proxy of C++ Seiscomp::RecordStream::SLConnection class"""
     __swig_setmethods__ = {}
     for _s in [RecordStream]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SLConnection, name, value)
@@ -1096,54 +2086,132 @@ class SLConnection(RecordStream):
     for _s in [RecordStream]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SLConnection, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.SLConnection_ClassName
-    if _newclass:ClassName = staticmethod(_IO.SLConnection_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.SLConnection_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.SLConnection_TypeInfo)
-    def className(self): return _IO.SLConnection_className(self)
-    def typeInfo(self): return _IO.SLConnection_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.SLConnection_Cast
-    if _newclass:Cast = staticmethod(_IO.SLConnection_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.SLConnection_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.SLConnection_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.SLConnection_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.SLConnection_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(SLConnection self) -> char const *"""
+        return _IO.SLConnection_className(self)
+
+    def typeInfo(self):
+        """typeInfo(SLConnection self) -> RTTI"""
+        return _IO.SLConnection_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> SLConnection
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> SLConnection
+        """
+        return _IO.SLConnection_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> SLConnection
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> SLConnection
+        """
+        return _IO.SLConnection_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::SLConnection self) -> SLConnection
+        __init__(Seiscomp::RecordStream::SLConnection self, string serverloc) -> SLConnection
+        """
         this = _IO.new_SLConnection(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_SLConnection
     __del__ = lambda self : None;
-    def setRecordType(self, *args): return _IO.SLConnection_setRecordType(self, *args)
-    def setSource(self, *args): return _IO.SLConnection_setSource(self, *args)
-    def addStream(self, *args): return _IO.SLConnection_addStream(self, *args)
-    def removeStream(self, *args): return _IO.SLConnection_removeStream(self, *args)
-    def setStartTime(self, *args): return _IO.SLConnection_setStartTime(self, *args)
-    def setEndTime(self, *args): return _IO.SLConnection_setEndTime(self, *args)
-    def setTimeWindow(self, *args): return _IO.SLConnection_setTimeWindow(self, *args)
-    def setTimeout(self, *args): return _IO.SLConnection_setTimeout(self, *args)
-    def clear(self): return _IO.SLConnection_clear(self)
-    def close(self): return _IO.SLConnection_close(self)
-    def reconnect(self): return _IO.SLConnection_reconnect(self)
-    def stream(self): return _IO.SLConnection_stream(self)
+    def setRecordType(self, *args):
+        """setRecordType(SLConnection self, char const * arg2) -> bool"""
+        return _IO.SLConnection_setRecordType(self, *args)
+
+    def setSource(self, *args):
+        """setSource(SLConnection self, string serverloc) -> bool"""
+        return _IO.SLConnection_setSource(self, *args)
+
+    def addStream(self, *args):
+        """
+        addStream(SLConnection self, string net, string sta, string loc, string cha) -> bool
+        addStream(SLConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        """
+        return _IO.SLConnection_addStream(self, *args)
+
+    def removeStream(self, *args):
+        """removeStream(SLConnection self, string net, string sta, string loc, string cha) -> bool"""
+        return _IO.SLConnection_removeStream(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(SLConnection self, Time stime) -> bool"""
+        return _IO.SLConnection_setStartTime(self, *args)
+
+    def setEndTime(self, *args):
+        """setEndTime(SLConnection self, Time etime) -> bool"""
+        return _IO.SLConnection_setEndTime(self, *args)
+
+    def setTimeWindow(self, *args):
+        """setTimeWindow(SLConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
+        return _IO.SLConnection_setTimeWindow(self, *args)
+
+    def setTimeout(self, *args):
+        """setTimeout(SLConnection self, int seconds) -> bool"""
+        return _IO.SLConnection_setTimeout(self, *args)
+
+    def clear(self):
+        """clear(SLConnection self) -> bool"""
+        return _IO.SLConnection_clear(self)
+
+    def close(self):
+        """close(SLConnection self)"""
+        return _IO.SLConnection_close(self)
+
+    def reconnect(self):
+        """reconnect(SLConnection self) -> bool"""
+        return _IO.SLConnection_reconnect(self)
+
+    def stream(self):
+        """stream(SLConnection self) -> std::istream &"""
+        return _IO.SLConnection_stream(self)
+
 SLConnection_swigregister = _IO.SLConnection_swigregister
 SLConnection_swigregister(SLConnection)
 
 def SLConnection_ClassName():
+  """SLConnection_ClassName() -> char const *"""
   return _IO.SLConnection_ClassName()
-SLConnection_ClassName = _IO.SLConnection_ClassName
 
 def SLConnection_TypeInfo():
+  """SLConnection_TypeInfo() -> RTTI"""
   return _IO.SLConnection_TypeInfo()
-SLConnection_TypeInfo = _IO.SLConnection_TypeInfo
 
 def SLConnection_Cast(*args):
+  """
+    Cast(BaseObject o) -> SLConnection
+    SLConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> SLConnection
+    """
   return _IO.SLConnection_Cast(*args)
-SLConnection_Cast = _IO.SLConnection_Cast
 
 def SLConnection_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> SLConnection
+    SLConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> SLConnection
+    """
   return _IO.SLConnection_ConstCast(*args)
-SLConnection_ConstCast = _IO.SLConnection_ConstCast
 
 class ArclinkException(RecordStreamException):
+    """Proxy of C++ Seiscomp::RecordStream::Arclink::_private::ArclinkException class"""
     __swig_setmethods__ = {}
     for _s in [RecordStreamException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ArclinkException, name, value)
@@ -1152,6 +2220,10 @@ class ArclinkException(RecordStreamException):
     __getattr__ = lambda self, name: _swig_getattr(self, ArclinkException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkException self) -> ArclinkException
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkException self, string what) -> ArclinkException
+        """
         this = _IO.new_ArclinkException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -1161,6 +2233,7 @@ ArclinkException_swigregister = _IO.ArclinkException_swigregister
 ArclinkException_swigregister(ArclinkException)
 
 class ArclinkCommandException(ArclinkException):
+    """Proxy of C++ Seiscomp::RecordStream::Arclink::_private::ArclinkCommandException class"""
     __swig_setmethods__ = {}
     for _s in [ArclinkException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ArclinkCommandException, name, value)
@@ -1169,6 +2242,10 @@ class ArclinkCommandException(ArclinkException):
     __getattr__ = lambda self, name: _swig_getattr(self, ArclinkCommandException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkCommandException self) -> ArclinkCommandException
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkCommandException self, string what) -> ArclinkCommandException
+        """
         this = _IO.new_ArclinkCommandException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -1178,6 +2255,7 @@ ArclinkCommandException_swigregister = _IO.ArclinkCommandException_swigregister
 ArclinkCommandException_swigregister(ArclinkCommandException)
 
 class ArclinkConnection(RecordStream):
+    """Proxy of C++ Seiscomp::RecordStream::Arclink::_private::ArclinkConnection class"""
     __swig_setmethods__ = {}
     for _s in [RecordStream]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ArclinkConnection, name, value)
@@ -1185,55 +2263,136 @@ class ArclinkConnection(RecordStream):
     for _s in [RecordStream]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, ArclinkConnection, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.ArclinkConnection_ClassName
-    if _newclass:ClassName = staticmethod(_IO.ArclinkConnection_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.ArclinkConnection_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.ArclinkConnection_TypeInfo)
-    def className(self): return _IO.ArclinkConnection_className(self)
-    def typeInfo(self): return _IO.ArclinkConnection_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.ArclinkConnection_Cast
-    if _newclass:Cast = staticmethod(_IO.ArclinkConnection_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.ArclinkConnection_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.ArclinkConnection_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.ArclinkConnection_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.ArclinkConnection_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(ArclinkConnection self) -> char const *"""
+        return _IO.ArclinkConnection_className(self)
+
+    def typeInfo(self):
+        """typeInfo(ArclinkConnection self) -> RTTI"""
+        return _IO.ArclinkConnection_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> ArclinkConnection
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> ArclinkConnection
+        """
+        return _IO.ArclinkConnection_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> ArclinkConnection
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArclinkConnection
+        """
+        return _IO.ArclinkConnection_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkConnection self) -> ArclinkConnection
+        __init__(Seiscomp::RecordStream::Arclink::_private::ArclinkConnection self, string serverloc) -> ArclinkConnection
+        """
         this = _IO.new_ArclinkConnection(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_ArclinkConnection
     __del__ = lambda self : None;
-    def setRecordType(self, *args): return _IO.ArclinkConnection_setRecordType(self, *args)
-    def setSource(self, *args): return _IO.ArclinkConnection_setSource(self, *args)
-    def setUser(self, *args): return _IO.ArclinkConnection_setUser(self, *args)
-    def addStream(self, *args): return _IO.ArclinkConnection_addStream(self, *args)
-    def removeStream(self, *args): return _IO.ArclinkConnection_removeStream(self, *args)
-    def setStartTime(self, *args): return _IO.ArclinkConnection_setStartTime(self, *args)
-    def setEndTime(self, *args): return _IO.ArclinkConnection_setEndTime(self, *args)
-    def setTimeWindow(self, *args): return _IO.ArclinkConnection_setTimeWindow(self, *args)
-    def setTimeout(self, *args): return _IO.ArclinkConnection_setTimeout(self, *args)
-    def clear(self): return _IO.ArclinkConnection_clear(self)
-    def close(self): return _IO.ArclinkConnection_close(self)
-    def reconnect(self): return _IO.ArclinkConnection_reconnect(self)
-    def stream(self): return _IO.ArclinkConnection_stream(self)
+    def setRecordType(self, *args):
+        """setRecordType(ArclinkConnection self, char const * arg2) -> bool"""
+        return _IO.ArclinkConnection_setRecordType(self, *args)
+
+    def setSource(self, *args):
+        """setSource(ArclinkConnection self, string serverloc) -> bool"""
+        return _IO.ArclinkConnection_setSource(self, *args)
+
+    def setUser(self, *args):
+        """setUser(ArclinkConnection self, string name, string password) -> bool"""
+        return _IO.ArclinkConnection_setUser(self, *args)
+
+    def addStream(self, *args):
+        """
+        addStream(ArclinkConnection self, string net, string sta, string loc, string cha) -> bool
+        addStream(ArclinkConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        """
+        return _IO.ArclinkConnection_addStream(self, *args)
+
+    def removeStream(self, *args):
+        """removeStream(ArclinkConnection self, string net, string sta, string loc, string cha) -> bool"""
+        return _IO.ArclinkConnection_removeStream(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(ArclinkConnection self, Time stime) -> bool"""
+        return _IO.ArclinkConnection_setStartTime(self, *args)
+
+    def setEndTime(self, *args):
+        """setEndTime(ArclinkConnection self, Time etime) -> bool"""
+        return _IO.ArclinkConnection_setEndTime(self, *args)
+
+    def setTimeWindow(self, *args):
+        """setTimeWindow(ArclinkConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
+        return _IO.ArclinkConnection_setTimeWindow(self, *args)
+
+    def setTimeout(self, *args):
+        """setTimeout(ArclinkConnection self, int seconds) -> bool"""
+        return _IO.ArclinkConnection_setTimeout(self, *args)
+
+    def clear(self):
+        """clear(ArclinkConnection self) -> bool"""
+        return _IO.ArclinkConnection_clear(self)
+
+    def close(self):
+        """close(ArclinkConnection self)"""
+        return _IO.ArclinkConnection_close(self)
+
+    def reconnect(self):
+        """reconnect(ArclinkConnection self) -> bool"""
+        return _IO.ArclinkConnection_reconnect(self)
+
+    def stream(self):
+        """stream(ArclinkConnection self) -> std::istream &"""
+        return _IO.ArclinkConnection_stream(self)
+
 ArclinkConnection_swigregister = _IO.ArclinkConnection_swigregister
 ArclinkConnection_swigregister(ArclinkConnection)
 
 def ArclinkConnection_ClassName():
+  """ArclinkConnection_ClassName() -> char const *"""
   return _IO.ArclinkConnection_ClassName()
-ArclinkConnection_ClassName = _IO.ArclinkConnection_ClassName
 
 def ArclinkConnection_TypeInfo():
+  """ArclinkConnection_TypeInfo() -> RTTI"""
   return _IO.ArclinkConnection_TypeInfo()
-ArclinkConnection_TypeInfo = _IO.ArclinkConnection_TypeInfo
 
 def ArclinkConnection_Cast(*args):
+  """
+    Cast(BaseObject o) -> ArclinkConnection
+    ArclinkConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> ArclinkConnection
+    """
   return _IO.ArclinkConnection_Cast(*args)
-ArclinkConnection_Cast = _IO.ArclinkConnection_Cast
 
 def ArclinkConnection_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> ArclinkConnection
+    ArclinkConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArclinkConnection
+    """
   return _IO.ArclinkConnection_ConstCast(*args)
-ArclinkConnection_ConstCast = _IO.ArclinkConnection_ConstCast
 
 class CombinedConnection(RecordStream):
+    """Proxy of C++ Seiscomp::RecordStream::Combined::_private::CombinedConnection class"""
     __swig_setmethods__ = {}
     for _s in [RecordStream]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, CombinedConnection, name, value)
@@ -1241,52 +2400,124 @@ class CombinedConnection(RecordStream):
     for _s in [RecordStream]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, CombinedConnection, name)
     __repr__ = _swig_repr
-    __swig_getmethods__["ClassName"] = lambda x: _IO.CombinedConnection_ClassName
-    if _newclass:ClassName = staticmethod(_IO.CombinedConnection_ClassName)
-    __swig_getmethods__["TypeInfo"] = lambda x: _IO.CombinedConnection_TypeInfo
-    if _newclass:TypeInfo = staticmethod(_IO.CombinedConnection_TypeInfo)
-    def className(self): return _IO.CombinedConnection_className(self)
-    def typeInfo(self): return _IO.CombinedConnection_typeInfo(self)
-    __swig_getmethods__["Cast"] = lambda x: _IO.CombinedConnection_Cast
-    if _newclass:Cast = staticmethod(_IO.CombinedConnection_Cast)
-    __swig_getmethods__["ConstCast"] = lambda x: _IO.CombinedConnection_ConstCast
-    if _newclass:ConstCast = staticmethod(_IO.CombinedConnection_ConstCast)
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _IO.CombinedConnection_ClassName()
+
+    if _newclass:ClassName = staticmethod(ClassName)
+    __swig_getmethods__["ClassName"] = lambda x: ClassName
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _IO.CombinedConnection_TypeInfo()
+
+    if _newclass:TypeInfo = staticmethod(TypeInfo)
+    __swig_getmethods__["TypeInfo"] = lambda x: TypeInfo
+    def className(self):
+        """className(CombinedConnection self) -> char const *"""
+        return _IO.CombinedConnection_className(self)
+
+    def typeInfo(self):
+        """typeInfo(CombinedConnection self) -> RTTI"""
+        return _IO.CombinedConnection_typeInfo(self)
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> CombinedConnection
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> CombinedConnection
+        """
+        return _IO.CombinedConnection_Cast(*args)
+
+    if _newclass:Cast = staticmethod(Cast)
+    __swig_getmethods__["Cast"] = lambda x: Cast
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> CombinedConnection
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> CombinedConnection
+        """
+        return _IO.CombinedConnection_ConstCast(*args)
+
+    if _newclass:ConstCast = staticmethod(ConstCast)
+    __swig_getmethods__["ConstCast"] = lambda x: ConstCast
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::RecordStream::Combined::_private::CombinedConnection self) -> CombinedConnection
+        __init__(Seiscomp::RecordStream::Combined::_private::CombinedConnection self, string serverloc) -> CombinedConnection
+        """
         this = _IO.new_CombinedConnection(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_CombinedConnection
     __del__ = lambda self : None;
-    def setRecordType(self, *args): return _IO.CombinedConnection_setRecordType(self, *args)
-    def setSource(self, *args): return _IO.CombinedConnection_setSource(self, *args)
-    def addStream(self, *args): return _IO.CombinedConnection_addStream(self, *args)
-    def setStartTime(self, *args): return _IO.CombinedConnection_setStartTime(self, *args)
-    def setEndTime(self, *args): return _IO.CombinedConnection_setEndTime(self, *args)
-    def setTimeWindow(self, *args): return _IO.CombinedConnection_setTimeWindow(self, *args)
-    def setTimeout(self, *args): return _IO.CombinedConnection_setTimeout(self, *args)
-    def close(self): return _IO.CombinedConnection_close(self)
-    def stream(self): return _IO.CombinedConnection_stream(self)
-    def createRecord(self, *args): return _IO.CombinedConnection_createRecord(self, *args)
+    def setRecordType(self, *args):
+        """setRecordType(CombinedConnection self, char const * arg2) -> bool"""
+        return _IO.CombinedConnection_setRecordType(self, *args)
+
+    def setSource(self, *args):
+        """setSource(CombinedConnection self, string serverloc) -> bool"""
+        return _IO.CombinedConnection_setSource(self, *args)
+
+    def addStream(self, *args):
+        """
+        addStream(CombinedConnection self, string net, string sta, string loc, string cha) -> bool
+        addStream(CombinedConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        """
+        return _IO.CombinedConnection_addStream(self, *args)
+
+    def setStartTime(self, *args):
+        """setStartTime(CombinedConnection self, Time stime) -> bool"""
+        return _IO.CombinedConnection_setStartTime(self, *args)
+
+    def setEndTime(self, *args):
+        """setEndTime(CombinedConnection self, Time etime) -> bool"""
+        return _IO.CombinedConnection_setEndTime(self, *args)
+
+    def setTimeWindow(self, *args):
+        """setTimeWindow(CombinedConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
+        return _IO.CombinedConnection_setTimeWindow(self, *args)
+
+    def setTimeout(self, *args):
+        """setTimeout(CombinedConnection self, int seconds) -> bool"""
+        return _IO.CombinedConnection_setTimeout(self, *args)
+
+    def close(self):
+        """close(CombinedConnection self)"""
+        return _IO.CombinedConnection_close(self)
+
+    def stream(self):
+        """stream(CombinedConnection self) -> std::istream &"""
+        return _IO.CombinedConnection_stream(self)
+
+    def createRecord(self, *args):
+        """createRecord(CombinedConnection self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"""
+        return _IO.CombinedConnection_createRecord(self, *args)
+
 CombinedConnection_swigregister = _IO.CombinedConnection_swigregister
 CombinedConnection_swigregister(CombinedConnection)
 
 def CombinedConnection_ClassName():
+  """CombinedConnection_ClassName() -> char const *"""
   return _IO.CombinedConnection_ClassName()
-CombinedConnection_ClassName = _IO.CombinedConnection_ClassName
 
 def CombinedConnection_TypeInfo():
+  """CombinedConnection_TypeInfo() -> RTTI"""
   return _IO.CombinedConnection_TypeInfo()
-CombinedConnection_TypeInfo = _IO.CombinedConnection_TypeInfo
 
 def CombinedConnection_Cast(*args):
+  """
+    Cast(BaseObject o) -> CombinedConnection
+    CombinedConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> CombinedConnection
+    """
   return _IO.CombinedConnection_Cast(*args)
-CombinedConnection_Cast = _IO.CombinedConnection_Cast
 
 def CombinedConnection_ConstCast(*args):
+  """
+    ConstCast(BaseObject o) -> CombinedConnection
+    CombinedConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> CombinedConnection
+    """
   return _IO.CombinedConnection_ConstCast(*args)
-CombinedConnection_ConstCast = _IO.CombinedConnection_ConstCast
 
 class RecordIIRFilterF(RecordFilterInterface):
+    """Proxy of C++ Seiscomp::IO::RecordIIRFilter<(float)> class"""
     __swig_setmethods__ = {}
     for _s in [RecordFilterInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordIIRFilterF, name, value)
@@ -1295,27 +2526,56 @@ class RecordIIRFilterF(RecordFilterInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordIIRFilterF, name)
     __repr__ = _swig_repr
     def __init__(self, filter=None): 
+        """
+        __init__(Seiscomp::IO::RecordIIRFilter<(float)> self, InPlaceFilterF filter=None) -> RecordIIRFilterF
+        __init__(Seiscomp::IO::RecordIIRFilter<(float)> self) -> RecordIIRFilterF
+        """
         this = _IO.new_RecordIIRFilterF(filter)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordIIRFilterF
     __del__ = lambda self : None;
-    def setIIR(self, *args): return _IO.RecordIIRFilterF_setIIR(self, *args)
-    def filter(self, *args): return _IO.RecordIIRFilterF_filter(self, *args)
-    def apply(self, *args): return _IO.RecordIIRFilterF_apply(self, *args)
+    def setIIR(self, *args):
+        """setIIR(RecordIIRFilterF self, InPlaceFilterF f)"""
+        return _IO.RecordIIRFilterF_setIIR(self, *args)
+
+    def filter(self, *args):
+        """
+        filter(RecordIIRFilterF self) -> InPlaceFilterF
+        filter(RecordIIRFilterF self) -> InPlaceFilterF
+        """
+        return _IO.RecordIIRFilterF_filter(self, *args)
+
+    def apply(self, *args):
+        """apply(RecordIIRFilterF self, GenericRecord rec) -> bool"""
+        return _IO.RecordIIRFilterF_apply(self, *args)
+
     def __nonzero__(self):
         return _IO.RecordIIRFilterF___nonzero__(self)
     __bool__ = __nonzero__
 
 
-    def feed(self, *args): return _IO.RecordIIRFilterF_feed(self, *args)
-    def flush(self): return _IO.RecordIIRFilterF_flush(self)
-    def reset(self): return _IO.RecordIIRFilterF_reset(self)
-    def clone(self): return _IO.RecordIIRFilterF_clone(self)
+    def feed(self, *args):
+        """feed(RecordIIRFilterF self, Record rec) -> Record"""
+        return _IO.RecordIIRFilterF_feed(self, *args)
+
+    def flush(self):
+        """flush(RecordIIRFilterF self) -> Record"""
+        return _IO.RecordIIRFilterF_flush(self)
+
+    def reset(self):
+        """reset(RecordIIRFilterF self)"""
+        return _IO.RecordIIRFilterF_reset(self)
+
+    def clone(self):
+        """clone(RecordIIRFilterF self) -> RecordFilterInterface"""
+        return _IO.RecordIIRFilterF_clone(self)
+
 RecordIIRFilterF_swigregister = _IO.RecordIIRFilterF_swigregister
 RecordIIRFilterF_swigregister(RecordIIRFilterF)
 
 class RecordIIRFilterD(RecordFilterInterface):
+    """Proxy of C++ Seiscomp::IO::RecordIIRFilter<(double)> class"""
     __swig_setmethods__ = {}
     for _s in [RecordFilterInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordIIRFilterD, name, value)
@@ -1324,27 +2584,56 @@ class RecordIIRFilterD(RecordFilterInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordIIRFilterD, name)
     __repr__ = _swig_repr
     def __init__(self, filter=None): 
+        """
+        __init__(Seiscomp::IO::RecordIIRFilter<(double)> self, InPlaceFilterD filter=None) -> RecordIIRFilterD
+        __init__(Seiscomp::IO::RecordIIRFilter<(double)> self) -> RecordIIRFilterD
+        """
         this = _IO.new_RecordIIRFilterD(filter)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordIIRFilterD
     __del__ = lambda self : None;
-    def setIIR(self, *args): return _IO.RecordIIRFilterD_setIIR(self, *args)
-    def filter(self, *args): return _IO.RecordIIRFilterD_filter(self, *args)
-    def apply(self, *args): return _IO.RecordIIRFilterD_apply(self, *args)
+    def setIIR(self, *args):
+        """setIIR(RecordIIRFilterD self, InPlaceFilterD f)"""
+        return _IO.RecordIIRFilterD_setIIR(self, *args)
+
+    def filter(self, *args):
+        """
+        filter(RecordIIRFilterD self) -> InPlaceFilterD
+        filter(RecordIIRFilterD self) -> InPlaceFilterD
+        """
+        return _IO.RecordIIRFilterD_filter(self, *args)
+
+    def apply(self, *args):
+        """apply(RecordIIRFilterD self, GenericRecord rec) -> bool"""
+        return _IO.RecordIIRFilterD_apply(self, *args)
+
     def __nonzero__(self):
         return _IO.RecordIIRFilterD___nonzero__(self)
     __bool__ = __nonzero__
 
 
-    def feed(self, *args): return _IO.RecordIIRFilterD_feed(self, *args)
-    def flush(self): return _IO.RecordIIRFilterD_flush(self)
-    def reset(self): return _IO.RecordIIRFilterD_reset(self)
-    def clone(self): return _IO.RecordIIRFilterD_clone(self)
+    def feed(self, *args):
+        """feed(RecordIIRFilterD self, Record rec) -> Record"""
+        return _IO.RecordIIRFilterD_feed(self, *args)
+
+    def flush(self):
+        """flush(RecordIIRFilterD self) -> Record"""
+        return _IO.RecordIIRFilterD_flush(self)
+
+    def reset(self):
+        """reset(RecordIIRFilterD self)"""
+        return _IO.RecordIIRFilterD_reset(self)
+
+    def clone(self):
+        """clone(RecordIIRFilterD self) -> RecordFilterInterface"""
+        return _IO.RecordIIRFilterD_clone(self)
+
 RecordIIRFilterD_swigregister = _IO.RecordIIRFilterD_swigregister
 RecordIIRFilterD_swigregister(RecordIIRFilterD)
 
 class RecordResamplerF(RecordResamplerBase):
+    """Proxy of C++ Seiscomp::IO::RecordResampler<(float)> class"""
     __swig_setmethods__ = {}
     for _s in [RecordResamplerBase]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordResamplerF, name, value)
@@ -1353,18 +2642,35 @@ class RecordResamplerF(RecordResamplerBase):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordResamplerF, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordResampler<(float)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3) -> RecordResamplerF
+        __init__(Seiscomp::IO::RecordResampler<(float)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10) -> RecordResamplerF
+        __init__(Seiscomp::IO::RecordResampler<(float)> self, double targetFrequency, double fp=0.7, double fs=0.9) -> RecordResamplerF
+        __init__(Seiscomp::IO::RecordResampler<(float)> self, double targetFrequency, double fp=0.7) -> RecordResamplerF
+        __init__(Seiscomp::IO::RecordResampler<(float)> self, double targetFrequency) -> RecordResamplerF
+        """
         this = _IO.new_RecordResamplerF(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordResamplerF
     __del__ = lambda self : None;
-    def feed(self, *args): return _IO.RecordResamplerF_feed(self, *args)
-    def reset(self): return _IO.RecordResamplerF_reset(self)
-    def clone(self): return _IO.RecordResamplerF_clone(self)
+    def feed(self, *args):
+        """feed(RecordResamplerF self, Record record) -> Record"""
+        return _IO.RecordResamplerF_feed(self, *args)
+
+    def reset(self):
+        """reset(RecordResamplerF self)"""
+        return _IO.RecordResamplerF_reset(self)
+
+    def clone(self):
+        """clone(RecordResamplerF self) -> RecordFilterInterface"""
+        return _IO.RecordResamplerF_clone(self)
+
 RecordResamplerF_swigregister = _IO.RecordResamplerF_swigregister
 RecordResamplerF_swigregister(RecordResamplerF)
 
 class RecordResamplerD(RecordResamplerBase):
+    """Proxy of C++ Seiscomp::IO::RecordResampler<(double)> class"""
     __swig_setmethods__ = {}
     for _s in [RecordResamplerBase]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordResamplerD, name, value)
@@ -1373,18 +2679,35 @@ class RecordResamplerD(RecordResamplerBase):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordResamplerD, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordResampler<(double)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3) -> RecordResamplerD
+        __init__(Seiscomp::IO::RecordResampler<(double)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10) -> RecordResamplerD
+        __init__(Seiscomp::IO::RecordResampler<(double)> self, double targetFrequency, double fp=0.7, double fs=0.9) -> RecordResamplerD
+        __init__(Seiscomp::IO::RecordResampler<(double)> self, double targetFrequency, double fp=0.7) -> RecordResamplerD
+        __init__(Seiscomp::IO::RecordResampler<(double)> self, double targetFrequency) -> RecordResamplerD
+        """
         this = _IO.new_RecordResamplerD(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordResamplerD
     __del__ = lambda self : None;
-    def feed(self, *args): return _IO.RecordResamplerD_feed(self, *args)
-    def reset(self): return _IO.RecordResamplerD_reset(self)
-    def clone(self): return _IO.RecordResamplerD_clone(self)
+    def feed(self, *args):
+        """feed(RecordResamplerD self, Record record) -> Record"""
+        return _IO.RecordResamplerD_feed(self, *args)
+
+    def reset(self):
+        """reset(RecordResamplerD self)"""
+        return _IO.RecordResamplerD_reset(self)
+
+    def clone(self):
+        """clone(RecordResamplerD self) -> RecordFilterInterface"""
+        return _IO.RecordResamplerD_clone(self)
+
 RecordResamplerD_swigregister = _IO.RecordResamplerD_swigregister
 RecordResamplerD_swigregister(RecordResamplerD)
 
 class RecordResamplerI(RecordResamplerBase):
+    """Proxy of C++ Seiscomp::IO::RecordResampler<(int)> class"""
     __swig_setmethods__ = {}
     for _s in [RecordResamplerBase]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RecordResamplerI, name, value)
@@ -1393,14 +2716,30 @@ class RecordResamplerI(RecordResamplerBase):
     __getattr__ = lambda self, name: _swig_getattr(self, RecordResamplerI, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::IO::RecordResampler<(int)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3) -> RecordResamplerI
+        __init__(Seiscomp::IO::RecordResampler<(int)> self, double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10) -> RecordResamplerI
+        __init__(Seiscomp::IO::RecordResampler<(int)> self, double targetFrequency, double fp=0.7, double fs=0.9) -> RecordResamplerI
+        __init__(Seiscomp::IO::RecordResampler<(int)> self, double targetFrequency, double fp=0.7) -> RecordResamplerI
+        __init__(Seiscomp::IO::RecordResampler<(int)> self, double targetFrequency) -> RecordResamplerI
+        """
         this = _IO.new_RecordResamplerI(*args)
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _IO.delete_RecordResamplerI
     __del__ = lambda self : None;
-    def feed(self, *args): return _IO.RecordResamplerI_feed(self, *args)
-    def reset(self): return _IO.RecordResamplerI_reset(self)
-    def clone(self): return _IO.RecordResamplerI_clone(self)
+    def feed(self, *args):
+        """feed(RecordResamplerI self, Record record) -> Record"""
+        return _IO.RecordResamplerI_feed(self, *args)
+
+    def reset(self):
+        """reset(RecordResamplerI self)"""
+        return _IO.RecordResamplerI_reset(self)
+
+    def clone(self):
+        """clone(RecordResamplerI self) -> RecordFilterInterface"""
+        return _IO.RecordResamplerI_clone(self)
+
 RecordResamplerI_swigregister = _IO.RecordResamplerI_swigregister
 RecordResamplerI_swigregister(RecordResamplerI)
 

@@ -180,14 +180,14 @@ class SC_SYSTEM_CORE_API Bindings : public Core::BaseObject {
 		 * @return A pointer to the parameter list if available, NULL otherwise.
 		 */
 		const KeyValues *getKeys(const std::string &networkCode,
-		                         const std::string &stationCode);
+		                         const std::string &stationCode) const;
 
 		/**
 		 * @brief Convenience function for getKeys(netCode, staCode)
 		 * @param station The station object
 		 * @return A pointer to the parameter list if available, NULL otherwise.
 		 */
-		const KeyValues *getKeys(const DataModel::Station *station);
+		const KeyValues *getKeys(const DataModel::Station *station) const;
 
 		/**
 		 * @brief Removes a binding for a station.

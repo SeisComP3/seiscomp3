@@ -811,14 +811,22 @@ for myfile in filelist:
         msg = email.message_from_file(fid)
     who = msg['From']
 
-    # Heuristic to set DCID/source string from From:
-    emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
-    try:
-        host = emailaddr.split('@')[1]
-        d = host.split('.')[-2]
-    except IndexError:
-        host = emailaddr
-        d = emailaddr    #???
+    if myfile.find('infp_ro') > -1:
+	# Special case for INFP
+	d = 'infp'
+	host = 'infp.ro'
+	emailaddr = 'infp.ro'
+	print ' ** SPECIAL CASE FOR INFP **'
+
+    else:
+    	# Heuristic to set DCID/source string from From:
+    	emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
+    	try:
+        	host = emailaddr.split('@')[1]
+        	d = host.split('.')[-2]
+    	except IndexError:
+        	host = emailaddr
+        	d = emailaddr    #???
 
     port = -1
 

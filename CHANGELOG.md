@@ -2,6 +2,80 @@
 
 ## Release YYYY.ddd
 
+* seiscomp
+
+  * Use symbolic links to module defaults and configurations instead of
+    copying when creating module aliases
+
+* doc
+
+  * Added plugin section to module documentation with all documented
+    plugins
+
+* spread
+
+  * Upgraded to version 4.4
+
+* scconfig
+
+  * Fixed issue with deleted structures when saving a configuration file.
+    Prior to that fix the structure was not deleted.
+  * Added documentation section which allows to browse changelogs and
+    documentations of installed modules
+
+* scrttv
+
+  * If loading data from a file then all data is loaded and --buffer-size
+    is being ignored. Furthermore XML event parameter files can be loaded
+    (File->Open) and picks will be shown on top of loaded traces.
+
+* scolv
+
+  * Show symbols for unassociated station by default up to 360 degrees.
+    This distance Can be changed with:
+    ```
+    # Show unassociated stations up to 20 degrees
+    olv.map.stations.unassociatedMaxDist = 20
+    ```
+
+* scevent
+
+  * Added parameter to also compare picks that are associated with
+    weight 0
+    ```
+    eventAssociation.allowLooseAssociatedArrivals = true
+    ```
+  * Added region check plugin that allows to configure a list of arbitrary
+    regions and to set the event type to "outside of network interest" if
+    its location is outside any region configured.
+
+* scevtls
+
+  * Added --modified-after option
+
+* dlsv2inv, fdsn2inv
+
+  * Make sample rate conversion from float to fraction more stable
+
+* fdsnws
+
+  * Make arclink-access bindings optional through configuration parameter
+    useArclinkAccess
+  * Add option ```recordBulkSize``` which defaults to 100kb and improves
+    the dataselect performance significantly
+
+* seedlink
+
+  * Added ps2400_eth plugin configuration
+
+* GUI
+
+  * Fixed bug in map tilestore that caused custom tilestore implementations
+    to crash under certain circumstances
+
+
+## Release 2016.333
+
 The database schema has changed since the previous version. To upgrade your
 database from version 0.8 to 0.9 to following SQL script can be used:
 
@@ -48,6 +122,10 @@ module has disabled or enabled a particular station the CreationInfo
 structure has been added to ConfigStation.
 
 ----
+
+* slmon
+
+  * Ported package from SeisComP 2.5
 
 * trunk
 

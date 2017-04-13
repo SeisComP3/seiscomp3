@@ -1,4 +1,4 @@
-AC_INIT(Spread, 4.3.0)
+AC_INIT(Spread, 4.4.0)
 
 AC_CONFIG_AUX_DIR(buildtools)
 AC_CONFIG_HEADERS(daemon/config.h)

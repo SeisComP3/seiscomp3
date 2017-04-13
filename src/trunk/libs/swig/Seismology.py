@@ -110,91 +110,234 @@ SwigPyIterator_swigregister = _Seismology.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 import IO
+import Math
 import Core
 import DataModel
 import Config
 class TravelTimeList_internal(_object):
+    """Proxy of C++ std::list<(Seiscomp::TravelTime)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTimeList_internal, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, TravelTimeList_internal, name)
     __repr__ = _swig_repr
-    def iterator(self): return _Seismology.TravelTimeList_internal_iterator(self)
+    def iterator(self):
+        """iterator(TravelTimeList_internal self) -> SwigPyIterator"""
+        return _Seismology.TravelTimeList_internal_iterator(self)
+
     def __iter__(self): return self.iterator()
-    def __nonzero__(self): return _Seismology.TravelTimeList_internal___nonzero__(self)
-    def __bool__(self): return _Seismology.TravelTimeList_internal___bool__(self)
-    def __len__(self): return _Seismology.TravelTimeList_internal___len__(self)
-    def pop(self): return _Seismology.TravelTimeList_internal_pop(self)
-    def __getslice__(self, *args): return _Seismology.TravelTimeList_internal___getslice__(self, *args)
-    def __setslice__(self, *args): return _Seismology.TravelTimeList_internal___setslice__(self, *args)
-    def __delslice__(self, *args): return _Seismology.TravelTimeList_internal___delslice__(self, *args)
-    def __delitem__(self, *args): return _Seismology.TravelTimeList_internal___delitem__(self, *args)
-    def __getitem__(self, *args): return _Seismology.TravelTimeList_internal___getitem__(self, *args)
-    def __setitem__(self, *args): return _Seismology.TravelTimeList_internal___setitem__(self, *args)
-    def append(self, *args): return _Seismology.TravelTimeList_internal_append(self, *args)
-    def empty(self): return _Seismology.TravelTimeList_internal_empty(self)
-    def size(self): return _Seismology.TravelTimeList_internal_size(self)
-    def clear(self): return _Seismology.TravelTimeList_internal_clear(self)
-    def swap(self, *args): return _Seismology.TravelTimeList_internal_swap(self, *args)
-    def get_allocator(self): return _Seismology.TravelTimeList_internal_get_allocator(self)
-    def begin(self): return _Seismology.TravelTimeList_internal_begin(self)
-    def end(self): return _Seismology.TravelTimeList_internal_end(self)
-    def rbegin(self): return _Seismology.TravelTimeList_internal_rbegin(self)
-    def rend(self): return _Seismology.TravelTimeList_internal_rend(self)
-    def pop_back(self): return _Seismology.TravelTimeList_internal_pop_back(self)
-    def erase(self, *args): return _Seismology.TravelTimeList_internal_erase(self, *args)
+    def __nonzero__(self):
+        """__nonzero__(TravelTimeList_internal self) -> bool"""
+        return _Seismology.TravelTimeList_internal___nonzero__(self)
+
+    def __bool__(self):
+        """__bool__(TravelTimeList_internal self) -> bool"""
+        return _Seismology.TravelTimeList_internal___bool__(self)
+
+    def __len__(self):
+        """__len__(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::size_type"""
+        return _Seismology.TravelTimeList_internal___len__(self)
+
+    def pop(self):
+        """pop(TravelTimeList_internal self) -> TravelTime"""
+        return _Seismology.TravelTimeList_internal_pop(self)
+
+    def __getslice__(self, *args):
+        """__getslice__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i, std::list< Seiscomp::TravelTime >::difference_type j) -> TravelTimeList_internal"""
+        return _Seismology.TravelTimeList_internal___getslice__(self, *args)
+
+    def __setslice__(self, *args):
+        """
+        __setslice__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i, std::list< Seiscomp::TravelTime >::difference_type j, 
+            TravelTimeList_internal v=std::list< Seiscomp::TravelTime,std::allocator< Seiscomp::TravelTime > >())
+        __setslice__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i, std::list< Seiscomp::TravelTime >::difference_type j)
+        """
+        return _Seismology.TravelTimeList_internal___setslice__(self, *args)
+
+    def __delslice__(self, *args):
+        """__delslice__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i, std::list< Seiscomp::TravelTime >::difference_type j)"""
+        return _Seismology.TravelTimeList_internal___delslice__(self, *args)
+
+    def __delitem__(self, *args):
+        """
+        __delitem__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i)
+        __delitem__(TravelTimeList_internal self, PySliceObject * slice)
+        """
+        return _Seismology.TravelTimeList_internal___delitem__(self, *args)
+
+    def __getitem__(self, *args):
+        """
+        __getitem__(TravelTimeList_internal self, PySliceObject * slice) -> TravelTimeList_internal
+        __getitem__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i) -> TravelTime
+        """
+        return _Seismology.TravelTimeList_internal___getitem__(self, *args)
+
+    def __setitem__(self, *args):
+        """
+        __setitem__(TravelTimeList_internal self, PySliceObject * slice, TravelTimeList_internal v)
+        __setitem__(TravelTimeList_internal self, PySliceObject * slice)
+        __setitem__(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::difference_type i, TravelTime x)
+        """
+        return _Seismology.TravelTimeList_internal___setitem__(self, *args)
+
+    def append(self, *args):
+        """append(TravelTimeList_internal self, TravelTime x)"""
+        return _Seismology.TravelTimeList_internal_append(self, *args)
+
+    def empty(self):
+        """empty(TravelTimeList_internal self) -> bool"""
+        return _Seismology.TravelTimeList_internal_empty(self)
+
+    def size(self):
+        """size(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::size_type"""
+        return _Seismology.TravelTimeList_internal_size(self)
+
+    def clear(self):
+        """clear(TravelTimeList_internal self)"""
+        return _Seismology.TravelTimeList_internal_clear(self)
+
+    def swap(self, *args):
+        """swap(TravelTimeList_internal self, TravelTimeList_internal v)"""
+        return _Seismology.TravelTimeList_internal_swap(self, *args)
+
+    def get_allocator(self):
+        """get_allocator(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::allocator_type"""
+        return _Seismology.TravelTimeList_internal_get_allocator(self)
+
+    def begin(self):
+        """begin(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::iterator"""
+        return _Seismology.TravelTimeList_internal_begin(self)
+
+    def end(self):
+        """end(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::iterator"""
+        return _Seismology.TravelTimeList_internal_end(self)
+
+    def rbegin(self):
+        """rbegin(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::reverse_iterator"""
+        return _Seismology.TravelTimeList_internal_rbegin(self)
+
+    def rend(self):
+        """rend(TravelTimeList_internal self) -> std::list< Seiscomp::TravelTime >::reverse_iterator"""
+        return _Seismology.TravelTimeList_internal_rend(self)
+
+    def pop_back(self):
+        """pop_back(TravelTimeList_internal self)"""
+        return _Seismology.TravelTimeList_internal_pop_back(self)
+
+    def erase(self, *args):
+        """
+        erase(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::iterator pos) -> std::list< Seiscomp::TravelTime >::iterator
+        erase(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::iterator first, std::list< Seiscomp::TravelTime >::iterator last) -> std::list< Seiscomp::TravelTime >::iterator
+        """
+        return _Seismology.TravelTimeList_internal_erase(self, *args)
+
     def __init__(self, *args): 
+        """
+        __init__(std::list<(Seiscomp::TravelTime)> self) -> TravelTimeList_internal
+        __init__(std::list<(Seiscomp::TravelTime)> self, TravelTimeList_internal arg2) -> TravelTimeList_internal
+        __init__(std::list<(Seiscomp::TravelTime)> self, std::list< Seiscomp::TravelTime >::size_type size) -> TravelTimeList_internal
+        __init__(std::list<(Seiscomp::TravelTime)> self, std::list< Seiscomp::TravelTime >::size_type size, TravelTime value) -> TravelTimeList_internal
+        """
         this = _Seismology.new_TravelTimeList_internal(*args)
         try: self.this.append(this)
         except: self.this = this
-    def push_back(self, *args): return _Seismology.TravelTimeList_internal_push_back(self, *args)
-    def front(self): return _Seismology.TravelTimeList_internal_front(self)
-    def back(self): return _Seismology.TravelTimeList_internal_back(self)
-    def assign(self, *args): return _Seismology.TravelTimeList_internal_assign(self, *args)
-    def resize(self, *args): return _Seismology.TravelTimeList_internal_resize(self, *args)
-    def insert(self, *args): return _Seismology.TravelTimeList_internal_insert(self, *args)
-    def pop_front(self): return _Seismology.TravelTimeList_internal_pop_front(self)
-    def push_front(self, *args): return _Seismology.TravelTimeList_internal_push_front(self, *args)
-    def reverse(self): return _Seismology.TravelTimeList_internal_reverse(self)
+    def push_back(self, *args):
+        """push_back(TravelTimeList_internal self, TravelTime x)"""
+        return _Seismology.TravelTimeList_internal_push_back(self, *args)
+
+    def front(self):
+        """front(TravelTimeList_internal self) -> TravelTime"""
+        return _Seismology.TravelTimeList_internal_front(self)
+
+    def back(self):
+        """back(TravelTimeList_internal self) -> TravelTime"""
+        return _Seismology.TravelTimeList_internal_back(self)
+
+    def assign(self, *args):
+        """assign(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::size_type n, TravelTime x)"""
+        return _Seismology.TravelTimeList_internal_assign(self, *args)
+
+    def resize(self, *args):
+        """
+        resize(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::size_type new_size)
+        resize(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::size_type new_size, TravelTime x)
+        """
+        return _Seismology.TravelTimeList_internal_resize(self, *args)
+
+    def insert(self, *args):
+        """
+        insert(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::iterator pos, TravelTime x) -> std::list< Seiscomp::TravelTime >::iterator
+        insert(TravelTimeList_internal self, std::list< Seiscomp::TravelTime >::iterator pos, std::list< Seiscomp::TravelTime >::size_type n, 
+            TravelTime x)
+        """
+        return _Seismology.TravelTimeList_internal_insert(self, *args)
+
+    def pop_front(self):
+        """pop_front(TravelTimeList_internal self)"""
+        return _Seismology.TravelTimeList_internal_pop_front(self)
+
+    def push_front(self, *args):
+        """push_front(TravelTimeList_internal self, TravelTime x)"""
+        return _Seismology.TravelTimeList_internal_push_front(self, *args)
+
+    def reverse(self):
+        """reverse(TravelTimeList_internal self)"""
+        return _Seismology.TravelTimeList_internal_reverse(self)
+
     __swig_destroy__ = _Seismology.delete_TravelTimeList_internal
     __del__ = lambda self : None;
 TravelTimeList_internal_swigregister = _Seismology.TravelTimeList_internal_swigregister
 TravelTimeList_internal_swigregister(TravelTimeList_internal)
 
 class Regions(_object):
+    """Proxy of C++ Seiscomp::Regions class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, Regions, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, Regions, name)
     __repr__ = _swig_repr
     def __init__(self): 
+        """__init__(Seiscomp::Regions self) -> Regions"""
         this = _Seismology.new_Regions()
         try: self.this.append(this)
         except: self.this = this
-    __swig_getmethods__["load"] = lambda x: _Seismology.Regions_load
-    if _newclass:load = staticmethod(_Seismology.Regions_load)
-    __swig_getmethods__["getRegionName"] = lambda x: _Seismology.Regions_getRegionName
-    if _newclass:getRegionName = staticmethod(_Seismology.Regions_getRegionName)
-    __swig_getmethods__["polyRegions"] = lambda x: _Seismology.Regions_polyRegions
-    if _newclass:polyRegions = staticmethod(_Seismology.Regions_polyRegions)
+    def load():
+        """load()"""
+        return _Seismology.Regions_load()
+
+    if _newclass:load = staticmethod(load)
+    __swig_getmethods__["load"] = lambda x: load
+    def getRegionName(*args):
+        """getRegionName(double lat, double lon) -> std::string"""
+        return _Seismology.Regions_getRegionName(*args)
+
+    if _newclass:getRegionName = staticmethod(getRegionName)
+    __swig_getmethods__["getRegionName"] = lambda x: getRegionName
+    def polyRegions():
+        """polyRegions() -> Seiscomp::Geo::PolyRegions &"""
+        return _Seismology.Regions_polyRegions()
+
+    if _newclass:polyRegions = staticmethod(polyRegions)
+    __swig_getmethods__["polyRegions"] = lambda x: polyRegions
     __swig_destroy__ = _Seismology.delete_Regions
     __del__ = lambda self : None;
 Regions_swigregister = _Seismology.Regions_swigregister
 Regions_swigregister(Regions)
 
 def Regions_load():
+  """Regions_load()"""
   return _Seismology.Regions_load()
-Regions_load = _Seismology.Regions_load
 
 def Regions_getRegionName(*args):
+  """Regions_getRegionName(double lat, double lon) -> std::string"""
   return _Seismology.Regions_getRegionName(*args)
-Regions_getRegionName = _Seismology.Regions_getRegionName
 
 def Regions_polyRegions():
+  """Regions_polyRegions() -> Seiscomp::Geo::PolyRegions &"""
   return _Seismology.Regions_polyRegions()
-Regions_polyRegions = _Seismology.Regions_polyRegions
 
 class SensorLocationDelegate(Core.BaseObject):
+    """Proxy of C++ Seiscomp::Seismology::SensorLocationDelegate class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SensorLocationDelegate, name, value)
@@ -203,13 +346,17 @@ class SensorLocationDelegate(Core.BaseObject):
     __getattr__ = lambda self, name: _swig_getattr(self, SensorLocationDelegate, name)
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    def getSensorLocation(self, *args): return _Seismology.SensorLocationDelegate_getSensorLocation(self, *args)
+    def getSensorLocation(self, *args):
+        """getSensorLocation(SensorLocationDelegate self, Pick pick) -> SensorLocation"""
+        return _Seismology.SensorLocationDelegate_getSensorLocation(self, *args)
+
     __swig_destroy__ = _Seismology.delete_SensorLocationDelegate
     __del__ = lambda self : None;
 SensorLocationDelegate_swigregister = _Seismology.SensorLocationDelegate_swigregister
 SensorLocationDelegate_swigregister(SensorLocationDelegate)
 
 class LocatorInterface(Core.BaseObject):
+    """Proxy of C++ Seiscomp::Seismology::LocatorInterface class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocatorInterface, name, value)
@@ -228,39 +375,123 @@ class LocatorInterface(Core.BaseObject):
     Warning = _Seismology.LocatorInterface_Warning
     __swig_destroy__ = _Seismology.delete_LocatorInterface
     __del__ = lambda self : None;
-    __swig_getmethods__["Create"] = lambda x: _Seismology.LocatorInterface_Create
-    if _newclass:Create = staticmethod(_Seismology.LocatorInterface_Create)
-    def name(self): return _Seismology.LocatorInterface_name(self)
-    def setSensorLocationDelegate(self, *args): return _Seismology.LocatorInterface_setSensorLocationDelegate(self, *args)
-    def init(self, *args): return _Seismology.LocatorInterface_init(self, *args)
-    def parameters(self): return _Seismology.LocatorInterface_parameters(self)
-    def parameter(self, *args): return _Seismology.LocatorInterface_parameter(self, *args)
-    def setParameter(self, *args): return _Seismology.LocatorInterface_setParameter(self, *args)
-    def profiles(self): return _Seismology.LocatorInterface_profiles(self)
-    def setProfile(self, *args): return _Seismology.LocatorInterface_setProfile(self, *args)
-    def capabilities(self): return _Seismology.LocatorInterface_capabilities(self)
-    def locate(self, *args): return _Seismology.LocatorInterface_locate(self, *args)
-    def relocate(self, *args): return _Seismology.LocatorInterface_relocate(self, *args)
-    def lastMessage(self, *args): return _Seismology.LocatorInterface_lastMessage(self, *args)
-    def supports(self, *args): return _Seismology.LocatorInterface_supports(self, *args)
-    def setFixedDepth(self, *args): return _Seismology.LocatorInterface_setFixedDepth(self, *args)
-    def useFixedDepth(self, use=True): return _Seismology.LocatorInterface_useFixedDepth(self, use)
-    def usingFixedDepth(self): return _Seismology.LocatorInterface_usingFixedDepth(self)
-    def releaseDepth(self): return _Seismology.LocatorInterface_releaseDepth(self)
-    def setDistanceCutOff(self, *args): return _Seismology.LocatorInterface_setDistanceCutOff(self, *args)
-    def releaseDistanceCutOff(self): return _Seismology.LocatorInterface_releaseDistanceCutOff(self)
-    def isInitialLocationIgnored(self): return _Seismology.LocatorInterface_isInitialLocationIgnored(self)
-    def setIgnoreInitialLocation(self, *args): return _Seismology.LocatorInterface_setIgnoreInitialLocation(self, *args)
-    def getPick(self, *args): return _Seismology.LocatorInterface_getPick(self, *args)
-    def getSensorLocation(self, *args): return _Seismology.LocatorInterface_getSensorLocation(self, *args)
+    def Create(*args):
+        """Create(char const * algo) -> LocatorInterface"""
+        return _Seismology.LocatorInterface_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def name(self):
+        """name(LocatorInterface self) -> std::string const &"""
+        return _Seismology.LocatorInterface_name(self)
+
+    def setSensorLocationDelegate(self, *args):
+        """setSensorLocationDelegate(LocatorInterface self, SensorLocationDelegate delegate)"""
+        return _Seismology.LocatorInterface_setSensorLocationDelegate(self, *args)
+
+    def init(self, *args):
+        """init(LocatorInterface self, Config config) -> bool"""
+        return _Seismology.LocatorInterface_init(self, *args)
+
+    def parameters(self):
+        """parameters(LocatorInterface self) -> vectorStr"""
+        return _Seismology.LocatorInterface_parameters(self)
+
+    def parameter(self, *args):
+        """parameter(LocatorInterface self, std::string const & name) -> std::string"""
+        return _Seismology.LocatorInterface_parameter(self, *args)
+
+    def setParameter(self, *args):
+        """setParameter(LocatorInterface self, std::string const & name, std::string const & value) -> bool"""
+        return _Seismology.LocatorInterface_setParameter(self, *args)
+
+    def profiles(self):
+        """profiles(LocatorInterface self) -> vectorStr"""
+        return _Seismology.LocatorInterface_profiles(self)
+
+    def setProfile(self, *args):
+        """setProfile(LocatorInterface self, std::string const & name)"""
+        return _Seismology.LocatorInterface_setProfile(self, *args)
+
+    def capabilities(self):
+        """capabilities(LocatorInterface self) -> int"""
+        return _Seismology.LocatorInterface_capabilities(self)
+
+    def locate(self, *args):
+        """
+        locate(LocatorInterface self, Seiscomp::Seismology::LocatorInterface::PickList & pickList) -> Origin
+        locate(LocatorInterface self, Seiscomp::Seismology::LocatorInterface::PickList & pickList, double initLat, double initLon, 
+            double initDepth, Time initTime) -> Origin
+        """
+        return _Seismology.LocatorInterface_locate(self, *args)
+
+    def relocate(self, *args):
+        """relocate(LocatorInterface self, Origin origin) -> Origin"""
+        return _Seismology.LocatorInterface_relocate(self, *args)
+
+    def lastMessage(self, *args):
+        """lastMessage(LocatorInterface self, Seiscomp::Seismology::LocatorInterface::MessageType arg2) -> std::string"""
+        return _Seismology.LocatorInterface_lastMessage(self, *args)
+
+    def supports(self, *args):
+        """supports(LocatorInterface self, Seiscomp::Seismology::LocatorInterface::Capability arg2) -> bool"""
+        return _Seismology.LocatorInterface_supports(self, *args)
+
+    def setFixedDepth(self, *args):
+        """
+        setFixedDepth(LocatorInterface self, double depth, bool use=True)
+        setFixedDepth(LocatorInterface self, double depth)
+        """
+        return _Seismology.LocatorInterface_setFixedDepth(self, *args)
+
+    def useFixedDepth(self, use=True):
+        """
+        useFixedDepth(LocatorInterface self, bool use=True)
+        useFixedDepth(LocatorInterface self)
+        """
+        return _Seismology.LocatorInterface_useFixedDepth(self, use)
+
+    def usingFixedDepth(self):
+        """usingFixedDepth(LocatorInterface self) -> bool"""
+        return _Seismology.LocatorInterface_usingFixedDepth(self)
+
+    def releaseDepth(self):
+        """releaseDepth(LocatorInterface self)"""
+        return _Seismology.LocatorInterface_releaseDepth(self)
+
+    def setDistanceCutOff(self, *args):
+        """setDistanceCutOff(LocatorInterface self, double distance)"""
+        return _Seismology.LocatorInterface_setDistanceCutOff(self, *args)
+
+    def releaseDistanceCutOff(self):
+        """releaseDistanceCutOff(LocatorInterface self)"""
+        return _Seismology.LocatorInterface_releaseDistanceCutOff(self)
+
+    def isInitialLocationIgnored(self):
+        """isInitialLocationIgnored(LocatorInterface self) -> bool"""
+        return _Seismology.LocatorInterface_isInitialLocationIgnored(self)
+
+    def setIgnoreInitialLocation(self, *args):
+        """setIgnoreInitialLocation(LocatorInterface self, bool f)"""
+        return _Seismology.LocatorInterface_setIgnoreInitialLocation(self, *args)
+
+    def getPick(self, *args):
+        """getPick(LocatorInterface self, Arrival arrival) -> Pick"""
+        return _Seismology.LocatorInterface_getPick(self, *args)
+
+    def getSensorLocation(self, *args):
+        """getSensorLocation(LocatorInterface self, Pick pick) -> SensorLocation"""
+        return _Seismology.LocatorInterface_getSensorLocation(self, *args)
+
 LocatorInterface_swigregister = _Seismology.LocatorInterface_swigregister
 LocatorInterface_swigregister(LocatorInterface)
 
 def LocatorInterface_Create(*args):
+  """LocatorInterface_Create(char const * algo) -> LocatorInterface"""
   return _Seismology.LocatorInterface_Create(*args)
-LocatorInterface_Create = _Seismology.LocatorInterface_Create
 
 class PickNotFoundException(Core.GeneralException):
+    """Proxy of C++ Seiscomp::Seismology::PickNotFoundException class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, PickNotFoundException, name, value)
@@ -269,6 +500,10 @@ class PickNotFoundException(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, PickNotFoundException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::Seismology::PickNotFoundException self) -> PickNotFoundException
+        __init__(Seiscomp::Seismology::PickNotFoundException self, std::string const & str) -> PickNotFoundException
+        """
         this = _Seismology.new_PickNotFoundException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -278,6 +513,7 @@ PickNotFoundException_swigregister = _Seismology.PickNotFoundException_swigregis
 PickNotFoundException_swigregister(PickNotFoundException)
 
 class LocatorException(Core.GeneralException):
+    """Proxy of C++ Seiscomp::Seismology::LocatorException class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocatorException, name, value)
@@ -286,6 +522,10 @@ class LocatorException(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, LocatorException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::Seismology::LocatorException self) -> LocatorException
+        __init__(Seiscomp::Seismology::LocatorException self, std::string const & str) -> LocatorException
+        """
         this = _Seismology.new_LocatorException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -295,6 +535,7 @@ LocatorException_swigregister = _Seismology.LocatorException_swigregister
 LocatorException_swigregister(LocatorException)
 
 class StationNotFoundException(Core.GeneralException):
+    """Proxy of C++ Seiscomp::Seismology::StationNotFoundException class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, StationNotFoundException, name, value)
@@ -303,6 +544,10 @@ class StationNotFoundException(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, StationNotFoundException, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::Seismology::StationNotFoundException self) -> StationNotFoundException
+        __init__(Seiscomp::Seismology::StationNotFoundException self, std::string const & str) -> StationNotFoundException
+        """
         this = _Seismology.new_StationNotFoundException(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -330,12 +575,14 @@ LP_PREFIX = _Seismology.LP_PREFIX
 LP_MIN_ARRIVAL_WEIGHT = _Seismology.LP_MIN_ARRIVAL_WEIGHT
 LP_RMS_AS_TIME_ERROR = _Seismology.LP_RMS_AS_TIME_ERROR
 class LocSATErrorEllipsoid(_object):
+    """Proxy of C++ Seiscomp::LocSATErrorEllipsoid class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocSATErrorEllipsoid, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, LocSATErrorEllipsoid, name)
     __repr__ = _swig_repr
     def __init__(self): 
+        """__init__(Seiscomp::LocSATErrorEllipsoid self) -> LocSATErrorEllipsoid"""
         this = _Seismology.new_LocSATErrorEllipsoid()
         try: self.this.append(this)
         except: self.this = this
@@ -396,6 +643,7 @@ LocSATErrorEllipsoid_swigregister = _Seismology.LocSATErrorEllipsoid_swigregiste
 LocSATErrorEllipsoid_swigregister(LocSATErrorEllipsoid)
 
 class LocSAT(LocatorInterface):
+    """Proxy of C++ Seiscomp::LocSAT class"""
     __swig_setmethods__ = {}
     for _s in [LocatorInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LocSAT, name, value)
@@ -404,38 +652,85 @@ class LocSAT(LocatorInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, LocSAT, name)
     __repr__ = _swig_repr
     def __init__(self): 
+        """__init__(Seiscomp::LocSAT self) -> LocSAT"""
         this = _Seismology.new_LocSAT()
         try: self.this.append(this)
         except: self.this = this
     __swig_destroy__ = _Seismology.delete_LocSAT
     __del__ = lambda self : None;
-    def init(self, *args): return _Seismology.LocSAT_init(self, *args)
-    def parameters(self): return _Seismology.LocSAT_parameters(self)
-    def parameter(self, *args): return _Seismology.LocSAT_parameter(self, *args)
-    def setParameter(self, *args): return _Seismology.LocSAT_setParameter(self, *args)
-    def profiles(self): return _Seismology.LocSAT_profiles(self)
-    def setProfile(self, *args): return _Seismology.LocSAT_setProfile(self, *args)
-    __swig_getmethods__["setDefaultProfile"] = lambda x: _Seismology.LocSAT_setDefaultProfile
-    if _newclass:setDefaultProfile = staticmethod(_Seismology.LocSAT_setDefaultProfile)
-    __swig_getmethods__["currentDefaultProfile"] = lambda x: _Seismology.LocSAT_currentDefaultProfile
-    if _newclass:currentDefaultProfile = staticmethod(_Seismology.LocSAT_currentDefaultProfile)
-    def setNewOriginID(self, *args): return _Seismology.LocSAT_setNewOriginID(self, *args)
-    def capabilities(self): return _Seismology.LocSAT_capabilities(self)
-    def locate(self, *args): return _Seismology.LocSAT_locate(self, *args)
-    def relocate(self, *args): return _Seismology.LocSAT_relocate(self, *args)
-    def errorEllipsoid(self): return _Seismology.LocSAT_errorEllipsoid(self)
+    def init(self, *args):
+        """init(LocSAT self, Config config) -> bool"""
+        return _Seismology.LocSAT_init(self, *args)
+
+    def parameters(self):
+        """parameters(LocSAT self) -> vectorStr"""
+        return _Seismology.LocSAT_parameters(self)
+
+    def parameter(self, *args):
+        """parameter(LocSAT self, std::string const & name) -> std::string"""
+        return _Seismology.LocSAT_parameter(self, *args)
+
+    def setParameter(self, *args):
+        """setParameter(LocSAT self, std::string const & name, std::string const & value) -> bool"""
+        return _Seismology.LocSAT_setParameter(self, *args)
+
+    def profiles(self):
+        """profiles(LocSAT self) -> vectorStr"""
+        return _Seismology.LocSAT_profiles(self)
+
+    def setProfile(self, *args):
+        """setProfile(LocSAT self, std::string const & name)"""
+        return _Seismology.LocSAT_setProfile(self, *args)
+
+    def setDefaultProfile(*args):
+        """setDefaultProfile(std::string const & name)"""
+        return _Seismology.LocSAT_setDefaultProfile(*args)
+
+    if _newclass:setDefaultProfile = staticmethod(setDefaultProfile)
+    __swig_getmethods__["setDefaultProfile"] = lambda x: setDefaultProfile
+    def currentDefaultProfile():
+        """currentDefaultProfile() -> std::string"""
+        return _Seismology.LocSAT_currentDefaultProfile()
+
+    if _newclass:currentDefaultProfile = staticmethod(currentDefaultProfile)
+    __swig_getmethods__["currentDefaultProfile"] = lambda x: currentDefaultProfile
+    def setNewOriginID(self, *args):
+        """setNewOriginID(LocSAT self, std::string const & newOriginID)"""
+        return _Seismology.LocSAT_setNewOriginID(self, *args)
+
+    def capabilities(self):
+        """capabilities(LocSAT self) -> int"""
+        return _Seismology.LocSAT_capabilities(self)
+
+    def locate(self, *args):
+        """
+        locate(LocSAT self, Seiscomp::Seismology::LocatorInterface::PickList & pickList) -> Origin
+        locate(LocSAT self, Seiscomp::Seismology::LocatorInterface::PickList & pickList, double initLat, double initLon, 
+            double initDepth, Time initTime) -> Origin
+        """
+        return _Seismology.LocSAT_locate(self, *args)
+
+    def relocate(self, *args):
+        """relocate(LocSAT self, Origin origin) -> Origin"""
+        return _Seismology.LocSAT_relocate(self, *args)
+
+    def errorEllipsoid(self):
+        """errorEllipsoid(LocSAT self) -> LocSATErrorEllipsoid"""
+        return _Seismology.LocSAT_errorEllipsoid(self)
+
 LocSAT_swigregister = _Seismology.LocSAT_swigregister
 LocSAT_swigregister(LocSAT)
 
 def LocSAT_setDefaultProfile(*args):
+  """LocSAT_setDefaultProfile(std::string const & name)"""
   return _Seismology.LocSAT_setDefaultProfile(*args)
-LocSAT_setDefaultProfile = _Seismology.LocSAT_setDefaultProfile
 
 def LocSAT_currentDefaultProfile():
+  """LocSAT_currentDefaultProfile() -> std::string"""
   return _Seismology.LocSAT_currentDefaultProfile()
-LocSAT_currentDefaultProfile = _Seismology.LocSAT_currentDefaultProfile
 
 class FileNotFoundError(Core.GeneralException):
+    """Proxy of C++ Seiscomp::FileNotFoundError class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, FileNotFoundError, name, value)
@@ -444,6 +739,7 @@ class FileNotFoundError(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, FileNotFoundError, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """__init__(Seiscomp::FileNotFoundError self, std::string const & filename) -> FileNotFoundError"""
         this = _Seismology.new_FileNotFoundError(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -453,6 +749,7 @@ FileNotFoundError_swigregister = _Seismology.FileNotFoundError_swigregister
 FileNotFoundError_swigregister(FileNotFoundError)
 
 class MultipleModelsError(Core.GeneralException):
+    """Proxy of C++ Seiscomp::MultipleModelsError class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, MultipleModelsError, name, value)
@@ -461,6 +758,7 @@ class MultipleModelsError(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, MultipleModelsError, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """__init__(Seiscomp::MultipleModelsError self, std::string const & model) -> MultipleModelsError"""
         this = _Seismology.new_MultipleModelsError(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -470,6 +768,7 @@ MultipleModelsError_swigregister = _Seismology.MultipleModelsError_swigregister
 MultipleModelsError_swigregister(MultipleModelsError)
 
 class NoPhaseError(Core.GeneralException):
+    """Proxy of C++ Seiscomp::NoPhaseError class"""
     __swig_setmethods__ = {}
     for _s in [Core.GeneralException]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, NoPhaseError, name, value)
@@ -478,6 +777,7 @@ class NoPhaseError(Core.GeneralException):
     __getattr__ = lambda self, name: _swig_getattr(self, NoPhaseError, name)
     __repr__ = _swig_repr
     def __init__(self): 
+        """__init__(Seiscomp::NoPhaseError self) -> NoPhaseError"""
         this = _Seismology.new_NoPhaseError()
         try: self.this.append(this)
         except: self.this = this
@@ -487,17 +787,29 @@ NoPhaseError_swigregister = _Seismology.NoPhaseError_swigregister
 NoPhaseError_swigregister(NoPhaseError)
 
 class TravelTime(_object):
+    """Proxy of C++ Seiscomp::TravelTime class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTime, name, value)
     __swig_getmethods__ = {}
     __getattr__ = lambda self, name: _swig_getattr(self, TravelTime, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
+        """
+        __init__(Seiscomp::TravelTime self) -> TravelTime
+        __init__(Seiscomp::TravelTime self, std::string const & _phase, double _time, double _dtdd, double _dtdh, double _dddp, 
+            double _takeoff) -> TravelTime
+        """
         this = _Seismology.new_TravelTime(*args)
         try: self.this.append(this)
         except: self.this = this
-    def __eq__(self, *args): return _Seismology.TravelTime___eq__(self, *args)
-    def __lt__(self, *args): return _Seismology.TravelTime___lt__(self, *args)
+    def __eq__(self, *args):
+        """__eq__(TravelTime self, TravelTime other) -> bool"""
+        return _Seismology.TravelTime___eq__(self, *args)
+
+    def __lt__(self, *args):
+        """__lt__(TravelTime self, TravelTime other) -> bool"""
+        return _Seismology.TravelTime___lt__(self, *args)
+
     __swig_setmethods__["phase"] = _Seismology.TravelTime_phase_set
     __swig_getmethods__["phase"] = _Seismology.TravelTime_phase_get
     if _newclass:phase = _swig_property(_Seismology.TravelTime_phase_get, _Seismology.TravelTime_phase_set)
@@ -522,6 +834,7 @@ TravelTime_swigregister = _Seismology.TravelTime_swigregister
 TravelTime_swigregister(TravelTime)
 
 class TravelTimeList(TravelTimeList_internal):
+    """Proxy of C++ Seiscomp::TravelTimeList class"""
     __swig_setmethods__ = {}
     for _s in [TravelTimeList_internal]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTimeList, name, value)
@@ -529,8 +842,14 @@ class TravelTimeList(TravelTimeList_internal):
     for _s in [TravelTimeList_internal]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, TravelTimeList, name)
     __repr__ = _swig_repr
-    def isEmpty(self): return _Seismology.TravelTimeList_isEmpty(self)
-    def sortByTime(self): return _Seismology.TravelTimeList_sortByTime(self)
+    def isEmpty(self):
+        """isEmpty(TravelTimeList self) -> bool"""
+        return _Seismology.TravelTimeList_isEmpty(self)
+
+    def sortByTime(self):
+        """sortByTime(TravelTimeList self)"""
+        return _Seismology.TravelTimeList_sortByTime(self)
+
     __swig_setmethods__["depth"] = _Seismology.TravelTimeList_depth_set
     __swig_getmethods__["depth"] = _Seismology.TravelTimeList_depth_get
     if _newclass:depth = _swig_property(_Seismology.TravelTimeList_depth_get, _Seismology.TravelTimeList_depth_set)
@@ -538,6 +857,7 @@ class TravelTimeList(TravelTimeList_internal):
     __swig_getmethods__["delta"] = _Seismology.TravelTimeList_delta_get
     if _newclass:delta = _swig_property(_Seismology.TravelTimeList_delta_get, _Seismology.TravelTimeList_delta_set)
     def __init__(self): 
+        """__init__(Seiscomp::TravelTimeList self) -> TravelTimeList"""
         this = _Seismology.new_TravelTimeList()
         try: self.this.append(this)
         except: self.this = this
@@ -547,6 +867,7 @@ TravelTimeList_swigregister = _Seismology.TravelTimeList_swigregister
 TravelTimeList_swigregister(TravelTimeList)
 
 class TravelTimeTableInterface(Core.BaseObject):
+    """Proxy of C++ Seiscomp::TravelTimeTableInterface class"""
     __swig_setmethods__ = {}
     for _s in [Core.BaseObject]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTimeTableInterface, name, value)
@@ -557,20 +878,52 @@ class TravelTimeTableInterface(Core.BaseObject):
     __repr__ = _swig_repr
     __swig_destroy__ = _Seismology.delete_TravelTimeTableInterface
     __del__ = lambda self : None;
-    __swig_getmethods__["Create"] = lambda x: _Seismology.TravelTimeTableInterface_Create
-    if _newclass:Create = staticmethod(_Seismology.TravelTimeTableInterface_Create)
-    def setModel(self, *args): return _Seismology.TravelTimeTableInterface_setModel(self, *args)
-    def model(self): return _Seismology.TravelTimeTableInterface_model(self)
-    def compute(self, *args): return _Seismology.TravelTimeTableInterface_compute(self, *args)
-    def computeFirst(self, *args): return _Seismology.TravelTimeTableInterface_computeFirst(self, *args)
+    def Create(*args):
+        """Create(char const * name) -> TravelTimeTableInterface"""
+        return _Seismology.TravelTimeTableInterface_Create(*args)
+
+    if _newclass:Create = staticmethod(Create)
+    __swig_getmethods__["Create"] = lambda x: Create
+    def setModel(self, *args):
+        """setModel(TravelTimeTableInterface self, std::string const & model) -> bool"""
+        return _Seismology.TravelTimeTableInterface_setModel(self, *args)
+
+    def model(self):
+        """model(TravelTimeTableInterface self) -> std::string const &"""
+        return _Seismology.TravelTimeTableInterface_model(self)
+
+    def compute(self, *args):
+        """
+        compute(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., 
+            int ellc=0) -> TravelTimeList
+        compute(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTimeList
+        compute(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTimeList
+        compute(TravelTimeTableInterface self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, 
+            double alt2=0., int ellc=0) -> TravelTime
+        compute(TravelTimeTableInterface self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, 
+            double alt2=0.) -> TravelTime
+        compute(TravelTimeTableInterface self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
+        """
+        return _Seismology.TravelTimeTableInterface_compute(self, *args)
+
+    def computeFirst(self, *args):
+        """
+        computeFirst(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., 
+            int ellc=0) -> TravelTime
+        computeFirst(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime
+        computeFirst(TravelTimeTableInterface self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
+        """
+        return _Seismology.TravelTimeTableInterface_computeFirst(self, *args)
+
 TravelTimeTableInterface_swigregister = _Seismology.TravelTimeTableInterface_swigregister
 TravelTimeTableInterface_swigregister(TravelTimeTableInterface)
 
 def TravelTimeTableInterface_Create(*args):
+  """TravelTimeTableInterface_Create(char const * name) -> TravelTimeTableInterface"""
   return _Seismology.TravelTimeTableInterface_Create(*args)
-TravelTimeTableInterface_Create = _Seismology.TravelTimeTableInterface_Create
 
 class TravelTimeTable(TravelTimeTableInterface):
+    """Proxy of C++ Seiscomp::TravelTimeTable class"""
     __swig_setmethods__ = {}
     for _s in [TravelTimeTableInterface]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, TravelTimeTable, name, value)
@@ -579,13 +932,41 @@ class TravelTimeTable(TravelTimeTableInterface):
     __getattr__ = lambda self, name: _swig_getattr(self, TravelTimeTable, name)
     __repr__ = _swig_repr
     def __init__(self): 
+        """__init__(Seiscomp::TravelTimeTable self) -> TravelTimeTable"""
         this = _Seismology.new_TravelTimeTable()
         try: self.this.append(this)
         except: self.this = this
-    def setModel(self, *args): return _Seismology.TravelTimeTable_setModel(self, *args)
-    def model(self): return _Seismology.TravelTimeTable_model(self)
-    def compute(self, *args): return _Seismology.TravelTimeTable_compute(self, *args)
-    def computeFirst(self, *args): return _Seismology.TravelTimeTable_computeFirst(self, *args)
+    def setModel(self, *args):
+        """setModel(TravelTimeTable self, std::string const & model) -> bool"""
+        return _Seismology.TravelTimeTable_setModel(self, *args)
+
+    def model(self):
+        """model(TravelTimeTable self) -> std::string const &"""
+        return _Seismology.TravelTimeTable_model(self)
+
+    def compute(self, *args):
+        """
+        compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., 
+            int ellc=0) -> TravelTimeList
+        compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTimeList
+        compute(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTimeList
+        compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, 
+            double alt2=0., int ellc=0) -> TravelTime
+        compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2, 
+            double alt2=0.) -> TravelTime
+        compute(TravelTimeTable self, char const * phase, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
+        """
+        return _Seismology.TravelTimeTable_compute(self, *args)
+
+    def computeFirst(self, *args):
+        """
+        computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0., 
+            int ellc=0) -> TravelTime
+        computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2, double alt2=0.) -> TravelTime
+        computeFirst(TravelTimeTable self, double lat1, double lon1, double dep1, double lat2, double lon2) -> TravelTime
+        """
+        return _Seismology.TravelTimeTable_computeFirst(self, *args)
+
     __swig_destroy__ = _Seismology.delete_TravelTimeTable
     __del__ = lambda self : None;
 TravelTimeTable_swigregister = _Seismology.TravelTimeTable_swigregister
@@ -593,16 +974,19 @@ TravelTimeTable_swigregister(TravelTimeTable)
 
 
 def ellipcorr(*args):
+  """
+    ellipcorr(std::string const & phase, double lat1, double lon1, double lat2, double lon2, double depth, 
+        double & corr) -> bool
+    """
   return _Seismology.ellipcorr(*args)
-ellipcorr = _Seismology.ellipcorr
 
 def getPhase(*args):
+  """getPhase(TravelTimeList arg1, std::string const & phaseCode) -> TravelTime"""
   return _Seismology.getPhase(*args)
-getPhase = _Seismology.getPhase
 
 def firstArrivalP(*args):
+  """firstArrivalP(TravelTimeList arg1) -> TravelTime"""
   return _Seismology.firstArrivalP(*args)
-firstArrivalP = _Seismology.firstArrivalP
 # This file is compatible with both classic and new-style classes.
 
 

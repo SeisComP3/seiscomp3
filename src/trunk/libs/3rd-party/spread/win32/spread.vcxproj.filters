@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{58608c26-9b1d-4775-a3e7-ad66b01e0ab4}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Source Files\stdutil">
+      <UniqueIdentifier>{f7005e83-d414-4c88-bda9-a33371079460}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\daemon\acm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\acp-permit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\auth-ip.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\auth-null.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\configuration.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\flow_control.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\groups.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\lex.yy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\log.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\membership.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\message.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\network.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\protocol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\session.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\spread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\status.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\y.tab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdarr.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdcarr.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stddll.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stderror.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdhash.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdit.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdskl.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdtime.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdutil.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\daemon\ip_enum.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

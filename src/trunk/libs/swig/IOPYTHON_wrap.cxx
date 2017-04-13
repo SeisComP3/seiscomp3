@@ -3433,156 +3433,190 @@ namespace Swig {
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl swig_types[52]
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl swig_types[53]
 #define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl swig_types[54]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[55]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[56]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[57]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[58]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[59]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[60]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[61]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[62]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_const_t__Impl swig_types[63]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_t__Impl swig_types[64]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_const_t__Impl swig_types[65]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_t__Impl swig_types[66]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_const_t__Impl swig_types[67]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_t__Impl swig_types[68]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_const_t__Impl swig_types[69]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_t__Impl swig_types[70]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_const_t__Impl swig_types[71]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_t__Impl swig_types[72]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[73]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[74]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[75]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[76]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[77]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[78]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[79]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[80]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[81]
-#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[82]
-#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[83]
-#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[84]
-#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[85]
-#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[86]
-#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[87]
-#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[88]
-#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[89]
-#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[90]
-#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[91]
-#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[92]
-#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[93]
-#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[94]
-#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[95]
-#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[96]
-#define SWIGTYPE_p_Seiscomp__IO__AHOutput swig_types[97]
-#define SWIGTYPE_p_Seiscomp__IO__AHRecord swig_types[98]
-#define SWIGTYPE_p_Seiscomp__IO__BinaryArchive swig_types[99]
-#define SWIGTYPE_p_Seiscomp__IO__DatabaseInterface swig_types[100]
-#define SWIGTYPE_p_Seiscomp__IO__ExportSink swig_types[101]
-#define SWIGTYPE_p_Seiscomp__IO__Exporter swig_types[102]
-#define SWIGTYPE_p_Seiscomp__IO__GFArchive swig_types[103]
-#define SWIGTYPE_p_Seiscomp__IO__GFReceiver swig_types[104]
-#define SWIGTYPE_p_Seiscomp__IO__GFSource swig_types[105]
-#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[106]
-#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[107]
-#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[108]
-#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[109]
-#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[110]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[111]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[112]
-#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[113]
-#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[114]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[115]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[116]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[117]
-#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[118]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[119]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[120]
-#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[121]
-#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[122]
-#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[123]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t swig_types[124]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[125]
-#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[126]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[127]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[128]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[129]
-#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[130]
-#define SWIGTYPE_p_Seiscomp__Record swig_types[131]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[132]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[133]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[134]
-#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[135]
-#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[136]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[137]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[138]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[139]
-#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[140]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[141]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[142]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[143]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[144]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[145]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[146]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[147]
-#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[148]
-#define SWIGTYPE_p_TagType swig_types[149]
-#define SWIGTYPE_p_Type swig_types[150]
-#define SWIGTYPE_p_allocator_type swig_types[151]
-#define SWIGTYPE_p_bool swig_types[152]
-#define SWIGTYPE_p_char swig_types[153]
-#define SWIGTYPE_p_char_type swig_types[154]
-#define SWIGTYPE_p_const_iterator swig_types[155]
-#define SWIGTYPE_p_const_reference swig_types[156]
-#define SWIGTYPE_p_difference_type swig_types[157]
-#define SWIGTYPE_p_double swig_types[158]
-#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[159]
-#define SWIGTYPE_p_float swig_types[160]
-#define SWIGTYPE_p_fmtflags swig_types[161]
-#define SWIGTYPE_p_int swig_types[162]
-#define SWIGTYPE_p_int_type swig_types[163]
-#define SWIGTYPE_p_iostate swig_types[164]
-#define SWIGTYPE_p_iterator swig_types[165]
-#define SWIGTYPE_p_long swig_types[166]
-#define SWIGTYPE_p_off_type swig_types[167]
-#define SWIGTYPE_p_openmode swig_types[168]
-#define SWIGTYPE_p_p_void swig_types[169]
-#define SWIGTYPE_p_pos_type swig_types[170]
-#define SWIGTYPE_p_reference swig_types[171]
-#define SWIGTYPE_p_seekdir swig_types[172]
-#define SWIGTYPE_p_size_t swig_types[173]
-#define SWIGTYPE_p_size_type swig_types[174]
-#define SWIGTYPE_p_state_type swig_types[175]
-#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[176]
-#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[177]
-#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[178]
-#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[179]
-#define SWIGTYPE_p_std__complexT_double_t swig_types[180]
-#define SWIGTYPE_p_std__complexT_float_t swig_types[181]
-#define SWIGTYPE_p_std__exception swig_types[182]
-#define SWIGTYPE_p_std__invalid_argument swig_types[183]
-#define SWIGTYPE_p_std__ios_base swig_types[184]
-#define SWIGTYPE_p_std__istream swig_types[185]
-#define SWIGTYPE_p_std__listT_double_t swig_types[186]
-#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[187]
-#define SWIGTYPE_p_std__locale swig_types[188]
-#define SWIGTYPE_p_std__ostream swig_types[189]
-#define SWIGTYPE_p_std__streambuf swig_types[190]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[191]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[192]
-#define SWIGTYPE_p_std__vectorT_float_t swig_types[193]
-#define SWIGTYPE_p_std__vectorT_int_t swig_types[194]
-#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[195]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_t swig_types[196]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[197]
-#define SWIGTYPE_p_time_t swig_types[198]
-#define SWIGTYPE_p_traits_type swig_types[199]
-#define SWIGTYPE_p_uint64_t swig_types[200]
-#define SWIGTYPE_p_value_type swig_types[201]
-#define SWIGTYPE_p_void swig_types[202]
-static swig_type_info *swig_types[204];
-static swig_module_info swig_module = {swig_types, 203, 0, 0, 0, 0};
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl swig_types[55]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl swig_types[56]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl swig_types[57]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl swig_types[58]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl swig_types[59]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_t__Impl swig_types[60]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_const_t__Impl swig_types[61]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_float_t_t__Impl swig_types[62]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_const_t__Impl swig_types[63]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_int_t_t__Impl swig_types[64]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_const_t__Impl swig_types[65]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Arclink___private__ArclinkConnection_t__Impl swig_types[66]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_const_t__Impl swig_types[67]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__Combined___private__CombinedConnection_t__Impl swig_types[68]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_const_t__Impl swig_types[69]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__File_t__Impl swig_types[70]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_const_t__Impl swig_types[71]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream__SLConnection_t__Impl swig_types[72]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_const_t__Impl swig_types[73]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__RecordStream_t__Impl swig_types[74]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_const_t__Impl swig_types[75]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__Record_t__Impl swig_types[76]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_const_t__Impl swig_types[77]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t_t__Impl swig_types[78]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_const_t__Impl swig_types[79]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_double_t_t_t__Impl swig_types[80]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_const_t__Impl swig_types[81]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__complexT_float_t_t_t__Impl swig_types[82]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_const_t__Impl swig_types[83]
+#define SWIGTYPE_p_Seiscomp__Core__SmartPointerT_Seiscomp__TypedArrayT_std__string_t_t__Impl swig_types[84]
+#define SWIGTYPE_p_Seiscomp__Core__StreamException swig_types[85]
+#define SWIGTYPE_p_Seiscomp__Core__Time swig_types[86]
+#define SWIGTYPE_p_Seiscomp__Core__TimeSpan swig_types[87]
+#define SWIGTYPE_p_Seiscomp__Core__TimeWindow swig_types[88]
+#define SWIGTYPE_p_Seiscomp__Core__TypeConversionException swig_types[89]
+#define SWIGTYPE_p_Seiscomp__Core__TypeException swig_types[90]
+#define SWIGTYPE_p_Seiscomp__Core__UnderflowException swig_types[91]
+#define SWIGTYPE_p_Seiscomp__Core__ValueError swig_types[92]
+#define SWIGTYPE_p_Seiscomp__Core__ValueException swig_types[93]
+#define SWIGTYPE_p_Seiscomp__Core___private__Alarmable swig_types[94]
+#define SWIGTYPE_p_Seiscomp__Core___private__Interruptible swig_types[95]
+#define SWIGTYPE_p_Seiscomp__Core___private__InterruptibleObject swig_types[96]
+#define SWIGTYPE_p_Seiscomp__Core___private__OperationInterrupted swig_types[97]
+#define SWIGTYPE_p_Seiscomp__GenericRecord swig_types[98]
+#define SWIGTYPE_p_Seiscomp__IO__AHOutput swig_types[99]
+#define SWIGTYPE_p_Seiscomp__IO__AHRecord swig_types[100]
+#define SWIGTYPE_p_Seiscomp__IO__BinaryArchive swig_types[101]
+#define SWIGTYPE_p_Seiscomp__IO__DatabaseInterface swig_types[102]
+#define SWIGTYPE_p_Seiscomp__IO__ExportSink swig_types[103]
+#define SWIGTYPE_p_Seiscomp__IO__Exporter swig_types[104]
+#define SWIGTYPE_p_Seiscomp__IO__GFArchive swig_types[105]
+#define SWIGTYPE_p_Seiscomp__IO__GFReceiver swig_types[106]
+#define SWIGTYPE_p_Seiscomp__IO__GFSource swig_types[107]
+#define SWIGTYPE_p_Seiscomp__IO__Importer swig_types[108]
+#define SWIGTYPE_p_Seiscomp__IO__LibmseedException swig_types[109]
+#define SWIGTYPE_p_Seiscomp__IO__MSeedRecord swig_types[110]
+#define SWIGTYPE_p_Seiscomp__IO__RecordDemuxFilter swig_types[111]
+#define SWIGTYPE_p_Seiscomp__IO__RecordFilterInterface swig_types[112]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t swig_types[113]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t swig_types[114]
+#define SWIGTYPE_p_Seiscomp__IO__RecordInput swig_types[115]
+#define SWIGTYPE_p_Seiscomp__IO__RecordIterator swig_types[116]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerBase swig_types[117]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_double_t swig_types[118]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_float_t swig_types[119]
+#define SWIGTYPE_p_Seiscomp__IO__RecordResamplerT_int_t swig_types[120]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStream swig_types[121]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamException swig_types[122]
+#define SWIGTYPE_p_Seiscomp__IO__RecordStreamTimeout swig_types[123]
+#define SWIGTYPE_p_Seiscomp__IO__VBinaryArchive swig_types[124]
+#define SWIGTYPE_p_Seiscomp__IO__XMLArchive swig_types[125]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AlignmentError swig_types[126]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_double_t swig_types[127]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__AverageT_float_t swig_types[128]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_double_t swig_types[129]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__ChainFilterT_float_t swig_types[130]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t swig_types[131]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t swig_types[132]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t swig_types[133]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t swig_types[134]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t swig_types[135]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t swig_types[136]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t swig_types[137]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t swig_types[138]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t swig_types[139]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t swig_types[140]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t swig_types[141]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_double_t swig_types[142]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__InitialTaperT_float_t swig_types[143]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t swig_types[144]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t swig_types[145]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_double_t swig_types[146]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__RunningMeanT_float_t swig_types[147]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_double_t swig_types[148]
+#define SWIGTYPE_p_Seiscomp__Math__Filtering__STALTAT_float_t swig_types[149]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_double_t swig_types[150]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CityT_float_t swig_types[151]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_double_t swig_types[152]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__CoordT_float_t swig_types[153]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_double_t swig_types[154]
+#define SWIGTYPE_p_Seiscomp__Math__Geo__NamedCoordT_float_t swig_types[155]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros swig_types[156]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__ResponseList swig_types[157]
+#define SWIGTYPE_p_Seiscomp__Math__Restitution__FFT__TransferFunction swig_types[158]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_char_t swig_types[159]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_double_t swig_types[160]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_float_t swig_types[161]
+#define SWIGTYPE_p_Seiscomp__NumericArrayT_int_t swig_types[162]
+#define SWIGTYPE_p_Seiscomp__Record swig_types[163]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException swig_types[164]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection swig_types[165]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Arclink___private__ArclinkException swig_types[166]
+#define SWIGTYPE_p_Seiscomp__RecordStream__Combined___private__CombinedConnection swig_types[167]
+#define SWIGTYPE_p_Seiscomp__RecordStream__File swig_types[168]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLConnection swig_types[169]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SLStreamIdx swig_types[170]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkCommandException swig_types[171]
+#define SWIGTYPE_p_Seiscomp__RecordStream__SeedlinkException swig_types[172]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t swig_types[173]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_char_t swig_types[174]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_double_t swig_types[175]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_float_t swig_types[176]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_int_t swig_types[177]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[178]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_double_t_t swig_types[179]
+#define SWIGTYPE_p_Seiscomp__TypedArrayT_std__complexT_float_t_t swig_types[180]
+#define SWIGTYPE_p_TagType swig_types[181]
+#define SWIGTYPE_p_Type swig_types[182]
+#define SWIGTYPE_p_ValueType swig_types[183]
+#define SWIGTYPE_p_allocator_type swig_types[184]
+#define SWIGTYPE_p_bool swig_types[185]
+#define SWIGTYPE_p_char swig_types[186]
+#define SWIGTYPE_p_char_type swig_types[187]
+#define SWIGTYPE_p_const_iterator swig_types[188]
+#define SWIGTYPE_p_const_reference swig_types[189]
+#define SWIGTYPE_p_difference_type swig_types[190]
+#define SWIGTYPE_p_double swig_types[191]
+#define SWIGTYPE_p_f_enum_std__ios_base__event_r_std__ios_base_int__void swig_types[192]
+#define SWIGTYPE_p_float swig_types[193]
+#define SWIGTYPE_p_fmtflags swig_types[194]
+#define SWIGTYPE_p_int swig_types[195]
+#define SWIGTYPE_p_int_type swig_types[196]
+#define SWIGTYPE_p_iostate swig_types[197]
+#define SWIGTYPE_p_iterator swig_types[198]
+#define SWIGTYPE_p_long swig_types[199]
+#define SWIGTYPE_p_off_type swig_types[200]
+#define SWIGTYPE_p_openmode swig_types[201]
+#define SWIGTYPE_p_p_void swig_types[202]
+#define SWIGTYPE_p_pos_type swig_types[203]
+#define SWIGTYPE_p_reference swig_types[204]
+#define SWIGTYPE_p_seekdir swig_types[205]
+#define SWIGTYPE_p_size_t swig_types[206]
+#define SWIGTYPE_p_size_type swig_types[207]
+#define SWIGTYPE_p_state_type swig_types[208]
+#define SWIGTYPE_p_std__basic_iosT_char_std__char_traitsT_char_t_t swig_types[209]
+#define SWIGTYPE_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t swig_types[210]
+#define SWIGTYPE_p_std__basic_streambufT_char_std__char_traitsT_char_t_t swig_types[211]
+#define SWIGTYPE_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t swig_types[212]
+#define SWIGTYPE_p_std__complexT_double_t swig_types[213]
+#define SWIGTYPE_p_std__complexT_float_t swig_types[214]
+#define SWIGTYPE_p_std__exception swig_types[215]
+#define SWIGTYPE_p_std__invalid_argument swig_types[216]
+#define SWIGTYPE_p_std__ios_base swig_types[217]
+#define SWIGTYPE_p_std__istream swig_types[218]
+#define SWIGTYPE_p_std__listT_double_t swig_types[219]
+#define SWIGTYPE_p_std__listT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t swig_types[220]
+#define SWIGTYPE_p_std__locale swig_types[221]
+#define SWIGTYPE_p_std__ostream swig_types[222]
+#define SWIGTYPE_p_std__streambuf swig_types[223]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[224]
+#define SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t swig_types[225]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[226]
+#define SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t swig_types[227]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[228]
+#define SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t swig_types[229]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[230]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[231]
+#define SWIGTYPE_p_time_t swig_types[232]
+#define SWIGTYPE_p_traits_type swig_types[233]
+#define SWIGTYPE_p_uint64_t swig_types[234]
+#define SWIGTYPE_p_value_type swig_types[235]
+#define SWIGTYPE_p_void swig_types[236]
+static swig_type_info *swig_types[238];
+static swig_module_info swig_module = {swig_types, 237, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3684,6 +3718,20 @@ namespace swig {
 #include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/core/greensfunction.h>
 #include <seiscomp3/core/datamessage.h>
+#include "seiscomp3/math/geo.h"
+#include "seiscomp3/math/coord.h"
+#include "seiscomp3/math/math.h"
+#include "seiscomp3/math/filter.h"
+#include "seiscomp3/math/filter/rmhp.h"
+#include "seiscomp3/math/filter/taper.h"
+#include "seiscomp3/math/filter/average.h"
+#include "seiscomp3/math/filter/stalta.h"
+#include "seiscomp3/math/filter/chainfilter.h"
+#include "seiscomp3/math/filter/biquad.h"
+#include "seiscomp3/math/filter/butterworth.h"
+#include "seiscomp3/math/filter/taper.h"
+#include "seiscomp3/math/filter/seismometers.h"
+#include "seiscomp3/math/restitution/transferfunction.h"
 #include <seiscomp3/io/database.h>
 #include <seiscomp3/io/recordinput.h>
 #include <seiscomp3/io/recordstream.h>
@@ -5338,6 +5386,9 @@ namespace swig
 }
 
 
+#include <algorithm>
+
+
 SWIGINTERNINLINE PyObject * 
 SWIG_FromCharPtr(const char *cptr)
 { 
@@ -5432,6 +5483,134 @@ SWIG_From_float  (float value)
   return SWIG_From_double  (value);
 }
 
+
+namespace swig {
+  template <> struct traits<float > {
+    typedef value_category category;
+    static const char* type_name() { return"float"; }
+  };  
+  template <>  struct traits_asval<float > {   
+    typedef float value_type;
+    static int asval(PyObject *obj, value_type *val) { 
+      return SWIG_AsVal_float (obj, val);
+    }
+  };
+  template <>  struct traits_from<float > {
+    typedef float value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_float  (val);
+    }
+  };
+}
+
+
+namespace swig {
+  template <class SwigPySeq, class Seq>
+  inline void
+  assign(const SwigPySeq& swigpyseq, Seq* seq) {
+    // seq->assign(swigpyseq.begin(), swigpyseq.end()); // not used as not always implemented
+    typedef typename SwigPySeq::value_type value_type;
+    typename SwigPySeq::const_iterator it = swigpyseq.begin();
+    for (;it != swigpyseq.end(); ++it) {
+      seq->insert(seq->end(),(value_type)(*it));
+    }
+  }
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_asptr_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+
+    static int asptr(PyObject *obj, sequence **seq) {
+      if (obj == Py_None || SWIG_Python_GetSwigThis(obj)) {
+	sequence *p;
+	if (::SWIG_ConvertPtr(obj,(void**)&p,
+			      swig::type_info<sequence>(),0) == SWIG_OK) {
+	  if (seq) *seq = p;
+	  return SWIG_OLDOBJ;
+	}
+      } else if (PySequence_Check(obj)) {
+	try {
+	  SwigPySequence_Cont<value_type> swigpyseq(obj);
+	  if (seq) {
+	    sequence *pseq = new sequence();
+	    assign(swigpyseq, pseq);
+	    *seq = pseq;
+	    return SWIG_NEWOBJ;
+	  } else {
+	    return swigpyseq.check() ? SWIG_OK : SWIG_ERROR;
+	  }
+	} catch (std::exception& e) {
+	  if (seq) {
+	    if (!PyErr_Occurred()) {
+	      PyErr_SetString(PyExc_TypeError, e.what());
+	    }
+	  }
+	  return SWIG_ERROR;
+	}
+      }
+      return SWIG_ERROR;
+    }
+  };
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_from_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+    typedef typename Seq::size_type size_type;
+    typedef typename sequence::const_iterator const_iterator;
+
+    static PyObject *from(const sequence& seq) {
+#ifdef SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
+      swig_type_info *desc = swig::type_info<sequence>();
+      if (desc && desc->clientdata) {
+	return SWIG_NewPointerObj(new sequence(seq), desc, SWIG_POINTER_OWN);
+      }
+#endif
+      size_type size = seq.size();
+      if (size <= (size_type)INT_MAX) {
+	PyObject *obj = PyTuple_New((int)size);
+	int i = 0;
+	for (const_iterator it = seq.begin();
+	     it != seq.end(); ++it, ++i) {
+	  PyTuple_SetItem(obj,i,swig::from<value_type>(*it));
+	}
+	return obj;
+      } else {
+	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
+	return NULL;
+      }
+    }
+  };
+}
+
+
+  namespace swig {
+    template <class T>
+    struct traits_asptr<std::vector<T> >  {
+      static int asptr(PyObject *obj, std::vector<T> **vec) {
+	return traits_asptr_stdseq<std::vector<T> >::asptr(obj, vec);
+      }
+    };
+    
+    template <class T>
+    struct traits_from<std::vector<T> > {
+      static PyObject *from(const std::vector<T>& vec) {
+	return traits_from_stdseq<std::vector<T> >::from(vec);
+      }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<float, std::allocator< float > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "float" "," "std::allocator< float >" " >";
+	  }
+	};
+      }
+    
 
 SWIGINTERNINLINE PyObject *
 SWIG_From_unsigned_SS_short  (unsigned short value)
@@ -9294,6 +9473,7 @@ SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   arg3 = static_cast< double >(val3);
   result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1,arg2,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9325,6 +9505,7 @@ SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   arg2 = static_cast< double >(val2);
   result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9347,6 +9528,7 @@ SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_2(PyObject *SWIGUNUSEDPARM(self), 
   arg1 = static_cast< double >(val1);
   result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9360,6 +9542,7 @@ SWIGINTERN PyObject *_wrap_new_GFSource__SWIG_3(PyObject *SWIGUNUSEDPARM(self), 
   if (!PyArg_ParseTuple(args,(char *)":new_GFSource")) SWIG_fail;
   result = (Seiscomp::IO::GFSource *)new Seiscomp::IO::GFSource();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFSource, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9504,7 +9687,7 @@ SWIGINTERN PyObject *_wrap_delete_GFSource(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GFSource" "', argument " "1"" of type '" "Seiscomp::IO::GFSource *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp1);
-  delete arg1;
+  if (arg1) arg1->decrementReferenceCount();
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9553,6 +9736,7 @@ SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   arg3 = static_cast< double >(val3);
   result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1,arg2,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9584,6 +9768,7 @@ SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   arg2 = static_cast< double >(val2);
   result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9606,6 +9791,7 @@ SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
   arg1 = static_cast< double >(val1);
   result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9619,6 +9805,7 @@ SWIGINTERN PyObject *_wrap_new_GFReceiver__SWIG_3(PyObject *SWIGUNUSEDPARM(self)
   if (!PyArg_ParseTuple(args,(char *)":new_GFReceiver")) SWIG_fail;
   result = (Seiscomp::IO::GFReceiver *)new Seiscomp::IO::GFReceiver();
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__GFReceiver, SWIG_POINTER_NEW |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -9763,7 +9950,7 @@ SWIGINTERN PyObject *_wrap_delete_GFReceiver(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_GFReceiver" "', argument " "1"" of type '" "Seiscomp::IO::GFReceiver *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp1);
-  delete arg1;
+  if (arg1) arg1->decrementReferenceCount();
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10458,6 +10645,92 @@ SWIGINTERN PyObject *_wrap_GFArchive_get(PyObject *SWIGUNUSEDPARM(self), PyObjec
   if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GFArchive_getTravelTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::GFArchive *arg1 = (Seiscomp::IO::GFArchive *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  Seiscomp::IO::GFSource *arg4 = 0 ;
+  Seiscomp::IO::GFReceiver *arg5 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  SwigValueWrapper< Seiscomp::Core::Optional< double >::Impl > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:GFArchive_getTravelTime",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__GFArchive, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GFArchive_getTravelTime" "', argument " "1"" of type '" "Seiscomp::IO::GFArchive *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::GFArchive * >(argp1);
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res2 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GFArchive_getTravelTime" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_getTravelTime" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::basic_string<char> *ptr = (std::basic_string<char> *)0;
+    res3 = SWIG_AsPtr_std_basic_string_Sl_char_Sg_(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "GFArchive_getTravelTime" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_getTravelTime" "', argument " "3"" of type '" "std::string const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_Seiscomp__IO__GFSource,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "GFArchive_getTravelTime" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_getTravelTime" "', argument " "4"" of type '" "Seiscomp::IO::GFSource const &""'"); 
+  }
+  arg4 = reinterpret_cast< Seiscomp::IO::GFSource * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_Seiscomp__IO__GFReceiver,  0  | 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "GFArchive_getTravelTime" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GFArchive_getTravelTime" "', argument " "5"" of type '" "Seiscomp::IO::GFReceiver const &""'"); 
+  }
+  arg5 = reinterpret_cast< Seiscomp::IO::GFReceiver * >(argp5);
+  result = (arg1)->getTravelTime((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::IO::GFSource const &)*arg4,(Seiscomp::IO::GFReceiver const &)*arg5);
+  {
+    if ( *(&result) == Seiscomp::Core::None ) {
+      resultobj = Py_None;
+    }
+    else {
+      double v = **(&result);
+      resultobj = PyFloat_FromDouble(static_cast<double>(v));
+    }
+  }
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
   return NULL;
 }
 
@@ -14759,7 +15032,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< char > *arg2 = 0 ;
+  std::vector< char,std::allocator< char > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14773,14 +15046,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< char > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< char,std::allocator< char > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -14792,7 +15065,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< int > *arg2 = 0 ;
+  std::vector< int,std::allocator< int > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14806,14 +15079,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< int > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< int,std::allocator< int > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -14825,7 +15098,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< float > *arg2 = 0 ;
+  std::vector< float,std::allocator< float > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14839,14 +15112,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< float > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -14858,7 +15131,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< double > *arg2 = 0 ;
+  std::vector< double,std::allocator< double > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14872,14 +15145,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_6(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< double > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< double,std::allocator< double > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -14891,7 +15164,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< std::string > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -14905,14 +15178,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_7(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::string > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15023,7 +15296,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< std::complex< double > > *arg2 = 0 ;
+  std::vector< std::complex< double >,std::allocator< std::complex< double > > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15037,14 +15310,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read__SWIG_11(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::complex< double > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::complex< double >,std::allocator< std::complex< double > > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15211,7 +15484,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_3(self, args);
@@ -15225,7 +15498,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_4(self, args);
@@ -15239,7 +15512,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_5(self, args);
@@ -15253,7 +15526,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_6(self, args);
@@ -15267,7 +15540,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_7(self, args);
@@ -15323,7 +15596,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_read__SWIG_11(self, args);
@@ -15379,15 +15652,15 @@ fail:
     "    Seiscomp::IO::XMLArchive::read(int &)\n"
     "    Seiscomp::IO::XMLArchive::read(float &)\n"
     "    Seiscomp::IO::XMLArchive::read(double &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< char > &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< int > &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< float > &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< double > &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< std::string > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< char,std::allocator< char > > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< int,std::allocator< int > > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< float,std::allocator< float > > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< double,std::allocator< double > > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< std::string,std::allocator< std::string > > &)\n"
     "    Seiscomp::IO::XMLArchive::read(std::complex< float > &)\n"
     "    Seiscomp::IO::XMLArchive::read(std::complex< double > &)\n"
     "    Seiscomp::IO::XMLArchive::read(bool &)\n"
-    "    Seiscomp::IO::XMLArchive::read(std::vector< std::complex< double > > &)\n"
+    "    Seiscomp::IO::XMLArchive::read(std::vector< std::complex< double >,std::allocator< std::complex< double > > > &)\n"
     "    Seiscomp::IO::XMLArchive::read(std::string &)\n"
     "    Seiscomp::IO::XMLArchive::read(time_t &)\n"
     "    Seiscomp::IO::XMLArchive::read(Seiscomp::Core::Time &)\n");
@@ -15488,7 +15761,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< char > *arg2 = 0 ;
+  std::vector< char,std::allocator< char > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15502,14 +15775,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< char > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< char,std::allocator< char > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15521,7 +15794,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< int > *arg2 = 0 ;
+  std::vector< int,std::allocator< int > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15535,14 +15808,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< int > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< int,std::allocator< int > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15554,7 +15827,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< float > *arg2 = 0 ;
+  std::vector< float,std::allocator< float > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15568,14 +15841,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< float > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15587,7 +15860,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< double > *arg2 = 0 ;
+  std::vector< double,std::allocator< double > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15601,14 +15874,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< double > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< double,std::allocator< double > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15620,7 +15893,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< std::string > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15634,14 +15907,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_7(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::string > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15749,7 +16022,7 @@ fail:
 SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
-  std::vector< std::complex< double > > *arg2 = 0 ;
+  std::vector< std::complex< double >,std::allocator< std::complex< double > > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -15763,14 +16036,14 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write__SWIG_11(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XMLArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::complex< double > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::complex< double >,std::allocator< std::complex< double > > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -15900,7 +16173,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_3(self, args);
@@ -15914,7 +16187,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_4(self, args);
@@ -15928,7 +16201,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_5(self, args);
@@ -15942,7 +16215,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_6(self, args);
@@ -15956,7 +16229,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_7(self, args);
@@ -15998,7 +16271,7 @@ SWIGINTERN PyObject *_wrap_XMLArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_XMLArchive_write__SWIG_11(self, args);
@@ -16113,15 +16386,15 @@ fail:
     "    Seiscomp::IO::XMLArchive::write(int)\n"
     "    Seiscomp::IO::XMLArchive::write(float)\n"
     "    Seiscomp::IO::XMLArchive::write(double)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< char > &)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< int > &)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< float > &)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< double > &)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< std::string > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< char,std::allocator< char > > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< int,std::allocator< int > > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< float,std::allocator< float > > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< double,std::allocator< double > > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< std::string,std::allocator< std::string > > &)\n"
     "    Seiscomp::IO::XMLArchive::write(std::complex< float > &)\n"
     "    Seiscomp::IO::XMLArchive::write(std::complex< double > &)\n"
     "    Seiscomp::IO::XMLArchive::write(bool)\n"
-    "    Seiscomp::IO::XMLArchive::write(std::vector< std::complex< double > > &)\n"
+    "    Seiscomp::IO::XMLArchive::write(std::vector< std::complex< double >,std::allocator< std::complex< double > > > &)\n"
     "    Seiscomp::IO::XMLArchive::write(std::string &)\n"
     "    Seiscomp::IO::XMLArchive::write(time_t)\n"
     "    Seiscomp::IO::XMLArchive::write(Seiscomp::Core::Time &)\n");
@@ -16618,7 +16891,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< char > *arg2 = 0 ;
+  std::vector< char,std::allocator< char > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16632,14 +16905,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_3(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< char > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< char,std::allocator< char > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -16651,7 +16924,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< int > *arg2 = 0 ;
+  std::vector< int,std::allocator< int > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16665,14 +16938,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_4(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< int > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< int,std::allocator< int > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -16684,7 +16957,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< float > *arg2 = 0 ;
+  std::vector< float,std::allocator< float > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16698,14 +16971,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_5(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< float > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -16717,7 +16990,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< double > *arg2 = 0 ;
+  std::vector< double,std::allocator< double > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16731,14 +17004,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_6(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< double > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< double,std::allocator< double > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -16750,7 +17023,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< std::string > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16764,14 +17037,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_7(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::string > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -16882,7 +17155,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< std::complex< double > > *arg2 = 0 ;
+  std::vector< std::complex< double >,std::allocator< std::complex< double > > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -16896,14 +17169,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read__SWIG_11(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_read" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_read" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::complex< double > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::complex< double >,std::allocator< std::complex< double > > > * >(argp2);
   (arg1)->read(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17070,7 +17343,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_3(self, args);
@@ -17084,7 +17357,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_4(self, args);
@@ -17098,7 +17371,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_5(self, args);
@@ -17112,7 +17385,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_6(self, args);
@@ -17126,7 +17399,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_7(self, args);
@@ -17182,7 +17455,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_read(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_read__SWIG_11(self, args);
@@ -17238,15 +17511,15 @@ fail:
     "    Seiscomp::IO::BinaryArchive::read(int &)\n"
     "    Seiscomp::IO::BinaryArchive::read(float &)\n"
     "    Seiscomp::IO::BinaryArchive::read(double &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< char > &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< int > &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< float > &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< double > &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< std::string > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< char,std::allocator< char > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< int,std::allocator< int > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< float,std::allocator< float > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< double,std::allocator< double > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< std::string,std::allocator< std::string > > &)\n"
     "    Seiscomp::IO::BinaryArchive::read(std::complex< float > &)\n"
     "    Seiscomp::IO::BinaryArchive::read(std::complex< double > &)\n"
     "    Seiscomp::IO::BinaryArchive::read(bool &)\n"
-    "    Seiscomp::IO::BinaryArchive::read(std::vector< std::complex< double > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::read(std::vector< std::complex< double >,std::allocator< std::complex< double > > > &)\n"
     "    Seiscomp::IO::BinaryArchive::read(std::string &)\n"
     "    Seiscomp::IO::BinaryArchive::read(time_t &)\n"
     "    Seiscomp::IO::BinaryArchive::read(Seiscomp::Core::Time &)\n");
@@ -17347,7 +17620,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< char > *arg2 = 0 ;
+  std::vector< char,std::allocator< char > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17361,14 +17634,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_3(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< char > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< char,std::allocator< char > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< char > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< char,std::allocator< char > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17380,7 +17653,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< int > *arg2 = 0 ;
+  std::vector< int,std::allocator< int > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17394,14 +17667,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_4(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< int > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< int,std::allocator< int > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< int > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< int,std::allocator< int > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17413,7 +17686,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< float > *arg2 = 0 ;
+  std::vector< float,std::allocator< float > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17427,14 +17700,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_5(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< float > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< float > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17446,7 +17719,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< double > *arg2 = 0 ;
+  std::vector< double,std::allocator< double > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17460,14 +17733,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_6(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< double > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< double > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< double,std::allocator< double > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17479,7 +17752,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_7(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< std::string > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17493,14 +17766,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_7(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::string > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::string > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17608,7 +17881,7 @@ fail:
 SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_11(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::BinaryArchive *arg1 = (Seiscomp::IO::BinaryArchive *) 0 ;
-  std::vector< std::complex< double > > *arg2 = 0 ;
+  std::vector< std::complex< double >,std::allocator< std::complex< double > > > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -17622,14 +17895,14 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write__SWIG_11(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BinaryArchive_write" "', argument " "1"" of type '" "Seiscomp::IO::BinaryArchive *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::BinaryArchive * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t,  0 );
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double > > &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BinaryArchive_write" "', argument " "2"" of type '" "std::vector< std::complex< double >,std::allocator< std::complex< double > > > &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< std::complex< double > > * >(argp2);
+  arg2 = reinterpret_cast< std::vector< std::complex< double >,std::allocator< std::complex< double > > > * >(argp2);
   (arg1)->write(*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -17759,7 +18032,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_char_std__allocatorT_char_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_3(self, args);
@@ -17773,7 +18046,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_4(self, args);
@@ -17787,7 +18060,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_5(self, args);
@@ -17801,7 +18074,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_6(self, args);
@@ -17815,7 +18088,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_7(self, args);
@@ -17857,7 +18130,7 @@ SWIGINTERN PyObject *_wrap_BinaryArchive_write(PyObject *self, PyObject *args) {
     _v = SWIG_CheckState(res);
     if (_v) {
       void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_t, 0);
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_BinaryArchive_write__SWIG_11(self, args);
@@ -17972,15 +18245,15 @@ fail:
     "    Seiscomp::IO::BinaryArchive::write(int)\n"
     "    Seiscomp::IO::BinaryArchive::write(float)\n"
     "    Seiscomp::IO::BinaryArchive::write(double)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< char > &)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< int > &)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< float > &)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< double > &)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< std::string > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< char,std::allocator< char > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< int,std::allocator< int > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< float,std::allocator< float > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< double,std::allocator< double > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< std::string,std::allocator< std::string > > &)\n"
     "    Seiscomp::IO::BinaryArchive::write(std::complex< float > &)\n"
     "    Seiscomp::IO::BinaryArchive::write(std::complex< double > &)\n"
     "    Seiscomp::IO::BinaryArchive::write(bool)\n"
-    "    Seiscomp::IO::BinaryArchive::write(std::vector< std::complex< double > > &)\n"
+    "    Seiscomp::IO::BinaryArchive::write(std::vector< std::complex< double >,std::allocator< std::complex< double > > > &)\n"
     "    Seiscomp::IO::BinaryArchive::write(std::string &)\n"
     "    Seiscomp::IO::BinaryArchive::write(time_t)\n"
     "    Seiscomp::IO::BinaryArchive::write(Seiscomp::Core::Time &)\n");
@@ -21118,10 +21391,10 @@ fail:
 SWIGINTERN PyObject *_wrap_AHRecord_cal_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::AHRecord *arg1 = (Seiscomp::IO::AHRecord *) 0 ;
-  std::vector< float > arg2 ;
+  std::vector< float,std::allocator< float > > *arg2 = (std::vector< float,std::allocator< float > > *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -21132,20 +21405,12 @@ SWIGINTERN PyObject *_wrap_AHRecord_cal_set(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_cal_set" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_float_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_cal_set" "', argument " "2"" of type '" "std::vector< float >""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "AHRecord_cal_set" "', argument " "2"" of type '" "std::vector< float >""'");
-    } else {
-      std::vector< float > * temp = reinterpret_cast< std::vector< float > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AHRecord_cal_set" "', argument " "2"" of type '" "std::vector< float,std::allocator< float > > *""'"); 
   }
-  if (arg1) (arg1)->cal = arg2;
+  arg2 = reinterpret_cast< std::vector< float,std::allocator< float > > * >(argp2);
+  if (arg1) (arg1)->cal = *arg2;
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -21159,7 +21424,7 @@ SWIGINTERN PyObject *_wrap_AHRecord_cal_get(PyObject *SWIGUNUSEDPARM(self), PyOb
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< float > result;
+  std::vector< float,std::allocator< float > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:AHRecord_cal_get",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__AHRecord, 0 |  0 );
@@ -21167,8 +21432,8 @@ SWIGINTERN PyObject *_wrap_AHRecord_cal_get(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AHRecord_cal_get" "', argument " "1"" of type '" "Seiscomp::IO::AHRecord *""'"); 
   }
   arg1 = reinterpret_cast< Seiscomp::IO::AHRecord * >(argp1);
-  result =  ((arg1)->cal);
-  resultobj = SWIG_NewPointerObj((new std::vector< float >(static_cast< const std::vector< float >& >(result))), SWIGTYPE_p_std__vectorT_float_t, SWIG_POINTER_OWN |  0 );
+  result = (std::vector< float,std::allocator< float > > *)& ((arg1)->cal);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_float_std__allocatorT_float_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -27491,17 +27756,15 @@ SWIGINTERN PyObject *CombinedConnection_swigregister(PyObject *SWIGUNUSEDPARM(se
 SWIGINTERN PyObject *_wrap_new_RecordIIRFilterF__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::InPlaceFilter< float > *arg1 = (Seiscomp::Math::Filtering::InPlaceFilter< float > *) 0 ;
-  void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   Seiscomp::IO::RecordIIRFilter< float > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_RecordIIRFilterF",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RecordIIRFilterF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::InPlaceFilter< float > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RecordIIRFilterF" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::InPlaceFilter< float > *""'");
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::InPlaceFilter< float > * >(argp1);
   result = (Seiscomp::IO::RecordIIRFilter< float > *)new Seiscomp::IO::RecordIIRFilter< float >(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_float_t, SWIG_POINTER_NEW |  0 );
   if (result) result->incrementReferenceCount();
@@ -27852,17 +28115,15 @@ SWIGINTERN PyObject *RecordIIRFilterF_swigregister(PyObject *SWIGUNUSEDPARM(self
 SWIGINTERN PyObject *_wrap_new_RecordIIRFilterD__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Math::Filtering::InPlaceFilter< double > *arg1 = (Seiscomp::Math::Filtering::InPlaceFilter< double > *) 0 ;
-  void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
   Seiscomp::IO::RecordIIRFilter< double > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_RecordIIRFilterD",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(obj0, SWIG_as_voidptrptr(&arg1), SWIGTYPE_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RecordIIRFilterD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::InPlaceFilter< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RecordIIRFilterD" "', argument " "1"" of type '" "Seiscomp::Math::Filtering::InPlaceFilter< double > *""'");
   }
-  arg1 = reinterpret_cast< Seiscomp::Math::Filtering::InPlaceFilter< double > * >(argp1);
   result = (Seiscomp::IO::RecordIIRFilter< double > *)new Seiscomp::IO::RecordIIRFilter< double >(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__IO__RecordIIRFilterT_double_t, SWIG_POINTER_NEW |  0 );
   if (result) result->incrementReferenceCount();
@@ -29588,427 +29849,748 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ios_narrow", _wrap_ios_narrow, METH_VARARGS, NULL},
 	 { (char *)"ios_widen", _wrap_ios_widen, METH_VARARGS, NULL},
 	 { (char *)"ios_swigregister", ios_swigregister, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_ClassName", _wrap_DatabaseInterface_ClassName, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_TypeInfo", _wrap_DatabaseInterface_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_className", _wrap_DatabaseInterface_className, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_typeInfo", _wrap_DatabaseInterface_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_Cast", _wrap_DatabaseInterface_Cast, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_ConstCast", _wrap_DatabaseInterface_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"delete_DatabaseInterface", _wrap_delete_DatabaseInterface, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_Create", _wrap_DatabaseInterface_Create, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_Open", _wrap_DatabaseInterface_Open, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_connect", _wrap_DatabaseInterface_connect, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_disconnect", _wrap_DatabaseInterface_disconnect, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_isConnected", _wrap_DatabaseInterface_isConnected, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_start", _wrap_DatabaseInterface_start, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_commit", _wrap_DatabaseInterface_commit, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_rollback", _wrap_DatabaseInterface_rollback, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_execute", _wrap_DatabaseInterface_execute, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_beginQuery", _wrap_DatabaseInterface_beginQuery, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_endQuery", _wrap_DatabaseInterface_endQuery, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_defaultValue", _wrap_DatabaseInterface_defaultValue, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_lastInsertId", _wrap_DatabaseInterface_lastInsertId, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_numberOfAffectedRows", _wrap_DatabaseInterface_numberOfAffectedRows, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_fetchRow", _wrap_DatabaseInterface_fetchRow, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_findColumn", _wrap_DatabaseInterface_findColumn, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_getRowFieldCount", _wrap_DatabaseInterface_getRowFieldCount, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_getRowFieldName", _wrap_DatabaseInterface_getRowFieldName, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_getRowField", _wrap_DatabaseInterface_getRowField, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_getRowFieldString", _wrap_DatabaseInterface_getRowFieldString, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_getRowFieldSize", _wrap_DatabaseInterface_getRowFieldSize, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_timeToString", _wrap_DatabaseInterface_timeToString, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_stringToTime", _wrap_DatabaseInterface_stringToTime, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_columnPrefix", _wrap_DatabaseInterface_columnPrefix, METH_VARARGS, NULL},
-	 { (char *)"DatabaseInterface_convertColumnName", _wrap_DatabaseInterface_convertColumnName, METH_VARARGS, NULL},
+	 { (char *)"DatabaseInterface_ClassName", _wrap_DatabaseInterface_ClassName, METH_VARARGS, (char *)"DatabaseInterface_ClassName() -> char const *"},
+	 { (char *)"DatabaseInterface_TypeInfo", _wrap_DatabaseInterface_TypeInfo, METH_VARARGS, (char *)"DatabaseInterface_TypeInfo() -> RTTI"},
+	 { (char *)"DatabaseInterface_className", _wrap_DatabaseInterface_className, METH_VARARGS, (char *)"DatabaseInterface_className(DatabaseInterface self) -> char const *"},
+	 { (char *)"DatabaseInterface_typeInfo", _wrap_DatabaseInterface_typeInfo, METH_VARARGS, (char *)"DatabaseInterface_typeInfo(DatabaseInterface self) -> RTTI"},
+	 { (char *)"DatabaseInterface_Cast", _wrap_DatabaseInterface_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> DatabaseInterface\n"
+		"DatabaseInterface_Cast(Seiscomp::Core::BaseObjectPtr o) -> DatabaseInterface\n"
+		""},
+	 { (char *)"DatabaseInterface_ConstCast", _wrap_DatabaseInterface_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> DatabaseInterface\n"
+		"DatabaseInterface_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> DatabaseInterface\n"
+		""},
+	 { (char *)"delete_DatabaseInterface", _wrap_delete_DatabaseInterface, METH_VARARGS, (char *)"delete_DatabaseInterface(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_Create", _wrap_DatabaseInterface_Create, METH_VARARGS, (char *)"DatabaseInterface_Create(char const * service) -> DatabaseInterface"},
+	 { (char *)"DatabaseInterface_Open", _wrap_DatabaseInterface_Open, METH_VARARGS, (char *)"DatabaseInterface_Open(char const * uri) -> DatabaseInterface"},
+	 { (char *)"DatabaseInterface_connect", _wrap_DatabaseInterface_connect, METH_VARARGS, (char *)"DatabaseInterface_connect(DatabaseInterface self, char const * connection) -> bool"},
+	 { (char *)"DatabaseInterface_disconnect", _wrap_DatabaseInterface_disconnect, METH_VARARGS, (char *)"DatabaseInterface_disconnect(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_isConnected", _wrap_DatabaseInterface_isConnected, METH_VARARGS, (char *)"DatabaseInterface_isConnected(DatabaseInterface self) -> bool"},
+	 { (char *)"DatabaseInterface_start", _wrap_DatabaseInterface_start, METH_VARARGS, (char *)"DatabaseInterface_start(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_commit", _wrap_DatabaseInterface_commit, METH_VARARGS, (char *)"DatabaseInterface_commit(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_rollback", _wrap_DatabaseInterface_rollback, METH_VARARGS, (char *)"DatabaseInterface_rollback(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_execute", _wrap_DatabaseInterface_execute, METH_VARARGS, (char *)"DatabaseInterface_execute(DatabaseInterface self, char const * command) -> bool"},
+	 { (char *)"DatabaseInterface_beginQuery", _wrap_DatabaseInterface_beginQuery, METH_VARARGS, (char *)"DatabaseInterface_beginQuery(DatabaseInterface self, char const * query) -> bool"},
+	 { (char *)"DatabaseInterface_endQuery", _wrap_DatabaseInterface_endQuery, METH_VARARGS, (char *)"DatabaseInterface_endQuery(DatabaseInterface self)"},
+	 { (char *)"DatabaseInterface_defaultValue", _wrap_DatabaseInterface_defaultValue, METH_VARARGS, (char *)"DatabaseInterface_defaultValue(DatabaseInterface self) -> char const *"},
+	 { (char *)"DatabaseInterface_lastInsertId", _wrap_DatabaseInterface_lastInsertId, METH_VARARGS, (char *)"DatabaseInterface_lastInsertId(DatabaseInterface self, char const * table) -> unsigned long"},
+	 { (char *)"DatabaseInterface_numberOfAffectedRows", _wrap_DatabaseInterface_numberOfAffectedRows, METH_VARARGS, (char *)"DatabaseInterface_numberOfAffectedRows(DatabaseInterface self) -> uint64_t"},
+	 { (char *)"DatabaseInterface_fetchRow", _wrap_DatabaseInterface_fetchRow, METH_VARARGS, (char *)"DatabaseInterface_fetchRow(DatabaseInterface self) -> bool"},
+	 { (char *)"DatabaseInterface_findColumn", _wrap_DatabaseInterface_findColumn, METH_VARARGS, (char *)"DatabaseInterface_findColumn(DatabaseInterface self, char const * name) -> int"},
+	 { (char *)"DatabaseInterface_getRowFieldCount", _wrap_DatabaseInterface_getRowFieldCount, METH_VARARGS, (char *)"DatabaseInterface_getRowFieldCount(DatabaseInterface self) -> int"},
+	 { (char *)"DatabaseInterface_getRowFieldName", _wrap_DatabaseInterface_getRowFieldName, METH_VARARGS, (char *)"DatabaseInterface_getRowFieldName(DatabaseInterface self, int index) -> char const *"},
+	 { (char *)"DatabaseInterface_getRowField", _wrap_DatabaseInterface_getRowField, METH_VARARGS, (char *)"DatabaseInterface_getRowField(DatabaseInterface self, int index) -> void const *"},
+	 { (char *)"DatabaseInterface_getRowFieldString", _wrap_DatabaseInterface_getRowFieldString, METH_VARARGS, (char *)"DatabaseInterface_getRowFieldString(DatabaseInterface self, int index) -> string"},
+	 { (char *)"DatabaseInterface_getRowFieldSize", _wrap_DatabaseInterface_getRowFieldSize, METH_VARARGS, (char *)"DatabaseInterface_getRowFieldSize(DatabaseInterface self, int index) -> size_t"},
+	 { (char *)"DatabaseInterface_timeToString", _wrap_DatabaseInterface_timeToString, METH_VARARGS, (char *)"DatabaseInterface_timeToString(DatabaseInterface self, Time arg2) -> string"},
+	 { (char *)"DatabaseInterface_stringToTime", _wrap_DatabaseInterface_stringToTime, METH_VARARGS, (char *)"DatabaseInterface_stringToTime(DatabaseInterface self, char const * arg2) -> Time"},
+	 { (char *)"DatabaseInterface_columnPrefix", _wrap_DatabaseInterface_columnPrefix, METH_VARARGS, (char *)"DatabaseInterface_columnPrefix(DatabaseInterface self) -> string"},
+	 { (char *)"DatabaseInterface_convertColumnName", _wrap_DatabaseInterface_convertColumnName, METH_VARARGS, (char *)"DatabaseInterface_convertColumnName(DatabaseInterface self, string name) -> string"},
 	 { (char *)"DatabaseInterface_swigregister", DatabaseInterface_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_GFSource", _wrap_new_GFSource, METH_VARARGS, NULL},
-	 { (char *)"GFSource_depth_set", _wrap_GFSource_depth_set, METH_VARARGS, NULL},
-	 { (char *)"GFSource_depth_get", _wrap_GFSource_depth_get, METH_VARARGS, NULL},
-	 { (char *)"delete_GFSource", _wrap_delete_GFSource, METH_VARARGS, NULL},
+	 { (char *)"new_GFSource", _wrap_new_GFSource, METH_VARARGS, (char *)"\n"
+		"GFSource(double lat=0.0, double lon=0.0, double d=0.0)\n"
+		"GFSource(double lat=0.0, double lon=0.0)\n"
+		"GFSource(double lat=0.0)\n"
+		"new_GFSource() -> GFSource\n"
+		""},
+	 { (char *)"GFSource_depth_set", _wrap_GFSource_depth_set, METH_VARARGS, (char *)"GFSource_depth_set(GFSource self, double depth)"},
+	 { (char *)"GFSource_depth_get", _wrap_GFSource_depth_get, METH_VARARGS, (char *)"GFSource_depth_get(GFSource self) -> double"},
+	 { (char *)"delete_GFSource", _wrap_delete_GFSource, METH_VARARGS, (char *)"delete_GFSource(GFSource self)"},
 	 { (char *)"GFSource_swigregister", GFSource_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_GFReceiver", _wrap_new_GFReceiver, METH_VARARGS, NULL},
-	 { (char *)"GFReceiver_elevation_set", _wrap_GFReceiver_elevation_set, METH_VARARGS, NULL},
-	 { (char *)"GFReceiver_elevation_get", _wrap_GFReceiver_elevation_get, METH_VARARGS, NULL},
-	 { (char *)"delete_GFReceiver", _wrap_delete_GFReceiver, METH_VARARGS, NULL},
+	 { (char *)"new_GFReceiver", _wrap_new_GFReceiver, METH_VARARGS, (char *)"\n"
+		"GFReceiver(double lat=0.0, double lon=0.0, double e=0.0)\n"
+		"GFReceiver(double lat=0.0, double lon=0.0)\n"
+		"GFReceiver(double lat=0.0)\n"
+		"new_GFReceiver() -> GFReceiver\n"
+		""},
+	 { (char *)"GFReceiver_elevation_set", _wrap_GFReceiver_elevation_set, METH_VARARGS, (char *)"GFReceiver_elevation_set(GFReceiver self, double elevation)"},
+	 { (char *)"GFReceiver_elevation_get", _wrap_GFReceiver_elevation_get, METH_VARARGS, (char *)"GFReceiver_elevation_get(GFReceiver self) -> double"},
+	 { (char *)"delete_GFReceiver", _wrap_delete_GFReceiver, METH_VARARGS, (char *)"delete_GFReceiver(GFReceiver self)"},
 	 { (char *)"GFReceiver_swigregister", GFReceiver_swigregister, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_ClassName", _wrap_GFArchive_ClassName, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_TypeInfo", _wrap_GFArchive_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_className", _wrap_GFArchive_className, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_typeInfo", _wrap_GFArchive_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_Cast", _wrap_GFArchive_Cast, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_ConstCast", _wrap_GFArchive_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"delete_GFArchive", _wrap_delete_GFArchive, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_setSource", _wrap_GFArchive_setSource, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_close", _wrap_GFArchive_close, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_availableModels", _wrap_GFArchive_availableModels, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_availableDepths", _wrap_GFArchive_availableDepths, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_setTimeSpan", _wrap_GFArchive_setTimeSpan, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_addRequest", _wrap_GFArchive_addRequest, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_get", _wrap_GFArchive_get, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_Create", _wrap_GFArchive_Create, METH_VARARGS, NULL},
-	 { (char *)"GFArchive_Open", _wrap_GFArchive_Open, METH_VARARGS, NULL},
+	 { (char *)"GFArchive_ClassName", _wrap_GFArchive_ClassName, METH_VARARGS, (char *)"GFArchive_ClassName() -> char const *"},
+	 { (char *)"GFArchive_TypeInfo", _wrap_GFArchive_TypeInfo, METH_VARARGS, (char *)"GFArchive_TypeInfo() -> RTTI"},
+	 { (char *)"GFArchive_className", _wrap_GFArchive_className, METH_VARARGS, (char *)"GFArchive_className(GFArchive self) -> char const *"},
+	 { (char *)"GFArchive_typeInfo", _wrap_GFArchive_typeInfo, METH_VARARGS, (char *)"GFArchive_typeInfo(GFArchive self) -> RTTI"},
+	 { (char *)"GFArchive_Cast", _wrap_GFArchive_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> GFArchive\n"
+		"GFArchive_Cast(Seiscomp::Core::BaseObjectPtr o) -> GFArchive\n"
+		""},
+	 { (char *)"GFArchive_ConstCast", _wrap_GFArchive_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> GFArchive\n"
+		"GFArchive_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> GFArchive\n"
+		""},
+	 { (char *)"delete_GFArchive", _wrap_delete_GFArchive, METH_VARARGS, (char *)"delete_GFArchive(GFArchive self)"},
+	 { (char *)"GFArchive_setSource", _wrap_GFArchive_setSource, METH_VARARGS, (char *)"GFArchive_setSource(GFArchive self, string arg2) -> bool"},
+	 { (char *)"GFArchive_close", _wrap_GFArchive_close, METH_VARARGS, (char *)"GFArchive_close(GFArchive self)"},
+	 { (char *)"GFArchive_availableModels", _wrap_GFArchive_availableModels, METH_VARARGS, (char *)"GFArchive_availableModels(GFArchive self) -> std::list< std::string >"},
+	 { (char *)"GFArchive_availableDepths", _wrap_GFArchive_availableDepths, METH_VARARGS, (char *)"GFArchive_availableDepths(GFArchive self, string model) -> std::list< double >"},
+	 { (char *)"GFArchive_setTimeSpan", _wrap_GFArchive_setTimeSpan, METH_VARARGS, (char *)"GFArchive_setTimeSpan(GFArchive self, TimeSpan span) -> bool"},
+	 { (char *)"GFArchive_addRequest", _wrap_GFArchive_addRequest, METH_VARARGS, (char *)"\n"
+		"addRequest(string id, string model, GFSource source, GFReceiver receiver) -> bool\n"
+		"GFArchive_addRequest(GFArchive self, string id, string model, GFSource source, GFReceiver receiver, TimeSpan span) -> bool\n"
+		""},
+	 { (char *)"GFArchive_get", _wrap_GFArchive_get, METH_VARARGS, (char *)"GFArchive_get(GFArchive self) -> GreensFunction"},
+	 { (char *)"GFArchive_getTravelTime", _wrap_GFArchive_getTravelTime, METH_VARARGS, (char *)"GFArchive_getTravelTime(GFArchive self, string phase, string model, GFSource source, GFReceiver receiver) -> Seiscomp::Core::Optional< double >::Impl"},
+	 { (char *)"GFArchive_Create", _wrap_GFArchive_Create, METH_VARARGS, (char *)"GFArchive_Create(char const * service) -> GFArchive"},
+	 { (char *)"GFArchive_Open", _wrap_GFArchive_Open, METH_VARARGS, (char *)"GFArchive_Open(char const * url) -> GFArchive"},
 	 { (char *)"GFArchive_swigregister", GFArchive_swigregister, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_ClassName", _wrap_RecordStream_ClassName, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_TypeInfo", _wrap_RecordStream_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_className", _wrap_RecordStream_className, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_typeInfo", _wrap_RecordStream_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_Cast", _wrap_RecordStream_Cast, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_ConstCast", _wrap_RecordStream_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordStream", _wrap_delete_RecordStream, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setRecordType", _wrap_RecordStream_setRecordType, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setSource", _wrap_RecordStream_setSource, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_close", _wrap_RecordStream_close, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_addStream", _wrap_RecordStream_addStream, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setStartTime", _wrap_RecordStream_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setEndTime", _wrap_RecordStream_setEndTime, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setTimeWindow", _wrap_RecordStream_setTimeWindow, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_setTimeout", _wrap_RecordStream_setTimeout, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_stream", _wrap_RecordStream_stream, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_createRecord", _wrap_RecordStream_createRecord, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_recordStored", _wrap_RecordStream_recordStored, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_filterRecord", _wrap_RecordStream_filterRecord, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_Create", _wrap_RecordStream_Create, METH_VARARGS, NULL},
-	 { (char *)"RecordStream_Open", _wrap_RecordStream_Open, METH_VARARGS, NULL},
+	 { (char *)"RecordStream_ClassName", _wrap_RecordStream_ClassName, METH_VARARGS, (char *)"RecordStream_ClassName() -> char const *"},
+	 { (char *)"RecordStream_TypeInfo", _wrap_RecordStream_TypeInfo, METH_VARARGS, (char *)"RecordStream_TypeInfo() -> RTTI"},
+	 { (char *)"RecordStream_className", _wrap_RecordStream_className, METH_VARARGS, (char *)"RecordStream_className(RecordStream self) -> char const *"},
+	 { (char *)"RecordStream_typeInfo", _wrap_RecordStream_typeInfo, METH_VARARGS, (char *)"RecordStream_typeInfo(RecordStream self) -> RTTI"},
+	 { (char *)"RecordStream_Cast", _wrap_RecordStream_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> RecordStream\n"
+		"RecordStream_Cast(Seiscomp::Core::BaseObjectPtr o) -> RecordStream\n"
+		""},
+	 { (char *)"RecordStream_ConstCast", _wrap_RecordStream_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> RecordStream\n"
+		"RecordStream_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> RecordStream\n"
+		""},
+	 { (char *)"delete_RecordStream", _wrap_delete_RecordStream, METH_VARARGS, (char *)"delete_RecordStream(RecordStream self)"},
+	 { (char *)"RecordStream_setRecordType", _wrap_RecordStream_setRecordType, METH_VARARGS, (char *)"RecordStream_setRecordType(RecordStream self, char const * arg2) -> bool"},
+	 { (char *)"RecordStream_setSource", _wrap_RecordStream_setSource, METH_VARARGS, (char *)"RecordStream_setSource(RecordStream self, string arg2) -> bool"},
+	 { (char *)"RecordStream_close", _wrap_RecordStream_close, METH_VARARGS, (char *)"RecordStream_close(RecordStream self)"},
+	 { (char *)"RecordStream_addStream", _wrap_RecordStream_addStream, METH_VARARGS, (char *)"\n"
+		"addStream(string net, string sta, string loc, string cha) -> bool\n"
+		"RecordStream_addStream(RecordStream self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool\n"
+		""},
+	 { (char *)"RecordStream_setStartTime", _wrap_RecordStream_setStartTime, METH_VARARGS, (char *)"RecordStream_setStartTime(RecordStream self, Time stime) -> bool"},
+	 { (char *)"RecordStream_setEndTime", _wrap_RecordStream_setEndTime, METH_VARARGS, (char *)"RecordStream_setEndTime(RecordStream self, Time etime) -> bool"},
+	 { (char *)"RecordStream_setTimeWindow", _wrap_RecordStream_setTimeWindow, METH_VARARGS, (char *)"RecordStream_setTimeWindow(RecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"},
+	 { (char *)"RecordStream_setTimeout", _wrap_RecordStream_setTimeout, METH_VARARGS, (char *)"RecordStream_setTimeout(RecordStream self, int seconds) -> bool"},
+	 { (char *)"RecordStream_stream", _wrap_RecordStream_stream, METH_VARARGS, (char *)"RecordStream_stream(RecordStream self) -> std::istream &"},
+	 { (char *)"RecordStream_createRecord", _wrap_RecordStream_createRecord, METH_VARARGS, (char *)"RecordStream_createRecord(RecordStream self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"},
+	 { (char *)"RecordStream_recordStored", _wrap_RecordStream_recordStored, METH_VARARGS, (char *)"RecordStream_recordStored(RecordStream self, Record arg2)"},
+	 { (char *)"RecordStream_filterRecord", _wrap_RecordStream_filterRecord, METH_VARARGS, (char *)"RecordStream_filterRecord(RecordStream self, Record arg2) -> bool"},
+	 { (char *)"RecordStream_Create", _wrap_RecordStream_Create, METH_VARARGS, (char *)"\n"
+		"Create(char const * service) -> RecordStream\n"
+		"RecordStream_Create(char const * service, char const * recordType) -> RecordStream\n"
+		""},
+	 { (char *)"RecordStream_Open", _wrap_RecordStream_Open, METH_VARARGS, (char *)"RecordStream_Open(char const * url) -> RecordStream"},
 	 { (char *)"RecordStream_swigregister", RecordStream_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordIterator", _wrap_new_RecordIterator, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordIterator", _wrap_delete_RecordIterator, METH_VARARGS, NULL},
-	 { (char *)"RecordIterator___ref__", _wrap_RecordIterator___ref__, METH_VARARGS, NULL},
-	 { (char *)"RecordIterator___ne__", _wrap_RecordIterator___ne__, METH_VARARGS, NULL},
-	 { (char *)"RecordIterator___eq__", _wrap_RecordIterator___eq__, METH_VARARGS, NULL},
-	 { (char *)"RecordIterator_source", _wrap_RecordIterator_source, METH_VARARGS, NULL},
-	 { (char *)"RecordIterator_current", _wrap_RecordIterator_current, METH_VARARGS, NULL},
+	 { (char *)"new_RecordIterator", _wrap_new_RecordIterator, METH_VARARGS, (char *)"\n"
+		"RecordIterator()\n"
+		"new_RecordIterator(RecordIterator iter) -> RecordIterator\n"
+		""},
+	 { (char *)"delete_RecordIterator", _wrap_delete_RecordIterator, METH_VARARGS, (char *)"delete_RecordIterator(RecordIterator self)"},
+	 { (char *)"RecordIterator___ref__", _wrap_RecordIterator___ref__, METH_VARARGS, (char *)"RecordIterator___ref__(RecordIterator self) -> Record"},
+	 { (char *)"RecordIterator___ne__", _wrap_RecordIterator___ne__, METH_VARARGS, (char *)"RecordIterator___ne__(RecordIterator self, RecordIterator iter) -> bool"},
+	 { (char *)"RecordIterator___eq__", _wrap_RecordIterator___eq__, METH_VARARGS, (char *)"RecordIterator___eq__(RecordIterator self, RecordIterator iter) -> bool"},
+	 { (char *)"RecordIterator_source", _wrap_RecordIterator_source, METH_VARARGS, (char *)"RecordIterator_source(RecordIterator self) -> RecordInput"},
+	 { (char *)"RecordIterator_current", _wrap_RecordIterator_current, METH_VARARGS, (char *)"RecordIterator_current(RecordIterator self) -> Record"},
 	 { (char *)"RecordIterator_swigregister", RecordIterator_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordInput", _wrap_new_RecordInput, METH_VARARGS, NULL},
-	 { (char *)"RecordInput_begin", _wrap_RecordInput_begin, METH_VARARGS, NULL},
-	 { (char *)"RecordInput_end", _wrap_RecordInput_end, METH_VARARGS, NULL},
-	 { (char *)"RecordInput_next", _wrap_RecordInput_next, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordInput", _wrap_delete_RecordInput, METH_VARARGS, NULL},
+	 { (char *)"new_RecordInput", _wrap_new_RecordInput, METH_VARARGS, (char *)"\n"
+		"RecordInput(RecordStream _in, Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW)\n"
+		"RecordInput(RecordStream _in, Seiscomp::Array::DataType dt=DOUBLE)\n"
+		"new_RecordInput(RecordStream _in) -> RecordInput\n"
+		""},
+	 { (char *)"RecordInput_begin", _wrap_RecordInput_begin, METH_VARARGS, (char *)"RecordInput_begin(RecordInput self) -> RecordIterator"},
+	 { (char *)"RecordInput_end", _wrap_RecordInput_end, METH_VARARGS, (char *)"RecordInput_end(RecordInput self) -> RecordIterator"},
+	 { (char *)"RecordInput_next", _wrap_RecordInput_next, METH_VARARGS, (char *)"RecordInput_next(RecordInput self) -> Record"},
+	 { (char *)"delete_RecordInput", _wrap_delete_RecordInput, METH_VARARGS, (char *)"delete_RecordInput(RecordInput self)"},
 	 { (char *)"RecordInput_swigregister", RecordInput_swigregister, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordFilterInterface", _wrap_delete_RecordFilterInterface, METH_VARARGS, NULL},
-	 { (char *)"RecordFilterInterface_feed", _wrap_RecordFilterInterface_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordFilterInterface_flush", _wrap_RecordFilterInterface_flush, METH_VARARGS, NULL},
-	 { (char *)"RecordFilterInterface_reset", _wrap_RecordFilterInterface_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordFilterInterface_clone", _wrap_RecordFilterInterface_clone, METH_VARARGS, NULL},
+	 { (char *)"delete_RecordFilterInterface", _wrap_delete_RecordFilterInterface, METH_VARARGS, (char *)"delete_RecordFilterInterface(RecordFilterInterface self)"},
+	 { (char *)"RecordFilterInterface_feed", _wrap_RecordFilterInterface_feed, METH_VARARGS, (char *)"RecordFilterInterface_feed(RecordFilterInterface self, Record rec) -> Record"},
+	 { (char *)"RecordFilterInterface_flush", _wrap_RecordFilterInterface_flush, METH_VARARGS, (char *)"RecordFilterInterface_flush(RecordFilterInterface self) -> Record"},
+	 { (char *)"RecordFilterInterface_reset", _wrap_RecordFilterInterface_reset, METH_VARARGS, (char *)"RecordFilterInterface_reset(RecordFilterInterface self)"},
+	 { (char *)"RecordFilterInterface_clone", _wrap_RecordFilterInterface_clone, METH_VARARGS, (char *)"RecordFilterInterface_clone(RecordFilterInterface self) -> RecordFilterInterface"},
 	 { (char *)"RecordFilterInterface_swigregister", RecordFilterInterface_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordDemuxFilter", _wrap_new_RecordDemuxFilter, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordDemuxFilter", _wrap_delete_RecordDemuxFilter, METH_VARARGS, NULL},
-	 { (char *)"RecordDemuxFilter_setFilter", _wrap_RecordDemuxFilter_setFilter, METH_VARARGS, NULL},
-	 { (char *)"RecordDemuxFilter_feed", _wrap_RecordDemuxFilter_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordDemuxFilter_flush", _wrap_RecordDemuxFilter_flush, METH_VARARGS, NULL},
-	 { (char *)"RecordDemuxFilter_reset", _wrap_RecordDemuxFilter_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordDemuxFilter_clone", _wrap_RecordDemuxFilter_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordDemuxFilter", _wrap_new_RecordDemuxFilter, METH_VARARGS, (char *)"\n"
+		"RecordDemuxFilter(RecordFilterInterface recordFilter=None)\n"
+		"new_RecordDemuxFilter() -> RecordDemuxFilter\n"
+		""},
+	 { (char *)"delete_RecordDemuxFilter", _wrap_delete_RecordDemuxFilter, METH_VARARGS, (char *)"delete_RecordDemuxFilter(RecordDemuxFilter self)"},
+	 { (char *)"RecordDemuxFilter_setFilter", _wrap_RecordDemuxFilter_setFilter, METH_VARARGS, (char *)"RecordDemuxFilter_setFilter(RecordDemuxFilter self, RecordFilterInterface recordFilter)"},
+	 { (char *)"RecordDemuxFilter_feed", _wrap_RecordDemuxFilter_feed, METH_VARARGS, (char *)"RecordDemuxFilter_feed(RecordDemuxFilter self, Record rec) -> Record"},
+	 { (char *)"RecordDemuxFilter_flush", _wrap_RecordDemuxFilter_flush, METH_VARARGS, (char *)"RecordDemuxFilter_flush(RecordDemuxFilter self) -> Record"},
+	 { (char *)"RecordDemuxFilter_reset", _wrap_RecordDemuxFilter_reset, METH_VARARGS, (char *)"RecordDemuxFilter_reset(RecordDemuxFilter self)"},
+	 { (char *)"RecordDemuxFilter_clone", _wrap_RecordDemuxFilter_clone, METH_VARARGS, (char *)"RecordDemuxFilter_clone(RecordDemuxFilter self) -> RecordFilterInterface"},
 	 { (char *)"RecordDemuxFilter_swigregister", RecordDemuxFilter_swigregister, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerBase_flush", _wrap_RecordResamplerBase_flush, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerBase_reset", _wrap_RecordResamplerBase_reset, METH_VARARGS, NULL},
+	 { (char *)"RecordResamplerBase_flush", _wrap_RecordResamplerBase_flush, METH_VARARGS, (char *)"RecordResamplerBase_flush(RecordResamplerBase self) -> Record"},
+	 { (char *)"RecordResamplerBase_reset", _wrap_RecordResamplerBase_reset, METH_VARARGS, (char *)"RecordResamplerBase_reset(RecordResamplerBase self)"},
 	 { (char *)"RecordResamplerBase_swigregister", RecordResamplerBase_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordStreamException", _wrap_new_RecordStreamException, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordStreamException", _wrap_delete_RecordStreamException, METH_VARARGS, NULL},
+	 { (char *)"new_RecordStreamException", _wrap_new_RecordStreamException, METH_VARARGS, (char *)"\n"
+		"RecordStreamException()\n"
+		"new_RecordStreamException(string what) -> RecordStreamException\n"
+		""},
+	 { (char *)"delete_RecordStreamException", _wrap_delete_RecordStreamException, METH_VARARGS, (char *)"delete_RecordStreamException(RecordStreamException self)"},
 	 { (char *)"RecordStreamException_swigregister", RecordStreamException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordStreamTimeout", _wrap_new_RecordStreamTimeout, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordStreamTimeout", _wrap_delete_RecordStreamTimeout, METH_VARARGS, NULL},
+	 { (char *)"new_RecordStreamTimeout", _wrap_new_RecordStreamTimeout, METH_VARARGS, (char *)"\n"
+		"RecordStreamTimeout()\n"
+		"new_RecordStreamTimeout(string what) -> RecordStreamTimeout\n"
+		""},
+	 { (char *)"delete_RecordStreamTimeout", _wrap_delete_RecordStreamTimeout, METH_VARARGS, (char *)"delete_RecordStreamTimeout(RecordStreamTimeout self)"},
 	 { (char *)"RecordStreamTimeout_swigregister", RecordStreamTimeout_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Importer_ClassName", _wrap_Importer_ClassName, METH_VARARGS, NULL},
-	 { (char *)"Importer_TypeInfo", _wrap_Importer_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"Importer_className", _wrap_Importer_className, METH_VARARGS, NULL},
-	 { (char *)"Importer_typeInfo", _wrap_Importer_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"Importer_Cast", _wrap_Importer_Cast, METH_VARARGS, NULL},
-	 { (char *)"Importer_ConstCast", _wrap_Importer_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"delete_Importer", _wrap_delete_Importer, METH_VARARGS, NULL},
-	 { (char *)"Importer_Create", _wrap_Importer_Create, METH_VARARGS, NULL},
-	 { (char *)"Importer_read", _wrap_Importer_read, METH_VARARGS, NULL},
-	 { (char *)"Importer_withoutErrors", _wrap_Importer_withoutErrors, METH_VARARGS, NULL},
+	 { (char *)"Importer_ClassName", _wrap_Importer_ClassName, METH_VARARGS, (char *)"Importer_ClassName() -> char const *"},
+	 { (char *)"Importer_TypeInfo", _wrap_Importer_TypeInfo, METH_VARARGS, (char *)"Importer_TypeInfo() -> RTTI"},
+	 { (char *)"Importer_className", _wrap_Importer_className, METH_VARARGS, (char *)"Importer_className(Importer self) -> char const *"},
+	 { (char *)"Importer_typeInfo", _wrap_Importer_typeInfo, METH_VARARGS, (char *)"Importer_typeInfo(Importer self) -> RTTI"},
+	 { (char *)"Importer_Cast", _wrap_Importer_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> Importer\n"
+		"Importer_Cast(Seiscomp::Core::BaseObjectPtr o) -> Importer\n"
+		""},
+	 { (char *)"Importer_ConstCast", _wrap_Importer_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> Importer\n"
+		"Importer_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Importer\n"
+		""},
+	 { (char *)"delete_Importer", _wrap_delete_Importer, METH_VARARGS, (char *)"delete_Importer(Importer self)"},
+	 { (char *)"Importer_Create", _wrap_Importer_Create, METH_VARARGS, (char *)"Importer_Create(char const * type) -> Importer"},
+	 { (char *)"Importer_read", _wrap_Importer_read, METH_VARARGS, (char *)"\n"
+		"read(std::streambuf * buf) -> BaseObject\n"
+		"Importer_read(Importer self, string filename) -> BaseObject\n"
+		""},
+	 { (char *)"Importer_withoutErrors", _wrap_Importer_withoutErrors, METH_VARARGS, (char *)"Importer_withoutErrors(Importer self) -> bool"},
 	 { (char *)"Importer_swigregister", Importer_swigregister, METH_VARARGS, NULL},
-	 { (char *)"delete_ExportSink", _wrap_delete_ExportSink, METH_VARARGS, NULL},
-	 { (char *)"ExportSink_write", _wrap_ExportSink_write, METH_VARARGS, NULL},
-	 { (char *)"new_ExportSink", _wrap_new_ExportSink, METH_VARARGS, NULL},
+	 { (char *)"delete_ExportSink", _wrap_delete_ExportSink, METH_VARARGS, (char *)"delete_ExportSink(ExportSink self)"},
+	 { (char *)"ExportSink_write", _wrap_ExportSink_write, METH_VARARGS, (char *)"ExportSink_write(ExportSink self, char const * data, int size) -> int"},
+	 { (char *)"new_ExportSink", _wrap_new_ExportSink, METH_VARARGS, (char *)"new_ExportSink(PyObject * self) -> ExportSink"},
 	 { (char *)"disown_ExportSink", _wrap_disown_ExportSink, METH_VARARGS, NULL},
 	 { (char *)"ExportSink_swigregister", ExportSink_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Exporter_ClassName", _wrap_Exporter_ClassName, METH_VARARGS, NULL},
-	 { (char *)"Exporter_TypeInfo", _wrap_Exporter_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"Exporter_className", _wrap_Exporter_className, METH_VARARGS, NULL},
-	 { (char *)"Exporter_typeInfo", _wrap_Exporter_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"Exporter_Cast", _wrap_Exporter_Cast, METH_VARARGS, NULL},
-	 { (char *)"Exporter_ConstCast", _wrap_Exporter_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"delete_Exporter", _wrap_delete_Exporter, METH_VARARGS, NULL},
-	 { (char *)"Exporter_Create", _wrap_Exporter_Create, METH_VARARGS, NULL},
-	 { (char *)"Exporter_setFormattedOutput", _wrap_Exporter_setFormattedOutput, METH_VARARGS, NULL},
-	 { (char *)"Exporter_setIndent", _wrap_Exporter_setIndent, METH_VARARGS, NULL},
-	 { (char *)"Exporter_write", _wrap_Exporter_write, METH_VARARGS, NULL},
+	 { (char *)"Exporter_ClassName", _wrap_Exporter_ClassName, METH_VARARGS, (char *)"Exporter_ClassName() -> char const *"},
+	 { (char *)"Exporter_TypeInfo", _wrap_Exporter_TypeInfo, METH_VARARGS, (char *)"Exporter_TypeInfo() -> RTTI"},
+	 { (char *)"Exporter_className", _wrap_Exporter_className, METH_VARARGS, (char *)"Exporter_className(Exporter self) -> char const *"},
+	 { (char *)"Exporter_typeInfo", _wrap_Exporter_typeInfo, METH_VARARGS, (char *)"Exporter_typeInfo(Exporter self) -> RTTI"},
+	 { (char *)"Exporter_Cast", _wrap_Exporter_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> Exporter\n"
+		"Exporter_Cast(Seiscomp::Core::BaseObjectPtr o) -> Exporter\n"
+		""},
+	 { (char *)"Exporter_ConstCast", _wrap_Exporter_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> Exporter\n"
+		"Exporter_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Exporter\n"
+		""},
+	 { (char *)"delete_Exporter", _wrap_delete_Exporter, METH_VARARGS, (char *)"delete_Exporter(Exporter self)"},
+	 { (char *)"Exporter_Create", _wrap_Exporter_Create, METH_VARARGS, (char *)"Exporter_Create(char const * type) -> Exporter"},
+	 { (char *)"Exporter_setFormattedOutput", _wrap_Exporter_setFormattedOutput, METH_VARARGS, (char *)"Exporter_setFormattedOutput(Exporter self, bool enable)"},
+	 { (char *)"Exporter_setIndent", _wrap_Exporter_setIndent, METH_VARARGS, (char *)"Exporter_setIndent(Exporter self, int arg2)"},
+	 { (char *)"Exporter_write", _wrap_Exporter_write, METH_VARARGS, (char *)"\n"
+		"write(std::streambuf * buf, BaseObject arg3) -> bool\n"
+		"write(string filename, BaseObject arg3) -> bool\n"
+		"Exporter_write(Exporter self, ExportSink sink, BaseObject arg3) -> bool\n"
+		""},
 	 { (char *)"Exporter_swigregister", Exporter_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_XMLArchive", _wrap_new_XMLArchive, METH_VARARGS, NULL},
-	 { (char *)"delete_XMLArchive", _wrap_delete_XMLArchive, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_open", _wrap_XMLArchive_open, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_create", _wrap_XMLArchive_create, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_close", _wrap_XMLArchive_close, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_setRootName", _wrap_XMLArchive_setRootName, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_setFormattedOutput", _wrap_XMLArchive_setFormattedOutput, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_setCompression", _wrap_XMLArchive_setCompression, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_rootNamespace", _wrap_XMLArchive_rootNamespace, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_rootNamespaceUri", _wrap_XMLArchive_rootNamespaceUri, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_setRootNamespace", _wrap_XMLArchive_setRootNamespace, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_read", _wrap_XMLArchive_read, METH_VARARGS, NULL},
-	 { (char *)"XMLArchive_write", _wrap_XMLArchive_write, METH_VARARGS, NULL},
+	 { (char *)"new_XMLArchive", _wrap_new_XMLArchive, METH_VARARGS, (char *)"\n"
+		"XMLArchive()\n"
+		"XMLArchive(std::streambuf * buf, bool isReading=True, int forceWriteVersion=-1)\n"
+		"XMLArchive(std::streambuf * buf, bool isReading=True)\n"
+		"new_XMLArchive(std::streambuf * buf) -> XMLArchive\n"
+		""},
+	 { (char *)"delete_XMLArchive", _wrap_delete_XMLArchive, METH_VARARGS, (char *)"delete_XMLArchive(XMLArchive self)"},
+	 { (char *)"XMLArchive_open", _wrap_XMLArchive_open, METH_VARARGS, (char *)"\n"
+		"open(std::streambuf * arg2) -> bool\n"
+		"XMLArchive_open(XMLArchive self, char const * filename) -> bool\n"
+		""},
+	 { (char *)"XMLArchive_create", _wrap_XMLArchive_create, METH_VARARGS, (char *)"\n"
+		"create(std::streambuf * buf, bool writeVersion=True, bool headerNode=True) -> bool\n"
+		"create(std::streambuf * buf, bool writeVersion=True) -> bool\n"
+		"create(std::streambuf * buf) -> bool\n"
+		"create(char const * filename, bool writeVersion=True, bool headerNode=True) -> bool\n"
+		"create(char const * filename, bool writeVersion=True) -> bool\n"
+		"XMLArchive_create(XMLArchive self, char const * filename) -> bool\n"
+		""},
+	 { (char *)"XMLArchive_close", _wrap_XMLArchive_close, METH_VARARGS, (char *)"XMLArchive_close(XMLArchive self)"},
+	 { (char *)"XMLArchive_setRootName", _wrap_XMLArchive_setRootName, METH_VARARGS, (char *)"XMLArchive_setRootName(XMLArchive self, string name)"},
+	 { (char *)"XMLArchive_setFormattedOutput", _wrap_XMLArchive_setFormattedOutput, METH_VARARGS, (char *)"XMLArchive_setFormattedOutput(XMLArchive self, bool enable)"},
+	 { (char *)"XMLArchive_setCompression", _wrap_XMLArchive_setCompression, METH_VARARGS, (char *)"XMLArchive_setCompression(XMLArchive self, bool enable)"},
+	 { (char *)"XMLArchive_rootNamespace", _wrap_XMLArchive_rootNamespace, METH_VARARGS, (char *)"XMLArchive_rootNamespace(XMLArchive self) -> string"},
+	 { (char *)"XMLArchive_rootNamespaceUri", _wrap_XMLArchive_rootNamespaceUri, METH_VARARGS, (char *)"XMLArchive_rootNamespaceUri(XMLArchive self) -> string"},
+	 { (char *)"XMLArchive_setRootNamespace", _wrap_XMLArchive_setRootNamespace, METH_VARARGS, (char *)"XMLArchive_setRootNamespace(XMLArchive self, string name, string uri)"},
+	 { (char *)"XMLArchive_read", _wrap_XMLArchive_read, METH_VARARGS, (char *)"\n"
+		"read(int & value)\n"
+		"read(float & value)\n"
+		"read(double & value)\n"
+		"read(std::vector< char,std::allocator< char > > & value)\n"
+		"read(std::vector< int,std::allocator< int > > & value)\n"
+		"read(vectorf value)\n"
+		"read(vectord value)\n"
+		"read(std::vector< std::string,std::allocator< std::string > > & value)\n"
+		"read(std::complex< float > & value)\n"
+		"read(std::complex< double > & value)\n"
+		"read(bool & value)\n"
+		"read(vectorc value)\n"
+		"read(string value)\n"
+		"read(time_t & value)\n"
+		"XMLArchive_read(XMLArchive self, Time value)\n"
+		""},
+	 { (char *)"XMLArchive_write", _wrap_XMLArchive_write, METH_VARARGS, (char *)"\n"
+		"write(int value)\n"
+		"write(float value)\n"
+		"write(double value)\n"
+		"write(std::vector< char,std::allocator< char > > & value)\n"
+		"write(std::vector< int,std::allocator< int > > & value)\n"
+		"write(vectorf value)\n"
+		"write(vectord value)\n"
+		"write(std::vector< std::string,std::allocator< std::string > > & value)\n"
+		"write(std::complex< float > & value)\n"
+		"write(std::complex< double > & value)\n"
+		"write(bool value)\n"
+		"write(vectorc value)\n"
+		"write(string value)\n"
+		"write(time_t value)\n"
+		"XMLArchive_write(XMLArchive self, Time value)\n"
+		""},
 	 { (char *)"XMLArchive_swigregister", XMLArchive_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_BinaryArchive", _wrap_new_BinaryArchive, METH_VARARGS, NULL},
-	 { (char *)"delete_BinaryArchive", _wrap_delete_BinaryArchive, METH_VARARGS, NULL},
-	 { (char *)"BinaryArchive_open", _wrap_BinaryArchive_open, METH_VARARGS, NULL},
-	 { (char *)"BinaryArchive_create", _wrap_BinaryArchive_create, METH_VARARGS, NULL},
-	 { (char *)"BinaryArchive_close", _wrap_BinaryArchive_close, METH_VARARGS, NULL},
-	 { (char *)"BinaryArchive_read", _wrap_BinaryArchive_read, METH_VARARGS, NULL},
-	 { (char *)"BinaryArchive_write", _wrap_BinaryArchive_write, METH_VARARGS, NULL},
+	 { (char *)"new_BinaryArchive", _wrap_new_BinaryArchive, METH_VARARGS, (char *)"\n"
+		"BinaryArchive()\n"
+		"BinaryArchive(std::streambuf * buf, bool isReading=True)\n"
+		"new_BinaryArchive(std::streambuf * buf) -> BinaryArchive\n"
+		""},
+	 { (char *)"delete_BinaryArchive", _wrap_delete_BinaryArchive, METH_VARARGS, (char *)"delete_BinaryArchive(BinaryArchive self)"},
+	 { (char *)"BinaryArchive_open", _wrap_BinaryArchive_open, METH_VARARGS, (char *)"\n"
+		"open(char const * file) -> bool\n"
+		"BinaryArchive_open(BinaryArchive self, std::streambuf * arg2) -> bool\n"
+		""},
+	 { (char *)"BinaryArchive_create", _wrap_BinaryArchive_create, METH_VARARGS, (char *)"\n"
+		"create(char const * file) -> bool\n"
+		"BinaryArchive_create(BinaryArchive self, std::streambuf * arg2) -> bool\n"
+		""},
+	 { (char *)"BinaryArchive_close", _wrap_BinaryArchive_close, METH_VARARGS, (char *)"BinaryArchive_close(BinaryArchive self)"},
+	 { (char *)"BinaryArchive_read", _wrap_BinaryArchive_read, METH_VARARGS, (char *)"\n"
+		"read(int & value)\n"
+		"read(float & value)\n"
+		"read(double & value)\n"
+		"read(std::vector< char,std::allocator< char > > & value)\n"
+		"read(std::vector< int,std::allocator< int > > & value)\n"
+		"read(vectorf value)\n"
+		"read(vectord value)\n"
+		"read(std::vector< std::string,std::allocator< std::string > > & value)\n"
+		"read(std::complex< float > & value)\n"
+		"read(std::complex< double > & value)\n"
+		"read(bool & value)\n"
+		"read(vectorc value)\n"
+		"read(string value)\n"
+		"read(time_t & value)\n"
+		"BinaryArchive_read(BinaryArchive self, Time value)\n"
+		""},
+	 { (char *)"BinaryArchive_write", _wrap_BinaryArchive_write, METH_VARARGS, (char *)"\n"
+		"write(int value)\n"
+		"write(float value)\n"
+		"write(double value)\n"
+		"write(std::vector< char,std::allocator< char > > & value)\n"
+		"write(std::vector< int,std::allocator< int > > & value)\n"
+		"write(vectorf value)\n"
+		"write(vectord value)\n"
+		"write(std::vector< std::string,std::allocator< std::string > > & value)\n"
+		"write(std::complex< float > & value)\n"
+		"write(std::complex< double > & value)\n"
+		"write(bool value)\n"
+		"write(vectorc value)\n"
+		"write(string value)\n"
+		"write(time_t value)\n"
+		"BinaryArchive_write(BinaryArchive self, Time value)\n"
+		""},
 	 { (char *)"BinaryArchive_swigregister", BinaryArchive_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_VBinaryArchive", _wrap_new_VBinaryArchive, METH_VARARGS, NULL},
-	 { (char *)"VBinaryArchive_setWriteVersion", _wrap_VBinaryArchive_setWriteVersion, METH_VARARGS, NULL},
-	 { (char *)"VBinaryArchive_open", _wrap_VBinaryArchive_open, METH_VARARGS, NULL},
-	 { (char *)"VBinaryArchive_create", _wrap_VBinaryArchive_create, METH_VARARGS, NULL},
-	 { (char *)"VBinaryArchive_close", _wrap_VBinaryArchive_close, METH_VARARGS, NULL},
-	 { (char *)"VBinaryArchive_errorMsg", _wrap_VBinaryArchive_errorMsg, METH_VARARGS, NULL},
-	 { (char *)"delete_VBinaryArchive", _wrap_delete_VBinaryArchive, METH_VARARGS, NULL},
+	 { (char *)"new_VBinaryArchive", _wrap_new_VBinaryArchive, METH_VARARGS, (char *)"\n"
+		"VBinaryArchive(int forceWriteVersion=-1)\n"
+		"VBinaryArchive()\n"
+		"VBinaryArchive(std::streambuf * buf, bool isReading=True, int forceWriteVersion=-1)\n"
+		"VBinaryArchive(std::streambuf * buf, bool isReading=True)\n"
+		"new_VBinaryArchive(std::streambuf * buf) -> VBinaryArchive\n"
+		""},
+	 { (char *)"VBinaryArchive_setWriteVersion", _wrap_VBinaryArchive_setWriteVersion, METH_VARARGS, (char *)"VBinaryArchive_setWriteVersion(VBinaryArchive self, int version)"},
+	 { (char *)"VBinaryArchive_open", _wrap_VBinaryArchive_open, METH_VARARGS, (char *)"\n"
+		"open(char const * file) -> bool\n"
+		"VBinaryArchive_open(VBinaryArchive self, std::streambuf * arg2) -> bool\n"
+		""},
+	 { (char *)"VBinaryArchive_create", _wrap_VBinaryArchive_create, METH_VARARGS, (char *)"\n"
+		"create(char const * file) -> bool\n"
+		"VBinaryArchive_create(VBinaryArchive self, std::streambuf * arg2) -> bool\n"
+		""},
+	 { (char *)"VBinaryArchive_close", _wrap_VBinaryArchive_close, METH_VARARGS, (char *)"VBinaryArchive_close(VBinaryArchive self)"},
+	 { (char *)"VBinaryArchive_errorMsg", _wrap_VBinaryArchive_errorMsg, METH_VARARGS, (char *)"VBinaryArchive_errorMsg(VBinaryArchive self) -> char const *"},
+	 { (char *)"delete_VBinaryArchive", _wrap_delete_VBinaryArchive, METH_VARARGS, (char *)"delete_VBinaryArchive(VBinaryArchive self)"},
 	 { (char *)"VBinaryArchive_swigregister", VBinaryArchive_swigregister, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_ClassName", _wrap_AHRecord_ClassName, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_TypeInfo", _wrap_AHRecord_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_className", _wrap_AHRecord_className, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_typeInfo", _wrap_AHRecord_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_Cast", _wrap_AHRecord_Cast, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_ConstCast", _wrap_AHRecord_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"new_AHRecord", _wrap_new_AHRecord, METH_VARARGS, NULL},
-	 { (char *)"delete_AHRecord", _wrap_delete_AHRecord, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_setSamplingFrequency", _wrap_AHRecord_setSamplingFrequency, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_data", _wrap_AHRecord_data, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_raw", _wrap_AHRecord_raw, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_setData", _wrap_AHRecord_setData, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_saveSpace", _wrap_AHRecord_saveSpace, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_copy", _wrap_AHRecord_copy, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_read", _wrap_AHRecord_read, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_write", _wrap_AHRecord_write, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_gain", _wrap_AHRecord_gain, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_setGain", _wrap_AHRecord_setGain, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_extra", _wrap_AHRecord_extra, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_setExtra", _wrap_AHRecord_setExtra, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_elat_set", _wrap_AHRecord_elat_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_elat_get", _wrap_AHRecord_elat_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_elon_set", _wrap_AHRecord_elon_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_elon_get", _wrap_AHRecord_elon_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_edep_set", _wrap_AHRecord_edep_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_edep_get", _wrap_AHRecord_edep_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_etim_set", _wrap_AHRecord_etim_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_etim_get", _wrap_AHRecord_etim_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_com_set", _wrap_AHRecord_com_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_com_get", _wrap_AHRecord_com_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_ecom_set", _wrap_AHRecord_ecom_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_ecom_get", _wrap_AHRecord_ecom_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_log_set", _wrap_AHRecord_log_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_log_get", _wrap_AHRecord_log_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_slat_set", _wrap_AHRecord_slat_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_slat_get", _wrap_AHRecord_slat_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_slon_set", _wrap_AHRecord_slon_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_slon_get", _wrap_AHRecord_slon_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_salt_set", _wrap_AHRecord_salt_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_salt_get", _wrap_AHRecord_salt_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_sgain_set", _wrap_AHRecord_sgain_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_sgain_get", _wrap_AHRecord_sgain_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_snorm_set", _wrap_AHRecord_snorm_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_snorm_get", _wrap_AHRecord_snorm_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_rmin_set", _wrap_AHRecord_rmin_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_rmin_get", _wrap_AHRecord_rmin_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_maxamp_set", _wrap_AHRecord_maxamp_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_maxamp_get", _wrap_AHRecord_maxamp_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_delta_set", _wrap_AHRecord_delta_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_delta_get", _wrap_AHRecord_delta_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_cal_set", _wrap_AHRecord_cal_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord_cal_get", _wrap_AHRecord_cal_get, METH_VARARGS, NULL},
-	 { (char *)"AHRecord__delta_set", _wrap_AHRecord__delta_set, METH_VARARGS, NULL},
-	 { (char *)"AHRecord__delta_get", _wrap_AHRecord__delta_get, METH_VARARGS, NULL},
+	 { (char *)"AHRecord_ClassName", _wrap_AHRecord_ClassName, METH_VARARGS, (char *)"AHRecord_ClassName() -> char const *"},
+	 { (char *)"AHRecord_TypeInfo", _wrap_AHRecord_TypeInfo, METH_VARARGS, (char *)"AHRecord_TypeInfo() -> RTTI"},
+	 { (char *)"AHRecord_className", _wrap_AHRecord_className, METH_VARARGS, (char *)"AHRecord_className(AHRecord self) -> char const *"},
+	 { (char *)"AHRecord_typeInfo", _wrap_AHRecord_typeInfo, METH_VARARGS, (char *)"AHRecord_typeInfo(AHRecord self) -> RTTI"},
+	 { (char *)"AHRecord_Cast", _wrap_AHRecord_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> AHRecord\n"
+		"AHRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> AHRecord\n"
+		""},
+	 { (char *)"AHRecord_ConstCast", _wrap_AHRecord_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> AHRecord\n"
+		"AHRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> AHRecord\n"
+		""},
+	 { (char *)"new_AHRecord", _wrap_new_AHRecord, METH_VARARGS, (char *)"\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\", Time stime=Seiscomp::Core::Time(), \n"
+		"    double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt=DOUBLE, \n"
+		"    Seiscomp::Record::Hint h=DATA_ONLY)\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\", Time stime=Seiscomp::Core::Time(), \n"
+		"    double fsamp=0., int tqual=-1, Seiscomp::Array::DataType dt=DOUBLE)\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\", Time stime=Seiscomp::Core::Time(), \n"
+		"    double fsamp=0., int tqual=-1)\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\", Time stime=Seiscomp::Core::Time(), \n"
+		"    double fsamp=0.)\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\", Time stime=Seiscomp::Core::Time())\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\", string cha=\"XYZ\")\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\", string loc=\"\")\n"
+		"AHRecord(string net=\"AB\", string sta=\"ABC\")\n"
+		"AHRecord(string net=\"AB\")\n"
+		"AHRecord()\n"
+		"AHRecord(AHRecord rec)\n"
+		"new_AHRecord(Record rec) -> AHRecord\n"
+		""},
+	 { (char *)"delete_AHRecord", _wrap_delete_AHRecord, METH_VARARGS, (char *)"delete_AHRecord(AHRecord self)"},
+	 { (char *)"AHRecord_setSamplingFrequency", _wrap_AHRecord_setSamplingFrequency, METH_VARARGS, (char *)"AHRecord_setSamplingFrequency(AHRecord self, double freq)"},
+	 { (char *)"AHRecord_data", _wrap_AHRecord_data, METH_VARARGS, (char *)"\n"
+		"data() -> Array\n"
+		"AHRecord_data(AHRecord self) -> Array\n"
+		""},
+	 { (char *)"AHRecord_raw", _wrap_AHRecord_raw, METH_VARARGS, (char *)"AHRecord_raw(AHRecord self) -> Array"},
+	 { (char *)"AHRecord_setData", _wrap_AHRecord_setData, METH_VARARGS, (char *)"\n"
+		"setData(Array data)\n"
+		"AHRecord_setData(AHRecord self, int size, void const * data, Seiscomp::Array::DataType datatype)\n"
+		""},
+	 { (char *)"AHRecord_saveSpace", _wrap_AHRecord_saveSpace, METH_VARARGS, (char *)"AHRecord_saveSpace(AHRecord self)"},
+	 { (char *)"AHRecord_copy", _wrap_AHRecord_copy, METH_VARARGS, (char *)"AHRecord_copy(AHRecord self) -> AHRecord"},
+	 { (char *)"AHRecord_read", _wrap_AHRecord_read, METH_VARARGS, (char *)"AHRecord_read(AHRecord self, std::istream & _in)"},
+	 { (char *)"AHRecord_write", _wrap_AHRecord_write, METH_VARARGS, (char *)"AHRecord_write(AHRecord self, std::ostream & out)"},
+	 { (char *)"AHRecord_gain", _wrap_AHRecord_gain, METH_VARARGS, (char *)"AHRecord_gain(AHRecord self) -> float"},
+	 { (char *)"AHRecord_setGain", _wrap_AHRecord_setGain, METH_VARARGS, (char *)"AHRecord_setGain(AHRecord self, float value)"},
+	 { (char *)"AHRecord_extra", _wrap_AHRecord_extra, METH_VARARGS, (char *)"AHRecord_extra(AHRecord self, int i) -> float"},
+	 { (char *)"AHRecord_setExtra", _wrap_AHRecord_setExtra, METH_VARARGS, (char *)"AHRecord_setExtra(AHRecord self, int i, float value)"},
+	 { (char *)"AHRecord_elat_set", _wrap_AHRecord_elat_set, METH_VARARGS, (char *)"AHRecord_elat_set(AHRecord self, float elat)"},
+	 { (char *)"AHRecord_elat_get", _wrap_AHRecord_elat_get, METH_VARARGS, (char *)"AHRecord_elat_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_elon_set", _wrap_AHRecord_elon_set, METH_VARARGS, (char *)"AHRecord_elon_set(AHRecord self, float elon)"},
+	 { (char *)"AHRecord_elon_get", _wrap_AHRecord_elon_get, METH_VARARGS, (char *)"AHRecord_elon_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_edep_set", _wrap_AHRecord_edep_set, METH_VARARGS, (char *)"AHRecord_edep_set(AHRecord self, float edep)"},
+	 { (char *)"AHRecord_edep_get", _wrap_AHRecord_edep_get, METH_VARARGS, (char *)"AHRecord_edep_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_etim_set", _wrap_AHRecord_etim_set, METH_VARARGS, (char *)"AHRecord_etim_set(AHRecord self, Time etim)"},
+	 { (char *)"AHRecord_etim_get", _wrap_AHRecord_etim_get, METH_VARARGS, (char *)"AHRecord_etim_get(AHRecord self) -> Time"},
+	 { (char *)"AHRecord_com_set", _wrap_AHRecord_com_set, METH_VARARGS, (char *)"AHRecord_com_set(AHRecord self, string com)"},
+	 { (char *)"AHRecord_com_get", _wrap_AHRecord_com_get, METH_VARARGS, (char *)"AHRecord_com_get(AHRecord self) -> string"},
+	 { (char *)"AHRecord_ecom_set", _wrap_AHRecord_ecom_set, METH_VARARGS, (char *)"AHRecord_ecom_set(AHRecord self, string ecom)"},
+	 { (char *)"AHRecord_ecom_get", _wrap_AHRecord_ecom_get, METH_VARARGS, (char *)"AHRecord_ecom_get(AHRecord self) -> string"},
+	 { (char *)"AHRecord_log_set", _wrap_AHRecord_log_set, METH_VARARGS, (char *)"AHRecord_log_set(AHRecord self, string log)"},
+	 { (char *)"AHRecord_log_get", _wrap_AHRecord_log_get, METH_VARARGS, (char *)"AHRecord_log_get(AHRecord self) -> string"},
+	 { (char *)"AHRecord_slat_set", _wrap_AHRecord_slat_set, METH_VARARGS, (char *)"AHRecord_slat_set(AHRecord self, float slat)"},
+	 { (char *)"AHRecord_slat_get", _wrap_AHRecord_slat_get, METH_VARARGS, (char *)"AHRecord_slat_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_slon_set", _wrap_AHRecord_slon_set, METH_VARARGS, (char *)"AHRecord_slon_set(AHRecord self, float slon)"},
+	 { (char *)"AHRecord_slon_get", _wrap_AHRecord_slon_get, METH_VARARGS, (char *)"AHRecord_slon_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_salt_set", _wrap_AHRecord_salt_set, METH_VARARGS, (char *)"AHRecord_salt_set(AHRecord self, float salt)"},
+	 { (char *)"AHRecord_salt_get", _wrap_AHRecord_salt_get, METH_VARARGS, (char *)"AHRecord_salt_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_sgain_set", _wrap_AHRecord_sgain_set, METH_VARARGS, (char *)"AHRecord_sgain_set(AHRecord self, float sgain)"},
+	 { (char *)"AHRecord_sgain_get", _wrap_AHRecord_sgain_get, METH_VARARGS, (char *)"AHRecord_sgain_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_snorm_set", _wrap_AHRecord_snorm_set, METH_VARARGS, (char *)"AHRecord_snorm_set(AHRecord self, float snorm)"},
+	 { (char *)"AHRecord_snorm_get", _wrap_AHRecord_snorm_get, METH_VARARGS, (char *)"AHRecord_snorm_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_rmin_set", _wrap_AHRecord_rmin_set, METH_VARARGS, (char *)"AHRecord_rmin_set(AHRecord self, float rmin)"},
+	 { (char *)"AHRecord_rmin_get", _wrap_AHRecord_rmin_get, METH_VARARGS, (char *)"AHRecord_rmin_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_maxamp_set", _wrap_AHRecord_maxamp_set, METH_VARARGS, (char *)"AHRecord_maxamp_set(AHRecord self, float maxamp)"},
+	 { (char *)"AHRecord_maxamp_get", _wrap_AHRecord_maxamp_get, METH_VARARGS, (char *)"AHRecord_maxamp_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_delta_set", _wrap_AHRecord_delta_set, METH_VARARGS, (char *)"AHRecord_delta_set(AHRecord self, float delta)"},
+	 { (char *)"AHRecord_delta_get", _wrap_AHRecord_delta_get, METH_VARARGS, (char *)"AHRecord_delta_get(AHRecord self) -> float"},
+	 { (char *)"AHRecord_cal_set", _wrap_AHRecord_cal_set, METH_VARARGS, (char *)"AHRecord_cal_set(AHRecord self, vectorf cal)"},
+	 { (char *)"AHRecord_cal_get", _wrap_AHRecord_cal_get, METH_VARARGS, (char *)"AHRecord_cal_get(AHRecord self) -> vectorf"},
+	 { (char *)"AHRecord__delta_set", _wrap_AHRecord__delta_set, METH_VARARGS, (char *)"AHRecord__delta_set(AHRecord self, float _delta)"},
+	 { (char *)"AHRecord__delta_get", _wrap_AHRecord__delta_get, METH_VARARGS, (char *)"AHRecord__delta_get(AHRecord self) -> float"},
 	 { (char *)"AHRecord_swigregister", AHRecord_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_AHOutput", _wrap_new_AHOutput, METH_VARARGS, NULL},
-	 { (char *)"delete_AHOutput", _wrap_delete_AHOutput, METH_VARARGS, NULL},
-	 { (char *)"AHOutput_put", _wrap_AHOutput_put, METH_VARARGS, NULL},
+	 { (char *)"new_AHOutput", _wrap_new_AHOutput, METH_VARARGS, (char *)"\n"
+		"AHOutput()\n"
+		"new_AHOutput(string filename) -> AHOutput\n"
+		""},
+	 { (char *)"delete_AHOutput", _wrap_delete_AHOutput, METH_VARARGS, (char *)"delete_AHOutput(AHOutput self)"},
+	 { (char *)"AHOutput_put", _wrap_AHOutput_put, METH_VARARGS, (char *)"AHOutput_put(AHOutput self, AHRecord rec) -> bool"},
 	 { (char *)"AHOutput_swigregister", AHOutput_swigregister, METH_VARARGS, NULL},
-	 { (char *)"read_one", _wrap_read_one, METH_VARARGS, NULL},
-	 { (char *)"write_one", _wrap_write_one, METH_VARARGS, NULL},
-	 { (char *)"new_LibmseedException", _wrap_new_LibmseedException, METH_VARARGS, NULL},
-	 { (char *)"delete_LibmseedException", _wrap_delete_LibmseedException, METH_VARARGS, NULL},
+	 { (char *)"read_one", _wrap_read_one, METH_VARARGS, (char *)"read_one(std::istream & _is) -> AHRecord"},
+	 { (char *)"write_one", _wrap_write_one, METH_VARARGS, (char *)"write_one(AHRecord rec, std::ostream & os) -> bool"},
+	 { (char *)"new_LibmseedException", _wrap_new_LibmseedException, METH_VARARGS, (char *)"\n"
+		"LibmseedException()\n"
+		"new_LibmseedException(string what) -> LibmseedException\n"
+		""},
+	 { (char *)"delete_LibmseedException", _wrap_delete_LibmseedException, METH_VARARGS, (char *)"delete_LibmseedException(LibmseedException self)"},
 	 { (char *)"LibmseedException_swigregister", LibmseedException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_ClassName", _wrap_MSeedRecord_ClassName, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_TypeInfo", _wrap_MSeedRecord_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_className", _wrap_MSeedRecord_className, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_typeInfo", _wrap_MSeedRecord_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_Cast", _wrap_MSeedRecord_Cast, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_ConstCast", _wrap_MSeedRecord_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"new_MSeedRecord", _wrap_new_MSeedRecord, METH_VARARGS, NULL},
-	 { (char *)"delete_MSeedRecord", _wrap_delete_MSeedRecord, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setNetworkCode", _wrap_MSeedRecord_setNetworkCode, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setStationCode", _wrap_MSeedRecord_setStationCode, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setLocationCode", _wrap_MSeedRecord_setLocationCode, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setChannelCode", _wrap_MSeedRecord_setChannelCode, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setStartTime", _wrap_MSeedRecord_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_sequenceNumber", _wrap_MSeedRecord_sequenceNumber, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setSequenceNumber", _wrap_MSeedRecord_setSequenceNumber, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_dataQuality", _wrap_MSeedRecord_dataQuality, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setDataQuality", _wrap_MSeedRecord_setDataQuality, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_sampleRateFactor", _wrap_MSeedRecord_sampleRateFactor, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setSampleRateFactor", _wrap_MSeedRecord_setSampleRateFactor, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_sampleRateMultiplier", _wrap_MSeedRecord_sampleRateMultiplier, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setSampleRateMultiplier", _wrap_MSeedRecord_setSampleRateMultiplier, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_byteOrder", _wrap_MSeedRecord_byteOrder, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_encoding", _wrap_MSeedRecord_encoding, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_sampleRateNumerator", _wrap_MSeedRecord_sampleRateNumerator, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_sampleRateDenominator", _wrap_MSeedRecord_sampleRateDenominator, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_frameNumber", _wrap_MSeedRecord_frameNumber, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_endTime", _wrap_MSeedRecord_endTime, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_recordLength", _wrap_MSeedRecord_recordLength, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_leapSeconds", _wrap_MSeedRecord_leapSeconds, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_data", _wrap_MSeedRecord_data, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_raw", _wrap_MSeedRecord_raw, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_saveSpace", _wrap_MSeedRecord_saveSpace, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_copy", _wrap_MSeedRecord_copy, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_useEncoding", _wrap_MSeedRecord_useEncoding, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_setOutputRecordLength", _wrap_MSeedRecord_setOutputRecordLength, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_read", _wrap_MSeedRecord_read, METH_VARARGS, NULL},
-	 { (char *)"MSeedRecord_write", _wrap_MSeedRecord_write, METH_VARARGS, NULL},
+	 { (char *)"MSeedRecord_ClassName", _wrap_MSeedRecord_ClassName, METH_VARARGS, (char *)"MSeedRecord_ClassName() -> char const *"},
+	 { (char *)"MSeedRecord_TypeInfo", _wrap_MSeedRecord_TypeInfo, METH_VARARGS, (char *)"MSeedRecord_TypeInfo() -> RTTI"},
+	 { (char *)"MSeedRecord_className", _wrap_MSeedRecord_className, METH_VARARGS, (char *)"MSeedRecord_className(MSeedRecord self) -> char const *"},
+	 { (char *)"MSeedRecord_typeInfo", _wrap_MSeedRecord_typeInfo, METH_VARARGS, (char *)"MSeedRecord_typeInfo(MSeedRecord self) -> RTTI"},
+	 { (char *)"MSeedRecord_Cast", _wrap_MSeedRecord_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> MSeedRecord\n"
+		"MSeedRecord_Cast(Seiscomp::Core::BaseObjectPtr o) -> MSeedRecord\n"
+		""},
+	 { (char *)"MSeedRecord_ConstCast", _wrap_MSeedRecord_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> MSeedRecord\n"
+		"MSeedRecord_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> MSeedRecord\n"
+		""},
+	 { (char *)"new_MSeedRecord", _wrap_new_MSeedRecord, METH_VARARGS, (char *)"\n"
+		"MSeedRecord(Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW)\n"
+		"MSeedRecord(Seiscomp::Array::DataType dt=DOUBLE)\n"
+		"MSeedRecord()\n"
+		"MSeedRecord(MSRecord * msrec, Seiscomp::Array::DataType dt=DOUBLE, Seiscomp::Record::Hint h=SAVE_RAW)\n"
+		"MSeedRecord(MSRecord * msrec, Seiscomp::Array::DataType dt=DOUBLE)\n"
+		"MSeedRecord(MSRecord * msrec)\n"
+		"MSeedRecord(MSeedRecord ms)\n"
+		"MSeedRecord(Record rec, int reclen=512)\n"
+		"new_MSeedRecord(Record rec) -> MSeedRecord\n"
+		""},
+	 { (char *)"delete_MSeedRecord", _wrap_delete_MSeedRecord, METH_VARARGS, (char *)"delete_MSeedRecord(MSeedRecord self)"},
+	 { (char *)"MSeedRecord_setNetworkCode", _wrap_MSeedRecord_setNetworkCode, METH_VARARGS, (char *)"MSeedRecord_setNetworkCode(MSeedRecord self, string net)"},
+	 { (char *)"MSeedRecord_setStationCode", _wrap_MSeedRecord_setStationCode, METH_VARARGS, (char *)"MSeedRecord_setStationCode(MSeedRecord self, string sta)"},
+	 { (char *)"MSeedRecord_setLocationCode", _wrap_MSeedRecord_setLocationCode, METH_VARARGS, (char *)"MSeedRecord_setLocationCode(MSeedRecord self, string loc)"},
+	 { (char *)"MSeedRecord_setChannelCode", _wrap_MSeedRecord_setChannelCode, METH_VARARGS, (char *)"MSeedRecord_setChannelCode(MSeedRecord self, string cha)"},
+	 { (char *)"MSeedRecord_setStartTime", _wrap_MSeedRecord_setStartTime, METH_VARARGS, (char *)"MSeedRecord_setStartTime(MSeedRecord self, Time time)"},
+	 { (char *)"MSeedRecord_sequenceNumber", _wrap_MSeedRecord_sequenceNumber, METH_VARARGS, (char *)"MSeedRecord_sequenceNumber(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_setSequenceNumber", _wrap_MSeedRecord_setSequenceNumber, METH_VARARGS, (char *)"MSeedRecord_setSequenceNumber(MSeedRecord self, int seqno)"},
+	 { (char *)"MSeedRecord_dataQuality", _wrap_MSeedRecord_dataQuality, METH_VARARGS, (char *)"MSeedRecord_dataQuality(MSeedRecord self) -> char"},
+	 { (char *)"MSeedRecord_setDataQuality", _wrap_MSeedRecord_setDataQuality, METH_VARARGS, (char *)"MSeedRecord_setDataQuality(MSeedRecord self, char qual)"},
+	 { (char *)"MSeedRecord_sampleRateFactor", _wrap_MSeedRecord_sampleRateFactor, METH_VARARGS, (char *)"MSeedRecord_sampleRateFactor(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_setSampleRateFactor", _wrap_MSeedRecord_setSampleRateFactor, METH_VARARGS, (char *)"MSeedRecord_setSampleRateFactor(MSeedRecord self, int srfact)"},
+	 { (char *)"MSeedRecord_sampleRateMultiplier", _wrap_MSeedRecord_sampleRateMultiplier, METH_VARARGS, (char *)"MSeedRecord_sampleRateMultiplier(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_setSampleRateMultiplier", _wrap_MSeedRecord_setSampleRateMultiplier, METH_VARARGS, (char *)"MSeedRecord_setSampleRateMultiplier(MSeedRecord self, int srmult)"},
+	 { (char *)"MSeedRecord_byteOrder", _wrap_MSeedRecord_byteOrder, METH_VARARGS, (char *)"MSeedRecord_byteOrder(MSeedRecord self) -> unsigned short"},
+	 { (char *)"MSeedRecord_encoding", _wrap_MSeedRecord_encoding, METH_VARARGS, (char *)"MSeedRecord_encoding(MSeedRecord self) -> unsigned short"},
+	 { (char *)"MSeedRecord_sampleRateNumerator", _wrap_MSeedRecord_sampleRateNumerator, METH_VARARGS, (char *)"MSeedRecord_sampleRateNumerator(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_sampleRateDenominator", _wrap_MSeedRecord_sampleRateDenominator, METH_VARARGS, (char *)"MSeedRecord_sampleRateDenominator(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_frameNumber", _wrap_MSeedRecord_frameNumber, METH_VARARGS, (char *)"MSeedRecord_frameNumber(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_endTime", _wrap_MSeedRecord_endTime, METH_VARARGS, (char *)"MSeedRecord_endTime(MSeedRecord self) -> Time"},
+	 { (char *)"MSeedRecord_recordLength", _wrap_MSeedRecord_recordLength, METH_VARARGS, (char *)"MSeedRecord_recordLength(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_leapSeconds", _wrap_MSeedRecord_leapSeconds, METH_VARARGS, (char *)"MSeedRecord_leapSeconds(MSeedRecord self) -> int"},
+	 { (char *)"MSeedRecord_data", _wrap_MSeedRecord_data, METH_VARARGS, (char *)"MSeedRecord_data(MSeedRecord self) -> Array"},
+	 { (char *)"MSeedRecord_raw", _wrap_MSeedRecord_raw, METH_VARARGS, (char *)"MSeedRecord_raw(MSeedRecord self) -> Array"},
+	 { (char *)"MSeedRecord_saveSpace", _wrap_MSeedRecord_saveSpace, METH_VARARGS, (char *)"MSeedRecord_saveSpace(MSeedRecord self)"},
+	 { (char *)"MSeedRecord_copy", _wrap_MSeedRecord_copy, METH_VARARGS, (char *)"MSeedRecord_copy(MSeedRecord self) -> Record"},
+	 { (char *)"MSeedRecord_useEncoding", _wrap_MSeedRecord_useEncoding, METH_VARARGS, (char *)"MSeedRecord_useEncoding(MSeedRecord self, bool flag)"},
+	 { (char *)"MSeedRecord_setOutputRecordLength", _wrap_MSeedRecord_setOutputRecordLength, METH_VARARGS, (char *)"MSeedRecord_setOutputRecordLength(MSeedRecord self, int reclen)"},
+	 { (char *)"MSeedRecord_read", _wrap_MSeedRecord_read, METH_VARARGS, (char *)"MSeedRecord_read(MSeedRecord self, std::istream & _in)"},
+	 { (char *)"MSeedRecord_write", _wrap_MSeedRecord_write, METH_VARARGS, (char *)"MSeedRecord_write(MSeedRecord self, std::ostream & out)"},
 	 { (char *)"MSeedRecord_swigregister", MSeedRecord_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_FileRecordStream", _wrap_new_FileRecordStream, METH_VARARGS, NULL},
-	 { (char *)"delete_FileRecordStream", _wrap_delete_FileRecordStream, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_setSource", _wrap_FileRecordStream_setSource, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_addStream", _wrap_FileRecordStream_addStream, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_setStartTime", _wrap_FileRecordStream_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_setEndTime", _wrap_FileRecordStream_setEndTime, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_setTimeWindow", _wrap_FileRecordStream_setTimeWindow, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_setTimeout", _wrap_FileRecordStream_setTimeout, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_close", _wrap_FileRecordStream_close, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_name", _wrap_FileRecordStream_name, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_stream", _wrap_FileRecordStream_stream, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_filterRecord", _wrap_FileRecordStream_filterRecord, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_tell", _wrap_FileRecordStream_tell, METH_VARARGS, NULL},
-	 { (char *)"FileRecordStream_seek", _wrap_FileRecordStream_seek, METH_VARARGS, NULL},
+	 { (char *)"new_FileRecordStream", _wrap_new_FileRecordStream, METH_VARARGS, (char *)"\n"
+		"File()\n"
+		"File(string name)\n"
+		"new_FileRecordStream(FileRecordStream f) -> FileRecordStream\n"
+		""},
+	 { (char *)"delete_FileRecordStream", _wrap_delete_FileRecordStream, METH_VARARGS, (char *)"delete_FileRecordStream(FileRecordStream self)"},
+	 { (char *)"FileRecordStream_setSource", _wrap_FileRecordStream_setSource, METH_VARARGS, (char *)"FileRecordStream_setSource(FileRecordStream self, string arg2) -> bool"},
+	 { (char *)"FileRecordStream_addStream", _wrap_FileRecordStream_addStream, METH_VARARGS, (char *)"\n"
+		"addStream(string net, string sta, string loc, string cha) -> bool\n"
+		"FileRecordStream_addStream(FileRecordStream self, string net, string sta, string loc, string cha, Time stime, \n"
+		"    Time etime) -> bool\n"
+		""},
+	 { (char *)"FileRecordStream_setStartTime", _wrap_FileRecordStream_setStartTime, METH_VARARGS, (char *)"FileRecordStream_setStartTime(FileRecordStream self, Time stime) -> bool"},
+	 { (char *)"FileRecordStream_setEndTime", _wrap_FileRecordStream_setEndTime, METH_VARARGS, (char *)"FileRecordStream_setEndTime(FileRecordStream self, Time etime) -> bool"},
+	 { (char *)"FileRecordStream_setTimeWindow", _wrap_FileRecordStream_setTimeWindow, METH_VARARGS, (char *)"FileRecordStream_setTimeWindow(FileRecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"},
+	 { (char *)"FileRecordStream_setTimeout", _wrap_FileRecordStream_setTimeout, METH_VARARGS, (char *)"FileRecordStream_setTimeout(FileRecordStream self, int seconds) -> bool"},
+	 { (char *)"FileRecordStream_close", _wrap_FileRecordStream_close, METH_VARARGS, (char *)"FileRecordStream_close(FileRecordStream self)"},
+	 { (char *)"FileRecordStream_name", _wrap_FileRecordStream_name, METH_VARARGS, (char *)"FileRecordStream_name(FileRecordStream self) -> string"},
+	 { (char *)"FileRecordStream_stream", _wrap_FileRecordStream_stream, METH_VARARGS, (char *)"FileRecordStream_stream(FileRecordStream self) -> std::istream &"},
+	 { (char *)"FileRecordStream_filterRecord", _wrap_FileRecordStream_filterRecord, METH_VARARGS, (char *)"FileRecordStream_filterRecord(FileRecordStream self, Record arg2) -> bool"},
+	 { (char *)"FileRecordStream_tell", _wrap_FileRecordStream_tell, METH_VARARGS, (char *)"FileRecordStream_tell(FileRecordStream self) -> size_t"},
+	 { (char *)"FileRecordStream_seek", _wrap_FileRecordStream_seek, METH_VARARGS, (char *)"\n"
+		"seek(size_t pos) -> FileRecordStream\n"
+		"FileRecordStream_seek(FileRecordStream self, int off, Seiscomp::RecordStream::File::SeekDir dir) -> FileRecordStream\n"
+		""},
 	 { (char *)"FileRecordStream_swigregister", FileRecordStream_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_SeedlinkException", _wrap_new_SeedlinkException, METH_VARARGS, NULL},
-	 { (char *)"delete_SeedlinkException", _wrap_delete_SeedlinkException, METH_VARARGS, NULL},
+	 { (char *)"new_SeedlinkException", _wrap_new_SeedlinkException, METH_VARARGS, (char *)"\n"
+		"SeedlinkException()\n"
+		"new_SeedlinkException(string what) -> SeedlinkException\n"
+		""},
+	 { (char *)"delete_SeedlinkException", _wrap_delete_SeedlinkException, METH_VARARGS, (char *)"delete_SeedlinkException(SeedlinkException self)"},
 	 { (char *)"SeedlinkException_swigregister", SeedlinkException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_SeedlinkCommandException", _wrap_new_SeedlinkCommandException, METH_VARARGS, NULL},
-	 { (char *)"delete_SeedlinkCommandException", _wrap_delete_SeedlinkCommandException, METH_VARARGS, NULL},
+	 { (char *)"new_SeedlinkCommandException", _wrap_new_SeedlinkCommandException, METH_VARARGS, (char *)"\n"
+		"SeedlinkCommandException()\n"
+		"new_SeedlinkCommandException(string what) -> SeedlinkCommandException\n"
+		""},
+	 { (char *)"delete_SeedlinkCommandException", _wrap_delete_SeedlinkCommandException, METH_VARARGS, (char *)"delete_SeedlinkCommandException(SeedlinkCommandException self)"},
 	 { (char *)"SeedlinkCommandException_swigregister", SeedlinkCommandException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_SLStreamIdx", _wrap_new_SLStreamIdx, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx___lt__", _wrap_SLStreamIdx___lt__, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx___eq__", _wrap_SLStreamIdx___eq__, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_network", _wrap_SLStreamIdx_network, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_station", _wrap_SLStreamIdx_station, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_channel", _wrap_SLStreamIdx_channel, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_location", _wrap_SLStreamIdx_location, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_selector", _wrap_SLStreamIdx_selector, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_startTime", _wrap_SLStreamIdx_startTime, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_endTime", _wrap_SLStreamIdx_endTime, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_timestamp", _wrap_SLStreamIdx_timestamp, METH_VARARGS, NULL},
-	 { (char *)"SLStreamIdx_setTimestamp", _wrap_SLStreamIdx_setTimestamp, METH_VARARGS, NULL},
-	 { (char *)"delete_SLStreamIdx", _wrap_delete_SLStreamIdx, METH_VARARGS, NULL},
+	 { (char *)"new_SLStreamIdx", _wrap_new_SLStreamIdx, METH_VARARGS, (char *)"\n"
+		"SLStreamIdx()\n"
+		"SLStreamIdx(string net, string sta, string loc, string cha)\n"
+		"new_SLStreamIdx(string net, string sta, string loc, string cha, Time stime, Time etime) -> SLStreamIdx\n"
+		""},
+	 { (char *)"SLStreamIdx___lt__", _wrap_SLStreamIdx___lt__, METH_VARARGS, (char *)"SLStreamIdx___lt__(SLStreamIdx self, SLStreamIdx other) -> bool"},
+	 { (char *)"SLStreamIdx___eq__", _wrap_SLStreamIdx___eq__, METH_VARARGS, (char *)"SLStreamIdx___eq__(SLStreamIdx self, SLStreamIdx other) -> bool"},
+	 { (char *)"SLStreamIdx_network", _wrap_SLStreamIdx_network, METH_VARARGS, (char *)"SLStreamIdx_network(SLStreamIdx self) -> string"},
+	 { (char *)"SLStreamIdx_station", _wrap_SLStreamIdx_station, METH_VARARGS, (char *)"SLStreamIdx_station(SLStreamIdx self) -> string"},
+	 { (char *)"SLStreamIdx_channel", _wrap_SLStreamIdx_channel, METH_VARARGS, (char *)"SLStreamIdx_channel(SLStreamIdx self) -> string"},
+	 { (char *)"SLStreamIdx_location", _wrap_SLStreamIdx_location, METH_VARARGS, (char *)"SLStreamIdx_location(SLStreamIdx self) -> string"},
+	 { (char *)"SLStreamIdx_selector", _wrap_SLStreamIdx_selector, METH_VARARGS, (char *)"SLStreamIdx_selector(SLStreamIdx self) -> string"},
+	 { (char *)"SLStreamIdx_startTime", _wrap_SLStreamIdx_startTime, METH_VARARGS, (char *)"SLStreamIdx_startTime(SLStreamIdx self) -> Time"},
+	 { (char *)"SLStreamIdx_endTime", _wrap_SLStreamIdx_endTime, METH_VARARGS, (char *)"SLStreamIdx_endTime(SLStreamIdx self) -> Time"},
+	 { (char *)"SLStreamIdx_timestamp", _wrap_SLStreamIdx_timestamp, METH_VARARGS, (char *)"SLStreamIdx_timestamp(SLStreamIdx self) -> Time"},
+	 { (char *)"SLStreamIdx_setTimestamp", _wrap_SLStreamIdx_setTimestamp, METH_VARARGS, (char *)"SLStreamIdx_setTimestamp(SLStreamIdx self, Time rectime)"},
+	 { (char *)"delete_SLStreamIdx", _wrap_delete_SLStreamIdx, METH_VARARGS, (char *)"delete_SLStreamIdx(SLStreamIdx self)"},
 	 { (char *)"SLStreamIdx_swigregister", SLStreamIdx_swigregister, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_ClassName", _wrap_SLConnection_ClassName, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_TypeInfo", _wrap_SLConnection_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_className", _wrap_SLConnection_className, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_typeInfo", _wrap_SLConnection_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_Cast", _wrap_SLConnection_Cast, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_ConstCast", _wrap_SLConnection_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"new_SLConnection", _wrap_new_SLConnection, METH_VARARGS, NULL},
-	 { (char *)"delete_SLConnection", _wrap_delete_SLConnection, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setRecordType", _wrap_SLConnection_setRecordType, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setSource", _wrap_SLConnection_setSource, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_addStream", _wrap_SLConnection_addStream, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_removeStream", _wrap_SLConnection_removeStream, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setStartTime", _wrap_SLConnection_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setEndTime", _wrap_SLConnection_setEndTime, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setTimeWindow", _wrap_SLConnection_setTimeWindow, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_setTimeout", _wrap_SLConnection_setTimeout, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_clear", _wrap_SLConnection_clear, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_close", _wrap_SLConnection_close, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_reconnect", _wrap_SLConnection_reconnect, METH_VARARGS, NULL},
-	 { (char *)"SLConnection_stream", _wrap_SLConnection_stream, METH_VARARGS, NULL},
+	 { (char *)"SLConnection_ClassName", _wrap_SLConnection_ClassName, METH_VARARGS, (char *)"SLConnection_ClassName() -> char const *"},
+	 { (char *)"SLConnection_TypeInfo", _wrap_SLConnection_TypeInfo, METH_VARARGS, (char *)"SLConnection_TypeInfo() -> RTTI"},
+	 { (char *)"SLConnection_className", _wrap_SLConnection_className, METH_VARARGS, (char *)"SLConnection_className(SLConnection self) -> char const *"},
+	 { (char *)"SLConnection_typeInfo", _wrap_SLConnection_typeInfo, METH_VARARGS, (char *)"SLConnection_typeInfo(SLConnection self) -> RTTI"},
+	 { (char *)"SLConnection_Cast", _wrap_SLConnection_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> SLConnection\n"
+		"SLConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> SLConnection\n"
+		""},
+	 { (char *)"SLConnection_ConstCast", _wrap_SLConnection_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> SLConnection\n"
+		"SLConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> SLConnection\n"
+		""},
+	 { (char *)"new_SLConnection", _wrap_new_SLConnection, METH_VARARGS, (char *)"\n"
+		"SLConnection()\n"
+		"new_SLConnection(string serverloc) -> SLConnection\n"
+		""},
+	 { (char *)"delete_SLConnection", _wrap_delete_SLConnection, METH_VARARGS, (char *)"delete_SLConnection(SLConnection self)"},
+	 { (char *)"SLConnection_setRecordType", _wrap_SLConnection_setRecordType, METH_VARARGS, (char *)"SLConnection_setRecordType(SLConnection self, char const * arg2) -> bool"},
+	 { (char *)"SLConnection_setSource", _wrap_SLConnection_setSource, METH_VARARGS, (char *)"SLConnection_setSource(SLConnection self, string serverloc) -> bool"},
+	 { (char *)"SLConnection_addStream", _wrap_SLConnection_addStream, METH_VARARGS, (char *)"\n"
+		"addStream(string net, string sta, string loc, string cha) -> bool\n"
+		"SLConnection_addStream(SLConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool\n"
+		""},
+	 { (char *)"SLConnection_removeStream", _wrap_SLConnection_removeStream, METH_VARARGS, (char *)"SLConnection_removeStream(SLConnection self, string net, string sta, string loc, string cha) -> bool"},
+	 { (char *)"SLConnection_setStartTime", _wrap_SLConnection_setStartTime, METH_VARARGS, (char *)"SLConnection_setStartTime(SLConnection self, Time stime) -> bool"},
+	 { (char *)"SLConnection_setEndTime", _wrap_SLConnection_setEndTime, METH_VARARGS, (char *)"SLConnection_setEndTime(SLConnection self, Time etime) -> bool"},
+	 { (char *)"SLConnection_setTimeWindow", _wrap_SLConnection_setTimeWindow, METH_VARARGS, (char *)"SLConnection_setTimeWindow(SLConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"},
+	 { (char *)"SLConnection_setTimeout", _wrap_SLConnection_setTimeout, METH_VARARGS, (char *)"SLConnection_setTimeout(SLConnection self, int seconds) -> bool"},
+	 { (char *)"SLConnection_clear", _wrap_SLConnection_clear, METH_VARARGS, (char *)"SLConnection_clear(SLConnection self) -> bool"},
+	 { (char *)"SLConnection_close", _wrap_SLConnection_close, METH_VARARGS, (char *)"SLConnection_close(SLConnection self)"},
+	 { (char *)"SLConnection_reconnect", _wrap_SLConnection_reconnect, METH_VARARGS, (char *)"SLConnection_reconnect(SLConnection self) -> bool"},
+	 { (char *)"SLConnection_stream", _wrap_SLConnection_stream, METH_VARARGS, (char *)"SLConnection_stream(SLConnection self) -> std::istream &"},
 	 { (char *)"SLConnection_swigregister", SLConnection_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_ArclinkException", _wrap_new_ArclinkException, METH_VARARGS, NULL},
-	 { (char *)"delete_ArclinkException", _wrap_delete_ArclinkException, METH_VARARGS, NULL},
+	 { (char *)"new_ArclinkException", _wrap_new_ArclinkException, METH_VARARGS, (char *)"\n"
+		"ArclinkException()\n"
+		"new_ArclinkException(string what) -> ArclinkException\n"
+		""},
+	 { (char *)"delete_ArclinkException", _wrap_delete_ArclinkException, METH_VARARGS, (char *)"delete_ArclinkException(ArclinkException self)"},
 	 { (char *)"ArclinkException_swigregister", ArclinkException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_ArclinkCommandException", _wrap_new_ArclinkCommandException, METH_VARARGS, NULL},
-	 { (char *)"delete_ArclinkCommandException", _wrap_delete_ArclinkCommandException, METH_VARARGS, NULL},
+	 { (char *)"new_ArclinkCommandException", _wrap_new_ArclinkCommandException, METH_VARARGS, (char *)"\n"
+		"ArclinkCommandException()\n"
+		"new_ArclinkCommandException(string what) -> ArclinkCommandException\n"
+		""},
+	 { (char *)"delete_ArclinkCommandException", _wrap_delete_ArclinkCommandException, METH_VARARGS, (char *)"delete_ArclinkCommandException(ArclinkCommandException self)"},
 	 { (char *)"ArclinkCommandException_swigregister", ArclinkCommandException_swigregister, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_ClassName", _wrap_ArclinkConnection_ClassName, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_TypeInfo", _wrap_ArclinkConnection_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_className", _wrap_ArclinkConnection_className, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_typeInfo", _wrap_ArclinkConnection_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_Cast", _wrap_ArclinkConnection_Cast, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_ConstCast", _wrap_ArclinkConnection_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"new_ArclinkConnection", _wrap_new_ArclinkConnection, METH_VARARGS, NULL},
-	 { (char *)"delete_ArclinkConnection", _wrap_delete_ArclinkConnection, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setRecordType", _wrap_ArclinkConnection_setRecordType, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setSource", _wrap_ArclinkConnection_setSource, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setUser", _wrap_ArclinkConnection_setUser, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_addStream", _wrap_ArclinkConnection_addStream, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_removeStream", _wrap_ArclinkConnection_removeStream, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setStartTime", _wrap_ArclinkConnection_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setEndTime", _wrap_ArclinkConnection_setEndTime, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setTimeWindow", _wrap_ArclinkConnection_setTimeWindow, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_setTimeout", _wrap_ArclinkConnection_setTimeout, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_clear", _wrap_ArclinkConnection_clear, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_close", _wrap_ArclinkConnection_close, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_reconnect", _wrap_ArclinkConnection_reconnect, METH_VARARGS, NULL},
-	 { (char *)"ArclinkConnection_stream", _wrap_ArclinkConnection_stream, METH_VARARGS, NULL},
+	 { (char *)"ArclinkConnection_ClassName", _wrap_ArclinkConnection_ClassName, METH_VARARGS, (char *)"ArclinkConnection_ClassName() -> char const *"},
+	 { (char *)"ArclinkConnection_TypeInfo", _wrap_ArclinkConnection_TypeInfo, METH_VARARGS, (char *)"ArclinkConnection_TypeInfo() -> RTTI"},
+	 { (char *)"ArclinkConnection_className", _wrap_ArclinkConnection_className, METH_VARARGS, (char *)"ArclinkConnection_className(ArclinkConnection self) -> char const *"},
+	 { (char *)"ArclinkConnection_typeInfo", _wrap_ArclinkConnection_typeInfo, METH_VARARGS, (char *)"ArclinkConnection_typeInfo(ArclinkConnection self) -> RTTI"},
+	 { (char *)"ArclinkConnection_Cast", _wrap_ArclinkConnection_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> ArclinkConnection\n"
+		"ArclinkConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> ArclinkConnection\n"
+		""},
+	 { (char *)"ArclinkConnection_ConstCast", _wrap_ArclinkConnection_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> ArclinkConnection\n"
+		"ArclinkConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArclinkConnection\n"
+		""},
+	 { (char *)"new_ArclinkConnection", _wrap_new_ArclinkConnection, METH_VARARGS, (char *)"\n"
+		"ArclinkConnection()\n"
+		"new_ArclinkConnection(string serverloc) -> ArclinkConnection\n"
+		""},
+	 { (char *)"delete_ArclinkConnection", _wrap_delete_ArclinkConnection, METH_VARARGS, (char *)"delete_ArclinkConnection(ArclinkConnection self)"},
+	 { (char *)"ArclinkConnection_setRecordType", _wrap_ArclinkConnection_setRecordType, METH_VARARGS, (char *)"ArclinkConnection_setRecordType(ArclinkConnection self, char const * arg2) -> bool"},
+	 { (char *)"ArclinkConnection_setSource", _wrap_ArclinkConnection_setSource, METH_VARARGS, (char *)"ArclinkConnection_setSource(ArclinkConnection self, string serverloc) -> bool"},
+	 { (char *)"ArclinkConnection_setUser", _wrap_ArclinkConnection_setUser, METH_VARARGS, (char *)"ArclinkConnection_setUser(ArclinkConnection self, string name, string password) -> bool"},
+	 { (char *)"ArclinkConnection_addStream", _wrap_ArclinkConnection_addStream, METH_VARARGS, (char *)"\n"
+		"addStream(string net, string sta, string loc, string cha) -> bool\n"
+		"ArclinkConnection_addStream(ArclinkConnection self, string net, string sta, string loc, string cha, Time stime, \n"
+		"    Time etime) -> bool\n"
+		""},
+	 { (char *)"ArclinkConnection_removeStream", _wrap_ArclinkConnection_removeStream, METH_VARARGS, (char *)"ArclinkConnection_removeStream(ArclinkConnection self, string net, string sta, string loc, string cha) -> bool"},
+	 { (char *)"ArclinkConnection_setStartTime", _wrap_ArclinkConnection_setStartTime, METH_VARARGS, (char *)"ArclinkConnection_setStartTime(ArclinkConnection self, Time stime) -> bool"},
+	 { (char *)"ArclinkConnection_setEndTime", _wrap_ArclinkConnection_setEndTime, METH_VARARGS, (char *)"ArclinkConnection_setEndTime(ArclinkConnection self, Time etime) -> bool"},
+	 { (char *)"ArclinkConnection_setTimeWindow", _wrap_ArclinkConnection_setTimeWindow, METH_VARARGS, (char *)"ArclinkConnection_setTimeWindow(ArclinkConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"},
+	 { (char *)"ArclinkConnection_setTimeout", _wrap_ArclinkConnection_setTimeout, METH_VARARGS, (char *)"ArclinkConnection_setTimeout(ArclinkConnection self, int seconds) -> bool"},
+	 { (char *)"ArclinkConnection_clear", _wrap_ArclinkConnection_clear, METH_VARARGS, (char *)"ArclinkConnection_clear(ArclinkConnection self) -> bool"},
+	 { (char *)"ArclinkConnection_close", _wrap_ArclinkConnection_close, METH_VARARGS, (char *)"ArclinkConnection_close(ArclinkConnection self)"},
+	 { (char *)"ArclinkConnection_reconnect", _wrap_ArclinkConnection_reconnect, METH_VARARGS, (char *)"ArclinkConnection_reconnect(ArclinkConnection self) -> bool"},
+	 { (char *)"ArclinkConnection_stream", _wrap_ArclinkConnection_stream, METH_VARARGS, (char *)"ArclinkConnection_stream(ArclinkConnection self) -> std::istream &"},
 	 { (char *)"ArclinkConnection_swigregister", ArclinkConnection_swigregister, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_ClassName", _wrap_CombinedConnection_ClassName, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_TypeInfo", _wrap_CombinedConnection_TypeInfo, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_className", _wrap_CombinedConnection_className, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_typeInfo", _wrap_CombinedConnection_typeInfo, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_Cast", _wrap_CombinedConnection_Cast, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_ConstCast", _wrap_CombinedConnection_ConstCast, METH_VARARGS, NULL},
-	 { (char *)"new_CombinedConnection", _wrap_new_CombinedConnection, METH_VARARGS, NULL},
-	 { (char *)"delete_CombinedConnection", _wrap_delete_CombinedConnection, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setRecordType", _wrap_CombinedConnection_setRecordType, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setSource", _wrap_CombinedConnection_setSource, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_addStream", _wrap_CombinedConnection_addStream, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setStartTime", _wrap_CombinedConnection_setStartTime, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setEndTime", _wrap_CombinedConnection_setEndTime, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setTimeWindow", _wrap_CombinedConnection_setTimeWindow, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_setTimeout", _wrap_CombinedConnection_setTimeout, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_close", _wrap_CombinedConnection_close, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_stream", _wrap_CombinedConnection_stream, METH_VARARGS, NULL},
-	 { (char *)"CombinedConnection_createRecord", _wrap_CombinedConnection_createRecord, METH_VARARGS, NULL},
+	 { (char *)"CombinedConnection_ClassName", _wrap_CombinedConnection_ClassName, METH_VARARGS, (char *)"CombinedConnection_ClassName() -> char const *"},
+	 { (char *)"CombinedConnection_TypeInfo", _wrap_CombinedConnection_TypeInfo, METH_VARARGS, (char *)"CombinedConnection_TypeInfo() -> RTTI"},
+	 { (char *)"CombinedConnection_className", _wrap_CombinedConnection_className, METH_VARARGS, (char *)"CombinedConnection_className(CombinedConnection self) -> char const *"},
+	 { (char *)"CombinedConnection_typeInfo", _wrap_CombinedConnection_typeInfo, METH_VARARGS, (char *)"CombinedConnection_typeInfo(CombinedConnection self) -> RTTI"},
+	 { (char *)"CombinedConnection_Cast", _wrap_CombinedConnection_Cast, METH_VARARGS, (char *)"\n"
+		"Cast(BaseObject o) -> CombinedConnection\n"
+		"CombinedConnection_Cast(Seiscomp::Core::BaseObjectPtr o) -> CombinedConnection\n"
+		""},
+	 { (char *)"CombinedConnection_ConstCast", _wrap_CombinedConnection_ConstCast, METH_VARARGS, (char *)"\n"
+		"ConstCast(BaseObject o) -> CombinedConnection\n"
+		"CombinedConnection_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> CombinedConnection\n"
+		""},
+	 { (char *)"new_CombinedConnection", _wrap_new_CombinedConnection, METH_VARARGS, (char *)"\n"
+		"CombinedConnection()\n"
+		"new_CombinedConnection(string serverloc) -> CombinedConnection\n"
+		""},
+	 { (char *)"delete_CombinedConnection", _wrap_delete_CombinedConnection, METH_VARARGS, (char *)"delete_CombinedConnection(CombinedConnection self)"},
+	 { (char *)"CombinedConnection_setRecordType", _wrap_CombinedConnection_setRecordType, METH_VARARGS, (char *)"CombinedConnection_setRecordType(CombinedConnection self, char const * arg2) -> bool"},
+	 { (char *)"CombinedConnection_setSource", _wrap_CombinedConnection_setSource, METH_VARARGS, (char *)"CombinedConnection_setSource(CombinedConnection self, string serverloc) -> bool"},
+	 { (char *)"CombinedConnection_addStream", _wrap_CombinedConnection_addStream, METH_VARARGS, (char *)"\n"
+		"addStream(string net, string sta, string loc, string cha) -> bool\n"
+		"CombinedConnection_addStream(CombinedConnection self, string net, string sta, string loc, string cha, Time stime, \n"
+		"    Time etime) -> bool\n"
+		""},
+	 { (char *)"CombinedConnection_setStartTime", _wrap_CombinedConnection_setStartTime, METH_VARARGS, (char *)"CombinedConnection_setStartTime(CombinedConnection self, Time stime) -> bool"},
+	 { (char *)"CombinedConnection_setEndTime", _wrap_CombinedConnection_setEndTime, METH_VARARGS, (char *)"CombinedConnection_setEndTime(CombinedConnection self, Time etime) -> bool"},
+	 { (char *)"CombinedConnection_setTimeWindow", _wrap_CombinedConnection_setTimeWindow, METH_VARARGS, (char *)"CombinedConnection_setTimeWindow(CombinedConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"},
+	 { (char *)"CombinedConnection_setTimeout", _wrap_CombinedConnection_setTimeout, METH_VARARGS, (char *)"CombinedConnection_setTimeout(CombinedConnection self, int seconds) -> bool"},
+	 { (char *)"CombinedConnection_close", _wrap_CombinedConnection_close, METH_VARARGS, (char *)"CombinedConnection_close(CombinedConnection self)"},
+	 { (char *)"CombinedConnection_stream", _wrap_CombinedConnection_stream, METH_VARARGS, (char *)"CombinedConnection_stream(CombinedConnection self) -> std::istream &"},
+	 { (char *)"CombinedConnection_createRecord", _wrap_CombinedConnection_createRecord, METH_VARARGS, (char *)"CombinedConnection_createRecord(CombinedConnection self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"},
 	 { (char *)"CombinedConnection_swigregister", CombinedConnection_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordIIRFilterF", _wrap_new_RecordIIRFilterF, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordIIRFilterF", _wrap_delete_RecordIIRFilterF, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_setIIR", _wrap_RecordIIRFilterF_setIIR, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_filter", _wrap_RecordIIRFilterF_filter, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_apply", _wrap_RecordIIRFilterF_apply, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF___nonzero__", _wrap_RecordIIRFilterF___nonzero__, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_feed", _wrap_RecordIIRFilterF_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_flush", _wrap_RecordIIRFilterF_flush, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_reset", _wrap_RecordIIRFilterF_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterF_clone", _wrap_RecordIIRFilterF_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordIIRFilterF", _wrap_new_RecordIIRFilterF, METH_VARARGS, (char *)"\n"
+		"RecordIIRFilterF(InPlaceFilterF filter=None)\n"
+		"new_RecordIIRFilterF() -> RecordIIRFilterF\n"
+		""},
+	 { (char *)"delete_RecordIIRFilterF", _wrap_delete_RecordIIRFilterF, METH_VARARGS, (char *)"delete_RecordIIRFilterF(RecordIIRFilterF self)"},
+	 { (char *)"RecordIIRFilterF_setIIR", _wrap_RecordIIRFilterF_setIIR, METH_VARARGS, (char *)"RecordIIRFilterF_setIIR(RecordIIRFilterF self, InPlaceFilterF f)"},
+	 { (char *)"RecordIIRFilterF_filter", _wrap_RecordIIRFilterF_filter, METH_VARARGS, (char *)"\n"
+		"filter() -> InPlaceFilterF\n"
+		"RecordIIRFilterF_filter(RecordIIRFilterF self) -> InPlaceFilterF\n"
+		""},
+	 { (char *)"RecordIIRFilterF_apply", _wrap_RecordIIRFilterF_apply, METH_VARARGS, (char *)"RecordIIRFilterF_apply(RecordIIRFilterF self, GenericRecord rec) -> bool"},
+	 { (char *)"RecordIIRFilterF___nonzero__", _wrap_RecordIIRFilterF___nonzero__, METH_VARARGS, (char *)"RecordIIRFilterF___nonzero__(RecordIIRFilterF self) -> bool"},
+	 { (char *)"RecordIIRFilterF_feed", _wrap_RecordIIRFilterF_feed, METH_VARARGS, (char *)"RecordIIRFilterF_feed(RecordIIRFilterF self, Record rec) -> Record"},
+	 { (char *)"RecordIIRFilterF_flush", _wrap_RecordIIRFilterF_flush, METH_VARARGS, (char *)"RecordIIRFilterF_flush(RecordIIRFilterF self) -> Record"},
+	 { (char *)"RecordIIRFilterF_reset", _wrap_RecordIIRFilterF_reset, METH_VARARGS, (char *)"RecordIIRFilterF_reset(RecordIIRFilterF self)"},
+	 { (char *)"RecordIIRFilterF_clone", _wrap_RecordIIRFilterF_clone, METH_VARARGS, (char *)"RecordIIRFilterF_clone(RecordIIRFilterF self) -> RecordFilterInterface"},
 	 { (char *)"RecordIIRFilterF_swigregister", RecordIIRFilterF_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordIIRFilterD", _wrap_new_RecordIIRFilterD, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordIIRFilterD", _wrap_delete_RecordIIRFilterD, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_setIIR", _wrap_RecordIIRFilterD_setIIR, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_filter", _wrap_RecordIIRFilterD_filter, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_apply", _wrap_RecordIIRFilterD_apply, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD___nonzero__", _wrap_RecordIIRFilterD___nonzero__, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_feed", _wrap_RecordIIRFilterD_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_flush", _wrap_RecordIIRFilterD_flush, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_reset", _wrap_RecordIIRFilterD_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordIIRFilterD_clone", _wrap_RecordIIRFilterD_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordIIRFilterD", _wrap_new_RecordIIRFilterD, METH_VARARGS, (char *)"\n"
+		"RecordIIRFilterD(InPlaceFilterD filter=None)\n"
+		"new_RecordIIRFilterD() -> RecordIIRFilterD\n"
+		""},
+	 { (char *)"delete_RecordIIRFilterD", _wrap_delete_RecordIIRFilterD, METH_VARARGS, (char *)"delete_RecordIIRFilterD(RecordIIRFilterD self)"},
+	 { (char *)"RecordIIRFilterD_setIIR", _wrap_RecordIIRFilterD_setIIR, METH_VARARGS, (char *)"RecordIIRFilterD_setIIR(RecordIIRFilterD self, InPlaceFilterD f)"},
+	 { (char *)"RecordIIRFilterD_filter", _wrap_RecordIIRFilterD_filter, METH_VARARGS, (char *)"\n"
+		"filter() -> InPlaceFilterD\n"
+		"RecordIIRFilterD_filter(RecordIIRFilterD self) -> InPlaceFilterD\n"
+		""},
+	 { (char *)"RecordIIRFilterD_apply", _wrap_RecordIIRFilterD_apply, METH_VARARGS, (char *)"RecordIIRFilterD_apply(RecordIIRFilterD self, GenericRecord rec) -> bool"},
+	 { (char *)"RecordIIRFilterD___nonzero__", _wrap_RecordIIRFilterD___nonzero__, METH_VARARGS, (char *)"RecordIIRFilterD___nonzero__(RecordIIRFilterD self) -> bool"},
+	 { (char *)"RecordIIRFilterD_feed", _wrap_RecordIIRFilterD_feed, METH_VARARGS, (char *)"RecordIIRFilterD_feed(RecordIIRFilterD self, Record rec) -> Record"},
+	 { (char *)"RecordIIRFilterD_flush", _wrap_RecordIIRFilterD_flush, METH_VARARGS, (char *)"RecordIIRFilterD_flush(RecordIIRFilterD self) -> Record"},
+	 { (char *)"RecordIIRFilterD_reset", _wrap_RecordIIRFilterD_reset, METH_VARARGS, (char *)"RecordIIRFilterD_reset(RecordIIRFilterD self)"},
+	 { (char *)"RecordIIRFilterD_clone", _wrap_RecordIIRFilterD_clone, METH_VARARGS, (char *)"RecordIIRFilterD_clone(RecordIIRFilterD self) -> RecordFilterInterface"},
 	 { (char *)"RecordIIRFilterD_swigregister", RecordIIRFilterD_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordResamplerF", _wrap_new_RecordResamplerF, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordResamplerF", _wrap_delete_RecordResamplerF, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerF_feed", _wrap_RecordResamplerF_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerF_reset", _wrap_RecordResamplerF_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerF_clone", _wrap_RecordResamplerF_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordResamplerF", _wrap_new_RecordResamplerF, METH_VARARGS, (char *)"\n"
+		"RecordResamplerF(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3)\n"
+		"RecordResamplerF(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10)\n"
+		"RecordResamplerF(double targetFrequency, double fp=0.7, double fs=0.9)\n"
+		"RecordResamplerF(double targetFrequency, double fp=0.7)\n"
+		"new_RecordResamplerF(double targetFrequency) -> RecordResamplerF\n"
+		""},
+	 { (char *)"delete_RecordResamplerF", _wrap_delete_RecordResamplerF, METH_VARARGS, (char *)"delete_RecordResamplerF(RecordResamplerF self)"},
+	 { (char *)"RecordResamplerF_feed", _wrap_RecordResamplerF_feed, METH_VARARGS, (char *)"RecordResamplerF_feed(RecordResamplerF self, Record record) -> Record"},
+	 { (char *)"RecordResamplerF_reset", _wrap_RecordResamplerF_reset, METH_VARARGS, (char *)"RecordResamplerF_reset(RecordResamplerF self)"},
+	 { (char *)"RecordResamplerF_clone", _wrap_RecordResamplerF_clone, METH_VARARGS, (char *)"RecordResamplerF_clone(RecordResamplerF self) -> RecordFilterInterface"},
 	 { (char *)"RecordResamplerF_swigregister", RecordResamplerF_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordResamplerD", _wrap_new_RecordResamplerD, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordResamplerD", _wrap_delete_RecordResamplerD, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerD_feed", _wrap_RecordResamplerD_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerD_reset", _wrap_RecordResamplerD_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerD_clone", _wrap_RecordResamplerD_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordResamplerD", _wrap_new_RecordResamplerD, METH_VARARGS, (char *)"\n"
+		"RecordResamplerD(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3)\n"
+		"RecordResamplerD(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10)\n"
+		"RecordResamplerD(double targetFrequency, double fp=0.7, double fs=0.9)\n"
+		"RecordResamplerD(double targetFrequency, double fp=0.7)\n"
+		"new_RecordResamplerD(double targetFrequency) -> RecordResamplerD\n"
+		""},
+	 { (char *)"delete_RecordResamplerD", _wrap_delete_RecordResamplerD, METH_VARARGS, (char *)"delete_RecordResamplerD(RecordResamplerD self)"},
+	 { (char *)"RecordResamplerD_feed", _wrap_RecordResamplerD_feed, METH_VARARGS, (char *)"RecordResamplerD_feed(RecordResamplerD self, Record record) -> Record"},
+	 { (char *)"RecordResamplerD_reset", _wrap_RecordResamplerD_reset, METH_VARARGS, (char *)"RecordResamplerD_reset(RecordResamplerD self)"},
+	 { (char *)"RecordResamplerD_clone", _wrap_RecordResamplerD_clone, METH_VARARGS, (char *)"RecordResamplerD_clone(RecordResamplerD self) -> RecordFilterInterface"},
 	 { (char *)"RecordResamplerD_swigregister", RecordResamplerD_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_RecordResamplerI", _wrap_new_RecordResamplerI, METH_VARARGS, NULL},
-	 { (char *)"delete_RecordResamplerI", _wrap_delete_RecordResamplerI, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerI_feed", _wrap_RecordResamplerI_feed, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerI_reset", _wrap_RecordResamplerI_reset, METH_VARARGS, NULL},
-	 { (char *)"RecordResamplerI_clone", _wrap_RecordResamplerI_clone, METH_VARARGS, NULL},
+	 { (char *)"new_RecordResamplerI", _wrap_new_RecordResamplerI, METH_VARARGS, (char *)"\n"
+		"RecordResamplerI(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10, int lanzcosWidth=3)\n"
+		"RecordResamplerI(double targetFrequency, double fp=0.7, double fs=0.9, double coeffScale=10)\n"
+		"RecordResamplerI(double targetFrequency, double fp=0.7, double fs=0.9)\n"
+		"RecordResamplerI(double targetFrequency, double fp=0.7)\n"
+		"new_RecordResamplerI(double targetFrequency) -> RecordResamplerI\n"
+		""},
+	 { (char *)"delete_RecordResamplerI", _wrap_delete_RecordResamplerI, METH_VARARGS, (char *)"delete_RecordResamplerI(RecordResamplerI self)"},
+	 { (char *)"RecordResamplerI_feed", _wrap_RecordResamplerI_feed, METH_VARARGS, (char *)"RecordResamplerI_feed(RecordResamplerI self, Record record) -> Record"},
+	 { (char *)"RecordResamplerI_reset", _wrap_RecordResamplerI_reset, METH_VARARGS, (char *)"RecordResamplerI_reset(RecordResamplerI self)"},
+	 { (char *)"RecordResamplerI_clone", _wrap_RecordResamplerI_clone, METH_VARARGS, (char *)"RecordResamplerI_clone(RecordResamplerI self) -> RecordFilterInterface"},
 	 { (char *)"RecordResamplerI_swigregister", RecordResamplerI_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -30016,6 +30598,21 @@ static PyMethodDef SwigMethods[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__NamedCoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::NamedCoord< double > *)  ((Seiscomp::Math::Geo::City< double > *) x));
+}
+static void *_p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Math__Geo__CoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< double > *)  ((Seiscomp::IO::GFSource *) x));
+}
+static void *_p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Math__Geo__CoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< double > *)  ((Seiscomp::IO::GFReceiver *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Math__Geo__CoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< double > *)  ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__CoordT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< double > *) (Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
+}
 static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Array(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Array *)  ((Seiscomp::TypedArray< char > *) x));
 }
@@ -30082,6 +30679,15 @@ static void *_p_Seiscomp__IO__VBinaryArchiveTo_p_Seiscomp__Core__Generic__Archiv
 static void *_p_Seiscomp__IO__VBinaryArchiveTo_p_Seiscomp__IO__BinaryArchive(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::IO::BinaryArchive *)  ((Seiscomp::IO::VBinaryArchive *) x));
 }
+static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__NamedCoordT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::NamedCoord< float > *)  ((Seiscomp::Math::Geo::City< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Math__Geo__CoordT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< float > *)  ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__CoordT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Geo::Coord< float > *) (Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
+}
 static void *_p_Seiscomp__Core__TimeTo_p_Seiscomp__Core__TimeSpan(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::TimeSpan *)  ((Seiscomp::Core::Time *) x));
 }
@@ -30097,89 +30703,44 @@ static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__IO__RecordStream(void
 static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__IO__RecordStream(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::IO::RecordStream *)  ((Seiscomp::RecordStream::SLConnection *) x));
 }
-static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
-}
-static void *_p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *)(Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) ((Seiscomp::Core::DataMessage *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
-}
-static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
-}
-static void *_p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< int > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
+static void *_p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< double > *) x));
 }
 static void *_p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< double > *) x));
 }
-static void *_p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< double > *) x));
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
 }
-static void *_p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Importer *) x));
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
 }
-static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
 }
-static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
+static void *_p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< double > *) x));
 }
-static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::File *) x));
+static void *_p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< double > *) ((Seiscomp::NumericArray< double > *) x));
 }
-static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
+static void *_p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< double > *) x));
 }
-static void *_p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Combined::_private::CombinedConnection *) x));
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::Math::Geo::NamedCoord< double > *) x));
 }
-static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
+static void *_p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *)(Seiscomp::Math::Geo::NamedCoord< double > *) ((Seiscomp::Math::Geo::City< double > *) x));
 }
-static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< double > *) x));
 }
-static void *_p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordResamplerBase *) x));
+static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::Average< double > *) x));
 }
-static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< Seiscomp::Core::Time > *) x));
-}
-static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
-}
-static void *_p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< float > *) x));
-}
-static void *_p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< float > *) x));
-}
-static void *_p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Exporter *) x));
+static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::STALTA< double > *) x));
 }
 static void *_p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::IO::MSeedRecord *) x));
@@ -30190,35 +30751,179 @@ static void *_p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Core__BaseObject(void *x, i
 static void *_p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Record *) x));
 }
-static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *) ((Seiscomp::IO::RecordStream *) x));
+static void *_p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Exporter *) x));
 }
-static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
+static void *_p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< float > > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< int > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< int > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< int > *) ((Seiscomp::NumericArray< int > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::complex< double > > *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::ResponseList *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *)(Seiscomp::IO::RecordResamplerBase *) ((Seiscomp::IO::RecordResampler< float > *) x));
+}
+static void *_p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordIIRFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< float > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< float > *) ((Seiscomp::NumericArray< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Geo::Coord< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *) ((Seiscomp::Math::Geo::NamedCoord< float > *) x));
+}
+static void *_p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< float > *)(Seiscomp::Math::Geo::NamedCoord< float > *) ((Seiscomp::Math::Geo::City< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Filtering::InPlaceFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::Average< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::STALTA< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Combined::_private::CombinedConnection *) x));
+}
+static void *_p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::File *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
+}
+static void *_p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::Importer *) x));
 }
 static void *_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *) ((Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) x));
 }
-static void *_p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordDemuxFilter *) x));
-}
-static void *_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > *) x));
-}
-static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
-}
-static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
+static void *_p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::_private::InterruptibleObject *) x));
 }
 static void *_p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordInput *) x));
+}
+static void *_p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::BitSet *) x));
+}
+static void *_p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordDemuxFilter *) x));
+}
+static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
+}
+static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
+}
+static void *_p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::GFArchive *) x));
 }
 static void *_p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::RecordFilterInterface *) x));
 }
 static void *_p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::IO::DatabaseInterface *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< char > *) x));
+}
+static void *_p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *)(Seiscomp::TypedArray< char > *) ((Seiscomp::NumericArray< char > *) x));
+}
+static void *_p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Record *) ((Seiscomp::GenericRecord *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Math::Restitution::FFT::TransferFunction *) x));
+}
+static void *_p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::GreensFunction *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > *) x));
+}
+static void *_p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFReceiver *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *) ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+}
+static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::_private::InterruptibleObject *) ((Seiscomp::IO::RecordStream *) x));
+}
+static void *_p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Geo::Coord< double > *) ((Seiscomp::IO::GFSource *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< float > *)(Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Array *) x));
+}
+static void *_p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Restitution::FFT::TransferFunction *) ((Seiscomp::Math::Restitution::FFT::PolesAndZeros *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Math::Filtering::InPlaceFilter< double > *)(Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
+}
+static void *_p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::IO::RecordFilterInterface *) ((Seiscomp::IO::RecordResamplerBase *) x));
+}
+static void *_p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Core::Message *)(Seiscomp::Core::GenericMessage< Seiscomp::Core::BaseObject > *) ((Seiscomp::Core::DataMessage *) x));
+}
+static void *_p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *)  ((Seiscomp::Core::Message *) x));
+}
+static void *_p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::Array *) ((Seiscomp::TypedArray< Seiscomp::Core::Time > *) x));
 }
 static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core___private__InterruptibleObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::_private::InterruptibleObject *) (Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
@@ -30234,6 +30939,36 @@ static void *_p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core___private__Interru
 }
 static void *_p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core___private__InterruptibleObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::_private::InterruptibleObject *) (Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::SLConnection *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::Average< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::STALTA< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::RunningMean< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::InitialTaper< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *)  ((Seiscomp::Math::Filtering::ChainFilter< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< float > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< float > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< float > *) (Seiscomp::Math::Filtering::RunningMean< float > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< float > *) x));
 }
 static void *_p_std__basic_iosT_char_std__char_traitsT_char_t_tTo_p_std__ios_base(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::ios_base *)  ((std::basic_ios< char,std::char_traits< char > > *) x));
@@ -30328,9 +31063,6 @@ static void *_p_Seiscomp__Core__ValueErrorTo_p_std__exception(void *x, int *SWIG
 static void *_p_Seiscomp__Core__ClassNotFoundTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *) (Seiscomp::Core::GeneralException *) ((Seiscomp::Core::ClassNotFound *) x));
 }
-static void *_p_Seiscomp__IO__RecordStreamExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((std::exception *) (Seiscomp::Core::GeneralException *)(Seiscomp::Core::StreamException *) ((Seiscomp::IO::RecordStreamException *) x));
-}
 static void *_p_Seiscomp__Core__TypeExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *) (Seiscomp::Core::GeneralException *) ((Seiscomp::Core::TypeException *) x));
 }
@@ -30358,6 +31090,9 @@ static void *_p_Seiscomp__Core__MemoryExceptionTo_p_std__exception(void *x, int 
 static void *_p_Seiscomp__Core__GeneralExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *)  ((Seiscomp::Core::GeneralException *) x));
 }
+static void *_p_Seiscomp__IO__RecordStreamExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((std::exception *) (Seiscomp::Core::GeneralException *)(Seiscomp::Core::StreamException *) ((Seiscomp::IO::RecordStreamException *) x));
+}
 static void *_p_Seiscomp__IO__LibmseedExceptionTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *) (Seiscomp::Core::GeneralException *)(Seiscomp::Core::StreamException *) ((Seiscomp::IO::LibmseedException *) x));
 }
@@ -30378,6 +31113,9 @@ static void *_p_Seiscomp__Core___private__OperationInterruptedTo_p_std__exceptio
 }
 static void *_p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((std::exception *) (Seiscomp::Core::GeneralException *) ((Seiscomp::Core::DuplicateClassname *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AlignmentErrorTo_p_std__exception(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((std::exception *)  ((Seiscomp::Math::Filtering::AlignmentError *) x));
 }
 static void *_p_Seiscomp__RecordStream__SeedlinkExceptionTo_p_Seiscomp__IO__RecordStreamException(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::IO::RecordStreamException *)  ((Seiscomp::RecordStream::SeedlinkException *) x));
@@ -30423,6 +31161,36 @@ static void *_p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__IO__Record
 }
 static void *_p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__IO__RecordResamplerBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::IO::RecordResamplerBase *)  ((Seiscomp::IO::RecordResampler< int > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::RunningMean< double > *) ((Seiscomp::Math::Filtering::RunningMeanHighPass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthLowpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthHighpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *) (Seiscomp::Math::Filtering::IIR::BiquadCascade< double > *) ((Seiscomp::Math::Filtering::IIR::ButterworthBandpass< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::Average< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::STALTA< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::RunningMean< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::InitialTaper< double > *) x));
+}
+static void *_p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Seiscomp::Math::Filtering::InPlaceFilter< double > *)  ((Seiscomp::Math::Filtering::ChainFilter< double > *) x));
 }
 static void *_p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core___private__Alarmable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::_private::Alarmable *) (Seiscomp::Core::_private::InterruptibleObject *)(Seiscomp::IO::RecordStream *) ((Seiscomp::RecordStream::Arclink::_private::ArclinkConnection *) x));
@@ -30470,10 +31238,33 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_char_t = {"_p_Seiscomp__Ty
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_int_t = {"_p_Seiscomp__TypedArrayT_int_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_float_t = {"_p_Seiscomp__TypedArrayT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__BaseObject = {"_p_Seiscomp__Core__BaseObject", "Seiscomp::Core::BaseObject *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__Message = {"_p_Seiscomp__Core__Message", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Core__DataMessage", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t = {"_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList = {"_p_Seiscomp__Math__Restitution__FFT__ResponseList", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__BitSet = {"_p_Seiscomp__BitSet", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t = {"_p_Seiscomp__Math__Filtering__STALTAT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AverageT_double_t = {"_p_Seiscomp__Math__Filtering__AverageT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t = {"_p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t = {"_p_Seiscomp__Math__Filtering__ChainFilterT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AverageT_float_t = {"_p_Seiscomp__Math__Filtering__AverageT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t = {"_p_Seiscomp__Math__Filtering__STALTAT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t = {"_p_Seiscomp__Math__Filtering__RunningMeanT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t = {"_p_Seiscomp__Math__Filtering__InitialTaperT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction = {"_p_Seiscomp__Math__Restitution__FFT__TransferFunction", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros = {"_p_Seiscomp__Math__Restitution__FFT__PolesAndZeros", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t = {"_p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__DataMessage = {"_p_Seiscomp__Core__DataMessage", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__Message = {"_p_Seiscomp__Core__Message", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t = {"_p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__GeneralException = {"_p_Seiscomp__Core__GeneralException", "Seiscomp::Core::GeneralException *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__ClassNotFound = {"_p_Seiscomp__Core__ClassNotFound", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__OverflowException = {"_p_Seiscomp__Core__OverflowException", 0, 0, 0, 0, 0};
@@ -30516,6 +31307,8 @@ static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSee
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::IO::MSeedRecord >::Impl *|Seiscomp::IO::MSeedRecordPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::IO::RecordFilterInterface const >::Impl *|Seiscomp::IO::RecordFilterInterfaceCPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::IO::RecordFilterInterface >::Impl *|Seiscomp::IO::RecordFilterInterfacePtr *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl", "Seiscomp::Math::Restitution::FFT::TransferFunctionCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Math::Restitution::FFT::TransferFunction const >::Impl *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl", "Seiscomp::Math::Restitution::FFT::TransferFunctionPtr *|Seiscomp::Core::SmartPointer< Seiscomp::Math::Restitution::FFT::TransferFunction >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl", "Seiscomp::CharArrayCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::NumericArray< char > const >::Impl *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl", "Seiscomp::Core::SmartPointer< Seiscomp::NumericArray< char > >::Impl *|Seiscomp::CharArrayPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl = {"_p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl", "Seiscomp::DoubleArrayCPtr *|Seiscomp::Core::SmartPointer< Seiscomp::NumericArray< double > const >::Impl *", 0, 0, (void*)0, 0};
@@ -30584,6 +31377,12 @@ static swig_type_info _swigt__p_Seiscomp__IO__XMLArchive = {"_p_Seiscomp__IO__XM
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t = {"_p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t", "Seiscomp::Math::Filtering::InPlaceFilter< T > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t = {"_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t", "Seiscomp::Math::Filtering::InPlaceFilter< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t = {"_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t", "Seiscomp::Math::Filtering::InPlaceFilter< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__CityT_double_t = {"_p_Seiscomp__Math__Geo__CityT_double_t", "Seiscomp::Math::Geo::City< double > *|Seiscomp::Math::Geo::CityD *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__CityT_float_t = {"_p_Seiscomp__Math__Geo__CityT_float_t", "Seiscomp::Math::Geo::City< float > *|Seiscomp::Math::Geo::CityF *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__CoordT_double_t = {"_p_Seiscomp__Math__Geo__CoordT_double_t", "Seiscomp::Math::Geo::CoordD *|Seiscomp::Math::Geo::Coord< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__CoordT_float_t = {"_p_Seiscomp__Math__Geo__CoordT_float_t", "Seiscomp::Math::Geo::CoordF *|Seiscomp::Math::Geo::Coord< float > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t = {"_p_Seiscomp__Math__Geo__NamedCoordT_double_t", "Seiscomp::Math::Geo::NamedCoordD *|Seiscomp::Math::Geo::NamedCoord< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t = {"_p_Seiscomp__Math__Geo__NamedCoordT_float_t", "Seiscomp::Math::Geo::NamedCoordF *|Seiscomp::Math::Geo::NamedCoord< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_char_t = {"_p_Seiscomp__NumericArrayT_char_t", "Seiscomp::CharArray *|Seiscomp::NumericArray< char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_double_t = {"_p_Seiscomp__NumericArrayT_double_t", "Seiscomp::DoubleArray *|Seiscomp::NumericArray< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__NumericArrayT_float_t = {"_p_Seiscomp__NumericArrayT_float_t", "Seiscomp::FloatArray *|Seiscomp::NumericArray< float > *", 0, 0, (void*)0, 0};
@@ -30604,6 +31403,7 @@ static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t =
 static swig_type_info _swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t = {"_p_Seiscomp__TypedArrayT_std__complexT_float_t_t", "Seiscomp::ComplexFloatArray *|Seiscomp::TypedArray< std::complex< float > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TagType = {"_p_TagType", "TagType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Type = {"_p_Type", "Type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ValueType = {"_p_ValueType", "ValueType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_bool = {"_p_bool", "bool *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
@@ -30633,10 +31433,11 @@ static swig_type_info _swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t 
 static swig_type_info _swigt__p_std__basic_ostreamT_char_std__char_traitsT_char_t_t = {"_p_std__basic_ostreamT_char_std__char_traitsT_char_t_t", "std::basic_ostream< char,std::char_traits< char > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__basic_streambufT_char_std__char_traitsT_char_t_t = {"_p_std__basic_streambufT_char_std__char_traitsT_char_t_t", "std::basic_streambuf< char,std::char_traits< char > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t = {"_p_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t", "std::basic_string< char,std::char_traits< char >,std::allocator< char > > *|std::string *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__complexT_double_t = {"_p_std__complexT_double_t", "std::complex< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__complexT_double_t = {"_p_std__complexT_double_t", "Seiscomp::Math::Complex *|Seiscomp::Math::SeismometerResponse::Zero *|Seiscomp::Math::Restitution::Zero *|Seiscomp::Math::Restitution::Pole *|Seiscomp::Math::SeismometerResponse::Pole *|std::complex< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__complexT_float_t = {"_p_std__complexT_float_t", "std::complex< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__exception = {"_p_std__exception", "std::exception *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__ValueError = {"_p_Seiscomp__Core__ValueError", 0, 0, 0, 0, 0};
+static swig_type_info _swigt__p_Seiscomp__Math__Filtering__AlignmentError = {"_p_Seiscomp__Math__Filtering__AlignmentError", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ios_base = {"_p_std__ios_base", "std::ios_base *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__istream = {"_p_std__istream", "std::istream *", 0, 0, (void*)0, 0};
@@ -30645,12 +31446,13 @@ static swig_type_info _swigt__p_std__listT_std__basic_stringT_char_std__char_tra
 static swig_type_info _swigt__p_std__locale = {"_p_std__locale", "std::locale *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__streambuf = {"_p_std__streambuf", "std::streambuf *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_char_t = {"_p_std__vectorT_char_t", "std::vector< char > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_double_t = {"_p_std__vectorT_double_t", "std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_float_t = {"_p_std__vectorT_float_t", "std::vector< float > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_int_t = {"_p_std__vectorT_int_t", "std::vector< int > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t = {"_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t", "std::vector< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > *|std::vector< std::string > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_t = {"_p_std__vectorT_std__complexT_double_t_t", "std::vector< std::complex< double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t = {"_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t", "std::vector< Seiscomp::Math::SeismometerResponse::FAP,std::allocator< Seiscomp::Math::SeismometerResponse::FAP > > *|Seiscomp::Math::SeismometerResponse::FAPs *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_char_std__allocatorT_char_t_t = {"_p_std__vectorT_char_std__allocatorT_char_t_t", "std::vector< char,std::allocator< char > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_double_std__allocatorT_double_t_t = {"_p_std__vectorT_double_std__allocatorT_double_t_t", "std::vector< double,std::allocator< double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_float_std__allocatorT_float_t_t = {"_p_std__vectorT_float_std__allocatorT_float_t_t", "std::vector< float,std::allocator< float > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_int_std__allocatorT_int_t_t = {"_p_std__vectorT_int_std__allocatorT_int_t_t", "std::vector< int,std::allocator< int > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t = {"_p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t", "std::vector< std::basic_string< char,std::char_traits< char >,std::allocator< char > >,std::allocator< std::basic_string< char,std::char_traits< char >,std::allocator< char > > > > *|std::vector< std::string,std::allocator< std::string > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t = {"_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t", "std::vector< std::complex< double >,std::allocator< std::complex< double > > > *|Seiscomp::Math::SeismometerResponse::Poles *|Seiscomp::Math::Restitution::Poles *|Seiscomp::Math::SeismometerResponse::Zeros *|Seiscomp::Math::Restitution::Zeros *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_time_t = {"_p_time_t", "time_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_traits_type = {"_p_traits_type", "traits_type *", 0, 0, (void*)0, 0};
@@ -30714,6 +31516,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl,
+  &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl,
   &_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl,
@@ -30783,9 +31587,39 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__IO__RecordStreamTimeout,
   &_swigt__p_Seiscomp__IO__VBinaryArchive,
   &_swigt__p_Seiscomp__IO__XMLArchive,
+  &_swigt__p_Seiscomp__Math__Filtering__AlignmentError,
+  &_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t,
   &_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t,
   &_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t,
   &_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t,
+  &_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t,
+  &_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t,
+  &_swigt__p_Seiscomp__Math__Geo__CityT_double_t,
+  &_swigt__p_Seiscomp__Math__Geo__CityT_float_t,
+  &_swigt__p_Seiscomp__Math__Geo__CoordT_double_t,
+  &_swigt__p_Seiscomp__Math__Geo__CoordT_float_t,
+  &_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t,
+  &_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t,
+  &_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros,
+  &_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList,
+  &_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction,
   &_swigt__p_Seiscomp__NumericArrayT_char_t,
   &_swigt__p_Seiscomp__NumericArrayT_double_t,
   &_swigt__p_Seiscomp__NumericArrayT_float_t,
@@ -30810,6 +31644,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t,
   &_swigt__p_TagType,
   &_swigt__p_Type,
+  &_swigt__p_ValueType,
   &_swigt__p_allocator_type,
   &_swigt__p_bool,
   &_swigt__p_char,
@@ -30850,12 +31685,13 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__locale,
   &_swigt__p_std__ostream,
   &_swigt__p_std__streambuf,
-  &_swigt__p_std__vectorT_char_t,
-  &_swigt__p_std__vectorT_double_t,
-  &_swigt__p_std__vectorT_float_t,
-  &_swigt__p_std__vectorT_int_t,
-  &_swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,
-  &_swigt__p_std__vectorT_std__complexT_double_t_t,
+  &_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
+  &_swigt__p_std__vectorT_char_std__allocatorT_char_t_t,
+  &_swigt__p_std__vectorT_double_std__allocatorT_double_t_t,
+  &_swigt__p_std__vectorT_float_std__allocatorT_float_t_t,
+  &_swigt__p_std__vectorT_int_std__allocatorT_int_t_t,
+  &_swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,
+  &_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_time_t,
   &_swigt__p_traits_type,
@@ -30879,11 +31715,34 @@ static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_char_t[] = {{&_swigt__p_Se
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_int_t[] = {{&_swigt__p_Seiscomp__TypedArrayT_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_float_t[] = {{&_swigt__p_Seiscomp__TypedArrayT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Array[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__Array, 0, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, _p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Array, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Array, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__Message[] = {{&_swigt__p_Seiscomp__Core__Message, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {{&_swigt__p_Seiscomp__Core__DataMessage, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t[] = {{&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__ResponseList[] = {{&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__BitSet[] = {{&_swigt__p_Seiscomp__BitSet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Importer, _p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFArchive, _p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerBase, _p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_double_t, _p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_double_t, _p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_int_t, _p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Exporter, _p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__AHRecord, _p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_float_t, _p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_float_t, _p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordDemuxFilter, _p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordInput, _p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, _p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordFilterInterface, _p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__DatabaseInterface, _p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AverageT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__TransferFunction[] = {{&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros[] = {{&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t[] = {{&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__DataMessage[] = {{&_swigt__p_Seiscomp__Core__DataMessage, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__Message[] = {{&_swigt__p_Seiscomp__Core__Message, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t[] = {{&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__BaseObject[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_double_t_t, _p_Seiscomp__TypedArrayT_std__complexT_double_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__AHRecord, _p_Seiscomp__IO__AHRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__MSeedRecord, _p_Seiscomp__IO__MSeedRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Exporter, _p_Seiscomp__IO__ExporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Combined___private__CombinedConnection, _p_Seiscomp__RecordStream__Combined___private__CombinedConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__ResponseList, _p_Seiscomp__Math__Restitution__FFT__ResponseListTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__File, _p_Seiscomp__RecordStream__FileTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__BitSet, _p_Seiscomp__BitSetTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_t, _p_Seiscomp__TypedArrayT_Seiscomp__Core__Time_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkConnection, _p_Seiscomp__RecordStream__Arclink___private__ArclinkConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__Importer, _p_Seiscomp__IO__ImporterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__BaseObject, 0, 0, 0},  {&_swigt__p_Seiscomp__Core___private__InterruptibleObject, _p_Seiscomp__Core___private__InterruptibleObjectTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordInput, _p_Seiscomp__IO__RecordInputTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, _p_Seiscomp__TypedArrayT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_char_t, _p_Seiscomp__NumericArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_char_t, _p_Seiscomp__TypedArrayT_char_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordDemuxFilter, _p_Seiscomp__IO__RecordDemuxFilterTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SLConnection, _p_Seiscomp__RecordStream__SLConnectionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_double_t, _p_Seiscomp__IO__RecordResamplerT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_double_t, _p_Seiscomp__IO__RecordIIRFilterT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_double_t, _p_Seiscomp__TypedArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_double_t, _p_Seiscomp__NumericArrayT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, _p_Seiscomp__Math__Geo__CoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFArchive, _p_Seiscomp__IO__GFArchiveTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordFilterInterface, _p_Seiscomp__IO__RecordFilterInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__DatabaseInterface, _p_Seiscomp__IO__DatabaseInterfaceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Record, _p_Seiscomp__RecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__GenericRecord, _p_Seiscomp__GenericRecordTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GreensFunction, _p_Seiscomp__Core__GreensFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, _p_Seiscomp__Math__Geo__CoordT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_float_t, _p_Seiscomp__NumericArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_float_t, _p_Seiscomp__TypedArrayT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordIIRFilterT_float_t, _p_Seiscomp__IO__RecordIIRFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_float_t, _p_Seiscomp__IO__RecordResamplerT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Array, _p_Seiscomp__ArrayTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFReceiver, _p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStream, _p_Seiscomp__IO__RecordStreamTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__GFSource, _p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__TransferFunction, _p_Seiscomp__Math__Restitution__FFT__TransferFunctionTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros, _p_Seiscomp__Math__Restitution__FFT__PolesAndZerosTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__NumericArrayT_int_t, _p_Seiscomp__NumericArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_int_t, _p_Seiscomp__TypedArrayT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerT_int_t, _p_Seiscomp__IO__RecordResamplerT_int_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordResamplerBase, _p_Seiscomp__IO__RecordResamplerBaseTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_t, _p_Seiscomp__Core__GenericMessageT_Seiscomp__Core__BaseObject_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__DataMessage, _p_Seiscomp__Core__DataMessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Core__Message, _p_Seiscomp__Core__MessageTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, _p_Seiscomp__Math__Filtering__InPlaceFilterT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, _p_Seiscomp__TypedArrayT_std__complexT_float_t_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Core__BaseObject, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Core__BaseObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__ClassNotFound[] = {{&_swigt__p_Seiscomp__Core__ClassNotFound, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__OverflowException[] = {{&_swigt__p_Seiscomp__Core__OverflowException, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__TypeConversionException[] = {{&_swigt__p_Seiscomp__Core__TypeConversionException, 0, 0, 0},{0, 0, 0, 0}};
@@ -30926,6 +31785,8 @@ static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSee
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl[] = {  {&_swigt__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl, 0, 0, 0},{0, 0, 0, 0}};
@@ -30992,8 +31853,14 @@ static swig_cast_info _swigc__p_Seiscomp__IO__RecordStreamTimeout[] = {  {&_swig
 static swig_cast_info _swigc__p_Seiscomp__IO__VBinaryArchive[] = {  {&_swigt__p_Seiscomp__IO__VBinaryArchive, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__XMLArchive[] = {  {&_swigt__p_Seiscomp__IO__XMLArchive, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_double_t, _p_Seiscomp__Math__Filtering__AverageT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_double_t, _p_Seiscomp__Math__Filtering__STALTAT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_double_t, _p_Seiscomp__Math__Filtering__RunningMeanT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_double_t, _p_Seiscomp__Math__Filtering__InitialTaperT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_double_t, _p_Seiscomp__Math__Filtering__ChainFilterT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t, _p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AverageT_float_t, _p_Seiscomp__Math__Filtering__AverageT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__STALTAT_float_t, _p_Seiscomp__Math__Filtering__STALTAT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__RunningMeanT_float_t, _p_Seiscomp__Math__Filtering__RunningMeanT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__InitialTaperT_float_t, _p_Seiscomp__Math__Filtering__InitialTaperT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t, _p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__ChainFilterT_float_t, _p_Seiscomp__Math__Filtering__ChainFilterT_float_tTo_p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__CityT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__CityT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__CoordT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__CoordT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__IO__GFSource, _p_Seiscomp__IO__GFSourceTo_p_Seiscomp__Math__Geo__CoordT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, _p_Seiscomp__Math__Geo__NamedCoordT_double_tTo_p_Seiscomp__Math__Geo__CoordT_double_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__CoordT_double_t, 0, 0},  {&_swigt__p_Seiscomp__IO__GFReceiver, _p_Seiscomp__IO__GFReceiverTo_p_Seiscomp__Math__Geo__CoordT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__CoordT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__CoordT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, _p_Seiscomp__Math__Geo__NamedCoordT_float_tTo_p_Seiscomp__Math__Geo__CoordT_float_t, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__CoordT_float_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__NamedCoordT_double_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_double_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_double_t, _p_Seiscomp__Math__Geo__CityT_double_tTo_p_Seiscomp__Math__Geo__NamedCoordT_double_t, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Geo__NamedCoordT_float_t[] = {  {&_swigt__p_Seiscomp__Math__Geo__NamedCoordT_float_t, 0, 0, 0},  {&_swigt__p_Seiscomp__Math__Geo__CityT_float_t, _p_Seiscomp__Math__Geo__CityT_float_tTo_p_Seiscomp__Math__Geo__NamedCoordT_float_t, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_char_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_double_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__NumericArrayT_float_t[] = {  {&_swigt__p_Seiscomp__NumericArrayT_float_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -31014,6 +31881,7 @@ static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__complexT_double_t_t[]
 static swig_cast_info _swigc__p_Seiscomp__TypedArrayT_std__complexT_float_t_t[] = {  {&_swigt__p_Seiscomp__TypedArrayT_std__complexT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TagType[] = {  {&_swigt__p_TagType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Type[] = {  {&_swigt__p_Type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ValueType[] = {  {&_swigt__p_ValueType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_bool[] = {  {&_swigt__p_bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -31046,7 +31914,8 @@ static swig_cast_info _swigc__p_std__basic_stringT_char_std__char_traitsT_char_t
 static swig_cast_info _swigc__p_std__complexT_double_t[] = {  {&_swigt__p_std__complexT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__complexT_float_t[] = {  {&_swigt__p_std__complexT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__ValueError[] = {{&_swigt__p_Seiscomp__Core__ValueError, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__exception[] = {  {&_swigt__p_Seiscomp__IO__RecordStreamTimeout, _p_Seiscomp__IO__RecordStreamTimeoutTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException, _p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkException, _p_Seiscomp__RecordStream__Arclink___private__ArclinkExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueError, _p_Seiscomp__Core__ValueErrorTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ClassNotFound, _p_Seiscomp__Core__ClassNotFoundTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__IO__LibmseedException, _p_Seiscomp__IO__LibmseedExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStreamException, _p_Seiscomp__IO__RecordStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__EndOfStreamException, _p_Seiscomp__Core__EndOfStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__StreamException, _p_Seiscomp__Core__StreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__MemoryException, _p_Seiscomp__Core__MemoryExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SeedlinkException, _p_Seiscomp__RecordStream__SeedlinkExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__GeneralException, _p_Seiscomp__Core__GeneralExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_std__exception, 0, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeConversionException, _p_Seiscomp__Core__TypeConversionExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__OverflowException, _p_Seiscomp__Core__OverflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__UnderflowException, _p_Seiscomp__Core__UnderflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueException, _p_Seiscomp__Core__ValueExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeException, _p_Seiscomp__Core__TypeExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core___private__OperationInterrupted, _p_Seiscomp__Core___private__OperationInterruptedTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__DuplicateClassname, _p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SeedlinkCommandException, _p_Seiscomp__RecordStream__SeedlinkCommandExceptionTo_p_std__exception, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__Math__Filtering__AlignmentError[] = {{&_swigt__p_Seiscomp__Math__Filtering__AlignmentError, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__exception[] = {  {&_swigt__p_Seiscomp__IO__RecordStreamTimeout, _p_Seiscomp__IO__RecordStreamTimeoutTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandException, _p_Seiscomp__RecordStream__Arclink___private__ArclinkCommandExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__Arclink___private__ArclinkException, _p_Seiscomp__RecordStream__Arclink___private__ArclinkExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueError, _p_Seiscomp__Core__ValueErrorTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ClassNotFound, _p_Seiscomp__Core__ClassNotFoundTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__IO__LibmseedException, _p_Seiscomp__IO__LibmseedExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__EndOfStreamException, _p_Seiscomp__Core__EndOfStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__StreamException, _p_Seiscomp__Core__StreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__MemoryException, _p_Seiscomp__Core__MemoryExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__GeneralException, _p_Seiscomp__Core__GeneralExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SeedlinkException, _p_Seiscomp__RecordStream__SeedlinkExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__IO__RecordStreamException, _p_Seiscomp__IO__RecordStreamExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_std__exception, 0, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeConversionException, _p_Seiscomp__Core__TypeConversionExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__OverflowException, _p_Seiscomp__Core__OverflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__UnderflowException, _p_Seiscomp__Core__UnderflowExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__ValueException, _p_Seiscomp__Core__ValueExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__TypeException, _p_Seiscomp__Core__TypeExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core___private__OperationInterrupted, _p_Seiscomp__Core___private__OperationInterruptedTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Core__DuplicateClassname, _p_Seiscomp__Core__DuplicateClassnameTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Math__Filtering__AlignmentError, _p_Seiscomp__Math__Filtering__AlignmentErrorTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__RecordStream__SeedlinkCommandException, _p_Seiscomp__RecordStream__SeedlinkCommandExceptionTo_p_std__exception, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ios_base[] = {  {&_swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t, _p_std__basic_iosT_char_std__char_traitsT_char_t_tTo_p_std__ios_base, 0, 0},  {&_swigt__p_std__ios_base, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__istream[] = {  {&_swigt__p_std__istream, 0, 0, 0},{0, 0, 0, 0}};
@@ -31055,12 +31924,13 @@ static swig_cast_info _swigc__p_std__listT_std__basic_stringT_char_std__char_tra
 static swig_cast_info _swigc__p_std__locale[] = {  {&_swigt__p_std__locale, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__streambuf[] = {  {&_swigt__p_std__streambuf, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_char_t[] = {  {&_swigt__p_std__vectorT_char_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_double_t[] = {  {&_swigt__p_std__vectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_float_t[] = {  {&_swigt__p_std__vectorT_float_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_int_t[] = {  {&_swigt__p_std__vectorT_int_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t[] = {  {&_swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_t[] = {  {&_swigt__p_std__vectorT_std__complexT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_char_std__allocatorT_char_t_t[] = {  {&_swigt__p_std__vectorT_char_std__allocatorT_char_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_double_std__allocatorT_double_t_t[] = {  {&_swigt__p_std__vectorT_double_std__allocatorT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_float_std__allocatorT_float_t_t[] = {  {&_swigt__p_std__vectorT_float_std__allocatorT_float_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_int_std__allocatorT_int_t_t[] = {  {&_swigt__p_std__vectorT_int_std__allocatorT_int_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t[] = {  {&_swigt__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_time_t[] = {  {&_swigt__p_time_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_traits_type[] = {  {&_swigt__p_traits_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -31124,6 +31994,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__MSeedRecord_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__IO__RecordFilterInterface_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_const_t__Impl,
+  _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__Math__Restitution__FFT__TransferFunction_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_const_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_char_t_t__Impl,
   _swigc__p_Seiscomp__Core__SmartPointerT_Seiscomp__NumericArrayT_double_t_const_t__Impl,
@@ -31193,9 +32065,39 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__IO__RecordStreamTimeout,
   _swigc__p_Seiscomp__IO__VBinaryArchive,
   _swigc__p_Seiscomp__IO__XMLArchive,
+  _swigc__p_Seiscomp__Math__Filtering__AlignmentError,
+  _swigc__p_Seiscomp__Math__Filtering__AverageT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__AverageT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__ChainFilterT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__BiquadCascadeT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthBandpassT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthHighpassT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__IIR__ButterworthLowpassT_float_t,
   _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_T_t,
   _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_double_t,
   _swigc__p_Seiscomp__Math__Filtering__InPlaceFilterT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__InitialTaperT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanHighPassT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__RunningMeanT_float_t,
+  _swigc__p_Seiscomp__Math__Filtering__STALTAT_double_t,
+  _swigc__p_Seiscomp__Math__Filtering__STALTAT_float_t,
+  _swigc__p_Seiscomp__Math__Geo__CityT_double_t,
+  _swigc__p_Seiscomp__Math__Geo__CityT_float_t,
+  _swigc__p_Seiscomp__Math__Geo__CoordT_double_t,
+  _swigc__p_Seiscomp__Math__Geo__CoordT_float_t,
+  _swigc__p_Seiscomp__Math__Geo__NamedCoordT_double_t,
+  _swigc__p_Seiscomp__Math__Geo__NamedCoordT_float_t,
+  _swigc__p_Seiscomp__Math__Restitution__FFT__PolesAndZeros,
+  _swigc__p_Seiscomp__Math__Restitution__FFT__ResponseList,
+  _swigc__p_Seiscomp__Math__Restitution__FFT__TransferFunction,
   _swigc__p_Seiscomp__NumericArrayT_char_t,
   _swigc__p_Seiscomp__NumericArrayT_double_t,
   _swigc__p_Seiscomp__NumericArrayT_float_t,
@@ -31220,6 +32122,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Seiscomp__TypedArrayT_std__complexT_float_t_t,
   _swigc__p_TagType,
   _swigc__p_Type,
+  _swigc__p_ValueType,
   _swigc__p_allocator_type,
   _swigc__p_bool,
   _swigc__p_char,
@@ -31260,12 +32163,13 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__locale,
   _swigc__p_std__ostream,
   _swigc__p_std__streambuf,
-  _swigc__p_std__vectorT_char_t,
-  _swigc__p_std__vectorT_double_t,
-  _swigc__p_std__vectorT_float_t,
-  _swigc__p_std__vectorT_int_t,
-  _swigc__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t,
-  _swigc__p_std__vectorT_std__complexT_double_t_t,
+  _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
+  _swigc__p_std__vectorT_char_std__allocatorT_char_t_t,
+  _swigc__p_std__vectorT_double_std__allocatorT_double_t_t,
+  _swigc__p_std__vectorT_float_std__allocatorT_float_t_t,
+  _swigc__p_std__vectorT_int_std__allocatorT_int_t_t,
+  _swigc__p_std__vectorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_std__allocatorT_std__basic_stringT_char_std__char_traitsT_char_t_std__allocatorT_char_t_t_t_t,
+  _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_time_t,
   _swigc__p_traits_type,

@@ -19,10 +19,10 @@ Application (C++: :class:`Seiscomp::Client::Application`, :class:`Python: seisco
 class. It manages the messaging connection and waveform sources in a transparent
 way.
 
-The class :class:`Seiscomp::Client::Application` is the base class for all SC3
-applications. It manages messaging and database connections, provides access to
-command line options and configuration parameters and also handles and
-interprets notifier messages.
+The class :class:`Seiscomp::Client::Application` is the base class for
+all SeisComP3 applications. It manages messaging and database
+connections, provides access to command line options and configuration
+parameters and also handles and interprets notifier messages.
 
 Blocking network operations like reading messages are moved into threads that
 are synchronized in a single blocking message queue. This queue allows pushing

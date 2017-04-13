@@ -651,5 +651,17 @@ Core::GreensFunction* HelmbergerArchive::read(const std::string &file,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(double) HelmbergerArchive::getTravelTime(const std::string &phase,
+                                             const std::string &model,
+                                             const GFSource &source,
+                                             const GFReceiver &receiver) {
+	return Core::None;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

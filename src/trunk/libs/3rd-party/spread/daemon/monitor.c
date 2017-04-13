@@ -1,4 +1,4 @@
- /*
+/*
  * The Spread Toolkit.
  *     
  * The contents of this file are subject to the Spread Open-Source
@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -81,8 +82,8 @@ static	packet_header	Pack;
 static	int16		Partition[MAX_PROCS_RING];
 static	int16		Work_partition[MAX_PROCS_RING];
 
-static	int16		Fc_buf[MAX_PROCS_RING];
-static	int16		Work_fc_buf[MAX_PROCS_RING];
+static	int16		Fc_buf[MAX_PROCS_RING][2];
+static	int16		Work_fc_buf[MAX_PROCS_RING][2];
 
 static	int		Status_vector[MAX_PROCS_RING];
 
@@ -109,7 +110,7 @@ static	void	Print_partition( int16 partition[MAX_PROCS_RING] );
 
 static	void	Define_flow_control();
 static	void	Send_flow_control();
-static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING] );
+static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING][2] );
 
 static  void	Activate_status();
 static	void	Send_status_query();
@@ -158,7 +159,7 @@ int main( int argc, char *argv[] )
 
 	Alarmp( SPLOG_PRINT, SYSTEM, "/===========================================================================\\\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "| The Spread Toolkit.                                                       |\n");
-	Alarmp( SPLOG_PRINT, SYSTEM, "| Copyright (c) 1993-2013 Spread Concepts LLC                               |\n"); 
+	Alarmp( SPLOG_PRINT, SYSTEM, "| Copyright (c) 1993-2014 Spread Concepts LLC                               |\n"); 
 	Alarmp( SPLOG_PRINT, SYSTEM, "| All rights reserved.                                                      |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "|                                                                           |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "| The Spread package is licensed under the Spread Open-Source License.      |\n");
@@ -179,6 +180,7 @@ int main( int argc, char *argv[] )
         Alarmp( SPLOG_PRINT, SYSTEM, "|    John Schultz          jschultz@spreadconcepts.com                      |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "|                                                                           |\n");
 	Alarmp( SPLOG_PRINT, SYSTEM, "| Contributors:                                                             |\n");
+        Alarmp( SPLOG_PRINT, SYSTEM, "|    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.     |\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Ryan Caudy           rcaudy@gmail.com - contribution to process groups.|\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Claudiu Danilov      claudiu@acm.org - scalable, wide-area support.    |\n");
         Alarmp( SPLOG_PRINT, SYSTEM, "|    Cristina Nita-Rotaru crisn@cs.purdue.edu - GC security.                |\n");
@@ -385,8 +387,10 @@ static	void	User_command()
 			break;
 
 		case '6':
-			for( i=0; i < Conf_num_procs( &Cn )+1; i++ )
-				Fc_buf[i] = Work_fc_buf[i];
+		        for( i=0; i < Conf_num_procs( &Cn )+1; i++ ) {
+				Fc_buf[i][0] = Work_fc_buf[i][0];
+				Fc_buf[i][1] = Work_fc_buf[i][1];
+			}
 			Send_flow_control();
 
 			printf("\n");
@@ -588,7 +592,7 @@ static	DWORD WINAPI    Partition_send_thread_routine( void *dummy)
 
 #endif	/* _REENTRANT */
 
-static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING] )
+static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING][2] )
 {
 	int32	proc_id;
 	proc	p;
@@ -600,7 +604,7 @@ static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING] )
 	printf("Flow Control Parameters:\n");
 	printf("------------------------\n");
 	printf("\n");
-	printf("Window size:  %d\n",fc_buf[ Conf_num_procs( &Cn )]);
+	printf("Window size:  %d\n",fc_buf[ Conf_num_procs( &Cn )][0]);
 	printf("\n");
 	for( i=0; i < Cn.num_segments ; i++ )
 	{
@@ -608,7 +612,11 @@ static	void	Print_flow_control( int16 fc_buf[MAX_PROCS_RING] )
 	    {
 		proc_id = Cn.segments[i].procs[j]->id;
 		proc_index = Conf_proc_by_id( proc_id, &p );
-		printf("\t%s\t%d\n", p.name, fc_buf[proc_index] );
+		printf("\t%s personal window\t%d\n", p.name, fc_buf[proc_index][0] );
+
+		if (Conf_get_accelerated_ring()) {
+		  printf("\t%s accelerated window\t%d\n", p.name, fc_buf[proc_index][1] );
+		}
 	    }
 	    printf("\n");
 	}
@@ -642,11 +650,11 @@ static	void	Define_flow_control()
 		exit(0);
 	    }
 	    ret = sscanf(str, "%d", &temp );
-	    Work_fc_buf[Conf_num_procs( &Cn )] = temp;
+	    Work_fc_buf[Conf_num_procs( &Cn )][0] = temp;
 	    if( ret > 0 ) legal = 1;
 	    else if( ret == -1 ){
 		legal = 1;
-		Work_fc_buf[Conf_num_procs( &Cn )] = -1;
+		Work_fc_buf[Conf_num_procs( &Cn )][0] = -1;
 	    }else printf("Please enter a number\n");
 	}
 	printf("\n");
@@ -658,7 +666,7 @@ static	void	Define_flow_control()
 		proc_index = Conf_proc_by_id( proc_id, &p );
 		for( legal=0; !legal; )
 		{
-		    printf("\t%s\t", p.name);
+		    printf("\t%s personal window\t", p.name);
 
 		    if( fgets( str, 70, stdin ) == NULL )
 		    {
@@ -666,12 +674,33 @@ static	void	Define_flow_control()
 			exit(0);
 		    }
 		    ret = sscanf(str, "%d", &temp);
-		    Work_fc_buf[proc_index] = temp;
+		    Work_fc_buf[proc_index][0] = temp;
 		    if( ret > 0 ) legal = 1;
 		    else if( ret == -1 ){
 			legal = 1;
-			Work_fc_buf[proc_index] = -1;
+			Work_fc_buf[proc_index][0] = -1;
 		    }else printf("Please enter a number\n");
+		}
+
+		if (Conf_get_accelerated_ring()) {
+
+		  for( legal=0; !legal; )
+		    {
+		      printf("\t%s accelerated window\t", p.name);
+
+		      if( fgets( str, 70, stdin ) == NULL )
+			{
+			  printf("Bye.\n");
+			  exit(0);
+			}
+		      ret = sscanf(str, "%d", &temp);
+		      Work_fc_buf[proc_index][1] = temp;
+		      if( ret > 0 ) legal = 1;
+		      else if( ret == -1 ){
+			legal = 1;
+			Work_fc_buf[proc_index][1] = -1;
+		      }else printf("Please enter a number\n");
+		    }
 		}
 	    }
 	    printf("\n");
@@ -957,6 +986,8 @@ static	int32	last_sec;
 		GlobalStatus.num_segments	= Flip_int16( GlobalStatus.num_segments );
 		GlobalStatus.window		= Flip_int16( GlobalStatus.window );
 		GlobalStatus.personal_window	= Flip_int16( GlobalStatus.personal_window );
+		GlobalStatus.accelerated_ring	= Flip_int16( GlobalStatus.accelerated_ring );
+		GlobalStatus.accelerated_window	= Flip_int16( GlobalStatus.accelerated_window );
 		GlobalStatus.num_sessions	= Flip_int16( GlobalStatus.num_sessions );
 		GlobalStatus.num_groups	        = Flip_int16( GlobalStatus.num_groups );
 		GlobalStatus.major_version		= Flip_int16( GlobalStatus.major_version );
@@ -976,19 +1007,22 @@ static	int32	last_sec;
                GlobalStatus.major_version,GlobalStatus.minor_version,GlobalStatus.patch_version, 
                GlobalStatus.state, GlobalStatus.gstate, GlobalStatus.sec);
 	if( ret2 < 0 )
-	     printf("Membership  :  %d  procs in %d segments, leader is %d\n",
+	     printf("Membership  :  %d  procs in %d segments, leader is %d, ",
 			GlobalStatus.num_procs,GlobalStatus.num_segments,GlobalStatus.leader_id);
-	else printf("Membership  :  %d  procs in %d segments, leader is %s\n",
+	else printf("Membership  :  %d  procs in %d segments, leader is %s, ",
 		GlobalStatus.num_procs,GlobalStatus.num_segments,leader_p.name);
+        if (GlobalStatus.accelerated_ring == 0)
+            printf("regular protocol\n");
+        else
+            printf("accelerated protocol\n");
 
 	printf("rounds   : %7d\ttok_hurry : %7d\tmemb change: %7d\n",GlobalStatus.token_rounds,GlobalStatus.token_hurry,GlobalStatus.membership_changes);
 	printf("sent pack: %7d\trecv pack : %7d\tretrans    : %7d\n",GlobalStatus.packet_sent,GlobalStatus.packet_recv,GlobalStatus.retrans);
 	printf("u retrans: %7d\ts retrans : %7d\tb retrans  : %7d\n",GlobalStatus.u_retrans,GlobalStatus.s_retrans,GlobalStatus.b_retrans);
 	printf("My_aru   : %7d\tAru       : %7d\tHighest seq: %7d\n",GlobalStatus.my_aru,GlobalStatus.aru, GlobalStatus.highest_seq);
 	printf("Sessions : %7d\tGroups    : %7d\tWindow     : %7d\n",GlobalStatus.num_sessions,GlobalStatus.num_groups,GlobalStatus.window);
-	printf("Deliver M: %7d\tDeliver Pk: %7d\tPers Window: %7d\n",GlobalStatus.message_delivered,GlobalStatus.packet_delivered,GlobalStatus.personal_window);
-	printf("Delta Mes: %7d\tDelta Pack: %7d\tDelta sec  : %7d\n",
-			GlobalStatus.message_delivered - last_mes, GlobalStatus.aru - last_aru, GlobalStatus.sec - last_sec );
+	printf("Deliver M: %7d\tDeliver Pk: %7d\tP/A Window : %7d/%d\n",GlobalStatus.message_delivered,GlobalStatus.packet_delivered,GlobalStatus.personal_window,GlobalStatus.accelerated_window);
+	printf("Delta Mes: %7d\tDelta Pk  : %7d\tDelta sec  : %7d\n",GlobalStatus.message_delivered - last_mes,GlobalStatus.aru - last_aru,GlobalStatus.sec - last_sec);
 	printf("==================================\n");
 
 	printf("\n");
@@ -1034,8 +1068,10 @@ static  void    Reload_Conf()
 	{
             Partition[i] = 0;
             Work_partition[i] = 0;
-            Fc_buf[i] = 0;
-            Work_fc_buf[i] = 0;
+            Fc_buf[i][0] = 0;
+            Fc_buf[i][1] = 0;
+            Work_fc_buf[i][0] = 0;
+            Work_fc_buf[i][1] = 0;
             Status_vector[i] = 0;
 	}
         Mutex_lock( &Partition_mutex );
@@ -1094,7 +1130,7 @@ static	void	Usage(int argc, char *argv[])
 
 			errno = 0; tmp = strtol(argv[1], &end, 0);
 
-			if (errno != 0 || *end != 0 || end == argv[1] || tmp < 0 || tmp > UINT16_MAX) {
+			if (errno != 0 || *end != 0 || end == argv[1] || tmp < 0 || tmp > 65535) {
 				Exit_Usage(exe, "Port number must be in range [0, 65536):", argv[1]);
 			}
 

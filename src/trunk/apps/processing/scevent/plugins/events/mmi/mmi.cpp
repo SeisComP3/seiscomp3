@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -8,6 +8,8 @@
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
+ *                                                                         *
+ *   Author: Jan Becker, gempa GmbH                                        *
  ***************************************************************************/
 
 

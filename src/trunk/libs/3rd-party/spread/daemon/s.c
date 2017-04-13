@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -52,7 +53,7 @@ WSADATA		WSAData;
 static  int     Num_bytes;
 static  int     Num_packets;
 static	char	IP[16];
-static	int16	Port;
+static	int16u	Port;
 static	sp_time	Delay;
 static	int	Burst;
 
@@ -93,7 +94,7 @@ int main( int argc, char *argv[] )
 	sscanf( IP ,"%d.%d.%d.%d",&i1, &i2, &i3, &i4);
 	address = ( (i1 << 24 ) | (i2 << 16) | (i3 << 8) | i4 );
 
-	printf("Checking (%d.%d.%d.%d, %d). Each burst has %d packets, %d bytes each with %ld msec delay in between, for a total of %d packets\n",i1,i2,i3,i4, Port, Burst, Num_bytes, Delay.usec/1000+Delay.sec*1000, Num_packets );
+	printf("Checking (%d.%d.%d.%d, %hu). Each burst has %d packets, %d bytes each with %ld msec delay in between, for a total of %d packets\n",i1,i2,i3,i4, Port, Burst, Num_bytes, Delay.usec/1000+Delay.sec*1000, Num_packets );
 
 	type  = (int32 *)buf;
 	count = (int32 *)&buf[4];
@@ -152,7 +153,7 @@ static  void    Usage(int argc, char *argv[])
 			}
 			argc--; argv++;
 		}else if( !strncmp( *argv, "-p", 2 ) ){
-			sscanf(argv[1], "%hd", &Port );
+			sscanf(argv[1], "%hu", &Port );
 			argc--; argv++;
 		}else if( !strncmp( *argv, "-b", 2 ) ){
 			sscanf(argv[1], "%d", &Burst );

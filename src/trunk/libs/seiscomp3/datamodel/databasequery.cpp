@@ -823,7 +823,7 @@ DatabaseIterator DatabaseQuery::getArclinkRequestByStreamCode(Seiscomp::Core::Ti
 	if ( !validInterface() ) return DatabaseIterator();
 
 	std::string query;
-	query += "select distinct(PArclinkRequest." + _T("publicID") + "),ArclinkRequest.* from ArclinkRequestLine,ArclinkRequest,PublicObject as PArclinkRequest where ArclinkRequestLine._parent_oid=ArclinkRequest._oid and ArclinkRequest._oid=PArclinkRequest._oid and ArclinkRequest." + _T("created") + ">'";
+	query += "select distinct(PArclinkRequest." + _T("publicID") + "),ArclinkRequest.* from ArclinkRequest,PublicObject as PArclinkRequest,ArclinkRequestLine where ArclinkRequestLine._parent_oid=ArclinkRequest._oid and ArclinkRequest._oid=PArclinkRequest._oid and ArclinkRequest." + _T("created") + ">'";
 	query += toString(startTime);
 	query += "' and ArclinkRequest." + _T("created") + "<'";
 	query += toString(endTime);

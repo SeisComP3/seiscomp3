@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -41,12 +42,15 @@
 
 /*	Dont forget that 0x80000080 is kept for endians */
 
+/* NOTE: protocol.c depends on UNRELIABLE_TYPE < ... < SAFE_TYPE < BLOCK_REGULAR_DELIVERY */
+
 #define		UNRELIABLE_TYPE		0x00000001
 #define		RELIABLE_TYPE		0x00000002
 #define		FIFO_TYPE		0x00000004
 #define		AGREED_TYPE		0x00000008
 #define		SAFE_TYPE		0x00000010
 #define		REGULAR_TYPE		0x0000001f
+#define		BLOCK_REGULAR_DELIVERY  ( REGULAR_TYPE + 1 )  /* NOTE: used in Prot_set_delivery_threshold to only allow low level calls to Deliver_packet to deliver packets (e.g. - Discard_packets) */
 
 #define		ROUTED_TYPE		0x00000020
 
@@ -107,16 +111,22 @@
 
 #define MONITOR_HASH    1100    /* Conf_hash code for packets from spmonitor program */
 
+typedef	struct	dummy_fragment_header {
+	int16		fragment_index;
+	int16		fragment_len;
+} fragment_header;
+
 typedef	struct	dummy_packet_header {
 	int32		type;
 	int32		transmiter_id;
 	int32		proc_id;
 	membership_id	memb_id;
 	int32		seq;
-	int32		fifo_seq;
-	int16		packet_index;
-	int16		data_len;
+	int32		token_round; /* ### changed from fifo_seq */
         int32           conf_hash;
+	int16		data_len;
+	int16           padding;
+        fragment_header first_frag_header;
 } packet_header;
 
 typedef	char       packet_body[MAX_PACKET_SIZE-sizeof(packet_header)];
@@ -124,8 +134,9 @@ typedef	char       packet_body[MAX_PACKET_SIZE-sizeof(packet_header)];
 typedef	struct	dummy_token_header {
 	int32		type;
 	int32		transmiter_id;
+        int32		proc_id;
+        membership_id   memb_id;
 	int32		seq;
-	int32		proc_id;
 	int32		aru;
         int32           aru_last_id;
 	int16		flow_control;
@@ -133,7 +144,7 @@ typedef	struct	dummy_token_header {
         int32           conf_hash;
 } token_header;
 
-typedef	char       token_body[MAX_PACKET_SIZE-sizeof(token_header)];
+typedef	char       token_body[((0x1 << 16) - 1) /* max IP packet size */ - 20 /* IP */ - 8 /* UDP */ - sizeof(token_header)];
 
 typedef	struct	dummy_ring_rtr {
 	membership_id	memb_id;

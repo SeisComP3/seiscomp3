@@ -30,6 +30,20 @@
 namespace Seiscomp {
 namespace Gui {
 
+class SaveBNADialog : public QDialog {
+	Q_OBJECT
+
+	public:
+		SaveBNADialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
+
+	public:
+		QLineEdit *name;
+		QCheckBox *closedPolygon;
+		QCheckBox *fileAppend;
+		QSpinBox  *rank;
+		QLineEdit *filename;
+};
+
 
 class SC_GUI_API MapWidget : public QWidget {
 	Q_OBJECT
@@ -97,10 +111,12 @@ class SC_GUI_API MapWidget : public QWidget {
 		bool     _firstDrag;
 		bool     _isDragging;
 		bool     _isMeasuring;
+		bool     _isMeasureDragging;
 		bool     _filterMap;
 
-		QPointF  _measureStart;
-		QPointF  _measureEnd;
+		QVector<QPointF> _measurePoints;
+		QString          _measureText;
+		SaveBNADialog   *_measureBNADialog;
 		QPoint   _lastDraggingPosition;
 
 		QMenu   *_contextProjectionMenu;

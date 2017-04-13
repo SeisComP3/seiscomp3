@@ -358,7 +358,7 @@ void Tensor2S<T>::spheric(T k) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::sum(Tensor2S<T> &A, T k) {
+void Tensor2S<T>::sum(const Tensor2S<T> &A, T k) {
 	_11 += k*A._11;
 	_12 += k*A._12; _22 += k*A._22;
 	_13 += k*A._13; _23 += k*A._23; _33 += k*A._33;
@@ -372,7 +372,7 @@ void Tensor2S<T>::scale(T k) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::strain(Tensor2N<T> &U) {
+void Tensor2S<T>::strain(const Tensor2N<T> &U) {
 	// INFINITISIMAL STRAIN TENSOR:
 	// e_ij = 1/2*(du_i/dx_j + du_j/dx_i)
 	_11 = U._11;
@@ -384,7 +384,7 @@ void Tensor2S<T>::strain(Tensor2N<T> &U) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::deviator(Tensor2N<T> &U) {
+void Tensor2S<T>::deviator(const Tensor2N<T> &U) {
 	// INFINITISIMAL STRAIN DEVIATOR:
 	// e_ij = 1/2*(du_i/dx_j + du_j/dx_i) - 1/3*delta_ij*du_k/dx_k
 	_11 = (2.0*U._11 -     U._22 -     U._33) / 3.0;
@@ -396,7 +396,7 @@ void Tensor2S<T>::deviator(Tensor2N<T> &U) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::GLStrain(Tensor2N<T> &F) {
+void Tensor2S<T>::GLStrain(const Tensor2N<T> &F) {
 	// GREEN-LAGRANGE STRAIN TENSOR:
 	// Eij = 1/2*(Fki*Fkj - delta_ij)
 	_11 = 0.5*(F._11*F._11 + F._21*F._21 + F._31*F._31 - 1.0);
@@ -408,7 +408,7 @@ void Tensor2S<T>::GLStrain(Tensor2N<T> &F) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::leftCG(Tensor2N<T> &F) {
+void Tensor2S<T>::leftCG(const Tensor2N<T> &F) {
 	// LEFT CAUCHY-GREEN DEFORMATION TENSOR
 	// bij = Fik*Fjk
 	_11 = F._11*F._11 + F._12*F._12 + F._13*F._13;
@@ -420,7 +420,7 @@ void Tensor2S<T>::leftCG(Tensor2N<T> &F) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::rightCG(Tensor2N<T> &F) {
+void Tensor2S<T>::rightCG(const Tensor2N<T> &F) {
 	// RIGHT CAUCHY-GREEN DEFORMATION TENSOR
 	// Cij = Fki*Fkj
 	_11 = F._11*F._11 + F._21*F._21 + F._31*F._31;
@@ -432,7 +432,7 @@ void Tensor2S<T>::rightCG(Tensor2N<T> &F) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::square(Tensor2S<T> &C) {
+void Tensor2S<T>::square(const Tensor2S<T> &C) {
 	// SQUARE OF SYMMETRIC TENSOR C^2 = C^t*C
 	_11 = C._11*C._11 + C._12*C._12 + C._13*C._13;
 	_22 = C._12*C._12 + C._22*C._22 + C._23*C._23;
@@ -443,7 +443,7 @@ void Tensor2S<T>::square(Tensor2S<T> &C) {
 }
 //---------------------------------------------------------------------------
 template <typename T>
-void Tensor2S<T>::pshFrwd(Tensor2N<T> & F, Tensor2S<T> &S) {
+void Tensor2S<T>::pshFrwd(const Tensor2N<T> & F, const Tensor2S<T> &S) {
 	// Stress Push-Forward transformation:
 	// T = 1/det(F) * F * S * F^t
 	T idet = 1.0 / F.det(), d1, d2, d3;

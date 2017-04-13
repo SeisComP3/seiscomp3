@@ -22,7 +22,7 @@ Script
 ------
 
 This script was demonstrated at the SeisComP3 workshop in Erice. It should be
-relatively self-explaining, but full understanding does require certain knowlege
+relatively self-explanatory, but full understanding does require certain knowlege
 of Python.
 
 The script does nothing but
@@ -109,11 +109,9 @@ information.
 Scripts
 -------
 
-The scripts in this chapter all deal with inventory access. All need to be
-invoked with the :option:`-d` command line option to specify the SeisComP3 database to
-read the information from.
-
-E.g.
+The scripts in this section all deal with inventory access. All need to be
+invoked with the :option:`-d` command line option to specify the SeisComP3 database
+from which the information is to be read. For example:
 
 .. code-block:: sh
 
@@ -122,7 +120,7 @@ E.g.
 configured-streams.py
 ^^^^^^^^^^^^^^^^^^^^^
 
-Print a list of all streams configured on a SC3 system.
+Print a list of all streams configured on a SeisComP3 system.
 
 .. code-block:: python
 
@@ -206,7 +204,7 @@ Print a list of all streams configured on a SC3 system.
 station-coordinates.py
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Print the station coordinated of all stations configured on a SC3 system.
+Print the coordinates of all stations configured on a SeisComP3 system.
 
 .. code-block:: python
 
@@ -283,7 +281,7 @@ Print the station coordinated of all stations configured on a SC3 system.
 channel-gains.py
 ^^^^^^^^^^^^^^^^
 
-Print channel gains for all streams configured on a SC3 system.
+Print channel gains for all streams configured on a SeisComP3 system.
 
 .. code-block:: python
 

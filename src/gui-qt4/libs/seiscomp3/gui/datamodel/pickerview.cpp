@@ -33,6 +33,9 @@
 #include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/filter.h>
+#include <seiscomp3/math/windows/cosine.h>
+#include <seiscomp3/math/windows/hann.h>
+#include <seiscomp3/math/windows/hamming.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 #include <seiscomp3/seismology/ttt.h>
@@ -892,15 +895,44 @@ class PickerMarker : public RecordMarker {
 };
 
 
-class SpectrumView : public QWidget {
+class SpectrumView : public SpectrumViewBase {
 	public:
+		enum WindowFunc {
+			None,
+			Cosine,
+			Hamming,
+			Hann
+		};
+
 		SpectrumView(QWidget *parent = 0, Qt::WindowFlags f = 0)
-		: QWidget(parent, f) {
+		: SpectrumViewBase(parent, f)
+		, _windowFunc(None)
+		, _windowWidth(5) {
 			QFrame *frame = new QFrame;
 			QHBoxLayout *hl = new QHBoxLayout;
 
 			spectrumWidget = new SpectrumWidget;
 			_infoLabel = new QLabel;
+
+			QComboBox *windowCombo = new QComboBox;
+			windowCombo->addItem(tr("Boxcar window"));
+			windowCombo->addItem(tr("Cosine window"));
+			windowCombo->addItem(tr("Hamming window"));
+			windowCombo->addItem(tr("Hann window"));
+			connect(windowCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(windowFuncChanged(int)));
+
+			QDoubleSpinBox *spinWindowWidth = new QDoubleSpinBox;
+			spinWindowWidth->setToolTip(tr("The data portion in percent at either side where the window function is applied on."));
+			spinWindowWidth->setRange(0, 50);
+			spinWindowWidth->setSuffix("%");
+			spinWindowWidth->setValue(_windowWidth);
+			connect(spinWindowWidth, SIGNAL(valueChanged(double)), this, SLOT(windowWidthChanged(double)));
+
+			QComboBox *modeCombo = new QComboBox;
+			modeCombo->addItem(tr("Amplitude spectrum"));
+			modeCombo->addItem(tr("Power spectrum"));
+			modeCombo->addItem(tr("Phase spectrum"));
+			connect(modeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged(int)));
 
 			QToolButton *toggleLogX = new QToolButton;
 			toggleLogX->setText(tr("Log scale X"));
@@ -908,21 +940,17 @@ class SpectrumView : public QWidget {
 			toggleLogX->setChecked(true);
 			connect(toggleLogX, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleX(bool)));
 
-			QToolButton *toggleLogY = new QToolButton;
-			toggleLogY->setText(tr("Log scale Y"));
-			toggleLogY->setCheckable(true);
-			toggleLogY->setChecked(true);
-			connect(toggleLogY, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleY(bool)));
-
-			QToolButton *toggleAmplitude = new QToolButton;
-			toggleAmplitude->setText(tr("Amplitude"));
-			toggleAmplitude->setCheckable(true);
-			toggleAmplitude->setChecked(true);
-			connect(toggleAmplitude, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setAmplitudeSpectrum(bool)));
+			_toggleLogY = new QToolButton;
+			_toggleLogY->setText(tr("Log scale Y"));
+			_toggleLogY->setCheckable(true);
+			_toggleLogY->setChecked(true);
+			connect(_toggleLogY, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleY(bool)));
 
 			hl->addWidget(toggleLogX);
-			hl->addWidget(toggleLogY);
-			hl->addWidget(toggleAmplitude);
+			hl->addWidget(_toggleLogY);
+			hl->addWidget(windowCombo);
+			hl->addWidget(spinWindowWidth);
+			hl->addWidget(modeCombo);
 			hl->addStretch();
 
 			QToolButton *toggleSpec = new QToolButton;
@@ -976,11 +1004,20 @@ class SpectrumView : public QWidget {
 			frame->setLayout(vl);
 
 			spectrumWidget->setLogScaleX(toggleLogX->isChecked());
-			spectrumWidget->setLogScaleY(toggleLogY->isChecked());
+			spectrumWidget->setLogScaleY(_toggleLogY->isChecked());
 			spectrumWidget->setShowSpectrum(toggleSpec->isChecked());
 			spectrumWidget->setShowCorrected(toggleCorrSpec->isChecked());
 			spectrumWidget->setShowResponse(toggleResp->isChecked());
 		}
+
+		void setData(Record *rec, Processing::Sensor *sensor) {
+			_trace = rec;
+			_response = sensor && sensor->response() ? sensor->response() : NULL;
+
+			setInfo(sensor);
+			updateData();
+		}
+
 
 		void setInfo(Processing::Sensor *sensor) {
 			if ( sensor == NULL ) {
@@ -997,7 +1034,96 @@ class SpectrumView : public QWidget {
 
 
 	private:
-		QLabel *_infoLabel;
+		void windowFuncChanged(int index) {
+			switch ( index ) {
+				case 0:
+					_windowFunc = None;
+					break;
+				case 1:
+					_windowFunc = Cosine;
+					break;
+				case 2:
+					_windowFunc = Hamming;
+					break;
+				case 3:
+					_windowFunc = Hann;
+					break;
+				default:
+					break;
+			}
+
+			updateData();
+		}
+
+
+		void windowWidthChanged(double value) {
+			_windowWidth = value;
+			if ( _windowWidth < 0 )
+				_windowWidth = 0;
+			if ( _windowWidth > 50 )
+				_windowWidth = 50;
+
+			updateData();
+		}
+
+
+		void modeChanged(int index) {
+			switch ( index ) {
+				case 0:
+					spectrumWidget->setAmplitudeSpectrum();
+					_toggleLogY->setChecked(true);
+					break;
+				case 1:
+					spectrumWidget->setPowerSpectrum();
+					_toggleLogY->setChecked(true);
+					break;
+				case 2:
+					spectrumWidget->setPhaseSpectrum();
+					_toggleLogY->setChecked(false);
+					break;
+				default:
+					break;
+			}
+		}
+
+
+		void updateData() {
+			if ( !_trace ) return;
+
+			std::vector<double> data(static_cast<const DoubleArray*>(_trace->data())->impl());
+			double wwidth = _windowWidth * 0.01;
+
+			switch ( _windowFunc ) {
+				case Cosine:
+					Math::CosineWindow<double>().apply(data, wwidth);
+					break;
+				case Hamming:
+					Math::HammingWindow<double>().apply(data, wwidth);
+					break;
+				case Hann:
+					Math::HannWindow<double>().apply(data, wwidth);
+					break;
+				default:
+					break;
+			}
+
+			Math::ComplexArray spectrum;
+			Math::fft(spectrum, data);
+
+			spectrumWidget->setSpectrum(_trace->samplingFrequency()*0.5,
+			                            spectrum, _response.get(),
+			                            _trace->streamID().c_str());
+		}
+
+
+	private:
+		QLabel                  *_infoLabel;
+		QToolButton             *_toggleLogY;
+		RecordPtr                _trace;
+		Processing::ResponsePtr  _response;
+		WindowFunc               _windowFunc;
+		double                   _windowWidth;
+
 
 	public:
 		SpectrumWidget *spectrumWidget;
@@ -3783,9 +3909,9 @@ void PickerView::loadNextStations(float distance) {
 	if ( inv != NULL ) {
 
 		for ( size_t i = 0; i < inv->networkCount(); ++i ) {
-			Network* n = inv->network(i);
+			Network *n = inv->network(i);
 			for ( size_t j = 0; j < n->stationCount(); ++j ) {
-				Station* s = n->station(j);
+				Station *s = n->station(j);
 
 				QString code = (n->code() + "." + s->code()).c_str();
 
@@ -3795,11 +3921,19 @@ void PickerView::loadNextStations(float distance) {
 					if ( s->end() <= _origin->time() )
 						continue;
 				}
-				catch ( Core::ValueException& ) {}
+				catch ( Core::ValueException & ) {}
 
-				double lat = s->latitude();
-				double lon = s->longitude();
+				double lat, lon;
 				double delta, az1, az2;
+
+				try {
+					lat = s->latitude(); lon = s->longitude();
+				}
+				catch ( Core::ValueException & ) {
+					SEISCOMP_WARNING("Station %s.%s has no valid coordinates",
+					                 n->code().c_str(), s->code().c_str());
+					continue;
+				}
 
 				Geo::delazi(_origin->latitude(), _origin->longitude(),
 				            lat, lon, &delta, &az1, &az2);
@@ -3834,6 +3968,18 @@ void PickerView::loadNextStations(float distance) {
 						               stream->sensorLocation()->code().c_str(),
 						               stream->code().c_str());
 					}
+				}
+
+				try {
+					stream->sensorLocation()->latitude();
+					stream->sensorLocation()->longitude();
+				}
+				catch ( ... ) {
+					SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+					                 stream->sensorLocation()->station()->network()->code().c_str(),
+					                 stream->sensorLocation()->station()->code().c_str(),
+					                 stream->sensorLocation()->code().c_str());
+					continue;
 				}
 
 				if ( stream ) {
@@ -4304,9 +4450,17 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		double delta, az1, az2;
 		double elat = _origin->latitude();
 		double elon = _origin->longitude();
-		double slat = loc->latitude();
-		double slon = loc->longitude();
+		double slat, slon;
 		double salt = loc->elevation();
+
+		try {
+			slat = loc->latitude(); slon = loc->longitude();
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+			                 netCode.c_str(), staCode.c_str(), locCode.c_str());
+			return false;
+		}
 
 		Geo::delazi(elat, elon, slat, slon, &delta, &az1, &az2);
 
@@ -4796,6 +4950,16 @@ void PickerView::openContextMenu(const QPoint &p) {
 		catch ( Seiscomp::Core::ValueException& ) {}
 
 		if ( loc->start() > _origin->time() ) continue;
+
+		try {
+			loc->latitude(); loc->longitude();
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+			                 loc->station()->network()->code().c_str(),
+			                 loc->station()->code().c_str(), loc->code().c_str());
+			continue;
+		}
 
 		for ( size_t j = 0; j < loc->streamCount(); ++j ) {
 			Stream* stream = loc->stream(j);
@@ -7172,11 +7336,11 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 	// Check for out-of-order records
 	if ( (label->data.traces[i].filter || label->data.enableTransformation) &&
 	     label->data.traces[i].raw->back() != (const Record*)rec ) {
-		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
-		               rec->networkCode().c_str(),
-		               rec->stationCode().c_str(),
-		               rec->locationCode().c_str(),
-		               rec->channelCode().c_str());
+//		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
+//		               rec->networkCode().c_str(),
+//		               rec->stationCode().c_str(),
+//		               rec->locationCode().c_str(),
+//		               rec->channelCode().c_str());
 		label->data.reset();
 	}
 	else
@@ -7888,14 +8052,9 @@ void PickerView::showSpectrum() {
 	// Remove mean
 	*static_cast<DoubleArray*>(trace->data()) -= static_cast<DoubleArray*>(trace->data())->mean();
 
-	Math::ComplexArray spectrum;
-	Math::fft(spectrum, static_cast<DoubleArray*>(trace->data())->impl());
-
 	if ( _spectrumView != NULL ) {
 		_spectrumView->setWindowTitle(tr("Spectrum of %1").arg(trace->streamID().c_str()));
-		static_cast<SpectrumView*>(_spectrumView)->spectrumWidget->setSpectrum(trace->samplingFrequency()*0.5, spectrum, tmp.sensor() && tmp.sensor()->response() ? tmp.sensor()->response() : NULL,
-		                                                                       trace->streamID().c_str());
-		static_cast<SpectrumView*>(_spectrumView)->setInfo(tmp.sensor());
+		static_cast<SpectrumView*>(_spectrumView)->setData(trace.get(), tmp.sensor());
 		return;
 	}
 
@@ -7907,10 +8066,7 @@ void PickerView::showSpectrum() {
 
 	connect(spectrumView, SIGNAL(destroyed(QObject*)), this, SLOT(destroyedSpectrumWidget(QObject*)));
 
-	spectrumView->setInfo(tmp.sensor());
-	spectrumView->spectrumWidget->setSpectrum(trace->samplingFrequency()*0.5, spectrum,
-	                                          tmp.sensor() && tmp.sensor()->response() ? tmp.sensor()->response() : NULL,
-	                                          trace->streamID().c_str());
+	spectrumView->setData(trace.get(), tmp.sensor());
 
 	if ( _spectrumWidgetGeometry.isEmpty() )
 		spectrumView->resize(_defaultSpectrumWidgetSize);

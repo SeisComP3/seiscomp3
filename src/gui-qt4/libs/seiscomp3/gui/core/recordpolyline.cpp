@@ -119,8 +119,7 @@ RecordPolyline::RecordPolyline()
 	_tx = _ty = 0;
 }
 
-void RecordPolyline::translate(int x, int y)
-{
+void RecordPolyline::translate(int x, int y) {
 	for ( iterator it = begin(); it != end(); ++it )
 		(*it).translate(x-_tx, y-_ty);
 
@@ -267,10 +266,8 @@ void RecordPolyline::create(RecordSequence const *records,
                             int height, float *timingQuality,
                             QVector<QPair<int,int> >* gaps,
                             bool optimization) {
-	if (records == NULL)
-		return;
-	if (records->size() == 0)
-		return;
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
 	double yscl;
@@ -304,7 +301,20 @@ void RecordPolyline::create(RecordSequence const *records,
 	int timingQualityRecordCount = 0;
 	if ( timingQuality ) *timingQuality = 0;
 
-	for(; it != records->end(); ++it) {
+	int x_prev;
+	int y_prev;
+	int y_min;
+	int y_max;
+
+	int x_out = 0;
+	int y_out = 0;
+
+	int x_pos;
+	int y_pos;
+
+	int i;
+
+	for ( ; it != records->end(); ++it ) {
 		const Record* rec = it->get();
 		const Record* lastRec = lastIt->get();
 
@@ -326,31 +336,33 @@ void RecordPolyline::create(RecordSequence const *records,
 			diff = tolerance*2;
 		}
 
-		if ( diff > tolerance || poly == NULL ) {
-			push_back(QPolygon());
-			poly = &back();
-		}
-
 		const FloatArray *arr = (const FloatArray*)rec->data();
-
-		float *f = (float*)arr->data();
+		const float *f = arr->typedData();
 		int x0 = int(pixelPerSecond*double(/*referenceTime*/refTime-rec->startTime()));
 		float dx = pixelPerSecond / rec->samplingFrequency();
 
-		int x_prev = -x0;
-		int y_prev = int(_baseline-yscl*(f[0]-amplOffset));
-		int y_min = y_prev;
-		int y_max = y_prev;
+		if ( diff > tolerance || poly == NULL ) {
+			push_back(QPolygon());
+			poly = &back();
 
-		int x_out = x_prev;
-		int y_out = y_prev;
+			x_prev = -x0;
+			y_prev = int(_baseline-yscl*(f[0]-amplOffset));
+			y_min = y_prev;
+			y_max = y_prev;
 
-		poly->append(QPoint(x_prev, y_prev));
+			x_out = x_prev;
+			y_out = y_prev;
+
+			poly->append(QPoint(x_prev, y_prev));
+			i = 1;
+		}
+		else
+			i = 0;
 
 		if ( optimization ) {
-			for (int i = 1; i<nsamp; i++) {
-				int x_pos = int(i*dx) - x0;
-				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+			for ( ; i < nsamp; ++i ) {
+				x_pos = int(i*dx) - x0;
+				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 
 				if ( y_pos != y_out ) {
 					// last output differs from the last sample?
@@ -414,9 +426,9 @@ void RecordPolyline::create(RecordSequence const *records,
 				poly->append(QPoint(x_prev, y_prev));
 		}
 		else {
-			for (int i = 1; i<nsamp; i++) {
-				int x_pos = int(i*dx) - x0;
-				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+			for ( ; i < nsamp; ++i ) {
+				x_pos = int(i*dx) - x0;
+				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 				poly->append(QPoint(x_pos, y_pos));
 			}
 		}
@@ -458,11 +470,8 @@ void RecordPolyline::create(RecordSequence const *records,
                             bool optimization) {
 	clear();
 
-	if ( records == NULL )
-		return;
-
-	if ( records->size() == 0 )
-		return;
+	if ( records == NULL ) return;
+	if ( records->size() == 0 ) return;
 
 	// normalize peak-to-peak amplitude to height set using setHeight()
 	double yscl;
@@ -474,7 +483,7 @@ void RecordPolyline::create(RecordSequence const *records,
 	}
 	else {
 		yscl = height/amplHeight;
-		_baseline = (int)((amplMax-amplOffset)*yscl);
+		_baseline = (int)(amplMax*yscl);
 	}
 
 	int skipCount = 0;
@@ -484,6 +493,19 @@ void RecordPolyline::create(RecordSequence const *records,
 	QPolygon *poly = NULL;
 	int timingQualityRecordCount = 0;
 	if ( timingQuality ) *timingQuality = 0;
+
+	int x_prev;
+	int y_prev;
+	int y_min;
+	int y_max;
+
+	int x_out = 0;
+	int y_out = 0;
+
+	int x_pos;
+	int y_pos;
+
+	int i;
 
 	for( ; it != records->end(); ++it ) {
 		const Record* rec = it->get();
@@ -515,16 +537,12 @@ void RecordPolyline::create(RecordSequence const *records,
 			diff = tolerance*2;
 		}
 
-		if ( diff > tolerance || poly == NULL ) {
-			push_back(QPolygon());
-			poly = &back();
-		}
+		double dt = 1.0/rec->samplingFrequency();
+		double startOfs = double(start-rec->startTime());
+		double endOfs = double(rec->endTime()-end) - dt;
 
 		const FloatArray *arr = (const FloatArray*)rec->data();
-
-		float *f = (float*)arr->data();
-		double startOfs = double(start-rec->startTime());
-		double endOfs = double(rec->endTime()-end);
+		const float *f = arr->typedData();
 
 		// Cut front samples
 		if ( startOfs > 0 ) {
@@ -532,7 +550,7 @@ void RecordPolyline::create(RecordSequence const *records,
 			if ( sampleOfs >= nsamp ) continue;
 			f += sampleOfs;
 			nsamp -= sampleOfs;
-			startOfs = 0;
+			startOfs -= (sampleOfs * dt);
 		}
 
 		// Cut back samples
@@ -542,22 +560,30 @@ void RecordPolyline::create(RecordSequence const *records,
 		}
 
 		int x0 = int(pixelPerSecond*startOfs);
-		float dx = pixelPerSecond / rec->samplingFrequency();
+		float dx = pixelPerSecond * dt;
 
-		int x_prev = -x0;
-		int y_prev = int(_baseline-yscl*(f[0]-amplOffset));
-		int y_min = y_prev;
-		int y_max = y_prev;
+		if ( diff > tolerance || poly == NULL ) {
+			push_back(QPolygon());
+			poly = &back();
 
-		int x_out = x_prev;
-		int y_out = y_prev;
+			x_prev = -x0;
+			y_prev = int(_baseline-yscl*(f[0]-amplOffset));
+			y_min = y_prev;
+			y_max = y_prev;
 
-		poly->append(QPoint(x_prev, y_prev));
+			x_out = x_prev;
+			y_out = y_prev;
+
+			poly->append(QPoint(x_prev, y_prev));
+			i = 1;
+		}
+		else
+			i = 0;
 
 		if ( optimization ) {
-			for (int i = 1; i<nsamp; i++) {
-				int x_pos = int(i*dx) - x0;
-				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
+			for ( ; i<nsamp; ++i ) {
+				x_pos = int(i*dx) - x0;
+				y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 
 				if ( y_pos != y_out ) {
 					// last output differs from the last sample?
@@ -621,7 +647,7 @@ void RecordPolyline::create(RecordSequence const *records,
 				poly->append(QPoint(x_prev, y_prev));
 		}
 		else {
-			for (int i = 1; i<nsamp; i++) {
+			for ( ; i < nsamp; ++i ) {
 				int x_pos = int(i*dx) - x0;
 				int y_pos = int(_baseline-yscl*(f[i]-amplOffset));
 				poly->append(QPoint(x_pos, y_pos));
@@ -793,6 +819,102 @@ void RecordPolyline::createSteps(RecordSequence const *records, double pixelPerS
 	for(; it != records->end(); ++it) {
 		const Record* rec = it->get();
 		const Record* lastRec = lastIt->get();
+
+		int nsamp = rec->sampleCount();
+		if ( nsamp == 0 ) continue;
+
+		double tolerance = records->tolerance()/rec->samplingFrequency();
+		double diff;
+
+		try {
+			diff = abs(double(rec->startTime() - lastRec->endTime()));
+		}
+		catch ( ... ) {
+			diff = tolerance*2;
+		}
+
+		if ( diff > tolerance || poly == NULL ) {
+			push_back(QPolygon());
+			poly = &back();
+		}
+
+		Array::DataType datatype = rec->dataType();
+		switch ( datatype ) {
+			case Array::FLOAT:
+				pushData<float>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			case Array::DOUBLE:
+				pushData<double>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			case Array::INT:
+				pushData<int>(poly, rec, refTime, pixelPerSecond, 1.0, amplOffset, _baseline, yscl);
+				break;
+			default:
+				break;
+		}
+
+		lastIt = it;
+	}
+
+	if ( poly->isEmpty() )
+		pop_back();
+
+	if ( !empty() ) {
+		if ( skipCount )
+			front().remove(0, skipCount);
+
+		if ( gaps ) {
+			for ( size_t i = 1; i < size(); ++i )
+				gaps->append(QPair<int,int>((*this)[i-1].last().x(), (*this)[i].first().x()));
+		}
+	}
+
+	_tx = _ty = 0;
+}
+
+
+void RecordPolyline::createSteps(RecordSequence const *records,
+                                 const Core::Time &start, const Core::Time &end,
+                                 double pixelPerSecond,
+                                 float amplMin, float amplMax, float amplOffset,
+                                 int height, QVector<QPair<int,int> >* gaps) {
+	clear();
+
+	if (records == NULL) return;
+	if (records->size() == 0) return;
+
+	// normalize peak-to-peak amplitude to height set using setHeight()
+	double yscl;
+	double amplHeight = amplMax - amplMin;
+
+	if ( amplHeight == 0.0 ) {
+		_baseline = height/2;
+		yscl = 0;
+	}
+	else {
+		yscl = height/amplHeight;
+		_baseline = (int)(amplMax*yscl);
+	}
+
+	int skipCount = 0;
+	RecordSequence::const_iterator it = records->begin();
+	RecordSequence::const_iterator lastIt = it;
+
+	Seiscomp::Core::Time refTime = start;
+
+	QPolygon *poly = NULL;
+
+	for(; it != records->end(); ++it) {
+		const Record* rec = it->get();
+		const Record* lastRec = lastIt->get();
+
+		// Skip records that are out of time window [start:end]
+		try {
+			if ( rec->endTime() <= start ) continue;
+		}
+		catch ( ... ) { continue; }
+
+		if ( rec->startTime() >= end ) break;
 
 		int nsamp = rec->sampleCount();
 		if ( nsamp == 0 ) continue;

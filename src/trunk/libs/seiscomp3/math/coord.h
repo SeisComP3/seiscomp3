@@ -41,7 +41,7 @@ struct Coord : public Core::BaseObject {
 	T latitude() const { return lat; }
 	T longitude() const { return lon; }
 
-        bool operator==(const Coord<T> &other) const;
+	bool operator==(const Coord<T> &other) const;
 	bool operator!=(const Coord<T> &other) const;
 
 	T lat;

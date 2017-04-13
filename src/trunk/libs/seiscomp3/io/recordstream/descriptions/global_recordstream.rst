@@ -164,7 +164,7 @@ Examples
    "``combined://slink/localhost:18000;arclink/localhost:18001``", "Same as above"
    "``combined://;``", "Same as above"
    "``combined://:18042;?user=foo&pwd=secret??rtMax=1800``", "Seedlink on localhost:18042 combined with Arclink on localhost 18001, real-time (SeedLink) buffer size set to 30min"
-   "``combined://;sdsarchive//home/sysop/seiscomp3/var/lib/archive?``", Seedlink combined with SDS archive
+   "``combined://slink/localhost:18000;sdsarchive//home/sysop/seiscomp3/var/lib/archive``", Seedlink combined with SDS archive
 
 .. _rs-balanced:
 
@@ -246,4 +246,3 @@ Examples
 - ``resample://slink/localhost:18000``
 - ``resample://file?rate=2/-``
 - ``resample://combined/;``
-

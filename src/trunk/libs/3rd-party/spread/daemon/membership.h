@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -48,22 +49,27 @@
 #define		EVS		6
 
 
-void		Memb_init();
-configuration	*Memb_active_ptr();
-membership_id	Memb_id();
-membership_id	Memb_trans_id();
+void		Memb_init( void );
+configuration  *Memb_active_ptr( void );
+membership_id   Memb_active_id( void );
+membership_id	Memb_id( void );
+membership_id	Memb_trans_id( void );
 int		Memb_is_equal( membership_id m1, membership_id m2 );
-int32		Memb_state();
-int		Memb_token_alive();
+int32		Memb_state( void );
+int		Memb_token_alive( void );
 void		Memb_handle_message( sys_scatter *scat );
 void		Memb_handle_token( sys_scatter *scat );
-void		Memb_token_loss();
-void 	        Memb_lookup_new_members();
-void            Memb_signal_conf_reload();
+void		Memb_token_loss(void);
+void 	        Memb_lookup_new_members(void);
+void		Memb_token_loss_event(int dmy, void *dmy_ptr);
+void 	        Memb_lookup_new_members_event(int dmy, void *dmy_ptr);
+void            Memb_signal_conf_reload( void );
 
-void		Memb_commit();
-void		Memb_transitional();
-void		Memb_regular();
+void		Memb_commit( void );
+void		Memb_transitional( void );
+void		Memb_regular( void );
 void	        Memb_print_form_token( sys_scatter *scat );
+
+extern bool     Memb_Just_Installed;
 
 #endif /* INC_MEMBERSHIP */
