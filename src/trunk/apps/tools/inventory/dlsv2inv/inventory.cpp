@@ -891,8 +891,8 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 
 	for( size_t i = 0; i < si.ci.size(); ++i ) {
 		ChannelIdentifier ci = *si.ci[i];
-		station_name = strip(si.GetStationCallLetters()) + "." + date2str(GetTime(ci.GetStartDate()));
-		channel_name = strip(si.GetStationCallLetters()) + "." + strip(ci.GetLocation()) + "." + ci.GetChannel() + "." + date2str(GetTime(ci.GetStartDate()));
+		station_name = strip(si.GetNetworkCode()) + "." + strip(si.GetStationCallLetters()) + "." + date2str(GetTime(ci.GetStartDate()));
+		channel_name = strip(si.GetNetworkCode()) + "." + strip(si.GetStationCallLetters()) + "." + strip(ci.GetLocation()) + "." + ci.GetChannel() + "." + date2str(GetTime(ci.GetStartDate()));
 
 		string strm_code = ci.GetChannel();
 		string loc_code = strip(ci.GetLocation());
