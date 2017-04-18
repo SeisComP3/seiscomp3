@@ -279,6 +279,12 @@ bool isDigitalDataloggerStage(AbbreviationDictionaryControl *adc,
 	return !isElectric(adc->UnitName(item.outputUnit));
 }
 
+bool isADCStage(AbbreviationDictionaryControl *adc,
+                const Inventory::StageItem &item) {
+	return isElectric(adc->UnitName(item.inputUnit))
+	   && !isElectric(adc->UnitName(item.outputUnit));
+}
+
 
 bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item, double &stageGain) {
 	stageGain = 1.0;
@@ -1343,7 +1349,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	GetStages(stages, ci);
 
 	string analogueChain, digitalChain;
-	bool hasPreAmplifierGain = false;
+	bool hasDigitizerGain = false;
 	SequenceNumber lastStage;
 
 	for ( size_t i = 0; i < stages.size(); ++i ) {
@@ -1365,28 +1371,53 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 
 		response_index = stages[i].index;
 
-		double stageGain;
+		double stageGain = 0;
+		for ( size_t j = 0; j< ci.csg.size(); ++j ) {
+			if ( ci.csg[j]->GetStageSequenceNumber() == (int)stages[i].stage ) {
+				stageGain = ci.csg[j]->GetSensitivityGain();
+				break;
+			}
+		}
+
+#if LOG_STAGES
+		cerr << " + D " << stages[i].type.toString() << " "
+		     << adc->UnitName(stages[i].inputUnit) << " "
+		     << adc->UnitName(stages[i].outputUnit) << " "
+		     << stageGain;
+#endif
+
 		if ( IsDummy(ci, stages[i], stageGain) ) {
+			bool ignoreStage = false;
+
+			// Ignore dummy stages without a defining gain
 			if ( stageGain == 1.0 ) {
 #if LOG_STAGES
-				cerr << " + D " << stages[i].type.toString() << " "
-				     << adc->UnitName(stages[i].inputUnit) << " "
-				     << adc->UnitName(stages[i].outputUnit) << " (dummy)"
-				     << endl;
+				cerr << " (dummy)";
+				ignoreStage = true;
 #endif
-				continue;
 			}
 
-			// Potential pre-amplifier gain
-			if ( !hasPreAmplifierGain ) {
-				hasPreAmplifierGain = true;
+			// Potential preamplifier gain
+			if ( !hasDigitizerGain && isADCStage(adc, stages[i]) ) {
+				hasDigitizerGain = true;
 				dlg->setGain(stageGain);
 #if LOG_STAGES
-				cerr << " + D pre-amplifier gain = " << stageGain << endl;
+				cerr << " (digitizer gain)";
+				ignoreStage = true;
+#endif
+			}
+
+			if ( ignoreStage ) {
+#if LOG_STAGES
+				cerr << endl;
 #endif
 				continue;
 			}
 		}
+
+#if LOG_STAGES
+		cerr << endl;
+#endif
 
 		string instr = channel_name + ".stage_" + ToString<int>(stages[i].stage);
 		string responseID;
@@ -1455,12 +1486,6 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 			if ( !digitalChain.empty() ) digitalChain += " ";
 			digitalChain += responseID;
 		}
-
-#if LOG_STAGES
-		cerr << " + D " << stages[i].type.toString() << " "
-		     << adc->UnitName(stages[i].inputUnit) << " "
-		     << adc->UnitName(stages[i].outputUnit) << endl;
-#endif
 
 		response_index = Core::None;
 		lastStage = stages[i].stage;
