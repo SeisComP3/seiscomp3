@@ -109,8 +109,8 @@ inline int doy(int y, int m) {
 
 
 inline string date2str(const Core::Time &t) {
-	int year, month, day, hour;
-	t.get(&year, &month, &day, &hour);
+	int year, month, day, hour, minute, second;
+	t.get(&year, &month, &day, &hour, &minute, &second);
 
 	if ( month < 1 || month > 12 || day < 1 || day > 31 ) {
 		SEISCOMP_ERROR("invalid date: month=%d, day=%d", month, day);
@@ -118,8 +118,8 @@ inline string date2str(const Core::Time &t) {
 		day = 0;
 	}
 
-	char buf[16];
-	snprintf(buf, 15, "%d.%03d.%02d", year, doy(year, month - 1) + day, hour);
+	char buf[20];
+	snprintf(buf, sizeof(buf)-1, "%d.%03d.%02d.%02d.%02d", year, doy(year, month - 1) + day, hour, minute, second);
 	return buf;
 }
 

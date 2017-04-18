@@ -121,8 +121,8 @@ inline int _ldoy(int y, int m) {
 }
 
 inline string date2str(const Core::Time& t) {
-	int year, month, day;
-	t.get(&year, &month, &day);
+	int year, month, day, hour, minute, second;
+	t.get(&year, &month, &day, &hour, &minute, &second);
 
 	if ( month < 1 || month > 12 || day < 1 || day > 31 ) {
 		SEISCOMP_ERROR("invalid date: month=%d, day=%d", month, day);
@@ -130,8 +130,8 @@ inline string date2str(const Core::Time& t) {
 		day = 0;
 	}
 
-	char buf[10];
-	snprintf(buf, 9, "%d.%03d", year, _ldoy(year, month - 1) + day);
+	char buf[20];
+	snprintf(buf, sizeof(buf)-1, "%d.%03d.%02d.%02d.%02d", year, _ldoy(year, month - 1) + day, hour, minute, second);
 	return string(buf);
 }
 
@@ -1317,6 +1317,9 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	                        strm->sensorLocation()->station()->code() + "." + strm->sensorLocation()->code() +
 	                        strm->code() + "." +
 	                        date2str(strm->start());
+#if LOG_STAGES
+	cerr << " + DL " << dataloggerName << endl;
+#endif
 
 	DataModel::DataloggerPtr dlg = inventory->datalogger(DataModel::DataloggerIndex(dataloggerName));
 	if ( !dlg )
