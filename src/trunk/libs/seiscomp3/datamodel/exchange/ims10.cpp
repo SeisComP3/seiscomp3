@@ -10,6 +10,10 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
+#define SEISCOMP_COMPONENT IMS10Exchange
+
+
 #include "ims10.h"
 
 #include <cstdio>
@@ -27,28 +31,35 @@
 
 #include <boost/algorithm/string.hpp>
 
-using namespace Seiscomp::DataModel;
 
 namespace Seiscomp {
 namespace DataModel {
 
+
 REGISTER_EXPORTER_INTERFACE(ExporterIMS10, "ims10");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string stringify(const char* fmt, ...) {
+namespace {
 
+
+std::string stringify(const char* fmt, ...) {
 	int size = 512;
 	char* buffer = 0;
 	buffer = new char[size];
 	va_list vl;
 	va_start(vl, fmt);
 	int nsize = vsnprintf(buffer, size, fmt, vl);
+
 	if ( size <= nsize ) { //fail delete buffer and try again
 		delete buffer;
-		buffer = 0;
 		buffer = new char[nsize + 1]; //+1 for /0
 		nsize = vsnprintf(buffer, size, fmt, vl);
 	}
+
 	std::string ret(buffer);
 	va_end(vl);
 	delete buffer;
@@ -56,12 +67,21 @@ std::string stringify(const char* fmt, ...) {
 	return ret;
 }
 
+
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ExporterIMS10::ExporterIMS10() {}
-
-
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ExporterIMS10::put(std::streambuf* buf, Core::BaseObject* obj) {
 	if ( buf == NULL ) return false;
 	if ( obj == NULL ) return false;
@@ -69,8 +89,8 @@ bool ExporterIMS10::put(std::streambuf* buf, Core::BaseObject* obj) {
 	if ( ep == NULL ) return false;
 
 	std::ostream os(buf);
-	Origin* o;
-	Magnitude* m;
+	Origin *o = NULL;
+	Magnitude *m = NULL;
 
 	// prettyPrint flag enables header output
 	if ( _prettyPrint ) {
@@ -590,6 +610,11 @@ bool ExporterIMS10::put(std::streambuf* buf, Core::BaseObject* obj) {
 	}
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // namespace DataModel
 } // namesapce Seiscomp
