@@ -1,8 +1,15 @@
+#! /bin/bash
+# Bash is required for arrays -- FIXME by reimplementing in Python!
+#
+# Peter L. Evans, 2017
+#
+# ----------------------------------------------------------------------
 
 set -u
 
 progname=`basename $0`
 
+monthdays=(31 28 31 30 31 30 31 31 30 31 30 31)
 
 show_usage() {
 	echo "${progname} [ {month} [ {db file} ]]"
@@ -39,9 +46,18 @@ fi
 
 dcid_list=$(echo "SELECT distinct(dcid) FROM ArcStatsSource ORDER BY dcid;" | sqlite3 var/reqlogstats-2016.db)
 
+date_constr="X.start_day > '$start_year-$start_month-00' AND X.start_day < '$start_year-$start_month-99' AND "
+
 for dcid in $dcid_list ; do
-    echo -n "$dcid : "
-    cmd="SELECT count(start_day) FROM ArcStatsSummary AS X JOIN ArcStatsSource as Y WHERE X.src = Y.id AND Y.dcid='${dcid}';"
-    echo ${cmd} \
-	| sqlite3 ${db_file}
+    echo -n "$dcid : ${monthdays[$start_month]} : "
+    cmd="SELECT count(start_day) FROM ArcStatsSummary AS X JOIN ArcStatsSource as Y WHERE ${date_constr} X.src = Y.id AND Y.dcid='${dcid}';"
+    #echo "CMD> $cmd"
+    count=$(echo ${cmd} \
+	| sqlite3 ${db_file} \
+	)
+    echo -n $count
+    if [ $count -lt ${monthdays[$start_month]} ] ; then
+	echo -n "****"
+    fi
+    echo
 done
