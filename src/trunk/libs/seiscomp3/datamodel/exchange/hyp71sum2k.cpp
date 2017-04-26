@@ -17,7 +17,6 @@
 #include "hyp71sum2k.h"
 
 #include <cstdio>
-#include <seiscomp3/core/exceptions.h>
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/eventdescription.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -25,8 +24,6 @@
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
-
-#include <boost/algorithm/string.hpp>
 
 
 namespace Seiscomp {
