@@ -740,7 +740,7 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 	}
 
 	const StreamConfig *sc = _stationConfig.get(&configuration(), configModuleName(),
-		                                        networkCode, stationCode);
+	                                            networkCode, stationCode);
 	return proc->setup(Settings(configModuleName(), networkCode, stationCode,
 	                            locationCode, channelCode, &configuration(),
 	                            sc?sc->parameters.get():NULL));

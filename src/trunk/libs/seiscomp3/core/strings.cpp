@@ -34,9 +34,9 @@ namespace Core {
 
 namespace {
 
-const char* timeFormat = "%FT%T.0000Z";
-const char* timeFormatPrecise = "%FT%T.%fZ";
-const char* timeFormat2 = "%FT%TZ";
+const char *timeFormat = "%FT%T.0000Z";
+const char *timeFormatPrecise = "%FT%T.%fZ";
+const char *timeFormat2 = "%FT%TZ";
 
 }
 
@@ -398,14 +398,16 @@ int compareNoCase(const std::string& a, const std::string& b) {
 
 
 std::string& trim(std::string& str) {
-// 	const char whitespace[] = "\t\n\v\f\r ";
-//
-// 	std::string::size_type pos;
-// 	pos = str.find_first_not_of(whitespace);
-// 	if (pos != 0) str.erase(0, pos);
-//
-// 	pos = str.find_last_not_of(whitespace);
-// 	if (pos != std::string::npos) str.erase(pos + 1, std::string::npos);
+	/*
+	const char whitespace[] = "\t\n\v\f\r ";
+
+	std::string::size_type pos;
+	pos = str.find_first_not_of(whitespace);
+	if (pos != 0) str.erase(0, pos);
+
+	pos = str.find_last_not_of(whitespace);
+	if (pos != std::string::npos) str.erase(pos + 1, std::string::npos);
+	*/
 	boost::trim(str);
 	return str;
 }
