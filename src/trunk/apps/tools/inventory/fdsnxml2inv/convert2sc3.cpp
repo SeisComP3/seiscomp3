@@ -1616,7 +1616,6 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 	for ( it = epochMap.begin(); it != epochMap.end(); ++it ) {
 		// Iterate over all locations (lat/lon/elev) of this sensor
 		EpochLocationMap::iterator lit, lit2;
-
 		Epochs::iterator eit, eit2;
 
 		set<FDSNXML::Channel*> overlappingEpochs;
@@ -1721,21 +1720,16 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 				// if the start time of the epoch overlaps with the
 				// current tw
 				else if ( sensorLocationEnd ) {
-					if ( cha->startDate() >= *sensorLocationEnd ) {
-						sensorLocationStart = cha->startDate();
-						try { sensorLocationEnd = cha->endDate(); }
-						catch ( ... ) { sensorLocationEnd = Core::None; }
-						sc_loc = NULL;
-					}
-					else {
-						// Extend end time of sensor location if necessary
-						try {
-							if ( cha->endDate() > *sensorLocationEnd ) {
-								sensorLocationEnd = cha->endDate();
-								sc_loc->setEnd(*sensorLocationEnd);
-							}
+					// Extend end time of sensor location if necessary
+					try {
+						if ( cha->endDate() > *sensorLocationEnd ) {
+							sensorLocationEnd = cha->endDate();
+							sc_loc->setEnd(*sensorLocationEnd);
 						}
-						catch ( ... ) {}
+					}
+					catch ( ... ) {
+						sensorLocationEnd = Core::None;
+						sc_loc->setEnd(Core::None);
 					}
 				}
 

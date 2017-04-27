@@ -53,9 +53,15 @@
 
   * Added --modified-after option
 
-* dlsv2inv, fdsn2inv
+* dlsv2inv, fdsnxml2inv
 
   * Make sample rate conversion from float to fraction more stable
+
+* fdsnxml2inv
+
+  * Fix epoch creation of sensor locations for some channel epoch
+    combinations which caused the creation of two sensor locations
+    with split epochs
 
 * fdsnws
 
