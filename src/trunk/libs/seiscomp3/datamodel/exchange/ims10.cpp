@@ -16,7 +16,7 @@
 
 #include "ims10.h"
 
-#include <cstdio>
+#include <seiscomp3/core/strings.h>
 #include <seiscomp3/datamodel/event.h>
 #include <seiscomp3/datamodel/eventdescription.h>
 #include <seiscomp3/datamodel/eventparameters.h>
@@ -27,6 +27,9 @@
 #include <seiscomp3/datamodel/pick.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
+
+
+using namespace Seiscomp::Core;
 
 
 namespace Seiscomp {
@@ -40,38 +43,6 @@ REGISTER_EXPORTER_INTERFACE(ExporterIMS10, "ims10");
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-namespace {
-
-
-std::string stringify(const char* fmt, ...) {
-	int size = 512;
-	char* buffer = 0;
-	buffer = new char[size];
-	va_list vl;
-	va_start(vl, fmt);
-	int nsize = vsnprintf(buffer, size, fmt, vl);
-
-	if ( size <= nsize ) { //fail delete buffer and try again
-		delete buffer;
-		buffer = new char[nsize + 1]; //+1 for /0
-		nsize = vsnprintf(buffer, size, fmt, vl);
-	}
-
-	std::string ret(buffer);
-	va_end(vl);
-	delete buffer;
-
-	return ret;
-}
-
-
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ExporterIMS10::ExporterIMS10() {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -79,7 +50,7 @@ ExporterIMS10::ExporterIMS10() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ExporterIMS10::put(std::streambuf* buf, Core::BaseObject* obj) {
+bool ExporterIMS10::put(std::streambuf* buf, BaseObject* obj) {
 	if ( buf == NULL ) return false;
 	if ( obj == NULL ) return false;
 	EventParameters* ep = EventParameters::Cast(obj);
