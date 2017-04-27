@@ -95,6 +95,16 @@ bool fromString(Enum<ENUMTYPE, END, NAMES>& value, const std::string& str);
 template <typename T>
 bool fromString(std::vector<T>& vec, const std::string& str);
 
+
+/**
+ * @brief Produces output according to a format as used by printf. The output
+ *        is written to a string and returned.
+ * @param fmt A format description as used by printf
+ * @return The string containing the output
+ */
+SC_SYSTEM_CORE_API std::string stringify(const char* fmt, ...);
+
+
 SC_SYSTEM_CORE_API
 int split(std::vector<std::string>& tokens, const char* source,
           const char* delimiter, bool compressOn = true);
@@ -134,8 +144,10 @@ SC_SYSTEM_CORE_API bool wildcmp(const std::string &wild, const std::string &str)
 SC_SYSTEM_CORE_API bool wildicmp(const char *wild, const char *str);
 SC_SYSTEM_CORE_API bool wildicmp(const std::string &wild, const std::string &str);
 
+
 }
 }
+
 
 #include <seiscomp3/core/strings.ipp>
 

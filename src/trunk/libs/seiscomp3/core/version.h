@@ -47,6 +47,7 @@ namespace Core {
    - Fixed bug in Seiscomp::Gui::Map::TextureCache that affected custom
      Seiscomp::Gui::Map::TileStore implementations
    - Added Seiscomp::Gui::RecordView::coveredTimeRange()
+   - Added Seiscomp::Core::stringify(...)
 
  "9.1.0"   0x090100
    - Added Seiscomp::Client::Application::Stage enum PLUGINS

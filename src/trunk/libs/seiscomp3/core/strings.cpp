@@ -18,6 +18,8 @@
 #include <boost/algorithm/string.hpp>
 #include <sstream>
 #include <iostream>
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <cerrno>
 
@@ -310,6 +312,28 @@ bool fromString(Enumeration& value, const std::string& str) {
 bool fromString(std::string& value, const std::string& str) {
 	value.assign(str);
 	return true;
+}
+
+
+std::string stringify(const char* fmt, ...) {
+	int size = 512;
+	char* buffer = 0;
+	buffer = new char[size];
+	va_list vl;
+	va_start(vl, fmt);
+	int nsize = vsnprintf(buffer, size, fmt, vl);
+
+	if ( size <= nsize ) { //fail delete buffer and try again
+		delete buffer;
+		buffer = new char[nsize + 1]; //+1 for /0
+		nsize = vsnprintf(buffer, size, fmt, vl);
+	}
+
+	std::string ret(buffer);
+	va_end(vl);
+	delete buffer;
+
+	return ret;
 }
 
 
