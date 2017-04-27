@@ -300,7 +300,7 @@ bool AmpTool::run() {
 		if ( endTime.valid() )
 			 dbQuery += " and Pick." + _T("time_value") + "<'" + endTime.toString("%F %T") + "'";
 
-		dbQuery += " group by Amplitude." + _T("pickID");
+		dbQuery += " group by PPick." + _T("publicID") + ", Pick._oid";
 
 		if ( !commandline().hasOption("commit") )
 			_testMode = true;
