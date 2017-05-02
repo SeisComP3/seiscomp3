@@ -643,28 +643,28 @@ string getBaseUnit(const string &unitText) {
 }
 
 
-string sensorUnit(const FDSNXML::ResponseStage *resp,
-                  const FDSNXML::PolesAndZeros *&paz,
-                  const FDSNXML::ResponseList *&rl,
-                  const FDSNXML::Polynomial *&poly) {
+OPT(FDSNXML::UnitsType) sensorUnit(const FDSNXML::ResponseStage *resp,
+                                   const FDSNXML::PolesAndZeros *&paz,
+                                   const FDSNXML::ResponseList *&rl,
+                                   const FDSNXML::Polynomial *&poly) {
 	paz = NULL;
 	rl = NULL;
 	poly = NULL;
 
 	if ( isPAZResponse(resp) ) {
 		paz = &resp->polesZeros();
-		return getBaseUnit(paz->inputUnits());
+		return paz->inputUnits();
 	}
 	else if ( isFAPResponse(resp) ) {
 		rl = &resp->responseList();
-		return getBaseUnit(rl->inputUnits());
+		return rl->inputUnits();
 	}
 	else if ( isPolyResponse(resp) ) {
 		poly = &resp->polynomial();
-		return getBaseUnit(poly->inputUnits());
+		return poly->inputUnits();
 	}
 
-	return UNDEFINED;
+	return Core::None;
 }
 
 
@@ -2462,7 +2462,7 @@ Convert2SC3::updateSensor(const std::string &name,
 	const FDSNXML::ResponseList *rl;
 	const FDSNXML::Polynomial *poly;
 
-	string unit = sensorUnit(resp, paz, rl, poly);
+	OPT(FDSNXML::UnitsType) inputUnit = sensorUnit(resp, paz, rl, poly);
 
 	DataModel::SensorPtr sc_sens = DataModel::Sensor::Create();
 	//sc_sens->setName(sc_sens->publicID());
@@ -2489,7 +2489,15 @@ Convert2SC3::updateSensor(const std::string &name,
 	}
 	catch ( ... ) {}
 
-	sc_sens->setUnit(unit);
+	if ( inputUnit ) {
+		sc_sens->setUnit(inputUnit->name());
+		if ( !inputUnit->description().empty() ) {
+			DataModel::Blob blob;
+			blob.setContent("{\"unit\":\"" + inputUnit->description() + "\"}");
+			sc_sens->setRemark(blob);
+		}
+	}
+
 	if ( !sc_sens->unit().empty() ) emptySensor = false;
 
 	if ( paz ) {
