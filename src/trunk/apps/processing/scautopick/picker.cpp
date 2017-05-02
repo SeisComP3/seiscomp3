@@ -70,9 +70,17 @@ char statusFlag(const Seiscomp::DataModel::Pick* pick) {
 
 bool contains(const Seiscomp::Core::TimeWindow &tw, const Seiscomp::Core::Time &time) {
 	if ( !time.valid() ) return false;
+
 	if ( tw.startTime().valid() && tw.endTime().valid() )
 		return tw.contains(time);
-	return !tw.startTime().valid() || time >= tw.startTime();
+
+	if ( tw.startTime().valid() )
+		return time >= tw.startTime();
+
+	if ( tw.endTime().valid() )
+		return time < tw.endTime();
+
+	return true;
 }
 
 
@@ -282,10 +290,12 @@ bool App::init() {
 
 	streamBuffer().setTimeSpan(_config.ringBufferSize);
 
+	_playbackMode = commandline().hasOption("playback");
+
 	// Only set start time if playback option is not set. Without a time window
-	// set a file source will forward all records to the application otherwise
+	// set, a file source will forward all records to the application otherwise
 	// they are filtered according to the time window.
-	if ( !commandline().hasOption("playback") )
+	if ( !_playbackMode )
 		recordStream()->setStartTime(Core::Time::GMT() - Core::TimeSpan(_config.leadTime));
 
 	if ( configModule() != NULL ) {
@@ -355,6 +365,7 @@ bool App::init() {
 	}
 
 	Core::Time now = Core::Time::GMT();
+	DataModel::Inventory *inv = Client::Inventory::Instance()->inventory();
 
 	for ( StationConfig::const_iterator it = _stationConfig.begin();
 	      it != _stationConfig.end(); ++it ) {
@@ -420,6 +431,38 @@ bool App::init() {
 			streamID = it->first.first + "." + it->first.second + "." + it->second.locCode + "." + compE->code();
 			if ( _streamIDs.find(streamID) == _streamIDs.end() )
 				recordStream()->addStream(it->first.first, it->first.second, it->second.locCode, compE->code());
+		}
+
+		if ( _playbackMode ) {
+			// Figure out all historic epochs for locations and channels and
+			// subscribe to all channels covering all epochs. This is only
+			// required in playback mode if historic data is fed into the picker
+			// and where the current time check does not apply.
+
+			for ( size_t n = 0; n < inv->networkCount(); ++n ) {
+				DataModel::Network *net = inv->network(n);
+				if ( net->code() != it->first.first ) continue;
+
+				for ( size_t s = 0; s < net->stationCount(); ++s ) {
+					DataModel::Station *sta = net->station(s);
+					if ( sta->code() != it->first.second ) continue;
+
+					for ( size_t l = 0; l < sta->sensorLocationCount(); ++l ) {
+						DataModel::SensorLocation *loc = sta->sensorLocation(l);
+						if ( loc->code() != it->second.locCode ) continue;
+
+						for ( size_t c = 0; c < loc->streamCount(); ++c ) {
+							DataModel::Stream *cha = loc->stream(c);
+
+							if ( it->second.channel.compare(0, 2, cha->code(), 0, 2) == 0 ) {
+								streamID = it->first.first + "." + it->first.second + "." + it->second.locCode + "." + cha->code();
+								if ( _streamIDs.find(streamID) == _streamIDs.end() )
+									recordStream()->addStream(it->first.first, it->first.second, it->second.locCode, cha->code());
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

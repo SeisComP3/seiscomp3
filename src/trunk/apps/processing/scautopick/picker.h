@@ -134,6 +134,7 @@ class App : public Processing::Application {
 		typedef std::map<TWProc*, std::string> ProcReverseMap;
 		typedef DataModel::EventParametersPtr EP;
 
+		bool           _playbackMode;
 		int            _sentMessages;
 		StreamMap      _streams;
 		Config         _config;
