@@ -26,6 +26,7 @@
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/utils/replace.h>
 #include <seiscomp3/core/system.h>
+#include <seiscomp3/core/strings.h>
 
 #define SEISCOMP_COMPONENT sync_dlsv
 #include <seiscomp3/logging/log.h>
@@ -1804,6 +1805,14 @@ void Inventory::ProcessPAZSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 	else
 		UpdateSensor(ci, sm, strm->gainUnit());
 
+	string unitDescription = adc->UnitDescription(ci.rpz[*response_index]->GetSignalInUnits());
+
+	if ( !unitDescription.empty() ) {
+		DataModel::Blob blob;
+		blob.setContent("{\"unit\":\"" + unitDescription + "\"}");
+		sm->setRemark(blob);
+	}
+
 	strm->setSensor(sm->publicID());
 
 	ProcessSensorPAZ(ci, sm);
@@ -1837,6 +1846,14 @@ void Inventory::ProcessPolySensor(ChannelIdentifier& ci, DataModel::StreamPtr st
 	else
 		UpdateSensor(ci, sm, strm->gainUnit());
 
+	string unitDescription = adc->UnitDescription(ci.rp[*response_index]->GetSignalInUnits());
+
+	if ( !unitDescription.empty() ) {
+		DataModel::Blob blob;
+		blob.setContent("{\"unit\":\"" + unitDescription + "\"}");
+		sm->setRemark(blob);
+	}
+
 	strm->setSensor(sm->publicID());
 
 	ProcessSensorPolynomial(ci, sm);
@@ -1869,6 +1886,14 @@ void Inventory::ProcessFAPSensor(ChannelIdentifier& ci, DataModel::StreamPtr str
 		sm = InsertSensor(ci, strm, strm->gainUnit(), sensorName);
 	else
 		UpdateSensor(ci, sm, strm->gainUnit());
+
+	string unitDescription = adc->UnitDescription(ci.rl[*response_index]->GetSignalInUnits());
+
+	if ( !unitDescription.empty() ) {
+		DataModel::Blob blob;
+		blob.setContent("{\"unit\":\"" + unitDescription + "\"}");
+		sm->setRemark(blob);
+	}
 
 	strm->setSensor(sm->publicID());
 

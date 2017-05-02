@@ -580,6 +580,15 @@ class AbbreviationDictionaryControl : public Control
 
 			return std::string();
 		}
+
+		std::string UnitDescription(int lookup) const {
+			for ( size_t i = 0; i < ua.size(); ++i ) {
+				if ( lookup == ua[i]->GetLookup() )
+					return ua[i]->GetDescription();
+			}
+
+			return std::string();
+		}
 };
 
 // definition of all Station Control Headers blockettes

@@ -634,8 +634,8 @@ ParseResult CitedSourceDictionary::Parse(string record) {
 	source_lookup_code = FromString<int>(substr(record, 0, 2));
 	int pos1=2, pos2;
 	name_of_publication = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	date_published = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	publisher_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	date_published = SplitString(record, SEED_SEPARATOR, ++pos2, pos1);
+	publisher_name = SplitString(record, SEED_SEPARATOR, ++pos1, pos2);
 	return PR_OK;
 }
 
@@ -659,8 +659,9 @@ ParseResult GenericAbbreviation::Parse(string record) {
 ParseResult UnitsAbbreviations::Parse(string record) {
 	lookup_code = FromString<int>(substr(record, 0, 3));
 	int pos1=3, pos2;
+	cerr << record << endl;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	description = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	description = SplitString(record, SEED_SEPARATOR, ++pos2, pos1);
 	return PR_OK;
 }
 
