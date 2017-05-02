@@ -704,13 +704,26 @@ year = datetime.datetime.now().year
 parser = optparse.OptionParser()
 parser.add_option('-y', '--year', dest='year', type='int', default=year,
                 help='Report is for year YEAR', metavar='YEAR')
+parser.add_option('-v', '--verbose', dest='verbose', help='increase verbosity',
+		action='store_true')
+parser.add_option('-q', '--quiet', dest='verbose', action='store_false', default=True)
+parser.add_option('-d', '--dcid', dest='dcid', type='str')
+
 (options, args) = parser.parse_args()
 year = options.year
+verbose = options.verbose
+default_dcid = options.dcid
 
 db = os.path.join(reqlogstats_db_dir, 'reqlogstats-%4i.db' % (year))
 scores = 4*[0]  # [0, 0]
 scores_labels = ("rejected", "inserted", "not found", "unparseable")
 unparsed_list = []
+
+if verbose:
+        print 'verbose set to True'
+        print 'Default dcid set to:', default_dcid
+        print 'Year set to:', year
+        print 'db file is:', db
 
 if os.path.exists(db):
     con = sqlite3.connect(db)
@@ -833,7 +846,7 @@ for myfile in filelist:
             d = host.split('.')[-2]
         except IndexError:
             host = emailaddr
-            d = emailaddr    #???
+            d = default_dcid # emailaddr    #???
 
     port = -1
 
