@@ -1161,7 +1161,6 @@ Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc,
 	}
 
 	strm->setFlags(ci.GetFlags());
-	//strm->setFormat("Steim2");
 
 	int identifier_code = ci.GetDataFormatIdentifierCode();
 	for ( size_t i=0; i<adc->dfd.size(); ++i ) {
@@ -1239,7 +1238,6 @@ void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm,
 	}
 
 	strm->setFlags(ci.GetFlags());
-	strm->setFormat("Steim2");
 
 	int identifier_code = ci.GetDataFormatIdentifierCode();
 	for ( size_t i = 0; i < adc->dfd.size(); ++i ) {
@@ -1285,7 +1283,23 @@ Inventory::InsertAuxStream(ChannelIdentifier& ci,
 	strm->setEnd(GetOptTime(ci.GetEndDate()));
 	strm->setDevice(station_name + "." + GetInstrumentName(ci.GetInstrument()));
 	strm->setFlags(ci.GetFlags());
-	strm->setFormat("Steim2");
+
+	int identifier_code = ci.GetDataFormatIdentifierCode();
+	for ( size_t i=0; i<adc->dfd.size(); ++i ) {
+		DataFormatDictionary dataformat = *adc->dfd[i];
+		if ( identifier_code == dataformat.GetDataFormatIdentifierCode() ) {
+			const std::vector<std::string> &keys = dataformat.GetDecoderKeys();
+			map<vector<string>, string>::iterator p;
+			if ( (p = encoding.find(keys)) != encoding.end() )
+				strm->setFormat(p->second);
+			else
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+				                 join(keys, "; ").c_str());
+
+			break;
+		}
+	}
+
 	strm->setRestricted(restricted);
 	strm->setShared(shared);
 
@@ -1305,7 +1319,23 @@ void Inventory::UpdateAuxStream(ChannelIdentifier& ci, DataModel::AuxStreamPtr s
 	strm->setEnd(GetTime(ci.GetEndDate()));
 	strm->setDevice(station_name + "." + GetInstrumentName(ci.GetInstrument()));
 	strm->setFlags(ci.GetFlags());
-	strm->setFormat("Steim2");
+
+	int identifier_code = ci.GetDataFormatIdentifierCode();
+	for ( size_t i = 0; i < adc->dfd.size(); ++i ) {
+		DataFormatDictionary dataformat = *adc->dfd[i];
+		if ( identifier_code == dataformat.GetDataFormatIdentifierCode()) {
+			const std::vector<std::string> &keys = dataformat.GetDecoderKeys();
+			map<vector<string>, string>::iterator p;
+			if ( (p = encoding.find(keys)) != encoding.end() )
+				strm->setFormat(p->second);
+			else
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+				                 join(keys, "; ").c_str());
+
+			break;
+		}
+	}
+
 	strm->setRestricted(restricted);
 	strm->setShared(shared);
 
