@@ -17,6 +17,7 @@ show_usage() {
 	echo "Create a summary of reports for a month." 
 	echo "If {month} is not given, use last month."
 	echo "If {db file} is not given, use a default."
+	echo "Use 02 for February, etc."
 
 }
 
@@ -37,7 +38,12 @@ else
     db_dir="var"
     db_file="${db_dir}/reqlogstats-${start_year}.db"
 fi
-echo "Looking in ${db_file} for month ${start_month} of ${start_year}" 
+
+# How many days in the month of interest?
+# FIXME2 - leap years not handled.
+# FIXME  - start_month = 08, 09: octal constants!
+num_days=${monthdays[$(($start_month-1))]}
+echo "Looking in ${db_file} for month ${start_month} of ${start_year} (with ${num_days} days)" 
 
 if [ $# -gt 1 ]; then
     show_usage
@@ -49,14 +55,14 @@ dcid_list=$(echo "SELECT distinct(dcid) FROM ArcStatsSource ORDER BY dcid;" | sq
 date_constr="X.start_day > '$start_year-$start_month-00' AND X.start_day < '$start_year-$start_month-99' AND "
 
 for dcid in $dcid_list ; do
-    echo -n "$dcid : ${monthdays[$start_month]} : "
+    echo -n "$dcid : ${num_days} : "
     cmd="SELECT count(start_day) FROM ArcStatsSummary AS X JOIN ArcStatsSource as Y WHERE ${date_constr} X.src = Y.id AND Y.dcid='${dcid}';"
     #echo "CMD> $cmd"
     count=$(echo ${cmd} \
 	| sqlite3 ${db_file} \
 	)
     echo -n $count
-    if [ $count -lt ${monthdays[$start_month]} ] ; then
+    if [ $count -lt ${num_days} ] ; then
 	echo -n "****"
     fi
     echo
