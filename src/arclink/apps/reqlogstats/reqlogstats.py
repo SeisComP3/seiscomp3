@@ -1,7 +1,7 @@
 #
 # Populate an SQLite database from Arclink webreqlog statistics HTML pages.
 #
-# Begun by Peter L. Evans 
+# Begun by Peter L. Evans
 # <pevans@gfz-potsdam.de>
 #
 # Copyright (C) 2013-2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
@@ -10,6 +10,7 @@
 #
 import glob
 import email
+import optparse
 import os
 import sqlite3
 import sys
@@ -697,8 +698,14 @@ if (not os.path.isdir(reqlogstats_db_dir)):
 # command line.
 import datetime
 year = datetime.datetime.now().year
-if len(sys.argv) > 1 and int(sys.argv[1]) > 2010:
-    year = int(sys.argv[1])
+#if len(sys.argv) > 1 and int(sys.argv[1]) > 2010:
+#   year = int(sys.argv[1])
+
+parser = optparse.OptionParser()
+parser.add_option('-y', '--year', dest='year', type='int', default=year,
+                help='Report is for year YEAR', metavar='YEAR')
+(options, args) = parser.parse_args()
+year = options.year
 
 db = os.path.join(reqlogstats_db_dir, 'reqlogstats-%4i.db' % (year))
 scores = 4*[0]  # [0, 0]
@@ -812,21 +819,21 @@ for myfile in filelist:
     who = msg['From']
 
     if myfile.find('infp_ro') > -1:
-	# Special case for INFP
-	d = 'infp'
-	host = 'infp.ro'
-	emailaddr = 'infp.ro'
-	print ' ** SPECIAL CASE FOR INFP **'
+        # Special case for INFP
+        d = 'infp'
+        host = 'infp.ro'
+        emailaddr = 'infp.ro'
+        print ' ** SPECIAL CASE FOR INFP **'
 
     else:
-    	# Heuristic to set DCID/source string from From:
-    	emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
-    	try:
-        	host = emailaddr.split('@')[1]
-        	d = host.split('.')[-2]
-    	except IndexError:
-        	host = emailaddr
-        	d = emailaddr    #???
+        # Heuristic to set DCID/source string from From:
+        emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
+        try:
+            host = emailaddr.split('@')[1]
+            d = host.split('.')[-2]
+        except IndexError:
+            host = emailaddr
+            d = emailaddr    #???
 
     port = -1
 
