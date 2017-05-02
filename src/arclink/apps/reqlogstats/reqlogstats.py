@@ -686,12 +686,12 @@ def process_resif_string(s):
     return insert_data(db, rd, who, -1, dcid, "String from " + who, start_day)
 
 # ----------------------------------------------------------------------
-# This directory must match where the PHP report
+# This directory is where the PHP report
 # generator looks for SQLite DB files:
-reqlogstats_db_dir="/home/sysop/reqlogstats/var"
+reqlogstats_db_dir=os.path.join(os.path.expanduser('~'), 'reqlogstats', 'var')
 if (not os.path.isdir(reqlogstats_db_dir)):
-    print " *** Configuration error: %s is not an existing directory." % (reqlogstats_db_dir)
-    raise IOError, 'No such directory.'
+    print ' *** Configuration error: %s: No such directory' % (reqlogstats_db_dir)
+    raise IOError, 'No such directory'
 
 # Which database file gets used should depend on the start date
 # found in the report! As a workaround, allow overriding on
@@ -846,14 +846,18 @@ for myfile in filelist:
             d = host.split('.')[-2]
         except IndexError:
             host = emailaddr
-            d = default_dcid # emailaddr    #???
+            d = emailaddr    #???
 
     port = -1
 
     try:
         dcid = source_dict[d.lower()]
+	description = 'E-mail from ' + emailaddr
     except KeyError:
-        dcid = emailaddr.lower()  ## Use the sender's name
+        #dcid = emailaddr.lower()  ## Use the sender's name
+        dcid = default_dcid
+	emailaddr = 'command line'
+	description = 'Command line with dcid=%s' % (default_dcid)
 
     print "as HTML from %s: %s (%s:%i)" % (emailaddr, dcid, host, port)
 
@@ -862,7 +866,7 @@ for myfile in filelist:
         # Replacements to make HTML pile of tags look like XHTML.
         buf = buf.replace('""', '&quot;&quot;');
         print >>fid, buf.replace("<hr>", "<hr />").replace("<br>", "<br />")
-    result = process_html_file(bodyfile, host, port, dcid, 'E-mail from ' + emailaddr)
+    result = process_html_file(bodyfile, host, port, dcid, description)
     os.unlink(bodyfile)
     scores[result] += 1
 
