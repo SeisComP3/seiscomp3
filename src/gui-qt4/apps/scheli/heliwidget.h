@@ -26,7 +26,7 @@
 
 class HeliCanvas {
 	public:
-		HeliCanvas();
+		HeliCanvas(bool saveUnfiltered = false);
 		~HeliCanvas();
 
 	public:
@@ -88,6 +88,7 @@ class HeliCanvas {
 		int                       _rowTimeSpan;
 		QVector<Row>              _rows;
 
+		bool                      _saveUnfiltered;
 		Seiscomp::Core::Time      _currentTime;
 		int                       _numberOfRows;
 		float                     _scale;
