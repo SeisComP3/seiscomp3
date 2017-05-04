@@ -15,6 +15,8 @@
 
 #define SEISCOMP_COMPONENT Gui::QcView
 #include <seiscomp3/logging/log.h>
+#include <seiscomp3/core/baseobject.h>
+#include <seiscomp3/gui/core/utils.h>
 
 #include "qcmodel.h"
 #include "qcviewconfig.h"
@@ -548,8 +550,8 @@ QString QcModel::wfq2str(const DataModel::WaveformQuality* wfq) const {
 	QString text = QString();
 
 	text.append(QString("value: %1 (+/- %2)\n").arg(wfq->value()).arg(wfq->lowerUncertainty()));
-	text.append(QString("start: %1\n").arg(wfq->start().toString("%Y-%m-%d %H:%M:%S UTC").c_str()));
-	try { text.append(QString("end : %1\n").arg(wfq->end().toString("%Y-%m-%d %H:%M:%S UTC").c_str())); }
+	text.append(QString("start: %1\n").arg(Gui::timeToString(wfq->start(), "%Y-%m-%d %H:%M:%S UTC")));
+	try { text.append(QString("end : %1\n").arg(Gui::timeToString(wfq->end(), "%Y-%m-%d %H:%M:%S UTC"))); }
 	catch(...) {};
 	try { text.append(QString("window length: %1 s").arg(wfq->windowLength())); }
 	catch(...) {};

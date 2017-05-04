@@ -83,6 +83,9 @@
 						<parameter name="alternateForeground" type="color" default="808080">
 							<description>A general trace color of the alternate trace (eg scheli).</description>
 						</parameter>
+						<parameter name="spectrogram" type="color" default="000000">
+							<description>The trace color used on top of a spectrogram.</description>
+						</parameter>
 						<parameter name="gaps" type="color" default="FFFF0040">
 							<description>The color of data gaps in trace views.</description>
 						</parameter>
@@ -525,6 +528,13 @@
 					<parameter name="distanceInKM" type="boolean" default="false">
 						<description>
 							Display distances in km?
+						</description>
+					</parameter>
+				</group>
+				<group name="dateTime">
+					<parameter name="useLocalTime" type="boolean" default="false">
+						<description>
+							Display times in localtime or UTC (default).
 						</description>
 					</parameter>
 				</group>

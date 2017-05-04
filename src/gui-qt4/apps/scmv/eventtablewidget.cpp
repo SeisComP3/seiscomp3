@@ -34,16 +34,15 @@ QTableWidgetItem* createTableWidgetItem(const QString& text, bool isActiveEvent 
 
 
 EventTableWidget::EventTableWidget(QWidget* parent)
- : QTableWidget(parent),
-   _controlKeyPressed(false),
-   _selectedRow(-1) {
+: QTableWidget(parent)
+, _controlKeyPressed(false)
+, _selectedRow(-1) {
 
 	uiInit();
 
 	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(handleCellDoubleClickEvent(int)));
 	connect(this, SIGNAL(cellPressed(int, int)), this, SLOT(handleCellPressedEvent(int)));
 }
-
 
 
 
@@ -132,7 +131,8 @@ void EventTableWidget::handleCellPressedEvent(int row) {
 		setSelectedRow(-1);
 		clearSelection();
 		emit eventDeselected(eventId);
-	} else {
+	}
+	else {
 		setSelectedRow(row);
 		emit eventSelected(eventId);
 	}
@@ -144,13 +144,13 @@ void EventTableWidget::handleCellPressedEvent(int row) {
 void EventTableWidget::uiInit() {
 	QStringList tableHeader;
 	tableHeader << "Event" << "Origin Time" << "Magnitude" << "Magnitude Type"
-				<< "Region" << "Latitude" << "Longitude" << "Depth";
+	            << "Region" << "Latitude" << "Longitude" << "Depth";
 
 	setRowCount(0);
 	setColumnCount(tableHeader.size());
 	setHorizontalHeaderLabels(tableHeader);
 
-	QHeaderView* horizontalHeaderRef = horizontalHeader();
+	QHeaderView *horizontalHeaderRef = horizontalHeader();
 	horizontalHeaderRef->setResizeMode(horizontalHeaderRef->count()-1, QHeaderView::Stretch);
 	resizeColumnsToContents();
 
@@ -158,7 +158,7 @@ void EventTableWidget::uiInit() {
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::SingleSelection);
 
-	QVBoxLayout* layout = new QVBoxLayout;
+	QVBoxLayout *layout = new QVBoxLayout;
 	setLayout(layout);
 
 	QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

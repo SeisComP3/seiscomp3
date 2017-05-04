@@ -23,6 +23,7 @@
 
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/messages.h>
+#include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/datamodel/stationsymbol.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/datamodel/ttdecorator.h>
@@ -117,7 +118,7 @@ void addEventWidgetRowData(EventTableWidget::RowData& rowData,
                            const EventData& eventData,
                            const DataModel::Origin* origin) {
 	QString eventId = QString(eventData.id().c_str());
-	QString originTime(origin->time().value().toString("%d.%m.%y %T").c_str());
+	QString originTime = Gui::timeToString(origin->time().value(), "%d.%m.%y %T");
 
 	QString eventRegion(DataModel::eventRegion(eventData.object()).c_str());
 
@@ -168,7 +169,7 @@ void configureInfoWidgetForRecordAcquisition(StationInfoWidget* infoWidget,
 
 void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplitude* amplitude) {
 	try	{
-		QString time = amplitude->timeWindow().reference().toString("%F-%T").c_str();
+		QString time = Gui::timeToString(amplitude->timeWindow().reference(), "%F-%T");
 		infoWidget->setAmplitudeTime(time);
 	}
 	catch ( Core::ValueException& ) {}
@@ -178,8 +179,8 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplit
 
 	try {
 		Core::Time amplTime(amplitude->timeWindow().reference()
-							+ Core::TimeSpan(amplitude->timeWindow().end()));
-		QString amplitudeValueTime = amplTime.toString("%F-%T").c_str();
+		                    + Core::TimeSpan(amplitude->timeWindow().end()));
+		QString amplitudeValueTime = Gui::timeToString(amplTime, "%F-%T");
 		infoWidget->setAmplitudeMaxValueTime(amplitudeValueTime);
 	}
 	catch ( Core::ValueException& )	{}
@@ -229,11 +230,12 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, StationData* stationDat
 }
 
 
-void setInfoWidgetContent(OriginInfoWidget* infoWidget, const DataModel::Origin* origin,
+void setInfoWidgetContent(OriginInfoWidget* infoWidget, const std::string &eventID,
+                          const DataModel::Origin* origin,
                           const std::string& preferredMagnitudeId) {
 	infoWidget->setPreferredOriginId(origin->publicID().c_str());
 
-	QString time = origin->time().value().toString("%F - %T").c_str();
+	QString time = Gui::timeToString(origin->time().value(), "%F - %T");
 	infoWidget->setTime(time);
 
 	QString latitude = QString("%1").arg(origin->latitude());
@@ -883,7 +885,7 @@ bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 
 
 
-QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString& title, Gui::Map::Symbol* mapSymbol) {
+QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString &title, Gui::Map::Symbol *mapSymbol) {
 	QAction* action = new QAction(title, NULL);
 
 	QVariant variant = qVariantFromValue(static_cast<void*>(mapSymbol));
@@ -1641,14 +1643,14 @@ void MvMainWindow::updateInfoWidget(const DataModel::Amplitude* amplitude) {
 void MvMainWindow::updateInfoWidget(const DataModel::Event* event) {
 	if ( EventInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
-	std::string eventId = event->publicID();
+	const std::string &eventId = event->publicID();
 	OriginInfoWidget* infoWidget = EventInfoWidgetRegistry::Instance()->find(eventId);
 	if ( !infoWidget ) return;
 
 	std::string originId = event->preferredOriginID();
 	DataModel::Origin* origin = _eventDataRepository.findOrigin(originId);
 
-	setInfoWidgetContent(infoWidget, origin, event->preferredMagnitudeID());
+	setInfoWidgetContent(infoWidget, eventId, origin, event->preferredMagnitudeID());
 	infoWidget->updateContent();
 }
 
@@ -1963,7 +1965,7 @@ void MvMainWindow::showInfoWidget() {
 
 	QVariant variant = contextMenuAction->data();
 	void* data = variant.value<void*>();
-	Gui::Map::Symbol* mapSymbol = static_cast<Gui::Map::Symbol*>(data);
+	Gui::Map::Symbol *mapSymbol = static_cast<Gui::Map::Symbol*>(data);
 
 	std::string mapSymbolId = mapSymbol->id();
 
@@ -1994,15 +1996,15 @@ void MvMainWindow::showInfoWidget() {
 		::showInfoWidget(infoWidget);
 	}
 	else if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
-		OriginInfoWidget* infoWidget = new OriginInfoWidget(mapSymbolId, this);
+		OriginInfoWidget *infoWidget = new OriginInfoWidget(mapSymbolId, this);
 
-		std::string eventId = mapSymbol->id();
-		EventData* eventData = _eventDataRepository.findEvent(eventId);
+		const std::string &eventId = mapSymbol->id();
+		EventData *eventData = _eventDataRepository.findEvent(eventId);
 
 		std::string preferredOriginId = eventData->object()->preferredOriginID();
-		DataModel::Origin* origin = _eventDataRepository.findOrigin(preferredOriginId);
+		DataModel::Origin *origin = _eventDataRepository.findOrigin(preferredOriginId);
 
-		setInfoWidgetContent(infoWidget, origin, eventData->object()->preferredMagnitudeID());
+		setInfoWidgetContent(infoWidget, eventId, origin, eventData->object()->preferredMagnitudeID());
 		::showInfoWidget(infoWidget);
 	}
 }
