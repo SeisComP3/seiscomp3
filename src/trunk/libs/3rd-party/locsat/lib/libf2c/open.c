@@ -243,7 +243,7 @@ integer f_open(olist *a)
 #ifdef NON_ANSI_STDIO
  replace:
 #endif
-		if (tf = FOPEN(buf,f__w_mode[0]))
+		if ((tf = FOPEN(buf,f__w_mode[0])))
 			fclose(tf);
 	}
 
@@ -253,9 +253,9 @@ integer f_open(olist *a)
 	if ((s = a->oacc) && b->url)
 		ufmt = 0;
 	if(!(tf = FOPEN(buf, f__w_mode[ufmt|2]))) {
-		if (tf = FOPEN(buf, f__r_mode[ufmt]))
+		if ((tf = FOPEN(buf, f__r_mode[ufmt])))
 			b->urw = 1;
-		else if (tf = FOPEN(buf, f__w_mode[ufmt])) {
+		else if ((tf = FOPEN(buf, f__w_mode[ufmt]))) {
 			b->uwrt = 1;
 			b->urw = 2;
 			}
@@ -267,12 +267,13 @@ integer f_open(olist *a)
 	if((b->uinode = f__inode(buf,&b->udev)) == -1)
 		opnerr(a->oerr,108,"open")
 #endif
-	if(b->useek)
+	if(b->useek) {
 		if (a->orl)
 			rewind(b->ufd);
 		else if ((s = a->oacc) && (*s == 'a' || *s == 'A')
 			&& FSEEK(b->ufd, 0L, SEEK_END))
 				opnerr(a->oerr,129,"open");
+	}
 	return(0);
 }
 

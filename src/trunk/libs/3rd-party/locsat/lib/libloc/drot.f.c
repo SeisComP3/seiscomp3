@@ -53,20 +53,20 @@ struct {
 /* AUTHOR */
 /* 	John Dongarra, March 1978. */
 /* Subroutine */ int drot_(n, dx, incx, dy, incy, c__, s)
-integer *n;
+int *n;
 doublereal *dx;
-integer *incx;
+int *incx;
 doublereal *dy;
-integer *incy;
+int *incy;
 doublereal *c__, *s;
 {
     /* System generated locals */
-    integer i__1;
+    int i__1;
 
     /* Local variables */
-    static integer i__;
+    static int i__;
     static doublereal dtemp;
-    static integer ix, iy;
+    static int ix, iy;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */

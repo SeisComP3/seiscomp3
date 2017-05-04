@@ -15,7 +15,7 @@ struct sccsrdcortab1_1_ {
 #define sccsrdcortab1_1 (*(struct sccsrdcortab1_1_ *) &sccsrdcortab1_)
 
 static struct {
-    real splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
+    float splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
 	    [2][210] */, xlat1[1350]	/* was [3][15][2][15] */, xlat2[1350]	
 	    /* was [3][15][2][15] */, xlon1[1350]	/* was [3][15][2][15] 
 	    */, xlon2[1350]	/* was [3][15][2][15] */;
@@ -43,8 +43,8 @@ struct {
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__9 = 9;
+static int c__1 = 1;
+static int c__9 = 9;
 
 /* NAME */
 /* 	rdcortab1 -- Read station correction data from a single file. */
@@ -91,44 +91,44 @@ static integer c__9 = 9;
 /* Subroutine */ int rdcortab1_(filnam, wavid, nwav, indx, jtype, ista, iarea,
 	 ierr, filnam_len, wavid_len)
 char *filnam, *wavid;
-integer *nwav, *indx, *jtype, *ista, *iarea, *ierr;
+int *nwav, *indx, *jtype, *ista, *iarea, *ierr;
 ftnlen filnam_len;
 ftnlen wavid_len;
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4;
+    int i__1, i__2, i__3, i__4;
     olist o__1;
     cllist cl__1;
     alist al__1;
 
     /* Builtin functions */
-    integer f_open(), f_rew(), s_rsfe(), do_fio(), e_rsfe(), s_cmp();
+    int f_open(), f_rew(), s_rsfe(), do_fio(), e_rsfe(), s_cmp();
     logical l_gt();
-    integer s_wsle(), do_lio(), e_wsle();
+    int s_wsle(), do_lio(), e_wsle();
     /* Subroutine */ int s_stop();
-    integer s_rsle(), e_rsle(), f_clos(), s_wsfe(), e_wsfe();
+    int s_rsle(), e_rsle(), f_clos(), s_wsfe(), e_wsfe();
 
     /* Local variables */
-    static integer jend;
+    static int jend;
     static shortint isrc[25];
-    static real dist;
-    static integer isln;
-    static real xlat;
-    static integer iphz[25], islt;
+    static float dist;
+    static int isln;
+    static float xlat;
+    static int iphz[25], islt;
     static shortint nphz;
-    static real xlon;
-    static integer i__, j, k, n, isave, j1, j2;
-    extern integer lnblnk_();
+    static float xlon;
+    static int i__, j, k, n, isave, j1, j2;
+    extern int lnblnk_();
     static char phases[200];
     extern /* Subroutine */ int clitok_();
     static char string[100];
-    static integer ind;
+    static int ind;
     static shortint nln;
-    static integer ios;
-    static real sln[15];
+    static int ios;
+    static float sln[15];
     static shortint nlt;
     static char phz[8*25];
-    static real slt[15];
+    static float slt[15];
     static shortint nodetot;
 
     /* Fortran I/O blocks */
@@ -236,10 +236,10 @@ ftnlen wavid_len;
 	goto L9000;
     }
     for (i__ = 1; i__ <= 25; ++i__) {
-	clitok_(phases, &i__, phz + (i__ - 1 << 3), &n, (ftnlen)200, (ftnlen)
+	clitok_(phases, &i__, phz + ((i__ - 1) << 3), &n, (ftnlen)200, (ftnlen)
 		8);
-	if (s_cmp(phz + (i__ - 1 << 3), " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    j1 = lnblnk_(phz + (i__ - 1 << 3), (ftnlen)8);
+	if (s_cmp(phz + ((i__ - 1) << 3), " ", (ftnlen)8, (ftnlen)1) != 0) {
+	    j1 = lnblnk_(phz + ((i__ - 1) << 3), (ftnlen)8);
 	    i__1 = *nwav;
 	    for (k = 1; k <= i__1; ++k) {
 		j2 = lnblnk_(wavid + k * wavid_len, wavid_len);
@@ -253,7 +253,7 @@ ftnlen wavid_len;
 /* L1012: */
 		}
 L1014:
-		if (j1 == j2 && s_cmp(phz + (i__ - 1 << 3), wavid + k * 
+		if (j1 == j2 && s_cmp(phz + ((i__ - 1) << 3), wavid + k *
 			wavid_len, j1, j2) == 0) {
 		    nphz = (shortint) (nphz + 1);
 		    iphz[nphz - 1] = k;
@@ -321,8 +321,8 @@ L1020:
 	    goto L9000;
 	}
 	s_rsfe(&io___23);
-	do_fio(&c__1, (char *)&xlat, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xlon, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&xlat, (ftnlen)sizeof(float));
+	do_fio(&c__1, (char *)&xlon, (ftnlen)sizeof(float));
 	e_rsfe();
 	s_rsfe(&io___26);
 	do_fio(&c__1, (char *)&nlt, (ftnlen)sizeof(shortint));
@@ -342,25 +342,25 @@ L1020:
 	s_rsfe(&io___31);
 	i__2 = islt;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    do_fio(&c__1, (char *)&slt[i__ - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&slt[i__ - 1], (ftnlen)sizeof(float));
 	}
 	e_rsfe();
 	s_rsfe(&io___33);
 	i__2 = isln;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    do_fio(&c__1, (char *)&sln[i__ - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&sln[i__ - 1], (ftnlen)sizeof(float));
 	}
 	e_rsfe();
 	i__2 = islt;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 /* L1050: */
-	    corrs_1.splat[*jtype + (ind + (*iarea + (j1 * islt + i__ << 1)) * 
+	    corrs_1.splat[*jtype + (ind + (*iarea + ((j1 * islt + i__) << 1)) *
 		    15) * 3 - 139] = slt[i__ - 1];
 	}
 	i__2 = isln;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 /* L1060: */
-	    corrs_1.splon[*jtype + (ind + (*iarea + (j1 * isln + i__ << 1)) * 
+	    corrs_1.splon[*jtype + (ind + (*iarea + ((j1 * isln + i__) << 1)) *
 		    15) * 3 - 139] = sln[i__ - 1];
 	}
 	dist = slt[0];
@@ -423,8 +423,7 @@ g. in", (ftnlen)47);
 	    }
 	    i__4 = nln;
 	    for (i__ = 1; i__ <= i__4; ++i__) {
-		i__3 = do_fio(&c__1, (char *)&corrs_1.stacor[*jtype + (ind + (
-			*iarea + (nodetot + i__ << 1)) * 15) * 3 - 139], (
+		i__3 = do_fio(&c__1, (char *)&corrs_1.stacor[*jtype + (ind + (*iarea + ((nodetot + i__) << 1)) * 15) * 3 - 139], (
 			ftnlen)sizeof(shortint));
 		if (i__3 != 0) {
 		    goto L9000;

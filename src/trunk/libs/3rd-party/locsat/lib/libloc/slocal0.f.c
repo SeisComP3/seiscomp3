@@ -28,8 +28,8 @@ struct {
 
 /* Table of constant values */
 
-static real c_b6 = (float)-1.;
-static integer c__4 = 4;
+static float c_b6 = (float)-1.;
+static int c__4 = 4;
 
 /* NAME */
 /* 	slocal0 -- Compute horizontal slownesses and partial derivatives. */
@@ -87,38 +87,38 @@ static integer c__4 = 4;
 /* 	Steve Bratt, December 1988. */
 /* Subroutine */ int slocal0_(phase_id__, zfoc, radius, delta, azi, maxtbd, 
 	maxtbz, ntbd, ntbz, tbd, tbz, tbtt, dcalx, atx, iterr)
-integer *phase_id__;
-real *zfoc, *radius, *delta, *azi;
-integer *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt, *dcalx;
+int *phase_id__;
+float *zfoc, *radius, *delta, *azi;
+int *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt, *dcalx;
 doublereal *atx;
-integer *iterr;
+int *iterr;
 {
     /* System generated locals */
-    integer tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
+    int tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
     double sin(), cos();
 
     /* Local variables */
-    static integer imin, jmin, imax, jmax;
-    static real tbds[4], dtdz;
+    static int imin, jmin, imax, jmax;
+    static float tbds[4], dtdz;
     static doublereal azir;
-    static integer iext, jext;
-    static real tbzs[4], slow;
-    static integer i__, j;
+    static int iext, jext;
+    static float tbzs[4], slow;
+    static int i__, j;
     extern /* Subroutine */ int brack_();
-    static integer ihole, ileft, jleft, idist;
-    static real dsldz, ttime;
-    static integer itotd;
-    static real tbsls[16]	/* was [4][4] */;
-    static integer do_extrap__, itotz, jz, nz, idepth;
+    static int ihole, ileft, jleft, idist;
+    static float dsldz, ttime;
+    static int itotd;
+    static float tbsls[16]	/* was [4][4] */;
+    static int do_extrap__, itotz, jz, nz, idepth;
     static doublereal cosazi;
-    static real dcross;
+    static float dcross;
     static doublereal sinazi;
     extern /* Subroutine */ int holint2_();
-    static real dslddel;
-    static integer ibad;
+    static float dslddel;
+    static int ibad;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- Parameter declarations ---- */
@@ -332,38 +332,38 @@ integer *iterr;
 /* 	Steve Bratt, December 1988. */
 /* Subroutine */ int slocal1_(zfoc, radius, delta, azi, maxtbd, maxtbz, ntbd, 
 	ntbz, tbd, tbz, tbtt, dcalx, atx, iterr)
-real *zfoc, *radius, *delta, *azi;
-integer *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt, *dcalx;
+float *zfoc, *radius, *delta, *azi;
+int *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt, *dcalx;
 doublereal *atx;
-integer *iterr;
+int *iterr;
 {
     /* System generated locals */
-    integer tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
+    int tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
     double sin(), cos();
 
     /* Local variables */
-    static integer imin, jmin, imax, jmax;
-    static real tbds[4], dtdz;
+    static int imin, jmin, imax, jmax;
+    static float tbds[4], dtdz;
     static doublereal azir;
-    static integer iext, jext;
-    static real tbzs[4], slow;
-    static integer i__, j;
+    static int iext, jext;
+    static float tbzs[4], slow;
+    static int i__, j;
     extern /* Subroutine */ int brack_();
-    static integer ileft, jleft;
-    static real dsldz, ttime;
-    static integer itotd;
-    static real tbsls[16]	/* was [4][4] */;
-    static integer itotz;
+    static int ileft, jleft;
+    static float dsldz, ttime;
+    static int itotd;
+    static float tbsls[16]	/* was [4][4] */;
+    static int itotz;
     extern /* Subroutine */ int holin2_();
-    static integer jz, nz;
+    static int jz, nz;
     static doublereal cosazi;
-    static real dcross;
+    static float dcross;
     static doublereal sinazi;
-    static real dslddel;
-    static integer ibad;
+    static float dslddel;
+    static int ibad;
 
 /*     ---- Parameter declarations ---- */
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */

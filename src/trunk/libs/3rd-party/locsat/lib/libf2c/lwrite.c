@@ -138,7 +138,7 @@ l_g(char *buf, double n)
 	switch(*b) {
 #ifndef WANT_LEAD_0
 		case '0':
-			while(b[0] = b[1])
+			while((b[0] = b[1]))
 				b++;
 			break;
 #endif
@@ -163,8 +163,7 @@ l_g(char *buf, double n)
 				while(*++b);
 				goto f__ret;
 			case 'E':
-				for(c1 = '.', c = 'E';  *b = c1;
-					c1 = c, c = *++b);
+				for(c1 = '.', c = 'E'; (*b = c1); c1 = c, c = *++b);
 				goto f__ret;
 			}
 		}
@@ -187,7 +186,7 @@ l_put(register char *s)
 #endif
 	register int c;
 
-	while(c = *s++)
+	while((c = *s++))
 		(*pn)(c);
 	}
 

@@ -1,7 +1,3 @@
-#ifndef	lint
-static	char	SccsId[] = "@(#)htoe_.c	44.1	9/23/91";
-#endif
-
 /* Author: T. McElfresh */
 
 /* FORTRAN callable function to convert "human" to epochal time */

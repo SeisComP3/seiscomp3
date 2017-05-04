@@ -28,7 +28,7 @@ struct {
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static int c__1 = 1;
 
 /* NAME */
 /* 	rdtab -- Establish filename structures for reading tables */
@@ -73,27 +73,27 @@ static integer c__1 = 1;
 /* Subroutine */ int rdtab_(froot, wavid, nwav, maxtbd, maxtbz, ntbd, ntbz, 
 	tbd, tbz, tbtt, ierr, froot_len, wavid_len)
 char *froot, *wavid;
-integer *nwav, *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt;
-integer *ierr;
+int *nwav, *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt;
+int *ierr;
 ftnlen froot_len;
 ftnlen wavid_len;
 {
     /* System generated locals */
-    integer tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
+    int tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
 	     tbz_offset, i__1;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy();
-    integer s_wsfe(), do_fio(), e_wsfe();
+    int s_wsfe(), do_fio(), e_wsfe();
 
     /* Local variables */
-    static integer icnt, k, luerr;
+    static int icnt, k, luerr;
     extern /* Subroutine */ int rdtab1_();
-    static integer js, kr;
+    static int js, kr;
     static char filnam[100];
-    extern integer lnblnk_();
-    static integer nfiles;
+    extern int lnblnk_();
+    static int nfiles;
 
     /* Fortran I/O blocks */
     static cilist io___8 = { 0, 0, 0, "(a)", 0 };

@@ -41,16 +41,13 @@
 static char	SccsId[] = "@(#)splie2.c	40.1	10/12/90";
 #endif
 
-void splie2 (x1a, x2a, ya, m, n, y2a)
 
-float	x1a[], x2a[], **ya, **y2a;
-int	m, n;
+void spline(float x[], float y[], int n, float yp1, float ypn, float y2[]);
 
-{
-	int	j;
-	void spline();
+void splie2(float x1a[], float x2a[], float **ya, int m, int n, float **y2a) {
+	int j;
 
-	for (j = 1; j <= m; j++)
-		spline (x2a, ya[j], n, 1.0e30, 1.0e30, y2a[j]);
+	for ( j = 1; j <= m; ++j )
+		spline(x2a, ya[j], n, 1.0e30, 1.0e30, y2a[j]);
 }
 

@@ -62,34 +62,35 @@ static	char	SccsId[] = "@(#)rdtttab.c	44.1	9/20/91";
 			}
 
 
-rdtttab (froot, phase_type_ptr, nwav, maxtbd, maxtbz, ntbd, ntbz,
-	 tbd, tbz, tbtt, ierr)
-
-int	*ierr,				/* Error flag 			      */
-	maxtbd, maxtbz, nwav,		/* Array lengths 		      */
-	*ntbd, *ntbz;			/* Size [nwav]  		      */
-float	*tbd,				/* Size [nwav][maxtbd] 		      */
-	*tbz,				/* Size [nwav][maxtbz]	 	      */
-	*tbtt;				/* Size [nwav][maxtbz][maxtbd]	      */
-char	*froot,				/* Size [ca. 1024] 	 	 	      */
-	**phase_type_ptr;		/* Size [nwav][8] 		      */
-
+void rdtttab(char *froot, /* Size [ca. 1024] */
+             char **phase_type_ptr, /* Size [nwav][8] */
+             int nwav,    /* Array lengths */
+             int maxtbd,  /* Array lengths */
+             int maxtbz,  /* Array lengths */
+             int *ntbd,   /* Array lengths */
+             int *ntbz,   /* Array lengths */
+             float *tbd,  /* Size [nwav][maxtbd] */
+             float *tbz,  /* Size [nwav][maxtbz] */
+             float *tbtt, /* Size [nwav][maxtbz][maxtbd] */
+             int *ierr) /* Error flag */
 {
-	int	i, j, k,		/* Loop counters		      */
-		err,			/* Local error flag		      */
-		ntbzx,			/* Number of depth samples to read    */
-		ntbdx;			/* Number of distance samples to read */
-	int	cnt, num_files;		/* File counters		      */
-	float	tempval,		/* Temporary read before assign       */
-		*temp_tbz,
-		*temp_tbd,
-		*temp_tt,
-		*tflt;
-	char	filnam[1024],	/* ["root" + "." + "postname" + NULL] */
-		**s2ptr;		/* Temporary array pointer	      */
-	char	readtemp[128];
-	FILE	*opf, *fopen();
+	int i, j, k,  /* Loop counters */
+	    err,      /* Local error flag */
+	    ntbzx,    /* Number of depth samples to read    */
+		ntbdx;    /* Number of distance samples to read */
 
+	int cnt, num_files; /* File counters		      */
+	float  tempval,     /* Temporary read before assign       */
+	      *temp_tbz,
+	      *temp_tbd,
+	      *temp_tt,
+	      *tflt;
+
+	char filnam[1024],  /* ["root" + "." + "postname" + NULL] */
+	     **s2ptr;       /* Temporary array pointer */
+
+	char readtemp[128];
+	FILE *opf;
 
 	/* Initialize */
 
@@ -99,28 +100,28 @@ char	*froot,				/* Size [ca. 1024] 	 	 	      */
 
 	cnt = 0; num_files = 0;		/* Counters */
 
-
 	/* Read the files */
 
-	for (err = 0, s2ptr = phase_type_ptr, k = 0; k < nwav && !err; ++k)
-	{
-		strcpy (filnam, froot);
-		strcat (filnam, ".");
-		
-		strcat (filnam, *s2ptr);
+	for ( err = 0, s2ptr = phase_type_ptr, k = 0; k < nwav && !err; ++k, ++s2ptr ) {
+		strcpy(filnam, froot);
+		strcat(filnam, ".");
+		strcat(filnam, *s2ptr);
 		
 		/** HACK to avoid problems with filesystems not able to handle upper/lower case filenames 
 		**  e.g. Microsofts NTFS or HFS+ on Mac's
 		*/
-		if (strcmp(*s2ptr, "pP") == 0)
-			strcat (filnam, "_");
+		if ( strcmp(*s2ptr, "pP") == 0 )
+			strcat(filnam, "_");
 
-		s2ptr++;
+		// Initialize grid with -1
+		tflt = temp_tt;
+		for ( i = 0; i < maxtbz; ++i )
+			for ( j = 0; j < maxtbd; ++j, ++tflt )
+				*tflt = -1.0f;
 
 		/* Open files */
- 
-		if ((opf = fopen (filnam, "r")) == NULL)
-		{
+
+		if ( (opf = fopen(filnam, "r")) == NULL ) {
 			fprintf (stderr, "\nFile %s will not open!\n", filnam);
 			ntbd[k] = 0; ntbz[k] = 0;
 			temp_tbz += maxtbz;
@@ -128,105 +129,102 @@ char	*froot,				/* Size [ca. 1024] 	 	 	      */
 			temp_tt += maxtbd * maxtbz;
 			continue;
 		}
-		cnt++;			/* Successful open counter */
 
+		++cnt;  /* Successful open counter */
 
 		/* Begin reading info -- Start with depth sampling */
- 
-		if (fscanf (opf, "%*[^\n]\n%d%*[^\n]", &ntbzx) != 1)
-		{
+
+		if ( fscanf(opf, "%*[^\n]\n%d%*[^\n]", &ntbzx) != 1 ) {
 			READ_E1("number of depth samples");
 			err = 2;
 		}
 
-
-		if (!err && (ntbz[k]=ntbzx) > maxtbz)
-		{
-			fprintf (stderr, "%s %s, %d used, %d skipped\n",
-				 "\nToo many depth samples in file",
-				 filnam, maxtbz, ntbzx-maxtbz);
+		if ( !err && (ntbz[k]=ntbzx) > maxtbz ) {
+			fprintf(stderr, "%s %s, %d used, %d skipped\n",
+			        "\nToo many depth samples in file",
+			        filnam, maxtbz, ntbzx-maxtbz);
 			ntbz[k] = maxtbz;
 		}
 
-		for (tflt = temp_tbz, i = 0; i < ntbzx && !err; ++i)
-		{
-			if (fscanf (opf, "%f", &tempval) != 1)
-			{
+		for ( tflt = temp_tbz, i = 0; i < ntbzx && !err; ++i ) {
+			if ( fscanf(opf, "%f", &tempval) != 1 ) {
 				READ_E1("depth sample value");
 				err = 2;
 			}
 
 			/* Skip, if necessary */
-			if (i < ntbz[k] ) *tflt++ = tempval;
+			if ( i < ntbz[k] )
+				*tflt++ = tempval;
 		}
+
 		temp_tbz += maxtbz;
 
  
 		/* Read distance sampling */
  
-		if (fscanf (opf, "%d%*[^\n]", &ntbdx) != 1)
-		{
+		if ( fscanf (opf, "%d%*[^\n]", &ntbdx) != 1 ) {
 			READ_E1("number of distance samples");
 			err = 2;
 		}
 
-		if (!err && (ntbd[k]=ntbdx) > maxtbd)
-		{
+		if ( !err && (ntbd[k]=ntbdx) > maxtbd ) {
 			fprintf (stderr, "%s %s, %d used, %d skipped\n",
-				 "\nToo many distance samples in file",
-				 filnam, maxtbd, ntbdx-maxtbd);
+			         "\nToo many distance samples in file",
+			         filnam, maxtbd, ntbdx-maxtbd);
 			ntbd[k] = maxtbd;
 		}
 
-		for (tflt = temp_tbd, i = 0; i < ntbdx && !err; ++i)
-		{
-			if (fscanf (opf, "%f", &tempval) != 1)
-			{
+		for ( tflt = temp_tbd, i = 0; i < ntbdx && !err; ++i ) {
+			if ( fscanf (opf, "%f", &tempval) != 1 ) {
 				READ_E1("distance sample value");
 				err = 2;
 			}
 
 			/* Skip, if necessary */
-			if (i < ntbd[k]) *tflt++ = tempval;
+			if ( i < ntbd[k] )
+				*tflt++ = tempval;
 		}
+
 		temp_tbd += maxtbd;
 
 
 		/* Read travel-time tables */
  
-		for (j = 0 ; j < ntbzx && !err; j++ )
-		{
+		for ( j = 0 ; j < ntbzx && !err; j++ ) {
 			/* skip the comment line */
-			while (getc(opf) != '#');
-			while (getc(opf) != '\n');
+			while ( getc(opf) != '#' );
+			while ( getc(opf) != '\n' );
 
-			for (tflt = temp_tt, i = 0; i < ntbdx & !err; ++i)
-			{
-				fgets(readtemp, 127, opf);
-				if (sscanf (readtemp, "%f", &tempval) != 1)
-				{
+			for ( tflt = temp_tt, i = 0; i < ntbdx && !err; ++i ) {
+				if ( fgets(readtemp, 127, opf) == NULL ) {
+					READ_E1("travel-time value text");
+					err = 2;
+				}
+
+				if ( sscanf(readtemp, "%f", &tempval) != 1 ) {
 					READ_E1("travel-time value");
 					err = 2;
 				}
 
 				/* Skip, if necessary */
-				if (j < ntbd[k] ) *tflt++ = tempval;
+				if ( j < ntbd[k] )
+					*tflt++ = tempval;
 			}
+
 			temp_tt += maxtbd;
 		}
 
-		if (j < maxtbz ) temp_tt += ((maxtbz - j) * maxtbd);
+		if ( j < maxtbz )
+			temp_tt += (maxtbz - j) * maxtbd;
  
-		num_files++;
+		++num_files;
 		fclose(opf);
 	}
 
-
-	if (num_files == 0 && cnt == 0)	/* Error: No tables found */
-	{
+	if ( num_files == 0 && cnt == 0 ) { /* Error: No tables found */
 		fprintf (stderr, "\nrdtttab: No tables can be read\n");
 		err = 1;
 	}
 
-	*ierr = err;	
-} 
+	*ierr = err;
+}

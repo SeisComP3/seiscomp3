@@ -53,19 +53,19 @@ struct {
 /* AUTHOR */
 /* 	John Dongarra, March 1978. */
 /* Subroutine */ int dswap_(n, dx, incx, dy, incy)
-integer *n;
+int *n;
 doublereal *dx;
-integer *incx;
+int *incx;
 doublereal *dy;
-integer *incy;
+int *incy;
 {
     /* System generated locals */
-    integer i__1;
+    int i__1;
 
     /* Local variables */
-    static integer i__, m;
+    static int i__, m;
     static doublereal dtemp;
-    static integer ix, iy, mp1;
+    static int ix, iy, mp1;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */

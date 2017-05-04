@@ -120,16 +120,17 @@
 #include "db_origin.h"
 #include "db_site.h"
 
-#ifdef SCCSID
-static char	SccsId[] = "@(#)predsat.c	44.1	9/20/91	Copyright 1990 Science Applications International Corporation.";
-#endif
-
 #define	DEG_TO_KM	111.195
 #define	DEG_TO_RAD	0.017453293
 #define SIGN(b1, b2)	((b2) >= 0 ? -(b1) : (b1))
 
+void distaz2_(double *alat1, double *alon1, double *alat2, double *alon2, double *delta, double *azi, double *baz);
+void latlon2_(double *alat1, double *alon1, double *delta, double *azi, double *alat2, double *alon2);
+void ttime_calc_(int *phase_id, double *atx, float *azi, float *delta, float *radius, float *zfoc, float *dcalx, int *iterr);
+void slow_calc_(int *phase_id, double *atx, float *azi, float *delta, float *radius, float *zfoc, float *dcalx, int *iserr);
+
 void
-predsat (sites, num_sta, origin, origerr, data_sta_id, data_phase_type,
+predsat(sites, num_sta, origin, origerr, data_sta_id, data_phase_type,
 	 phase_type, len_phase_type, num_phases, num_data, slow_flag,
 	 print_flag, out_file, dist_min, dist_max, dist_center, tt_min,
 	 tt_max, tt_center, az_min, az_max, az_center, slow_min, slow_max,
@@ -368,8 +369,7 @@ wavfnd:
 
 	for (n = 0; n < num_times; n++)
 	{
-		ttime_calc_ (&kwav, atx, &aztt[n], &dist[n], &radius, &z[n],
-			     &dcalx, &iterr[n]);
+		ttime_calc_(&kwav, atx, &aztt[n], &dist[n], &radius, &z[n], &dcalx, &iterr[n]);
 
 		/*
 		 * Use only sucessfully interpolated and extrapolated results

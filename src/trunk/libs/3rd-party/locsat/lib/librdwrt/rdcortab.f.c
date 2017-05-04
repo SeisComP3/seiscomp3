@@ -14,7 +14,7 @@ struct sccsrdcortab_1_ {
 #define sccsrdcortab_1 (*(struct sccsrdcortab_1_ *) &sccsrdcortab_)
 
 static struct {
-    real splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
+    float splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
 	    [2][210] */, xlat1[1350]	/* was [3][15][2][15] */, xlat2[1350]	
 	    /* was [3][15][2][15] */, xlon1[1350]	/* was [3][15][2][15] 
 	    */, xlon2[1350]	/* was [3][15][2][15] */;
@@ -42,10 +42,10 @@ struct {
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__2 = 2;
-static integer c__4 = 4;
+static int c__9 = 9;
+static int c__1 = 1;
+static int c__2 = 2;
+static int c__4 = 4;
 
 /* NAME */
 /* 	rdcortab -- Read station correction tables in succession. */
@@ -98,9 +98,9 @@ static integer c__4 = 4;
 /* Subroutine */ int rdcortab_(froot, cortyp, ntype, staid, wavid, nsta, nwav,
 	 ierr, froot_len, cortyp_len, staid_len, wavid_len)
 char *froot, *cortyp;
-integer *ntype;
+int *ntype;
 char *staid, *wavid;
-integer *nsta, *nwav, *ierr;
+int *nsta, *nwav, *ierr;
 ftnlen froot_len;
 ftnlen cortyp_len;
 ftnlen staid_len;
@@ -108,27 +108,27 @@ ftnlen wavid_len;
 {
     /* System generated locals */
     address a__1[2], a__2[4];
-    integer i__1[2], i__2, i__3[4], i__4;
+    int i__1[2], i__2, i__3[4], i__4;
     olist o__1;
     cllist cl__1;
 
     /* Builtin functions */
-    integer s_wsle(), do_lio(), e_wsle();
+    int s_wsle(), do_lio(), e_wsle();
     /* Subroutine */ int s_stop(), s_copy();
-    integer f_open(), s_rsfe(), do_fio(), e_rsfe();
+    int f_open(), s_rsfe(), do_fio(), e_rsfe();
     /* Subroutine */ int s_cat();
-    integer f_clos(), s_cmp(), s_wsfe(), e_wsfe();
+    int f_clos(), s_cmp(), s_wsfe(), e_wsfe();
 
     /* Local variables */
-    static integer icnt, ista, indx[2];
+    static int icnt, ista, indx[2];
     static char corr_dir__[30];
     extern /* Subroutine */ int rdcortab1_();
-    static integer itype, jtype;
+    static int itype, jtype;
     static char ct[8];
-    static integer js, jt, kr;
+    static int js, jt, kr;
     static char filnam[100];
-    extern integer lnblnk_();
-    static integer nfiles, ios;
+    extern int lnblnk_();
+    static int nfiles, ios;
 
     /* Fortran I/O blocks */
     static cilist io___1 = { 0, 6, 0, 0, 0 };

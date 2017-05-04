@@ -1,29 +1,4 @@
-/*  -- translated by f2c (version 20000121).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#include "f2c.h"
-
-/* Common Block Declarations */
-
-struct sccsfixhol_1_ {
-    char sccsid[80];
-};
-
-#define sccsfixhol_1 (*(struct sccsfixhol_1_ *) &sccsfixhol_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccsfixhol_ = { {'@', '(', '#', ')', 'f', 'i', 'x', 'h', 'o', 'l', '.', 
-	    'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0', '/', '9',
-	     '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' '} };
+#include "utils.h"
 
 
 /* NAME */
@@ -71,84 +46,89 @@ struct {
 
 /* AUTHOR */
 
-/* Subroutine */ int fixhol_(m, x, f, fbad, ms, xs, fs)
-integer *m;
-real *x, *f, *fbad;
-integer *ms;
-real *xs, *fs;
-{
-    /* System generated locals */
-    integer i__1, i__2, i__3;
+int fixhol_(int *m, float *x, float *f, float *fbad, int *ms, float *xs, float *fs) {
+	/* System generated locals */
+	int i__1, i__2, i__3;
 
-    /* Local variables */
-    static integer i__;
+	/* Local variables */
+	int i__;
 
-/* K.S. 1-Dec-97, changed 'undefined' to 'none' */
-/*     ---- On entry ---- */
-/*     ---- On return ---- */
-/*     ---- Internal variables ---- */
-/*     Trivial case */
-    /* Parameter adjustments */
-    --f;
-    --x;
-    --xs;
-    --fs;
+	/* K.S. 1-Dec-97, changed 'undefined' to 'none' */
+	/*     ---- On entry ---- */
+	/*     ---- On return ---- */
+	/*     ---- Internal variables ---- */
+	/*     Trivial case */
+	/* Parameter adjustments */
+	--f;
+	--x;
+	--xs;
+	--fs;
 
-    /* Function Body */
-    if (*m <= 0) {
-	*ms = 0;
-	return 0;
-    }
-/*     Set up first point */
-    *ms = 1;
-    xs[1] = x[1];
-    fs[1] = f[1];
-/*     Do the rest */
-    i__1 = *m;
-    for (i__ = 2; i__ <= i__1; ++i__) {
-	if (f[i__] != *fbad) {
-	    if (fs[*ms] != *fbad) {
-		if (x[i__] == xs[*ms]) {
-		    if (f[i__] == fs[*ms]) {
-			goto L1010;
-		    }
-		}
-	    } else {
-		if (*ms > 1) {
-		    ++(*ms);
-		}
-		xs[*ms] = x[i__];
-		fs[*ms] = *fbad;
-	    }
-	    ++(*ms);
-	    xs[*ms] = x[i__];
-	    fs[*ms] = f[i__];
-	} else {
-	    if (fs[*ms] != *fbad) {
-		if (*ms > 1) {
-		    if (fs[*ms - 1] == *fbad) {
-/* Computing MAX */
-			i__2 = 1, i__3 = *ms - 2;
-			*ms = max(i__2,i__3);
-			goto L1010;
-		    }
-		}
-		++(*ms);
-		xs[*ms] = xs[*ms - 1];
-		fs[*ms] = *fbad;
-	    }
+	/* Function Body */
+	if (*m <= 0) {
+		*ms = 0;
+		return 0;
 	}
+
+	/*     Set up first point */
+	*ms = 1;
+	xs[1] = x[1];
+	fs[1] = f[1];
+	/*     Do the rest */
+	i__1 = *m;
+
+	for (i__ = 2; i__ <= i__1; ++i__) {
+		if (f[i__] != *fbad) {
+			if (fs[*ms] != *fbad) {
+				if (x[i__] == xs[*ms]) {
+					if (f[i__] == fs[*ms]) {
+						goto L1010;
+					}
+				}
+			}
+			else {
+				if (*ms > 1) {
+					++(*ms);
+				}
+
+				xs[*ms] = x[i__];
+				fs[*ms] = *fbad;
+			}
+
+			++(*ms);
+			xs[*ms] = x[i__];
+			fs[*ms] = f[i__];
+		}
+		else {
+			if (fs[*ms] != *fbad) {
+				if (*ms > 1) {
+					if (fs[*ms - 1] == *fbad) {
+						/* Computing MAX */
+						i__2 = 1, i__3 = *ms - 2;
+						*ms = max(i__2,i__3);
+						goto L1010;
+					}
+				}
+
+				++(*ms);
+				xs[*ms] = xs[*ms - 1];
+				fs[*ms] = *fbad;
+			}
+		}
+
 L1000:
-	if (*ms > 2) {
-	    if (xs[*ms] == xs[*ms - 2]) {
-		fs[*ms - 1] = fs[*ms];
-		--(*ms);
-		goto L1000;
-	    }
-	}
+		if (*ms > 2) {
+			if (xs[*ms] == xs[*ms - 2]) {
+				fs[*ms - 1] = fs[*ms];
+				--(*ms);
+				goto L1000;
+			}
+		}
+
 L1010:
-	;
-    }
-    return 0;
-} /* fixhol_ */
+		;
+	}
+
+	return 0;
+}
 
