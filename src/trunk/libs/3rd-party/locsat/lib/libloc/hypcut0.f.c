@@ -5,30 +5,15 @@
 
 #include "f2c.h"
 
-/* Common Block Declarations */
 
-struct sccshypcut0_1_ {
-    char sccsid[80];
-};
-
-#define sccshypcut0_1 (*(struct sccshypcut0_1_ *) &sccshypcut0_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccshypcut0_ = { {'@', '(', '#', ')', 'h', 'y', 'p', 'c', 'u', 't', '0',
-	     '.', 'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0',
-	    '/', '9', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-	    ' ', ' ', ' ', ' ', ' '} };
+void
+crossings_(double *olat1, double *olon1, double *olat2, double *olon2, double *rsmall, double *rlarge,
+           double *xlat1, double *xlon1, double *xlat2, double *xlon2, int *icerr);
 
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static int c__1 = 1;
 
 /* NAME */
 /* 	hypcut0 -- Make an initial location guess or prediction. */
@@ -140,88 +125,70 @@ static integer c__1 = 1;
 /* AUTHORS */
 /* 	Steve Bratt, December 1988; */
 /* 	Walter Nagy, July 1990. */
-/* Subroutine */ int hypcut0_(staid, stalat, stalon, nsta, dobs, dsd, dwavid,
-	ipsta, ipwav, nwav, maxtbd, maxtbz, ntbd, tbd, tbtt, idtyp, iderr,
-	atype, ndata, luout, prtflg, alat0, alon0, ierr, staid_len,
-	dwavid_len, atype_len, prtflg_len)
-char *staid;
-real *stalat, *stalon;
-integer *nsta;
-real *dobs, *dsd;
-char *dwavid;
-integer *ipsta, *ipwav, *nwav, *maxtbd, *maxtbz, *ntbd;
-real *tbd, *tbtt;
-integer *idtyp, *iderr;
-char *atype;
-integer *ndata, *luout;
-char *prtflg;
-real *alat0, *alon0;
-integer *ierr;
-ftnlen staid_len;
-ftnlen dwavid_len;
-ftnlen atype_len;
-ftnlen prtflg_len;
-{
+int hypcut0_(char *staid, float *stalat, float *stalon, int *nsta,
+             float *dobs, float *dsd, char *dwavid,
+             int *ipsta, int *ipwav, int *nwav, int *maxtbd, int *maxtbz, int *ntbd,
+             float *tbd, float *tbtt, int *idtyp, int *iderr,
+             char *atype, int *ndata, int *luout, char *prtflg, float *alat0, float *alon0,
+             int *ierr, int staid_len, int dwavid_len, int atype_len, int prtflg_len) {
     /* Initialized data */
-
-    static doublereal distance[19] = { 0.,10.,20.,30.,40.,50.,60.,70.,80.,90.,
+    static double distance[19] = { 0.,10.,20.,30.,40.,50.,60.,70.,80.,90.,
 	    100.,110.,120.,130.,140.,150.,160.,170.,180. };
-    static doublereal slowness[19] = { 19.17,13.7,10.9,8.85,8.3,7.6,6.88,6.15,
+    static double slowness[19] = { 19.17,13.7,10.9,8.85,8.3,7.6,6.88,6.15,
 	    5.4,4.66,4.44,1.96,1.91,1.88,1.79,1.57,1.14,.59,.01 };
-    static doublereal sminusp[12] = { 0.,114.2,226.76,300.,367.49,432.64,
+    static double sminusp[12] = { 0.,114.2,226.76,300.,367.49,432.64,
 	    494.45,552.32,605.82,654.47,695.75,734.6 };
 
     /* System generated locals */
-    integer tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, i__1,
+    int tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, i__1,
 	    i__2;
-    doublereal d__1;
+    double d__1;
 
     /* Builtin functions */
-    integer s_cmp(), s_wsfe(), do_fio(), e_wsfe();
+    int s_cmp(), s_wsfe(), do_fio(), e_wsfe();
     /* Subroutine */ int s_copy(), s_stop();
 
     /* Local variables */
-    static doublereal bestazcross;
-    static logical goodsminusp[9999];
-    static doublereal sminusptime, torg;
-    static shortint indexdsd[9999];
-    static doublereal orderdsd[9999];
-    static logical goodazim[9999];
-    static doublereal fmaxtime, bestazim[9999], delcross, smallest;
-    static integer itimeyet;
-    static doublereal crosslat[12];
-    static logical goodslow[9999];
-    static doublereal bestslow[9999], crosslon[12], dist1, dist2;
-    static integer isminusp;
-    static shortint indexdsd2[9999];
-    static doublereal orderdsd2[9999];
-    static integer i__, j, k, n;
-    static shortint indexsminusp[9999];
-    static doublereal tcalc, ordersminusp[9999], delta;
-    static integer icerr, iazim;
+    static double bestazcross;
+    static int goodsminusp[9999];
+    static double sminusptime, torg;
+    static short int indexdsd[9999];
+    static double orderdsd[9999];
+    static int goodazim[9999];
+    static double fmaxtime, bestazim[9999], delcross, smallest;
+    static int itimeyet;
+    static double crosslat[12];
+    static int goodslow[9999];
+    static double bestslow[9999], crosslon[12], dist1, dist2;
+    static int isminusp;
+    static short int indexdsd2[9999];
+    static double orderdsd2[9999];
+    static int i__, j, k, n;
+    static short int indexsminusp[9999];
+    static double tcalc, ordersminusp[9999], delta;
+    static int icerr, iazim;
     static char wavid[2];
-    static shortint iwave[9999];
-    static doublereal a1, a2;
-    static integer i1, i2, ierrx, islow, j1, j2, n1, n2;
-    static doublereal sheartime[9999];
-    static logical goodcompr[9999];
-    static doublereal comprtime[9999], alat0x;
-    extern /* Subroutine */ int crossings_();
-    static doublereal alon0x, dist1x, dist2x;
-    extern integer lnblnk_();
-    static doublereal azimsd[9999];
-    static integer icompr, ic2;
-    static doublereal azisav;
-    static integer icross;
-    static doublereal slowsd[9999];
-    static integer i1s, i2s, i3s;
+    static short int iwave[9999];
+    static double a1, a2;
+    static int i1, i2, ierrx, islow, j1, j2, n1, n2;
+    static double sheartime[9999];
+    static int goodcompr[9999];
+    static double comprtime[9999], alat0x;
+    static double alon0x, dist1x, dist2x;
+    extern int lnblnk_();
+    static double azimsd[9999];
+    static int icompr, ic2;
+    static double azisav;
+    static int icross;
+    static double slowsd[9999];
+    static int i1s, i2s, i3s;
     extern /* Subroutine */ int prtcut_();
-    static shortint indexcompr[9999];
-    static doublereal ordercompr[9999];
+    static short int indexcompr[9999];
+    static double ordercompr[9999];
     extern /* Subroutine */ int latlon2_(), distaz2_(), azcros2_();
-    static doublereal baz, dis[9999], azi, tmp;
-    static integer iusesta;
-    static doublereal useazim, sta1, sta2, res1, res2, sta3, sta4, useslow;
+    static double baz, dis[9999], azi, tmp;
+    static int iusesta;
+    static double useazim, sta1, sta2, res1, res2, sta3, sta4, useslow;
 
     /* Fortran I/O blocks */
     static cilist io___4 = { 0, 0, 0, "(/a/a)", 0 };
@@ -253,7 +220,7 @@ ftnlen prtflg_len;
 /*     ---- On return ---- */
 /*     ---- Internal variables ---- */
 /*     Slowness and S-P time as a function of distance for a surface event */
-/*     Taken from IASPEI Seismological Tables of B.L.N. Kennett (1991) */
+/*     Taken from IASPEI Seismoint Tables of B.L.N. Kennett (1991) */
     /* Parameter adjustments */
     --stalon;
     --stalat;
@@ -331,7 +298,7 @@ ftnlen prtflg_len;
 			ftnlen)2) == 0 || s_cmp(wavid, "Pb", k, (ftnlen)2) ==
 			0) && dobs[n] < comprtime[i__ - 1]) {
 		    comprtime[i__ - 1] = dobs[n];
-		    iwave[i__ - 1] = (shortint) ipwav[n];
+		    iwave[i__ - 1] = (short int) ipwav[n];
 		} else if ((s_cmp(wavid, "S ", k, (ftnlen)2) == 0 || s_cmp(
 			wavid, "Sn", k, (ftnlen)2) == 0 || s_cmp(wavid, "Sb",
 			k, (ftnlen)2) == 0 || s_cmp(wavid, "Lg", k, (ftnlen)2)
@@ -370,14 +337,14 @@ ftnlen prtflg_len;
 	goodcompr[i__ - 1] = comprtime[i__ - 1] < fmaxtime;
 	if (goodcompr[i__ - 1]) {
 	    ++icompr;
-	    indexcompr[icompr - 1] = (shortint) i__;
+	    indexcompr[icompr - 1] = (short int) i__;
 	    ordercompr[icompr - 1] = comprtime[i__ - 1];
 	}
 	goodsminusp[i__ - 1] = goodcompr[i__ - 1] && sheartime[i__ - 1] <
 		fmaxtime && sheartime[i__ - 1] > comprtime[i__ - 1];
 	if (goodsminusp[i__ - 1]) {
 	    ++isminusp;
-	    indexsminusp[isminusp - 1] = (shortint) i__;
+	    indexsminusp[isminusp - 1] = (short int) i__;
 	    ordersminusp[isminusp - 1] = sheartime[i__ - 1] - comprtime[i__ -
 		    1];
 	}
@@ -385,14 +352,14 @@ ftnlen prtflg_len;
 		- 1] <= (float)360.;
 	if (goodazim[i__ - 1]) {
 	    ++iazim;
-	    indexdsd[iazim - 1] = (shortint) i__;
+	    indexdsd[iazim - 1] = (short int) i__;
 	    orderdsd[iazim - 1] = azimsd[i__ - 1];
 	}
 	goodslow[i__ - 1] = bestslow[i__ - 1] > .02 && bestslow[i__ - 1] <
 		19.16;
 	if (goodslow[i__ - 1]) {
 	    ++islow;
-	    indexdsd2[islow - 1] = (shortint) i__;
+	    indexdsd2[islow - 1] = (short int) i__;
 	    orderdsd2[islow - 1] = slowsd[i__ - 1];
 	}
 /* L1030: */
@@ -409,7 +376,7 @@ ftnlen prtflg_len;
 		    ordercompr[j - 1] = ordercompr[j + i__ - 1];
 		    indexcompr[j - 1] = indexcompr[j + i__ - 1];
 		    ordercompr[j + i__ - 1] = tmp;
-		    indexcompr[j + i__ - 1] = (shortint) n;
+		    indexcompr[j + i__ - 1] = (short int) n;
 		}
 /* L1040: */
 	    }
@@ -426,7 +393,7 @@ ftnlen prtflg_len;
 		    ordersminusp[j - 1] = ordersminusp[j + i__ - 1];
 		    indexsminusp[j - 1] = indexsminusp[j + i__ - 1];
 		    ordersminusp[j + i__ - 1] = tmp;
-		    indexsminusp[j + i__ - 1] = (shortint) n;
+		    indexsminusp[j + i__ - 1] = (short int) n;
 		}
 /* L1050: */
 	    }
@@ -444,7 +411,7 @@ ftnlen prtflg_len;
 		    orderdsd[j - 1] = orderdsd[j + i__ - 1];
 		    indexdsd[j - 1] = indexdsd[j + i__ - 1];
 		    orderdsd[j + i__ - 1] = tmp;
-		    indexdsd[j + i__ - 1] = (shortint) n;
+		    indexdsd[j + i__ - 1] = (short int) n;
 		}
 /* L1060: */
 	    }
@@ -462,7 +429,7 @@ ftnlen prtflg_len;
 		    orderdsd2[j - 1] = orderdsd2[j + i__ - 1];
 		    indexdsd2[j - 1] = indexdsd2[j + i__ - 1];
 		    orderdsd2[j + i__ - 1] = tmp;
-		    indexdsd2[j + i__ - 1] = (shortint) n;
+		    indexdsd2[j + i__ - 1] = (short int) n;
 		}
 /* L1070: */
 	    }
@@ -497,15 +464,15 @@ station", (ftnlen)44);
 			do_fio(&c__1, staid + iusesta * staid_len, staid_len);
 			do_fio(&c__1, "  S-P time: ", (ftnlen)12);
 			do_fio(&c__1, (char *)&sminusptime, (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, " sec.", (ftnlen)5);
 			do_fio(&c__1, "  Distance: ", (ftnlen)12);
 			do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, " deg.", (ftnlen)5);
 			do_fio(&c__1, "   Azimuth: ", (ftnlen)12);
 			do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, " deg.", (ftnlen)5);
 			e_wsfe();
 		    }
@@ -636,11 +603,11 @@ L1130:
 			do_fio(&c__1, staid + i3s * staid_len, staid_len);
 			do_fio(&c__1, " Distances: ", (ftnlen)12);
 			do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, (char *)&dis[1], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, (char *)&dis[2], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, " deg.", (ftnlen)5);
 			e_wsfe();
 		    }
@@ -726,8 +693,8 @@ L1220:
 	    do_fio(&c__1, staid + i2s * staid_len, staid_len);
 	    do_fio(&c__1, staid + j * staid_len, staid_len);
 	    do_fio(&c__1, " Distances: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&dis[1], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(double));
+	    do_fio(&c__1, (char *)&dis[1], (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    e_wsfe();
 	}
@@ -816,11 +783,11 @@ L1250:
 			do_fio(&c__1, staid + j2 * staid_len, staid_len);
 			do_fio(&c__1, " Distances: ", (ftnlen)12);
 			do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, (char *)&dis[1], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, (char *)&dis[2], (ftnlen)sizeof(
-				doublereal));
+				double));
 			do_fio(&c__1, " deg.", (ftnlen)5);
 			e_wsfe();
 		    }
@@ -898,13 +865,13 @@ ons", (ftnlen)48);
 		do_fio(&c__1, staid + i2s * staid_len, staid_len);
 		do_fio(&c__1, "  Azimuths: ", (ftnlen)12);
 		do_fio(&c__1, (char *)&bestazim[i1s - 1], (ftnlen)sizeof(
-			doublereal));
+			double));
 		do_fio(&c__1, (char *)&bestazim[i2s - 1], (ftnlen)sizeof(
-			doublereal));
+			double));
 		do_fio(&c__1, " deg.", (ftnlen)5);
 		do_fio(&c__1, " Distances: ", (ftnlen)12);
-		do_fio(&c__1, (char *)&dist1, (ftnlen)sizeof(doublereal));
-		do_fio(&c__1, (char *)&dist2, (ftnlen)sizeof(doublereal));
+		do_fio(&c__1, (char *)&dist1, (ftnlen)sizeof(double));
+		do_fio(&c__1, (char *)&dist2, (ftnlen)sizeof(double));
 		do_fio(&c__1, " deg.", (ftnlen)5);
 		e_wsfe();
 	    }
@@ -952,15 +919,15 @@ station", (ftnlen)48);
 		    do_fio(&c__1, "   Station: ", (ftnlen)12);
 		    do_fio(&c__1, staid + iusesta * staid_len, staid_len);
 		    do_fio(&c__1, "  Slowness: ", (ftnlen)12);
-		    do_fio(&c__1, (char *)&useslow, (ftnlen)sizeof(doublereal)
+		    do_fio(&c__1, (char *)&useslow, (ftnlen)sizeof(double)
 			    );
 		    do_fio(&c__1, " sec./deg.", (ftnlen)10);
 		    do_fio(&c__1, "  Distance: ", (ftnlen)12);
-		    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(doublereal))
+		    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(double))
 			    ;
 		    do_fio(&c__1, " deg.", (ftnlen)5);
 		    do_fio(&c__1, "   Azimuth: ", (ftnlen)12);
-		    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(doublereal)
+		    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(double)
 			    );
 		    do_fio(&c__1, " deg.", (ftnlen)5);
 		    e_wsfe();
@@ -998,13 +965,13 @@ station", (ftnlen)48);
 	    do_fio(&c__1, "       Station: ", (ftnlen)16);
 	    do_fio(&c__1, staid + iusesta * staid_len, staid_len);
 	    do_fio(&c__1, " Earliest time: ", (ftnlen)16);
-	    do_fio(&c__1, (char *)&ordercompr[0], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&ordercompr[0], (ftnlen)sizeof(double));
 	    do_fio(&c__1, " sec.", (ftnlen)5);
 	    do_fio(&c__1, "      Distance: ", (ftnlen)16);
-	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, "       Azimuth: ", (ftnlen)16);
-	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    e_wsfe();
 	}
@@ -1025,14 +992,14 @@ station", (ftnlen)48);
 	    do_fio(&c__1, "   Station: ", (ftnlen)12);
 	    do_fio(&c__1, staid + iusesta * staid_len, staid_len);
 	    do_fio(&c__1, "  Distance: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, "   Azimuth: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, " Best S.D.: ", (ftnlen)12);
 	    do_fio(&c__1, (char *)&bestazim[iusesta - 1], (ftnlen)sizeof(
-		    doublereal));
+		    double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    e_wsfe();
 	}
@@ -1058,13 +1025,13 @@ station", (ftnlen)48);
 	    do_fio(&c__1, "   Station: ", (ftnlen)12);
 	    do_fio(&c__1, staid + iusesta * staid_len, staid_len);
 	    do_fio(&c__1, "  Slowness: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&useslow, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&useslow, (ftnlen)sizeof(double));
 	    do_fio(&c__1, " sec./deg.", (ftnlen)10);
 	    do_fio(&c__1, "  Distance: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&dis[0], (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, "   Azimuth: ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&useazim, (ftnlen)sizeof(double));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    e_wsfe();
 	}
@@ -1095,15 +1062,15 @@ station", (ftnlen)48);
 } /* hypcut0_ */
 
 /* Subroutine */ int prtcut_(alat, alon, luout)
-real *alat, *alon;
-integer *luout;
+float *alat, *alon;
+int *luout;
 {
     /* System generated locals */
-    real r__1, r__2;
+    float r__1, r__2;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy();
-    integer s_wsfe(), do_fio(), e_wsfe();
+    int s_wsfe(), do_fio(), e_wsfe();
 
     /* Local variables */
     static char ew[2], ns[2];
@@ -1125,12 +1092,12 @@ integer *luout;
     s_wsfe(&io___91);
     do_fio(&c__1, "  Latitude: ", (ftnlen)12);
     r__1 = dabs(*alat);
-    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
     do_fio(&c__1, " deg.", (ftnlen)5);
     do_fio(&c__1, ns, (ftnlen)2);
     do_fio(&c__1, " Longitude: ", (ftnlen)12);
     r__2 = dabs(*alon);
-    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(float));
     do_fio(&c__1, " deg.", (ftnlen)5);
     do_fio(&c__1, ew, (ftnlen)2);
     do_fio(&c__1, " ===============================================", (ftnlen)

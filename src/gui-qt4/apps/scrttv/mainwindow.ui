@@ -49,6 +49,8 @@
     <property name="title" >
      <string>&amp;File</string>
     </property>
+    <addaction name="actionOpenXMLFile" />
+    <addaction name="separator" />
     <addaction name="actionQuit" />
    </widget>
    <widget class="QMenu" name="menu_Interaction" >
@@ -112,6 +114,14 @@
    </property>
    <property name="shortcut" >
     <string>Alt+Q</string>
+   </property>
+  </action>
+  <action name="actionOpenXMLFile" >
+   <property name="text" >
+    <string>&amp;Open XML</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionLineUp" >

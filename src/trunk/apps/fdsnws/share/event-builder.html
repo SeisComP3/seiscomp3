@@ -79,7 +79,7 @@
     </table>
   </fieldset>
   <fieldset>
-    <legend>Service specific contraints</legend>
+    <legend>Service specific constraints</legend>
     <table class="builder">
       <tbody>
         <tr>
@@ -95,8 +95,8 @@
           <td><input type="number" name="minmagnitude" min="-1" max="12" step="0.1" value="" placeholder="2.0" /></td>
         </tr>
         <tr>
-          <td>Minimum Magnitude</td>
-          <td><input type="number" name="minmagnitude" min="-1" max="12" step="0.1" value="" placeholder="5.0" /></td>
+          <td>Maximum Magnitude</td>
+          <td><input type="number" name="maxmagnitude" min="-1" max="12" step="0.1" value="" placeholder="5.0" /></td>
         </tr>
         <tr>
           <td>Magnitude Type</td>
@@ -112,7 +112,15 @@
         </tr>
         <tr>
           <td>Include Arrivals</td>
-          <td><input type="checkbox" name="includeallmagnitudes" value="true" /></td>
+          <td><input type="checkbox" name="includearrivals" value="true" /></td>
+        </tr>
+        <tr title="Note: Picks are available only in combination with includearrivals=true">
+          <td>Exclude Picks</td>
+          <td><input type="checkbox" name="includepicks" value="false" /></td>
+        </tr>
+        <tr>
+          <td>Include Comments</td>
+          <td><input type="checkbox" name="includecomments" value="true" /></td>
         </tr>
         <tr>
           <td>Event ID</td>
@@ -161,12 +169,16 @@
           <td>
             <select name="format">
               <option value="">QuakeML (default)</option>
-              <option value="">QuakeML-RT</option>
+              <option value="qml-rt">QuakeML-RT</option>
               <option value="sc3ml">SeisComP3 XML</option>
               <option value="text">Text (| delimited)</option>
               <option value="csv">CSV (, delimited)</option>
             </select>
           </td>
+        </tr>
+        <tr>
+          <td>Formatted</td>
+          <td><input type="checkbox" name="formatted" value="true" /></td>
         </tr>
         <tr>
           <td>No Data 404</td>

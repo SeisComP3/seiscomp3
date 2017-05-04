@@ -185,6 +185,20 @@ class SC_GUI_API PickerMarkerActionPlugin : public QObject {
 DEFINE_INTERFACE_FACTORY(PickerMarkerActionPlugin);
 
 
+class SpectrumViewBase : public QWidget {
+	Q_OBJECT
+
+	public:
+		SpectrumViewBase(QWidget *parent = 0, Qt::WindowFlags f = 0)
+		: QWidget(parent, f) {}
+
+	protected slots:
+		virtual void modeChanged(int) = 0;
+		virtual void windowFuncChanged(int) = 0;
+		virtual void windowWidthChanged(double) = 0;
+};
+
+
 class SC_GUI_API PickerView : public QMainWindow {
 	public:
 		struct SC_GUI_API Config {

@@ -82,6 +82,14 @@
 				connection with a large request.
 				</description>
 			</parameter>
+			<parameter name="recordBulkSize" type="int" default="102400" unit="bytes">
+				<description>
+				Set the number of bytes to buffer for each chunk of waveform data
+				served to the client. The lower the buffer the higher the overhead
+				of Python Twisted. The higher the buffer the higher the memory
+				usage per request. 100kB seems to be a good trade-off.
+				</description>
+			</parameter>
 			<parameter name="htpasswd" type="string" default="@CONFIGDIR@/fdsnws.htpasswd">
 				<description>
 				Path to password file used in fdsnws-station/queryauth. The
@@ -98,6 +106,13 @@
 			<parameter name="allowRestricted" type="boolean" default="true">
 				<description>
 				Enables/disables access to restricted inventory data.
+				</description>
+			</parameter>
+			<parameter name="useArclinkAccess" type="boolean" default="false">
+				<description>
+				If enabled, then access to restricted waveform data is controlled
+				by arclink-access bindings. By default authenticated users have
+				access to all data.
 				</description>
 			</parameter>
 			<parameter name="hideAuthor" type="boolean" default="false">

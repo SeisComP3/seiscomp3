@@ -236,6 +236,7 @@ class EventSummaryMap : public MapWidget {
 
 void EventSummary::init() {
 	_ui.setupUi(this);
+
 	_showComment = true;
 	_defaultEventRadius = 0.0;
 	_maxMinutesSecondDisplay = -1;
@@ -260,6 +261,8 @@ void EventSummary::init() {
 
 	// Set the font sizes
 	setupFont(_ui.originTime, SCScheme.fonts.highlight);
+	_ui.originTime->setMinimumWidth(_ui.originTime->fontMetrics().width("9999-99-99 99:99:99 "));
+
 	setupFont(_ui.timeAgo, SCScheme.fonts.base);
 
 	//QColor highlightColor = Qt::red;
@@ -724,7 +727,7 @@ void EventSummary::selectMagnitude(const std::string &type) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventSummary::updateOrigin() {
 	// Origin time
-	_ui.originTime->setText(_currentOrigin->time().value().toString("%F %T").c_str());
+	timeToLabel(_ui.originTime, _currentOrigin->time().value(), "%F %T");
 
 	// Depth
 	try {

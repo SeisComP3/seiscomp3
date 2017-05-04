@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -88,7 +89,7 @@ public class SpreadConnection
 	// The Spread version.
 	//////////////////////
         private static final int SP_MAJOR_VERSION = 4;
-	private static final int SP_MINOR_VERSION = 3;
+	private static final int SP_MINOR_VERSION = 4;
 	private static final int SP_PATCH_VERSION = 0;
 
         // The default authentication method
@@ -876,6 +877,17 @@ NOT SUPPORTED IN 1.1	*/
 			throw new SpreadException("Socket(): " + e);
 		}
 		
+		try 
+		{
+		    socket.setTcpNoDelay(true);
+		}
+		catch(SocketException e) 
+                {
+		    SpreadException se = new SpreadException("setTcpNoDelay(): " + e.getMessage());
+		    se.initCause(e);
+		    throw se;
+		}
+
 		// Set the socket's buffer sizes.
 		/////////////////////////////////
 		setBufferSizes();

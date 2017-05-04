@@ -864,10 +864,6 @@ bool RecordView::feed(const Seiscomp::Record *rec) {
 		if ( _autoInsertItems ) {
 			child = addItem(streamID, stationCode);
 			if ( !child ) return false;
-			/*
-			std::cout << " starting at " << rec->startTime().toString("%F %T")
-			          << std::endl;
-			*/
 			emit addedItem(rec, child);
 		}
 		else
@@ -2920,6 +2916,26 @@ QWidget* RecordView::infoWidget() const {
 TimeScale* RecordView::timeWidget() const {
 	return _timeScaleWidget;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Core::TimeWindow RecordView::coveredTimeRange() const {
+	Core::TimeWindow tw;
+	foreach ( RecordViewItem *trace, _rows ) {
+		int slotCount = trace->widget()->slotCount();
+		for ( int i = 0; i < slotCount; ++i ) {
+			Seiscomp::RecordSequence *seq = trace->widget()->records(i);
+			if ( seq == NULL ) continue;
+			tw = tw | seq->timeWindow();
+		}
+	}
+
+	return tw;
+}
+
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

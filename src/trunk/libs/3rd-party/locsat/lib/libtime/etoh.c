@@ -1,10 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef	lint
-static	char	SccsId[] = "@(#)etoh.c	44.1	9/23/91";
-#endif
-
 #include "csstime.h"
 
 static int days_in_month[] = {31,28,31,30,31,30,31,31,30,31,30,31,31};

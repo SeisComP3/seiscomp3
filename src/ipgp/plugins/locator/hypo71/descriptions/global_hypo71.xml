@@ -3,62 +3,65 @@
 	<plugin name="Hypo71">
 		<extends>global</extends>
 		<description>
-		This plugin allows the use of traditionnal Hypo71PC locator with SeisComP3
+		This plugin allows the use of the traditional Hypo71PC locator with SeisComP3.
 		</description>
 		<configuration>
 			<group name="hypo71">
-				<parameter name="logFile" type="string" default="HYPO71.LOG">
+				<description>
+					General Hypo71 configuration parameters.
+				</description>
+				<parameter name="logFile" type="string" default="@LOGDIR@/HYPO71.LOG">
 					<description>
-					Temporary file used by Hypo71 to store calculation logs
+					Temporary file used by Hypo71 to store calculation logs.
 					</description>
 				</parameter>
-				<parameter name="inputFile" type="string" default="HYPO71.INP">
+				<parameter name="inputFile" type="string" default="@DATADIR@/hypo71/HYPO71.INP">
 					<description>
-					Temporary file to write Hypo71 input data to
+					Temporary file to write Hypo71 input data to.
 					</description>
 				</parameter>
-				<parameter name="outputFile" type="string" default="HYPO71.PRT">
+				<parameter name="outputFile" type="string" default="@DATADIR@/hypo71/HYPO71.PRT">
 					<description>
-					Temporary output file to read Hypo71 localization data from
+					Temporary output file to read Hypo71 location data from.
 					</description>
 				</parameter>
-				<parameter name="defaultControlFile" type="string" default="${HOME}/hypo71/default.hypo71.conf">
+				<parameter name="defaultControlFile" type="string" default="@DATADIR@/hypo71/profiles/default.hypo71.conf">
 					<description>
 					Hypo71 default profile.
 					If no custom profile is specified, this profile will be used by the plugin when proceeding to a localization. 
 					</description>
 				</parameter>
-				<parameter name="hypo71ScriptFile" type="string" default="${HOME}/hypo71/run.sh">
+				<parameter name="hypo71ScriptFile" type="string" default="@DATADIR@/hypo71/run.sh">
 					<description>
-					Bash script to use when calls have to be made by the plugin when proceeding to a localization
+					Bash script executed when calling the Hypo71 locator plugin for locating the earthquake.
 					</description>
 				</parameter>
 				<parameter name="profiles" type="list:string">
 					<description>
 					Hypo71 profile name.
-					Multiples names may be set, as long as they are separated by comma.
+					Multiples names may be set. They must be separated by comma.
 					Each profile can have different velocity or parameters.
 					</description>
 				</parameter>
 				<group name="profile">
+					<description>
+						Profiles containing the profile-specific velocity model and the Hypo71 parameters.
+					</description>
 					<struct type="Hypo71 profile" link = "hypo71.profiles">
-						<description>
-							A profile contains a velocity model and Hypo71PC parameters
-						</description>
 						<parameter name="earthModelID" type="string">
 							<description>
-							Profile's velocity model name
+							Profile's velocity model name.
 							</description>
 						</parameter>
-						<parameter name="methodID" type="string" default="Hypo71PC">
+						<parameter name="methodID" type="string" default="Hypo71">
 							<description>
 							Profile's method.
-							It's generally the locator's name (Hypo71).
+							It is generally the locator's name (Hypo71).
 							</description>
 						</parameter>
 						<parameter name="controlFile" type="string">
 							<description>
-							File containing a profile parameters
+							File containing the profile parameters.
 							</description>
 						</parameter>
 						<parameter name="fixStartDepthOnly" type="boolean" default="false">

@@ -199,7 +199,9 @@ class SC_GUI_API Canvas : public QObject {
 		}
 
 		//! Canvas does not take ownership of layer.
+		void prependLayer(Layer*);
 		void addLayer(Layer*);
+		void insertLayerBefore(const Layer*, Layer*);
 		void removeLayer(Layer*);
 
 		void lower(Layer*);
@@ -270,6 +272,8 @@ class SC_GUI_API Canvas : public QObject {
 		int polyToCache(size_t n, const Math::Geo::CoordF *points,
 		                uint minPixelDist) const;
 
+		void setupLayer(Layer *layer);
+
 
 	private slots:
 		void updatedTiles();
@@ -316,6 +320,7 @@ class SC_GUI_API Canvas : public QObject {
 		typedef QHash<Qt::Alignment, LegendArea> LegendAreas;
 
 		typedef QList<Layer*> Layers;
+		typedef QList<LayerPtr> CustomLayers;
 		typedef boost::shared_ptr<SymbolCollection> SymbolCollectionPtr;
 
 	private:
@@ -344,6 +349,7 @@ class SC_GUI_API Canvas : public QObject {
 		std::vector<LayerProperties*> _layerProperties;
 
 		Layers                        _layers;
+		CustomLayers                  _customLayers;
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;
 

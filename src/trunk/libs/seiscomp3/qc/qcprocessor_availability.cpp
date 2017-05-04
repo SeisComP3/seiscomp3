@@ -21,14 +21,15 @@ namespace Processing {
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorAvailability, QcProcessor, "QcProcessorAvailability");
 
 QcProcessorAvailability::QcProcessorAvailability() 
-    : QcProcessor() {}
+: QcProcessor() {}
 
 double QcProcessorAvailability::getAvailability() throw (Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch ( const boost::bad_any_cast & ) {
+		throw Core::ValueException("no data");
+	}
 }
 
 bool QcProcessorAvailability::setState(const Record *record, const DoubleArray &data) {
@@ -39,7 +40,7 @@ bool QcProcessorAvailability::setState(const Record *record, const DoubleArray &
 	}
 	catch (Core::ValueException) {}
 
-    return false;
+	return false;
 }
 
 

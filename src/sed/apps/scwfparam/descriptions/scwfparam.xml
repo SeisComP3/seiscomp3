@@ -124,7 +124,7 @@
 				<parameter name="Tmin" type="double" unit="s" default="0">
 					<description>
 					Specifies the minimum period (Tmin) in seconds for computation of the
-					relative displacement lastic response spectrum.
+					relative displacement elastic response spectrum.
 					</description>
 				</parameter>
 				<parameter name="Tmax" type="double" unit="s" default="5">

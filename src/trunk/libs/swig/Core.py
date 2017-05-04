@@ -627,6 +627,8 @@ class Time(TimeSpan):
     def get2(self, yday=None): return _Core.Time_get2(self, yday)
     __swig_getmethods__["LocalTime"] = lambda x: _Core.Time_LocalTime
     if _newclass:LocalTime = staticmethod(_Core.Time_LocalTime)
+    __swig_getmethods__["LocalTimeZone"] = lambda x: _Core.Time_LocalTimeZone
+    if _newclass:LocalTimeZone = staticmethod(_Core.Time_LocalTimeZone)
     __swig_getmethods__["GMT"] = lambda x: _Core.Time_GMT
     if _newclass:GMT = staticmethod(_Core.Time_GMT)
     __swig_getmethods__["FromYearDay"] = lambda x: _Core.Time_FromYearDay
@@ -653,6 +655,10 @@ Time.Null = _Core.cvar.Time_Null
 def Time_LocalTime():
   return _Core.Time_LocalTime()
 Time_LocalTime = _Core.Time_LocalTime
+
+def Time_LocalTimeZone():
+  return _Core.Time_LocalTimeZone()
+Time_LocalTimeZone = _Core.Time_LocalTimeZone
 
 def Time_GMT():
   return _Core.Time_GMT()

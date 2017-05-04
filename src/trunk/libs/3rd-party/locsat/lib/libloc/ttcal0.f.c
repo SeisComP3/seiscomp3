@@ -29,7 +29,7 @@ struct {
 
 /* Table of constant values */
 
-static real c_b2 = (float)-1.;
+static float c_b2 = (float)-1.;
 
 /* NAME */
 /* 	ttcal0 -- Compute travel times and their partial derivatives. */
@@ -87,33 +87,33 @@ static real c_b2 = (float)-1.;
 /* 	Steve Bratt, December 1988. */
 /* Subroutine */ int ttcal0_(phase_id__, zfoc, radius, delta, azi, maxtbd, 
 	maxtbz, ntbd, ntbz, tbd, tbz, tbtt, dcalx, atx, iterr)
-integer *phase_id__;
-real *zfoc, *radius, *delta, *azi;
-integer *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt, *dcalx;
+int *phase_id__;
+float *zfoc, *radius, *delta, *azi;
+int *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt, *dcalx;
 doublereal *atx;
-integer *iterr;
+int *iterr;
 {
     /* System generated locals */
-    integer tbtt_dim1, tbtt_offset, i__1, i__2;
+    int tbtt_dim1, tbtt_offset, i__1, i__2;
 
     /* Builtin functions */
     double sin(), cos();
 
     /* Local variables */
-    static real dtdz;
+    static float dtdz;
     static doublereal azir;
-    static integer iext, jext;
+    static int iext, jext;
     extern /* Subroutine */ int brack_();
-    static integer ileft, do_extrap__;
-    static real dtddel;
-    static integer jz, nz;
+    static int ileft, do_extrap__;
+    static float dtddel;
+    static int jz, nz;
     static doublereal cosazi;
-    static real dcross;
+    static float dcross;
     static doublereal sinazi;
     extern /* Subroutine */ int holint2_();
     static doublereal pd12;
-    static integer ibad;
+    static int ibad;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- Parameter declaration ---- */
@@ -256,31 +256,31 @@ integer *iterr;
 /* 	Steve Bratt, December 1988. */
 /* Subroutine */ int ttcal1_(zfoc, radius, delta, azi, maxtbd, maxtbz, ntbd, 
 	ntbz, tbd, tbz, tbtt, dcalx, atx, iterr)
-real *zfoc, *radius, *delta, *azi;
-integer *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt, *dcalx;
+float *zfoc, *radius, *delta, *azi;
+int *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt, *dcalx;
 doublereal *atx;
-integer *iterr;
+int *iterr;
 {
     /* System generated locals */
-    integer tbtt_dim1, tbtt_offset, i__1, i__2;
+    int tbtt_dim1, tbtt_offset, i__1, i__2;
 
     /* Builtin functions */
     double sin(), cos();
 
     /* Local variables */
-    static real dtdz;
+    static float dtdz;
     static doublereal azir;
-    static integer iext, jext;
+    static int iext, jext;
     extern /* Subroutine */ int brack_();
-    static integer ileft;
+    static int ileft;
     extern /* Subroutine */ int holin2_();
-    static real dtddel;
-    static integer jz, nz;
+    static float dtddel;
+    static int jz, nz;
     static doublereal cosazi;
-    static real dcross;
+    static float dcross;
     static doublereal sinazi, pd12;
-    static integer ibad;
+    static int ibad;
 
 /*     ---- Parameter declaration ---- */
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */

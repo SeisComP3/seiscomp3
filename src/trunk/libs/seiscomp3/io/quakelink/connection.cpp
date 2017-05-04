@@ -385,7 +385,7 @@ bool Connection::connect() {
 		SEISCOMP_DEBUG("%sskipping authentication", _logPrefix.c_str());
 	}
 	else {
-		SEISCOMP_DEBUG("%sperfoming authentication", _logPrefix.c_str());
+		SEISCOMP_DEBUG("%sperforming authentication", _logPrefix.c_str());
 		if ( sendRequest("auth " + _user + " " + _pass, false) )
 			SEISCOMP_DEBUG("%sauthentication successful", _logPrefix.c_str());
 		else

@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -75,6 +76,7 @@ ext	int32		Last_discarded;
 ext	int32		Last_delivered;
 ext	int32		Last_seq;
 ext	int32		Token_rounds;
+ext     int32           Received_token_rounds; /* ### Added to determine when to switch priorities*/
 ext	token_header	*Last_token;
 
 ext	int		Transitional;
@@ -97,7 +99,8 @@ ext	sp_time		Form_timeout;
 ext	sp_time		Lookup_timeout;
 ext	int		Wide_network;
 
-void	Prot_token_hurry();
+void	Prot_token_hurry(void);
+void	Prot_token_hurry_event(int dmy, void *dmy_ptr);
 void	Discard_packets();
 void    Prot_initiate_conf_reload( int code, void *data );
 bool    Prot_need_conf_reload( void );

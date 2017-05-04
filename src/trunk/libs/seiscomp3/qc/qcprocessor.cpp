@@ -79,21 +79,22 @@ QcParameter* QcProcessor::getState() const {
 
 
 void QcProcessor::process(const Record *record, const DoubleArray &data) {
-	if (!record) return;
+	if ( !record ) return;
 
 	_qcp = new QcParameter;
-	_setFlag = false;    
+	_setFlag = false;
 
-	if ((record->samplingFrequency() > 0.0) && (data.size() > 0)) {
+	if ( (record->samplingFrequency() > 0.0) && (data.size() > 0) ) {
 		_qcp->recordStartTime = record->startTime();
 		_qcp->recordEndTime = record->endTime();
 		_qcp->recordSamplingFrequency = record->samplingFrequency();
 
 		_setFlag = true;
 		_validFlag = setState(record,data);
-	} 
+	}
 	
-	for (std::deque<QcProcessorObserver *>::iterator it = _observers.begin(); it != _observers.end(); ++it)
+	for ( std::deque<QcProcessorObserver *>::iterator it = _observers.begin();
+	      it != _observers.end(); ++it )
 		(*it)->update();
 }
 

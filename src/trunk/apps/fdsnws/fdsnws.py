@@ -209,9 +209,15 @@ class Access(object):
 				.append((user, start, end))
 
 	#---------------------------------------------------------------------------
-	def __matchTime(self, t1, t2, start, end):
-		return (not start or (t1 and t1 >= start)) and \
-			(not end or (t2 and t2 <= end))
+	def __matchTime(self, t1, t2, accessStart, accessEnd):
+		return (not accessStart or (t1 and t1 >= accessStart)) and \
+			(not accessEnd or (t2 and t2 <= accessEnd))
+
+	#---------------------------------------------------------------------------
+	def __matchUser(self, emailAddress, accessUser):
+		return (emailAddress.upper() == accessUser.upper() or \
+				(accessUser[:1] == '@' and emailAddress[:1] != '@' and \
+					emailAddress.upper().endswith(accessUser.upper())))
 
 	#---------------------------------------------------------------------------
 	def authorize(self, user, net, sta, loc, cha, t1, t2):
@@ -223,15 +229,15 @@ class Access(object):
 			return False
 
 		for (u, start, end) in self.__access.get((net, '', '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		for (u, start, end) in self.__access.get((net, sta, '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
-			if self.__matchTime(t1, t2, start, end) and emailAddress.endswith(u):
+			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
 				return True
 
 		return False
@@ -248,17 +254,19 @@ class FDSNWS(Application):
 		self.setRecordStreamEnabled(True)
 		self.setLoadInventoryEnabled(True)
 
-		self._serverRoot    = os.path.dirname(__file__)
-		self._listenAddress = '0.0.0.0' # all interfaces
-		self._port          = 8080
-		self._connections   = 5
-		self._queryObjects  = 100000    # maximum number of objects per query
-		self._realtimeGap   = None      # minimum data age: 5min
-		self._samplesM      = None      # maximum number of samples per query
-		self._htpasswd      = '@CONFIGDIR@/fdsnws.htpasswd'
-		self._accessLogFile = ''
+		self._serverRoot     = os.path.dirname(__file__)
+		self._listenAddress  = '0.0.0.0' # all interfaces
+		self._port           = 8080
+		self._connections    = 5
+		self._queryObjects   = 100000    # maximum number of objects per query
+		self._realtimeGap    = None      # minimum data age: 5min
+		self._samplesM       = None      # maximum number of samples per query
+		self._recordBulkSize = 102400    # desired record bulk size
+		self._htpasswd       = '@CONFIGDIR@/fdsnws.htpasswd'
+		self._accessLogFile  = ''
 
 		self._allowRestricted   = True
+		self._useArclinkAccess  = False
 		self._serveDataSelect   = True
 		self._serveEvent        = True
 		self._serveStation      = True
@@ -318,6 +326,13 @@ class FDSNWS(Application):
 		try: self._samplesM = self.configGetDouble('samplesM')
 		except ConfigException: pass
 
+		try: self._recordBulkSize = self.configGetInt('recordBulkSize')
+		except ConfigException: pass
+
+		if self._recordBulkSize < 1:
+			print >> sys.stderr, "Invalid recordBulkSize, must be larger than 0"
+			return False
+
 		# location of htpasswd file
 		try:
 			self._htpasswd = self.configGetString('htpasswd')
@@ -332,6 +347,10 @@ class FDSNWS(Application):
 
 		# access to restricted inventory information
 		try: self._allowRestricted = self.configGetBool('allowRestricted')
+		except: pass
+
+		# use arclink-access bindings
+		try: self._useArclinkAccess = self.configGetBool('useArclinkAccess')
 		except: pass
 
 		# services to enable
@@ -399,6 +418,18 @@ class FDSNWS(Application):
 		except ConfigException: pass
 		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
 
+		# If the database connection is passed via command line or configuration
+		# file then messaging is disabled. Messaging is only used to get
+		# the configured database connection URI.
+		if self.databaseURI() != "":
+			self.setMessagingEnabled(False)
+		else:
+			# Without the event service, event a database connection is not
+			# required if the inventory is loaded from file
+			if not self._serveEvent and not self._useArclinkAccess and not self.isInventoryDatabaseEnabled():
+				self.setMessagingEnabled(False)
+				self.setDatabaseEnabled(False, False)
+
 		return True
 
 
@@ -446,6 +477,7 @@ class FDSNWS(Application):
 		               "  realtimeGap     : %s\n" \
 		               "  samples (M)     : %s\n" \
 		               "  allowRestricted : %s\n" \
+		               "  useArclinkAccess: %s\n" \
 		               "  hideAuthor      : %s\n" \
 		               "  evaluationMode  : %s\n" \
 		               "  eventType\n" \
@@ -465,7 +497,8 @@ class FDSNWS(Application):
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted, self._hideAuthor, modeStr,
+		               self._allowRestricted, self._useArclinkAccess,
+		               self._hideAuthor, modeStr,
 		               whitelistStr, blacklistStr, stationFilterStr,
 		               dataSelectFilterStr, self._debugFilter,
 		               self._trackdbEnabled, self._trackdbDefaultUser,
@@ -496,7 +529,7 @@ class FDSNWS(Application):
 					       self._filterInventory(dataSelectInv, self._dataSelectFilter, "dataSelect")
 				else:
 					retn = self._filterInventory(stationInv, self._stationFilter)
-			elif self._serveDataSelect:
+			elif self._serveStation:
 				retn = self._filterInventory(stationInv, self._stationFilter)
 			else:
 				retn = self._filterInventory(dataSelectInv, self._dataSelectFilter)
@@ -504,7 +537,7 @@ class FDSNWS(Application):
 			if not retn:
 				return False
 
-		if self._serveDataSelect:
+		if self._serveDataSelect and self._useArclinkAccess:
 			self._access.initFromSC3Routing(self.query().loadRouting())
 
 		DataModel.PublicObject.SetRegistrationEnabled(False)
@@ -539,7 +572,7 @@ class FDSNWS(Application):
 			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
 			dataselect.putChild('1', dataselect1)
 
-			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._access))
+			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._recordBulkSize))
 			msg = 'authorization for restricted time series data required'
 			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
@@ -864,12 +897,18 @@ class FDSNWS(Application):
 
 	#---------------------------------------------------------------------------
 	def _getAuthSessionWrapper(self, inv, msg):
+		if self._useArclinkAccess:
+			access = self._access
+
+		else:
+			access = None
+
 		if self._authEnabled:  # auth extension
-			realm = FDSNDataSelectAuthRealm(inv, self._access, self._userdb)
+			realm = FDSNDataSelectAuthRealm(inv, self._recordBulkSize, access, self._userdb)
 			checker = UsernamePasswordChecker(self._userdb)
 
 		else:  # htpasswd
-			realm = FDSNDataSelectRealm(inv, self._access)
+			realm = FDSNDataSelectRealm(inv, self._recordBulkSize, access)
 			checker = checkers.FilePasswordDB(self._htpasswd)
 
 		p = portal.Portal(realm, [checker])

@@ -1976,7 +1976,7 @@ void FancyView::removeStruct() {
 	if ( it != _viewItems.end() )
 		_viewItems.erase(it);
 	else
-		std::cout << "ERROR: view item does not exist for index" << std::endl;
+		cerr << "ERROR: view item does not exist for index" << endl;
 
 	model()->removeRow(item.index.row(), item.index.parent());
 

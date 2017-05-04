@@ -29,7 +29,7 @@ class SC_SYSTEM_CLIENT_API QcProcessorGap : public QcProcessor {
 
 public:
     QcProcessorGap();
-    double getGap() throw(Core::ValueException);		
+    double getGap() throw(Core::ValueException);
     bool setState(const Record* record, const DoubleArray& data);
 };
 

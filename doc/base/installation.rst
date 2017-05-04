@@ -12,7 +12,7 @@ Linux systems and architectures:
 
 Download these from http://www.seiscomp3.org/ .
 This section describes the installation of the binary packages of SeisComP3 on
-an 
+an
 
 * :program:`Ubuntu 14`, 64 bit system
 * :program:`openSUSE 11`, 64 bit system
@@ -81,7 +81,7 @@ Installation procedure
 ======================
 
 The next steps describe the installation of SeisComP3 with the prepared
-tar.gz files. 
+tar.gz files.
 
 * Log in as user (e.g. sysop)
 * Copy one of the :file:`seiscomp3-jakarta-[version]-[OS]-[arch].tar.gz` files to
@@ -89,13 +89,13 @@ tar.gz files.
   your operating system.
 
 * Go to home directory
-     
+
   .. code-block:: sh
-  
+
      user@host:/tmp$ cd
 
-* Un-tar the SeisComP3 binary packagemake 
-   
+* Un-tar the SeisComP3 binary packagemake
+
   .. code-block:: sh
 
      user@host:~$ tar xzf seiscomp3-jakarta-[version]-[OS]-[arch].tar.gz
@@ -118,13 +118,13 @@ Install dependencies
 --------------------
 
 SeisComP3 depends on a number of additional packages shipped with each Linux
-distribution. The following table gives an overview (the names of packages, 
+distribution. The following table gives an overview (the names of packages,
 files or commands may differ slightly for other Linux systems):
 
 :program:`Packages`
 
 +--------------------+--------------------+----------------------+----------------------------------------+
-|:program:`Ubuntu 14`|:program:`OpenSUSE` |:program:`CentOS 6`   | SC3 component                          |
+|:program:`Ubuntu 14`|:program:`OpenSUSE` |:program:`CentOS 6`   | SeisComP3 component                    |
 +====================+====================+======================+========================================+
 | flex               | flex               | flex                 | Seedlink (compilation only)            |
 +--------------------+--------------------+----------------------+----------------------------------------+
@@ -140,9 +140,13 @@ files or commands may differ slightly for other Linux systems):
 +--------------------+--------------------+----------------------+----------------------------------------+
 | mysql-client       | libmysqlclient     | mysql                | trunk (only if MySQL is used)          |
 +--------------------+--------------------+----------------------+----------------------------------------+
+| mariadb-client     |                    | mariadb-client       | trunk (only if MariaDB is used)        |
++--------------------+--------------------+----------------------+----------------------------------------+
 | libmysqlclient-dev | libmysqlclient-dev | mysql-devel          | trunk (compilation only if enabled)    |
 +--------------------+--------------------+----------------------+----------------------------------------+
 | mysql-server       | mysql-server       | mysql-server         | trunk (only if MySQL is used locally)  |
++--------------------+--------------------+----------------------+----------------------------------------+
+| mariadb-server     |                    | mariadb-server       | trunk (only if MariaDB is used locally)|
 +--------------------+--------------------+----------------------+----------------------------------------+
 | libpq5             | libpq5             | postgresql           | trunk (only if PostgreSQL is used)     |
 +--------------------+--------------------+----------------------+----------------------------------------+
@@ -159,8 +163,8 @@ files or commands may differ slightly for other Linux systems):
 First the environment has to be set up. The :program:`seiscomp` tool comes with
 the command :command:`install-deps` which installs required packages.
 Read the section :ref:`System management<system-management>` for more detailed instructions.
-E.g. for installing the dependencies for using the MySQL database, 
-give 'mysql-server' as parameter. 
+For example, to install the dependencies for using the MySQL database,
+give 'mysql-server' as parameter.
 
 .. code-block:: sh
 
@@ -172,7 +176,7 @@ give 'mysql-server' as parameter.
    Reading state information... Done
    ...
 
-   
+
 If your distribution is not supported by :command:`install-deps`
 , install the above packages manually:
 
@@ -182,16 +186,48 @@ If your distribution is not supported by :command:`install-deps`
 
    user@host:~$ cd seiscomp3/share/deps/ubuntu/[version]
    ...
-   
-   
+
+.. note::
+
+    With **Ubuntu 16.04** MariaDB has become the standard flavour of MySQL in Ubuntu
+    and either MariaDB or MySQL can be installed. The implementation of MariaDB
+    in Ubuntu requires additional steps. They must be taken in order to allow
+    SeisComP3 to make use of MariaDB. The full procedure including database
+    optimization is:
+
+    .. code-block:: sh
+
+        user@host:~$ sudo systemctl enable mysql
+        user@host:~$ sudo mysql_secure_installation
+            provide new root password
+            answer all questions with yes [Enter]
+
+        user@host:~$ sudo mysql -u root -p
+            CREATE DATABASE seiscomp3 CHARACTER SET utf8 COLLATE utf8_bin;
+            grant usage on seiscomp3.* to sysop@localhost identified by 'sysop';
+            grant all privileges on seiscomp3.* to sysop@localhost;
+            grant usage on seiscomp3.* to sysop@'%' identified by 'sysop';
+            grant all privileges on seiscomp3.* to sysop@'%';
+            flush privileges;
+
+        user@host:~$ sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf
+            [mysqld]
+            innodb_buffer_pool_size = 64M
+            innodb_flush_log_at_trx_commit = 2
+
+        user@host:~$ sudo systemctl restart mysql
+        user@host:~$ mysql -u sysop -p seiscomp3 < ~/seiscomp3/share/db/mysql.sql
+
+    Currently, the :ref:`scconfig` wizard cannot be used to set up the MariaDB database.
+
 :program:`OpenSUSE` `version`
 
 .. code-block:: sh
 
    user@host:~$ cd seiscomp3/share/deps/sles/[version]
    ...
-   
-   
+
+
 :program:`CentOS` `version`
 
 .. code-block:: sh
@@ -199,8 +235,6 @@ If your distribution is not supported by :command:`install-deps`
    user@host:~$ cd seiscomp3/share/deps/centos/[version]
    ...
 
-   
-   
 .. code-block:: sh
 
    su root
@@ -209,9 +243,9 @@ If your distribution is not supported by :command:`install-deps`
    bash install-base.sh
    bash install-gui.sh
    ...
-   
+
 or contact the SeisComP3 developpers to add support for your distribution.
-   
+
 SQL configuration
 -----------------
 
@@ -220,27 +254,31 @@ SQL configuration
   * "innodb_buffer_pool_size = 64M"
   * "innodb_flush_log_at_trx_commit = 2"
 
-  The location of the configuration can differ between distributions. 
-  
+  The location of the configuration can differ between distributions.
+
   :program:`OpenSUSE`
-  
-  :file:`/etc/my.cnf` 
-  
-  :program:`Ubuntu 14`
-  
-  :file:`/etc/mysql/my.cnf`  or :file:`/etc/mysql/conf.d/*`
-  
-  :program:`CentOS`
-  
+
   :file:`/etc/my.cnf`
-  
-  Please read the documentation of your distribution. root privileges may 
+
+  :program:`Ubuntu 14`
+
+  :file:`/etc/mysql/my.cnf`  or :file:`/etc/mysql/conf.d/*`
+
+  :program:`Ubuntu 16`
+
+  :file:`/etc/mysql/mariadb.conf.d/50-server.cnf`
+
+  :program:`CentOS`
+
+  :file:`/etc/my.cnf`
+
+  Please read the documentation of your distribution. root privileges may
   be required to make the changes.
 
 *  After adjusting the parameters, MySQL needs to be restarted. One can run
 
   :program:`OpenSUSE`
-  
+
   .. code-block:: sh
 
      user@host:~$ sudo rcmysql restart
@@ -250,6 +288,13 @@ SQL configuration
   .. code-block:: sh
 
      user@host:~$ sudo restart mysql
+
+
+  :program:`Ubuntu 16`
+
+  .. code-block:: sh
+
+     user@host:~$ sudo systemctl restart mysql
 
   :program:`CentOS`
 
@@ -262,17 +307,17 @@ SQL configuration
 * To start MySQL automatically during boot set
 
   :program:`OpenSUSE`
-	
+
   .. code-block:: sh
 
      user@host:~$ insserv mysql
 
-  :program:`Ubuntu 14`
+  :program:`Ubuntu 14, 16`
 
   .. code-block:: sh
 
      user@host:~$ sudo update-rc.d mysql defaults
-     
+
   :program:`CentOS`
 
   .. code-block:: sh
@@ -298,7 +343,7 @@ following table.
 +---------------------+--------------------------------------------------------------------+
 | *lib*               | The base library directory used by all modules.                    |
 +---------------------+--------------------------------------------------------------------+
-| *lib/python*        | The python library directory.                                      |
+| *lib/python*        | The Python library directory.                                      |
 +---------------------+--------------------------------------------------------------------+
 | *man*               | The manual pages.                                                  |
 +---------------------+--------------------------------------------------------------------+

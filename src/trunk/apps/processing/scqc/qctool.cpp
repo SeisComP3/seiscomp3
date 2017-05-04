@@ -477,7 +477,7 @@ bool QcTool::exitRequested() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void QcTool::handleNewStream(const Record *rec) {
-	if (_streamIDs.find(rec->streamID()) != _streamIDs.end()) 
+	if ( _streamIDs.find(rec->streamID()) != _streamIDs.end() )
 		initQc(rec->networkCode(),rec->stationCode(),rec->locationCode(),rec->channelCode());
 	
 }

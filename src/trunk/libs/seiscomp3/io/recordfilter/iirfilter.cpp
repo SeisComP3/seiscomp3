@@ -141,8 +141,8 @@ bool RecordIIRFilter<T>::apply(GenericRecord *rec) {
 			// Overlap or gap does not matter, we need to reset the filter
 			// for non-continuous records
 			if ( fabs(diff) > (0.5/_samplingFrequency) ) {
-				SEISCOMP_DEBUG("[%s] discontinuity of %fs: reset filter",
-				               rec->streamID().c_str(), (double)diff);
+//				SEISCOMP_DEBUG("[%s] discontinuity of %fs: reset filter",
+//				               rec->streamID().c_str(), (double)diff);
 				reset();
 			}
 		}

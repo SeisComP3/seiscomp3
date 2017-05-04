@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -281,6 +282,9 @@ static  void G_shift_to_GOP( void )
 {
 	Gstate = GOP;
 	GlobalStatus.gstate = Gstate;
+
+        /* allow any type of regular message delivery again */
+        Prot_set_delivery_threshold( UNRELIABLE_TYPE );
 }
 
 void	G_init()
@@ -640,6 +644,13 @@ void	G_handle_reg_memb( configuration reg_memb, membership_id reg_memb_id )
 
                         /* Replace down queue */
                         Prot_set_down_queue( GROUPS_DOWNQUEUE );
+
+                        /* Enforce (at least) causal delivery at
+                         * protocol level to prevent any regular msgs
+                         * sent in the new membership from being
+                         * delivered to a daemon before it too
+                         * finishes the groups algorithm */
+                        Prot_set_delivery_threshold( AGREED_TYPE /*CAUSAL_TYPE*/ );
 
                         /* If I'm the head of my synced set, I send one or more GROUPS messages.
                          * No daemon's data about members for a given group is ever split across
@@ -2142,7 +2153,7 @@ static	int  G_build_groups_buf( char buf[], stdit *git, stdit *dit, int first_ti
                 /* To have information about this group, we need to be able to fit
                  * its name, ID, and the number of daemons it has in this message. */
                 size_needed = GROUPS_BUF_GROUP_INFO_SIZE + Message_get_data_header_size();
-                if( size_needed > GROUPS_BUF_SIZE - num_bytes ) break;
+                if( (int) size_needed > GROUPS_BUF_SIZE - num_bytes ) break;
 
                 memcpy( &buf[num_bytes], grp->name, MAX_GROUP_NAME );
                 num_bytes += MAX_GROUP_NAME;
@@ -2167,7 +2178,7 @@ static	int  G_build_groups_buf( char buf[], stdit *git, stdit *dit, int first_ti
                         size_needed = GROUPS_BUF_DAEMON_INFO_SIZE +
                                 (stdskl_size(&dmn->MembersList) * MAX_GROUP_NAME) + Message_get_data_header_size();
                         /* This requires that the number of local group members be limited. */
-                        if( size_needed > GROUPS_BUF_SIZE - num_bytes )
+                        if( (int) size_needed > GROUPS_BUF_SIZE - num_bytes )
                         {
                                 couldnt_fit_daemon = 1;
                                 break;
@@ -2315,7 +2326,7 @@ static	int  G_mess_to_groups( message_link *mess_link, synced_set *sset )
 	total_bytes = 0;
 	msg = mess_link->mess;
         scat = Message_get_data_scatter(msg);
-	for( i=0; i < scat->num_elements ; i++ )
+	for( i=0; i < (int) scat->num_elements ; i++ )
 	{
 		memcpy( &Temp_buf[total_bytes], scat->elements[i].buf, scat->elements[i].len );
 		total_bytes += scat->elements[i].len;
@@ -2341,7 +2352,7 @@ static	int  G_mess_to_groups( message_link *mess_link, synced_set *sset )
                 num_bytes           += sset->size * sizeof(int32) ;
                 memcpy( &sset->proc_ids, synced_set_procs_ptr, sset->size * sizeof(int32) );
                 if( !Same_endian( head_ptr->type ) )
-                        for( i = 0; i < sset->size; ++i )
+                        for( i = 0; i < (int) sset->size; ++i )
                                 sset->proc_ids[i] = Flip_int32( sset->proc_ids[i] );                
         }
 
@@ -2700,14 +2711,14 @@ int  G_private_to_names( char *private_group_name, char *private_name, char *pro
         pn[proc_name_len] = '\0';
         prvn = &name[1];
         legal_private_name = 1;
-        for( i=0; i < priv_name_len; i++ )
+        for( i=0; i < (int) priv_name_len; i++ )
                 if( prvn[i] <= '#' ||
                     prvn[i] >  '~' ) 
                 {
                         legal_private_name = 0;
                         prvn[i] = '.';
                 }
-        for( i=0; i < proc_name_len; i++ )
+        for( i=0; i < (int) proc_name_len; i++ )
                 if( pn[i] <= '#' ||
                     pn[i] >  '~' ) 
                 {
@@ -2812,7 +2823,7 @@ static  bool  G_update_synced_set_status( synced_set *s, configuration *memb_p )
         int    i, j = 0;
         bool changed = FALSE;
     
-        for( i = 0; i < s->size; ++i )
+        for( i = 0; i < (int) s->size; ++i )
                 if( Conf_id_in_conf( memb_p, s->proc_ids[i] ) >= 0 )
                         s->proc_ids[j++] = s->proc_ids[i];
         /* If we lost members. */
@@ -2829,7 +2840,7 @@ static  void  G_print_synced_set( int priority, synced_set *s, char *func_name )
         int  i;
         proc p;
         Alarmp( priority, GROUPS, "%s: Synced Set (with %u members):\n", func_name, s->size );
-        for( i = 0; i < s->size; ++i ) {
+        for( i = 0; i < (int) s->size; ++i ) {
                 Conf_proc_by_id( s->proc_ids[i], &p );
                 Alarmp( priority, GROUPS, "%s: \t%s\n", func_name, p.name );
         }

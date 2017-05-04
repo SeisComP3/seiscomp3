@@ -1,29 +1,4 @@
-/*  -- translated by f2c (version 20000121).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#include "f2c.h"
-
-/* Common Block Declarations */
-
-struct sccsquaint_1_ {
-    char sccsid[80];
-};
-
-#define sccsquaint_1 (*(struct sccsquaint_1_ *) &sccsquaint_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccsquaint_ = { {'@', '(', '#', ')', 'q', 'u', 'a', 'i', 'n', 't', '.', 
-	    'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0', '/', '9',
-	     '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' '} };
+#include "utils.h"
 
 
 /* NAME */
@@ -69,23 +44,23 @@ struct {
 /* AUTHOR */
 
 /* Subroutine */ int quaint_(n, x, f, x0, f0, fp0, iext)
-integer *n;
-real *x, *f, *x0, *f0, *fp0;
-integer *iext;
+int *n;
+float *x, *f, *x0, *f0, *fp0;
+int *iext;
 {
     /* System generated locals */
-    integer i__1, i__2;
-    real r__1, r__2;
+    int i__1, i__2;
+    float r__1, r__2;
 
     /* Local variables */
     extern /* Subroutine */ int brack_();
-    static integer ileft;
-    static real fpdev, f1, f2, f3;
-    static integer i1, i2, i3, i4;
-    static real f4, x1, x2, x3, x4, fpdev2, fpdev3, h12, h23, h34, s12, s23, 
+    static int ileft;
+    static float fpdev, f1, f2, f3;
+    static int i1, i2, i3, i4;
+    static float f4, x1, x2, x3, x4, fpdev2, fpdev3, h12, h23, h34, s12, s23,
 	    s34;
     extern /* Subroutine */ int hermit_();
-    static real fp2, fp3, fac;
+    static float fp2, fp3, fac;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */

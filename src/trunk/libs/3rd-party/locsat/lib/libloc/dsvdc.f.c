@@ -28,7 +28,7 @@ struct {
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static int c__1 = 1;
 static doublereal c_b41 = -1.;
 
 /* NAME */
@@ -108,16 +108,16 @@ static doublereal c_b41 = -1.;
 /* Subroutine */ int dsvdc_(x, ldx, n, p, s, e, u, ldu, v, ldv, work, job, 
 	info)
 doublereal *x;
-integer *ldx, *n, *p;
+int *ldx, *n, *p;
 doublereal *s, *e, *u;
-integer *ldu;
+int *ldu;
 doublereal *v;
-integer *ldv;
+int *ldv;
 doublereal *work;
-integer *job, *info;
+int *job, *info;
 {
     /* System generated locals */
-    integer x_dim1, x_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, 
+    int x_dim1, x_offset, u_dim1, u_offset, v_dim1, v_offset, i__1, i__2, 
 	    i__3;
     doublereal d__1, d__2, d__3, d__4, d__5, d__6, d__7;
 
@@ -125,32 +125,32 @@ integer *job, *info;
     double d_sign(), sqrt();
 
     /* Local variables */
-    static integer kase;
+    static int kase;
     extern doublereal ddot_();
-    static integer jobu, iter;
+    static int jobu, iter;
     extern /* Subroutine */ int drot_();
     static doublereal test;
     extern doublereal dnrm2_();
-    static integer nctp1;
+    static int nctp1;
     static doublereal b, c__;
-    static integer nrtp1;
+    static int nrtp1;
     static doublereal f, g;
-    static integer i__, j, k, l, m;
+    static int i__, j, k, l, m;
     static doublereal t, scale;
     extern /* Subroutine */ int dscal_();
     static doublereal shift;
     extern /* Subroutine */ int dswap_(), drotg_();
-    static integer maxit;
+    static int maxit;
     extern /* Subroutine */ int daxpy_();
     static logical wantu, wantv;
     static doublereal t1, ztest, el;
-    static integer kk;
+    static int kk;
     static doublereal cs;
-    static integer ll, mm, ls;
+    static int ll, mm, ls;
     static doublereal sl;
-    static integer lu;
+    static int lu;
     static doublereal sm, sn;
-    static integer lm1, mm1, lp1, mp1, nct, ncu, lls, nrt;
+    static int lm1, mm1, lp1, mp1, nct, ncu, lls, nrt;
     static doublereal emm1, smm1;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */

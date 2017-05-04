@@ -38,7 +38,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WindowFlags f)
 , _graphResponseCorrectedPowerSpectrum(&_xAxis, &_yAxis)
 , _graphResponsePowerSpectrum(&_xAxis, &_yAxis2)
 {
-	_phaseSpectrum = false;
+	_mode = Amplitude;
 	_graphPowerSpectrum.setData(&_powerSpectrum);
 	_graphResponseCorrectedPowerSpectrum.setData(&_responseCorrectedPowerSpectrum);
 	_graphResponsePowerSpectrum.setData(&_responsePowerSpectrum);
@@ -49,8 +49,7 @@ SpectrumWidget::SpectrumWidget(QWidget *parent, Qt::WindowFlags f)
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
 	_xAxis.setLabel(tr("Frequency in Hz (1/T)"));
-	_yAxis.setLabel(tr("Amplitude"));
-	_yAxis2.setLabel(tr("Normalized response amplitude"));
+	updateAxisLabels();
 
 	_xAxis.setPosition(Axis::Bottom);
 	_yAxis.setPosition(Axis::Left);
@@ -104,13 +103,29 @@ void SpectrumWidget::updateData() {
 
 	// Ignore the first value, this is the offset
 	_powerSpectrum.y.resize(_spec.size()-1);
-	if ( _phaseSpectrum ) {
-		for ( size_t i = 1; i < _spec.size(); ++i )
-			_powerSpectrum.y[i-1] = rad2deg(arg(_spec[i]));
-	}
-	else {
-		for ( size_t i = 1; i < _spec.size(); ++i )
-			_powerSpectrum.y[i-1] = abs(_spec[i]);
+
+	switch ( _mode ) {
+		case Amplitude:
+			for ( size_t i = 1; i < _spec.size(); ++i )
+				_powerSpectrum.y[i-1] = abs(_spec[i]);
+			break;
+
+		case Power:
+			for ( size_t i = 1; i < _spec.size(); ++i ) {
+				double v = abs(_spec[i]);
+				_powerSpectrum.y[i-1] = v*v;
+			}
+			break;
+
+		case Phase:
+			for ( size_t i = 1; i < _spec.size(); ++i )
+				_powerSpectrum.y[i-1] = rad2deg(arg(_spec[i]));
+			break;
+
+		default:
+			for ( size_t i = 1; i < _spec.size(); ++i )
+				_powerSpectrum.y[i-1] = 0;
+			break;
 	}
 
 	_powerSpectrum.x.lower = _freqNyquist / _powerSpectrum.count();
@@ -128,21 +143,39 @@ void SpectrumWidget::updateData() {
 			double dx = _responseCorrectedPowerSpectrum.x.length() / (_spec.size()-1);
 			double px = _responseCorrectedPowerSpectrum.x.lower;
 
-			if ( _phaseSpectrum ) {
-				for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
-					Math::Complex r;
-					tf->evaluate(&r, 1, &px);
-					_responsePowerSpectrum.y[i-1] = rad2deg(arg(r));
-					_responseCorrectedPowerSpectrum.y[i-1] = rad2deg(arg(_spec[i] / r));
-				}
-			}
-			else {
-				for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
-					Math::Complex r;
-					tf->evaluate(&r, 1, &px);
-					_responsePowerSpectrum.y[i-1] = abs(r);
-					_responseCorrectedPowerSpectrum.y[i-1] = abs(_spec[i] / r);
-				}
+			switch ( _mode ) {
+				case Amplitude:
+					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
+						Math::Complex r;
+						tf->evaluate(&r, 1, &px);
+						_responsePowerSpectrum.y[i-1] = abs(r);
+						_responseCorrectedPowerSpectrum.y[i-1] = abs(_spec[i] / r);
+					}
+					break;
+
+				case Power:
+					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
+						Math::Complex r;
+						tf->evaluate(&r, 1, &px);
+
+						double resp = abs(r);
+						double cresp = abs(_spec[i] / r);
+						_responsePowerSpectrum.y[i-1] = resp*resp;
+						_responseCorrectedPowerSpectrum.y[i-1] = cresp*cresp;
+					}
+					break;
+
+				case Phase:
+					for ( size_t i = 1; i < _spec.size(); ++i, px += dx ) {
+						Math::Complex r;
+						tf->evaluate(&r, 1, &px);
+						_responsePowerSpectrum.y[i-1] = rad2deg(arg(r));
+						_responseCorrectedPowerSpectrum.y[i-1] = rad2deg(arg(_spec[i] / r));
+					}
+					break;
+
+				default:
+					break;
 			}
 		}
 	}
@@ -155,8 +188,16 @@ void SpectrumWidget::updateData() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SpectrumWidget::setAmplitudeSpectrum(bool amplitudeSpectrum) {
-	setPhaseSpectrum(!amplitudeSpectrum);
+void SpectrumWidget::setAmplitudeSpectrum() {
+	if ( _mode == Amplitude ) return;
+	_mode = Amplitude;
+
+	updateAxisLabels();
+
+	if ( _freqNyquist > 0 )
+		updateData();
+
+	update();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -164,23 +205,62 @@ void SpectrumWidget::setAmplitudeSpectrum(bool amplitudeSpectrum) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SpectrumWidget::setPhaseSpectrum(bool phaseSpectrum) {
-	if ( _phaseSpectrum == phaseSpectrum ) return;
-	_phaseSpectrum = phaseSpectrum;
+void SpectrumWidget::setPhaseSpectrum() {
+	if ( _mode == Phase ) return;
+	_mode = Phase;
 
-	if ( _phaseSpectrum ) {
-		_yAxis.setLabel(tr("Phase in degree"));
-		_yAxis2.setLabel(tr("Response phase in degree"));
-	}
-	else {
-		_yAxis.setLabel(tr("Amplitude"));
-		_yAxis2.setLabel(tr("Normalized response amplitude"));
-	}
+	updateAxisLabels();
 
 	if ( _freqNyquist > 0 )
 		updateData();
 
 	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void SpectrumWidget::setPowerSpectrum() {
+	if ( _mode == Power ) return;
+	_mode = Power;
+
+	updateAxisLabels();
+
+	if ( _freqNyquist > 0 )
+		updateData();
+
+	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void SpectrumWidget::updateAxisLabels() {
+	switch ( _mode ) {
+		case Amplitude:
+			_yAxis.setLabel(tr("Amplitude"));
+			_yAxis2.setLabel(tr("Normalized response amplitude"));
+			break;
+
+		case Power:
+			_yAxis.setLabel(tr("Amplitude^2"));
+			_yAxis2.setLabel(tr("Normalized response amplitude^2"));
+			break;
+
+		case Phase:
+			_yAxis.setLabel(tr("Phase in degree"));
+			_yAxis2.setLabel(tr("Response phase in degree"));
+			break;
+
+		default:
+			_yAxis.setLabel(QString());
+			_yAxis2.setLabel(QString());
+			break;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

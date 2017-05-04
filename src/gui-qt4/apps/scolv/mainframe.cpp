@@ -1523,9 +1523,10 @@ void MainFrame::publishEvent() {
 			                           QString("%1 is still running.\n"
 			                                   "Do you want to terminate it?")
 			                             .arg(_exportScript.c_str()),
-			                           QMessageBox::Yes, QMessageBox::No) == QMessageBox::No )
+			                           QMessageBox::Yes, QMessageBox::No) == QMessageBox::No ) {
 				PublicObject::SetRegistrationEnabled(wasEnabled);
 				return;
+			}
 		}
 
 		SEISCOMP_WARNING(" ... will terminate old/other %s ...", _exportScript.c_str());

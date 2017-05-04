@@ -52,29 +52,22 @@ static  char	SccsId[] = "@(#)distaz2_.c	40.1	11/15/90";
 #define RAD_TO_DEG	57.2957795
 #define DEG_TO_RAD	1.0/RAD_TO_DEG
 
-void distaz2_ (alat1, alon1, alat2, alon2, delta, azi, baz)
+void distaz2_(double *alat1, double *alon1, double *alat2, double *alon2, double *delta, double *azi, double *baz) {
+	double clat1, clat2, cdlon, cdel;
+	double rlat1, rlat2, rdlon, slat1, slat2, sdlon;
+	double xazi, xbaz, yazi, ybaz;
 
-double	*alat1, *alon1, *alat2, *alon2;
-double	*azi, *baz, *delta;
+	/*  changed for ellipticity of earth
+	 *   changed use of *alat1 and *alat2
+	 */
 
-{
-	double	clat1, clat2, cdlon, cdel;
-	double	rlat1, rlat2, rdlon, slat1, slat2, sdlon;
-	double	xazi, xbaz, yazi, ybaz;
-	double	acos(), atan2(), cos(), sin();
+	double  esq, alat3, alat4;
 
-        /*  changed for ellipticity of earth
-	*   changed use of *alat1 and *alat2
-        */
+	esq = (1.0-1.0/298.25)*(1.0-1.0/298.25);
+	alat3=atan(tan(*alat1*DEG_TO_RAD)*esq)*RAD_TO_DEG;
+	alat4=atan(tan(*alat2*DEG_TO_RAD)*esq)*RAD_TO_DEG;
 
-	double  esq, alat3, alat4, atan(), tan();
-        esq=(1.0-1.0/298.25)*(1.0-1.0/298.25);
-        alat3=atan(tan(*alat1*DEG_TO_RAD)*esq)*RAD_TO_DEG;
-        alat4=atan(tan(*alat2*DEG_TO_RAD)*esq)*RAD_TO_DEG;
-
-
-	if ((*alat1 == *alat2) && (*alon1 == *alon2))
-	{
+	if ( (*alat1 == *alat2) && (*alon1 == *alon2) ) {
 		*delta = 0.0;
 		*azi = 0.0;
 		*baz = 180.0;
@@ -109,4 +102,3 @@ double	*azi, *baz, *delta;
 	if (*baz < 0.0)
 		*baz += 360.0;
 }
-

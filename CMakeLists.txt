@@ -120,7 +120,7 @@ IF (CMAKE_COMPILER_IS_GNUCC)
 
 	# gcc 6 defaults to C++14 which might break compilation
 	IF(GCC_VERSION_MAJOR GREATER 5)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98")
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-deprecated-declarations")
 	ENDIF(GCC_VERSION_MAJOR GREATER 5)
 ENDIF (CMAKE_COMPILER_IS_GNUCC)
 

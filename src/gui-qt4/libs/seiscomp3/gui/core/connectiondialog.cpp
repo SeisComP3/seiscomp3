@@ -137,8 +137,8 @@ bool ConnectionDialog::setDatabaseParameters(const QString& type, const QString&
 bool ConnectionDialog::setDefaultDatabaseParameters(const QString &uri) {
 	QStringList tmp = uri.split("://");
 	QString type, connection;
-	type = tmp.size() > 0?tmp[0]:"";
-	connection = tmp.size() > 1?tmp[1]:"";
+	type = tmp.size() > 1?tmp[0]:"mysql";
+	connection = tmp.size() > 1?tmp[1]:tmp[0];
 
 	return setDefaultDatabaseParameters(type, connection);
 }

@@ -4,10 +4,10 @@
 Filter grammar
 **************
 
-SeisComP3 supports string based filter definitions. This section covers available filters and their parameters.
+SeisComP3 supports string-based filter definitions. This section covers available filters and their parameters.
 
 The filter definition supports building filter chains (operator >> or ->) as well as combining them with basic
-mathematical operators like \+, \-, \*, \/, \^ (power) and \| \| (absolute value).
+mathematical operators like \+, \-, \*, \/, \^ (exponentiation) and \|. \| (absolute value).
 
 Example
 =======
@@ -35,7 +35,7 @@ The default filter applied by scautopick is
 :py:func:`RMHP(10)<RMHP()>` >> :py:func:`ITAPER(30)<ITAPER()>` >> :py:func:`BW(4,0.7,2)<BW()>` >> :py:func:`STALTA(2,80)<STALTA()>`
 
 It first removes the offset. Then an ITAPER of 30 seconds is applied before the data
-is filtered with a 4th order butterworth bandpass with corner frequencies of 0.7 Hz and 2 Hz.
+is filtered with a fourth order Butterworth bandpass with corner frequencies of 0.7 Hz and 2 Hz.
 Finally an STA/LTA filter with a short-time time window of 2 seconds and a long-term time window of
 80 seconds is applied.
 
@@ -85,7 +85,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 
 .. py:function:: BW_BP(order, lo-freq, hi-freq)
 
-   Butterworth Bandpass filter (BW) realized as a causal recursive IIR (infinite impulse response)
+   Butterworth bandpass filter (BW) realized as a causal recursive IIR (infinite impulse response)
    filter. An arbitrary bandpass filter can be created for given order and corner frequencies.
 
    :param order: The filter order
@@ -98,7 +98,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
    Differentiation filter realized as a recursive IIR (infinite impulse response) differentiation
    filter.
 
-   The differentiation loop calculates for each input sample s the output sample s\':
+   The differentiation loop calculates for each input sample `s` the output sample `s\'`:
 
    .. code-block:: py
 
@@ -109,7 +109,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 .. py:function:: INT([a = 0])
 
    Integration filter realized as a recursive IIR (infinite impulse response) integration
-   filter. The weights are calculated according to parameter a in the following way:
+   filter. The weights are calculated according to parameter `a` in the following way:
 
    .. code-block:: py
 
@@ -122,7 +122,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
       b2 = -1
 
 
-   The integration loop calculates for each input sample s the integrated output sample s\':
+   The integration loop calculates for each input sample `s` the integrated output sample s\':
 
    .. code-block:: py
 
@@ -131,7 +131,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
       v2 = v1
       v1 = v0
 
-   :param a: Coefficient a
+   :param a: Coefficient `a`.
 
 
 .. py:function:: ITAPER(timespan)
@@ -168,7 +168,7 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 
    A simulation of a 5-second seismometer.
 
-   :param type: The data type: 0 (displacement), 1 (velocity) and 2 (acceleration)
+   :param type: The data type: either 0 (displacement), 1 (velocity) or 2 (acceleration)
 
 
 .. py:function:: STALTA(sta, lta)
@@ -188,9 +188,9 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
    to be given for applying the simulation filter (displacement = 0, velocity = 1, acceleration = 2),
    e.g. WA(1) is the simulation on velocity data.
 
-   :param type: The data type: 0 (displacement), 1 (velocity) and 2 (acceleration)
+   :param type: The data type: 0 (displacement), 1 (velocity) or 2 (acceleration)
    :param gain: The gain of the Wood-Anderson response
-   :param T0: The eigen period in seconds
+   :param T0: The eigenperiod in seconds
    :param h: The damping constant
 
 
@@ -198,11 +198,11 @@ parameters it can be given either with parentheses (e.g. :py:func:`DIFF()<DIFF()
 
    The instrument simulation filter of a World-Wide Standard Seismograph Network (WWSSN) long-period seismometer.
 
-   :param type: The data type: 0 (displacement), 1 (velocity) and 2 (acceleration)
+   :param type: The data type: 0 (displacement), 1 (velocity) or 2 (acceleration)
 
 
 .. py:function:: WWSSN_SP([type = 1])
 
    Analog to the WWSSN_LP, the simulation filter of the short-period seismometer of the WWSSN.
 
-   :param type: The data type: 0 (displacement), 1 (velocity) and 2 (acceleration)
+   :param type: The data type: 0 (displacement), 1 (velocity) or 2 (acceleration)

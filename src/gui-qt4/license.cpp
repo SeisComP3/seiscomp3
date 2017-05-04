@@ -154,7 +154,11 @@ RSA *readKey(const char *fn, int which, int minbits, int maxbits, int &strength)
 	(void)BIO_free_all(in);
 	
 	if ( rsa != NULL ) {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 		strength = BN_num_bits(rsa->n);
+#else
+		strength = RSA_bits(rsa);
+#endif
 		if ( strength < minbits || strength > maxbits ) {
 			RSA_free(rsa);
 			rsa = NULL;

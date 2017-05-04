@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -408,7 +409,7 @@ void	Sess_init()
 	    Alarm( EXIT, "Sess_init: UNIX sock error\n" );
 
 	unix_addr.sun_family	= AF_UNIX;
-	snprintf( name, sizeof(name), "%s/%d", SP_UNIX_SOCKET, My.port );
+	snprintf( name, sizeof(name), "%s/%hu", SP_UNIX_SOCKET, My.port );
 	strcpy( unix_addr.sun_path, name ); 
 	unlink( name );
 
@@ -436,6 +437,17 @@ void	Sess_init()
 	G_init();
 
         Alarm( SESSION, "Sess_init: ended ok\n" );
+}
+
+void    Sess_fini(void)
+{
+#ifndef ARCH_PC_WIN95
+        char name[80];
+
+        close( Accept_unix_mbox );
+        snprintf( name, sizeof(name), "%s/%hu", SP_UNIX_SOCKET, My.port );
+        unlink( name );
+#endif
 }
 
 void    Sess_signal_conf_reload(void)
@@ -1284,7 +1296,7 @@ static  struct  msghdr  msgh;
 	{
 		packet_index = Sessions[ses].read.cur_element;
 		byte_index   = Sessions[ses].read.cur_byte;
-                if (packet_index >= scat->num_elements) 
+                if (packet_index >= (int) scat->num_elements) 
                 {
                         /* We are beginning a new fragment -- so allocate it */
                         assert(byte_index == 0);
@@ -1563,7 +1575,7 @@ void    Sess_write( int ses, message_link *mess_link, int *needed )
         Obj_Inc_Refcount(msg);
         scat = Message_get_data_scatter(msg);
 
-	for( total_to_send=0, i=0; i < scat->num_elements; i++ )
+	for( total_to_send=0, i=0; i < (int) scat->num_elements; i++ )
 		total_to_send += scat->elements[i].len;
 
         /* since also sending message_header */
@@ -1615,7 +1627,7 @@ void    Sess_write( int ses, message_link *mess_link, int *needed )
                         goto end_write;
                 }
 		/* send the message after first buffer*/
-		for( i=1; i < scat->num_elements; i++ )
+		for( i=1; i < (int) scat->num_elements; i++ )
 		{
 			ret = send( Sessions[ses].mbox, scat->elements[i].buf, 
 							scat->elements[i].len, 0);
@@ -1722,7 +1734,7 @@ static	void	Sess_badger( mailbox mbox )
                 {
                         scat = Message_get_data_scatter(msg);
                         for( i=Sessions[ses].write.cur_element, from=Sessions[ses].write.cur_byte;
-                             i < scat->num_elements; 
+                             i < (int) scat->num_elements; 
                              i++, from=0 )
                         {
                                 bytes_to_send = scat->elements[i].len - from;

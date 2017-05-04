@@ -815,7 +815,7 @@ class OriginTreeItem : public SchemeTreeItem {
 				setText(config.columnMap[COL_AGENCY], "");
 				setText(config.columnMap[COL_AUTHOR], "");
 			}
-			setText(config.columnMap[COL_OTIME], QString("%1").arg(ori->time().value().toString("... %T").c_str()));
+			setText(config.columnMap[COL_OTIME], timeToString(ori->time().value(), "... %T"));
 			setData(config.columnMap[COL_OTIME], Qt::UserRole, QVariant((double)ori->time().value()));
 			setText(config.columnMap[COL_M], "-"); // Mag
 			setText(config.columnMap[COL_MTYPE], "-"); // MagType
@@ -888,7 +888,7 @@ class OriginTreeItem : public SchemeTreeItem {
 				}
 			}
 
-			setToolTip(config.columnMap[COL_OTIME], ori->time().value().toString("%F %T").c_str());
+			setToolTip(config.columnMap[COL_OTIME], timeToString(ori->time().value(), "%F %T", true));
 			setToolTip(config.columnMap[COL_ID], text(config.columnMap[COL_ID]));
 			setToolTip(config.columnMap[COL_REGION], text(config.columnMap[COL_REGION])); // Region ToolTip
 		}
@@ -971,7 +971,7 @@ class FocalMechanismTreeItem : public SchemeTreeItem {
 				fmBaseOrg = Origin::Find(fm->triggeringOriginID());
 
 			if ( fmBaseOrg ) {
-				setText(config.columnMap[COL_OTIME], QString("%1").arg(fmBaseOrg->time().value().toString("... %T").c_str()));
+				setText(config.columnMap[COL_OTIME], timeToString(fmBaseOrg->time().value(), "... %T"));
 				setData(config.columnMap[COL_OTIME], Qt::UserRole, QVariant((double)fmBaseOrg->time().value()));
 
 				try {
@@ -1420,7 +1420,7 @@ class EventTreeItem : public SchemeTreeItem {
 					}
 
 					int column = config.columnMap[COL_OTIME];
-					setText(column, QString("%1").arg(origin->time().value().toString("%F %T").c_str()));
+					setText(column, timeToString(origin->time().value(), "%F %T"));
 					setData(column, Qt::UserRole, QVariant((double)origin->time().value()));
 
 					double lat = origin->latitude();
@@ -3079,7 +3079,10 @@ void EventListView::readFromDatabase(const Filter& filter) {
 					update = true;
 					OriginTreeItem *originItem = addOrigin(o, eventItem, prefOrg == o);
 					for ( size_t c = 0; c < o->commentCount(); ++c ) {
-						if ( o->comment(c)->text() == "OriginPublished" ) {
+						// "OriginPublished" shall be superseded by "published"
+					        // but here we accept both
+						if ( o->comment(c)->text() == "OriginPublished" ||
+						     o->comment(c)->text() == "published" ) {
 							originItem->setPublishState(true);
 							originItem->update(this);
 							break;
@@ -3783,7 +3786,10 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 					else if ( _withOrigins ) {
 						OriginTreeItem *origItem = findOrigin( n->parentID() );
 						if ( origItem ) {
-							if( comment->text() == "OriginPublished")
+							// "OriginPublished" shall be superseded by "published"
+							// but here we accept both
+							if( comment->text() == "OriginPublished" ||
+							    comment->text() == "published")
 								origItem->setPublishState(true);
 							updateOriginProcessColumns(origItem, true);
 							origItem->update(this);

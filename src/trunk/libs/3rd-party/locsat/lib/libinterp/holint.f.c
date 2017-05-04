@@ -1,29 +1,4 @@
-/*  -- translated by f2c (version 20000121).
-   You must link the resulting object file with the libraries:
-	-lf2c -lm   (in that order)
-*/
-
-#include "f2c.h"
-
-/* Common Block Declarations */
-
-struct sccsholint_1_ {
-    char sccsid[80];
-};
-
-#define sccsholint_1 (*(struct sccsholint_1_ *) &sccsholint_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccsholint_ = { {'@', '(', '#', ')', 'h', 'o', 'l', 'i', 'n', 't', '.', 
-	    'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0', '/', '9',
-	     '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' '} };
+#include "utils.h"
 
 
 /* NAME */
@@ -81,20 +56,20 @@ struct {
 /* AUTHOR */
 
 /* Subroutine */ int holint_(n, x, f, fbad, x0, f0, fp0, iext, ibad)
-integer *n;
-real *x, *f, *fbad, *x0, *f0, *fp0;
-integer *iext, *ibad;
+int *n;
+float *x, *f, *fbad, *x0, *f0, *fp0;
+int *iext, *ibad;
 {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
 
     /* Local variables */
-    static integer imin, imax, nuse;
+    static int imin, imax, nuse;
     extern /* Subroutine */ int brack_();
-    static integer ileft;
-    static real fh[6];
-    static integer nh;
-    static real xh[6];
+    static int ileft;
+    static float fh[6];
+    static int nh;
+    static float xh[6];
     extern /* Subroutine */ int fixhol_(), quaint_();
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */

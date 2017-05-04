@@ -33,6 +33,7 @@
 #include "panels/inventory.h"
 #include "panels/modules.h"
 #include "panels/system.h"
+#include "panels/help.h"
 
 
 using namespace std;
@@ -1392,6 +1393,7 @@ Configurator::Configurator(Environment::ConfigStage stage, QWidget *parent)
 	panels.append(new InventoryPanel);
 	panels.append(new ModulesPanel);
 	panels.append(new BindingsPanel);
+	panels.append(new HelpPanel);
 
 	_statusLabel = new StatusLabel;
 	_statusLabel->hide();

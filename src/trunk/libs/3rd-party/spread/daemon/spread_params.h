@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -37,11 +38,12 @@
 #define INC_SPREAD_PARAMS
 
 #define		SP_MAJOR_VERSION	4
-#define         SP_MINOR_VERSION        3
+#define         SP_MINOR_VERSION        4
 #define         SP_PATCH_VERSION        0
+
 #define         SPREAD_PROTOCOL         3
 
-#define         SPREAD_BUILD_DATE       "11/June/2013"
+#define         SPREAD_BUILD_DATE       "27/May/2014"
 
 #define		DEFAULT_SPREAD_PORT	4803
 
@@ -89,7 +91,8 @@
 
 #define         MAX_WRAP_SEQUENCE_VALUE (1<<30) /* Maximum value for token->seq before reseting to zero with membership */
 
-#define		DEFAULT_WINDOW 		100
-#define		DEFAULT_PERSONAL_WINDOW	 20
+#define		DEFAULT_WINDOW 		   160
+#define		DEFAULT_PERSONAL_WINDOW	    20
+#define		DEFAULT_ACCELERATED_WINDOW  15
 
 #endif /* INC_SPREAD_PARAMS */

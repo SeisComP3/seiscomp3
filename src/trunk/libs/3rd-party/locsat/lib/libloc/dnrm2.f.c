@@ -50,9 +50,9 @@ struct {
 /* AUTHOR */
 /* 	C.L. Lawson, Jan. 1978. */
 doublereal dnrm2_(n, dx, incx)
-integer *n;
+int *n;
 doublereal *dx;
-integer *incx;
+int *incx;
 {
     /* Initialized data */
 
@@ -61,14 +61,8 @@ integer *incx;
     static doublereal cutlo = 8.232e-11;
     static doublereal cuthi = 1.304e19;
 
-    /* Format strings */
-    static char fmt_1020[] = "";
-    static char fmt_1030[] = "";
-    static char fmt_1060[] = "";
-    static char fmt_1070[] = "";
-
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
     doublereal ret_val, d__1;
 
     /* Builtin functions */
@@ -76,11 +70,8 @@ integer *incx;
 
     /* Local variables */
     static doublereal xmax;
-    static integer next, i__, j, nn;
+    static int next, i__, j, nn;
     static doublereal hitest, sum;
-
-    /* Assigned format variables */
-    static char *next_fmt;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */
@@ -127,7 +118,6 @@ integer *incx;
     goto L1130;
 L1000:
     next = 0;
-    next_fmt = fmt_1020;
     sum = zero;
     nn = *n * *incx;
 /*     Begin main loop */
@@ -144,7 +134,6 @@ L1020:
 	goto L1100;
     }
     next = 1;
-    next_fmt = fmt_1030;
     xmax = zero;
 /*     Phase 1.  sum is zero */
 L1030:
@@ -156,13 +145,11 @@ L1030:
     }
 /*     Prepare for phase 2 */
     next = 2;
-    next_fmt = fmt_1060;
     goto L1050;
 /*     Prepare for phase 4 */
 L1040:
     i__ = j;
     next = 3;
-    next_fmt = fmt_1070;
     sum = sum / dx[i__] / dx[i__];
 L1050:
     xmax = (d__1 = dx[i__], abs(d__1));

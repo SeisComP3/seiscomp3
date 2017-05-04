@@ -4,24 +4,28 @@
 Contributing Documentation
 **************************
 
-This is the documentation for the core processing elements and utilities that make up the SeisComP3 system. 
-It aims to document the configuration and command line options for SC3 in multiple formats (html, man, pdf,
-ePub etc) in a consistent way.  The functionality of SC3 differs between versions so the documentation is
-versioned along with SC3.  For more general topics and tutorials please refer to the
+This is the documentation for the core processing elements and utilities that make up the SeisComP3 system.
+It aims to document the configuration and command line options for
+SeisComP3 in multiple formats (HTML, man, PDF, ePub etc) in a
+consistent way. The functionality of SeisComP3 differs between
+versions so the documentation is versioned along with SeisComP3.
+For more general topics and tutorials please refer to the
 `SeisComp3 wiki <http://www.seiscomp3.org/>`_.
 
 The documentation is written in `reStructuredText <http://docutils.sourceforge.net/rst.html>`_ (reST) a
 simple text mark up format. The documentation is generated using `Sphinx <http://sphinx.pocoo.org/index.html>`_
-which is used to create the `Python documentation <http://docs.python.org/>`_.  The Sphinx website has a very
-good `introduction to reST <http://sphinx.pocoo.org/rest.html>`_ and also covers the Sphinx specific
+which is used to create the `Python documentation <http://docs.python.org/>`_.
+The Sphinx website has a very good
+`introduction to reST <http://sphinx.pocoo.org/rest.html>`_ and also covers the Sphinx specific
 `directives <http://sphinx.pocoo.org/markup/index.html>`_.
 
 If you would like to add to this documentation or you find an error then please submit a patch to
 `trac <http://www.seiscomp3.org/newticket>`_ or to the mailing list.  
 
-If you are viewing the html version of the documentation in a browser then you can use the *Show Source*
-link on each page to view the reST source.  This or the documentation files for executables (see below)
-is a good starting point for a patch.
+If you are viewing the HTML version of the documentation in a browser
+then you can use the *Show Source* link on each page to view the reST
+source. This or the documentation files for executables (see below) is
+a good starting point for a patch.
 
 Documenting Executables
 =======================
@@ -29,23 +33,25 @@ Documenting Executables
 The documentation for executables is generated from two sources:
 
 'executable'.xml
-    An xml file that contains a brief description of the command, markup describing the command line parameters,
-    and any configuration parameters for the executable.  Each parameter should have a brief description of
-    the purpose of the parameter.
+    An XML file that contains a brief description of the command,
+    markup describing the command line parameters, and any
+    configuration parameters for the executable. Each parameter should
+    have a brief description of the purpose of the parameter.
 
-    The description should be plain text and not containt reST markup. Where parameters are common accross
+    The description should be plain text and not contain reST markup. Where parameters are common across
     a number of executables they should be placed in the appropriate common file and referred to using
     their publicID.
 
-    All xml files live in the :file:`doc/apps` directory of the source distribution or in :file:`etc/descriptions` of an
-    installation.
+    All XML files live in the :file:`doc/apps` directory of the source
+    distribution or in :file:`etc/descriptions` of an installation.
 
 'executable'.rst
-    This is a text file in reST markup that gives any more detailed description and examples for the executable.
-    It is combined with the corresponding .xml to create the full documentation.  The first entry in the file
-    should be a paragraph giving a more detailed description of the executable.
+    This is a text file in reST markup that gives any more-detailed description and examples for the executable.
+    It is combined with the corresponding .xml to create the full documentation.
+    The first entry in the file should be a paragraph giving a more
+    detailed description of the executable.
 
-These two files should be placed in a :file:`descriptions` sub directory of the
+These two files should be placed in a :file:`descriptions` sub-directory of the
 respective module, e.g. :file:`src/seedlink/apps/seedlink/descriptions/seedlink.rst`.
 The intention is that the documentation is close to the code to make it easier for developers to keep the
 documentation up to date with code changes.
@@ -57,8 +63,8 @@ form of the documentation that is generated from only the .xml file.
 Images 
 ======
 
-Any images should be placed in a suitable sub directory of :file:`descriptions/media`.
-They can the be referred to (in .rst) like::
+Any images should be placed in a suitable sub-directory of :file:`descriptions/media`.
+They can then be referred to (in .rst) like::
 
     .. figure::  media/scolv/scolv-overview.png
 
@@ -257,7 +263,7 @@ Element: **configuration**
 |                   |          |           |    group.param = "another value"                  |
 |                   |          |           |                                                   |
 |                   |          |           | Here ``param`` is a top level parameter           |
-|                   |          |           | wheras ``group.param`` is not. See                |
+|                   |          |           | whereas ``group.param`` is not. See               |
 |                   |          |           | :ref:`parameter<xml-configuration-parameter>`.    |
 +-------------------+----------+-----------+---------------------------------------------------+
 | **struct**        | element  |    no     | A top level structure definition. Structures      |

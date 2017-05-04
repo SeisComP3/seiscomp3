@@ -12428,6 +12428,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Time_LocalTimeZone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":Time_LocalTimeZone")) SWIG_fail;
+  result = Seiscomp::Core::Time::LocalTimeZone();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Time_GMT(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Core::Time result;
@@ -35785,6 +35798,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Time_get", _wrap_Time_get, METH_VARARGS, NULL},
 	 { (char *)"Time_get2", _wrap_Time_get2, METH_VARARGS, NULL},
 	 { (char *)"Time_LocalTime", _wrap_Time_LocalTime, METH_VARARGS, NULL},
+	 { (char *)"Time_LocalTimeZone", _wrap_Time_LocalTimeZone, METH_VARARGS, NULL},
 	 { (char *)"Time_GMT", _wrap_Time_GMT, METH_VARARGS, NULL},
 	 { (char *)"Time_FromYearDay", _wrap_Time_FromYearDay, METH_VARARGS, NULL},
 	 { (char *)"Time_localtime", _wrap_Time_localtime, METH_VARARGS, NULL},
@@ -37759,7 +37773,7 @@ SWIG_init(void) {
   
   PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"Unset",Swig_var_Unset_get, Swig_var_Unset_set);
-  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x090000)));
+  SWIG_Python_SetConstant(d, "SC_API_VERSION",SWIG_From_int(static_cast< int >(0x0A0000)));
   SWIG_addvarlink(SWIG_globals(),(char*)"CurrentVersion",Swig_var_CurrentVersion_get, Swig_var_CurrentVersion_set);
   SWIG_Python_SetConstant(d, "GenericArchive_NONE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::NONE)));
   SWIG_Python_SetConstant(d, "GenericArchive_STATIC_TYPE",SWIG_From_int(static_cast< int >(Seiscomp::Core::Generic::Archive< Seiscomp::Core::BaseObject >::STATIC_TYPE)));

@@ -150,10 +150,33 @@ bool Check::check() {
 			checkOutside(net, sta);
 
 			EpochMap locationEpochs;
-			double lat = sta->latitude();
-			double lon = sta->longitude();
+			double lat = 0.0;
+			double lon = 0.0;
+			bool lvalid = true;
 
-			if ( lat == 0.0 && lon == 0.0 ) {
+			try {
+				lat = sta->latitude();
+			}
+			catch ( ... ) {
+				log(LogHandler::Warning,
+				    (string(sta->className()) + " " + id(sta) + "\n  "
+				     "latitude is not set").c_str(),
+				     NULL, NULL);
+				lvalid = false;
+			}
+
+			try {
+				lon = sta->longitude();
+			}
+			catch ( ... ) {
+				log(LogHandler::Warning,
+				    (string(sta->className()) + " " + id(sta) + "\n  "
+				     "longitude is not set").c_str(),
+				     NULL, NULL);
+				lvalid = false;
+			}
+
+			if ( lvalid && lat == 0.0 && lon == 0.0 ) {
 				log(LogHandler::Warning,
 				    (string(sta->className()) + " " + id(sta) + "\n  "
 				     "coordinates are 0.0/0.0").c_str(),
@@ -166,26 +189,51 @@ bool Check::check() {
 				checkOverlap(locationEpochs[loc->code()], loc);
 				checkOutside(sta, loc);
 
-				double llat = loc->latitude();
-				double llon = loc->longitude();
+				double llat = 0.0;
+				double llon = 0.0;
+				bool llvalid = true;
 
-				if ( llat == 0.0 && llon == 0.0 ) {
+				try {
+					llat = loc->latitude();
+				}
+				catch ( ... ) {
+					log(LogHandler::Warning,
+					    (string(loc->className()) + " " + id(loc) + "\n  "
+					     "latitude is not set").c_str(),
+					     NULL, NULL);
+					llvalid = false;
+				}
+
+				try {
+					llon = loc->longitude();
+				}
+				catch ( ... ) {
+					log(LogHandler::Warning,
+					    (string(loc->className()) + " " + id(loc) + "\n  "
+					     "longitude is not set").c_str(),
+					     NULL, NULL);
+					llvalid = false;
+				}
+
+				if ( llvalid && llat == 0.0 && llon == 0.0 ) {
 					log(LogHandler::Warning,
 					    (string(loc->className()) + " " + id(loc) + "\n  "
 					     "coordinates are 0.0/0.0").c_str(),
 					     NULL, NULL);
 				}
 
-				double dist,a1,a2;
+				if ( lvalid && llvalid ) {
+					double dist,a1,a2;
 
-				Math::Geo::delazi(lat,lon,llat,llon, &dist, &a1, &a2);
-				dist = Math::Geo::deg2km(dist);
+					Math::Geo::delazi(lat,lon,llat,llon, &dist, &a1, &a2);
+					dist = Math::Geo::deg2km(dist);
 
-				if ( dist > 10 ) {
-					log(LogHandler::Warning,
-					    (string(loc->className()) + " " + id(loc) + "\n  "
-					     "location is " + Core::toString(dist) + "km away from parent Station").c_str(),
-					     NULL, NULL);
+					if ( dist > 10 ) {
+						log(LogHandler::Warning,
+						    (string(loc->className()) + " " + id(loc) + "\n  "
+						     "location is " + Core::toString(dist) + "km away from parent Station").c_str(),
+						    NULL, NULL);
+					}
 				}
 
 				EpochMap channelEpochs;

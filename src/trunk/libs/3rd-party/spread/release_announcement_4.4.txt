@@ -1,0 +1,56 @@
+Spread 4.4.0 http://www.spread.org
+
+Spread Concepts LLC is happy to announce the release of a 
+new version, 4.4.0, of The Spread Toolkit. 
+
+The Spread 4.4 version is an important release that incorporates a new,
+accelerated ring protocol.  This protocol is tailored for data center networks 
+and can provide 30%-50% higher throughput and 20-35% lower latency in modern 
+local area networks.  This version also supports Spread's regular ring protocol.
+
+The main new features of this release are:
+
+1) Accelerated ring protocol to improve both throughput and latency in local area networks.
+
+2) Redesigned message-packing, reducing overhead for small messages.
+
+3) Updated MSVS project files for Windows source builds.
+
+4) Several important bugfixes that make Spread more stable, especially under high loss.
+
+5) Expanded and improved logging.
+
+6) Binary executable releases for 64b OSX (10.6+) and Windows 8.
+
+For details check the Readme.txt file. 
+
+This release does not include any API changes, so applications should be able to be
+relinked or recompiled with the new Spread library without changes. 
+
+A new AcceleratedRing parameter has been added to Spread's configuration file.
+If this parameter is set to true, then the accelerated ring protocol will be used.  
+If it is set to false, then the regular ring protocol will be used.  If it is left 
+unspecified (the default), then Spread will try to determine which protocol is likely better 
+for your environment.  If your configuration looks like it might be a LAN (i.e. - all 
+daemon IPs are in the same /16 network) rather than a WAN, then Spread will use 
+the accelerated protocol.  Otherwise, it will use the regular protocol.  All the daemons 
+in a configuration must use the same ring protocol.  Daemons with different protocols 
+will refuse to communicate with one another.
+
+A new AcceleratedWindow parameter (default 15), with a value between 0 and the 
+value of the PersonalWindow parameter (default 20), can be specified as a flow 
+control parameter in the spread.conf file.  When the accelerated protocol is used,
+the higher the AcceleratedWindow parameter the more acceleration can be expected, 
+up to a point.  In our testing on an 8 daemon ring on 1Gb/s and 10Gb/s networks, we 
+achieved peak performance with both AcceleratedWindow and PersonalWindow 
+values of 20.  The accelerated protocol achieves peak performance with smaller values 
+of PersonalWindow than the regular protocol.  The sample.spread.conf file included in 
+this release has example settings for these parameters that enable the Accelerated 
+ring protocol, as well as a description of their functions.
+
+The Spread toolkit provides a high performance messaging service that is resilient 
+to faults across local and wide area networks. Spread functions as a unified message bus 
+for distributed applications, and provides highly tuned application-level multicast, group 
+communication, and point to point support. Spread services range from reliable messaging 
+to fully ordered messages with virtual synchrony delivery guarantees, even in case 
+of computer failures and network partitions.

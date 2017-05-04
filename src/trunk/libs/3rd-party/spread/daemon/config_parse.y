@@ -19,7 +19,7 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
@@ -255,7 +255,7 @@ static  int    convert_segment_to_string(char *segstr, int strsize, segment *seg
     strncat( segstr, "\n", strsize - curlen);
     curlen += 1;
 
-    if (curlen > strsize) {
+    if ((int) curlen > strsize) {
         /* ran out of space in string -- should never happen. */
         Alarmp( SPLOG_ERROR, CONF_SYS, "config_parse.y:convert_segment_to_string: The segment string is too long! %d characters attemped is more then %d characters allowed", curlen, strsize);
         Alarmp( SPLOG_ERROR, CONF_SYS, "config_parse.y:convert_segment_to_string:The error occured on segment %d.%d.%d.%d. Successful string was: %s\n",
@@ -327,7 +327,7 @@ static  int    convert_segment_to_string(char *segstr, int strsize, segment *seg
 %token DEBUGINITIALSEQUENCE
 %token DANGEROUSMONITOR SOCKETPORTREUSE RUNTIMEDIR SPUSER SPGROUP ALLOWEDAUTHMETHODS REQUIREDAUTHMETHODS ACCESSCONTROLPOLICY
 %token MAXSESSIONMESSAGES
-%token WINDOW PERSONALWINDOW
+%token WINDOW PERSONALWINDOW ACCELERATEDRING ACCELERATEDWINDOW
 %token TOKENTIMEOUT HURRYTIMEOUT ALIVETIMEOUT JOINTIMEOUT REPTIMEOUT SEGTIMEOUT GATHERTIMEOUT FORMTIMEOUT LOOKUPTIMEOUT
 %token SP_BOOL SP_TRIVAL LINKPROTOCOL PHOP PTCPHOP
 %token IMONITOR ICLIENT IDAEMON
@@ -559,6 +559,15 @@ ParamStruct	:	DEBUGFLAGS EQUALS OPENBRACE AlarmBitComp CLOSEBRACE
 		|	PERSONALWINDOW EQUALS NUMBER
 			{
 			    Conf_set_personal_window($3.number);
+			}
+		|	ACCELERATEDRING EQUALS SP_BOOL
+			{
+			    Conf_set_accelerated_ring_flag(TRUE);
+			    Conf_set_accelerated_ring($3.boolean);
+			}
+		|	ACCELERATEDWINDOW EQUALS NUMBER
+			{
+			    Conf_set_accelerated_window($3.number);
 			}
 		|	TOKENTIMEOUT EQUALS NUMBER
 			{

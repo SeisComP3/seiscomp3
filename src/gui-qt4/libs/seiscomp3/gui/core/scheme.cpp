@@ -207,6 +207,7 @@ Scheme::Colors::Records::Records() {
 	alignment = Qt::red;
 	foreground = QColor(128, 128, 128);
 	alternateForeground = foreground;
+	spectrogram = Qt::black;
 	gaps = QColor(255, 255, 0, 64);
 	overlaps = QColor(255, 0, 255, 64);
 }
@@ -254,6 +255,7 @@ Scheme::Colors::QC::QC() :
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Colors::OriginSymbol::OriginSymbol() {
+	classic = false;
 	depth.discrete = true;
 	depth.gradient.setColorAt(0, Qt::red);
 	depth.gradient.setColorAt(50, QColor(255, 165, 0));
@@ -452,6 +454,15 @@ Scheme::Unit::Unit() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Scheme::DateTime::DateTime() {
+	useLocalTime = false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Scheme::fetch() {
 	READ_BOOL(showMenu);
 	READ_BOOL(showStatusBar);
@@ -478,6 +489,7 @@ void Scheme::fetch() {
 	READ_COLOR(colors.records.alignment);
 	READ_COLOR(colors.records.foreground);
 	READ_COLOR(colors.records.alternateForeground);
+	READ_COLOR(colors.records.spectrogram);
 	READ_COLOR(colors.records.gaps);
 	READ_COLOR(colors.records.overlaps);
 	READ_COLOR(colors.records.states.unrequested);
@@ -552,6 +564,7 @@ void Scheme::fetch() {
 	READ_COLOR(colors.legend.text);
 	READ_COLOR(colors.legend.headerText);
 
+	READ_BOOL(colors.originSymbol.classic);
 	READ_COLOR_GRADIENT(colors.originSymbol.depth.gradient);
 	READ_BOOL(colors.originSymbol.depth.discrete);
 
@@ -602,6 +615,7 @@ void Scheme::fetch() {
 	READ_INT(precision.uncertainties);
 
 	READ_BOOL(unit.distanceInKM);
+	READ_BOOL(dateTime.useLocalTime);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

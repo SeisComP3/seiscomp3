@@ -393,6 +393,15 @@ void Application::handleRecord(Record *rec) {
 		}
 	}
 
+	// Delete finished processors
+	for ( std::list<WaveformProcessor*>::iterator itt = trashList.begin();
+	      itt != trashList.end(); ++itt ) {
+		processorFinished(rec, *itt);
+		removeProcessor(*itt);
+	}
+
+	trashList.clear();
+
 	_registrationBlocked = false;
 
 	// Remove outdated processors if not already on the trash list
@@ -419,13 +428,6 @@ void Application::handleRecord(Record *rec) {
 
 		registerProcessor(wid.networkCode(), wid.stationCode(),
 		                  wid.locationCode(), wid.channelCode(), twp.get());
-	}
-
-	// Delete finished processors
-	for ( std::list<WaveformProcessor*>::iterator itt = trashList.begin();
-	      itt != trashList.end(); ++itt ) {
-		processorFinished(rec, *itt);
-		removeProcessor(*itt);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

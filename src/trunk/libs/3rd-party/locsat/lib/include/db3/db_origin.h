@@ -17,31 +17,14 @@
 #define DB_ORIGIN_H
 
 typedef struct origin {
-	float	lat;
-	float	lon;
-	float	depth;
-	double	time;
-	long	orid;
-	long	evid;
-	long	jdate;
-	long	nass;
-	long	ndef;
-	long	ndp;
-	long	grn;
-	long	srn;
-	char	etype[8];
-	float	depdp;
-	char	dtype[2];
-	float	mb;
-	long	mbid;
-	float	ms;
-	long	msid;
-	float	ml;
-	long	mlid;
-	char	algorithm[16];
-	char	auth[16];
-	long	commid;
-	char	lddate[18];
+	float  lat;
+	float  lon;
+	float  depth;
+	double time;
+	long   nass;
+	long   ndef;
+	long   ndp;
+	char   auth[16];
 } Origin;
 
 #endif /* DB_ORIGIN_H */

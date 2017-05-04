@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -64,5 +65,11 @@ void    Prot_Create_Local_Session(session *new_sess);
 void    Prot_Destroy_Local_Session(session *old_sess);
 down_link       *Prot_Create_Down_Link(message_obj *msg, int type, int mbox, int cur_element);
 void    Prot_kill_session(message_obj *msg);
+void	Prot_set_prev_proc(configuration *memb);
+
+/* thresholds defined in net_types.h: UNRELIABLE_TYPE, AGREED_TYPE, BLOCK_REGULAR_DELIVERY, etc. */
+
+int     Prot_get_delivery_threshold( void );
+void    Prot_set_delivery_threshold( int thresh );
 
 #endif	/* INC_PROTOCOL */ 

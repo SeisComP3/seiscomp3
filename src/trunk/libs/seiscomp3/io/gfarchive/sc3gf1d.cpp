@@ -51,27 +51,6 @@ DeprecatedInterface("saul");
 namespace {
 
 
-void interpolate(Core::GreensFunction *gf1, const Core::GreensFunction *gf2,
-                 double dist, double lower, double upper) {
-	double coeff2 = (dist-lower) / (upper-lower);
-	double coeff1 = 1.0 - coeff2;
-
-	//std::cerr << "Interpolate: " << lower << ", " << dist << ", " << upper << ": "
-	//          << coeff1 << ", " << coeff2 << std::endl;
-
-	for ( int i = 0; i < 8; ++i ) {
-		FloatArray *ar1 = (FloatArray*)gf1->data(i);
-		FloatArray *ar2 = (FloatArray*)gf2->data(i);
-
-		if ( ar1->size() != ar2->size() )
-			SEISCOMP_ERROR("GF: Interpolation sizes do not match");
-
-		for ( int s = 0; s < ar1->size(); ++s )
-			(*ar1)[s] = coeff1*(*ar1)[s] + coeff2*(*ar2)[s];
-	}
-}
-
-
 bool interpolate(Core::GreensFunction *gf1, const Core::GreensFunction *gf2,
                  const Core::GreensFunction *gf3, const Core::GreensFunction *gf4,
                  double dist, double lowerDist, double upperDist,
@@ -398,7 +377,7 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 		std::string pathprefix = _baseDirectory + "/" + req.model + "/";
 
 		int distKm = (int)req.distance;
-		int iDepth = (int)req.depth;
+		double fDepth = req.depth;
 
 		ModelMap::iterator mit = _models.find(req.model);
 		if ( mit == _models.end() ) continue;
@@ -459,8 +438,8 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 				dep2 = dep1;
 
 			double maxDepError = dep2 - dep1;
-			if ( dep1 - iDepth > maxDepError ) {
-				SEISCOMP_DEBUG("Depth too low: %d km < %d km", iDepth, (int)dep1);
+			if ( dep1 - fDepth > maxDepError ) {
+				SEISCOMP_DEBUG("Depth too low: %f km < %d km", fDepth, (int)dep1);
 				continue;
 			}
 
@@ -474,8 +453,8 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 			dep1 = *lbdep;
 
 			double maxDepError = dep2 - dep1;
-			if ( iDepth - dep2 > maxDepError ) {
-				SEISCOMP_DEBUG("Depth too high: %d km", iDepth);
+			if ( fDepth - dep2 > maxDepError ) {
+				SEISCOMP_DEBUG("Depth too high: %f km", fDepth);
 				continue;
 			}
 
@@ -493,7 +472,7 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 			dist = dist2;
 		}
 
-		if ( fabs(iDepth - dep1) < fabs(iDepth - dep2) ) {
+		if ( fabs(fDepth - dep1) < fabs(fDepth - dep2) ) {
 			dep = dep1;
 		}
 		else {
@@ -640,12 +619,12 @@ Core::GreensFunction* SC3GF1DArchive::get() {
 				}
 			}
 
-			gf_11->setDepth(iDepth);
+			gf_11->setDepth(fDepth);
 		}
 
 		if ( !interpolate(gf_11, gf_12, gf_21, gf_22,
-		                  distKm, dist1, dist2, iDepth, dep, alt_dep) ) {
-			SEISCOMP_ERROR("Interpolation for %d / %d failed", distKm, iDepth);
+		                  distKm, dist1, dist2, fDepth, dep, alt_dep) ) {
+			SEISCOMP_ERROR("Interpolation for %d / %f failed", distKm, fDepth);
 
 			if ( gf_11 ) delete gf_11;
 			if ( gf_12 && (gf_11 != gf_12) ) delete gf_12;
@@ -779,6 +758,18 @@ Core::GreensFunction* SC3GF1DArchive::read(const std::string &file,
 	}
 
 	return gf;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(double) SC3GF1DArchive::getTravelTime(const std::string &phase,
+                                          const std::string &model,
+                                          const GFSource &source,
+                                          const GFReceiver &receiver) {
+	return Core::None;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

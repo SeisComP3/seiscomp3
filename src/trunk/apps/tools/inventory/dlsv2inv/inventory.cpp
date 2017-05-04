@@ -123,15 +123,49 @@ inline string date2str(const Core::Time& t)
 	return string(buf);
 }
 
-inline pair<int,int> float2rational(double x) // to be improved
-{
-	for(int n = 1; n <= 10000; n *= 10)
-	{
-		int k = int(n * x + 0.5);
-		if(k >= 1) return make_pair(k, n);
+typedef pair<int,int> Fraction;
+
+Fraction double2frac(double d) {
+	double df = 1;
+	Fraction::first_type top = d >= 2.0 ? d-1 : 1, ctop = top;
+	Fraction::second_type bot = d <= 0.5 ? 1/d-1 : 1, cbot = bot;
+	double error = fabs(df-d);
+	double last_error = error*2;
+	bool fixed_top = false;
+
+	if ( fabs(d) < 1E-20 )
+		return Fraction(0,1);
+
+	while ( error < last_error ) {
+		ctop = top;
+		cbot = bot;
+
+		//cerr << error << "  " << top << "/" << bot << endl;
+		if ( df < d )
+			++top;
+		else {
+			++bot;
+			top = Fraction::first_type(d * bot);
+		}
+
+		df = (double)top / (double)bot;
+		if ( top > 0 ) {
+			last_error = error;
+			error = fabs(df-d);
+			fixed_top = false;
+		}
+		else if ( fixed_top ) {
+			cbot = 1;
+			break;
+		}
+		else
+			fixed_top = true;
+
+		if ( top < 0 || bot < 0 )
+			return Fraction(0,0);
 	}
 
-	return make_pair(0, 1);
+	return Fraction(ctop,cbot);
 }
 
 inline void check_fir(DataModel::ResponseFIRPtr rf, int &errors)
@@ -918,7 +952,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		}
 #endif
 
-		if(IsPAZStream(ci) || IsPolyStream(ci) || IsFAPStream(ci))
+		if ( IsSensorPAZStream(ci) || IsSensorPolyStream(ci) || IsSensorFAPStream(ci) )
 		{
 			/* pair<set<pair<pair<pair<pair<pair<string, string>, string>, string>, Core::Time>, Core::Time> >::iterator, bool> ins = \
 			*/
@@ -934,9 +968,9 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 			// ProcessComponent(ci, strm);
 			ProcessDatalogger(ci, strm);
 
-			if(IsPAZStream(ci))
+			if(IsSensorPAZStream(ci))
 				ProcessPAZSensor(ci, strm);
-			else if (IsPolyStream(ci))
+			else if (IsSensorPolyStream(ci))
 				ProcessPolySensor(ci, strm);
 			else
 				ProcessFAPSensor(ci, strm);
@@ -1006,12 +1040,12 @@ void Inventory::UpdateSensorLocation(ChannelIdentifier& ci, DataModel::SensorLoc
 *******************************************************************************/
 DataModel::StreamPtr Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc, bool restricted, bool shared)
 {
-	pair<int,int> samprate = float2rational(ci.GetSampleRate());
+	Fraction samprate = double2frac(ci.GetSampleRate());
 	if ( samprate.first == 0 || samprate.second == 0 ) {
 		SEISCOMP_WARNING("%s: invalid sample rate %.2f -> checking for valid decimations",
 		                 ci.GetChannel().c_str(), ci.GetSampleRate());
 
-		samprate = float2rational(ci.GetMinimumInputDecimationSampleRate());
+		samprate = double2frac(ci.GetMinimumInputDecimationSampleRate());
 		if ( samprate.first == 0 || samprate.second == 0 ) {
 			SEISCOMP_WARNING("%s: invalid sample rate %.2f, keeping it",
 			                 ci.GetChannel().c_str(), ci.GetSampleRate());
@@ -1118,7 +1152,7 @@ void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm, b
 	strm->setDataloggerSerialNumber("xxxx");
 	strm->setSensorSerialNumber("yyyy");
 
-	pair<int,int> samprate = float2rational(ci.GetSampleRate());
+	Fraction samprate = double2frac(ci.GetSampleRate());
 	strm->setSampleRateNumerator(samprate.first);
 	strm->setSampleRateDenominator(samprate.second);
 
@@ -2970,7 +3004,7 @@ bool Inventory::IsDummy(ResponseCoefficients &rc) const
 * Function:     IsPAZStream                                                    *
 * Parameters:   none                                                           *
 *******************************************************************************/
-bool Inventory::IsPAZStream(ChannelIdentifier& ci)
+bool Inventory::IsSensorPAZStream(ChannelIdentifier &ci)
 {
 	if(GetPAZSequence(ci, VELOCITY, VOLTAGE) != -1)
 		return true;
@@ -3020,7 +3054,7 @@ bool Inventory::IsPAZStream(ChannelIdentifier& ci)
 * Function:     IsPolyStream                                                   *
 * Parameters:   none                                                           *
 *******************************************************************************/
-bool Inventory::IsPolyStream(ChannelIdentifier& ci)
+bool Inventory::IsSensorPolyStream(ChannelIdentifier& ci)
 {
 	if(GetPolySequence(ci, TEMPERATURE, VOLTAGE) != -1)
 		return true;
@@ -3046,7 +3080,7 @@ bool Inventory::IsPolyStream(ChannelIdentifier& ci)
  * Function:     IsFAPStream                                                  *
  * Parameters:   none                                                         *
  ******************************************************************************/
-bool Inventory::IsFAPStream(ChannelIdentifier& ci)
+bool Inventory::IsSensorFAPStream(ChannelIdentifier& ci)
 {
 	if(GetFAPSequence(ci, VELOCITY, VOLTAGE) != -1)
 		return true;

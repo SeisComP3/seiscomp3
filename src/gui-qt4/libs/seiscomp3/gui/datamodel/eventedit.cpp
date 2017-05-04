@@ -1783,7 +1783,7 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 	QTreeWidgetItem *item = _originTree->topLevelItem(row);
 
 	item->setData(0, Qt::UserRole, QString(org->publicID().c_str()));
-	item->setText(_originColumnMap[OL_TIME], org->time().value().toString("%T").c_str());
+	item->setText(_originColumnMap[OL_TIME], timeToString(org->time().value(), "%T"));
 	item->setText(_originColumnMap[OL_LAT], QString("%1 %2").arg(fabs(org->latitude()), 0, 'f', SCScheme.precision.location).arg(org->latitude() < 0?"S":"N"));
 	item->setData(_originColumnMap[OL_LAT], Qt::UserRole, org->latitude().value());
 	item->setText(_originColumnMap[OL_LON], QString("%1 %2").arg(fabs(org->longitude()), 0, 'f', SCScheme.precision.location).arg(org->longitude() < 0?"W":"E"));
@@ -1834,7 +1834,7 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 		item->setData(_originColumnMap[OL_RMS], Qt::UserRole, QVariant());
 	}
 	try {
-		item->setText(_originColumnMap[OL_CREATED], org->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(_originColumnMap[OL_CREATED], timeToString(org->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(_originColumnMap[OL_CREATED], "");
@@ -1873,7 +1873,7 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 	item->setData(0, Qt::UserRole, QString(mag->publicID().c_str()));
 
 	try {
-		item->setText(MLC_TIMESTAMP, mag->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(MLC_TIMESTAMP, timeToString(mag->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(MLC_TIMESTAMP, "");
@@ -1985,7 +1985,7 @@ void EventEdit::updateFMRow(int row, FocalMechanism *fm) {
 	}
 
 	try {
-		item->setText(_fmColumnMap[FML_CREATED], fm->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(_fmColumnMap[FML_CREATED], timeToString(fm->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(_fmColumnMap[FML_CREATED], "");
@@ -2286,7 +2286,7 @@ bool EventEdit::sendJournal(const std::string &action,
 void EventEdit::addJournal(JournalEntry *entry) {
 	QString created;
 	try {
-		created = entry->created().toString("%F %T").c_str();
+		created = timeToString(entry->created(), "%F %T");
 	}
 	catch ( ... ) {
 		created = "--/--/---- --:--:--";
@@ -2439,7 +2439,7 @@ void EventEdit::updateEvent() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::updateOrigin() {
-	_ui.labelTimeValue->setText(_currentOrigin->time().value().toString("%F %T").c_str());
+	timeToLabel(_ui.labelTimeValue, _currentOrigin->time().value(), "%F %T");
 
 	_ui.labelLatitudeValue->setText(latitudeToString(_currentOrigin->latitude(), true, false, SCScheme.precision.location));
 	_ui.labelLatitudeUnit->setText(latitudeToString(_currentOrigin->latitude(), false, true));
@@ -2611,7 +2611,7 @@ void EventEdit::updateMT() {
 		_ui.mtOriginInfo->setEnabled(true);
 
 		// time
-		_ui.mtOriginTime->setText(o->time().value().toString("%F %T").c_str());
+		timeToLabel(_ui.mtOriginTime, o->time().value(), "%F %T");
 
 		// region
 		Regions regions;

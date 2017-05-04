@@ -241,6 +241,7 @@ class SchemaParameters(Core.BaseObject):
     def structureCount(self): return _System.SchemaParameters_structureCount(self)
     def structure(self, *args): return _System.SchemaParameters_structure(self, *args)
     def add(self, *args): return _System.SchemaParameters_add(self, *args)
+    def accept(self, *args): return _System.SchemaParameters_accept(self, *args)
     def serialize(self, *args): return _System.SchemaParameters_serialize(self, *args)
     __swig_destroy__ = _System.delete_SchemaParameters
     __del__ = lambda self : None;
@@ -592,6 +593,7 @@ class SchemaModule(Core.BaseObject):
         try: self.this.append(this)
         except: self.this = this
     def isStandalone(self): return _System.SchemaModule_isStandalone(self)
+    def accept(self, *args): return _System.SchemaModule_accept(self, *args)
     def serialize(self, *args): return _System.SchemaModule_serialize(self, *args)
     __swig_setmethods__["aliasedModule"] = _System.SchemaModule_aliasedModule_set
     __swig_getmethods__["aliasedModule"] = _System.SchemaModule_aliasedModule_get
@@ -788,6 +790,16 @@ class SchemaDefinitions(Core.BaseObject):
     __del__ = lambda self : None;
 SchemaDefinitions_swigregister = _System.SchemaDefinitions_swigregister
 SchemaDefinitions_swigregister(SchemaDefinitions)
+
+class SchemaVisitor(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SchemaVisitor, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SchemaVisitor, name)
+    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+SchemaVisitor_swigregister = _System.SchemaVisitor_swigregister
+SchemaVisitor_swigregister(SchemaVisitor)
 
 class ConfigDelegate(Config.Logger):
     __swig_setmethods__ = {}

@@ -47,7 +47,7 @@
 #  undef EINPROGRESS
 #  undef EALREADY
 #  ifndef va_copy
-#    define va_copy(d,s) (d) = (s)
+#    define va_copy(d,s) ((d) = (s))
 #  endif
 #endif
 #include <errno.h>
@@ -196,10 +196,12 @@ static void Internal_Alarmp(int16 priority, int32 mask, char *message, va_list a
         }
 
         va_copy(ap_copy, ap);                               /* make a copy of param list in case of vsnprintf truncation */
-        msg_len  = vsnprintf(msg_ptr, MAX_ALARM_MESSAGE_BUF - tot_len, message, ap);
-        tot_len += msg_len;
+		if ((msg_len = vsnprintf(msg_ptr, MAX_ALARM_MESSAGE_BUF - tot_len, message, ap)) < 0) { /* failure; on Windows can be buffer too small */
+			msg_len = 4 * MAX_ALARM_MESSAGE_BUF;
+		}
+		tot_len += msg_len;
 
-        if (tot_len >= MAX_ALARM_MESSAGE_BUF) {             /* alarm string doesn't fit in buf; dynamically allocate big enough buffer */
+        if (tot_len >= MAX_ALARM_MESSAGE_BUF) {             /* failure; try dynamically allocating a bigger buffer */
 
             if ((alloc_buf = (char*) malloc(sizeof(Alarm_Warning_Alloc) - 1 + tot_len + 1)) != NULL) {
 
@@ -212,8 +214,9 @@ static void Internal_Alarmp(int16 priority, int32 mask, char *message, va_list a
 		tot_len += ts_len;
 
                 msg_ptr  = ts_ptr + ts_len;
-                tmp      = vsnprintf(msg_ptr, msg_len + 1, message, ap_copy);             /* write msg after timestamp */
-                assert(tmp == msg_len);
+				if ((tmp = vsnprintf(msg_ptr, msg_len + 1, message, ap_copy)) < 0) {             /* write msg after timestamp */
+					tmp = msg_len;
+				}
                 msg_len  = tmp;
 		tot_len += msg_len;
 
@@ -253,10 +256,11 @@ static void Internal_Alarmp(int16 priority, int32 mask, char *message, va_list a
 
 #ifndef USE_THREADED_ALARM
         fprintf(stdout, "Exit caused by Alarm(EXIT)\n");
-#ifndef ARCH_PC_WIN95
+#  ifndef ARCH_PC_WIN95
         abort();
-#endif
-        exit(0);
+#  else
+        exit(1);
+#  endif
 #else
         Threaded_Alarm_Exit();
 #endif
@@ -334,8 +338,9 @@ void Alarm( int32 mask, char *message,
             printf("Exit caused by Alarm(EXIT)\n");
 #ifndef ARCH_PC_WIN95
             abort();
+#else
+            exit( 1 );
 #endif
-            exit( 0 );
         }
 }
 
@@ -708,8 +713,9 @@ static void Threaded_Alarm_Exit(void)
     fprintf(stdout, "Exit caused by Alarm(EXIT)\n");
 #ifndef ARCH_PC_WIN95
     abort();
+#else
+    exit(1);
 #endif
-    exit(0);
   }
 }
 

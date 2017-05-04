@@ -64,9 +64,12 @@ static  char	SccsId[] = "@(#)azcros2_.c	41.1	12/28/90";
 
 #include <math.h>
 
-#define RAD_TO_DEG	57.2957795
-#define DEG_TO_RAD	1.0/RAD_TO_DEG
-#define	SIGN(a1, a2)	((a2) >= 0 ? -(a1) : (a1))
+#define RAD_TO_DEG 57.2957795
+#define DEG_TO_RAD 1.0/RAD_TO_DEG
+#define SIGN(a1, a2) ((a2) >= 0 ? -(a1) : (a1))
+
+void distaz2_(double *alat1, double *alon1, double *alat2, double *alon2, double *delta, double *azi, double *baz);
+void latlon2_(double *alat1, double *alon1, double *delta, double *azi, double *alat2, double *alon2);
 
 void azcros2_ (alat1, alon1, aza, alat2, alon2, azb, dista, distb, alat, alon, ierr)
 
@@ -81,7 +84,7 @@ double	*alat, *alon, *dista, *distb;
 
 	/* Find azimuth, back azimuth and radial distance between stations */
 
-	distaz2_ (alat1, alon1, alat2, alon2, &delta, &azi, &baz);
+	distaz2_(alat1, alon1, alat2, alon2, &delta, &azi, &baz);
 
 	/* Find angle measured from line between two stations to aza and azb */
 

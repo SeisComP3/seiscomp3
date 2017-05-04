@@ -1,0 +1,26 @@
+How to run the Spread daemon as a Windows (XP, Vista, 7, 8) service
+
+Run spread-service.exe from the command line to print possible errors to
+the console.  Also inspect any log file.  Fix any errors before proceeding.
+
+Now register the executable as a service, managed via the Service Manager, by
+running from the command line:
+ spread-service.exe --install-service
+
+To unregister the service at some later time, run from the command line:
+ spread-service.exe --uninstall-service
+
+Start the Service Manager by running from the command line:
+ services.msc
+
+Look for "Spread Service" in the list of installed services and double click
+the entry to open the service properties window.  Change its settings to have
+it start automatically, if preferred.  Note that the executable is run with 
+the --service option when started by the service
+controller.
+
+Services can also be started and stopped from the command line using sc.exe
+and referencing the service name that is visible from the service properties
+window:
+ sc start spread
+ sc stop spread

@@ -54,6 +54,8 @@ bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 		*bits = qRgb(224,224,224);
 		isDummy = true;
 	}
+	else
+		isDummy = false;
 
 	if ( node ) {
 		id.level = node->level();
@@ -69,7 +71,6 @@ bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 	w = image.width();
 	h = image.height();
 	data = (const QRgb*)image.bits();
-	isDummy = false;
 
 	return true;
 }
@@ -193,7 +194,7 @@ void TextureCache::checkResources(Texture *tex) {
 		_storedBytes -= min_tex->numBytes();
 
 		for ( Lookup::iterator lit = _firstLevel.begin(); lit != _firstLevel.end(); ) {
-			if ( lit.value() == min_tex ) {
+			if ( lit.value() == min_tex.get() ) {
 				lit = _firstLevel.erase(lit);
 			}
 			else
@@ -255,13 +256,22 @@ void TextureCache::invalidateTexture(Alg::MapTreeNode *node) {
 		// Remove node from texture cache
 		Storage::iterator it = _storage.find(node);
 		if ( it != _storage.end() ) {
-			if ( _lastTile[0] == it.value().get() )
+			Texture *tex = it.value().get();
+
+			for ( Lookup::iterator lit = _firstLevel.begin(); lit != _firstLevel.end(); ) {
+				if ( lit.value() == tex ) {
+					lit = _firstLevel.erase(lit);
+				}
+				else
+					++lit;
+			}
+
+			if ( _lastTile[0] == tex )
 				_lastTile[0] = NULL;
 
-			if ( _lastTile[1] == it.value().get() )
+			if ( _lastTile[1] == tex )
 				_lastTile[1] = NULL;
 
-			Texture *tex = it.value().get();
 			// Update storage size
 			_storedBytes -= tex->numBytes();
 			_storage.erase(it);

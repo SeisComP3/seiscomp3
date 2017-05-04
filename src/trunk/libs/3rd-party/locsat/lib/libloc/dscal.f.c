@@ -51,15 +51,15 @@ struct {
 /* AUTHOR */
 /* 	John Dongarra, March 1978. */
 /* Subroutine */ int dscal_(n, da, dx, incx)
-integer *n;
+int *n;
 doublereal *da, *dx;
-integer *incx;
+int *incx;
 {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
 
     /* Local variables */
-    static integer i__, m, nincx, mp1;
+    static int i__, m, nincx, mp1;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */

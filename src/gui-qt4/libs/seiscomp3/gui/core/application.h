@@ -249,7 +249,7 @@ class SC_GUI_API Application : public QApplication,
 		void startMessageThread();
 		void closeMessageThread();
 		void createSettingsDialog();
-		ConnectionDialog* cdlg();
+		ConnectionDialog *cdlg();
 
 
 	private:

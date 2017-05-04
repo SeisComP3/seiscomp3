@@ -1460,10 +1460,16 @@ bool Application::initPlugins() {
 		for ( ; it != tokens.end(); ++it )
 			PluginRegistry::Instance()->addPluginName(Core::trim(*it));
 
-		PluginRegistry::Instance()->loadPlugins();
+		if ( PluginRegistry::Instance()->loadPlugins() < 0 ) {
+			SEISCOMP_ERROR("Failed to load all requested plugins, bailing out");
+			return false;
+		}
 	}
 	else {
-		PluginRegistry::Instance()->loadConfiguredPlugins(&_configuration);
+		if ( PluginRegistry::Instance()->loadConfiguredPlugins(&_configuration) < 0 ) {
+			SEISCOMP_ERROR("Failed to load all requested plugins, bailing out");
+			return false;
+		}
 	}
 
 	if ( PluginRegistry::Instance()->pluginCount() ) {
@@ -1551,10 +1557,16 @@ bool Application::init() {
 	_queue.resize(10);
 
 	showMessage("Initialize logging");
-	if ( !initLogging() ) return false;
+	if ( !initLogging() ) {
+		if ( !handleInitializationError(LOGGING) )
+			return false;
+	}
 
 	showMessage("Loading plugins");
-	if ( !initPlugins() ) return false;
+	if ( !initPlugins() ) {
+		if ( !handleInitializationError(PLUGINS) )
+			return false;
+	}
 
 	if ( commandline().hasOption("db-driver-list") ) {
 		DatabaseInterfaceFactory::ServiceNames* services = DatabaseInterfaceFactory::Services();
@@ -2708,7 +2720,7 @@ bool Application::initDatabase() {
 				_db = dbType + "://" + dbParameters;
 
 				SEISCOMP_INFO("Received database service parameters");
-				SEISCOMP_INFO("Trying to connect to %s://%s", dbrmsg->service(), dbrmsg->parameters());
+				SEISCOMP_INFO("Trying to connect to %s database", dbrmsg->service());
 				IO::DatabaseInterfacePtr db = dbrmsg->database();
 				if (db) {
 					setDatabase(db.get());

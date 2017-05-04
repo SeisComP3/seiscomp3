@@ -15,7 +15,7 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-dec`", "``dec``", "Decimates (resamples) a proxy stream"
    ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
-The RecordStream used by an application is either specified on the the
+The RecordStream used by an application is either specified on the
 commandline (`-I URI`) or configured through using the parameters
 :confval:`recordstream.service` and :confval:`recordstream.source`. While the
 `service` defines the RecordSteam implementation, the `source` supplies
@@ -27,7 +27,7 @@ SeedLink
 --------
 
 This RecordStream fetches data from a SeedLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18000`. Optional parameters are:
 
 - `timeout` - connection timeout in seconds, default: 300
@@ -47,7 +47,7 @@ ArcLink
 -------
 
 This RecordStream fetches data from a ArcLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18001`. Optional parameters are:
 
 - `user` - user name required on some servers
@@ -164,7 +164,7 @@ Examples
    "``combined://slink/localhost:18000;arclink/localhost:18001``", "Same as above"
    "``combined://;``", "Same as above"
    "``combined://:18042;?user=foo&pwd=secret??rtMax=1800``", "Seedlink on localhost:18042 combined with Arclink on localhost 18001, real-time (SeedLink) buffer size set to 30min"
-   "``combined://;sdsarchive//home/sysop/seiscomp3/var/lib/archive?``", Seedlink combined with SDS archive
+   "``combined://slink/localhost:18000;sdsarchive//home/sysop/seiscomp3/var/lib/archive``", Seedlink combined with SDS archive
 
 .. _rs-balanced:
 
@@ -246,4 +246,3 @@ Examples
 - ``resample://slink/localhost:18000``
 - ``resample://file?rate=2/-``
 - ``resample://combined/;``
-

@@ -227,7 +227,7 @@ bool Detector::handleGap(Filter *filter, const Core::TimeSpan& gapLength,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Detector::emitPick(const Record* rec, const Core::Time& t) {
+bool Detector::emitPick(const Record *rec, const Core::Time &t) {
 	// Is there a last pick and a last snr amplitude? Then defer the pick
 	// until the max amplitude has been calculated
 	if ( _lastAmplitude && (bool)_lastPick ) {
@@ -304,6 +304,11 @@ bool Detector::validateOn(const Record *record, size_t &i, const DoubleArray &fi
 	_minAmplitude = Core::None;
 	_pickID = "";
 
+	SEISCOMP_DEBUG("[%s] trigger on = %s, amp = %f",
+	               record->streamID().c_str(),
+	               (record->startTime() + Core::TimeSpan(double(i)/record->samplingFrequency())).iso().c_str(),
+	               _triggeredAmplitude);
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -324,6 +329,10 @@ bool Detector::validateOff(const Record *record, size_t i,
 		Core::Time offTime;
 		offTime = record->startTime() +
 		          Core::TimeSpan(double(i)/record->samplingFrequency());
+		SEISCOMP_DEBUG("[%s] trigger off = %s, amp = %f",
+		               record->streamID().c_str(),
+		               offTime.iso().c_str(),
+		               filteredData[i]);
 		SEISCOMP_DEBUG("[%s] duration = %.2f", _pickID.c_str(),
 		               double(offTime - _lastPick));
 	}

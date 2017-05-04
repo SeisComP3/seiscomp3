@@ -1063,7 +1063,7 @@ QString Application::splashImagePath() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ConnectionDialog* Application::cdlg() {
+ConnectionDialog *Application::cdlg() {
 	createSettingsDialog();
 	return _dlgConnection;
 }
@@ -1075,6 +1075,8 @@ ConnectionDialog* Application::cdlg() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::createSettingsDialog() {
 	if ( _dlgConnection ) return;
+	if ( type() == QApplication::Tty )
+		return;
 
 	_dlgConnection = new ConnectionDialog(&_connection, &_database);
 	_dlgConnection->setMessagingEnabled(isMessagingEnabled());
@@ -1095,8 +1097,18 @@ void Application::createSettingsDialog() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::handleInitializationError(Stage stage) {
-	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) )
+	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) ) {
+		if ( stage == PLUGINS ) {
+			std::cerr << "Failed to load plugins: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+		else if ( stage == LOGGING ) {
+			std::cerr << "Failed to initialize logging: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+
 		return false;
+	}
 
 	if ( (_flags & OPEN_CONNECTION_DIALOG) && !_settingsOpened ) {
 		const set<string>& subscriptions = subscribedGroups();
@@ -1357,7 +1369,9 @@ void Application::destroyConnection() {
 
 	closeMessageThread();
 
-	cdlg()->setDefaultDatabaseParameters("","");
+	ConnectionDialog *dlg = cdlg();
+	if ( dlg != NULL )
+		dlg->setDefaultDatabaseParameters("","");
 
 	_connection = NULL;
 	emit changedConnection();

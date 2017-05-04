@@ -1457,7 +1457,8 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 
 			double x = 0;
 			double xp = 0;
-			double xpp = _data[0];
+			// f = -f: thats why -_data[0] is used
+			double xpp = -_data[0];
 			double maxx = x;
 
 			for ( int j = 1; j < sig1i; ++j ) {

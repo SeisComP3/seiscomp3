@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<plugin name="RegionCheck">
+		<extends>scevent</extends>
+		<description>evrc plug-in for scevent</description>
+		<configuration>
+			<group name="rc">
+				<description>
+				Region check for scevents setting the event type to &quot;outside of network interest&quot;
+				if the location is inside or outside preconfigured regions of rejection or acceptance,
+				respectively.
+				</description>
+				<parameter name="regions" type="list:string" default="reject">
+					<description>
+					The list of closed BNA polygon names defining regions of
+					acceptance or rejection of events. The polygon names define
+					regions of event acceptance but names with prefix !  (exclamation mark)
+					define regions of rejection. Evaluation is done in the order of the
+					polygons. The last matching criteria applies. If events ARE NOT
+					within regions of acceptance or ARE within regions of
+					rejection their type is set to &quot;outside of network interest&quot;.
+					Default: &quot;reject&quot;, use &quot;accecpt&quot; to overwrite the default.
+
+					Examples:
+
+					Accept events within the polygon &quot;germany&quot;:
+
+					germany
+
+					Accept all events but reject events within the polygon &quot;quarries&quot;:
+
+					accept,!quarries
+
+					Accept events within the polygon &quot;germany&quot; but reject events within the polygon &quot;quarries&quot;:
+
+					germany,!quarries
+
+					Accept all events but reject events within the polygon &quot;germany&quot; and accept events within the polygon &quot;saxony&quot;:
+
+					accept,!germany,saxony
+					</description>
+				</parameter>
+			</group>
+		</configuration>
+	</plugin>
+</seiscomp>

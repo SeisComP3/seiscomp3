@@ -19,13 +19,13 @@ char *lin;
 ftnlen lin_len;
 {
     /* System generated locals */
-    integer ret_val;
+    int ret_val;
 
     /* Builtin functions */
-    integer i_len();
+    int i_len();
 
     /* Local variables */
-    static integer i__;
+    static int i__;
 
 /*     returns length of string not counting trailing blanks */
 /*     parameters of routine */

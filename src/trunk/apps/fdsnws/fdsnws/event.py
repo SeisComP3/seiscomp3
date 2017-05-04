@@ -12,8 +12,9 @@
 #     preferred origin resp. preferred magnitude
 #   - 'updateafter' request parameter not implemented
 #   - additional request parameters:
-#     - includepicks:    boolean, default: false
-#     - includecomments: boolean, default: true
+#     - includepicks:    boolean, default: true,
+#                        available only in combination with includearrivals=true
+#     - includecomments: boolean, default: false
 #     - formatted:       boolean, default: false
 #   - additional values of request parameters:
 #     - format
@@ -272,7 +273,7 @@ class FDSNEvent(resource.Resource):
 
 	#---------------------------------------------------------------------------
 	def _loadComments(self, dbq, obj):
-		cnt = dbq.loadComments(e)
+		cnt = dbq.loadComments(obj)
 		if self._hideAuthor:
 			for iComment in xrange(cnt):
 				self._removeAuthor(obj.comment(iComment))
@@ -302,7 +303,7 @@ class FDSNEvent(resource.Resource):
 			# eventDescriptions and comments
 			objCount += dbq.loadEventDescriptions(e)
 			if ro.comments:
-				objCount += self._loadComment(dbq, e)
+				objCount += self._loadComments(dbq, e)
 			if not HTTP.checkObjects(req, objCount, maxObj):
 				return False
 

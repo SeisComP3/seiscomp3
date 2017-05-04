@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -1139,7 +1140,7 @@ static int FL_int_scat_multicast(mailbox mbox, service serv_type, const char *gr
     } else if (IS_ILLEGAL_SEND_MTYPE(mess_type)) {                /* used a reserved mess type */
       DEBUG(std_stkfprintf(stderr, 0, "Illegal use of reserved message type!\n"));
       ret = ILLEGAL_MESSAGE_TYPE;
-    } else if (scat->num_elements < 0 || scat->num_elements > FL_MAX_SCATTER_ELEMENTS) {
+    } else if (scat->num_elements > FL_MAX_SCATTER_ELEMENTS) {
       DEBUG(std_stkfprintf(stderr, 0, "Illegal scatter num_elements %d\n", scat->num_elements));
       ret = ILLEGAL_MESSAGE;
     } else if ((grp_not_priv = !is_private_group(grp)) &&   /* I allow sends to private groups */
@@ -1209,7 +1210,7 @@ static int FL_int_scat_multicast(mailbox mbox, service serv_type, const char *gr
       if (fix_scat) {                       /* I modified user's scatter: I need to restore it */
 	--scat->num_elements;
 	if (ret >= 0) {          /* successful return: need to adjust err to ignore appendings */
-	  if (ret >= scat->elements[scat->num_elements].len)
+	  if (ret >= (int) scat->elements[scat->num_elements].len)
 	    ret -= scat->elements[scat->num_elements].len;
 	  else
 	    stderr_output(STDERR_ABORT, 0,"(%s, %d): mbox %d: serv 0x%X: group '%s': SP_multicast returned %d\n",
@@ -1619,7 +1620,7 @@ static void handle_recv_flush_ok(fl_conn *conn, fl_group *group, gc_recv_mess *m
 	handle_next_memb_change(conn, group, m);
       }
       /* if new members have already died (after they sent their floks): deliver TRANS */
-      if (stdhash_size(&group->fl_view->curr_membs) < group->fl_view->orig_num_membs) {
+      if ((int) stdhash_size(&group->fl_view->curr_membs) < group->fl_view->orig_num_membs) {
 	DEBUG(std_stkfprintf(stderr, 0, "New view members have already died! Deliver TRANS!\n"));
 	assert(!group->fl_view->in_trans_memb);
 	group->fl_view->in_trans_memb = 1;
@@ -1634,17 +1635,17 @@ static void handle_recv_flush_ok(fl_conn *conn, fl_group *group, gc_recv_mess *m
       stddll_clear(&group->mess_queue);                    /* empty postponed vulnerable queue */
     } else
       assert(!spc->memb_mess_recvd || 
-	     stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
+	     (int) stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
     break;
   case AUTHORIZE: 
     assert(group->curr_change != 0 && group->curr_change->memb_mess_recvd);
     assert(!spc->memb_mess_recvd || 
-	   stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
+	   (int) stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
     break;
   case STEADY: case VERIFY: 
     assert(group->curr_change == 0);
     assert(!spc->memb_mess_recvd || 
-	   stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
+	   (int) stdhash_size(&spc->flok_senders) < spc->memb_info->orig_num_membs);
     break;
   default: stderr_output(STDERR_ABORT, 0,"(%s, %d): impossible vstate %d\n", __FILE__, __LINE__, group->vstate);
   }
@@ -2022,7 +2023,7 @@ determine_leavers(stdhash *leavers, view *last_sp_view, gc_recv_mess *m) {
       stderr_output(STDERR_ABORT, 0,"(%s, %d): malloc(%d)\n", __FILE__, __LINE__, num_membs * MAX_GROUP_NAME);
     err = SP_scat_get_vs_set_members( m->scat_mess, &m_info.my_vs_set, members, num_membs);
     assert(err == num_membs);
-    for (i = 0; i < num_membs; ++i) {        /* remove members that came with me: leaves who left */
+    for (i = 0; i < (int) num_membs; ++i) {        /* remove members that came with me: leaves who left */
       members[i][MAX_GROUP_NAME -1] = 0;
       err = stdhash_size(leavers);
       stdhash_erase_key(leavers, &(members[i][0]));

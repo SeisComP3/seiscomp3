@@ -141,23 +141,49 @@ bool respLowerThan(const FDSNXML::ResponseStage *r1, const FDSNXML::ResponseStag
 }
 
 
-pair<int,int> double2frac(double d) {
-	double df = 1;
-	int top = 1;
-	int bot = 1;
+typedef pair<int,int> Fraction;
 
-	while ( fabs(df-d) > 1e-05 ) {
+Fraction double2frac(double d) {
+	double df = 1;
+	Fraction::first_type top = d >= 2.0 ? d-1 : 1, ctop = top;
+	Fraction::second_type bot = d <= 0.5 ? 1/d-1 : 1, cbot = bot;
+	double error = fabs(df-d);
+	double last_error = error*2;
+	bool fixed_top = false;
+
+	if ( fabs(d) < 1E-20 )
+		return Fraction(0,1);
+
+	while ( error < last_error ) {
+		ctop = top;
+		cbot = bot;
+
+		//cerr << error << "  " << top << "/" << bot << endl;
 		if ( df < d )
 			++top;
 		else {
 			++bot;
-			top = int(d * bot);
+			top = Fraction::first_type(d * bot);
 		}
 
 		df = (double)top / (double)bot;
+		if ( top > 0 ) {
+			last_error = error;
+			error = fabs(df-d);
+			fixed_top = false;
+		}
+		else if ( fixed_top ) {
+			cbot = 1;
+			break;
+		}
+		else
+			fixed_top = true;
+
+		if ( top < 0 || bot < 0 )
+			return Fraction(0,0);
 	}
 
-	return pair<int,int>(top,bot);
+	return Fraction(ctop,cbot);
 }
 
 
@@ -1590,7 +1616,6 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 	for ( it = epochMap.begin(); it != epochMap.end(); ++it ) {
 		// Iterate over all locations (lat/lon/elev) of this sensor
 		EpochLocationMap::iterator lit, lit2;
-
 		Epochs::iterator eit, eit2;
 
 		set<FDSNXML::Channel*> overlappingEpochs;
@@ -1695,21 +1720,16 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 				// if the start time of the epoch overlaps with the
 				// current tw
 				else if ( sensorLocationEnd ) {
-					if ( cha->startDate() >= *sensorLocationEnd ) {
-						sensorLocationStart = cha->startDate();
-						try { sensorLocationEnd = cha->endDate(); }
-						catch ( ... ) { sensorLocationEnd = Core::None; }
-						sc_loc = NULL;
-					}
-					else {
-						// Extend end time of sensor location if necessary
-						try {
-							if ( cha->endDate() > *sensorLocationEnd ) {
-								sensorLocationEnd = cha->endDate();
-								sc_loc->setEnd(*sensorLocationEnd);
-							}
+					// Extend end time of sensor location if necessary
+					try {
+						if ( cha->endDate() > *sensorLocationEnd ) {
+							sensorLocationEnd = cha->endDate();
+							sc_loc->setEnd(*sensorLocationEnd);
 						}
-						catch ( ... ) {}
+					}
+					catch ( ... ) {
+						sensorLocationEnd = Core::None;
+						sc_loc->setEnd(Core::None);
 					}
 				}
 
@@ -1957,7 +1977,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	}
 	catch ( ... ) {
 		try {
-			pair<int,int> rat = double2frac(cha->sampleRate().value());
+			Fraction rat = double2frac(cha->sampleRate().value());
 			sc_stream->setSampleRateNumerator(rat.first);
 			sc_stream->setSampleRateDenominator(rat.second);
 		}

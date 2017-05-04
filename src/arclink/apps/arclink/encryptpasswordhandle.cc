@@ -246,8 +246,7 @@ int EncryptPasswordHandle::Email(std::string username, std::string password){
 	cmdLine += " | /usr/bin/formail -I'From: " + this->dcemail + "' ";
 	cmdLine += "-I'To: " + username + "' ";
 	cmdLine += "-I'Subject: New password for restricted data from Arclink @ " + this->dcname + " [" + this->dcid + "]' -a'Message-ID:' ";
-	cmdLine += " | /usr/sbin/sendmail -f" + this->dcemail;
-	cmdLine += " " + username;
+	cmdLine += " | /usr/bin/mail -t -S from=" + this->dcemail;
 
 	// Execute
 	r = system(cmdLine.c_str ());

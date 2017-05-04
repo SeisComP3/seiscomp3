@@ -5,35 +5,14 @@
 
 #include "f2c.h"
 
-/* Common Block Declarations */
-
-struct sccshypinv0_1_ {
-    char sccsid[80];
-};
-
-#define sccshypinv0_1 (*(struct sccshypinv0_1_ *) &sccshypinv0_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccshypinv0_ = { {'@', '(', '#', ')', 'h', 'y', 'p', 'i', 'n', 'v', '0',
-	     '.', 'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0', 
-	    '/', '9', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' '} };
-
-
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c_n1 = -1;
-static integer c__4 = 4;
-static integer c__3 = 3;
-static integer c__2 = 2;
+static int c__9 = 9;
+static int c__1 = 1;
+static int c_n1 = -1;
+static int c__4 = 4;
+static int c__3 = 3;
+static int c__2 = 2;
 
 /* NAME */
 /* 	hypinv0 -- Compute a hypocentral location. */
@@ -198,79 +177,66 @@ static integer c__2 = 2;
 /* 	1105-1130. */
 /* AUTHOR */
 /* 	Steve Bratt, December 1988. */
-/* Subroutine */ int hypinv0_(dstaid, dwavid, dtype, atype, dobs, dsd, ndata, 
-	stalat, stalon, nsta, maxtbd, maxtbz, ntbd, ntbz, tbd, tbz, tbtt, 
-	ipsta, ipwav, idtyp, iderr, alat0, alon0, zfoc0, sig0, ndf0, pconf, 
-	radius, azwt, damp, maxit, prtflg, fxdflg, luout, alat, alon, zfoc, 
-	torg, sighat, snssd, ndf, epmaj, epmin, epstr, zfint, toint, sxx, syy,
-	 szz, stt, sxy, sxz, syz, stx, sty, stz, stadel, staazi, stabaz, 
-	epimp, rank, resid, igap, niter, nd, ierr, dstaid_len, dwavid_len, 
-	dtype_len, atype_len, prtflg_len, fxdflg_len)
-char *dstaid, *dwavid, *dtype, *atype;
-real *dobs, *dsd;
-integer *ndata;
-real *stalat, *stalon;
-integer *nsta, *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt;
-integer *ipsta, *ipwav, *idtyp, *iderr;
-real *alat0, *alon0, *zfoc0, *sig0;
-integer *ndf0;
-real *pconf, *radius, *azwt, *damp;
-integer *maxit;
-char *prtflg, *fxdflg;
-integer *luout;
-real *alat, *alon, *zfoc, *torg, *sighat, *snssd;
-integer *ndf;
-real *epmaj, *epmin, *epstr, *zfint, *toint, *sxx, *syy, *szz, *stt, *sxy, *
-	sxz, *syz, *stx, *sty, *stz, *stadel, *staazi, *stabaz, *epimp;
-doublereal *rank;
-real *resid;
-integer *igap, *niter, *nd, *ierr;
-ftnlen dstaid_len;
-ftnlen dwavid_len;
-ftnlen dtype_len;
-ftnlen atype_len;
-ftnlen prtflg_len;
-ftnlen fxdflg_len;
-{
+int hypinv0_(char *dstaid, char *dwavid, char *dtype, char *atype,
+             float *dobs, float *dsd, int *ndata,
+             float *stalat, float *stalon, int *nsta, int *maxtbd, int *maxtbz, int *ntbd, int *ntbz,
+             float *tbd, float *tbz, float *tbtt,
+             int *ipsta, int *ipwav, int *idtyp, int *iderr,
+             float *alat0, float *alon0, float *zfoc0, float *sig0,
+             int *ndf0,
+             float *pconf, float *radius, float *azwt, float *damp,
+             int *maxit,
+             char *prtflg, char *fxdflg,
+             int *luout,
+             float *alat, float *alon, float *zfoc, float *torg, float *sighat, float *snssd,
+             int *ndf,
+             float *epmaj, float *epmin, float *epstr,
+             float *zfint, float *toint,
+             float *sxx, float *syy, float *szz, float *stt, float *sxy,
+             float *sxz, float *syz, float *stx, float *sty, float *stz,
+             float *stadel, float *staazi, float *stabaz, float *epimp,
+             double *rank, float *resid,
+             int *igap, int *niter, int *nd, int *ierr,
+             int dstaid_len, int dwavid_len, int dtype_len, int atype_len,
+             int prtflg_len, int fxdflg_len) {
     /* System generated locals */
-    integer tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
+    int tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
 	     tbz_offset, i__1, i__2;
-    real r__1, r__2, r__3;
+    float r__1, r__2, r__3;
     doublereal d__1, d__2;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy();
     double r_sign();
-    integer s_wsle(), do_lio(), e_wsle();
+    int s_wsle(), do_lio(), e_wsle();
     double sqrt();
-    integer s_cmp(), s_wsfe(), do_fio(), e_wsfe();
+    int s_cmp(), s_wsfe(), do_fio(), e_wsfe();
     double atan2();
-    integer i_nint();
+    int i_nint();
 
     /* Local variables */
     static doublereal andf, sgh12, sgh23, dxn12, dxn23, dist, xold[4];
     extern /* Subroutine */ int exit_();
     static doublereal step, xsol[4], slwt;
-    static integer ntoodeep;
+    static int ntoodeep;
     static doublereal cnvghats[3], snssdden, alat2, alon2;
-    static integer ierr0;
+    static int ierr0;
     static doublereal snssdnum;
-    static integer i__, k, m, n;
+    static int i__, k, m, n;
     static doublereal dmean, scale, delta;
     extern /* Subroutine */ int azcal_();
-    static real dcalx;
+    static float dcalx;
     static doublereal cnvg12;
     static char phase[8];
-    static real colat;
+    static float colat;
     static doublereal cnvg23;
-    static real ecorr;
+    static float ecorr;
     static doublereal covar[16]	/* was [4][4] */;
     static logical divrg;
     static doublereal hyrak;
-    static integer inerr__, iterr;
+    static int inerr__, iterr;
     static doublereal dxmax, a1;
-    static integer nairquake;
+    static int nairquake;
     static doublereal a2, hyplu;
     static logical cnvrg;
     static doublereal hystr, epmaj0, wtrms;
@@ -278,30 +244,30 @@ ftnlen fxdflg_len;
     static doublereal epmin0, hymaj0, hymid0, resid2[9999], resid3[9999];
     extern /* Subroutine */ int solve_via_svd__();
     static doublereal hymin0, zfint0;
-    static integer idtyp2[9999];
+    static int idtyp2[9999];
     static doublereal at[39996]	/* was [4][9999] */, fs;
-    static integer np;
+    static int np;
     static doublereal condit[2];
     extern /* Subroutine */ int elpcor_();
     static doublereal sghats[3];
     static char fxdsav[1];
     extern /* Subroutine */ int denuis_();
-    static integer ntimes, nazims;
+    static int ntimes, nazims;
     extern /* Subroutine */ int ellips_();
     static doublereal dxnorm;
-    static integer ip0[9999];
+    static int ip0[9999];
     extern /* Subroutine */ int fstatx_();
     static doublereal dxnrms[3];
-    static integer nslows;
+    static int nslows;
     extern /* Subroutine */ int slocal0_();
     static doublereal fac;
     extern /* Subroutine */ int latlon2_(), distaz2_();
-    static integer iga[9999];
+    static int iga[9999];
     static doublereal azi;
-    static integer nds[3];
+    static int nds[3];
     static doublereal atx[4], ssq, cnvgold;
-    static integer ndftemp;
-    static real correct;
+    static int ndftemp;
+    static float correct;
     static logical ldenuis;
     static doublereal dsd2[9999], cnvgtst, sta1, sta2, sta3, sta4, sta5, 
 	    unwtrms;
@@ -784,17 +750,17 @@ data", (ftnlen)50);
 	io___47.ciunit = *luout;
 	s_wsfe(&io___47);
 	do_fio(&c__1, "- Iteration #", (ftnlen)13);
-	do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(int));
 	do_fio(&c__1, "   Number of Obs. (Data):", (ftnlen)25);
-	do_fio(&c__1, (char *)&(*nd), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*nd), (ftnlen)sizeof(int));
 	do_fio(&c__1, "- Lat:", (ftnlen)6);
-	do_fio(&c__1, (char *)&(*alat), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*alat), (ftnlen)sizeof(float));
 	do_fio(&c__1, "   Lon:", (ftnlen)7);
-	do_fio(&c__1, (char *)&(*alon), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*alon), (ftnlen)sizeof(float));
 	do_fio(&c__1, "   Depth:", (ftnlen)9);
-	do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(float));
 	do_fio(&c__1, "   To:", (ftnlen)6);
-	do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(float));
 	do_fio(&c__1, "- Unwt. RMS Res.:", (ftnlen)17);
 	do_fio(&c__1, (char *)&unwtrms, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, "   Wt. RMS Res.:", (ftnlen)16);
@@ -821,13 +787,13 @@ data", (ftnlen)50);
 	    do_fio(&c__1, dstaid + ip0[n - 1] * dstaid_len, dstaid_len);
 	    do_fio(&c__1, dwavid + ip0[n - 1] * dwavid_len, dwavid_len);
 	    do_fio(&c__1, dtype + ip0[n - 1] * dtype_len, dtype_len);
-	    do_fio(&c__1, (char *)&dobs[ip0[n - 1]], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&dobs[ip0[n - 1]], (ftnlen)sizeof(float));
 	    d__1 = dobs[ip0[n - 1]] - resid3[n - 1];
 	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&resid3[n - 1], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&resid2[n - 1], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&stadel[ipsta[ip0[n - 1]]], (ftnlen)sizeof(
-		    real));
+		    float));
 	    e_wsfe();
 /* L1090: */
 	}
@@ -898,9 +864,9 @@ data", (ftnlen)50);
 	io___57.ciunit = *luout;
 	s_wsfe(&io___57);
 	do_fio(&c__1, "> Sighat:", (ftnlen)9);
-	do_fio(&c__1, (char *)&(*sighat), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*sighat), (ftnlen)sizeof(float));
 	do_fio(&c__1, "   NSSD:", (ftnlen)8);
-	do_fio(&c__1, (char *)&(*snssd), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*snssd), (ftnlen)sizeof(float));
 	do_fio(&c__1, "   dLat:", (ftnlen)8);
 	do_fio(&c__1, (char *)&xsol[2], (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, "   dLon:", (ftnlen)8);
@@ -933,7 +899,7 @@ data", (ftnlen)50);
 /*     azimuth, or one azimuth and one slowness data.  In that case */
 /*     continue on even though it will be impossible to get an origin time. */
     ndftemp = *ndf0;
-    if (np == 3 && (nazims > 1 || nazims > 0 && nslows > 0)) {
+    if (np == 3 && (nazims > 1 || (nazims > 0 && nslows > 0))) {
 	ndftemp = *ndf0 - 1;
     }
 /*     Convergence, divergence or just keep on iterating */
@@ -943,7 +909,7 @@ data", (ftnlen)50);
 	    s_wsle(&io___63);
 	    do_lio(&c__9, &c__1, "   Too few data usable to continue:", (
 		    ftnlen)35);
-	    do_lio(&c__3, &c__1, (char *)&(*nd), (ftnlen)sizeof(integer));
+	    do_lio(&c__3, &c__1, (char *)&(*nd), (ftnlen)sizeof(int));
 	    e_wsle();
 	}
 	divrg = TRUE_;
@@ -961,16 +927,15 @@ data", (ftnlen)50);
 	    sgh23 = sghats[1] / sghats[2];
 	    dxn12 = dxnrms[0] / dxnrms[1];
 	    dxn23 = dxnrms[1] / dxnrms[2];
-	    divrg = (sgh23 > (float)1.1 && sgh12 > sgh23 || dxn23 > (float)
-		    1.1 && dxn12 > dxn23) && *niter > 6 && dxnorm > (float)
-		    1e3;
+	    divrg = ((sgh23 > (float)1.1 && sgh12 > sgh23) || (dxn23 > (float)1.1 && dxn12 > dxn23 && *niter > 6 && dxnorm > (float)1e3));
 	    cnvrg = nds[0] == nds[1] && ! divrg && (sgh12 > (float).99 && 
 		    sgh12 < (float)1.001) && (cnvgtst < 1e-8 || dxnorm < (
 		    float).5);
-	    if (cnvgtst < cnvgold * (float)1.01 && cnvgtst < 1e-8 || *niter > 
-		    *maxit * 3 / 4 && (cnvgtst < sqrt(1e-8) || (d__1 = cnvg23 
-		    - cnvg12, abs(d__1)) < 1e-8 || (d__2 = cnvghats[0] - 
-		    cnvghats[2], abs(d__2)) < (float)1e-5)) {
+	    if ( (cnvgtst < cnvgold * (float)1.01 && cnvgtst < 1e-8) ||
+	         (*niter > *maxit * 3 / 4 &&
+	          (cnvgtst < sqrt(1e-8) ||
+	          (d__1 = cnvg23 - cnvg12, abs(d__1)) < 1e-8 ||
+	          (d__2 = cnvghats[0] - cnvghats[2], abs(d__2)) < (float)1e-5)) ) {
 		cnvrg = TRUE_;
 	    }
 	    if ((wtrms < (float).001 || dxnrms[0] < (float).001) && *niter > 
@@ -1132,7 +1097,7 @@ L1210:
 /*     load the default values into arrays for the erroneous data */
     i__1 = *ndata;
     for (n = 1; n <= i__1; ++n) {
-	if (iderr[n] > 0 && iderr[n] < 4 || iderr[n] == 11) {
+	if ((iderr[n] > 0 && iderr[n] < 4) || iderr[n] == 11) {
 	    resid[n] = (float)-999.;
 	    epimp[n] = (float)-1.;
 	    s_copy(atype + n * atype_len, "n", atype_len, (ftnlen)1);

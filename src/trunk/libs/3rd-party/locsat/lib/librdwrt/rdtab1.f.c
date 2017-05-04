@@ -29,9 +29,9 @@ struct {
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__4 = 4;
+static int c__1 = 1;
+static int c__3 = 3;
+static int c__4 = 4;
 
 /* NAME */
 /* 	rdtab1 \(em Read travel-time tables */
@@ -66,26 +66,26 @@ static integer c__4 = 4;
 /* Subroutine */ int rdtab1_(filnam, maxtbd, maxtbz, luerr, ntbd, ntbz, tbd, 
 	tbz, tbtt, ierr, filnam_len)
 char *filnam;
-integer *maxtbd, *maxtbz, *luerr, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt;
-integer *ierr;
+int *maxtbd, *maxtbz, *luerr, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt;
+int *ierr;
 ftnlen filnam_len;
 {
     /* System generated locals */
-    integer tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
+    int tbtt_dim1, tbtt_offset, i__1, i__2, i__3, i__4;
     olist o__1;
     cllist cl__1;
 
     /* Builtin functions */
-    integer f_open(), s_wsfe(), do_fio(), e_wsfe(), s_rsfe(), e_rsfe(), 
+    int f_open(), s_wsfe(), do_fio(), e_wsfe(), s_rsfe(), e_rsfe(), 
 	    s_rsle(), do_lio(), e_rsle(), f_clos();
 
     /* Local variables */
-    static integer i__, j, k, ntbdx, ntbzx;
-    extern integer lnblnk_();
+    static int i__, j, k, ntbdx, ntbzx;
+    extern int lnblnk_();
     static char string[80];
-    static real dum;
-    static integer ios;
+    static float dum;
+    static int ios;
 
     /* Fortran I/O blocks */
     static cilist io___3 = { 0, 0, 0, "(3a)", 0 };
@@ -157,7 +157,7 @@ ftnlen filnam_len;
     if (i__1 != 0) {
 	goto L9000;
     }
-    i__1 = do_lio(&c__3, &c__1, (char *)&ntbzx, (ftnlen)sizeof(integer));
+    i__1 = do_lio(&c__3, &c__1, (char *)&ntbzx, (ftnlen)sizeof(int));
     if (i__1 != 0) {
 	goto L9000;
     }
@@ -175,9 +175,9 @@ ftnlen filnam_len;
 	io___9.ciunit = *luerr;
 	s_wsfe(&io___9);
 	do_fio(&c__1, "  Number in file:", (ftnlen)17);
-	do_fio(&c__1, (char *)&ntbzx, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&ntbzx, (ftnlen)sizeof(int));
 	do_fio(&c__1, "  Number kept:", (ftnlen)14);
-	do_fio(&c__1, (char *)&(*maxtbz), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*maxtbz), (ftnlen)sizeof(int));
 	e_wsfe();
     }
     i__1 = s_rsle(&io___10);
@@ -186,14 +186,14 @@ ftnlen filnam_len;
     }
     i__2 = *ntbz;
     for (i__ = 1; i__ <= i__2; ++i__) {
-	i__1 = do_lio(&c__4, &c__1, (char *)&tbz[i__], (ftnlen)sizeof(real));
+	i__1 = do_lio(&c__4, &c__1, (char *)&tbz[i__], (ftnlen)sizeof(float));
 	if (i__1 != 0) {
 	    goto L9000;
 	}
     }
     i__3 = ntbzx;
     for (i__ = *ntbz + 1; i__ <= i__3; ++i__) {
-	i__1 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(real));
+	i__1 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(float));
 	if (i__1 != 0) {
 	    goto L9000;
 	}
@@ -207,7 +207,7 @@ ftnlen filnam_len;
     if (i__1 != 0) {
 	goto L9000;
     }
-    i__1 = do_lio(&c__3, &c__1, (char *)&ntbdx, (ftnlen)sizeof(integer));
+    i__1 = do_lio(&c__3, &c__1, (char *)&ntbdx, (ftnlen)sizeof(int));
     if (i__1 != 0) {
 	goto L9000;
     }
@@ -225,9 +225,9 @@ ftnlen filnam_len;
 	io___16.ciunit = *luerr;
 	s_wsfe(&io___16);
 	do_fio(&c__1, "  Number in file:", (ftnlen)17);
-	do_fio(&c__1, (char *)&ntbdx, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&ntbdx, (ftnlen)sizeof(int));
 	do_fio(&c__1, "  Number kept:", (ftnlen)14);
-	do_fio(&c__1, (char *)&(*maxtbd), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*maxtbd), (ftnlen)sizeof(int));
 	e_wsfe();
     }
     i__1 = s_rsle(&io___17);
@@ -236,14 +236,14 @@ ftnlen filnam_len;
     }
     i__2 = *ntbd;
     for (i__ = 1; i__ <= i__2; ++i__) {
-	i__1 = do_lio(&c__4, &c__1, (char *)&tbd[i__], (ftnlen)sizeof(real));
+	i__1 = do_lio(&c__4, &c__1, (char *)&tbd[i__], (ftnlen)sizeof(float));
 	if (i__1 != 0) {
 	    goto L9000;
 	}
     }
     i__3 = ntbdx;
     for (i__ = *ntbd + 1; i__ <= i__3; ++i__) {
-	i__1 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(real));
+	i__1 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(float));
 	if (i__1 != 0) {
 	    goto L9000;
 	}
@@ -274,14 +274,14 @@ ftnlen filnam_len;
 	i__3 = *ntbd;
 	for (i__ = 1; i__ <= i__3; ++i__) {
 	    i__2 = do_lio(&c__4, &c__1, (char *)&tbtt[i__ + j * tbtt_dim1], (
-		    ftnlen)sizeof(real));
+		    ftnlen)sizeof(float));
 	    if (i__2 != 0) {
 		goto L9000;
 	    }
 	}
 	i__4 = ntbdx;
 	for (i__ = *ntbd + 1; i__ <= i__4; ++i__) {
-	    i__2 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(real));
+	    i__2 = do_lio(&c__4, &c__1, (char *)&dum, (ftnlen)sizeof(float));
 	    if (i__2 != 0) {
 		goto L9000;
 	    }

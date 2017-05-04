@@ -19,19 +19,24 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QGroupBox>
+#include <QPushButton>
 
 #define SEISCOMP_COMPONENT MapView
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+
+#include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/core/messages.h>
+
 
 using namespace Seiscomp;
 
 
 namespace {
 
+
 const QColor WARNING_COLOR(255, 165, 0);
 const QColor ERROR_COLOR(Qt::red);
-
 
 
 
@@ -46,50 +51,61 @@ void createConfigureAndAddTreeItem(QTreeWidgetItem* rootItem, const QString& tit
 
 
 } // namespace
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool __compareInfoWidgetIds(const InfoWidget* infoWidget, std::string id) {
 	if ( infoWidget->id() == id )
 		return true;
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
 InfoWidgetRegistry<T>* InfoWidgetRegistry<T>::_Registry = NULL;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 InfoWidget::InfoWidget(const std::string& id, QWidget* parent, Qt::WindowFlags f)
  : QWidget(parent, f),
    _id(id) {
 
 	uiInit();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QTreeWidget* InfoWidget::treeWidget() {
 	return _treeWidget;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QSplitter* InfoWidget::splitter() {
 	return _splitter;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void InfoWidget::uiInit() {
 	setWindowFlags(Qt::Tool);
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -105,21 +121,26 @@ void InfoWidget::uiInit() {
 
 	QVBoxLayout* boxLayout = new QVBoxLayout;
 	boxLayout->addWidget(_splitter);
+
 	setLayout(boxLayout);
 
 	activateWindow();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const std::string& InfoWidget::id() const {
 	return _id;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationInfoWidget::StationInfoWidget(const std::string& id, QWidget* parent, Qt::WindowFlags f)
  : InfoWidget(id, parent, f),
    _stationItem(NULL),
@@ -131,32 +152,37 @@ StationInfoWidget::StationInfoWidget(const std::string& id, QWidget* parent, Qt:
 	uiInit();
 	startWaveformAcquisition();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationInfoWidget::~StationInfoWidget() {
 	StationInfoWidgetRegistry::Instance()->remove(this);
 
 	stopWaveformAcquisition();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::init() {
 	_stationItem = createAndAddTopLevelItem("Station");
 	_qcItem = createAndAddTopLevelItem("Quality Control");
 	_amplitudeItem = createAndAddTopLevelItem("Amplitude");
 
-
 	updateContent();
 	startWaveformAcquisition();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateContent() {
 	removeContent(_stationItem);
 	removeContent(_qcItem);
@@ -172,10 +198,12 @@ void StationInfoWidget::updateContent() {
 
 	resizeColumnsToContent();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::addRecordMarker(const Core::Time& time,
                                         const std::string& phaseHint) {
 	Gui::RecordMarker* marker = createRecordMarkerFromTime(time, phaseHint);
@@ -185,80 +213,102 @@ void StationInfoWidget::addRecordMarker(const Core::Time& time,
 
 	removeExpiredRecordMarker();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setLongitude(const QString& longitude)  {
 	_stationInfo[STATION_LONGITUDE_TAG] = longitude;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setLatitude(const QString& latitude)  {
 	_stationInfo[STATION_LATITUDE_TAG] = latitude;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setElevation(const QString& elevation)  {
 	_stationInfo[STATION_ELEVATION_TAG] = elevation;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setDepth(const QString& depth)  {
 	//_stationInfo[STATION_DEPTH_TAG] = depth;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setPlace(const QString& place)  {
 	_stationInfo[STATION_PLACE_TAG] = place;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setCountry(const QString& country)  {
 	_stationInfo[STATION_COUNTRY_TAG] = country;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setDescription(const QString& description)  {
 	_stationInfo[STATION_DESCRIPTION_TAG] = description;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setAmplitudeTime(const QString& time) {
 	_amplitudeInfo[AMPLITUDE_TIME_TAG] = time;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setAmplitudeMaxValue(const QString& value) {
 	_amplitudeInfo[AMPLITUDE_MAX_VALUE_TAG] = value;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setAmplitudeMaxValueTime(const QString& time) {
 	_amplitudeInfo[AMPLITUDE_MAX_VALUE_TIME_TAG] = time;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setQCContent(const QString& name, const QString& value,
 		                             const QString& lowerUncertainty, const QString& upperUncertainty,
 		                             const QColor& backgroundColor) {
@@ -271,31 +321,39 @@ void StationInfoWidget::setQCContent(const QString& name, const QString& value,
 
 	_qcInfo[name] = data;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setRecordFilterString(const std::string& filterStr) {
 	_recordFilterStr = filterStr;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setRecordSequeceTimeSpan(const Core::TimeSpan& timeSpan) {
 	_recordSequenceTimeSpan = timeSpan;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::setRecordStreamUrl(const std::string& url) {
 	_recordStreamUrl = url;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::showEvent(QShowEvent*) {
 	// Use the same code as resizeEvent which does not depend on the
 	// parameter QResizeEvent*
@@ -307,17 +365,21 @@ void StationInfoWidget::showEvent(QShowEvent*) {
 	// record scale has the value we want it to be.
 	resizeEvent(NULL);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::resizeEvent(QResizeEvent* evt) {
 	adjustRecordWidgetSize();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::uiInit() {
 	QString title = QString("Station Info: %1").arg(id().c_str());
 	setWindowTitle(title);
@@ -353,12 +415,14 @@ void StationInfoWidget::uiInit() {
 	splitter()->addWidget(groupBox);
 
 	connect(_recordWidgetTimeScale, SIGNAL(changedInterval(double, double, double)),
-			_recordWidget, SLOT(setGridSpacing(double, double, double)));
+	        _recordWidget, SLOT(setGridSpacing(double, double, double)));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::startWaveformAcquisition() {
 	Math::Filtering::InPlaceFilter<float> *filter =
 		Math::Filtering::InPlaceFilter<float>::Create(_recordFilterStr);
@@ -403,19 +467,23 @@ void StationInfoWidget::startWaveformAcquisition() {
 
 	_recordWidgetTimer.start();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::stopWaveformAcquisition() {
 	_recordWidgetTimer.stop();
 	_recordStreamThread->stop(true);
 	disconnect(_recordStreamThread.get(), 0, 0, 0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateStationContent() {
 	createConfigureAndAddTreeItem(_stationItem, "ID", id().c_str());
 	createConfigureAndAddTreeItem(_stationItem, "Longitude", _stationInfo[STATION_LONGITUDE_TAG]);
@@ -427,19 +495,23 @@ void StationInfoWidget::updateStationContent() {
 	createConfigureAndAddTreeItem(_stationItem, "Country", _stationInfo[STATION_COUNTRY_TAG]);
 	createConfigureAndAddTreeItem(_stationItem, "Description", _stationInfo[STATION_DESCRIPTION_TAG]);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateAmplitudeContent() {
 	createConfigureAndAddTreeItem(_amplitudeItem, "Time", _amplitudeInfo[AMPLITUDE_TIME_TAG]);
 	createConfigureAndAddTreeItem(_amplitudeItem, "STA/LTA max. Amp", _amplitudeInfo[AMPLITUDE_MAX_VALUE_TAG]);
 	createConfigureAndAddTreeItem(_amplitudeItem, "Time of max. Amp.", _amplitudeInfo[AMPLITUDE_MAX_VALUE_TIME_TAG]);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateQCContent() {
 	QCInfo::const_iterator it = _qcInfo.begin();
 	for ( ; it != _qcInfo.end(); it++ ) {
@@ -453,10 +525,12 @@ void StationInfoWidget::updateQCContent() {
 		createConfigureAndAddTreeItem(_qcItem, data.name, description, data.backgroundColor);
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::adjustRecordWidgetSize() {
 	double seconds = _recordSequenceTimeSpan.seconds();
 	_recordWidget->setTimeScale( _recordWidget->width() / seconds);
@@ -465,10 +539,12 @@ void StationInfoWidget::adjustRecordWidgetSize() {
 	_recordWidgetTimeScale->setScale( _recordWidget->width() / seconds);
 	_recordWidgetTimeScale->setTimeRange(-1 * seconds, 0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Gui::RecordMarker* StationInfoWidget::createRecordMarkerFromTime(const Core::Time& time,
                                                                  const std::string& phaseHint) {
 	Gui::RecordMarker* marker = new Gui::RecordMarker(NULL, time);
@@ -477,10 +553,12 @@ Gui::RecordMarker* StationInfoWidget::createRecordMarkerFromTime(const Core::Tim
 
 	return marker;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::removeExpiredRecordMarker() {
 	RecordMarkerCollection::iterator it = _recordMarkerCache.begin();
 	for ( ; it != _recordMarkerCache.end(); it ++ ) {
@@ -491,29 +569,35 @@ void StationInfoWidget::removeExpiredRecordMarker() {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QTreeWidgetItem* StationInfoWidget::createAndAddTopLevelItem(const QString& text) {
 	QTreeWidgetItem* item = new QTreeWidgetItem(treeWidget(), QStringList(text));
 	treeWidget()->expandItem(item);
 
 	return item;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::removeContent(QTreeWidgetItem* item) {
 	QList<QTreeWidgetItem*> children = item->takeChildren();
 	for (QList<QTreeWidgetItem*>::iterator it = children.begin(); it != children.end(); ++it)
 		delete *it;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::resizeColumnsToContent() {
 	bool isStationItemExpanded = _stationItem->isExpanded();
 	bool isAmplitudeItemExpanded = _amplitudeItem->isExpanded();
@@ -529,16 +613,12 @@ void StationInfoWidget::resizeColumnsToContent() {
 	treeWidget()->setItemExpanded(_amplitudeItem, isAmplitudeItemExpanded);
 	treeWidget()->setItemExpanded(_qcItem, isQCItemExpanded);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-//void StationInfoWidget::showWaveformData() {
-//}
-
-
-
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateRecordWidget(Seiscomp::Record* record) {
 	std::string streamCode = record->networkCode() + "." +
 	                         record->stationCode() + "." +
@@ -556,35 +636,42 @@ void StationInfoWidget::updateRecordWidget(Seiscomp::Record* record) {
 
 	_recordWidget->update();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationInfoWidget::updateRecordWidgetAlignment() {
 	_recordWidget->setAlignment(Core::Time::GMT());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginInfoWidget::OriginInfoWidget(const std::string& id, QWidget* parent, Qt::WindowFlags f)
  : InfoWidget(id, parent, f) {
 	EventInfoWidgetRegistry::Instance()->add(this);
 
 	uiInit();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginInfoWidget::~OriginInfoWidget() {
 	EventInfoWidgetRegistry::Instance()->remove(this);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::updateContent() {
 	treeWidget()->clear();
 
@@ -607,103 +694,156 @@ void OriginInfoWidget::updateContent() {
 	treeWidget()->expandItem(rootItem);
 	treeWidget()->resizeColumnToContents(1);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setPreferredOriginId(const QString& id) {
 	_originInfo[ORIGIN_ID_TAG] = id;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setTime(const QString& time) {
 	_originInfo[ORIGIN_TIME_TAG] = time;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setLongitude(const QString& longitude) {
 	_originInfo[ORIGIN_LONGITUDE_TAG] = longitude;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setLatitude(const QString& latitude) {
 	_originInfo[ORIGIN_LATITUDE_TAG] = latitude;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setDepth(const QString& depth) {
 	_originInfo[ORIGIN_DEPTH_TAG] = depth;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setMagnitude(const QString& magnitude) {
 	_originInfo[ORIGIN_MAGNITUDE_TAG] = magnitude;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setAgency(const QString& agency) {
 	_originInfo[ORIGIN_AGENCY_TAG] = agency;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setMode(const QString& mode) {
 	_originInfo[ORIGIN_MODE_TAG] = mode;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setStatus(const QString& status) {
 	_originInfo[ORIGIN_STATUS_TAG] = status;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setStationCount(const QString& stationCount) {
 	_originInfo[ORIGIN_STATION_COUNT_TAG] = stationCount;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setAzimuthGap(const QString& azimuthGap) {
 	_originInfo[ORIGIN_AZIMUTH_GAP_TAG] = azimuthGap;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setMinimumDistance(const QString& minimumDistance) {
 	_originInfo[ORIGIN_MINIMUM_DISTANCE_TAG] = minimumDistance;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::setMaximumDistance(const QString& maximumDistance) {
 	_originInfo[ORIGIN_MAXIMUM_DISTANCE_TAG] = maximumDistance;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginInfoWidget::uiInit() {
 	QString title = QString("Event Info: %1").arg(id().c_str());
 	setWindowTitle(title);
+
+	QHBoxLayout *hbox = new QHBoxLayout;
+	QPushButton *showDetails = new QPushButton;
+	showDetails->setText(tr("Show Details"));
+
+	connect(showDetails, SIGNAL(clicked(bool)),
+	        this, SLOT(showDetails()));
+
+	hbox->addStretch();
+	hbox->addWidget(showDetails);
+	static_cast<QBoxLayout*>(layout())->addLayout(hbox);
+
 	activateWindow();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginInfoWidget::showDetails() {
+	OriginInfo::const_iterator it = _originInfo.find(ORIGIN_ID_TAG);
+	if ( it == _originInfo.end() )
+		return;
+
+	SCApp->sendCommand(Gui::CM_SHOW_ORIGIN, it->second.toStdString());
 }

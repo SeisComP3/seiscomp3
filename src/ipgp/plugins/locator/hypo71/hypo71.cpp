@@ -27,6 +27,7 @@
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/system/environment.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/datamodel/comment.h>
 #include <seiscomp3/math/geo.h>
@@ -163,42 +164,44 @@ bool Hypo71::init(const Config::Config& config) {
 		_useHypo71PatternID = false;
 	}
 
+	Seiscomp::Environment *env = Seiscomp::Environment::Instance();
+
 	try {
-		_logFile = config.getString("hypo71.logFile");
+		_logFile = env->absolutePath(config.getString("hypo71.logFile"));
 		SEISCOMP_DEBUG("%s | logFile              | %s", MSG_HEADER, _logFile.c_str());
 	}
 	catch ( ... ) {
-		_logFile = "HYPO71.LOG";
+		_logFile = env->absolutePath("@LOGDIR@/HYPO71.LOG");
 		SEISCOMP_ERROR("%s |   logFile            | DEFAULT value: %s",
 		    MSG_HEADER, _logFile.c_str());
 	}
 
 	try {
-		_h71inputFile = config.getString("hypo71.inputFile");
+		_h71inputFile = env->absolutePath(config.getString("hypo71.inputFile"));
 		SEISCOMP_DEBUG("%s | inputFile            | %s", MSG_HEADER, _h71inputFile.c_str());
 	}
 	catch ( ... ) {
-		_h71inputFile = "HYPO71.INP";
+		_h71inputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.INP");
 		SEISCOMP_ERROR("%s | inputFile            | DEFAULT value: %s",
 		    MSG_HEADER, _h71inputFile.c_str());
 	}
 
 	try {
-		_h71outputFile = config.getString("hypo71.outputFile");
+		_h71outputFile = env->absolutePath(config.getString("hypo71.outputFile"));
 		SEISCOMP_DEBUG("%s | outputFile           | %s", MSG_HEADER, _h71outputFile.c_str());
 	}
 	catch ( ... ) {
-		_h71outputFile = "HYPO71.PRT";
+		_h71outputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.PRT");
 		SEISCOMP_ERROR("%s | outputFile           | DEFAULT value: %s",
 		    MSG_HEADER, _h71outputFile.c_str());
 	}
 
 	try {
-		_controlFilePath = config.getString("hypo71.defaultControlFile");
+		_controlFilePath = env->absolutePath(config.getString("hypo71.defaultControlFile"));
 		SEISCOMP_DEBUG("%s | defaultControlFile   | %s", MSG_HEADER, _controlFilePath.c_str());
 	}
 	catch ( ... ) {
-		_controlFilePath = "";
+		_controlFilePath = env->absolutePath("@DATADIR@/hypo71/profiles/default.hypo71.conf");
 		SEISCOMP_ERROR("%s | defaultControlFile   | DEFAULT value: %s",
 		    MSG_HEADER, _controlFilePath.c_str());
 	}
@@ -209,14 +212,15 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 
 	try {
-		_hypo71ScriptFile = config.getString("hypo71.hypo71ScriptFile");
-		SEISCOMP_DEBUG("%s | hypo71ScriptFile     | %s", MSG_HEADER,
+		_hypo71ScriptFile = env->absolutePath(config.getString("hypo71.hypo71ScriptFile"));
+		SEISCOMP_DEBUG("%s | hypo71ScriptFile   | DEFAULT value: %s", MSG_HEADER,
 		    _hypo71ScriptFile.c_str());
 	}
 	catch ( ... ) {
-		SEISCOMP_ERROR("%s | hypo71ScriptFile     | can't read value", MSG_HEADER);
+		_hypo71ScriptFile = env->absolutePath("@DATADIR@/hypo71/run.sh");
+		SEISCOMP_ERROR("%s | hypo71ScriptFile     | DEFAULT value: %s",
+		    MSG_HEADER, _hypo71ScriptFile.c_str());
 	}
-
 	if ( !Util::fileExists(_hypo71ScriptFile) ) {
 		SEISCOMP_ERROR("%s | hypo71ScriptFile     | %s does not exist",
 		    MSG_HEADER, _hypo71ScriptFile.c_str());
@@ -229,7 +233,7 @@ bool Hypo71::init(const Config::Config& config) {
 		_profileNames = config.getStrings("hypo71.profiles");
 	}
 	catch ( ... ) {
-		SEISCOMP_ERROR("%s CONFIGURATION FILE IS NOT CORRECTLY IMPLEMENTED!!", MSG_HEADER);
+		SEISCOMP_ERROR("%s CHECK hypo71.profiles in the CONFIGURATION FILE - INCORRECT IMPLEMENTATION!", MSG_HEADER);
 	}
 
 	for ( IDList::iterator it = _profileNames.begin();
@@ -254,13 +258,13 @@ bool Hypo71::init(const Config::Config& config) {
 			SEISCOMP_DEBUG("%s |   methodID           | %s", MSG_HEADER, prof.methodID.c_str());
 		}
 		catch ( ... ) {
-			prof.methodID = "hypo71";
+			prof.methodID = "Hypo71";
 			SEISCOMP_ERROR("%s |   methodID           | DEFAULT value: %s",
 			    MSG_HEADER, prof.methodID.c_str());
 		}
 
 		try {
-			prof.controlFile = config.getString(prefix + "controlFile");
+			prof.controlFile = env->absolutePath(config.getString(prefix + "controlFile"));
 			SEISCOMP_DEBUG("%s |   configFile         | %s", MSG_HEADER, prof.controlFile.c_str());
 		}
 		catch ( ... ) {
@@ -697,7 +701,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
                                const double& max) {
 
 	int weight = 4;
-	double upper = 0, lower = 0;
+	double upper = 0, lower = 0, uncertainty = 0;
 	string pickID;
 
 	for ( PickList::const_iterator it = pickList.begin();
@@ -717,13 +721,19 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		pickID = pick->publicID();
 		try {
-			upper = pick->time().upperUncertainty();
+			uncertainty = 2 * pick->time().uncertainty();
 		}
-		catch ( ... ) {}
-		try {
-			lower = pick->time().lowerUncertainty();
+		catch ( ... ) {
+			try {
+				upper = pick->time().upperUncertainty();
+			}
+			catch ( ... ) {}
+			try {
+				lower = pick->time().lowerUncertainty();
+			}
+			catch ( ... ) {}
+			uncertainty = lower + upper;
 		}
-		catch ( ... ) {}
 
 		// Pick found, break the loop
 		break;
@@ -733,7 +743,77 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 		if ( weight != 1.0 )
 			weight = 4;
 		else
-			weight = (int) round((3 / max) * (upper + lower));
+			weight = (int) round((3 / max) * (uncertainty));
+	}
+
+	return weight;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const int Hypo71::getH71Weight(const PickList& pickList,
+                               const string& networkCode,
+                               const string& stationCode,
+                               const string& phaseCode,
+							   const string& weightBoundaries) {
+
+	int weight = 4;
+	double upper = 0, lower = 0, uncertainty = 0;
+	string pickID;
+	vector<string> TweightBoundaries;
+
+	stringExplode(weightBoundaries, ",", &TweightBoundaries);
+
+	for ( PickList::const_iterator it = pickList.begin();
+	      it != pickList.end(); ++it ) {
+
+		PickPtr pick = it->first;
+		weight = it->second;
+
+		if ( pick->phaseHint().code() != phaseCode )
+			continue;
+
+		if ( pick->waveformID().networkCode() != networkCode )
+			continue;
+
+		if ( pick->waveformID().stationCode() != stationCode )
+			continue;
+
+		pickID = pick->publicID();
+		try {
+			uncertainty = 2 * pick->time().uncertainty();
+		}
+		catch ( ... ) {
+			try {
+				upper = pick->time().upperUncertainty();
+			}
+			catch ( ... ) {}
+			try {
+				lower = pick->time().lowerUncertainty();
+			}
+			catch ( ... ) {}
+			uncertainty = lower + upper;
+		}
+
+		// Pick found, break the loop
+		break;
+	}
+
+	if ( pickID != "" ) {
+		if ( weight != 1.0 )
+			weight = 4;
+		else {
+			weight = 0;
+			for (size_t i = 0; i < TweightBoundaries.size(); ++i) {
+				if ( (uncertainty) > toDouble(TweightBoundaries.at(i)) )
+					weight = i+1;
+			}
+			if ( weight > 4 )
+				weight = 4;
+		}
 	}
 
 	return weight;
@@ -1245,6 +1325,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 	// Uncertainty values
 	double maxUncertainty = -1, minUncertainty = 100;
 	string maxWeight = "0";
+	string uncertaintyList = "";
 
 
 	for (PickList::iterator i = pickList.begin();
@@ -1372,7 +1453,11 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 				    pick->waveformID().stationCode(), "P");
 
 				try {
-					h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
+					if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
+					}
+					else
+						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 				}
 				catch ( ... ) {
 					h71PWeight = maxWeight;
@@ -1392,7 +1477,11 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 					isSPhase = true;
 					try {
-						h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+						}
+						else
+							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
 					}
 					catch ( ... ) {
 						h71SWeight = maxWeight;
@@ -2531,6 +2620,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 		double maxUncertainty = -1, minUncertainty = 100;
 		string maxWeight = "0";
 		string minWeight = "4";
+		string uncertaintyList = "";
 
 
 		for ( PickList::const_iterator i = pickList.begin();
@@ -2645,7 +2735,11 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 					pSec = toString(buffer);
 
 					try {
-						h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
+						if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", uncertaintyList));
+						}
+						else
+							h71PWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "P", maxUncertainty));
 					}
 					catch ( ... ) {
 						h71PWeight = maxWeight;
@@ -2664,7 +2758,11 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 						sPolarity = getPickPolarity(pickList, pick->waveformID().networkCode(), staName, "S");
 						isSPhase = true;
 						try {
-							h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
+							if ( pConfig.readInto(uncertaintyList, "WEIGHT_UNCERTAINTY_BOUNDARIES") ) {
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", uncertaintyList));
+							}
+							else
+								h71SWeight = toString(getH71Weight(pickList, pick->waveformID().networkCode(), staName, "S", maxUncertainty));
 						}
 						catch ( ... ) {
 							h71SWeight = maxWeight;
@@ -2992,7 +3090,23 @@ Origin* Hypo71::relocate(const Origin* origin) throw (Core::GeneralException) {
 
 		PickPtr pick = getPick(origin->arrival(i));
 
-		if ( !pick )
+		if ( pick != NULL ) {
+			try {
+				// Phase definition of arrival and pick different ?
+				if ( pick->phaseHint().code() != origin->arrival(i)->phase().code() ) {
+					PickPtr np = new Pick(*pick);
+					np->setPhaseHint(origin->arrival(i)->phase());
+					pick = np;
+				}
+			}
+			catch ( ... ) {
+				// Pick has no phase hint ?
+				PickPtr np = new Pick(*pick);
+				np->setPhaseHint(origin->arrival(i)->phase());
+				pick = np;
+			}
+		}
+		else
 			continue;
 
 		SensorLocationPtr sloc = getSensorLocation(pick.get());

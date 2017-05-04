@@ -1,7 +1,7 @@
 #
 # Populate an SQLite database from Arclink webreqlog statistics HTML pages.
 #
-# Begun by Peter L. Evans 
+# Begun by Peter L. Evans
 # <pevans@gfz-potsdam.de>
 #
 # Copyright (C) 2013-2016 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
@@ -10,6 +10,7 @@
 #
 import glob
 import email
+import optparse
 import os
 import sqlite3
 import sys
@@ -685,25 +686,44 @@ def process_resif_string(s):
     return insert_data(db, rd, who, -1, dcid, "String from " + who, start_day)
 
 # ----------------------------------------------------------------------
-# This directory must match where the PHP report
+# This directory is where the PHP report
 # generator looks for SQLite DB files:
-reqlogstats_db_dir="/home/sysop/reqlogstats/var"
+reqlogstats_db_dir=os.path.join(os.path.expanduser('~'), 'reqlogstats', 'var')
 if (not os.path.isdir(reqlogstats_db_dir)):
-    print " *** Configuration error: %s is not an existing directory." % (reqlogstats_db_dir)
-    raise IOError, 'No such directory.'
+    print ' *** Configuration error: %s: No such directory' % (reqlogstats_db_dir)
+    raise IOError, 'No such directory'
 
 # Which database file gets used should depend on the start date
 # found in the report! As a workaround, allow overriding on
 # command line.
 import datetime
 year = datetime.datetime.now().year
-if len(sys.argv) > 1 and int(sys.argv[1]) > 2010:
-    year = int(sys.argv[1])
+#if len(sys.argv) > 1 and int(sys.argv[1]) > 2010:
+#   year = int(sys.argv[1])
+
+parser = optparse.OptionParser()
+parser.add_option('-y', '--year', dest='year', type='int', default=year,
+                help='Report is for year YEAR', metavar='YEAR')
+parser.add_option('-v', '--verbose', dest='verbose', help='increase verbosity',
+		action='store_true')
+parser.add_option('-q', '--quiet', dest='verbose', action='store_false', default=True)
+parser.add_option('-d', '--dcid', dest='dcid', type='str')
+
+(options, args) = parser.parse_args()
+year = options.year
+verbose = options.verbose
+default_dcid = options.dcid
 
 db = os.path.join(reqlogstats_db_dir, 'reqlogstats-%4i.db' % (year))
 scores = 4*[0]  # [0, 0]
 scores_labels = ("rejected", "inserted", "not found", "unparseable")
 unparsed_list = []
+
+if verbose:
+        print 'verbose set to True'
+        print 'Default dcid set to:', default_dcid
+        print 'Year set to:', year
+        print 'db file is:', db
 
 if os.path.exists(db):
     con = sqlite3.connect(db)
@@ -811,21 +831,33 @@ for myfile in filelist:
         msg = email.message_from_file(fid)
     who = msg['From']
 
-    # Heuristic to set DCID/source string from From:
-    emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
-    try:
-        host = emailaddr.split('@')[1]
-        d = host.split('.')[-2]
-    except IndexError:
-        host = emailaddr
-        d = emailaddr    #???
+    if myfile.find('infp_ro') > -1:
+        # Special case for INFP
+        d = 'infp'
+        host = 'infp.ro'
+        emailaddr = 'infp.ro'
+        print ' ** SPECIAL CASE FOR INFP **'
+
+    else:
+        # Heuristic to set DCID/source string from From:
+        emailaddr = email.utils.parseaddr(who)[1]  # Discard "realname" part
+        try:
+            host = emailaddr.split('@')[1]
+            d = host.split('.')[-2]
+        except IndexError:
+            host = emailaddr
+            d = emailaddr    #???
 
     port = -1
 
     try:
         dcid = source_dict[d.lower()]
+	description = 'E-mail from ' + emailaddr
     except KeyError:
-        dcid = emailaddr.lower()  ## Use the sender's name
+        #dcid = emailaddr.lower()  ## Use the sender's name
+        dcid = default_dcid
+	emailaddr = 'command line'
+	description = 'Command line with dcid=%s' % (default_dcid)
 
     print "as HTML from %s: %s (%s:%i)" % (emailaddr, dcid, host, port)
 
@@ -834,7 +866,7 @@ for myfile in filelist:
         # Replacements to make HTML pile of tags look like XHTML.
         buf = buf.replace('""', '&quot;&quot;');
         print >>fid, buf.replace("<hr>", "<hr />").replace("<br>", "<br />")
-    result = process_html_file(bodyfile, host, port, dcid, 'E-mail from ' + emailaddr)
+    result = process_html_file(bodyfile, host, port, dcid, description)
     os.unlink(bodyfile)
     scores[result] += 1
 

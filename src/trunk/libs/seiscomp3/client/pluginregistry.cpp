@@ -188,14 +188,16 @@ int PluginRegistry::loadPlugins() {
 		std::string filename = find(*it);
 		if ( filename.empty() ) {
 			SEISCOMP_ERROR("Did not find plugin %s", it->c_str());
-			continue;
+			return -1;
 		}
 
 		SEISCOMP_DEBUG("Trying to open plugin at %s", filename.c_str());
 		PluginEntry e = open(filename);
 		if ( e.plugin == NULL ) {
-			if ( e.handle == NULL )
+			if ( e.handle == NULL ) {
 				SEISCOMP_ERROR("Unable to load plugin %s", it->c_str());
+				return -1;
+			}
 			else
 				SEISCOMP_WARNING("The plugin %s has been loaded already",
 				                 it->c_str());

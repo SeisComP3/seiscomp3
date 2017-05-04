@@ -292,6 +292,25 @@ class Hypo71 : public LocatorInterface {
 		                       const double& max);
 
 		/**
+		 * @brief  Evaluates and converts weights from upper/lower time
+		 *         uncertainties into Hypo71 1-4 weight value
+		 * @param  pickList the list of picks
+		 * @param  networkCode the station's network code
+		 * @param  stationCode the station's code
+		 * @param  phaseCode the station's phase code
+		 * @param  weight0 the maximum Uncertainty for an Hypo71 weight of 0
+		 * @param  weight1 the maximum Uncertainty for an Hypo71 weight of 1
+		 * @param  weight2 the maximum Uncertainty for an Hypo71 weight of 2
+		 * @param  weight3 the maximum Uncertainty for an Hypo71 weight of 3
+		 * @return Hypo71 weight value as integer
+		 */
+		const int getH71Weight(const PickList& pickList,
+		                       const std::string& networkCode,
+		                       const std::string& stationCode,
+		                       const std::string& phaseCode,
+		                       const std::string& weightBoundaries);
+
+		/**
 		 * @brief This method adds a station into the mapped list by giving it
 		 *        a unique translated name which will serve as id in Hypo71
 		 *        input and output files.

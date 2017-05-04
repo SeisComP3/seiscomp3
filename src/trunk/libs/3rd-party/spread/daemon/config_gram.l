@@ -19,7 +19,7 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
@@ -100,6 +100,8 @@ TcpHop                          { return PTCPHOP; }
 RouteMatrix                     { return ROUTEMATRIX; }
 Window				{ return WINDOW; }
 PersonalWindow			{ return PERSONALWINDOW; }
+AcceleratedRing                 { return ACCELERATEDRING; }
+AcceleratedWindow               { return ACCELERATEDWINDOW; }
 TokenTimeout                    { return TOKENTIMEOUT; }
 HurryTimeout                    { return HURRYTIMEOUT; }
 AliveTimeout                    { return ALIVETIMEOUT; }
@@ -136,7 +138,7 @@ NONE				{ yylval.mask = 0x00000000; return DNONE; }
 M                               { yylval.mask = IFTYPE_MONITOR; return IMONITOR; }
 C                               { yylval.mask = IFTYPE_CLIENT; return ICLIENT; }
 D                               { yylval.mask = IFTYPE_DAEMON; return IDAEMON; }
-pDEBUG                           { yylval.number = 1; return PDEBUG; }
+pDEBUG                          { yylval.number = 1; return PDEBUG; }
 INFO                            { yylval.number = 2; return PINFO; }
 WARNING                         { yylval.number = 3; return PWARNING; }
 ERROR                           { yylval.number = 4; return PERROR; }

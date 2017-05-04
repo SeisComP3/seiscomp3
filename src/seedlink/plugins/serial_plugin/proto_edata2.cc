@@ -823,7 +823,7 @@ void Edata2Protocol::decode_taip(GPSData &gps, const char *gpsmsg)
         return;
       }
 
-    r = sscanf(tm_ptr, ">RTM%2u%2u%5u%2u%2u%4u%*2u%*1u%*2u%1u",
+    r = sscanf(tm_ptr, ">RTM%2u%2u%5u%2u%2u%4u%*2u%*1u%*2c%1u",
       &hour, &min, &msec, &day, &month, &year, &valid);
 
     if(r == EOF || r == 0 || valid == 0)
