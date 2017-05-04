@@ -6,7 +6,7 @@
 # (c) 2010 Mathias Hoffmann, GFZ Potsdam
 #
 #
-import genwrap as _genwrap
+#import genwrap as _genwrap
 from seiscomp.db.xmlio import qc as _xmlio
 from seiscomp.db import DBError
 #
