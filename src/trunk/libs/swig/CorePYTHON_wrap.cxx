@@ -12428,6 +12428,19 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Time_LocalTimeZone(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::string result;
+  
+  if (!PyArg_ParseTuple(args,(char *)":Time_LocalTimeZone")) SWIG_fail;
+  result = Seiscomp::Core::Time::LocalTimeZone();
+  resultobj = SWIG_From_std_string(static_cast< std::string >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Time_GMT(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Core::Time result;
@@ -35785,6 +35798,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Time_get", _wrap_Time_get, METH_VARARGS, NULL},
 	 { (char *)"Time_get2", _wrap_Time_get2, METH_VARARGS, NULL},
 	 { (char *)"Time_LocalTime", _wrap_Time_LocalTime, METH_VARARGS, NULL},
+	 { (char *)"Time_LocalTimeZone", _wrap_Time_LocalTimeZone, METH_VARARGS, NULL},
 	 { (char *)"Time_GMT", _wrap_Time_GMT, METH_VARARGS, NULL},
 	 { (char *)"Time_FromYearDay", _wrap_Time_FromYearDay, METH_VARARGS, NULL},
 	 { (char *)"Time_localtime", _wrap_Time_localtime, METH_VARARGS, NULL},

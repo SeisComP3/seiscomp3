@@ -755,6 +755,22 @@ Time Time::LocalTime() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+std::string Time::LocalTimeZone() {
+	time_t t;
+	struct tm *tm_;
+	char tz[40];
+	::time(&t);
+	tm_ = ::localtime(&t);
+	strftime(tz, sizeof(tz)-1, "%Z", tm_);
+	tz[sizeof(tz)-1] = '\0';
+	return tz;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time Time::GMT() {
 	Time t;
 	t.gmt();
@@ -1014,16 +1030,7 @@ bool Time::fromString(const char* str, const char* fmt) {
 		return false;
 	}
 	else {
-		time_t calendartime = timegm(&t);
-		if ( calendartime == -1 ) {
-			*this = (time_t)0;
-			return false;
-		}
-
-		*this = (time_t)0;
-		setUSecs(usec);
-
-		*this = calendartime;
+		*this = timegm(&t);
 		setUSecs(usec);
 	}
 

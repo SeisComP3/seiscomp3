@@ -39,6 +39,7 @@ namespace Core {
  API Changelog
  ******************************************************************************
  "10.0.0"   0x0A0000
+   - Added Seiscomp::Core::Time::LocalTimeZone()
    - Added Seiscomp::IO::GFArchive::getTravelTime(...)
    - Added Seiscomp::Math::WindowFunc and several implementations
    - Changed Seiscomp::Util::Bindings::getKeys to const
@@ -48,6 +49,8 @@ namespace Core {
      Seiscomp::Gui::Map::TileStore implementations
    - Added Seiscomp::Gui::RecordView::coveredTimeRange()
    - Added Seiscomp::Core::stringify(...)
+   - Added Seiscomp::Gui::timeToString()
+   - Added Seiscomp::Gui::timeToLabel(...)
 
  "9.1.0"   0x090100
    - Added Seiscomp::Client::Application::Stage enum PLUGINS
