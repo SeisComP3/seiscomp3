@@ -638,7 +638,7 @@ void SSLSocket::open(const std::string &serverLocation) {
 	char buf[6];
 	snprintf(buf, 6, "%d", port);
 	BIO_set_conn_hostname(_bio, host.c_str());
-	BIO_set_conn_int_port(_bio, (char*)&port);
+	BIO_set_conn_port(_bio, buf);
 
 	if ( BIO_do_connect(_bio) <= 0 )
 		throw SocketException(string("error establishing secure socket "
