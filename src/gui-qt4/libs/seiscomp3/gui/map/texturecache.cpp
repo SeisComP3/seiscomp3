@@ -54,6 +54,8 @@ bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 		*bits = qRgb(224,224,224);
 		isDummy = true;
 	}
+	else
+		isDummy = false;
 
 	if ( node ) {
 		id.level = node->level();
@@ -69,7 +71,6 @@ bool Texture::load(TextureCache *cache, Alg::MapTreeNode *node) {
 	w = image.width();
 	h = image.height();
 	data = (const QRgb*)image.bits();
-	isDummy = false;
 
 	return true;
 }
