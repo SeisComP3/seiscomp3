@@ -23,6 +23,9 @@
 #include <vector>
 
 
+class QLabel;
+
+
 namespace Seiscomp {
 namespace Gui {
 
@@ -36,6 +39,8 @@ SC_GUI_API bool fromString(QColor& value, const std::string& str);
 SC_GUI_API QString latitudeToString(double lat, bool withValue = true, bool withUnit = true, int precision = 2);
 SC_GUI_API QString longitudeToString(double lon, bool withValue = true, bool withUnit = true, int precision = 2);
 SC_GUI_API QString depthToString(double depth, int precision = 0);
+SC_GUI_API QString timeToString(const Core::Time &t, const char *fmt, bool addTimeZone = false);
+SC_GUI_API void timeToLabel(QLabel *label, const Core::Time &t, const char *fmt, bool addTimeZone = false);
 SC_GUI_API QString elapsedTimeString(const Core::TimeSpan &dt);
 
 SC_GUI_API void setMaxWidth(QWidget *w, int numCharacters);

@@ -864,10 +864,6 @@ bool RecordView::feed(const Seiscomp::Record *rec) {
 		if ( _autoInsertItems ) {
 			child = addItem(streamID, stationCode);
 			if ( !child ) return false;
-			/*
-			std::cout << " starting at " << rec->startTime().toString("%F %T")
-			          << std::endl;
-			*/
 			emit addedItem(rec, child);
 		}
 		else

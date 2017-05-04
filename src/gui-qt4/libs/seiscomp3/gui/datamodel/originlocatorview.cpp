@@ -1052,6 +1052,12 @@ ArrivalModel::ArrivalModel(DataModel::Origin* origin, QObject *parent)
 			else
 				_header << QString("%1 (deg)").arg(EArrivalListColumnsNames::name(i));
 		}
+		else if ( i == TIME ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
+		}
 		else
 			_header << EArrivalListColumnsNames::name(i);
 
@@ -1145,7 +1151,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick ) {
 					try {
-						return QString(pick->creationInfo().creationTime().toString("%T.%1f").c_str());
+						return timeToString(pick->creationInfo().creationTime(), "%T.%1f");
 					}
 					catch ( ValueException& ) {}
 				}
@@ -1224,7 +1230,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 			case TIME:
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick )
-					return pick->time().value().toString(_pickTimeFormat.c_str()).c_str();
+					return timeToString(pick->time().value(), _pickTimeFormat.c_str());
 				break;
 
 			// Picktime
@@ -1387,11 +1393,10 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 		pick = Pick::Cast(PublicObject::Find(a->pickID()));
 
 		if ( pick ) {
-			if (l++) summary += '\n';
-			summary += QString("%1").arg(wfid2qstr(pick->waveformID()));
-
-			if (l++) summary += '\n';
-			summary += QString("%1").arg(pick->time().value().toString(_pickTimeFormat.c_str()).c_str());
+			if ( l++ ) summary += '\n';
+			summary += wfid2qstr(pick->waveformID());
+			if ( l++ ) summary += '\n';
+			summary += timeToString(pick->time().value(), _pickTimeFormat.c_str());
 		}
 
 		/*
@@ -3301,8 +3306,8 @@ void OriginLocatorView::updateContent() {
 	Time t = _currentOrigin->time();
 	Regions regions;
 	_ui.labelRegion->setText(regions.getRegionName(_currentOrigin->latitude(), _currentOrigin->longitude()).c_str());
-	//_ui.labelDate->setText(t.toString("%Y-%m-%d").c_str());
-	_ui.labelTime->setText(t.toString("%Y-%m-%d %H:%M:%S").c_str());
+	//timeToLabel(_ui.labelDate, timeToString(t, "%Y-%m-%d");
+	timeToLabel(_ui.labelTime, t, "%Y-%m-%d %H:%M:%S");
 
 	double radius;
 	if ( _config.defaultEventRadius > 0 )
@@ -3428,8 +3433,7 @@ void OriginLocatorView::updateContent() {
 	}
 
 	try {
-		std::string t = _currentOrigin->creationInfo().creationTime().toString("%Y-%m-%d %H:%M:%S");
-		_ui.labelCreated->setText(t.c_str());
+		timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S");
 	}
 	catch ( ValueException& ) {
 		_ui.labelCreated->setText("");
@@ -4869,11 +4873,11 @@ void OriginLocatorView::editComment() {
 			catch ( ... ) {}
 
 			try {
-				dlg.ui.labelDate->setText(_baseEvent->comment(i)->creationInfo().modificationTime().toString("%F %T").c_str());
+				timeToLabel(dlg.ui.labelDate, _baseEvent->comment(i)->creationInfo().modificationTime(), "%F %T");
 			}
 			catch ( ... ) {
 				try {
-					dlg.ui.labelDate->setText(_baseEvent->comment(i)->creationInfo().creationTime().toString("%F %T").c_str());
+					timeToLabel(dlg.ui.labelDate, _baseEvent->comment(i)->creationInfo().creationTime(), "%F %T");
 				}
 				catch ( ... ) {}
 			}

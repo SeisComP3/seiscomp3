@@ -1063,7 +1063,7 @@ QString Application::splashImagePath() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ConnectionDialog* Application::cdlg() {
+ConnectionDialog *Application::cdlg() {
 	createSettingsDialog();
 	return _dlgConnection;
 }
@@ -1075,6 +1075,8 @@ ConnectionDialog* Application::cdlg() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::createSettingsDialog() {
 	if ( _dlgConnection ) return;
+	if ( type() == QApplication::Tty )
+		return;
 
 	_dlgConnection = new ConnectionDialog(&_connection, &_database);
 	_dlgConnection->setMessagingEnabled(isMessagingEnabled());
@@ -1367,7 +1369,9 @@ void Application::destroyConnection() {
 
 	closeMessageThread();
 
-	cdlg()->setDefaultDatabaseParameters("","");
+	ConnectionDialog *dlg = cdlg();
+	if ( dlg != NULL )
+		dlg->setDefaultDatabaseParameters("","");
 
 	_connection = NULL;
 	emit changedConnection();

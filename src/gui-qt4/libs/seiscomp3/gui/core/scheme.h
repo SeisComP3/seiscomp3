@@ -82,6 +82,7 @@ class SC_GUI_API Scheme {
 				QColor alignment;
 				QColor foreground;
 				QColor alternateForeground;
+				QColor spectrogram;
 				QColor gaps;
 				QColor overlaps;
 				RecordStates states;
@@ -267,6 +268,12 @@ class SC_GUI_API Scheme {
 			bool distanceInKM;
 		};
 
+		struct DateTime {
+			DateTime();
+
+			bool useLocalTime;
+		};
+
 	public:
 		bool      showMenu;
 		bool      showStatusBar;
@@ -279,6 +286,7 @@ class SC_GUI_API Scheme {
 		Map       map;
 		Precision precision;
 		Unit      unit;
+		DateTime  dateTime;
 
 		Fonts     fonts;
 

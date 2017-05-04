@@ -21,6 +21,7 @@
 #include <seiscomp3/math/math.h>
 #include <seiscomp3/math/filter/butterworth.h>
 #include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/core/utils.h>
 
 using namespace std;
 using namespace Seiscomp;
@@ -163,17 +164,7 @@ bool minmax(const ::RecordSequence *seq, const Core::TimeWindow &tw,
 
 	return sampleCount > 0;
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ostream &operator << (ostream &os, const Core::Time &t)
-{
-            os << t.toString("%F %T.%f").substr(0,23);
-	            return os;
-}
 
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -2968,7 +2959,7 @@ void RecordWidget::drawActiveCursor(QPainter &painter, int x, int y) {
 	f.setBold(false);
 	painter.setFont(f);
 
-	QString time = _cursorPos.toString("%T.%f000000").substr(0,11).c_str();
+	QString time = timeToString(_cursorPos, "%T.%f000000").mid(0,11);
 
 	painter.drawText(rect(), Qt::TextSingleLine | Qt::AlignRight | Qt::AlignTop, time);
 }

@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <cmath>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/utils.h>
 
 #include <QEvent>
@@ -148,6 +149,33 @@ QString longitudeToString(double lon, bool withValue, bool withUnit, int precisi
 QString depthToString(double depth, int precision) {
 	return QString("%1")
 		.arg(depth, 0, 'f', precision);
+}
+
+
+QString timeToString(const Core::Time &t, const char *fmt, bool addTimeZone) {
+	QString s;
+
+	if ( SCScheme.dateTime.useLocalTime ) {
+		s = t.toLocalTime().toString(fmt).c_str();
+		if ( addTimeZone ) {
+			s += " ";
+			s += Core::Time::LocalTimeZone().c_str();
+		}
+	}
+	else {
+		s = t.toString(fmt).c_str();
+		if ( addTimeZone )
+			s += " UTC";
+	}
+
+	return s;
+}
+
+
+void timeToLabel(QLabel *label, const Core::Time &t, const char *fmt, bool addTimeZone) {
+	if ( SCScheme.dateTime.useLocalTime )
+		label->setToolTip((t.toString(fmt) + " UTC").c_str());
+	label->setText(timeToString(t, fmt, addTimeZone));
 }
 
 

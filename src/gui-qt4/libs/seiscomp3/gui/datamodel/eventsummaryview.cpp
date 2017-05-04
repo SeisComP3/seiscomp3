@@ -1642,7 +1642,7 @@ void EventSummaryView::setOrigin(Seiscomp::DataModel::Origin* origin) {
 	}
 
 
-	ui._lbOriginTime->setText(_currentOrigin->time().value().toString("%F %T UTC").c_str());
+	timeToLabel(ui._lbOriginTime, _currentOrigin->time().value(), "%F %T UTC");
 
 	try {
 		uiHypocenter._lbOriginStatus->setText(_currentOrigin->evaluationMode().toString());
@@ -1808,7 +1808,7 @@ void EventSummaryView::setAutomaticOrigin(DataModel::Origin* origin) {
 	}
 
 
-	ui._lbOriginTimeAutomatic->setText(origin->time().value().toString("%F %T UTC").c_str());
+	timeToLabel(ui._lbOriginTimeAutomatic, origin->time().value(), "%F %T UTC");
 
 	try {
 		uiHypocenter._lbOriginStatusAutomatic->setText(origin->evaluationMode().toString());
@@ -2283,37 +2283,37 @@ void EventSummaryView::deferredMapUpdate(){
 void EventSummaryView::updateMap(bool realignView){
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-		if ( !_currentOrigin->arrivalCount() && _reader )
-			_reader->loadArrivals(_currentOrigin.get());
+	if ( _currentOrigin && !_currentOrigin->arrivalCount() && _reader )
+		_reader->loadArrivals(_currentOrigin.get());
 
-		_map->setOrigin(_currentOrigin.get());
+	_map->setOrigin(_currentOrigin.get());
 
-		if ( realignView ) {
-			if ( _recenterMap ) {
-				double radius = 30;
-				try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
-				catch ( ... ) {}
-				_map->canvas().displayRect(QRectF(_currentOrigin->longitude()-radius, _currentOrigin->latitude()-radius, radius*2, radius*2));
-			}
-			else {
-				if ( !_map->canvas().isVisible(_currentOrigin->longitude(), _currentOrigin->latitude()) ) {
-					_map->canvas().setView(QPointF(_currentOrigin->longitude(), _currentOrigin->latitude()), _map->canvas().zoomLevel());
-				}
+	if ( _currentOrigin && realignView ) {
+		if ( _recenterMap ) {
+			double radius = 30;
+			try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
+			catch ( ... ) {}
+			_map->canvas().displayRect(QRectF(_currentOrigin->longitude()-radius, _currentOrigin->latitude()-radius, radius*2, radius*2));
+		}
+		else {
+			if ( !_map->canvas().isVisible(_currentOrigin->longitude(), _currentOrigin->latitude()) ) {
+				_map->canvas().setView(QPointF(_currentOrigin->longitude(), _currentOrigin->latitude()), _map->canvas().zoomLevel());
 			}
 		}
+	}
 
-		if ( _displayFocMechs ) {
-			if ( _currentFocalMechanism )
-				showFocalMechanism(_currentFocalMechanism.get(), -80, -80, palette().color(QPalette::WindowText));
+	if ( _displayFocMechs ) {
+		if ( _currentFocalMechanism )
+			showFocalMechanism(_currentFocalMechanism.get(), -80, -80, palette().color(QPalette::WindowText));
 
-			// Only show the last automatic solution if there is a preferred
-			// solution and if both are different
-			if ( _lastAutomaticFocalMechanism && _currentFocalMechanism &&
-				 _lastAutomaticFocalMechanism != _currentFocalMechanism )
-				showFocalMechanism(_lastAutomaticFocalMechanism.get(), 80, -80, _automaticOriginEnabledColor);
-		}
+		// Only show the last automatic solution if there is a preferred
+		// solution and if both are different
+		if ( _lastAutomaticFocalMechanism && _currentFocalMechanism &&
+			 _lastAutomaticFocalMechanism != _currentFocalMechanism )
+			showFocalMechanism(_lastAutomaticFocalMechanism.get(), 80, -80, _automaticOriginEnabledColor);
+	}
 
-		_map->update();
+	_map->update();
 
 	QApplication::restoreOverrideCursor();
 }

@@ -71,6 +71,7 @@ OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
 , _drawStations(false), _drawStationsLines(true)
 , _interactive(true)
 {
+	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;

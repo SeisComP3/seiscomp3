@@ -473,7 +473,7 @@ class AmplitudeViewMarker : public RecordMarker {
 				catch ( ... ) {}
 
 				try {
-					text += QString(" at %1").arg(_referencedAmplitude->creationInfo().creationTime().toString("%F %T").c_str());
+					text += QString(" at %1").arg(timeToString(_referencedAmplitude->creationInfo().creationTime(), "%F %T"));
 				}
 				catch ( ... ) {}
 

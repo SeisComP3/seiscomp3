@@ -149,7 +149,7 @@ class OriginTreeItem : public SchemeTreeItem {
 		void update() {
 			Origin* origin = static_cast<Origin*>(object());
 			setText(0, QString("%1").arg(origin->publicID().c_str()));
-			setText(1, QString("%1").arg(origin->time().value().toString("%F %T").c_str()));
+			setText(1, QString("%1").arg(timeToString(origin->time().value(), "%F %T")));
 			//setText(2, QString("%1").arg(origin->arrivalCount()));
 		}
 

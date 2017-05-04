@@ -170,6 +170,7 @@ class ZoomRecordWidget : public RecordWidget {
 			if ( showSpectrogram == enable ) return;
 
 			showSpectrogram = enable;
+			updateTraceColor();
 
 			resetSpectrogram();
 			update();
@@ -209,6 +210,7 @@ class ZoomRecordWidget : public RecordWidget {
 		void setTraces(ThreeComponentTrace::Component *t) {
 			traces = t;
 			resetSpectrogram();
+			updateTraceColor();
 		}
 
 		void feedRaw(int slot, const Seiscomp::Record *rec) {
@@ -247,6 +249,17 @@ class ZoomRecordWidget : public RecordWidget {
 			spectrogram[slot].setAlignment(alignment());
 			spectrogram[slot].setTimeRange(tmin(), tmax());
 			spectrogram[slot].renderAxis(painter, r, false);
+		}
+
+		void updateTraceColor() {
+			if ( showSpectrogram ) {
+				for ( int i = 0; i < slotCount(); ++i )
+					setRecordPen(i, QPen(SCScheme.colors.records.spectrogram, SCScheme.records.lineWidth));
+			}
+			else {
+				for ( int i = 0; i < slotCount(); ++i )
+					setRecordPen(i, QPen(SCScheme.colors.records.foreground, SCScheme.records.lineWidth));
+			}
 		}
 
 	protected:
@@ -804,7 +817,7 @@ class PickerMarker : public RecordMarker {
 			catch ( ... ) {}
 
 			try {
-				text += QString(" at %1").arg(_referencedPick->creationInfo().creationTime().toString("%F %T").c_str());
+				text += QString(" at %1").arg(timeToString(_referencedPick->creationInfo().creationTime(), "%F %T"));
 			}
 			catch ( ... ) {}
 
@@ -2465,6 +2478,7 @@ void PickerView::init() {
 	spinTW->setToolTip(tr("Sets the time window length of raw data to be used to compute a column of the spectrogram."));
 	connect(spinTW, SIGNAL(valueChanged(double)), this, SLOT(specTimeWindow(double)));
 	specTimeWindow(spinTW->value());
+	specApply();
 
 	_ui.toolBarSpectrogram->addSeparator();
 	_ui.toolBarSpectrogram->addWidget(spinTW);
@@ -3970,19 +3984,19 @@ void PickerView::loadNextStations(float distance) {
 					}
 				}
 
-				try {
-					stream->sensorLocation()->latitude();
-					stream->sensorLocation()->longitude();
-				}
-				catch ( ... ) {
-					SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
-					                 stream->sensorLocation()->station()->network()->code().c_str(),
-					                 stream->sensorLocation()->station()->code().c_str(),
-					                 stream->sensorLocation()->code().c_str());
-					continue;
-				}
-
 				if ( stream ) {
+					try {
+						stream->sensorLocation()->latitude();
+						stream->sensorLocation()->longitude();
+					}
+					catch ( ... ) {
+						SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+						                 stream->sensorLocation()->station()->network()->code().c_str(),
+						                 stream->sensorLocation()->station()->code().c_str(),
+						                 stream->sensorLocation()->code().c_str());
+						continue;
+					}
+
 					WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
 
 					RecordViewItem* item = addStream(stream->sensorLocation(), streamID, delta, streamID.stationCode().c_str(), false, true, stream);
