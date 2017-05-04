@@ -62,7 +62,7 @@ copyright = u'GFZ Potsdam, gempa GmbH'
 # built documents.
 #
 # The short X.Y version.
-version = 'Year.Day'
+version = '2017.124'
 # The full version, including alpha/beta/rc tags.
 release = 'Jakarta'
 
