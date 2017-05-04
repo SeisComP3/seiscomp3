@@ -27,6 +27,7 @@
 #include <sys/types.h>
 #include <errno.h>
 
+#include <stdexcept>
 #include <fstream>
 #include <set>
 
