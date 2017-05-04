@@ -495,20 +495,21 @@
 						</description>
 					</parameter>
 				</group>
-				<parameter name="saturationThreshold" type="string" default="false">
+				<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
 					<description>
 					Defines the saturation threshold for the optional saturation check.
 					By default the saturation check is disabled but giving a value above
 					0 will enable it. Waveforms that are saturated are not used
 					for amplitude calculations.
 
-					This value can either be an absolute value such as &quot;100000&quot;
-					or a relative value (optionally in percent) with respect to
-					the number of effective bits, e.g. &quot;0.8@23&quot; or
-					&quot;80%@23&quot;. The first version uses 1**23 * 0.8
-					whereas the latter uses 1**23 * 80/100.
+					This value can either be an absolute value of counts such
+					as &quot;100000&quot; counts or a relative value
+					(optionally in percent) with respect to the number of
+					effective bits, e.g. &quot;0.8@23&quot; or &quot;80%@23&quot;.
+					The first version uses 1**23 * 0.8 whereas the latter
+					uses 1**23 * 80/100.
 
-					The special value &quot;false&quot; explicitly disables
+					The boolean value &quot;false&quot; explicitly disables
 					the check.
 					</description>
 				</parameter>
@@ -532,20 +533,21 @@
 					the type must match the one defined in the corresponding
 					AmplitudeProcessor.
 					</description>
-					<parameter name="saturationThreshold" type="string" default="false">
+					<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
 						<description>
 						Defines the saturation threshold for the optional saturation check.
 						By default the saturation check is disabled but giving a value above
 						0 will enable it. Waveforms that are saturated are not used
 						for amplitude calculations.
 
-						This value can either be an absolute value such as &quot;100000&quot;
-						or a relative value (optionally in percent) with respect to
-						the number of effective bits, e.g. &quot;0.8@23&quot; or
-						&quot;80%@23&quot;. The first version uses 1**23 * 0.8
-						whereas the latter uses 1**23 * 80/100.
+						This value can either be an absolute value of counts such
+						as &quot;100000&quot; counts or a relative value
+						(optionally in percent) with respect to the number of
+						effective bits, e.g. &quot;0.8@23&quot; or &quot;80%@23&quot;.
+						The first version uses 1**23 * 0.8 whereas the latter
+						uses 1**23 * 80/100.
 
-						The special value &quot;false&quot; explicitly disables
+						The boolean value &quot;false&quot; explicitly disables
 						the check.
 						</description>
 					</parameter>
@@ -568,7 +570,7 @@
 						has no global default value.
 						</description>
 					</parameter>
-					<parameter name="noiseBegin" type="double">
+					<parameter name="noiseBegin" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the noise window used to compute
@@ -577,7 +579,7 @@
 						should only be changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="noiseEnd" type="double">
+					<parameter name="noiseEnd" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the end of the noise window used to compute
@@ -586,7 +588,7 @@
 						should only be changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="signalBegin" type="double">
+					<parameter name="signalBegin" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to compute
@@ -595,7 +597,7 @@
 						changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="signalEnd" type="double">
+					<parameter name="signalEnd" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the end of the signal window used to compute
@@ -673,13 +675,13 @@
 						is the minimum of noiseBegin and signalBegin.
 						</description>
 					</parameter>
-					<parameter name="signalBegin" type="double" default="-20">
+					<parameter name="signalBegin" type="double" default="-20" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to pick.
 						</description>
 					</parameter>
-					<parameter name="signalEnd" type="double" default="80">
+					<parameter name="signalEnd" type="double" default="80" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to pick.
