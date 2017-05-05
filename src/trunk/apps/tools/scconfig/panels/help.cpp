@@ -85,11 +85,10 @@ HelpPanel::HelpPanel(QWidget *parent)
 
 	_folderView->setViewMode(QListView::IconMode);
 	_folderView->setMovement(QListView::Static);
+	_folderView->setIconSize(QSize(64,64));
 	_folderView->setSpacing(6);
-	/*
-	_folderView->setIconSize(QSize(48,48));
-	_folderView->setGridSize(QSize(96,96));
-	*/
+	//_folderView->setGridSize(QSize(172,164 + fontMetrics().height()*2));
+	_folderView->setUniformItemSizes(true);
 
 	/*
 	IconItemDelegate *delegate = new IconItemDelegate(this);
