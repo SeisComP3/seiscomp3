@@ -27,6 +27,7 @@ using namespace std;
 namespace {
 
 
+/*
 class IconItemDelegate : public QStyledItemDelegate {
 	public:
 		IconItemDelegate(QObject *parent = 0)
@@ -36,14 +37,13 @@ class IconItemDelegate : public QStyledItemDelegate {
 		return QSize(96,96);
 	}
 
-	/*
 	virtual void paint(QPainter *painter,
 	                   const QStyleOptionViewItem &option,
 	                   const QModelIndex &index) const {
 		painter->fillRect(option.rect, Qt::blue);
 	}
-	*/
 };
+*/
 
 
 }
