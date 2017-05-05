@@ -288,10 +288,18 @@ void MapWidget::draw(QPainter &painter) {
 		QPoint p;
 		double dist = 0.0;
 		_canvas.projection()->project(p, _measurePoints[0]);
+#if QT_VERSION >= 0x040400
 		painter.drawEllipse(QPointF(p), 1.3f, 1.3f);
+#else
+		painter.drawEllipse(QRectF(p.x()-1.3f, p.y()-1.3f, 2.6f, 2.6f));
+#endif
 		for ( int i = 1; i < _measurePoints.size(); ++i ) {
 			_canvas.projection()->project(p, _measurePoints[i]);
+#if QT_VERSION >= 0x040400
 			painter.drawEllipse(QPointF(p), 1.3f, 1.3f);
+#else
+			painter.drawEllipse(QRectF(p.x()-1.3f, p.y()-1.3f, 2.6f, 2.6f));
+#endif
 			dist += _canvas.drawGeoLine(painter, _measurePoints[i-1], _measurePoints[i]);
 		}
 
