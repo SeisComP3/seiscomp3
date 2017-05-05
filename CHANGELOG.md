@@ -16,12 +16,35 @@
 
   * Upgraded to version 4.4
 
+* LocSAT
+
+  * Started to clean up code and to remove f2c dependencies. Goal of this
+    was to make compute_tt work in subsequent calls. Prior to the changes
+    travel time computation with LocSAT gave unpredictable results which
+    is now fixed.
+
 * scconfig
 
   * Fixed issue with deleted structures when saving a configuration file.
     Prior to that fix the structure was not deleted.
   * Added documentation section which allows to browse changelogs and
     documentations of installed modules
+
+* GUI
+
+  * Fixed bug in map tilestore that caused custom tilestore implementations
+    to crash under certain circumstances
+  * Add option to show times in localtime
+    ```
+    scheme.dateTime.useLocalTime = true
+    ```
+    This will show (hopefully) all times in the GUI with respect to the
+    systems timezone instead of UTC.
+
+* scesv
+
+  * Fixed crash if no event was loaded and either "Show full tensor" or
+    "Show waveform propagation" was toggled
 
 * scrttv
 
@@ -37,6 +60,12 @@
     # Show unassociated stations up to 20 degrees
     olv.map.stations.unassociatedMaxDist = 20
     ```
+  * Apply show spectrogram values initially
+  * Use separate trace color if spectrogram is shown: ```scheme.colors.records.spectrogram```
+
+* scmv
+
+  * Add "Show Details" button to event details widget
 
 * scevent
 
@@ -73,11 +102,6 @@
 * seedlink
 
   * Added ps2400_eth plugin configuration
-
-* GUI
-
-  * Fixed bug in map tilestore that caused custom tilestore implementations
-    to crash under certain circumstances
 
 
 ## Release 2016.333
