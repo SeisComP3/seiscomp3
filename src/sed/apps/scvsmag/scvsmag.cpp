@@ -862,7 +862,7 @@ void VsMagnitude::process(VsEvent *evt, Event *event) {
 
 		// Record single station magnitudes
 		Notifier::SetEnabled(true);
-		_creationInfo.setCreationTime(_currentTime);
+		_creationInfo.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 		_creationInfo.setModificationTime(Core::None);
 		DataModel::StationMagnitudePtr staMag = DataModel::StationMagnitude::Create();
 		staMag->setMagnitude(RealQuantity(input.mest));
@@ -1072,7 +1072,7 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	}
 
 	Notifier::SetEnabled(true);
-	_creationInfo.setCreationTime(_currentTime);
+	_creationInfo.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 	_creationInfo.setModificationTime(Core::None);
 	_creationInfo.setVersion(Core::toString(vsevt->update));
 	MagnitudePtr nmag = Magnitude::Create();
@@ -1128,7 +1128,7 @@ bool VsMagnitude::setComments(Magnitude *mag, const std::string id,
 	cmt->setId(id);
 	cmt->setText(Core::toString(value));
 	CreationInfo ci;
-	ci.setCreationTime(_currentTime);
+	ci.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 	cmt->setCreationInfo(ci);
 
 	if ( !mag->add(cmt.get()) ) {
