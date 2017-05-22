@@ -737,7 +737,7 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 
 	DataModel::ResponseFIRPtr rf = create<DataModel::ResponseFIR>(coeff);
 
-	rf->setGain(resp->stageGain().value());
+	try { rf->setGain(resp->stageGain().value()); } catch ( ... ) {}
 	try { rf->setDecimationFactor(resp->decimation().factor()); }
 	catch ( ... ) {}
 	try { rf->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
@@ -762,7 +762,7 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
                                   const FDSNXML::FIR *fir) {
 	DataModel::ResponseFIRPtr rf = create<DataModel::ResponseFIR>(fir);
 
-	rf->setGain(resp->stageGain().value());
+	try { rf->setGain(resp->stageGain().value()); } catch ( ... ) {}
 	try { rf->setDecimationFactor(resp->decimation().factor()); }
 	catch ( ... ) {}
 	try { rf->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
@@ -837,7 +837,7 @@ DataModel::ResponsePAZPtr convert(const FDSNXML::ResponseStage *resp,
 			break;
 	}
 
-	rp->setGain(resp->stageGain().value());
+	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
 	try { rp->setGainFrequency(resp->stageGain().frequency()); }
 	catch ( ... ) {}
 
@@ -892,7 +892,7 @@ DataModel::ResponseFAPPtr convert(const FDSNXML::ResponseStage *resp,
                                   const FDSNXML::ResponseList *rl) {
 	DataModel::ResponseFAPPtr rp = create<DataModel::ResponseFAP>(rl);
 
-	rp->setGain(resp->stageGain().value());
+	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
 	try { rp->setGainFrequency(resp->stageGain().frequency()); }
 	catch ( ... ) {}
 
@@ -920,7 +920,7 @@ DataModel::ResponsePolynomialPtr convert(const FDSNXML::ResponseStage *resp,
                                          const FDSNXML::Polynomial *poly) {
 	DataModel::ResponsePolynomialPtr rp = create<DataModel::ResponsePolynomial>(poly);
 
-	rp->setGain(resp->stageGain().value());
+	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
 	try { rp->setGainFrequency(resp->stageGain().frequency()); }
 	catch ( ... ) {}
 
@@ -2638,7 +2638,7 @@ Convert2SC3::updateSensorCalibration(DataModel::Sensor *sc_sens, DataModel::Stre
 	sc_cal->setGain(Core::None);
 	sc_cal->setGainFrequency(Core::None);
 
-	sc_cal->setGain(fabs(resp->stageGain().value()));
+	try { sc_cal->setGain(fabs(resp->stageGain().value())); } catch ( ... ) {}
 	try { sc_cal->setGainFrequency(fabs(resp->stageGain().frequency())); }
 	catch ( ... ) {}
 
