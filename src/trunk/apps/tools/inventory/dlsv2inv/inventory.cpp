@@ -308,6 +308,7 @@ bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item, doub
 			     ci.rc[item.index]->GetNumberOfDenominators() == 0 ) {
 				return true;
 			}
+			break;
 		case Inventory::RT_PAZ:
 			if ( ci.rpz[item.index]->GetNumberOfPoles() == 0 &&
 			     ci.rpz[item.index]->GetNumberOfZeros() == 0 ) {
@@ -1006,7 +1007,9 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 			UpdateStream(ci, strm, station->restricted(), station->shared());
 
 #if LOG_STAGES
-		cerr << "[" << strm_code << "]" << endl;
+		cerr << "[" << loc_code << strm_code << "]" << endl;
+		cerr << " + Start " << strm_start.iso() << endl;
+
 		if ( srt != RT_None )
 			cerr << " + S " << srt.toString() << endl;
 #endif
