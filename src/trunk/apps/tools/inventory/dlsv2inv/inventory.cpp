@@ -1175,9 +1175,11 @@ Inventory::InsertStream(ChannelIdentifier& ci, DataModel::SensorLocationPtr loc,
 			map<vector<string>, string>::iterator p;
 			if ( (p = encoding.find(keys)) != encoding.end() )
 				strm->setFormat(p->second);
-			else
-				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+			else if ( dataformat.GetShortDescriptiveName().empty() )
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known and no short descriptive name given: %s",
 				                 join(keys, "; ").c_str());
+			else
+				strm->setFormat(dataformat.GetShortDescriptiveName());
 
 			break;
 		}
@@ -1247,9 +1249,11 @@ void Inventory::UpdateStream(ChannelIdentifier& ci, DataModel::StreamPtr strm,
 			map<vector<string>, string>::iterator p;
 			if ( (p = encoding.find(keys)) != encoding.end() )
 				strm->setFormat(p->second);
-			else
-				SEISCOMP_WARNING("No mapping to a name from decoder keys known: %s",
+			else if ( dataformat.GetShortDescriptiveName().empty() )
+				SEISCOMP_WARNING("No mapping to a name from decoder keys known and no short descriptive name given: %s",
 				                 join(keys, "; ").c_str());
+			else
+				strm->setFormat(dataformat.GetShortDescriptiveName());
 
 			break;
 		}
