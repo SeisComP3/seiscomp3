@@ -120,11 +120,11 @@ class Inventory
 		Seiscomp::DataModel::DataloggerPtr InsertDatalogger(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string& name);
 		void InsertDecimation(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 
-		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, const std::string &name);
-		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, const std::string &name);
-		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, const std::string &name);
-		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, const std::string &name);
-		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, const std::string &name);
+		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
+		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
+		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
+		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
+		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 
 		Seiscomp::DataModel::SensorPtr InsertSensor(ChannelIdentifier&, Seiscomp::DataModel::StreamPtr, const std::string &unit, const std::string& name);
 		void InsertSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, Seiscomp::DataModel::StreamPtr, int stageSequenceNumber);
@@ -135,11 +135,11 @@ class Inventory
 		void UpdateDatalogger(ChannelIdentifier&, Seiscomp::DataModel::DataloggerPtr, Seiscomp::DataModel::StreamPtr);
 		void UpdateDecimation(ChannelIdentifier&, Seiscomp::DataModel::DecimationPtr, Seiscomp::DataModel::StreamPtr);
 
-		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr);
-		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr);
-		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr);
-		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr);
-		void UpdateResponsePolynomial(ChannelIdentifier&, Seiscomp::DataModel::ResponsePolynomialPtr);
+		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, OPT(double) stageGain);
+		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, OPT(double) stageGain);
+		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr, OPT(double) stageGain);
+		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr, OPT(double) stageGain);
+		void UpdateResponsePolynomial(ChannelIdentifier&, Seiscomp::DataModel::ResponsePolynomialPtr, OPT(double) stageGain);
 
 		void UpdateSensor(ChannelIdentifier&, Seiscomp::DataModel::SensorPtr, const std::string &unit);
 		void UpdateSensorCalibration(ChannelIdentifier&, Seiscomp::DataModel::SensorCalibrationPtr, Seiscomp::DataModel::StreamPtr, int stageSequenceNumber);
@@ -153,6 +153,8 @@ class Inventory
 		SequenceNumber GetFAPSequence(ChannelIdentifier&, std::string, std::string);
 		SequenceNumber GetPolySequence(ChannelIdentifier&, std::string, std::string);
 		ResponseType GetSensorResponseType(const ChannelIdentifier& ci, SequenceNumber &stageSequenceNumber);
+
+		OPT(double) GetStageGain(const ChannelIdentifier &, int sequence_number) const;
 		void GetStages(Stages &stages, const ChannelIdentifier &ci);
 };
 #endif /* MYINVENTORY_H */
