@@ -51,20 +51,6 @@ namespace Map {
 namespace {
 
 
-QString lat2String(double lat) {
-	return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
-}
-
-
-QString lon2String(double lon) {
-	lon = fmod(lon, 360.0);
-	if ( lon < 0 ) lon += 360.0;
-	if ( lon > 180.0 ) lon -= 360.0;
-
-	return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
-}
-
-
 union RGBA {
 	struct {
 		unsigned char red;
@@ -1165,9 +1151,6 @@ void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
 	for ( SymbolCollection::const_iterator it = symbolCollection()->begin(); it != symbolCollection()->end(); ++it ) {
 		Symbol* mapSymbol = *it;
 
-		if ( !mapSymbol->hasValidMapPosition() )
-			mapSymbol->calculateMapPosition(this);
-
 		bool isConsidered = !mapSymbol->isClipped() &&
 		                    mapSymbol->isVisible() &&
 		                    mapSymbol->priority() == priority;
@@ -1199,8 +1182,8 @@ void Canvas::drawDrawables(QPainter& painter) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawImage(const QRectF &geoReference, const QImage &image) {
-	_projection->drawImage(_buffer, geoReference, image, _filterMap && !_previewMode);
+void Canvas::drawImage(const QRectF &geoReference, const QImage &image, CompositionMode compositionMode) {
+	_projection->drawImage(_buffer, geoReference, image, _filterMap && !_previewMode, compositionMode);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1258,6 +1241,9 @@ void Canvas::drawImageLayer(QPainter &painter) {
 			                !_previewMode && SCScheme.map.vectorLayerAntiAlias);
 			drawGeoFeatures(p);
 		}
+
+		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
+			(*it)->bufferUpdated(this);
 
 		bufferUpdated();
 		_dirtyImage = false;

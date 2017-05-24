@@ -60,12 +60,12 @@ struct jsonstring {
 
 ostream &operator<<(ostream &os, const jsontime_t &js) {
 	//os << js.ref << "000";
-	os << Core::Time(js.ref).toString("\""DATE_FORMAT"\"");
+	os << Core::Time(js.ref).toString("\"" DATE_FORMAT "\"");
 	return os;
 }
 
 ostream &operator<<(ostream &os, const jsontime &js) {
-	os << js.ref.toString("\""DATE_FORMAT"\"");
+	os << js.ref.toString("\"" DATE_FORMAT "\"");
 	return os;
 }
 

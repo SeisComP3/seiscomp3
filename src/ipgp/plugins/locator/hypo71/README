@@ -40,9 +40,9 @@
 # How to make it work:                                                 #
 #                                                                      #
 # Load the plugin in scolv.cfg -> plugins = hypo71                     #
-# Add content of config/hypo71.cfg, edit properly paths, permissions   #
+# Add content of examples/hypo71.cfg, edit properly paths, permissions #
 #                                                                      #
-# Copy config/hypo71/ into ${HOME}/hypo71/                             #
+# Copy examples/hypo71/ into share/hypo71/                             #
 # Edit run.sh and make paths match accordingly to those specified      #
 # in scolv.cfg                                                         #
 #                                                                      #

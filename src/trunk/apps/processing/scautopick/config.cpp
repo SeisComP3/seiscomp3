@@ -56,6 +56,7 @@ Picker::Config::Config() {
 	initTime = 60.;
 
 	pickerType = "";
+	killPendingSecondaryProcessors = true;
 	sendDetections = false;
 
 	amplitudeList.insert("MLv");
@@ -135,6 +136,9 @@ void Picker::Config::init(const Client::Application *app) {
 	try { secondaryPickerType = app->configGetString("spicker"); }
 	catch ( ... ) {}
 
+	try { killPendingSecondaryProcessors = app->configGetBool("killPendingSPickers"); }
+	catch ( ... ) {}
+
 	try { sendDetections = app->configGetBool("sendDetections"); }
 	catch ( ... ) {}
 }
@@ -189,9 +193,10 @@ void Picker::Config::dump() const {
 	printf("ringBufferSize                   %.0fs\n", ringBufferSize);
 	printf("leadTime                         %.0fs\n", leadTime);
 	printf("initTime                         %.0fs\n", initTime);
-	printf("pickerType                       %s\n",     pickerType.c_str());
-	printf("secondaryPickerType              %s\n",     secondaryPickerType.c_str());
-	printf("sendDetections                   %s\n",     sendDetections ? "true" : "false");
+	printf("pickerType                       %s\n",    pickerType.c_str());
+	printf("secondaryPickerType              %s\n",    secondaryPickerType.c_str());
+	printf("killPendingSPickers              %s\n",    killPendingSecondaryProcessors ? "true" : "false");
+	printf("sendDetections                   %s\n",    sendDetections ? "true" : "false");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

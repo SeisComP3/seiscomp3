@@ -18,10 +18,7 @@
 #include "mvstationsymbol.h"
 
 using namespace Seiscomp;
-
-
-IMPLEMENT_RTTI(Legend, "Legend", Gui::Map::Symbol)
-IMPLEMENT_RTTI_METHODS(Legend)
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -192,10 +189,9 @@ void Legend::drawStation(const Seiscomp::Gui::Map::Canvas* canvas, QPainter& pai
 	stationSymbol.setCharacterDrawingColor(SCScheme.colors.stations.text);
 	stationSymbol.setCharacterDrawingEnabled(true);
 
-	stationSymbol.setSize(_stationSize);
+	stationSymbol.setRadius(_stationSize);
 	stationSymbol.setFrameSize(0);
-	stationSymbol.setX(pos.x());
-	stationSymbol.setY(pos.y());
+	stationSymbol.setPos(pos);
 	stationSymbol.setColor(color);
 	stationSymbol.setFrameColor(Qt::black);
 	stationSymbol.draw(canvas, painter);
@@ -322,4 +318,9 @@ void Legend::Content::draw(const Seiscomp::Gui::Map::Canvas* canvas, const Legen
 		currentPos.setY(currentPos.y() + legend._offset);
 	}
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

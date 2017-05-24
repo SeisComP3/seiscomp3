@@ -1987,7 +1987,7 @@ void DatabaseArchive::locateNullObjectByName(const char* name, const char* targe
 	if ( !isEmpty(name) ) {
 		if ( !isEmpty(targetClass) ) {
 			if ( !(hint() & DB_TABLE) ) {
-				_currentAttributeName = std::string(name) + ATTRIBUTE_SEPERATOR""OBJECT_USED_POSTFIX;
+				_currentAttributeName = std::string(name) + ATTRIBUTE_SEPERATOR "" OBJECT_USED_POSTFIX;
 				write((bool)false);
 				return;
 			}

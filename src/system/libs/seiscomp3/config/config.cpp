@@ -62,20 +62,6 @@ namespace {
 std::string CONF_NULL_OBJECT = "___CONFIG_NULL_OBJECT___";
 std::string quotable = "\\\t\n\v\f\r ,${}";
 
-std::string removeApostrophe(const std::string &str)
-{
-	std::string tmpString(str);
-	std::string::size_type pos = tmpString.find("\"");
-	if (pos != std::string::npos)
-		tmpString.erase(pos, pos + 1);
-
-	pos = tmpString.rfind("\"");
-	if (pos != std::string::npos)
-		tmpString.erase(pos);
-
-	return tmpString;
-}
-
 std::string stripEscapes(const std::string &str) {
 	std::string tmpString(str);
 	size_t pos = tmpString.find('\\');

@@ -90,7 +90,11 @@ EVP_CIPHER_CTX* EncryptPasswordHandle::makeContext(int direction){
 						  iv);
 	
 	// Context Initialization
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	ctx = (EVP_CIPHER_CTX*) calloc(sizeof(EVP_CIPHER_CTX),1);
+#else
+	ctx = EVP_CIPHER_CTX_new();
+#endif
 
 	if (direction == 0)
 		result = EVP_EncryptInit (ctx, EVP_des_cbc (), key, iv);

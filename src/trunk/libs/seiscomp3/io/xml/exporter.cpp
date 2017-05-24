@@ -72,52 +72,6 @@ class NamespaceCollector : public OutputHandler {
 };
 
 
-std::string convertUTF8(const std::string &in, const char *encoding, bool fromEncoding) {
-	if ( in.empty() ) return in;
-
-	xmlCharEncodingHandlerPtr handler = xmlFindCharEncodingHandler(encoding);
-	if ( handler == NULL ) {
-		SEISCOMP_ERROR("No encoding handler found for '%s'\n",
-		encoding ? encoding : "");
-		return in;
-	}
-
-	int size = in.size(),
-	bytesIn = size,
-	bytesOut;
-
-	int (*func)(unsigned char*, int*, const unsigned char*, int*) = NULL;
-	if ( fromEncoding ) {
-		func = handler->input;
-		bytesOut = size * 2 + 1;
-	}
-	else {
-		func = handler->output;
-		bytesOut = size + 1;
-	}
-
-	xmlChar* out = new xmlChar[bytesOut];
-	if ( out == NULL ) return in;
-
-	int ret = func(out, &bytesOut, (const xmlChar *) in.c_str(), &bytesIn);
-	if ((ret < 0) || (bytesIn != size) ) {
-		if ( bytesIn < 0 )
-			SEISCOMP_ERROR("Transcoding of %s failed with code %d", in.c_str(), bytesIn);
-
-		delete[] out;
-		return in;
-	}
-
-	out = (unsigned char *) realloc(out, bytesOut + 1);
-	out[bytesOut] = 0;
-
-	std::string result = (char*)out;
-	delete[] out;
-
-	return result;
-}
-
-
 }
 
 

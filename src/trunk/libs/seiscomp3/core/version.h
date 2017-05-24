@@ -51,6 +51,14 @@ namespace Core {
    - Added Seiscomp::Core::stringify(...)
    - Added Seiscomp::Gui::timeToString()
    - Added Seiscomp::Gui::timeToLabel(...)
+   - Added Seiscomp::Gui::MapWidget::setGrayScale(...)
+   - Added Seiscomp::Gui::Map::Layer::bufferUpdated(...)
+   - Added Seiscomp::Gui::Map::CompositionMode (Source, SourceOver, Multiply)
+   - Changed prototype of Seiscomp::Gui::Map::Canvas::drawImage(..., +CompositionMode)
+   - Changed prototype of Seiscomp::Gui::Map::Projection::drawImage(..., +CompositionMode)
+   - Reworked Seiscomp::Gui::Map::Symbol and add geodetic location and screen
+     position attributes (Symbol API v2)
+   - Add default implementation of Seiscomp::Gui::Map::Symbol::calculateMapPosition
 
  "9.1.0"   0x090100
    - Added Seiscomp::Client::Application::Stage enum PLUGINS

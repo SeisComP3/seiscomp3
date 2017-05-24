@@ -19,8 +19,8 @@ using namespace Seiscomp;
 
 MvMapWidget::MvMapWidget(const Seiscomp::Gui::MapsDesc &maps,
                          QWidget* parent, Qt::WFlags f)
- : Gui::MapWidget(maps, parent, f),
-   _mapLegend(new Legend) {
+: Gui::MapWidget(maps, parent, f)
+, _mapLegend(new Legend) {
 	setMouseTracking(true);
 }
 

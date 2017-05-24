@@ -233,7 +233,7 @@ Command-line
 
 def find_doc_dirs(directory):
   # The followlinks option has been added with Python 2.6
-  if sys.version_info >= (2,6)
+  if sys.version_info >= (2,6):
     for root, dirs, files in os.walk(directory, followlinks=True):
       if os.path.basename(root) == "descriptions":
         yield root

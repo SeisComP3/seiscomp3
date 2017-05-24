@@ -1,0 +1,12 @@
+#
+# Sample crontab entries used for configuring reqlogstats
+# at GEOFON.
+#
+
+# EIDA statistics processing, daily, after all reports are received:
+15 07 * * * (cd ${HOME}/reqlogstats; ./reqlogstats_mail.sh) 2>&1 | ${HOME}/bin/smo.sh ${MAILTO} "reqlogstats.sh"
+# Daily, or maybe once per week, update the mirror on the backup:
+55 07 * * * (rsync -av ${HOME}/reqlogstats/var sysop@geofon-open1:reqlogstats ; rsync -av ${HOME}/eida_stats sysop@geofon-open1: ) 2>&1 | ${HOME}/bin/smo.sh ${MAILTO} "reqlogstats.sh backup"
+
+# EIDA statistics processing, monthly; are all reports here for last month? EXPERIMENTAL
+05 07 4 * * (cd ${HOME}/reqlogstats; ./completeness.sh ) 2>&1 | ${HOME}/bin/smo.sh ${MAILTO} "completeness.sh for reqlogstats"

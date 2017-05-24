@@ -47,22 +47,10 @@ const static char *cmStrLayers = "Show Layers";
 const static char *cmStrHideAll = "Hide All";
 
 
-QString lat2String(double lat) {
-	return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
-}
-
 inline QString lat2String(double lat, int precision) {
 	return QString("%1%2")
 	        .arg(fabs(lat), 3+precision, 'f', precision)
 	        .arg(lat < 0?" S":lat > 0?" N":"");
-}
-
-QString lon2String(double lon) {
-	lon = fmod(lon, 360.0);
-	if ( lon < 0 ) lon += 360.0;
-	if ( lon > 180.0 ) lon -= 360.0;
-
-	return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
 }
 
 inline QString lon2String(double lon, int precision) {
@@ -233,6 +221,7 @@ void MapWidget::init() {
 	connect(zoomOut, SIGNAL(pressed()), this, SLOT(zoomOut()));
 
 	_measureBNADialog = NULL;
+	_forceGrayScale = false;
 }
 
 
@@ -274,9 +263,21 @@ void MapWidget::setDrawCities(bool e) {
 }
 
 
+void MapWidget::setGrayScale(bool f) {
+	if ( _forceGrayScale == f ) return;
+	_forceGrayScale = f;
+	update();
+}
+
+
+bool MapWidget::isGrayScale() const {
+	return _forceGrayScale;
+}
+
+
 void MapWidget::draw(QPainter &painter) {
 	_canvas.setPreviewMode(_isDragging || _isMeasureDragging);
-	_canvas.setGrayScale(!isEnabled());
+	_canvas.setGrayScale(!isEnabled() || _forceGrayScale);
 	_canvas.draw(painter);
 
 	if ( _isMeasuring ) {

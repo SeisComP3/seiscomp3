@@ -27,8 +27,6 @@
 
 
 class Legend : public Seiscomp::Gui::Map::Symbol {
-	DECLARE_RTTI;
-
 	private:
 		typedef QPair<QString, QChar> Annotation;
 		typedef QPair<Annotation, QColor> ContentItem;
@@ -55,6 +53,7 @@ class Legend : public Seiscomp::Gui::Map::Symbol {
 		void setMode(ApplicationStatus::Mode mode);
 
 	private:
+		virtual bool isInside(int x, int y) const { return false; }
 		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
 
 	private:

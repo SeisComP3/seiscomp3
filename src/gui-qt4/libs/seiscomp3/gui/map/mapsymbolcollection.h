@@ -52,6 +52,7 @@ class SymbolCollection {
 		virtual const_iterator begin() const = 0;
 		virtual const_iterator end() const = 0;
 
+		virtual void sortByLatitude() = 0;
 };
 
 
@@ -79,9 +80,12 @@ class DefaultSymbolCollection : public SymbolCollection {
 		virtual Symbols::const_iterator begin() const;
 		virtual Symbols::const_iterator end() const;
 
+		virtual void sortByLatitude();
+
 	private:
-		Symbols _mapSymbols;
-		Symbol* _topSymbol;
+		Symbols  _mapSymbols;
+		Symbol  *_topSymbol;
+		bool     _dirty;
 };
 
 

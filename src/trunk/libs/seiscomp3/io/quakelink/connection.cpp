@@ -110,7 +110,7 @@ bool Connection::init(const string &url, int options) {
 	size_t pos;
 	string protocol;
 	string connection;
-	pos = url.find_first_of("://");
+	pos = url.find("://");
 	if ( pos == string::npos ) {
 		protocol = "ql";
 		connection = url;
@@ -141,7 +141,7 @@ bool Connection::init(const string &url, int options) {
 		_service = connection;
 
 	// step 3: host:port
-	_service = _service.substr(0, _service.find_first_of('/'));
+	_service = _service.substr(0, _service.find('/'));
 	if ( _service.find(':') == string::npos )
 		_service += DEFAULT_PORT;
 

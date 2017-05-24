@@ -2883,16 +2883,6 @@ bool EventSummaryView::checkAndDisplay(DataModel::Event *e) {
 }
 
 
-namespace {
-
-bool lessThan(const std::pair<Seiscomp::DataModel::StationPtr, double>& op1,
-              const std::pair<Seiscomp::DataModel::StationPtr, double>& op2) {
-	return op1.second < op2.second;
-}
-
-}
-
-
 void EventSummaryView::calcOriginDistances() {
 	/*
 	_originStations.clear();

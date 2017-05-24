@@ -18,12 +18,25 @@ namespace Gui {
 namespace Map {
 
 
+namespace {
+
+
+bool byLatitude(const Symbol *s1, const Symbol *s2) {
+	return s1->latitude() > s2->latitude();
+}
+
+
+}
+
+
 DefaultSymbolCollection::DefaultSymbolCollection()
- : _topSymbol(NULL) {}
+: _topSymbol(NULL)
+, _dirty(false) {}
 
 
 bool DefaultSymbolCollection::add(Symbol* symbol) {
 	_mapSymbols.push_back(symbol);
+	_dirty = true;
 	return true;
 }
 
@@ -37,9 +50,11 @@ SymbolCollection::const_iterator DefaultSymbolCollection::remove(Symbol* symbol)
 				setTop(NULL);
 
 			delete *it;
+			_dirty = true;
 			return _mapSymbols.erase(it);
 		}
 	}
+
 	return _mapSymbols.end();
 }
 
@@ -96,6 +111,11 @@ SymbolCollection::Symbols::const_iterator DefaultSymbolCollection::begin() const
 
 SymbolCollection::Symbols::const_iterator DefaultSymbolCollection::end() const {
 	return _mapSymbols.end();
+}
+
+
+void DefaultSymbolCollection::sortByLatitude() {
+	 qSort(_mapSymbols.begin(), _mapSymbols.end(), byLatitude);
 }
 
 

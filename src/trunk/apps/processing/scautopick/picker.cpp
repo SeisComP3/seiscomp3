@@ -983,39 +983,41 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 	}
 
 	ProcList &list = _runningStreamProcs[rec->streamID()];
-	SEISCOMP_DEBUG("check for expired procs (got %d in list)", (int)list.size());
+	if ( _config.killPendingSecondaryProcessors ) {
+		SEISCOMP_DEBUG("check for expired procs (got %d in list)", (int)list.size());
 
-	// Check for secondary procs that are still running but where the
-	// end time is before onset and remove them
-	// ...
-	for ( ProcList::iterator it = list.begin(); it != list.end(); ) {
-		if ( it->dataEndTime <= onset ) {
-			SEISCOMP_DEBUG("Remove expired proc 0x%lx", (long int)it->proc);
-			if ( /*it->proc != NULL*/true ) {
-				SEISCOMP_INFO("Remove expired running processor %s on %s",
-				              it->proc->className(), rec->streamID().c_str());
+		// Check for secondary procs that are still running but where the
+		// end time is before onset and remove them
+		// ...
+		for ( ProcList::iterator it = list.begin(); it != list.end(); ) {
+			if ( it->dataEndTime <= onset ) {
+				SEISCOMP_DEBUG("Remove expired proc 0x%lx", (long int)it->proc);
+				if ( /*it->proc != NULL*/true ) {
+					SEISCOMP_INFO("Remove expired running processor %s on %s",
+					              it->proc->className(), rec->streamID().c_str());
 
-				if ( it->proc->status() == Processing::WaveformProcessor::LowSNR )
-					SEISCOMP_DEBUG("  -> status: SNR(%f) too low", it->proc->statusValue());
-				else if ( it->proc->status() > Processing::WaveformProcessor::Terminated )
-					SEISCOMP_DEBUG("  -> status: ERROR (%s, %f)",
-					               it->proc->status().toString(), it->proc->statusValue());
-				else
-					SEISCOMP_DEBUG("  -> status: OK");
+					if ( it->proc->status() == Processing::WaveformProcessor::LowSNR )
+						SEISCOMP_DEBUG("  -> status: SNR(%f) too low", it->proc->statusValue());
+					else if ( it->proc->status() > Processing::WaveformProcessor::Terminated )
+						SEISCOMP_DEBUG("  -> status: ERROR (%s, %f)",
+						               it->proc->status().toString(), it->proc->statusValue());
+					else
+						SEISCOMP_DEBUG("  -> status: OK");
 
-				// Remove processor from application
-				removeProcessor(it->proc);
+					// Remove processor from application
+					removeProcessor(it->proc);
 
-				// Remove its reverse lookup
-				ProcReverseMap::iterator pit = _procLookup.find(it->proc);
-				if ( pit != _procLookup.end() ) _procLookup.erase(pit);
+					// Remove its reverse lookup
+					ProcReverseMap::iterator pit = _procLookup.find(it->proc);
+					if ( pit != _procLookup.end() ) _procLookup.erase(pit);
+				}
+
+				// Remove it from the run list
+				it = list.erase(it);
 			}
-
-			// Remove it from the run list
-			it = list.erase(it);
+			else
+				++it;
 		}
-		else
-			++it;
 	}
 
 	// addProcessor can feed the requested time window with cached records

@@ -176,10 +176,8 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 
 				QPoint originLocation;
 				if ( canvas().projection()->project(originLocation, originLocationF) ) {
-					if ( canvas().symbolCollection()->size() > 0 ) {
-						(*canvas().symbolCollection()->begin())->update();
+					if ( canvas().symbolCollection()->size() > 0 )
 						cutOff = (*canvas().symbolCollection()->begin())->size().width();
-					}
 
 					if ( cutOff ) {
 						p.setClipping(true);

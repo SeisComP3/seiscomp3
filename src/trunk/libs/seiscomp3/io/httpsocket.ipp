@@ -42,7 +42,7 @@ template <typename SocketType>
 std::streamsize HttpSource<SocketType>::read(char* buf, std::streamsize size) {
 	std::string data = _sock->httpReadRaw(size);
 
-	if ( data.size() > size ) {
+	if ( (int)data.size() > size ) {
 		SEISCOMP_ERROR("impossible thing happened");
 		memcpy(buf, data.data(), size);
 		return size;
@@ -306,7 +306,7 @@ std::string HttpSocket<SocketType>::httpRead(int size)
 {
 	std::string data;
 
-	while ( data.size() < size ) {
+	while ( (int)data.size() < size ) {
 		std::string::size_type bytesRead = data.size();
 		data += httpReadSome(size - bytesRead);
 

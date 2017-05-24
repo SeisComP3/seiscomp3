@@ -8,6 +8,8 @@
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
+ *                                                                         *
+ *   Author: Jan Becker, gempa GmbH, jabe@gempa.de                         *
  ***************************************************************************/
 
 
@@ -50,7 +52,8 @@ class SC_GUI_API RectangularProjection : public Projection {
 
 		int  lineSteps(const QPointF &p0, const QPointF &p1);
 
-		void drawImage(QImage &buffer, const QRectF &geoReference, const QImage &image, bool highQuality);
+		void drawImage(QImage &buffer, const QRectF &geoReference, const QImage &image, bool highQuality,
+		               CompositionMode cm);
 
 		bool drawLine(QPainter &p, const QPointF &from, const QPointF &to);
 		void moveTo(const QPointF &p);
