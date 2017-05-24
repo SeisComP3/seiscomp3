@@ -299,6 +299,12 @@ bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item) {
 			     ci.rc[item.index]->GetNumberOfDenominators() == 0 ) {
 				return true;
 			}
+			if ( ci.rc[item.index]->GetNumberOfNumerators() == 1 &&
+			     ci.rc[item.index]->GetNumberOfDenominators() == 0 &&
+			     ci.rc[item.index]->numerators[0].coefficient == 1.0 &&
+			     ci.rc[item.index]->numerators[0].error == 0.0 ) {
+				return true;
+			}
 			break;
 		case Inventory::RT_PAZ:
 			if ( ci.rpz[item.index]->GetNumberOfPoles() == 0 &&
@@ -1365,7 +1371,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 				hasDigitizerGain = true;
 				dlg->setGain(stageGain);
 #if LOG_STAGES
-				cerr << " (digitizer gain)";
+				cerr << " (digitizer gain. forward filter with gain 1)";
 #endif
 				stageGain = 1.0;
 			}

@@ -413,6 +413,8 @@ DECLARE_BLOCKETTE2(ResponseCoefficients, SequenceRecord) {
 		int	number_of_numerators, number_of_denominators;
 		int  signal_in_units, signal_out_units;
 		char response_type;
+
+	public:
 		std::vector<Coefficient> numerators;
 		std::vector<Coefficient> denominators;
 };
