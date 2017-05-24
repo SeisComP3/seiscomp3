@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2017.124
 
 * seiscomp
 
