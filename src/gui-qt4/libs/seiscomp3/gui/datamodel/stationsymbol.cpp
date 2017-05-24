@@ -30,17 +30,14 @@
 
 namespace Seiscomp {
 namespace Gui {
-
-
-IMPLEMENT_RTTI(StationSymbol, "StationSymbol", Map::Symbol)
-IMPLEMENT_RTTI_METHODS(StationSymbol)
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationSymbol::StationSymbol(Map::Decorator* decorator)
- : Symbol(decorator) {
+: Symbol(decorator) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -52,10 +49,7 @@ StationSymbol::StationSymbol(Map::Decorator* decorator)
 StationSymbol::StationSymbol(double latitude,
                              double longitude,
                              Map::Decorator* decorator)
- : Symbol(decorator),
-   _latitude(latitude),
-   _longitude(longitude) {
-
+: Symbol(latitude, longitude, decorator) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -73,41 +67,7 @@ bool StationSymbol::isInside(int x, int y) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::calculateMapPosition(const Map::Canvas *canvas) {
-	QPoint tmpCartesianCoordinates;
-	setClipped(!canvas->projection()->project(tmpCartesianCoordinates,
-	                                          QPointF(longitude(), latitude())));
-	setX(tmpCartesianCoordinates.x());
-	setY(tmpCartesianCoordinates.y());
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool StationSymbol::hasValidMapPosition() const {
-	if ( _xPos < 0 && _yPos < 0 )
-		return false;
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool StationSymbol::isClipped(const Map::Canvas *canvas) const {
-	return canvas->isInside(longitude(), latitude());
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setColor(const QColor& color)
-{
+void StationSymbol::setColor(const QColor& color) {
 	_color = color;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -161,8 +121,8 @@ int StationSymbol::frameSize() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setSize(int size) {
-	_size = size;
+void StationSymbol::setRadius(int radius) {
+	_radius = radius;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -170,78 +130,8 @@ void StationSymbol::setSize(int size) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int StationSymbol::size() const {
-	return _size;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int StationSymbol::x() const {
-	return _xPos;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setX(int x) {
-	_xPos = x;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int StationSymbol::y() const {
-	return _yPos;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setY(int y) {
-	_yPos = y;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationSymbol::latitude() const {
-	return _latitude;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setLatitude(double latitude) {
-	_latitude = latitude;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationSymbol::longitude() const {
-	return _longitude;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void StationSymbol::setLongitude(double longitude) {
-	_longitude = longitude;
+int StationSymbol::radius() const {
+	return _radius;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -250,15 +140,6 @@ void StationSymbol::setLongitude(double longitude) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
-	drawStationSymbol(painter);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const QPolygon& StationSymbol::drawStationSymbol(QPainter& painter) {
 	painter.save();
 
 	QPen pen(Qt::MiterJoin);
@@ -271,7 +152,7 @@ const QPolygon& StationSymbol::drawStationSymbol(QPainter& painter) {
 		brush.setColor(_frameColor);
 		painter.setBrush(brush);
 
-		_stationPolygon = generateShape(x(), y(), size() + _frameSize);
+		_stationPolygon = generateShape(_position.x(), _position.y(), _radius + _frameSize);
 		painter.drawPolygon(_stationPolygon);
 	}
 
@@ -281,13 +162,11 @@ const QPolygon& StationSymbol::drawStationSymbol(QPainter& painter) {
 	brush.setColor(_color);
 	painter.setBrush(brush);
 
-	_stationPolygon = generateShape(x(), y(), size());
+	_stationPolygon = generateShape(_position.x(), _position.y(), _radius);
 
 	painter.drawPolygon(_stationPolygon);
 
 	painter.restore();
-
-	return _stationPolygon;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -296,14 +175,10 @@ const QPolygon& StationSymbol::drawStationSymbol(QPainter& painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StationSymbol::init() {
-	_xPos = -1;
-	_yPos = -1;
-
 	_frameColor = Qt::black;
 	_color      = Qt::black;
-
 	_frameSize = 1;
-	setSize(SCScheme.map.stationSize);
+	setRadius(SCScheme.map.stationSize);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

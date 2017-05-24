@@ -17,6 +17,7 @@
 
 #ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/maps.h>
+#include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/gui/map/legend.h>
 #include <seiscomp3/gui/map/imagetree.h>
 #include <seiscomp3/gui/map/mapsymbolcollection.h>
@@ -37,7 +38,6 @@ namespace Gui {
 namespace Map {
 
 class Layer;
-class Projection;
 
 DEFINE_SMARTPOINTER(TextureCache);
 
@@ -177,7 +177,8 @@ class SC_GUI_API Canvas : public QObject {
 		void drawGeoFeatures(QPainter& p);
 		void drawLayers(QPainter& p);
 		void drawDrawables(QPainter& p);
-		void drawImage(const QRectF &geoReference, const QImage &image);
+		void drawImage(const QRectF &geoReference, const QImage &image,
+		               CompositionMode compositionMode = CompositionMode_Default);
 
 		void updateBuffer();
 

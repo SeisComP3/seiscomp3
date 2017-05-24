@@ -14,16 +14,14 @@
 #ifndef __MVSTATIONSYMBOL_H___
 #define __MVSTATIONSYMBOL_H___
 
+
 #include <seiscomp3/gui/datamodel/stationsymbol.h>
 
 
 class MvStationSymbol : public Seiscomp::Gui::StationSymbol {
-	DECLARE_RTTI;
-
 	public:
 		MvStationSymbol(Seiscomp::Gui::Map::Decorator* decorator = NULL);
-		MvStationSymbol(double latitude,
-		                double longitude,
+		MvStationSymbol(double latitude, double longitude,
 		                Seiscomp::Gui::Map::Decorator* decorator = NULL);
 
 	public:
@@ -48,6 +46,8 @@ class MvStationSymbol : public Seiscomp::Gui::StationSymbol {
 
 		const std::string& channelCode() const;
 		void setChannleCode(const std::string& channelCode);
+
+		void setPos(const QPoint &p) { _position = p; }
 
 	protected:
 		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);

@@ -38,14 +38,6 @@ void setupFont(QWidget *w, const QFont &f) {
 	w->setFont(f);
 }
 
-void setupFont(QWidget *w, const QFont &f, const QColor &c) {
-	w->setFont(f);
-
-	QPalette pal = w->palette();
-	pal.setColor(QPalette::WindowText, c);
-	w->setPalette(pal);
-}
-
 void setupColor(QWidget *w, const QColor &c) {
 	QPalette pal = w->palette();
 	pal.setColor(QPalette::WindowText, c);

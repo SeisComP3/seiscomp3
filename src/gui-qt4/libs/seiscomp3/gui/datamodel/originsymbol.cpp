@@ -29,20 +29,16 @@
 
 namespace Seiscomp {
 namespace Gui {
-
-
-IMPLEMENT_RTTI(OriginSymbol, "OriginSymbol", Map::Symbol)
-IMPLEMENT_RTTI_METHODS(OriginSymbol)
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginSymbol::OriginSymbol(Map::Decorator* decorator)
- : Symbol(decorator),
-   _filled(false),
-   _geoPosition(0, 0),
-   _depth(0) {
-
+: Symbol(decorator)
+, _filled(false)
+, _depth(0) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -55,11 +51,9 @@ OriginSymbol::OriginSymbol(double latitude,
                            double longitude,
                            double depth,
                            Map::Decorator* decorator)
- : Symbol(decorator),
-   _filled(false),
-   _geoPosition(latitude, longitude),
-   _depth(depth) {
-
+: Symbol(latitude, longitude, decorator)
+, _filled(false)
+, _depth(depth) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -67,55 +61,7 @@ OriginSymbol::OriginSymbol(double latitude,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginSymbol::~OriginSymbol() {
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::update() {
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::calculateMapPosition(const Map::Canvas *canvas) {
-	double latitude = _geoPosition.x();
-	double longitude = _geoPosition.y();
-
-	setClipped(!canvas->projection()->project(_mapPosition, QPointF(longitude, latitude)));
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::hasValidMapPosition() const {
-	if ( _mapPosition.x() < 0 && _mapPosition.y() < 0 )
-		return false;
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::customDraw(const Map::Canvas *canvas, QPainter& painter) {
-	drawOriginSymbol(canvas, painter);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::drawOriginSymbol(const Map::Canvas*, QPainter& painter) {
+void OriginSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
 	painter.save();
 
 	QPen pen;
@@ -145,29 +91,18 @@ void OriginSymbol::drawOriginSymbol(const Map::Canvas*, QPainter& painter) {
 
 	painter.setBrush(brush);
 
-	const QSize& size = Seiscomp::Gui::Map::Symbol::size();
+	const QSize &size = Seiscomp::Gui::Map::Symbol::size();
+
 	int height = size.height(),
 	    width = size.width(),
 	    r = int(width / 2);
-	QRect rect(_mapPosition.x() - r, _mapPosition.y() - r, width, height);
+	QRect rect(_position.x() - r, _position.y() - r, width, height);
 	_poly = rect;
 	painter.drawEllipse(rect);
 
 	painter.restore();
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::isClipped(const Map::Canvas *canvas) {
-	double latitude = _geoPosition.x();
-	double longitude = _geoPosition.y();
-
-	return canvas->isInside(longitude, latitude);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -204,78 +139,6 @@ double OriginSymbol::depth() const {
 void OriginSymbol::setDepth(double depth) {
 	_depth = depth;
 	depthColorCoding();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setLatitude(double latitude) {
-	_geoPosition.setX(latitude);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginSymbol::latitude() const {
-	return _geoPosition.x();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setLongitude(double longitude) {
-	_geoPosition.setY(longitude);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginSymbol::longitude() const {
-	return _geoPosition.y();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginSymbol::x() const {
-	return _mapPosition.x();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setX(int xPos) {
-	_mapPosition.setX(xPos);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginSymbol::y() const {
-	return _mapPosition.y();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setY(int yPos) {
-	_mapPosition.setY(yPos);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -330,7 +193,6 @@ void OriginSymbol::updateSize() {
 void OriginSymbol::init() {
 	_color                   = Qt::black;
 	_defaultSize             = 20;
-	_mapPosition             = QPoint(-1, -1);
 	_preferredMagnitudeValue = 0.;
 
 	setPriority(Symbol::HIGH);

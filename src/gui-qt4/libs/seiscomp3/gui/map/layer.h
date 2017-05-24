@@ -59,31 +59,28 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		Layer(QObject* parent = NULL);
 		virtual ~Layer();
 
-		virtual Layer& operator =(const Layer &other);
-
-		virtual void calculateMapPosition(const Map::Canvas *canvas);
-		virtual Layer* clone() const { return NULL; }
-		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
-
+	public:
 		virtual void setConfig(const std::string &/*config*/) {}
-
-		void setDescription(const QString&);
-		const QString& description() const;
-
+		virtual void init(const Seiscomp::Config::Config&);
 		virtual void draw(const Seiscomp::Gui::Map::Canvas*, QPainter&) {}
 
-		virtual void init(const Seiscomp::Config::Config&);
+		virtual Layer &operator =(const Layer &other);
+		virtual Layer *clone() const { return NULL; }
+
+	public:
+		void setName(const QString&);
+		const QString &name() const;
+
+		void setDescription(const QString&);
+		const QString &description() const;
 
 		bool addLegend(Seiscomp::Gui::Map::Legend *legend);
 		bool removeLegend(Seiscomp::Gui::Map::Legend *legend);
 
 		int legendCount() const { return _legends.count(); }
-		Legend* legend(int i) const;
+		Legend *legend(int i) const;
 
-		const QList<Legend*>& legends() const { return _legends; }
-
-		void setName(const QString&);
-		const QString& name() const;
+		const QList<Legend*> &legends() const { return _legends; }
 
 		virtual void setVisible(bool);
 		bool isVisible() const;
@@ -91,7 +88,11 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		void setAntiAliasingEnabled(bool);
 		bool isAntiAliasingEnabled() const;
 
-		virtual QMenu* menu(QWidget*) const;
+	public:
+		virtual void calculateMapPosition(const Map::Canvas *canvas);
+		virtual void bufferUpdated(Map::Canvas *canvas);
+		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
+		virtual QMenu *menu(QWidget*) const;
 
 	signals:
 		void updateRequested(const Layer::UpdateHints& = UpdateHints());

@@ -8,9 +8,9 @@
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
+ *                                                                         *
+ *   Author: Jan Becker, gempa GmbH, jabe@gempa.de                         *
  ***************************************************************************/
-
-
 
 
 #include <QPainter>
@@ -96,7 +96,7 @@ void Projection::displayRect(const QRectF& rect) {
 }
 
 
-void Projection::drawImage(QImage &, const QRectF &, const QImage &, bool) {
+void Projection::drawImage(QImage &, const QRectF &, const QImage &, bool, CompositionMode) {
 	static bool firstCall = true;
 	if ( firstCall ) {
 		std::cerr << "Drawing a georeferenced image is not yet supported" << std::endl;

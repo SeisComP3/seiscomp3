@@ -35,6 +35,9 @@ Layer::~Layer() {
 void Layer::calculateMapPosition(const Map::Canvas *canvas) {
 }
 
+void Layer::bufferUpdated(Map::Canvas *canvas) {
+}
+
 bool Layer::filterContextMenuEvent(QContextMenuEvent* e, QWidget*) {
 	return false;
 }

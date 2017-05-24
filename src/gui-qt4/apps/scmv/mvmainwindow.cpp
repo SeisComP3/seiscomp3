@@ -55,6 +55,12 @@ using namespace Seiscomp;
 namespace {
 
 
+enum SymbolType {
+	OriginSymbolType,
+	StationSymbolType
+};
+
+
 inline std::string getStationId(const DataModel::WaveformStreamID* waveformID) {
 	return waveformID->networkCode() + "."
 	       + waveformID->stationCode() + "."
@@ -850,13 +856,13 @@ bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 		if ( !mapSymbol->isInside(contextMenuEvent->x(), contextMenuEvent->y()) )
 			continue;
 
-		if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
+		if ( mapSymbol->type() == OriginSymbolType ) {
 			QString title = QString("Event %1").arg(mapSymbol->id().c_str());
 			QAction* action = createAndConfigureContextMenuAction(title, mapSymbol);
 
 			originActionCollection.push_back(action);
 		}
-		else if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+		else if ( mapSymbol->type() == StationSymbolType ) {
 			QString title = QString("Station: %1").arg(mapSymbol->id().c_str());
 			QAction* action = createAndConfigureContextMenuAction(title, mapSymbol);
 
@@ -1121,8 +1127,8 @@ bool MvMainWindow::readStationsFromDataBase() {
 				if ( it == stations.end() ) continue;
 
 				it->second.stationRef = station;
-				it->second.stationSymbolRef = new MvStationSymbol(station->latitude(),
-				                                                  station->longitude());
+				it->second.stationSymbolRef = new MvStationSymbol(lat, lon);
+				it->second.stationSymbolRef->setType(StationSymbolType);
 				it->second.stationSymbolRef->setID(it->second.id);
 				it->second.stationSymbolRef->setNetworkCode(station->network()->code());
 				it->second.stationSymbolRef->setStationCode(station->code());
@@ -1136,6 +1142,8 @@ bool MvMainWindow::readStationsFromDataBase() {
 			}
 		}
 	}
+
+	_mapWidget->canvas().symbolCollection()->sortByLatitude();
 
 	return true;
 }
@@ -1504,7 +1512,7 @@ void MvMainWindow::selectStations(const EventData* eventData, bool isSelected) {
 void MvMainWindow::showOriginSymbols(bool val) {
 	EventDataRepository::event_iterator it = _eventDataRepository.eventsBegin();
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
-		if ( it->originSymbol()->TypeInfo() == Gui::OriginSymbol::TypeInfo() )
+		if ( it->originSymbol()->type() == OriginSymbolType )
 			it->originSymbol()->setVisible(val);
 		if ( it->tensorSymbol() != NULL )
 			it->tensorSymbol()->setVisible(val);
@@ -1681,6 +1689,7 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 	ttDecorator->setVisible(_ui.showWaveformPropagationAction->isChecked());
 
 	Gui::OriginSymbol *originSymbol = new Gui::OriginSymbol(ttDecorator);
+	originSymbol->setType(OriginSymbolType);
 	originSymbol->setLatitude(origin->latitude());
 	originSymbol->setLongitude(origin->longitude());
 	originSymbol->setID(event->publicID());
@@ -1797,21 +1806,20 @@ void MvMainWindow::markSearchWidgetResults() {
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
-		if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+		if ( mapSymbol->type() == StationSymbolType ) {
 			SearchWidget::Matches::const_iterator found = std::find(_searchWidgetRef->matches().begin(),
 			                                                        _searchWidgetRef->matches().end(),
 			                                                        mapSymbol->id());
 			if ( found != _searchWidgetRef->matches().end() ) {
 				mapSymbol->setVisible(true);
 				if ( idOfFirstMatch == mapSymbol->id() )
-					_mapWidget->canvas().centerMap(QPoint(static_cast<MvStationSymbol*>(mapSymbol)->x(),
-					                             static_cast<MvStationSymbol*>(mapSymbol)->y()));
+					_mapWidget->canvas().centerMap(mapSymbol->pos());
 			}
 			else {
 				mapSymbol->setVisible(false);
 			}
 		}
-		else if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
+		else if ( mapSymbol->type() == OriginSymbolType ) {
 			mapSymbol->setVisible(false);
 		}
 	}
@@ -1825,7 +1833,7 @@ void MvMainWindow::searchWidgetClosed() {
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
-		if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() )
+		if ( mapSymbol->type() == StationSymbolType )
 			mapSymbol->setVisible(true);
 	}
 
@@ -1969,7 +1977,7 @@ void MvMainWindow::showInfoWidget() {
 
 	std::string mapSymbolId = mapSymbol->id();
 
-	if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+	if ( mapSymbol->type() == StationSymbolType ) {
 		StationInfoWidget* infoWidget = new StationInfoWidget(mapSymbolId, this);
 
 		StationData* stationData = _stationDataCollection.find(mapSymbolId);
@@ -1995,7 +2003,7 @@ void MvMainWindow::showInfoWidget() {
 
 		::showInfoWidget(infoWidget);
 	}
-	else if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
+	else if ( mapSymbol->type() == OriginSymbolType ) {
 		OriginInfoWidget *infoWidget = new OriginInfoWidget(mapSymbolId, this);
 
 		const std::string &eventId = mapSymbol->id();
@@ -2056,9 +2064,9 @@ void MvMainWindow::updateOriginSymbolDisplay() {
 void MvMainWindow::setWaveformPropagationVisible(bool val) {
 	Gui::Map::SymbolCollection::iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
-		Gui::Map::Symbol* mapSymbol = *it;
-		if ( Gui::OriginSymbol::TypeInfo() == mapSymbol->typeInfo() ) {
-			Gui::Map::Decorator* decorator = mapSymbol->decorator();
+		Gui::Map::Symbol *mapSymbol = *it;
+		if ( mapSymbol->type() == OriginSymbolType ) {
+			Gui::Map::Decorator *decorator = mapSymbol->decorator();
 			if ( decorator )
 				decorator->setVisible(val);
 		}

@@ -59,6 +59,14 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		int heightForWidth(int w) const;
 
+		/**
+		 * @brief Sets map rendering in grayscale mode even if the widget is
+		 *        enabled.
+		 * @param f The enable flag
+		 */
+		void setGrayScale(bool f);
+		bool isGrayScale() const;
+
 		virtual void draw(QPainter&);
 
 
@@ -113,6 +121,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		bool     _isMeasuring;
 		bool     _isMeasureDragging;
 		bool     _filterMap;
+		bool     _forceGrayScale;
 
 		QVector<QPointF> _measurePoints;
 		QString          _measureText;
