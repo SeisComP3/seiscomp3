@@ -80,7 +80,7 @@ bool Environment::init()
 
 
 #ifdef SEISCOMP_SHARE_DIR
-	_shareDir = _installDir + "/"SEISCOMP_SHARE_DIR;
+	_shareDir = _installDir + "/" SEISCOMP_SHARE_DIR;
 #else
 	_shareDir = _installDir + "/share";
 #endif
@@ -104,7 +104,7 @@ bool Environment::init()
 
 
 #ifdef SEISCOMP_CONFIG_DIR
-	_globalConfigDir  = _installDir + "/"SEISCOMP_CONFIG_DIR;
+	_globalConfigDir  = _installDir + "/" SEISCOMP_CONFIG_DIR;
 #else
 	_globalConfigDir  = _installDir + "/etc/defaults";
 #endif

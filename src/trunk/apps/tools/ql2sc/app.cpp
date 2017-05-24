@@ -163,15 +163,6 @@ bool loadEventParam(DataModel::EventParametersPtr &ep, const string &data,
 }
 
 
-#if BOOST_VERSION >= 103500
-boost::posix_time::time_duration wait(const Core::Time &until) {
-	double diff = until - Core::Time::GMT();
-	if ( diff <= 0 ) diff = 0.001; // make sure wait is positive
-	int s = (int) boost::posix_time::time_duration::ticks_per_second() * diff;
-	return boost::posix_time::time_duration(0, 0, 0, s);
-}
-#endif
-
 /** Adds all PublicObjects to a cache */
 class SC_SYSTEM_CORE_API PublicObjectCacheFeeder : protected DataModel::Visitor {
 	public:

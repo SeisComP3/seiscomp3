@@ -42,14 +42,6 @@ namespace {
 const char *null_file = "";
 
 
-void xmlGenericErrorHandler(void *ctx, const char* msg, ...) {
-	va_list argp;
-	va_start(argp, msg);
-	vfprintf(stderr, msg, argp);
-	va_end(argp);
-}
-
-
 void xmlStructuredErrorHandler(void * userData, xmlErrorPtr error) {
 	SEISCOMP_ERROR("%s: %s", (const char*)userData, error->message);
 }
@@ -152,15 +144,6 @@ xmlNodePtr findNextTag(xmlDocPtr doc, xmlNodePtr node, const char* name, const c
 
 		sibling = sibling->next;
 	}
-
-	return NULL;
-}
-
-
-xmlNodePtr getFirstElementNode(xmlNodePtr node) {
-	for ( xmlNodePtr child = node->xmlChildrenNode; child != NULL; child = child->next )
-		if ( child->type == XML_ELEMENT_NODE )
-			return child;
 
 	return NULL;
 }

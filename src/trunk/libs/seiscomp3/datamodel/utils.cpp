@@ -92,22 +92,6 @@ class CloneVisitor : public Visitor {
 
 }
 
-namespace {
-	std::ostream &operator<<(std::ostream &os, const ComplexArray &ar) {
-		os << "Complex Array of " << ar.content().size() << " elements";
-		return os;
-	}
-	
-	std::ostream &operator<<(std::ostream &os, const RealArray &ar) {
-		os << "Real Array of " << ar.content().size() << " elements";
-		return os;
-	}
-	
-	std::ostream &operator<<(std::ostream &os, const Blob &ar) {
-		os << "Blob size: " << ar.content().size();
-		return os;
-	}
-}
 
 ThreeComponents::ThreeComponents() {
 	comps[0] = NULL;
