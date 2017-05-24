@@ -62,6 +62,7 @@
     ```
   * Apply show spectrogram values initially
   * Use separate trace color if spectrogram is shown: ```scheme.colors.records.spectrogram```
+  * Read and apply scolv/global bindings to the repicker
 
 * scmv
 
