@@ -41,7 +41,7 @@ Encrypt::~Encrypt(){
 
 Encrypt::Encrypt(){
 	// Initialization of the class, we must zero everyone
-	memset(this->salt,sizeof(this->salt),0);
+	memset(this->salt, 0, sizeof(this->salt));
 	ctx = NULL;
 
 	inBuffer = NULL;
@@ -52,7 +52,7 @@ Encrypt::Encrypt(){
 
 // Public
 void Encrypt::reset (){
-	memset(this->salt,sizeof(this->salt),0);
+	memset(this->salt, 0, sizeof(this->salt));
 	
 	if (ctx!= NULL) {
 		EVP_CIPHER_CTX_cleanup(this->ctx);
@@ -99,7 +99,7 @@ void Encrypt::initContext (std::string filename, std::string masterpassword, std
 	key = (unsigned char *) calloc(sizeof(unsigned char), EVP_MAX_KEY_LENGTH);
 	iv = (unsigned char *)calloc(sizeof(unsigned char), EVP_MAX_IV_LENGTH);
 	
-	memset(this->salt, sizeof(this->salt), 0);
+	memset(this->salt, 0, sizeof(this->salt));
 
 	// Get a new salt
 	if ((result = RAND_pseudo_bytes(this->salt, sizeof(this->salt))) != 1)
@@ -117,7 +117,11 @@ void Encrypt::initContext (std::string filename, std::string masterpassword, std
 
 
 	// Context Initialization
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	this->ctx = (EVP_CIPHER_CTX*)calloc(sizeof(EVP_CIPHER_CTX),1);
+#else
+	this->ctx = EVP_CIPHER_CTX_new();
+#endif
 
 	if ( (result = EVP_EncryptInit (this->ctx, EVP_des_cbc (), key, iv)) !=  1)
 		throw EncryptError("failed to initialize encryption context");
