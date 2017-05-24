@@ -240,7 +240,7 @@ class RegionCheckProcessor : public Seiscomp::Client::EventProcessor {
 			}
 			else {
 				if ( currentType && *currentType == OUTSIDE_OF_NETWORK_INTEREST ) {
-					SEISCOMP_DEBUG("%s: RC: event is out of network interest: removing type",
+					SEISCOMP_DEBUG("%s: RC: event is inside of network interest: removing type",
 					               event->publicID().c_str());
 					event->setType(Core::None);
 					return true;
