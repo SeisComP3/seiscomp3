@@ -171,8 +171,8 @@ bool Hypo71::init(const Config::Config& config) {
 		SEISCOMP_DEBUG("%s | logFile              | %s", MSG_HEADER, _logFile.c_str());
 	}
 	catch ( ... ) {
-		_logFile = env->absolutePath("@LOGDIR@/HYPO71.LOG");
-		SEISCOMP_ERROR("%s |   logFile            | DEFAULT value: %s",
+		_logFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.LOG");
+		SEISCOMP_DEBUG("%s |   logFile            | DEFAULT value: %s",
 		    MSG_HEADER, _logFile.c_str());
 	}
 
@@ -182,7 +182,7 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 	catch ( ... ) {
 		_h71inputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.INP");
-		SEISCOMP_ERROR("%s | inputFile            | DEFAULT value: %s",
+		SEISCOMP_DEBUG("%s | inputFile            | DEFAULT value: %s",
 		    MSG_HEADER, _h71inputFile.c_str());
 	}
 
@@ -192,7 +192,7 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 	catch ( ... ) {
 		_h71outputFile = env->absolutePath("@DATADIR@/hypo71/HYPO71.PRT");
-		SEISCOMP_ERROR("%s | outputFile           | DEFAULT value: %s",
+		SEISCOMP_DEBUG("%s | outputFile           | DEFAULT value: %s",
 		    MSG_HEADER, _h71outputFile.c_str());
 	}
 
@@ -202,7 +202,7 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 	catch ( ... ) {
 		_controlFilePath = env->absolutePath("@DATADIR@/hypo71/profiles/default.hypo71.conf");
-		SEISCOMP_ERROR("%s | defaultControlFile   | DEFAULT value: %s",
+		SEISCOMP_DEBUG("%s | defaultControlFile   | DEFAULT value: %s",
 		    MSG_HEADER, _controlFilePath.c_str());
 	}
 	if ( !Util::fileExists(_controlFilePath) ) {
@@ -218,7 +218,7 @@ bool Hypo71::init(const Config::Config& config) {
 	}
 	catch ( ... ) {
 		_hypo71ScriptFile = env->absolutePath("@DATADIR@/hypo71/run.sh");
-		SEISCOMP_ERROR("%s | hypo71ScriptFile     | DEFAULT value: %s",
+		SEISCOMP_DEBUG("%s | hypo71ScriptFile     | DEFAULT value: %s",
 		    MSG_HEADER, _hypo71ScriptFile.c_str());
 	}
 	if ( !Util::fileExists(_hypo71ScriptFile) ) {
@@ -250,7 +250,7 @@ bool Hypo71::init(const Config::Config& config) {
 			SEISCOMP_DEBUG("%s |   earthModelID       | %s", MSG_HEADER, prof.earthModelID.c_str());
 		}
 		catch ( ... ) {
-			SEISCOMP_ERROR("%s |   earthModelID       | can't read value", MSG_HEADER);
+			SEISCOMP_WARNING("%s |   earthModelID       | can't read value", MSG_HEADER);
 		}
 
 		try {
@@ -259,7 +259,7 @@ bool Hypo71::init(const Config::Config& config) {
 		}
 		catch ( ... ) {
 			prof.methodID = "Hypo71";
-			SEISCOMP_ERROR("%s |   methodID           | DEFAULT value: %s",
+			SEISCOMP_DEBUG("%s |   methodID           | DEFAULT value: %s",
 			    MSG_HEADER, prof.methodID.c_str());
 		}
 
@@ -268,7 +268,7 @@ bool Hypo71::init(const Config::Config& config) {
 			SEISCOMP_DEBUG("%s |   configFile         | %s", MSG_HEADER, prof.controlFile.c_str());
 		}
 		catch ( ... ) {
-			SEISCOMP_ERROR("%s |   configFile         | can't read value", MSG_HEADER);
+			SEISCOMP_WARNING("%s |   configFile         | can't read value", MSG_HEADER);
 		}
 
 		try {
