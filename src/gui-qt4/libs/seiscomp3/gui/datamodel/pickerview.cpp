@@ -40,6 +40,7 @@
 #include <seiscomp3/core/interfacefactory.ipp>
 #include <seiscomp3/seismology/ttt.h>
 #include <seiscomp3/utils/misc.h>
+#include <seiscomp3/utils/keyvalues.h>
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
@@ -6817,11 +6818,38 @@ void PickerView::automaticRepick() {
 			}
 
 			WaveformStreamID wid = _recordView->streamID(_recordView->currentItem()->row());
+			KeyValues params;
+			DataModel::ConfigModule *module = SCApp->configModule();
+			for ( size_t i = 0; i < module->configStationCount(); ++i ) {
+				DataModel::ConfigStation *station = module->configStation(i);
+				if ( station->networkCode() != wid.networkCode() ||
+				     station->stationCode() != wid.stationCode() ) continue;
+
+				DataModel::Setup *configSetup = DataModel::findSetup(station, SCApp->name(), true);
+
+				if ( configSetup ) {
+					DataModel::ParameterSet* ps = NULL;
+					try {
+						ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
+					}
+					catch ( Core::ValueException ) {
+						continue;
+					}
+
+					if ( !ps ) {
+						SEISCOMP_ERROR("Cannot find parameter set %s",
+						               configSetup->parameterSetID().c_str());
+						continue;
+					}
+
+					params.init(ps);
+				}
+			}
 
 			if ( !picker->setup(Processing::Settings(SCApp->configModuleName(),
 			                    wid.networkCode(), wid.stationCode(),
 			                    wid.locationCode(), wid.channelCode(), &SCApp->configuration(),
-			                    NULL)) ) {
+			                    &params)) ) {
 				statusBar()->showMessage("Automatic picking: unable to inialize picker");
 				return;
 			}
