@@ -74,6 +74,7 @@ class Magnitude_MLR : public Processing::MagnitudeProcessor {
 		// Do not need to compute another amplitude.
 
 		bool setup(const Settings &settings) {
+			string s = settings.getString("MLr.params");
 			// Reset the configuration 
 			list_of_parametersets.clear();
 			try {
@@ -86,6 +87,9 @@ class Magnitude_MLR : public Processing::MagnitudeProcessor {
 					return false;
 			}
 			catch ( ... ) {}
+			SEISCOMP_DEBUG("station %s.%s  Corrections: %s",
+					settings.networkCode.c_str(), settings.stationCode.c_str(),
+					s.c_str());
 
 			return true;
 		}
