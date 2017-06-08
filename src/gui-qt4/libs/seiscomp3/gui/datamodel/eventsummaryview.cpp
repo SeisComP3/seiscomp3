@@ -1642,7 +1642,7 @@ void EventSummaryView::setOrigin(Seiscomp::DataModel::Origin* origin) {
 	}
 
 
-	timeToLabel(ui._lbOriginTime, _currentOrigin->time().value(), "%F %T UTC");
+	timeToLabel(ui._lbOriginTime, _currentOrigin->time().value(), "%F %T", true);
 
 	try {
 		uiHypocenter._lbOriginStatus->setText(_currentOrigin->evaluationMode().toString());
@@ -1808,7 +1808,7 @@ void EventSummaryView::setAutomaticOrigin(DataModel::Origin* origin) {
 	}
 
 
-	timeToLabel(ui._lbOriginTimeAutomatic, origin->time().value(), "%F %T UTC");
+	timeToLabel(ui._lbOriginTimeAutomatic, origin->time().value(), "%F %T", true);
 
 	try {
 		uiHypocenter._lbOriginStatusAutomatic->setText(origin->evaluationMode().toString());
@@ -2515,7 +2515,7 @@ void EventSummaryView::clearOriginParameter(){
 	uiHypocenter._lbLongError->setText(QString("+/-%1 km").arg(0.0, 6, 'f', 0));
 	uiHypocenter._lbDepthError->setText(QString("+/-%1 km").arg(0.0, 6, 'f', 0));
 
-	ui._lbOriginTime->setText("0000/00/00  00:00:00 UTC");
+	ui._lbOriginTime->setText("0000/00/00  00:00:00");
 	ui._lbTimeAgo->setVisible(false);
 
 	ui._lbRegion->setText(""); ui._lbRegion->setVisible(false);
@@ -2540,7 +2540,7 @@ void EventSummaryView::clearOriginParameter(){
 void EventSummaryView::clearAutomaticOriginParameter() {
 	setLastAutomaticOriginColor(_automaticOriginDisabledColor);
 
-	ui._lbOriginTimeAutomatic->setText("0000/00/00  00:00:00 UTC");
+	ui._lbOriginTimeAutomatic->setText("0000/00/00  00:00:00");
 	uiHypocenter._lbLatitudeAutomatic->setText("---.--");
 	uiHypocenter._lbLatitudeUnitAutomatic->setText("");
 	uiHypocenter._lbLongitudeAutomatic->setText("---.--");
