@@ -58,8 +58,8 @@ MAKEENUM(
 		OL_REGION
 	),
 	ENAMES(
-		"Created(GMT)",
-		"OT(GMT)",
+		"Created(%1)",
+		"OT(%1)",
 		"Phases",
 		"Lat.",
 		"Lon.",
@@ -114,7 +114,7 @@ MAKEENUM(
 		MLC_DUMMY
 	),
 	ENAMES(
-		"Created(GMT)",
+		"Created(%1)",
 		"TP",
 		"M",
 		"Count",
@@ -158,7 +158,7 @@ MAKEENUM(
 		FML_AUTHOR
 	),
 	ENAMES(
-		"Created(GMT)",
+		"Created(%1)",
 		"Azi. Gap",
 		"Count",
 		"Misfit",
@@ -882,15 +882,31 @@ void EventEdit::init() {
 
 	_originTableHeader.clear();
 	for ( int i = 0; i < OriginListColumns::Quantity; ++i ) {
-		if ( i == _customColumn ) _originTableHeader << _customColumnLabel;
+		if ( i == _customColumn )
+			_originTableHeader << _customColumnLabel;
+		else if ( i == OL_CREATED || i == OL_TIME ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg("UTC");
+		}
+		else
 			_originTableHeader << EOriginListColumnsNames::name(i);
 	}
 
 	if ( _customColumn == OriginListColumns::Quantity )
 		_originTableHeader << _customColumnLabel;
 
-	for ( int i = 0; i < FMListColumns::Quantity; ++i )
-		_fmTableHeader << EFMListColumnsNames::name(i);
+	for ( int i = 0; i < FMListColumns::Quantity; ++i ) {
+		if ( i == FML_CREATED ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_fmTableHeader << QString(EFMListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_fmTableHeader << QString(EFMListColumnsNames::name(i)).arg("UTC");
+		}
+		else
+			_fmTableHeader << EFMListColumnsNames::name(i);
+	}
 
 	_ui.comboTypes->addItem("- unset -");
 	for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
@@ -2880,8 +2896,17 @@ void EventEdit::currentOriginChanged(QTreeWidgetItem* item, QTreeWidgetItem*) {
 	_ui.treeMagnitudes->setColumnCount(MagnitudeListColumns::Quantity);
 
 	QStringList headerLabels;
-	for ( int i = 0; i < MagnitudeListColumns::Quantity; ++i )
-		headerLabels << EMagnitudeListColumnsNames::name(i);
+	for ( int i = 0; i < MagnitudeListColumns::Quantity; ++i ) {
+		if ( i == MLC_TIMESTAMP ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				headerLabels << QString(EMagnitudeListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				headerLabels << QString(EMagnitudeListColumnsNames::name(i)).arg("UTC");
+		}
+		else
+			headerLabels << EMagnitudeListColumnsNames::name(i);
+	}
+
 	_ui.treeMagnitudes->setHeaderLabels(headerLabels);
 
 	_preferredMagnitudeIdx = -1;

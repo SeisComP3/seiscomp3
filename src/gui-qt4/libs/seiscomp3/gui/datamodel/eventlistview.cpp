@@ -82,7 +82,7 @@ MAKEENUM(
 		COL_ID
 	),
 	ENAMES(
-		"OT(GMT)",
+		"OT(%1)",
 		"Certainty",
 		"Type",
 		"M",
@@ -138,42 +138,6 @@ class ByteArrayBuf : public std::streambuf {
 	private:
 		QByteArray &_array;
 };
-
-
-QString filterToString(const EventListView::Filter &filter) {
-	QString s;
-
-	if ( filter.minLatitude || filter.maxLatitude ) {
-		if ( !s.isEmpty() ) s += " and ";
-		s += "latitude ";
-
-		if ( filter.minLatitude && filter.maxLatitude )
-			s += QString("inside [%1 %2;%3 %4]")
-			     .arg(fabs(*filter.minLatitude)).arg(*filter.minLatitude < 0?"S":"N")
-			     .arg(fabs(*filter.maxLatitude)).arg(*filter.maxLatitude < 0?"S":"N");
-		else if ( filter.minLatitude )
-			s += QString(">= %1 %2").arg(fabs(*filter.minLatitude)).arg(*filter.minLatitude < 0?"S":"N");
-		else if ( filter.maxLatitude )
-			s += QString("<= %1 %2").arg(fabs(*filter.maxLatitude)).arg(*filter.maxLatitude < 0?"S":"N");
-	}
-
-	if ( filter.minLongitude || filter.maxLongitude ) {
-		if ( !s.isEmpty() ) s += " and ";
-		s += "longitude ";
-
-		if ( filter.minLongitude && filter.maxLongitude )
-			s += QString("inside [%1 %2;%3 %4]")
-			     .arg(fabs(*filter.minLongitude)).arg(*filter.minLongitude < 0?"E":"W")
-			     .arg(fabs(*filter.maxLongitude)).arg(*filter.maxLongitude < 0?"E":"W");
-		else if ( filter.minLongitude )
-			s += QString(">= %1 %2").arg(fabs(*filter.minLongitude)).arg(*filter.minLongitude < 0?"E":"W");
-		else if ( filter.maxLongitude )
-			s += QString("<= %1 %2").arg(fabs(*filter.maxLongitude)).arg(*filter.maxLongitude < 0?"E":"W");
-	}
-
-	return s;
-}
-
 
 
 #define _T(name) ar->driver()->convertColumnName(name)
@@ -1902,7 +1866,14 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	_itemConfig.disabledColor = palette().color(QPalette::Disabled, QPalette::Text);
 	_itemConfig.columnMap.clear();
 	for ( int i = 0; i < EventListColumns::Quantity; ++i ) {
-		_itemConfig.header << EEventListColumnsNames::name(i);
+		if ( i == COL_OTIME ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_itemConfig.header << QString(EEventListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_itemConfig.header << QString(EEventListColumnsNames::name(i)).arg("UTC");
+		}
+		else
+			_itemConfig.header << EEventListColumnsNames::name(i);
 		_itemConfig.columnMap.append(i);
 	}
 
@@ -2710,10 +2681,18 @@ void EventListView::changeRegion() {
 
 void EventListView::setInterval(const Seiscomp::Core::TimeWindow& tw) {
 	QDateTime start, end;
-	start.setTimeSpec(Qt::UTC);
-	end.setTimeSpec(Qt::UTC);
-	start.setTime_t(tw.startTime().seconds());
-	end.setTime_t(tw.endTime().seconds());
+
+	if ( !SCScheme.dateTime.useLocalTime ) {
+		start.setTimeSpec(Qt::UTC);
+		end.setTimeSpec(Qt::UTC);
+		start.setTime_t(tw.startTime().seconds());
+		end.setTime_t(tw.endTime().seconds());
+	}
+	else {
+		start.setTime_t(tw.startTime().seconds());
+		end.setTime_t(tw.endTime().seconds());
+	}
+
 	_ui.dateTimeEditStart->setDateTime(start);
 	_ui.dateTimeEditEnd->setDateTime(end);
 }
