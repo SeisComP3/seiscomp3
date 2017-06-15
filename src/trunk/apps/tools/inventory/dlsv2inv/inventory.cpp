@@ -1008,7 +1008,7 @@ void Inventory::ProcessStream(StationIdentifier& si, DataModel::StationPtr stati
 		cerr << " + Start " << strm_start.iso() << endl;
 
 		if ( srt != RT_None )
-			cerr << " + S " << srt.toString() << endl;
+			cerr << " + S#" << *sensorStage << " " << srt.toString() << endl;
 #endif
 
 		ProcessDatalogger(ci, strm);
@@ -1306,7 +1306,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 	bool hasDigitizerGain = false;
 	SequenceNumber lastStage;
 
-	for ( size_t i = 0; i < stages.size(); ++i ) {
+	for ( size_t i = 0; i < stages.size(); lastStage = stages[i].stage, ++i ) {
 		bool isAnalogue;
 		if ( isAnalogDataloggerStage(adc, stages[i]) )
 			isAnalogue = true;
@@ -1328,7 +1328,7 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 		OPT(double) stageGain = GetStageGain(ci, stages[i].stage);
 
 #if LOG_STAGES
-		cerr << " + D " << stages[i].type.toString() << " "
+		cerr << " + D#" << stages[i].stage << " " << stages[i].type.toString() << " "
 		     << adc->UnitName(stages[i].inputUnit) << " "
 		     << adc->UnitName(stages[i].outputUnit) << " ";
 		if ( stageGain )
@@ -1435,6 +1435,16 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 				responseID = fap->publicID();
 				break;
 			}
+			case RT_None:
+			{
+				DataModel::ResponsePAZPtr rp = inventory->responsePAZ(DataModel::ResponsePAZIndex(instr));
+				if ( !rp )
+					rp = InsertDummyPAZ(ci, instr, stageGain);
+				else
+					UpdateDummyPAZ(ci, rp, stageGain);
+				responseID = rp->publicID();
+				break;
+			}
 			default:
 				SEISCOMP_ERROR("Invalid response type");
 				continue;
@@ -1450,7 +1460,6 @@ void Inventory::ProcessDatalogger(ChannelIdentifier& ci, DataModel::StreamPtr st
 		}
 
 		response_index = Core::None;
-		lastStage = stages[i].stage;
 	}
 
 	if ( !analogueChain.empty() )
@@ -2061,6 +2070,40 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, co
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+DataModel::ResponsePAZPtr Inventory::InsertDummyPAZ(ChannelIdentifier& ci, const string &name, OPT(double) stageGain) {
+	int seq = (int)*response_index;
+	int seqnum = ci.csg[seq]->GetStageSequenceNumber();
+
+	SEISCOMP_DEBUG("Insert dummy paz, for sequence number: %d", seqnum);
+
+	DataModel::ResponsePAZPtr rp = DataModel::ResponsePAZ::Create();
+
+	rp->setName(name);
+
+	rp->setType("A");
+	rp->setGain(stageGain);
+
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum ) {
+			rp->setGainFrequency(ci.csg[i]->GetFrequency());
+		}
+	}
+
+	rp->setNormalizationFactor(1.0);
+	rp->setNormalizationFrequency(1.0);
+	rp->setNumberOfZeros(0);
+	rp->setNumberOfPoles(0);
+
+	inventory->add(rp.get());
+
+	return rp;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp, OPT(double) stageGain) {
 	int seq = (int)*response_index;
 	int seqnum = ci.rpz[seq]->GetStageSequenceNumber();
@@ -2085,6 +2128,37 @@ void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZP
 	rp->setZeros(parseComplexArray(ci.rpz[seq]->GetComplexZeros()));
 	rp->setPoles(parseComplexArray(ci.rpz[seq]->GetComplexPoles()));
 	check_paz(rp, _fixedErrors);
+
+	rp->update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Inventory::UpdateDummyPAZ(ChannelIdentifier& ci, DataModel::ResponsePAZPtr rp, OPT(double) stageGain) {
+	int seq = (int)*response_index;
+	int seqnum = ci.csg[seq]->GetStageSequenceNumber();
+
+	SEISCOMP_DEBUG("Update dummy poles & zeros");
+
+	rp->setType("A");
+	rp->setGain(stageGain);
+	rp->setGainFrequency(Core::None);
+
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum ) {
+			rp->setGainFrequency(ci.csg[i]->GetFrequency());
+		}
+	}
+
+	rp->setNormalizationFactor(1.0);
+	rp->setNormalizationFrequency(1.0);
+	rp->setNumberOfZeros(0);
+	rp->setNumberOfPoles(0);
+	rp->setZeros(Core::None);
+	rp->setPoles(Core::None);
 
 	rp->update();
 }
@@ -2542,7 +2616,40 @@ void Inventory::GetStages(Stages &stages, const ChannelIdentifier &ci) {
 	populateStages(stages, ci.rc, RT_RC);
 	populateStages(stages, ci.firr, RT_FIR);
 
+	// Check for stages with only blockette 58
+	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
+		size_t seqNr = ci.csg[i]->GetStageSequenceNumber();
+		if ( !seqNr ) continue;
+
+		bool foundResponse = false;
+
+		for ( size_t j = 0; j < stages.size(); ++j ) {
+			if ( stages[j].stage == seqNr ) {
+				foundResponse = true;
+				break;
+			}
+		}
+
+		if ( foundResponse ) continue;
+
+		stages.push_back(Inventory::StageItem(seqNr, i, RT_None, -1, -1));
+	}
+
 	sort(stages.begin(), stages.end(), bySequenceNumber);
+
+	// Populate units for none stages
+	for ( size_t i = 0; i < stages.size(); ++i ) {
+		if ( stages[i].type != RT_None ) continue;
+
+		if ( i == 0 ) {
+			SEISCOMP_ERROR("Stage %d as first stage with only sensitivity is not an appropriate description",
+			               (int)stages[i].stage);
+			throw Core::GeneralException("Undefined behaviour expected, conversion aborted");
+		}
+
+		stages[i].inputUnit = stages[i-1].outputUnit;
+		stages[i].outputUnit = stages[i].inputUnit;
+	}
 
 #if 0
 	Stages::iterator it = stages.begin();

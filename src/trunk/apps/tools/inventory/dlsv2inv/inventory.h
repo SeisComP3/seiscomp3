@@ -123,6 +123,7 @@ class Inventory
 		Seiscomp::DataModel::ResponseFIRPtr InsertRespCoeff(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 		Seiscomp::DataModel::ResponseFIRPtr InsertResponseFIR(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 		Seiscomp::DataModel::ResponsePAZPtr InsertResponsePAZ(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
+		Seiscomp::DataModel::ResponsePAZPtr InsertDummyPAZ(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 		Seiscomp::DataModel::ResponseFAPPtr InsertResponseFAP(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 		Seiscomp::DataModel::ResponsePolynomialPtr InsertResponsePolynomial(ChannelIdentifier&, const std::string &name, OPT(double) stageGain);
 
@@ -138,6 +139,7 @@ class Inventory
 		void UpdateRespCoeff(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, OPT(double) stageGain);
 		void UpdateResponseFIR(ChannelIdentifier&, Seiscomp::DataModel::ResponseFIRPtr, OPT(double) stageGain);
 		void UpdateResponsePAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr, OPT(double) stageGain);
+		void UpdateDummyPAZ(ChannelIdentifier&, Seiscomp::DataModel::ResponsePAZPtr, OPT(double) stageGain);
 		void UpdateResponseFAP(ChannelIdentifier&, Seiscomp::DataModel::ResponseFAPPtr, OPT(double) stageGain);
 		void UpdateResponsePolynomial(ChannelIdentifier&, Seiscomp::DataModel::ResponsePolynomialPtr, OPT(double) stageGain);
 
