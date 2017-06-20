@@ -7,6 +7,12 @@
   * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
   * ```olv.locator``` is now deprecated in favour of ```olv.locator.interface```
 
+* scqc
+
+  * Added configuration option ```use3Components``` that allows to use all
+    3 components of a configured station. This only applied if ```useConfiguredStreams```
+    is active (default).
+
 
 ## Release 2017.124
 

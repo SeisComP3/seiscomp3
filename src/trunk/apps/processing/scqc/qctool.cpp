@@ -43,7 +43,7 @@ namespace Qc {
 QcTool::QcTool(int argc, char **argv) : QcApp(argc, argv) {
 
 	setLoadInventoryEnabled(false);
-    setLoadStationsEnabled(true);
+	setLoadStationsEnabled(true);
 	setLoadConfigModuleEnabled(true);
 
 	setPrimaryMessagingGroup("QC");
@@ -59,6 +59,8 @@ QcTool::QcTool(int argc, char **argv) : QcApp(argc, argv) {
 	_maxGapLength = Core::TimeSpan(1.*60.);
 	_archiveMode = false;
 	_autoTime = false;
+
+	_use3Components = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -153,25 +155,39 @@ bool QcTool::initConfiguration() {
 		return false;
 
 	try {
-		_useConfiguredStreams = (configGetString("useConfiguredStreams") == "True" || configGetString("useConfiguredStreams") == "true");
-	} catch (ConfigException&) {
+		_useConfiguredStreams = configGetBool("useConfiguredStreams");
+	}
+	catch ( ... ) {
 		_useConfiguredStreams = true;
 	}
-	if (!_useConfiguredStreams) {
+
+	try {
+		_use3Components = configGetBool("use3Components");
+	}
+	catch ( ... ) {
+		_use3Components = false;
+	}
+
+	if ( !_useConfiguredStreams ) {
 		try {
 			_streamMask = configGetString("streamMask");
-		} catch (ConfigException&) {
+		}
+		catch ( ... ) {
 			_streamMask = "^.*BHZ$";
 		}
 	}
+
 	try {
 		_creator = configGetString("CreatorId");
-	} catch (ConfigException&) {
+	}
+	catch ( ... ) {
 		_creator = "SC3_QcTool";
 	}
+
 	try {
 		_dbLookBack = boost::lexical_cast<int>(configGetString("dbLookBack"));
-	} catch (ConfigException&) {
+	}
+	catch ( ... ) {
 		_dbLookBack = 7;
 	}
 
@@ -268,22 +284,64 @@ bool QcTool::init() {
 						if ( !cha.empty() ) {
 							bool isFixedChannel = cha.size() > 2;
 
-							if ( !isFixedChannel ) {
-								DataModel::SensorLocation *sloc =
-									Client::Inventory::Instance()->getSensorLocation(net, sta, loc, Core::Time::GMT());
+							DataModel::SensorLocation *sloc =
+								Client::Inventory::Instance()->getSensorLocation(net, sta, loc, Core::Time::GMT());
+
+							if ( _use3Components ) {
+								std::string groupCode;
+
+								if ( isFixedChannel )
+									groupCode = cha.substr(0, 2);
+								else
+									groupCode = cha;
 
 								if ( sloc != NULL ) {
-									DataModel::Stream *stream = DataModel::getVerticalComponent(sloc, cha.c_str(), Core::Time::GMT());
-									if ( stream != NULL )
-										addStream(net, sta, loc, stream->code());
+									DataModel::ThreeComponents tc;
+
+									if ( DataModel::getThreeComponents(tc, sloc, groupCode.c_str(), Core::Time::GMT()) ) {
+										if ( tc.comps[DataModel::ThreeComponents::Vertical] != NULL )
+											addStream(net, sta, loc, tc.comps[DataModel::ThreeComponents::Vertical]->code());
+										else
+											addStream(net, sta, loc, isFixedChannel ? cha : groupCode + 'Z');
+
+										if ( tc.comps[DataModel::ThreeComponents::FirstHorizontal] != NULL )
+											addStream(net, sta, loc, tc.comps[DataModel::ThreeComponents::FirstHorizontal]->code());
+										else
+											addStream(net, sta, loc, groupCode+'N');
+
+										if ( tc.comps[DataModel::ThreeComponents::SecondHorizontal] != NULL )
+											addStream(net, sta, loc, tc.comps[DataModel::ThreeComponents::SecondHorizontal]->code());
+										else
+											addStream(net, sta, loc, groupCode+'E');
+									}
+									else {
+										addStream(net, sta, loc, isFixedChannel ? cha : groupCode + 'Z');
+										addStream(net, sta, loc, groupCode+'N');
+										addStream(net, sta, loc, groupCode+'E');
+									}
+								}
+								else {
+									addStream(net, sta, loc, isFixedChannel ? cha : groupCode + 'Z');
+									addStream(net, sta, loc, groupCode+'N');
+									addStream(net, sta, loc, groupCode+'E');
+								}
+							}
+							else {
+								// Only vertical
+								if ( !isFixedChannel ) {
+									if ( sloc != NULL ) {
+										DataModel::Stream *stream = DataModel::getVerticalComponent(sloc, cha.c_str(), Core::Time::GMT());
+										if ( stream != NULL )
+											addStream(net, sta, loc, stream->code());
+										else
+											addStream(net, sta, loc, cha+'Z');
+									}
 									else
 										addStream(net, sta, loc, cha+'Z');
 								}
 								else
-									addStream(net, sta, loc, cha+'Z');
+									addStream(net, sta, loc, cha);
 							}
-							else
-								addStream(net, sta, loc, cha);
 						}
 					}
 				}
