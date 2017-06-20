@@ -3044,24 +3044,30 @@ void MagnitudeView::addStationMagnitude(Seiscomp::DataModel::StationMagnitude* s
 double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
                                           DataModel::StationMagnitude* stationMagnitude,
                                           double weight) {
-	double distance;
+	double distance = -999;
 
 	try {
-		StationLocation loc = Client::Inventory::Instance()->stationLocation(
-			stationMagnitude->waveformID().networkCode(),
-			stationMagnitude->waveformID().stationCode(),
-			_origin->time().value()
-		);
+		const WaveformStreamID &wfsID = stationMagnitude->waveformID();
 
-		double azi1, azi2;
+		try {
+			StationLocation loc = Client::Inventory::Instance()->stationLocation(
+				wfsID.networkCode(), wfsID.stationCode(), _origin->time().value());
 
-		Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
-		                  loc.latitude, loc.longitude,
-		                  &distance, &azi1, &azi2);
+			double azi1, azi2;
+			Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
+			                  loc.latitude, loc.longitude,
+			                  &distance, &azi1, &azi2);
+		}
+		catch ( ValueException& ) {
+			SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: Station %s.%s "
+			               "not found. Not added.", wfsID.networkCode().c_str(),
+			               wfsID.stationCode().c_str());
+		}
 	}
 	catch ( ValueException& ) {
-		SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: Station %s not found. Not added.", stationMagnitude->waveformID().stationCode().c_str());
-		distance = -999;
+		SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: WaveformID in "
+		               "magnitude '%s' not set",
+		               stationMagnitude->publicID().c_str());
 	}
 
 	double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();
