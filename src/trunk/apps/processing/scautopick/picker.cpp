@@ -89,6 +89,11 @@ Seiscomp::DataModel::WaveformStreamID waveformStreamID(const Seiscomp::Record *r
 		rec->networkCode(), rec->stationCode(), rec->locationCode(), rec->channelCode(), "");
 }
 
+std::string dotted(const Seiscomp::DataModel::WaveformStreamID &wf) {
+	return wf.networkCode() + "." + wf.stationCode() + "." + wf.locationCode() + "." + wf.channelCode();
+}
+
+
 ostream& operator<<(ostream& o, const Seiscomp::Core::Time& time) {
 	o << time.toString("%Y/%m/%d %H:%M:%S.") << (time.microseconds() / 1000);
 	return o;
@@ -569,10 +574,7 @@ bool App::initComponent(Processing::WaveformProcessor *proc,
                         Processing::WaveformProcessor::Component comp,
                         const Core::Time &time,
                         const std::string &streamID,
-                        const std::string &networkCode,
-                        const std::string &stationCode,
-                        const std::string &locationCode,
-                        const std::string &channelCode,
+			const DataModel::WaveformStreamID &waveformID,
                         bool metaDataRequired) {
 	StreamMap::iterator it = _streams.find(streamID);
 	if ( it != _streams.end() && contains(it->second->epoch, time) ) {
@@ -587,7 +589,7 @@ bool App::initComponent(Processing::WaveformProcessor *proc,
 		Processing::StreamPtr stream = new Processing::Stream;
 		_streams[streamID] = stream;
 
-		stream->init(networkCode, stationCode, locationCode, channelCode, time);
+		stream->init(waveformID.networkCode(), waveformID.stationCode(), waveformID.locationCode(), waveformID.channelCode(), time);
 		if ( (stream->gain == 0.0) && metaDataRequired ) {
 			SEISCOMP_ERROR("No gain for stream %s", streamID.c_str());
 			return false;
@@ -608,20 +610,15 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
                         Processing::WaveformProcessor::StreamComponent comp,
                         const Core::Time &time,
                         const std::string &streamID,
-                        const std::string &networkCode,
-                        const std::string &stationCode,
-                        const std::string &locationCode,
-                        const std::string &channelCode,
+			const DataModel::WaveformStreamID &waveformID,
                         bool metaDataRequired) {
+	const std::string dottedWaveformID = dotted(waveformID);
 	switch ( comp ) {
 		case Processing::WaveformProcessor::Vertical:
 			if ( !initComponent(proc,
 			                    Processing::WaveformProcessor::VerticalComponent,
-			                    time, streamID, networkCode, stationCode,
-			                    locationCode, channelCode, metaDataRequired) ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: failed to setup vertical component",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+			                    time, streamID, waveformID, metaDataRequired) ) {
+				SEISCOMP_ERROR_S(dottedWaveformID + ": failed to setup vertical component");
 				return false;
 			}
 			break;
@@ -629,23 +626,16 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 		case Processing::WaveformProcessor::FirstHorizontal:
 			if ( !initComponent(proc,
 			                    Processing::WaveformProcessor::FirstHorizontalComponent,
-			                    time, streamID, networkCode, stationCode,
-			                    locationCode, channelCode, metaDataRequired) ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: failed to setup first horizontal component",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+			                    time, streamID, waveformID, metaDataRequired) ) {
+				SEISCOMP_ERROR_S(dottedWaveformID + ": failed to setup first horizontal component");
 				return false;
 			}
 			break;
 
 		case Processing::WaveformProcessor::SecondHorizontal:
-			if ( !initComponent(proc,
-			                    Processing::WaveformProcessor::SecondHorizontalComponent,
-			                    time, streamID, networkCode, stationCode,
-			                    locationCode, channelCode, metaDataRequired) ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: failed to setup second horizontal component",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+			if ( ! initComponent(proc, Processing::WaveformProcessor::SecondHorizontalComponent,
+			                     time, streamID, waveformID, metaDataRequired) ) {
+				SEISCOMP_ERROR_S(dottedWaveformID + ": failed to setup second horizontal component");
 				return false;
 			}
 			break;
@@ -654,56 +644,51 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 		{
 			// Find the two horizontal components of given location code
 			DataModel::ThreeComponents chans;
+			DataModel::WaveformStreamID waveformID1, waveformID2;
 			string streamID1, streamID2;
-			string channelCode1, channelCode2;
 
 			DataModel::SensorLocation *loc =
 				Client::Inventory::Instance()->getSensorLocation(
-					networkCode, stationCode, locationCode, time
-				);
+					waveformID.networkCode(), waveformID.stationCode(), waveformID.locationCode(), time);
 
 			if ( loc == NULL ) {
 				SEISCOMP_ERROR("%s.%s: location code '%s' not found",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str());
+				               waveformID.networkCode().c_str(), waveformID.stationCode().c_str(),
+				               waveformID.locationCode().c_str());
 				return false;
 			}
 
 			// Extract the first two characters of the channel code
-			DataModel::getThreeComponents(chans, loc, channelCode.substr(0, 2).c_str(), time);
+			string c2 = waveformID.channelCode().substr(0, 2);
+
+			DataModel::getThreeComponents(chans, loc, c2.c_str(), time);
 			if ( chans.comps[DataModel::ThreeComponents::FirstHorizontal] != NULL ) {
-				channelCode1 = chans.comps[DataModel::ThreeComponents::FirstHorizontal]->code();
-				streamID1 = networkCode + "." + stationCode + "." +
-				            locationCode + "." + channelCode1;
+				string channelCode1 = chans.comps[DataModel::ThreeComponents::FirstHorizontal]->code();
+				waveformID1 = waveformID;
+				waveformID1.setChannelCode(channelCode1);
+				streamID1 = dotted(waveformID1);
 			}
 			else {
-				SEISCOMP_ERROR("%s.%s.%s.%s: 1st horizontal component not available",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+				SEISCOMP_ERROR_S(dottedWaveformID + ": 1st horizontal component not available");
 				return false;
 			}
 
 			if ( chans.comps[DataModel::ThreeComponents::SecondHorizontal] != NULL ) {
-				channelCode2 = chans.comps[DataModel::ThreeComponents::SecondHorizontal]->code();
-				streamID2 = networkCode + "." + stationCode + "." +
-				            locationCode + "." + channelCode2;
+				string channelCode2 = chans.comps[DataModel::ThreeComponents::SecondHorizontal]->code();
+				waveformID2 = waveformID;
+				waveformID2.setChannelCode(channelCode2);
+				streamID2 = dotted(waveformID2);
 			}
 			else {
-				SEISCOMP_ERROR("%s.%s.%s.%s: 2nd horizontal component not available",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+				SEISCOMP_ERROR_S(dottedWaveformID + ": 2nd horizontal component not available");
 				return false;
 			}
 
-			if ( !initComponent(proc, Processing::WaveformProcessor::FirstHorizontalComponent,
-			                    time, streamID1, networkCode, stationCode,
-			                    locationCode, channelCode1, metaDataRequired) ||
-			     !initComponent(proc, Processing::WaveformProcessor::SecondHorizontalComponent,
-			                    time, streamID2, networkCode, stationCode,
-			                    locationCode, channelCode2, metaDataRequired) ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: failed to setup horizontal components",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+			if ( ! initComponent(proc, Processing::WaveformProcessor::FirstHorizontalComponent,
+			                     time, streamID1, waveformID1, metaDataRequired) ||
+			     ! initComponent(proc, Processing::WaveformProcessor::SecondHorizontalComponent,
+			                     time, streamID2, waveformID2, metaDataRequired) ) {
+				SEISCOMP_ERROR_S(dottedWaveformID + ": failed to setup horizontal components");
 				return false;
 			}
 			break;
@@ -713,71 +698,64 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 		{
 			// Find the all three components of given location code
 			DataModel::ThreeComponents chans;
+			DataModel::WaveformStreamID waveformID0, waveformID1, waveformID2;
 			string streamID0, streamID1, streamID2;
-			string channelCode0, channelCode1, channelCode2;
 
 			DataModel::SensorLocation *loc =
 				Client::Inventory::Instance()->getSensorLocation(
-					networkCode, stationCode, locationCode, time
+					waveformID.networkCode(), waveformID.stationCode(), waveformID.locationCode(), time
 				);
 
 			if ( loc == NULL ) {
 				SEISCOMP_ERROR("%s.%s: location code '%s' not found",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str());
+				               waveformID.networkCode().c_str(), waveformID.stationCode().c_str(),
+				               waveformID.locationCode().c_str());
 				return false;
 			}
 
 			// Extract the first two characters of the channel code
-			DataModel::getThreeComponents(chans, loc, channelCode.substr(0, 2).c_str(), time);
+			string c2 = waveformID.channelCode().substr(0, 2);
+			DataModel::getThreeComponents(chans, loc, c2.c_str(), time);
 			if ( chans.comps[DataModel::ThreeComponents::Vertical] != NULL ) {
-				channelCode0 = chans.comps[DataModel::ThreeComponents::Vertical]->code();
-				streamID0 = networkCode + "." + stationCode + "." +
-				            locationCode + "." + channelCode0;
+				string channelCode0 = chans.comps[DataModel::ThreeComponents::Vertical]->code();
+				waveformID0 = waveformID;
+				waveformID0.setChannelCode(channelCode0);
+				streamID0 = dotted(waveformID0);
 			}
 			else if ( metaDataRequired ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: 1st horizontal component not available",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+				SEISCOMP_ERROR_S(dottedWaveformID + ": vertical component not available");
 				return false;
 			}
 
 			if ( chans.comps[DataModel::ThreeComponents::FirstHorizontal] != NULL ) {
-				channelCode1 = chans.comps[DataModel::ThreeComponents::FirstHorizontal]->code();
-				streamID1 = networkCode + "." + stationCode + "." +
-				            locationCode + "." + channelCode1;
+				string channelCode1 = chans.comps[DataModel::ThreeComponents::FirstHorizontal]->code();
+				waveformID1 = waveformID;
+				waveformID1.setChannelCode(channelCode1);
+				streamID1 = dotted(waveformID1);
 			}
 			else if ( metaDataRequired ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: 1st horizontal component not available",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+				SEISCOMP_ERROR_S(dottedWaveformID + ": 1st horizontal component not available");
 				return false;
 			}
 
 			if ( chans.comps[DataModel::ThreeComponents::SecondHorizontal] != NULL ) {
-				channelCode2 = chans.comps[DataModel::ThreeComponents::SecondHorizontal]->code();
-				streamID2 = networkCode + "." + stationCode + "." +
-				            locationCode + "." + channelCode2;
+				string channelCode2 = chans.comps[DataModel::ThreeComponents::SecondHorizontal]->code();
+				waveformID2 = waveformID;
+				waveformID2.setChannelCode(channelCode2);
+				streamID2 = dotted(waveformID2);
 			}
 			else if ( metaDataRequired ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: 2nd horizontal component not available",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+				SEISCOMP_ERROR_S(dottedWaveformID + ": 2nd horizontal component not available");
 				return false;
 			}
 
-			if ( !initComponent(proc, Processing::WaveformProcessor::VerticalComponent,
-			                    time, streamID0, networkCode, stationCode,
-			                    locationCode, channelCode0, metaDataRequired) ||
-			     !initComponent(proc, Processing::WaveformProcessor::FirstHorizontalComponent,
-			                    time, streamID1, networkCode, stationCode,
-			                    locationCode, channelCode1, metaDataRequired) ||
-			     !initComponent(proc, Processing::WaveformProcessor::SecondHorizontalComponent,
-			                    time, streamID2, networkCode, stationCode,
-			                    locationCode, channelCode2, metaDataRequired) ) {
-				SEISCOMP_ERROR("%s.%s.%s.%s: failed to setup components",
-				               networkCode.c_str(), stationCode.c_str(),
-				               locationCode.c_str(), channelCode.substr(0,2).c_str());
+			if ( ! initComponent(proc, Processing::WaveformProcessor::VerticalComponent,
+			                     time, streamID0, waveformID0, metaDataRequired) ||
+			     ! initComponent(proc, Processing::WaveformProcessor::FirstHorizontalComponent,
+			                     time, streamID1, waveformID1, metaDataRequired) ||
+			     ! initComponent(proc, Processing::WaveformProcessor::SecondHorizontalComponent,
+			                     time, streamID2, waveformID2, metaDataRequired) ) {
+				SEISCOMP_ERROR_S(dottedWaveformID + ": failed to setup components");
 				return false;
 			}
 			break;
@@ -788,9 +766,9 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 	}
 
 	const StreamConfig *sc = _stationConfig.get(&configuration(), configModuleName(),
-	                                            networkCode, stationCode);
-	return proc->setup(Settings(configModuleName(), networkCode, stationCode,
-	                            locationCode, channelCode, &configuration(),
+	                                            waveformID.networkCode(), waveformID.stationCode());
+	return proc->setup(Settings(configModuleName(), waveformID.networkCode(), waveformID.stationCode(),
+	                            waveformID.locationCode(), waveformID.channelCode(), &configuration(),
 	                            sc?sc->parameters.get():NULL));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -800,10 +778,7 @@ bool App::initProcessor(Processing::WaveformProcessor *proc,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool App::initDetector(const string &streamID,
-                       const string &networkCode,
-                       const string &stationCode,
-                       const string &locationCode,
-                       const string &channelCode,
+		       const DataModel::WaveformStreamID &waveformID,
                        const Core::Time &time) {
 	double trigOn = _config.defaultTriggerOnThreshold;
 	double trigOff = _config.defaultTriggerOffThreshold;
@@ -812,11 +787,11 @@ bool App::initDetector(const string &streamID,
 	bool sensitivityCorrection = false;
 
 	const StreamConfig *sc = _stationConfig.get(&configuration(), configModuleName(),
-	                                            networkCode, stationCode);
+	                                            waveformID.networkCode(), waveformID.stationCode());
 	if ( sc != NULL ) {
 		if ( !sc->enabled ) {
 			SEISCOMP_INFO("Detector on station %s.%s disabled by config",
-			              networkCode.c_str(), stationCode.c_str());
+			              waveformID.networkCode().c_str(), waveformID.stationCode().c_str());
 			return true;
 		}
 
@@ -854,14 +829,14 @@ bool App::initDetector(const string &streamID,
 		detector->setAmplitudePublishFunction(boost::bind(&App::emitAmplitude, this, _1, _2));
 
 	if ( !initProcessor(detector.get(), detector->usedComponent(),
-	                    time, streamID, networkCode, stationCode, locationCode, channelCode, sensitivityCorrection) )
+	                    time, streamID, waveformID, sensitivityCorrection) )
 		return false;
 
 	SEISCOMP_DEBUG("%s: created detector", streamID.c_str());
 
-	addProcessor(networkCode, stationCode, locationCode, channelCode, detector.get());
+	addProcessor(waveformID, detector.get());
 
-	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
+//	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
 
 	return true;
 }
@@ -873,8 +848,7 @@ bool App::initDetector(const string &streamID,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void App::handleNewStream(const Record *rec) {
 	if ( _config.useAllStreams || _streamIDs.find(rec->streamID()) != _streamIDs.end() )
-		if ( !initDetector(rec->streamID(), rec->networkCode(), rec->stationCode(),
-		                   rec->locationCode(), rec->channelCode(), rec->startTime()) ) {
+		if ( !initDetector(rec->streamID(), waveformStreamID(rec), rec->startTime()) ) {
 			SEISCOMP_ERROR("%s: initialization failed: abort operation",
 			               rec->streamID().c_str());
 			exit(1);
@@ -941,12 +915,13 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 	proc->setPublishFunction(boost::bind(&App::emitSPick, this, _1, _2));
 	proc->setReferencingPickID(pickID);
 
+	const DataModel::WaveformStreamID waveformID(waveformStreamID(rec));
 	const std::string &n = rec->networkCode();
 	const std::string &s = rec->stationCode();
 	const std::string &l = rec->locationCode();
 	std::string c = rec->channelCode();
 
-	if ( !initProcessor(proc.get(), proc->usedComponent(), onset, rec->streamID(), n, s, l, c, true) )
+	if ( !initProcessor(proc.get(), proc->usedComponent(), onset, rec->streamID(), waveformID, true) )
 		return;
 
 	SEISCOMP_DEBUG("%s: created secondary picker %s (rec ref: %d)",
@@ -1034,7 +1009,7 @@ void App::addSecondaryPicker(const Core::Time &onset, const Record *rec, const s
 	else
 		SEISCOMP_DEBUG("%s: proc finished already", rec->streamID().data());
 
-	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
+//	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1047,14 +1022,13 @@ void App::addAmplitudeProcessor(AmplitudeProcessorPtr proc,
 	proc->setPublishFunction(boost::bind(&App::emitAmplitude, this, _1, _2));
 	proc->setReferencingPickID(pickID);
 
+	const DataModel::WaveformStreamID waveformID(waveformStreamID(rec));
 	const std::string &n = rec->networkCode();
 	const std::string &s = rec->stationCode();
 	const std::string &l = rec->locationCode();
 	std::string c = rec->channelCode();
 
-	if ( !initProcessor(proc.get(), proc->usedComponent(),
-	                    proc->trigger(), rec->streamID(),
-	                    n, s, l, c, true) )
+	if ( !initProcessor(proc.get(), proc->usedComponent(), proc->trigger(), rec->streamID(), waveformID, true) )
 		return;
 
 	if ( _config.amplitudeUpdateList.find(proc->type()) != _config.amplitudeUpdateList.end() )
@@ -1091,7 +1065,7 @@ void App::addAmplitudeProcessor(AmplitudeProcessorPtr proc,
 			break;
 	}
 
-	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
+//	SEISCOMP_DEBUG("Number of processors: %lu", (unsigned long)processorCount());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1111,15 +1085,15 @@ void App::emitTrigger(const Processing::Detector *pickProc,
 	proc->setMargin(60.);
 	proc->setPublishFunction(boost::bind(&App::emitPPick, this, _1, _2));
 
-	const std::string &n = rec->networkCode(), &s = rec->stationCode(), &l = rec->locationCode(), &c = rec->channelCode();
+	const DataModel::WaveformStreamID waveformID(waveformStreamID(rec));
 
-	if ( !initProcessor(proc.get(), proc->usedComponent(), time, rec->streamID(), n, s, l, c, false) )
+	if ( !initProcessor(proc.get(), proc->usedComponent(), time, rec->streamID(), waveformID, false) )
 		return;
 
 	SEISCOMP_DEBUG("%s: created picker %s",
 	               rec->streamID().c_str(), _config.pickerType.c_str());
 
-	addProcessor(n, s, l, c, proc.get());
+	addProcessor(waveformID, proc.get());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1208,6 +1182,8 @@ void App::emitPPick(const Processing::Picker *proc,
 	pick->setPhaseHint(DataModel::Phase(_config.phaseHint));
 	pick->setWaveformID(waveformStreamID(res.record));
 
+	SEISCOMP_DEBUG("Created P pick %s", pick->publicID().c_str());
+
 	_lastPicks[res.record->streamID()] = pick;
 
 	DataModel::TimeWindow tw;
@@ -1232,6 +1208,9 @@ void App::emitPPick(const Processing::Picker *proc,
 
 		amp->setSnr(res.snr);
 		amp->setAmplitude(DataModel::RealQuantity(res.snr));
+
+		SEISCOMP_DEBUG("Created %s amplitude %s", amp->type().c_str(), amp->publicID().c_str());
+		SEISCOMP_DEBUG("  pickID   %s", amp->pickID().c_str());
 	}
 
 #ifdef LOG_PICKS
@@ -1442,6 +1421,8 @@ void App::emitDetection(const Processing::Detector *proc, const Record *rec, con
 	pick->setPhaseHint(DataModel::Phase(_config.phaseHint));
 	pick->setWaveformID(waveformStreamID(rec));
 
+	SEISCOMP_DEBUG("Created detection %s", pick->publicID().c_str());
+
 	static_cast<const Detector*>(proc)->setPickID(pick->publicID());
 
 #ifdef LOG_PICKS
@@ -1523,7 +1504,7 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 			amp = DataModel::Amplitude::Create(ampProc->referencingPickID() + "." + ampProc->type());
 
 		if ( !amp ) {
-			SEISCOMP_INFO("Internal error: duplicate amplitudeID?");
+			SEISCOMP_WARNING("Internal error: duplicate amplitudeID?");
 			return;
 		}
 
@@ -1537,6 +1518,9 @@ void App::emitAmplitude(const AmplitudeProcessor *ampProc,
 		amp->setType(ampProc->type());
 		amp->setWaveformID(waveformStreamID(res.record));
 		ampProc->setUserData(amp.get());
+
+		SEISCOMP_DEBUG("Created %s amplitude %s", amp->type().c_str(), amp->publicID().c_str());
+		SEISCOMP_DEBUG("  pickID   %s", amp->pickID().c_str());
 
 		update = false;
 	}
