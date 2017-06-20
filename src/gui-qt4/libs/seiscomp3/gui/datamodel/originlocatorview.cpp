@@ -2075,12 +2075,19 @@ void OriginLocatorView::init() {
 
 	connect(_ui.btnLocatorSettings, SIGNAL(clicked()),
 	        this, SLOT(configureLocator()));
+
 	_minimumDepth = -999;
+
 	try {
 		// "locator.minimumDepth" preferred
-		_minimumDepth = SCApp->configGetDouble("locator.minimumDepth");
+		_minimumDepth = SCApp->configGetDouble("olv.locator.minimumDepth");
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		try {
+			_minimumDepth = SCApp->configGetDouble("locator.minimumDepth");
+		}
+		catch ( ... ) {}
+	}
 
 	try {
 		_ui.btnCustom0->setText(SCApp->configGetString("button0").c_str());

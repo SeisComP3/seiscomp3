@@ -1,5 +1,12 @@
 # Jakarta
 
+## Release YYYY.DDD
+
+* scolv
+
+  * ```locator.minimumDepth``` is now deprecated in favour if ```olv.locator.minimumDepth```
+
+
 ## Release 2017.124
 
 * seiscomp
