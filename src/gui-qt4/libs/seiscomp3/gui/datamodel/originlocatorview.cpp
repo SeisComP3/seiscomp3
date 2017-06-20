@@ -2049,8 +2049,15 @@ void OriginLocatorView::init() {
 	catch ( ... ) {}
 
 	std::string defaultLocator = "LOCSAT";
-	try { defaultLocator = SCApp->configGetString("olv.locator"); }
-	catch ( ... ) {}
+	try {
+		defaultLocator = SCApp->configGetString("olv.locator.interface");
+	}
+	catch ( ... ) {
+		try {
+			defaultLocator = SCApp->configGetString("olv.locator");
+		}
+		catch ( ... ) {}
+	}
 
 	vector<string> *locatorInterfaces = Seismology::LocatorInterfaceFactory::Services();
 	if ( locatorInterfaces ) {
