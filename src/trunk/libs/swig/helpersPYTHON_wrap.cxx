@@ -5632,10 +5632,13 @@ SWIGINTERN PyObject *_wrap__readobj(PyObject *SWIGUNUSEDPARM(self), PyObject *ar
     try {
       result = (bool)Seiscomp::Sc3py::_private::_readobj(arg1,(char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -5679,10 +5682,13 @@ SWIGINTERN PyObject *_wrap__writeobj(PyObject *SWIGUNUSEDPARM(self), PyObject *a
     try {
       result = (bool)Seiscomp::Sc3py::_private::_writeobj(arg1,(char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -5716,10 +5722,13 @@ SWIGINTERN PyObject *_wrap_new__DatabaseQuery(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = (Seiscomp::Sc3py::_private::_DatabaseQuery *)new Seiscomp::Sc3py::_private::_DatabaseQuery(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -5751,10 +5760,13 @@ SWIGINTERN PyObject *_wrap_delete__DatabaseQuery(PyObject *SWIGUNUSEDPARM(self),
     try {
       if (arg1) arg1->decrementReferenceCount();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -5937,10 +5949,13 @@ SWIGINTERN PyObject *_wrap__DatabaseQuery_getEvents(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (arg1)->getEvents(arg2,arg3,arg4,(Seiscomp::Core::Optional< Seiscomp::Core::Time >::Impl const &)*arg5,(Seiscomp::Core::Optional< Seiscomp::Core::Time >::Impl const &)*arg6,(Seiscomp::Core::Optional< double >::Impl const &)*arg7,(Seiscomp::Core::Optional< double >::Impl const &)*arg8,(Seiscomp::Core::Optional< double >::Impl const &)*arg9,(Seiscomp::Core::Optional< double >::Impl const &)*arg10,(Seiscomp::Core::Optional< double >::Impl const &)*arg11,(Seiscomp::Core::Optional< int >::Impl const &)*arg12);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {

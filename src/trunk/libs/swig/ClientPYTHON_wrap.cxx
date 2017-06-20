@@ -9623,10 +9623,13 @@ SWIGINTERN PyObject *_wrap_new_CommandLine(PyObject *SWIGUNUSEDPARM(self), PyObj
     try {
       result = (Seiscomp::Client::CommandLine *)new Seiscomp::Client::CommandLine();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9667,10 +9670,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addGroup(PyObject *SWIGUNUSEDPARM(self), 
     try {
       (arg1)->addGroup((char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9733,10 +9739,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addOption(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->addOption((char const *)arg2,(char const *)arg3,(char const *)arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9808,10 +9817,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_parse(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = (bool)(arg1)->parse(arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9848,10 +9860,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_printOptions(PyObject *SWIGUNUSEDPARM(sel
     try {
       ((Seiscomp::Client::CommandLine const *)arg1)->printOptions();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9897,10 +9912,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_hasOption(PyObject *SWIGUNUSEDPARM(self),
     try {
       result = (bool)((Seiscomp::Client::CommandLine const *)arg1)->hasOption((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9934,10 +9952,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_unrecognizedOptions(PyObject *SWIGUNUSEDP
     try {
       result = ((Seiscomp::Client::CommandLine const *)arg1)->unrecognizedOptions();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -9983,10 +10004,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_optionInt(PyObject *SWIGUNUSEDPARM(self),
     try {
       result = (int)((Seiscomp::Client::CommandLine const *)arg1)->SWIGTEMPLATEDISAMBIGUATOR option< int >((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10034,10 +10058,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_optionBool(PyObject *SWIGUNUSEDPARM(self)
     try {
       result = (bool)((Seiscomp::Client::CommandLine const *)arg1)->SWIGTEMPLATEDISAMBIGUATOR option< bool >((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10085,10 +10112,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_optionDouble(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (double)((Seiscomp::Client::CommandLine const *)arg1)->SWIGTEMPLATEDISAMBIGUATOR option< double >((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10136,10 +10166,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_optionString(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = ((Seiscomp::Client::CommandLine const *)arg1)->SWIGTEMPLATEDISAMBIGUATOR option< std::string >((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10202,10 +10235,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addIntOption__SWIG_0(PyObject *SWIGUNUSED
     try {
       Seiscomp_Client_CommandLine_addIntOption__SWIG_0(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10281,10 +10317,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addIntOption__SWIG_1(PyObject *SWIGUNUSED
     try {
       Seiscomp_Client_CommandLine_addIntOption__SWIG_1(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4,arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10421,10 +10460,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addDoubleOption__SWIG_0(PyObject *SWIGUNU
     try {
       Seiscomp_Client_CommandLine_addDoubleOption__SWIG_0(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10500,10 +10542,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addDoubleOption__SWIG_1(PyObject *SWIGUNU
     try {
       Seiscomp_Client_CommandLine_addDoubleOption__SWIG_1(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4,arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10640,10 +10685,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addBoolOption__SWIG_0(PyObject *SWIGUNUSE
     try {
       Seiscomp_Client_CommandLine_addBoolOption__SWIG_0(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10719,10 +10767,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addBoolOption__SWIG_1(PyObject *SWIGUNUSE
     try {
       Seiscomp_Client_CommandLine_addBoolOption__SWIG_1(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4,arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10859,10 +10910,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addStringOption__SWIG_0(PyObject *SWIGUNU
     try {
       Seiscomp_Client_CommandLine_addStringOption__SWIG_0(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -10943,10 +10997,13 @@ SWIGINTERN PyObject *_wrap_CommandLine_addStringOption__SWIG_1(PyObject *SWIGUNU
     try {
       Seiscomp_Client_CommandLine_addStringOption__SWIG_1(arg1,(char const *)arg2,(char const *)arg3,(char const *)arg4,(std::string const &)*arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11053,10 +11110,13 @@ SWIGINTERN PyObject *_wrap_delete_CommandLine(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11095,10 +11155,13 @@ SWIGINTERN PyObject *_wrap_new_RunningAverage(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = (Seiscomp::Client::RunningAverage *)new Seiscomp::Client::RunningAverage(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11130,10 +11193,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_timeSpan(PyObject *SWIGUNUSEDPARM(self
     try {
       result = (int)((Seiscomp::Client::RunningAverage const *)arg1)->timeSpan();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11185,10 +11251,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_push__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try {
       (arg1)->push((Seiscomp::Core::Time const &)*arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11231,10 +11300,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_push__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try {
       (arg1)->push((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11332,10 +11404,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_count(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (int)((Seiscomp::Client::RunningAverage const *)arg1)->count((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11379,10 +11454,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_value(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (double)((Seiscomp::Client::RunningAverage const *)arg1)->value((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11414,10 +11492,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_last(PyObject *SWIGUNUSEDPARM(self), P
     try {
       result = ((Seiscomp::Client::RunningAverage const *)arg1)->last();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11448,10 +11529,13 @@ SWIGINTERN PyObject *_wrap_RunningAverage_dumpBins(PyObject *SWIGUNUSEDPARM(self
     try {
       ((Seiscomp::Client::RunningAverage const *)arg1)->dumpBins();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11482,10 +11566,13 @@ SWIGINTERN PyObject *_wrap_delete_RunningAverage(PyObject *SWIGUNUSEDPARM(self),
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11524,10 +11611,13 @@ SWIGINTERN PyObject *_wrap_new_ObjectMonitor(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = (Seiscomp::Client::ObjectMonitor *)new Seiscomp::Client::ObjectMonitor(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11558,10 +11648,13 @@ SWIGINTERN PyObject *_wrap_delete_ObjectMonitor(PyObject *SWIGUNUSEDPARM(self), 
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11621,10 +11714,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_add__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try {
       result = (Seiscomp::Client::ObjectMonitor::Log *)(arg1)->add((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11674,10 +11770,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_add__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try {
       result = (Seiscomp::Client::ObjectMonitor::Log *)(arg1)->add((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11774,10 +11873,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_update(PyObject *SWIGUNUSEDPARM(self), 
     try {
       (arg1)->update((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11809,10 +11911,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_begin(PyObject *SWIGUNUSEDPARM(self), P
     try {
       result = ((Seiscomp::Client::ObjectMonitor const *)arg1)->begin();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11844,10 +11949,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_end(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = ((Seiscomp::Client::ObjectMonitor const *)arg1)->end();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11879,10 +11987,13 @@ SWIGINTERN PyObject *_wrap_ObjectMonitor_size(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = ((Seiscomp::Client::ObjectMonitor const *)arg1)->size();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11912,10 +12023,13 @@ SWIGINTERN PyObject *_wrap_new_EApplicationStatusNames(PyObject *SWIGUNUSEDPARM(
     try {
       result = (Seiscomp::Client::EApplicationStatusNames *)new Seiscomp::Client::EApplicationStatusNames();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11947,10 +12061,13 @@ SWIGINTERN PyObject *_wrap_EApplicationStatusNames_name(PyObject *SWIGUNUSEDPARM
     try {
       result = (char *)Seiscomp::Client::EApplicationStatusNames::name(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -11981,10 +12098,13 @@ SWIGINTERN PyObject *_wrap_delete_EApplicationStatusNames(PyObject *SWIGUNUSEDPA
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12014,10 +12134,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_ClassName(PyObject *SWIGUNUS
     try {
       result = (char *)Seiscomp::Client::ApplicationStatusMessage::ClassName();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12040,10 +12163,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_TypeInfo(PyObject *SWIGUNUSE
     try {
       result = (Seiscomp::Core::RTTI *) &Seiscomp::Client::ApplicationStatusMessage::TypeInfo();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12075,10 +12201,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_className(PyObject *SWIGUNUS
     try {
       result = (char *)((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->className();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12110,10 +12239,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_typeInfo(PyObject *SWIGUNUSE
     try {
       result = (Seiscomp::Core::RTTI *) &((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->typeInfo();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12145,10 +12277,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_Cast__SWIG_0(PyObject *SWIGU
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)Seiscomp::Client::ApplicationStatusMessage::Cast(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12181,10 +12316,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_ConstCast__SWIG_0(PyObject *
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)Seiscomp::Client::ApplicationStatusMessage::ConstCast((Seiscomp::Core::BaseObject const *)arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12224,10 +12362,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_Cast__SWIG_1(PyObject *SWIGU
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)Seiscomp::Client::ApplicationStatusMessage::Cast(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12307,10 +12448,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_ConstCast__SWIG_1(PyObject *
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)Seiscomp::Client::ApplicationStatusMessage::ConstCast(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12392,10 +12536,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_serialize(PyObject *SWIGUNUS
     try {
       (arg1)->serialize(*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12418,10 +12565,13 @@ SWIGINTERN PyObject *_wrap_new_ApplicationStatusMessage__SWIG_0(PyObject *SWIGUN
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)new Seiscomp::Client::ApplicationStatusMessage();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12476,10 +12626,13 @@ SWIGINTERN PyObject *_wrap_new_ApplicationStatusMessage__SWIG_1(PyObject *SWIGUN
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)new Seiscomp::Client::ApplicationStatusMessage((std::string const &)*arg1,arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12550,10 +12703,13 @@ SWIGINTERN PyObject *_wrap_new_ApplicationStatusMessage__SWIG_2(PyObject *SWIGUN
     try {
       result = (Seiscomp::Client::ApplicationStatusMessage *)new Seiscomp::Client::ApplicationStatusMessage((std::string const &)*arg1,(std::string const &)*arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12644,10 +12800,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_empty(PyObject *SWIGUNUSEDPA
     try {
       result = (bool)((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->empty();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12679,10 +12838,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_module(PyObject *SWIGUNUSEDP
     try {
       result = (std::string *) &((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->module();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12714,10 +12876,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_username(PyObject *SWIGUNUSE
     try {
       result = (std::string *) &((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->username();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12749,10 +12914,13 @@ SWIGINTERN PyObject *_wrap_ApplicationStatusMessage_status(PyObject *SWIGUNUSEDP
     try {
       result = ((Seiscomp::Client::ApplicationStatusMessage const *)arg1)->status();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12783,10 +12951,13 @@ SWIGINTERN PyObject *_wrap_delete_ApplicationStatusMessage(PyObject *SWIGUNUSEDP
     try {
       if (arg1) arg1->decrementReferenceCount();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12816,10 +12987,13 @@ SWIGINTERN PyObject *_wrap_new_Notification__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (Seiscomp::Client::Notification *)new Seiscomp::Client::Notification();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12851,10 +13025,13 @@ SWIGINTERN PyObject *_wrap_new_Notification__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (Seiscomp::Client::Notification *)new Seiscomp::Client::Notification(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12886,10 +13063,13 @@ SWIGINTERN PyObject *_wrap_new_Notification__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (Seiscomp::Client::Notification *)new Seiscomp::Client::Notification(arg1);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -12930,10 +13110,13 @@ SWIGINTERN PyObject *_wrap_new_Notification__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (Seiscomp::Client::Notification *)new Seiscomp::Client::Notification(arg1,arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13129,10 +13312,13 @@ SWIGINTERN PyObject *_wrap_delete_Notification(PyObject *SWIGUNUSEDPARM(self), P
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13205,10 +13391,13 @@ SWIGINTERN PyObject *_wrap_new_Application(PyObject *SWIGUNUSEDPARM(self), PyObj
       }
       
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13246,10 +13435,13 @@ SWIGINTERN PyObject *_wrap_delete_Application(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       if (arg1) arg1->decrementReferenceCount();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13281,10 +13473,13 @@ SWIGINTERN PyObject *_wrap_Application___call__(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (int)(arg1)->operator ()();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13316,10 +13511,13 @@ SWIGINTERN PyObject *_wrap_Application_arguments(PyObject *SWIGUNUSEDPARM(self),
     try {
       result = (Seiscomp::Client::Application::Arguments *) &((Seiscomp::Client::Application const *)arg1)->arguments();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13351,10 +13549,13 @@ SWIGINTERN PyObject *_wrap_Application_commandline__SWIG_0(PyObject *SWIGUNUSEDP
     try {
       result = (Seiscomp::Client::CommandLine *) &(arg1)->commandline();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13386,10 +13587,13 @@ SWIGINTERN PyObject *_wrap_Application_commandline__SWIG_1(PyObject *SWIGUNUSEDP
     try {
       result = (Seiscomp::Client::CommandLine *) &((Seiscomp::Client::Application const *)arg1)->commandline();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13461,10 +13665,13 @@ SWIGINTERN PyObject *_wrap_Application_configuration(PyObject *SWIGUNUSEDPARM(se
     try {
       result = (Seiscomp::Config::Config *) &((Seiscomp::Client::Application const *)arg1)->configuration();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13496,10 +13703,13 @@ SWIGINTERN PyObject *_wrap_Application_path(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       result = (char *)((Seiscomp::Client::Application const *)arg1)->path();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13531,10 +13741,13 @@ SWIGINTERN PyObject *_wrap_Application_name(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->name();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13579,10 +13792,13 @@ SWIGINTERN PyObject *_wrap_Application_addPluginPackagePath(PyObject *SWIGUNUSED
     try {
       (arg1)->addPluginPackagePath((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13616,10 +13832,13 @@ SWIGINTERN PyObject *_wrap_Application_frameworkVersion(PyObject *SWIGUNUSEDPARM
     try {
       result = (char *)((Seiscomp::Client::Application const *)arg1)->frameworkVersion();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13651,10 +13870,13 @@ SWIGINTERN PyObject *_wrap_Application_agencyID(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->agencyID();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13686,10 +13908,13 @@ SWIGINTERN PyObject *_wrap_Application_author(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->author();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13735,10 +13960,13 @@ SWIGINTERN PyObject *_wrap_Application_isAgencyIDAllowed(PyObject *SWIGUNUSEDPAR
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isAgencyIDAllowed((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13786,10 +14014,13 @@ SWIGINTERN PyObject *_wrap_Application_isAgencyIDBlocked(PyObject *SWIGUNUSEDPAR
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isAgencyIDBlocked((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13823,10 +14054,13 @@ SWIGINTERN PyObject *_wrap_Application_execute(PyObject *SWIGUNUSEDPARM(self), P
     try {
       result = (int)(arg1)->exec();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13866,10 +14100,13 @@ SWIGINTERN PyObject *_wrap_Application_exit(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       (arg1)->exit(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13900,10 +14137,13 @@ SWIGINTERN PyObject *_wrap_Application_quit(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       (arg1)->quit();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13935,10 +14175,13 @@ SWIGINTERN PyObject *_wrap_Application_isExitRequested(PyObject *SWIGUNUSEDPARM(
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isExitRequested();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -13978,10 +14221,13 @@ SWIGINTERN PyObject *_wrap_Application_printUsage(PyObject *SWIGUNUSEDPARM(self)
           ((Seiscomp::Client::Application const *)arg1)->printUsage();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -14016,10 +14262,13 @@ SWIGINTERN PyObject *_wrap_Application_connection(PyObject *SWIGUNUSEDPARM(self)
     try {
       result = (Seiscomp::Communication::Connection *)((Seiscomp::Client::Application const *)arg1)->connection();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14051,10 +14300,13 @@ SWIGINTERN PyObject *_wrap_Application_databaseType(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->databaseType();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14086,10 +14338,13 @@ SWIGINTERN PyObject *_wrap_Application_databaseParameters(PyObject *SWIGUNUSEDPA
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->databaseParameters();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14121,10 +14376,13 @@ SWIGINTERN PyObject *_wrap_Application_database(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (Seiscomp::IO::DatabaseInterface *)((Seiscomp::Client::Application const *)arg1)->database();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14156,10 +14414,13 @@ SWIGINTERN PyObject *_wrap_Application_databaseURI(PyObject *SWIGUNUSEDPARM(self
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->databaseURI();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14191,10 +14452,13 @@ SWIGINTERN PyObject *_wrap_Application_query(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = (Seiscomp::DataModel::DatabaseQuery *)((Seiscomp::Client::Application const *)arg1)->query();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14226,10 +14490,13 @@ SWIGINTERN PyObject *_wrap_Application_recordStreamURL(PyObject *SWIGUNUSEDPARM(
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->recordStreamURL();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14261,10 +14528,13 @@ SWIGINTERN PyObject *_wrap_Application_crashHandler(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->crashHandler();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14296,10 +14566,13 @@ SWIGINTERN PyObject *_wrap_Application_cities(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = (std::vector< Seiscomp::Math::Geo::CityD,std::allocator< Seiscomp::Math::Geo::CityD > > *) &((Seiscomp::Client::Application const *)arg1)->cities();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14375,10 +14648,13 @@ SWIGINTERN PyObject *_wrap_Application_nearestCity(PyObject *SWIGUNUSEDPARM(self
     try {
       result = (Seiscomp::Math::Geo::CityD *)((Seiscomp::Client::Application const *)arg1)->nearestCity(arg2,arg3,arg4,arg5,arg6,arg7);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14422,10 +14698,13 @@ SWIGINTERN PyObject *_wrap_Application_configModule(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (Seiscomp::DataModel::ConfigModule *)((Seiscomp::Client::Application const *)arg1)->configModule();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14485,10 +14764,13 @@ SWIGINTERN PyObject *_wrap_Application_isStationEnabled(PyObject *SWIGUNUSEDPARM
     try {
       result = (bool)(arg1)->isStationEnabled((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14524,10 +14806,13 @@ SWIGINTERN PyObject *_wrap_Application_messagingHost(PyObject *SWIGUNUSEDPARM(se
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->messagingHost();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14567,10 +14852,13 @@ SWIGINTERN PyObject *_wrap_Application_enableTimer(PyObject *SWIGUNUSEDPARM(self
     try {
       (arg1)->enableTimer(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14601,10 +14889,13 @@ SWIGINTERN PyObject *_wrap_Application_disableTimer(PyObject *SWIGUNUSEDPARM(sel
     try {
       (arg1)->disableTimer();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14647,10 +14938,13 @@ SWIGINTERN PyObject *_wrap_Application_sendNotification(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->sendNotification((Seiscomp::Client::Notification const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14692,10 +14986,13 @@ SWIGINTERN PyObject *_wrap_Application_requestSync(PyObject *SWIGUNUSEDPARM(self
     try {
       result = (bool)(arg1)->requestSync((char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14739,10 +15036,13 @@ SWIGINTERN PyObject *_wrap_Application_sync__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (bool)(arg1)->sync((char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14776,10 +15076,13 @@ SWIGINTERN PyObject *_wrap_Application_sync__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (bool)(arg1)->sync();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14863,10 +15166,13 @@ SWIGINTERN PyObject *_wrap_Application_setDaemonEnabled(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->setDaemonEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14911,10 +15217,13 @@ SWIGINTERN PyObject *_wrap_Application_setPrimaryMessagingGroup(PyObject *SWIGUN
     try {
       (arg1)->setPrimaryMessagingGroup((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14948,10 +15257,13 @@ SWIGINTERN PyObject *_wrap_Application_primaryMessagingGroup(PyObject *SWIGUNUSE
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->primaryMessagingGroup();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -14996,10 +15308,13 @@ SWIGINTERN PyObject *_wrap_Application_setMessagingUsername(PyObject *SWIGUNUSED
     try {
       (arg1)->setMessagingUsername((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15046,10 +15361,13 @@ SWIGINTERN PyObject *_wrap_Application_addMessagingSubscription(PyObject *SWIGUN
     try {
       (arg1)->addMessagingSubscription((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15100,10 +15418,13 @@ SWIGINTERN PyObject *_wrap_Application_setDatabaseEnabled(PyObject *SWIGUNUSEDPA
     try {
       (arg1)->setDatabaseEnabled(arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15135,10 +15456,13 @@ SWIGINTERN PyObject *_wrap_Application_isDatabaseEnabled(PyObject *SWIGUNUSEDPAR
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isDatabaseEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15170,10 +15494,13 @@ SWIGINTERN PyObject *_wrap_Application_isInventoryDatabaseEnabled(PyObject *SWIG
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isInventoryDatabaseEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15205,10 +15532,13 @@ SWIGINTERN PyObject *_wrap_Application_isConfigDatabaseEnabled(PyObject *SWIGUNU
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isConfigDatabaseEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15248,10 +15578,13 @@ SWIGINTERN PyObject *_wrap_Application_setMessagingEnabled(PyObject *SWIGUNUSEDP
     try {
       (arg1)->setMessagingEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15283,10 +15616,13 @@ SWIGINTERN PyObject *_wrap_Application_isMessagingEnabled(PyObject *SWIGUNUSEDPA
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isMessagingEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15326,10 +15662,13 @@ SWIGINTERN PyObject *_wrap_Application_setStartStopMessagesEnabled(PyObject *SWI
     try {
       (arg1)->setStartStopMessagesEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15361,10 +15700,13 @@ SWIGINTERN PyObject *_wrap_Application_areStartStopMessagesEnabled(PyObject *SWI
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->areStartStopMessagesEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15404,10 +15746,13 @@ SWIGINTERN PyObject *_wrap_Application_setAutoShutdownEnabled(PyObject *SWIGUNUS
     try {
       (arg1)->setAutoShutdownEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15439,10 +15784,13 @@ SWIGINTERN PyObject *_wrap_Application_isAutoShutdownEnabled(PyObject *SWIGUNUSE
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isAutoShutdownEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15482,10 +15830,13 @@ SWIGINTERN PyObject *_wrap_Application_setRecordStreamEnabled(PyObject *SWIGUNUS
     try {
       (arg1)->setRecordStreamEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15517,10 +15868,13 @@ SWIGINTERN PyObject *_wrap_Application_isRecordStreamEnabled(PyObject *SWIGUNUSE
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isRecordStreamEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15560,10 +15914,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoadStationsEnabled(PyObject *SWIGUNUS
     try {
       (arg1)->setLoadStationsEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15595,10 +15952,13 @@ SWIGINTERN PyObject *_wrap_Application_isLoadStationsEnabled(PyObject *SWIGUNUSE
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isLoadStationsEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15638,10 +15998,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoadInventoryEnabled(PyObject *SWIGUNU
     try {
       (arg1)->setLoadInventoryEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15673,10 +16036,13 @@ SWIGINTERN PyObject *_wrap_Application_isLoadInventoryEnabled(PyObject *SWIGUNUS
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isLoadInventoryEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15716,10 +16082,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoadConfigModuleEnabled(PyObject *SWIG
     try {
       (arg1)->setLoadConfigModuleEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15751,10 +16120,13 @@ SWIGINTERN PyObject *_wrap_Application_isLoadConfigModuleEnabled(PyObject *SWIGU
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isLoadConfigModuleEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15794,10 +16166,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoadCitiesEnabled(PyObject *SWIGUNUSED
     try {
       (arg1)->setLoadCitiesEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15829,10 +16204,13 @@ SWIGINTERN PyObject *_wrap_Application_isLoadCitiesEnabled(PyObject *SWIGUNUSEDP
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isLoadCitiesEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15872,10 +16250,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoadRegionsEnabled(PyObject *SWIGUNUSE
     try {
       (arg1)->setLoadRegionsEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15907,10 +16288,13 @@ SWIGINTERN PyObject *_wrap_Application_isLoadRegionsEnabled(PyObject *SWIGUNUSED
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isLoadRegionsEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15950,10 +16334,13 @@ SWIGINTERN PyObject *_wrap_Application_setAutoApplyNotifierEnabled(PyObject *SWI
     try {
       (arg1)->setAutoApplyNotifierEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -15985,10 +16372,13 @@ SWIGINTERN PyObject *_wrap_Application_isAutoApplyNotifierEnabled(PyObject *SWIG
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isAutoApplyNotifierEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16028,10 +16418,13 @@ SWIGINTERN PyObject *_wrap_Application_setInterpretNotifierEnabled(PyObject *SWI
     try {
       (arg1)->setInterpretNotifierEnabled(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16063,10 +16456,13 @@ SWIGINTERN PyObject *_wrap_Application_isInterpretNotifierEnabled(PyObject *SWIG
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->isInterpretNotifierEnabled();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16098,10 +16494,13 @@ SWIGINTERN PyObject *_wrap_Application_hasCustomPublicIDPattern(PyObject *SWIGUN
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->hasCustomPublicIDPattern();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16141,10 +16540,13 @@ SWIGINTERN PyObject *_wrap_Application_setConnectionRetries(PyObject *SWIGUNUSED
     try {
       (arg1)->setConnectionRetries(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16184,10 +16586,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoggingContext(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->setLoggingContext(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16227,10 +16632,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoggingComponent(PyObject *SWIGUNUSEDP
     try {
       (arg1)->setLoggingComponent(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16270,10 +16678,13 @@ SWIGINTERN PyObject *_wrap_Application_setLoggingToStdErr(PyObject *SWIGUNUSEDPA
     try {
       (arg1)->setLoggingToStdErr(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16318,10 +16729,13 @@ SWIGINTERN PyObject *_wrap_Application_addLoggingComponentSubscription(PyObject 
     try {
       (arg1)->addLoggingComponentSubscription((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16368,10 +16782,13 @@ SWIGINTERN PyObject *_wrap_Application_setConfigModuleName(PyObject *SWIGUNUSEDP
     try {
       (arg1)->setConfigModuleName((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16405,10 +16822,13 @@ SWIGINTERN PyObject *_wrap_Application_configModuleName(PyObject *SWIGUNUSEDPARM
     try {
       result = (std::string *) &((Seiscomp::Client::Application const *)arg1)->configModuleName();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16453,10 +16873,13 @@ SWIGINTERN PyObject *_wrap_Application_setShutdownMasterModule(PyObject *SWIGUNU
     try {
       (arg1)->setShutdownMasterModule((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16503,10 +16926,13 @@ SWIGINTERN PyObject *_wrap_Application_setShutdownMasterUsername(PyObject *SWIGU
     try {
       (arg1)->setShutdownMasterUsername((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16539,10 +16965,13 @@ SWIGINTERN PyObject *_wrap_Application_closeLogging(PyObject *SWIGUNUSEDPARM(sel
     try {
       (arg1)->closeLogging();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16602,10 +17031,13 @@ SWIGINTERN PyObject *_wrap_Application_addInputObjectLog__SWIG_0(PyObject *SWIGU
     try {
       result = (Seiscomp::Client::Application::ObjectLog *)(arg1)->addInputObjectLog((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16655,10 +17087,13 @@ SWIGINTERN PyObject *_wrap_Application_addInputObjectLog__SWIG_1(PyObject *SWIGU
     try {
       result = (Seiscomp::Client::Application::ObjectLog *)(arg1)->addInputObjectLog((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16772,10 +17207,13 @@ SWIGINTERN PyObject *_wrap_Application_addOutputObjectLog__SWIG_0(PyObject *SWIG
     try {
       result = (Seiscomp::Client::Application::ObjectLog *)(arg1)->addOutputObjectLog((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16825,10 +17263,13 @@ SWIGINTERN PyObject *_wrap_Application_addOutputObjectLog__SWIG_1(PyObject *SWIG
     try {
       result = (Seiscomp::Client::Application::ObjectLog *)(arg1)->addOutputObjectLog((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16943,10 +17384,13 @@ SWIGINTERN PyObject *_wrap_Application_logObject__SWIG_0(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->logObject(arg2,(Seiscomp::Core::Time const &)*arg3,arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -16998,10 +17442,13 @@ SWIGINTERN PyObject *_wrap_Application_logObject__SWIG_1(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->logObject(arg2,(Seiscomp::Core::Time const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -17097,10 +17544,13 @@ SWIGINTERN PyObject *_wrap_Application_reloadInventory(PyObject *SWIGUNUSEDPARM(
     try {
       result = (bool)(arg1)->reloadInventory();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -17124,10 +17574,13 @@ SWIGINTERN PyObject *_wrap_Application_Instance(PyObject *SWIGUNUSEDPARM(self), 
     try {
       result = (Seiscomp::Client::Application *)Seiscomp::Client::Application::Instance();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -17173,10 +17626,13 @@ SWIGINTERN PyObject *_wrap_Application_HandleSignals(PyObject *SWIGUNUSEDPARM(se
     try {
       Seiscomp::Client::Application::HandleSignals(arg1,arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -17223,10 +17679,13 @@ SWIGINTERN PyObject *_wrap_Application_version(PyObject *SWIGUNUSEDPARM(self), P
           result = (char *)(darg)->version();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17278,10 +17737,13 @@ SWIGINTERN PyObject *_wrap_Application_createCommandLineDescription(PyObject *SW
           (darg)->createCommandLineDescription();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17331,10 +17793,13 @@ SWIGINTERN PyObject *_wrap_Application_validateParameters(PyObject *SWIGUNUSEDPA
           result = (bool)(darg)->validateParameters();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17384,10 +17849,13 @@ SWIGINTERN PyObject *_wrap_Application_init(PyObject *SWIGUNUSEDPARM(self), PyOb
           result = (bool)(darg)->init();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17437,10 +17905,13 @@ SWIGINTERN PyObject *_wrap_Application_run(PyObject *SWIGUNUSEDPARM(self), PyObj
           result = (bool)(darg)->run();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17489,10 +17960,13 @@ SWIGINTERN PyObject *_wrap_Application_idle(PyObject *SWIGUNUSEDPARM(self), PyOb
           (darg)->idle();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17541,10 +18015,13 @@ SWIGINTERN PyObject *_wrap_Application_done(PyObject *SWIGUNUSEDPARM(self), PyOb
           (darg)->done();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17594,10 +18071,13 @@ SWIGINTERN PyObject *_wrap_Application_forkProcess(PyObject *SWIGUNUSEDPARM(self
           result = (bool)(darg)->forkProcess();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17647,10 +18127,13 @@ SWIGINTERN PyObject *_wrap_Application_initConfiguration(PyObject *SWIGUNUSEDPAR
           result = (bool)(darg)->initConfiguration();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17700,10 +18183,13 @@ SWIGINTERN PyObject *_wrap_Application_initPlugins(PyObject *SWIGUNUSEDPARM(self
           result = (bool)(darg)->initPlugins();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17753,10 +18239,13 @@ SWIGINTERN PyObject *_wrap_Application_initDatabase(PyObject *SWIGUNUSEDPARM(sel
           result = (bool)(darg)->initDatabase();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17806,10 +18295,13 @@ SWIGINTERN PyObject *_wrap_Application_initSubscriptions(PyObject *SWIGUNUSEDPAR
           result = (bool)(darg)->initSubscriptions();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17858,10 +18350,13 @@ SWIGINTERN PyObject *_wrap_Application_printVersion(PyObject *SWIGUNUSEDPARM(sel
           (darg)->printVersion();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17920,10 +18415,13 @@ SWIGINTERN PyObject *_wrap_Application_handleInitializationError(PyObject *SWIGU
           result = (bool)(darg)->handleInitializationError(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -17972,10 +18470,13 @@ SWIGINTERN PyObject *_wrap_Application_handleStartSync(PyObject *SWIGUNUSEDPARM(
           (darg)->handleStartSync();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18024,10 +18525,13 @@ SWIGINTERN PyObject *_wrap_Application_handleEndSync(PyObject *SWIGUNUSEDPARM(se
           (darg)->handleEndSync();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18076,10 +18580,13 @@ SWIGINTERN PyObject *_wrap_Application_handleEndAcquisition(PyObject *SWIGUNUSED
           (darg)->handleEndAcquisition();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18138,10 +18645,13 @@ SWIGINTERN PyObject *_wrap_Application_dispatch(PyObject *SWIGUNUSEDPARM(self), 
           result = (bool)(darg)->dispatch(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18209,10 +18719,13 @@ SWIGINTERN PyObject *_wrap_Application_dispatchNotification(PyObject *SWIGUNUSED
           result = (bool)(darg)->dispatchNotification(arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18271,10 +18784,13 @@ SWIGINTERN PyObject *_wrap_Application_showMessage(PyObject *SWIGUNUSEDPARM(self
           (darg)->showMessage((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18335,10 +18851,13 @@ SWIGINTERN PyObject *_wrap_Application_showWarning(PyObject *SWIGUNUSEDPARM(self
           (darg)->showWarning((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18389,10 +18908,13 @@ SWIGINTERN PyObject *_wrap_Application_handleTimeout(PyObject *SWIGUNUSEDPARM(se
           (darg)->handleTimeout();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18442,10 +18964,13 @@ SWIGINTERN PyObject *_wrap_Application_handleClose(PyObject *SWIGUNUSEDPARM(self
           result = (bool)(darg)->handleClose();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18494,10 +19019,13 @@ SWIGINTERN PyObject *_wrap_Application_handleAutoShutdown(PyObject *SWIGUNUSEDPA
           (darg)->handleAutoShutdown();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18556,10 +19084,13 @@ SWIGINTERN PyObject *_wrap_Application_handleSync(PyObject *SWIGUNUSEDPARM(self)
           (darg)->handleSync((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18610,10 +19141,13 @@ SWIGINTERN PyObject *_wrap_Application_handleDisconnect(PyObject *SWIGUNUSEDPARM
           (darg)->handleDisconnect();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18662,10 +19196,13 @@ SWIGINTERN PyObject *_wrap_Application_handleReconnect(PyObject *SWIGUNUSEDPARM(
           (darg)->handleReconnect();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18723,10 +19260,13 @@ SWIGINTERN PyObject *_wrap_Application_handleMessage(PyObject *SWIGUNUSEDPARM(se
           (darg)->handleMessage(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18784,10 +19324,13 @@ SWIGINTERN PyObject *_wrap_Application_handleNetworkMessage(PyObject *SWIGUNUSED
           (darg)->handleNetworkMessage((Seiscomp::Communication::NetworkMessage const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18859,10 +19402,13 @@ SWIGINTERN PyObject *_wrap_Application_addObject(PyObject *SWIGUNUSEDPARM(self),
           (darg)->addObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -18936,10 +19482,13 @@ SWIGINTERN PyObject *_wrap_Application_removeObject(PyObject *SWIGUNUSEDPARM(sel
           (darg)->removeObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -19013,10 +19562,13 @@ SWIGINTERN PyObject *_wrap_Application_updateObject(PyObject *SWIGUNUSEDPARM(sel
           (darg)->updateObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -19067,10 +19619,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetBool(PyObject *SWIGUNUSEDPARM(se
     try {
       result = (bool)((Seiscomp::Client::Application const *)arg1)->configGetBool((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19118,10 +19673,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetInt(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (int)((Seiscomp::Client::Application const *)arg1)->configGetInt((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19169,10 +19727,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetDouble(PyObject *SWIGUNUSEDPARM(
     try {
       result = (double)((Seiscomp::Client::Application const *)arg1)->configGetDouble((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19220,10 +19781,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetString(PyObject *SWIGUNUSEDPARM(
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetString((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19271,10 +19835,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetPath(PyObject *SWIGUNUSEDPARM(se
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetPath((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19322,10 +19889,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetBools(PyObject *SWIGUNUSEDPARM(s
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetBools((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19373,10 +19943,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetInts(PyObject *SWIGUNUSEDPARM(se
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetInts((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19424,10 +19997,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetDoubles(PyObject *SWIGUNUSEDPARM
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetDoubles((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19475,10 +20051,13 @@ SWIGINTERN PyObject *_wrap_Application_configGetStrings(PyObject *SWIGUNUSEDPARM
     try {
       result = ((Seiscomp::Client::Application const *)arg1)->configGetStrings((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19534,10 +20113,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetBool(PyObject *SWIGUNUSEDPARM(se
     try {
       (arg1)->configSetBool((std::string const &)*arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19593,10 +20175,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetInt(PyObject *SWIGUNUSEDPARM(sel
     try {
       (arg1)->configSetInt((std::string const &)*arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19652,10 +20237,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetDouble(PyObject *SWIGUNUSEDPARM(
     try {
       (arg1)->configSetDouble((std::string const &)*arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19716,10 +20304,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetString(PyObject *SWIGUNUSEDPARM(
     try {
       (arg1)->configSetString((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19782,10 +20373,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetBools(PyObject *SWIGUNUSEDPARM(s
     try {
       (arg1)->configSetBools((std::string const &)*arg2,(std::vector< bool,std::allocator< bool > > const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19848,10 +20442,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetInts(PyObject *SWIGUNUSEDPARM(se
     try {
       (arg1)->configSetInts((std::string const &)*arg2,(std::vector< int,std::allocator< int > > const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19914,10 +20511,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetDoubles(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->configSetDoubles((std::string const &)*arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -19980,10 +20580,13 @@ SWIGINTERN PyObject *_wrap_Application_configSetStrings(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->configSetStrings((std::string const &)*arg2,(std::vector< std::string,std::allocator< std::string > > const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20032,10 +20635,13 @@ SWIGINTERN PyObject *_wrap_Application_configUnset(PyObject *SWIGUNUSEDPARM(self
     try {
       (arg1)->configUnset((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20069,10 +20675,13 @@ SWIGINTERN PyObject *_wrap_Application_saveConfiguration(PyObject *SWIGUNUSEDPAR
     try {
       result = (bool)(arg1)->saveConfiguration();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20143,10 +20752,13 @@ SWIGINTERN PyObject *_wrap_Application_handleAlarm(PyObject *SWIGUNUSEDPARM(self
           (darg)->handleAlarm();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -20223,10 +20835,13 @@ SWIGINTERN PyObject *_wrap_new_StreamApplication(PyObject *SWIGUNUSEDPARM(self),
       }
       
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20264,10 +20879,13 @@ SWIGINTERN PyObject *_wrap_delete_StreamApplication(PyObject *SWIGUNUSEDPARM(sel
     try {
       if (arg1) arg1->decrementReferenceCount();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20299,10 +20917,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_openStream(PyObject *SWIGUNUSEDPARM
     try {
       result = (bool)(arg1)->openStream();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20333,10 +20954,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_closeStream(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->closeStream();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20368,10 +20992,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_recordStream(PyObject *SWIGUNUSEDPA
     try {
       result = (Seiscomp::IO::RecordStream *)((Seiscomp::Client::StreamApplication const *)arg1)->recordStream();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20431,10 +21058,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_addStation(PyObject *SWIGUNUSEDPARM
     try {
       result = (bool)(arg1)->addStation((std::string const &)*arg2,(std::string const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20526,10 +21156,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_addStream(PyObject *SWIGUNUSEDPARM(
     try {
       result = (bool)(arg1)->addStream((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20580,10 +21213,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setStartTime(PyObject *SWIGUNUSEDPA
     try {
       (arg1)->setStartTime((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20626,10 +21262,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setEndTime(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->setEndTime((Seiscomp::Core::Time const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20673,10 +21312,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setTimeWindow(PyObject *SWIGUNUSEDP
     try {
       result = (bool)(arg1)->setTimeWindow((Seiscomp::Core::TimeWindow const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20716,10 +21358,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setAutoAcquisitionStart(PyObject *S
     try {
       (arg1)->setAutoAcquisitionStart(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20759,10 +21404,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setAutoCloseOnAcquisitionFinished(P
     try {
       (arg1)->setAutoCloseOnAcquisitionFinished(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20793,10 +21441,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_requestSync(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->requestSync();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20836,10 +21487,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setRecordInputHint(PyObject *SWIGUN
     try {
       (arg1)->setRecordInputHint(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20879,10 +21533,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_setRecordDatatype(PyObject *SWIGUNU
     try {
       (arg1)->setRecordDatatype(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20914,10 +21571,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_recordDataType(PyObject *SWIGUNUSED
     try {
       result = (Seiscomp::Array::DataType)((Seiscomp::Client::StreamApplication const *)arg1)->recordDataType();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20948,10 +21608,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_startRecordThread(PyObject *SWIGUNU
     try {
       (arg1)->startRecordThread();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -20982,10 +21645,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_waitForRecordThread(PyObject *SWIGU
     try {
       (arg1)->waitForRecordThread();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -21017,10 +21683,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_isRecordThreadActive(PyObject *SWIG
     try {
       result = (bool)((Seiscomp::Client::StreamApplication const *)arg1)->isRecordThreadActive();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -21067,10 +21736,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_init(PyObject *SWIGUNUSEDPARM(self)
           result = (bool)(darg)->init();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21120,10 +21792,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_run(PyObject *SWIGUNUSEDPARM(self),
           result = (bool)(darg)->run();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21172,10 +21847,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_done(PyObject *SWIGUNUSEDPARM(self)
           (darg)->done();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21234,10 +21912,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_dispatch(PyObject *SWIGUNUSEDPARM(s
           result = (bool)(darg)->dispatch(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21295,10 +21976,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleRecord(PyObject *SWIGUNUSEDPA
           (darg)->handleRecord(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21347,10 +22031,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleEndSync(PyObject *SWIGUNUSEDP
           (darg)->handleEndSync();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21424,10 +22111,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleAlarm(PyObject *SWIGUNUSEDPAR
           (darg)->handleAlarm();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21477,10 +22167,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_version(PyObject *SWIGUNUSEDPARM(se
           result = (char *)(darg)->version();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21532,10 +22225,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_createCommandLineDescription(PyObje
           (darg)->createCommandLineDescription();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21585,10 +22281,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_validateParameters(PyObject *SWIGUN
           result = (bool)(darg)->validateParameters();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21637,10 +22336,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_idle(PyObject *SWIGUNUSEDPARM(self)
           (darg)->idle();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21690,10 +22392,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_forkProcess(PyObject *SWIGUNUSEDPAR
           result = (bool)(darg)->forkProcess();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21743,10 +22448,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_initConfiguration(PyObject *SWIGUNU
           result = (bool)(darg)->initConfiguration();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21796,10 +22504,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_initPlugins(PyObject *SWIGUNUSEDPAR
           result = (bool)(darg)->initPlugins();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21849,10 +22560,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_initDatabase(PyObject *SWIGUNUSEDPA
           result = (bool)(darg)->initDatabase();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21902,10 +22616,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_initSubscriptions(PyObject *SWIGUNU
           result = (bool)(darg)->initSubscriptions();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -21954,10 +22671,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_printVersion(PyObject *SWIGUNUSEDPA
           (darg)->printVersion();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22016,10 +22736,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleInitializationError(PyObject 
           result = (bool)(darg)->handleInitializationError(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22068,10 +22791,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleStartSync(PyObject *SWIGUNUSE
           (darg)->handleStartSync();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22120,10 +22846,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleEndAcquisition(PyObject *SWIG
           (darg)->handleEndAcquisition();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22191,10 +22920,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_dispatchNotification(PyObject *SWIG
           result = (bool)(darg)->dispatchNotification(arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22253,10 +22985,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_showMessage(PyObject *SWIGUNUSEDPAR
           (darg)->showMessage((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22317,10 +23052,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_showWarning(PyObject *SWIGUNUSEDPAR
           (darg)->showWarning((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22371,10 +23109,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleTimeout(PyObject *SWIGUNUSEDP
           (darg)->handleTimeout();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22424,10 +23165,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleClose(PyObject *SWIGUNUSEDPAR
           result = (bool)(darg)->handleClose();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22476,10 +23220,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleAutoShutdown(PyObject *SWIGUN
           (darg)->handleAutoShutdown();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22538,10 +23285,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleSync(PyObject *SWIGUNUSEDPARM
           (darg)->handleSync((char const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22592,10 +23342,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleDisconnect(PyObject *SWIGUNUS
           (darg)->handleDisconnect();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22644,10 +23397,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleReconnect(PyObject *SWIGUNUSE
           (darg)->handleReconnect();
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22705,10 +23461,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleMessage(PyObject *SWIGUNUSEDP
           (darg)->handleMessage(arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22766,10 +23525,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_handleNetworkMessage(PyObject *SWIG
           (darg)->handleNetworkMessage((Seiscomp::Communication::NetworkMessage const *)arg2);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22841,10 +23603,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_addObject(PyObject *SWIGUNUSEDPARM(
           (darg)->addObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22918,10 +23683,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_removeObject(PyObject *SWIGUNUSEDPA
           (darg)->removeObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -22995,10 +23763,13 @@ SWIGINTERN PyObject *_wrap_StreamApplication_updateObject(PyObject *SWIGUNUSEDPA
           (darg)->updateObject((std::string const &)*arg2,arg3);
         }
       }
-      catch ( const Seiscomp::Core::ValueException &e) {
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
         SWIG_exception(SWIG_ValueError, e.what());
       }
-      catch ( const std::exception &e) {
+      catch ( const std::exception &e ) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
       catch ( ... ) {
@@ -23033,10 +23804,13 @@ SWIGINTERN PyObject *_wrap_new_StationLocation__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try {
       result = (Seiscomp::Client::StationLocation *)new Seiscomp::Client::StationLocation();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23086,10 +23860,13 @@ SWIGINTERN PyObject *_wrap_new_StationLocation__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try {
       result = (Seiscomp::Client::StationLocation *)new Seiscomp::Client::StationLocation(arg1,arg2,arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23323,10 +24100,13 @@ SWIGINTERN PyObject *_wrap_delete_StationLocation(PyObject *SWIGUNUSEDPARM(self)
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23356,10 +24136,13 @@ SWIGINTERN PyObject *_wrap_Inventory_Instance(PyObject *SWIGUNUSEDPARM(self), Py
     try {
       result = (Seiscomp::Client::Inventory *)Seiscomp::Client::Inventory::Instance();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23400,10 +24183,13 @@ SWIGINTERN PyObject *_wrap_Inventory_load__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try {
       (arg1)->load((char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23445,10 +24231,13 @@ SWIGINTERN PyObject *_wrap_Inventory_load__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try {
       (arg1)->load(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23537,10 +24326,13 @@ SWIGINTERN PyObject *_wrap_Inventory_setInventory(PyObject *SWIGUNUSEDPARM(self)
     try {
       (arg1)->setInventory(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23590,10 +24382,13 @@ SWIGINTERN PyObject *_wrap_Inventory_filter(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       result = (int)(arg1)->filter((Seiscomp::Util::StringFirewall const *)arg2,(Seiscomp::Util::StringFirewall const *)arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23633,10 +24428,13 @@ SWIGINTERN PyObject *_wrap_Inventory_loadStations(PyObject *SWIGUNUSEDPARM(self)
     try {
       (arg1)->loadStations(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23708,10 +24506,13 @@ SWIGINTERN PyObject *_wrap_Inventory_stationLocation(PyObject *SWIGUNUSEDPARM(se
     try {
       result = ((Seiscomp::Client::Inventory const *)arg1)->stationLocation((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::Core::Time const &)*arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23796,10 +24597,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getStation__SWIG_0(PyObject *SWIGUNUSEDPARM
     try {
       result = (Seiscomp::DataModel::Station *)((Seiscomp::Client::Inventory const *)arg1)->getStation((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::Core::Time const &)*arg4,arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23875,10 +24679,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getStation__SWIG_1(PyObject *SWIGUNUSEDPARM
     try {
       result = (Seiscomp::DataModel::Station *)((Seiscomp::Client::Inventory const *)arg1)->getStation((std::string const &)*arg2,(std::string const &)*arg3,(Seiscomp::Core::Time const &)*arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -23977,10 +24784,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getSensorLocation__SWIG_0(PyObject *SWIGUNU
     try {
       result = (Seiscomp::DataModel::SensorLocation *)((Seiscomp::Client::Inventory const *)arg1)->getSensorLocation((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(Seiscomp::Core::Time const &)*arg5,arg6);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24072,10 +24882,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getSensorLocation__SWIG_1(PyObject *SWIGUNU
     try {
       result = (Seiscomp::DataModel::SensorLocation *)((Seiscomp::Client::Inventory const *)arg1)->getSensorLocation((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(Seiscomp::Core::Time const &)*arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24190,10 +25003,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getStream__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try {
       result = (Seiscomp::DataModel::Stream *)((Seiscomp::Client::Inventory const *)arg1)->getStream((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(Seiscomp::Core::Time const &)*arg6,arg7);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24301,10 +25117,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getStream__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try {
       result = (Seiscomp::DataModel::Stream *)((Seiscomp::Client::Inventory const *)arg1)->getStream((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(Seiscomp::Core::Time const &)*arg6);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24497,10 +25316,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getThreeComponents__SWIG_0(PyObject *SWIGUN
     try {
       result = ((Seiscomp::Client::Inventory const *)arg1)->getThreeComponents((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(Seiscomp::Core::Time const &)*arg6);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24549,10 +25371,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getStation__SWIG_2(PyObject *SWIGUNUSEDPARM
     try {
       result = (Seiscomp::DataModel::Station *)((Seiscomp::Client::Inventory const *)arg1)->getStation((Seiscomp::DataModel::Pick const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24677,10 +25502,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getSensorLocation__SWIG_2(PyObject *SWIGUNU
     try {
       result = (Seiscomp::DataModel::SensorLocation *)((Seiscomp::Client::Inventory const *)arg1)->getSensorLocation((Seiscomp::DataModel::Pick const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24813,10 +25641,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getThreeComponents__SWIG_1(PyObject *SWIGUN
     try {
       result = ((Seiscomp::Client::Inventory const *)arg1)->getThreeComponents((Seiscomp::DataModel::Pick const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -24981,10 +25812,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getGain(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = (double)(arg1)->getGain((std::string const &)*arg2,(std::string const &)*arg3,(std::string const &)*arg4,(std::string const &)*arg5,(Seiscomp::Core::Time const &)*arg6);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25048,10 +25882,13 @@ SWIGINTERN PyObject *_wrap_Inventory_getAllStations(PyObject *SWIGUNUSEDPARM(sel
     try {
       result = (int)(arg1)->getAllStations(*arg2,(Seiscomp::Core::Time const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25083,10 +25920,13 @@ SWIGINTERN PyObject *_wrap_Inventory_inventory(PyObject *SWIGUNUSEDPARM(self), P
     try {
       result = (Seiscomp::DataModel::Inventory *)(arg1)->inventory();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25117,10 +25957,13 @@ SWIGINTERN PyObject *_wrap_delete_Inventory(PyObject *SWIGUNUSEDPARM(self), PyOb
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25150,10 +25993,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_Instance(PyObject *SWIGUNUSEDPARM(self), PyO
     try {
       result = (Seiscomp::Client::ConfigDB *)Seiscomp::Client::ConfigDB::Instance();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25253,10 +26099,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg3,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg4,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg5,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg6,(std::set< std::string,std::less< std::string >,std::allocator< std::string > > const &)*arg7);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25344,10 +26193,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg3,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg4,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg5,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg6);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25423,10 +26275,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg3,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg4,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg5);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25490,10 +26345,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg3,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg4);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25545,10 +26403,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2,(Seiscomp::Core::Optional< std::string >::Impl const &)*arg3);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25588,10 +26449,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_5(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load(arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25632,10 +26496,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_load__SWIG_6(PyObject *SWIGUNUSEDPARM(self),
     try {
       (arg1)->load((char const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25853,10 +26720,13 @@ SWIGINTERN PyObject *_wrap_ConfigDB_config(PyObject *SWIGUNUSEDPARM(self), PyObj
     try {
       result = (Seiscomp::DataModel::Config *)(arg1)->config();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25887,10 +26757,13 @@ SWIGINTERN PyObject *_wrap_delete_ConfigDB(PyObject *SWIGUNUSEDPARM(self), PyObj
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25928,10 +26801,13 @@ SWIGINTERN PyObject *_wrap_delete_PluginRegistry(PyObject *SWIGUNUSEDPARM(self),
     try {
       delete arg1;
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -25954,10 +26830,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_Instance(PyObject *SWIGUNUSEDPARM(self
     try {
       result = (Seiscomp::Client::PluginRegistry *)Seiscomp::Client::PluginRegistry::Instance();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26002,10 +26881,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_addPluginName(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->addPluginName((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26052,10 +26934,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_addPluginPath(PyObject *SWIGUNUSEDPARM
     try {
       (arg1)->addPluginPath((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26102,10 +26987,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_addPackagePath(PyObject *SWIGUNUSEDPAR
     try {
       (arg1)->addPackagePath((std::string const &)*arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26139,10 +27027,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_loadPlugins(PyObject *SWIGUNUSEDPARM(s
     try {
       result = (int)(arg1)->loadPlugins();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26183,10 +27074,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_loadConfiguredPlugins(PyObject *SWIGUN
     try {
       result = (int)(arg1)->loadConfiguredPlugins((Seiscomp::Config::Config const *)arg2);
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26217,10 +27111,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_freePlugins(PyObject *SWIGUNUSEDPARM(s
     try {
       (arg1)->freePlugins();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
@@ -26252,10 +27149,13 @@ SWIGINTERN PyObject *_wrap_PluginRegistry_pluginCount(PyObject *SWIGUNUSEDPARM(s
     try {
       result = (int)((Seiscomp::Client::PluginRegistry const *)arg1)->pluginCount();
     }
-    catch ( const Seiscomp::Core::ValueException &e) {
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
-    catch ( const std::exception &e) {
+    catch ( const std::exception &e ) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {

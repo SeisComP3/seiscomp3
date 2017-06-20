@@ -7076,6 +7076,9 @@ SWIGINTERN PyObject *_wrap_new_Logger(PyObject *SWIGUNUSEDPARM(self), PyObject *
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7400,6 +7403,9 @@ SWIGINTERN PyObject *_wrap_delete_OptionNotFoundException(PyObject *SWIGUNUSEDPA
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7512,6 +7518,9 @@ SWIGINTERN PyObject *_wrap_delete_TypeConversionException(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -7626,6 +7635,9 @@ SWIGINTERN PyObject *_wrap_delete_SyntaxException(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7739,6 +7751,9 @@ SWIGINTERN PyObject *_wrap_delete_CaseSensitivityException(PyObject *SWIGUNUSEDP
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7832,6 +7847,9 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7915,6 +7933,9 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -7943,6 +7964,9 @@ SWIGINTERN PyObject *_wrap_new_Symbol__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -8110,6 +8134,9 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -8200,6 +8227,9 @@ SWIGINTERN PyObject *_wrap_Symbol_set__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -8329,6 +8359,9 @@ SWIGINTERN PyObject *_wrap_Symbol___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -8360,6 +8393,9 @@ SWIGINTERN PyObject *_wrap_Symbol_toString(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -8784,6 +8820,9 @@ SWIGINTERN PyObject *_wrap_delete_Symbol(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -8813,6 +8852,9 @@ SWIGINTERN PyObject *_wrap_new_SymbolTable(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -8854,6 +8896,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_setCaseSensitivityCheck(PyObject *SWIGUNU
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -8893,6 +8938,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_setLogger(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9011,6 +9059,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9127,6 +9178,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9234,6 +9288,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_2(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9327,6 +9384,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_3(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9375,6 +9435,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_add__SWIG_4(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9590,6 +9653,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_get__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9637,6 +9703,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_get__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9734,6 +9803,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_remove(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9768,6 +9840,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_incrementObjectCount(PyObject *SWIGUNUSED
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9799,6 +9874,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_decrementObjectCount(PyObject *SWIGUNUSED
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9832,6 +9910,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_objectCount(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9863,6 +9944,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_toString(PyObject *SWIGUNUSEDPARM(self), 
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9909,6 +9993,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_hasFileBeenIncluded(PyObject *SWIGUNUSEDP
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -9957,6 +10044,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_addToIncludedFiles(PyObject *SWIGUNUSEDPA
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -9991,6 +10081,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_includesBegin(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10022,6 +10115,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_includesEnd(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10055,6 +10151,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_begin(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10087,6 +10186,9 @@ SWIGINTERN PyObject *_wrap_SymbolTable_end(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10118,6 +10220,9 @@ SWIGINTERN PyObject *_wrap_delete_SymbolTable(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10147,6 +10252,9 @@ SWIGINTERN PyObject *_wrap_new_Config(PyObject *SWIGUNUSEDPARM(self), PyObject *
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10178,6 +10286,9 @@ SWIGINTERN PyObject *_wrap_delete_Config(PyObject *SWIGUNUSEDPARM(self), PyObjec
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10218,6 +10329,9 @@ SWIGINTERN PyObject *_wrap_Config_setCaseSensitivityCheck(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10283,6 +10397,9 @@ SWIGINTERN PyObject *_wrap_Config_readConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10340,6 +10457,9 @@ SWIGINTERN PyObject *_wrap_Config_readConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10387,6 +10507,9 @@ SWIGINTERN PyObject *_wrap_Config_readConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10525,6 +10648,9 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10573,6 +10699,9 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_1(PyObject *SWIGUNUSEDPARM(s
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10616,6 +10745,9 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_2(PyObject *SWIGUNUSEDPARM(s
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10647,6 +10779,9 @@ SWIGINTERN PyObject *_wrap_Config_writeConfig__SWIG_3(PyObject *SWIGUNUSEDPARM(s
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10768,6 +10903,9 @@ SWIGINTERN PyObject *_wrap_Config_setLogger(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10799,6 +10937,9 @@ SWIGINTERN PyObject *_wrap_Config_symbolsToString(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10832,6 +10973,9 @@ SWIGINTERN PyObject *_wrap_Config_names(PyObject *SWIGUNUSEDPARM(self), PyObject
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -10863,6 +11007,9 @@ SWIGINTERN PyObject *_wrap_Config_visitedFilesToString(PyObject *SWIGUNUSEDPARM(
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10909,6 +11056,9 @@ SWIGINTERN PyObject *_wrap_Config_getInt__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -10966,6 +11116,9 @@ SWIGINTERN PyObject *_wrap_Config_getInt__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11026,6 +11179,9 @@ SWIGINTERN PyObject *_wrap_Config_getInt__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11156,6 +11312,9 @@ SWIGINTERN PyObject *_wrap_Config_setInt(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -11203,6 +11362,9 @@ SWIGINTERN PyObject *_wrap_Config_getDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11260,6 +11422,9 @@ SWIGINTERN PyObject *_wrap_Config_getDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11320,6 +11485,9 @@ SWIGINTERN PyObject *_wrap_Config_getDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11450,6 +11618,9 @@ SWIGINTERN PyObject *_wrap_Config_setDouble(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -11497,6 +11668,9 @@ SWIGINTERN PyObject *_wrap_Config_getBool__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11554,6 +11728,9 @@ SWIGINTERN PyObject *_wrap_Config_getBool__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11614,6 +11791,9 @@ SWIGINTERN PyObject *_wrap_Config_getBool__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11744,6 +11924,9 @@ SWIGINTERN PyObject *_wrap_Config_setBool(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -11791,6 +11974,9 @@ SWIGINTERN PyObject *_wrap_Config_getString__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11848,6 +12034,9 @@ SWIGINTERN PyObject *_wrap_Config_getString__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -11908,6 +12097,9 @@ SWIGINTERN PyObject *_wrap_Config_getString__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12043,6 +12235,9 @@ SWIGINTERN PyObject *_wrap_Config_setString(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12093,6 +12288,9 @@ SWIGINTERN PyObject *_wrap_Config_remove(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12140,6 +12338,9 @@ SWIGINTERN PyObject *_wrap_Config_getInts__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12197,6 +12398,9 @@ SWIGINTERN PyObject *_wrap_Config_getInts__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12311,6 +12515,9 @@ SWIGINTERN PyObject *_wrap_Config_setInts(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12358,6 +12565,9 @@ SWIGINTERN PyObject *_wrap_Config_getDoubles__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12415,6 +12625,9 @@ SWIGINTERN PyObject *_wrap_Config_getDoubles__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12529,6 +12742,9 @@ SWIGINTERN PyObject *_wrap_Config_setDoubles(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12576,6 +12792,9 @@ SWIGINTERN PyObject *_wrap_Config_getBools__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12633,6 +12852,9 @@ SWIGINTERN PyObject *_wrap_Config_getBools__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12747,6 +12969,9 @@ SWIGINTERN PyObject *_wrap_Config_setBools(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12794,6 +13019,9 @@ SWIGINTERN PyObject *_wrap_Config_getStrings__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12851,6 +13079,9 @@ SWIGINTERN PyObject *_wrap_Config_getStrings__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -12965,6 +13196,9 @@ SWIGINTERN PyObject *_wrap_Config_setStrings(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -12998,6 +13232,9 @@ SWIGINTERN PyObject *_wrap_Config_symbolTable(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13035,6 +13272,9 @@ SWIGINTERN PyObject *_wrap_Config_Instance(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13114,6 +13354,9 @@ SWIGINTERN PyObject *_wrap_Config_eval__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13183,6 +13426,9 @@ SWIGINTERN PyObject *_wrap_Config_eval__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13242,6 +13488,9 @@ SWIGINTERN PyObject *_wrap_Config_eval__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13414,6 +13663,9 @@ SWIGINTERN PyObject *_wrap_Config_Eval__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13483,6 +13735,9 @@ SWIGINTERN PyObject *_wrap_Config_Eval__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13543,6 +13798,9 @@ SWIGINTERN PyObject *_wrap_Config_Eval__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13593,6 +13851,9 @@ SWIGINTERN PyObject *_wrap_Config_Eval__SWIG_3(PyObject *SWIGUNUSEDPARM(self), P
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13747,6 +14008,9 @@ SWIGINTERN PyObject *_wrap_Config_writeValues(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13790,6 +14054,9 @@ SWIGINTERN PyObject *_wrap_Config_writeSymbol(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13831,6 +14098,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_iterator(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13862,6 +14132,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___nonzero__(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13895,6 +14168,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___bool__(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -13926,6 +14202,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___len__(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -13986,6 +14265,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___getslice__(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14043,6 +14325,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___setslice____SWIG_0(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14115,6 +14400,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___setslice____SWIG_1(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14242,6 +14530,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___delslice__(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14291,6 +14582,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___delitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14339,6 +14633,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___getitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14402,6 +14699,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___setitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14452,6 +14752,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___setitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14499,6 +14802,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___delitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14595,6 +14901,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___getitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14704,6 +15013,9 @@ SWIGINTERN PyObject *_wrap_vectorStr___setitem____SWIG_2(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14816,6 +15128,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_pop(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14861,6 +15176,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_append(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14885,6 +15203,9 @@ SWIGINTERN PyObject *_wrap_new_vectorStr__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -14923,6 +15244,9 @@ SWIGINTERN PyObject *_wrap_new_vectorStr__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14957,6 +15281,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_empty(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -14988,6 +15315,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15032,6 +15362,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_swap(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15063,6 +15396,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_begin(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15097,6 +15433,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_end(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15129,6 +15468,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_rbegin(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15163,6 +15505,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_rend(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15194,6 +15539,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_clear(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15227,6 +15575,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_get_allocator(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15259,6 +15610,9 @@ SWIGINTERN PyObject *_wrap_new_vectorStr__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15289,6 +15643,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_pop_back(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15329,6 +15686,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15376,6 +15736,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15439,6 +15802,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15539,6 +15905,9 @@ SWIGINTERN PyObject *_wrap_new_vectorStr__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15646,6 +16015,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_push_back(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15680,6 +16052,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_front(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -15711,6 +16086,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_back(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15765,6 +16143,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_assign(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15821,6 +16202,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -15939,6 +16323,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16010,6 +16397,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16115,6 +16505,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_reserve(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16147,6 +16540,9 @@ SWIGINTERN PyObject *_wrap_vectorStr_capacity(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16177,6 +16573,9 @@ SWIGINTERN PyObject *_wrap_delete_vectorStr(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16219,6 +16618,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_iterator(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16250,6 +16652,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___nonzero__(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16283,6 +16688,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___bool__(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16314,6 +16722,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___len__(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16374,6 +16785,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___getslice__(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16431,6 +16845,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___setslice____SWIG_0(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16503,6 +16920,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___setslice____SWIG_1(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16630,6 +17050,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___delslice__(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16679,6 +17102,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___delitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16727,6 +17153,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___getitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16790,6 +17219,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___setitem____SWIG_0(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16840,6 +17272,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___setitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -16887,6 +17322,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___delitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -16983,6 +17421,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___getitem____SWIG_1(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17089,6 +17530,9 @@ SWIGINTERN PyObject *_wrap_vectorInt___setitem____SWIG_2(PyObject *SWIGUNUSEDPAR
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17201,6 +17645,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_pop(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17243,6 +17690,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_append(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17265,6 +17715,9 @@ SWIGINTERN PyObject *_wrap_new_vectorInt__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17303,6 +17756,9 @@ SWIGINTERN PyObject *_wrap_new_vectorInt__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17337,6 +17793,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_empty(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17368,6 +17827,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17412,6 +17874,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_swap(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17443,6 +17908,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_begin(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17477,6 +17945,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_end(PyObject *SWIGUNUSEDPARM(self), PyObjec
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17509,6 +17980,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_rbegin(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17543,6 +18017,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_rend(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17574,6 +18051,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_clear(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17607,6 +18087,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_get_allocator(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17639,6 +18122,9 @@ SWIGINTERN PyObject *_wrap_new_vectorInt__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -17669,6 +18155,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_pop_back(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17709,6 +18198,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17756,6 +18248,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17819,6 +18314,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -17916,6 +18414,9 @@ SWIGINTERN PyObject *_wrap_new_vectorInt__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18020,6 +18521,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_push_back(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18052,6 +18556,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_front(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18083,6 +18590,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_back(PyObject *SWIGUNUSEDPARM(self), PyObje
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18135,6 +18645,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_assign(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18185,6 +18698,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18300,6 +18816,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18366,6 +18885,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18473,6 +18995,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_reserve(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18505,6 +19030,9 @@ SWIGINTERN PyObject *_wrap_vectorInt_capacity(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18535,6 +19063,9 @@ SWIGINTERN PyObject *_wrap_delete_vectorInt(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18577,6 +19108,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_iterator(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18608,6 +19142,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___nonzero__(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18641,6 +19178,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___bool__(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18672,6 +19212,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___len__(PyObject *SWIGUNUSEDPARM(self), 
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18732,6 +19275,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___getslice__(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -18789,6 +19335,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___setslice____SWIG_0(PyObject *SWIGUNUSE
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18861,6 +19410,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___setslice____SWIG_1(PyObject *SWIGUNUSE
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -18988,6 +19540,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___delslice__(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19037,6 +19592,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___delitem____SWIG_0(PyObject *SWIGUNUSED
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19085,6 +19643,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___getitem____SWIG_0(PyObject *SWIGUNUSED
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19148,6 +19709,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___setitem____SWIG_0(PyObject *SWIGUNUSED
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19198,6 +19762,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___setitem____SWIG_1(PyObject *SWIGUNUSED
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19245,6 +19812,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___delitem____SWIG_1(PyObject *SWIGUNUSED
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19341,6 +19911,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___getitem____SWIG_1(PyObject *SWIGUNUSED
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19447,6 +20020,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble___setitem____SWIG_2(PyObject *SWIGUNUSED
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19559,6 +20135,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_pop(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19601,6 +20180,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_append(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19623,6 +20205,9 @@ SWIGINTERN PyObject *_wrap_new_vectorDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19661,6 +20246,9 @@ SWIGINTERN PyObject *_wrap_new_vectorDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19695,6 +20283,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_empty(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19726,6 +20317,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_size(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19770,6 +20364,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_swap(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19801,6 +20398,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_begin(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19835,6 +20435,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_end(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19867,6 +20470,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_rbegin(PyObject *SWIGUNUSEDPARM(self), P
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19901,6 +20507,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_rend(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19932,6 +20541,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_clear(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -19965,6 +20577,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_get_allocator(PyObject *SWIGUNUSEDPARM(s
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -19997,6 +20612,9 @@ SWIGINTERN PyObject *_wrap_new_vectorDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20027,6 +20645,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_pop_back(PyObject *SWIGUNUSEDPARM(self),
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20067,6 +20688,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20114,6 +20738,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20177,6 +20804,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(s
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20274,6 +20904,9 @@ SWIGINTERN PyObject *_wrap_new_vectorDouble__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20378,6 +21011,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_push_back(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20410,6 +21046,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_front(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20441,6 +21080,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_back(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20493,6 +21135,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_assign(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20543,6 +21188,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20658,6 +21306,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20724,6 +21375,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20831,6 +21485,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_reserve(PyObject *SWIGUNUSEDPARM(self), 
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20863,6 +21520,9 @@ SWIGINTERN PyObject *_wrap_vectorDouble_capacity(PyObject *SWIGUNUSEDPARM(self),
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20893,6 +21553,9 @@ SWIGINTERN PyObject *_wrap_delete_vectorDouble(PyObject *SWIGUNUSEDPARM(self), P
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20935,6 +21598,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_iterator(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -20966,6 +21632,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___nonzero__(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -20999,6 +21668,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___bool__(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21030,6 +21702,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___len__(PyObject *SWIGUNUSEDPARM(self), Py
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21090,6 +21765,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___getslice__(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21147,6 +21825,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___setslice____SWIG_0(PyObject *SWIGUNUSEDP
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21219,6 +21900,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___setslice____SWIG_1(PyObject *SWIGUNUSEDP
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21346,6 +22030,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___delslice__(PyObject *SWIGUNUSEDPARM(self
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21395,6 +22082,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___delitem____SWIG_0(PyObject *SWIGUNUSEDPA
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21443,6 +22133,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___getitem____SWIG_0(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21506,6 +22199,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___setitem____SWIG_0(PyObject *SWIGUNUSEDPA
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21556,6 +22252,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___setitem____SWIG_1(PyObject *SWIGUNUSEDPA
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21603,6 +22302,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___delitem____SWIG_1(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21699,6 +22401,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___getitem____SWIG_1(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21803,6 +22508,9 @@ SWIGINTERN PyObject *_wrap_vectorBool___setitem____SWIG_2(PyObject *SWIGUNUSEDPA
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -21915,6 +22623,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_pop(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21955,6 +22666,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_append(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -21977,6 +22691,9 @@ SWIGINTERN PyObject *_wrap_new_vectorBool__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22015,6 +22732,9 @@ SWIGINTERN PyObject *_wrap_new_vectorBool__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22049,6 +22769,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_empty(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22080,6 +22803,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_size(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22124,6 +22850,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_swap(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22155,6 +22884,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_begin(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22189,6 +22921,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_end(PyObject *SWIGUNUSEDPARM(self), PyObje
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22221,6 +22956,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_rbegin(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22255,6 +22993,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_rend(PyObject *SWIGUNUSEDPARM(self), PyObj
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22286,6 +23027,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_clear(PyObject *SWIGUNUSEDPARM(self), PyOb
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22319,6 +23063,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_get_allocator(PyObject *SWIGUNUSEDPARM(sel
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22351,6 +23098,9 @@ SWIGINTERN PyObject *_wrap_new_vectorBool__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22381,6 +23131,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_pop_back(PyObject *SWIGUNUSEDPARM(self), P
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22421,6 +23174,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22468,6 +23224,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22531,6 +23290,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22626,6 +23388,9 @@ SWIGINTERN PyObject *_wrap_new_vectorBool__SWIG_3(PyObject *SWIGUNUSEDPARM(self)
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22728,6 +23493,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_push_back(PyObject *SWIGUNUSEDPARM(self), 
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22760,6 +23528,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_front(PyObject *SWIGUNUSEDPARM(self), PyOb
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22791,6 +23562,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_back(PyObject *SWIGUNUSEDPARM(self), PyObj
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -22841,6 +23615,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_assign(PyObject *SWIGUNUSEDPARM(self), PyO
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -22889,6 +23666,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -23002,6 +23782,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -23066,6 +23849,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
@@ -23173,6 +23959,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_reserve(PyObject *SWIGUNUSEDPARM(self), Py
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -23205,6 +23994,9 @@ SWIGINTERN PyObject *_wrap_vectorBool_capacity(PyObject *SWIGUNUSEDPARM(self), P
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
     }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
@@ -23235,6 +24027,9 @@ SWIGINTERN PyObject *_wrap_delete_vectorBool(PyObject *SWIGUNUSEDPARM(self), PyO
     }
     catch ( const Seiscomp::Config::OptionNotFoundException &e) {
       SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
     }
     catch ( ... ) {
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");

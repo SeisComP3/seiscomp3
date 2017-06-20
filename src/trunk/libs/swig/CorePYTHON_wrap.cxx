@@ -3264,8 +3264,6 @@ namespace swig {
 #include "seiscomp3/core/version.h"
 #ifdef HAVE_NUMPY
 #include <numpy/ndarrayobject.h>
-#else
-#include <seiscomp3/logging/log.h>
 #endif
 
 
