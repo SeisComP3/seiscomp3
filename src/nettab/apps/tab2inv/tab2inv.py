@@ -16,7 +16,7 @@ def main():
 					  help="Indicates a folder containing the filters coefficients files", dest="ffolder", default=None)
 
 	parser.add_option("-x", "--xmlf", type="string",
-					  help="Indicates a folder containing the xml inventory files (needed for station group support)", dest="xfolder", default=None)
+					  help="Indicates a folder containing the XML inventory files (needed for station group support)", dest="xfolder", default=None)
 
 	parser.add_option("-D", "--database", type="string",
 					  help="Database URL for inventory (needed for station group support)", dest="database", default=None)
@@ -41,11 +41,11 @@ def main():
 	error = False
 	
 	if len(args) < 1:
-		print >> sys.stderr, "no file to digest"
+		print >> sys.stderr, "No input file(s) to digest"
 		error = True
 	
 	if error:
-		print >> sys.stderr, "use -h for getting a help on usage"
+		print >> sys.stderr, "Use -h for help on usage"
 		return 1
 
 	# Execution
@@ -56,7 +56,7 @@ def main():
 			try:
 				t.digest(f)
 			except Exception,e:
-				print >> sys.stderr,"Error digesting %s:\n %s" % (f, e)
+				print >> sys.stderr, "Error digesting %s:\n %s" % (f, e)
 				if not options.force:
 					raise e
 
@@ -68,7 +68,7 @@ def main():
 			inv = t.sc3Obj()
 			if inv:
 				ar = IO.XMLArchive()
-				print >> sys.stderr, " Generating file: %s" % options.outFile
+				print >> sys.stderr, "Generating file: %s" % options.outFile
 				ar.create(options.outFile)
 				ar.setFormattedOutput(True)
 				ar.setCompression(False)

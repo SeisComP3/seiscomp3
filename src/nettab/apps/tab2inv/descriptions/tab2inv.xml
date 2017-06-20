@@ -23,7 +23,7 @@
 			</option>
 			
 			<option long-flag="xmlf" flag="x">
-				<description>Indicate a folder containing a set of XML files that contains the SeisComp3 inventory files that will be used to resolve the station groups. Normally this folder is the seiscomp3/etc/inventory folder.</description>
+				<description>Indicate a folder containing a set of XML files that contains the SeisComp3 inventory files that will be used to resolve the station groups. Normally this folder is seiscomp3/etc/inventory.</description>
 			</option>
 			
 			<option long-flag="database" flag="D">
@@ -43,7 +43,7 @@
 			</option>
 			
 			<option long-flag="default" flag="d">
-				<description>Use this option to indicate a default file. A default file is a file containing normally a set of rules for Network (Na), Stations (Sa) and Instruments (Ia) that are applied for every object created before the attributes specified in the file are applied. This option help to set parameters that you want to be set on all objects.</description>
+				<description>Use this option to indicate a default file. A default file is a file containing normally a set of rules for Network (Na), Stations (Sa) and Instruments (Ia) that are applied for every object created before the attributes specified in the file are applied. This option help sto set parameters that you want to be set on all objects.</description>
 			</option>
 			
 			<option long-flag="output" flag="o">
