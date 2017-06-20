@@ -117,25 +117,6 @@ string timeToStr(const Core::Time &time) {
 }
 
 
-ostream &operator<<(ostream &os, const set<string> &s) {
-	bool first = true;
-	for ( set<string>::const_iterator it = s.begin(); it != s.end(); ++ it ) {
-		if ( !first ) os << " ";
-		os << *it;
-		first = false;
-	}
-	return os;
-}
-
-
-ostream &operator<<(ostream &os, const Epochs &l) {
-	set<string> s;
-	for ( Epochs::const_iterator it = l.begin(); it != l.end(); ++ it )
-		s.insert((*it).first);
-	return os << s;
-}
-
-
 bool respLowerThan(const FDSNXML::ResponseStage *r1, const FDSNXML::ResponseStage *r2) {
 	return r1->number() < r2->number();
 }
@@ -511,26 +492,6 @@ bool equal(const DataModel::Sensor *s1, const DataModel::Sensor *s2) {
 }
 
 
-bool isMetaResponse(const FDSNXML::ResponseStage *resp) {
-	try { resp->polesZeros(); return false; }
-	catch ( ... ) {}
-
-	try { resp->coefficients(); return false; }
-	catch ( ... ) {}
-
-	try { resp->responseList(); return false; }
-	catch ( ... ) {}
-
-	try { resp->fIR(); return false; }
-	catch ( ... ) {}
-
-	try { resp->polynomial(); return false; }
-	catch ( ... ) {}
-
-	return true;
-}
-
-
 bool isFIRResponse(const FDSNXML::ResponseStage *resp) {
 	if ( resp == NULL ) return false;
 	try { resp->fIR(); return true; }
@@ -741,53 +702,6 @@ const char *sensorUnit(const FDSNXML::ResponseStage *resp,
 	}
 
 	return UNDEFINED;
-}
-
-
-DataModel::Network *findNetwork(DataModel::Inventory *inv, const string &code,
-                                const FDSNXML::Station *sta) {
-	for ( size_t i = 0; i < inv->networkCount(); ++i ) {
-		DataModel::Network *net = inv->network(i);
-		if ( net->code() != code ) continue;
-
-		// Check for overlapping time windows
-		try { if ( sta->startDate() < net->start() ) continue; }
-		catch ( ... ) { continue; }
-
-		OPT(Core::Time) end1, end2;
-		try { end1 = sta->endDate(); } catch ( ... ) {}
-		try { end2 = net->end(); } catch ( ... ) {}
-
-		// Network time window open, ok
-		if ( !end2 ) return net;
-		// Epoch time window open, not ok
-		if ( !end1 ) continue;
-
-		// Epoch time window end greater than network end, not ok
-		if ( *end1 > *end2 ) continue;
-
-		return net;
-	}
-
-	return NULL;
-}
-
-
-bool findElement(const string &line, const string &sub) {
-	size_t pos = line.find(' ');
-	if ( pos == string::npos )
-		return line == sub;
-
-	size_t last = 0;
-	while ( pos != string::npos ) {
-		if ( line.compare(last, pos-last, sub) == 0 )
-			return true;
-
-		last = line.find_first_not_of(' ', pos);
-		pos = line.find(' ', last);
-	}
-
-	return line.compare(last, pos, sub) == 0;
 }
 
 

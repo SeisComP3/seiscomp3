@@ -90,66 +90,6 @@ FDSNXML::Channel *findChannel(FDSNXML::Station *sta,
 }
 
 
-DataModel::Datalogger *findDatalogger(const DataModel::Inventory *inv,
-                                      const string &publicID) {
-	for ( size_t i = 0; i < inv->dataloggerCount(); ++i ) {
-		DataModel::Datalogger *d = inv->datalogger(i);
-		if ( d->publicID() == publicID )
-			return d;
-	}
-
-	return NULL;
-}
-
-
-DataModel::Sensor *findSensor(const DataModel::Inventory *inv,
-                              const string &publicID) {
-	for ( size_t i = 0; i < inv->sensorCount(); ++i ) {
-		DataModel::Sensor *s = inv->sensor(i);
-		if ( s->publicID() == publicID )
-			return s;
-	}
-
-	return NULL;
-}
-
-
-DataModel::ResponseFIR *findFIR(const DataModel::Inventory *inv,
-                                const string &publicID) {
-	for ( size_t i = 0; i < inv->responseFIRCount(); ++i ) {
-		DataModel::ResponseFIR *fir = inv->responseFIR(i);
-		if ( fir->publicID() == publicID )
-			return fir;
-	}
-
-	return NULL;
-}
-
-
-DataModel::ResponsePAZ *findPAZ(const DataModel::Inventory *inv,
-                                const string &publicID) {
-	for ( size_t i = 0; i < inv->responsePAZCount(); ++i ) {
-		DataModel::ResponsePAZ *paz = inv->responsePAZ(i);
-		if ( paz->publicID() == publicID )
-			return paz;
-	}
-
-	return NULL;
-}
-
-
-DataModel::ResponsePolynomial *findPoly(const DataModel::Inventory *inv,
-                                        const string &publicID) {
-	for ( size_t i = 0; i < inv->responsePolynomialCount(); ++i ) {
-		DataModel::ResponsePolynomial *poly = inv->responsePolynomial(i);
-		if ( poly->publicID() == publicID )
-			return poly;
-	}
-
-	return NULL;
-}
-
-
 // SC3 FIR responses are converted to fdsnxml FIR responses to
 // use optimizations (symmetry) though all fdsnxml files in the
 // wild are using Coefficient responses. This can be changed on
