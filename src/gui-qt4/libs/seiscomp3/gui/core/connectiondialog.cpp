@@ -112,8 +112,8 @@ bool ConnectionDialog::setMessagingEnabled(bool e) {
 bool ConnectionDialog::setDatabaseParameters(const QString& uri) {
 	QStringList tmp = uri.split("://");
 	QString type, connection;
-	type = tmp.size() > 0?tmp[0]:"";
-	connection = tmp.size() > 1?tmp[1]:"";
+	type = tmp.size() > 1?tmp[0]:"mysql";
+	connection = tmp.size() > 1?tmp[1]:tmp[0];
 
 	return setDatabaseParameters(type, connection);
 }
@@ -121,14 +121,13 @@ bool ConnectionDialog::setDatabaseParameters(const QString& uri) {
 
 bool ConnectionDialog::setDatabaseParameters(const QString& type, const QString& connection) {
 	int selIndex = _ui.comboDbType->findText(type);
+	_ui.editDbConnection->setText(connection);
 	if ( selIndex != -1 ) {
 		_ui.comboDbType->setCurrentIndex(selIndex);
-		_ui.editDbConnection->setText(connection);
 		return true;
 	}
 	else {
 		_ui.comboDbType->setCurrentIndex(0);
-		_ui.editDbConnection->setText("");
 		return false;
 	}
 }
