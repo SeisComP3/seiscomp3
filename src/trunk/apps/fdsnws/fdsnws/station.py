@@ -230,6 +230,15 @@ class FDSNStation(resource.Resource):
 
 
 	#---------------------------------------------------------------------------
+	def render_OPTIONS(self, req):
+		req.setHeader('Access-Control-Allow-Origin', '*')
+		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Content-Type', 'text/plain')
+		return ""
+
+
+	#---------------------------------------------------------------------------
 	def render_GET(self, req):
 		# Parse and validate GET parameters
 		ro = _StationRequestOptions(req.args)
