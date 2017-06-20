@@ -149,7 +149,7 @@ StationConfig::read(const Seiscomp::Config::Config *config, const std::string &m
 
 	StreamConfig &sc = _stationConfigs[Key(net,sta)];
 	sc.updatable = true;
-	sc.locCode = loc;
+	sc.locationCode = loc;
 	sc.channel = cha;
 	sc.triggerOn = trigOn;
 	sc.triggerOff = trigOff;
@@ -225,7 +225,7 @@ void StationConfig::dump() const {
 		if ( it->second.channel.empty() )
 			streamID = it->first.first + "." + it->first.second;
 		else
-			streamID = it->first.first + "." + it->first.second + "." + it->second.locCode + "." + it->second.channel;
+			streamID = it->first.first + "." + it->first.second + "." + it->second.locationCode + "." + it->second.channel;
 		printf("%-16s", streamID.c_str());
 		if ( it->second.triggerOn )
 			printf("%.2f ", *it->second.triggerOn);
