@@ -124,8 +124,10 @@ class AppQuery : public Client::Application {
 
 		bool run() {
 			Config::Config queriesConf;
-			if ( !queriesConf.readConfig(Environment::Instance()->configDir() + "/queries.cfg") )
-				return false;
+			if ( !queriesConf.readConfig(Environment::Instance()->configDir() + "/queries.cfg") ) {
+				if ( !queriesConf.readConfig(Environment::Instance()->appConfigDir() + "/queries.cfg") )
+					return false;
+			}
 
 			if ( commandline().hasOption("showqueries") ) {
 				showQueries(queriesConf);
