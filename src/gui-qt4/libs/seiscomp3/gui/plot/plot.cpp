@@ -94,6 +94,8 @@ void Plot::draw(QPainter &p, const QRect &rect) {
 	QRect plotRect(rect);
 	plotRect.adjust(0,xAxis2Height,0,-xAxisHeight);
 
+	p.save();
+
 	// Draw axis
 	if ( yAxis->isVisible() ) {
 		QRect yAxisRect(plotRect.left(),plotRect.top(),0,plotRect.height());
@@ -122,21 +124,18 @@ void Plot::draw(QPainter &p, const QRect &rect) {
 	}
 
 	// Setup clipping
-	if ( yAxis->isVisible() )  plotRect.adjust( 1, 0, 0, 0);
-	if ( xAxis2->isVisible() ) plotRect.adjust( 0, 1, 0, 0);
-	if ( yAxis2->isVisible() ) plotRect.adjust( 0, 0,-1, 0);
-	if ( xAxis->isVisible() )  plotRect.adjust( 0, 0, 0,-1);
+	if ( yAxis->isVisible() )  plotRect.adjust( yAxis->pen().width(), 0, 0, 0);
+	if ( xAxis2->isVisible() )  plotRect.adjust( 0, xAxis2->pen().width(), 0, 0);
+	if ( yAxis2->isVisible() ) plotRect.adjust( 0, 0,-yAxis2->pen().width(), 0);
+	if ( xAxis->isVisible() ) plotRect.adjust( 0, 0, 0, -xAxis->pen().width());
 
-	p.save();
 	p.setClipRect(plotRect);
 
-	p.setPen(QColor(192,192,192));
 	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, plotRect, true, false);
 	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, plotRect, true, false);
 	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, plotRect, true, false);
 	if ( yAxis2->hasGrid() ) yAxis2->drawGrid(p, plotRect, true, false);
 
-	p.setPen(QColor(224,224,224));
 	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, plotRect, false, true);
 	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, plotRect, false, true);
 	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, plotRect, false, true);

@@ -41,6 +41,7 @@ namespace Core {
  "11.0.0"   0x0B0000
    - Remove dynamic type throw declarations from all methods as this is
      deprecated in current C++ standard
+   - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

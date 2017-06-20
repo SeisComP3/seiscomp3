@@ -79,6 +79,31 @@ class SC_GUI_API Axis : public QObject {
 		void setGrid(bool grid);
 		bool hasGrid() const;
 
+		/**
+		 * @brief Set the pen used to draw the axis, the ticks and the
+		 *        labels.
+		 * @param pen The pen
+		 */
+		void setPen(const QPen &pen);
+		const QPen &pen() const;
+
+		/**
+		 * @brief Set the pen used to draw the primary grid at ticks. The
+		 *        default is a solid pen with color (192,192,192) and line
+		 *        width 1.
+		 * @param pen The pen
+		 */
+		void setGridPen(const QPen &pen);
+		const QPen &gridPen() const;
+
+		/**
+		 * @brief Set the pen used to draw the grid at subticks. The default
+		 *        is a solid pen with color (224,224,224) and line width 1.
+		 * @param pen The pen
+		 */
+		void setSubGridPen(const QPen &pen);
+		const QPen &subGridPen() const;
+
 
 	// ----------------------------------------------------------------------
 	//  Render specific interface
@@ -142,7 +167,13 @@ class SC_GUI_API Axis : public QObject {
 	//  Members
 	// ----------------------------------------------------------------------
 	private:
-		typedef QPair<double,int> Tick;
+		struct Tick {
+			Tick() {}
+			Tick(double v, int rp, int ap) : value(v), relPos(rp), absPos(ap) {}
+			double value;
+			int    relPos;
+			int    absPos;
+		};
 
 		// Setup
 		bool          _visible;
@@ -168,6 +199,10 @@ class SC_GUI_API Axis : public QObject {
 		double        _tickStart;
 		QVector<Tick> _ticks;
 		QVector<Tick> _subTicks;
+
+		QPen          _penAxis;
+		QPen          _penGridTicks;
+		QPen          _penGridSubticks;
 };
 
 
@@ -234,6 +269,18 @@ inline bool Axis::logScale() const {
 
 inline double Axis::logBase() const {
 	return _logBase;
+}
+
+inline const QPen &Axis::pen() const {
+	return _penAxis;
+}
+
+inline const QPen &Axis::gridPen() const {
+	return _penGridTicks;
+}
+
+inline const QPen &Axis::subGridPen() const {
+	return _penGridSubticks;
 }
 
 

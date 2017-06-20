@@ -83,7 +83,7 @@ class SC_GUI_API Plot : public QObject {
 	protected:
 		typedef QList<Graph*> Graphs;
 
-		Graphs  _graphs;
+		Graphs _graphs;
 };
 
 

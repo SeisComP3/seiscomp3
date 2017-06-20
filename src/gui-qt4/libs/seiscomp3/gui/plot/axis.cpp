@@ -71,6 +71,14 @@ Axis::Axis(QObject *parent) : QObject(parent) {
 	_spacing = 6;
 	_logScale = false;
 	_logBase = 10;
+
+	_penGridTicks.setWidth(1);
+	_penGridTicks.setColor(QColor(192,192,192));
+	_penGridTicks.setStyle(Qt::SolidLine);
+
+	_penGridSubticks.setWidth(1);
+	_penGridSubticks.setColor(QColor(224,224,224));
+	_penGridSubticks.setStyle(Qt::SolidLine);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -270,7 +278,7 @@ void Axis::updateLayout(QPainter &painter, QRect &rect) {
 						int subTickPos = (int)((subS0-lowerRange)*scale);
 						if ( subTickPos < 0 ) break;
 						_transform.map(subTickPos, 0, &x0, &y0);
-						_subTicks.append(Tick(subS0, isHorizontal ? x0 : y0));
+						_subTicks.append(Tick(subS0, subTickPos, isHorizontal ? x0 : y0));
 					}
 				}
 
@@ -279,12 +287,12 @@ void Axis::updateLayout(QPainter &painter, QRect &rect) {
 					int subTickPos = (int)((subS0-lowerRange)*scale);
 					if ( subTickPos > _width ) continue;
 					_transform.map(subTickPos, 0, &x0, &y0);
-					_subTicks.append(Tick(subS0, isHorizontal ? x0 : y0));
+					_subTicks.append(Tick(subS0, subTickPos, isHorizontal ? x0 : y0));
 				}
 			}
 
 			_transform.map(tickPos, 0, &x0, &y0);
-			_ticks.append(Tick(s0, isHorizontal ? x0 : y0));
+			_ticks.append(Tick(s0, tickPos, isHorizontal ? x0 : y0));
 
 			s0 += _tickSpacing;
 			firstTick = false;
@@ -317,6 +325,8 @@ int Axis::sizeHint(QPainter &painter) const {
 void Axis::draw(QPainter &painter, const QRect &rect) {
 #if QT_VERSION >= 0x040300
 	if ( !_visible ) return;
+
+	painter.setPen(_penAxis);
 
 	int fontHeight = painter.fontMetrics().ascent();
 	int fontDescent = painter.fontMetrics().descent();
@@ -354,38 +364,17 @@ void Axis::draw(QPainter &painter, const QRect &rect) {
 	painter.drawLine(x0,y0,x1,y1);
 
 	if ( _tickSpacing > 0 ) {
-		bool firstTick = true;
-		double s0 = _tickStart;
 		double epsilon = _tickSpacing * 1E-2;
 
-		while ( s0 <= (_axisEndValue+epsilon) ) {
-			int tickPos = (int)((s0 - _axisStartValue) * _axisPixelScale);
-			if ( tickPos < 0 ) {
-				s0 += _tickSpacing;
-				continue;
-			}
+		for ( int i = 0; i < _subTicks.count(); ++i ) {
+			int subTickPos = _subTicks[i].relPos;
+			_transform.map(subTickPos, 0, &x0, &y0);
+			_transform.map(subTickPos, _tickLength/2, &x1, &y1);
+			painter.drawLine(x0,y0,x1,y1);
+		}
 
-			if ( _logScale ) {
-				if ( firstTick ) {
-					for ( int j = _logBase-1; j >= 2; --j ) {
-						double subS0 = s0-_tickSpacing+sLogBase(j, _logBase);
-						int subTickPos = (int)((subS0-_axisStartValue)*_axisPixelScale);
-						if ( subTickPos < 0 ) break;
-						_transform.map(subTickPos, 0, &x0, &y0);
-						_transform.map(subTickPos, _tickLength/2, &x1, &y1);
-						painter.drawLine(x0,y0,x1,y1);
-					}
-				}
-
-				for ( int j = 2; j < _logBase; ++j ) {
-					double subS0 = s0+sLogBase(j, _logBase);
-					int subTickPos = (int)((subS0-_axisStartValue)*_axisPixelScale);
-					if ( subTickPos > _width ) continue;
-					_transform.map(subTickPos, 0, &x0, &y0);
-					_transform.map(subTickPos, _tickLength/2, &x1, &y1);
-					painter.drawLine(x0,y0,x1,y1);
-				}
-			}
+		for ( int i = 0; i < _ticks.count(); ++i ) {
+			int tickPos = _ticks[i].relPos;
 
 			_transform.map(tickPos, 0, &x0, &y0);
 			_transform.map(tickPos, _tickLength, &x1, &y1);
@@ -395,7 +384,7 @@ void Axis::draw(QPainter &painter, const QRect &rect) {
 			_transform.map(tickPos, _tickLength + _spacing, &x0, &y0);
 
 			// Avoid zero is being displayed as -5.54523E-17
-			double value = s0;
+			double value = _ticks[i].value;
 			if ( fabs(value) < epsilon )
 				value = 0;
 
@@ -417,9 +406,6 @@ void Axis::draw(QPainter &painter, const QRect &rect) {
 				labelRect.moveTop(y0-labelRect.height()/2);
 
 			painter.drawText(labelRect, labelAlign, label);
-
-			s0 += _tickSpacing;
-			firstTick = false;
 		}
 	}
 
@@ -470,27 +456,39 @@ void Axis::drawGrid(QPainter &painter, const QRect &rect, bool ticks, bool subTi
 	if ( isHorizontal ) {
 		if ( ticks ) {
 			int c = _ticks.count();
-			for ( int i = 0; i < c; ++i )
-				painter.drawLine(_ticks[i].second, rect.top(), _ticks[i].second, rect.bottom());
+			painter.setPen(_penGridTicks);
+			for ( int i = 0; i < c; ++i ) {
+				if ( _ticks[i].absPos >= rect.left() && _ticks[i].absPos < rect.right() )
+					painter.drawLine(_ticks[i].absPos, rect.top(), _ticks[i].absPos, rect.bottom());
+			}
 		}
 
 		if ( subTicks ) {
 			int c = _subTicks.count();
-			for ( int i = 0; i < c; ++i )
-				painter.drawLine(_subTicks[i].second, rect.top(), _subTicks[i].second, rect.bottom());
+			painter.setPen(_penGridSubticks);
+			for ( int i = 0; i < c; ++i ) {
+				if ( _subTicks[i].absPos >= rect.left() && _subTicks[i].absPos < rect.right() )
+					painter.drawLine(_subTicks[i].absPos, rect.top(), _subTicks[i].absPos, rect.bottom());
+			}
 		}
 	}
 	else {
 		if ( ticks ) {
 			int c = _ticks.count();
-			for ( int i = 0; i < c; ++i )
-				painter.drawLine(rect.left(), _ticks[i].second, rect.right(), _ticks[i].second);
+			painter.setPen(_penGridTicks);
+			for ( int i = 0; i < c; ++i ) {
+				if ( _ticks[i].absPos >= rect.top() && _ticks[i].absPos < rect.bottom() )
+					painter.drawLine(rect.left(), _ticks[i].absPos, rect.right(), _ticks[i].absPos);
+			}
 		}
 
 		if ( subTicks ) {
 			int c = _subTicks.count();
-			for ( int i = 0; i < c; ++i )
-				painter.drawLine(rect.left(), _subTicks[i].second, rect.right(), _subTicks[i].second);
+			painter.setPen(_penGridSubticks);
+			for ( int i = 0; i < c; ++i ) {
+				if ( _subTicks[i].absPos >= rect.top() && _subTicks[i].absPos < rect.bottom() )
+					painter.drawLine(rect.left(), _subTicks[i].absPos, rect.right(), _subTicks[i].absPos);
+			}
 		}
 	}
 }
