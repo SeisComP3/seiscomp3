@@ -101,6 +101,12 @@
 						<parameter name="alignment" type="color" default="FF0000">
 							<description>The color of the alignment marker in trace views.</description>
 						</parameter>
+						<group name="states">
+							<parameter name="unrequested" default="00000080"/>
+							<parameter name="requested" default="ffff0080"/>
+							<parameter name="inprogress" default="00ff0010"/>
+							<parameter name="notAvailable" default="ff000080"/>
+						</group>
 					</group>
 
 					<group name="picks">
@@ -165,6 +171,12 @@
 					</group>
 
 					<group name="stations">
+						<parameter name="text" type="color" default="ffffff">
+							<description>The color of the station name.</description>
+						</parameter>
+						<parameter name="selected" type="color" default="4D4DB8">
+							<description>The color of a selected station.</description>
+						</parameter>
 						<parameter name="associated" type="color" default="82AD58">
 							<description>The color of associated stations (e.g. in scmv).</description>
 						</parameter>
@@ -345,6 +357,7 @@
 					</group>
 
 					<group name="originSymbol">
+						<parameter name="classic" type="boolean" default="false"/>
 						<group name="depth">
 							<parameter name="gradient" type="gradient" default="0:FF0000,50:ffA500,100:FFFF00,250:00FF00,600:0000FF">
 								<description>The depth gradient.</description>
@@ -406,36 +419,216 @@
 				</group>
 
 				<group name="fonts">
-					<parameter name="base" type="font">
+					<group name="base">
 						<description>
 							The general base font of an application. This overrides
 							the default Qt4 application font.
 						</description>
-					</parameter>
-					<parameter name="small" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="normal" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="large" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="highlight" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading1" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading2" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading3" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="cityLabels" type="font">
-						<description></description>
-					</parameter>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="smaller">
+						<description>
+							The smallest available font. If undefined the point size is 2 points smaller than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="normal">
+						<description>
+							The default text font. If undefined the point size is 2 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="large">
+						<description>
+							The largest text font. If undefined the point size is 6 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="highlight">
+						<description>
+							Font used to highlight text. If undefined it equals the normal font except for a bold font face.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading1">
+						<description>
+							The largest heading font. If undefined it uses a bold font face and a font size twice as large as the normal font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading2">
+						<description>
+							The second largest heading font. If undefined it uses a bold font face and a font size twice as large as the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading3">
+						<description>
+							The smallest heading font. If undefined it uses a bold font face and a font size 4 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="cityLabels">
+						<description>
+							Font used for city labels. If undefined it equals the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="splashVersion">
+						<description>
+							Font used for version string in the splash dialog shown at application startup. If undefined it equals the base font with a bold font face and a font size of 12.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="splashMessage">
+						<description>
+							Font used for the message text in the splash dialog shown at application startup. If undefined it equals the base font with a font size of 12.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
 				</group>
 
 				<group name="map">
@@ -490,6 +683,11 @@
 						<description>
 							SeisComP ships with the rectangular projection build in.
 							Other projections may be provided through plug-ins.
+						</description>
+					</parameter>
+					<parameter name="toBGR" type="boolean" default="false">
+						<description>
+							Converts map colors from RGB color scheme to BGR.
 						</description>
 					</parameter>
 				</group>
