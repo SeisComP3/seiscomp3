@@ -44,6 +44,13 @@
   * Added documentation section which allows to browse changelogs and
     documentations of installed modules
 
+* scautopick
+
+  * Added the option ```killPendingSPickers``` to configure whether to
+    terminate pending secondary processors if a new detection has been
+    found or not. The downside of disabling that is that two picks will
+    be possibly sent: a P and an S pick.
+
 * GUI
 
   * Fixed bug in map tilestore that caused custom tilestore implementations
