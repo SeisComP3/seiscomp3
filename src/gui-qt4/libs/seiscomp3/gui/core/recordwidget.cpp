@@ -2080,7 +2080,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QRect rect = event->rect();
 	QColor fg;
-	QColor bg = palette().color(backgroundRole());
+	QColor bg = SCScheme.colors.records.background;
 	QColor alignColor;
 
 	/*

@@ -13,6 +13,7 @@
 
 
 #define SEISCOMP_COMPONENT Gui::RecordView
+#include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/recordview.h>
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/core/recordsequence.h>
@@ -991,9 +992,9 @@ RecordViewItem* RecordView::addItem(const DataModel::WaveformStreamID& streamID,
 void RecordView::colorItem(RecordViewItem* item, int row) {
 	QPalette pal;
 	if ( (row % 2) && _alternatingColors )
-		item->setBackgroundColor(palette().color(QPalette::AlternateBase));
+		item->setBackgroundColor(SCScheme.colors.records.alternateBackground);
 	else
-		item->setBackgroundColor(palette().color(QPalette::Base));
+		item->setBackgroundColor(SCScheme.colors.records.background);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

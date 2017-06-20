@@ -83,6 +83,12 @@
 						<parameter name="alternateForeground" type="color" default="808080">
 							<description>A general trace color of the alternate trace (eg scheli).</description>
 						</parameter>
+						<parameter name="background" type="color">
+							<description>The general background color of records/traces.</description>
+						</parameter>
+						<parameter name="alternateBackground" type="color">
+							<description>A general background color of the alternate trace.</description>
+						</parameter>
 						<parameter name="spectrogram" type="color" default="000000">
 							<description>The trace color used on top of a spectrogram.</description>
 						</parameter>

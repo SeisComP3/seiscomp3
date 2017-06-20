@@ -205,6 +205,8 @@ Scheme::Colors::RecordStates::RecordStates() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Scheme::Colors::Records::Records() {
 	alignment = Qt::red;
+	background = SCApp->palette().base().color();
+	alternateBackground = SCApp->palette().alternateBase().color();
 	foreground = QColor(128, 128, 128);
 	alternateForeground = foreground;
 	spectrogram = Qt::black;
@@ -487,6 +489,8 @@ void Scheme::fetch() {
 	READ_COLOR(colors.splash.message);
 
 	READ_COLOR(colors.records.alignment);
+	READ_COLOR(colors.records.background);
+	READ_COLOR(colors.records.alternateBackground);
 	READ_COLOR(colors.records.foreground);
 	READ_COLOR(colors.records.alternateForeground);
 	READ_COLOR(colors.records.spectrogram);

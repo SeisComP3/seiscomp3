@@ -80,6 +80,8 @@ class SC_GUI_API Scheme {
 			struct Records {
 				Records();
 				QColor alignment;
+				QColor background;
+				QColor alternateBackground;
 				QColor foreground;
 				QColor alternateForeground;
 				QColor spectrogram;
