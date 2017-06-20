@@ -201,7 +201,7 @@ void FocalMechanism::setNodalPlanes(const OPT(NodalPlanes)& nodalPlanes) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-NodalPlanes& FocalMechanism::nodalPlanes() throw(Seiscomp::Core::ValueException) {
+NodalPlanes& FocalMechanism::nodalPlanes() {
 	if ( _nodalPlanes )
 		return *_nodalPlanes;
 	throw Seiscomp::Core::ValueException("FocalMechanism.nodalPlanes is not set");
@@ -212,7 +212,7 @@ NodalPlanes& FocalMechanism::nodalPlanes() throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const NodalPlanes& FocalMechanism::nodalPlanes() const throw(Seiscomp::Core::ValueException) {
+const NodalPlanes& FocalMechanism::nodalPlanes() const {
 	if ( _nodalPlanes )
 		return *_nodalPlanes;
 	throw Seiscomp::Core::ValueException("FocalMechanism.nodalPlanes is not set");
@@ -232,7 +232,7 @@ void FocalMechanism::setPrincipalAxes(const OPT(PrincipalAxes)& principalAxes) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PrincipalAxes& FocalMechanism::principalAxes() throw(Seiscomp::Core::ValueException) {
+PrincipalAxes& FocalMechanism::principalAxes() {
 	if ( _principalAxes )
 		return *_principalAxes;
 	throw Seiscomp::Core::ValueException("FocalMechanism.principalAxes is not set");
@@ -243,7 +243,7 @@ PrincipalAxes& FocalMechanism::principalAxes() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const PrincipalAxes& FocalMechanism::principalAxes() const throw(Seiscomp::Core::ValueException) {
+const PrincipalAxes& FocalMechanism::principalAxes() const {
 	if ( _principalAxes )
 		return *_principalAxes;
 	throw Seiscomp::Core::ValueException("FocalMechanism.principalAxes is not set");
@@ -263,7 +263,7 @@ void FocalMechanism::setAzimuthalGap(const OPT(double)& azimuthalGap) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double FocalMechanism::azimuthalGap() const throw(Seiscomp::Core::ValueException) {
+double FocalMechanism::azimuthalGap() const {
 	if ( _azimuthalGap )
 		return *_azimuthalGap;
 	throw Seiscomp::Core::ValueException("FocalMechanism.azimuthalGap is not set");
@@ -283,7 +283,7 @@ void FocalMechanism::setStationPolarityCount(const OPT(int)& stationPolarityCoun
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int FocalMechanism::stationPolarityCount() const throw(Seiscomp::Core::ValueException) {
+int FocalMechanism::stationPolarityCount() const {
 	if ( _stationPolarityCount )
 		return *_stationPolarityCount;
 	throw Seiscomp::Core::ValueException("FocalMechanism.stationPolarityCount is not set");
@@ -303,7 +303,7 @@ void FocalMechanism::setMisfit(const OPT(double)& misfit) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double FocalMechanism::misfit() const throw(Seiscomp::Core::ValueException) {
+double FocalMechanism::misfit() const {
 	if ( _misfit )
 		return *_misfit;
 	throw Seiscomp::Core::ValueException("FocalMechanism.misfit is not set");
@@ -323,7 +323,7 @@ void FocalMechanism::setStationDistributionRatio(const OPT(double)& stationDistr
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double FocalMechanism::stationDistributionRatio() const throw(Seiscomp::Core::ValueException) {
+double FocalMechanism::stationDistributionRatio() const {
 	if ( _stationDistributionRatio )
 		return *_stationDistributionRatio;
 	throw Seiscomp::Core::ValueException("FocalMechanism.stationDistributionRatio is not set");
@@ -361,7 +361,7 @@ void FocalMechanism::setEvaluationMode(const OPT(EvaluationMode)& evaluationMode
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationMode FocalMechanism::evaluationMode() const throw(Seiscomp::Core::ValueException) {
+EvaluationMode FocalMechanism::evaluationMode() const {
 	if ( _evaluationMode )
 		return *_evaluationMode;
 	throw Seiscomp::Core::ValueException("FocalMechanism.evaluationMode is not set");
@@ -381,7 +381,7 @@ void FocalMechanism::setEvaluationStatus(const OPT(EvaluationStatus)& evaluation
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationStatus FocalMechanism::evaluationStatus() const throw(Seiscomp::Core::ValueException) {
+EvaluationStatus FocalMechanism::evaluationStatus() const {
 	if ( _evaluationStatus )
 		return *_evaluationStatus;
 	throw Seiscomp::Core::ValueException("FocalMechanism.evaluationStatus is not set");
@@ -401,7 +401,7 @@ void FocalMechanism::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& FocalMechanism::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& FocalMechanism::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("FocalMechanism.creationInfo is not set");
@@ -412,7 +412,7 @@ CreationInfo& FocalMechanism::creationInfo() throw(Seiscomp::Core::ValueExceptio
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& FocalMechanism::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& FocalMechanism::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("FocalMechanism.creationInfo is not set");

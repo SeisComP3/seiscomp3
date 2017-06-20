@@ -72,7 +72,7 @@ Inventory* Inventory::Instance() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::load(const char *filename) throw(std::exception) {
+void Inventory::load(const char *filename) {
 	IO::XMLArchive ar;
 
 	if ( !ar.open(filename) )
@@ -470,8 +470,7 @@ Inventory::getThreeComponents(const std::string& networkCode,
                               const std::string& stationCode,
                               const std::string& locationCode,
                               const std::string& channelCode,
-                              const Core::Time &time) const
-                              throw(Core::ValueException) {
+                              const Core::Time &time) const {
 	DataModel::SensorLocation *loc = getSensorLocation(networkCode, stationCode, locationCode, time);
 	if ( loc == NULL )
 		throw Core::ValueException("sensor location not found");
@@ -571,8 +570,7 @@ DataModel::SensorLocation* Inventory::getSensorLocation(const DataModel::Pick *p
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const
-throw(Core::ValueException) {
+DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const {
 	DataModel::SensorLocation *loc = getSensorLocation(pick);
 	if ( loc == NULL )
 		throw Core::ValueException("sensor location not found");
@@ -595,7 +593,7 @@ double Inventory::getGain(const std::string& networkCode,
                           const std::string& stationCode,
                           const std::string& locationCode,
                           const std::string& channelCode,
-                          const Core::Time& t) throw(Core::ValueException) {
+                          const Core::Time& t) {
 	if ( channelCode.size() != 3 )
 		throw Core::ValueException("invalid channel code");
 

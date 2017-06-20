@@ -141,7 +141,7 @@ int LocSAT::capabilities() const {
 
 DataModel::Origin* LocSAT::locate(PickList& pickList,
                                   double initLat, double initLon, double initDepth,
-                                  const Core::Time &initTime) throw(Core::GeneralException) {
+                                  const Core::Time &initTime) {
 	if (_locateEvent) delete _locateEvent;
 	_locateEvent = new Internal::LocSAT;
 	_locateEvent->setOrigin(initLat, initLon, initDepth);
@@ -156,7 +156,7 @@ DataModel::Origin* LocSAT::locate(PickList& pickList,
 }
 
 
-DataModel::Origin* LocSAT::locate(PickList& picks) throw(Core::GeneralException) {
+DataModel::Origin* LocSAT::locate(PickList& picks) {
 	if (_locateEvent) delete _locateEvent;
 	_locateEvent = new Internal::LocSAT;
 	_locateEvent->setOrigin(0.0, 0.0, 0.0);
@@ -388,7 +388,7 @@ DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin, double time
 }
 
 
-DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) throw(Core::GeneralException) {
+DataModel::Origin* LocSAT::relocate(const DataModel::Origin* origin) {
 	DataModel::Origin* o = relocate(origin, ARRIVAL_TIME_ERROR);
 	if ( o && _useArrivalRMSAsTimeError ) {
 		double sig = 0.0;

@@ -61,7 +61,7 @@ public:
     bool setEndTime(const Seiscomp::Core::Time &etime);
     bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
     bool setTimeout(int seconds);
-    std::istream& stream() throw(ArchiveException);
+    std::istream& stream();
     void close();
     std::string archiveRoot() const;
 		

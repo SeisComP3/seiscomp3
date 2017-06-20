@@ -705,7 +705,7 @@ bool AmplitudeProcessor::setup(const Settings &settings) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void AmplitudeProcessor::setTrigger(const Core::Time& trigger) throw(Core::ValueException) {
+void AmplitudeProcessor::setTrigger(const Core::Time& trigger) {
 	if ( _trigger )
 		throw Core::ValueException("The trigger has been set already");
 

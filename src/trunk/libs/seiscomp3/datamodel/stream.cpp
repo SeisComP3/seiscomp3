@@ -225,7 +225,7 @@ void Stream::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Stream::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Stream::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Stream.end is not set");
@@ -281,7 +281,7 @@ void Stream::setDataloggerChannel(const OPT(int)& dataloggerChannel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::dataloggerChannel() const throw(Seiscomp::Core::ValueException) {
+int Stream::dataloggerChannel() const {
 	if ( _dataloggerChannel )
 		return *_dataloggerChannel;
 	throw Seiscomp::Core::ValueException("Stream.dataloggerChannel is not set");
@@ -337,7 +337,7 @@ void Stream::setSensorChannel(const OPT(int)& sensorChannel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sensorChannel() const throw(Seiscomp::Core::ValueException) {
+int Stream::sensorChannel() const {
 	if ( _sensorChannel )
 		return *_sensorChannel;
 	throw Seiscomp::Core::ValueException("Stream.sensorChannel is not set");
@@ -375,7 +375,7 @@ void Stream::setSampleRateNumerator(const OPT(int)& sampleRateNumerator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sampleRateNumerator() const throw(Seiscomp::Core::ValueException) {
+int Stream::sampleRateNumerator() const {
 	if ( _sampleRateNumerator )
 		return *_sampleRateNumerator;
 	throw Seiscomp::Core::ValueException("Stream.sampleRateNumerator is not set");
@@ -395,7 +395,7 @@ void Stream::setSampleRateDenominator(const OPT(int)& sampleRateDenominator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sampleRateDenominator() const throw(Seiscomp::Core::ValueException) {
+int Stream::sampleRateDenominator() const {
 	if ( _sampleRateDenominator )
 		return *_sampleRateDenominator;
 	throw Seiscomp::Core::ValueException("Stream.sampleRateDenominator is not set");
@@ -415,7 +415,7 @@ void Stream::setDepth(const OPT(double)& depth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::depth() const throw(Seiscomp::Core::ValueException) {
+double Stream::depth() const {
 	if ( _depth )
 		return *_depth;
 	throw Seiscomp::Core::ValueException("Stream.depth is not set");
@@ -435,7 +435,7 @@ void Stream::setAzimuth(const OPT(double)& azimuth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::azimuth() const throw(Seiscomp::Core::ValueException) {
+double Stream::azimuth() const {
 	if ( _azimuth )
 		return *_azimuth;
 	throw Seiscomp::Core::ValueException("Stream.azimuth is not set");
@@ -455,7 +455,7 @@ void Stream::setDip(const OPT(double)& dip) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::dip() const throw(Seiscomp::Core::ValueException) {
+double Stream::dip() const {
 	if ( _dip )
 		return *_dip;
 	throw Seiscomp::Core::ValueException("Stream.dip is not set");
@@ -475,7 +475,7 @@ void Stream::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::gain() const throw(Seiscomp::Core::ValueException) {
+double Stream::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("Stream.gain is not set");
@@ -495,7 +495,7 @@ void Stream::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double Stream::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("Stream.gainFrequency is not set");
@@ -569,7 +569,7 @@ void Stream::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Stream::restricted() const throw(Seiscomp::Core::ValueException) {
+bool Stream::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("Stream.restricted is not set");
@@ -589,7 +589,7 @@ void Stream::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Stream::shared() const throw(Seiscomp::Core::ValueException) {
+bool Stream::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("Stream.shared is not set");

@@ -303,7 +303,7 @@ const Array* MSeedRecord::raw() const {
 	return &_raw;
 }
 
-const Array* MSeedRecord::data() const throw(LibmseedException) {
+const Array* MSeedRecord::data() const {
     if (_raw.data() && (!_data || _datatype != _data->dataType())) {
         _setDataAttributes(_reclen,(char *)_raw.data());
     }
@@ -311,7 +311,7 @@ const Array* MSeedRecord::data() const throw(LibmseedException) {
     return _data.get();
 }
 
-void MSeedRecord::_setDataAttributes(int reclen, char *data) const throw(LibmseedException) {
+void MSeedRecord::_setDataAttributes(int reclen, char *data) const {
 	MSRecord *pmsr = NULL;
 
 	if (data) {
@@ -370,7 +370,7 @@ bool _isHeader(const char *header) {
 	  (*(header+7) == ' ' || *(header+7) == '\0'));
 }
 
-void MSeedRecord::read(std::istream &is) throw(Core::StreamException) {
+void MSeedRecord::read(std::istream &is) {
 	int reclen = -1;
 	int pos = is.tellg();
 	MSRecord *prec = NULL;
@@ -453,7 +453,7 @@ void MSeedRecord::read(std::istream &is) throw(Core::StreamException) {
 }
 
 
-void MSeedRecord::write(std::ostream& out) throw(Core::StreamException) {
+void MSeedRecord::write(std::ostream& out) {
 	if (!_data) {
 		if (!_raw.data())
 			throw Core::StreamException("No writable data found");

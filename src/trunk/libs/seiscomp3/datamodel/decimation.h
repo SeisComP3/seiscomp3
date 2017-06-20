@@ -119,15 +119,15 @@ class SC_SYSTEM_CORE_API Decimation : public Object {
 		//! digitizer. Each element (separated by space) references
 		//! responsePAZ/@publicID
 		void setAnalogueFilterChain(const OPT(Blob)& analogueFilterChain);
-		Blob& analogueFilterChain() throw(Seiscomp::Core::ValueException);
-		const Blob& analogueFilterChain() const throw(Seiscomp::Core::ValueException);
+		Blob& analogueFilterChain();
+		const Blob& analogueFilterChain() const;
 
 		//! Specifies digital filters (decimation, gain removal). Each
 		//! element (separated by space) references
 		//! responsePAZ@publicID or responseFIR/@publicID
 		void setDigitalFilterChain(const OPT(Blob)& digitalFilterChain);
-		Blob& digitalFilterChain() throw(Seiscomp::Core::ValueException);
-		const Blob& digitalFilterChain() const throw(Seiscomp::Core::ValueException);
+		Blob& digitalFilterChain();
+		const Blob& digitalFilterChain() const;
 
 
 	// ------------------------------------------------------------------

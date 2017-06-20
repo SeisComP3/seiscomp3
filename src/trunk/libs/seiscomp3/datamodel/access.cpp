@@ -279,7 +279,7 @@ void Access::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Access::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Access::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Access.end is not set");

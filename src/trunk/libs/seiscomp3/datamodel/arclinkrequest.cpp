@@ -426,7 +426,7 @@ void ArclinkRequest::setSummary(const OPT(ArclinkRequestSummary)& summary) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ArclinkRequestSummary& ArclinkRequest::summary() throw(Seiscomp::Core::ValueException) {
+ArclinkRequestSummary& ArclinkRequest::summary() {
 	if ( _summary )
 		return *_summary;
 	throw Seiscomp::Core::ValueException("ArclinkRequest.summary is not set");
@@ -437,7 +437,7 @@ ArclinkRequestSummary& ArclinkRequest::summary() throw(Seiscomp::Core::ValueExce
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ArclinkRequestSummary& ArclinkRequest::summary() const throw(Seiscomp::Core::ValueException) {
+const ArclinkRequestSummary& ArclinkRequest::summary() const {
 	if ( _summary )
 		return *_summary;
 	throw Seiscomp::Core::ValueException("ArclinkRequest.summary is not set");

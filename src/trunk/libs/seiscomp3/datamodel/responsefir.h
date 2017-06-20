@@ -131,23 +131,23 @@ class SC_SYSTEM_CORE_API ResponseFIR : public PublicObject {
 
 		//! Gain of response (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Decimation factor (47.06/57.05)
 		void setDecimationFactor(const OPT(int)& decimationFactor);
-		int decimationFactor() const throw(Seiscomp::Core::ValueException);
+		int decimationFactor() const;
 
 		//! Estimated delay (47.08/57.07)
 		void setDelay(const OPT(double)& delay);
-		double delay() const throw(Seiscomp::Core::ValueException);
+		double delay() const;
 
 		//! Applied correction (47.09/57.08)
 		void setCorrection(const OPT(double)& correction);
-		double correction() const throw(Seiscomp::Core::ValueException);
+		double correction() const;
 
 		//! Number of coefficients (41.08/61.08)
 		void setNumberOfCoefficients(const OPT(int)& numberOfCoefficients);
-		int numberOfCoefficients() const throw(Seiscomp::Core::ValueException);
+		int numberOfCoefficients() const;
 
 		//! Symmetry code (41.05/61.05)
 		void setSymmetry(const std::string& symmetry);
@@ -155,12 +155,12 @@ class SC_SYSTEM_CORE_API ResponseFIR : public PublicObject {
 
 		//! Coefficients normalized to gain=1.0 (41.09/61.09)
 		void setCoefficients(const OPT(RealArray)& coefficients);
-		RealArray& coefficients() throw(Seiscomp::Core::ValueException);
-		const RealArray& coefficients() const throw(Seiscomp::Core::ValueException);
+		RealArray& coefficients();
+		const RealArray& coefficients() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

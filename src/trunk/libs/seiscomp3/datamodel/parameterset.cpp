@@ -197,7 +197,7 @@ void ParameterSet::setCreated(const OPT(Seiscomp::Core::Time)& created) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time ParameterSet::created() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time ParameterSet::created() const {
 	if ( _created )
 		return *_created;
 	throw Seiscomp::Core::ValueException("ParameterSet.created is not set");

@@ -47,7 +47,7 @@ class DecimatedRecord : public GenericRecord {
 
 		// Read is just a converter. Nothing is actually read from a stream
 		// because nothing is written to a stream
-		void read(std::istream &in) throw(Core::StreamException) {
+		void read(std::istream &in) {
 			if ( data()->dataType() == _datatype ) return;
 			setData(data()->copy(_datatype));
 		}

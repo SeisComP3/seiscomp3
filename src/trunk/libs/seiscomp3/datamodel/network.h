@@ -143,7 +143,7 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 
 		//! End of station epoch. Empty string if the station is open
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Network description (50.10)
 		void setDescription(const std::string& description);
@@ -171,16 +171,16 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 
 		//! Whether the network is "restricted"
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		//! Whether the metadata is synchronized with other datacenters
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 		//! Any notes
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

@@ -85,11 +85,11 @@ class SC_SYSTEM_CORE_API SourceTimeFunction : public Core::BaseObject {
 
 		//! Source time function rise time in seconds.
 		void setRiseTime(const OPT(double)& riseTime);
-		double riseTime() const throw(Seiscomp::Core::ValueException);
+		double riseTime() const;
 
 		//! Source time function decay time in seconds.
 		void setDecayTime(const OPT(double)& decayTime);
-		double decayTime() const throw(Seiscomp::Core::ValueException);
+		double decayTime() const;
 
 
 	// ------------------------------------------------------------------

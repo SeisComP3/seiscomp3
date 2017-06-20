@@ -217,7 +217,7 @@ void SensorCalibration::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time SensorCalibration::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time SensorCalibration::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("SensorCalibration.end is not set");
@@ -237,7 +237,7 @@ void SensorCalibration::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorCalibration::gain() const throw(Seiscomp::Core::ValueException) {
+double SensorCalibration::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("SensorCalibration.gain is not set");
@@ -257,7 +257,7 @@ void SensorCalibration::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorCalibration::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double SensorCalibration::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("SensorCalibration.gainFrequency is not set");
@@ -277,7 +277,7 @@ void SensorCalibration::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& SensorCalibration::remark() throw(Seiscomp::Core::ValueException) {
+Blob& SensorCalibration::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("SensorCalibration.remark is not set");
@@ -288,7 +288,7 @@ Blob& SensorCalibration::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& SensorCalibration::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& SensorCalibration::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("SensorCalibration.remark is not set");

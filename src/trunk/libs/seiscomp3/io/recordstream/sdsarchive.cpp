@@ -351,7 +351,7 @@ bool SDSArchive::isEnd() {
 	return false;
 }
 
-istream& SDSArchive::stream() throw(ArchiveException) {  
+istream& SDSArchive::stream() {
 	if ( _recstream ) {
 		/* eof check: try to read from stream */
 		istream &tmpstream = _recstream->stream();

@@ -245,7 +245,7 @@ void ResponsePAZ::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::gain() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.gain is not set");
@@ -265,7 +265,7 @@ void ResponsePAZ::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.gainFrequency is not set");
@@ -285,7 +285,7 @@ void ResponsePAZ::setNormalizationFactor(const OPT(double)& normalizationFactor)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFactor() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::normalizationFactor() const {
 	if ( _normalizationFactor )
 		return *_normalizationFactor;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.normalizationFactor is not set");
@@ -305,7 +305,7 @@ void ResponsePAZ::setNormalizationFrequency(const OPT(double)& normalizationFreq
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::normalizationFrequency() const {
 	if ( _normalizationFrequency )
 		return *_normalizationFrequency;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.normalizationFrequency is not set");
@@ -325,7 +325,7 @@ void ResponsePAZ::setNumberOfZeros(const OPT(int)& numberOfZeros) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponsePAZ::numberOfZeros() const throw(Seiscomp::Core::ValueException) {
+int ResponsePAZ::numberOfZeros() const {
 	if ( _numberOfZeros )
 		return *_numberOfZeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.numberOfZeros is not set");
@@ -345,7 +345,7 @@ void ResponsePAZ::setNumberOfPoles(const OPT(int)& numberOfPoles) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponsePAZ::numberOfPoles() const throw(Seiscomp::Core::ValueException) {
+int ResponsePAZ::numberOfPoles() const {
 	if ( _numberOfPoles )
 		return *_numberOfPoles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.numberOfPoles is not set");
@@ -365,7 +365,7 @@ void ResponsePAZ::setZeros(const OPT(ComplexArray)& zeros) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ComplexArray& ResponsePAZ::zeros() throw(Seiscomp::Core::ValueException) {
+ComplexArray& ResponsePAZ::zeros() {
 	if ( _zeros )
 		return *_zeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.zeros is not set");
@@ -376,7 +376,7 @@ ComplexArray& ResponsePAZ::zeros() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ComplexArray& ResponsePAZ::zeros() const throw(Seiscomp::Core::ValueException) {
+const ComplexArray& ResponsePAZ::zeros() const {
 	if ( _zeros )
 		return *_zeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.zeros is not set");
@@ -396,7 +396,7 @@ void ResponsePAZ::setPoles(const OPT(ComplexArray)& poles) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ComplexArray& ResponsePAZ::poles() throw(Seiscomp::Core::ValueException) {
+ComplexArray& ResponsePAZ::poles() {
 	if ( _poles )
 		return *_poles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.poles is not set");
@@ -407,7 +407,7 @@ ComplexArray& ResponsePAZ::poles() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ComplexArray& ResponsePAZ::poles() const throw(Seiscomp::Core::ValueException) {
+const ComplexArray& ResponsePAZ::poles() const {
 	if ( _poles )
 		return *_poles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.poles is not set");
@@ -427,7 +427,7 @@ void ResponsePAZ::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& ResponsePAZ::remark() throw(Seiscomp::Core::ValueException) {
+Blob& ResponsePAZ::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.remark is not set");
@@ -438,7 +438,7 @@ Blob& ResponsePAZ::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& ResponsePAZ::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& ResponsePAZ::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.remark is not set");

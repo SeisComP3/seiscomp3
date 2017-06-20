@@ -25,28 +25,28 @@ namespace Processing {
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorTiming, QcProcessor, "QcProcessorTiming");
 
 
-QcProcessorTiming::QcProcessorTiming() 
-    : QcProcessor() {}
+QcProcessorTiming::QcProcessorTiming() : QcProcessor() {}
 
 bool QcProcessorTiming::setState(const Record *record, const DoubleArray &data) {
-// #ifdef HAVE_MSEED
-    const IO::MSeedRecord* mrec = IO::MSeedRecord::ConstCast(record);
-    if (mrec) {
-        if ((double)mrec->timingQuality() != -1) {
-            _qcp->parameter = (double)mrec->timingQuality();
-            return true;
-        }
-    }
-// #endif
-    return false;
+	const IO::MSeedRecord *mrec = IO::MSeedRecord::ConstCast(record);
+
+	if ( mrec != NULL ) {
+		if ((double)mrec->timingQuality() != -1) {
+			_qcp->parameter = (double)mrec->timingQuality();
+			return true;
+		}
+	}
+
+	return false;
 }
 
-double QcProcessorTiming::getTiming() throw (Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+double QcProcessorTiming::getTiming() {
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch (const boost::bad_any_cast &) {
+		throw Core::ValueException("no data");
+	}
 }
 
 

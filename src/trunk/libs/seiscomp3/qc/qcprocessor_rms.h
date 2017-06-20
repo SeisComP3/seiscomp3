@@ -25,12 +25,12 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorRms);
 
 class SC_SYSTEM_CLIENT_API QcProcessorRms : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorRms);
+	DECLARE_SC_CLASS(QcProcessorRms);
 
-public:
-    QcProcessorRms();
-    double getRms() throw (Core::ValueException);
-    bool setState(const Record* record, const DoubleArray& data);
+	public:
+		QcProcessorRms();
+		double getRms();
+		bool setState(const Record* record, const DoubleArray& data);
 };
 
 

@@ -251,7 +251,7 @@ bool ODCArchive::isEnd() {
 	return false;
 }
 
-istream& ODCArchive::stream() throw(ArchiveException) {
+istream& ODCArchive::stream() {
 	if (_recstream) {
 		/* eof check: try to read from stream */
 		istream &tmpstream = _recstream->stream();

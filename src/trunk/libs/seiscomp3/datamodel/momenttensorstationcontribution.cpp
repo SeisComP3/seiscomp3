@@ -177,7 +177,7 @@ void MomentTensorStationContribution::setWaveformID(const OPT(WaveformStreamID)&
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-WaveformStreamID& MomentTensorStationContribution::waveformID() throw(Seiscomp::Core::ValueException) {
+WaveformStreamID& MomentTensorStationContribution::waveformID() {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("MomentTensorStationContribution.waveformID is not set");
@@ -188,7 +188,7 @@ WaveformStreamID& MomentTensorStationContribution::waveformID() throw(Seiscomp::
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const WaveformStreamID& MomentTensorStationContribution::waveformID() const throw(Seiscomp::Core::ValueException) {
+const WaveformStreamID& MomentTensorStationContribution::waveformID() const {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("MomentTensorStationContribution.waveformID is not set");
@@ -208,7 +208,7 @@ void MomentTensorStationContribution::setWeight(const OPT(double)& weight) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorStationContribution::weight() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorStationContribution::weight() const {
 	if ( _weight )
 		return *_weight;
 	throw Seiscomp::Core::ValueException("MomentTensorStationContribution.weight is not set");
@@ -228,7 +228,7 @@ void MomentTensorStationContribution::setTimeShift(const OPT(double)& timeShift)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorStationContribution::timeShift() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorStationContribution::timeShift() const {
 	if ( _timeShift )
 		return *_timeShift;
 	throw Seiscomp::Core::ValueException("MomentTensorStationContribution.timeShift is not set");

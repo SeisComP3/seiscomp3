@@ -201,7 +201,7 @@ TravelTimeList *LibTau::compute(double lat1, double lon1, double dep1,
 }
 
 
-TravelTime LibTau::computeFirst(double delta, double depth) throw(std::exception) {
+TravelTime LibTau::computeFirst(double delta, double depth) {
 	int n;
 	char ph[1000], *phase[100];
 	float time[100], p[100], dtdd[100], dtdh[100], dddp[100], vp, vs;
@@ -229,7 +229,7 @@ TravelTime LibTau::computeFirst(double delta, double depth) throw(std::exception
 
 TravelTime LibTau::computeFirst(double lat1, double lon1, double dep1,
                                 double lat2, double lon2, double alt2,
-                                int ellc) throw(std::exception) {
+                                int ellc) {
 	if ( !_initialized ) setModel("iasp91");
 
 	double delta, azi1, azi2;

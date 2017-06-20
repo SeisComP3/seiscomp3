@@ -69,14 +69,11 @@ class NLLocator : public Seiscomp::Seismology::LocatorInterface {
 
 		virtual int capabilities() const;
 
-		virtual DataModel::Origin* locate(PickList& pickList)
-		        throw(Core::GeneralException);
+		virtual DataModel::Origin* locate(PickList& pickList);
 		virtual DataModel::Origin* locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  const Core::Time &initTime)
-		        throw(Core::GeneralException);
-		virtual DataModel::Origin* relocate(const DataModel::Origin* origin)
-		        throw(Core::GeneralException);
+		                                  const Core::Time &initTime);
+		virtual DataModel::Origin* relocate(const DataModel::Origin* origin);
 
 		virtual std::string lastMessage(MessageType) const;
 

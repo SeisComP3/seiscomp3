@@ -1204,7 +1204,7 @@ std::string Application::argumentStr(const std::string& query) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Application::configGetInt(const std::string& query) const throw(Config::Exception) {
+int Application::configGetInt(const std::string& query) const {
 	try {
 		return atoi(argumentStr(query).c_str());
 	}
@@ -1218,7 +1218,7 @@ int Application::configGetInt(const std::string& query) const throw(Config::Exce
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Application::configGetDouble(const std::string& query) const throw(Config::Exception) {
+double Application::configGetDouble(const std::string& query) const {
 	try {
 		return atof(argumentStr(query).c_str());
 	}
@@ -1232,7 +1232,7 @@ double Application::configGetDouble(const std::string& query) const throw(Config
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Application::configGetBool(const std::string& query) const throw(Config::Exception) {
+bool Application::configGetBool(const std::string& query) const {
 	try {
 		return argumentStr(query) == "true";
 	}
@@ -1246,7 +1246,7 @@ bool Application::configGetBool(const std::string& query) const throw(Config::Ex
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string Application::configGetString(const std::string& query) const throw(Config::Exception) {
+std::string Application::configGetString(const std::string& query) const {
 	try {
 		return argumentStr(query);
 	}
@@ -1260,7 +1260,7 @@ std::string Application::configGetString(const std::string& query) const throw(C
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string Application::configGetPath(const std::string& query) const throw(Config::Exception) {
+std::string Application::configGetPath(const std::string& query) const {
 	try {
 		return Environment::Instance()->absolutePath(argumentStr(query));
 	}
@@ -1274,7 +1274,7 @@ std::string Application::configGetPath(const std::string& query) const throw(Con
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<int> Application::configGetInts(const std::string& query) const throw(Config::Exception) {
+std::vector<int> Application::configGetInts(const std::string& query) const {
 	return _configuration.getInts(query);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1283,7 +1283,7 @@ std::vector<int> Application::configGetInts(const std::string& query) const thro
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<double> Application::configGetDoubles(const std::string& query) const throw(Config::Exception) {
+std::vector<double> Application::configGetDoubles(const std::string& query) const {
 	return _configuration.getDoubles(query);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1292,7 +1292,7 @@ std::vector<double> Application::configGetDoubles(const std::string& query) cons
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<bool> Application::configGetBools(const std::string& query) const throw(Config::Exception) {
+std::vector<bool> Application::configGetBools(const std::string& query) const {
 	return _configuration.getBools(query);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1301,7 +1301,7 @@ std::vector<bool> Application::configGetBools(const std::string& query) const th
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<std::string> Application::configGetStrings(const std::string& query) const throw(Config::Exception) {
+std::vector<std::string> Application::configGetStrings(const std::string& query) const {
 	try {
 		std::string param = argumentStr(query);
 		std::vector<std::string> tmp;

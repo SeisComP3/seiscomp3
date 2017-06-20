@@ -654,7 +654,7 @@ const string Hypo71::getPickPolarity(const PickList& pickList,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string
 Hypo71::formatString(string toFormat, const size_t& nb, const size_t& pos,
-                     const string& sender) throw (Core::GeneralException) {
+                     const string& sender) throw() {
 
 	if ( toFormat.size() > nb ) {
 		SEISCOMP_ERROR("%s Can't format string %s : length(%d) > length(%d) [sender: %s]",
@@ -824,7 +824,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
+Origin* Hypo71::locate(PickList& pickList) throw() {
 
 	ofstream log(_logFile.c_str(), ios::app);
 
@@ -2232,7 +2232,7 @@ Origin* Hypo71::locate(PickList& pickList) throw (Core::GeneralException) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const string
-Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
+Hypo71::getZTR(const PickList& pickList) throw() {
 
 	vector<string> Tvelocity;
 	vector<string> Tdepth;
@@ -3052,7 +3052,7 @@ Hypo71::getZTR(const PickList& pickList) throw (Core::GeneralException) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
                        double initDepth,
-                       const Time &initTime) throw (Core::GeneralException) {
+                       const Time &initTime) throw() {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -3061,7 +3061,7 @@ Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* Hypo71::relocate(const Origin* origin) throw (Core::GeneralException) {
+Origin* Hypo71::relocate(const Origin* origin) throw() {
 
 	if ( !origin )
 		throw LocatorException("Initial origin is a NULL object. Nothing to do.");

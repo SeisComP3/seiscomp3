@@ -166,8 +166,8 @@ class SC_SYSTEM_CORE_API ArclinkRequest : public PublicObject {
 		const std::string& header() const;
 
 		void setSummary(const OPT(ArclinkRequestSummary)& summary);
-		ArclinkRequestSummary& summary() throw(Seiscomp::Core::ValueException);
-		const ArclinkRequestSummary& summary() const throw(Seiscomp::Core::ValueException);
+		ArclinkRequestSummary& summary();
+		const ArclinkRequestSummary& summary() const;
 
 
 	// ------------------------------------------------------------------

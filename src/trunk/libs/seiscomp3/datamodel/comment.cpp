@@ -193,7 +193,7 @@ void Comment::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Comment::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Comment::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Comment.creationInfo is not set");
@@ -204,7 +204,7 @@ CreationInfo& Comment::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Comment::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Comment::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Comment.creationInfo is not set");

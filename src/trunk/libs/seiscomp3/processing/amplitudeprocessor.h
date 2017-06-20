@@ -225,7 +225,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor : public TimeWindowProcessor {
 		//! Sets the trigger used to compute the timewindow to calculate
 		//! the amplitude
 		//! Once a trigger has been set all succeeding calls will fail.
-		virtual void setTrigger(const Core::Time& trigger) throw(Core::ValueException);
+		virtual void setTrigger(const Core::Time& trigger);
 
 		Core::Time trigger() const;
 

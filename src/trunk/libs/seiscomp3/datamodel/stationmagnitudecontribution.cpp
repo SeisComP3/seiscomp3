@@ -189,7 +189,7 @@ void StationMagnitudeContribution::setResidual(const OPT(double)& residual) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationMagnitudeContribution::residual() const throw(Seiscomp::Core::ValueException) {
+double StationMagnitudeContribution::residual() const {
 	if ( _residual )
 		return *_residual;
 	throw Seiscomp::Core::ValueException("StationMagnitudeContribution.residual is not set");
@@ -209,7 +209,7 @@ void StationMagnitudeContribution::setWeight(const OPT(double)& weight) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationMagnitudeContribution::weight() const throw(Seiscomp::Core::ValueException) {
+double StationMagnitudeContribution::weight() const {
 	if ( _weight )
 		return *_weight;
 	throw Seiscomp::Core::ValueException("StationMagnitudeContribution.weight is not set");

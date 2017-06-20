@@ -35,7 +35,7 @@ class EnumPropertyBase<T, U, F1, F2, 0> : public Core::MetaProperty {
 		EnumPropertyBase(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(Core::BaseObject *object, Core::MetaValue value) const throw(Core::GeneralException) {
+		bool write(Core::BaseObject *object, Core::MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 			U tmp;
@@ -46,7 +46,7 @@ class EnumPropertyBase<T, U, F1, F2, 0> : public Core::MetaProperty {
 			return true;
 		}
 
-		bool writeString(Core::BaseObject *object, const std::string &value) const throw(Core::GeneralException) {
+		bool writeString(Core::BaseObject *object, const std::string &value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 			typename Core::Generic::remove_optional<U>::type tmp;
@@ -57,13 +57,13 @@ class EnumPropertyBase<T, U, F1, F2, 0> : public Core::MetaProperty {
 			return true;
 		}
 
-		Core::MetaValue read(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		Core::MetaValue read(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return (target->*_getter)().toInt();
 		}
 
-		std::string readString(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		std::string readString(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return (target->*_getter)().toString();
@@ -82,7 +82,7 @@ class EnumPropertyBase<T, U, F1, F2, 1> : public Core::MetaProperty {
 		EnumPropertyBase(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(Core::BaseObject *object, Core::MetaValue value) const throw(Core::GeneralException) {
+		bool write(Core::BaseObject *object, Core::MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -99,7 +99,7 @@ class EnumPropertyBase<T, U, F1, F2, 1> : public Core::MetaProperty {
 			return true;
 		}
 
-		bool writeString(Core::BaseObject *object, const std::string &value) const throw(Core::GeneralException) {
+		bool writeString(Core::BaseObject *object, const std::string &value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -116,13 +116,13 @@ class EnumPropertyBase<T, U, F1, F2, 1> : public Core::MetaProperty {
 			return true;
 		}
 
-		Core::MetaValue read(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		Core::MetaValue read(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return (target->*_getter)().toInt();
 		}
 
-		std::string readString(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		std::string readString(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return (target->*_getter)().toString();
@@ -146,7 +146,7 @@ class BaseObjectPropertyBase<A, T, U, F1, F2, 0> : public Core::MetaClassPropert
 		BaseObjectPropertyBase(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(Core::BaseObject *object, Core::MetaValue value) const throw(Core::GeneralException) {
+		bool write(Core::BaseObject *object, Core::MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -179,7 +179,7 @@ class BaseObjectPropertyBase<A, T, U, F1, F2, 0> : public Core::MetaClassPropert
 			return true;
 		}
 
-		Core::MetaValue read(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		Core::MetaValue read(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return static_cast<Core::BaseObject*>(&(const_cast<T*>(target)->*_getter)());
@@ -198,7 +198,7 @@ class BaseObjectPropertyBase<A, T, U, F1, F2, 1> : public Core::MetaClassPropert
 		BaseObjectPropertyBase(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(Core::BaseObject *object, Core::MetaValue value) const throw(Core::GeneralException) {
+		bool write(Core::BaseObject *object, Core::MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -237,7 +237,7 @@ class BaseObjectPropertyBase<A, T, U, F1, F2, 1> : public Core::MetaClassPropert
 			return true;
 		}
 
-		Core::MetaValue read(const Core::BaseObject *object) const throw(Core::GeneralException) {
+		Core::MetaValue read(const Core::BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return static_cast<Core::BaseObject*>(&(const_cast<T*>(target)->*_getter)());

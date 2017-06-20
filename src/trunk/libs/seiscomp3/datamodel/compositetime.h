@@ -107,34 +107,34 @@ class SC_SYSTEM_CORE_API CompositeTime : public Object {
 	public:
 		//! Year or range of years of the event's focal time.
 		void setYear(const OPT(IntegerQuantity)& year);
-		IntegerQuantity& year() throw(Seiscomp::Core::ValueException);
-		const IntegerQuantity& year() const throw(Seiscomp::Core::ValueException);
+		IntegerQuantity& year();
+		const IntegerQuantity& year() const;
 
 		//! Month or range of months of the event's focal time.
 		void setMonth(const OPT(IntegerQuantity)& month);
-		IntegerQuantity& month() throw(Seiscomp::Core::ValueException);
-		const IntegerQuantity& month() const throw(Seiscomp::Core::ValueException);
+		IntegerQuantity& month();
+		const IntegerQuantity& month() const;
 
 		//! Day or range of days of the event's focal time.
 		void setDay(const OPT(IntegerQuantity)& day);
-		IntegerQuantity& day() throw(Seiscomp::Core::ValueException);
-		const IntegerQuantity& day() const throw(Seiscomp::Core::ValueException);
+		IntegerQuantity& day();
+		const IntegerQuantity& day() const;
 
 		//! Hour or range of hours of the event's focal time.
 		void setHour(const OPT(IntegerQuantity)& hour);
-		IntegerQuantity& hour() throw(Seiscomp::Core::ValueException);
-		const IntegerQuantity& hour() const throw(Seiscomp::Core::ValueException);
+		IntegerQuantity& hour();
+		const IntegerQuantity& hour() const;
 
 		//! Minute or range of minutes of the event's focal time.
 		void setMinute(const OPT(IntegerQuantity)& minute);
-		IntegerQuantity& minute() throw(Seiscomp::Core::ValueException);
-		const IntegerQuantity& minute() const throw(Seiscomp::Core::ValueException);
+		IntegerQuantity& minute();
+		const IntegerQuantity& minute() const;
 
 		//! Second and fraction of seconds or range of seconds with
 		//! fraction of the event's focal time.
 		void setSecond(const OPT(RealQuantity)& second);
-		RealQuantity& second() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& second() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& second();
+		const RealQuantity& second() const;
 
 	
 	// ------------------------------------------------------------------

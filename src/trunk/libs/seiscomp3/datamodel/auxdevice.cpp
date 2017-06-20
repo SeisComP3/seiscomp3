@@ -275,7 +275,7 @@ void AuxDevice::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& AuxDevice::remark() throw(Seiscomp::Core::ValueException) {
+Blob& AuxDevice::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxDevice.remark is not set");
@@ -286,7 +286,7 @@ Blob& AuxDevice::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& AuxDevice::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& AuxDevice::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxDevice.remark is not set");

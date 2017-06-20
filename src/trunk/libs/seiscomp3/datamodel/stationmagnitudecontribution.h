@@ -117,7 +117,7 @@ class SC_SYSTEM_CORE_API StationMagnitudeContribution : public Object {
 
 		//! Residual of magnitude computation.
 		void setResidual(const OPT(double)& residual);
-		double residual() const throw(Seiscomp::Core::ValueException);
+		double residual() const;
 
 		//! Weight of the magnitude value from class StationMagnitude
 		//! for computing
@@ -129,7 +129,7 @@ class SC_SYSTEM_CORE_API StationMagnitudeContribution : public Object {
 		//! are not
 		//! required to sum up to unity.
 		void setWeight(const OPT(double)& weight);
-		double weight() const throw(Seiscomp::Core::ValueException);
+		double weight() const;
 
 
 	// ------------------------------------------------------------------

@@ -78,8 +78,7 @@ void CommandLine::addCustomOption(const char* group,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T>
-inline T CommandLine::option(const std::string& option) const
-throw(Core::TypeException) {
+inline T CommandLine::option(const std::string& option) const {
 	try {
 		return boost::any_cast<T>(_variableMap[option].value());
 	}
@@ -93,8 +92,7 @@ throw(Core::TypeException) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename T, int LEN>
-inline T CommandLine::option(const char (&option)[LEN]) const 
-throw (Core::TypeException) {
+inline T CommandLine::option(const char (&option)[LEN]) const {
 	return this->option<T>(std::string(option));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

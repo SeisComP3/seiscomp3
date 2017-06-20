@@ -51,7 +51,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_ML : public AmplitudeProcessor {
 
 		bool setup(const Settings &settings);
 
-		void setTrigger(const Core::Time& trigger) throw(Core::ValueException);
+		void setTrigger(const Core::Time& trigger);
 
 		void computeTimeWindow();
 

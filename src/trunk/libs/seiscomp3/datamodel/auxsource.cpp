@@ -259,7 +259,7 @@ void AuxSource::setSampleRateNumerator(const OPT(int)& sampleRateNumerator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int AuxSource::sampleRateNumerator() const throw(Seiscomp::Core::ValueException) {
+int AuxSource::sampleRateNumerator() const {
 	if ( _sampleRateNumerator )
 		return *_sampleRateNumerator;
 	throw Seiscomp::Core::ValueException("AuxSource.sampleRateNumerator is not set");
@@ -279,7 +279,7 @@ void AuxSource::setSampleRateDenominator(const OPT(int)& sampleRateDenominator) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int AuxSource::sampleRateDenominator() const throw(Seiscomp::Core::ValueException) {
+int AuxSource::sampleRateDenominator() const {
 	if ( _sampleRateDenominator )
 		return *_sampleRateDenominator;
 	throw Seiscomp::Core::ValueException("AuxSource.sampleRateDenominator is not set");
@@ -299,7 +299,7 @@ void AuxSource::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& AuxSource::remark() throw(Seiscomp::Core::ValueException) {
+Blob& AuxSource::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxSource.remark is not set");
@@ -310,7 +310,7 @@ Blob& AuxSource::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& AuxSource::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& AuxSource::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxSource.remark is not set");

@@ -142,7 +142,7 @@ class SC_SYSTEM_CORE_API TravelTimeTableInterface : public Core::BaseObject {
 		compute(const char *phase,
 		        double lat1, double lon1, double dep1,
 		        double lat2, double lon2, double alt2=0.,
-		        int ellc = 0) throw(std::exception);
+		        int ellc = 0);
 
 
 		/**
@@ -154,7 +154,7 @@ class SC_SYSTEM_CORE_API TravelTimeTableInterface : public Core::BaseObject {
 		virtual TravelTime
 		computeFirst(double lat1, double lon1, double dep1,
 		             double lat2, double lon2, double alt2=0.,
-		             int ellc = 0) throw(std::exception) = 0;
+		             int ellc = 0) = 0;
 };
 
 
@@ -180,12 +180,12 @@ class SC_SYSTEM_CORE_API TravelTimeTable : public TravelTimeTableInterface {
 		compute(const char *phase,
 		        double lat1, double lon1, double dep1,
 		        double lat2, double lon2, double alt2=0.,
-		        int ellc = 0) throw(std::exception);
+		        int ellc = 0);
 
 		TravelTime
 		computeFirst(double lat1, double lon1, double dep1,
 		             double lat2, double lon2, double alt2=0.,
-		             int ellc = 0) throw(std::exception);
+		             int ellc = 0);
 
 	private:
 		static TravelTimeTableInterfacePtr _interface;

@@ -125,9 +125,7 @@ bool Config::set(const std::string& name, const std::vector<T>& values)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <typename T>
-T Config::get(const std::string& name) const
-throw(Exception)
-{
+T Config::get(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);
@@ -145,9 +143,7 @@ throw(Exception)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <typename T>
-std::vector<T> Config::getVec(const std::string& name) const
-throw(Exception)
-{
+std::vector<T> Config::getVec(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);

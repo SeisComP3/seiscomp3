@@ -321,7 +321,7 @@ void Sensor::setLowFrequency(const OPT(double)& lowFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensor::lowFrequency() const throw(Seiscomp::Core::ValueException) {
+double Sensor::lowFrequency() const {
 	if ( _lowFrequency )
 		return *_lowFrequency;
 	throw Seiscomp::Core::ValueException("Sensor.lowFrequency is not set");
@@ -341,7 +341,7 @@ void Sensor::setHighFrequency(const OPT(double)& highFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensor::highFrequency() const throw(Seiscomp::Core::ValueException) {
+double Sensor::highFrequency() const {
 	if ( _highFrequency )
 		return *_highFrequency;
 	throw Seiscomp::Core::ValueException("Sensor.highFrequency is not set");
@@ -379,7 +379,7 @@ void Sensor::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& Sensor::remark() throw(Seiscomp::Core::ValueException) {
+Blob& Sensor::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Sensor.remark is not set");
@@ -390,7 +390,7 @@ Blob& Sensor::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& Sensor::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& Sensor::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Sensor.remark is not set");

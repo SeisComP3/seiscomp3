@@ -29,7 +29,7 @@ class VSRecord : public Seiscomp::GenericRecord {
 	public:
 		VSRecord() : next(NULL) {}
 
-		void read(std::istream &in) throw(Seiscomp::Core::StreamException) {}
+		void read(std::istream &in) {}
 
 	public:
 		VSRecord *next;

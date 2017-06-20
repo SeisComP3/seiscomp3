@@ -200,7 +200,7 @@ void Amplitude::setAmplitude(const OPT(RealQuantity)& amplitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Amplitude::amplitude() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Amplitude::amplitude() {
 	if ( _amplitude )
 		return *_amplitude;
 	throw Seiscomp::Core::ValueException("Amplitude.amplitude is not set");
@@ -211,7 +211,7 @@ RealQuantity& Amplitude::amplitude() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Amplitude::amplitude() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Amplitude::amplitude() const {
 	if ( _amplitude )
 		return *_amplitude;
 	throw Seiscomp::Core::ValueException("Amplitude.amplitude is not set");
@@ -231,7 +231,7 @@ void Amplitude::setTimeWindow(const OPT(TimeWindow)& timeWindow) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-TimeWindow& Amplitude::timeWindow() throw(Seiscomp::Core::ValueException) {
+TimeWindow& Amplitude::timeWindow() {
 	if ( _timeWindow )
 		return *_timeWindow;
 	throw Seiscomp::Core::ValueException("Amplitude.timeWindow is not set");
@@ -242,7 +242,7 @@ TimeWindow& Amplitude::timeWindow() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const TimeWindow& Amplitude::timeWindow() const throw(Seiscomp::Core::ValueException) {
+const TimeWindow& Amplitude::timeWindow() const {
 	if ( _timeWindow )
 		return *_timeWindow;
 	throw Seiscomp::Core::ValueException("Amplitude.timeWindow is not set");
@@ -262,7 +262,7 @@ void Amplitude::setPeriod(const OPT(RealQuantity)& period) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Amplitude::period() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Amplitude::period() {
 	if ( _period )
 		return *_period;
 	throw Seiscomp::Core::ValueException("Amplitude.period is not set");
@@ -273,7 +273,7 @@ RealQuantity& Amplitude::period() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Amplitude::period() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Amplitude::period() const {
 	if ( _period )
 		return *_period;
 	throw Seiscomp::Core::ValueException("Amplitude.period is not set");
@@ -293,7 +293,7 @@ void Amplitude::setSnr(const OPT(double)& snr) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Amplitude::snr() const throw(Seiscomp::Core::ValueException) {
+double Amplitude::snr() const {
 	if ( _snr )
 		return *_snr;
 	throw Seiscomp::Core::ValueException("Amplitude.snr is not set");
@@ -349,7 +349,7 @@ void Amplitude::setWaveformID(const OPT(WaveformStreamID)& waveformID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-WaveformStreamID& Amplitude::waveformID() throw(Seiscomp::Core::ValueException) {
+WaveformStreamID& Amplitude::waveformID() {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("Amplitude.waveformID is not set");
@@ -360,7 +360,7 @@ WaveformStreamID& Amplitude::waveformID() throw(Seiscomp::Core::ValueException) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const WaveformStreamID& Amplitude::waveformID() const throw(Seiscomp::Core::ValueException) {
+const WaveformStreamID& Amplitude::waveformID() const {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("Amplitude.waveformID is not set");
@@ -416,7 +416,7 @@ void Amplitude::setScalingTime(const OPT(TimeQuantity)& scalingTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-TimeQuantity& Amplitude::scalingTime() throw(Seiscomp::Core::ValueException) {
+TimeQuantity& Amplitude::scalingTime() {
 	if ( _scalingTime )
 		return *_scalingTime;
 	throw Seiscomp::Core::ValueException("Amplitude.scalingTime is not set");
@@ -427,7 +427,7 @@ TimeQuantity& Amplitude::scalingTime() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const TimeQuantity& Amplitude::scalingTime() const throw(Seiscomp::Core::ValueException) {
+const TimeQuantity& Amplitude::scalingTime() const {
 	if ( _scalingTime )
 		return *_scalingTime;
 	throw Seiscomp::Core::ValueException("Amplitude.scalingTime is not set");
@@ -465,7 +465,7 @@ void Amplitude::setEvaluationMode(const OPT(EvaluationMode)& evaluationMode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationMode Amplitude::evaluationMode() const throw(Seiscomp::Core::ValueException) {
+EvaluationMode Amplitude::evaluationMode() const {
 	if ( _evaluationMode )
 		return *_evaluationMode;
 	throw Seiscomp::Core::ValueException("Amplitude.evaluationMode is not set");
@@ -485,7 +485,7 @@ void Amplitude::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Amplitude::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Amplitude::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Amplitude.creationInfo is not set");
@@ -496,7 +496,7 @@ CreationInfo& Amplitude::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Amplitude::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Amplitude::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Amplitude.creationInfo is not set");

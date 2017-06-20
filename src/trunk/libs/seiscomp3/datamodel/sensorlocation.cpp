@@ -249,7 +249,7 @@ void SensorLocation::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time SensorLocation::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time SensorLocation::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("SensorLocation.end is not set");
@@ -269,7 +269,7 @@ void SensorLocation::setLatitude(const OPT(double)& latitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::latitude() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::latitude() const {
 	if ( _latitude )
 		return *_latitude;
 	throw Seiscomp::Core::ValueException("SensorLocation.latitude is not set");
@@ -289,7 +289,7 @@ void SensorLocation::setLongitude(const OPT(double)& longitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::longitude() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::longitude() const {
 	if ( _longitude )
 		return *_longitude;
 	throw Seiscomp::Core::ValueException("SensorLocation.longitude is not set");
@@ -309,7 +309,7 @@ void SensorLocation::setElevation(const OPT(double)& elevation) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::elevation() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::elevation() const {
 	if ( _elevation )
 		return *_elevation;
 	throw Seiscomp::Core::ValueException("SensorLocation.elevation is not set");

@@ -194,7 +194,7 @@ void ArclinkStatusLine::setSize(const OPT(int)& size) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ArclinkStatusLine::size() const throw(Seiscomp::Core::ValueException) {
+int ArclinkStatusLine::size() const {
 	if ( _size )
 		return *_size;
 	throw Seiscomp::Core::ValueException("ArclinkStatusLine.size is not set");

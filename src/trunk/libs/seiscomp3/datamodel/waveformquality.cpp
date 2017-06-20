@@ -255,7 +255,7 @@ void WaveformQuality::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time WaveformQuality::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time WaveformQuality::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("WaveformQuality.end is not set");
@@ -329,7 +329,7 @@ void WaveformQuality::setLowerUncertainty(const OPT(double)& lowerUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double WaveformQuality::lowerUncertainty() const throw(Seiscomp::Core::ValueException) {
+double WaveformQuality::lowerUncertainty() const {
 	if ( _lowerUncertainty )
 		return *_lowerUncertainty;
 	throw Seiscomp::Core::ValueException("WaveformQuality.lowerUncertainty is not set");
@@ -349,7 +349,7 @@ void WaveformQuality::setUpperUncertainty(const OPT(double)& upperUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double WaveformQuality::upperUncertainty() const throw(Seiscomp::Core::ValueException) {
+double WaveformQuality::upperUncertainty() const {
 	if ( _upperUncertainty )
 		return *_upperUncertainty;
 	throw Seiscomp::Core::ValueException("WaveformQuality.upperUncertainty is not set");
@@ -369,7 +369,7 @@ void WaveformQuality::setWindowLength(const OPT(double)& windowLength) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double WaveformQuality::windowLength() const throw(Seiscomp::Core::ValueException) {
+double WaveformQuality::windowLength() const {
 	if ( _windowLength )
 		return *_windowLength;
 	throw Seiscomp::Core::ValueException("WaveformQuality.windowLength is not set");

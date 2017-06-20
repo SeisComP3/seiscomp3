@@ -135,13 +135,13 @@ class SC_SYSTEM_CORE_API StationMagnitude : public PublicObject {
 		//! provided there
 		//! and can be omitted.
 		void setWaveformID(const OPT(WaveformStreamID)& waveformID);
-		WaveformStreamID& waveformID() throw(Seiscomp::Core::ValueException);
-		const WaveformStreamID& waveformID() const throw(Seiscomp::Core::ValueException);
+		WaveformStreamID& waveformID();
+		const WaveformStreamID& waveformID() const;
 
 		//! CreationInfo for the StationMagnitude object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

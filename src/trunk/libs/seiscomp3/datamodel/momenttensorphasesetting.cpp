@@ -235,7 +235,7 @@ void MomentTensorPhaseSetting::setMinimumSNR(const OPT(double)& minimumSNR) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorPhaseSetting::minimumSNR() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorPhaseSetting::minimumSNR() const {
 	if ( _minimumSNR )
 		return *_minimumSNR;
 	throw Seiscomp::Core::ValueException("MomentTensorPhaseSetting.minimumSNR is not set");
@@ -255,7 +255,7 @@ void MomentTensorPhaseSetting::setMaximumTimeShift(const OPT(double)& maximumTim
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorPhaseSetting::maximumTimeShift() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorPhaseSetting::maximumTimeShift() const {
 	if ( _maximumTimeShift )
 		return *_maximumTimeShift;
 	throw Seiscomp::Core::ValueException("MomentTensorPhaseSetting.maximumTimeShift is not set");

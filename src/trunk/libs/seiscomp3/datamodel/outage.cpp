@@ -236,7 +236,7 @@ void Outage::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Outage::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Outage::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Outage.end is not set");

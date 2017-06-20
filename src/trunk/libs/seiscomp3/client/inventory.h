@@ -58,7 +58,7 @@ class SC_SYSTEM_CLIENT_API Inventory {
 	public:
 		static Inventory* Instance();
 
-		void load(const char *filename) throw(std::exception);
+		void load(const char *filename);
 		void load(DataModel::DatabaseReader*);
 		void setInventory(DataModel::Inventory*);
 
@@ -104,8 +104,7 @@ class SC_SYSTEM_CLIENT_API Inventory {
 		                                             const std::string& stationCode,
 		                                             const std::string& locationCode,
 		                                             const std::string& channelCode,
-		                                             const Core::Time&) const
-		throw(Core::ValueException);
+		                                             const Core::Time&) const;
 
 		//! Returns the station used for a pick. If the station has not been found
 		//! NULL will be returned.
@@ -117,14 +116,13 @@ class SC_SYSTEM_CLIENT_API Inventory {
 
 		//! Returns the three streams (vertical, horizontal1, horizontal2) corresponding
 		//! to the picked stream.
-		DataModel::ThreeComponents getThreeComponents(const DataModel::Pick*) const
-		throw(Core::ValueException);
+		DataModel::ThreeComponents getThreeComponents(const DataModel::Pick*) const;
 
 		double getGain(const std::string& networkCode,
 		               const std::string& stationCode,
 		               const std::string& locationCode,
 		               const std::string& channelCode,
-		               const Core::Time&) throw(Core::ValueException);
+		               const Core::Time&);
 
 		//! Returns all defined stations for the given time
 		int getAllStations(StationList&, const Core::Time&);

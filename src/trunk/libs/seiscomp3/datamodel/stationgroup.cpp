@@ -214,7 +214,7 @@ void StationGroup::setType(const OPT(StationGroupType)& type) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StationGroupType StationGroup::type() const throw(Seiscomp::Core::ValueException) {
+StationGroupType StationGroup::type() const {
 	if ( _type )
 		return *_type;
 	throw Seiscomp::Core::ValueException("StationGroup.type is not set");
@@ -252,7 +252,7 @@ void StationGroup::setStart(const OPT(Seiscomp::Core::Time)& start) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time StationGroup::start() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time StationGroup::start() const {
 	if ( _start )
 		return *_start;
 	throw Seiscomp::Core::ValueException("StationGroup.start is not set");
@@ -272,7 +272,7 @@ void StationGroup::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time StationGroup::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time StationGroup::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("StationGroup.end is not set");
@@ -310,7 +310,7 @@ void StationGroup::setLatitude(const OPT(double)& latitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationGroup::latitude() const throw(Seiscomp::Core::ValueException) {
+double StationGroup::latitude() const {
 	if ( _latitude )
 		return *_latitude;
 	throw Seiscomp::Core::ValueException("StationGroup.latitude is not set");
@@ -330,7 +330,7 @@ void StationGroup::setLongitude(const OPT(double)& longitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationGroup::longitude() const throw(Seiscomp::Core::ValueException) {
+double StationGroup::longitude() const {
 	if ( _longitude )
 		return *_longitude;
 	throw Seiscomp::Core::ValueException("StationGroup.longitude is not set");
@@ -350,7 +350,7 @@ void StationGroup::setElevation(const OPT(double)& elevation) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationGroup::elevation() const throw(Seiscomp::Core::ValueException) {
+double StationGroup::elevation() const {
 	if ( _elevation )
 		return *_elevation;
 	throw Seiscomp::Core::ValueException("StationGroup.elevation is not set");

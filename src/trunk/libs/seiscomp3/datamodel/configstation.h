@@ -138,8 +138,8 @@ class SC_SYSTEM_CORE_API ConfigStation : public PublicObject {
 
 		//! CreationInfo for the ConfigStation object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 
 	// ------------------------------------------------------------------

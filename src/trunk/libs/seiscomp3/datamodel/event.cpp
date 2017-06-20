@@ -236,7 +236,7 @@ void Event::setType(const OPT(EventType)& type) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EventType Event::type() const throw(Seiscomp::Core::ValueException) {
+EventType Event::type() const {
 	if ( _type )
 		return *_type;
 	throw Seiscomp::Core::ValueException("Event.type is not set");
@@ -256,7 +256,7 @@ void Event::setTypeCertainty(const OPT(EventTypeCertainty)& typeCertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EventTypeCertainty Event::typeCertainty() const throw(Seiscomp::Core::ValueException) {
+EventTypeCertainty Event::typeCertainty() const {
 	if ( _typeCertainty )
 		return *_typeCertainty;
 	throw Seiscomp::Core::ValueException("Event.typeCertainty is not set");
@@ -276,7 +276,7 @@ void Event::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Event::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Event::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Event.creationInfo is not set");
@@ -287,7 +287,7 @@ CreationInfo& Event::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Event::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Event::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Event.creationInfo is not set");

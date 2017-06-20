@@ -43,7 +43,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_MLv : public MagnitudeProcessor {
 
 
 	private:
-		double logA0(double dist_km) const throw(Core::ValueException);
+		double logA0(double dist_km) const;
 
 
 	private:

@@ -23,8 +23,7 @@ namespace Processing {
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorGap, QcProcessor, "QcProcessorGap");
 
 
-QcProcessorGap::QcProcessorGap() 
-: QcProcessor() {}
+QcProcessorGap::QcProcessorGap() : QcProcessor() {}
 
 bool QcProcessorGap::setState(const Record *record, const DoubleArray &data) {
 	if ( _stream.lastRecord && record->samplingFrequency() > 0 ) {
@@ -41,7 +40,7 @@ bool QcProcessorGap::setState(const Record *record, const DoubleArray &data) {
 	return false;
 }
 
-double QcProcessorGap::getGap() throw(Core::ValueException) {
+double QcProcessorGap::getGap() {
 	try {
 		return boost::any_cast<double>(_qcp->parameter);
 	}

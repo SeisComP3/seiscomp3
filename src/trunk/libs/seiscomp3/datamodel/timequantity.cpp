@@ -174,7 +174,7 @@ void TimeQuantity::setUncertainty(const OPT(double)& uncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double TimeQuantity::uncertainty() const throw(Seiscomp::Core::ValueException) {
+double TimeQuantity::uncertainty() const {
 	if ( _uncertainty )
 		return *_uncertainty;
 	throw Seiscomp::Core::ValueException("TimeQuantity.uncertainty is not set");
@@ -194,7 +194,7 @@ void TimeQuantity::setLowerUncertainty(const OPT(double)& lowerUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double TimeQuantity::lowerUncertainty() const throw(Seiscomp::Core::ValueException) {
+double TimeQuantity::lowerUncertainty() const {
 	if ( _lowerUncertainty )
 		return *_lowerUncertainty;
 	throw Seiscomp::Core::ValueException("TimeQuantity.lowerUncertainty is not set");
@@ -214,7 +214,7 @@ void TimeQuantity::setUpperUncertainty(const OPT(double)& upperUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double TimeQuantity::upperUncertainty() const throw(Seiscomp::Core::ValueException) {
+double TimeQuantity::upperUncertainty() const {
 	if ( _upperUncertainty )
 		return *_upperUncertainty;
 	throw Seiscomp::Core::ValueException("TimeQuantity.upperUncertainty is not set");
@@ -234,7 +234,7 @@ void TimeQuantity::setConfidenceLevel(const OPT(double)& confidenceLevel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double TimeQuantity::confidenceLevel() const throw(Seiscomp::Core::ValueException) {
+double TimeQuantity::confidenceLevel() const {
 	if ( _confidenceLevel )
 		return *_confidenceLevel;
 	throw Seiscomp::Core::ValueException("TimeQuantity.confidenceLevel is not set");

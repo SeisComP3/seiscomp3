@@ -131,9 +131,7 @@ DefaultLogger __logger__;
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <>
-std::string Config::get<std::string>(const std::string& name) const
-throw(Exception)
-{
+std::string Config::get<std::string>(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);
@@ -147,9 +145,7 @@ throw(Exception)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <>
-bool Config::get<bool>(const std::string& name) const
-throw(Exception)
-{
+bool Config::get<bool>(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);
@@ -173,9 +169,7 @@ throw(Exception)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <>
-std::vector<std::string> Config::getVec<std::string>(const std::string& name) const
-throw(Exception)
-{
+std::vector<std::string> Config::getVec<std::string>(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);
@@ -193,9 +187,7 @@ throw(Exception)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 template <>
-std::vector<bool> Config::getVec<bool>(const std::string& name) const
-throw(Exception)
-{
+std::vector<bool> Config::getVec<bool>(const std::string& name) const {
 	const Symbol* symbol = _symbolTable->get(name);
 	if (!symbol)
 		throw OptionNotFoundException(name);
@@ -986,9 +978,7 @@ std::vector<std::string> Config::names() const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-int Config::getInt(const std::string& name) const
-throw(Exception)
-{
+int Config::getInt(const std::string& name) const {
 	return get<int>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1017,9 +1007,7 @@ bool Config::getInt(int& value, const std::string& name) const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-double Config::getDouble(const std::string& name) const
-throw(Exception)
-{
+double Config::getDouble(const std::string& name) const {
 	return get<double>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1048,9 +1036,7 @@ bool Config::getDouble(double& value, const std::string& name) const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-bool Config::getBool(const std::string& name) const
-throw(Exception)
-{
+bool Config::getBool(const std::string& name) const {
 	return get<bool>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1079,9 +1065,7 @@ bool Config::getBool(bool& value, const std::string& name) const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::string Config::getString(const std::string& name) const
-throw(Exception)
-{
+std::string Config::getString(const std::string& name) const {
 	return get<std::string>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1123,9 +1107,7 @@ Config* Config::Instance(const std::string& fileName)
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::vector<int> Config::getInts(const std::string& name) const
-throw(Exception)
-{
+std::vector<int> Config::getInts(const std::string& name) const {
 	return getVec<int>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1144,9 +1126,7 @@ std::vector<int> Config::getInts(const std::string& name, bool* error) const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::vector<double> Config::getDoubles(const std::string& name) const
-throw(Exception)
-{
+std::vector<double> Config::getDoubles(const std::string& name) const {
 	return getVec<double>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1165,9 +1145,7 @@ std::vector<double> Config::getDoubles(const std::string& name, bool* error) con
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::vector<bool> Config::getBools(const std::string& name) const
-throw(Exception)
-{
+std::vector<bool> Config::getBools(const std::string& name) const {
 	return getVec<bool>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1186,9 +1164,7 @@ std::vector<bool> Config::getBools(const std::string& name, bool* error) const
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::vector<std::string> Config::getStrings(const std::string& name) const
-throw(Exception)
-{
+std::vector<std::string> Config::getStrings(const std::string& name) const {
 	return getVec<std::string>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

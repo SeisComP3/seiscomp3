@@ -142,19 +142,19 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 
 		//! End of epoch
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Sensor latitude (52.10)
 		void setLatitude(const OPT(double)& latitude);
-		double latitude() const throw(Seiscomp::Core::ValueException);
+		double latitude() const;
 
 		//! Sensor longitude (52.11)
 		void setLongitude(const OPT(double)& longitude);
-		double longitude() const throw(Seiscomp::Core::ValueException);
+		double longitude() const;
 
 		//! Sensor elevation (52.12)
 		void setElevation(const OPT(double)& elevation);
-		double elevation() const throw(Seiscomp::Core::ValueException);
+		double elevation() const;
 
 
 	// ------------------------------------------------------------------

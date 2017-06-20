@@ -615,7 +615,7 @@ int NLLocator::capabilities() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
+Origin* NLLocator::locate(PickList &pickList) {
 	_lastWarning = "";
 
 	if ( pickList.empty() )
@@ -1000,7 +1000,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* NLLocator::locate(PickList& pickList,
                            double initLat, double initLon, double initDepth,
-                           const Time &initTime) throw(Core::GeneralException) {
+                           const Time &initTime) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1009,7 +1009,7 @@ Origin* NLLocator::locate(PickList& pickList,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) {
+Origin* NLLocator::relocate(const Origin* origin) {
 	_lastWarning = "";
 
 	if ( origin == NULL ) return NULL;

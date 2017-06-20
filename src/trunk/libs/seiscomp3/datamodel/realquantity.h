@@ -107,21 +107,21 @@ class SC_SYSTEM_CORE_API RealQuantity : public Core::BaseObject {
 		//! Uncertainty as the absolute value of symmetric deviation
 		//! from the main value.
 		void setUncertainty(const OPT(double)& uncertainty);
-		double uncertainty() const throw(Seiscomp::Core::ValueException);
+		double uncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards smaller values.
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards larger values.
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		//! Confidence level of the uncertainty, given in percent.
 		void setConfidenceLevel(const OPT(double)& confidenceLevel);
-		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+		double confidenceLevel() const;
 
 
 	// ------------------------------------------------------------------

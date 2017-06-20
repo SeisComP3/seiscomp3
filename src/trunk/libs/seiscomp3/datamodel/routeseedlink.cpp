@@ -164,7 +164,7 @@ void RouteSeedlink::setPriority(const OPT(int)& priority) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int RouteSeedlink::priority() const throw(Seiscomp::Core::ValueException) {
+int RouteSeedlink::priority() const {
 	if ( _priority )
 		return *_priority;
 	throw Seiscomp::Core::ValueException("RouteSeedlink.priority is not set");

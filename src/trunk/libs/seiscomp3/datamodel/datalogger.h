@@ -168,16 +168,16 @@ class SC_SYSTEM_CORE_API Datalogger : public PublicObject {
 
 		//! Sensitivity of digitizer, counts/V (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Max clock drift, seconds/second (not identical to 52.19,
 		//! which is seconds/sample)
 		void setMaxClockDrift(const OPT(double)& maxClockDrift);
-		double maxClockDrift() const throw(Seiscomp::Core::ValueException);
+		double maxClockDrift() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

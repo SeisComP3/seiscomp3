@@ -171,7 +171,7 @@ void DataUsed::setShortestPeriod(const OPT(double)& shortestPeriod) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double DataUsed::shortestPeriod() const throw(Seiscomp::Core::ValueException) {
+double DataUsed::shortestPeriod() const {
 	if ( _shortestPeriod )
 		return *_shortestPeriod;
 	throw Seiscomp::Core::ValueException("DataUsed.shortestPeriod is not set");

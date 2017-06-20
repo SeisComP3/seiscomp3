@@ -260,7 +260,7 @@ void ConfigStation::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& ConfigStation::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& ConfigStation::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("ConfigStation.creationInfo is not set");
@@ -271,7 +271,7 @@ CreationInfo& ConfigStation::creationInfo() throw(Seiscomp::Core::ValueException
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& ConfigStation::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& ConfigStation::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("ConfigStation.creationInfo is not set");

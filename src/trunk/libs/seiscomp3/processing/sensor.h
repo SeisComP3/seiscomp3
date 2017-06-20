@@ -51,10 +51,10 @@ class SC_SYSTEM_CLIENT_API Sensor : public Core::BaseObject {
 		const std::string& unit() const;
 
 		void setLowFrequency(const OPT(double)& lowFrequency);
-		double lowFrequency() const throw(Seiscomp::Core::ValueException);
+		double lowFrequency() const;
 
 		void setHighFrequency(const OPT(double)& highFrequency);
-		double highFrequency() const throw(Seiscomp::Core::ValueException);
+		double highFrequency() const;
 
 		Response *response() const;
 		void setResponse(Response *response);

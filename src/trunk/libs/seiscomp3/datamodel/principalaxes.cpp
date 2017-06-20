@@ -160,7 +160,7 @@ void PrincipalAxes::setNAxis(const OPT(Axis)& nAxis) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Axis& PrincipalAxes::nAxis() throw(Seiscomp::Core::ValueException) {
+Axis& PrincipalAxes::nAxis() {
 	if ( _nAxis )
 		return *_nAxis;
 	throw Seiscomp::Core::ValueException("PrincipalAxes.nAxis is not set");
@@ -171,7 +171,7 @@ Axis& PrincipalAxes::nAxis() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Axis& PrincipalAxes::nAxis() const throw(Seiscomp::Core::ValueException) {
+const Axis& PrincipalAxes::nAxis() const {
 	if ( _nAxis )
 		return *_nAxis;
 	throw Seiscomp::Core::ValueException("PrincipalAxes.nAxis is not set");

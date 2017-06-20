@@ -217,7 +217,7 @@ void DataloggerCalibration::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time DataloggerCalibration::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time DataloggerCalibration::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("DataloggerCalibration.end is not set");
@@ -237,7 +237,7 @@ void DataloggerCalibration::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double DataloggerCalibration::gain() const throw(Seiscomp::Core::ValueException) {
+double DataloggerCalibration::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("DataloggerCalibration.gain is not set");
@@ -257,7 +257,7 @@ void DataloggerCalibration::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double DataloggerCalibration::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double DataloggerCalibration::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("DataloggerCalibration.gainFrequency is not set");
@@ -277,7 +277,7 @@ void DataloggerCalibration::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& DataloggerCalibration::remark() throw(Seiscomp::Core::ValueException) {
+Blob& DataloggerCalibration::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("DataloggerCalibration.remark is not set");
@@ -288,7 +288,7 @@ Blob& DataloggerCalibration::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& DataloggerCalibration::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& DataloggerCalibration::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("DataloggerCalibration.remark is not set");

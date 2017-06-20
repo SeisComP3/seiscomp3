@@ -189,7 +189,7 @@ void RouteArclink::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time RouteArclink::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time RouteArclink::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("RouteArclink.end is not set");
@@ -209,7 +209,7 @@ void RouteArclink::setPriority(const OPT(int)& priority) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int RouteArclink::priority() const throw(Seiscomp::Core::ValueException) {
+int RouteArclink::priority() const {
 	if ( _priority )
 		return *_priority;
 	throw Seiscomp::Core::ValueException("RouteArclink.priority is not set");

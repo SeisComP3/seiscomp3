@@ -25,12 +25,12 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorOverlap);
 
 class SC_SYSTEM_CLIENT_API QcProcessorOverlap : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorOverlap);
+	DECLARE_SC_CLASS(QcProcessorOverlap);
 
-public:
-    QcProcessorOverlap();
-    double getOverlap() throw(Core::ValueException);		
-    bool setState(const Record* record, const DoubleArray& data);
+	public:
+		QcProcessorOverlap();
+		double getOverlap();
+		bool setState(const Record* record, const DoubleArray& data);
 };
 
 

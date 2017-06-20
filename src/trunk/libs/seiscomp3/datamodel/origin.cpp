@@ -293,7 +293,7 @@ void Origin::setDepth(const OPT(RealQuantity)& depth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Origin::depth() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Origin::depth() {
 	if ( _depth )
 		return *_depth;
 	throw Seiscomp::Core::ValueException("Origin.depth is not set");
@@ -304,7 +304,7 @@ RealQuantity& Origin::depth() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Origin::depth() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Origin::depth() const {
 	if ( _depth )
 		return *_depth;
 	throw Seiscomp::Core::ValueException("Origin.depth is not set");
@@ -324,7 +324,7 @@ void Origin::setDepthType(const OPT(OriginDepthType)& depthType) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginDepthType Origin::depthType() const throw(Seiscomp::Core::ValueException) {
+OriginDepthType Origin::depthType() const {
 	if ( _depthType )
 		return *_depthType;
 	throw Seiscomp::Core::ValueException("Origin.depthType is not set");
@@ -344,7 +344,7 @@ void Origin::setTimeFixed(const OPT(bool)& timeFixed) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Origin::timeFixed() const throw(Seiscomp::Core::ValueException) {
+bool Origin::timeFixed() const {
 	if ( _timeFixed )
 		return *_timeFixed;
 	throw Seiscomp::Core::ValueException("Origin.timeFixed is not set");
@@ -364,7 +364,7 @@ void Origin::setEpicenterFixed(const OPT(bool)& epicenterFixed) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Origin::epicenterFixed() const throw(Seiscomp::Core::ValueException) {
+bool Origin::epicenterFixed() const {
 	if ( _epicenterFixed )
 		return *_epicenterFixed;
 	throw Seiscomp::Core::ValueException("Origin.epicenterFixed is not set");
@@ -438,7 +438,7 @@ void Origin::setQuality(const OPT(OriginQuality)& quality) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginQuality& Origin::quality() throw(Seiscomp::Core::ValueException) {
+OriginQuality& Origin::quality() {
 	if ( _quality )
 		return *_quality;
 	throw Seiscomp::Core::ValueException("Origin.quality is not set");
@@ -449,7 +449,7 @@ OriginQuality& Origin::quality() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const OriginQuality& Origin::quality() const throw(Seiscomp::Core::ValueException) {
+const OriginQuality& Origin::quality() const {
 	if ( _quality )
 		return *_quality;
 	throw Seiscomp::Core::ValueException("Origin.quality is not set");
@@ -469,7 +469,7 @@ void Origin::setUncertainty(const OPT(OriginUncertainty)& uncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginUncertainty& Origin::uncertainty() throw(Seiscomp::Core::ValueException) {
+OriginUncertainty& Origin::uncertainty() {
 	if ( _uncertainty )
 		return *_uncertainty;
 	throw Seiscomp::Core::ValueException("Origin.uncertainty is not set");
@@ -480,7 +480,7 @@ OriginUncertainty& Origin::uncertainty() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const OriginUncertainty& Origin::uncertainty() const throw(Seiscomp::Core::ValueException) {
+const OriginUncertainty& Origin::uncertainty() const {
 	if ( _uncertainty )
 		return *_uncertainty;
 	throw Seiscomp::Core::ValueException("Origin.uncertainty is not set");
@@ -500,7 +500,7 @@ void Origin::setType(const OPT(OriginType)& type) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginType Origin::type() const throw(Seiscomp::Core::ValueException) {
+OriginType Origin::type() const {
 	if ( _type )
 		return *_type;
 	throw Seiscomp::Core::ValueException("Origin.type is not set");
@@ -520,7 +520,7 @@ void Origin::setEvaluationMode(const OPT(EvaluationMode)& evaluationMode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationMode Origin::evaluationMode() const throw(Seiscomp::Core::ValueException) {
+EvaluationMode Origin::evaluationMode() const {
 	if ( _evaluationMode )
 		return *_evaluationMode;
 	throw Seiscomp::Core::ValueException("Origin.evaluationMode is not set");
@@ -540,7 +540,7 @@ void Origin::setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationStatus Origin::evaluationStatus() const throw(Seiscomp::Core::ValueException) {
+EvaluationStatus Origin::evaluationStatus() const {
 	if ( _evaluationStatus )
 		return *_evaluationStatus;
 	throw Seiscomp::Core::ValueException("Origin.evaluationStatus is not set");
@@ -560,7 +560,7 @@ void Origin::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Origin::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Origin::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Origin.creationInfo is not set");
@@ -571,7 +571,7 @@ CreationInfo& Origin::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Origin::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Origin::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Origin.creationInfo is not set");

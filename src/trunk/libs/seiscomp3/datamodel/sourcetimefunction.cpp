@@ -151,7 +151,7 @@ void SourceTimeFunction::setRiseTime(const OPT(double)& riseTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SourceTimeFunction::riseTime() const throw(Seiscomp::Core::ValueException) {
+double SourceTimeFunction::riseTime() const {
 	if ( _riseTime )
 		return *_riseTime;
 	throw Seiscomp::Core::ValueException("SourceTimeFunction.riseTime is not set");
@@ -171,7 +171,7 @@ void SourceTimeFunction::setDecayTime(const OPT(double)& decayTime) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SourceTimeFunction::decayTime() const throw(Seiscomp::Core::ValueException) {
+double SourceTimeFunction::decayTime() const {
 	if ( _decayTime )
 		return *_decayTime;
 	throw Seiscomp::Core::ValueException("SourceTimeFunction.decayTime is not set");

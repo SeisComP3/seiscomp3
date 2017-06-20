@@ -25,11 +25,11 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorLatency);
 
 class SC_SYSTEM_CLIENT_API QcProcessorLatency : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorLatency);
+	DECLARE_SC_CLASS(QcProcessorLatency);
 
 	public:
 		QcProcessorLatency();
-		double getLatency() throw (Core::ValueException);
+		double getLatency();
 		bool setState(const Record* record, const DoubleArray& data);
 
 	private:

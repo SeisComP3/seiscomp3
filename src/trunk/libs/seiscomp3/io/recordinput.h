@@ -95,9 +95,9 @@ class SC_SYSTEM_CORE_API RecordInput : public Seiscomp::Core::BaseObject {
 	//  Iteration
 	// ------------------------------------------------------------------
 	public:
-		RecordIterator begin() throw(Core::GeneralException);
+		RecordIterator begin();
 		RecordIterator end();
-		Record *next() throw(Core::GeneralException);
+		Record *next();
 
 
 	// ------------------------------------------------------------------

@@ -116,30 +116,30 @@ class SC_SYSTEM_CORE_API FocalMechanism : public PublicObject {
 
 		//! Nodal planes of the focal mechanism.
 		void setNodalPlanes(const OPT(NodalPlanes)& nodalPlanes);
-		NodalPlanes& nodalPlanes() throw(Seiscomp::Core::ValueException);
-		const NodalPlanes& nodalPlanes() const throw(Seiscomp::Core::ValueException);
+		NodalPlanes& nodalPlanes();
+		const NodalPlanes& nodalPlanes() const;
 
 		//! Principal axes of the focal mechanism.
 		void setPrincipalAxes(const OPT(PrincipalAxes)& principalAxes);
-		PrincipalAxes& principalAxes() throw(Seiscomp::Core::ValueException);
-		const PrincipalAxes& principalAxes() const throw(Seiscomp::Core::ValueException);
+		PrincipalAxes& principalAxes();
+		const PrincipalAxes& principalAxes() const;
 
 		//! Largest azimuthal gap in distribution of stations used for
 		//! determination
 		//! of focal mechanism in degrees.
 		void setAzimuthalGap(const OPT(double)& azimuthalGap);
-		double azimuthalGap() const throw(Seiscomp::Core::ValueException);
+		double azimuthalGap() const;
 
 		//! Number of station polarities used for determination of
 		//! focal mechanism.
 		void setStationPolarityCount(const OPT(int)& stationPolarityCount);
-		int stationPolarityCount() const throw(Seiscomp::Core::ValueException);
+		int stationPolarityCount() const;
 
 		//! Fraction of misfit polarities in a first-motion focal
 		//! mechanism determination.
 		//! Decimal fraction between 0 and 1.
 		void setMisfit(const OPT(double)& misfit);
-		double misfit() const throw(Seiscomp::Core::ValueException);
+		double misfit() const;
 
 		//! Station distribution ratio (STDR) parameter. Indicates how
 		//! the stations
@@ -147,7 +147,7 @@ class SC_SYSTEM_CORE_API FocalMechanism : public PublicObject {
 		//! Oppenheimer 1985).
 		//! Decimal fraction between 0 and 1.
 		void setStationDistributionRatio(const OPT(double)& stationDistributionRatio);
-		double stationDistributionRatio() const throw(Seiscomp::Core::ValueException);
+		double stationDistributionRatio() const;
 
 		//! Resource identifier of the method used for determination of
 		//! the focal mechanism.
@@ -156,15 +156,15 @@ class SC_SYSTEM_CORE_API FocalMechanism : public PublicObject {
 
 		//! Evaluation mode of FocalMechanism.
 		void setEvaluationMode(const OPT(EvaluationMode)& evaluationMode);
-		EvaluationMode evaluationMode() const throw(Seiscomp::Core::ValueException);
+		EvaluationMode evaluationMode() const;
 
 		//! Evaluation status of FocalMechanism.
 		void setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus);
-		EvaluationStatus evaluationStatus() const throw(Seiscomp::Core::ValueException);
+		EvaluationStatus evaluationStatus() const;
 
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

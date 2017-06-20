@@ -152,7 +152,7 @@ RecordInput::RecordInput(RecordStream *in, Array::DataType dt, Record::Hint h)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RecordIterator RecordInput::begin() throw(Core::GeneralException) {
+RecordIterator RecordInput::begin() {
 	return RecordIterator(this,next());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -170,7 +170,7 @@ RecordIterator RecordInput::end() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Record* RecordInput::next() throw(Core::GeneralException) {
+Seiscomp::Record* RecordInput::next() {
 	Record *pms = 0;
 	while ( true ) {
 		std::istream &istr = _in->stream();

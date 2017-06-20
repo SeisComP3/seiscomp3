@@ -138,21 +138,21 @@ class SC_SYSTEM_CORE_API Arrival : public Object {
 		//! characteristic for the
 		//! phase type or the slowness in seconds.
 		void setTimeCorrection(const OPT(double)& timeCorrection);
-		double timeCorrection() const throw(Seiscomp::Core::ValueException);
+		double timeCorrection() const;
 
 		//! Azimuth of station as seen from the epicenter in degrees.
 		void setAzimuth(const OPT(double)& azimuth);
-		double azimuth() const throw(Seiscomp::Core::ValueException);
+		double azimuth() const;
 
 		//! Epicentral distance in degrees.
 		void setDistance(const OPT(double)& distance);
-		double distance() const throw(Seiscomp::Core::ValueException);
+		double distance() const;
 
 		//! Angle of emerging ray at the source, measured against the
 		//! downward
 		//! normal direction in degrees.
 		void setTakeOffAngle(const OPT(double)& takeOffAngle);
-		double takeOffAngle() const throw(Seiscomp::Core::ValueException);
+		double takeOffAngle() const;
 
 		//! Residual between observed and expected arrival time
 		//! assuming proper
@@ -160,7 +160,7 @@ class SC_SYSTEM_CORE_API Arrival : public Object {
 		//! Origin,
 		//! taking into account the timeCorrection in seconds.
 		void setTimeResidual(const OPT(double)& timeResidual);
-		double timeResidual() const throw(Seiscomp::Core::ValueException);
+		double timeResidual() const;
 
 		//! Residual of horizontal slowness and the expected slowness
 		//! given the
@@ -168,34 +168,34 @@ class SC_SYSTEM_CORE_API Arrival : public Object {
 		//! class Pick)
 		//! in s/deg.
 		void setHorizontalSlownessResidual(const OPT(double)& horizontalSlownessResidual);
-		double horizontalSlownessResidual() const throw(Seiscomp::Core::ValueException);
+		double horizontalSlownessResidual() const;
 
 		//! Residual of backazimuth and the backazimuth computed for
 		//! the current
 		//! origin (refers to attribute backazimuth of class Pick) in
 		//! degrees.
 		void setBackazimuthResidual(const OPT(double)& backazimuthResidual);
-		double backazimuthResidual() const throw(Seiscomp::Core::ValueException);
+		double backazimuthResidual() const;
 
 		void setTimeUsed(const OPT(bool)& timeUsed);
-		bool timeUsed() const throw(Seiscomp::Core::ValueException);
+		bool timeUsed() const;
 
 		//! Weight of the horizontal slowness for computation of the
 		//! associated Origin.
 		//! Note that the sum of all weights is not required to be
 		//! unity.
 		void setHorizontalSlownessUsed(const OPT(bool)& horizontalSlownessUsed);
-		bool horizontalSlownessUsed() const throw(Seiscomp::Core::ValueException);
+		bool horizontalSlownessUsed() const;
 
 		void setBackazimuthUsed(const OPT(bool)& backazimuthUsed);
-		bool backazimuthUsed() const throw(Seiscomp::Core::ValueException);
+		bool backazimuthUsed() const;
 
 		//! Weight of the arrival time for computation of the
 		//! associated Origin.
 		//! Note that the sum of all weights is not required to be
 		//! unity.
 		void setWeight(const OPT(double)& weight);
-		double weight() const throw(Seiscomp::Core::ValueException);
+		double weight() const;
 
 		//! Earth model which is used for the association of Arrival to
 		//! Pick and computation of the
@@ -205,12 +205,12 @@ class SC_SYSTEM_CORE_API Arrival : public Object {
 
 		//! Indicates if the arrival is preliminary.
 		void setPreliminary(const OPT(bool)& preliminary);
-		bool preliminary() const throw(Seiscomp::Core::ValueException);
+		bool preliminary() const;
 
 		//! CreationInfo for the Arrival object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 
 	// ------------------------------------------------------------------

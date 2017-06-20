@@ -223,7 +223,7 @@ void ResponseFIR::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponseFIR::gain() const throw(Seiscomp::Core::ValueException) {
+double ResponseFIR::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponseFIR.gain is not set");
@@ -243,7 +243,7 @@ void ResponseFIR::setDecimationFactor(const OPT(int)& decimationFactor) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponseFIR::decimationFactor() const throw(Seiscomp::Core::ValueException) {
+int ResponseFIR::decimationFactor() const {
 	if ( _decimationFactor )
 		return *_decimationFactor;
 	throw Seiscomp::Core::ValueException("ResponseFIR.decimationFactor is not set");
@@ -263,7 +263,7 @@ void ResponseFIR::setDelay(const OPT(double)& delay) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponseFIR::delay() const throw(Seiscomp::Core::ValueException) {
+double ResponseFIR::delay() const {
 	if ( _delay )
 		return *_delay;
 	throw Seiscomp::Core::ValueException("ResponseFIR.delay is not set");
@@ -283,7 +283,7 @@ void ResponseFIR::setCorrection(const OPT(double)& correction) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponseFIR::correction() const throw(Seiscomp::Core::ValueException) {
+double ResponseFIR::correction() const {
 	if ( _correction )
 		return *_correction;
 	throw Seiscomp::Core::ValueException("ResponseFIR.correction is not set");
@@ -303,7 +303,7 @@ void ResponseFIR::setNumberOfCoefficients(const OPT(int)& numberOfCoefficients) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponseFIR::numberOfCoefficients() const throw(Seiscomp::Core::ValueException) {
+int ResponseFIR::numberOfCoefficients() const {
 	if ( _numberOfCoefficients )
 		return *_numberOfCoefficients;
 	throw Seiscomp::Core::ValueException("ResponseFIR.numberOfCoefficients is not set");
@@ -341,7 +341,7 @@ void ResponseFIR::setCoefficients(const OPT(RealArray)& coefficients) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealArray& ResponseFIR::coefficients() throw(Seiscomp::Core::ValueException) {
+RealArray& ResponseFIR::coefficients() {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponseFIR.coefficients is not set");
@@ -352,7 +352,7 @@ RealArray& ResponseFIR::coefficients() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealArray& ResponseFIR::coefficients() const throw(Seiscomp::Core::ValueException) {
+const RealArray& ResponseFIR::coefficients() const {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponseFIR.coefficients is not set");
@@ -372,7 +372,7 @@ void ResponseFIR::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& ResponseFIR::remark() throw(Seiscomp::Core::ValueException) {
+Blob& ResponseFIR::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponseFIR.remark is not set");
@@ -383,7 +383,7 @@ Blob& ResponseFIR::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& ResponseFIR::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& ResponseFIR::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponseFIR.remark is not set");

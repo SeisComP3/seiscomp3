@@ -145,8 +145,8 @@ class SC_SYSTEM_CORE_API AuxDevice : public PublicObject {
 		const std::string& manufacturer() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

@@ -246,7 +246,7 @@ TravelTimeTableInterface *TravelTimeTableInterface::Create(const char *name) {
 TravelTime TravelTimeTableInterface::compute(const char *phase,
                                              double lat1, double lon1, double dep1,
                                              double lat2, double lon2, double alt2,
-                                             int ellc) throw(std::exception) {
+                                             int ellc) {
 	TravelTimeList *ttlist = compute(lat1, lon1, dep1, lat2, lon2, alt2, ellc);
 	if ( ttlist == NULL )
 		throw NoPhaseError();
@@ -303,7 +303,7 @@ TravelTime
 TravelTimeTable::compute(const char *phase,
                          double lat1, double lon1, double dep1,
                          double lat2, double lon2, double alt2,
-                         int ellc) throw(std::exception) {
+                         int ellc) {
 	if ( _interface )
 		return _interface->compute(phase, lat1, lon1, dep1, lat2, lon2, alt2, ellc);
 	throw NoPhaseError();
@@ -313,7 +313,7 @@ TravelTimeTable::compute(const char *phase,
 TravelTime
 TravelTimeTable::computeFirst(double lat1, double lon1, double dep1,
                               double lat2, double lon2, double alt2,
-                              int ellc) throw(std::exception) {
+                              int ellc) {
 	if ( _interface )
 		return _interface->computeFirst(lat1, lon1, dep1, lat2, lon2, alt2, ellc);
 	throw NoPhaseError();

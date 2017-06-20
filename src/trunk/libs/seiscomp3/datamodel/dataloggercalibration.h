@@ -123,20 +123,20 @@ class SC_SYSTEM_CORE_API DataloggerCalibration : public Object {
 
 		//! End of validity
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Overrides nominal gain of calibrated datalogger
 		//! (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Gain frequency (48.06/58.05)
 		void setGainFrequency(const OPT(double)& gainFrequency);
-		double gainFrequency() const throw(Seiscomp::Core::ValueException);
+		double gainFrequency() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

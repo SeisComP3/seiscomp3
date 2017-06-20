@@ -106,7 +106,7 @@ void NodalPlanes::setNodalPlane1(const OPT(NodalPlane)& nodalPlane1) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-NodalPlane& NodalPlanes::nodalPlane1() throw(Seiscomp::Core::ValueException) {
+NodalPlane& NodalPlanes::nodalPlane1() {
 	if ( _nodalPlane1 )
 		return *_nodalPlane1;
 	throw Seiscomp::Core::ValueException("NodalPlanes.nodalPlane1 is not set");
@@ -117,7 +117,7 @@ NodalPlane& NodalPlanes::nodalPlane1() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const NodalPlane& NodalPlanes::nodalPlane1() const throw(Seiscomp::Core::ValueException) {
+const NodalPlane& NodalPlanes::nodalPlane1() const {
 	if ( _nodalPlane1 )
 		return *_nodalPlane1;
 	throw Seiscomp::Core::ValueException("NodalPlanes.nodalPlane1 is not set");
@@ -137,7 +137,7 @@ void NodalPlanes::setNodalPlane2(const OPT(NodalPlane)& nodalPlane2) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-NodalPlane& NodalPlanes::nodalPlane2() throw(Seiscomp::Core::ValueException) {
+NodalPlane& NodalPlanes::nodalPlane2() {
 	if ( _nodalPlane2 )
 		return *_nodalPlane2;
 	throw Seiscomp::Core::ValueException("NodalPlanes.nodalPlane2 is not set");
@@ -148,7 +148,7 @@ NodalPlane& NodalPlanes::nodalPlane2() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const NodalPlane& NodalPlanes::nodalPlane2() const throw(Seiscomp::Core::ValueException) {
+const NodalPlane& NodalPlanes::nodalPlane2() const {
 	if ( _nodalPlane2 )
 		return *_nodalPlane2;
 	throw Seiscomp::Core::ValueException("NodalPlanes.nodalPlane2 is not set");
@@ -168,7 +168,7 @@ void NodalPlanes::setPreferredPlane(const OPT(int)& preferredPlane) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int NodalPlanes::preferredPlane() const throw(Seiscomp::Core::ValueException) {
+int NodalPlanes::preferredPlane() const {
 	if ( _preferredPlane )
 		return *_preferredPlane;
 	throw Seiscomp::Core::ValueException("NodalPlanes.preferredPlane is not set");

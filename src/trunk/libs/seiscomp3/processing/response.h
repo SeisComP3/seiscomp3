@@ -111,10 +111,10 @@ class SC_SYSTEM_CLIENT_API ResponsePAZ : public Response {
 	// ----------------------------------------------------------------------
 	public:
 		void setNormalizationFactor(const OPT(double)& normalizationFactor);
-		double normalizationFactor() const throw(Seiscomp::Core::ValueException);
+		double normalizationFactor() const;
 
 		void setNormalizationFrequency(const OPT(double)& normalizationFrequency);
-		double normalizationFrequency() const throw(Seiscomp::Core::ValueException);
+		double normalizationFrequency() const;
 
 		void setPoles(const Poles& poles);
 		const Poles& poles() const;

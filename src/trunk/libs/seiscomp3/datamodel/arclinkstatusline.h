@@ -111,7 +111,7 @@ class SC_SYSTEM_CORE_API ArclinkStatusLine : public Object {
 		const std::string& status() const;
 
 		void setSize(const OPT(int)& size);
-		int size() const throw(Seiscomp::Core::ValueException);
+		int size() const;
 
 		void setMessage(const std::string& message);
 		const std::string& message() const;

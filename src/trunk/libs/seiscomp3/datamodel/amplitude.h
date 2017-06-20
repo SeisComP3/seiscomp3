@@ -146,27 +146,27 @@ class SC_SYSTEM_CORE_API Amplitude : public PublicObject {
 		//! For clarity, using the optional unit attribute is highly
 		//! encouraged.
 		void setAmplitude(const OPT(RealQuantity)& amplitude);
-		RealQuantity& amplitude() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& amplitude() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& amplitude();
+		const RealQuantity& amplitude() const;
 
 		//! Description of the time window used for amplitude
 		//! measurement.
 		//! Recommended for duration magnitudes.
 		void setTimeWindow(const OPT(TimeWindow)& timeWindow);
-		TimeWindow& timeWindow() throw(Seiscomp::Core::ValueException);
-		const TimeWindow& timeWindow() const throw(Seiscomp::Core::ValueException);
+		TimeWindow& timeWindow();
+		const TimeWindow& timeWindow() const;
 
 		//! Dominant period in the timeWindow in case of amplitude
 		//! measurements.
 		//! Not used for duration magnitude. The unit is seconds.
 		void setPeriod(const OPT(RealQuantity)& period);
-		RealQuantity& period() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& period() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& period();
+		const RealQuantity& period() const;
 
 		//! Signal-to-noise ratio of the spectrogram at the location
 		//! the amplitude was measured.
 		void setSnr(const OPT(double)& snr);
-		double snr() const throw(Seiscomp::Core::ValueException);
+		double snr() const;
 
 		//! This attribute provides the most likely measurement units
 		//! for the
@@ -183,8 +183,8 @@ class SC_SYSTEM_CORE_API Amplitude : public PublicObject {
 		//! Identifies the waveform stream on which the amplitude was
 		//! measured.
 		void setWaveformID(const OPT(WaveformStreamID)& waveformID);
-		WaveformStreamID& waveformID() throw(Seiscomp::Core::ValueException);
-		const WaveformStreamID& waveformID() const throw(Seiscomp::Core::ValueException);
+		WaveformStreamID& waveformID();
+		const WaveformStreamID& waveformID() const;
 
 		//! Identifies the filter or filter setup used for filtering
 		//! the waveform stream referenced by waveformID.
@@ -196,8 +196,8 @@ class SC_SYSTEM_CORE_API Amplitude : public PublicObject {
 
 		//! Scaling time for amplitude measurement.
 		void setScalingTime(const OPT(TimeQuantity)& scalingTime);
-		TimeQuantity& scalingTime() throw(Seiscomp::Core::ValueException);
-		const TimeQuantity& scalingTime() const throw(Seiscomp::Core::ValueException);
+		TimeQuantity& scalingTime();
+		const TimeQuantity& scalingTime() const;
 
 		//! Type of magnitude the amplitude measurement is used for.
 		//! For valid
@@ -209,12 +209,12 @@ class SC_SYSTEM_CORE_API Amplitude : public PublicObject {
 
 		//! Evaluation mode of Amplitude.
 		void setEvaluationMode(const OPT(EvaluationMode)& evaluationMode);
-		EvaluationMode evaluationMode() const throw(Seiscomp::Core::ValueException);
+		EvaluationMode evaluationMode() const;
 
 		//! CreationInfo for the Amplitude object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

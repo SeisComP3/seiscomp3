@@ -113,7 +113,7 @@ void JournalEntry::setCreated(const OPT(Seiscomp::Core::Time)& created) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time JournalEntry::created() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time JournalEntry::created() const {
 	if ( _created )
 		return *_created;
 	throw Seiscomp::Core::ValueException("JournalEntry.created is not set");

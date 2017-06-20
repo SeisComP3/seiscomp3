@@ -201,7 +201,7 @@ void AuxStream::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time AuxStream::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time AuxStream::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("AuxStream.end is not set");
@@ -311,7 +311,7 @@ void AuxStream::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AuxStream::restricted() const throw(Seiscomp::Core::ValueException) {
+bool AuxStream::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("AuxStream.restricted is not set");
@@ -331,7 +331,7 @@ void AuxStream::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AuxStream::shared() const throw(Seiscomp::Core::ValueException) {
+bool AuxStream::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("AuxStream.shared is not set");

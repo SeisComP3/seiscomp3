@@ -750,10 +750,10 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * @param query The query
 		 * @return The requested value
 		 */
-		bool configGetBool(const std::string& query) const throw(Config::Exception);
-		int configGetInt(const std::string& query) const throw(Config::Exception);
-		double configGetDouble(const std::string& query) const throw(Config::Exception);
-		std::string configGetString(const std::string& query) const throw(Config::Exception);
+		bool configGetBool(const std::string& query) const;
+		int configGetInt(const std::string& query) const;
+		double configGetDouble(const std::string& query) const;
+		std::string configGetString(const std::string& query) const;
 
 		/**
 		 * @brief Convenience method that calls configGetString and resolves
@@ -762,12 +762,12 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * @param query The query
 		 * @return The path
 		 */
-		std::string configGetPath(const std::string& query) const throw(Config::Exception);
+		std::string configGetPath(const std::string& query) const;
 
-		std::vector<bool> configGetBools(const std::string& query) const throw(Config::Exception);
-		std::vector<int> configGetInts(const std::string& query) const throw(Config::Exception);
-		std::vector<double> configGetDoubles(const std::string& query) const throw(Config::Exception);
-		std::vector<std::string> configGetStrings(const std::string& query) const throw(Config::Exception);
+		std::vector<bool> configGetBools(const std::string& query) const;
+		std::vector<int> configGetInts(const std::string& query) const;
+		std::vector<double> configGetDoubles(const std::string& query) const;
+		std::vector<std::string> configGetStrings(const std::string& query) const;
 
 		/**
 		 * Write a singel value to the local section of the clients

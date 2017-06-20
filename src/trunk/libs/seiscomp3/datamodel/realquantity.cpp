@@ -175,7 +175,7 @@ void RealQuantity::setUncertainty(const OPT(double)& uncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double RealQuantity::uncertainty() const throw(Seiscomp::Core::ValueException) {
+double RealQuantity::uncertainty() const {
 	if ( _uncertainty )
 		return *_uncertainty;
 	throw Seiscomp::Core::ValueException("RealQuantity.uncertainty is not set");
@@ -195,7 +195,7 @@ void RealQuantity::setLowerUncertainty(const OPT(double)& lowerUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double RealQuantity::lowerUncertainty() const throw(Seiscomp::Core::ValueException) {
+double RealQuantity::lowerUncertainty() const {
 	if ( _lowerUncertainty )
 		return *_lowerUncertainty;
 	throw Seiscomp::Core::ValueException("RealQuantity.lowerUncertainty is not set");
@@ -215,7 +215,7 @@ void RealQuantity::setUpperUncertainty(const OPT(double)& upperUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double RealQuantity::upperUncertainty() const throw(Seiscomp::Core::ValueException) {
+double RealQuantity::upperUncertainty() const {
 	if ( _upperUncertainty )
 		return *_upperUncertainty;
 	throw Seiscomp::Core::ValueException("RealQuantity.upperUncertainty is not set");
@@ -235,7 +235,7 @@ void RealQuantity::setConfidenceLevel(const OPT(double)& confidenceLevel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double RealQuantity::confidenceLevel() const throw(Seiscomp::Core::ValueException) {
+double RealQuantity::confidenceLevel() const {
 	if ( _confidenceLevel )
 		return *_confidenceLevel;
 	throw Seiscomp::Core::ValueException("RealQuantity.confidenceLevel is not set");

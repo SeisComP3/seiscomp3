@@ -73,10 +73,10 @@ class SC_SYSTEM_CLIENT_API CommandLine {
 		bool hasOption(const std::string& option) const;
 
 		template <typename T>
-		T option(const std::string& option) const throw(Core::TypeException);
+		T option(const std::string& option) const;
 
 		template <typename T, int LEN>
-		T option(const char (&option)[LEN]) const throw (Core::TypeException);
+		T option(const char (&option)[LEN]) const;
 
 		std::vector<std::string> unrecognizedOptions() const;
 

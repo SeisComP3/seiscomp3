@@ -244,7 +244,7 @@ void MomentTensor::setScalarMoment(const OPT(RealQuantity)& scalarMoment) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& MomentTensor::scalarMoment() throw(Seiscomp::Core::ValueException) {
+RealQuantity& MomentTensor::scalarMoment() {
 	if ( _scalarMoment )
 		return *_scalarMoment;
 	throw Seiscomp::Core::ValueException("MomentTensor.scalarMoment is not set");
@@ -255,7 +255,7 @@ RealQuantity& MomentTensor::scalarMoment() throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& MomentTensor::scalarMoment() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& MomentTensor::scalarMoment() const {
 	if ( _scalarMoment )
 		return *_scalarMoment;
 	throw Seiscomp::Core::ValueException("MomentTensor.scalarMoment is not set");
@@ -275,7 +275,7 @@ void MomentTensor::setTensor(const OPT(Tensor)& tensor) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Tensor& MomentTensor::tensor() throw(Seiscomp::Core::ValueException) {
+Tensor& MomentTensor::tensor() {
 	if ( _tensor )
 		return *_tensor;
 	throw Seiscomp::Core::ValueException("MomentTensor.tensor is not set");
@@ -286,7 +286,7 @@ Tensor& MomentTensor::tensor() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Tensor& MomentTensor::tensor() const throw(Seiscomp::Core::ValueException) {
+const Tensor& MomentTensor::tensor() const {
 	if ( _tensor )
 		return *_tensor;
 	throw Seiscomp::Core::ValueException("MomentTensor.tensor is not set");
@@ -306,7 +306,7 @@ void MomentTensor::setVariance(const OPT(double)& variance) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensor::variance() const throw(Seiscomp::Core::ValueException) {
+double MomentTensor::variance() const {
 	if ( _variance )
 		return *_variance;
 	throw Seiscomp::Core::ValueException("MomentTensor.variance is not set");
@@ -326,7 +326,7 @@ void MomentTensor::setVarianceReduction(const OPT(double)& varianceReduction) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensor::varianceReduction() const throw(Seiscomp::Core::ValueException) {
+double MomentTensor::varianceReduction() const {
 	if ( _varianceReduction )
 		return *_varianceReduction;
 	throw Seiscomp::Core::ValueException("MomentTensor.varianceReduction is not set");
@@ -346,7 +346,7 @@ void MomentTensor::setDoubleCouple(const OPT(double)& doubleCouple) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensor::doubleCouple() const throw(Seiscomp::Core::ValueException) {
+double MomentTensor::doubleCouple() const {
 	if ( _doubleCouple )
 		return *_doubleCouple;
 	throw Seiscomp::Core::ValueException("MomentTensor.doubleCouple is not set");
@@ -366,7 +366,7 @@ void MomentTensor::setClvd(const OPT(double)& clvd) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensor::clvd() const throw(Seiscomp::Core::ValueException) {
+double MomentTensor::clvd() const {
 	if ( _clvd )
 		return *_clvd;
 	throw Seiscomp::Core::ValueException("MomentTensor.clvd is not set");
@@ -386,7 +386,7 @@ void MomentTensor::setIso(const OPT(double)& iso) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensor::iso() const throw(Seiscomp::Core::ValueException) {
+double MomentTensor::iso() const {
 	if ( _iso )
 		return *_iso;
 	throw Seiscomp::Core::ValueException("MomentTensor.iso is not set");
@@ -442,7 +442,7 @@ void MomentTensor::setSourceTimeFunction(const OPT(SourceTimeFunction)& sourceTi
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SourceTimeFunction& MomentTensor::sourceTimeFunction() throw(Seiscomp::Core::ValueException) {
+SourceTimeFunction& MomentTensor::sourceTimeFunction() {
 	if ( _sourceTimeFunction )
 		return *_sourceTimeFunction;
 	throw Seiscomp::Core::ValueException("MomentTensor.sourceTimeFunction is not set");
@@ -453,7 +453,7 @@ SourceTimeFunction& MomentTensor::sourceTimeFunction() throw(Seiscomp::Core::Val
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const SourceTimeFunction& MomentTensor::sourceTimeFunction() const throw(Seiscomp::Core::ValueException) {
+const SourceTimeFunction& MomentTensor::sourceTimeFunction() const {
 	if ( _sourceTimeFunction )
 		return *_sourceTimeFunction;
 	throw Seiscomp::Core::ValueException("MomentTensor.sourceTimeFunction is not set");
@@ -491,7 +491,7 @@ void MomentTensor::setMethod(const OPT(MomentTensorMethod)& method) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MomentTensorMethod MomentTensor::method() const throw(Seiscomp::Core::ValueException) {
+MomentTensorMethod MomentTensor::method() const {
 	if ( _method )
 		return *_method;
 	throw Seiscomp::Core::ValueException("MomentTensor.method is not set");
@@ -511,7 +511,7 @@ void MomentTensor::setStatus(const OPT(MomentTensorStatus)& status) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MomentTensorStatus MomentTensor::status() const throw(Seiscomp::Core::ValueException) {
+MomentTensorStatus MomentTensor::status() const {
 	if ( _status )
 		return *_status;
 	throw Seiscomp::Core::ValueException("MomentTensor.status is not set");
@@ -567,7 +567,7 @@ void MomentTensor::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& MomentTensor::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& MomentTensor::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("MomentTensor.creationInfo is not set");
@@ -578,7 +578,7 @@ CreationInfo& MomentTensor::creationInfo() throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& MomentTensor::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& MomentTensor::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("MomentTensor.creationInfo is not set");

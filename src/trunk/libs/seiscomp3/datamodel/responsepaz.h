@@ -137,41 +137,41 @@ class SC_SYSTEM_CORE_API ResponsePAZ : public PublicObject {
 
 		//! Gain of response (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Gain frequency (48.06/58.05)
 		void setGainFrequency(const OPT(double)& gainFrequency);
-		double gainFrequency() const throw(Seiscomp::Core::ValueException);
+		double gainFrequency() const;
 
 		//! A0 normalization factor (43.08/53.07)
 		void setNormalizationFactor(const OPT(double)& normalizationFactor);
-		double normalizationFactor() const throw(Seiscomp::Core::ValueException);
+		double normalizationFactor() const;
 
 		//! Normalization frequency (43.09/53.08)
 		void setNormalizationFrequency(const OPT(double)& normalizationFrequency);
-		double normalizationFrequency() const throw(Seiscomp::Core::ValueException);
+		double normalizationFrequency() const;
 
 		//! Number of zeros (43.10/53.09)
 		void setNumberOfZeros(const OPT(int)& numberOfZeros);
-		int numberOfZeros() const throw(Seiscomp::Core::ValueException);
+		int numberOfZeros() const;
 
 		//! Number of poles (43.15/53.14)
 		void setNumberOfPoles(const OPT(int)& numberOfPoles);
-		int numberOfPoles() const throw(Seiscomp::Core::ValueException);
+		int numberOfPoles() const;
 
 		//! Zeros (43.16-19/53.10-13)
 		void setZeros(const OPT(ComplexArray)& zeros);
-		ComplexArray& zeros() throw(Seiscomp::Core::ValueException);
-		const ComplexArray& zeros() const throw(Seiscomp::Core::ValueException);
+		ComplexArray& zeros();
+		const ComplexArray& zeros() const;
 
 		//! Poles (43.11-14/53.15-18)
 		void setPoles(const OPT(ComplexArray)& poles);
-		ComplexArray& poles() throw(Seiscomp::Core::ValueException);
-		const ComplexArray& poles() const throw(Seiscomp::Core::ValueException);
+		ComplexArray& poles();
+		const ComplexArray& poles() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

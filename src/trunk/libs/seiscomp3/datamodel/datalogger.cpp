@@ -384,7 +384,7 @@ void Datalogger::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Datalogger::gain() const throw(Seiscomp::Core::ValueException) {
+double Datalogger::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("Datalogger.gain is not set");
@@ -404,7 +404,7 @@ void Datalogger::setMaxClockDrift(const OPT(double)& maxClockDrift) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Datalogger::maxClockDrift() const throw(Seiscomp::Core::ValueException) {
+double Datalogger::maxClockDrift() const {
 	if ( _maxClockDrift )
 		return *_maxClockDrift;
 	throw Seiscomp::Core::ValueException("Datalogger.maxClockDrift is not set");
@@ -424,7 +424,7 @@ void Datalogger::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& Datalogger::remark() throw(Seiscomp::Core::ValueException) {
+Blob& Datalogger::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Datalogger.remark is not set");
@@ -435,7 +435,7 @@ Blob& Datalogger::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& Datalogger::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& Datalogger::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Datalogger.remark is not set");

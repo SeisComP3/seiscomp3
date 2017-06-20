@@ -273,7 +273,7 @@ bool MetaProperty::arrayRemoveObject(BaseObject *object, BaseObject *child) cons
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool MetaProperty::write(BaseObject *object, MetaValue value) const throw(GeneralException) {
+bool MetaProperty::write(BaseObject *object, MetaValue value) const {
 	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -283,7 +283,7 @@ bool MetaProperty::write(BaseObject *object, MetaValue value) const throw(Genera
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool MetaProperty::writeString(BaseObject *object, const std::string &value) const throw(GeneralException) {
+bool MetaProperty::writeString(BaseObject *object, const std::string &value) const {
 	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -293,7 +293,7 @@ bool MetaProperty::writeString(BaseObject *object, const std::string &value) con
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MetaValue MetaProperty::read(const BaseObject *object) const throw(GeneralException) {
+MetaValue MetaProperty::read(const BaseObject *object) const {
 	throw PropertyNotFoundException();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -303,7 +303,7 @@ MetaValue MetaProperty::read(const BaseObject *object) const throw(GeneralExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string MetaProperty::readString(const BaseObject *object) const throw(GeneralException) {
+std::string MetaProperty::readString(const BaseObject *object) const {
 	return "";
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
