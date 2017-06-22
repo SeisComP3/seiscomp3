@@ -42,6 +42,10 @@ namespace Core {
    - Remove dynamic type throw declarations from all methods as this is
      deprecated in current C++ standard
    - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
+   - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent
+     canvas
+   - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added class Seiscomp::Gui::EventLayer
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()
