@@ -25,6 +25,7 @@
 #include <seiscomp3/gui/datamodel/eventedit.h>
 #include <seiscomp3/gui/datamodel/pickersettings.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
+#include <seiscomp3/gui/datamodel/eventlayer.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/config/config.h>
@@ -611,6 +612,18 @@ MainFrame::MainFrame(){
 	_eventList->setRelativeMinimumEventTime(Application::Instance()->maxEventAge());
 	_eventList->setEventModificationsEnabled(true);
 	_eventList->setFMLinkEnabled(true);
+
+	// Connect events layer with map
+	EventLayer *eventMapLayer = new EventLayer(_originLocator->map());
+	connect(_eventList, SIGNAL(reset()), eventMapLayer, SLOT(clear()));
+	connect(_eventList, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(addEvent(Seiscomp::DataModel::Event*)));
+	connect(_eventList, SIGNAL(eventUpdatedInList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(updateEvent(Seiscomp::DataModel::Event*)));
+	connect(_eventList, SIGNAL(eventRemovedFromList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(removeEvent(Seiscomp::DataModel::Event*)));
+
+	_originLocator->map()->canvas().addLayer(eventMapLayer);
 
 	QLayout* layoutEventList = new QVBoxLayout(_ui.tabEventList);
 	layoutEventList->addWidget(_eventList);
