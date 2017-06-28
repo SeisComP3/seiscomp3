@@ -935,22 +935,24 @@ void Canvas::initLayerProperites() {
 		readLayerProperties(_layerProperties.back());
 	}
 
-	// Read custom layers
-	try {
-		std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
-		for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
-			LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
-			if ( !customLayer ) {
-				SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
-				continue;
-			}
+	if ( _customLayers.empty() ) {
+		// Read custom layers
+		try {
+			std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
+			for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
+				LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
+				if ( !customLayer ) {
+					SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
+					continue;
+				}
 
-			customLayer->setName(customLayerInterfaces[i].c_str());
-			_customLayers.append(customLayer);
-			prependLayer(customLayer.get());
+				customLayer->setName(customLayerInterfaces[i].c_str());
+				_customLayers.append(customLayer);
+				prependLayer(customLayer.get());
+			}
 		}
+		catch ( ... ) {}
 	}
-	catch ( ... ) {}
 
 	// Read layer order
 	try {
