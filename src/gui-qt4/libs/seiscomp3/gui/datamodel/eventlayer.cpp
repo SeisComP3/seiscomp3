@@ -58,7 +58,7 @@ void updateSymbol(Map::Canvas *canvas, OriginSymbol *symbol,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventLayer::EventLayer(QObject* parent) : Map::Layer(parent) {
-	setName("Events");
+	setName("events");
 	setVisible(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
