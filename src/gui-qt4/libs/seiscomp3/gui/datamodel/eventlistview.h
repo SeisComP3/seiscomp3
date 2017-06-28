@@ -132,6 +132,12 @@ class SC_GUI_API EventListView : public QWidget {
 		void eventFMSelected(Seiscomp::DataModel::Event*);
 		void originReferenceAdded(const std::string &, Seiscomp::DataModel::OriginReference*);
 
+		//! Emitted when the event list is cleared
+		void reset();
+		void eventAddedToList(Seiscomp::DataModel::Event*);
+		void eventUpdatedInList(Seiscomp::DataModel::Event*);
+		void eventRemovedFromList(Seiscomp::DataModel::Event*);
+
 
 	public slots:
 		void setAutoSelect(bool);

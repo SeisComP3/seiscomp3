@@ -2567,6 +2567,8 @@ void EventListView::initTree() {
 
 	PublicObjectEvaluator::Instance().clear(this);
 	PublicObjectEvaluator::Instance().setDatabaseURI(SCApp->databaseURI().c_str());
+
+	emit reset();
 }
 
 
@@ -2761,7 +2763,7 @@ void EventListView::readFromDatabase() {
 }
 
 
-void EventListView::readFromDatabase(const Filter& filter) {
+void EventListView::readFromDatabase(const Filter &filter) {
 	if ( _reader == NULL ) return;
 
 	initTree();
@@ -3137,6 +3139,7 @@ void EventListView::removeExpiredEvents() {
 				QTreeWidgetItem* item = _treeWidget->takeTopLevelItem(i);
 				if ( item ) {
 					delete item;
+					eventRemovedFromList(event);
 					--i;
 				}
 			}
@@ -3239,6 +3242,9 @@ EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event) {
 	_ui.btnClear->setEnabled(true);
 
 	updateEventProcessColumns(item, true);
+
+	if ( event != NULL )
+		eventAddedToList(event);
 
 	return item;
 }
@@ -3423,8 +3429,10 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 							emit originUpdated(static_cast<Origin*>(item->object()));
 							EventTreeItem* parent = static_cast<EventTreeItem*>(item->parent()->parent());
 							Event *e = static_cast<Event*>(parent->object());
-							if ( e && e->preferredOriginID() == o->publicID() )
+							if ( e && e->preferredOriginID() == o->publicID() ) {
 								parent->update(this);
+								emit eventUpdatedInList(e);
+							}
 						}
 					}
 					break;
@@ -3454,8 +3462,10 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 							emit focalMechanismUpdated(static_cast<FocalMechanism*>(item->object()));
 							EventTreeItem* parent = static_cast<EventTreeItem*>(item->parent()->parent());
 							Event *e = static_cast<Event*>(parent->object());
-							if ( e && e->preferredFocalMechanismID() == fm->publicID() )
+							if ( e && e->preferredFocalMechanismID() == fm->publicID() ) {
 								parent->update(this);
+								emit eventUpdatedInList(e);
+							}
 						}
 					}
 					break;
@@ -3577,6 +3587,8 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 
 							item->update(this);
 						}
+
+						emit eventUpdatedInList(event);
 					}
 				}
 				break;
@@ -3742,6 +3754,7 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 			EventTreeItem* item = (EventTreeItem*)_treeWidget->topLevelItem(i);
 			if ( item->event() && item->event()->preferredMagnitudeID() == mag->publicID() ) {
 				item->update(this);
+				emit eventUpdatedInList(item->event());
 			}
 		}
 
@@ -3836,8 +3849,10 @@ void EventListView::updateOrigin(Seiscomp::DataModel::Origin* origin) {
 		item->update(this);
 		EventTreeItem* parent = static_cast<EventTreeItem*>(item->parent()->parent());
 		Event *e = static_cast<Event*>(parent->object());
-		if ( e && e->preferredOriginID() == origin->publicID() )
+		if ( e && e->preferredOriginID() == origin->publicID() ) {
 			parent->update(this);
+			emit eventUpdatedInList(e);
+		}
 	}
 
 	if ( !_updateLocalEPInstance ) {
@@ -3951,8 +3966,10 @@ void EventListView::updateFocalMechanism(Seiscomp::DataModel::FocalMechanism *fm
 		item->update(this);
 		EventTreeItem* parent = static_cast<EventTreeItem*>(item->parent()->parent());
 		Event *e = static_cast<Event*>(parent->object());
-		if ( e && e->preferredOriginID() == fm->publicID() )
+		if ( e && e->preferredOriginID() == fm->publicID() ) {
 			parent->update(this);
+			emit eventUpdatedInList(e);
+		}
 	}
 
 	if ( !_updateLocalEPInstance ) {

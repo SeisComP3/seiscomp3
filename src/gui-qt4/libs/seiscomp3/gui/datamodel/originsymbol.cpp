@@ -38,6 +38,7 @@ namespace Gui {
 OriginSymbol::OriginSymbol(Map::Decorator* decorator)
 : Symbol(decorator)
 , _filled(false)
+, _preferredMagnitudeValue(0)
 , _depth(0) {
 	init();
 }
