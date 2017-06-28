@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -10,12 +10,12 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
 #ifndef __SEISCOMP_GUI_MAP_LAYER_H__
 #define __SEISCOMP_GUI_MAP_LAYER_H__
 
-#ifndef Q_MOC_RUN
-#include <seiscomp3/core/rtti.h>
 
+#ifndef Q_MOC_RUN
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/interfacefactory.h>
 #endif
@@ -25,6 +25,7 @@
 #include <seiscomp3/gui/map/mapsymbol.h>
 
 #include <QObject>
+
 
 class QContextMenuEvent;
 class QDialog;
@@ -46,7 +47,6 @@ class Canvas;
 DEFINE_SMARTPOINTER(Layer);
 
 class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
-	DECLARE_RTTI;
 	Q_OBJECT
 
 	public:
@@ -67,6 +67,12 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual Layer &operator =(const Layer &other);
 		virtual Layer *clone() const { return NULL; }
 
+
+	public slots:
+		void setAntiAliasingEnabled(bool);
+		virtual void setVisible(bool);
+
+
 	public:
 		void setName(const QString&);
 		const QString &name() const;
@@ -82,11 +88,11 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 		const QList<Legend*> &legends() const { return _legends; }
 
-		virtual void setVisible(bool);
 		bool isVisible() const;
-
-		void setAntiAliasingEnabled(bool);
 		bool isAntiAliasingEnabled() const;
+
+		Canvas *canvas() const { return _canvas; }
+
 
 	public:
 		virtual void calculateMapPosition(const Map::Canvas *canvas);
@@ -101,11 +107,14 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		void onObjectDestroyed(QObject *object);
 
 	private:
+		Canvas                       *_canvas;
 		QString                       _name;
 		QString                       _description;
 		bool                          _visible;
 		bool                          _antiAliasing;
 		Legends                       _legends;
+
+	friend class Canvas;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Layer::UpdateHints)
@@ -114,6 +123,7 @@ DEFINE_INTERFACE_FACTORY(Layer);
 
 #define REGISTER_LAYER_INTERFACE(Class, Service) \
 Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Gui::Map::Layer, Class> __##Class##InterfaceFactory__(Service)
+
 
 } // namespace Map
 } // namespce Gui

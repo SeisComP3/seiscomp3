@@ -130,8 +130,8 @@ class SC_GUI_API Canvas : public QObject {
 		bool isInside(double lon, double lat) const;
 		bool isVisible(double lon, double lat) const;
 
-		SymbolCollection *symbolCollection() const;
-		void setSymbolCollection(SymbolCollection *collection);
+		const SymbolCollection *symbolCollection() const;
+		SymbolCollection *symbolCollection();
 
 		void setSelectedCity(const Math::Geo::CityD*);
 
@@ -200,9 +200,10 @@ class SC_GUI_API Canvas : public QObject {
 		}
 
 		//! Canvas does not take ownership of layer.
-		void prependLayer(Layer*);
-		void addLayer(Layer*);
-		void insertLayerBefore(const Layer*, Layer*);
+		bool prependLayer(Layer*);
+		bool addLayer(Layer*);
+		bool insertLayerBefore(const Layer*, Layer*);
+
 		void removeLayer(Layer*);
 
 		void lower(Layer*);
@@ -249,8 +250,6 @@ class SC_GUI_API Canvas : public QObject {
 
 	private:
 		void init();
-
-		void updateDrawablePositions() const;
 
 		void drawCity(QPainter &painter, const Math::Geo::CityD &,
 		              QVector< QList<QRect> > &grid,
@@ -322,7 +321,6 @@ class SC_GUI_API Canvas : public QObject {
 
 		typedef QList<Layer*> Layers;
 		typedef QList<LayerPtr> CustomLayers;
-		typedef boost::shared_ptr<SymbolCollection> SymbolCollectionPtr;
 
 	private:
 		QFont                         _font;
@@ -346,7 +344,7 @@ class SC_GUI_API Canvas : public QObject {
 		bool                          _dirtyLayers;
 		bool                          _previewMode;
 
-		SymbolCollectionPtr           _mapSymbolCollection;
+		DefaultSymbolCollection       _mapSymbolCollection;
 		std::vector<LayerProperties*> _layerProperties;
 
 		Layers                        _layers;

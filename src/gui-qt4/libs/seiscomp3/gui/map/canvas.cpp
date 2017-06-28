@@ -240,13 +240,18 @@ Canvas::Canvas(ImageTree *mapTree)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::~Canvas() {
 	delete _projection;
-	symbolCollection()->clear();
+	_mapSymbolCollection.clear();
 
 	// Delete all LayerProperties
 	for ( size_t i = 0; i < _layerProperties.size(); ++i ) {
 		delete _layerProperties[i];
 	}
+
 	_layerProperties.clear();
+
+	// Remove this from Layers parent
+	for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
+		(*it)->_canvas = NULL;
 
 	if ( _delegate ) delete _delegate;
 }
@@ -357,10 +362,10 @@ void Canvas::init() {
 		connect(_maptree.get(), SIGNAL(tilesUpdated()), this, SLOT(updatedTiles()));
 	}
 
-	_mapSymbolCollection = boost::shared_ptr<SymbolCollection>(new DefaultSymbolCollection);
-
+	_citiesLayer._canvas = this;
 	_citiesLayer.setVisible(SCScheme.map.showCities);
 
+	_gridLayer._canvas = this;
 	_gridLayer.setGridDistance(QPointF(15.0, 15.0));
 	_gridLayer.setVisible(SCScheme.map.showGrid);
 
@@ -872,8 +877,8 @@ bool Canvas::isVisible(double lon, double lat) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SymbolCollection* Canvas::symbolCollection() const {
-	return _mapSymbolCollection.get();
+const SymbolCollection *Canvas::symbolCollection() const {
+	return &_mapSymbolCollection;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -881,8 +886,8 @@ SymbolCollection* Canvas::symbolCollection() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::setSymbolCollection(SymbolCollection *collection) {
-	_mapSymbolCollection = boost::shared_ptr<SymbolCollection>(collection);
+SymbolCollection *Canvas::symbolCollection() {
+	return &_mapSymbolCollection;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -941,8 +946,6 @@ void Canvas::initLayerProperites() {
 			}
 
 			customLayer->setName(customLayerInterfaces[i].c_str());
-			customLayer->init(SCApp->configuration());
-
 			_customLayers.append(customLayer);
 			prependLayer(customLayer.get());
 		}
@@ -1148,7 +1151,8 @@ void Canvas::drawLayers(QPainter& painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
-	for ( SymbolCollection::const_iterator it = symbolCollection()->begin(); it != symbolCollection()->end(); ++it ) {
+	for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
+	      it != _mapSymbolCollection.end(); ++it ) {
 		Symbol* mapSymbol = *it;
 
 		bool isConsidered = !mapSymbol->isClipped() &&
@@ -1173,7 +1177,7 @@ void Canvas::drawDrawables(QPainter& painter) {
 	drawDrawables(painter, Symbol::MEDIUM);
 	drawDrawables(painter, Symbol::HIGH);
 
-	Symbol* tmp = symbolCollection()->top();
+	Symbol* tmp = _mapSymbolCollection.top();
 	if ( tmp ) tmp->draw(this, painter);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1263,8 +1267,21 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 		                                  _filterMap && !_previewMode);
 	}
 
-	if ( _dirtyLayers ) {
-		updateDrawablePositions();
+	if ( _buffer.width() > 0 && _buffer.height() > 0 ) {
+		if ( _dirtyLayers || _mapSymbolCollection._dirty ) {
+			for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
+			      it != _mapSymbolCollection.end(); ++it )
+				(*it)->calculateMapPosition(this);
+			_mapSymbolCollection._dirty = false;
+		}
+
+		if ( _dirtyLayers ) {
+			for ( Layers::const_iterator it = _layers.begin();
+			      it != _layers.end(); ++it ) {
+				(*it)->calculateMapPosition(this);
+			}
+		}
+
 		_dirtyLayers = false;
 	}
 
@@ -1419,24 +1436,6 @@ void Canvas::draw(QPainter& painter) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateDrawablePositions() const {
-	if ( _buffer.width() <= 0 || _buffer.height() <= 0 ) return;
-
-	for ( SymbolCollection::const_iterator it = symbolCollection()->begin();
-	      it != symbolCollection()->end(); ++it )
-		(*it)->calculateMapPosition(this);
-
-	for ( Layers::const_iterator it = _layers.begin();
-	      it != _layers.end(); ++it ) {
-		(*it)->calculateMapPosition(this);
-	}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::centerMap(const QPoint& centerPnt) {
 	if ( !_projection->unproject(_center, centerPnt) ) return;
 	_projection->centerOn(_center);
@@ -1492,6 +1491,22 @@ void Canvas::onObjectDestroyed(QObject *object) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setupLayer(Layer *layer) {
+	layer->_canvas = this;
+
+	if ( SCApp ) {
+		if ( !layer->name().isEmpty() ) {
+			std::string cfgVisible = CFG_LAYER_PREFIX ".";
+			cfgVisible += layer->name().toStdString();
+			cfgVisible += ".visible";
+			try {
+				layer->setVisible(SCApp->configGetBool(cfgVisible));
+			}
+			catch ( ... ) {}
+		}
+
+		layer->init(SCApp->configuration());
+	}
+
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
@@ -1515,6 +1530,9 @@ void Canvas::setupLayer(Layer *layer) {
 			        this, SLOT(onObjectDestroyed(QObject*)));
 		}
 	}
+
+	if ( _buffer.width() > 0 && _buffer.height() > 0 )
+		layer->calculateMapPosition(this);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1522,9 +1540,15 @@ void Canvas::setupLayer(Layer *layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::prependLayer(Layer* layer) {
+bool Canvas::prependLayer(Layer* layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	_layers.prepend(layer);
 	setupLayer(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1532,9 +1556,15 @@ void Canvas::prependLayer(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::addLayer(Layer* layer) {
+bool Canvas::addLayer(Layer* layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	_layers.append(layer);
 	setupLayer(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1542,12 +1572,18 @@ void Canvas::addLayer(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::insertLayerBefore(const Layer *referenceLayer, Layer *layer) {
+bool Canvas::insertLayerBefore(const Layer *referenceLayer, Layer *layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	int index = _layers.indexOf(const_cast<Layer*>(referenceLayer));
 	if ( index >= 0 )
 		_layers.insert(index, layer);
 	else
 		_layers.append(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1581,6 +1617,8 @@ void Canvas::removeLayer(Layer* layer) {
 			++it;
 		}
 	}
+
+	layer->_canvas = NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1676,11 +1714,17 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 QMenu* Canvas::menu(QWidget* parent) const {
 	QMenu* menu = new QMenu("Layers", parent);
 	foreach ( Layer* layer, _layers ) {
-		QMenu* subMenu = layer->menu(parent);
+		QMenu* subMenu = layer->menu(menu);
 		if ( subMenu )
 			menu->addMenu(subMenu);
 	}
-	return menu->isEmpty() ? NULL : menu;
+
+	if ( menu->isEmpty() ) {
+		delete menu;
+		return NULL;
+	}
+
+	return menu;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

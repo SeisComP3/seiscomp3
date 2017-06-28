@@ -44,7 +44,20 @@ const static char *cmStrReload = "Reload";
 const static char *cmStrGrid = "Show Grid";
 const static char *cmStrCities = "Show Cities";
 const static char *cmStrLayers = "Show Layers";
+const static char *cmStrLayersGeofeatures = "Features";
 const static char *cmStrHideAll = "Hide All";
+
+
+bool isChildOf(QObject *child, QObject *parent) {
+	QObject *p = child->parent();
+	while ( p != NULL ) {
+		if ( p == parent )
+			return true;
+		p = p->parent();
+	}
+
+	return false;
+}
 
 
 inline QString lat2String(double lat, int precision) {
@@ -425,7 +438,7 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 	// Layers (if any)
 
-	QMenu* subMenu = _canvas.menu(this);
+	QMenu* subMenu = _canvas.menu(menu);
 	if ( subMenu )
 		menu->addMenu(subMenu);
 	// Refresh
@@ -443,28 +456,53 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 	// Layers (if any)
 
-	if ( !_canvas.layerProperties().empty() ) {
-		// No sub categories available or all layers disabled: 1 enabled main menu entry
-		if ( _canvas.layerProperties().size() == 1 || !_canvas.isDrawLayersEnabled() ) {
-			action = menu->addAction(cmStrLayers);
-			action->setCheckable(true);
-			action->setChecked(_canvas.isDrawLayersEnabled());
-		}
-		// Subcategories available: create layer sub menu
-		else {
-			_contextLayerMenu = menu->addMenu(cmStrLayers);
-			action = _contextLayerMenu->addAction(cmStrHideAll);
-			action->setCheckable(true);
-			_contextLayerMenu->addSeparator();
+	int fixedLayers = 2; // cities + grid
+	int fixedGeoFeatures = 1; // root feature
+	int layerCount = (_canvas.layerProperties().size()-fixedGeoFeatures) + (_canvas.layerCount()-fixedLayers);
+	if ( layerCount > 0 ) {
+		layerCount = _canvas.layerCount()-fixedLayers;
 
-			std::vector<Map::LayerProperties*>::const_iterator it =
-					_canvas.layerProperties().begin();
-			const Map::LayerProperties *root = *it++;
-			for ( ; it != _canvas.layerProperties().end(); ++it ) {
-				if ( (*it)->parent != root ) continue;
-				action = _contextLayerMenu->addAction((*it)->name.c_str());
+		_contextLayerMenu = menu->addMenu(cmStrLayers);
+
+		if ( (int)_canvas.layerProperties().size() > fixedGeoFeatures ) {
+			if ( !_canvas.isDrawLayersEnabled() ) {
+				action = _contextLayerMenu->addAction(cmStrLayersGeofeatures);
 				action->setCheckable(true);
-				action->setChecked((*it)->visible);
+				action->setChecked(false);
+			}
+			else {
+				QMenu *subMenu;
+
+				if ( layerCount > 0 )
+					subMenu = _contextLayerMenu->addMenu(cmStrLayersGeofeatures);
+				else
+					subMenu = _contextLayerMenu;
+
+				action = subMenu->addAction(cmStrHideAll);
+				action->setCheckable(true);
+				subMenu->addSeparator();
+
+				std::vector<Map::LayerProperties*>::const_iterator it = _canvas.layerProperties().begin();
+				const Map::LayerProperties *root = *it++;
+				for ( ; it != _canvas.layerProperties().end(); ++it ) {
+					if ( (*it)->parent != root ) continue;
+					action = subMenu->addAction((*it)->name.c_str());
+					action->setCheckable(true);
+					action->setChecked((*it)->visible);
+					action->setData(QVariant::fromValue<void*>(*it));
+				}
+			}
+		}
+
+		if ( layerCount > 0 ) {
+			for ( int i = 0; i < layerCount; ++i ) {
+				Map::Layer *layer = _canvas.layer(i+fixedLayers);
+				// What to do with empty names?
+				if ( layer->name().isEmpty() ) continue;
+				action = _contextLayerMenu->addAction(layer->name());
+				action->setCheckable(true);
+				action->setChecked(layer->isVisible());
+				connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
 			}
 		}
 	}
@@ -479,11 +517,9 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 		return;
 	}
 
-	if ( _contextProjectionMenu &&
-	     action->parent() == _contextProjectionMenu )
+	if ( _contextProjectionMenu && action->parent() == _contextProjectionMenu )
 		_canvas.setProjectionByName(action->text().toStdString().c_str());
-	else if ( _contextFilterMenu &&
-	          action->parent() == _contextFilterMenu ) {
+	else if ( _contextFilterMenu && action->parent() == _contextFilterMenu ) {
 		_filterMap = action->text() == cmStrBilinear;
 		_canvas.setBilinearFilter(_filterMap);
 	}
@@ -551,16 +587,15 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 		_canvas.reload();
 	else if ( action->text() == cmStrCities )
 		_canvas.setDrawCities(action->isChecked());
-	else if ( action->text() == cmStrLayers )
-		_canvas.setDrawLayers(action->isChecked());
 	else if ( action->text() == cmStrGrid )
 		_canvas.setDrawGrid(action->isChecked());
 	else if ( action->text() == cmStrLayers )
 		_canvas.setDrawLayers(action->isChecked());
-	else if ( _contextLayerMenu &&
-			  action->parent() == _contextLayerMenu ) {
+	else if ( _contextLayerMenu && isChildOf(action, _contextLayerMenu) ) {
 		if ( action->text() == cmStrHideAll )
 			_canvas.setDrawLayers(false);
+		else if ( action->text() == cmStrLayersGeofeatures )
+			_canvas.setDrawLayers(action->isChecked());
 		else {
 			// Find the LayerProperties which belongs to the action
 			std::vector<Map::LayerProperties*>::const_iterator it =
@@ -568,8 +603,7 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 			const Map::LayerProperties *root = *it++;
 			Map::LayerProperties *prop = NULL;
 			for ( ; it != _canvas.layerProperties().end(); ++it ) {
-				if ( (*it)->parent != root ||
-					 action->text() != (*it)->name.c_str() ) continue;
+				if ( (*it)->parent != root || action->data().value<void*>() != *it ) continue;
 				prop = *it;
 				break;
 			}
