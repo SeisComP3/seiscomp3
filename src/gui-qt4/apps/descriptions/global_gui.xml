@@ -38,6 +38,36 @@
 						Used to distinguish tile store implementations provided by plug-ins.
 					</description>
 				</parameter>
+				<parameter name="customLayers" type="list:string">
+					<description>
+						Allows to add custom layers that are included via plugins.
+						This is a list of layer names. A plugin must implement
+						the layer interface and register itself with the
+						name used in this list. The order of layers is the
+						default order. The custom layers are prepended to
+						the maps defaults layers such as the grid and the cities.
+					</description>
+				</parameter>
+				<parameter name="layers" type="string">
+					<description>
+						Defines the order of all configured layers. This
+						includes the standard layers (grid, cities) as
+						well as custom layers. The name of the grid layer
+						is &quot;grid&quot; and the name of the cities
+						layer is &quot;cities&quot;.
+					</description>
+				</parameter>
+				<group name="layers">
+					<group name="events">
+						<description>
+						Configuration options for the events layer that
+						shows all events on the map that are loaded in the
+						event list.
+						</description>
+						<parameter name="visible" type="boolean" default="false">
+						</parameter>
+					</group>
+				</group>
 			</group>
 			<group name="scheme">
 				<description>
