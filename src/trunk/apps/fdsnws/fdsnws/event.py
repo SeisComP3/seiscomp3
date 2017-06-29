@@ -206,11 +206,13 @@ class FDSNEvent(resource.Resource):
 
 	#---------------------------------------------------------------------------
 	def __init__(self, hideAuthor = False, evaluationMode = None,
-	             eventTypeWhitelist = None, eventTypeBlacklist = None):
+	             eventTypeWhitelist = None, eventTypeBlacklist = None,
+	             formatList = None):
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
 		self._eventTypeWhitelist = eventTypeWhitelist
 		self._eventTypeBlacklist = eventTypeBlacklist
+		self._formatList = formatList
 
 
 	#---------------------------------------------------------------------------
@@ -242,6 +244,10 @@ class FDSNEvent(resource.Resource):
 			msg = "filtering based on update time not supported"
 			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
+		if self._formatList is not None and ro.format not in self._formatList:
+			msg = "output format '%s' not available" % ro.format
+			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
 			exp = None
@@ -250,7 +256,7 @@ class FDSNEvent(resource.Resource):
 			if exp:
 				exp.setFormattedOutput(bool(ro.formatted))
 			else:
-				msg = "output format '%s' no available, export module '%s' could " \
+				msg = "output format '%s' not available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
 				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
@@ -739,5 +745,3 @@ class FDSNEvent(resource.Resource):
 
 		for e in dbq.getObjectIterator(q, DataModel.Event.TypeInfo()):
 			ep.add(DataModel.Event.Cast(e))
-
-

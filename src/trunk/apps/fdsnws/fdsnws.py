@@ -275,6 +275,7 @@ class FDSNWS(Application):
 		self._evaluationMode        = None
 		self._eventTypeWhitelist    = None
 		self._eventTypeBlacklist    = None
+		self._eventFormats          = None
 		self._stationFilter         = None
 		self._dataSelectFilter      = None
 		self._debugFilter           = False
@@ -383,6 +384,11 @@ class FDSNWS(Application):
 			strings = self.configGetStrings('eventType.blacklist')
 			if len(strings) > 0 or len(strings[0]):
 				self._eventTypeBlacklist = [ s.lower() for s in strings ]
+		except: pass
+		try:
+			strings = self.configGetStrings('eventFormats')
+			if len(strings) > 1 or len(strings[0]):
+				self._eventFormats = [ s.lower() for s in strings ]
 		except: pass
 
 		# station filter
@@ -598,7 +604,8 @@ class FDSNWS(Application):
 			event1.putChild('query', FDSNEvent(self._hideAuthor,
 			                                   self._evaluationMode,
 			                                   self._eventTypeWhitelist,
-			                                   self._eventTypeBlacklist))
+			                                   self._eventTypeBlacklist,
+			                                   self._eventFormats))
 			fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('catalogs', fileRes)
