@@ -31,7 +31,6 @@ try:
 	from seiscomp3 import Core, DataModel, Logging
 	from seiscomp3.Client import Application, Inventory
 	from seiscomp3.System import Environment
-	from seiscomp3.Config import Exception as ConfigException
 	from seiscomp3.Core import ValueException
 except ImportError, e:
 	sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
@@ -304,31 +303,31 @@ class FDSNWS(Application):
 
 		# bind address and port
 		try: self._listenAddress = self.configGetString('listenAddress')
-		except ConfigException: pass
+		except Exception: pass
 		try: self._port = self.configGetInt('port')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of connections
 		try: self._connections = self.configGetInt('connections')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of objects per query, used in fdsnws-station and
 		# fdsnws-event to limit main memory consumption
 		try: self._queryObjects = self.configGetInt('queryObjects')
-		except ConfigException: pass
+		except Exception: pass
 
 		# restrict end time of request to now-realtimeGap seconds, used in
 		# fdsnws-dataselect
 		try: self._realtimeGap = self.configGetInt('realtimeGap')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of samples (in units of million) per query, used in
 		# fdsnws-dataselect to limit bandwidth
 		try: self._samplesM = self.configGetDouble('samplesM')
-		except ConfigException: pass
+		except Exception: pass
 
 		try: self._recordBulkSize = self.configGetInt('recordBulkSize')
-		except ConfigException: pass
+		except Exception: pass
 
 		if self._recordBulkSize < 1:
 			print >> sys.stderr, "Invalid recordBulkSize, must be larger than 0"
@@ -337,34 +336,34 @@ class FDSNWS(Application):
 		# location of htpasswd file
 		try:
 			self._htpasswd = self.configGetString('htpasswd')
-		except ConfigException: pass
+		except Exception: pass
 		self._htpasswd = Environment.Instance().absolutePath(self._htpasswd)
 
 		# location of access log file
 		try:
 			self._accessLogFile = Environment.Instance().absolutePath(
 			                      self.configGetString('accessLog'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# access to restricted inventory information
 		try: self._allowRestricted = self.configGetBool('allowRestricted')
-		except: pass
+		except Exception: pass
 
 		# use arclink-access bindings
 		try: self._useArclinkAccess = self.configGetBool('useArclinkAccess')
-		except: pass
+		except Exception: pass
 
 		# services to enable
 		try: self._serveDataSelect = self.configGetBool('serveDataSelect')
-		except: pass
+		except Exception: pass
 		try: self._serveEvent = self.configGetBool('serveEvent')
-		except: pass
+		except Exception: pass
 		try: self._serveStation = self.configGetBool('serveStation')
-		except: pass
+		except Exception: pass
 
 		# event filter
 		try: self._hideAuthor = self.configGetBool('hideAuthor')
-		except: pass
+		except Exception: pass
 		try:
 			name = self.configGetString('evaluationMode')
 			if name.lower() == DataModel.EEvaluationModeNames.name(DataModel.MANUAL):
@@ -374,54 +373,54 @@ class FDSNWS(Application):
 			else:
 				print >> sys.stderr, "invalid evaluation mode string: %s" % name
 				return False
-		except: pass
+		except Exception: pass
 		try:
 			strings = self.configGetStrings('eventType.whitelist')
 			if len(strings) > 1 or len(strings[0]):
 				self._eventTypeWhitelist = [ s.lower() for s in strings ]
-		except: pass
+		except Exception: pass
 		try:
 			strings = self.configGetStrings('eventType.blacklist')
 			if len(strings) > 0 or len(strings[0]):
 				self._eventTypeBlacklist = [ s.lower() for s in strings ]
-		except: pass
+		except Exception: pass
 		try:
 			strings = self.configGetStrings('eventFormats')
 			if len(strings) > 1 or len(strings[0]):
 				self._eventFormats = [ s.lower() for s in strings ]
-		except: pass
+		except Exception: pass
 
 		# station filter
 		try: self._stationFilter = Environment.Instance().absolutePath(self.configGetString('stationFilter'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# dataSelect filter
 		try: self._dataSelectFilter = Environment.Instance().absolutePath(self.configGetString('dataSelectFilter'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# output filter debug information
 		try: self._debugFilter = self.configGetBool('debugFilter')
-		except ConfigException: pass
+		except Exception: pass
 
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = self.configGetString('fileNamePrefix')
-		except ConfigException: pass
+		except Exception: pass
 
 		# save request logs in database?
 		try: self._trackdbEnabled = self.configGetBool('trackdb.enable')
-		except ConfigException: pass
+		except Exception: pass
 
 		# default user
 		try: self._trackdbDefaultUser = self.configGetString('trackdb.defaultUser')
-		except ConfigException: pass
+		except Exception: pass
 
 		# enable authentication extension?
 		try: self._authEnabled = self.configGetBool('auth.enable')
-		except ConfigException: pass
+		except Exception: pass
 
 		# GnuPG home directory
 		try: self._authGnupgHome = self.configGetString('auth.gnupgHome')
-		except ConfigException: pass
+		except Exception: pass
 		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
 
 		# If the database connection is passed via command line or configuration
