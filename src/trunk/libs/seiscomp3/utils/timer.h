@@ -137,6 +137,11 @@ class SC_SYSTEM_CORE_API Timer {
 
 		static void Loop();
 		static bool Update();
+#elif __APPLE__
+		bool deactivate(bool remove);
+
+		static void Loop();
+		static bool Update();
 #else
 		bool destroy();
 
@@ -146,6 +151,14 @@ class SC_SYSTEM_CORE_API Timer {
 	private:
 #ifdef WIN32
 		typedef std::list<Timer*> TimerList;
+		static TimerList _timers;
+		static boost::thread *_thread;
+		static boost::mutex _mutex;
+
+		bool             _isActive;
+		unsigned int     _value;
+#elif defined(__APPLE__)
+	   typedef std::list<Timer*> TimerList;
 		static TimerList _timers;
 		static boost::thread *_thread;
 		static boost::mutex _mutex;

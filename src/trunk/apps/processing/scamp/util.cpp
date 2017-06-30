@@ -23,7 +23,7 @@
 
 /*
 #include <seiscomp3/core/platform/platform.h>
-#ifdef MACOSX
+#ifdef __APPLE__
 // On OSX HOST_NAME_MAX is not define in sys/params.h. Therefore we use
 // instead on this platform.
 #include <sys/param.h>

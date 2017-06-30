@@ -90,6 +90,12 @@ typedef unsigned int uint32_t;
 #ifndef __LITTLE_ENDIAN
 #define __LITTLE_ENDIAN 1
 #endif
+#elif defined(__APPLE__)
+#include <stdint.h>
+#include <machine/endian.h>
+#ifndef __LITTLE_ENDIAN
+#define __LITTLE_ENDIAN 1
+#endif
 #elif defined (__sparc)
 #ifndef __BIG_ENDIAN
 #define __BIG_ENDIAN 1

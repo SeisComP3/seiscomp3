@@ -25,7 +25,7 @@
 #    define MAX_FNAME_LEN _MAX_FNAME
 #endif
 
-#ifdef unix 
+#if defined(unix) || defined(__APPLE__)
     struct _finddata_t {
         unsigned  attrib;
         time_t    time_create;

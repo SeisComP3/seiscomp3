@@ -51,7 +51,12 @@
 #include <stdlib.h>
 
 #ifdef HAVE_MALLOC_H
+// For Mac OS X use stdlib.h instead of malloc.h
+#ifdef __APPLE__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 #endif
 
 #ifdef HAVE_STRING_H

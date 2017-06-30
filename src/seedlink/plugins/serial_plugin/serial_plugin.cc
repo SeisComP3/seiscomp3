@@ -31,9 +31,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 #include <getopt.h>
 #endif
+
 
 #include "qutils.h"
 
@@ -65,7 +66,7 @@ using namespace Utilities;
 
 const char *const ident_str = "SeedLink Serial Digitizer Plugin v" MYVERSION;
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 const char *const opterr_message = "Try `%s --help' for more information\n";
 const char *const help_message =
     "Usage: %s [options] plugin_name\n"
@@ -639,12 +640,18 @@ Stream logs = make_stream(SystemLog());
 
 }
 
+
+#if defined(__APPLE__)
+template<>
+RegisteredModule<Proto>* RegisteredModule<Proto>::registered = NULL;
+#else
 namespace PluginModule {
 
 template<>
 RegisteredModule<Proto>* RegisteredModule<Proto>::registered = NULL;
 
 }
+#endif
 
 //*****************************************************************************
 // Main
@@ -653,7 +660,7 @@ RegisteredModule<Proto>* RegisteredModule<Proto>::registered = NULL;
 int main(int argc, char **argv)
 try
   {
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     struct option ops[] =
       {
         { "verbosity",      required_argument, NULL, 'X' },
@@ -669,7 +676,7 @@ try
     string config_file = CONFIG_FILE;
 
     int c;
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     while((c = getopt_long(argc, argv, "vDf:mVh", ops, NULL)) != EOF)
 #else
     while((c = getopt(argc, argv, "vDf:mVh")) != EOF)

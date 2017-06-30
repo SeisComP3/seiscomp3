@@ -43,11 +43,11 @@ static char rcsid[] = "$Id: gnet.c,v 1.9 2006/09/11 13:11:07 lwithers Exp $";
 
 #include "gnet.h"
 
+// For Mac OS X use stdlib.h instead of malloc.h
 #ifdef __APPLE__
-    #include <stdlib.h>
-    #include <malloc/malloc.h>
+#include <stdlib.h>
 #else
-    #include <malloc.h>
+#include <malloc.h>
 #endif
 
 #include <string.h>

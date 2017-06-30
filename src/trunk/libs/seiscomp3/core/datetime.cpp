@@ -20,6 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __APPLE__
+#include <time.h>
+#endif
 
 #ifdef WIN32
 #include <time.h>
@@ -449,7 +452,12 @@ void TimeSpan::elapsedTime(int* days, int* hours,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeSpan TimeSpan::abs() const {
+    #ifdef __APPLE__
+	return TimeSpan(std::abs(_timeval.tv_sec), std::abs(_timeval.tv_usec));
+	#else
 	return TimeSpan(::abs(_timeval.tv_sec), ::abs(_timeval.tv_usec));
+	#endif
+	
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

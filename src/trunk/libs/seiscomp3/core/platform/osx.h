@@ -17,7 +17,7 @@
  *  Signal handling
  */
 #include <signal.h>
-#ifdef MACOSX
+#ifdef __APPLE__
 	typedef void (*sighandler_t)(int);
 #else
 	#include <execinfo.h>
@@ -25,10 +25,11 @@
 
 /*
  * Header files for malloc
+ * On Mac OS X: malloc is defined in stdlib.h
  */
-#ifdef MACOSX
+#ifdef __APPLE__
     #include <stdlib.h>
-    #include <malloc/malloc.h>
+    //#include <malloc/malloc.h>
 #else
     #include <malloc.h>
 #endif

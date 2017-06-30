@@ -27,7 +27,7 @@
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/client/inventory.h>
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <seiscomp3/gui/core/osx.h>
 #endif
 
@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WFlags flags)
 
 	setWindowTitle(_title);
 
-#ifdef MACOSX
+#ifdef __APPLE__
 	Mac::addFullscreen(this);
 #endif
 
@@ -154,7 +154,7 @@ void MainWindow::dropEvent(QDropEvent *event) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool MainWindow::restoreGeometry(const QByteArray & geometry) {
 	bool res = QMainWindow::restoreGeometry(geometry);
-#ifdef MACOSX
+#ifdef __APPLE__
 		Mac::addFullscreen(this);
 #endif
 	return res;
@@ -223,7 +223,7 @@ void MainWindow::showNormal() {
 	if ( statusBar() && !SCScheme.showStatusBar )
 		statusBar()->setVisible(false);
 
-#ifdef MACOSX
+#ifdef __APPLE__
 	Mac::addFullscreen(this);
 #endif
 }

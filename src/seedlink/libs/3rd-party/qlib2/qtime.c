@@ -1471,7 +1471,7 @@ time_t unix_time_from_ext_time
     tm.tm_wday = 0;
     tm.tm_yday = et.doy - 1;			/* 0-365	*/
     tm.tm_isdst =0;
-#if defined(SUNOS) || defined (__APPLE__)
+#if defined(SUNOS) || defined(__APPLE__)
     tm.tm_zone = "GMT";
     tm.tm_gmtoff = 0;
     gtime = timegm (&tm);

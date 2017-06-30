@@ -51,7 +51,7 @@
 
 #include <boost/bind.hpp>
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <seiscomp3/gui/core/osx.h>
 #endif
 
@@ -485,7 +485,7 @@ class PickerMarker : public RecordMarker {
 				if ( text.isEmpty() ) {
 					try {
 						text = pick()->phaseHint().code().c_str();
-						setText(QString("%1"AUTOMATIC_POSTFIX).arg(text));
+						setText(QString("%1" AUTOMATIC_POSTFIX).arg(text));
 					}
 					catch (...) {}
 				}
@@ -2149,7 +2149,7 @@ RecordLabel* PickerView::createLabel(RecordViewItem *item) const {
 void PickerView::init() {
 	setObjectName("Picker");
 
-#ifdef MACOSX
+#ifdef __APPLE__
 	Mac::addFullscreen(this);
 #endif
 
@@ -3221,7 +3221,7 @@ void PickerView::showEvent(QShowEvent *e) {
 			QVariant geometry = SCApp->settings().value("geometry");
 			restoreState(SCApp->settings().value("state").toByteArray());
 			restoreGeometry(geometry.toByteArray());
-#ifdef MACOSX
+#ifdef __APPLE__
 			Mac::addFullscreen(this);
 #endif
 
@@ -3401,7 +3401,12 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 
 	if ( _recordView->currentItem()->widget() == widget &&
 	     widget->cursorText() == "P" && marker ) {
+        #ifdef __APPLE__
+        RecordMarker* marker2 = widget->marker("P" THEORETICAL_POSTFIX);
+        #else
 		RecordMarker* marker2 = widget->marker("P"THEORETICAL_POSTFIX);
+		#endif
+		
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(marker->correctedTime() - marker2->correctedTime())));
@@ -3438,7 +3443,12 @@ void PickerView::declareArrival(RecordMarker *m_, const QString &phase,
 
 	if ( _recordView->currentItem()->widget() == w &&
 	     w->cursorText() == "P" && m ) {
+		#ifdef __APPLE__
+        RecordMarker* marker2 = w->marker("P" THEORETICAL_POSTFIX);
+		#else
 		RecordMarker* marker2 = w->marker("P"THEORETICAL_POSTFIX);
+		#endif
+		
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(m->correctedTime() - marker2->correctedTime())));
@@ -3811,7 +3821,7 @@ void PickerView::showFullscreen(bool e) {
 		showFullScreen();
 	else {
 		showNormal();
-#ifdef MACOSX
+#ifdef __APPLE__
 		Mac::addFullscreen(this);
 #endif
 	}
@@ -4586,7 +4596,12 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		for ( int i = 0; i < item->widget()->markerCount(); ++i ) {
 			PickerMarker* m = static_cast<PickerMarker*>(item->widget()->marker(i));
 			if ( m->text() == "P" && m->isArrival() ) {
-				RecordMarker* m2 = item->widget()->marker("P"THEORETICAL_POSTFIX);
+				#ifdef __APPLE__
+				RecordMarker* m2 = item->widget()->marker("P" THEORETICAL_POSTFIX);
+	   			#else
+	   			RecordMarker* m2 = item->widget()->marker("P"THEORETICAL_POSTFIX);
+		        #endif
+		        
 				if ( m2 ) {
 					item->setValue(ITEM_RESIDUAL_INDEX, -fabs((double)(m->correctedTime() - m2->correctedTime())));
 					break;
@@ -4695,8 +4710,12 @@ bool PickerView::addRawPick(Seiscomp::DataModel::Pick *pick) {
 	widget->insertMarker(0, marker);
 
 	try {
-		marker->setText(QString("%1"AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
-
+	    #ifdef __APPLE__
+		marker->setText(QString("%1" AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
+        #else
+        marker->setText(QString("%1"AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
+        #endif
+        
 		if ( !pick->methodID().empty() ) {
 			marker->setDescription(QString("%1<%2>")
 			                       .arg(pick->phaseHint().code().c_str())

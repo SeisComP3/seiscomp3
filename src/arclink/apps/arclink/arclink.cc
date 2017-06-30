@@ -36,7 +36,7 @@
 #include <libxml/xmlIO.h>
 #include <libxml/tree.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 #include <getopt.h>
 #endif
 
@@ -80,7 +80,7 @@ const char *const SHELL            = "/bin/bash";
 const char *const ident_str        = "ArcLink v" MYVERSION;
 string            config_file      = "/home/sysop/config/arclink.ini";
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 const char *const opterr_message = "Try `%s --help' for more information\n";
 const char *const help_message = 
     "Usage: %s [options]\n"
@@ -3449,10 +3449,15 @@ void Arclink::setup()
     inet_addr.sin_family = AF_INET;
     inet_addr.sin_port = htons(tcp_port);
     inet_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
+   
+    #ifdef __APPLE__
+    if(::bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
+        throw ArclinkLibraryError("bind error");
+    #else    
     if(bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
         throw ArclinkLibraryError("bind error");
-
+    #endif
+        
     N(listen(listenfd, 5));
   }
 
@@ -4049,7 +4054,7 @@ Stream logs = make_stream(LogFunc());
 int main(int argc, char **argv)
 try
   {
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     struct option ops[] = 
       {
         { "verbosity",      required_argument, NULL, 'X' },
@@ -4064,7 +4069,7 @@ try
     daemon_name = get_progname(argv[0]);
     
     int c;
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     while((c = getopt_long(argc, argv, "vDf:Vh", ops, NULL)) != EOF)
 #else
     while((c = getopt(argc, argv, "vDf:Vh")) != EOF)

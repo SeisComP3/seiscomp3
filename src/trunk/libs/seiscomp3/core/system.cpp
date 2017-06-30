@@ -17,7 +17,7 @@
 #include <seiscomp3/core/platform/platform.h>
 #include <stdlib.h>
 
-#ifdef MACOSX
+#ifdef __APPLE__
 	#include <sys/param.h>
 	#define HOST_NAME_MAX MAXHOSTNAMELEN
 #endif

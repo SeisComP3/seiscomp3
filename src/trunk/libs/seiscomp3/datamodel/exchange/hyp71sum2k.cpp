@@ -28,6 +28,9 @@
 
 using namespace Seiscomp::Core;
 
+#ifdef __APPLE__
+using namespace std;
+#endif
 
 namespace Seiscomp {
 namespace DataModel {

@@ -2516,9 +2516,14 @@ void ConnectionManagerImpl::start(int port)
     inet_addr.sin_port = htons(port);
     inet_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
+    #ifdef __APPLE__
+    if(::bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
+        throw LibraryError("bind error");
+    #else
     if(bind(listenfd, (struct sockaddr *) &inet_addr, sizeof(inet_addr)) < 0)
         throw LibraryError("bind error");
-
+    #endif
+        
     N(listen(listenfd, 5));
     fds.set_read(listenfd);
 

@@ -5,7 +5,9 @@
 /* collection of time conversion utility subroutines */
 #include <ctype.h>
 #include <time.h>
-	/* convert julian date to epoch time */
+
+
+/* convert julian date to epoch time */
 double
 dtoepoch(date)
 long date;

@@ -22,8 +22,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+// For Mac OS X use stdlib.h instead of malloc.h
+#ifndef __APPLE__
 #include <malloc.h>
-#include <memory.h>
+#endif
 
 #define _LINKLIST_C
 #include "linklist.h"

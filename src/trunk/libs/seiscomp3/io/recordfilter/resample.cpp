@@ -23,7 +23,6 @@
 #include <string.h>
 #include <ctype.h>
 
-
 namespace Seiscomp {
 namespace IO {
 

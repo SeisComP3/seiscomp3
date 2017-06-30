@@ -46,7 +46,7 @@
 
 #include <boost/bind.hpp>
 
-#ifdef MACOSX
+#ifdef __APPLE__
 #include <seiscomp3/gui/core/osx.h>
 #endif
 
@@ -1801,7 +1801,7 @@ RecordLabel* AmplitudeView::createLabel(RecordViewItem *item) const {
 void AmplitudeView::init() {
 	setObjectName("Amplitudes");
 
-#ifdef MACOSX
+#ifdef __APPLE__
 	Mac::addFullscreen(this);
 #endif
 
@@ -2401,7 +2401,7 @@ void AmplitudeView::showEvent(QShowEvent *e) {
 			restoreGeometry(SCApp->settings().value("geometry").toByteArray());
 			restoreState(SCApp->settings().value("state").toByteArray());
 
-#ifdef MACOSX
+#ifdef __APPLE__
 			Mac::addFullscreen(this);
 #endif
 
@@ -2829,7 +2829,7 @@ void AmplitudeView::showFullscreen(bool e) {
 		showFullScreen();
 	else {
 		showNormal();
-#ifdef MACOSX
+#ifdef __APPLE__
 		Mac::addFullscreen(this);
 #endif
 	}

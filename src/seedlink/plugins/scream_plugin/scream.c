@@ -41,6 +41,13 @@ static char rcsid[] = "$Id: scream.c 1364 2008-10-24 18:42:33Z andres $";
 
 #include "project.h"
 
+// Note: MSG_CONFIRM flag for send() does not exist on Darwin (OS X & FreeBSD)
+//
+#ifdef __APPLE__
+#include <sys/types.h>
+#define MSG_CONFIRM 1
+#endif
+
 #include <sys/socket.h>
 #include <netdb.h>
 

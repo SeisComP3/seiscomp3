@@ -1,12 +1,11 @@
 
-# ifdef __APPLE__
-#include <stdlib.h>
-# else
-#include <malloc.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
+
+// For Mac OS X use stdlib.h instead of malloc.h
+#ifndef __APPLE__
+#include <malloc.h>
+#endif
 
 /*  (C) Copr. 1986-92 Numerical Recipes Software */
 

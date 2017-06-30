@@ -28,7 +28,7 @@
 #include <sys/types.h>
 #include <sys/resource.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 #include <getopt.h>
 #endif
 
@@ -71,7 +71,7 @@ const double EPOCH_DELTA       = 946684800.0;
 const char *const SEED_NEWLINE = "\r\n";
 const char *const ident_str    = "SeedLink Q330 Plugin v" MYVERSION;
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 const char *const opterr_message = "Try `%s --help' for more information\n";
 const char *const help_message = 
     "Usage: %s [options] plugin_name\n"
@@ -736,7 +736,7 @@ std::string get_progname(char *argv0)
 
 void init_plugin(int argc, char **argv)
   {
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     struct option ops[] = 
       {
         { "verbosity",      required_argument, NULL, 'X' },
@@ -751,7 +751,7 @@ void init_plugin(int argc, char **argv)
     std::string config_file = CONFIG_FILE;
     
     int c;
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     while((c = getopt_long(argc, argv, "vDf:Vh", ops, NULL)) != EOF)
 #else
     while((c = getopt(argc, argv, "vDf:Vh")) != EOF)

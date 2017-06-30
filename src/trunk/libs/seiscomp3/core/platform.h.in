@@ -4,7 +4,7 @@
 #cmakedefine MACOSX
 #cmakedefine LINUX
 
-#ifdef MACOSX
+#ifdef __APPLE__
    #include <seiscomp3/core/platform/osx.h>
 #endif
 

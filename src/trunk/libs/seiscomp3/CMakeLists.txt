@@ -90,9 +90,9 @@ IF(WIN32)
 	SC_LIB_LINK_LIBRARIES(core zlib)
 ENDIF(WIN32)
 
-IF ( MACOSX )
+IF (MACOSX)
 	SC_LIB_LINK_LIBRARIES(core iconv)
-ENDIF ( MACOSX )
+ENDIF (MACOSX)
 
 IF (CMAKE_SYSTEM_NAME STREQUAL SunOS)
 	SC_LIB_LINK_LIBRARIES(core iconv)
@@ -128,6 +128,12 @@ IF(NOT WIN32)
         SET(SPREAD_INC ${SPREAD_SOURCE_DIR}/include)
         INCLUDE_DIRECTORIES(${SPREAD_INC})
 
+        IF (MACOSX)
+        	SET(SPREAD_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib)
+            SET(SPREAD_INC ${SPREAD_SOURCE_DIR}/include)
+        	SET(SPREAD_LIBRARIES ${SPREAD_LIB_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}tspread-core${CMAKE_SHARED_LIBRARY_SUFFIX})
+    	ENDIF (MACOSX)
+    	
         SET_SOURCE_FILES_PROPERTIES(
                 communication/spread/spreaddriver.cpp
                 PROPERTIES OBJECT_DEPENDS ${SPREAD_LIBRARIES}
@@ -149,7 +155,9 @@ IF(NOT WIN32)
                 )
 
         ELSE(CMAKE_HOST_ARCHITECTURE)
-                ADD_CUSTOM_COMMAND(
+               
+                IF(NOT MACOSX)                  
+                    ADD_CUSTOM_COMMAND(
                         OUTPUT ${SPREAD_LIBRARIES}
                         DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
                         COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR}
@@ -157,13 +165,26 @@ IF(NOT WIN32)
                         COMMAND ${CMAKE_MAKE_PROGRAM}
                         COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
                         WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
-                )
+                    )
+                ENDIF(NOT MACOSX)
+                
+                IF (MACOSX)
+                        ADD_CUSTOM_COMMAND(
+                        OUTPUT ${SPREAD_LIBRARIES}
+                        COMMAND ./configure ARGS --prefix=${CMAKE_INSTALL_PREFIX} --libdir=${CMAKE_INSTALL_PREFIX}/lib --sysconfdir=${CMAKE_INSTALL_PREFIX}/etc
+                        
+                        COMMAND ${CMAKE_MAKE_PROGRAM}
+                        COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
+                        WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
+                    )
+                ENDIF (MACOSX)
+                
         ENDIF(CMAKE_HOST_ARCHITECTURE)
 ENDIF(NOT WIN32)
 
 INCLUDE_DIRECTORIES(${SPREAD_INCLUDE_DIR})
 
-IF(NOT WIN32)
+IF(NOT WIN32 AND NOT MACOSX)
         MAKE_DIRECTORY(${SPREAD_BINARY_DIR})
         INSTALL(
                 DIRECTORY
@@ -175,7 +196,23 @@ IF(NOT WIN32)
                 PATTERN "*.cmake" EXCLUDE
                 PATTERN "Makefile" EXCLUDE
         )
-ENDIF(NOT WIN32)
+ENDIF(NOT WIN32 AND NOT MACOSX)
+
+IF (MACOSX)
+                   
+        MAKE_DIRECTORY(${CMAKE_INSTALL_PREFIX})
+        INSTALL(
+                DIRECTORY
+                        ${CMAKE_INSTALL_PREFIX}/bin
+                DESTINATION
+                        ${SC3_PACKAGE_DIR}
+                USE_SOURCE_PERMISSIONS
+                PATTERN "CMakeFiles" EXCLUDE
+                PATTERN "*.cmake" EXCLUDE
+                PATTERN "Makefile" EXCLUDE
+        )
+ENDIF (MACOSX)
+
 
 SC_ADD_LIBRARY(SYSTEM_CLIENT client)
 SC_LIB_INSTALL_HEADERS(SYSTEM_CLIENT)

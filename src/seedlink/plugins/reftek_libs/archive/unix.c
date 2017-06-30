@@ -27,7 +27,11 @@
 #include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+// Note: ustat is deprecated for Mac OS X and Linux
+#if !defined(__APPLE__)
 #include <ustat.h>
+#endif
 
 #include "util.h"
 #include "archive.h"
@@ -412,6 +416,7 @@ BOOL IsDirectory(CHAR * pathname)
 }
 
 /*---------------------------------------------------------------------*/
+#if !defined(__APPLE__)
 UINT64 DiskSpace(CHAR * pathname)
 {
     struct stat sbuf;
@@ -425,6 +430,7 @@ UINT64 DiskSpace(CHAR * pathname)
     return (UINT64) ubuf.f_tfree * (UINT64) 512;
 
 }
+#endif
 
 /*---------------------------------------------------------------------*/
 BOOL GetFileStat(CHAR * pathname, FILE_STAT * statbuf)

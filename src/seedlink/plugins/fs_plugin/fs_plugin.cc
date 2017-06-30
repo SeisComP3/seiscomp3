@@ -28,7 +28,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 #include <getopt.h>
 #endif
 
@@ -63,7 +63,7 @@ using namespace Utilities;
 const char *const SEED_NEWLINE = "\r\n";
 const char *const ident_str    = "SeedLink FS-Plugin v" MYVERSION;
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 const char *const opterr_message = "Try `%s --help' for more information\n";
 const char *const help_message = 
     "Usage: %s [options] plugin_name\n"
@@ -503,6 +503,14 @@ Stream logs = make_stream(SystemLog());
 
 }
 
+#if defined(__APPLE__)
+template<>
+RegisteredModule<FS_Input>* RegisteredModule<FS_Input>::registered = NULL;
+
+template<>
+RegisteredModule<FS_Decoder>* RegisteredModule<FS_Decoder>::registered = NULL;
+
+#else
 namespace PluginModule {
 
 template<>
@@ -512,6 +520,7 @@ template<>
 RegisteredModule<FS_Decoder>* RegisteredModule<FS_Decoder>::registered = NULL;
 
 }
+#endif
 
 //*****************************************************************************
 // Main
@@ -520,7 +529,7 @@ RegisteredModule<FS_Decoder>* RegisteredModule<FS_Decoder>::registered = NULL;
 int main(int argc, char **argv)
 try
   {
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     struct option ops[] = 
       {
         { "verbosity",      required_argument, NULL, 'X' },
@@ -536,7 +545,7 @@ try
     string config_file = CONFIG_FILE;
     
     int c;
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     while((c = getopt_long(argc, argv, "vDf:mVh", ops, NULL)) != EOF)
 #else
     while((c = getopt(argc, argv, "vDf:mVh")) != EOF)

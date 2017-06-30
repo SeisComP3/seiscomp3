@@ -17,7 +17,7 @@
 
 /*
 #include <seiscomp3/core/platform/platform.h>
-#ifdef MACOSX
+#ifdef __APPLE__
     // On OSX HOST_NAME_MAX is not define in sys/params.h. Therefoere we use MAXHOSTNAMELEN
     // instead on this platform.
     #include <sys/param.h>

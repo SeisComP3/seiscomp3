@@ -22,7 +22,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 #include <getopt.h>
 #endif
 
@@ -40,7 +40,7 @@
 
 static const char *const ident_str = "SeedLink MSEED-FIFO Plugin v" MYVERSION;
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
 static const char *const opterr_message = "Try `%s --help' for more information\n";
 static const char *const help_message = 
     "Usage: %s [options] plugin_name\n"
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     char buf[512];
     int fd, n;
 
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     struct option ops[] = 
       {
         { "fifo",           required_argument, NULL, 'd' },
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 #endif
 
     int c;
-#if defined(__GNU_LIBRARY__) || defined(__GLIBC__)
+#if defined(__GNU_LIBRARY__) || defined(__GLIBC__) || defined(__APPLE__)
     while((c = getopt_long(argc, argv, "d:vDnVh", ops, NULL)) != EOF)
 #else
     while((c = getopt(argc, argv, "d:vDnVh")) != EOF)

@@ -138,7 +138,7 @@ bool Bindings::remove(const std::string &networkCode,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Bindings::remove(const DataModel::Station *station) {
 	if ( station->network() == NULL )
-		return NULL;
+		return false;
 
 	return remove(station->network()->code(), station->code());
 }

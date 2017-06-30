@@ -262,7 +262,9 @@ BOOL IsRegularFile(CHAR * pathname);
 BOOL IsDirectory(CHAR * pathname);
 BOOL GetFileStat(CHAR * pathname, FILE_STAT * stat);
 
+#if !defined(__APPLE__)
 UINT64 DiskSpace(CHAR * pathname);
+#endif
 
 BOOL FileFindFirst(EVENT * event);
 BOOL FileFindNext(EVENT * event);
