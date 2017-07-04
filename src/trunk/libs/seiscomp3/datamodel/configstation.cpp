@@ -591,7 +591,7 @@ bool ConfigStation::removeSetup(const SetupIndex& i) {
 void ConfigStation::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ConfigStation skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -604,8 +604,9 @@ void ConfigStation::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("networkCode", _index.networkCode, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("stationCode", _index.stationCode, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("enabled", _enabled, Archive::XML_MANDATORY);
-	if ( ar.supportsVersion<0,9>() )
+	if ( ar.supportsVersion<0,9>() ) {
 		ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	}
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
 	ar & NAMED_OBJECT_HINT("setup",
 	                       Seiscomp::Core::Generic::containerMember(_setups,

@@ -70,6 +70,7 @@ namespace Core {
    - Added Seiscomp::Gui::RecordWidget::setGridVSpacing
    - Added Seiscomp::Gui::RecordWidget::setGridVRange
    - Added Seiscomp::Gui::RecordWidget::setGridVScale
+   - Increased datamodel version to 0.10
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

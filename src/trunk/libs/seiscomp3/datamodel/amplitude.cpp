@@ -808,7 +808,7 @@ bool Amplitude::removeComment(const CommentIndex& i) {
 void Amplitude::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Amplitude skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -823,8 +823,9 @@ void Amplitude::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("timeWindow", _timeWindow, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("period", _period, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("snr", _snr, Archive::XML_ELEMENT);
-	if ( ar.supportsVersion<0,7>() )
+	if ( ar.supportsVersion<0,7>() ) {
 		ar & NAMED_OBJECT_HINT("unit", _unit, Archive::XML_ELEMENT);
+	}
 	ar & NAMED_OBJECT_HINT("pickID", _pickID, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("waveformID", _waveformID, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("filterID", _filterID, Archive::XML_ELEMENT);

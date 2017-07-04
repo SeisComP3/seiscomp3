@@ -756,7 +756,7 @@ void Stream::accept(Visitor* visitor) {
 void Stream::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Stream skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -764,8 +764,14 @@ void Stream::serialize(Archive& ar) {
 	}
 
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT("datalogger", _datalogger);
 	ar & NAMED_OBJECT_HINT("dataloggerSerialNumber", _dataloggerSerialNumber, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("dataloggerChannel", _dataloggerChannel, Archive::XML_ELEMENT);

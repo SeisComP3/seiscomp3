@@ -675,7 +675,7 @@ bool StationGroup::removeStationReference(const StationReferenceIndex& i) {
 void StationGroup::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: StationGroup skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -687,8 +687,14 @@ void StationGroup::serialize(Archive& ar) {
 
 	ar & NAMED_OBJECT_HINT("type", _type, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _start, Archive::XML_ELEMENT);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _start, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("start", _start, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("description", _description, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("latitude", _latitude, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("longitude", _longitude, Archive::XML_ELEMENT);

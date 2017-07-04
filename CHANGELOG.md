@@ -2,6 +2,93 @@
 
 ## Release YYYY.DDD
 
+The database schema has changed since the previous version. To upgrade your
+database from version 0.9 to 0.10 to following SQL script can be used:
+
+
+**MYSQL**
+
+```sql
+ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
+ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;
+ALTER TABLE DataloggerCalibration ADD start_ms INTEGER AFTER start;
+ALTER TABLE DataloggerCalibration ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON DataloggerCalibration;
+ALTER TABLE DataloggerCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
+ALTER TABLE SensorCalibration ADD start_ms INTEGER AFTER start;
+ALTER TABLE SensorCalibration ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON SensorCalibration;
+ALTER TABLE SensorCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
+ALTER TABLE AuxStream ADD start_ms INTEGER AFTER start;
+ALTER TABLE AuxStream ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON AuxStream;
+ALTER TABLE AuxStream ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Stream ADD start_ms INTEGER AFTER start;
+ALTER TABLE Stream ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Stream;
+ALTER TABLE Stream ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE SensorLocation ADD start_ms INTEGER AFTER start;
+ALTER TABLE SensorLocation ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON SensorLocation;
+ALTER TABLE SensorLocation ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Station ADD start_ms INTEGER AFTER start;
+ALTER TABLE Station ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Station;
+ALTER TABLE Station ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Network ADD start_ms INTEGER AFTER start;
+ALTER TABLE Network ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Network;
+ALTER TABLE Network ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+
+UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+ALTER TABLE StationGroup ADD m_start_ms INTEGER;
+ALTER TABLE StationGroup ADD m_end_ms INTEGER;
+ALTER TABLE DataloggerCalibration ADD m_start_ms INTEGER;
+ALTER TABLE DataloggerCalibration ADD m_end_ms INTEGER;
+ALTER TABLE DataloggerCalibration DROP CONSTRAINT dataloggercalibration__parent_oid_m_serialnumber_m_channel__key;
+ALTER TABLE DataloggerCalibration ADD CONSTRAINT dataloggercalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms);
+ALTER TABLE SensorCalibration ADD m_start_ms INTEGER;
+ALTER TABLE SensorCalibration ADD m_end_ms INTEGER;
+ALTER TABLE SensorCalibration DROP CONSTRAINT sensorcalibration__parent_oid_m_serialnumber_m_channel_m_st_key;
+ALTER TABLE SensorCalibration ADD CONSTRAINT sensorcalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms);
+ALTER TABLE AuxStream ADD m_start_ms INTEGER;
+ALTER TABLE AuxStream ADD m_end_ms INTEGER;
+ALTER TABLE AuxStream DROP CONSTRAINT auxstream__parent_oid_m_code_m_start_key;
+ALTER TABLE AuxStream ADD CONSTRAINT auxstream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Stream ADD m_start_ms INTEGER;
+ALTER TABLE Stream ADD m_end_ms INTEGER;
+ALTER TABLE Stream DROP CONSTRAINT stream__parent_oid_m_code_m_start_key;
+ALTER TABLE Stream ADD CONSTRAINT stream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE SensorLocation ADD m_start_ms INTEGER;
+ALTER TABLE SensorLocation ADD m_end_ms INTEGER;
+ALTER TABLE SensorLocation DROP CONSTRAINT sensorlocation__parent_oid_m_code_m_start_key;
+ALTER TABLE SensorLocation ADD CONSTRAINT sensorlocation_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Station ADD m_start_ms INTEGER;
+ALTER TABLE Station ADD m_end_ms INTEGER;
+ALTER TABLE Station DROP CONSTRAINT station__parent_oid_m_code_m_start_key;
+ALTER TABLE Station ADD CONSTRAINT station_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Network ADD m_start_ms INTEGER;
+ALTER TABLE Network ADD m_end_ms INTEGER;
+ALTER TABLE Network DROP CONSTRAINT network__parent_oid_m_code_m_start_key;
+ALTER TABLE Network ADD CONSTRAINT network_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+
+UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
+```
+
+**Rationale**
+
+Most of the inventory objects are valid for certain epochs defined with start
+and end time. The database schema did not support microsecond storage of those
+times although the structures in the source code do. This schema revision closes
+the gap.
+
+----
+
 * scmv
 
   * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.

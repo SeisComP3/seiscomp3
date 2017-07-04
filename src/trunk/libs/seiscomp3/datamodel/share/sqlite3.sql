@@ -81,7 +81,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -1235,7 +1235,9 @@ CREATE TABLE StationGroup (
 	type VARCHAR(64),
 	code CHAR,
 	start DATETIME,
+	start_ms INTEGER,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1311,7 +1313,9 @@ CREATE TABLE SensorCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	gain DOUBLE UNSIGNED,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
@@ -1320,7 +1324,7 @@ CREATE TABLE SensorCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
@@ -1455,7 +1459,9 @@ CREATE TABLE DataloggerCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	gain DOUBLE UNSIGNED,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
@@ -1464,7 +1470,7 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
@@ -1564,7 +1570,9 @@ CREATE TABLE AuxStream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	device VARCHAR,
 	deviceSerialNumber VARCHAR,
 	source VARCHAR,
@@ -1576,7 +1584,7 @@ CREATE TABLE AuxStream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
@@ -1592,7 +1600,9 @@ CREATE TABLE Stream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	datalogger VARCHAR,
 	dataloggerSerialNumber VARCHAR,
 	dataloggerChannel INT UNSIGNED,
@@ -1616,7 +1626,7 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
@@ -1632,7 +1642,9 @@ CREATE TABLE SensorLocation (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1640,7 +1652,7 @@ CREATE TABLE SensorLocation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
@@ -1656,7 +1668,9 @@ CREATE TABLE Station (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1675,7 +1689,7 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Station__parent_oid ON Station(_parent_oid);
@@ -1691,7 +1705,9 @@ CREATE TABLE Network (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	institutions VARCHAR,
 	region VARCHAR,
@@ -1706,7 +1722,7 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Network__parent_oid ON Network(_parent_oid);

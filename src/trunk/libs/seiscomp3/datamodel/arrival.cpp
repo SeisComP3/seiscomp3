@@ -650,7 +650,7 @@ void Arrival::accept(Visitor* visitor) {
 void Arrival::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Arrival skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -662,8 +662,9 @@ void Arrival::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("timeCorrection", _timeCorrection, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("azimuth", _azimuth, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("distance", _distance, Archive::XML_ELEMENT);
-	if ( ar.supportsVersion<0,6>() )
+	if ( ar.supportsVersion<0,6>() ) {
 		ar & NAMED_OBJECT_HINT("takeOffAngle", _takeOffAngle, Archive::XML_ELEMENT);
+	}
 	ar & NAMED_OBJECT_HINT("timeResidual", _timeResidual, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("horizontalSlownessResidual", _horizontalSlownessResidual, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("backazimuthResidual", _backazimuthResidual, Archive::XML_ELEMENT);
