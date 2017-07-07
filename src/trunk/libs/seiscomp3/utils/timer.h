@@ -21,7 +21,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__APPLE__)
 #include <list>
 #else
 #include <signal.h>
@@ -132,12 +132,7 @@ class SC_SYSTEM_CORE_API Timer {
 
 
 	private:
-#ifdef WIN32
-		bool deactivate(bool remove);
-
-		static void Loop();
-		static bool Update();
-#elif __APPLE__
+#if defined(WIN32) || defined(__APPLE__)
 		bool deactivate(bool remove);
 
 		static void Loop();
@@ -149,16 +144,8 @@ class SC_SYSTEM_CORE_API Timer {
 #endif
 
 	private:
-#ifdef WIN32
+#if defined(WIN32) || defined(__APPLE__)
 		typedef std::list<Timer*> TimerList;
-		static TimerList _timers;
-		static boost::thread *_thread;
-		static boost::mutex _mutex;
-
-		bool             _isActive;
-		unsigned int     _value;
-#elif defined(__APPLE__)
-	   typedef std::list<Timer*> TimerList;
 		static TimerList _timers;
 		static boost::thread *_thread;
 		static boost::mutex _mutex;
@@ -172,7 +159,7 @@ class SC_SYSTEM_CORE_API Timer {
 		Callback         _callback;
 		boost::try_mutex _callbackMutex;
 		unsigned int     _timeout;
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__APPLE__)
 		unsigned int     _timeoutNs;
 #endif
 		bool             _singleShot;
