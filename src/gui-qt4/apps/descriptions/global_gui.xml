@@ -428,7 +428,7 @@
 						The line width of the records / traces.
 						</description>
 					</parameter>
-					<parameter name="antiAliasing" type="bool" default="false">
+					<parameter name="antiAliasing" type="boolean" default="false">
 						<description>
 						Configures antialiasing of records / traces. Antialiasing
 						needs more processing time and does not look as good as
@@ -436,7 +436,7 @@
 						visual quality, disable trace optimization as well.
 						</description>
 					</parameter>
-					<parameter name="optimize" type="bool" default="true">
+					<parameter name="optimize" type="boolean" default="true">
 						<description>
 						Configures optimization of trace polylines. If activated
 						then lines on the same pixel line or same pixel row
