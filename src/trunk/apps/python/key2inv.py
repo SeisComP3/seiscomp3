@@ -244,7 +244,7 @@ def parseDate(datestr):
 
         coretime = seiscomp3.Core.Time(year, month, mday, hour, minute, second)
 
-    except (TypeError, ValueError, IndexError, seiscomp3.Core.ValueException):
+    except (TypeError, ValueError, IndexError):
         logs.error("invalid date: " + datestr)
         return (seiscomp3.Core.Time(1980, 1, 1, 0, 0, 0), "1980-01-01T00:00:00.0000Z")
 
@@ -494,14 +494,14 @@ class InventoryWrapper(object):
                     try:
                         loc.stream(j).end()
                         continue
-                    except seiscomp3.Core.ValueException:
+                    except ValueError:
                         loc.stream(j).setEnd(start)
                         loc.stream(j).update()
 
                 try:
                     station.obj.sensorLocation(i).end()
                     continue
-                except seiscomp3.Core.ValueException:
+                except ValueError:
                     station.obj.sensorLocation(i).setEnd(start)
                     station.obj.sensorLocation(i).update()
 
@@ -595,7 +595,7 @@ class Key2DB(seiscomp3.Client.Application):
             try:
                 DCID = self.configGetString("datacenterID")
 
-            except Config.ConfigException:
+            except:
                 logs.error("datacenterID not found in global.cfg")
                 return False
 

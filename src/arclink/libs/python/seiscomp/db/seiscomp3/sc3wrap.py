@@ -84,22 +84,22 @@ class base_qclog(object):
     def __get_networkCode(self):
         try:
             return self.obj.waveformID().networkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_stationCode(self):
         try:
             return self.obj.waveformID().stationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_streamCode(self):
         try:
             return self.obj.waveformID().channelCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_locationCode(self):
         try:
             return self.obj.waveformID().locationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_networkCode(self, arg):
         if self.__get_networkCode() != arg:
@@ -125,7 +125,7 @@ class base_qclog(object):
     def __get_creatorID(self):
         try: # @return: const std::string&
             return self.obj.creatorID()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
@@ -150,7 +150,7 @@ class base_qclog(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_created(self, arg):
         value = None
@@ -171,7 +171,7 @@ class base_qclog(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -192,7 +192,7 @@ class base_qclog(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -207,7 +207,7 @@ class base_qclog(object):
     def __get_message(self):
         try: # @return: const std::string&
             return self.obj.message()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_message(self, arg):
         try:
@@ -251,22 +251,22 @@ class base_waveformquality(object):
     def __get_networkCode(self):
         try:
             return self.obj.waveformID().networkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_stationCode(self):
         try:
             return self.obj.waveformID().stationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_streamCode(self):
         try:
             return self.obj.waveformID().channelCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_locationCode(self):
         try:
             return self.obj.waveformID().locationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_networkCode(self, arg):
         if self.__get_networkCode() != arg:
@@ -292,7 +292,7 @@ class base_waveformquality(object):
     def __get_creatorID(self):
         try: # @return: const std::string&
             return self.obj.creatorID()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
@@ -317,7 +317,7 @@ class base_waveformquality(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_created(self, arg):
         value = None
@@ -338,7 +338,7 @@ class base_waveformquality(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -360,7 +360,7 @@ class base_waveformquality(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -375,7 +375,7 @@ class base_waveformquality(object):
     def __get_type(self):
         try: # @return: const std::string&
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         try:
@@ -394,7 +394,7 @@ class base_waveformquality(object):
     def __get_parameter(self):
         try: # @return: const std::string&
             return self.obj.parameter()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_parameter(self, arg):
         try:
@@ -413,7 +413,7 @@ class base_waveformquality(object):
     def __get_value(self):
         try: # @return: double
             return self.obj.value()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_value(self, arg):
         try: value = float(arg)
@@ -427,7 +427,7 @@ class base_waveformquality(object):
         # optional Attribute
         try: # @return: double
             return self.obj.lowerUncertainty()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_lowerUncertainty(self, arg):
         try: value = float(arg)
@@ -441,7 +441,7 @@ class base_waveformquality(object):
         # optional Attribute
         try: # @return: double
             return self.obj.upperUncertainty()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_upperUncertainty(self, arg):
         try: value = float(arg)
@@ -455,7 +455,7 @@ class base_waveformquality(object):
         # optional Attribute
         try: # @return: double
             return self.obj.windowLength()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_windowLength(self, arg):
         try: value = float(arg)
@@ -493,22 +493,22 @@ class base_outage(object):
     def __get_networkCode(self):
         try:
             return self.obj.waveformID().networkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_stationCode(self):
         try:
             return self.obj.waveformID().stationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_streamCode(self):
         try:
             return self.obj.waveformID().channelCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __get_locationCode(self):
         try:
             return self.obj.waveformID().locationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_networkCode(self, arg):
         if self.__get_networkCode() != arg:
@@ -534,7 +534,7 @@ class base_outage(object):
     def __get_creatorID(self):
         try: # @return: const std::string&
             return self.obj.creatorID()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_creatorID(self, arg):
         try:
@@ -559,7 +559,7 @@ class base_outage(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_created(self, arg):
         value = None
@@ -580,7 +580,7 @@ class base_outage(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -602,7 +602,7 @@ class base_outage(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -692,8 +692,8 @@ class base_qualitycontrol(object):
                     obj = DataModel.QCLog.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_qclog(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _qCLog = property(__get_qclog)
@@ -761,8 +761,8 @@ class base_qualitycontrol(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_waveformquality(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _waveformQuality = property(__get_waveformquality)
 
@@ -817,8 +817,8 @@ class base_qualitycontrol(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_outage(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _outage = property(__get_outage)
 
@@ -850,7 +850,7 @@ class base_stationreference(object):
     def __get_stationID(self):
         try: # @return: const std::string&
             return self.obj.stationID()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_stationID(self, arg):
         try:
@@ -904,7 +904,7 @@ class base_stationgroup(object):
         # optional Attribute
         try: # @return: StationGroupType
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         if self.__get_type() != arg:
@@ -915,7 +915,7 @@ class base_stationgroup(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -941,7 +941,7 @@ class base_stationgroup(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -963,7 +963,7 @@ class base_stationgroup(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -978,7 +978,7 @@ class base_stationgroup(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -998,7 +998,7 @@ class base_stationgroup(object):
         # optional Attribute
         try: # @return: double
             return self.obj.latitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_latitude(self, arg):
         try: value = float(arg)
@@ -1012,7 +1012,7 @@ class base_stationgroup(object):
         # optional Attribute
         try: # @return: double
             return self.obj.longitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_longitude(self, arg):
         try: value = float(arg)
@@ -1026,7 +1026,7 @@ class base_stationgroup(object):
         # optional Attribute
         try: # @return: double
             return self.obj.elevation()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_elevation(self, arg):
         try: value = float(arg)
@@ -1072,8 +1072,8 @@ class base_stationgroup(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_stationreference(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _stationReference = property(__get_stationreference)
 
@@ -1105,7 +1105,7 @@ class base_auxsource(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -1124,7 +1124,7 @@ class base_auxsource(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -1143,7 +1143,7 @@ class base_auxsource(object):
     def __get_unit(self):
         try: # @return: const std::string&
             return self.obj.unit()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_unit(self, arg):
         try:
@@ -1162,7 +1162,7 @@ class base_auxsource(object):
     def __get_conversion(self):
         try: # @return: const std::string&
             return self.obj.conversion()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_conversion(self, arg):
         try:
@@ -1182,7 +1182,7 @@ class base_auxsource(object):
         # optional Attribute
         try: # @return: int
             return self.obj.sampleRateNumerator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateNumerator(self, arg):
         if self.__get_sampleRateNumerator() != arg:
@@ -1194,7 +1194,7 @@ class base_auxsource(object):
         # optional Attribute
         try: # @return: int
             return self.obj.sampleRateDenominator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateDenominator(self, arg):
         if self.__get_sampleRateDenominator() != arg:
@@ -1207,7 +1207,7 @@ class base_auxsource(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -1263,7 +1263,7 @@ class base_auxdevice(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -1282,7 +1282,7 @@ class base_auxdevice(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -1301,7 +1301,7 @@ class base_auxdevice(object):
     def __get_model(self):
         try: # @return: const std::string&
             return self.obj.model()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_model(self, arg):
         try:
@@ -1320,7 +1320,7 @@ class base_auxdevice(object):
     def __get_manufacturer(self):
         try: # @return: const std::string&
             return self.obj.manufacturer()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_manufacturer(self, arg):
         try:
@@ -1341,7 +1341,7 @@ class base_auxdevice(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -1408,8 +1408,8 @@ class base_auxdevice(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_auxsource(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _auxSource = property(__get_auxsource)
 
@@ -1441,7 +1441,7 @@ class base_sensorcalibration(object):
     def __get_serialNumber(self):
         try: # @return: const std::string&
             return self.obj.serialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_serialNumber(self, arg):
         try:
@@ -1460,7 +1460,7 @@ class base_sensorcalibration(object):
     def __get_channel(self):
         try: # @return: int
             return self.obj.channel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_channel(self, arg):
         if self.__get_channel() != arg:
@@ -1477,7 +1477,7 @@ class base_sensorcalibration(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -1499,7 +1499,7 @@ class base_sensorcalibration(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -1515,7 +1515,7 @@ class base_sensorcalibration(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -1529,7 +1529,7 @@ class base_sensorcalibration(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -1544,7 +1544,7 @@ class base_sensorcalibration(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -1600,7 +1600,7 @@ class base_sensor(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -1619,7 +1619,7 @@ class base_sensor(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -1638,7 +1638,7 @@ class base_sensor(object):
     def __get_model(self):
         try: # @return: const std::string&
             return self.obj.model()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_model(self, arg):
         try:
@@ -1657,7 +1657,7 @@ class base_sensor(object):
     def __get_manufacturer(self):
         try: # @return: const std::string&
             return self.obj.manufacturer()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_manufacturer(self, arg):
         try:
@@ -1676,7 +1676,7 @@ class base_sensor(object):
     def __get_type(self):
         try: # @return: const std::string&
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         try:
@@ -1695,7 +1695,7 @@ class base_sensor(object):
     def __get_unit(self):
         try: # @return: const std::string&
             return self.obj.unit()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_unit(self, arg):
         try:
@@ -1715,7 +1715,7 @@ class base_sensor(object):
         # optional Attribute
         try: # @return: double
             return self.obj.lowFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_lowFrequency(self, arg):
         try: value = float(arg)
@@ -1729,7 +1729,7 @@ class base_sensor(object):
         # optional Attribute
         try: # @return: double
             return self.obj.highFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_highFrequency(self, arg):
         try: value = float(arg)
@@ -1742,7 +1742,7 @@ class base_sensor(object):
     def __get_response(self):
         try: # @return: const std::string&
             return self.obj.response()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_response(self, arg):
         try:
@@ -1763,7 +1763,7 @@ class base_sensor(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -1834,8 +1834,8 @@ class base_sensor(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_sensorcalibration(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _sensorCalibration = property(__get_sensorcalibration)
 
@@ -1876,7 +1876,7 @@ class base_responsepaz(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -1895,7 +1895,7 @@ class base_responsepaz(object):
     def __get_type(self):
         try: # @return: const std::string&
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         try:
@@ -1915,7 +1915,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -1929,7 +1929,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -1943,7 +1943,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: double
             return self.obj.normalizationFactor()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_normalizationFactor(self, arg):
         try: value = float(arg)
@@ -1957,7 +1957,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: double
             return self.obj.normalizationFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_normalizationFrequency(self, arg):
         try: value = float(arg)
@@ -1971,7 +1971,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: int
             return self.obj.numberOfZeros()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_numberOfZeros(self, arg):
         if self.__get_numberOfZeros() != arg:
@@ -1983,7 +1983,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: int
             return self.obj.numberOfPoles()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_numberOfPoles(self, arg):
         if self.__get_numberOfPoles() != arg:
@@ -1995,7 +1995,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: ComplexArray
             return ComplexArray2str(self.obj.zeros().content())
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_zeros(self, arg):
         try: value = str2ComplexArray(arg)
@@ -2010,7 +2010,7 @@ class base_responsepaz(object):
         # optional Attribute
         try: # @return: ComplexArray
             return ComplexArray2str(self.obj.poles().content())
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_poles(self, arg):
         try: value = str2ComplexArray(arg)
@@ -2026,7 +2026,7 @@ class base_responsepaz(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -2082,7 +2082,7 @@ class base_responsepolynomial(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -2102,7 +2102,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -2116,7 +2116,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -2129,7 +2129,7 @@ class base_responsepolynomial(object):
     def __get_frequencyUnit(self):
         try: # @return: const std::string&
             return self.obj.frequencyUnit()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_frequencyUnit(self, arg):
         try:
@@ -2148,7 +2148,7 @@ class base_responsepolynomial(object):
     def __get_approximationType(self):
         try: # @return: const std::string&
             return self.obj.approximationType()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_approximationType(self, arg):
         try:
@@ -2168,7 +2168,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: double
             return self.obj.approximationLowerBound()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_approximationLowerBound(self, arg):
         try: value = float(arg)
@@ -2182,7 +2182,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: double
             return self.obj.approximationUpperBound()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_approximationUpperBound(self, arg):
         try: value = float(arg)
@@ -2196,7 +2196,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: double
             return self.obj.approximationError()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_approximationError(self, arg):
         try: value = float(arg)
@@ -2210,7 +2210,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: int
             return self.obj.numberOfCoefficients()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_numberOfCoefficients(self, arg):
         if self.__get_numberOfCoefficients() != arg:
@@ -2222,7 +2222,7 @@ class base_responsepolynomial(object):
         # optional Attribute
         try: # @return: RealArray
             return RealArray2str(self.obj.coefficients().content())
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_coefficients(self, arg):
         try: value = str2RealArray(arg)
@@ -2238,7 +2238,7 @@ class base_responsepolynomial(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -2294,7 +2294,7 @@ class base_responsefap(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -2314,7 +2314,7 @@ class base_responsefap(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -2328,7 +2328,7 @@ class base_responsefap(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -2342,7 +2342,7 @@ class base_responsefap(object):
         # optional Attribute
         try: # @return: int
             return self.obj.numberOfTuples()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_numberOfTuples(self, arg):
         if self.__get_numberOfTuples() != arg:
@@ -2354,7 +2354,7 @@ class base_responsefap(object):
         # optional Attribute
         try: # @return: RealArray
             return RealArray2str(self.obj.tuples().content())
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_tuples(self, arg):
         try: value = str2RealArray(arg)
@@ -2370,7 +2370,7 @@ class base_responsefap(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -2417,7 +2417,7 @@ class base_dataloggercalibration(object):
     def __get_serialNumber(self):
         try: # @return: const std::string&
             return self.obj.serialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_serialNumber(self, arg):
         try:
@@ -2436,7 +2436,7 @@ class base_dataloggercalibration(object):
     def __get_channel(self):
         try: # @return: int
             return self.obj.channel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_channel(self, arg):
         if self.__get_channel() != arg:
@@ -2453,7 +2453,7 @@ class base_dataloggercalibration(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -2475,7 +2475,7 @@ class base_dataloggercalibration(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -2491,7 +2491,7 @@ class base_dataloggercalibration(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -2505,7 +2505,7 @@ class base_dataloggercalibration(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -2520,7 +2520,7 @@ class base_dataloggercalibration(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -2567,7 +2567,7 @@ class base_decimation(object):
     def __get_sampleRateNumerator(self):
         try: # @return: int
             return self.obj.sampleRateNumerator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateNumerator(self, arg):
         if self.__get_sampleRateNumerator() != arg:
@@ -2578,7 +2578,7 @@ class base_decimation(object):
     def __get_sampleRateDenominator(self):
         try: # @return: int
             return self.obj.sampleRateDenominator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateDenominator(self, arg):
         if self.__get_sampleRateDenominator() != arg:
@@ -2591,7 +2591,7 @@ class base_decimation(object):
         try: # @return: Blob
             B = self.obj.analogueFilterChain()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_analogueFilterChain(self, arg):
         try:
@@ -2615,7 +2615,7 @@ class base_decimation(object):
         try: # @return: Blob
             B = self.obj.digitalFilterChain()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_digitalFilterChain(self, arg):
         try:
@@ -2671,7 +2671,7 @@ class base_datalogger(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -2690,7 +2690,7 @@ class base_datalogger(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -2709,7 +2709,7 @@ class base_datalogger(object):
     def __get_digitizerModel(self):
         try: # @return: const std::string&
             return self.obj.digitizerModel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_digitizerModel(self, arg):
         try:
@@ -2728,7 +2728,7 @@ class base_datalogger(object):
     def __get_digitizerManufacturer(self):
         try: # @return: const std::string&
             return self.obj.digitizerManufacturer()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_digitizerManufacturer(self, arg):
         try:
@@ -2747,7 +2747,7 @@ class base_datalogger(object):
     def __get_recorderModel(self):
         try: # @return: const std::string&
             return self.obj.recorderModel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_recorderModel(self, arg):
         try:
@@ -2766,7 +2766,7 @@ class base_datalogger(object):
     def __get_recorderManufacturer(self):
         try: # @return: const std::string&
             return self.obj.recorderManufacturer()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_recorderManufacturer(self, arg):
         try:
@@ -2785,7 +2785,7 @@ class base_datalogger(object):
     def __get_clockModel(self):
         try: # @return: const std::string&
             return self.obj.clockModel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_clockModel(self, arg):
         try:
@@ -2804,7 +2804,7 @@ class base_datalogger(object):
     def __get_clockManufacturer(self):
         try: # @return: const std::string&
             return self.obj.clockManufacturer()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_clockManufacturer(self, arg):
         try:
@@ -2823,7 +2823,7 @@ class base_datalogger(object):
     def __get_clockType(self):
         try: # @return: const std::string&
             return self.obj.clockType()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_clockType(self, arg):
         try:
@@ -2843,7 +2843,7 @@ class base_datalogger(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -2857,7 +2857,7 @@ class base_datalogger(object):
         # optional Attribute
         try: # @return: double
             return self.obj.maxClockDrift()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_maxClockDrift(self, arg):
         try: value = float(arg)
@@ -2872,7 +2872,7 @@ class base_datalogger(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -2943,8 +2943,8 @@ class base_datalogger(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_dataloggercalibration(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _dataloggerCalibration = property(__get_dataloggercalibration)
 
@@ -2989,8 +2989,8 @@ class base_datalogger(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_decimation(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _decimation = property(__get_decimation)
 
@@ -3031,7 +3031,7 @@ class base_responsefir(object):
     def __get_name(self):
         try: # @return: const std::string&
             return self.obj.name()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_name(self, arg):
         try:
@@ -3051,7 +3051,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -3065,7 +3065,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: int
             return self.obj.decimationFactor()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_decimationFactor(self, arg):
         if self.__get_decimationFactor() != arg:
@@ -3077,7 +3077,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: double
             return self.obj.delay()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_delay(self, arg):
         try: value = float(arg)
@@ -3091,7 +3091,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: double
             return self.obj.correction()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_correction(self, arg):
         try: value = float(arg)
@@ -3105,7 +3105,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: int
             return self.obj.numberOfCoefficients()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_numberOfCoefficients(self, arg):
         if self.__get_numberOfCoefficients() != arg:
@@ -3116,7 +3116,7 @@ class base_responsefir(object):
     def __get_symmetry(self):
         try: # @return: const std::string&
             return self.obj.symmetry()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_symmetry(self, arg):
         try:
@@ -3136,7 +3136,7 @@ class base_responsefir(object):
         # optional Attribute
         try: # @return: RealArray
             return RealArray2str(self.obj.coefficients().content())
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_coefficients(self, arg):
         try: value = str2RealArray(arg)
@@ -3152,7 +3152,7 @@ class base_responsefir(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -3199,7 +3199,7 @@ class base_auxstream(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -3224,7 +3224,7 @@ class base_auxstream(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -3246,7 +3246,7 @@ class base_auxstream(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -3261,7 +3261,7 @@ class base_auxstream(object):
     def __get_device(self):
         try: # @return: const std::string&
             return self.obj.device()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_device(self, arg):
         try:
@@ -3280,7 +3280,7 @@ class base_auxstream(object):
     def __get_deviceSerialNumber(self):
         try: # @return: const std::string&
             return self.obj.deviceSerialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_deviceSerialNumber(self, arg):
         try:
@@ -3299,7 +3299,7 @@ class base_auxstream(object):
     def __get_source(self):
         try: # @return: const std::string&
             return self.obj.source()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_source(self, arg):
         try:
@@ -3318,7 +3318,7 @@ class base_auxstream(object):
     def __get_format(self):
         try: # @return: const std::string&
             return self.obj.format()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_format(self, arg):
         try:
@@ -3337,7 +3337,7 @@ class base_auxstream(object):
     def __get_flags(self):
         try: # @return: const std::string&
             return self.obj.flags()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_flags(self, arg):
         try:
@@ -3357,7 +3357,7 @@ class base_auxstream(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.restricted()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_restricted(self, arg):
         try: value = bool(arg)
@@ -3395,7 +3395,7 @@ class base_stream(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -3420,7 +3420,7 @@ class base_stream(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -3442,7 +3442,7 @@ class base_stream(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -3457,7 +3457,7 @@ class base_stream(object):
     def __get_datalogger(self):
         try: # @return: const std::string&
             return self.obj.datalogger()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_datalogger(self, arg):
         try:
@@ -3476,7 +3476,7 @@ class base_stream(object):
     def __get_dataloggerSerialNumber(self):
         try: # @return: const std::string&
             return self.obj.dataloggerSerialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_dataloggerSerialNumber(self, arg):
         try:
@@ -3496,7 +3496,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: int
             return self.obj.dataloggerChannel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_dataloggerChannel(self, arg):
         if self.__get_dataloggerChannel() != arg:
@@ -3507,7 +3507,7 @@ class base_stream(object):
     def __get_sensor(self):
         try: # @return: const std::string&
             return self.obj.sensor()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sensor(self, arg):
         try:
@@ -3526,7 +3526,7 @@ class base_stream(object):
     def __get_sensorSerialNumber(self):
         try: # @return: const std::string&
             return self.obj.sensorSerialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sensorSerialNumber(self, arg):
         try:
@@ -3546,7 +3546,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: int
             return self.obj.sensorChannel()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sensorChannel(self, arg):
         if self.__get_sensorChannel() != arg:
@@ -3557,7 +3557,7 @@ class base_stream(object):
     def __get_clockSerialNumber(self):
         try: # @return: const std::string&
             return self.obj.clockSerialNumber()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_clockSerialNumber(self, arg):
         try:
@@ -3577,7 +3577,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: int
             return self.obj.sampleRateNumerator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateNumerator(self, arg):
         if self.__get_sampleRateNumerator() != arg:
@@ -3589,7 +3589,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: int
             return self.obj.sampleRateDenominator()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_sampleRateDenominator(self, arg):
         if self.__get_sampleRateDenominator() != arg:
@@ -3601,7 +3601,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: double
             return self.obj.depth()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_depth(self, arg):
         try: value = float(arg)
@@ -3615,7 +3615,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: double
             return self.obj.azimuth()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_azimuth(self, arg):
         try: value = float(arg)
@@ -3629,7 +3629,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: double
             return self.obj.dip()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_dip(self, arg):
         try: value = float(arg)
@@ -3643,7 +3643,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gain()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gain(self, arg):
         try: value = float(arg)
@@ -3657,7 +3657,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: double
             return self.obj.gainFrequency()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainFrequency(self, arg):
         try: value = float(arg)
@@ -3670,7 +3670,7 @@ class base_stream(object):
     def __get_gainUnit(self):
         try: # @return: const std::string&
             return self.obj.gainUnit()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_gainUnit(self, arg):
         try:
@@ -3689,7 +3689,7 @@ class base_stream(object):
     def __get_format(self):
         try: # @return: const std::string&
             return self.obj.format()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_format(self, arg):
         try:
@@ -3708,7 +3708,7 @@ class base_stream(object):
     def __get_flags(self):
         try: # @return: const std::string&
             return self.obj.flags()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_flags(self, arg):
         try:
@@ -3728,7 +3728,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.restricted()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_restricted(self, arg):
         try: value = bool(arg)
@@ -3742,7 +3742,7 @@ class base_stream(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.shared()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_shared(self, arg):
         try: value = bool(arg)
@@ -3789,7 +3789,7 @@ class base_sensorlocation(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -3814,7 +3814,7 @@ class base_sensorlocation(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -3836,7 +3836,7 @@ class base_sensorlocation(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -3852,7 +3852,7 @@ class base_sensorlocation(object):
         # optional Attribute
         try: # @return: double
             return self.obj.latitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_latitude(self, arg):
         try: value = float(arg)
@@ -3866,7 +3866,7 @@ class base_sensorlocation(object):
         # optional Attribute
         try: # @return: double
             return self.obj.longitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_longitude(self, arg):
         try: value = float(arg)
@@ -3880,7 +3880,7 @@ class base_sensorlocation(object):
         # optional Attribute
         try: # @return: double
             return self.obj.elevation()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_elevation(self, arg):
         try: value = float(arg)
@@ -3946,8 +3946,8 @@ class base_sensorlocation(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_auxstream(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _auxStream = property(__get_auxstream)
 
@@ -4032,8 +4032,8 @@ class base_sensorlocation(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_stream(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _stream = property(__get_stream)
 
@@ -4074,7 +4074,7 @@ class base_station(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -4099,7 +4099,7 @@ class base_station(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -4121,7 +4121,7 @@ class base_station(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -4136,7 +4136,7 @@ class base_station(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -4156,7 +4156,7 @@ class base_station(object):
         # optional Attribute
         try: # @return: double
             return self.obj.latitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_latitude(self, arg):
         try: value = float(arg)
@@ -4170,7 +4170,7 @@ class base_station(object):
         # optional Attribute
         try: # @return: double
             return self.obj.longitude()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_longitude(self, arg):
         try: value = float(arg)
@@ -4184,7 +4184,7 @@ class base_station(object):
         # optional Attribute
         try: # @return: double
             return self.obj.elevation()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_elevation(self, arg):
         try: value = float(arg)
@@ -4197,7 +4197,7 @@ class base_station(object):
     def __get_place(self):
         try: # @return: const std::string&
             return self.obj.place()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_place(self, arg):
         try:
@@ -4216,7 +4216,7 @@ class base_station(object):
     def __get_country(self):
         try: # @return: const std::string&
             return self.obj.country()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_country(self, arg):
         try:
@@ -4235,7 +4235,7 @@ class base_station(object):
     def __get_affiliation(self):
         try: # @return: const std::string&
             return self.obj.affiliation()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_affiliation(self, arg):
         try:
@@ -4254,7 +4254,7 @@ class base_station(object):
     def __get_type(self):
         try: # @return: const std::string&
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         try:
@@ -4273,7 +4273,7 @@ class base_station(object):
     def __get_archive(self):
         try: # @return: const std::string&
             return self.obj.archive()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_archive(self, arg):
         try:
@@ -4292,7 +4292,7 @@ class base_station(object):
     def __get_archiveNetworkCode(self):
         try: # @return: const std::string&
             return self.obj.archiveNetworkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_archiveNetworkCode(self, arg):
         try:
@@ -4312,7 +4312,7 @@ class base_station(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.restricted()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_restricted(self, arg):
         try: value = bool(arg)
@@ -4326,7 +4326,7 @@ class base_station(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.shared()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_shared(self, arg):
         try: value = bool(arg)
@@ -4341,7 +4341,7 @@ class base_station(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -4401,8 +4401,8 @@ class base_station(object):
                     obj = DataModel.SensorLocation.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_sensorlocation(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _sensorLocation = property(__get_sensorlocation)
@@ -4444,7 +4444,7 @@ class base_network(object):
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_code(self, arg):
         try:
@@ -4469,7 +4469,7 @@ class base_network(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -4491,7 +4491,7 @@ class base_network(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -4506,7 +4506,7 @@ class base_network(object):
     def __get_description(self):
         try: # @return: const std::string&
             return self.obj.description()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_description(self, arg):
         try:
@@ -4525,7 +4525,7 @@ class base_network(object):
     def __get_institutions(self):
         try: # @return: const std::string&
             return self.obj.institutions()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_institutions(self, arg):
         try:
@@ -4544,7 +4544,7 @@ class base_network(object):
     def __get_region(self):
         try: # @return: const std::string&
             return self.obj.region()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_region(self, arg):
         try:
@@ -4563,7 +4563,7 @@ class base_network(object):
     def __get_type(self):
         try: # @return: const std::string&
             return self.obj.type()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_type(self, arg):
         try:
@@ -4582,7 +4582,7 @@ class base_network(object):
     def __get_netClass(self):
         try: # @return: const std::string&
             return self.obj.netClass()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_netClass(self, arg):
         try:
@@ -4601,7 +4601,7 @@ class base_network(object):
     def __get_archive(self):
         try: # @return: const std::string&
             return self.obj.archive()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_archive(self, arg):
         try:
@@ -4621,7 +4621,7 @@ class base_network(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.restricted()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_restricted(self, arg):
         try: value = bool(arg)
@@ -4635,7 +4635,7 @@ class base_network(object):
         # optional Attribute
         try: # @return: bool
             return self.obj.shared()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_shared(self, arg):
         try: value = bool(arg)
@@ -4650,7 +4650,7 @@ class base_network(object):
         try: # @return: Blob
             B = self.obj.remark()
             return B.content()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_remark(self, arg):
         try:
@@ -4730,8 +4730,8 @@ class base_network(object):
                     obj = DataModel.Station.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_station(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _station = property(__get_station)
@@ -4818,8 +4818,8 @@ class base_inventory(object):
                     obj = DataModel.StationGroup.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_stationgroup(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _stationGroup = property(__get_stationgroup)
@@ -4858,8 +4858,8 @@ class base_inventory(object):
                     obj = DataModel.AuxDevice.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_auxdevice(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _auxDevice = property(__get_auxdevice)
@@ -4908,8 +4908,8 @@ class base_inventory(object):
                     obj = DataModel.Sensor.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_sensor(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _sensor = property(__get_sensor)
@@ -4962,8 +4962,8 @@ class base_inventory(object):
                     obj = DataModel.Datalogger.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_datalogger(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _datalogger = property(__get_datalogger)
@@ -5014,8 +5014,8 @@ class base_inventory(object):
                     obj = DataModel.ResponsePAZ.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepaz(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _responsePAZ = property(__get_responsepaz)
@@ -5062,8 +5062,8 @@ class base_inventory(object):
                     obj = DataModel.ResponseFIR.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefir(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _responseFIR = property(__get_responsefir)
@@ -5114,8 +5114,8 @@ class base_inventory(object):
                     obj = DataModel.ResponsePolynomial.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsepolynomial(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _responsePolynomial = property(__get_responsepolynomial)
@@ -5156,8 +5156,8 @@ class base_inventory(object):
                     obj = DataModel.ResponseFAP.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_responsefap(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _responseFAP = property(__get_responsefap)
@@ -5214,8 +5214,8 @@ class base_inventory(object):
                     obj = DataModel.Network.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_network(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _network = property(__get_network)
@@ -5248,7 +5248,7 @@ class base_routearclink(object):
     def __get_address(self):
         try: # @return: const std::string&
             return self.obj.address()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_address(self, arg):
         try:
@@ -5273,7 +5273,7 @@ class base_routearclink(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -5295,7 +5295,7 @@ class base_routearclink(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -5311,7 +5311,7 @@ class base_routearclink(object):
         # optional Attribute
         try: # @return: int
             return self.obj.priority()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_priority(self, arg):
         if self.__get_priority() != arg:
@@ -5347,7 +5347,7 @@ class base_routeseedlink(object):
     def __get_address(self):
         try: # @return: const std::string&
             return self.obj.address()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_address(self, arg):
         try:
@@ -5367,7 +5367,7 @@ class base_routeseedlink(object):
         # optional Attribute
         try: # @return: int
             return self.obj.priority()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_priority(self, arg):
         if self.__get_priority() != arg:
@@ -5412,7 +5412,7 @@ class base_route(object):
     def __get_networkCode(self):
         try: # @return: const std::string&
             return self.obj.networkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_networkCode(self, arg):
         try:
@@ -5431,7 +5431,7 @@ class base_route(object):
     def __get_stationCode(self):
         try: # @return: const std::string&
             return self.obj.stationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_stationCode(self, arg):
         try:
@@ -5450,7 +5450,7 @@ class base_route(object):
     def __get_locationCode(self):
         try: # @return: const std::string&
             return self.obj.locationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_locationCode(self, arg):
         try:
@@ -5469,7 +5469,7 @@ class base_route(object):
     def __get_streamCode(self):
         try: # @return: const std::string&
             return self.obj.streamCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_streamCode(self, arg):
         try:
@@ -5531,8 +5531,8 @@ class base_route(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_routearclink(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _routeArclink = property(__get_routearclink)
 
@@ -5573,8 +5573,8 @@ class base_route(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_routeseedlink(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _routeSeedlink = property(__get_routeseedlink)
 
@@ -5606,7 +5606,7 @@ class base_access(object):
     def __get_networkCode(self):
         try: # @return: const std::string&
             return self.obj.networkCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_networkCode(self, arg):
         try:
@@ -5625,7 +5625,7 @@ class base_access(object):
     def __get_stationCode(self):
         try: # @return: const std::string&
             return self.obj.stationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_stationCode(self, arg):
         try:
@@ -5644,7 +5644,7 @@ class base_access(object):
     def __get_locationCode(self):
         try: # @return: const std::string&
             return self.obj.locationCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_locationCode(self, arg):
         try:
@@ -5663,7 +5663,7 @@ class base_access(object):
     def __get_streamCode(self):
         try: # @return: const std::string&
             return self.obj.streamCode()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_streamCode(self, arg):
         try:
@@ -5682,7 +5682,7 @@ class base_access(object):
     def __get_user(self):
         try: # @return: const std::string&
             return self.obj.user()
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_user(self, arg):
         try:
@@ -5707,7 +5707,7 @@ class base_access(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_start(self, arg):
         value = None
@@ -5729,7 +5729,7 @@ class base_access(object):
                  )
             )
                 
-        except Core.ValueException:
+        except ValueError:
             return None
     def __set_end(self, arg):
         value = None
@@ -5807,8 +5807,8 @@ class base_routing(object):
                     obj = DataModel.Route.Cast(it.get())
                     obj.lastModified = it.lastModified()
                     list.append(base_route(obj))
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
                 it.step()
         return list
     _route = property(__get_route)
@@ -5864,8 +5864,8 @@ class base_routing(object):
                         except:
                             logs.debug("got " + repr(obj) + " in __get_access(), objects_left=" + str(objects_left))
                     i += 1
-                except Core.ValueException, e:
-                    print e.what()
+                except ValueError, e:
+                    print str(e)
         return list
     _access = property(__get_access)
 

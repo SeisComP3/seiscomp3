@@ -1,6 +1,5 @@
 import os, string, time, re, glob, shutil, sys, imp, random, fnmatch
 from seiscomp3 import Core, Kernel, Config, System, Client, Communication, DataModel
-from seiscomp3.Core import ValueException
 
 DEBUG = 0
 
@@ -72,7 +71,7 @@ class InventoryResolver(object):
     def _getEnd(self, obj):
         try:
             return obj.end()
-        except Core.ValueException:
+        except ValueError:
             return None
 
     def _codeMatch(self, obj, code):
@@ -139,7 +138,7 @@ class InventoryResolver(object):
     def findEndDate(self, network, start, end):
         if end is None:
             try: return network.end()
-            except ValueException: return None
+            except ValueError: return None
 
         return self._truncateDate(network, end)
 
@@ -520,7 +519,7 @@ class RoutingDBUpdater(Client.Application):
                         if cpriority != priority:
                             arclink.setPriority(priority)
                             update = True
-                    except ValueException,e:
+                    except ValueError,e:
                         if priority:
                             arclink.setPriority(priority)
                             update = True
@@ -530,7 +529,7 @@ class RoutingDBUpdater(Client.Application):
                         if (not end) or (end and cend != end):
                             arclink.setEnd(end)
                             update = True
-                    except ValueException,e:
+                    except ValueError,e:
                         if end:
                             arclink.setEnd(end)
                             update = True
@@ -556,7 +555,7 @@ class RoutingDBUpdater(Client.Application):
                         if cpriority != priority:
                             seedlink.setPriority(priority)
                             update = True
-                    except ValueException,e:
+                    except ValueError,e:
                         if priority:
                             seedlink.setPriority(priority)
                             update = True
@@ -615,7 +614,7 @@ class RoutingDBUpdater(Client.Application):
                     if (not end) or (end and cend != end):
                         access.setEnd(end)
                         update = True
-                except ValueException,e:
+                except ValueError,e:
                     if end:
                         access.setEnd(end)
                         update = True

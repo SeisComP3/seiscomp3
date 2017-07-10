@@ -200,7 +200,7 @@ class SDS(object):
             if lastrecord:
                 try:
                     etime = lastrecord.endTime()
-                except Core.ValueException:
+                except ValueError:
                     logs.warning("SDS: record.endTime() raises Core.ValueException! Resulting SEED file maybe incorrect!")
                     etime = lastrecord.startTime()
                 timetuple = time.strptime(etime.toString("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")                
@@ -233,8 +233,6 @@ class SDS(object):
                     lastrecord = record
                     record = recinput.next()                
 
-            except Core.GeneralException, e:
-                logs.error(e.what())
             except Exception, e:
                 logs.error("SDS: Unexpected exception occured: %s" % e)
            
