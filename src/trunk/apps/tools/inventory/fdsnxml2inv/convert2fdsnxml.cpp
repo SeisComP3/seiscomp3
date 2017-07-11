@@ -35,6 +35,8 @@
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/logging/log.h>
 
+#include <rapidjson/document.h>
+
 #include <iostream>
 
 using namespace std;
@@ -572,6 +574,15 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 	sx_chan->setResponse(FDSNXML::Response());
 	FDSNXML::Response &resp = sx_chan->response();
 
+	const DataModel::Datalogger *datalogger = NULL;
+	const DataModel::Sensor *sensor = NULL;
+
+	if ( !stream->datalogger().empty() )
+		datalogger = findDatalogger(stream->datalogger());
+
+	if ( !stream->sensor().empty() )
+		sensor = findSensor(stream->sensor());
+
 	try {
 		FDSNXML::Sensitivity sensitivity;
 		sensitivity.setValue(stream->gain());
@@ -588,21 +599,25 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 		else
 			inputUnits.setName(stream->gainUnit());
 
+		if ( sensor ) {
+			try {
+				const DataModel::Blob &blob = sensor->remark();
+				rapidjson::Document json;
+				if ( !json.Parse(blob.content().c_str()).HasParseError() ) {
+					rapidjson::Value::ConstMemberIterator jit = json.FindMember("unit");
+					if ( jit != json.MemberEnd() && jit->value.IsString() )
+						inputUnits.setDescription(jit->value.GetString());
+				}
+			}
+			catch ( ... ) {}
+		}
+
 		sensitivity.setInputUnits(inputUnits);
 		resp.setInstrumentSensitivity(sensitivity);
 	}
 	catch ( Core::GeneralException &exc ) {
 		resp.setInstrumentSensitivity(Core::None);
 	}
-
-	const DataModel::Datalogger *datalogger = NULL;
-	const DataModel::Sensor *sensor = NULL;
-
-	if ( !stream->datalogger().empty() )
-		datalogger = findDatalogger(stream->datalogger());
-
-	if ( !stream->sensor().empty() )
-		sensor = findSensor(stream->sensor());
 
 	if ( sensor ) {
 		sx_chan->setSensor(FDSNXML::Equipment());
