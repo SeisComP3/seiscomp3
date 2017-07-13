@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -29,19 +29,14 @@
 namespace Seiscomp {
 namespace RecordStream {
 
-class SC_SYSTEM_CORE_API FDSNWSConnection : public Seiscomp::IO::RecordStream {
-	DECLARE_SC_CLASS(FDSNWSConnection);
+
+class SC_SYSTEM_CORE_API FDSNWSConnectionBase : public IO::RecordStream {
+	protected:
+		//! C'tor
+		FDSNWSConnectionBase(IO::Socket *socket, int defaultPort);
+
 
 	public:
-		//! C'tor
-		FDSNWSConnection();
-
-		//! Initializing Constructor
-		FDSNWSConnection(std::string serverloc);
-
-		//! Destructor
-		virtual ~FDSNWSConnection();
-
 		//! The recordtype cannot be selected when using an arclink
 		//! connection. It will always create MiniSeed records
 		bool setRecordType(const char*);
@@ -55,19 +50,19 @@ class SC_SYSTEM_CORE_API FDSNWSConnection : public Seiscomp::IO::RecordStream {
 
 		//! Adds the given stream to the server connection description
 		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-			const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
+			const Core::Time &stime, const Core::Time &etime);
 
 		//! Removes the given stream from the connection description. Returns true on success; false otherwise.
 		bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
 
 		//! Adds the given start time to the server connection description
-		bool setStartTime(const Seiscomp::Core::Time &stime);
+		bool setStartTime(const Core::Time &stime);
 
 		//! Adds the given end time to the server connection description
-		bool setEndTime(const Seiscomp::Core::Time &etime);
+		bool setEndTime(const Core::Time &etime);
 
 		//! Adds the given end time window to the server connection description
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
+		bool setTimeWindow(const Core::TimeWindow &w);
 
 		//! Sets timeout
 		bool setTimeout(int seconds);
@@ -84,25 +79,42 @@ class SC_SYSTEM_CORE_API FDSNWSConnection : public Seiscomp::IO::RecordStream {
 		//! Returns the data stream
 		std::istream& stream();
 
+
 	private:
 		//! Blocking read from socket
 		std::string readBinary(int size);
+		void handshake();
+
 
 	private:
 		std::istringstream _stream;
-		Seiscomp::IO::Socket _sock;
+		IO::SocketPtr _sock;
 		std::string _host;
 		std::string _url;
+		int _defaultPort;
 		std::set<Seiscomp::RecordStream::StreamIdx> _streams;
-		Seiscomp::Core::Time _stime;
-		Seiscomp::Core::Time _etime;
+		Core::Time _stime;
+		Core::Time _etime;
 		std::string _reqID;
 		bool _readingData;
 		bool _chunkMode;
 		int _remainingBytes;
 		std::string _error;
-		void handshake();
 };
+
+
+class SC_SYSTEM_CORE_API FDSNWSConnection : public FDSNWSConnectionBase {
+	public:
+		FDSNWSConnection();
+};
+
+
+class SC_SYSTEM_CORE_API FDSNWSSSLConnection : public FDSNWSConnectionBase {
+	public:
+		FDSNWSSSLConnection();
+};
+
+
 
 }
 }
