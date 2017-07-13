@@ -44,6 +44,21 @@
 			<parameter name="annotationsWithChannels" type="boolean" default="true">
 				<description>Enables/disabled drawing of station annotations with location/channel codes.</description>
 			</parameter>
+			<group name="eventTable">
+				<parameter name="visible" type="boolean" default="false">
+					<description>
+						Whether to show the event table initially or not.
+					</description>
+				</parameter>
+				<parameter name="columns" type="list:string">
+					<description>
+						The columns that are visible in the table. If nothing
+						is specified then all columns are visible. Valid column names are:
+						&quot;Event&quot;, &quot;Origin Time&quot;, &quot;Magnitude&quot;, &quot;Magnitude Type&quot;,
+						&quot;Region&quot;, &quot;Latitude&quot;, &quot;Longitude&quot;, &quot;Depth&quot;.
+					</description>
+				</parameter>
+			</group>
 			<group name="stations">
 				<parameter name="groundMotionFilter" type="string">
 					<description>Sets the filter applied to determine ground motion.</description>

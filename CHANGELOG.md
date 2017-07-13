@@ -6,6 +6,11 @@
 
   * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
     The default value is 0 and does disable the interval check.
+  * Added option to show the event table initially and to configure visible columns
+    ```
+    eventTable.visible = true
+    eventTable.columns = Event, Depth
+    ```
 
 * scolv
 

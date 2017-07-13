@@ -683,7 +683,13 @@ void MvMainWindow::setupStandardUi() {
 	_ui.splitter->setStretchFactor(0, 1);
 
 	// Setup menu
-	_ui.showEventTableWidgetAction->setChecked(false);
+	try {
+		_ui.showEventTableWidgetAction->setChecked(SCApp->configGetBool("eventTable.visible"));
+	}
+	catch ( ... ) {
+		_ui.showEventTableWidgetAction->setChecked(false);
+	}
+
 	_ui.showWaveformPropagationAction->setChecked(true);
 	_ui.showMapLegendAction->setChecked(true);
 	_ui.showHistoricOriginsAction->setChecked(true);

@@ -104,6 +104,7 @@ class EventTableWidget : public QTableWidget {
 	private:
 		bool _controlKeyPressed;
 		int  _selectedRow;
+		int  _lastVisibleSection;
 
 };
 

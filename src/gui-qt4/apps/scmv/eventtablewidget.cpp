@@ -91,9 +91,8 @@ void EventTableWidget::addRow(RowData& rowData) {
 
 	resizeColumnsToContents();
 
-	QHeaderView* horizontalHeaderRef = horizontalHeader();
-	horizontalHeaderRef->setResizeMode(horizontalHeaderRef->count()-1, QHeaderView::Stretch);
-
+	QHeaderView *horizontalHeaderRef = horizontalHeader();
+	horizontalHeaderRef->setResizeMode(_lastVisibleSection, QHeaderView::Stretch);
 }
 
 
@@ -146,12 +145,40 @@ void EventTableWidget::uiInit() {
 	tableHeader << "Event" << "Origin Time" << "Magnitude" << "Magnitude Type"
 	            << "Region" << "Latitude" << "Longitude" << "Depth";
 
+	QVector<bool> sectionsVisible;
+	for ( int i = 0; i < tableHeader.count(); ++i )
+		sectionsVisible.append(true);
+
+	try {
+		std::vector<std::string> cols = SCApp->configGetStrings("eventTable.columns");
+
+		// Switch all section to invisible
+		for ( int i = 0; i < sectionsVisible.count(); ++i )
+			sectionsVisible[i] = false;
+
+		for ( size_t i = 0; i < cols.size(); ++i ) {
+			int idx = tableHeader.indexOf(cols[i].c_str());
+			if ( idx < 0 ) continue;
+			sectionsVisible[idx] = true;
+		}
+	}
+	catch ( ... ) {}
+
 	setRowCount(0);
 	setColumnCount(tableHeader.size());
 	setHorizontalHeaderLabels(tableHeader);
 
 	QHeaderView *horizontalHeaderRef = horizontalHeader();
-	horizontalHeaderRef->setResizeMode(horizontalHeaderRef->count()-1, QHeaderView::Stretch);
+
+	_lastVisibleSection = -1;
+	for ( int i = 0; i < horizontalHeaderRef->count(); ++i ) {
+		if ( !sectionsVisible[i] )
+			horizontalHeaderRef->hideSection(i);
+		else
+			_lastVisibleSection = i;
+	}
+
+	horizontalHeaderRef->setResizeMode(_lastVisibleSection, QHeaderView::Stretch);
 	resizeColumnsToContents();
 
 	setAlternatingRowColors(true);
