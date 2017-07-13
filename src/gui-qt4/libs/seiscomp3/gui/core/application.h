@@ -158,6 +158,8 @@ class SC_GUI_API Application : public QApplication,
 		bool startFullScreen() const;
 		bool nonInteractive() const;
 
+		bool isReadOnlyMessaging() const { return _readOnlyMessaging; }
+
 		const MapsDesc &mapsDesc() const;
 		const MessageGroups &messageGroups() const;
 
@@ -278,6 +280,7 @@ class SC_GUI_API Application : public QApplication,
 
 		bool                _startFullScreen;
 		bool                _nonInteractive;
+		bool                _readOnlyMessaging;
 		Core::TimeSpan      _eventTimeAgo;
 		MapsDesc            _mapsDesc;
 		MessageGroups       _messageGroups;

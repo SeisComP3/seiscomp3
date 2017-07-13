@@ -14,6 +14,7 @@
 
 #define SEISCOMP_COMPONENT Application
 
+#include <seiscomp3/core/system.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/aboutwidget.h>
@@ -225,15 +226,16 @@ Application* Application::_instance = NULL;
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Application::Application(int& argc, char **argv, int flags, Type type)
- : QApplication(argc, argv, type),
-   Client::Application(argc, argv),
-   _settings(NULL),
-   _intervalSOH(60),
-   _mainWidget(NULL),
-   _splash(NULL),
-   _dlgConnection(NULL),
-   _settingsOpened(false),
-   _flags(flags) {
+: QApplication(argc, argv, type)
+, Client::Application(argc, argv)
+, _settings(NULL)
+, _intervalSOH(60)
+, _readOnlyMessaging(false)
+, _mainWidget(NULL)
+, _splash(NULL)
+, _dlgConnection(NULL)
+, _settingsOpened(false)
+, _flags(flags) {
 
 	if ( type == QApplication::Tty )
 		_flags &= ~SHOW_SPLASH;
@@ -1028,6 +1030,24 @@ bool Application::init() {
 
 	bool result = Client::Application::init();
 
+	// Check author read-only
+	try {
+		vector<string> blacklistedAuthors = configGetStrings("blacklist.authors");
+		if ( find(blacklistedAuthors.begin(), blacklistedAuthors.end(), author()) != blacklistedAuthors.end() )
+			_readOnlyMessaging = true;
+	}
+	catch ( ... ) {}
+
+	try {
+		vector<string> blacklistedUsers = configGetStrings("blacklist.users");
+		SEISCOMP_DEBUG("Check if user %s is blacklisted", Seiscomp::Core::getLogin().c_str());
+		if ( find(blacklistedUsers.begin(), blacklistedUsers.end(), Seiscomp::Core::getLogin()) != blacklistedUsers.end() ) {
+			SEISCOMP_DEBUG("User %s is blacklisted, setup read-only connection", Seiscomp::Core::getLogin().c_str());
+			_readOnlyMessaging = true;
+		}
+	}
+	catch ( ... ) {}
+
 	_messageGroups.pick = "PICK";
 	_messageGroups.amplitude = "AMPLITUDE";
 	_messageGroups.magnitude = "MAGNITUDE";
@@ -1293,6 +1313,12 @@ bool Application::sendMessage(Seiscomp::Core::Message* msg) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 	bool result = false;
+
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return false;
+	}
 
 	if ( SCApp->connection() )
 		result =
@@ -1682,6 +1708,12 @@ void Application::sendCommand(Command command, const std::string& parameter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::sendCommand(Command command, const std::string& parameter, Core::BaseObject *obj) {
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return;
+	}
+
 	if ( commandTarget().empty() ) {
 		QMessageBox::critical(NULL,
 		            "Commands",

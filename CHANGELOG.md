@@ -227,6 +227,16 @@ Status computeMagnitude(double amplitude, double period,
     ```
   * Add legend for event symbols
 
+* GUI
+
+  * All GUI applications support an author and/or user blacklist to prevent sending
+    messages to scmaster. This is not a proper secure access control implementation
+    but helps to setup read-only applications to avoid accidental commits.
+    ```
+    blacklist.users = sysop1, sysop2
+    blacklist.authors = sysop1@host, sysop2@host
+    ```
+
 * scolv
 
   * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
