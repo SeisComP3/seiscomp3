@@ -2,6 +2,11 @@
 
 ## Release YYYY.DDD
 
+* scmv
+
+  * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
+    The default value is 0 and does disable the interval check.
+
 * scolv
 
   * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```

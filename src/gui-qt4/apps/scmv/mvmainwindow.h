@@ -172,16 +172,18 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 		void selectStations(const EventData* eventData, bool isSelected = true);
 		void showOriginSymbols(bool val);
 
-		void removeExpiredEvents();
-        void removeEventData(const EventData* eventData);
-        
+		void removeEventData(const EventData* eventData);
+
 		bool isInDisplayMode() const;
+
 
 	// ----------------------------------------------------------------------
 	//  slots
 	// ----------------------------------------------------------------------
 	private slots:
 		void updateMap();
+		void removeExpiredEvents();
+
 		void changeView(int index);
 
 		void showSearchWidget();
@@ -222,6 +224,8 @@ class MvMainWindow : public Seiscomp::Gui::MainWindow {
 
 		int    _mapUpdateInterval;
 		QTimer _mapUpdateTimer;
+		int    _expiredEventsInterval;
+		QTimer _expiredEventsTimer;
 
 		StationDataCollection _stationDataCollection;
 		EventDataRepository   _eventDataRepository;

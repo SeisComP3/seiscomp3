@@ -513,15 +513,16 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 
 
 MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
- : Gui::MainWindow(parent, flags),
-   _mapWidget(NULL),
-   _displayMode(NONE),
-   _mapUpdateInterval(1E3),
-   _configStationPickCacheLifeSpan(15 * 60),
-   _configEventActivityLifeSpan(15 * 60),
-   _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600)),
-   _configReadEventsNotOlderThanTimeSpan(0.0),
-   _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
+: Gui::MainWindow(parent, flags)
+, _mapWidget(NULL)
+, _displayMode(NONE)
+, _mapUpdateInterval(1000)
+, _expiredEventsInterval(0)
+, _configStationPickCacheLifeSpan(15 * 60)
+, _configEventActivityLifeSpan(15 * 60)
+, _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600))
+, _configReadEventsNotOlderThanTimeSpan(0.0)
+, _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
 
 	setupStandardUi();
 }
@@ -760,6 +761,14 @@ void MvMainWindow::setupStandardUi() {
 
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
 	        this, SLOT(handleNewMessage(Seiscomp::Core::Message*)));
+
+	try { _expiredEventsInterval = (int)SCApp->configGetDouble("expiredEventsInterval")*1000; }
+	catch ( ... ) {}
+
+	if ( _expiredEventsInterval > 0 ) {
+		connect(&_expiredEventsTimer, SIGNAL(timeout()), this, SLOT(removeExpiredEvents()));
+		_expiredEventsTimer.start(_expiredEventsInterval);
+	}
 
 	connect(&_mapUpdateTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
 
@@ -1523,8 +1532,9 @@ void MvMainWindow::showOriginSymbols(bool val) {
 
 
 void MvMainWindow::removeExpiredEvents() {
+	SEISCOMP_DEBUG("Check for expired events");
 	while ( true ) {
-		EventData* expiredEvent = _eventDataRepository.findNextExpiredEvent();
+		EventData *expiredEvent = _eventDataRepository.findNextExpiredEvent();
 		if ( !expiredEvent ) break;
 		removeEventData(expiredEvent);
 	}
