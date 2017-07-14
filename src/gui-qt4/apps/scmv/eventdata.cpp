@@ -215,7 +215,7 @@ EventData* EventDataRepository::findEvent(const std::string& id) {
 EventData *EventDataRepository::findNextExpiredEvent() {
 	Core::Time maxTime = Core::Time::GMT() - _eventDataObjectLifeSpan;
 
-	typename EventDataCollection::iterator it;
+	EventDataCollection::iterator it;
 	for ( it = _eventDataCollection.begin(); it != _eventDataCollection.end(); ++it ) {
 		DataModel::Origin *origin = findOrigin(it->object()->preferredOriginID());
 		if ( origin == NULL )
