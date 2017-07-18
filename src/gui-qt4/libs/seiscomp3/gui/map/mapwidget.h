@@ -74,6 +74,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		void setDrawGrid(bool);
 		void setDrawLayers(bool);
 		void setDrawCities(bool);
+		void setDrawLegends(bool);
 
 
 	protected slots:

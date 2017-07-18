@@ -46,6 +46,10 @@ namespace Core {
      canvas
    - Removed Seiscomp::Gui::Map::Layer RTTI interface
    - Added class Seiscomp::Gui::EventLayer
+   - Added Seiscomp::Gui::MapWidget::setDrawLegends
+   - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
+   - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
+   - Added Seiscomp::Gui::Application::messageGroups
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

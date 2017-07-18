@@ -276,6 +276,12 @@ void MapWidget::setDrawCities(bool e) {
 }
 
 
+void MapWidget::setDrawLegends(bool e) {
+	_canvas.setDrawLegends(e);
+	update();
+}
+
+
 void MapWidget::setGrayScale(bool f) {
 	if ( _forceGrayScale == f ) return;
 	_forceGrayScale = f;
@@ -703,8 +709,10 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
 void MapWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 	if ( event->button() == Qt::LeftButton &&
-	     !_canvas.filterMouseDoubleClickEvent(event) )
+	     !_canvas.filterMouseDoubleClickEvent(event) ) {
 		_canvas.centerMap(event->pos());
+		update();
+	}
 }
 
 
