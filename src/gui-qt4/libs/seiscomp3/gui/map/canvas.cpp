@@ -326,9 +326,14 @@ void Canvas::setFont(QFont f) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSize(int w, int h) {
 	_buffer = QImage(w, h, (_projection && !_projection->isRectangular())?QImage::Format_ARGB32:QImage::Format_RGB32);
-	updateBuffer();
 
+	updateBuffer();
 	updateLayout();
+
+	foreach ( const LegendArea &area, _legendAreas ) {
+		foreach ( Seiscomp::Gui::Map::Legend *legend, area )
+			legend->canvasResizeEvent(_buffer.size());
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1512,24 +1517,27 @@ void Canvas::setupLayer(Layer *layer) {
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
-	foreach ( Legend* legend, layer->legends() ) {
+	foreach ( Legend *legend, layer->legends() ) {
 		if ( legend != NULL ) {
 			LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 			if ( it == _legendAreas.end() )
 				it = _legendAreas.insert(legend->alignment(), LegendArea());
 
-			LegendArea& area = *it;
+			LegendArea &area = *it;
 			area.append(legend);
 			if ( legend->isEnabled() && area.currentIndex == -1 ) {
 				area.currentIndex = area.count() - 1;
 				area.lastIndex = area.currentIndex;
 			}
+
 			connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
 			        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
 			connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
 			        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
 			connect(legend, SIGNAL(destroyed(QObject*)),
 			        this, SLOT(onObjectDestroyed(QObject*)));
+
+			legend->canvasResizeEvent(_buffer.size());
 		}
 	}
 

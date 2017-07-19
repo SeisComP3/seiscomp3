@@ -90,6 +90,7 @@ class SC_GUI_API Canvas : public QObject {
 		void setBilinearFilter(bool);
 
 		void setSize(int w, int h);
+		QSize size() const { return _buffer.size(); }
 		int width() const { return _buffer.width(); }
 		int height() const { return _buffer.height(); }
 

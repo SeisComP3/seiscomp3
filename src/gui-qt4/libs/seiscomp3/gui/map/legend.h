@@ -27,12 +27,15 @@
 
 class QPainter;
 
+
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
 
+
 class Canvas;
 class Layer;
+
 
 class SC_GUI_API Legend : public QObject {
 	Q_OBJECT
@@ -42,7 +45,7 @@ class SC_GUI_API Legend : public QObject {
 		Legend(const QString&, QObject *parent = NULL);
 		virtual ~Legend() {}
 
-		Legend& operator =(const Legend &other);
+		Legend &operator =(const Legend &other);
 
 		virtual void bringToFront();
 
@@ -59,21 +62,17 @@ class SC_GUI_API Legend : public QObject {
 		const QFont& font() const { return _font; }
 		void setFont(const QFont &font) { _font = font; }
 
-
-		Layer* layer() const { return _layer; }
+		Layer *layer() const { return _layer; }
 		void setLayer(Layer* layer) { _layer = layer; }
 
 		int margin() const { return _margin; }
 		void setMargin(int margin) { _margin = margin; }
-
-		virtual const QSize& size() const { return _size; }
 
 		int spacing() const { return _spacing; }
 		void setSpacing(int spacing) { _spacing = spacing; }
 
 		const QString& title() const { return _title; }
 		void setTitle(const QString &title) { _title = title; }
-
 
 		const QFont& titleFont() const { return _titleFont; }
 		void setTitleFont(const QFont &font) { _titleFont = font; }
@@ -84,10 +83,16 @@ class SC_GUI_API Legend : public QObject {
 			emit visibilityChanged(visible);
 		}
 
+		const QSize &size() const { return _size; }
+
+		virtual void canvasResizeEvent(const QSize &size) {}
+
+
 	signals:
 		void bringToFrontRequested(Seiscomp::Gui::Map::Legend*);
 		void enabled(Seiscomp::Gui::Map::Legend*, bool);
 		void visibilityChanged(bool);
+
 
 	protected:
 		int                           _margin;
@@ -95,7 +100,7 @@ class SC_GUI_API Legend : public QObject {
 		QFont                         _font;
 		QFont                         _titleFont;
 		QSize                         _size;
-		Layer*                        _layer;
+		Layer                        *_layer;
 		QString                       _title;
 		Qt::Alignment                 _alignment;
 		bool                          _enabled;
@@ -104,8 +109,10 @@ class SC_GUI_API Legend : public QObject {
 
 };
 
+
 } // namespace Map
 } // namespce Gui
 } // namespace Seiscomp
+
 
 #endif
