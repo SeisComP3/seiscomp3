@@ -3447,7 +3447,17 @@ void OriginLocatorView::updateContent() {
 	}
 
 	try {
-		timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S");
+		try {
+			timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().modificationTime(), "%Y-%m-%d %H:%M:%S");
+			try {
+				_ui.labelCreated->setToolTip(tr("Creation time: %1").arg(timeToString(_currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S")));
+			}
+			catch ( ... ) {}
+		}
+		catch ( ... ) {
+			timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S");
+			_ui.labelCreated->setToolTip(tr("That is actually the creation time"));
+		}
 	}
 	catch ( ValueException& ) {
 		_ui.labelCreated->setText("");
