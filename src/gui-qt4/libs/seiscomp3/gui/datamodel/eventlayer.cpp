@@ -108,6 +108,12 @@ void EventLayer::calculateMapPosition(const Map::Canvas *canvas) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventLayer::clear() {
+	SymbolMap::iterator it;
+
+	// Delete all symbols
+	for ( it = _eventSymbols.begin(); it != _eventSymbols.end(); ++it )
+		delete it.value();
+
 	_eventSymbols.clear();
 	updateRequested();
 }
@@ -161,6 +167,7 @@ void EventLayer::updateEvent(Seiscomp::DataModel::Event *e) {
 void EventLayer::removeEvent(Seiscomp::DataModel::Event *e) {
 	SymbolMap::iterator it = _eventSymbols.find(e);
 	if ( it == _eventSymbols.end() ) return;
+	delete it.value();
 	_eventSymbols.erase(it);
 	updateRequested();
 }
