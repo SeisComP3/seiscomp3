@@ -12,6 +12,7 @@
 
 
 #include <seiscomp3/gui/map/layer.h>
+#include <seiscomp3/gui/map/canvas.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 #include <QContextMenuEvent>
 
@@ -42,6 +43,17 @@ Layer::Layer(QObject* parent)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Layer::~Layer() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+QSize Layer::size() const {
+	if ( _canvas != NULL )
+		return _canvas->size();
+	return QSize();
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

@@ -48,6 +48,7 @@ namespace Core {
    - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
    - Added Seiscomp::Gui::Map::Canvas::size
    - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added Seiscomp::Gui::Map::Layer::size
    - Added Seiscomp::Gui::Map::Layer::isInside
    - Added Seiscomp::Gui::Map::Layer::handleEnterEvent
    - Added Seiscomp::Gui::Map::Layer::handleLeaveEvent
@@ -55,8 +56,9 @@ namespace Core {
    - Added Seiscomp::Gui::Map::Layer::filterMouseDoubleClickEvent
    - Added Seiscomp::Gui::Map::Layer::filterMousePressEvent
    - Added Seiscomp::Gui::Map::Layer::filterMouseReleaseEvent
-   - Added Seiscomp::Gui::Map::Legend::canvasResizeEvent
+   - Added Seiscomp::Gui::Map::Legend::contextResizeEvent
    - Removed virtual declaration of Seiscomp::Gui::Map::Legend::size
+   - Removed class Seiscomp::Gui::Map::CanvasDelegate
    - Added class Seiscomp::Gui::EventLayer
    - Added Seiscomp::Gui::MapWidget::setDrawLegends
    - Added Seiscomp::Gui::RecordView::setMaximumRowHeight

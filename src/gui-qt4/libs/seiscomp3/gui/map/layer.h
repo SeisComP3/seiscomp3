@@ -55,9 +55,11 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 		typedef QList<Legend*> Legends;
 
+
 	public:
 		Layer(QObject* parent = NULL);
 		virtual ~Layer();
+
 
 	public:
 		virtual void setConfig(const std::string &/*config*/) {}
@@ -95,16 +97,27 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 
 	public:
+		/**
+		 * @brief Convenience function that returns the size in pixels of the
+		 *        layer. By default it forwards the request to the canvas if
+		 *        the layer is attached to canvas or an invalid size otherwise.
+		 * @return The size of the layer.
+		 */
+		virtual QSize size() const;
+
 		virtual void calculateMapPosition(const Map::Canvas *canvas);
 		virtual void bufferUpdated(Map::Canvas *canvas);
 		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
 		virtual QMenu *menu(QWidget*) const;
 
+
 	signals:
 		void updateRequested(const Layer::UpdateHints& = UpdateHints());
 
+
 	private slots:
 		void onObjectDestroyed(QObject *object);
+
 
 	private:
 		Canvas                       *_canvas;
@@ -113,6 +126,7 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		bool                          _visible;
 		bool                          _antiAliasing;
 		Legends                       _legends;
+
 
 	friend class Canvas;
 };

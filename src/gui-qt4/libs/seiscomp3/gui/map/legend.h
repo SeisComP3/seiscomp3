@@ -85,7 +85,7 @@ class SC_GUI_API Legend : public QObject {
 
 		const QSize &size() const { return _size; }
 
-		virtual void canvasResizeEvent(const QSize &size) {}
+		virtual void contextResizeEvent(const QSize &size) {}
 
 
 	signals:

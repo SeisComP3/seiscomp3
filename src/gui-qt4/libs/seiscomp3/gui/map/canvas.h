@@ -43,33 +43,35 @@ DEFINE_SMARTPOINTER(TextureCache);
 
 
 struct SC_GUI_API LayerProperties {
-	std::string name;
 	const LayerProperties *parent;
-	bool visible;
-	QPen pen;
-	QBrush brush;
-	QFont font;
-	bool drawName;
-	bool debug;
-	int  rank;
-	int  roughness;
-	bool filled;
+	std::string            name;
+	bool                   visible;
+	QPen                   pen;
+	QBrush                 brush;
+	QFont                  font;
+	bool                   drawName;
+	bool                   debug;
+	int                    rank;
+	int                    roughness;
+	bool                   filled;
 
-	LayerProperties(const std::string &name) :
-	                name(name), parent(NULL), visible(true),
-	                drawName(false), debug(false), rank(-1), roughness(3),
-	                filled(false) {}
-	LayerProperties(const std::string &name, const LayerProperties* parent) :
-	                name(name), parent(parent), visible(parent->visible),
-	                pen(parent->pen), brush(parent->brush), font(parent->font),
-	                drawName(parent->drawName), debug(parent->debug), rank(-1),
-	                roughness(parent->roughness), filled(parent->filled) {}
+	LayerProperties(const std::string &name)
+	: parent(NULL), name(name)
+	, visible(true), drawName(false)
+	, debug(false), rank(-1), roughness(3)
+	, filled(false) {}
+
+	LayerProperties(const std::string &name, const LayerProperties* parent)
+	: parent(parent), name(name)
+	, visible(parent->visible), pen(parent->pen)
+	, brush(parent->brush), font(parent->font)
+	, drawName(parent->drawName), debug(parent->debug)
+	, rank(-1), roughness(parent->roughness)
+	, filled(parent->filled) {}
 
 	bool isChild(const LayerProperties* child) const;
 };
 
-
-class CanvasDelegate;
 
 class SC_GUI_API Canvas : public QObject {
 	Q_OBJECT
@@ -186,10 +188,6 @@ class SC_GUI_API Canvas : public QObject {
 		void setBuffer(QImage buffer) { _buffer = buffer; }
 		QImage &buffer() { return _buffer; }
 
-
-		CanvasDelegate* delegate() const { return _delegate; }
-		void setDelegate(CanvasDelegate *delegate);
-
 		//! Returns the number of layers
 		int layerCount() const { return _layers.count(); }
 
@@ -258,11 +256,9 @@ class SC_GUI_API Canvas : public QObject {
 		              int rowHeight,
 		              bool &lastUnderline, bool &lastBold);
 
-		void drawDrawables(QPainter& painter, Symbol::Priority priority);
+		void drawDrawables(QPainter &painter, Symbol::Priority priority);
 
-		void drawLegends(QPainter&);
-
-		void updateLayout();
+		void drawLegends(QPainter &painter);
 
 		/**
 		 * Initializes the layer property vector with properties read
@@ -356,57 +352,10 @@ class SC_GUI_API Canvas : public QObject {
 		LegendAreas                   _legendAreas;
 		int                           _margin;
 		bool                          _isDrawLegendsEnabled;
-		CanvasDelegate               *_delegate;
 
 		mutable QPolygon              _polyCache;
 };
 
-class CanvasDelegate : public QObject {
-	public:
-		struct Margins {
-			int left;
-			int top;
-			int right;
-			int bottom;
-		};
-
-	public:
-		CanvasDelegate(Canvas *canvas, QObject *parent = NULL)
-		    : QObject(parent), _canvas(canvas), _spacing(6) {
-			int margin = 9;
-			setContentsMargins(margin, margin, margin, margin);
-		}
-
-		Canvas* canvas() { return _canvas; }
-		void setCanas(Canvas* canvas) { _canvas = canvas; }
-
-		virtual void doLayout() = 0;
-		virtual void drawLegends(QPainter &painter) {}
-
-		virtual bool filterMouseDoubleClickEvent(QMouseEvent *mouseEvent) {
-			return false;
-		}
-
-		virtual bool filterMousePressEvent(QMouseEvent *mouseEvent) {
-			return false;
-		}
-
-		Margins margins() const { return _margins; }
-		void setContentsMargins(int left, int top, int right, int bottom) {
-			_margins.left = left;
-			_margins.top = top;
-			_margins.right = right;
-			_margins.bottom = bottom;
-		}
-
-		int spacing() const { return _spacing; }
-		void setSpacing(int spacing) { _spacing = spacing; }
-
-	protected:
-		Canvas        *_canvas;
-		Margins        _margins;
-		int            _spacing;
-};
 
 }
 }

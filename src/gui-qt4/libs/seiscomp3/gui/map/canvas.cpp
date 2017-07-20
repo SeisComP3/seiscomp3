@@ -203,7 +203,6 @@ Canvas::Canvas(const MapsDesc &meta)
 , _dirtyLayers(true)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
-, _delegate(NULL)
 , _polyCache(10) {
 	_maptree = new ImageTree(meta);
 	if ( !_maptree->valid() )
@@ -223,7 +222,6 @@ Canvas::Canvas(ImageTree *mapTree)
 , _dirtyLayers(true)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
-, _delegate(NULL)
 , _polyCache(10) {
 	_maptree = mapTree;
 
@@ -252,8 +250,6 @@ Canvas::~Canvas() {
 	// Remove this from Layers parent
 	for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
 		(*it)->_canvas = NULL;
-
-	if ( _delegate ) delete _delegate;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -328,11 +324,10 @@ void Canvas::setSize(int w, int h) {
 	_buffer = QImage(w, h, (_projection && !_projection->isRectangular())?QImage::Format_ARGB32:QImage::Format_RGB32);
 
 	updateBuffer();
-	updateLayout();
 
 	foreach ( const LegendArea &area, _legendAreas ) {
 		foreach ( Seiscomp::Gui::Map::Legend *legend, area )
-			legend->canvasResizeEvent(_buffer.size());
+			legend->contextResizeEvent(_buffer.size());
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1310,11 +1305,6 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLegends(QPainter& painter) {
-	if ( _delegate ) {
-		delegate()->drawLegends(painter);
-		return;
-	}
-
 	QFontMetrics fm(painter.font());
 	int margin = 9;
 
@@ -1537,7 +1527,7 @@ void Canvas::setupLayer(Layer *layer) {
 			connect(legend, SIGNAL(destroyed(QObject*)),
 			        this, SLOT(onObjectDestroyed(QObject*)));
 
-			legend->canvasResizeEvent(_buffer.size());
+			legend->contextResizeEvent(_buffer.size());
 		}
 	}
 
@@ -1821,26 +1811,6 @@ void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) 
 				it->currentIndex = it->findNext();
 		}
 	}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::setDelegate(CanvasDelegate *delegate) {
-	if ( _delegate ) delete _delegate;
-
-	_delegate = delegate;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateLayout() {
-	if ( _delegate ) _delegate->doLayout();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
