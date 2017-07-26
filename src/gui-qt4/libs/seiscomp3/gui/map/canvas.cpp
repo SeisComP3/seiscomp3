@@ -1157,6 +1157,9 @@ void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
 	      it != _mapSymbolCollection.end(); ++it ) {
 		Symbol* mapSymbol = *it;
 
+		if ( !mapSymbol->hasValidPosition() )
+			mapSymbol->calculateMapPosition(this);
+
 		bool isConsidered = !mapSymbol->isClipped() &&
 		                    mapSymbol->isVisible() &&
 		                    mapSymbol->priority() == priority;
