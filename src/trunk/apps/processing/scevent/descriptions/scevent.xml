@@ -243,7 +243,13 @@
 
 						AUTHOR: check based on author priorities
 
-						STATUS: manual origins rule out automatic ones
+						MODE: evaluation mode priority: 0 = unset, 1 = automatic, 2 = manual
+
+						STATUS: evaluation mode and evaluation status combination priority:
+						-100 = status is rejected, -1 = status is reported,
+						0 = status is preliminary or status is unset and mode is automatic,
+						1 = status is confirmed or status is unset and mode is manual,
+						2 = status is reviewed, 3 = status is final,
 
 						METHOD: check based on the method priorities
 

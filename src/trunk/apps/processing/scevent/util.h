@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -9,8 +9,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
-
-
 
 
 #ifndef __SEISCOMP_APPLICATIONS_EVENTTOOL_UTIL_H__
@@ -62,6 +60,8 @@ std::string region(const DataModel::Origin *origin);
 
 double arrivalWeight(const DataModel::Arrival *arr, double defaultWeight=1.);
 int stationCount(const DataModel::Magnitude *mag);
+int modePriority(const DataModel::Origin *origin);
+int modePriority(const DataModel::FocalMechanism *fm);
 int priority(const DataModel::Origin *origin);
 int priority(const DataModel::FocalMechanism *fm);
 int definingPhaseCount(const DataModel::Origin *origin);

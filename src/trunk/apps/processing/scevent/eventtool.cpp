@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -9,8 +9,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
-
-
 
 
 #include "eventtool.h"
@@ -59,7 +57,7 @@ void makeUpper(std::string &src) {
 }
 
 const char *PRIORITY_TOKENS[] = {
-	"AGENCY", "AUTHOR", "STATUS", "METHOD",
+	"AGENCY", "AUTHOR", "MODE", "STATUS", "METHOD",
 	"PHASES", "PHASES_AUTOMATIC",
 	"RMS", "RMS_AUTOMATIC",
 	"TIME", "TIME_AUTOMATIC", "SCORE"
@@ -2644,6 +2642,50 @@ void EventTool::choosePreferred(EventInformation *info, Origin *origin,
 							break;
 						}
 					}
+					else if ( *it == "MODE" ) {
+						int originPriority = modePriority(origin);
+						int preferredOriginPriority = modePriority(info->preferredOrigin.get());
+
+						if ( info->constraints.fixOriginMode(info->preferredOrigin.get()) ) {
+							SEISCOMP_LOG(_infoChannel, "Origin %s: has priority %d vs %d",
+							             origin->publicID().c_str(), originPriority, preferredOriginPriority);
+
+							// Set back the evalmode to automatic if a higher priority
+							// origin has been send (but not triggered by a magnitude change only)
+							if ( realOriginUpdate && (originPriority > preferredOriginPriority) ) {
+								SEISCOMP_LOG(_infoChannel, "Origin %s has higher priority: releasing EvPrefOrgEvalMode",
+								             origin->publicID().c_str());
+								JournalEntryPtr entry = new JournalEntry;
+								entry->setObjectID(info->event->publicID());
+								entry->setAction("EvPrefOrgEvalMode");
+								entry->setParameters("");
+								entry->setSender(name() + "@" + Core::getHostname());
+								entry->setCreated(Core::Time::GMT());
+								Notifier::Create(_journal->publicID(), OP_ADD, entry.get());
+								info->addJournalEntry(entry.get());
+							}
+							else
+								preferredOriginPriority = ORIGIN_PRIORITY_MAX;
+						}
+
+						if ( info->constraints.fixOriginMode(origin) )
+							originPriority = ORIGIN_PRIORITY_MAX;
+
+						if ( originPriority < preferredOriginPriority ) {
+							SEISCOMP_DEBUG("... skipping potential preferred origin (%d < %d)",
+							               originPriority, preferredOriginPriority);
+							SEISCOMP_LOG(_infoChannel, "Origin %s has not been set preferred in event %s: priority too low (%d < %d)",
+							             origin->publicID().c_str(), info->event->publicID().c_str(),
+							             originPriority, preferredOriginPriority);
+							return;
+						}
+						// Found origin with higher status priority
+						else if ( originPriority > preferredOriginPriority ) {
+							SEISCOMP_LOG(_infoChannel, "Origin %s: status priority %d overrides status priority %d",
+							             origin->publicID().c_str(), originPriority, preferredOriginPriority);
+							break;
+						}
+					}
 					else if ( *it == "STATUS" ) {
 						int originPriority = priority(origin);
 						int preferredOriginPriority = priority(info->preferredOrigin.get());
@@ -3301,14 +3343,13 @@ void EventTool::choosePreferred(EventInformation *info, DataModel::FocalMechanis
 							break;
 						}
 					}
-					else if ( *it == "STATUS" ) {
-						int fmPriority = priority(fm);
-						int preferredFMPriority = priority(info->preferredFocalMechanism.get());
+					else if ( *it == "MODE" ) {
+						int fmPriority = modePriority(fm);
+						int preferredFMPriority = modePriority(info->preferredFocalMechanism.get());
 
 						if ( info->constraints.fixFocalMechanismMode(info->preferredFocalMechanism.get()) ) {
 							SEISCOMP_LOG(_infoChannel, "FocalMechanism %s: has priority %d vs %d",
 							             fm->publicID().c_str(), fmPriority, preferredFMPriority);
-
 							// Set back the evalmode to automatic if a higher priority
 							// origin has been send (but not triggered by a magnitude change only)
 							if ( fmPriority > preferredFMPriority ) {
@@ -3326,7 +3367,52 @@ void EventTool::choosePreferred(EventInformation *info, DataModel::FocalMechanis
 								*/
 							}
 							else
-								preferredFMPriority = FOCALMECHANISM_PRIORITY_MAX ;
+								preferredFMPriority = FOCALMECHANISM_PRIORITY_MAX;
+						}
+
+						if ( info->constraints.fixFocalMechanismMode(fm) )
+							fmPriority = FOCALMECHANISM_PRIORITY_MAX;
+
+						if ( fmPriority < preferredFMPriority ) {
+							SEISCOMP_DEBUG("... skipping potential preferred focalmechanism (%d < %d)",
+							               fmPriority, preferredFMPriority);
+							SEISCOMP_LOG(_infoChannel, "FocalMechanism %s has not been set preferred in event %s: priority too low (%d < %d)",
+							             fm->publicID().c_str(), info->event->publicID().c_str(),
+							             fmPriority, preferredFMPriority);
+							return;
+						}
+						// Found origin with higher status priority
+						else if ( fmPriority > preferredFMPriority ) {
+							SEISCOMP_LOG(_infoChannel, "FocalMechanism %s: status priority %d overrides status priority %d",
+							             fm->publicID().c_str(), fmPriority, preferredFMPriority);
+							break;
+						}
+					}
+					else if ( *it == "STATUS" ) {
+						int fmPriority = priority(fm);
+						int preferredFMPriority = priority(info->preferredFocalMechanism.get());
+
+						if ( info->constraints.fixFocalMechanismMode(info->preferredFocalMechanism.get()) ) {
+							SEISCOMP_LOG(_infoChannel, "FocalMechanism %s: has priority %d vs %d",
+							             fm->publicID().c_str(), fmPriority, preferredFMPriority);
+							// Set back the evalmode to automatic if a higher priority
+							// origin has been send (but not triggered by a magnitude change only)
+							if ( fmPriority > preferredFMPriority ) {
+								/*
+								SEISCOMP_LOG(_infoChannel, "FocalMechanism %s has higher priority: releasing EvPrefOrgEvalMode",
+								             origin->publicID().c_str());
+								JournalEntryPtr entry = new JournalEntry;
+								entry->setObjectID(info->event->publicID());
+								entry->setAction("EvPrefOrgEvalMode");
+								entry->setParameters("");
+								entry->setSender(name() + "@" + Core::getHostname());
+								entry->setCreated(Core::Time::GMT());
+								Notifier::Create(_journal->publicID(), OP_ADD, entry.get());
+								info->addJournalEntry(entry.get());
+								*/
+							}
+							else
+								preferredFMPriority = FOCALMECHANISM_PRIORITY_MAX;
 						}
 
 						if ( info->constraints.fixFocalMechanismMode(fm) )
