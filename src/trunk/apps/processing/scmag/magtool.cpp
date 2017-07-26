@@ -616,6 +616,9 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 			stdev = sqrt(stdev/(cumw-1));
 		else
 			stdev = 0;
+
+		break;
+
 	default:
 		return false;
 	}
