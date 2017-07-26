@@ -48,6 +48,7 @@ namespace Core {
    - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
    - Added Seiscomp::Gui::Map::Canvas::size
    - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added Seiscomp::Gui::Map::Layer::baseBufferUpdated
    - Added Seiscomp::Gui::Map::Layer::size
    - Added Seiscomp::Gui::Map::Layer::isInside
    - Added Seiscomp::Gui::Map::Layer::handleEnterEvent
@@ -64,6 +65,7 @@ namespace Core {
    - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
    - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
    - Added Seiscomp::Gui::Application::messageGroups
+   - Added Seiscomp::Gui::LUT::operator[]
    - Added class Seiscomp::Math::Filtering::Min<T>
    - Added class Seiscomp::Math::Filtering::Max<T>
 

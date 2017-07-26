@@ -72,6 +72,14 @@ class LUT {
 			return idx / _scale + _lowerBound;
 		}
 
+		Value &operator[](int idx) {
+			return _lut[idx];
+		}
+
+		const Value &operator[](int idx) const {
+			return _lut[idx];
+		}
+
 
 	protected:
 		Key    _lowerBound;

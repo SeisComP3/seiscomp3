@@ -106,6 +106,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual QSize size() const;
 
 		virtual void calculateMapPosition(const Map::Canvas *canvas);
+		virtual bool isInside(int x, int y) const;
+		virtual void baseBufferUpdated(Map::Canvas *canvas);
 		virtual void bufferUpdated(Map::Canvas *canvas);
 		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
 		virtual QMenu *menu(QWidget*) const;

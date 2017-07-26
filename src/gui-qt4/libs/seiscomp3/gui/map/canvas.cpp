@@ -1239,6 +1239,11 @@ void Canvas::drawImageLayer(QPainter &painter) {
 		else
 			_buffer.fill(Qt::lightGray);
 
+		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+			if ( (*it)->isVisible() )
+				(*it)->baseBufferUpdated(this);
+		}
+
 		if ( painter.device() == &_buffer )
 			drawGeoFeatures(painter);
 		else {
@@ -1248,8 +1253,10 @@ void Canvas::drawImageLayer(QPainter &painter) {
 			drawGeoFeatures(p);
 		}
 
-		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
-			(*it)->bufferUpdated(this);
+		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+			if ( (*it)->isVisible() )
+				(*it)->bufferUpdated(this);
+		}
 
 		bufferUpdated();
 		_dirtyImage = false;
