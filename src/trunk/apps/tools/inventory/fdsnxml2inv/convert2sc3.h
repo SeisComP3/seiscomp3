@@ -145,7 +145,7 @@ class Convert2SC3 : public Converter {
 	// ------------------------------------------------------------------
 	private:
 		typedef std::map<std::string, const DataModel::Object*> ObjectLookup;
-		typedef std::list<const FDSNXML::ResponseStage*> Responses;
+		typedef std::list<const FDSNXML::ResponseStage*> Stages;
 		typedef std::set<std::string> StringSet;
 
 		DataModel::Inventory *_inv;
