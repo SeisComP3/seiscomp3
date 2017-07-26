@@ -174,15 +174,17 @@ bool OriginSymbol::isInside(int x, int y) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::updateSize() {
-	int width;
-	if ( _preferredMagnitudeValue > 0 )
-		// 2.7**1.6 = 4.9
-		// 2.7**0.19 = 1.2
-		width = std::max(SCScheme.map.originSymbolMinSize, int(4.9 * (_preferredMagnitudeValue - 1.2)));
-	else
-		width = SCScheme.map.originSymbolMinSize;
+int OriginSymbol::getSize(double mag) {
+	return std::max(SCScheme.map.originSymbolMinSize, int(4.9*(mag-1.2)));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginSymbol::updateSize() {
+	int width = getSize(_preferredMagnitudeValue);
 	setSize(QSize(width, width));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

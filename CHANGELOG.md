@@ -11,6 +11,7 @@
     eventTable.visible = true
     eventTable.columns = Event, Depth
     ```
+  * Add legend for event symbols
 
 * scolv
 

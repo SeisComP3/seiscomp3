@@ -57,6 +57,15 @@ class SC_GUI_API OriginSymbol : public Map::Symbol {
 
 		virtual bool isInside(int x, int y) const;
 
+		/**
+		 * @brief Returns the size of an origin symbol in pixel depending on
+		 *        the magnitude.
+		 * @param mag The input magnitude
+		 * @return The size in pixels
+		 */
+		static int getSize(double mag);
+
+
 	protected:
 		virtual void customDraw(const Map::Canvas *canvas, QPainter& painter);
 
