@@ -662,7 +662,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: routing()
@@ -787,7 +787,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeWindow(timeWindow)
@@ -803,7 +803,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPeriod(period)
@@ -819,7 +819,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -835,7 +835,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUnit(unit)
@@ -872,7 +872,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFilterID(filterID)
@@ -906,7 +906,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMagnitudeHint(magnitudeHint)
@@ -933,7 +933,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -948,7 +948,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -1474,7 +1474,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(arclinkStatusLine)
@@ -1700,7 +1700,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -1713,7 +1713,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNetClass(netClass)
@@ -1899,7 +1899,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMessage(message)
@@ -2173,7 +2173,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -2188,7 +2188,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDistance(distance)
@@ -2203,7 +2203,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTakeOffAngle(takeOffAngle)
@@ -2219,7 +2219,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeResidual(timeResidual)
@@ -2236,7 +2236,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessResidual(horizontalSlownessResidual)
@@ -2253,7 +2253,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthResidual(backazimuthResidual)
@@ -2269,7 +2269,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeUsed(timeUsed)
@@ -2282,7 +2282,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessUsed(horizontalSlownessUsed)
@@ -2298,7 +2298,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthUsed(backazimuthUsed)
@@ -2311,7 +2311,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -2327,7 +2327,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEarthModelID(earthModelID)
@@ -2354,7 +2354,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -2369,7 +2369,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -2517,7 +2517,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(auxSource)
@@ -2715,7 +2715,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -2731,7 +2731,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -2744,7 +2744,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: auxDevice()
@@ -2860,7 +2860,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDevice(device)
@@ -2926,7 +2926,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -2941,7 +2941,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensorLocation()
@@ -3161,7 +3161,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -3313,7 +3313,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-compositetime:
@@ -3373,7 +3373,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMonth(month)
@@ -3388,7 +3388,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDay(day)
@@ -3403,7 +3403,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHour(hour)
@@ -3418,7 +3418,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinute(minute)
@@ -3433,7 +3433,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecond(second)
@@ -3449,7 +3449,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -4038,7 +4038,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(setup)
@@ -4226,7 +4226,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setModificationTime(modificationTime)
@@ -4242,7 +4242,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVersion(version)
@@ -4328,7 +4328,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -4528,7 +4528,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxClockDrift(maxClockDrift)
@@ -4544,7 +4544,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4557,7 +4557,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(dataloggerCalibration)
@@ -4792,7 +4792,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -4807,7 +4807,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -4822,7 +4822,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4835,7 +4835,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -4954,7 +4954,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDigitalFilterChain(digitalFilterChain)
@@ -4971,7 +4971,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -5105,7 +5105,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTypeCertainty(typeCertainty)
@@ -5121,7 +5121,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -5136,7 +5136,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(eventDescription)
@@ -5874,7 +5874,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPrincipalAxes(principalAxes)
@@ -5889,7 +5889,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -5905,7 +5905,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationPolarityCount(stationPolarityCount)
@@ -5920,7 +5920,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMisfit(misfit)
@@ -5937,7 +5937,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationDistributionRatio(stationDistributionRatio)
@@ -5954,7 +5954,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -5980,7 +5980,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -5995,7 +5995,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -6008,7 +6008,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -6301,7 +6301,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -6317,7 +6317,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -6333,7 +6333,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -6348,7 +6348,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-inventory:
@@ -6957,7 +6957,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setObjectID(objectID)
@@ -7250,7 +7250,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -7265,7 +7265,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -7280,7 +7280,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -7295,7 +7295,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -7524,7 +7524,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTensor(tensor)
@@ -7539,7 +7539,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVariance(variance)
@@ -7554,7 +7554,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVarianceReduction(varianceReduction)
@@ -7571,7 +7571,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDoubleCouple(doubleCouple)
@@ -7588,7 +7588,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClvd(clvd)
@@ -7605,7 +7605,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setIso(iso)
@@ -7621,7 +7621,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGreensFunctionID(greensFunctionID)
@@ -7656,7 +7656,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -7681,7 +7681,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStatus(status)
@@ -7696,7 +7696,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCmtName(cmtName)
@@ -7727,7 +7727,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -8059,7 +8059,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -8072,7 +8072,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensorStationContribution()
@@ -8189,7 +8189,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaximumTimeShift(maximumTimeShift)
@@ -8202,7 +8202,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -8304,7 +8304,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -8317,7 +8317,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeShift(timeShift)
@@ -8330,7 +8330,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(momentTensorComponentContribution)
@@ -8522,7 +8522,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -8597,7 +8597,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -8612,7 +8612,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -8627,7 +8627,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(station)
@@ -8841,7 +8841,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNodalPlane2(nodalPlane2)
@@ -8856,7 +8856,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredPlane(preferredPlane)
@@ -8872,7 +8872,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-origin:
@@ -8969,7 +8969,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthType(depthType)
@@ -8984,7 +8984,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeFixed(timeFixed)
@@ -9000,7 +9000,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEpicenterFixed(epicenterFixed)
@@ -9015,7 +9015,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setReferenceSystemID(referenceSystemID)
@@ -9064,7 +9064,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUncertainty(uncertainty)
@@ -9079,7 +9079,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -9094,7 +9094,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -9109,7 +9109,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -9124,7 +9124,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -9139,7 +9139,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -9457,7 +9457,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedPhaseCount(usedPhaseCount)
@@ -9474,7 +9474,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAssociatedStationCount(associatedStationCount)
@@ -9489,7 +9489,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedStationCount(usedStationCount)
@@ -9504,7 +9504,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthPhaseCount(depthPhaseCount)
@@ -9520,7 +9520,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStandardError(standardError)
@@ -9537,7 +9537,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -9553,7 +9553,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecondaryAzimuthalGap(secondaryAzimuthalGap)
@@ -9569,7 +9569,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGroundTruthLevel(groundTruthLevel)
@@ -9596,7 +9596,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinimumDistance(minimumDistance)
@@ -9611,7 +9611,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMedianDistance(medianDistance)
@@ -9626,7 +9626,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-originreference:
@@ -9764,7 +9764,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinHorizontalUncertainty(minHorizontalUncertainty)
@@ -9779,7 +9779,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxHorizontalUncertainty(maxHorizontalUncertainty)
@@ -9794,7 +9794,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthMaxHorizontalUncertainty(azimuthMaxHorizontalUncertainty)
@@ -9810,7 +9810,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceEllipsoid(confidenceEllipsoid)
@@ -9825,7 +9825,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredDescription(preferredDescription)
@@ -9840,7 +9840,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-outage:
@@ -9927,7 +9927,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()
@@ -10195,7 +10195,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(parameter)
@@ -10481,7 +10481,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuth(backazimuth)
@@ -10497,7 +10497,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSlownessMethodID(slownessMethodID)
@@ -10522,7 +10522,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPhaseHint(phaseHint)
@@ -10537,7 +10537,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPolarity(polarity)
@@ -10552,7 +10552,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -10567,7 +10567,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -10582,7 +10582,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -10597,7 +10597,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -10851,7 +10851,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-qclog:
@@ -11463,7 +11463,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-realquantity:
@@ -11528,7 +11528,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -11544,7 +11544,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -11560,7 +11560,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -11575,7 +11575,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-responsefap:
@@ -11659,7 +11659,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -11674,7 +11674,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfTuples(numberOfTuples)
@@ -11689,7 +11689,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTuples(tuples)
@@ -11706,7 +11706,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11721,7 +11721,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -11854,7 +11854,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecimationFactor(decimationFactor)
@@ -11869,7 +11869,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDelay(delay)
@@ -11884,7 +11884,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCorrection(correction)
@@ -11899,7 +11899,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -11914,7 +11914,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSymmetry(symmetry)
@@ -11939,7 +11939,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11952,7 +11952,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12097,7 +12097,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -12112,7 +12112,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFactor(normalizationFactor)
@@ -12127,7 +12127,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFrequency(normalizationFrequency)
@@ -12142,7 +12142,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfZeros(numberOfZeros)
@@ -12157,7 +12157,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfPoles(numberOfPoles)
@@ -12172,7 +12172,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setZeros(zeros)
@@ -12187,7 +12187,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPoles(poles)
@@ -12202,7 +12202,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -12215,7 +12215,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12348,7 +12348,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -12363,7 +12363,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFrequencyUnit(frequencyUnit)
@@ -12400,7 +12400,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationUpperBound(approximationUpperBound)
@@ -12415,7 +12415,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationError(approximationError)
@@ -12431,7 +12431,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -12447,7 +12447,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCoefficients(coefficients)
@@ -12462,7 +12462,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -12475,7 +12475,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12849,7 +12849,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPriority(priority)
@@ -12864,7 +12864,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -12970,7 +12970,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -13315,7 +13315,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHighFrequency(highFrequency)
@@ -13330,7 +13330,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setResponse(response)
@@ -13354,7 +13354,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(sensorCalibration)
@@ -13541,7 +13541,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -13556,7 +13556,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -13571,7 +13571,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -13584,7 +13584,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensor()
@@ -13714,7 +13714,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLatitude(latitude)
@@ -13729,7 +13729,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -13744,7 +13744,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -13759,7 +13759,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(auxStream)
@@ -14076,7 +14076,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecayTime(decayTime)
@@ -14091,7 +14091,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-station:
@@ -14183,7 +14183,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -14208,7 +14208,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -14223,7 +14223,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -14238,7 +14238,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPlace(place)
@@ -14313,7 +14313,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -14328,7 +14328,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -14343,7 +14343,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(sensorLocation)
@@ -14521,7 +14521,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCode(code)
@@ -14546,7 +14546,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEnd(end)
@@ -14561,7 +14561,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -14586,7 +14586,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -14601,7 +14601,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -14616,7 +14616,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(stationReference)
@@ -14831,7 +14831,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -14846,7 +14846,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -15015,7 +15015,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -15034,7 +15034,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: magnitude()
@@ -15241,7 +15241,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDatalogger(datalogger)
@@ -15276,7 +15276,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSensor(sensor)
@@ -15311,7 +15311,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClockSerialNumber(clockSerialNumber)
@@ -15336,7 +15336,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -15351,7 +15351,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepth(depth)
@@ -15366,7 +15366,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -15381,7 +15381,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDip(dip)
@@ -15396,7 +15396,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -15411,7 +15411,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -15426,7 +15426,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainUnit(gainUnit)
@@ -15472,7 +15472,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -15487,7 +15487,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensorLocation()
@@ -15675,7 +15675,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -15690,7 +15690,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15705,7 +15705,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -15720,7 +15720,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-timewindow:
@@ -15873,7 +15873,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -15910,7 +15910,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15923,7 +15923,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWindowLength(windowLength)
@@ -15936,7 +15936,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()
