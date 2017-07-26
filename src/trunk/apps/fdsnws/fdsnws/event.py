@@ -31,7 +31,6 @@ from twisted.web import http, resource, server
 
 from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import ValueException
 from seiscomp3.IO import DatabaseInterface, Exporter
 
 from http import HTTP
@@ -283,7 +282,7 @@ class FDSNEvent(resource.Resource):
 			ci = obj.creationInfo()
 			ci.setAuthor("")
 			ci.setAuthorURI("")
-		except ValueException: pass
+		except ValueError: pass
 
 
 	#---------------------------------------------------------------------------
@@ -460,18 +459,18 @@ class FDSNEvent(resource.Resource):
 
 			# depth
 			try: depth = str(o.depth().value())
-			except ValueException: depth = ''
+			except ValueError: depth = ''
 
 			# author
 			if self._hideAuthor:
 				author = ''
 			else:
 				try: author = o.creationInfo().author()
-				except ValueException: author = ''
+				except ValueError: author = ''
 
 			# contributor
 			try: contrib = e.creationInfo().agencyID()
-			except ValueException: contrib = ''
+			except ValueError: contrib = ''
 
 			# query for preferred magnitude (if any)
 			mType, mVal, mAuthor = '', '', ''
@@ -486,7 +485,7 @@ class FDSNEvent(resource.Resource):
 						mAuthor = ''
 					else:
 						try: mAuthor = m.creationInfo().author()
-						except ValueException: pass
+						except ValueError: pass
 
 			# event description
 			dbq.loadEventDescriptions(e)
@@ -533,7 +532,7 @@ class FDSNEvent(resource.Resource):
 				if self._eventTypeWhitelist or self._eventTypeBlacklist:
 					eType = None
 					try: eType = DataModel.EEventTypeNames_name(e.type())
-					except ValueException: pass
+					except ValueError: pass
 					if self._eventTypeWhitelist and \
 					   not eType in self._eventTypeWhitelist: continue
 					if self._eventTypeBlacklist and \
@@ -547,7 +546,7 @@ class FDSNEvent(resource.Resource):
 						if o is None or \
 						   o.evaluationMode() != self._evaluationMode:
 							continue
-					except ValueException:
+					except ValueError:
 						continue
 
 				ep.add(e)

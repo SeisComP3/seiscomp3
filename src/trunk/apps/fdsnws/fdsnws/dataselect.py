@@ -21,7 +21,7 @@ from zope.interface import implements
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import Array, Record, Time, ValueException
+from seiscomp3.Core import Array, Record, Time
 from seiscomp3.IO import RecordInput, RecordStream
 
 from http import HTTP
@@ -279,7 +279,7 @@ class FDSNDataSelect(resource.Resource):
 			# start and end time
 			if ro.time:
 				try: end = net.end()
-				except ValueException: end = None
+				except ValueError: end = None
 				if not ro.time.match(net.start(), end):
 					continue
 
@@ -298,7 +298,7 @@ class FDSNDataSelect(resource.Resource):
 			# start and end time
 			if ro.time:
 				try: end = sta.end()
-				except ValueException: end = None
+				except ValueError: end = None
 				if not ro.time.match(sta.start(), end):
 					continue
 
@@ -317,7 +317,7 @@ class FDSNDataSelect(resource.Resource):
 			# start and end time
 			if ro.time:
 				try: end = loc.end()
-				except ValueException: end = None
+				except ValueError: end = None
 				if not ro.time.match(loc.start(), end):
 					continue
 
@@ -336,7 +336,7 @@ class FDSNDataSelect(resource.Resource):
 			# start and end time
 			if ro.time:
 				try: end = stream.end()
-				except ValueException: end = None
+				except ValueError: end = None
 				if not ro.time.match(stream.start(), end):
 					continue
 
@@ -404,7 +404,7 @@ class FDSNDataSelect(resource.Resource):
 								try:
 									n = cha.sampleRateNumerator()
 									d = cha.sampleRateDenominator()
-								except ValueException:
+								except ValueError:
 									msg = "skipping stream without sampling " \
 									      "rate definition: %s.%s.%s.%s" % (
 									      net.code(), sta.code(), loc.code(),

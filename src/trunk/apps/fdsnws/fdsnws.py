@@ -31,7 +31,6 @@ try:
 	from seiscomp3 import Core, DataModel, Logging
 	from seiscomp3.Client import Application, Inventory
 	from seiscomp3.System import Environment
-	from seiscomp3.Core import ValueException
 except ImportError, e:
 	sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
 
@@ -201,7 +200,7 @@ class Access(object):
 			try:
 				end = acc.end()
 
-			except Core.ValueException:
+			except ValueError:
 				end = None
 
 			self.__access.setdefault((net, sta, loc, cha), []) \
@@ -776,9 +775,9 @@ class FDSNWS(Application):
 			net = inv.network(iNet)
 
 			try: netRestricted = net.restricted()
-			except ValueException: netRestricted = None
+			except ValueError: netRestricted = None
 			try: netShared = net.shared()
-			except ValueException: netShared = None
+			except ValueError: netShared = None
 
 			# stations
 			iSta = 0
@@ -787,9 +786,9 @@ class FDSNWS(Application):
 				staCode = "%s.%s" % (net.code(), sta.code())
 
 				try: staRestricted = sta.restricted()
-				except ValueException: staRestricted = None
+				except ValueError: staRestricted = None
 				try: staShared = sta.shared()
-				except ValueException: staShared = None
+				except ValueError: staShared = None
 
 				# sensor locations
 				iLoc = 0
@@ -815,7 +814,7 @@ class FDSNWS(Application):
 								try:
 									if cha.restricted() != rule.restricted:
 										continue
-								except ValueException:
+								except ValueError:
 									if staRestricted != None:
 										if sta.Restricted != rule.Restricted:
 											continue
@@ -828,7 +827,7 @@ class FDSNWS(Application):
 								try:
 									if cha.shared() != rule.shared:
 										continue
-								except ValueException:
+								except ValueError:
 									if staShared != None:
 										if sta.Shared != rule.Shared:
 											continue

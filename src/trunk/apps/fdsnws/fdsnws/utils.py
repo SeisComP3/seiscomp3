@@ -14,7 +14,7 @@ from twisted.python.failure import Failure
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import Time, ValueException
+from seiscomp3.Core import Time
 from seiscomp3.IO import ExportSink
 
 
@@ -23,7 +23,7 @@ from seiscomp3.IO import ExportSink
 def isRestricted(obj):
 	try:
 		return obj.restricted()
-	except ValueException:
+	except ValueError:
 		return False
 
 
