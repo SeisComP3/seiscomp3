@@ -190,6 +190,7 @@ class SC_GUI_API EventListView : public QWidget {
 		void regionSelectionChanged(int index);
 		void changeRegion();
 
+		void itemEntered(QTreeWidgetItem *item, int);
 		void itemExpanded(QTreeWidgetItem * item);
 		void currentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 		void indicatorResized(const QSize &size);

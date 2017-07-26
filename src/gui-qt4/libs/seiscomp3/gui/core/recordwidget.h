@@ -504,6 +504,9 @@ class SC_GUI_API RecordWidget : public QWidget
 	
 		void enableFiltering(bool enable);
 		void setGridSpacing(double, double, double);
+		void setGridVSpacing(double, double, double);
+		void setGridVRange(double, double);
+		void setGridVScale(double);
 
 		void setActive(bool);
 
@@ -673,8 +676,13 @@ class SC_GUI_API RecordWidget : public QWidget
 		double  _smin, _smax;     // selection
 		double  _pixelPerSecond;
 		float   _amplScale;       // pixel per amplitude unit (0=normalize)
-		double  _gridSpacing[2];
-		double  _gridOffset;
+		double  _gridHSpacing[2];
+		double  _gridHOffset;
+
+		double  _gridVRange[2];
+		double  _gridVSpacing[2];
+		double  _gridVOffset;
+		double  _gridVScale;
 
 		float   _amplitudeRange[2];
 		bool    _useFixedAmplitudeRange;

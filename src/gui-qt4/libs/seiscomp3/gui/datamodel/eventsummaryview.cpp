@@ -2791,7 +2791,7 @@ void EventSummaryView::switchToAutomaticPressed() {
 	NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 	NotifierMessagePtr nm = new NotifierMessage;
 	nm->attach(n.get());
-	SCApp->sendMessage("EVENT", nm.get());
+	SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get());
 }
 
 

@@ -379,6 +379,8 @@ void RecordView::setupUi() {
 
 	_defaultRowHeight = 16;
 	_rowHeight = _minRowHeight = _defaultRowHeight;
+	_maxRowHeight = -1;
+	_numberOfRows = -1;
 
 	_minTimeScale = 0.0;
 	_timeScale = 1.0/3.0;
@@ -493,8 +495,34 @@ void RecordView::setupUi() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordView::setMinimumRowHeight(int h) {
 	_minRowHeight = h;
+	if ( (_maxRowHeight > 0) && (_maxRowHeight < _minRowHeight) )
+		_maxRowHeight = _minRowHeight;
+
 	if ( _minRowHeight > rowHeight() )
 		setRowHeight(_minRowHeight);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordView::setMaximumRowHeight(int h) {
+	_maxRowHeight = h;
+	if ( (_maxRowHeight > 0) && (_minRowHeight > _maxRowHeight) )
+		_minRowHeight = _maxRowHeight;
+
+	if ( rowHeight() > _maxRowHeight )
+		setRowHeight(_maxRowHeight);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordView::setRelativeRowHeight(int desiredNumberOfTraces) {
+	_numberOfRows = desiredNumberOfTraces;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -574,13 +602,36 @@ void RecordView::applyBufferChange() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void RecordView::setRowHeight(int h) {
+void RecordView::setRowHeight(int h, bool allowStretch) {
 	if ( _rowHeight == h ) return;
 	_rowHeight = h;
 
+	int stretch = 0;
+	int budget = 0;
+	int budgetRows = 0;
+
+	if ( allowStretch ) {
+		// Stretch the first items to match the window height
+		int targetHeight = _scrollArea->viewport()->height();
+		budgetRows = (targetHeight + _rowSpacing) / (_rowHeight + _rowSpacing);
+		if ( budgetRows > 1 ) {
+			int layoutHeight = budgetRows * _rowHeight + (budgetRows-1)*_rowSpacing;
+			budget = targetHeight - layoutHeight;
+			stretch = (budget + budgetRows - 1) / budgetRows;
+		}
+	}
+
 	foreach (RecordViewItem* item, _rows) {
 		item->widget()->setDirty();
-		item->setRowHeight(rowHeight());
+		item->setRowHeight(rowHeight() + stretch);
+
+		if ( budgetRows > 1 ) {
+			budget -= stretch;
+			--budgetRows;
+			stretch = (budget + budgetRows - 1) / budgetRows;
+		}
+		else
+			stretch = 0;
 	}
 
 	_scrollArea->verticalScrollBar()->setSingleStep(rowHeight() + _rowSpacing);
@@ -1713,6 +1764,8 @@ void RecordView::scaleContent() {
 	int w = _scrollArea->viewport()->width() - _labelWidth - _horizontalSpacing;
 	int h = _scrollArea->viewport()->height();
 
+	if ( w <= 0 ) return;
+
 	float timeWindowLength = _tmax - _tmin;
 
 	if ( timeWindowLength < 0 ) {
@@ -1738,11 +1791,17 @@ void RecordView::scaleContent() {
 	int visibleRows = visibleRowCount();
 
 	if ( visibleRows > 0 ) {
+		if ( _numberOfRows > 0 )
+			visibleRows = _numberOfRows;
+
 		int rowHeight = ((h + _rowSpacing) / visibleRows) - _rowSpacing;
 		if ( rowHeight < _minRowHeight )
 			rowHeight = _minRowHeight;
 
-		setRowHeight(rowHeight);
+		if ( (_maxRowHeight > 0) && (rowHeight > _maxRowHeight) )
+			rowHeight = _maxRowHeight;
+
+		setRowHeight(rowHeight, true);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1803,6 +1862,7 @@ bool RecordView::copyState(RecordView* from) {
 	_zoomSpot = from->_zoomSpot;
 
 	setMinimumRowHeight(from->_minRowHeight);
+	setMaximumRowHeight(from->_maxRowHeight);
 	setRowHeight(from->rowHeight());
 	setZoomFactor(from->zoomFactor());
 
@@ -1874,7 +1934,7 @@ bool RecordView::moveSelectionTo(RecordView *to) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void RecordView::setTimeRange (double t1, double t2) {
+void RecordView::setTimeRange(double t1, double t2) {
 	_tmin = t1;
 	_tmax = t2;
 
@@ -2012,11 +2072,13 @@ void RecordView::verticalZoom(float factor) {
 	int h  = rowHeight();
 	int h2 = (int)ceil(h*factor);
 
-	if ( h2 < _defaultRowHeight ) h2=_defaultRowHeight;
+	if ( h2 < _defaultRowHeight ) h2 = _defaultRowHeight;
 	if ( h2 > _scrollArea->viewport()->height() )
 		h2 = _scrollArea->viewport()->height();
 
 	_minRowHeight = h2;
+	if ( (_maxRowHeight > 0) && _maxRowHeight < h2 )
+		_maxRowHeight = -1;
 
 	int oldHeight = _scrollArea->widget()->height();
 	if( oldHeight == 0 ) return;
@@ -2141,6 +2203,9 @@ void RecordView::setZoomRect(const QRectF &rect) {
 	int absolutePos = posY + _scrollArea->verticalScrollBar()->sliderPosition();
 
 	_minRowHeight = h2;
+	if ( (_maxRowHeight > 0) && _maxRowHeight < h2 )
+		_maxRowHeight = -1;
+
 	setRowHeight(h2);
 
 	double newAbsolutePos = ((double)absolutePos / (double)oldHeight) * _scrollArea->widget()->height();
@@ -2524,6 +2589,7 @@ void RecordView::setDefaultDisplay() {
 		pos = double(_scrollArea->verticalScrollBar()->sliderPosition() + h/2) / (double)_scrollArea->widget()->height();
 
 	_minRowHeight = _defaultRowHeight;
+	_maxRowHeight = -1;
 
 	scaleAllRecords();
 

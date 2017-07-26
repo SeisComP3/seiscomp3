@@ -81,6 +81,16 @@ namespace Gui {
 class ConnectionDialog;
 
 
+struct MessageGroups {
+	std::string pick;
+	std::string amplitude;
+	std::string magnitude;
+	std::string location;
+	std::string focalMechanism;
+	std::string event;
+};
+
+
 class SC_GUI_API Application : public QApplication,
                                public Client::Application {
 	Q_OBJECT
@@ -128,7 +138,7 @@ class SC_GUI_API Application : public QApplication,
 
 	public:
 		//! Returns the pointer to the application's instance.
-		static Application* Instance();
+		static Application *Instance();
 
 		//! Checks if the installed Qt version is at least the
 		//! one passed in 'ver'
@@ -140,7 +150,7 @@ class SC_GUI_API Application : public QApplication,
 
 		void setDatabaseSOHInterval(int secs);
 
-		Scheme& scheme();
+		Scheme &scheme();
 
 		QSettings &settings();
 		const QSettings &settings() const;
@@ -149,6 +159,7 @@ class SC_GUI_API Application : public QApplication,
 		bool nonInteractive() const;
 
 		const MapsDesc &mapsDesc() const;
+		const MessageGroups &messageGroups() const;
 
 		Core::TimeSpan maxEventAge() const;
 
@@ -160,7 +171,7 @@ class SC_GUI_API Application : public QApplication,
 
 		void setFilterCommandsEnabled(bool);
 
-		const std::string& commandTarget() const;
+		const std::string &commandTarget() const;
 
 		void sendCommand(Command command, const std::string& parameter);
 		void sendCommand(Command command, const std::string& parameter, Core::BaseObject*);
@@ -265,6 +276,7 @@ class SC_GUI_API Application : public QApplication,
 		bool                _nonInteractive;
 		Core::TimeSpan      _eventTimeAgo;
 		MapsDesc            _mapsDesc;
+		MessageGroups       _messageGroups;
 		std::string         _guiGroup;
 		std::string         _commandTargetClient;
 

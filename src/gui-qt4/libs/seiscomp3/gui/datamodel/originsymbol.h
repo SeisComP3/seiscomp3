@@ -73,6 +73,7 @@ class SC_GUI_API OriginSymbol : public Map::Symbol {
 		void updateSize();
 		void depthColorCoding();
 
+
 	protected:
 		Seiscomp::DataModel::Origin *_origin;
 		QColor                       _color;

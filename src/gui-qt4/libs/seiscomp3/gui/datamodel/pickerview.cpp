@@ -485,7 +485,7 @@ class PickerMarker : public RecordMarker {
 				if ( text.isEmpty() ) {
 					try {
 						text = pick()->phaseHint().code().c_str();
-						setText(QString("%1"AUTOMATIC_POSTFIX).arg(text));
+						setText(QString("%1" AUTOMATIC_POSTFIX).arg(text));
 					}
 					catch (...) {}
 				}
@@ -1874,10 +1874,13 @@ PickerRecordLabel::PickerRecordLabel(int items, QWidget *parent, const char* nam
 
 PickerRecordLabel::~PickerRecordLabel() {}
 
+void PickerRecordLabel::setConfigState(bool state) {
+	isEnabledByConfig = state;
+}
+
 void PickerRecordLabel::setLinkedItem(bool li) {
 	_isLinkedItem = li;
 }
-
 
 void PickerRecordLabel::setControlledItem(RecordViewItem *controlledItem) {
 	_linkedItem = controlledItem;
@@ -1952,15 +1955,29 @@ void PickerRecordLabel::resizeEvent(QResizeEvent *e) {
 void PickerRecordLabel::paintEvent(QPaintEvent *e) {
 	QPainter p(this);
 
+	int fontSize = p.fontMetrics().ascent();
+
 	if ( _hasLabelColor ) {
 		QRect r(rect());
 
 		r.setLeft(r.right()-16);
 
-		QColor bg = palette().color(QPalette::Window);
 		QLinearGradient gradient(r.left(), 0, r.right(), 0);
-		gradient.setColorAt(0, bg);
+		gradient.setColorAt(0, palette().color(QPalette::Window));
 		gradient.setColorAt(1, _labelColor);
+
+		p.fillRect(r, gradient);
+	}
+
+	if ( !isEnabledByConfig ) {
+		QRect r(rect());
+
+		r.setRight(r.left()+16);
+		r.setTop(r.bottom()-fontSize);
+
+		QLinearGradient gradient(r.left(), 0, r.right(), 0);
+		gradient.setColorAt(0, QColor(192,0,0));
+		gradient.setColorAt(1, palette().color(QPalette::Window));
 
 		p.fillRect(r, gradient);
 	}
@@ -1972,7 +1989,6 @@ void PickerRecordLabel::paintEvent(QPaintEvent *e) {
 
 	int posX = 0;
 
-	int fontSize = p.fontMetrics().ascent();
 	int posY = (h - fontSize*2 - 4)/2;
 
 	for ( int i = 0; i < _items.count()-1; ++i ) {
@@ -2037,6 +2053,8 @@ PickerView::Config::Config() {
 	alignmentPosition = 0.5;
 	offsetWindowStart = 0;
 	offsetWindowEnd = 0;
+
+	hideDisabledStations = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3123,37 +3141,26 @@ bool PickerView::setConfig(const Config &c, QString *error) {
 		}
 	}
 
+	bool reselectCurrentItem = false;
 
-	if ( _config.hideStationsWithoutData ) {
-		bool reselectCurrentItem = false;
+	for ( int r = 0; r < _recordView->rowCount(); ++r ) {
+		RecordViewItem* item = _recordView->itemAt(r);
+		PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+		if ( isLinkedItem(item) ) continue;
 
-		for ( int r = 0; r < _recordView->rowCount(); ++r ) {
-			RecordViewItem* item = _recordView->itemAt(r);
-			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-			if ( isLinkedItem(item) ) continue;
+		// Force state to false if item has no data yet and should be hidden
+		item->forceInvisibilty(!isTracePicked(item->widget())
+		                    && ((_config.hideStationsWithoutData && !label->hasGotData)
+		                     || (_config.hideDisabledStations && !label->isEnabledByConfig)));
 
-			if ( !isTracePicked(item->widget()) && !label->hasGotData ) {
-				item->forceInvisibilty(true);
-				if ( item == _recordView->currentItem() )
-					reselectCurrentItem = true;
-			}
-		}
-
-		if ( _recordView->currentItem() == NULL ) reselectCurrentItem = true;
-
-		if ( reselectCurrentItem )
-			selectFirstVisibleItem(_recordView);
+		if ( item == _recordView->currentItem() )
+			reselectCurrentItem = true;
 	}
-	else {
-		for ( int r = 0; r < _recordView->rowCount(); ++r ) {
-			RecordViewItem* item = _recordView->itemAt(r);
-			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-			if ( isLinkedItem(item) ) continue;
 
-			if ( !isTracePicked(item->widget()) && !label->hasGotData )
-				item->forceInvisibilty(!label->isEnabledByConfig);
-		}
-	}
+	if ( _recordView->currentItem() == NULL ) reselectCurrentItem = true;
+
+	if ( reselectCurrentItem )
+		selectFirstVisibleItem(_recordView);
 
 	_ui.actionShowUnassociatedPicks->setChecked(_config.loadAllPicks);
 
@@ -3401,7 +3408,7 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 
 	if ( _recordView->currentItem()->widget() == widget &&
 	     widget->cursorText() == "P" && marker ) {
-		RecordMarker* marker2 = widget->marker("P"THEORETICAL_POSTFIX);
+		RecordMarker* marker2 = widget->marker("P" THEORETICAL_POSTFIX);
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(marker->correctedTime() - marker2->correctedTime())));
@@ -3438,7 +3445,7 @@ void PickerView::declareArrival(RecordMarker *m_, const QString &phase,
 
 	if ( _recordView->currentItem()->widget() == w &&
 	     w->cursorText() == "P" && m ) {
-		RecordMarker* marker2 = w->marker("P"THEORETICAL_POSTFIX);
+		RecordMarker* marker2 = w->marker("P" THEORETICAL_POSTFIX);
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(m->correctedTime() - marker2->correctedTime())));
@@ -4586,7 +4593,7 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		for ( int i = 0; i < item->widget()->markerCount(); ++i ) {
 			PickerMarker* m = static_cast<PickerMarker*>(item->widget()->marker(i));
 			if ( m->text() == "P" && m->isArrival() ) {
-				RecordMarker* m2 = item->widget()->marker("P"THEORETICAL_POSTFIX);
+				RecordMarker* m2 = item->widget()->marker("P" THEORETICAL_POSTFIX);
 				if ( m2 ) {
 					item->setValue(ITEM_RESIDUAL_INDEX, -fabs((double)(m->correctedTime() - m2->correctedTime())));
 					break;
@@ -4659,16 +4666,16 @@ void PickerView::addPick(Seiscomp::DataModel::Pick* pick) {
 void PickerView::setStationEnabled(const std::string& networkCode,
                                    const std::string& stationCode,
                                    bool state) {
+
 	QList<RecordViewItem*> streams = _recordView->stationStreams(networkCode, stationCode);
 	foreach ( RecordViewItem* item, streams ) {
 		PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-		label->isEnabledByConfig = state;
+		label->setConfigState(state);
 
 		// Force state to false if item has no data yet and should be hidden
-		if ( _config.hideStationsWithoutData && !label->hasGotData && !isTracePicked(item->widget()) )
-			state = false;
-
-		item->forceInvisibilty(!state);
+		item->forceInvisibilty(!isTracePicked(item->widget())
+		                    && ((_config.hideStationsWithoutData && !label->hasGotData)
+		                     || (_config.hideDisabledStations && !label->isEnabledByConfig)));
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -4695,7 +4702,7 @@ bool PickerView::addRawPick(Seiscomp::DataModel::Pick *pick) {
 	widget->insertMarker(0, marker);
 
 	try {
-		marker->setText(QString("%1"AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
+		marker->setText(QString("%1" AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
 
 		if ( !pick->methodID().empty() ) {
 			marker->setDescription(QString("%1<%2>")
@@ -4730,14 +4737,17 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
                                       const WaveformStreamID& streamID,
                                       double distance,
                                       const std::string& text,
-                                      bool showDisabled,
+                                      bool /*showDisabled*/,
                                       bool theoreticalArrivals, const Stream *base) {
+	/*
 	bool isEnabled = true;
 	if ( !showDisabled ) {
 		isEnabled = SCApp->isStationEnabled(streamID.networkCode(), streamID.stationCode());
 		if ( !isEnabled )
 			return NULL;
 	}
+	*/
+	bool isEnabled = SCApp->isStationEnabled(streamID.networkCode(), streamID.stationCode());
 
 	// HACK: Add strong motion
 	WaveformStreamID smStreamID(streamID);
@@ -4745,7 +4755,6 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 	bool hasStrongMotion = false;
 
 	if ( _config.loadStrongMotionData ) {
-
 		Station *sta = Client::Inventory::Instance()->getStation(
 			streamID.networkCode(),
 			streamID.stationCode(),
@@ -4772,7 +4781,6 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 				hasStrongMotion = true;
 			}
 		}
-
 	}
 
 	RecordViewItem *item = addRawStream(sloc, streamID, distance, text, theoreticalArrivals, base);
@@ -4781,10 +4789,10 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 	item->setValue(ITEM_PRIORITY_INDEX, 0);
 
 	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-	label->isEnabledByConfig = isEnabled;
+	label->setConfigState(isEnabled);
 	label->hasGotData = false;
 
-	item->forceInvisibilty(!label->isEnabledByConfig);
+	item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
 
 	if ( hasStrongMotion ) {
 		// Try to find a corresponding StrongMotion stream and add
@@ -4793,10 +4801,10 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 		if ( sm_item ) {
 			label = static_cast<PickerRecordLabel*>(sm_item->label());
 			label->setLinkedItem(true);
-			label->isEnabledByConfig = isEnabled;
+			label->setConfigState(isEnabled);
 			label->hasGotData = false;
 			sm_item->setValue(ITEM_PRIORITY_INDEX, 1);
-			sm_item->forceInvisibilty(!label->isEnabledByConfig);
+			sm_item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
 			sm_item->setVisible(false);
 
 			// Start showing the expandable button when the first record arrives
@@ -7394,8 +7402,10 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 		item->widget()->setRecordBackgroundColor(i, SCScheme.colors.records.states.inProgress);
 		label->hasGotData = true;
 
-		if ( _config.hideStationsWithoutData )
-			item->forceInvisibilty(!label->isEnabledByConfig);
+		if ( _config.hideStationsWithoutData ) {
+			if ( !isTracePicked(item->widget()) )
+				item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
+		}
 
 		// If this item is linked to another item, enable the expand button of
 		// the controller

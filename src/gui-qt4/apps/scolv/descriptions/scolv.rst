@@ -623,6 +623,17 @@ type, number of phases, epicenter and depth, origin status, region, agency and
 event/origin ID are similar to the event list in :ref:`scesv`. Additionally,
 all origins associated with one event are displayed an event item is expanded.
 
+.. note::
+
+   The region name of an event is read from the database or received via the
+   messaging bus. It is an integral part of the event description and set based
+   on the data set available at the time of the event creation. The region name
+   of the origins is not part of the origin description and resolved dynamically
+   when the information is required. That can lead to confusion if the dataset
+   of the computer where the event has been created and the local dataset
+   differs. Therefor the region names resolved locally are rendered with italic
+   font style.
+
 .. _fig-scolv-events:
 
 .. figure:: media/scolv/tab_events.png

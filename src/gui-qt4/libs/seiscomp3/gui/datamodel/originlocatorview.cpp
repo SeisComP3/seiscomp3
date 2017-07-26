@@ -4679,6 +4679,22 @@ void OriginLocatorView::computeMagnitudes() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::magnitudeRemoved(const QString &id, Seiscomp::DataModel::Object *obj) {
+	if ( id != _currentOrigin->publicID().c_str() ) return;
+
+	_ui.btnMagnitudes->setEnabled(_currentOrigin->magnitudeCount() == 0);
+
+	if ( _currentOrigin->magnitudeCount() > 0 ) {
+		evaluateOrigin(_currentOrigin.get(), _baseEvent.get(),
+		               _localOrigin, false);
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::pushUndo() {
 	_undoList.push(
 		OriginMemento(
@@ -5368,7 +5384,7 @@ bool OriginLocatorView::sendJournal(const std::string &objectID,
 		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 		NotifierMessagePtr nm = new NotifierMessage;
 		nm->attach(n.get());
-		return SCApp->sendMessage("EVENT", nm.get());
+		return SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get());
 	}
 
 	return false;

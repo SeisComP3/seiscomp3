@@ -57,6 +57,9 @@
 #define WITH_SMALL_SUMMARY
 
 
+Q_DECLARE_METATYPE(std::string)
+
+
 using namespace std;
 using namespace Seiscomp;
 using namespace Seiscomp::DataModel;
@@ -131,6 +134,8 @@ string trim(const std::string &str) {
 
 
 MainFrame::MainFrame(){
+	qRegisterMetaType<std::string>("std::string");
+
 	_ui.setupUi(this);
 
 	SCApp->settings().beginGroup(objectName());
@@ -507,6 +512,9 @@ MainFrame::MainFrame(){
 	try { pickerConfig.hideStationsWithoutData = SCApp->configGetBool("olv.hideStationsWithoutData"); }
 	catch ( ... ) { pickerConfig.hideStationsWithoutData = false; }
 
+	try { pickerConfig.hideDisabledStations = SCApp->configGetBool("olv.hideDisabledStations"); }
+	catch ( ... ) { pickerConfig.hideDisabledStations = true; }
+
 	try { pickerConfig.defaultDepth = SCApp->configGetDouble("olv.defaultDepth"); }
 	catch ( ... ) { pickerConfig.defaultDepth = 10; }
 
@@ -566,6 +574,9 @@ MainFrame::MainFrame(){
 	connect(_magnitudes, SIGNAL(localAmplitudesAvailable(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*)),
 	        _originLocator, SLOT(setLocalAmplitudes(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*)));
 
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _originLocator, SLOT(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)));
+
 	connect(_originLocator, SIGNAL(magnitudesAdded(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        _magnitudes, SLOT(reload()));
 
@@ -622,6 +633,11 @@ MainFrame::MainFrame(){
 	        eventMapLayer, SLOT(updateEvent(Seiscomp::DataModel::Event*)));
 	connect(_eventList, SIGNAL(eventRemovedFromList(Seiscomp::DataModel::Event*)),
 	        eventMapLayer, SLOT(removeEvent(Seiscomp::DataModel::Event*)));
+	connect(eventMapLayer, SIGNAL(eventHovered(std::string)),
+	        this, SLOT(hoverEvent(std::string)));
+	connect(eventMapLayer, SIGNAL(eventSelected(std::string)),
+	        this, SLOT(selectEvent(std::string)),
+	        Qt::QueuedConnection);
 
 	_originLocator->map()->canvas().addLayer(eventMapLayer);
 
@@ -766,8 +782,14 @@ MainFrame::MainFrame(){
 	connect(_magnitudes, SIGNAL(magnitudeUpdated(const QString&, Seiscomp::DataModel::Object*)),
 	        _eventSmallSummary, SLOT(updateObject(const QString&, Seiscomp::DataModel::Object*)));
 
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _eventSmallSummary, SLOT(removeObject(const QString &, Seiscomp::DataModel::Object*)));
+
 	connect(_magnitudes, SIGNAL(magnitudeUpdated(const QString&, Seiscomp::DataModel::Object*)),
 	        _eventSmallSummaryCurrent, SLOT(updateObject(const QString&, Seiscomp::DataModel::Object*)));
+
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _eventSmallSummaryCurrent, SLOT(removeObject(const QString &, Seiscomp::DataModel::Object*)));
 
 	connect(_originLocator, SIGNAL(committedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*,
 	                                               const Seiscomp::Gui::ObjectChangeList<Seiscomp::DataModel::Pick>&,
@@ -888,6 +910,24 @@ void MainFrame::setEventID(const std::string &eventID) {
 }
 
 
+void MainFrame::hoverEvent(const std::string &eventID) {
+	if ( !_eventID.empty() && (_eventID == eventID) )
+		_originLocator->map()->setToolTip(tr("%1\nCurrently loaded").arg(eventID.c_str()));
+	else
+		_originLocator->map()->setToolTip(eventID.c_str());
+
+	if ( eventID.empty() )
+		_originLocator->map()->unsetCursor();
+	else
+		_originLocator->map()->setCursor(Qt::PointingHandCursor);
+}
+
+
+void MainFrame::selectEvent(const std::string &eventID) {
+	_eventList->selectEventID(eventID);
+}
+
+
 void MainFrame::setOriginID(const std::string &originID) {
 	PublicObjectPtr po = SCApp->query()->loadObject(Origin::TypeInfo(), originID);
 	EventPtr e = Event::Cast(SCApp->query()->getEvent(originID));
@@ -960,6 +1000,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetBool("olv.computeMissingTakeOffAngles", lc.computeMissingTakeOffAngles);
 		SCApp->configSetDouble("olv.defaultAddStationsDistance", pc.defaultAddStationsDistance);
 		SCApp->configSetBool("olv.hideStationsWithoutData", pc.hideStationsWithoutData);
+		SCApp->configSetBool("olv.hideDisabledStations", pc.hideDisabledStations);
 
 		SCApp->configSetBool("picker.showCrossHairCursor", pc.showCrossHair);
 		SCApp->configSetBool("picker.ignoreUnconfiguredStations", pc.ignoreUnconfiguredStations);

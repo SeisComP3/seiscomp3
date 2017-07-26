@@ -501,8 +501,7 @@ void EventSummary::addObject(const QString& parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void EventSummary::updateObject(const QString& parentID,
-                                Object* obj) {
+void EventSummary::updateObject(const QString& parentID, Object* obj) {
 	Event *evt = Event::Cast(obj);
 	if ( evt ) {
 		if ( !_fixedView ) {
@@ -558,6 +557,27 @@ void EventSummary::updateOrigin(Origin* org) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventSummary::removeObject(const QString& parentID, Object* obj) {
+	Magnitude *mag = Magnitude::Cast(obj);
+	if ( mag && _currentOrigin &&
+	     parentID == _currentOrigin->publicID().c_str() ) {
+
+		MagnitudeList::iterator it = _magnitudes.find(mag->type());
+		if ( it == _magnitudes.end() ) return;
+
+		it->second->reset();
+
+		if ( _currentMag && mag->publicID() == _currentMag->publicID() ) {
+			_currentMag = NULL;
+			_ui.magnitude->setText("-");
+			if ( _symbol ) {
+				_symbol->setPreferredMagnitudeValue(0);
+				if ( _map ) _map->update();
+			}
+			selectMagnitude("");
+		}
+
+		return;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

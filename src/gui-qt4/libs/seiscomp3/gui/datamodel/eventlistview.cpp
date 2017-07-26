@@ -186,6 +186,7 @@ DatabaseIterator getEvents(DatabaseArchive *ar, const EventListView::Filter& fil
 	return ar->getObjectIterator(oss.str(), Event::TypeInfo());
 }
 
+
 DatabaseIterator getEventOriginReferences(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if ( !ar->driver() ) return DatabaseIterator();
 
@@ -232,6 +233,7 @@ DatabaseIterator getEventOriginReferences(DatabaseArchive *ar, const EventListVi
 	return ar->getObjectIterator(oss.str(), OriginReference::TypeInfo());
 }
 
+
 DatabaseIterator getEventFocalMechanismReferences(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if ( !ar->driver() ) return DatabaseIterator();
 
@@ -277,6 +279,7 @@ DatabaseIterator getEventFocalMechanismReferences(DatabaseArchive *ar, const Eve
 
 	return ar->getObjectIterator(oss.str(), FocalMechanismReference::TypeInfo());
 }
+
 
 DatabaseIterator getEventOrigins(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if ( !ar->driver() ) return DatabaseIterator();
@@ -326,6 +329,7 @@ DatabaseIterator getEventOrigins(DatabaseArchive *ar, const EventListView::Filte
 	return ar->getObjectIterator(oss.str(), Origin::TypeInfo());
 }
 
+
 DatabaseIterator getEventFocalMechanisms(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if ( !ar->driver() ) return DatabaseIterator();
 
@@ -374,6 +378,7 @@ DatabaseIterator getEventFocalMechanisms(DatabaseArchive *ar, const EventListVie
 
 	return ar->getObjectIterator(oss.str(), FocalMechanism::TypeInfo());
 }
+
 
 DatabaseIterator getEventMomentTensors(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if ( !ar->driver() ) return DatabaseIterator();
@@ -458,6 +463,7 @@ DatabaseIterator getUnassociatedOrigins(DatabaseArchive *ar, const EventListView
 	return ar->getObjectIterator(oss.str(), Origin::TypeInfo());
 }
 
+
 DatabaseIterator getComments4Origins(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if( !ar->driver() )
 		return DatabaseIterator();
@@ -486,6 +492,7 @@ DatabaseIterator getComments4Origins(DatabaseArchive *ar, const EventListView::F
 
 	return ar->getObjectIterator( oss.str(), Comment::TypeInfo() );
 }
+
 
 DatabaseIterator getComments4Events(DatabaseArchive *ar, const EventListView::Filter& filter) {
 	if( !ar->driver() )
@@ -629,7 +636,6 @@ DatabaseIterator getDescriptions4Events(DatabaseArchive *ar, const EventListView
 	if ( filter.maxMagnitude )
 		oss << "Magnitude." << _T("magnitude_value") << " <= '" << *filter.maxMagnitude << "' and ";
 
-
 	oss	<<       "Origin._oid = POrigin._oid and "
 		<<       "POrigin." << _T("publicID") << " = Event." << _T("preferredOriginID") << " and "
 		<<       "EventDescription._parent_oid = Event._oid";
@@ -657,6 +663,7 @@ bool itemTextLessThan(const SortItem& left, const SortItem& right) {
 bool itemTextGreaterThan(const SortItem& left, const SortItem& right) {
 	return left.first->text(left.second) > right.first->text(right.second);
 }
+
 
 }
 
@@ -751,6 +758,10 @@ class OriginTreeItem : public SchemeTreeItem {
 		OriginTreeItem(Origin* origin, const EventListView::ItemConfig &config, QTreeWidgetItem * parent = 0)
 		  : SchemeTreeItem(ST_Origin, origin, config, parent),_published( false ) {
 			update(NULL);
+
+			QFont f = font(config.columnMap[COL_REGION]);
+			f.setItalic(true);
+			setFont(config.columnMap[COL_REGION], f);
 		}
 
 		~OriginTreeItem() {
@@ -1001,8 +1012,6 @@ class EventTreeItem : public SchemeTreeItem {
 	public:
 		EventTreeItem(Event* event, const EventListView::ItemConfig &config, QTreeWidgetItem * parent = 0)
 		  : SchemeTreeItem(ST_Event, event, config, parent) {
-			QFont f;
-
 			_showOnlyOnePerAgency = false;
 			_resort = false;
 			_hasMultipleAgencies = false;
@@ -1012,6 +1021,11 @@ class EventTreeItem : public SchemeTreeItem {
 			setText(config.columnMap[COL_M], "-");
 			setText(config.columnMap[COL_MTYPE], "-");
 			setText(config.columnMap[COL_DEPTH], "-");
+
+			QFont f = SCApp->font();
+			f.setUnderline(true);
+			setData(config.columnMap[COL_FM], Qt::FontRole, f);
+			setData(config.columnMap[COL_FM], Qt::ForegroundRole, SCApp->palette().color(QPalette::Link));
 
 			_origins = NULL;
 			_focalMechanisms = NULL;
@@ -1318,21 +1332,14 @@ class EventTreeItem : public SchemeTreeItem {
 				}
 
 				if ( ev->preferredFocalMechanismID().empty() ) {
-					if ( treeWidget() )
-						treeWidget()->setItemWidget(this, config.columnMap[COL_FM], NULL);
-					setText(config.columnMap[COL_FM], "");
+					setData(config.columnMap[COL_FM], Qt::DisplayRole, QVariant());
+					setData(config.columnMap[COL_FM], Qt::ToolTipRole, QVariant());
+					setData(config.columnMap[COL_FM], Qt::UserRole+1, QVariant());
 				}
 				else if ( treeWidget() && view ) {
 					setText(config.columnMap[COL_FM], QObject::tr("Yes"));
-					if ( config.createFMLink ) {
-						QLabel *link = new QLabel(QString("<a href=\"%1\">Yes</a>").arg(QObject::tr("Yes")));
-						link->setToolTip(QObject::tr("Load event and open the focal mechanism tab"));
-						link->setAlignment(Qt::AlignCenter);
-						link->setProperty("eventPtr", QVariant::fromValue<void*>(ev));
-						treeWidget()->setItemWidget(this, config.columnMap[COL_FM], link);
-						QObject::connect(link, SIGNAL(linkActivated(const QString &)),
-						                 view, SLOT(selectEventFM(const QString &)));
-					}
+					setData(config.columnMap[COL_FM], Qt::ToolTipRole, QObject::tr("Load event and open the focal mechanism tab"));
+					setData(config.columnMap[COL_FM], Qt::UserRole+1, QVariant::fromValue<void*>(ev));
 				}
 
 				Origin* origin = Origin::Find(ev->preferredOriginID());
@@ -1853,6 +1860,7 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	_treeWidget = new TreeWidget(_ui.frameList);
 	_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+	_treeWidget->setMouseTracking(true);
 	_treeWidget->viewport()->installEventFilter(this);
 	_treeWidget->setAutoScroll(true);
 
@@ -2270,6 +2278,7 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	connect(_ui.btnClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(_treeWidget, SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(itemSelected(QTreeWidgetItem*,int)));
 	connect(_treeWidget, SIGNAL(itemPressed(QTreeWidgetItem*,int)), this, SLOT(itemPressed(QTreeWidgetItem*,int)));
+	connect(_treeWidget, SIGNAL(itemEntered(QTreeWidgetItem*,int)), this, SLOT(itemEntered(QTreeWidgetItem*,int)));
 	connect(_treeWidget, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(itemExpanded(QTreeWidgetItem*)));
 	connect(_treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
 	connect(_ui.actionCopyRowToClipboard, SIGNAL(triggered(bool)), this, SLOT(copyRowToClipboard()));
@@ -2310,6 +2319,8 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
 	        _busyIndicator, SLOT(stop()));
 	connect(&PublicObjectEvaluator::Instance(), SIGNAL(terminated()),
 	        _busyIndicator, SLOT(stop()));
+
+	setFMLinkEnabled(_itemConfig.createFMLink);
 
 	PublicObjectEvaluator::Instance().setDatabaseURI(SCApp->databaseURI().c_str());
 }
@@ -2427,8 +2438,13 @@ void EventListView::updateHideState(QTreeWidgetItem *item) {
 				hide = true;
 	}
 
-	if ( hide != _treeWidget->isItemHidden(item) )
+	if ( hide != _treeWidget->isItemHidden(item) ) {
 		_treeWidget->setItemHidden(item, hide);
+		if ( hide )
+			emit eventRemovedFromList(event);
+		else
+			emit eventAddedToList(event);
+	}
 }
 
 
@@ -2452,7 +2468,10 @@ void EventListView::add(Seiscomp::DataModel::Event* event,
 		SchemeTreeItem *item = findEvent(event->publicID());
 		std::map<std::string, OriginPtr> orgs;
 		std::map<std::string, FocalMechanismPtr> fms;
-		MagnitudePtr prefMag = Magnitude::Find(event->preferredMagnitudeID());
+		MagnitudePtr prefMag;
+
+		if ( !event->preferredMagnitudeID().empty() )
+			prefMag = Magnitude::Find(event->preferredMagnitudeID());
 
 		for ( size_t i = 0; i < event->originReferenceCount(); ++i ) {
 			Origin *org = Origin::Find(event->originReference(i)->originID());
@@ -2481,7 +2500,7 @@ void EventListView::add(Seiscomp::DataModel::Event* event,
 			}
 			it.close();
 
-			if ( !prefMag )
+			if ( !prefMag && !event->preferredMagnitudeID().empty() )
 				prefMag = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
 		}
 
@@ -2513,7 +2532,7 @@ void EventListView::add(Seiscomp::DataModel::Event* event,
 					_reader->loadComments(prefOrg.get());
 			}
 
-			if ( !prefMag && _reader )
+			if ( !prefMag && _reader && !event->preferredMagnitudeID().empty() )
 				prefMag = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
 
 			item = addEvent(event);
@@ -2610,7 +2629,7 @@ bool EventListView::eventFilter(QObject *obj, QEvent *ev) {
 					}
 
 					sendJournalAndWait(item->object()->publicID(), CMD_MERGE_EVENT,
-					                   eventID.toStdString(), "EVENT");
+					                   eventID.toStdString(), SCApp->messageGroups().event.c_str());
 				}
 				else if ( event->mimeData()->hasFormat("uri/origin") ) {
 					QString originID = event->mimeData()->data("uri/origin");
@@ -2630,7 +2649,7 @@ bool EventListView::eventFilter(QObject *obj, QEvent *ev) {
 					}
 
 					sendJournalAndWait(eitem->event()->publicID(), CMD_GRAB_ORIGIN,
-					                   originID.toStdString(), "EVENT");
+					                   originID.toStdString(), SCApp->messageGroups().event.c_str());
 				}
 			}
 			else {
@@ -2993,8 +3012,6 @@ void EventListView::readFromDatabase(const Filter &filter) {
 
 	QSet<void*> associatedOrigins;
 
-	_treeWidget->setUpdatesEnabled (false);
-
 	progress.setLabelText(tr("Reading magnitudes..."));
 	std::vector<MagnitudePtr> prefMags;
 	std::vector<OriginPtr> prefOrigins;
@@ -3036,11 +3053,12 @@ void EventListView::readFromDatabase(const Filter &filter) {
 		}
 	}
 
+	_treeWidget->setUpdatesEnabled (false);
 
 	for ( size_t i = 0; i < ep.eventCount(); ++i ) {
-		Event* event = ep.event(i);
+		Event *event = ep.event(i);
 
-		EventTreeItem* eventItem = addEvent(event);
+		EventTreeItem *eventItem = addEvent(event);
 		bool update = false;
 
 		for ( size_t c = 0; c < event->commentCount(); ++c ) {
@@ -3104,7 +3122,7 @@ void EventListView::readFromDatabase(const Filter &filter) {
 	for (int i = 0; i < _treeWidget->columnCount(); i++)
 		_treeWidget->resizeColumnToContents(i);
 
-	_treeWidget->setUpdatesEnabled (true);
+	_treeWidget->setUpdatesEnabled(true);
 
 	QApplication::restoreOverrideCursor();
 	_blockSelection = false;
@@ -3197,7 +3215,7 @@ EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event) {
 
 	// Read preferred magnitude for display purpose
 	MagnitudePtr preferredMagnitude;
-	if ( event ) {
+	if ( event && !event->preferredMagnitudeID().empty() ) {
 		preferredMagnitude = Magnitude::Find(event->preferredMagnitudeID());
 		if ( !preferredMagnitude && _reader )
 			preferredMagnitude = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
@@ -3244,7 +3262,7 @@ EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event) {
 	updateEventProcessColumns(item, true);
 
 	if ( event != NULL )
-		eventAddedToList(event);
+		emit eventAddedToList(event);
 
 	return item;
 }
@@ -3536,9 +3554,12 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 							}
 						}
 
-						MagnitudePtr nm = Magnitude::Find(event->preferredMagnitudeID());
-						if ( !nm && _reader )
-							nm = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
+						MagnitudePtr nm;
+						if ( !event->preferredMagnitudeID().empty() ) {
+							nm = Magnitude::Find(event->preferredMagnitudeID());
+							if ( !nm && _reader )
+								nm = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
+						}
 
 						updateEventProcessColumns(item, true);
 						item->update(this);
@@ -3860,7 +3881,7 @@ void EventListView::updateOrigin(Seiscomp::DataModel::Origin* origin) {
 		MessagePtr msg = Notifier::GetMessage();
 		if ( msg )
 			//SCApp->sendMessage("LOGGING", msg.get());
-			SCApp->sendMessage("LOCATION", msg.get());
+			SCApp->sendMessage(SCApp->messageGroups().location.c_str(), msg.get());
 	}
 
 	Notifier::SetEnabled(wasEnabled);
@@ -3896,7 +3917,7 @@ void EventListView::insertOrigin(Seiscomp::DataModel::Origin* origin,
 	NotifierMessagePtr msg = Notifier::GetMessage();
 	if ( msg && !_updateLocalEPInstance )
 		//SCApp->sendMessage("LOGGING", msg.get());
-		SCApp->sendMessage("PICK", msg.get());
+		SCApp->sendMessage(SCApp->messageGroups().pick.c_str(), msg.get());
 
 	for ( std::vector<Seiscomp::DataModel::AmplitudePtr>::const_iterator it = newAmplitudes.begin();
 	      it != newAmplitudes.end(); ++it )
@@ -3904,7 +3925,7 @@ void EventListView::insertOrigin(Seiscomp::DataModel::Origin* origin,
 
 	msg = Notifier::GetMessage();
 	if ( msg && !_updateLocalEPInstance )
-		SCApp->sendMessage("AMPLITUDE", msg.get());
+		SCApp->sendMessage(SCApp->messageGroups().amplitude.c_str(), msg.get());
 
 	// Insert origin to Eventparameters
 	ep->add(origin);
@@ -3929,7 +3950,7 @@ void EventListView::insertOrigin(Seiscomp::DataModel::Origin* origin,
 	msg = Notifier::GetMessage();
 	if ( msg ) {
 		//SCApp->sendMessage("LOGGING", msg.get());
-		if ( !_updateLocalEPInstance ) SCApp->sendMessage("LOCATION", msg.get());
+		if ( !_updateLocalEPInstance ) SCApp->sendMessage(SCApp->messageGroups().location.c_str(), msg.get());
 		if ( ref && baseEvent ) emit originReferenceAdded(baseEvent->publicID(), ref.get());
 	}
 
@@ -3977,7 +3998,7 @@ void EventListView::updateFocalMechanism(Seiscomp::DataModel::FocalMechanism *fm
 		MessagePtr msg = Notifier::GetMessage();
 		if ( msg )
 			//SCApp->sendMessage("LOGGING", msg.get());
-			SCApp->sendMessage("FOCMECH", msg.get());
+			SCApp->sendMessage(SCApp->messageGroups().focalMechanism.c_str(), msg.get());
 	}
 
 	Notifier::SetEnabled(wasEnabled);
@@ -4031,7 +4052,7 @@ void EventListView::insertFocalMechanism(Seiscomp::DataModel::FocalMechanism *fm
 	NotifierMessagePtr msg = Notifier::GetMessage();
 	if ( msg ) {
 		//SCApp->sendMessage("LOGGING", msg.get());
-		if ( !_updateLocalEPInstance ) SCApp->sendMessage("FOCMECH", msg.get());
+		if ( !_updateLocalEPInstance ) SCApp->sendMessage(SCApp->messageGroups().focalMechanism.c_str(), msg.get());
 	}
 
 	Notifier::SetEnabled(wasEnabled);
@@ -4154,8 +4175,16 @@ void EventListView::loadItem(QTreeWidgetItem *item) {
 }
 
 
-void EventListView::itemSelected(QTreeWidgetItem* item, int) {
+void EventListView::itemSelected(QTreeWidgetItem* item, int column) {
 	if ( QApplication::keyboardModifiers() != Qt::NoModifier ) return;
+	if ( column == _itemConfig.columnMap[COL_FM] ) {
+		Event *ev = (Event*)item->data(column, Qt::UserRole+1).value<void*>();
+		if ( ev ) {
+			eventFMSelected(ev);
+			return;
+		}
+	}
+
 	loadItem(item);
 }
 
@@ -4224,7 +4253,7 @@ void EventListView::itemPressed(QTreeWidgetItem *item, int column) {
 			return;
 		}
 
-		sendJournalAndWait(org->publicID(), CMD_NEW_EVENT, "", "EVENT");
+		sendJournalAndWait(org->publicID(), CMD_NEW_EVENT, "", SCApp->messageGroups().event.c_str());
 	}
 	else if ( action == splitOrg ) {
 		if ( QMessageBox::question(
@@ -4243,7 +4272,7 @@ void EventListView::itemPressed(QTreeWidgetItem *item, int column) {
 		EventTreeItem *eitem = (EventTreeItem*)oitem->parent()->parent();
 		Event *e = eitem->event();
 		if ( e )
-			sendJournalAndWait(e->publicID(), CMD_SPLIT_ORIGIN, org->publicID(), "EVENT");
+			sendJournalAndWait(e->publicID(), CMD_SPLIT_ORIGIN, org->publicID(), SCApp->messageGroups().event.c_str());
 		else {
 			QMessageBox::critical(
 				this, "Error",
@@ -4443,6 +4472,15 @@ bool EventListView::sendJournalAndWait(const std::string &objectID,
 
 void EventListView::waitDialogDestroyed(QObject *o) {
 	if ( _commandWaitDialog == o ) _commandWaitDialog = NULL;
+}
+
+
+void EventListView::itemEntered(QTreeWidgetItem *item, int column) {
+	if ( column == _itemConfig.columnMap[COL_FM]
+	  && item->data(column, Qt::UserRole+1).isValid() )
+		setCursor(Qt::PointingHandCursor);
+	else
+		unsetCursor();
 }
 
 

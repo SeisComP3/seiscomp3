@@ -78,10 +78,6 @@ class SC_GUI_API Legend : public QObject {
 		void setTitleFont(const QFont &font) { _titleFont = font; }
 
 		bool isVisible() const { return _visible; }
-		void setVisible(bool visible) {
-			_visible = visible;
-			emit visibilityChanged(visible);
-		}
 
 		const QSize &size() const { return _size; }
 
@@ -94,6 +90,13 @@ class SC_GUI_API Legend : public QObject {
 		void visibilityChanged(bool);
 
 
+	private:
+		void setVisible(bool visible) {
+			_visible = visible;
+			emit visibilityChanged(visible);
+		}
+
+
 	protected:
 		int                           _margin;
 		int                           _spacing;
@@ -104,9 +107,13 @@ class SC_GUI_API Legend : public QObject {
 		QString                       _title;
 		Qt::Alignment                 _alignment;
 		bool                          _enabled;
-		bool                          _visible;
 		QPoint                        _pos;
 
+
+	private:
+		bool                          _visible;
+
+	friend class Canvas;
 };
 
 

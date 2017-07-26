@@ -286,6 +286,8 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		int  _rowSpacing;
 		bool _withFrames;
 		int  _frameMargin;
+		int  _rowHeight;
+		int  _numberOfRows;
 
 		std::vector<std::string> _filters;
 		int _currentFilterIdx;
@@ -315,6 +317,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 			std::string matchID;
 			OPT(double) minValue;
 			OPT(double) maxValue;
+			bool        fixedScale;
 			OPT(double) gain;
 			OPT(double) minMaxMargin;
 			QPen        minPen;

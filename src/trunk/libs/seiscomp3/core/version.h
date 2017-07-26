@@ -44,7 +44,6 @@ namespace Core {
    - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
    - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent
      canvas
-   - Removed Seiscomp::Gui::Map::Layer RTTI interface
    - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
    - Added Seiscomp::Gui::Map::Canvas::size
    - Removed Seiscomp::Gui::Map::Layer RTTI interface
@@ -68,6 +67,9 @@ namespace Core {
    - Added Seiscomp::Gui::LUT::operator[]
    - Added class Seiscomp::Math::Filtering::Min<T>
    - Added class Seiscomp::Math::Filtering::Max<T>
+   - Added Seiscomp::Gui::RecordWidget::setGridVSpacing
+   - Added Seiscomp::Gui::RecordWidget::setGridVRange
+   - Added Seiscomp::Gui::RecordWidget::setGridVScale
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

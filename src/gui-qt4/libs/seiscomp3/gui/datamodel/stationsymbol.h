@@ -55,7 +55,7 @@ class SC_GUI_API StationSymbol : public Map::Symbol {
 		int frameSize() const;
 
 		virtual bool isInside(int x, int y) const;
-		virtual void customDraw(const Map::Canvas *canvas, QPainter& painter);
+		virtual void customDraw(const Map::Canvas *canvas, QPainter &painter);
 
 	protected:
 		QPolygon generateShape(int posX, int posY, int radius);

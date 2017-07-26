@@ -75,6 +75,9 @@ class MainFrame : public MainWindow {
 		void showWaveforms();
 		void publishEvent();
 
+		void hoverEvent(const std::string &eventID);
+		void selectEvent(const std::string &eventID);
+
 		void raiseLocator();
 
 		void fileOpen();

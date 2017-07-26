@@ -468,12 +468,20 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	_rowSpacing = 0;
 	_withFrames = false;
 	_frameMargin = 0;
+	_rowHeight = -1;
+	_numberOfRows = -1;
 
 	try { _rowSpacing = SCApp->configGetInt("streams.rowSpacing"); }
 	catch ( ... ) {}
 	try { _withFrames = SCApp->configGetBool("streams.withFrames"); }
 	catch ( ... ) {}
 	try { _frameMargin = SCApp->configGetInt("streams.frameMargin"); }
+	catch ( ... ) {}
+
+	try { _rowHeight = SCApp->configGetInt("streams.height"); }
+	catch ( ... ) {}
+
+	try { _numberOfRows = SCApp->configGetInt("streams.rows"); }
 	catch ( ... ) {}
 
 	QPen defaultMinPen, defaultMaxPen;
@@ -535,6 +543,8 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 			catch ( ... ) {}
 			try { desc.minValue = SCApp->configGetDouble(prefix + "minimum.value"); }
 			catch ( ... ) {}
+			try { desc.fixedScale = SCApp->configGetBool(prefix + "fixedScale"); }
+			catch ( ... ) { desc.fixedScale = false; }
 			try { desc.minPen = SCApp->configGetPen(prefix + "minimum.pen", defaultMinPen); }
 			catch ( ... ) {}
 			try { desc.minBrush = SCApp->configGetBrush(prefix + "minimum.brush", defaultMinBrush); }
@@ -874,6 +884,11 @@ TraceView* MainWindow::createTraceView() {
 	traceView->setRowSpacing(_rowSpacing);
 	traceView->setFramesEnabled(_withFrames);
 	traceView->setFrameMargin(_frameMargin);
+	if ( _rowHeight > 0 ) {
+		traceView->setMinimumRowHeight(_rowHeight);
+		traceView->setMaximumRowHeight(_rowHeight);
+	}
+	traceView->setRelativeRowHeight(_numberOfRows);
 	traceView->setAlternatingRowColors(true);
 	traceView->setAutoScale(true);
 	traceView->setDefaultDisplay();
@@ -1045,8 +1060,12 @@ void MainWindow::setupItem(const Record*, Gui::RecordViewItem* item) {
 			double center = (*desc.minValue + *desc.maxValue) * 0.5;
 			double vmin = (*desc.minValue-center)*(1+*desc.minMaxMargin)+center;
 			double vmax = (*desc.maxValue-center)*(1+*desc.minMaxMargin)+center;
-			item->widget()->setMinimumAmplRange(vmin / *item->widget()->recordScale(0),
-			                                    vmax / *item->widget()->recordScale(0));
+			if ( desc.fixedScale )
+				item->widget()->setAmplRange(vmin / *item->widget()->recordScale(0),
+				                             vmax / *item->widget()->recordScale(0));
+			else
+				item->widget()->setMinimumAmplRange(vmin / *item->widget()->recordScale(0),
+				                                    vmax / *item->widget()->recordScale(0));
 		}
 
 		break;

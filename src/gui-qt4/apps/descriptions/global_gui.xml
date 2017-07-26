@@ -8,6 +8,50 @@
 			and feel.
 		</description>
 		<configuration>
+			<group name="groups">
+				<description>
+				Configures the target messaging groups for various object types.
+				These parameters should only be touched if you know what you
+				are doing.
+				</description>
+				<parameter name="pick" type="string" default="PICK">
+					<description>
+					Defines the target messaging group for manual picks, e.g.
+					made in scolv.
+					</description>
+				</parameter>
+				<parameter name="amplitude" type="string" default="AMPLITUDE">
+					<description>
+					Defines the target messaging group for amplitudes, e.g.
+					computed in scolv.
+					</description>
+				</parameter>
+				<parameter name="magnitude" type="string" default="MAGNITUDE">
+					<description>
+					Defines the target messaging group for magnitudes. scolv does
+					not use this group but sends magnitudes together with the
+					origin to the origin group.
+					</description>
+				</parameter>
+				<parameter name="location" type="string" default="LOCATION">
+					<description>
+					Defines the target messaging group for origins created in
+					e.g. scolv.
+					</description>
+				</parameter>
+				<parameter name="focalMechanism" type="string" default="FOCMECH">
+					<description>
+					Defines the target messaging group for focal mechanisms created in
+					e.g. scolv.
+					</description>
+				</parameter>
+				<parameter name="event" type="string" default="EVENT">
+					<description>
+					Defines the target messaging group for events and event
+					journal entries.
+					</description>
+				</parameter>
+			</group>
 			<group name="map">
 				<parameter name="location" type="string" default="@DATADIR@/maps/world%s.png">
 					<description>

@@ -210,8 +210,9 @@ class SC_GUI_API Canvas : public QObject {
 
 		bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
 		bool filterMouseMoveEvent(QMouseEvent*);
-		bool filterMouseDoubleClickEvent(QMouseEvent*);
 		bool filterMousePressEvent(QMouseEvent*);
+		bool filterMouseReleaseEvent(QMouseEvent*);
+		bool filterMouseDoubleClickEvent(QMouseEvent*);
 
 		QMenu* menu(QWidget*) const;
 
@@ -279,39 +280,19 @@ class SC_GUI_API Canvas : public QObject {
 	private:
 		typedef QVector<Legend*> Legends;
 		struct LegendArea : public Legends {
-			LegendArea() : currentIndex(-1), lastIndex(-1) {}
+			LegendArea() : currentIndex(-1) {}
 
 			bool hasIndex(int index) {
 				return ( index >= 0 && index < count() );
 			}
 
-			bool mousePressEvent(QMouseEvent *e );
-
-			int findNext(bool forward = true) const {
-				int count = this->count(),
-				    index = currentIndex,
-				    tmp = forward ? 1 : -1;
-
-				index = currentIndex;
-				for ( int i = 0; i < count - 1; ++i ) {
-					index += tmp;
-					if ( index < 0 || index >= count ) {
-						if ( forward )
-							index = 0;
-						else
-							index = count -1;
-					}
-
-					if ( this->at(index)->isEnabled() ) return index;
-				}
-
-				return -1;
-			}
+			bool mousePressEvent(QMouseEvent *e);
+			bool mouseReleaseEvent(QMouseEvent *e);
+			int findNext(bool forward = true) const;
 
 			QRect      header;
 			QRect      decorationRects[2];
 			int        currentIndex;
-			int        lastIndex;
 		};
 
 		typedef QHash<Qt::Alignment, LegendArea> LegendAreas;
@@ -345,6 +326,7 @@ class SC_GUI_API Canvas : public QObject {
 		std::vector<LayerProperties*> _layerProperties;
 
 		Layers                        _layers;
+		Layer                        *_hoverLayer;
 		CustomLayers                  _customLayers;
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;

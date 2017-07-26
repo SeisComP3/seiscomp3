@@ -210,6 +210,7 @@ void MapWidget::init() {
 	_filterMap = SCScheme.map.bilinearFilter;
 	_canvas.setBilinearFilter(_filterMap);
 
+	setMouseTracking(true);
 	setFocusPolicy(Qt::StrongFocus);
 	//setAttribute(Qt::WA_PaintOnScreen);
 
@@ -649,20 +650,11 @@ void MapWidget::contextMenuEvent(QContextMenuEvent *event) {
 void MapWidget::mousePressEvent(QMouseEvent* event) {
 	_isMeasureDragging = false;
 
-	if ( _canvas.filterMousePressEvent(event) ) return;
-
 	if ( event->button() == Qt::LeftButton ) {
 		_lastDraggingPosition = event->pos();
 		_firstDrag = true;
 
-		if ( event->modifiers() == Qt::NoModifier ) {
-			_isDragging = true;
-			_isMeasuring = false;
-			_isMeasureDragging = false;
-			_measurePoints.clear();
-			_measureText.clear();
-		}
-		else if ( event->modifiers() == Qt::ControlModifier ) {
+		if ( event->modifiers() == Qt::ControlModifier ) {
 			QPointF p;
 			_canvas.projection()->unproject(p, _lastDraggingPosition);
 			if ( !_isMeasuring ) {
@@ -671,18 +663,35 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 			}
 			_measurePoints.push_back(p);
 			update();
+			return;
+		}
+
+		if ( !_isMeasuring ) {
+			if ( _canvas.filterMousePressEvent(event) ) return;
+		}
+
+		if ( event->modifiers() == Qt::NoModifier ) {
+			_isDragging = true;
+			_isMeasuring = false;
+			_isMeasureDragging = false;
+			_measurePoints.clear();
+			_measureText.clear();
 		}
 	}
+	else if ( _canvas.filterMousePressEvent(event) )
+		event->ignore();
 }
 
 
 void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
 	_isMeasureDragging = false;
 
-	if ( event->button() == Qt::LeftButton ) {
+	if ( _isDragging && (event->button() == Qt::LeftButton) ) {
 		_isDragging = false;
 		update();
 	}
+
+	_canvas.filterMouseReleaseEvent(event);
 }
 
 

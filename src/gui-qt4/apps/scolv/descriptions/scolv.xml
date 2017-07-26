@@ -114,6 +114,12 @@
 						If enabled then all traces without data are hidden in the picker.
 					</description>
 				</parameter>
+				<parameter name="hideDisabledStations" type="boolean" default="true">
+					<description>
+						If enabled then all traces of disabled stations are hidden if
+						they are not picked.
+					</description>
+				</parameter>
 				<parameter name="defaultDepth" type="double" unit="km" default="10">
 					<description>
 						When creating an artificial origin this is the default depth used.

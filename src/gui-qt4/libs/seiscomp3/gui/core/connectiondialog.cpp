@@ -329,8 +329,13 @@ bool ConnectionDialog::connectToDatabase() {
 	_changedDatabase = false;
 
 	if ( !*_db || !(*_db)->isConnected() ) {
-		DatabaseProvideMessage tmp(_ui.comboDbType->currentText().toAscii(), _ui.editDbConnection->text().toAscii());
-		*_db = tmp.database();
+		if ( !_ui.editDbConnection->text().isEmpty() ) {
+			DatabaseProvideMessage tmp(_ui.comboDbType->currentText().toAscii(), _ui.editDbConnection->text().toAscii());
+			*_db = tmp.database();
+		}
+		else
+			*_db = NULL;
+
 		_changedDatabase = true;
 		emit databaseChanged();
 	}

@@ -44,6 +44,12 @@ class SC_GUI_API EventLayer : public Map::Layer {
 	public:
 		virtual void draw(const Map::Canvas *, QPainter &);
 		virtual void calculateMapPosition(const Map::Canvas *canvas);
+		virtual bool isInside(int x, int y) const;
+
+		virtual void handleEnterEvent();
+		virtual void handleLeaveEvent();
+		virtual bool filterMouseMoveEvent(QMouseEvent *event, const QPointF &geoPos);
+		virtual bool filterMouseDoubleClickEvent(QMouseEvent *event, const QPointF &geoPos);
 
 
 	// ----------------------------------------------------------------------
@@ -57,11 +63,22 @@ class SC_GUI_API EventLayer : public Map::Layer {
 
 
 	// ----------------------------------------------------------------------
-	//  Private members
+	//  Signals
 	// ----------------------------------------------------------------------
-	private:
-		typedef QMap<DataModel::Event*, OriginSymbol*> SymbolMap;
-		SymbolMap _eventSymbols;
+	signals:
+		void eventHovered(const std::string &eventID);
+		void eventSelected(const std::string &eventID);
+
+
+	// ----------------------------------------------------------------------
+	//  Protected members
+	// ----------------------------------------------------------------------
+	protected:
+		typedef QMap<std::string, OriginSymbol*> SymbolMap;
+
+		SymbolMap           _eventSymbols;
+		mutable std::string _hoverId;
+		mutable bool        _hoverChanged;
 };
 
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -11,8 +11,6 @@
  ***************************************************************************/
 
 
-
-
 #define SEISCOMP_COMPONENT EventSummaryView
 
 #include "mainframe.h"
@@ -20,13 +18,19 @@
 #include <seiscomp3/gui/core/messages.h>
 #include <seiscomp3/gui/datamodel/eventsummaryview.h>
 #include <seiscomp3/gui/datamodel/eventlistview.h>
+#include <seiscomp3/gui/datamodel/eventlayer.h>
 #include <seiscomp3/logging/log.h>
+
 
 namespace Seiscomp {
 namespace Applications {
 namespace EventSummaryView {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MainFrame::MainFrame() {
 	_ui.setupUi(this);
 
@@ -42,8 +46,7 @@ MainFrame::MainFrame() {
 	_ui.actionAutoSelect->setChecked(TRUE);
 
 	// create SummaryView tab
-	_eventSummary = new Gui::EventSummaryView(SCApp->mapsDesc(),
-                                              SCApp->query());
+	_eventSummary = new Gui::EventSummaryView(SCApp->mapsDesc(), SCApp->query());
 
 	// create EventListView tab
 	_listPage = new Gui::EventListView(SCApp->query(), false, false, this);
@@ -115,13 +118,48 @@ MainFrame::MainFrame() {
 	connect(_eventSummary, SIGNAL(requestNonFakeEvent()),
 	        this, SLOT(setLastNonFakeEvent()));
 
+	// Connect events layer with map
+	Gui::EventLayer *eventMapLayer = new Gui::EventLayer(_eventSummary->map());
+	connect(_listPage, SIGNAL(reset()), eventMapLayer, SLOT(clear()));
+	connect(_listPage, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(addEvent(Seiscomp::DataModel::Event*)));
+	connect(_listPage, SIGNAL(eventUpdatedInList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(updateEvent(Seiscomp::DataModel::Event*)));
+	connect(_listPage, SIGNAL(eventRemovedFromList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(removeEvent(Seiscomp::DataModel::Event*)));
+
+	_eventSummary->map()->canvas().addLayer(eventMapLayer);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+MainFrame::~MainFrame() {
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Gui::EventSummaryView* MainFrame::eventSummaryView() const {
+	return _eventSummary;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainFrame::loadEvents(float days) {
 	Core::TimeWindow tw;
 
 	tw.setEndTime(Core::Time::GMT());
-	tw.setStartTime(tw.endTime() - Core::TimeSpan(1*86400));
+	tw.setStartTime(tw.endTime() - Core::TimeSpan(days*86400));
 
 	_listPage->setInterval(tw);
-
 	_listPage->readFromDatabase();
 
 	if ( _eventSummary->ignoreOtherEvents() )
@@ -129,27 +167,31 @@ MainFrame::MainFrame() {
 	else
 		_listPage->selectEvent(0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-MainFrame::~MainFrame() {
-}
 
 
-Gui::EventSummaryView* MainFrame::eventSummaryView() const {
-	return _eventSummary;
-}
-
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::showLocator() {
 	if ( !_eventSummary->currentOrigin() ) return;
 
 	SCApp->sendCommand(Gui::CM_SHOW_ORIGIN, _eventSummary->currentOrigin()->publicID());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::toggleDock() {
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::toggleEventList() {
 	if ( _ui.tabWidget == NULL ) return;
 
@@ -158,13 +200,22 @@ void MainFrame::toggleEventList() {
 	else
 		_ui.tabWidget->setCurrentIndex(0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::toggledFullScreen(bool isFullScreen) {
 	if ( menuBar() )
 		menuBar()->setVisible(!isFullScreen);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::showInStatusbar(QString text, int time) {
 	if ( statusBar() ){
 		if (time > 0)
@@ -179,25 +230,41 @@ void MainFrame::showInStatusbar(QString text, int time) {
 		}	
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::setLastNonFakeEvent() {
 	_listPage->selectFirstEnabledEvent();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::clearStatusbar() {
 	if ( statusBar() )
 		statusBar()->showMessage("");
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainFrame::showESVTab() {
 	if ( _ui.tabWidget )
 		_ui.tabWidget->setCurrentIndex(0);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }
 }

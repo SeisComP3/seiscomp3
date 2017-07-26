@@ -28,6 +28,7 @@
 
 
 class QContextMenuEvent;
+class QMouseEvent;
 class QDialog;
 class QMenu;
 class QPainter;
@@ -109,7 +110,16 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual bool isInside(int x, int y) const;
 		virtual void baseBufferUpdated(Map::Canvas *canvas);
 		virtual void bufferUpdated(Map::Canvas *canvas);
+
+		virtual void handleEnterEvent();
+		virtual void handleLeaveEvent();
+
 		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
+		virtual bool filterMouseMoveEvent(QMouseEvent *event, const QPointF &geoPos);
+		virtual bool filterMousePressEvent(QMouseEvent *event, const QPointF &geoPos);
+		virtual bool filterMouseReleaseEvent(QMouseEvent *event, const QPointF &geoPos);
+		virtual bool filterMouseDoubleClickEvent(QMouseEvent *event, const QPointF &geoPos);
+
 		virtual QMenu *menu(QWidget*) const;
 
 

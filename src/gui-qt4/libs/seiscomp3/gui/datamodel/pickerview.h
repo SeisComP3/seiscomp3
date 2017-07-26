@@ -108,6 +108,8 @@ class SC_GUI_API PickerRecordLabel : public StandardRecordLabel {
 
 
 	public:
+		void setConfigState(bool);
+
 		void setControlledItem(RecordViewItem *controlledItem);
 		RecordViewItem *controlledItem() const;
 
@@ -242,6 +244,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 			bool limitStations;
 			bool showAllComponents;
 			bool hideStationsWithoutData;
+			bool hideDisabledStations;
 
 			int    limitStationCount;
 			double allComponentsMaximumStationDistance;

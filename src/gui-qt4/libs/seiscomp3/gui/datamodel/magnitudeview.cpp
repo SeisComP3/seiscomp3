@@ -988,6 +988,27 @@ void MagnitudeView::closeEvent(QCloseEvent *e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::closeTab(int idx) {
+	std::string magID = _tabMagnitudes->tabData(idx).toString().toStdString();
+	MagnitudePtr mag = Magnitude::Find(magID);
+
+	if ( mag != NULL ) {
+		if ( mag->detach() ) {
+			emit magnitudeRemoved(_origin->publicID().c_str(), mag.get());
+			_tabMagnitudes->removeTab(idx);
+		}
+		else
+			QMessageBox::critical(this, "Error", tr("An error occured while removing magnitude %1").arg(magID.c_str()));
+	}
+	else
+		QMessageBox::critical(this, "Error", tr("Did not find magnitude %1").arg(magID.c_str()));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::debugCreateMagRef() {
 	StationMagnitudePtr staMag = StationMagnitude::Create();
 	staMag->setMagnitude(10.0);
@@ -1101,6 +1122,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	_tabMagnitudes->setShape(QTabBar::RoundedNorth);
 	_tabMagnitudes->setUsesScrollButtons(true);
 
+#if QT_VERSION >= 0x040500
+	connect(_tabMagnitudes, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+#endif
+
 	hboxLayout->addWidget(_tabMagnitudes);
 
 	// reset GUI to default
@@ -1174,6 +1199,8 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	}
 
 	_currentMagnitudeTypes = _magnitudeTypes;
+
+	setReadOnly(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1251,6 +1278,11 @@ void MagnitudeView::recalculateMagnitude() {
 
 			mags.push_back(sm->magnitude().value());
 		}
+	}
+
+	if ( mags.empty() ) {
+		QMessageBox::critical(this, "Error", "At least one station magnitude must be selected");
+		return;
 	}
 
 	double netmag, stdev;
@@ -2590,6 +2622,10 @@ void MagnitudeView::updateObject(const QString &parentID, Seiscomp::DataModel::O
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::setReadOnly(bool e) {
 	_ui.groupReview->setVisible(!e);
+
+#if QT_VERSION >= 0x040500
+	_tabMagnitudes->setTabsClosable(!e);
+#endif
 
 	if ( _amplitudeView && e )
 		_amplitudeView->close();

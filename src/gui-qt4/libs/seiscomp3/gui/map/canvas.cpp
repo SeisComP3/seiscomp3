@@ -176,20 +176,80 @@ bool LayerProperties::isChild(const LayerProperties* child) const {
 #define MAX_ZOOM (1 << 24)
 
 bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
+	if ( e->button() != Qt::LeftButton ) return false;
+	return header.contains(e->pos());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::LegendArea::mouseReleaseEvent(QMouseEvent *e) {
+	if ( e->button() != Qt::LeftButton ) return false;
+
 	QPoint pos = e->pos();
 	if ( header.contains(pos) ) {
 		if ( currentIndex == -1 ) return true;
 
-		if ( decorationRects[0].contains(pos) ) {
+		int newIndex = currentIndex;
+
+		if ( decorationRects[0].contains(pos) )
+			newIndex = findNext(false);
+		else if ( decorationRects[1].contains(pos) )
+			newIndex = findNext(true);
+
+		if ( newIndex != currentIndex ) {
 			at(currentIndex)->setVisible(false);
-			currentIndex = findNext(false);
-		} else if ( decorationRects[1].contains(pos) ) {
-			at(currentIndex)->setVisible(false);
-			currentIndex = findNext(true);
+			currentIndex = newIndex;
+			if ( currentIndex != -1 )
+				at(currentIndex)->setVisible(true);
 		}
+
 		return true;
 	}
+
 	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int Canvas::LegendArea::findNext(bool forward) const {
+	int numberOfLegends = count(),
+	    index = currentIndex,
+	    tmp = forward ? 1 : -1;
+
+	if ( currentIndex >= 0 ) {
+		index = currentIndex;
+
+		for ( int i = 0; i < numberOfLegends-1; ++i ) {
+			index += tmp;
+			if ( index < 0 || index >= numberOfLegends ) {
+				if ( forward )
+					index = 0;
+				else
+					index = numberOfLegends-1;
+			}
+
+			Legend *legend = at(index);
+			if ( legend->isEnabled() &&
+				(legend->layer() == NULL || legend->layer()->isVisible()) )
+				return index;
+		}
+	}
+	else {
+		for ( int i = 0; i < numberOfLegends; ++i ) {
+			Legend *legend = at(i);
+			if ( legend->isEnabled() &&
+				(legend->layer() == NULL || legend->layer()->isVisible()) )
+				return i;
+		}
+	}
+
+	return -1;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -201,6 +261,7 @@ Canvas::Canvas(const MapsDesc &meta)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
 , _dirtyImage(true)
 , _dirtyLayers(true)
+, _hoverLayer(NULL)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
 , _polyCache(10) {
@@ -220,6 +281,7 @@ Canvas::Canvas(ImageTree *mapTree)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
 , _dirtyImage(true)
 , _dirtyLayers(true)
+, _hoverLayer(NULL)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
 , _polyCache(10) {
@@ -1323,23 +1385,40 @@ void Canvas::drawLegends(QPainter& painter) {
 
 	for ( LegendAreas::iterator it = _legendAreas.begin();
 	      it != _legendAreas.end(); ++it ) {
+		LegendArea &area = it.value();
+		Legend *legend;
 
-		LegendArea& area = it.value();
-		if ( area.currentIndex == -1 ) continue;
+		if ( area.currentIndex == -1 ) {
+			area.currentIndex = area.findNext();
+			if ( area.currentIndex == -1 ) continue;
+		}
+		else {
+			legend = area[area.currentIndex];
+			if ( !legend->isEnabled() || ((legend->layer() != NULL) && !legend->layer()->isVisible()) ) {
+				if ( legend->isVisible() ) legend->setVisible(false);
+				area.currentIndex = area.findNext();
+				if ( area.currentIndex == -1 ) continue;
+			}
+		}
 
-		Legend* legend = area[area.currentIndex];
+		legend = area[area.currentIndex];
+
 		if ( !legend->isVisible() ) legend->setVisible(true);
 
 		QRect decorationRect(0, 0, 52, 22);
-		const QString& title = legend->title();
+		const QString &title = legend->title();
 		QRect textRect(0, 0, fm.width(title) + 2 * margin, fm.height());
 		QSize contentSize = legend->size();
 		int contentHeight = contentSize.height(),
 		    contentWidth = contentSize.width(),
 		    headerHeight = std::max(textRect.height(), decorationRect.height());
 
-		if ( area.findNext() == -1 )
+		if ( area.findNext() == -1 ) {
 			decorationRect.setSize(QSize(0, 0));
+
+			// No title and just one legend -> no header
+			if ( title.isEmpty() ) headerHeight = 0;
+		}
 
 		int height = headerHeight + contentHeight,
 		    width = textRect.width() + decorationRect.width();
@@ -1347,7 +1426,8 @@ void Canvas::drawLegends(QPainter& painter) {
 		if ( contentWidth > width) {
 			textRect.setWidth(textRect.width() + contentWidth - width);
 			width = contentWidth;
-		} else {
+		}
+		else {
 			contentWidth = width;
 			contentSize.setWidth(contentWidth);
 		}
@@ -1378,7 +1458,8 @@ void Canvas::drawLegends(QPainter& painter) {
 		if ( legend->alignment() & Qt::AlignRight ) {
 			textRect.moveTopLeft(headerRect.topLeft());
 			decorationRect.moveTopLeft(textRect.topRight());
-		} else {
+		}
+		else {
 			decorationRect.moveTopLeft(headerRect.topLeft());
 			textRect.moveTopLeft(decorationRect.topRight());
 		}
@@ -1404,7 +1485,8 @@ void Canvas::drawLegends(QPainter& painter) {
 			painter.drawImage(rect.topLeft(), image);
 
 			it->decorationRects[1] = rect;
-		} else {
+		}
+		else {
 			it->decorationRects[0] = QRect();
 			it->decorationRects[1] = QRect();
 		}
@@ -1525,10 +1607,8 @@ void Canvas::setupLayer(Layer *layer) {
 
 			LegendArea &area = *it;
 			area.append(legend);
-			if ( legend->isEnabled() && area.currentIndex == -1 ) {
-				area.currentIndex = area.count() - 1;
-				area.lastIndex = area.currentIndex;
-			}
+			if ( layer->isVisible() && legend->isEnabled() && area.currentIndex == -1 )
+				area.currentIndex = area.findNext();
 
 			connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
 			        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
@@ -1605,18 +1685,20 @@ void Canvas::removeLayer(Layer* layer) {
 	_layers.removeAll(layer);
 	disconnect(layer, SIGNAL(updateRequested()));
 
+	if ( layer == _hoverLayer )
+		_hoverLayer = NULL;
+
 	LegendAreas::iterator it = _legendAreas.begin();
 	while ( it != _legendAreas.end() ) {
-		Legends& legends = it.value();
+		Legends &legends = it.value();
 		bool changed = false;
 		Legends::iterator tmpIt = legends.begin();
 		while ( tmpIt != legends.end() ) {
 			if ( layer == (*tmpIt)->layer() ) {
 				tmpIt = legends.erase(tmpIt);
-				if ( it->lastIndex != -1 ) it->lastIndex = -1;
-
 				changed = true;
-			} else
+			}
+			else
 				++tmpIt;
 		}
 
@@ -1667,20 +1749,48 @@ void Canvas::lower(Layer* layer) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
-	return false;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	SymbolCollection::iterator it = _mapSymbolCollection.end();
 
+	// TODO: Check legend hit that will eat the event
 
+	QPointF geoPos;
+	if ( !_projection->unproject(geoPos, e->pos()) )
+		return  false;
 
+	while ( it != _mapSymbolCollection.begin() ) {
+		--it;
+		if ( (*it)->isInside(geoPos.y(), geoPos.x()) ) {
+			if ( _hoverLayer ) {
+				_hoverLayer->handleLeaveEvent();
+				_hoverLayer = NULL;
+			}
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
-	if ( !_isDrawLegendsEnabled ) return false;
+			return false;
+		}
+	}
 
-	for ( LegendAreas::iterator it = _legendAreas.begin();
-	      it != _legendAreas.end(); ++it ) {
-		if ( it->mousePressEvent(e) ) return true;
+	Layers::iterator lit = _layers.end();
+	Layer *hoverLayer = NULL;
+
+	while ( lit != _layers.begin() ) {
+		--lit;
+		if ( (*lit)->isVisible() && (*lit)->isInside(e->pos().x(), e->pos().y()) ) {
+			hoverLayer = *lit;
+			break;
+		}
+	}
+
+	if ( _hoverLayer != hoverLayer ) {
+		if ( _hoverLayer )
+			_hoverLayer->handleLeaveEvent();
+		if ( hoverLayer )
+			hoverLayer->handleEnterEvent();
+		_hoverLayer = hoverLayer;
+	}
+
+	if ( _hoverLayer ) {
+		if ( _hoverLayer->filterMouseMoveEvent(e, geoPos) )
+			return true;
 	}
 
 	return false;
@@ -1691,12 +1801,68 @@ bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::filterMousePressEvent(QMouseEvent* e) {
-	if ( !_isDrawLegendsEnabled ) return false;
+bool Canvas::filterMouseDoubleClickEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mousePressEvent(e) ) return true;
+		}
+	}
 
-	for ( LegendAreas::iterator it = _legendAreas.begin();
-	      it != _legendAreas.end(); ++it ) {
-		if ( it->mousePressEvent(e) ) return true;
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMouseDoubleClickEvent(e, geoPos);
+	}
+
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterMousePressEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mousePressEvent(e) ) {
+				updateRequested();
+				return true;
+			}
+		}
+	}
+
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMousePressEvent(e, geoPos);
+	}
+
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterMouseReleaseEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mouseReleaseEvent(e) ) {
+				updateRequested();
+				return true;
+			}
+		}
+	}
+
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMouseReleaseEvent(e, geoPos);
 	}
 
 	return false;
@@ -1708,7 +1874,7 @@ bool Canvas::filterMousePressEvent(QMouseEvent* e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
-	foreach ( Layer* layer, _layers ) {
+	foreach ( Layer *layer, _layers ) {
 		if ( layer->filterContextMenuEvent(e, parent) )
 			return true;
 	}
@@ -1723,7 +1889,7 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QMenu* Canvas::menu(QWidget* parent) const {
 	QMenu* menu = new QMenu("Layers", parent);
-	foreach ( Layer* layer, _layers ) {
+	foreach ( Layer *layer, _layers ) {
 		QMenu* subMenu = layer->menu(menu);
 		if ( subMenu )
 			menu->addMenu(subMenu);
@@ -1744,7 +1910,7 @@ QMenu* Canvas::menu(QWidget* parent) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::updateLayer(const Layer::UpdateHints& hints) {
 	if ( hints.testFlag(Layer::Position) ) {
-		Layer* layer = static_cast<Layer*>(sender());
+		Layer *layer = static_cast<Layer*>(sender());
 		layer->calculateMapPosition(this);
 	}
 
@@ -1778,7 +1944,7 @@ void Canvas::reload() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
+void Canvas::bringToFront(Seiscomp::Gui::Map::Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
 
@@ -1790,7 +1956,6 @@ void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
 	if ( it->currentIndex > 0 && legends.count() > it->currentIndex )
 		legends[it->currentIndex]->setVisible(false);
 
-	it->lastIndex = it->currentIndex;
 	it->currentIndex = index;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1806,21 +1971,7 @@ void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) 
 	int index = it->indexOf(legend);
 	if ( index == -1 ) return;
 
-	if ( enabled ) {
-		if ( it->currentIndex == -1 ) it->currentIndex = index;
-	} else  {
-		if ( it->currentIndex == index ) {
-			if ( it->lastIndex != index && it->lastIndex != -1) {
-				const Legends& legends = *it;
-				if ( legends.count() > it->lastIndex &&
-				     legends[it->lastIndex]->isEnabled())
-					it->currentIndex = it->lastIndex;
-				else
-					it->currentIndex = it->findNext();
-			} else
-				it->currentIndex = it->findNext();
-		}
-	}
+	it->currentIndex = -1;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

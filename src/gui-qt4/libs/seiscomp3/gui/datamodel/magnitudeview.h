@@ -184,7 +184,8 @@ class SC_GUI_API MagnitudeView : public QWidget {
 
 	signals:
 		void localAmplitudesAvailable(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*);
-		void magnitudeUpdated(const QString&, Seiscomp::DataModel::Object*);
+		void magnitudeUpdated(const QString &, Seiscomp::DataModel::Object*);
+		void magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*);
 		void requestClose();
 
 
@@ -229,6 +230,8 @@ class SC_GUI_API MagnitudeView : public QWidget {
 		void changeStationState(int id, bool state);
 		void dataChanged(const QModelIndex&, const QModelIndex&);
 		void updateContent();
+
+		void closeTab(int idx);
 
 		void debugCreateMagRef();
 

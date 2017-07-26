@@ -2265,7 +2265,7 @@ bool EventEdit::sendJournal(const std::string &action,
 		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 		NotifierMessagePtr nm = new NotifierMessage;
 		nm->attach(n.get());
-		if ( SCApp->sendMessage("EVENT", nm.get()) ) {
+		if ( SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get()) ) {
 			addJournal(entry.get());
 			return true;
 		}

@@ -580,6 +580,15 @@ const MapsDesc &Application::mapsDesc() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const MessageGroups &Application::messageGroups() const {
+	return _messageGroups;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Core::TimeSpan Application::maxEventAge() const {
 	return _eventTimeAgo;
 }
@@ -994,6 +1003,26 @@ bool Application::init() {
 
 	bool result = Client::Application::init();
 
+	_messageGroups.pick = "PICK";
+	_messageGroups.amplitude = "AMPLITUDE";
+	_messageGroups.magnitude = "MAGNITUDE";
+	_messageGroups.location = "LOCATION";
+	_messageGroups.focalMechanism = "FOCMECH";
+	_messageGroups.event = "EVENT";
+
+	try { _messageGroups.pick = configGetString("groups.pick"); }
+	catch ( ... ) {}
+	try { _messageGroups.amplitude = configGetString("groups.amplitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.magnitude = configGetString("groups.magnitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.location = configGetString("groups.location"); }
+	catch ( ... ) {}
+	try { _messageGroups.focalMechanism = configGetString("groups.focalMechanism"); }
+	catch ( ... ) {}
+	try { _messageGroups.event = configGetString("groups.event"); }
+	catch ( ... ) {}
+
 	try { _intervalSOH = configGetInt("IntervalSOH"); }
 	catch ( ... ) {}
 
@@ -1321,7 +1350,7 @@ void Application::createConnection(QString host, QString user,
 	               timeout);
 
 	_connection = Connection::Create(host.toStdString(), user.toStdString(), group.toStdString(),
-                                     Protocol::PRIORITY_DEFAULT, timeout, &status);
+	                                 Protocol::PRIORITY_DEFAULT, timeout, &status);
 
 	if ( _connection == NULL ) {
 		QMessageBox::warning(NULL, "ConnectionError",

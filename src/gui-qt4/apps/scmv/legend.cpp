@@ -372,8 +372,7 @@ void EQSymbolLegend::customDraw(const Seiscomp::Gui::Map::Canvas *canvas,
                                 QPainter& p) {
 	if ( !isVisible() ) return;
 
-	QPainter::RenderHints h = p.renderHints();
-	p.setRenderHint(QPainter::Antialiasing, false);
+	p.save();
 
 	QFont f(p.font());
 	QFont bold(f);
@@ -489,8 +488,7 @@ void EQSymbolLegend::customDraw(const Seiscomp::Gui::Map::Canvas *canvas,
 		fX += _magItems[i].second.second + SPACING + additionalItemSpacing;
 	}
 
-	p.setFont(f);
-	p.setRenderHints(h);
+	p.restore();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
