@@ -133,8 +133,8 @@ class PolesAndZeros : public BaseFilter {
 		FrequencyType _normalizationFrequency;
 
 		// Aggregations
-		std::vector<PoleAndZeroPtr> _poles;
 		std::vector<PoleAndZeroPtr> _zeros;
+		std::vector<PoleAndZeroPtr> _poles;
 };
 
 

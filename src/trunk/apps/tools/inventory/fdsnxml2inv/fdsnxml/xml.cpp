@@ -391,8 +391,8 @@ struct PolesAndZerosHandler : public IO::XML::TypedClassHandler<PolesAndZeros> {
 		addProperty("NormalizationFactor", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "NormalizationFactor");
 		// Element
 		addProperty("NormalizationFrequency", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "NormalizationFrequency");
-		addChildProperty("Pole", "http://www.fdsn.org/xml/station/1", "Pole");
 		addChildProperty("Zero", "http://www.fdsn.org/xml/station/1", "Zero");
+		addChildProperty("Pole", "http://www.fdsn.org/xml/station/1", "Pole");
 	}
 };
 
