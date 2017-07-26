@@ -1934,7 +1934,12 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	stages.sort(respLowerThan);
 
 	if ( resp0 != NULL ) {
-		try { sc_stream->setGain(resp0->instrumentSensitivity().value()); }
+		try {
+			sc_stream->setGain(resp0->instrumentSensitivity().value());
+#if LOG_STAGES
+			cerr << " + Gain " << sc_stream->gain() << endl;
+#endif
+		}
 		catch ( ... ) { sc_stream->setGain(Core::None); }
 		try { sc_stream->setGainFrequency(resp0->instrumentSensitivity().frequency()); }
 		catch ( ... ) { sc_stream->setGainFrequency(Core::None); }
@@ -1970,6 +1975,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	}
 
 	// If orientation is available and gain is negative, invert orientation
+	/*
 	if ( hasOrientation ) {
 		try {
 			if ( sc_stream->gain() < 0 ) {
@@ -1983,6 +1989,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		}
 		catch ( ... ) {}
 	}
+	*/
 
 	sc_stream->setDataloggerSerialNumber("");
 
