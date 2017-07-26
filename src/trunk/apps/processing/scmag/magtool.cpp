@@ -701,15 +701,19 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 	for ( size_t i = 0; i < origin->magnitudeCount(); ++i ) {
 		NetMag *nmag = origin->magnitude(i);
 		const std::string &type = nmag->type();
+		int n = 0;
+
 		if ( type == _summaryMagnitudeType )
 			continue;
 
 		if ( !isTypeEnabledForSummaryMagnitude(type) ) continue;
 
-		int n = nmag->stationCount();
+		try { n = nmag->stationCount(); }
+		catch ( ... ) {}
+
 		if ( n < _summaryMagnitudeMinStationCount ) continue;
 
-		double a=*_defaultCoefficients.a, b=*_defaultCoefficients.b; // defaults
+		double a = *_defaultCoefficients.a, b=*_defaultCoefficients.b; // defaults
 
 		Coefficients::iterator it = _magnitudeCoefficients.find(type);
 		if ( it != _magnitudeCoefficients.end() ) {
@@ -718,14 +722,14 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 		}
 
 		double weight = a*n+b;
-		if (weight<=0)
+		if ( weight <= 0 )
 			continue;
 
 		totalWeight += weight;
 		value += weight*nmag->magnitude().value();
 		// The total count is currently the maximum count for any individual magnitude.
 		// FIXME: Something better is needed here.
-		count  = nmag->stationCount() > count ? nmag->stationCount() : count;
+		count  = n > count ? n : count;
 	}
 
 	// No magnitudes available
