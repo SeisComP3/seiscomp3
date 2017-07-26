@@ -30,6 +30,7 @@ class FDSNStationXML;
 class Station;
 class Channel;
 class ResponseStage;
+class BaseFilter;
 
 }
 
@@ -49,6 +50,26 @@ class DataloggerCalibration;
 class Decimation;
 
 }
+
+
+MAKEENUM(ResponseType,
+	EVALUES(
+		RT_None,
+		RT_FIR,
+		RT_RC,
+		RT_PAZ,
+		RT_Poly,
+		RT_FAP
+	),
+	ENAMES(
+		"None",
+		"FIR",
+		"RC",
+		"PAZ",
+		"Poly",
+		"FAP"
+	)
+);
 
 
 //! \brief Converter class for FDSNXML -> SC3 that works on an
@@ -124,9 +145,9 @@ class Convert2SC3 : public Converter {
 		                            const FDSNXML::Channel *);
 
 		DataModel::Sensor *
-		updateSensor(const std::string &name,
-		             const FDSNXML::Channel *,
-		             const FDSNXML::ResponseStage *resp);
+		updateSensor(const std::string &name, const FDSNXML::Channel *,
+		             const FDSNXML::ResponseStage *resp,
+		             ResponseType stageType, const FDSNXML::BaseFilter *filter);
 
 		DataModel::SensorCalibration *
 		updateSensorCalibration(DataModel::Sensor *, DataModel::Stream *,

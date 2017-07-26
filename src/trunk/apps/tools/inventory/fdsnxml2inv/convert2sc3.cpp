@@ -62,26 +62,6 @@ namespace {
 #define DIGITAL     "COUNTS"
 
 
-MAKEENUM(ResponseType,
-	EVALUES(
-		RT_None,
-		RT_FIR,
-		RT_RC,
-		RT_PAZ,
-		RT_Poly,
-		RT_FAP
-	),
-	ENAMES(
-		"None",
-		"FIR",
-		"RC",
-		"PAZ",
-		"Poly",
-		"FAP"
-	)
-);
-
-
 typedef pair<double,double> Location;
 typedef pair<Location,double> LocationElevation;
 typedef pair<string,Location> EpochIndex;
@@ -585,46 +565,6 @@ bool equal(const DataModel::Sensor *s1, const DataModel::Sensor *s2) {
 }
 
 
-bool isFIRResponse(const FDSNXML::ResponseStage *resp) {
-	if ( resp == NULL ) return false;
-	try { resp->fIR(); return true; }
-	catch ( ... ) {}
-	return false;
-}
-
-
-bool isCoeffResponse(const FDSNXML::ResponseStage *resp) {
-	if ( resp == NULL ) return false;
-	try { resp->coefficients(); return true; }
-	catch ( ... ) {}
-	return false;
-}
-
-
-bool isPAZResponse(const FDSNXML::ResponseStage *resp) {
-	if ( resp == NULL ) return false;
-	try { resp->polesZeros(); return true; }
-	catch ( ... ) {}
-	return false;
-}
-
-
-bool isFAPResponse(const FDSNXML::ResponseStage *resp) {
-	if ( resp == NULL ) return false;
-	try { resp->responseList(); return true; }
-	catch ( ... ) {}
-	return false;
-}
-
-
-bool isPolyResponse(const FDSNXML::ResponseStage *resp) {
-	if ( resp == NULL ) return false;
-	try { resp->polynomial(); return true; }
-	catch ( ... ) {}
-	return false;
-}
-
-
 bool isElectric(const string &unit) {
 	return unit == AMPERE || unit == VOLTAGE;
 }
@@ -700,31 +640,6 @@ string getBaseUnit(const string &unitText) {
 	size_t pos = unitText.find(' ');
 	if ( pos == string::npos ) return unitText;
 	return unitText.substr(0, pos);
-}
-
-
-OPT(FDSNXML::UnitsType) sensorUnit(const FDSNXML::ResponseStage *resp,
-                                   const FDSNXML::PolesAndZeros *&paz,
-                                   const FDSNXML::ResponseList *&rl,
-                                   const FDSNXML::Polynomial *&poly) {
-	paz = NULL;
-	rl = NULL;
-	poly = NULL;
-
-	if ( isPAZResponse(resp) ) {
-		paz = &resp->polesZeros();
-		return paz->inputUnits();
-	}
-	else if ( isFAPResponse(resp) ) {
-		rl = &resp->responseList();
-		return rl->inputUnits();
-	}
-	else if ( isPolyResponse(resp) ) {
-		poly = &resp->polynomial();
-		return poly->inputUnits();
-	}
-
-	return Core::None;
 }
 
 
@@ -1899,11 +1814,10 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	}
 
 	// Set orientation
-	bool hasOrientation = false;
-	try { sc_stream->setAzimuth(cha->azimuth().value()); hasOrientation = true; }
+	try { sc_stream->setAzimuth(cha->azimuth().value()); }
 	catch ( ... ) {}
 	try { sc_stream->setDip(cha->dip().value()); }
-	catch ( ... ) { hasOrientation = false; }
+	catch ( ... ) {}
 
 	// Set datalogger/sensor channel according to the component code
 	if ( sc_stream->code().substr(2,1) == "N" || sc_stream->code().substr(2,1) == "1" ) {
@@ -1973,23 +1887,6 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		                 sc_loc->station()->code().c_str(),
 		                 sc_loc->code().c_str(), sc_stream->code().c_str());
 	}
-
-	// If orientation is available and gain is negative, invert orientation
-	/*
-	if ( hasOrientation ) {
-		try {
-			if ( sc_stream->gain() < 0 ) {
-				if ( sc_stream->azimuth() < 180.0 )
-					sc_stream->setAzimuth(sc_stream->azimuth() + 180.0);
-				else
-					sc_stream->setAzimuth(sc_stream->azimuth() - 180.0);
-				sc_stream->setDip(-sc_stream->dip());
-				sc_stream->setGain(-sc_stream->gain());
-			}
-		}
-		catch ( ... ) {}
-	}
-	*/
 
 	sc_stream->setDataloggerSerialNumber("");
 
@@ -2095,7 +1992,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 			                    sc_stream->code() + "." +
 			                    date2str(sc_stream->start());
 
-			sc_sens = updateSensor(sensorName, cha, stage);
+			sc_sens = updateSensor(sensorName, cha, stage, stageType, filter);
 			if ( sc_sens ) {
 				sc_stream->setSensor(sc_sens->publicID());
 				process(sc_sens.get(), sc_stream.get(), cha, stage);
@@ -2345,279 +2242,6 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 			if ( !digitalChain.empty() ) digitalChain += " ";
 			digitalChain += abstractResponse->publicID();
 		}
-
-#if 0
-		if ( firstStage ) {
-			if ( !isElectric(inputUnit) && isElectric(outputUnit) ) {
-				if ( inputUnit != sc_stream->gainUnit() ) {
-					SEISCOMP_WARNING("%s: sensor input unit does not match channel instrument unit: %s != %s",
-					                 chaCode.c_str(), inputUnit.c_str(), outputUnit.c_str());
-				}
-
-				// This is out sensor stage
-				// Update sensor information
-				string sensorName = sc_loc->station()->network()->code() + "." +
-				                    sc_loc->station()->code() + "." + sc_loc->code() +
-				                    sc_stream->code() + "." +
-				                    date2str(sc_stream->start());
-
-				DataModel::SensorPtr sc_sens = updateSensor(sensorName, cha, stage);
-				if ( sc_sens ) {
-					sc_stream->setSensor(sc_sens->publicID());
-					process(sc_sens.get(), sc_stream.get(), cha, stage);
-				}
-				else {
-					SEISCOMP_ERROR("Something wrong happened when creating a sensor, unsupported filter type %s?",
-					               stageType.toString());
-					return false;
-				}
-			}
-
-			firstStage = false;
-			continue;
-		}
-
-		// This block handles all subsequent datalogger stages
-		if ( !sc_dl ) {
-			string dataloggerName = sc_loc->station()->network()->code() + "." +
-			                        sc_loc->station()->code() + "." + sc_loc->code() +
-			                        sc_stream->code() + "." +
-			                        date2str(sc_stream->start());
-			sc_dl = updateDatalogger(dataloggerName, cha);
-			if ( !sc_dl ) {
-				SEISCOMP_ERROR("Something wrong happened when creating a datalogger");
-				return false;
-			}
-
-			sc_stream->setDatalogger(sc_dl->publicID());
-
-			int numerator, denominator;
-
-			try {
-				numerator = sc_stream->sampleRateNumerator();
-				denominator = sc_stream->sampleRateDenominator();
-			}
-			catch ( ... ) {
-				SEISCOMP_WARNING("%s: no sampling rate given, ignoring all decimation stages",
-				                 chaCode.c_str());
-				break;
-			}
-
-			sc_deci = sc_dl->decimation(DataModel::DecimationIndex(numerator, denominator));
-			if ( !sc_deci ) {
-				sc_deci = new DataModel::Decimation();
-				sc_deci->setSampleRateNumerator(numerator);
-				sc_deci->setSampleRateDenominator(denominator);
-				sc_dl->add(sc_deci.get());
-				newDeciInstance = true;
-			}
-			else {
-				try { oldAnalogueFilterChain = sc_deci->analogueFilterChain().content(); }
-				catch ( ... ) {}
-				try { oldDigitalFilterChain = sc_deci->digitalFilterChain().content(); }
-				catch ( ... ) {}
-				newDeciInstance = false;
-				SEISCOMP_DEBUG("Reused datalogger decimation for stream %s",
-				               sc_stream->code().c_str());
-			}
-		}
-
-		// The decimation does exist here, otherwise it is an error
-		bool isAnalog;
-
-		if ( isAnalogDataloggerStage(inputUnit, outputUnit) )
-			isAnalog = true;
-		else if ( isDigitalDataloggerStage(inputUnit, outputUnit) )
-			isAnalog = false;
-		else {
-			SEISCOMP_ERROR("%s: stage %d is neither an analogue nor a digital stage, don't know what to do",
-			               chaCode.c_str(), stage->number());
-			return false;
-		}
-
-		DataModel::PublicObject *abstractResponse = NULL;
-
-		switch ( stageType ) {
-			case RT_PAZ:
-			{
-				const FDSNXML::PolesAndZeros *paz = &stage->polesZeros();
-				bool newPAZ = true;
-
-				// Create PAZ ...
-				DataModel::ResponsePAZPtr rp = convert(stage, paz);
-				checkPAZ(rp.get());
-
-				for ( size_t f = 0; f < _inv->responsePAZCount(); ++f ) {
-					DataModel::ResponsePAZ *paz = _inv->responsePAZ(f);
-					if ( equal(paz, rp.get()) ) {
-						rp = paz;
-						newPAZ = false;
-						break;
-					}
-				}
-
-				if ( newPAZ ) {
-					addRespToInv(rp.get());
-					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
-				}
-				else {
-					//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
-				}
-
-				abstractResponse = rp.get();
-				break;
-			}
-
-			case RT_Poly:
-			{
-				const FDSNXML::Polynomial *poly = &stage->polynomial();
-				bool newPoly = true;
-
-				DataModel::ResponsePolynomialPtr rp = convert(stage, poly);
-				checkPoly(rp.get());
-
-				for ( size_t f = 0; f < _inv->responsePolynomialCount(); ++f ) {
-					DataModel::ResponsePolynomial *poly = _inv->responsePolynomial(f);
-					if ( equal(poly, rp.get()) ) {
-						rp = poly;
-						newPoly = false;
-						break;
-					}
-				}
-
-				if ( newPoly ) {
-					addRespToInv(rp.get());
-					//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
-				}
-				else {
-					//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
-				}
-
-				abstractResponse = rp.get();
-				break;
-			}
-
-			case RT_FAP:
-			{
-				const FDSNXML::ResponseList *rl = &stage->responseList();
-				bool newFAP = true;
-
-				// Create FAP ...
-				DataModel::ResponseFAPPtr rp = convert(stage, rl);
-				checkFAP(rp.get());
-
-				for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
-					DataModel::ResponseFAP *fap = _inv->responseFAP(f);
-					if ( equal(fap, rp.get()) ) {
-						rp = fap;
-						newFAP = false;
-						break;
-					}
-				}
-
-				if ( newFAP ) {
-					addRespToInv(rp.get());
-					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
-				}
-				else {
-					//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
-				}
-
-				abstractResponse = rp.get();
-				break;
-			}
-
-			case RT_RC:
-			{
-				bool newFIR = true;
-
-				DataModel::ResponseFIRPtr rf;
-				const FDSNXML::Coefficients *coeff = &stage->coefficients();
-				rf = convert(*it, coeff);
-
-				if ( !rf ) {
-					SEISCOMP_ERROR("%s: stage %d contains an unsupported filter configuration",
-					               chaCode.c_str(), stage->number());
-					return false;
-				}
-
-				checkFIR(rf.get());
-
-				for ( size_t f = 0; f < _inv->responseFIRCount(); ++f ) {
-					DataModel::ResponseFIR *fir = _inv->responseFIR(f);
-					if ( equal(fir, rf.get()) ) {
-						rf = fir;
-						newFIR = false;
-						break;
-					}
-				}
-
-				if ( newFIR ) {
-					addRespToInv(rf.get());
-					//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
-				}
-				else {
-					//SEISCOMP_DEBUG("Reuse FIR filter from coefficients: %s", rf->publicID().c_str());
-				}
-
-				abstractResponse = rf.get();
-				break;
-			}
-
-			case RT_FIR:
-			{
-				bool newFIR = true;
-
-				DataModel::ResponseFIRPtr rf;
-				const FDSNXML::FIR *fir = &stage->fIR();
-				rf = convert(stage, fir);
-
-				if ( !rf ) {
-					SEISCOMP_ERROR("%s: stage %d contains an unsupported filter configuration",
-					               chaCode.c_str(), stage->number());
-					return false;
-				}
-
-				checkFIR(rf.get());
-
-				for ( size_t f = 0; f < _inv->responseFIRCount(); ++f ) {
-					DataModel::ResponseFIR *fir = _inv->responseFIR(f);
-					if ( equal(fir, rf.get()) ) {
-						rf = fir;
-						newFIR = false;
-						break;
-					}
-				}
-
-				if ( newFIR ) {
-					addRespToInv(rf.get());
-					//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
-				}
-				else {
-					//SEISCOMP_DEBUG("Reuse FIR filter from coefficients: %s", rf->publicID().c_str());
-				}
-
-				abstractResponse = rf.get();
-				break;
-			}
-
-			default:
-				SEISCOMP_ERROR("%s: stage %d contains an unsupported or no filter",
-				               chaCode.c_str(), stage->number());
-				return false;
-		}
-
-		if ( abstractResponse != NULL ) {
-			if ( isAnalog ) {
-				if ( !analogueFilterChain.empty() ) analogueFilterChain += " ";
-				analogueFilterChain += abstractResponse->publicID();
-			}
-			else {
-				if ( !digitalFilterChain.empty() ) digitalFilterChain += " ";
-				digitalFilterChain += abstractResponse->publicID();
-			}
-		}
-#endif
 	}
 
 	if ( sc_deci ) {
@@ -2857,12 +2481,10 @@ Convert2SC3::updateDataloggerCalibration(DataModel::Datalogger *sc_dl,
 DataModel::Sensor *
 Convert2SC3::updateSensor(const std::string &name,
                           const FDSNXML::Channel *epoch,
-                          const FDSNXML::ResponseStage *resp) {
-	const FDSNXML::PolesAndZeros *paz;
-	const FDSNXML::ResponseList *rl;
-	const FDSNXML::Polynomial *poly;
-
-	OPT(FDSNXML::UnitsType) inputUnit = sensorUnit(resp, paz, rl, poly);
+                          const FDSNXML::ResponseStage *resp,
+                          ResponseType stageType,
+                          const FDSNXML::BaseFilter *filter) {
+	FDSNXML::UnitsType inputUnit = filter->inputUnits();
 
 	DataModel::SensorPtr sc_sens = DataModel::Sensor::Create();
 	//sc_sens->setName(sc_sens->publicID());
@@ -2889,96 +2511,109 @@ Convert2SC3::updateSensor(const std::string &name,
 	}
 	catch ( ... ) {}
 
-	if ( inputUnit ) {
-		sc_sens->setUnit(inputUnit->name());
-		if ( !inputUnit->description().empty() ) {
-			DataModel::Blob blob;
-			blob.setContent("{\"unit\":\"" + inputUnit->description() + "\"}");
-			sc_sens->setRemark(blob);
-		}
+	sc_sens->setUnit(inputUnit.name());
+	if ( !inputUnit.description().empty() ) {
+		DataModel::Blob blob;
+		blob.setContent("{\"unit\":\"" + inputUnit.description() + "\"}");
+		sc_sens->setRemark(blob);
 	}
 
 	if ( !sc_sens->unit().empty() ) emptySensor = false;
 
-	if ( paz ) {
-		DataModel::ResponsePAZPtr rp = convert(resp, paz);
-		checkPAZ(rp.get());
+	switch ( stageType ) {
+		case RT_PAZ:
+		{
+			DataModel::ResponsePAZPtr rp = convert(resp, &resp->polesZeros());
+			checkPAZ(rp.get());
 
-		bool newPAZ = true;
-		for ( size_t f = 0; f < _inv->responsePAZCount(); ++f ) {
-			DataModel::ResponsePAZ *paz = _inv->responsePAZ(f);
-			if ( equal(paz, rp.get()) ) {
-				rp = paz;
-				newPAZ = false;
-				break;
+			bool newPAZ = true;
+			for ( size_t f = 0; f < _inv->responsePAZCount(); ++f ) {
+				DataModel::ResponsePAZ *paz = _inv->responsePAZ(f);
+				if ( equal(paz, rp.get()) ) {
+					rp = paz;
+					newPAZ = false;
+					break;
+				}
 			}
-		}
 
-		if ( newPAZ ) {
-			addRespToInv(rp.get());
-			SEISCOMP_DEBUG("Added new Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
-		}
-		else {
-			SEISCOMP_DEBUG("Reused Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
-		}
-
-		SEISCOMP_DEBUG("Update Sensor.response: %s -> %s",
-		               sc_sens->publicID().c_str(), rp->publicID().c_str());
-
-		sc_sens->setResponse(rp->publicID());
-		emptySensor = false;
-	}
-	else if ( rl ) {
-		DataModel::ResponseFAPPtr rp = convert(resp, rl);
-		checkFAP(rp.get());
-
-		bool newFAP = true;
-		for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
-			DataModel::ResponseFAP *fap = _inv->responseFAP(f);
-			if ( equal(fap, rp.get()) ) {
-				rp = fap;
-				newFAP = false;
-				break;
+			if ( newPAZ ) {
+				addRespToInv(rp.get());
+				SEISCOMP_DEBUG("Added new Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
 			}
-		}
-
-		if ( newFAP ) {
-			addRespToInv(rp.get());
-			//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
-		}
-		else {
-			//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
-		}
-
-		sc_sens->setResponse(rp->publicID());
-		emptySensor = false;
-	}
-	else if ( poly ) {
-		DataModel::ResponsePolynomialPtr rp = convert(resp, poly);
-		checkPoly(rp.get());
-
-		bool newPoly = true;
-		for ( size_t f = 0; f < _inv->responsePolynomialCount(); ++f ) {
-			DataModel::ResponsePolynomial *poly = _inv->responsePolynomial(f);
-			if ( equal(poly, rp.get()) ) {
-				rp = poly;
-				newPoly = false;
-				break;
+			else {
+				SEISCOMP_DEBUG("Reused Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
 			}
+
+			SEISCOMP_DEBUG("Update Sensor.response: %s -> %s",
+			               sc_sens->publicID().c_str(), rp->publicID().c_str());
+
+			sc_sens->setResponse(rp->publicID());
+			emptySensor = false;
+			break;
 		}
 
-		if ( newPoly ) {
-			addRespToInv(rp.get());
-			//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
-		}
-		else {
-			//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
+		case RT_FAP:
+		{
+			DataModel::ResponseFAPPtr rp = convert(resp, &resp->responseList());
+			checkFAP(rp.get());
+
+			bool newFAP = true;
+			for ( size_t f = 0; f < _inv->responseFAPCount(); ++f ) {
+				DataModel::ResponseFAP *fap = _inv->responseFAP(f);
+				if ( equal(fap, rp.get()) ) {
+					rp = fap;
+					newFAP = false;
+					break;
+				}
+			}
+
+			if ( newFAP ) {
+				addRespToInv(rp.get());
+				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
+			}
+			else {
+				//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
+			}
+
+			sc_sens->setResponse(rp->publicID());
+			emptySensor = false;
+
+			break;
 		}
 
-		sc_sens->setLowFrequency(poly->frequencyLowerBound().value());
-		sc_sens->setHighFrequency(poly->frequencyUpperBound().value());
-		sc_sens->setResponse(rp->publicID());
-		emptySensor = false;
+		case RT_Poly:
+		{
+			DataModel::ResponsePolynomialPtr rp = convert(resp, &resp->polynomial());
+			checkPoly(rp.get());
+
+			bool newPoly = true;
+			for ( size_t f = 0; f < _inv->responsePolynomialCount(); ++f ) {
+				DataModel::ResponsePolynomial *poly = _inv->responsePolynomial(f);
+				if ( equal(poly, rp.get()) ) {
+					rp = poly;
+					newPoly = false;
+					break;
+				}
+			}
+
+			if ( newPoly ) {
+				addRespToInv(rp.get());
+				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
+			}
+			else {
+				//SEISCOMP_DEBUG("reused polynomial response from poly: %s", rp->publicID().c_str());
+			}
+
+			sc_sens->setLowFrequency(resp->polynomial().frequencyLowerBound().value());
+			sc_sens->setHighFrequency(resp->polynomial().frequencyUpperBound().value());
+			sc_sens->setResponse(rp->publicID());
+			emptySensor = false;
+
+			break;
+		}
+
+		default:
+			break;
 	}
 
 	/*
