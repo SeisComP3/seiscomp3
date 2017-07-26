@@ -105,6 +105,7 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 		typedef std::map<std::string, TimeWindowFilter> FilterMap;
 
 		std::string     _name;
+		bool            _closeRequested;
 		std::fstream    _fstream;
 		std::istream   *_current;
 		FilterMap       _filter;
