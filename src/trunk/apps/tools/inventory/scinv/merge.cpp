@@ -274,6 +274,28 @@ bool equal(const Sensor *s1, const Sensor *s2) {
 }
 
 
+class InventoryVisitor : public Seiscomp::DataModel::Visitor {
+	public:
+		InventoryVisitor(Seiscomp::DataModel::Inventory *inv,
+		                 InventoryTask::SourceMap *map)
+		: _source(inv), _map(map) {}
+
+	public:
+		bool visit(PublicObject *po) {
+			(*_map)[po] = _source;
+			return true;
+		}
+
+		virtual void visit(Object *o) {
+			(*_map)[o] = _source;
+		}
+
+	private:
+		Seiscomp::DataModel::Inventory *_source;
+		InventoryTask::SourceMap *_map;
+};
+
+
 
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -305,8 +327,12 @@ Merge::Merge(Inventory *inv) : InventoryTask(inv) {}
 		target->add(o.get());\
 	}
 
+
 bool Merge::push(Inventory *inv) {
 	if ( _inv == NULL ) return false;
+
+	InventoryVisitor bindToSource(inv, &_sources);
+	inv->accept(&bindToSource);
 
 	bool bckReg = PublicObject::IsRegistrationEnabled();
 	bool bckNot = Notifier::IsEnabled();
@@ -420,6 +446,8 @@ bool Merge::merge(bool stripUnreferenced) {
 			process(r);
 	}
 
+	_sources.clear();
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -497,6 +525,7 @@ bool Merge::process(const Network *net) {
 	bool newInstance = false;
 	if ( !sc_net ) {
 		sc_net = create<Network>(net->publicID());
+		_sources[sc_net.get()] = _sources[net];
 		newInstance = true;
 	}
 	else {
@@ -533,6 +562,7 @@ bool Merge::process(Network *net, const Station *sta) {
 	bool newInstance = false;
 	if ( !sc_sta ) {
 		sc_sta = create<Station>(sta->publicID());
+		_sources[sc_sta.get()] = _sources[sta];
 		newInstance = true;
 	}
 	else {
@@ -574,6 +604,7 @@ bool Merge::process(Station *sta, const SensorLocation *loc) {
 	bool newInstance = false;
 	if ( !sc_loc ) {
 		sc_loc = create<SensorLocation>(loc->publicID());
+		_sources[sc_loc.get()] = _sources[loc];
 		newInstance = true;
 	}
 	else {
@@ -616,6 +647,7 @@ bool Merge::process(SensorLocation *loc, const Stream *stream) {
 	bool newInstance = false;
 	if ( !sc_cha ) {
 		sc_cha = new Stream();
+		_sources[sc_cha.get()] = _sources[stream];
 		newInstance = true;
 
 		// Assign values
@@ -715,6 +747,7 @@ bool Merge::process(SensorLocation *loc, const AuxStream *aux) {
 	bool newInstance = false;
 	if ( !sc_aux ) {
 		sc_aux = new AuxStream();
+		_sources[sc_aux.get()] = _sources[aux];
 		newInstance = true;
 	}
 
@@ -753,6 +786,7 @@ bool Merge::process(Stream *cha, const Datalogger *dl) {
 	bool newInstance = false;
 	if ( !sc_dl ) {
 		sc_dl = create<Datalogger>(dl->publicID());
+		_sources[sc_dl.get()] = _sources[dl];
 		newInstance = true;
 	}
 
@@ -804,6 +838,7 @@ bool Merge::process(Datalogger *dl, const Decimation *deci) {
 	bool newInstance = false;
 	if ( !sc_deci ) {
 		sc_deci = new Decimation();
+		_sources[sc_deci.get()] = _sources[deci];
 		newInstance = true;
 	}
 
@@ -934,6 +969,7 @@ bool Merge::process(Datalogger *dl, const DataloggerCalibration *cal) {
 	bool newInstance = false;
 	if ( !sc_cal ) {
 		sc_cal = new DataloggerCalibration();
+		_sources[sc_cal.get()] = _sources[cal];
 		newInstance = true;
 	}
 
@@ -958,6 +994,7 @@ bool Merge::process(Stream *cha, const Sensor *sensor) {
 	bool newInstance = false;
 	if ( !sc_sensor ) {
 		sc_sensor = create<Sensor>(sensor->publicID());
+		_sources[sc_sensor.get()] = _sources[sensor];
 		newInstance = true;
 	}
 
@@ -1022,6 +1059,7 @@ bool Merge::process(Sensor *sensor, const SensorCalibration *cal) {
 	bool newInstance = false;
 	if ( !sc_cal ) {
 		sc_cal = new SensorCalibration();
+		_sources[sc_cal.get()] = _sources[cal];
 		newInstance = true;
 	}
 
@@ -1046,6 +1084,7 @@ bool Merge::process(AuxStream *aux, const AuxDevice *device) {
 	bool newInstance = false;
 	if ( !sc_device ) {
 		sc_device = create<AuxDevice>(device->publicID());
+		_sources[sc_device.get()] = _sources[device];
 		newInstance = true;
 	}
 
@@ -1078,6 +1117,7 @@ bool Merge::process(AuxDevice *device, const AuxSource *source) {
 	bool newInstance = false;
 	if ( !sc_source ) {
 		sc_source = new AuxSource();
+		_sources[sc_source.get()] = _sources[source];
 		newInstance = true;
 	}
 

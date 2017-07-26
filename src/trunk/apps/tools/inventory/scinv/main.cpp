@@ -574,6 +574,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -670,6 +672,8 @@ class InventoryManager : public Client::Application,
 					cerr << "No inventory found (ignored): " << files[i] << endl;
 					continue;
 				}
+
+				_inventorySources[inv.get()] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
@@ -963,6 +967,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -1043,6 +1049,8 @@ class InventoryManager : public Client::Application,
 					cerr << "No inventory found (ignored): " << files[i] << endl;
 					continue;
 				}
+
+				_inventorySources[inv.get()] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
@@ -1385,6 +1393,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -1591,7 +1601,9 @@ class InventoryManager : public Client::Application,
 
 		void publish(LogHandler::Level level, const char *message,
 		             const DataModel::Object *obj1,
-		             const DataModel::Object *obj2) {
+		             const Seiscomp::DataModel::Inventory *source1,
+		             const DataModel::Object *obj2,
+		             const Seiscomp::DataModel::Inventory *source2) {
 			if ( level == LogHandler::Conflict ) ++_conflicts;
 			else if ( level == LogHandler::Error ) ++_errors;
 			else if ( level == LogHandler::Warning ) ++_warnings;
@@ -1599,6 +1611,17 @@ class InventoryManager : public Client::Application,
 
 			if ( level == LogHandler::Conflict ) {
 				_logs << "C " << message << endl;
+
+				std::string file1 = _inventorySources[source1];
+				std::string file2 = _inventorySources[source2];
+
+				_logs << "  Defined in ";
+				if ( file1.empty() ) _logs << "<unknown>"; else _logs << file1;
+				_logs << " and " << endl;
+				_logs << "             ";
+				if ( file2.empty() ) _logs << "<unknown>"; else _logs << file2;
+				_logs << endl;
+
 				_continueOperation = false;
 
 				if ( obj1 != NULL && obj2 != NULL )
@@ -1635,19 +1658,21 @@ class InventoryManager : public Client::Application,
 
 
 	private:
-		Task   *_currentTask;
-		string  _operation;
-		string  _filebase;
-		string  _rcdir;
-		string  _keydir;
-		string  _output;
-		string  _level;
-		bool    _continueOperation;
+		typedef std::map<const DataModel::Inventory*, string> SourceMap;
+		Task     *_currentTask;
+		string    _operation;
+		string    _filebase;
+		string    _rcdir;
+		string    _keydir;
+		string    _output;
+		string    _level;
+		bool      _continueOperation;
 		std::stringstream  _logs;
-		int     _conflicts;
-		int     _errors;
-		int     _warnings;
-		int     _unresolved;
+		int       _conflicts;
+		int       _errors;
+		int       _warnings;
+		int       _unresolved;
+		SourceMap _inventorySources;
 };
 
 

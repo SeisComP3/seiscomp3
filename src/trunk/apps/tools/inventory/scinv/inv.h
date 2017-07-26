@@ -43,11 +43,19 @@ struct LogHandler {
 	 */
 	virtual void publish(Level level, const char *message,
 	                     const Seiscomp::DataModel::Object *obj1,
-	                     const Seiscomp::DataModel::Object *obj2) = 0;
+	                     const Seiscomp::DataModel::Inventory *source1,
+	                     const Seiscomp::DataModel::Object *obj2,
+	                     const Seiscomp::DataModel::Inventory *source2) = 0;
 };
 
 
 class InventoryTask : public Task {
+	public:
+		typedef Seiscomp::DataModel::Object Object;
+		typedef Seiscomp::DataModel::Inventory Inventory;
+		typedef std::map<const Object*,Inventory*> SourceMap;
+
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -109,8 +117,6 @@ class InventoryTask : public Task {
 	//  Protected types and members
 	// ------------------------------------------------------------------
 	protected:
-		typedef Seiscomp::DataModel::Object Object;
-		typedef Seiscomp::DataModel::Inventory Inventory;
 		typedef std::map<std::string, const Object*> ObjectLookup;
 		typedef std::map<std::string, std::string> IDMap;
 		typedef std::set<const Object*> ObjectSet;
@@ -139,6 +145,7 @@ class InventoryTask : public Task {
 		Session       _session;
 
 		LogHandler   *_logHandler;
+		SourceMap     _sources;
 };
 
 

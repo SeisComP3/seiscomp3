@@ -83,7 +83,7 @@ void InventoryTask::log(LogHandler::Level level, const char *message,
                         const Seiscomp::DataModel::Object *obj1,
                         const Seiscomp::DataModel::Object *obj2) {
 	if ( _logHandler == NULL ) return;
-	_logHandler->publish(level, message, obj1, obj2);
+	_logHandler->publish(level, message, obj1, _sources[obj1], obj2, _sources[obj2]);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
