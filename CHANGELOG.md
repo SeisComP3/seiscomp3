@@ -23,6 +23,18 @@
     3 components of a configured station. This only applied if ```useConfiguredStreams```
     is active (default).
 
+* scinv
+
+  * Print file source of conflicting definitions
+
+* seiscomp
+
+  * An init script can not forward its configuration to another module. This is
+    especially useful if e.g. ```seiscomp update-config scautopick``` is ran
+    which did not do anything. Now it forwards its configuration to module
+    *trunk* and will update the bindings database. The old behaviour has always
+    confused users.
+
 
 ## Release 2017.124
 

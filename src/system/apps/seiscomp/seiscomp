@@ -190,8 +190,6 @@ def stop_kernel_modules():
 def on_setup(args, flags):
   import seiscomp3.Setup
 
-  params = {}
-
   if "stdin" in flags:
     cfg = seiscomp3.Config.Config()
     if cfg.readConfig("-") == False:
@@ -602,14 +600,52 @@ def on_install_deps_help(args):
 
 
 def on_update_config(args, flags):
-  print "* starting kernel modules"
-  start_kernel_modules()
-  for mod in config_mods:
-    if len(args) == 0 or mod.name in args:
-      print "* configure %s" % mod.name
-      if mod.updateConfig() != 0:
-        error("updating configuration for %s failed" % mod.name)
-        return 1
+  kernelModsStarted = False
+  configuredMods = {}
+
+  listOfMods = args
+  if len(listOfMods) == 0:
+    listOfMods = []
+    for mod in config_mods: listOfMods.append(mod.name)
+
+  while len(listOfMods) > 0:
+    for mod in config_mods:
+      if mod.name in listOfMods:
+        if not kernelModsStarted and mod.requiresKernelModules():
+          print "* starting kernel modules"
+          start_kernel_modules()
+          kernelModsStarted = True
+        print "* configure %s" % mod.name
+
+        proxy = None
+
+        try:
+          proxy = mod.updateConfigProxy()
+          if isinstance(proxy, basestring):
+            configuredMods.setdefault(proxy, False)
+        except Exception, e:
+          pass
+
+        if proxy is None:
+          result = mod.updateConfig()
+
+          try:
+            error_code = int(result)
+          except Exception, e:
+            error("unexpected return type when updating configuration of %s" % mod.name)
+            return 1
+
+            if error_code != 0:
+              error("updating configuration for %s failed" % mod.name)
+              return 1
+
+        configuredMods[mod.name] = True
+
+    listOfMods = []
+    # Collect all unconfigured but indirectly requested mods
+    for name, configured in configuredMods.iteritems():
+      if not configured: listOfMods.append(name)
+
   return 0
 
 
