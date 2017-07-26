@@ -64,6 +64,8 @@ namespace Core {
    - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
    - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
    - Added Seiscomp::Gui::Application::messageGroups
+   - Added class Seiscomp::Math::Filtering::Min<T>
+   - Added class Seiscomp::Math::Filtering::Max<T>
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()
