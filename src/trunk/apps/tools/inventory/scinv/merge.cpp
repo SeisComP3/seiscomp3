@@ -611,7 +611,7 @@ bool Merge::process(Station *sta, const SensorLocation *loc) {
 		if ( !sc_loc->equal(*loc) ) {
 			stringstream ss;
 			ss << "Conflicting definitions for sensor location " << sta->network()->code()
-			   << "." << sta->code() << "." << loc->code() << " / "
+			   << "." << sta->code() << "." << (loc->code().empty() ? "--" : loc->code()) << " / "
 			   << loc->start().toString("%FT%T");
 			log(LogHandler::Conflict, ss.str().c_str(), sc_loc.get(), loc);
 		}
