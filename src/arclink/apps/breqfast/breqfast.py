@@ -64,7 +64,8 @@ ACC_DIR = BASEDIR+"/lib"
 FTP_DIR = BASEDIR+"/data"
 FTP_URL = "ftp://ftp.webdc.eu/breqfast"
 
-SMTP_SERVER = "smtp-server.gfz-potsdam.de"
+#SMTP_SERVER = "smtp-server.gfz-potsdam.de"
+#SMTP_SERVER = "localhost"
 EMAIL_ADDR = "breqfast@webdc.eu"
 EMAIL_FROM = "WebDC <breqfast@webdc.eu>"
 
@@ -404,7 +405,7 @@ def _check_time(beg_time, end_time):
 	Checks the validity of the given time span.
 	
 	@arguments: beg_time, a datetime object storing the start of time window
-	            end_time, a datetime object storing the end of time window
+				end_time, a datetime object storing the end of time window
 	@return: True if valid; False otherwise
 	"""
 	if beg_time > end_time or beg_time > datetime.datetime.today():
@@ -784,7 +785,10 @@ def submit_request(parser, req_name, breq_id):
 		volumecounts = 0
 		
 		for req in req_sent:
-			for vol in req.status().volume:
+			reqstatus = req.status()
+			if reqstatus.encrypted:
+				canJoin = False
+			for vol in reqstatus.volume:
 				if arclink_status_string(vol.status) == "OK" and vol.size > 0:
 					volumecounts += 1
 				if vol.encrypted and vol.size > 0:
