@@ -640,7 +640,7 @@ def check_request(fname, basename, parser):
 		if badtext != "":
 			badtext = "%s\n%s\n" % (_badtext,badtext)
 		if parser.failstr != "":
-			badtext = "%s\nThe following request lines are not Breq_fast conform:\n%s\n--> Look at http://www.iris.washington.edu/manuals/breq_fast.htm for the specification of Breq_fast requests.\n" % (badtext,parser.failstr)
+			badtext = "%s\nThe following request lines are not Breq_fast conform:\n%s\n--> Look at http://ds.iris.edu/ds/nodes/dmc/manuals/breq_fast/ for the specification of BREQ_FAST requests.\n" % (badtext,parser.failstr)
 		if noctext != "":
 			noctext = "%s\n%s" % (_noctext1,noctext)
 			noctext = "%s%s\n\n" % (noctext,_noctext2)
