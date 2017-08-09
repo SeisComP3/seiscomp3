@@ -74,7 +74,7 @@ LABEL = "breq_req"
 FORMAIL_BIN = "/usr/bin/formail"
 SENDMAIL_BIN = "/usr/sbin/sendmail"
 
-VERSION = "0.12 (2014.015)"
+VERSION = "0.13 (2017.221)"
 
 class BreqParser(object):
 	"""
@@ -179,8 +179,14 @@ class BreqParser(object):
 		if re.search(r'[?\*]+', station):
 			logs.debug("*** expanding %s for network: %s" % (station, network))
 
-			# FIXME: begin=None, end=None
-			db = self.mgr.get_inventory(network=re.sub("[?]+","*",network), station=re.sub("[?]+","*",station), begin=None, end=None) 
+                        n = re.sub("[?]+", "*", network)
+                        s = re.sub("[?]+", "*", station)
+
+			# FIXME: Following uses default values of
+			# start_time=None, end_time=None,
+			# but these should be set based on the time span
+			# being requested.
+			db = self.mgr.get_inventory(network=n, station=s)
 	
 			netlist = []
 			netlist = db.network.keys()
