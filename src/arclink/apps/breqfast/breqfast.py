@@ -16,7 +16,7 @@
 
 #   changes 2011.234, MB&Andres
 #   * Added support to multiples files in the case where no join is possible
-#  (proxy + encryption). 
+#  (proxy + encryption).
 #   * Created a BASEDIR variable pointing to base installation
 
 #   changes 2008.046, Mathias Hoffmann
@@ -167,7 +167,7 @@ class BreqParser(object):
 			self.failstr = "%sBreq_fast header must contain at least .NAME and .EMAIL arguments.\n" % self.failstr
 
 		# Longest local part 64 octets, + "@" + longest domain part 255 octets.
-		if self.tokendict.has_key("email") and len(self.tokendict["email"]) > 320:
+		if "email" in self.tokendict.keys() and len(self.tokendict["email"]) > 320:
 			self.failstr = "%s.EMAIL argument is too long.\n" % self.failstr
 
 	def __expand_net_station(self, network, station, beg_time, end_time):
@@ -425,12 +425,12 @@ def _check_availability(reqline):
 	result = child.read()
 	err = child.close()
 	if err:
-		raise RuntimeError, '%s failed with exit code %d' % (command, err)
+		raise RuntimeError('%s failed with exit code %d' % (command, err))
 
 	m = re.search("(\d+) files found", str(result))
 
 	if m:
-		if int(m.group(1)) > 0: 
+		if int(m.group(1)) > 0:
 			return True
 	return False
 
@@ -736,7 +736,7 @@ def build_filename(encrypted, compressed, req_args):
     endung = ""
     if compressed is True:
         endung = '.bz2'
-    elif compressed is None and req_args.has_key("compression"):
+    elif compressed is None and "compression" in req_args.keys():
         endung = '.bz2'
     if encrypted:
         endung = endung + '.openssl'
@@ -839,7 +839,6 @@ def submit_request(parser, req_name, breq_id):
 				if vol.encrypted and vol.size > 0:
 					canJoin = False
 
-		sufix = ""
 		addname = ""
 		fd_out = None
 
@@ -1172,4 +1171,3 @@ def set_logger(fname):
 
 if __name__ == "__main__":
     start()
-
