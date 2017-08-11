@@ -325,7 +325,7 @@ class BreqParser(object):
 		@arguments: path, the absolute path to file containing the
 				email Breq_fast request
 
-                """
+		"""
 		fh = file(path)
 
 		try:
@@ -440,7 +440,7 @@ def _check_time(beg_time, end_time):
 	Checks the validity of the given time span.
 
 	@arguments: beg_time, a datetime object storing the start of time window
-				end_time, a datetime object storing the end of time window
+		    end_time, a datetime object storing the end of time window
 	@return: True if valid; False otherwise
 	"""
 	if beg_time > end_time or beg_time > datetime.datetime.today():
@@ -536,7 +536,20 @@ _toolarge = "Unfortunately your request is too large for automatic processing.\n
 _emailtext = "You have requested data from the WebDC data archive. This request is now queued for automatic execution. Depending on the amount of data and the load of the system it may take some time until it will be processed. You will get an email message when it is finished."
 _nonetext = "None of your requested data have been found in our database. It will be forwarded to other data centers. Depending on the amount of data and the load of the system it may take some time until it will be processed. You will get an email message when it is finished."
 ### messages for resulting email ###
-_oktext1 = "Your breq_fast request to the WebDC has been processed.\n\nPlease find the resulting data file in your personal ftp directory:"
+_oktext1 = """
+Your breq_fast request to the WebDC has been processed.
+
+*NOTE*: BREQ_FAST service will not be supported here at GEOFON indefinitely.
+As yet there is no anticipated date for shutting down the service.
+However, some more modern methods are available to access waveform data from
+the GEOFON archive, and we encourage you to transition to using these. See
+
+    http://geofon.gfz-potsdam.de/waveform/breq_fast.php
+
+for more information.
+
+Please find the resulting data file in your personal FTP directory for a limited time.:
+"""
 _oktext1a = "Files with suffix .openssl contain restricted data and have been encrypted. Use 'openssl des-cbc -pass pass:<Password> -in <Input> -out <Output> -d' to decrypt. Remember that you should use the correct password based on the datacenter id of the file. The datacenter id is the field just before the '.seed' on the filename."
 _oktext2 = "In case of problems please send a message to geofon_dc@gfz-potsdam.de.\n\nIf you use data from the WebDC for a publication, please acknowledge the GEOFON Program of GFZ Potsdam."
 _noktext = "Your breq_fast request to the WebDC has been processed. We are very sorry, but unfortunately none of the requested data could be supplied."
@@ -663,12 +676,12 @@ def check_request(fname, basename, parser):
 	if len(parser.reqlist) > MAX_LINES:
 		sys.stderr.write("--> this request is too large!!\n")
 		msg = _toolarge + "\n----> reason for refusal: too many lines (after wildcard expansion)"
-		_write_status_file(os.path.join(SPOOL_DIR,"make",basename), "too_large", "")
+		_write_status_file(os.path.join(SPOOL_DIR, "make", basename), "too_large", "")
 	elif requestSize > maxRequestSize:
 		sys.stderr.write("--> this request is too large!!\n")
 		msg = _toolarge + "\n----> reason for refusal: request too large! (%.1f > %.1f GByte)" % (requestSize / gigabyte,
 													  maxRequestSize / gigabyte)
-		_write_status_file(os.path.join(SPOOL_DIR,"make",basename), "too_large", "")
+		_write_status_file(os.path.join(SPOOL_DIR, "make", basename), "too_large", "")
 	else:
 		### write the check status files ###
 		_write_status_file(ckname, "arc", arctext)
