@@ -899,8 +899,9 @@ DataModel::ResponsePolynomialPtr convert(const FDSNXML::ResponseStage *resp,
 	try { rp->setGainFrequency(resp->stageGain().frequency()); }
 	catch ( ... ) {}
 
-	// Type is not given in fdsnxml. Settings type to A (rad/sec)
-	rp->setFrequencyUnit("A");
+	// Frequency unit is fixed at Hz.
+	// https://github.com/FDSN/StationXML/blob/v1.0/fdsn-station.xsd#L790
+	rp->setFrequencyUnit("B");
 	const char *atstr = poly->approximationType().toString();
 	if ( atstr != NULL )
 		rp->setApproximationType(atstr);
