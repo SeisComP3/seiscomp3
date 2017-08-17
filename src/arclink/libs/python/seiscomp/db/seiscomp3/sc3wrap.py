@@ -2045,6 +2045,46 @@ class base_responsepaz(object):
         self.obj.setRemark(blob)
     remark = property(__get_remark, __set_remark)
 
+    def __get_decimationFactor(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.decimationFactor()
+        except ValueError:
+            return None
+    def __set_decimationFactor(self, arg):
+        if self.__get_decimationFactor() != arg:
+            self._needsUpdate = True
+        self.obj.setDecimationFactor(arg)
+    decimationFactor = property(__get_decimationFactor, __set_decimationFactor)
+
+    def __get_delay(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.delay()
+        except ValueError:
+            return None
+    def __set_delay(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_delay() != value:
+            self._needsUpdate = True
+        self.obj.setDelay(value)
+    delay = property(__get_delay, __set_delay)
+
+    def __get_correction(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.correction()
+        except ValueError:
+            return None
+    def __set_correction(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_correction() != value:
+            self._needsUpdate = True
+        self.obj.setCorrection(value)
+    correction = property(__get_correction, __set_correction)
+
 
 # package: Inventory
 class base_responsepolynomial(object):
@@ -3367,6 +3407,20 @@ class base_auxstream(object):
         self.obj.setRestricted(value)
     restricted = property(__get_restricted, __set_restricted)
 
+    def __get_shared(self):
+        # optional Attribute
+        try: # @return: bool
+            return self.obj.shared()
+        except ValueError:
+            return None
+    def __set_shared(self, arg):
+        try: value = bool(arg)
+        except: value = None
+        if self.__get_shared() != value:
+            self._needsUpdate = True
+        self.obj.setShared(value)
+    shared = property(__get_shared, __set_shared)
+
 
 # package: Inventory
 class base_stream(object):
@@ -3915,6 +3969,8 @@ class base_sensorlocation(object):
         try: obj.setFlags(args["flags"])
         except KeyError: pass
         try: obj.setRestricted(args["restricted"])
+        except KeyError: pass
+        try: obj.setShared(args["shared"])
         except KeyError: pass
         if not self.obj.add(obj):
             print "seiscomp3.DataModel.SensorLocation: error adding AuxStream"
@@ -4994,6 +5050,12 @@ class base_inventory(object):
         try: obj.setPoles(args["poles"])
         except KeyError: pass
         try: obj.setRemark(args["remark"])
+        except KeyError: pass
+        try: obj.setDecimationFactor(args["decimationFactor"])
+        except KeyError: pass
+        try: obj.setDelay(args["delay"])
+        except KeyError: pass
+        try: obj.setCorrection(args["correction"])
         except KeyError: pass
         if not self.obj.add(obj):
             print "seiscomp3.DataModel.Inventory: error adding ResponsePAZ"

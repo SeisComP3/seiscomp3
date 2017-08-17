@@ -1374,6 +1374,9 @@ class xml_ResponsePAZ(object):
         self.zeros = src.zeros
         self.poles = src.poles
         self.remark = src.remark
+        self.decimationFactor = src.decimationFactor
+        self.delay = src.delay
+        self.correction = src.correction
         self.publicID = src.publicID
 
     def _copy_to(self, dest):
@@ -1399,6 +1402,12 @@ class xml_ResponsePAZ(object):
             dest.poles = self.poles
         if self._element.find(xml_ResponsePAZ._xmlns + "remark") is not None:
             dest.remark = self.remark
+        if self._element.get("decimationFactor") is not None:
+            dest.decimationFactor = self.decimationFactor
+        if self._element.get("delay") is not None:
+            dest.delay = self.delay
+        if self._element.get("correction") is not None:
+            dest.correction = self.correction
         if self._element.get("publicID") is not None:
             dest.publicID = self.publicID
 
@@ -1515,6 +1524,33 @@ class xml_ResponsePAZ(object):
             return _get_blob(self._element, xml_ResponsePAZ._xmlns + "remark")
         def fset(self, value):
             _set_blob(self._element, xml_ResponsePAZ._xmlns + "remark", value)
+        return locals()
+
+    @Property
+    def decimationFactor():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("decimationFactor"))
+        def fset(self, value):
+            self._element.set("decimationFactor", _int_toxml(value))
+        return locals()
+
+    @Property
+    def delay():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("delay"))
+        def fset(self, value):
+            self._element.set("delay", _float_toxml(value))
+        return locals()
+
+    @Property
+    def correction():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("correction"))
+        def fset(self, value):
+            self._element.set("correction", _float_toxml(value))
         return locals()
 
 
@@ -2338,6 +2374,7 @@ class xml_AuxStream(object):
         self.format = src.format
         self.flags = src.flags
         self.restricted = src.restricted
+        self.shared = src.shared
 
     def _copy_to(self, dest):
         if self._element.get("code") is not None:
@@ -2358,6 +2395,8 @@ class xml_AuxStream(object):
             dest.flags = self.flags
         if self._element.get("restricted") is not None:
             dest.restricted = self.restricted
+        if self._element.get("shared") is not None:
+            dest.shared = self.shared
 
     @Property
     def action():
@@ -2446,6 +2485,15 @@ class xml_AuxStream(object):
             return _boolean_fromxml(self._element.get("restricted"))
         def fset(self, value):
             self._element.set("restricted", _boolean_toxml(value))
+        return locals()
+
+    @Property
+    def shared():
+    # type: boolean
+        def fget(self):
+            return _boolean_fromxml(self._element.get("shared"))
+        def fset(self, value):
+            self._element.set("shared", _boolean_toxml(value))
         return locals()
 
 

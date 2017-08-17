@@ -330,6 +330,9 @@ class _ResponsePAZ(object):
 		"zeros",
 		"poles",
 		"remark",
+		"decimationFactor",
+		"delay",
+		"correction",
 		"last_modified",
 	)
 
@@ -347,6 +350,9 @@ class _ResponsePAZ(object):
 		self.zeros = ""
 		self.poles = ""
 		self.remark = ""
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
 		self.my = my
 		self.object = {}
 
@@ -691,6 +697,7 @@ class _AuxStream(object):
 		"format",
 		"flags",
 		"restricted",
+		"shared",
 		"last_modified",
 	)
 
@@ -705,6 +712,7 @@ class _AuxStream(object):
 		self.format = ""
 		self.flags = ""
 		self.restricted = None
+		self.shared = None
 		self.mySensorLocation = mySensorLocation
 		self.object = {}
 
