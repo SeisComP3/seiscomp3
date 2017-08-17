@@ -20,7 +20,7 @@ import dateutil.parser
 
 from seiscomp import mseedlite, logs
 
-VERSION = "2017.065"
+VERSION = "2017.223"
 
 
 class Error(Exception):
@@ -44,7 +44,7 @@ def exec_fetch(param, data, verbose):
         cmd += ["-p", "/dev/stdin"]
 
     cmd += ["-o", "/dev/stdout"]
-    cmd += param
+    cmd += map(str, param)
 
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
@@ -146,8 +146,8 @@ def get_citation(nets, param, verbose):
             logs.error("error parsing text format: %s" % str(e))
             continue
 
-        if code[0] in '0123456789XYZ':
-            net_desc['%s_%d' % (code, year)] = desc
+        if code[0] in "0123456789XYZ":
+            net_desc["%s_%d" % (code, year)] = desc
 
         else:
             net_desc[code] = desc
@@ -168,11 +168,15 @@ def get_citation(nets, param, verbose):
 
 
 def main():
-    param0 = ['-y', 'station', '-q', 'format=text', '-q', 'level=network']
-    param1 = ['-y', 'station', '-q', 'format=text', '-q', 'level=channel']
-    param2 = ['-y', 'dataselect', '-z']
-    times = {'starttime': datetime.datetime(1900, 1, 1), 'endtime': datetime.datetime(2100, 1, 1)}
+    param0 = ["-y", "station", "-q", "format=text", "-q", "level=network"]
+    param1 = ["-y", "station", "-q", "format=text", "-q", "level=channel"]
+    param2 = ["-y", "dataselect", "-z"]
+    times = {"starttime": datetime.datetime(1900, 1, 1), "endtime": datetime.datetime(2100, 1, 1)}
     nets = set()
+
+    def add_param0(option, opt_str, value, parser):
+        param0.append(opt_str)
+        param0.append(value)
 
     def add_param1(option, opt_str, value, parser):
         param1.append(opt_str)
@@ -183,8 +187,7 @@ def main():
         param2.append(value)
 
     def add_param(option, opt_str, value, parser):
-        param0.append(opt_str)
-        param0.append(value)
+        add_param0(option, opt_str, value, parser)
         add_param1(option, opt_str, value, parser)
         add_param2(option, opt_str, value, parser)
 
@@ -203,7 +206,7 @@ def main():
         times[option.dest] = t
 
     parser = optparse.OptionParser(
-            usage="Usage: %prog [-h|--help] [OPTIONS] -o file",
+            usage="Usage: %prog [-h|--help] [OPTIONS] -o directory",
             version="%prog " + VERSION)
 
     parser.set_defaults(
@@ -285,7 +288,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if args or not options.output_dir:
-        parser.print_usage()
+        parser.print_usage(sys.stderr)
         return 1
 
     def log_verbose(s):

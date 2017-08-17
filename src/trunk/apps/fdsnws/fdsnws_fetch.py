@@ -97,7 +97,7 @@ except ImportError:
     import urllib.parse as urlparse
     import urllib.parse as urllib
 
-VERSION = "2017.065"
+VERSION = "2017.223"
 
 GET_PARAMS = set(('net', 'network',
                   'sta', 'station',
@@ -242,7 +242,7 @@ class XMLCombiner(object):
 
         for el in one:
             try:
-                eid = (el.tag, el.attrib['code'], el.attrib['start'])
+                eid = (el.tag, el.attrib['code'], el.attrib['startDate'])
                 mapping[eid] = el
 
             except KeyError:
@@ -256,7 +256,7 @@ class XMLCombiner(object):
                 continue
 
             try:
-                eid = (el.tag, el.attrib['code'], el.attrib['start'])
+                eid = (el.tag, el.attrib['code'], el.attrib['startDate'])
 
                 try:
                     self.__combine_element(mapping[eid], el)
@@ -266,7 +266,7 @@ class XMLCombiner(object):
                     one.append(el)
 
             except KeyError:
-                one.append(el)
+                pass
 
     def combine(self, et):
         if self.__et:
@@ -586,6 +586,8 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
                         else:
                             msg("authentication at %s failed with HTTP "
                                 "status code %d" % (auth_url, fd.getcode()))
+
+                            query_url = url.post()
 
                     finally:
                         fd.close()
@@ -1137,7 +1139,7 @@ def main():
         return 0
 
     if args or not options.output_file:
-        parser.print_usage()
+        parser.print_usage(sys.stderr)
         return 1
 
     if bool(options.post_file) + bool(options.arclink_file) + \
@@ -1202,8 +1204,8 @@ def main():
 
         msg("In case of problems with your request, plese use the contact "
             "form at\n\n"
-            "    http://www.orfeus-eu.org/organization/contact/form/\n",
-            options.verbose)
+            "    http://www.orfeus-eu.org/organization/contact/form/"
+            "?recipient=EIDA\n", options.verbose)
 
     except (IOError, Error) as e:
         msg(str(e))
