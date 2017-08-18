@@ -112,6 +112,11 @@
 						</parameter>
 					</group>
 				</group>
+				<group name="zoom">
+					<parameter name="sensitivity" type="double" default="0.5">
+						<description>Zoom sensitivity of the map</description>
+					</parameter>
+				</group>
 			</group>
 			<group name="scheme">
 				<description>
