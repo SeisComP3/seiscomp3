@@ -709,6 +709,10 @@ class _WaveformRequest(_Request):
                     for acc_strm in acc_loc.itervalues():
                         for acc_user in acc_strm.itervalues():
                             for acc in acc_user.itervalues():
+                                if ':' in acc.user:
+                                    # for fdsnws only
+                                    continue
+
                                 if (self.__user.upper() == acc.user.upper() or \
                                         (acc.user[:1] == '@' and self.__user[:1] != '@' and \
                                             self.__user.upper().endswith(acc.user.upper()))) and \
