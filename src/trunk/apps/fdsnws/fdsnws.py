@@ -212,31 +212,52 @@ class Access(object):
 			(not accessEnd or (t2 and t2 <= accessEnd))
 
 	#---------------------------------------------------------------------------
-	def __matchUser(self, emailAddress, accessUser):
+	def __matchEmail(self, emailAddress, accessUser):
+		defaultPrefix = "mail:"
+
+		if accessUser.startswith(defaultPrefix):
+			accessUser = accessUser[len(defaultPrefix):]
+
 		return (emailAddress.upper() == accessUser.upper() or \
 				(accessUser[:1] == '@' and emailAddress[:1] != '@' and \
 					emailAddress.upper().endswith(accessUser.upper())))
 
 	#---------------------------------------------------------------------------
+	def __matchAttribute(self, attribute, accessUser):
+		return (attribute.upper() == accessUser.upper())
+
+	#---------------------------------------------------------------------------
 	def authorize(self, user, net, sta, loc, cha, t1, t2):
+		matchers = []
+
 		try:
 			# OID 0.9.2342.19200300.100.1.3 (RFC 2798)
 			emailAddress = user['mail']
+			matchers.append((self.__matchEmail, emailAddress))
 
 		except KeyError:
-			return False
+			pass
 
-		for (u, start, end) in self.__access.get((net, '', '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
-				return True
+		try:
+			# B2ACCESS
+			for memberof in user['memberof'].split(';'):
+				matchers.append((self.__matchAttribute, "group:" + memberof))
 
-		for (u, start, end) in self.__access.get((net, sta, '', ''), []):
-			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
-				return True
+		except KeyError:
+			pass
 
-		for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
-			if self.__matchTime(t1, t2, start, end) and self.__matchUser(emailAddress, u):
-				return True
+		for m in matchers:
+			for (u, start, end) in self.__access.get((net, '', '', ''), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
+
+			for (u, start, end) in self.__access.get((net, sta, '', ''), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
+
+			for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
 
 		return False
 
@@ -910,6 +931,7 @@ class FDSNWS(Application):
 			access = None
 
 		if self._authEnabled:  # auth extension
+			access = self._access  # requires useArclinkAccess for security reasons
 			realm = FDSNDataSelectAuthRealm(inv, self._recordBulkSize, access, self._userdb)
 			checker = UsernamePasswordChecker(self._userdb)
 
