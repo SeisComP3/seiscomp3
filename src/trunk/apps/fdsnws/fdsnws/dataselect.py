@@ -16,6 +16,7 @@
 
 from twisted.cred import portal
 from twisted.web import http, resource, server
+from twisted.internet import interfaces, reactor
 
 from zope.interface import implements
 
@@ -29,7 +30,9 @@ from request import RequestOptions
 import utils
 
 import time
+import dateutil.parser
 from reqtrack import RequestTrackerDB
+from fastsds import SDS
 
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
@@ -101,69 +104,166 @@ class _DataSelectRequestOptions(RequestOptions):
 
 
 ################################################################################
-class _WaveformProducer:
-	def __init__(self, req, ro, rs, fileName, tracker, bufSize = 1):
+class _MyRecordStream(object):
+	def __init__(self, url, tracker, bufferSize):
+		self.__url = url
+		self.__tracker = tracker
+		self.__bufferSize = bufferSize
+		self.__tw = []
+
+
+	def addStream(self, net, sta, loc, cha, startt, endt, restricted):
+		self.__tw.append((net, sta, loc, cha, startt, endt, restricted))
+
+
+	def input(self):
+		fastsdsPrefix = 'fastsds://'
+
+		if self.__url.startswith(fastsdsPrefix):
+			fastsds = SDS(self.__url[len(fastsdsPrefix):])
+
+		else:
+			fastsds = None
+
+		for (net, sta, loc, cha, startt, endt, restricted) in self.__tw:
+			size = 0
+
+			if fastsds:
+				start = dateutil.parser.parse(startt.iso()).replace(tzinfo=None)
+				end = dateutil.parser.parse(endt.iso()).replace(tzinfo=None)
+
+				for data in fastsds.getRawBytes(start, end, net, sta, loc, cha, self.__bufferSize):
+					if data:
+						size += len(data)
+						yield data
+
+			else:
+				rs = RecordStream.Open(self.__url)
+
+				if rs is None:
+					raise Exception("could not open record stream")
+
+				rs.addStream(net, sta, loc, cha, startt, endt)
+				rsInput = RecordInput(rs, Array.INT, Record.SAVE_RAW)
+				eof = False
+
+				while not eof:
+					data = ""
+
+					while len(data) < self.__bufferSize:
+						try:
+							rec = rsInput.next()
+
+						except Exception, e:
+							Logging.warning("%s" % str(e))
+							eof = True
+							break
+
+						if rec is None:
+							eof = True
+							break
+
+						data += rec.raw().str()
+
+					if data:
+						size += len(data)
+						yield data
+
+			if self.__tracker:
+				net_class = 't' if net[0] in "0123456789XYZ" else 'p'
+
+				if size == 0:
+					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
+					    restricted, net_class, True, [], "fdsnws", "NODATA", 0, "")
+
+				else:
+					self.__tracker.line_status(startt, endt, net, sta, cha, loc,
+					    restricted, net_class, True, [], "fdsnws", "OK", size, "")
+
+
+################################################################################
+class _WaveformProducer(object):
+	implements(interfaces.IPushProducer)
+
+	def __init__(self, req, ro, rs, fileName, tracker):
 		self.req = req
 		self.ro = ro
-		self.rs = rs # keep a reference to avoid crash
-		self.bufSize = bufSize
-		self.rsInput = RecordInput(rs, Array.INT, Record.SAVE_RAW)
+		self.it = rs.input()
 
 		self.fileName = fileName
 		self.written = 0
 
 		self.tracker = tracker
+		self.paused = False
+		self.stopped = False
+		self.running = False
 
 
-	def resumeProducing(self):
-		rec = None
-		data = ""
-		while len(data) < self.bufSize:
-			try:
-				rec = self.rsInput.next()
-				if rec: data += rec.raw().str()
-				else: break
-			except Exception, e:
-				Logging.warning("%s" % str(e))
-				break
+	def _flush(self, data):
+		if not self.paused:
+			reactor.callInThread(self._collectData)
+
+		else:
+			self.running = False
 
 		if self.written == 0:
-			# read first record to test if any data exists at all
-			if not data:
-				msg = "no waveform data found"
-				data = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
-				if data:
-					self.req.write(data)
-				self.req.unregisterProducer()
-				self.req.finish()
-
-				if self.tracker:
-					self.tracker.volume_status("fdsnws", "NODATA", 0, "")
-					self.tracker.request_status("END", "")
-
-				return
-
 			self.req.setHeader('Content-Type', 'application/vnd.fdsn.mseed')
 			self.req.setHeader('Content-Disposition', "attachment; " \
-			                   "filename=%s" % self.fileName)
+					   "filename=%s" % self.fileName)
 
-		if not data:
-			self.req.unregisterProducer()
+		self.req.write(data)
+		self.written += len(data)
+
+
+	def _finish(self):
+		if self.written == 0:
+			msg = "no waveform data found"
+			data = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
+			self.req.write(data)
+
+			if self.tracker:
+				self.tracker.volume_status("fdsnws", "NODATA", 0, "")
+				self.tracker.request_status("END", "")
+
+		else:
 			Logging.debug("%s: returned %i bytes of mseed data" % (
-			               self.ro.service, self.written))
+			              self.ro.service, self.written))
 			utils.accessLog(self.req, self.ro, http.OK, self.written, None)
-			self.req.finish()
 
 			if self.tracker:
 				self.tracker.volume_status("fdsnws", "OK", self.written, "")
 				self.tracker.request_status("END", "")
 
+
+		self.req.unregisterProducer()
+		self.req.finish()
+
+
+	def _collectData(self):
+		if self.stopped:
 			return
 
-		self.req.write(data)
-		self.written += len(data)
+		try:
+			reactor.callFromThread(self._flush, self.it.next())
 
-	def stopProducing(self): pass
+		except StopIteration:
+			reactor.callFromThread(self._finish)
+
+
+	def pauseProducing(self):
+		self.paused = True
+
+
+	def resumeProducing(self):
+		self.paused = False
+
+		if not self.running:
+			self.running = True
+			reactor.callInThread(self._collectData)
+
+
+	def stopProducing(self):
+		self.stopped = True
 
 
 
@@ -361,12 +461,6 @@ class FDSNDataSelect(resource.Resource):
 		app = Application.Instance()
 		ro._checkTimes(app._realtimeGap)
 
-		# Open record stream
-		rs = RecordStream.Open(self._rsURL)
-		if rs is None:
-			msg = "could not open record stream"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
-
 		maxSamples = None
 		if app._samplesM is not None:
 			maxSamples = app._samplesM * 1000000
@@ -380,6 +474,15 @@ class FDSNDataSelect(resource.Resource):
 
 		else:
 			tracker = None
+
+		# Open record stream
+		try:
+			rs = _MyRecordStream(self._rsURL, tracker, self.__bufferSize)
+
+		except Exception, e:
+			Logging.warning("%s" % str(e))
+			msg = "could not open record stream"
+			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
 		# Add request streams
 		# iterate over inventory networks
@@ -428,18 +531,16 @@ class FDSNDataSelect(resource.Resource):
 							                 cha.code(), s.time.start.iso(),
 							                 s.time.end.iso()))
 							rs.addStream(net.code(), sta.code(), loc.code(),
-							             cha.code(), s.time.start, s.time.end)
-
-							if tracker:
-								tracker.line_status(s.time.start, s.time.end,
-								    net.code(), sta.code(), cha.code(), loc.code(),
-								    False, "", True, [], "fdsnws", "OK", 0, "")
+							             cha.code(), s.time.start, s.time.end,
+							             utils.isRestricted(cha))
 
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix.replace("%time", time.strftime('%Y-%m-%dT%H:%M:%S'))+'.mseed'
 
 		# Create producer for async IO
-		req.registerProducer(_WaveformProducer(req, ro, rs, fileName, tracker, self.__bufferSize), False)
+		prod = _WaveformProducer(req, ro, rs, fileName, tracker)
+		req.registerProducer(prod, True)
+		prod.resumeProducing()
 
 		# The request is handled by the deferred object
 		return server.NOT_DONE_YET
