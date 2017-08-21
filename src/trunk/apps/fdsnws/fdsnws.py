@@ -16,7 +16,7 @@
 ################################################################################
 
 
-import os, sys, time, fnmatch, base64
+import os, sys, time, fnmatch, base64, signal
 
 try:
 	from twisted.cred import checkers, credentials, error, portal
@@ -471,7 +471,7 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def run(self):
+	def site(self):
 		modeStr = None
 		if self._evaluationMode is not None:
 			modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
@@ -533,7 +533,7 @@ class FDSNWS(Application):
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
 			Logging.error("all services disabled through configuration")
-			return False
+			return None
 
 		# access logger if requested
 		if self._accessLogFile:
@@ -561,7 +561,9 @@ class FDSNWS(Application):
 				retn = self._filterInventory(dataSelectInv, self._dataSelectFilter)
 
 			if not retn:
-				return False
+				return None
+
+		self._access = Access()
 
 		if self._serveDataSelect and self._useArclinkAccess:
 			self._access.initFromSC3Routing(self.query().loadRouting())
@@ -670,11 +672,41 @@ class FDSNWS(Application):
 		fileRes.hideInListing = True
 		prefix.putChild('css', fileRes)
 
+		return Site(root)
+
+
+	#---------------------------------------------------------------------------
+	def reloadHandler(self, signum, frame):
+		Logging.info("SIGHUP received: reloading inventory")
+		self.reloadInventory()
+
+		site = self.site()
+
+		if site:
+			self.__tcpPort.factory = site
+			Logging.info("reload successful")
+
+		else:
+			Logging.info("reload failed")
+
+
+	#---------------------------------------------------------------------------
+	def run(self):
 		retn = False
 		try:
+			site = self.site()
+
+			if not site:
+				return False
+
 			# start listen for incoming request
-			reactor.listenTCP(self._port, Site(root), self._connections,
-			                  self._listenAddress)
+			self.__tcpPort = reactor.listenTCP(self._port,
+			                                   site,
+	 		                                   self._connections,
+			                                   self._listenAddress)
+
+			# setup signal handler
+			signal.signal(signal.SIGHUP, self.reloadHandler)
 
 			# start processing
 			Logging.info("start listening")
