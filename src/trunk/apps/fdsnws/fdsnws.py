@@ -480,6 +480,7 @@ class FDSNWS(Application):
 		               "  queryObjects    : %i\n" \
 		               "  realtimeGap     : %s\n" \
 		               "  samples (M)     : %s\n" \
+		               "  recordBulkSize  : %i\n" \
 		               "  allowRestricted : %s\n" \
 		               "  useArclinkAccess: %s\n" \
 		               "  hideAuthor      : %s\n" \
@@ -501,8 +502,8 @@ class FDSNWS(Application):
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted, self._useArclinkAccess,
-		               self._hideAuthor, modeStr,
+		               self._recordBulkSize, self._allowRestricted,
+		               self._useArclinkAccess, self._hideAuthor, modeStr,
 		               whitelistStr, blacklistStr, stationFilterStr,
 		               dataSelectFilterStr, self._debugFilter,
 		               self._trackdbEnabled, self._trackdbDefaultUser,
