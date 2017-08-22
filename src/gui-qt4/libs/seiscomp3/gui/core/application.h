@@ -205,6 +205,9 @@ class SC_GUI_API Application : public QApplication,
 		virtual bool initConfiguration();
 		virtual bool initSubscriptions();
 
+		virtual void schemaValidationNames(std::vector<std::string> &modules,
+		                                   std::vector<std::string> &plugins) const;
+
 		virtual bool validateParameters();
 
 		virtual bool handleInitializationError(Stage);

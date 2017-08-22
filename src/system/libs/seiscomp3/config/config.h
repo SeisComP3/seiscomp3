@@ -29,6 +29,11 @@
 namespace Seiscomp {
 namespace Config {
 
+/**
+ * Mapping of configuration variable to type
+ */
+typedef std::map<std::string, std::string> Variables;
+
 
 /**
  * This is a class for reading and writing configuration files. Currently the
@@ -207,6 +212,15 @@ class SC_CONFIG_API Config {
 		 */
 		static void writeSymbol(std::ostream &os, const Symbol *symbol);
 
+		/** Enables/disables tracking of configuration variables.
+		 */
+		void trackVariables(bool enabled);
+
+		/** Returns all configuration variables read by an application mapped
+		 * to a type
+		 */
+		const Variables& getVariables() const;
+
 
 		// ----------------------------------------------------------------------
 		// Protected interface
@@ -271,6 +285,8 @@ class SC_CONFIG_API Config {
 		template <typename T>
 		bool set(const std::string& name, const std::vector<T>& values);
 
+		inline void addVariable(const std::string &name, const char *type) const;
+
 
 		// ------------------------------------------------------------------------
 		// Private data members
@@ -284,6 +300,8 @@ class SC_CONFIG_API Config {
 		Logger      *_logger;
 
 		SymbolTable *_symbolTable;
+		bool         _trackVariables;
+		Variables    _variables;
 
 };
 

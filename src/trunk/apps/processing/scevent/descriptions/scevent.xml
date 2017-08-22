@@ -48,16 +48,14 @@
 							Region in which scevent is allowed to create events.
 						</description>
 					</parameter>
-				</group>
 
-				<group name="depths">
-					<parameter name="minimum" type = "double" >
+					<parameter name="minDepth" type="double" >
 						<description>
 							Minimum depth for which scevent is allowed to create events.
 						</description>
 					</parameter>
 
-					<parameter name="maximum" type = "double" >
+					<parameter name="maxDepth" type="double" >
 						<description>
 							Maximum depth for which scevent is allowed to create events.
 						</description>
@@ -78,7 +76,7 @@
 					</description>
 				</parameter>
 
-				<parameter name="maximumMatchingArrivalTimeDiff" type="float" unit="s" default="-1">
+				<parameter name="maximumMatchingArrivalTimeDiff" type="double" unit="s" default="-1">
 					<description>
 						Negative time window: compare only pickIDs to find
 						matching arrivals. A non negative
@@ -112,21 +110,21 @@
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeBefore" type="int" unit="s" default="1800">
+				<parameter name="eventTimeBefore" type="double" unit="s" default="1800">
 					<description>
 						Time range before the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeAfter" type="int" unit="s" default="1800">
+				<parameter name="eventTimeAfter" type="double" unit="s" default="1800">
 					<description>
 						Time range after the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="maximumTimeSpan" type="int" unit="s" default="60">
+				<parameter name="maximumTimeSpan" type="double" unit="s" default="60">
 					<description>
 					Associates an origin with an existing event  if the origin
 					time differs not more than 60 seconds unless the
@@ -155,7 +153,7 @@
 					</description>
 				</parameter>
 
-				<parameter name="mbOverMwValue" type="int" default="6">
+				<parameter name="mbOverMwValue" type="double" default="6">
 					<description>
 						Average between mb and Mw(mB) which must be exceeded to become Mw(mB)
 						preferred.

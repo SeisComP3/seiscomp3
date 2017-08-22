@@ -987,6 +987,17 @@ bool Application::initSubscriptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::schemaValidationNames(std::vector<std::string> &modules,
+                                        std::vector<std::string> &plugins) const {
+	Client::Application::schemaValidationNames(modules, plugins);
+	plugins.push_back("GUI");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::initLicense() {
 	if ( !License::isValid() ) {
 		std::cout << std::endl;

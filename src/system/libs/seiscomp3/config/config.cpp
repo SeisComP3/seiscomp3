@@ -216,7 +216,8 @@ std::vector<bool> Config::getVec<bool>(const std::string& name) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Config::Config()
-: _stage(0), _resolveReferences(true), _logger(&__logger__), _symbolTable(NULL) {
+: _stage(0), _resolveReferences(true), _logger(&__logger__), _symbolTable(NULL),
+  _trackVariables(false) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -383,6 +384,26 @@ void Config::writeSymbol(std::ostream &os, const Symbol *symbol)
 	os << std::endl;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Config::trackVariables(bool enabled) {
+	if ( !enabled )
+		_variables.clear();
+	_trackVariables = enabled;
+}
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const Variables& Config::getVariables() const {
+	return _variables;
+}
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -962,8 +983,7 @@ bool Config::Eval(const std::string &rvalue, std::vector<std::string> &result,
 
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-std::vector<std::string> Config::names() const
-{
+std::vector<std::string> Config::names() const {
 	std::vector<std::string> tmpVec;
 
 	SymbolTable::iterator it = _symbolTable->begin();
@@ -979,6 +999,7 @@ std::vector<std::string> Config::names() const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 int Config::getInt(const std::string& name) const {
+	addVariable(name, "int");
 	return get<int>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -987,8 +1008,8 @@ int Config::getInt(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Config::getInt(const std::string& name, bool* error) const
-{
+int Config::getInt(const std::string& name, bool* error) const {
+	addVariable(name, "int");
 	return get<int>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -997,8 +1018,8 @@ int Config::getInt(const std::string& name, bool* error) const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::getInt(int& value, const std::string& name) const
-{
+bool Config::getInt(int& value, const std::string& name) const {
+	addVariable(name, "int");
 	return get<int>(value, name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1008,6 +1029,7 @@ bool Config::getInt(int& value, const std::string& name) const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 double Config::getDouble(const std::string& name) const {
+	addVariable(name, "double");
 	return get<double>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1016,8 +1038,8 @@ double Config::getDouble(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Config::getDouble(const std::string& name, bool* error) const
-{
+double Config::getDouble(const std::string& name, bool* error) const {
+	addVariable(name, "double");
 	return get<double>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1026,8 +1048,8 @@ double Config::getDouble(const std::string& name, bool* error) const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::getDouble(double& value, const std::string& name) const
-{
+bool Config::getDouble(double& value, const std::string& name) const {
+	addVariable(name, "double");
 	return get<double>(value, name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1037,6 +1059,7 @@ bool Config::getDouble(double& value, const std::string& name) const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 bool Config::getBool(const std::string& name) const {
+	addVariable(name, "boolean");
 	return get<bool>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1045,8 +1068,8 @@ bool Config::getBool(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::getBool(const std::string& name, bool* error) const
-{
+bool Config::getBool(const std::string& name, bool* error) const {
+	addVariable(name, "boolean");
 	return get<bool>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1055,8 +1078,8 @@ bool Config::getBool(const std::string& name, bool* error) const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::getBool(bool& value, const std::string& name) const
-{
+bool Config::getBool(bool& value, const std::string& name) const {
+	addVariable(name, "boolean");
 	return get<bool>(value, name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1066,6 +1089,7 @@ bool Config::getBool(bool& value, const std::string& name) const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::string Config::getString(const std::string& name) const {
+	addVariable(name, "string");
 	return get<std::string>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1074,8 +1098,8 @@ std::string Config::getString(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::string Config::getString(const std::string& name, bool* error) const
-{
+std::string Config::getString(const std::string& name, bool* error) const {
+	addVariable(name, "string");
 	return get<std::string>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1084,8 +1108,8 @@ std::string Config::getString(const std::string& name, bool* error) const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::getString(std::string& value, const std::string& name) const
-{
+bool Config::getString(std::string& value, const std::string& name) const {
+	addVariable(name, "string");
 	return get<std::string>(value, name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1094,8 +1118,7 @@ bool Config::getString(std::string& value, const std::string& name) const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Config* Config::Instance(const std::string& fileName)
-{
+Config* Config::Instance(const std::string& fileName) {
 	static Config conf;
 	if ( !conf.readConfig(fileName) )
 		return NULL;
@@ -1108,6 +1131,7 @@ Config* Config::Instance(const std::string& fileName)
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::vector<int> Config::getInts(const std::string& name) const {
+	addVariable(name, "list:int");
 	return getVec<int>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1116,8 +1140,8 @@ std::vector<int> Config::getInts(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<int> Config::getInts(const std::string& name, bool* error) const
-{
+std::vector<int> Config::getInts(const std::string& name, bool* error) const {
+	addVariable(name, "list:int");
 	return getVec<int>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1127,6 +1151,7 @@ std::vector<int> Config::getInts(const std::string& name, bool* error) const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::vector<double> Config::getDoubles(const std::string& name) const {
+	addVariable(name, "list:double");
 	return getVec<double>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1135,8 +1160,8 @@ std::vector<double> Config::getDoubles(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<double> Config::getDoubles(const std::string& name, bool* error) const
-{
+std::vector<double> Config::getDoubles(const std::string& name, bool* error) const {
+	addVariable(name, "list:double");
 	return getVec<double>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1146,6 +1171,7 @@ std::vector<double> Config::getDoubles(const std::string& name, bool* error) con
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::vector<bool> Config::getBools(const std::string& name) const {
+	addVariable(name, "list:boolean");
 	return getVec<bool>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1154,8 +1180,8 @@ std::vector<bool> Config::getBools(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<bool> Config::getBools(const std::string& name, bool* error) const
-{
+std::vector<bool> Config::getBools(const std::string& name, bool* error) const {
+	addVariable(name, "list:boolean");
 	return getVec<bool>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1165,6 +1191,7 @@ std::vector<bool> Config::getBools(const std::string& name, bool* error) const
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 std::vector<std::string> Config::getStrings(const std::string& name) const {
+	addVariable(name, "list:string");
 	return getVec<std::string>(name);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1173,8 +1200,8 @@ std::vector<std::string> Config::getStrings(const std::string& name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-std::vector<std::string> Config::getStrings(const std::string& name, bool* error) const
-{
+std::vector<std::string> Config::getStrings(const std::string& name, bool* error) const {
+	addVariable(name, "list:string");
 	return getVec<std::string>(name, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1183,8 +1210,8 @@ std::vector<std::string> Config::getStrings(const std::string& name, bool* error
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Config::setInt(const std::string& name, int value)
-{
+bool Config::setInt(const std::string& name, int value) {
+	addVariable(name, "list:int");
 	return set<int>(name, value);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1278,6 +1305,16 @@ bool Config::remove(const std::string& name)
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+inline void Config::addVariable(const std::string &name, const char *type) const {
+	if ( _trackVariables ) {
+		const_cast<Config*>(this)->_variables[name] = type;
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 } // namespace Config

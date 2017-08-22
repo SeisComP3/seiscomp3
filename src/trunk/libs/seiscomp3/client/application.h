@@ -26,6 +26,7 @@
 #include <seiscomp3/client.h>
 #include <seiscomp3/config/config.h>
 #include <seiscomp3/system/environment.h>
+#include <seiscomp3/system/schema.h>
 #include <seiscomp3/communication/connection.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/notifier.h>
@@ -610,6 +611,24 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * Prints the version information to stdout
 		 */
 		virtual void printVersion();
+
+		/**
+		 * Prints all available configuration variables
+		 */
+		virtual void printConfigVariables();
+
+		/**
+		 * Returns lists of schema modules and plugins to validate in
+		 * method validateSchemaParameters
+		 */
+		virtual void schemaValidationNames(std::vector<std::string> &modules,
+		                                   std::vector<std::string> &plugins) const;
+
+		/**
+		 * Validates configuration variables use by application against
+		 * description xml file
+		*/
+		virtual bool validateSchemaParameters();
 
 		//! Handles the interrupt request from outside
 		void handleInterrupt(int) throw();

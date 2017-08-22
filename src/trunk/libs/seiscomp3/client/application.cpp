@@ -26,6 +26,7 @@
 
 #include <seiscomp3/math/geo.h>
 
+#include <seiscomp3/utils/files.h>
 #include <seiscomp3/utils/timer.h>
 #include <seiscomp3/utils/replace.h>
 
@@ -334,6 +335,59 @@ struct CityGreaterThan {
 	}
 };
 
+struct ParamRef {
+	ParamRef() : param(NULL) {}
+	ParamRef(System::SchemaParameter *param, const string &reference)
+	  : param(param), reference(reference) {}
+	System::SchemaParameter* param;
+	string                   reference;
+};
+
+typedef map<string, ParamRef> ParamMap;
+void mapSchemaParameters(ParamMap &map, System::SchemaParameters *params,
+                         const string &reference, const string &path = "") {
+	if ( params == NULL )
+		return;
+
+	string p = path.empty() ? "" : path + ".";
+	for ( size_t i = 0; i < params->parameterCount(); ++i ) {
+		System::SchemaParameter *param = params->parameter(i);
+		map[p + param->name] = ParamRef(param, reference);
+	}
+
+	for ( size_t i = 0; i < params->groupCount(); ++i ) {
+		System::SchemaGroup *group = params->group(i);
+		mapSchemaParameters(map, group, reference, p + group->name);
+	}
+}
+
+// comparison of strings separated into parts by '.' character
+bool compare_string_toks(const std::string& a, const std::string& b) {
+	vector<string> ta, tb;
+	Core::split(ta, a.c_str(), ".", false);
+	Core::split(tb, b.c_str(), ".", false);
+
+	if ( ta.size() == 1 && tb.size() > 1 )
+		return true;
+	if ( ta.size() > 1 && tb.size() == 1 )
+		return false;
+
+	vector<string>::const_iterator a_it = ta.begin(), b_it = tb.begin();
+	for ( ; a_it != ta.end() && b_it != tb.end(); ++a_it, ++b_it ) {
+		int cmp = Core::compareNoCase(*a_it, *b_it);
+		if ( cmp < 0 )
+			return true;
+		if ( cmp > 0 )
+			return false;
+	}
+
+	return ta.size() <= tb.size();
+}
+
+// pad string to spefic length
+inline string pad(const string &s, size_t len, char c = ' ') {
+	return s.length() >= len ? s : (s + string(len-s.length(), c));
+}
 
 } // unnamed namespace
 
@@ -578,6 +632,184 @@ void Application::printVersion() {
 	     << SC_API_VERSION_MINOR(SC_API_VERSION) << "."
 	     << SC_API_VERSION_PATCH(SC_API_VERSION) << endl;
 	cout << CurrentVersion.systemInfo() << endl;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::printConfigVariables() {
+	list<string> varList;
+	Config::Variables::const_iterator cv_it = _configuration.getVariables().begin();
+	for ( ; cv_it != _configuration.getVariables().end(); ++cv_it ) {
+		varList.push_back(pad(cv_it->first, 50) + " " + cv_it->second);
+	}
+
+	varList.sort(compare_string_toks);
+	cout << "available configuration variables:" << endl;
+	list<string>::const_iterator it = varList.begin();
+	for ( ; it != varList.end(); ++it ) {
+		cout << "  " << *it << endl;
+	}
+
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::schemaValidationNames(vector<string> &modules,
+                                        vector<string> &plugins) const {
+
+	// process global and application secific modules
+	modules.push_back("global");
+	modules.push_back(name());
+
+	// process all loaded plugins
+	for ( PluginRegistry::iterator it = PluginRegistry::Instance()->begin();
+		it != PluginRegistry::Instance()->end(); ++it ) {
+		plugins.push_back(Util::removeExtension(Util::basename(it->filename)));
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::validateSchemaParameters() {
+	System::SchemaDefinitions defs;
+	string path = Environment::Instance()->appConfigDir() + "/descriptions";
+	if ( !defs.load(path.c_str()) ) {
+		cerr << "Could not load schema definitions from directory " << path << endl;
+		return false;
+	}
+
+	vector<string> moduleNames;
+	vector<string> pluginNames;
+	schemaValidationNames(moduleNames, pluginNames);
+
+	ParamMap paramMap;
+
+	// map module parameter path to SchemaParameter instance
+	for ( vector<string>::const_iterator mn_it = moduleNames.begin();
+	      mn_it != moduleNames.end(); ++mn_it ) {
+		System::SchemaModule *module = defs.module(*mn_it);
+		cerr << "Schema module '" << *mn_it << "' "
+		     << ((module == NULL) ? "not found" : "loaded") << endl;
+
+		mapSchemaParameters(paramMap, module->parameters.get(),
+		                    "module " + module->name);
+
+		System::SchemaDefinitions::PluginList plugins = defs.pluginsForModule(*mn_it);
+		System::SchemaDefinitions::PluginList::const_iterator p_it = plugins.begin();
+		for ( ; p_it != plugins.end(); ++p_it ) {
+			vector<string>::iterator pn_it = find(pluginNames.begin(),
+			                                      pluginNames.end(), (*p_it)->name);
+			if ( pn_it != pluginNames.end() ) {
+				mapSchemaParameters(paramMap, (*p_it)->parameters.get(),
+				                    "plugin " + (*p_it)->name);
+				cerr << "Schema plugin '" << *pn_it << "' loaded" << endl;
+				pluginNames.erase(pn_it);
+			}
+		}
+	}
+
+	if ( paramMap.empty() ) {
+		cerr << "No schema parameters found" << endl;
+		return false;
+	}
+
+	map<string, string> typeMappings;
+	typeMappings["color"] = "string";
+	typeMappings["host-with-port"] = "string";
+	typeMappings["gradient"] = "list:string";
+	typeMappings["path"] = "string";
+
+	list<string> missing;
+	list<string> invalidType;
+	list<string> emptyDesc;
+
+	Config::Variables::const_iterator cv_it = _configuration.getVariables().begin();
+	for ( ; cv_it != _configuration.getVariables().end(); ++cv_it ) {
+		ParamMap::iterator pm_it = paramMap.find(cv_it->first);
+		if ( pm_it == paramMap.end() ) {
+			missing.push_back(cv_it->first);
+			continue;
+		}
+
+		if ( cv_it->second != pm_it->second.param->type ) {
+			map<string, string>::const_iterator tm_it =
+			        typeMappings.find(pm_it->second.param->type);
+			if ( tm_it == typeMappings.end() || tm_it->second != cv_it->second ) {
+				string line = pad(cv_it->first, 40);
+				line += " expected: " + cv_it->second + ", ";
+				if ( pm_it->second.param->type.empty() )
+					line += "undefined in schema";
+				else
+					line += "found in schema: " + pm_it->second.param->type;
+				invalidType.push_back(line + " [" +
+				                      pm_it->second.reference + "]");
+			}
+		}
+
+		if ( pm_it->second.param->description.empty() ) {
+			emptyDesc.push_back(pad(cv_it->first, 40) + " [" +
+			                    pm_it->second.reference + "]");
+		}
+
+		paramMap.erase(pm_it);
+	}
+
+	if ( !missing.empty() ) {
+		missing.sort(compare_string_toks);
+		cout << endl
+		     << "parameters missing in schema:" << endl;
+		list<string>::const_iterator it = missing.begin();
+		for ( ; it != missing.end(); ++it ) {
+			cout << "  " << *it << endl;
+		}
+	}
+
+	if ( !invalidType.empty() ) {
+		invalidType.sort(compare_string_toks);
+		cout << endl
+		     << "parameters of invalid type:" << endl;
+		list<string>::const_iterator it = invalidType.begin();
+		for ( ; it != invalidType.end(); ++it ) {
+			cout << "  " << *it << endl;
+		}
+	}
+
+	if ( !emptyDesc.empty() ) {
+		emptyDesc.sort(compare_string_toks);
+		cout << endl
+		     << "parameters without schema description:" << endl;
+		list<string>::const_iterator it = emptyDesc.begin();
+		for ( ; it != emptyDesc.end(); ++it ) {
+			cout << "  " << *it << endl;
+		}
+	}
+
+	if ( !paramMap.empty() ) {
+		list<string> paramList;
+		ParamMap::const_iterator pm_it = paramMap.begin();
+		for ( ; pm_it != paramMap.end(); ++pm_it ) {
+			string line = pad(pm_it->first, 40);
+			paramList.push_back(line + " [" + pm_it->second.reference + "]");
+		}
+		paramList.sort(compare_string_toks);
+		cout << endl
+		     << "parameters found in schema but not read by application:" << endl;
+		list<string>::const_iterator it = paramList.begin();
+		for ( ; it != paramList.end(); ++it ) {
+			cout << "  " << *it << endl;
+		}
+	}
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1520,6 +1752,11 @@ bool Application::init() {
 		return false;
 	}
 
+	// Enable tracking of configuration variables output or validation of those
+	// is requested on commandline
+	_configuration.trackVariables(commandline().hasOption("print-config-vars") ||
+	                              commandline().hasOption("validate-schema-params"));
+
 	if ( !initConfiguration() ) {
 		exit(-1);
 		return false;
@@ -1602,6 +1839,17 @@ bool Application::init() {
 		}
 	}
 
+	if ( commandline().hasOption("print-config-vars") ) {
+		printConfigVariables();
+		exit(-1);
+		return false;
+	}
+
+	if ( commandline().hasOption("validate-schema-params") ) {
+		validateSchemaParameters();
+		exit(-1);
+		return false;
+	}
 
 	if ( commandline().hasOption("daemon") ) {
 		if ( !forkProcess() ) {
@@ -2106,6 +2354,8 @@ void Application::initCommandLine() {
 	commandline().addOption("Generic", "help,h", "produce help message");
 	commandline().addOption("Generic", "version,V", "show version information");
 	commandline().addOption("Generic", "config-file", "Use alternative configuration file", &_alternativeConfigFile);
+	commandline().addOption("Generic", "print-config-vars", "Print all available configuration variables and exit");
+	commandline().addOption("Generic", "validate-schema-params", "Validates the applications description xml and exit");
 	commandline().addOption("Generic", "plugins", "Load given plugins", &_plugins);
 	//commandline().addOption("Generic", "crash-handler", "path to crash handler script", &_crashHandler);
 
@@ -2113,9 +2363,9 @@ void Application::initCommandLine() {
 		commandline().addOption("Generic", "daemon,D", "run as daemon");
 
 	if ( _enableMessaging ) {
-		commandline().addOption("Generic", "auto-shutdown", "enable/disable self-shutdown because a master module shutdown", &_enableAutoShutdown);
-		commandline().addOption("Generic", "shutdown-master-module", "sets the name of the master-module used for auto-shutdown", &_shutdownMasterModule, false);
-		commandline().addOption("Generic", "shutdown-master-username", "sets the name of the master-username used for auto-shutdown", &_shutdownMasterUsername, false);
+		commandline().addOption("Generic", "auto-shutdown", "enables automatic application shutdown triggered by a status message", &_enableAutoShutdown);
+		commandline().addOption("Generic", "shutdown-master-module", "triggers shutdown if the module name of the received messages match", &_shutdownMasterModule, false);
+		commandline().addOption("Generic", "shutdown-master-username", "triggers shutdown if the user name of the received messages match", &_shutdownMasterUsername, false);
 	}
 
 	commandline().addGroup("Verbose");
