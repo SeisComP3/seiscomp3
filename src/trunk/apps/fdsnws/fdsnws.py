@@ -145,22 +145,32 @@ class UserDB(object):
 	#---------------------------------------------------------------------------
 	def __init__(self):
 		self.__users = {}
+		self.__blacklist = set()
 		task.LoopingCall(self.__expireUsers).start(60, False)
 
 	#---------------------------------------------------------------------------
 	def __expireUsers(self):
-		for (user, (password, attributes, expires)) in self.__users.items():
+		for (name, (password, attributes, expires)) in self.__users.items():
 			if time.time() > expires:
-				del self.__users[user]
+				Logging.info("de-registering %s" % name)
+				del self.__users[name]
 
 	#---------------------------------------------------------------------------
-	def addUser(self, name, attributes, expires):
+	def blacklistUser(self, name):
+		Logging.info("blacklisting %s" % name)
+		self.__blacklist.add(name)
+
+	#---------------------------------------------------------------------------
+	def addUser(self, name, attributes, expires, data):
 		try:
 			password = self.__users[name][0]
 
 		except KeyError:
+			bl = " (blacklisted)" if name in self.__blacklist else ""
+			Logging.notice("registering %s%s %s" % (name, bl, data))
 			password = base64.urlsafe_b64encode(os.urandom(12))
 
+		attributes['blacklisted'] = name in self.__blacklist
 		self.__users[name] = (password, attributes, expires)
 		return password
 
@@ -177,6 +187,13 @@ class UserDB(object):
 	#---------------------------------------------------------------------------
 	def getAttributes(self, name):
 		return self.__users[name][1]
+
+	#---------------------------------------------------------------------------
+	def dump(self):
+		Logging.info("known users:")
+
+		for name, user in self.__users.items():
+			Logging.info(" %s %s %d" % (name, user[1], user[2]))
 
 
 ################################################################################
@@ -228,6 +245,9 @@ class Access(object):
 
 	#---------------------------------------------------------------------------
 	def authorize(self, user, net, sta, loc, cha, t1, t2):
+		if user['blacklisted']:
+			return False
+
 		matchers = []
 
 		try:
@@ -308,6 +328,7 @@ class FDSNWS(Application):
 
 		self._authEnabled   = False
 		self._authGnupgHome = '@ROOTDIR@/var/lib/gpg'
+		self._authBlacklist = []
 
 		self._userdb        = UserDB()
 		self._access        = Access()
@@ -442,6 +463,13 @@ class FDSNWS(Application):
 		try: self._authGnupgHome = self.configGetString('auth.gnupgHome')
 		except Exception: pass
 		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
+
+		# blacklist of users/tokens
+		try:
+			strings = self.configGetStrings('auth.blacklist')
+			if len(strings) > 1 or len(strings[0]):
+				self._authBlacklist = strings
+		except Exception: pass
 
 		# If the database connection is passed via command line or configuration
 		# file then messaging is disabled. Messaging is only used to get
@@ -689,11 +717,16 @@ class FDSNWS(Application):
 		else:
 			Logging.info("reload failed")
 
+		self._userdb.dump()
+
 
 	#---------------------------------------------------------------------------
 	def run(self):
 		retn = False
 		try:
+			for user in self._authBlacklist:
+				self._userdb.blacklistUser(user)
+
 			site = self.site()
 
 			if not site:
