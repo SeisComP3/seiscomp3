@@ -31,8 +31,10 @@ import utils
 
 import time
 import dateutil.parser
+import cStringIO
 from reqtrack import RequestTrackerDB
 from fastsds import SDS
+from seiscomp import mseedlite
 
 ################################################################################
 class _DataSelectRequestOptions(RequestOptions):
@@ -112,8 +114,24 @@ class _MyRecordStream(object):
 		self.__tw = []
 
 
-	def addStream(self, net, sta, loc, cha, startt, endt, restricted):
-		self.__tw.append((net, sta, loc, cha, startt, endt, restricted))
+	def addStream(self, net, sta, loc, cha, startt, endt, restricted, archNet):
+		self.__tw.append((net, sta, loc, cha, startt, endt, restricted, archNet))
+
+
+	def __override_network(self, data, net):
+		inp = cStringIO.StringIO(data)
+		out = cStringIO.StringIO()
+
+		for rec in mseedlite.Input(inp):
+			rec.net = net
+			rec_len_exp = 9
+
+			while (1 << rec_len_exp) < rec.size:
+				rec_len_exp += 1
+
+			rec.write(out, rec_len_exp)
+
+		return out.getvalue()
 
 
 	def input(self):
@@ -125,17 +143,25 @@ class _MyRecordStream(object):
 		else:
 			fastsds = None
 
-		for (net, sta, loc, cha, startt, endt, restricted) in self.__tw:
+		for (net, sta, loc, cha, startt, endt, restricted, archNet) in self.__tw:
+			if not archNet:
+				archNet = net
+
 			size = 0
 
 			if fastsds:
 				start = dateutil.parser.parse(startt.iso()).replace(tzinfo=None)
 				end = dateutil.parser.parse(endt.iso()).replace(tzinfo=None)
 
-				for data in fastsds.getRawBytes(start, end, net, sta, loc, cha, self.__bufferSize):
+				for data in fastsds.getRawBytes(start, end, archNet, sta, loc, cha, self.__bufferSize):
 					if data:
 						size += len(data)
-						yield data
+
+						if archNet == net:
+							yield data
+
+						else:
+							yield self.__override_network(data, net)
 
 			else:
 				rs = RecordStream.Open(self.__url)
@@ -143,7 +169,7 @@ class _MyRecordStream(object):
 				if rs is None:
 					raise Exception("could not open record stream")
 
-				rs.addStream(net, sta, loc, cha, startt, endt)
+				rs.addStream(archNet, sta, loc, cha, startt, endt)
 				rsInput = RecordInput(rs, Array.INT, Record.SAVE_RAW)
 				eof = False
 
@@ -167,7 +193,12 @@ class _MyRecordStream(object):
 
 					if data:
 						size += len(data)
-						yield data
+
+						if archNet == net:
+							yield data
+
+						else:
+							yield self.__override_network(data, net)
 
 			if self.__tracker:
 				net_class = 't' if net[0] in "0123456789XYZ" else 'p'
@@ -532,7 +563,7 @@ class FDSNDataSelect(resource.Resource):
 							                 s.time.end.iso()))
 							rs.addStream(net.code(), sta.code(), loc.code(),
 							             cha.code(), s.time.start, s.time.end,
-							             utils.isRestricted(cha))
+							             utils.isRestricted(cha), sta.archiveNetworkCode())
 
 		# Build output filename
 		fileName = Application.Instance()._fileNamePrefix.replace("%time", time.strftime('%Y-%m-%dT%H:%M:%S'))+'.mseed'
