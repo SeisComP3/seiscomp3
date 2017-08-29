@@ -199,6 +199,11 @@
 					GnuPG home directory.
 					</description>
 				</parameter>
+				<parameter name="blacklist" type="list:string">
+					<description>
+					List of revoked token IDs.
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 	</module>
