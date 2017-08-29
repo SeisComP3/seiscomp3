@@ -155,7 +155,8 @@ class _StationRequestOptions(RequestOptions):
 
 			for ro in self.streams:
 				# station code
-				if ro.channel and not ro.channel.matchSta(sta.code()):
+				if ro.channel and (not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -170,13 +171,15 @@ class _StationRequestOptions(RequestOptions):
 
 
 	#---------------------------------------------------------------------------
-	def locationIter(self, sta, matchTime=False):
+	def locationIter(self, net, sta, matchTime=False):
 		for i in xrange(sta.sensorLocationCount()):
 			loc = sta.sensorLocation(i)
 
 			for ro in self.streams:
 				# location code
-				if ro.channel and not ro.channel.matchLoc(loc.code()):
+				if ro.channel and (not ro.channel.matchLoc(loc.code()) or \
+						   not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -191,13 +194,16 @@ class _StationRequestOptions(RequestOptions):
 
 
 	#---------------------------------------------------------------------------
-	def streamIter(self, loc, matchTime=False):
+	def streamIter(self, net, sta, loc, matchTime=False):
 		for i in xrange(loc.streamCount()):
 			stream = loc.stream(i)
 
 			for ro in self.streams:
 				# stream code
-				if ro.channel and not ro.channel.matchCha(stream.code()):
+				if ro.channel and (not ro.channel.matchCha(stream.code()) or \
+						   not ro.channel.matchLoc(loc.code()) or \
+						   not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
@@ -337,7 +343,7 @@ class FDSNStation(resource.Resource):
 				if not HTTP.checkObjects(req, objCount, self._maxObj): return False
 				if ro.includeCha:
 					numCha, numLoc, d, s = \
-						self._processStation(newNet, sta, ro, skipRestricted)
+						self._processStation(newNet, net, sta, ro, skipRestricted)
 					if numCha > 0:
 						locCount += numLoc
 						chaCount += numCha
@@ -346,7 +352,7 @@ class FDSNStation(resource.Resource):
 							return False
 						dataloggers |= d
 						sensors |= s
-				elif self._matchStation(sta, ro):
+				elif self._matchStation(net, sta, ro):
 					if ro.includeSta:
 						newNet.add(DataModel.Station(sta))
 					else:
@@ -419,7 +425,7 @@ class FDSNStation(resource.Resource):
 				# at least one matching station is required
 				stationFound = False
 				for sta in ro.stationIter(net, False):
-					if self._matchStation(sta, ro):
+					if self._matchStation(net, sta, ro):
 						stationFound = True
 						break
 				if not stationFound: continue
@@ -445,7 +451,7 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations
 				for sta in ro.stationIter(net, True):
-					if not self._matchStation(sta, ro): continue
+					if not self._matchStation(net, sta, ro): continue
 
 					try: lat = str(sta.latitude())
 					except ValueError: lat = ''
@@ -476,8 +482,8 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations, locations, streams
 				for sta in ro.stationIter(net, False):
-					for loc in ro.locationIter(sta, True):
-						for stream in ro.streamIter(loc, True):
+					for loc in ro.locationIter(net, sta, True):
+						for stream in ro.streamIter(net, sta, loc, True):
 							if skipRestricted and utils.isRestricted(stream): continue
 
 							try: lat = str(loc.latitude())
@@ -551,16 +557,16 @@ class FDSNStation(resource.Resource):
 	# Checks if at least one location and channel combination matches the
 	# request options
 	@staticmethod
-	def _matchStation(sta, ro):
+	def _matchStation(net, sta, ro):
 		# No filter: return true immediately
 		if not ro.channel or (not ro.channel.loc and not ro.channel.cha):
 			return True
 
-		for loc in ro.locationIter(sta, False):
+		for loc in ro.locationIter(net, sta, False):
 			if not ro.channel.cha and not ro.time:
 				return True
 
-			for stream in ro.streamIter(loc, False):
+			for stream in ro.streamIter(net, sta, loc, False):
 				return True
 
 		return False
@@ -570,13 +576,13 @@ class FDSNStation(resource.Resource):
 	# Adds a deep copy of the specified station to the new network if the
 	# location and channel combination matches the request options (if any)
 	@staticmethod
-	def _processStation(newNet, sta, ro, skipRestricted):
+	def _processStation(newNet, net, sta, ro, skipRestricted):
 		chaCount = 0
 		dataloggers, sensors = set(), set()
 		newSta = DataModel.Station(sta)
-		for loc in ro.locationIter(sta, True):
+		for loc in ro.locationIter(net, sta, True):
 			newLoc = DataModel.SensorLocation(loc)
-			for stream in ro.streamIter(loc, True):
+			for stream in ro.streamIter(net, sta, loc, True):
 				if skipRestricted and utils.isRestricted(stream): continue
 				newLoc.add(DataModel.Stream(stream))
 				dataloggers.add(stream.datalogger())
