@@ -499,7 +499,7 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def site(self):
+	def _site(self):
 		modeStr = None
 		if self._evaluationMode is not None:
 			modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
@@ -704,11 +704,16 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def reloadHandler(self, signum, frame):
-		Logging.info("SIGHUP received: reloading inventory")
+	def _reloadTask(self):
+		if not self.__sighup:
+			return
+
+		self.__sighup = False
+
+		Logging.info("reloading inventory")
 		self.reloadInventory()
 
-		site = self.site()
+		site = self._site()
 
 		if site:
 			self.__tcpPort.factory = site
@@ -721,13 +726,19 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
+	def _sighupHandler(self, signum, frame):
+		Logging.info("SIGHUP received")
+		self.__sighup = True
+
+
+	#---------------------------------------------------------------------------
 	def run(self):
 		retn = False
 		try:
 			for user in self._authBlacklist:
 				self._userdb.blacklistUser(user)
 
-			site = self.site()
+			site = self._site()
 
 			if not site:
 				return False
@@ -739,7 +750,9 @@ class FDSNWS(Application):
 			                                   self._listenAddress)
 
 			# setup signal handler
-			signal.signal(signal.SIGHUP, self.reloadHandler)
+			self.__sighup = False
+			signal.signal(signal.SIGHUP, self._sighupHandler)
+		        task.LoopingCall(self._reloadTask).start(60, False)
 
 			# start processing
 			Logging.info("start listening")
