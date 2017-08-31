@@ -29,6 +29,7 @@
 #include <fdsnxml/poleandzero.h>
 #include <fdsnxml/responselist.h>
 #include <fdsnxml/responselistelement.h>
+#include <fdsnxml/output.h>
 
 #include <seiscomp3/core/timewindow.h>
 #include <seiscomp3/datamodel/inventory_package.h>
@@ -1786,6 +1787,9 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	string oldDLSN = sc_stream->dataloggerSerialNumber();
 	string oldSN = sc_stream->sensor();
 	string oldSNSN = sc_stream->sensorSerialNumber();
+	string oldFlags = sc_stream->flags();
+
+	string flags;
 
 	try {
 		if ( cha->endDate().valid() )
@@ -1797,6 +1801,17 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 
 	sc_stream->setDepth(cha->depth().value());
 	sc_stream->setFormat(cha->storageFormat());
+
+	for ( size_t i = 0; i < cha->typeCount(); ++i )
+		flags += cha->type(i)->type().toString()[0];
+
+	/* Should it default to "GC"? Currently no.
+	if ( flags.empty() )
+		flags = "GC";
+	*/
+
+	sc_stream->setFlags(flags);
+
 	try { sc_stream->setRestricted(cha->restrictedStatus() != FDSNXML::RST_OPEN); }
 	catch ( ... ) { sc_stream->setRestricted(Core::None); }
 
@@ -2288,6 +2303,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 
 	UPD(needUpdate, oldEnd, Core::Time, sc_stream->end());
 	UPD(needUpdate, oldDep, double, sc_stream->depth());
+	if ( oldFlags != sc_stream->flags() ) needUpdate = true;
 	if ( oldFormat != sc_stream->format() ) needUpdate = true;
 	UPD(needUpdate, oldRestricted, bool, sc_stream->restricted());
 	UPD(needUpdate, oldsrNum, int, sc_stream->sampleRateNumerator());
