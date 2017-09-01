@@ -223,7 +223,7 @@ class AuthResource(resource.Resource):
 			return "token expired"
 
 		userid = base64.urlsafe_b64encode(hashlib.sha256(verified.data).digest()[:18])
-		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600))
+		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600), verified.data)
 
 		return '%s:%s' % (userid, password)
 
