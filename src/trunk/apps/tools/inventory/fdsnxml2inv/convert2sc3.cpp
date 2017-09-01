@@ -49,7 +49,7 @@
 
 using namespace std;
 
-#define LOG_STAGES 1
+#define LOG_STAGES 0
 
 
 namespace Seiscomp {
@@ -706,9 +706,18 @@ T *create(const FDSNXML::BaseFilter *n) {
 DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
                                   const FDSNXML::Coefficients *coeff) {
 	if ( coeff->cfTransferFunctionType() != FDSNXML::CFTFT_DIGITAL ) {
-		SEISCOMP_ERROR("only response coefficients with transfer function "
-		                 "type \"DIGITAL\" supported");
+		SEISCOMP_ERROR("only coefficient responses with transfer function "
+		               "type \"DIGITAL\" supported");
 		return NULL;
+	}
+
+	if ( coeff->denominatorCount() > 0 ) {
+		if ( (coeff->denominatorCount() > 1) ||
+		     (coeff->denominator(0)->value() != 1.0) ) {
+			SEISCOMP_ERROR("coefficient responses with non-trivial "
+			               "denominators are not supported");
+			return NULL;
+		}
 	}
 
 	DataModel::ResponseFIRPtr rf = create<DataModel::ResponseFIR>(coeff);
@@ -731,6 +740,55 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 	}
 
 	return rf;
+}
+
+
+DataModel::ResponseIIRPtr convertIIR(const FDSNXML::ResponseStage *resp,
+                                     const FDSNXML::Coefficients *coeff) {
+	DataModel::ResponseIIRPtr rp = create<DataModel::ResponseIIR>(coeff);
+
+	switch ( coeff->cfTransferFunctionType() ) {
+		case FDSNXML::PZTFT_LAPLACE_RAD:
+			rp->setType("A");
+			break;
+		case FDSNXML::PZTFT_LAPLACE_HZ:
+			rp->setType("B");
+			break;
+		case FDSNXML::PZTFT_DIGITAL_Z_TRANSFORM:
+			rp->setType("D");
+			break;
+		default:
+			break;
+	}
+
+	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
+	try { rp->setDecimationFactor(resp->decimation().factor()); }
+	catch ( ... ) {}
+	try { rp->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
+	catch ( ... ) {}
+	try { rp->setCorrection(resp->decimation().correction().value()*resp->decimation().inputSampleRate().value()); }
+	catch ( ... ) {}
+
+	rp->setNumberOfNumerators(coeff->numeratorCount());
+	rp->setNumberOfDenominators(coeff->denominatorCount());
+
+	rp->setNumerators(DataModel::RealArray());
+	vector<double> &numerators = rp->numerators().content();
+
+	for ( size_t n = 0; n < coeff->numeratorCount(); ++n ) {
+		FDSNXML::FloatType *num = coeff->numerator(n);
+		numerators.push_back(num->value());
+	}
+
+	rp->setDenominators(DataModel::RealArray());
+	vector<double> &denominators = rp->denominators().content();
+
+	for ( size_t n = 0; n < coeff->denominatorCount(); ++n ) {
+		FDSNXML::FloatType *num = coeff->denominator(n);
+		denominators.push_back(num->value());
+	}
+
+	return rp;
 }
 
 
@@ -2125,38 +2183,75 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 			}
 			case RT_RC:
 			{
-				bool newFIR = true;
-
-				DataModel::ResponseFIRPtr rf;
 				const FDSNXML::Coefficients *coeff = &stage->coefficients();
-				rf = convert(*it, coeff);
 
-				if ( !rf ) {
-					SEISCOMP_ERROR("%s: stage %d contains an unsupported filter configuration",
-					               chaCode.c_str(), stage->number());
-					return false;
-				}
+				if ( (coeff->cfTransferFunctionType() != FDSNXML::CFTFT_DIGITAL) ||
+				     ((coeff->denominatorCount() > 0) &&
+				      (coeff->denominatorCount() > 1 || coeff->denominator(0)->value() != 1.0)) ) {
+					bool newIIR = true;
+					DataModel::ResponseIIRPtr iir;
+					iir = convertIIR(*it, coeff);
 
-				checkFIR(rf.get());
-
-				for ( size_t f = 0; f < _inv->responseFIRCount(); ++f ) {
-					DataModel::ResponseFIR *fir = _inv->responseFIR(f);
-					if ( equal(fir, rf.get()) ) {
-						rf = fir;
-						newFIR = false;
-						break;
+					if ( !iir ) {
+						SEISCOMP_ERROR("%s: stage %d contains an unconvertible IIR coefficient filter configuration",
+						               chaCode.c_str(), stage->number());
+						return false;
 					}
-				}
 
-				if ( newFIR ) {
-					addRespToInv(rf.get());
-					//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
+					checkIIR(iir.get());
+
+					for ( size_t f = 0; f < _inv->responseIIRCount(); ++f ) {
+						DataModel::ResponseIIR *iir_ = _inv->responseIIR(f);
+						if ( equal(iir_, iir.get()) ) {
+							iir = iir_;
+							newIIR = false;
+							break;
+						}
+					}
+
+					if ( newIIR ) {
+						addRespToInv(iir.get());
+						//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
+					}
+					else {
+						//SEISCOMP_DEBUG("Reused PAZ response from paz: %s", rp->publicID().c_str());
+					}
+
+					abstractResponse = iir.get();
 				}
 				else {
-					//SEISCOMP_DEBUG("Reuse FIR filter from coefficients: %s", rf->publicID().c_str());
+					bool newFIR = true;
+					DataModel::ResponseFIRPtr rf;
+					rf = convert(*it, coeff);
+
+					if ( !rf ) {
+						SEISCOMP_ERROR("%s: stage %d contains an unconvertible FIR coefficient filter configuration",
+						               chaCode.c_str(), stage->number());
+						return false;
+					}
+
+					checkFIR(rf.get());
+
+					for ( size_t f = 0; f < _inv->responseFIRCount(); ++f ) {
+						DataModel::ResponseFIR *fir = _inv->responseFIR(f);
+						if ( equal(fir, rf.get()) ) {
+							rf = fir;
+							newFIR = false;
+							break;
+						}
+					}
+
+					if ( newFIR ) {
+						addRespToInv(rf.get());
+						//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
+					}
+					else {
+						//SEISCOMP_DEBUG("Reuse FIR filter from coefficients: %s", rf->publicID().c_str());
+					}
+
+					abstractResponse = rf.get();
 				}
 
-				abstractResponse = rf.get();
 				break;
 			}
 			case RT_PAZ:
