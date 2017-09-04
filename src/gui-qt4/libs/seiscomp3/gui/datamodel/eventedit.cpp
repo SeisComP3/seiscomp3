@@ -376,13 +376,13 @@ void ExtTensorSymbol::customDraw(const Map::Canvas *c, QPainter &p) {
 		symbolPos += _offset;
 		QColor color = _selected ? Qt::black : QColor(64, 64, 64);
 		p.setPen(QPen(color, 1, _selected ? Qt::SolidLine : Qt::DashLine));
-		p.drawLine(_mapPosition, symbolPos);
+		p.drawLine(pos(), symbolPos);
 		p.setPen(color);
 		p.setBrush(QBrush(color));
-		p.drawEllipse(QRect(_mapPosition.x()-2, _mapPosition.y()-2, 4, 4));
+		p.drawEllipse(QRect(pos().x()-2, pos().y()-2, 4, 4));
 	}
 	else
-		symbolPos = _mapPosition;
+		symbolPos = pos();
 
 	p.drawImage(symbolPos - QPoint(_size.width()/2, _size.height()/2), _buffer);
 
