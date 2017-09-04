@@ -52,8 +52,9 @@ REGISTER_RECORDSTREAM(FDSNWSConnection, "fdsnws");
 REGISTER_RECORDSTREAM(FDSNWSSSLConnection, "fdsnwss");
 
 
-FDSNWSConnectionBase::FDSNWSConnectionBase(IO::Socket *socket, int defaultPort)
+FDSNWSConnectionBase::FDSNWSConnectionBase(const char *protocol, IO::Socket *socket, int defaultPort)
 : _stream(std::istringstream::in|std::istringstream::binary)
+, _protocol(protocol)
 , _sock(socket)
 , _defaultPort(defaultPort)
 , _readingData(false)
@@ -147,7 +148,7 @@ bool FDSNWSConnectionBase::setTimeout(int seconds) {
 
 bool FDSNWSConnectionBase::clear() {
 	this->~FDSNWSConnectionBase();
-	new(this) FDSNWSConnectionBase(_sock.get(), _defaultPort);
+	new(this) FDSNWSConnectionBase(_protocol, _sock.get(), _defaultPort);
 	setSource(_host + _url);
 	return true;
 }
@@ -201,6 +202,7 @@ void FDSNWSConnectionBase::handshake() {
 		request += "\r\n";
 	}
 
+	SEISCOMP_DEBUG("POST %s://%s%s", _protocol, _host.c_str(), _url.c_str());
 	SEISCOMP_DEBUG("Sending request:\n%s", request.c_str());
 
 	_sock->sendRequest(string("POST ") + _url + " HTTP/1.1", false);
@@ -443,8 +445,8 @@ std::string FDSNWSConnectionBase::readBinary(int size) {
 
 
 FDSNWSConnection::FDSNWSConnection()
-: FDSNWSConnectionBase(new IO::Socket, 80) {}
+: FDSNWSConnectionBase("http", new IO::Socket, 80) {}
 
 
 FDSNWSSSLConnection::FDSNWSSSLConnection()
-: FDSNWSConnectionBase(new IO::SSLSocket, 443) {}
+: FDSNWSConnectionBase("https", new IO::SSLSocket, 443) {}

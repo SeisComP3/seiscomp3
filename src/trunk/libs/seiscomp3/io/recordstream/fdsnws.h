@@ -33,7 +33,7 @@ namespace RecordStream {
 class SC_SYSTEM_CORE_API FDSNWSConnectionBase : public IO::RecordStream {
 	protected:
 		//! C'tor
-		FDSNWSConnectionBase(IO::Socket *socket, int defaultPort);
+		FDSNWSConnectionBase(const char *protocol, IO::Socket *socket, int defaultPort);
 
 
 	public:
@@ -88,6 +88,7 @@ class SC_SYSTEM_CORE_API FDSNWSConnectionBase : public IO::RecordStream {
 
 	private:
 		std::istringstream _stream;
+		const char *_protocol;
 		IO::SocketPtr _sock;
 		std::string _host;
 		std::string _url;
