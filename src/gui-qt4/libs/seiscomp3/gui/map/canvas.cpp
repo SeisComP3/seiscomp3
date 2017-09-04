@@ -125,33 +125,6 @@ QImage getDecorationSymbol(const QSize& size) {
 }
 
 
-void readLayerProperties(LayerProperties *props) {
-	const static std::string cfgVisible = ".visible";
-	const static std::string cfgPen = ".pen";
-	const static std::string cfgBrush = ".brush";
-	const static std::string cfgFont = ".font";
-	const static std::string cfgDrawName = ".drawName";
-	const static std::string cfgDebug = ".debug";
-	const static std::string cfgRank = ".rank";
-	const static std::string cfgRoughness = ".roughness";
-
-	// Query properties from config
-	std::string query = CFG_LAYER_PREFIX;
-	if ( !props->name.empty() ) query += "." + props->name;
-
-	try { props->visible = SCApp->configGetBool(query + cfgVisible); } catch( ... ) {}
-	props->pen = SCApp->configGetPen(query + cfgPen, props->pen);
-	props->brush = SCApp->configGetBrush(query + cfgBrush, props->brush);
-	props->font = SCApp->configGetFont(query + cfgFont, props->font);
-	try { props->drawName = SCApp->configGetBool(query + cfgDrawName); } catch( ... ) {}
-	try { props->debug = SCApp->configGetBool(query + cfgDebug); } catch( ... ) {}
-	try { props->rank = SCApp->configGetInt(query + cfgRank); } catch( ... ) {}
-	try { props->roughness = SCApp->configGetInt(query + cfgRoughness); } catch( ... ) {}
-
-	props->filled = props->brush.style() != Qt::NoBrush;
-}
-
-
 } // ns anonymous
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -301,13 +274,6 @@ Canvas::~Canvas() {
 	delete _projection;
 	_mapSymbolCollection.clear();
 
-	// Delete all LayerProperties
-	for ( size_t i = 0; i < _layerProperties.size(); ++i ) {
-		delete _layerProperties[i];
-	}
-
-	_layerProperties.clear();
-
 	// Remove this from Layers parent
 	for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
 		(*it)->_canvas = NULL;
@@ -430,21 +396,18 @@ void Canvas::init() {
 	_gridLayer.setGridDistance(QPointF(15.0, 15.0));
 	_gridLayer.setVisible(SCScheme.map.showGrid);
 
-	/*
-	_geoFeatureLayer._canvas = this;
+	setupLayer(&_geoFeatureLayer);
 	_geoFeatureLayer.setVisible(SCScheme.map.showLayers);
-	*/
 
 	_layers.clear();
 	_layers.append(&_gridLayer);
 	_layers.append(&_citiesLayer);
-	//_layers.append(&_geoFeatureLayer);
+	_layers.append(&_geoFeatureLayer);
 
 	_center = QPointF(0.0, 0.0);
 	_zoomLevel = 1;
 
 	_grayScale = false;
-	_drawLayers = false;
 
 	_projection->setView(_center, _zoomLevel);
 
@@ -455,6 +418,55 @@ void Canvas::init() {
 		_maxZoom = MAX_ZOOM;
 
 	setDrawLayers(SCScheme.map.showLayers);
+
+	// Read custom layers
+	try {
+		std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
+		for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
+			LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
+			if ( !customLayer ) {
+				SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
+				continue;
+			}
+
+			customLayer->setName(customLayerInterfaces[i].c_str());
+			_customLayers.append(customLayer);
+			prependLayer(customLayer.get());
+		}
+	}
+	catch ( ... ) {}
+
+	// Read layer order
+	try {
+		std::vector<std::string> layerOrder;
+
+		layerOrder = SCApp->configGetStrings(CFG_LAYER_PREFIX);
+		if ( !layerOrder.empty() ) {
+			QMap<std::string, Layer*> layerNameMap;
+
+			// Create layer lookup
+			foreach ( Layer *layer, _layers )
+				layerNameMap[layer->name().toStdString()] = layer;
+
+			Layers orderedLayers;
+			for ( size_t i = 0; i < layerOrder.size(); ++i ) {
+				Layer *layer = layerNameMap.value(layerOrder[i]);
+				if ( layer == NULL )
+					SEISCOMP_WARNING("Layer '%s' in layer list not found", layerOrder[i].c_str());
+				else
+					orderedLayers.append(layer);
+			}
+
+			// Append layers that are not already in ordered list
+			foreach ( Layer *layer, _layers )
+				if ( !orderedLayers.contains(layer) )
+					orderedLayers.append(layer);
+
+			// Finally copy the ordered layer list to the current layer list
+			_layers = orderedLayers;
+		}
+	}
+	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -500,14 +512,7 @@ bool Canvas::isDrawGridEnabled() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLayers(bool e) {
-	if ( e != _drawLayers ) {
-		_drawLayers = e;
-		updateBuffer();
-	}
-
-	if ( _drawLayers && _layerProperties.empty() )
-		// Load all layers and initialize the layer property vector
-		initLayerProperites();
+	_geoFeatureLayer.setVisible(e);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -516,7 +521,7 @@ void Canvas::setDrawLayers(bool e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawLayersEnabled() const {
-	return _drawLayers;
+	return _geoFeatureLayer.isVisible();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -971,96 +976,6 @@ void Canvas::setSelectedCity(const Math::Geo::CityD *c) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/**
- * Initializes the layer property vector with properties read
- * from the symbol collection.
- */
-void Canvas::initLayerProperites() {
-	// Create a layer properties from BNA geo features
-	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
-	std::vector<Geo::Category*>::const_iterator itc = featureSet.categories().begin();
-	for ( ; itc != featureSet.categories().end(); ++itc ) {
-		// Initialize the base pen with the parent pen if available,
-		// else use the default constructor
-		Geo::Category *cat = *itc;
-		LayerProperties *props = cat->parent == 0 ?
-			new LayerProperties(cat->name.c_str()) :
-			new LayerProperties(cat->name.c_str(), _layerProperties.at(cat->parent->id));
-		_layerProperties.push_back(props);
-		readLayerProperties(props);
-	}
-
-	const Geo::PolyRegions &fepRegions = Regions::polyRegions();
-	if ( fepRegions.regionCount() > 0 ) {
-		// Add empty root property if not exists yet
-		if ( _layerProperties.empty() ) {
-			_layerProperties.push_back(new LayerProperties(""));
-			readLayerProperties(_layerProperties.front());
-		}
-		// Add fep properties
-		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
-		readLayerProperties(_layerProperties.back());
-	}
-
-	if ( _customLayers.empty() ) {
-		// Read custom layers
-		try {
-			std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
-			for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
-				LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
-				if ( !customLayer ) {
-					SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
-					continue;
-				}
-
-				customLayer->setName(customLayerInterfaces[i].c_str());
-				_customLayers.append(customLayer);
-				prependLayer(customLayer.get());
-			}
-		}
-		catch ( ... ) {}
-	}
-
-	// Read layer order
-	try {
-		std::vector<std::string> layerOrder;
-
-		layerOrder = SCApp->configGetStrings(CFG_LAYER_PREFIX);
-		if ( !layerOrder.empty() ) {
-			QMap<std::string, Layer*> layerNameMap;
-
-			// Create layer lookup
-			foreach ( Layer *layer, _layers )
-				layerNameMap[layer->name().toStdString()] = layer;
-
-			Layers orderedLayers;
-			for ( size_t i = 0; i < layerOrder.size(); ++i ) {
-				Layer *layer = layerNameMap.value(layerOrder[i]);
-				if ( layer == NULL )
-					SEISCOMP_WARNING("Layer '%s' in layer list not found", layerOrder[i].c_str());
-				else
-					orderedLayers.append(layer);
-			}
-
-			// Append layers that are not already in ordered list
-			foreach ( Layer *layer, _layers )
-				if ( !orderedLayers.contains(layer) )
-					orderedLayers.append(layer);
-
-			// Finally copy the ordered layer list to the current layer list
-			_layers = orderedLayers;
-		}
-
-
-	}
-	catch ( ... ) {}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
                             const LayerProperties *layProp, const QPen &debugPen,
                             size_t &linesPlotted, size_t &polysPlotted,
@@ -1132,73 +1047,6 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 
 	++polysPlotted;
 	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawGeoFeatures(QPainter& painter) {
-	if ( !_drawLayers ) return;
-
-	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
-
-	size_t linesPlotted = 0;
-	size_t polygonsPlotted = 0;
-
-	size_t categoryId = 0;
-	LayerProperties* layProp = NULL;
-
-	// Debug pen and label point
-	QPen debugPen;
-	debugPen.setColor(Qt::black);
-	debugPen.setWidth(1);
-	debugPen.setStyle(Qt::SolidLine);
-
-	bool filled = false;
-
-	// Iterate over all features
-	std::vector<Geo::GeoFeature*>::const_iterator itf = featureSet.features().begin();
-	for ( ; itf != featureSet.features().end(); ++itf ) {
-		// Update painter settings if necessary
-		if ( layProp == NULL || categoryId != (*itf)->category()->id ) {
-			categoryId = (*itf)->category()->id;
-			layProp = _layerProperties.at(categoryId);
-			filled = _projection->isRectangular()?layProp->filled:false;
-			painter.setFont(layProp->font);
-			painter.setPen(layProp->pen);
-			if ( filled ) painter.setBrush(layProp->brush);
-		}
-
-		if ( !drawGeoFeature(painter, *itf, layProp, debugPen, linesPlotted,
-		                     polygonsPlotted, filled) ) break;
-	}
-
-	// Last property is for "fep"
-	const Geo::PolyRegions &fepRegions = Regions().polyRegions();
-	layProp = fepRegions.regionCount() > 0 ? _layerProperties.back() : NULL;
-
-	// Skip, if the layer was disabled
-	if ( layProp && layProp->visible && layProp->rank <= _zoomLevel ) {
-		painter.setFont(layProp->font);
-		painter.setPen(layProp->pen);
-		filled = _projection->isRectangular()?layProp->filled:false;
-		if ( filled ) painter.setBrush(layProp->brush);
-		for ( size_t i = 0; i < fepRegions.regionCount(); ++i ) {
-			Geo::GeoFeature *reg = fepRegions.region(i);
-			if ( !drawGeoFeature(painter, reg, layProp, debugPen, linesPlotted,
-			                     polygonsPlotted, filled) ) break;
-		}
-	}
-
-	/*
-	if ( polygonsPlotted > 0 ) {
-		SEISCOMP_DEBUG("zoom: %f, pixelPerDegree: %f -- %i polygons with %i lines plotted",
-		               _zoomLevel, _projection->pixelPerDegree(),
-		               (uint)polygonsPlotted, (uint)linesPlotted);
-	}
-	*/
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1314,6 +1162,7 @@ void Canvas::drawImageLayer(QPainter &painter) {
 				(*it)->baseBufferUpdated(this);
 		}
 
+		/*
 		if ( painter.device() == &_buffer )
 			drawGeoFeatures(painter);
 		else {
@@ -1322,6 +1171,7 @@ void Canvas::drawImageLayer(QPainter &painter) {
 			                !_previewMode && SCScheme.map.vectorLayerAntiAlias);
 			drawGeoFeatures(p);
 		}
+		*/
 
 		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
 			if ( (*it)->isVisible() )
@@ -1517,7 +1367,7 @@ void Canvas::drawLegends(QPainter& painter) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::draw(QPainter& painter) {
+void Canvas::draw(QPainter &painter) {
 	drawImageLayer(painter);
 	drawVectorLayer(painter);
 
@@ -1893,11 +1743,33 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QMenu* Canvas::menu(QWidget* parent) const {
-	QMenu* menu = new QMenu("Layers", parent);
+	QMenu *menu = new QMenu(tr("Layers"), parent);
 	foreach ( Layer *layer, _layers ) {
-		QMenu* subMenu = layer->menu(menu);
-		if ( subMenu )
-			menu->addMenu(subMenu);
+		if ( layer == &_citiesLayer ||
+		     layer == &_gridLayer )
+			continue;
+
+		if ( layer->name().isEmpty() ) continue;
+
+		if ( !layer->isVisible() ) {
+			QAction *action = menu->addAction(layer->name());
+			action->setCheckable(true);
+			action->setChecked(false);
+			connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+		}
+		else {
+			QMenu *subMenu = layer->menu(menu);
+			if ( subMenu ) {
+				subMenu->setTitle(layer->name());
+				menu->addMenu(subMenu);
+			}
+			else {
+				QAction *action = menu->addAction(layer->name());
+				action->setCheckable(true);
+				action->setChecked(true);
+				connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+			}
+		}
 	}
 
 	if ( menu->isEmpty() ) {
@@ -1913,11 +1785,14 @@ QMenu* Canvas::menu(QWidget* parent) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateLayer(const Layer::UpdateHints& hints) {
+void Canvas::updateLayer(const Layer::UpdateHints &hints) {
 	if ( hints.testFlag(Layer::Position) ) {
 		Layer *layer = static_cast<Layer*>(sender());
 		layer->calculateMapPosition(this);
 	}
+
+	if ( hints.testFlag(Layer::RasterLayer) )
+		updateBuffer();
 
 	updateRequested();
 }

@@ -23,18 +23,34 @@ namespace Map {
 
 
 class Canvas;
-class Projection;
+class LayerProperties;
 
 
 class SC_GUI_API GeoFeatureLayer : public Layer {
+	Q_OBJECT
+
+
 	public:
 		GeoFeatureLayer(QObject *parent = NULL);
 		virtual ~GeoFeatureLayer();
 
-		virtual void draw(const Canvas *canvas, QPainter &painter);
+		virtual void setVisible(bool flag);
+		virtual void bufferUpdated(Canvas *canvas);
+
+		virtual QMenu *menu(QWidget*) const;
+
+
+	private slots:
+		void toggleFeatureVisibility(bool);
+
+
+	private:
+		void initLayerProperites();
+
 
 	private:
 		bool _initialized;
+		std::vector<LayerProperties*> _layerProperties;
 };
 
 

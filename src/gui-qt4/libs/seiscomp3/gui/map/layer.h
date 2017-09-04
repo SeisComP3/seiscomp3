@@ -35,14 +35,18 @@ class QMenu;
 class QPainter;
 class QWidget;
 
+
 namespace Seiscomp {
 
 namespace Config {
+
 class Config;
+
 }
 
 namespace Gui {
 namespace Map {
+
 
 class Canvas;
 
@@ -52,7 +56,12 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 	Q_OBJECT
 
 	public:
-		enum UpdateHint{Position};
+		enum UpdateHint {
+			Redraw       = 0x00, // Just redraw
+			Position     = 0x01, // Update the layers position
+			RasterLayer  = 0x02  // Update the map base layer
+		};
+
 		Q_DECLARE_FLAGS(UpdateHints, UpdateHint)
 
 		typedef QList<Legend*> Legends;
@@ -65,8 +74,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 	public:
 		virtual void setConfig(const std::string &/*config*/) {}
-		virtual void init(const Seiscomp::Config::Config&);
-		virtual void draw(const Seiscomp::Gui::Map::Canvas*, QPainter&) {}
+		virtual void init(const Config::Config&);
+		virtual void draw(const Canvas*, QPainter&) {}
 
 		virtual Layer &operator =(const Layer &other);
 		virtual Layer *clone() const { return NULL; }
@@ -84,8 +93,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		void setDescription(const QString&);
 		const QString &description() const;
 
-		bool addLegend(Seiscomp::Gui::Map::Legend *legend);
-		bool removeLegend(Seiscomp::Gui::Map::Legend *legend);
+		bool addLegend(Legend *legend);
+		bool removeLegend(Legend *legend);
 
 		int legendCount() const { return _legends.count(); }
 		Legend *legend(int i) const;
@@ -107,10 +116,10 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		 */
 		virtual QSize size() const;
 
-		virtual void calculateMapPosition(const Map::Canvas *canvas);
+		virtual void calculateMapPosition(const Canvas *canvas);
 		virtual bool isInside(int x, int y) const;
-		virtual void baseBufferUpdated(Map::Canvas *canvas);
-		virtual void bufferUpdated(Map::Canvas *canvas);
+		virtual void baseBufferUpdated(Canvas *canvas);
+		virtual void bufferUpdated(Canvas *canvas);
 
 		virtual void handleEnterEvent();
 		virtual void handleLeaveEvent();
@@ -146,6 +155,7 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 	friend class Canvas;
 };
 
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(Layer::UpdateHints)
 
 DEFINE_INTERFACE_FACTORY(Layer);
@@ -157,5 +167,6 @@ Seiscomp::Core::Generic::InterfaceFactory<Seiscomp::Gui::Map::Layer, Class> __##
 } // namespace Map
 } // namespce Gui
 } // namespace Seiscomp
+
 
 #endif

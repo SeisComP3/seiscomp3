@@ -7,6 +7,9 @@ SET(GUI_MAP_LAYER_SOURCES
 SET(GUI_MAP_LAYER_HEADERS
 	citieslayer.h
 	gridlayer.h
+)
+
+SET(GUI_MAP_LAYER_MOC_HEADERS
 	geofeaturelayer.h
 )
 

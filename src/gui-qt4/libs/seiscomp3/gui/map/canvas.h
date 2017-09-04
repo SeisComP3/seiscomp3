@@ -11,9 +11,9 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_GUI_MAP_CANVAS_H__
 #define __SEISCOMP_GUI_MAP_CANVAS_H__
+
 
 #ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/maps.h>
@@ -33,10 +33,13 @@
 #include <QPolygon>
 
 class QMouseEvent;
+class QMenu;
+
 
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
+
 
 class Layer;
 
@@ -89,9 +92,6 @@ class SC_GUI_API Canvas : public QObject {
 		bool setProjectionByName(const char *name);
 		const std::string &projectionName() const { return _projectionName; }
 
-		void setPreviewMode(bool);
-		void setBilinearFilter(bool);
-
 		void setSize(int w, int h);
 		QSize size() const { return _buffer.size(); }
 		int width() const { return _buffer.width(); }
@@ -99,6 +99,28 @@ class SC_GUI_API Canvas : public QObject {
 
 		void setGrayScale(bool);
 		bool isGrayScale() const;
+
+		/**
+		 * @brief Sets bilinear filtering for map tile interpolation. This is
+		 *        only used if not in preview mode.
+		 * @param enable Boolean flag
+		 */
+		void setBilinearFilter(bool enable);
+
+		/**
+		 * @brief Enables the preview mode. The preview mode is meant to be
+		 *        used for fast rendering the map, e.g. with antialiasing
+		 *        switched of. This is mainly used while dragging the map.
+		 * @param enable Boolean flag
+		 */
+		void setPreviewMode(bool enable);
+
+		/**
+		 * @brief Returns whether the canvas rendering is currently in preview
+		 *        mode or not.
+		 * @return A boolean flag
+		 */
+		bool previewMode() const;
 
 		void setDrawGrid(bool);
 		bool isDrawGridEnabled() const;
@@ -141,7 +163,7 @@ class SC_GUI_API Canvas : public QObject {
 
 		//! Draws a geometric line (great circle) given in geographical coordinates (lon, lat)
 		//! Returns the distance in degree of the line
-		double drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end) const;
+		double drawGeoLine(QPainter& painter, const QPointF& start, const QPointF& end) const;
 
 		//! Draws a geofeature with layer properties.
 		bool drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
@@ -152,15 +174,15 @@ class SC_GUI_API Canvas : public QObject {
 		//! Draws a polyline in geographical coordinates (lon, lat).
 		//! Returns number of line segments drawn.
 		//! Does not check for clipping
-		size_t drawGeoPolyline(QPainter& p, size_t n, const Math::Geo::CoordF *line,
+		size_t drawGeoPolyline(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
 		                       bool isClosedPolygon, uint minPixelDist = 3,
 		                       bool interpolate = false) const;
 		//! Does not check for clipping
-		size_t drawGeoPolygon(QPainter& p, size_t n, const Math::Geo::CoordF *line,
+		size_t drawGeoPolygon(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
 		                      uint minPixelDist = 3) const;
 		//! Draws a GeoFeature as either polyline or filled polygon and
 		//! checks for clipping
-		size_t drawGeoFeature(QPainter& p, const Geo::GeoFeature *feature,
+		size_t drawGeoFeature(QPainter &painter, const Geo::GeoFeature *feature,
 		                      uint minPixelDist = 3, bool interpolate = false,
 		                      bool filled = false) const;
 
@@ -170,17 +192,11 @@ class SC_GUI_API Canvas : public QObject {
 		void translate(const QPoint &delta);
 		void translate(const QPointF &delta);
 
-		//! Returns a reference to the layerproperties vector
-		const std::vector<LayerProperties*> &layerProperties() {
-			return _layerProperties;
-		}
+		void drawImageLayer(QPainter &painter);
+		void drawVectorLayer(QPainter &painter);
 
-		void drawImageLayer(QPainter&);
-		void drawVectorLayer(QPainter&);
-
-		void drawGeoFeatures(QPainter& p);
-		void drawLayers(QPainter& p);
-		void drawDrawables(QPainter& p);
+		void drawLayers(QPainter &painter);
+		void drawDrawables(QPainter &painter);
 		void drawImage(const QRectF &geoReference, const QImage &image,
 		               CompositionMode compositionMode = CompositionMode_Default);
 
@@ -236,6 +252,7 @@ class SC_GUI_API Canvas : public QObject {
 		void onObjectDestroyed(QObject *object);
 		void setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool);
 
+
 	signals:
 		//! This signal is emitted if draw() caused asynchronous data requests
 		//! and when those requests are finished.
@@ -246,6 +263,7 @@ class SC_GUI_API Canvas : public QObject {
 		void projectionChanged(Seiscomp::Gui::Map::Projection*);
 		void updateRequested();
 		void customLayer(QPainter*);
+
 
 	private:
 		void init();
@@ -259,12 +277,6 @@ class SC_GUI_API Canvas : public QObject {
 		void drawDrawables(QPainter &painter, Symbol::Priority priority);
 
 		void drawLegends(QPainter &painter);
-
-		/**
-		 * Initializes the layer property vector with properties read
-		 * from the symbol collection.
-		 */
-		void initLayerProperites();
 
 		int polyToCache(size_t n, const Math::Geo::CoordF *points,
 		                uint minPixelDist) const;
@@ -315,21 +327,19 @@ class SC_GUI_API Canvas : public QObject {
 		QPointF                       _center;
 		float                         _zoomLevel;
 		bool                          _grayScale;
-		bool                          _drawLayers;
 		bool                          _filterMap;
 		bool                          _dirtyImage;
 		bool                          _dirtyLayers;
 		bool                          _previewMode;
 
 		DefaultSymbolCollection       _mapSymbolCollection;
-		std::vector<LayerProperties*> _layerProperties;
 
 		Layers                        _layers;
 		Layer                        *_hoverLayer;
 		CustomLayers                  _customLayers;
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;
-		//GeoFeatureLayer               _geoFeatureLayer;
+		GeoFeatureLayer               _geoFeatureLayer;
 
 		LegendAreas                   _legendAreas;
 		int                           _margin;
@@ -339,8 +349,14 @@ class SC_GUI_API Canvas : public QObject {
 };
 
 
+inline bool Canvas::previewMode() const {
+	return _previewMode;
+}
+
+
 }
 }
 }
+
 
 #endif
