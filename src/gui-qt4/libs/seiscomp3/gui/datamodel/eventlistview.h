@@ -24,7 +24,7 @@
 #include <seiscomp3/core/timewindow.h>
 #endif
 #include <seiscomp3/gui/datamodel/ui_eventlistview.h>
-#include <seiscomp3/gui/datamodel/ui_eventlistviewfilterdialog.h>
+#include <seiscomp3/gui/datamodel/ui_eventlistviewregionfilterdialog.h>
 
 namespace Seiscomp {
 
@@ -284,6 +284,7 @@ class SC_GUI_API EventListView : public QWidget {
 		//StationMap                        _associatedStations;
 		Seiscomp::DataModel::DatabaseQuery *_reader;
 		Seiscomp::Core::TimeSpan            _timeAgo;
+		Filter                              _filter;
 		bool                                _autoSelect;
 		bool                                _withOrigins;
 		bool                                _withFocalMechanisms;
@@ -300,15 +301,15 @@ class SC_GUI_API EventListView : public QWidget {
 };
 
 
-class SC_GUI_API EventListViewFilterDialog : public QDialog {
+class SC_GUI_API EventListViewRegionFilterDialog : public QDialog {
 	Q_OBJECT
 
 	// ------------------------------------------------------------------
 	//  X'truction
 	// ------------------------------------------------------------------
 	public:
-		EventListViewFilterDialog(QWidget *parent, EventListView::Region *target,
-		                          EventListView::FilterRegions *regionList);
+		EventListViewRegionFilterDialog(QWidget *parent, EventListView::Region *target,
+		                                EventListView::FilterRegions *regionList);
 
 
 	// ------------------------------------------------------------------
@@ -330,11 +331,10 @@ class SC_GUI_API EventListViewFilterDialog : public QDialog {
 	//  Private members
 	// ------------------------------------------------------------------
 	private:
-		::Ui::EventListViewFilterDialog  _ui;
-		EventListView::Region           *_target;
-		EventListView::FilterRegions    *_regionList;
+		::Ui::EventListViewRegionFilterDialog  _ui;
+		EventListView::Region                 *_target;
+		EventListView::FilterRegions          *_regionList;
 };
-
 
 
 }

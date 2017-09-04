@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>EventListViewFilterDialog</class>
- <widget class="QDialog" name="EventListViewFilterDialog" >
+ <class>EventListViewRegionFilterDialog</class>
+ <widget class="QDialog" name="EventListViewRegionFilterDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>

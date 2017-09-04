@@ -2694,7 +2694,7 @@ void EventListView::regionSelectionChanged(int index) {
 
 
 void EventListView::changeRegion() {
-	EventListViewFilterDialog dlg(this, &_filterRegions[0], &_filterRegions);
+	EventListViewRegionFilterDialog dlg(this, &_filterRegions[0], &_filterRegions);
 	if ( dlg.exec() == QDialog::Accepted && _hideOutsideRegion )
 		updateHideState();
 }
@@ -2748,32 +2748,28 @@ void EventListView::selectEventID(const std::string& publicID) {
 
 
 void EventListView::readLastDays() {
-	Core::TimeWindow tw;
-	tw.setEndTime(Core::Time::GMT());
-	tw.setStartTime(tw.endTime() - Core::TimeSpan(_ui.spinBox->value()*86400));
-	setInterval(tw);
-	readFromDatabase(Filter(tw));
+	_filter.endTime = Core::Time::GMT();
+	_filter.startTime = _filter.endTime - Core::TimeSpan(_ui.spinBox->value()*86400);
+	setInterval(Core::TimeWindow(_filter.startTime, _filter.endTime));
+	readFromDatabase(_filter);
 }
 
 void EventListView::readInterval() {
-	Core::TimeWindow tw;
-	tw.setStartTime(Core::Time(
-		_ui.dateTimeEditStart->date().year(),
-		_ui.dateTimeEditStart->date().month(),
-		_ui.dateTimeEditStart->date().day(),
-		_ui.dateTimeEditStart->time().hour(),
-		_ui.dateTimeEditStart->time().minute(),
-		_ui.dateTimeEditStart->time().second()));
+	_filter.startTime = Core::Time(_ui.dateTimeEditStart->date().year(),
+	                               _ui.dateTimeEditStart->date().month(),
+	                               _ui.dateTimeEditStart->date().day(),
+	                               _ui.dateTimeEditStart->time().hour(),
+	                               _ui.dateTimeEditStart->time().minute(),
+	                               _ui.dateTimeEditStart->time().second());
 
-	tw.setEndTime(Core::Time(
-		_ui.dateTimeEditEnd->date().year(),
-		_ui.dateTimeEditEnd->date().month(),
-		_ui.dateTimeEditEnd->date().day(),
-		_ui.dateTimeEditEnd->time().hour(),
-		_ui.dateTimeEditEnd->time().minute(),
-		_ui.dateTimeEditEnd->time().second()));
+	_filter.endTime = Core::Time(_ui.dateTimeEditEnd->date().year(),
+	                             _ui.dateTimeEditEnd->date().month(),
+	                             _ui.dateTimeEditEnd->date().day(),
+	                             _ui.dateTimeEditEnd->time().hour(),
+	                             _ui.dateTimeEditEnd->time().minute(),
+	                             _ui.dateTimeEditEnd->time().second());
 
-	readFromDatabase(Filter(tw));
+	readFromDatabase(_filter);
 }
 
 
@@ -4603,9 +4599,9 @@ void EventListView::evalResultError(const QString &publicID,
 }
 
 
-EventListViewFilterDialog::EventListViewFilterDialog(QWidget *parent,
-                                                     EventListView::Region *target,
-                                                     EventListView::FilterRegions *regionList)
+EventListViewRegionFilterDialog::EventListViewRegionFilterDialog(QWidget *parent,
+                                                                 EventListView::Region *target,
+                                                                 EventListView::FilterRegions *regionList)
 : QDialog(parent), _target(target), _regionList(regionList) {
 	_ui.setupUi(this);
 
@@ -4630,7 +4626,7 @@ EventListViewFilterDialog::EventListViewFilterDialog(QWidget *parent,
 }
 
 
-void EventListViewFilterDialog::regionSelectionChanged(const QString &text) {
+void EventListViewRegionFilterDialog::regionSelectionChanged(const QString &text) {
 	for ( int i = 0; i < _regionList->size(); ++i ) {
 		if ( (*_regionList)[i].name == text ) {
 			_ui.edMinLat->setText(QString::number((*_regionList)[i].minLat));
@@ -4648,12 +4644,12 @@ void EventListViewFilterDialog::regionSelectionChanged(const QString &text) {
 }
 
 
-void EventListViewFilterDialog::showError(const QString &msg) {
+void EventListViewRegionFilterDialog::showError(const QString &msg) {
 	QMessageBox::critical(this, "Error", msg);
 }
 
 
-void EventListViewFilterDialog::accept() {
+void EventListViewRegionFilterDialog::accept() {
 	// Copy minimum latitude
 	if ( _ui.edMinLat->text().isEmpty() ) {
 		showError("Minimum latitude must not be empty.");
