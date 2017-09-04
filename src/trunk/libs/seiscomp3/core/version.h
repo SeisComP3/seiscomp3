@@ -74,6 +74,8 @@ namespace Core {
    - Added Seiscomp::Gui::AbstractLegend
    - Added Seiscomp::Gui::Plot::addGraph(graph)
    - Added Seiscomp::Gui::Plot::setLegend
+   - Added Seiscomp::Gui::Plot::isInsidePlot
+   - Added Seiscomp::Gui::Plot::plotRect
    - Added virtual Seiscomp::Gui::Graph::draw
    - Added virtual Seiscomp::Gui::Graph::drawSymbol
    - Added Seiscomp::Gui::Graph::setName/name

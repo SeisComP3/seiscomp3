@@ -58,7 +58,8 @@ class SC_GUI_API Plot : public QObject {
 		Graph *addGraph(Axis *keyAxis = NULL, Axis *valueAxis = NULL);
 
 		/**
-		 * @brief Adds a graph instance to the plot.
+		 * @brief Adds a graph instance to the plot. This function was added
+		 *        with API version 11.0.0.
 		 * @param graph The graph instance. The ownership is transferred to
 		 *              the plot.
 		 */
@@ -66,7 +67,8 @@ class SC_GUI_API Plot : public QObject {
 
 		/**
 		 * @brief Sets a legend instance for which the draw method is called
-		 *        at every plot update
+		 *        at every plot update. This function was added with API
+		 *        version 11.0.0.
 		 * @param legend The legend instance. The ownership goes to the plot.
 		 */
 		void setLegend(AbstractLegend *legend);
@@ -84,6 +86,22 @@ class SC_GUI_API Plot : public QObject {
 		 */
 		void draw(QPainter &painter, const QRect &rect);
 
+		/**
+		 * @brief Checks whether point is inside the plot area. This function
+		 *        was added with API version 11.0.0.
+		 * @param p The point in pixels
+		 * @return true if inside, false otherwise
+		 */
+		bool isInsidePlot(const QPoint &p) const;
+
+		/**
+		 * @brief Returns the rectangle of the actual data plot without
+		 *        the axis rectangle. This function was added with API
+		 *        version 11.0.0.
+		 * @return QRect
+		 */
+		const QRect &plotRect() const;
+
 
 	// ----------------------------------------------------------------------
 	//  Public Members
@@ -99,7 +117,17 @@ class SC_GUI_API Plot : public QObject {
 		typedef QList<Graph*> Graphs;
 		Graphs          _graphs;
 		AbstractLegend *_legend;
+		QRect           _plotRect; //!< The plot rectangle of the last draw
 };
+
+
+inline bool Plot::isInsidePlot(const QPoint &p) const {
+	return _plotRect.contains(p);
+}
+
+inline const QRect &Plot::plotRect() const {
+	return _plotRect;
+}
 
 
 }
