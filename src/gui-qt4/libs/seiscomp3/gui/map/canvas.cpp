@@ -1759,11 +1759,29 @@ QMenu* Canvas::menu(QWidget* parent) const {
 		}
 		else {
 			QMenu *subMenu = layer->menu(menu);
+
 			if ( subMenu ) {
-				subMenu->setTitle(layer->name());
-				menu->addMenu(subMenu);
+				if ( subMenu->isEmpty() ) {
+					delete subMenu;
+					subMenu = NULL;
+				}
+				else {
+					// Add "Hide layer" option as first option
+					QAction *firstAction = subMenu->actions().first();
+
+					subMenu->setTitle(layer->name());
+					QAction *separator = subMenu->insertSeparator(firstAction);
+					QAction *toggleAction = new QAction(tr("Hide layer"), subMenu);
+					toggleAction->setCheckable(true);
+					toggleAction->setChecked(true);
+					connect(toggleAction, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+
+					subMenu->insertAction(separator, toggleAction);
+					menu->addMenu(subMenu);
+				}
 			}
-			else {
+
+			if ( !subMenu ) {
 				QAction *action = menu->addAction(layer->name());
 				action->setCheckable(true);
 				action->setChecked(true);
