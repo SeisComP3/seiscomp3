@@ -49,7 +49,7 @@
 
 using namespace std;
 
-#define LOG_STAGES 0
+#define LOG_STAGES 1
 
 
 namespace Seiscomp {
@@ -2026,21 +2026,34 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		                 chaCode.c_str());
 	}
 
+	double dataloggerGainScale = 1.0;
+
 	for ( it = stages.begin(); it != stages.end(); ++it ) {
 		const FDSNXML::ResponseStage *stage = *it;
-		ResponseType stageType;
-		const FDSNXML::BaseFilter *filter = getFilter(stage, stageType);
-		if ( filter == NULL ) {
-			cerr << "Channel " << chaCode << ", stage " << stage->number() << " has no filter but a gain. This is currently not supported" << endl;
-			return false;
-		}
-
-		string inputUnit = getBaseUnit(filter->inputUnits().name());
-		string outputUnit = getBaseUnit(filter->outputUnits().name());
 
 		OPT(double) stageGain;
 		try { stageGain = stage->stageGain().value(); }
 		catch ( ... ) {}
+
+		ResponseType stageType;
+		const FDSNXML::BaseFilter *filter = getFilter(stage, stageType);
+		if ( filter == NULL ) {
+			if ( stageGain ) {
+#if LOG_STAGES
+				cerr << " + D#" << stage->number() << " " << stageType.toString() << " datalogger gain times "
+				     << *stageGain << endl;
+#endif
+				dataloggerGainScale *= *stageGain;
+				continue;
+			}
+			else {
+				cerr << "Channel " << chaCode << ", stage " << stage->number() << " has no filter and no gain. This is currently not supported" << endl;
+				return false;
+			}
+		}
+
+		string inputUnit = getBaseUnit(filter->inputUnits().name());
+		string outputUnit = getBaseUnit(filter->outputUnits().name());
 
 		bool isAnalogue;
 		if ( isSensorStage(inputUnit, outputUnit) ) {
@@ -2391,6 +2404,13 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	// Set a default serial number if there is none
 	if ( sc_stream->sensorSerialNumber().empty() )
 		sc_stream->setSensorSerialNumber("yyyy");
+
+	if ( dataloggerGainScale != 1.0 ) {
+#if LOG_STAGES
+		cerr << "+ Scale datalogger gain by " << dataloggerGainScale << endl;
+#endif
+		sc_dl->setGain(sc_dl->gain()*dataloggerGainScale);
+	}
 
 	// All stages have been converted, finalize configuration
 	if ( sc_dl )
