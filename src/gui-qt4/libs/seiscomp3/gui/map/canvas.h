@@ -23,6 +23,7 @@
 #include <seiscomp3/gui/map/mapsymbolcollection.h>
 #include <seiscomp3/gui/map/layers/citieslayer.h>
 #include <seiscomp3/gui/map/layers/gridlayer.h>
+#include <seiscomp3/gui/map/layers/geofeaturelayer.h>
 #include <seiscomp3/math/coord.h>
 #include <seiscomp3/geo/geofeature.h>
 #endif
@@ -328,6 +329,7 @@ class SC_GUI_API Canvas : public QObject {
 		CustomLayers                  _customLayers;
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;
+		//GeoFeatureLayer               _geoFeatureLayer;
 
 		LegendAreas                   _legendAreas;
 		int                           _margin;

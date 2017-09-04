@@ -463,7 +463,7 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 	// Layers (if any)
 
-	int fixedLayers = 2; // cities + grid
+	int fixedLayers = 2; // cities + grid + features
 	int fixedGeoFeatures = 1; // root feature
 	int layerCount = (_canvas.layerProperties().size()-fixedGeoFeatures) + (_canvas.layerCount()-fixedLayers);
 	if ( layerCount > 0 ) {
@@ -471,33 +471,31 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 		_contextLayerMenu = menu->addMenu(cmStrLayers);
 
-		if ( (int)_canvas.layerProperties().size() > fixedGeoFeatures ) {
-			if ( !_canvas.isDrawLayersEnabled() ) {
-				action = _contextLayerMenu->addAction(cmStrLayersGeofeatures);
+		if ( !_canvas.isDrawLayersEnabled() ) {
+			action = _contextLayerMenu->addAction(cmStrLayersGeofeatures);
+			action->setCheckable(true);
+			action->setChecked(false);
+		}
+		else if ( (int)_canvas.layerProperties().size() > fixedGeoFeatures ) {
+			QMenu *subMenu;
+
+			if ( layerCount > 0 )
+				subMenu = _contextLayerMenu->addMenu(cmStrLayersGeofeatures);
+			else
+				subMenu = _contextLayerMenu;
+
+			action = subMenu->addAction(cmStrHideAll);
+			action->setCheckable(true);
+			subMenu->addSeparator();
+
+			std::vector<Map::LayerProperties*>::const_iterator it = _canvas.layerProperties().begin();
+			const Map::LayerProperties *root = *it++;
+			for ( ; it != _canvas.layerProperties().end(); ++it ) {
+				if ( (*it)->parent != root ) continue;
+				action = subMenu->addAction((*it)->name.c_str());
 				action->setCheckable(true);
-				action->setChecked(false);
-			}
-			else {
-				QMenu *subMenu;
-
-				if ( layerCount > 0 )
-					subMenu = _contextLayerMenu->addMenu(cmStrLayersGeofeatures);
-				else
-					subMenu = _contextLayerMenu;
-
-				action = subMenu->addAction(cmStrHideAll);
-				action->setCheckable(true);
-				subMenu->addSeparator();
-
-				std::vector<Map::LayerProperties*>::const_iterator it = _canvas.layerProperties().begin();
-				const Map::LayerProperties *root = *it++;
-				for ( ; it != _canvas.layerProperties().end(); ++it ) {
-					if ( (*it)->parent != root ) continue;
-					action = subMenu->addAction((*it)->name.c_str());
-					action->setCheckable(true);
-					action->setChecked((*it)->visible);
-					action->setData(QVariant::fromValue<void*>(*it));
-				}
+				action->setChecked((*it)->visible);
+				action->setData(QVariant::fromValue<void*>(*it));
 			}
 		}
 

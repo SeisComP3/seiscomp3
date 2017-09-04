@@ -20,7 +20,6 @@
 #include <seiscomp3/gui/map/layer.h>
 #include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/gui/map/texturecache.h>
-#include <seiscomp3/gui/map/layers/citieslayer.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
@@ -431,9 +430,15 @@ void Canvas::init() {
 	_gridLayer.setGridDistance(QPointF(15.0, 15.0));
 	_gridLayer.setVisible(SCScheme.map.showGrid);
 
+	/*
+	_geoFeatureLayer._canvas = this;
+	_geoFeatureLayer.setVisible(SCScheme.map.showLayers);
+	*/
+
 	_layers.clear();
 	_layers.append(&_gridLayer);
 	_layers.append(&_citiesLayer);
+	//_layers.append(&_geoFeatureLayer);
 
 	_center = QPointF(0.0, 0.0);
 	_zoomLevel = 1;
@@ -1202,7 +1207,7 @@ void Canvas::drawGeoFeatures(QPainter& painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLayers(QPainter& painter) {
-	foreach ( Layer* layer, _layers ) {
+	foreach ( Layer *layer, _layers ) {
 		if ( !layer->isVisible() ) continue;
 
 		layer->draw(this, painter);

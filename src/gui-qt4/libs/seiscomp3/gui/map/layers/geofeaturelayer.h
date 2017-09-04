@@ -10,34 +10,37 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
-#ifndef __SEISCOMP_GUI_MAP_LAYERS_GRIDLAYER_H__
-#define __SEISCOMP_GUI_MAP_LAYERS_GRIDLAYER_H__
+#ifndef __SEISCOMP_GUI_MAP_LAYERS_GEOFEATURELAYER_H__
+#define __SEISCOMP_GUI_MAP_LAYERS_GEOFEATURELAYER_H__
 
-#include <seiscomp3/gui/qt4.h>
+
 #include <seiscomp3/gui/map/layer.h>
-#include <seiscomp3/math/coord.h>
+
 
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
 
+
 class Canvas;
+class Projection;
 
-class SC_GUI_API GridLayer : public Layer {
+
+class SC_GUI_API GeoFeatureLayer : public Layer {
 	public:
-		GridLayer(QObject* = NULL);
-		virtual ~GridLayer();
+		GeoFeatureLayer(QObject *parent = NULL);
+		virtual ~GeoFeatureLayer();
 
-		virtual void draw(const Canvas*, QPainter&);
+		virtual void draw(const Canvas *canvas, QPainter &painter);
 
-		void setGridDistance(const QPointF&);
-		const QPointF& gridDistance() const;
 	private:
-		QPointF                _gridDistance;
+		bool _initialized;
 };
 
-} // namespace Map
-} // namespce Gui
-} // namespace Seiscomp
+
+}
+}
+}
+
 
 #endif
