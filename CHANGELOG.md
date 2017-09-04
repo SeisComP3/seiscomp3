@@ -17,6 +17,7 @@ DROP INDEX _parent_oid_2 ON DataloggerCalibration;
 ALTER TABLE DataloggerCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
 ALTER TABLE SensorCalibration ADD start_ms INTEGER AFTER start;
 ALTER TABLE SensorCalibration ADD end_ms INTEGER AFTER end;
+ALTER TABLE SensorCalibration MODIFY gain DOUBLE;
 DROP INDEX _parent_oid_2 ON SensorCalibration;
 ALTER TABLE SensorCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
 ALTER TABLE AuxStream ADD start_ms INTEGER AFTER start;
@@ -42,6 +43,13 @@ ALTER TABLE Network ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start
 ALTER TABLE ResponsePAZ ADD decimationFactor SMALLINT UNSIGNED;
 ALTER TABLE ResponsePAZ ADD delay DOUBLE UNSIGNED;
 ALTER TABLE ResponsePAZ ADD correction DOUBLE;
+ALTER TABLE ResponsePAZ MODIFY gain DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY gain DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY approximationLowerBound DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY approximationUpperBound DOUBLE;
+ALTER TABLE ResponseFAP MODIFY gain DOUBLE;
+ALTER TABLE DataloggerCalibration MODIFY gain DOUBLE;
+ALTER TABLE Datalogger MODIFY gain DOUBLE;
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
@@ -100,6 +108,9 @@ have been added.
 * GUI
 
   * The event list shows status REVIEWED as V and FINAL as F
+  * Added option to allow map layer visibilities and order
+  * Allow to add custom map layers via plugins to the map
+  * Refactored Map API (Canvas, Layer, Legend)
 
 * scmv
 
@@ -120,7 +131,7 @@ have been added.
 * scqc
 
   * Added configuration option ```use3Components``` that allows to use all
-    3 components of a configured station. This only applied if ```useConfiguredStreams```
+    3 components of a configured station. This only applies if ```useConfiguredStreams```
     is active (default).
 
 * scinv
