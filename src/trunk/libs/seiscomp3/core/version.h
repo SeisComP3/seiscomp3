@@ -79,6 +79,7 @@ namespace Core {
    - Added virtual Seiscomp::Gui::Graph::draw
    - Added virtual Seiscomp::Gui::Graph::drawSymbol
    - Added Seiscomp::Gui::Graph::setName/name
+   - Added Seiscomp::Client::Application::reloadBindings
    - Increased datamodel version to 0.10
 
  "10.0.0"   0x0A0000

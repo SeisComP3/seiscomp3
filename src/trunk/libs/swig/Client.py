@@ -1025,6 +1025,11 @@ class Application(Core.InterruptibleObject):
         return _Client.Application_reloadInventory(self)
 
 
+    def reloadBindings(self):
+        """reloadBindings(Application self) -> bool"""
+        return _Client.Application_reloadBindings(self)
+
+
     def Instance():
         """Instance() -> Application"""
         return _Client.Application_Instance()

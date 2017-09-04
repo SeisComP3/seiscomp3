@@ -524,6 +524,12 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 */
 		bool reloadInventory();
 
+		/**
+		 * Reloads the application configuration (bindings) from either an
+		 * XML file or the database.
+		 */
+		bool reloadBindings();
+
 
 	// ----------------------------------------------------------------------
 	//  Static public members

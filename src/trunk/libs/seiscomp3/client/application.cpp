@@ -1661,36 +1661,8 @@ bool Application::init() {
 	if ( _exitRequested )
 		return false;
 
-	if ( _enableLoadConfigModule ) {
-		std::set<std::string> params;
-
-		if ( !_configDB.empty() ) {
-			if ( !loadConfig(_configDB) ) return false;
-		}
-		else if ( _database ) {
-			if ( _query ) {
-				SEISCOMP_INFO("Loading configuration module");
-				showMessage("Reading station config");
-				if ( !_configModuleName.empty() )
-					ConfigDB::Instance()->load(query(), _configModuleName, Core::None, Core::None, Core::None, params);
-				else
-					ConfigDB::Instance()->load(query(), Core::None, Core::None, Core::None, Core::None, params);
-				SEISCOMP_INFO("Finished loading configuration module");
-			}
-			else {
-				SEISCOMP_ERROR("No database query object");
-				return false;
-			}
-		}
-
-		DataModel::Config* config = ConfigDB::Instance()->config();
-		for ( size_t i = 0; i < config->configModuleCount(); ++i ) {
-			if ( config->configModule(i)->name() == _configModuleName ) {
-				_configModule = config->configModule(i);
-				break;
-			}
-		}
-	}
+	if ( !reloadBindings() )
+		return false;
 
 	if ( _exitRequested )
 		return false;
@@ -1878,6 +1850,48 @@ bool Application::reloadInventory() {
 		                                             &_stationTypeFirewall);
 		if ( filtered > 0 )
 			SEISCOMP_INFO("Filtered %d stations by type", filtered);
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::reloadBindings() {
+	_configModule = NULL;
+
+	if ( _enableLoadConfigModule ) {
+		std::set<std::string> params;
+
+		if ( !_configDB.empty() ) {
+			if ( !loadConfig(_configDB) ) return false;
+		}
+		else if ( _database ) {
+			if ( _query ) {
+				SEISCOMP_INFO("Loading configuration module");
+				showMessage("Reading station config");
+				if ( !_configModuleName.empty() )
+					ConfigDB::Instance()->load(query(), _configModuleName, Core::None, Core::None, Core::None, params);
+				else
+					ConfigDB::Instance()->load(query(), Core::None, Core::None, Core::None, Core::None, params);
+				SEISCOMP_INFO("Finished loading configuration module");
+			}
+			else {
+				SEISCOMP_ERROR("No database query object");
+				return false;
+			}
+		}
+
+		DataModel::Config* config = ConfigDB::Instance()->config();
+		for ( size_t i = 0; i < config->configModuleCount(); ++i ) {
+			if ( config->configModule(i)->name() == _configModuleName ) {
+				_configModule = config->configModule(i);
+				break;
+			}
+		}
 	}
 
 	return true;
