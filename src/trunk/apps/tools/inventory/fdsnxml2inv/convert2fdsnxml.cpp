@@ -146,11 +146,9 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseFIR *fir,
 	sx_fir.setOutputUnits(outputUnit);
 
 	try {
-		int idx = 0;
 		const vector<double> &coeff = fir->coefficients().content();
 		for ( size_t c = 0; c < coeff.size(); ++c ) {
 			FDSNXML::NumeratorCoefficientPtr fc = new FDSNXML::NumeratorCoefficient;
-			fc->setI(idx++);
 			fc->setValue(coeff[c]);
 			sx_fir.addNumeratorCoefficient(fc.get());
 		}

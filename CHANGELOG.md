@@ -202,6 +202,13 @@ filters to poles and zeros.
     *trunk* and will update the bindings database. The old behaviour has always
     confused users.
 
+* fdsnxml2inv
+
+  * Declare NumeratorCoefficient.i as optional according to the official schema. Before
+    that change, a lot of responses failed to convert.
+  * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
+    bloating the XML.
+
 
 ## Release 2017.124
 
