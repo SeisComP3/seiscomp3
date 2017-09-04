@@ -70,6 +70,12 @@ namespace Core {
    - Added Seiscomp::Gui::RecordWidget::setGridVSpacing
    - Added Seiscomp::Gui::RecordWidget::setGridVRange
    - Added Seiscomp::Gui::RecordWidget::setGridVScale
+   - Added Seiscomp::Gui::AbstractLegend
+   - Added Seiscomp::Gui::Plot::addGraph(graph)
+   - Added Seiscomp::Gui::Plot::setLegend
+   - Added virtual Seiscomp::Gui::Graph::draw
+   - Added virtual Seiscomp::Gui::Graph::drawSymbol
+   - Added Seiscomp::Gui::Graph::setName/name
    - Increased datamodel version to 0.10
 
  "10.0.0"   0x0A0000
