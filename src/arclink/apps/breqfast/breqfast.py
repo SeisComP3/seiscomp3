@@ -190,14 +190,10 @@ class BreqParser(object):
 
                         n = re.sub("[?]+", "*", network)
                         s = re.sub("[?]+", "*", station)
+			db = self.mgr.get_inventory(network=n, station=s,
+						    start_time=beg_time,
+						    end_time=end_time)
 
-			# FIXME: Following uses default values of
-			# start_time=None, end_time=None,
-			# but these should be set based on the time span
-			# being requested.
-			db = self.mgr.get_inventory(network=n, station=s)
-	
-			netlist = []
 			netlist = db.network.keys()
 			logs.debug("- netlist: %s" % netlist)
 
