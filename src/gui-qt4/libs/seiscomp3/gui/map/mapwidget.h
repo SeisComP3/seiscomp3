@@ -132,7 +132,6 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		QMenu   *_contextProjectionMenu;
 		QMenu   *_contextFilterMenu;
-		QMenu   *_contextLayerMenu;
 
 		double   _zoomSensitivity;
 

@@ -43,23 +43,6 @@ const static char *cmStrBilinear = "Bilinear";
 const static char *cmStrReload = "Reload";
 const static char *cmStrGrid = "Show Grid";
 const static char *cmStrCities = "Show Cities";
-const static char *cmStrLayers = "Show Layers";
-const static char *cmStrLayersGeofeatures = "Features";
-const static char *cmStrHideAll = "Hide All";
-
-
-int isChildOf(QObject *child, QObject *parent) {
-	QObject *p = child->parent();
-	int level = 0;
-	while ( p != NULL ) {
-		++level;
-		if ( p == parent )
-			return level;
-		p = p->parent();
-	}
-
-	return 0;
-}
 
 
 inline QString lat2String(double lat, int precision) {
@@ -412,7 +395,6 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 	_contextProjectionMenu = NULL;
 	_contextFilterMenu = NULL;
-	_contextLayerMenu = NULL;
 
 	// Copy Measurements
 	if ( !_measureText.isEmpty() ) {
@@ -469,7 +451,6 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 	if ( action == NULL ) {
 		_contextProjectionMenu = NULL;
 		_contextFilterMenu = NULL;
-		_contextLayerMenu = NULL;
 		return;
 	}
 
@@ -545,45 +526,9 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 		_canvas.setDrawCities(action->isChecked());
 	else if ( action->text() == cmStrGrid )
 		_canvas.setDrawGrid(action->isChecked());
-	else if ( action->text() == cmStrLayers )
-		_canvas.setDrawLayers(action->isChecked());
-	else if ( _contextLayerMenu && (isChildOf(action, _contextLayerMenu) == 1) ) {
-		if ( action->text() == cmStrLayersGeofeatures )
-			_canvas.setDrawLayers(action->isChecked());
-	}
-	else if ( _contextLayerMenu && (isChildOf(action, _contextLayerMenu) > 1) ) {
-		if ( action->text() == cmStrHideAll )
-			_canvas.setDrawLayers(false);
-		else {
-			/*
-			// Find the LayerProperties which belongs to the action
-			std::vector<Map::LayerProperties*>::const_iterator it =
-				_canvas.layerProperties().begin();
-			const Map::LayerProperties *root = *it++;
-			Map::LayerProperties *prop = NULL;
-			for ( ; it != _canvas.layerProperties().end(); ++it ) {
-				if ( (*it)->parent != root || action->data().value<void*>() != *it ) continue;
-				prop = *it;
-				break;
-			}
-			// If found set the visibility property of this
-			// LayerProperties object and all children
-			if ( prop ) {
-				prop->visible = action->isChecked();
-				it = _canvas.layerProperties().begin();
-				for ( ; it != _canvas.layerProperties().end(); ++it ) {
-					if ( !prop->isChild(*it) ) continue;
-					(*it)->visible = action->isChecked();
-				}
-				_canvas.updateBuffer();
-			}
-			*/
-		}
-	}
 
 	_contextProjectionMenu = NULL;
 	_contextFilterMenu = NULL;
-	_contextLayerMenu = NULL;
 
 	update();
 }
