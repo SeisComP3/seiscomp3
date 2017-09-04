@@ -104,9 +104,9 @@ class ResponseStage : public Core::BaseObject {
 		//! deprecated. Overall sensitivity should be specified in the
 		//! InstrumentSensitivity element.
 		//! XML tag: StageGain
-		void setStageGain(const Gain& stageGain);
-		Gain& stageGain();
-		const Gain& stageGain() const;
+		void setStageGain(const OPT(Gain)& stageGain);
+		Gain& stageGain() throw(Seiscomp::Core::ValueException);
+		const Gain& stageGain() const throw(Seiscomp::Core::ValueException);
 
 		//! Stage sequence number. This is used in all the response SEED
 		//! blockettes.
@@ -131,7 +131,7 @@ class ResponseStage : public Core::BaseObject {
 		OPT(FIR) _fIR;
 		OPT(Polynomial) _polynomial;
 		OPT(Decimation) _decimation;
-		Gain _stageGain;
+		OPT(Gain) _stageGain;
 		int _number;
 		std::string _resourceId;
 };

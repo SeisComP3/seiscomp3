@@ -23,7 +23,7 @@ ResponseStage::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaOb
 	addProperty(objectProperty<FIR>("FIR", "FDSNXML::FIR", false, true, &ResponseStage::setFIR, &ResponseStage::fIR));
 	addProperty(objectProperty<Polynomial>("Polynomial", "FDSNXML::Polynomial", false, true, &ResponseStage::setPolynomial, &ResponseStage::polynomial));
 	addProperty(objectProperty<Decimation>("Decimation", "FDSNXML::Decimation", false, true, &ResponseStage::setDecimation, &ResponseStage::decimation));
-	addProperty(objectProperty<Gain>("StageGain", "FDSNXML::Gain", false, false, &ResponseStage::setStageGain, &ResponseStage::stageGain));
+	addProperty(objectProperty<Gain>("StageGain", "FDSNXML::Gain", false, true, &ResponseStage::setStageGain, &ResponseStage::stageGain));
 	addProperty(Core::simpleProperty("number", "int", false, false, false, false, false, false, NULL, &ResponseStage::setNumber, &ResponseStage::number));
 	addProperty(Core::simpleProperty("resourceId", "string", false, false, false, false, false, false, NULL, &ResponseStage::setResourceId, &ResponseStage::resourceId));
 }
@@ -273,7 +273,7 @@ const Decimation& ResponseStage::decimation() const throw(Seiscomp::Core::ValueE
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void ResponseStage::setStageGain(const Gain& stageGain) {
+void ResponseStage::setStageGain(const OPT(Gain)& stageGain) {
 	_stageGain = stageGain;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -282,8 +282,10 @@ void ResponseStage::setStageGain(const Gain& stageGain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Gain& ResponseStage::stageGain() {
-	return _stageGain;
+Gain& ResponseStage::stageGain() throw(Seiscomp::Core::ValueException) {
+	if ( _stageGain )
+		return *_stageGain;
+	throw Seiscomp::Core::ValueException("ResponseStage.StageGain is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -291,8 +293,10 @@ Gain& ResponseStage::stageGain() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Gain& ResponseStage::stageGain() const {
-	return _stageGain;
+const Gain& ResponseStage::stageGain() const throw(Seiscomp::Core::ValueException) {
+	if ( _stageGain )
+		return *_stageGain;
+	throw Seiscomp::Core::ValueException("ResponseStage.StageGain is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

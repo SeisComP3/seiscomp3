@@ -867,17 +867,27 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 	rf->setCoefficients(DataModel::RealArray());
 	vector<double> &numerators = rf->coefficients().content();
 
-	// Sort coefficients according to its i attribute
-	vector< pair<int,int> > sortedIdx;
-	for ( size_t n = 0; n < fir->numeratorCoefficientCount(); ++n ) {
-		FDSNXML::NumeratorCoefficient *num = fir->numeratorCoefficient(n);
-		sortedIdx.push_back(pair<int,int>(num->i(), n));
-	}
-	sort(sortedIdx.begin(), sortedIdx.end());
+	try {
+		// Sort coefficients according to its i attribute
+		vector< pair<int,int> > sortedIdx;
+		for ( size_t n = 0; n < fir->numeratorCoefficientCount(); ++n ) {
+			FDSNXML::NumeratorCoefficient *num = fir->numeratorCoefficient(n);
+			sortedIdx.push_back(pair<int,int>(num->i(), n));
+		}
+		sort(sortedIdx.begin(), sortedIdx.end());
 
-	for ( size_t n = 0; n < fir->numeratorCoefficientCount(); ++n ) {
-		FDSNXML::NumeratorCoefficient *num = fir->numeratorCoefficient(sortedIdx[n].second);
-		numerators.push_back(num->value());
+		for ( size_t n = 0; n < fir->numeratorCoefficientCount(); ++n ) {
+			FDSNXML::NumeratorCoefficient *num = fir->numeratorCoefficient(sortedIdx[n].second);
+			numerators.push_back(num->value());
+		}
+	}
+	catch ( ... ) {
+		// Since NumeratorCoefficient.i is optional, just one unset attribute
+		// will make sorting impossible, so use the order as given in the XML.
+		for ( size_t n = 0; n < fir->numeratorCoefficientCount(); ++n ) {
+			FDSNXML::NumeratorCoefficient *num = fir->numeratorCoefficient(n);
+			numerators.push_back(num->value());
+		}
 	}
 
 	return rf;

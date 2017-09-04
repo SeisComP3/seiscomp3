@@ -91,8 +91,8 @@ class PolesAndZeros : public BaseFilter {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
-		bool addPole(PoleAndZero *obj);
 		bool addZero(PoleAndZero *obj);
+		bool addPole(PoleAndZero *obj);
 
 		/**
 		 * Removes an object.
@@ -101,8 +101,8 @@ class PolesAndZeros : public BaseFilter {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
-		bool removePole(PoleAndZero *obj);
 		bool removeZero(PoleAndZero *obj);
+		bool removePole(PoleAndZero *obj);
 
 		/**
 		 * Removes an object of a particular class.
@@ -110,17 +110,17 @@ class PolesAndZeros : public BaseFilter {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
-		bool removePole(size_t i);
 		bool removeZero(size_t i);
+		bool removePole(size_t i);
 
 		//! Retrieve the number of objects of a particular class
-		size_t poleCount() const;
 		size_t zeroCount() const;
+		size_t poleCount() const;
 
 		//! Index access
 		//! @return The object at index i
-		PoleAndZero* pole(size_t i) const;
 		PoleAndZero* zero(size_t i) const;
+		PoleAndZero* pole(size_t i) const;
 
 
 	// ------------------------------------------------------------------

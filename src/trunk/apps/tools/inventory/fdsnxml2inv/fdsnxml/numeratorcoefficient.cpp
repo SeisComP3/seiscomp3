@@ -18,7 +18,7 @@ namespace FDSNXML {
 
 NumeratorCoefficient::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *base) : Core::MetaObject(rtti, base) {
 	addProperty(Core::simpleProperty("value", "float", false, false, false, false, false, false, NULL, &NumeratorCoefficient::setValue, &NumeratorCoefficient::value));
-	addProperty(Core::simpleProperty("i", "int", false, false, false, false, false, false, NULL, &NumeratorCoefficient::setI, &NumeratorCoefficient::i));
+	addProperty(Core::simpleProperty("i", "int", false, false, false, false, true, false, NULL, &NumeratorCoefficient::setI, &NumeratorCoefficient::i));
 }
 
 
@@ -29,7 +29,6 @@ IMPLEMENT_METAOBJECT(NumeratorCoefficient)
 
 NumeratorCoefficient::NumeratorCoefficient() {
 	_value = 0;
-	_i = 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -57,7 +56,7 @@ NumeratorCoefficient::NumeratorCoefficient(double value)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 NumeratorCoefficient::NumeratorCoefficient(double value,
-                                           int i)
+                                           const OPT(int)& i)
  : _value(value),
    _i(i) {
 }
@@ -105,7 +104,7 @@ double NumeratorCoefficient::value() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void NumeratorCoefficient::setI(int i) {
+void NumeratorCoefficient::setI(const OPT(int)& i) {
 	_i = i;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -114,8 +113,10 @@ void NumeratorCoefficient::setI(int i) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int NumeratorCoefficient::i() const {
-	return _i;
+int NumeratorCoefficient::i() const throw(Seiscomp::Core::ValueException) {
+	if ( _i )
+		return *_i;
+	throw Seiscomp::Core::ValueException("NumeratorCoefficient.i is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
