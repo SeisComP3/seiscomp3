@@ -748,13 +748,13 @@ DataModel::ResponseIIRPtr convertIIR(const FDSNXML::ResponseStage *resp,
 	DataModel::ResponseIIRPtr rp = create<DataModel::ResponseIIR>(coeff);
 
 	switch ( coeff->cfTransferFunctionType() ) {
-		case FDSNXML::PZTFT_LAPLACE_RAD:
+		case FDSNXML::CFTFT_ANALOG_RAD:
 			rp->setType("A");
 			break;
-		case FDSNXML::PZTFT_LAPLACE_HZ:
+		case FDSNXML::CFTFT_ANALOG_HZ:
 			rp->setType("B");
 			break;
-		case FDSNXML::PZTFT_DIGITAL_Z_TRANSFORM:
+		case FDSNXML::CFTFT_DIGITAL:
 			rp->setType("D");
 			break;
 		default:
