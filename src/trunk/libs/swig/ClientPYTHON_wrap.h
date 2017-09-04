@@ -86,6 +86,18 @@ public:
     virtual void printVersionSwigPublic() {
       Seiscomp::Client::Application::printVersion();
     }
+    virtual void printConfigVariables();
+    virtual void printConfigVariablesSwigPublic() {
+      Seiscomp::Client::Application::printConfigVariables();
+    }
+    virtual void schemaValidationNames(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const;
+    virtual void schemaValidationNamesSwigPublic(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const {
+      Seiscomp::Client::Application::schemaValidationNames(modules,plugins);
+    }
+    virtual bool validateSchemaParameters();
+    virtual bool validateSchemaParametersSwigPublic() {
+      return Seiscomp::Client::Application::validateSchemaParameters();
+    }
     virtual bool handleInitializationError(Seiscomp::Client::Application::Stage stage);
     virtual bool handleInitializationErrorSwigPublic(Seiscomp::Client::Application::Stage stage) {
       return Seiscomp::Client::Application::handleInitializationError(stage);
@@ -196,7 +208,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[38];
+    mutable swig::SwigVar_PyObject vtable[41];
 #endif
 
 };
@@ -272,6 +284,18 @@ public:
     virtual void printVersion();
     virtual void printVersionSwigPublic() {
       Seiscomp::Client::Application::printVersion();
+    }
+    virtual void printConfigVariables();
+    virtual void printConfigVariablesSwigPublic() {
+      Seiscomp::Client::Application::printConfigVariables();
+    }
+    virtual void schemaValidationNames(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const;
+    virtual void schemaValidationNamesSwigPublic(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const {
+      Seiscomp::Client::Application::schemaValidationNames(modules,plugins);
+    }
+    virtual bool validateSchemaParameters();
+    virtual bool validateSchemaParametersSwigPublic() {
+      return Seiscomp::Client::Application::validateSchemaParameters();
     }
     virtual bool handleInitializationError(Seiscomp::Client::Application::Stage stage);
     virtual bool handleInitializationErrorSwigPublic(Seiscomp::Client::Application::Stage stage) {
@@ -392,7 +416,7 @@ private:
       return method;
     }
 private:
-    mutable swig::SwigVar_PyObject vtable[39];
+    mutable swig::SwigVar_PyObject vtable[42];
 #endif
 
 };

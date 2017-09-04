@@ -1107,6 +1107,21 @@ class Application(Core.InterruptibleObject):
         return _Client.Application_printVersion(self)
 
 
+    def printConfigVariables(self):
+        """printConfigVariables(Application self)"""
+        return _Client.Application_printConfigVariables(self)
+
+
+    def schemaValidationNames(self, modules, plugins):
+        """schemaValidationNames(Application self, vectorStr modules, vectorStr plugins)"""
+        return _Client.Application_schemaValidationNames(self, modules, plugins)
+
+
+    def validateSchemaParameters(self):
+        """validateSchemaParameters(Application self) -> bool"""
+        return _Client.Application_validateSchemaParameters(self)
+
+
     def handleInitializationError(self, stage):
         """handleInitializationError(Application self, Seiscomp::Client::Application::Stage stage) -> bool"""
         return _Client.Application_handleInitializationError(self, stage)
@@ -1515,6 +1530,21 @@ class StreamApplication(Application):
     def printVersion(self):
         """printVersion(StreamApplication self)"""
         return _Client.StreamApplication_printVersion(self)
+
+
+    def printConfigVariables(self):
+        """printConfigVariables(StreamApplication self)"""
+        return _Client.StreamApplication_printConfigVariables(self)
+
+
+    def schemaValidationNames(self, modules, plugins):
+        """schemaValidationNames(StreamApplication self, vectorStr modules, vectorStr plugins)"""
+        return _Client.StreamApplication_schemaValidationNames(self, modules, plugins)
+
+
+    def validateSchemaParameters(self):
+        """validateSchemaParameters(StreamApplication self) -> bool"""
+        return _Client.StreamApplication_validateSchemaParameters(self)
 
 
     def handleInitializationError(self, stage):

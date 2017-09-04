@@ -4005,15 +4005,17 @@ namespace Swig {
 #define SWIGTYPE_p_std__complexT_double_t swig_types[551]
 #define SWIGTYPE_p_std__invalid_argument swig_types[552]
 #define SWIGTYPE_p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator swig_types[553]
-#define SWIGTYPE_p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t swig_types[554]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t swig_types[555]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[556]
-#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[557]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[558]
-#define SWIGTYPE_p_traits_type swig_types[559]
-#define SWIGTYPE_p_value_type swig_types[560]
-static swig_type_info *swig_types[562];
-static swig_module_info swig_module = {swig_types, 561, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t swig_types[554]
+#define SWIGTYPE_p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t swig_types[555]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t swig_types[556]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t swig_types[557]
+#define SWIGTYPE_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t swig_types[558]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[559]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[560]
+#define SWIGTYPE_p_traits_type swig_types[561]
+#define SWIGTYPE_p_value_type swig_types[562]
+static swig_type_info *swig_types[564];
+static swig_module_info swig_module = {swig_types, 563, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6912,6 +6914,93 @@ void SwigDirector_Application::printVersion() {
 }
 
 
+void SwigDirector_Application::printConfigVariables() {
+  swig_set_inner("printConfigVariables", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 19;
+  const char *const swig_method_name = "printConfigVariables";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *) "printConfigVariables", NULL);
+#endif
+  swig_set_inner("printConfigVariables", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+}
+
+
+void SwigDirector_Application::schemaValidationNames(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const {
+  swig::SwigVar_PyObject obj0;
+  obj0 = SWIG_NewPointerObj(SWIG_as_voidptr(&modules), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  swig::SwigVar_PyObject obj1;
+  obj1 = SWIG_NewPointerObj(SWIG_as_voidptr(&plugins), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  swig_set_inner("schemaValidationNames", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 20;
+  const char *const swig_method_name = "schemaValidationNames";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *)"schemaValidationNames", (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
+#endif
+  swig_set_inner("schemaValidationNames", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+}
+
+
+bool SwigDirector_Application::validateSchemaParameters() {
+  bool c_result;
+  swig_set_inner("validateSchemaParameters", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 21;
+  const char *const swig_method_name = "validateSchemaParameters";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *) "validateSchemaParameters", NULL);
+#endif
+  swig_set_inner("validateSchemaParameters", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+  bool swig_val;
+  int swig_res = SWIG_AsVal_bool(result, &swig_val);
+  if (!SWIG_IsOK(swig_res)) {
+    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""bool""'");
+  }
+  c_result = static_cast< bool >(swig_val);
+  return (bool) c_result;
+}
+
+
 bool SwigDirector_Application::handleInitializationError(Seiscomp::Client::Application::Stage stage) {
   bool c_result;
   swig::SwigVar_PyObject obj0;
@@ -6921,7 +7010,7 @@ bool SwigDirector_Application::handleInitializationError(Seiscomp::Client::Appli
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 19;
+  const size_t swig_method_index = 22;
   const char *const swig_method_name = "handleInitializationError";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -6953,7 +7042,7 @@ void SwigDirector_Application::handleStartSync() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 20;
+  const size_t swig_method_index = 23;
   const char *const swig_method_name = "handleStartSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -6978,7 +7067,7 @@ void SwigDirector_Application::handleEndSync() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 21;
+  const size_t swig_method_index = 24;
   const char *const swig_method_name = "handleEndSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7003,7 +7092,7 @@ void SwigDirector_Application::handleEndAcquisition() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 22;
+  const size_t swig_method_index = 25;
   const char *const swig_method_name = "handleEndAcquisition";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7031,7 +7120,7 @@ bool SwigDirector_Application::dispatch(Seiscomp::Core::BaseObject *arg0) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 23;
+  const size_t swig_method_index = 26;
   const char *const swig_method_name = "dispatch";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7068,7 +7157,7 @@ bool SwigDirector_Application::dispatchNotification(int type, Seiscomp::Core::Ba
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 24;
+  const size_t swig_method_index = 27;
   const char *const swig_method_name = "dispatchNotification";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -7102,7 +7191,7 @@ void SwigDirector_Application::showMessage(char const *arg0) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 25;
+  const size_t swig_method_index = 28;
   const char *const swig_method_name = "showMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7129,7 +7218,7 @@ void SwigDirector_Application::showWarning(char const *arg0) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 26;
+  const size_t swig_method_index = 29;
   const char *const swig_method_name = "showWarning";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7154,7 +7243,7 @@ void SwigDirector_Application::handleTimeout() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 27;
+  const size_t swig_method_index = 30;
   const char *const swig_method_name = "handleTimeout";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7180,7 +7269,7 @@ bool SwigDirector_Application::handleClose() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 28;
+  const size_t swig_method_index = 31;
   const char *const swig_method_name = "handleClose";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7212,7 +7301,7 @@ void SwigDirector_Application::handleAutoShutdown() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 29;
+  const size_t swig_method_index = 32;
   const char *const swig_method_name = "handleAutoShutdown";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7244,7 +7333,7 @@ void SwigDirector_Application::handleSync(char const *ID) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 30;
+  const size_t swig_method_index = 33;
   const char *const swig_method_name = "handleSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7269,7 +7358,7 @@ void SwigDirector_Application::handleDisconnect() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 31;
+  const size_t swig_method_index = 34;
   const char *const swig_method_name = "handleDisconnect";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7294,7 +7383,7 @@ void SwigDirector_Application::handleReconnect() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 32;
+  const size_t swig_method_index = 35;
   const char *const swig_method_name = "handleReconnect";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -7321,7 +7410,7 @@ void SwigDirector_Application::handleMessage(Seiscomp::Core::Message *msg) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 33;
+  const size_t swig_method_index = 36;
   const char *const swig_method_name = "handleMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7348,7 +7437,7 @@ void SwigDirector_Application::handleNetworkMessage(Seiscomp::Communication::Net
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 34;
+  const size_t swig_method_index = 37;
   const char *const swig_method_name = "handleNetworkMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -7377,7 +7466,7 @@ void SwigDirector_Application::addObject(std::string const &parentID, Seiscomp::
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 35;
+  const size_t swig_method_index = 38;
   const char *const swig_method_name = "addObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -7406,7 +7495,7 @@ void SwigDirector_Application::removeObject(std::string const &parentID, Seiscom
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 36;
+  const size_t swig_method_index = 39;
   const char *const swig_method_name = "removeObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -7435,7 +7524,7 @@ void SwigDirector_Application::updateObject(std::string const &parentID, Seiscom
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call Application.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 37;
+  const size_t swig_method_index = 40;
   const char *const swig_method_name = "updateObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -8060,6 +8149,93 @@ void SwigDirector_StreamApplication::printVersion() {
 }
 
 
+void SwigDirector_StreamApplication::printConfigVariables() {
+  swig_set_inner("printConfigVariables", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 19;
+  const char *const swig_method_name = "printConfigVariables";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *) "printConfigVariables", NULL);
+#endif
+  swig_set_inner("printConfigVariables", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+}
+
+
+void SwigDirector_StreamApplication::schemaValidationNames(std::vector< std::string,std::allocator< std::string > > &modules, std::vector< std::string,std::allocator< std::string > > &plugins) const {
+  swig::SwigVar_PyObject obj0;
+  obj0 = SWIG_NewPointerObj(SWIG_as_voidptr(&modules), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  swig::SwigVar_PyObject obj1;
+  obj1 = SWIG_NewPointerObj(SWIG_as_voidptr(&plugins), SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  swig_set_inner("schemaValidationNames", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 20;
+  const char *const swig_method_name = "schemaValidationNames";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *)"schemaValidationNames", (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
+#endif
+  swig_set_inner("schemaValidationNames", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+}
+
+
+bool SwigDirector_StreamApplication::validateSchemaParameters() {
+  bool c_result;
+  swig_set_inner("validateSchemaParameters", true);
+  if (!swig_get_self()) {
+    Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
+  }
+#if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
+  const size_t swig_method_index = 21;
+  const char *const swig_method_name = "validateSchemaParameters";
+  PyObject *method = swig_get_method(swig_method_index, swig_method_name);
+  swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
+#else
+  swig::SwigVar_PyObject result = PyObject_CallMethod(swig_get_self(), (char *) "validateSchemaParameters", NULL);
+#endif
+  swig_set_inner("validateSchemaParameters", false);
+  if (!result) {
+    PyObject *error = PyErr_Occurred();
+    {
+      if (error != NULL) {
+        throw Swig::DirectorMethodException();
+      }
+    }
+  }
+  bool swig_val;
+  int swig_res = SWIG_AsVal_bool(result, &swig_val);
+  if (!SWIG_IsOK(swig_res)) {
+    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""bool""'");
+  }
+  c_result = static_cast< bool >(swig_val);
+  return (bool) c_result;
+}
+
+
 bool SwigDirector_StreamApplication::handleInitializationError(Seiscomp::Client::Application::Stage stage) {
   bool c_result;
   swig::SwigVar_PyObject obj0;
@@ -8069,7 +8245,7 @@ bool SwigDirector_StreamApplication::handleInitializationError(Seiscomp::Client:
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 19;
+  const size_t swig_method_index = 22;
   const char *const swig_method_name = "handleInitializationError";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8101,7 +8277,7 @@ void SwigDirector_StreamApplication::handleStartSync() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 20;
+  const size_t swig_method_index = 23;
   const char *const swig_method_name = "handleStartSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8126,7 +8302,7 @@ void SwigDirector_StreamApplication::handleEndSync() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 21;
+  const size_t swig_method_index = 24;
   const char *const swig_method_name = "handleEndSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8151,7 +8327,7 @@ void SwigDirector_StreamApplication::handleEndAcquisition() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 22;
+  const size_t swig_method_index = 25;
   const char *const swig_method_name = "handleEndAcquisition";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8179,7 +8355,7 @@ bool SwigDirector_StreamApplication::dispatch(Seiscomp::Core::BaseObject *obj) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 23;
+  const size_t swig_method_index = 26;
   const char *const swig_method_name = "dispatch";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8216,7 +8392,7 @@ bool SwigDirector_StreamApplication::dispatchNotification(int type, Seiscomp::Co
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 24;
+  const size_t swig_method_index = 27;
   const char *const swig_method_name = "dispatchNotification";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -8250,7 +8426,7 @@ void SwigDirector_StreamApplication::showMessage(char const *arg0) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 25;
+  const size_t swig_method_index = 28;
   const char *const swig_method_name = "showMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8277,7 +8453,7 @@ void SwigDirector_StreamApplication::showWarning(char const *arg0) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 26;
+  const size_t swig_method_index = 29;
   const char *const swig_method_name = "showWarning";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8302,7 +8478,7 @@ void SwigDirector_StreamApplication::handleTimeout() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 27;
+  const size_t swig_method_index = 30;
   const char *const swig_method_name = "handleTimeout";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8328,7 +8504,7 @@ bool SwigDirector_StreamApplication::handleClose() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 28;
+  const size_t swig_method_index = 31;
   const char *const swig_method_name = "handleClose";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8360,7 +8536,7 @@ void SwigDirector_StreamApplication::handleAutoShutdown() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 29;
+  const size_t swig_method_index = 32;
   const char *const swig_method_name = "handleAutoShutdown";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8392,7 +8568,7 @@ void SwigDirector_StreamApplication::handleSync(char const *ID) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 30;
+  const size_t swig_method_index = 33;
   const char *const swig_method_name = "handleSync";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8417,7 +8593,7 @@ void SwigDirector_StreamApplication::handleDisconnect() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 31;
+  const size_t swig_method_index = 34;
   const char *const swig_method_name = "handleDisconnect";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8442,7 +8618,7 @@ void SwigDirector_StreamApplication::handleReconnect() {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 32;
+  const size_t swig_method_index = 35;
   const char *const swig_method_name = "handleReconnect";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, NULL, NULL);
@@ -8469,7 +8645,7 @@ void SwigDirector_StreamApplication::handleMessage(Seiscomp::Core::Message *msg)
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 33;
+  const size_t swig_method_index = 36;
   const char *const swig_method_name = "handleMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8496,7 +8672,7 @@ void SwigDirector_StreamApplication::handleNetworkMessage(Seiscomp::Communicatio
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 34;
+  const size_t swig_method_index = 37;
   const char *const swig_method_name = "handleNetworkMessage";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -8525,7 +8701,7 @@ void SwigDirector_StreamApplication::addObject(std::string const &parentID, Seis
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 35;
+  const size_t swig_method_index = 38;
   const char *const swig_method_name = "addObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -8554,7 +8730,7 @@ void SwigDirector_StreamApplication::removeObject(std::string const &parentID, S
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 36;
+  const size_t swig_method_index = 39;
   const char *const swig_method_name = "removeObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -8583,7 +8759,7 @@ void SwigDirector_StreamApplication::updateObject(std::string const &parentID, S
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 37;
+  const size_t swig_method_index = 40;
   const char *const swig_method_name = "updateObject";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(OO)" ,(PyObject *)obj0,(PyObject *)obj1);
@@ -8620,7 +8796,7 @@ void SwigDirector_StreamApplication::handleRecord(Seiscomp::Record *rec) {
     Swig::DirectorException::raise("'self' uninitialized, maybe you forgot to call StreamApplication.__init__.");
   }
 #if defined(SWIG_PYTHON_DIRECTOR_VTABLE)
-  const size_t swig_method_index = 38;
+  const size_t swig_method_index = 41;
   const char *const swig_method_name = "handleRecord";
   PyObject *method = swig_get_method(swig_method_index, swig_method_name);
   swig::SwigVar_PyObject result = PyObject_CallFunction(method, (char *)"(O)" ,(PyObject *)obj0);
@@ -18414,6 +18590,196 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Application_printConfigVariables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_Application *darg = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Application_printConfigVariables",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_printConfigVariables" "', argument " "1"" of type '" "Seiscomp::Client::Application *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("printConfigVariables"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member printConfigVariables");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_Application *>(arg1);
+    {
+      try {
+        if (upcall) {
+          (darg)->printConfigVariablesSwigPublic();
+        } else {
+          (darg)->printConfigVariables();
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Application_schemaValidationNames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_Application *darg = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Application_schemaValidationNames",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_schemaValidationNames" "', argument " "1"" of type '" "Seiscomp::Client::Application const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Application_schemaValidationNames" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Application_schemaValidationNames" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Application_schemaValidationNames" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Application_schemaValidationNames" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("schemaValidationNames"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member schemaValidationNames");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_Application *>(arg1);
+    {
+      try {
+        if (upcall) {
+          ((SwigDirector_Application const *)darg)->schemaValidationNamesSwigPublic(*arg2,*arg3);
+        } else {
+          ((SwigDirector_Application const *)darg)->schemaValidationNames(*arg2,*arg3);
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Application_validateSchemaParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_Application *darg = 0;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Application_validateSchemaParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_validateSchemaParameters" "', argument " "1"" of type '" "Seiscomp::Client::Application *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("validateSchemaParameters"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member validateSchemaParameters");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_Application *>(arg1);
+    {
+      try {
+        if (upcall) {
+          result = (bool)(darg)->validateSchemaParametersSwigPublic();
+        } else {
+          result = (bool)(darg)->validateSchemaParameters();
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Application_handleInitializationError(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
@@ -22729,6 +23095,196 @@ SWIGINTERN PyObject *_wrap_StreamApplication_printVersion(PyObject *SWIGUNUSEDPA
     SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StreamApplication_printConfigVariables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_StreamApplication *darg = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StreamApplication_printConfigVariables",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__StreamApplication, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamApplication_printConfigVariables" "', argument " "1"" of type '" "Seiscomp::Client::StreamApplication *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::StreamApplication * >(argp1);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("printConfigVariables"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member printConfigVariables");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_StreamApplication *>(arg1);
+    {
+      try {
+        if (upcall) {
+          (darg)->printConfigVariablesSwigPublic();
+        } else {
+          (darg)->printConfigVariables();
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StreamApplication_schemaValidationNames(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg2 = 0 ;
+  std::vector< std::string,std::allocator< std::string > > *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_StreamApplication *darg = 0;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:StreamApplication_schemaValidationNames",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__StreamApplication, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamApplication_schemaValidationNames" "', argument " "1"" of type '" "Seiscomp::Client::StreamApplication const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::StreamApplication * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "StreamApplication_schemaValidationNames" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "StreamApplication_schemaValidationNames" "', argument " "2"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg2 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "StreamApplication_schemaValidationNames" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "StreamApplication_schemaValidationNames" "', argument " "3"" of type '" "std::vector< std::string,std::allocator< std::string > > &""'"); 
+  }
+  arg3 = reinterpret_cast< std::vector< std::string,std::allocator< std::string > > * >(argp3);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("schemaValidationNames"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member schemaValidationNames");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_StreamApplication *>(arg1);
+    {
+      try {
+        if (upcall) {
+          ((SwigDirector_StreamApplication const *)darg)->schemaValidationNamesSwigPublic(*arg2,*arg3);
+        } else {
+          ((SwigDirector_StreamApplication const *)darg)->schemaValidationNames(*arg2,*arg3);
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StreamApplication_validateSchemaParameters(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::StreamApplication *arg1 = (Seiscomp::Client::StreamApplication *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_StreamApplication *darg = 0;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:StreamApplication_validateSchemaParameters",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__StreamApplication, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamApplication_validateSchemaParameters" "', argument " "1"" of type '" "Seiscomp::Client::StreamApplication *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::StreamApplication * >(argp1);
+  director = SWIG_DIRECTOR_CAST(arg1);
+  if (!director || !(director->swig_get_inner("validateSchemaParameters"))) {
+    SWIG_SetErrorMsg(PyExc_RuntimeError,"accessing protected member validateSchemaParameters");
+    SWIG_fail;
+  }
+  upcall = (director && (director->swig_get_self()==obj0));
+  try {
+    darg = dynamic_cast<SwigDirector_StreamApplication *>(arg1);
+    {
+      try {
+        if (upcall) {
+          result = (bool)(darg)->validateSchemaParametersSwigPublic();
+        } else {
+          result = (bool)(darg)->validateSchemaParameters();
+        }
+      }
+      catch ( const Swig::DirectorException &e ) {
+        SWIG_fail;
+      }
+      catch ( const Seiscomp::Core::ValueException &e ) {
+        SWIG_exception(SWIG_ValueError, e.what());
+      }
+      catch ( const std::exception &e ) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+      catch ( ... ) {
+        SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+      }
+    }
+  } catch (Swig::DirectorException&) {
+    SWIG_fail;
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
   return NULL;
@@ -27443,6 +27999,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Application_initDatabase", _wrap_Application_initDatabase, METH_VARARGS, (char *)"Application_initDatabase(Application self) -> bool"},
 	 { (char *)"Application_initSubscriptions", _wrap_Application_initSubscriptions, METH_VARARGS, (char *)"Application_initSubscriptions(Application self) -> bool"},
 	 { (char *)"Application_printVersion", _wrap_Application_printVersion, METH_VARARGS, (char *)"Application_printVersion(Application self)"},
+	 { (char *)"Application_printConfigVariables", _wrap_Application_printConfigVariables, METH_VARARGS, (char *)"Application_printConfigVariables(Application self)"},
+	 { (char *)"Application_schemaValidationNames", _wrap_Application_schemaValidationNames, METH_VARARGS, (char *)"Application_schemaValidationNames(Application self, vectorStr modules, vectorStr plugins)"},
+	 { (char *)"Application_validateSchemaParameters", _wrap_Application_validateSchemaParameters, METH_VARARGS, (char *)"Application_validateSchemaParameters(Application self) -> bool"},
 	 { (char *)"Application_handleInitializationError", _wrap_Application_handleInitializationError, METH_VARARGS, (char *)"Application_handleInitializationError(Application self, Seiscomp::Client::Application::Stage stage) -> bool"},
 	 { (char *)"Application_handleStartSync", _wrap_Application_handleStartSync, METH_VARARGS, (char *)"Application_handleStartSync(Application self)"},
 	 { (char *)"Application_handleEndSync", _wrap_Application_handleEndSync, METH_VARARGS, (char *)"Application_handleEndSync(Application self)"},
@@ -27521,6 +28080,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StreamApplication_initDatabase", _wrap_StreamApplication_initDatabase, METH_VARARGS, (char *)"StreamApplication_initDatabase(StreamApplication self) -> bool"},
 	 { (char *)"StreamApplication_initSubscriptions", _wrap_StreamApplication_initSubscriptions, METH_VARARGS, (char *)"StreamApplication_initSubscriptions(StreamApplication self) -> bool"},
 	 { (char *)"StreamApplication_printVersion", _wrap_StreamApplication_printVersion, METH_VARARGS, (char *)"StreamApplication_printVersion(StreamApplication self)"},
+	 { (char *)"StreamApplication_printConfigVariables", _wrap_StreamApplication_printConfigVariables, METH_VARARGS, (char *)"StreamApplication_printConfigVariables(StreamApplication self)"},
+	 { (char *)"StreamApplication_schemaValidationNames", _wrap_StreamApplication_schemaValidationNames, METH_VARARGS, (char *)"StreamApplication_schemaValidationNames(StreamApplication self, vectorStr modules, vectorStr plugins)"},
+	 { (char *)"StreamApplication_validateSchemaParameters", _wrap_StreamApplication_validateSchemaParameters, METH_VARARGS, (char *)"StreamApplication_validateSchemaParameters(StreamApplication self) -> bool"},
 	 { (char *)"StreamApplication_handleInitializationError", _wrap_StreamApplication_handleInitializationError, METH_VARARGS, (char *)"StreamApplication_handleInitializationError(StreamApplication self, Seiscomp::Client::Application::Stage stage) -> bool"},
 	 { (char *)"StreamApplication_handleStartSync", _wrap_StreamApplication_handleStartSync, METH_VARARGS, (char *)"StreamApplication_handleStartSync(StreamApplication self)"},
 	 { (char *)"StreamApplication_handleEndAcquisition", _wrap_StreamApplication_handleEndAcquisition, METH_VARARGS, (char *)"StreamApplication_handleEndAcquisition(StreamApplication self)"},
@@ -29096,10 +29658,12 @@ static swig_type_info _swigt__p_std__basic_iosT_char_std__char_traitsT_char_t_t 
 static swig_type_info _swigt__p_std__complexT_double_t = {"_p_std__complexT_double_t", "Seiscomp::Math::Complex *|Seiscomp::Math::SeismometerResponse::Zero *|Seiscomp::Math::Restitution::Zero *|Seiscomp::Math::Restitution::Pole *|Seiscomp::Math::SeismometerResponse::Pole *|std::complex< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator = {"_p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator", "std::list< Seiscomp::Client::ObjectMonitor::Test >::const_iterator *|Seiscomp::Client::ObjectMonitor::const_iterator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t = {"_p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t", "std::map< std::string,std::string,std::less< std::string >,std::allocator< std::pair< std::string const,std::string > > > *|Seiscomp::Config::Variables *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t = {"_p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t", "std::set< std::string,std::less< std::string >,std::allocator< std::string > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t = {"_p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t", "Seiscomp::Client::StationList *|std::vector< Seiscomp::DataModel::Station *,std::allocator< Seiscomp::DataModel::Station * > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t = {"_p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t", "std::vector< Seiscomp::Math::SeismometerResponse::FAP,std::allocator< Seiscomp::Math::SeismometerResponse::FAP > > *|Seiscomp::Math::SeismometerResponse::FAPs *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t = {"_p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t", "std::vector< std::complex< double >,std::allocator< std::complex< double > > > *|Seiscomp::Math::SeismometerResponse::Poles *|Seiscomp::Math::Restitution::Poles *|Seiscomp::Math::SeismometerResponse::Zeros *|Seiscomp::Math::Restitution::Zeros *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_traits_type = {"_p_traits_type", "traits_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
@@ -29659,10 +30223,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__complexT_double_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator,
+  &_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   &_swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t,
   &_swigt__p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t,
   &_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   &_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
+  &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_traits_type,
   &_swigt__p_value_type,
@@ -30222,10 +30788,12 @@ static swig_cast_info _swigc__p_std__basic_iosT_char_std__char_traitsT_char_t_t[
 static swig_cast_info _swigc__p_std__complexT_double_t[] = {  {&_swigt__p_std__complexT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator[] = {  {&_swigt__p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t[] = {  {&_swigt__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t[] = {  {&_swigt__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_traits_type[] = {  {&_swigt__p_traits_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
@@ -30785,10 +31353,12 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__complexT_double_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__listT_Seiscomp__Client__ObjectMonitor__Test_t__const_iterator,
+  _swigc__p_std__mapT_std__string_std__string_std__lessT_std__string_t_std__allocatorT_std__pairT_std__string_const_std__string_t_t_t,
   _swigc__p_std__setT_std__string_std__lessT_std__string_t_std__allocatorT_std__string_t_t,
   _swigc__p_std__vectorT_Seiscomp__DataModel__Station_p_std__allocatorT_Seiscomp__DataModel__Station_p_t_t,
   _swigc__p_std__vectorT_Seiscomp__Math__SeismometerResponse__FAP_std__allocatorT_Seiscomp__Math__SeismometerResponse__FAP_t_t,
   _swigc__p_std__vectorT_std__complexT_double_t_std__allocatorT_std__complexT_double_t_t_t,
+  _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_traits_type,
   _swigc__p_value_type,

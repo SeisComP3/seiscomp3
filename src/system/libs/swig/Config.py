@@ -536,6 +536,12 @@ class Config(_object):
         writeSymbol = staticmethod(_Config.Config_writeSymbol)
     else:
         writeSymbol = _Config.Config_writeSymbol
+
+    def trackVariables(self, enabled):
+        return _Config.Config_trackVariables(self, enabled)
+
+    def getVariables(self):
+        return _Config.Config_getVariables(self)
 Config_swigregister = _Config.Config_swigregister
 Config_swigregister(Config)
 

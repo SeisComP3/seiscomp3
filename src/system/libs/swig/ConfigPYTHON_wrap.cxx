@@ -3480,18 +3480,19 @@ namespace Swig {
 #define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[26]
 #define SWIGTYPE_p_std__exception swig_types[27]
 #define SWIGTYPE_p_std__invalid_argument swig_types[28]
-#define SWIGTYPE_p_std__ostream swig_types[29]
-#define SWIGTYPE_p_std__setT_std__string_t__iterator swig_types[30]
-#define SWIGTYPE_p_std__string swig_types[31]
-#define SWIGTYPE_p_std__vectorT_Seiscomp__Config__Symbol_p_std__allocatorT_Seiscomp__Config__Symbol_p_t_t__const_iterator swig_types[32]
-#define SWIGTYPE_p_std__vectorT_bool_std__allocatorT_bool_t_t swig_types[33]
-#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[34]
-#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[35]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[36]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[37]
-#define SWIGTYPE_p_value_type swig_types[38]
-static swig_type_info *swig_types[40];
-static swig_module_info swig_module = {swig_types, 39, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__mapT_std__string_std__string_t swig_types[29]
+#define SWIGTYPE_p_std__ostream swig_types[30]
+#define SWIGTYPE_p_std__setT_std__string_t__iterator swig_types[31]
+#define SWIGTYPE_p_std__string swig_types[32]
+#define SWIGTYPE_p_std__vectorT_Seiscomp__Config__Symbol_p_std__allocatorT_Seiscomp__Config__Symbol_p_t_t__const_iterator swig_types[33]
+#define SWIGTYPE_p_std__vectorT_bool_std__allocatorT_bool_t_t swig_types[34]
+#define SWIGTYPE_p_std__vectorT_double_std__allocatorT_double_t_t swig_types[35]
+#define SWIGTYPE_p_std__vectorT_int_std__allocatorT_int_t_t swig_types[36]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[37]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[38]
+#define SWIGTYPE_p_value_type swig_types[39]
+static swig_type_info *swig_types[41];
+static swig_module_info swig_module = {swig_types, 40, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -14068,6 +14069,84 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Config_trackVariables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Config_trackVariables",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Config, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_trackVariables" "', argument " "1"" of type '" "Seiscomp::Config::Config *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Config * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Config_trackVariables" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try {
+      (arg1)->trackVariables(arg2);
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Config_getVariables(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Config::Config *arg1 = (Seiscomp::Config::Config *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  Seiscomp::Config::Variables *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Config_getVariables",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Config__Config, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Config_getVariables" "', argument " "1"" of type '" "Seiscomp::Config::Config const *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Config::Config * >(argp1);
+  {
+    try {
+      result = (Seiscomp::Config::Variables *) &((Seiscomp::Config::Config const *)arg1)->getVariables();
+    }
+    catch ( const Seiscomp::Config::OptionNotFoundException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__mapT_std__string_std__string_t, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *Config_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
@@ -24160,6 +24239,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Config_Eval", _wrap_Config_Eval, METH_VARARGS, NULL},
 	 { (char *)"Config_writeValues", _wrap_Config_writeValues, METH_VARARGS, NULL},
 	 { (char *)"Config_writeSymbol", _wrap_Config_writeSymbol, METH_VARARGS, NULL},
+	 { (char *)"Config_trackVariables", _wrap_Config_trackVariables, METH_VARARGS, NULL},
+	 { (char *)"Config_getVariables", _wrap_Config_getVariables, METH_VARARGS, NULL},
 	 { (char *)"Config_swigregister", Config_swigregister, METH_VARARGS, NULL},
 	 { (char *)"vectorStr_iterator", _wrap_vectorStr_iterator, METH_VARARGS, NULL},
 	 { (char *)"vectorStr___nonzero__", _wrap_vectorStr___nonzero__, METH_VARARGS, NULL},
@@ -24359,6 +24440,7 @@ static swig_type_info _swigt__p_std__allocatorT_int_t = {"_p_std__allocatorT_int
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__exception = {"_p_std__exception", "std::exception *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__mapT_std__string_std__string_t = {"_p_std__mapT_std__string_std__string_t", "std::map< std::string,std::string > *|Seiscomp::Config::Variables *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__ostream = {"_p_std__ostream", "std::ostream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__setT_std__string_t__iterator = {"_p_std__setT_std__string_t__iterator", "std::set< std::string >::iterator *|Seiscomp::Config::SymbolTable::file_iterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
@@ -24400,6 +24482,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__exception,
   &_swigt__p_std__invalid_argument,
+  &_swigt__p_std__mapT_std__string_std__string_t,
   &_swigt__p_std__ostream,
   &_swigt__p_std__setT_std__string_t__iterator,
   &_swigt__p_std__string,
@@ -24441,6 +24524,7 @@ static swig_cast_info _swigc__p_std__allocatorT_int_t[] = {  {&_swigt__p_std__al
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__exception[] = {  {&_swigt__p_std__exception, 0, 0, 0},  {&_swigt__p_Seiscomp__Config__Exception, _p_Seiscomp__Config__ExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Config__OptionNotFoundException, _p_Seiscomp__Config__OptionNotFoundExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Config__TypeConversionException, _p_Seiscomp__Config__TypeConversionExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Config__SyntaxException, _p_Seiscomp__Config__SyntaxExceptionTo_p_std__exception, 0, 0},  {&_swigt__p_Seiscomp__Config__CaseSensitivityException, _p_Seiscomp__Config__CaseSensitivityExceptionTo_p_std__exception, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__mapT_std__string_std__string_t[] = {  {&_swigt__p_std__mapT_std__string_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__ostream[] = {  {&_swigt__p_std__ostream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__setT_std__string_t__iterator[] = {  {&_swigt__p_std__setT_std__string_t__iterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
@@ -24482,6 +24566,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__exception,
   _swigc__p_std__invalid_argument,
+  _swigc__p_std__mapT_std__string_std__string_t,
   _swigc__p_std__ostream,
   _swigc__p_std__setT_std__string_t__iterator,
   _swigc__p_std__string,
