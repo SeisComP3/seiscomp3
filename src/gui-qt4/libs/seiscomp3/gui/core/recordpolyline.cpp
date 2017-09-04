@@ -19,8 +19,6 @@ using namespace std;
 
 namespace {
 
-std::ostream &operator << (std::ostream &os, const Seiscomp::Core::Time &t);
-
 /*
 static void optimize1(int &n, int *pt)
 {
