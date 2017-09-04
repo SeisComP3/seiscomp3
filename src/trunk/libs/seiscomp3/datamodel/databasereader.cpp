@@ -1814,6 +1814,9 @@ int DatabaseReader::load(Inventory* inventory) {
 
 	count += loadResponseFIRs(inventory);
 
+	if ( supportsVersion<0,10>() )
+		count += loadResponseIIRs(inventory);
+
 	count += loadResponsePolynomials(inventory);
 
 	if ( supportsVersion<0,8>() )
@@ -2000,6 +2003,36 @@ int DatabaseReader::loadResponseFIRs(Inventory* inventory) {
 		}
 		else
 			SEISCOMP_INFO("Inventory::add(ResponseFIR) -> ResponseFIR has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadResponseIIRs(Inventory* inventory) {
+	if ( !validInterface() || inventory == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(inventory, ResponseIIR::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			inventory->add(ResponseIIR::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("Inventory::add(ResponseIIR) -> ResponseIIR has already another parent");
 		++it;
 	}
 	it.close();

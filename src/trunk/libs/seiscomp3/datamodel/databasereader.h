@@ -70,6 +70,7 @@ class DataloggerCalibration;
 class Decimation;
 class ResponsePAZ;
 class ResponseFIR;
+class ResponseIIR;
 class ResponsePolynomial;
 class ResponseFAP;
 class Network;
@@ -196,6 +197,7 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int loadDataloggers(Inventory*);
 		int loadResponsePAZs(Inventory*);
 		int loadResponseFIRs(Inventory*);
+		int loadResponseIIRs(Inventory*);
 		int loadResponsePolynomials(Inventory*);
 		int loadResponseFAPs(Inventory*);
 		int loadNetworks(Inventory*);

@@ -37,10 +37,11 @@ DROP TABLE IF EXISTS Sensor;
 DROP TABLE IF EXISTS ResponsePAZ;
 DROP TABLE IF EXISTS ResponsePolynomial;
 DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS ResponseIIR;
 DROP TABLE IF EXISTS DataloggerCalibration;
 DROP TABLE IF EXISTS Decimation;
 DROP TABLE IF EXISTS Datalogger;
-DROP TABLE IF EXISTS ResponseFIR;
 DROP TABLE IF EXISTS AuxStream;
 DROP TABLE IF EXISTS Stream;
 DROP TABLE IF EXISTS SensorLocation;
@@ -1455,6 +1456,67 @@ BEGIN
   UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
+CREATE TABLE ResponseFIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	gain DOUBLE,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfCoefficients SMALLINT UNSIGNED,
+	symmetry CHAR,
+	coefficients_content BLOB,
+	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
+
+CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
+BEGIN
+  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE ResponseIIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	type CHAR,
+	gain DOUBLE,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used INTEGER(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+
+CREATE TRIGGER ResponseIIRUpdate UPDATE ON ResponseIIR
+BEGIN
+  UPDATE ResponseIIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
 CREATE TABLE DataloggerCalibration (
 	_oid INTEGER NOT NULL,
 	_parent_oid INTEGER NOT NULL,
@@ -1536,35 +1598,6 @@ CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 CREATE TRIGGER DataloggerUpdate UPDATE ON Datalogger
 BEGIN
   UPDATE Datalogger SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
-END;
-
-CREATE TABLE ResponseFIR (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	name VARCHAR,
-	gain DOUBLE,
-	decimationFactor SMALLINT UNSIGNED,
-	delay DOUBLE UNSIGNED,
-	correction DOUBLE,
-	numberOfCoefficients SMALLINT UNSIGNED,
-	symmetry CHAR,
-	coefficients_content BLOB,
-	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
-	remark_content BLOB,
-	remark_used INTEGER(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
-);
-
-CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
-
-CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
-BEGIN
-  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
 CREATE TABLE AuxStream (

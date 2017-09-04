@@ -62,10 +62,11 @@ SET(
 		responsepaz.h
 		responsepolynomial.h
 		responsefap.h
+		responsefir.h
+		responseiir.h
 		dataloggercalibration.h
 		decimation.h
 		datalogger.h
-		responsefir.h
 		auxstream.h
 		stream.h
 		sensorlocation.h
@@ -161,10 +162,11 @@ SET(
 		responsepaz.cpp
 		responsepolynomial.cpp
 		responsefap.cpp
+		responsefir.cpp
+		responseiir.cpp
 		dataloggercalibration.cpp
 		decimation.cpp
 		datalogger.cpp
-		responsefir.cpp
 		auxstream.cpp
 		stream.cpp
 		sensorlocation.cpp

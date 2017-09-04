@@ -37,10 +37,11 @@ DROP TABLE Sensor;
 DROP TABLE ResponsePAZ;
 DROP TABLE ResponsePolynomial;
 DROP TABLE ResponseFAP;
+DROP TABLE ResponseFIR;
+DROP TABLE ResponseIIR;
 DROP TABLE DataloggerCalibration;
 DROP TABLE Decimation;
 DROP TABLE Datalogger;
-DROP TABLE ResponseFIR;
 DROP TABLE AuxStream;
 DROP TABLE Stream;
 DROP TABLE SensorLocation;
@@ -1383,6 +1384,63 @@ CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
 CREATE TRIGGER ResponseFAP_update BEFORE UPDATE ON ResponseFAP FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
+CREATE TABLE ResponseFIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_gain DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfCoefficients SMALLINT,
+	m_symmetry VARCHAR(1),
+	m_coefficients_content BYTEA,
+	m_coefficients_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	CONSTRAINT responsefir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
+
+CREATE TRIGGER ResponseFIR_update BEFORE UPDATE ON ResponseFIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
+CREATE TABLE ResponseIIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_type VARCHAR(1),
+	m_gain DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfNumerators SMALLINT,
+	m_numberOfDenominators SMALLINT,
+	m_numerators_content BYTEA,
+	m_numerators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_denominators_content BYTEA,
+	m_denominators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	CONSTRAINT responseiir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+
+CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
 CREATE TABLE DataloggerCalibration (
 	_oid BIGINT NOT NULL,
 	_parent_oid BIGINT NOT NULL,
@@ -1458,33 +1516,6 @@ CREATE TABLE Datalogger (
 CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 
 CREATE TRIGGER Datalogger_update BEFORE UPDATE ON Datalogger FOR EACH ROW EXECUTE PROCEDURE update_modified();
-
-
-CREATE TABLE ResponseFIR (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	m_name VARCHAR(255),
-	m_gain DOUBLE PRECISION,
-	m_decimationFactor SMALLINT,
-	m_delay DOUBLE PRECISION,
-	m_correction DOUBLE PRECISION,
-	m_numberOfCoefficients SMALLINT,
-	m_symmetry VARCHAR(1),
-	m_coefficients_content BYTEA,
-	m_coefficients_used BOOLEAN NOT NULL DEFAULT '0',
-	m_remark_content BYTEA,
-	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	CONSTRAINT responsefir_composite_index UNIQUE(_parent_oid,m_name)
-);
-
-CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
-
-CREATE TRIGGER ResponseFIR_update BEFORE UPDATE ON ResponseFIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
 CREATE TABLE AuxStream (

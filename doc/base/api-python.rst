@@ -201,6 +201,7 @@ Classes
   * :ref:`RealArray <api-python-datamodel-realarray>`
   * :ref:`ResponseFAP <api-python-datamodel-responsefap>`
   * :ref:`ResponseFIR <api-python-datamodel-responsefir>`
+  * :ref:`ResponseIIR <api-python-datamodel-responseiir>`
   * :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
   * :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
   * :ref:`Sensor <api-python-datamodel-sensor>`
@@ -235,6 +236,7 @@ Classes
         Decimation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Decimation</td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int</font></td></tr><tr><td align="left" port="analogueFilterChain"><font color="#8b0000">+ analogueFilterChain: Blob  [0..1]</font></td></tr><tr><td align="left" port="digitalFilterChain"><font color="#8b0000">+ digitalFilterChain: Blob  [0..1]</font></td></tr></table>>]
         ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr></table>>]
         ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponseIIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseIIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfNumerators"><font color="#8b0000">+ numberOfNumerators: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfDenominators"><font color="#8b0000">+ numberOfDenominators: int  [0..1]</font></td></tr><tr><td align="left" port="numerators"><font color="#8b0000">+ numerators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="denominators"><font color="#8b0000">+ denominators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponsePolynomial [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePolynomial</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="frequencyUnit"><font color="#8b0000">+ frequencyUnit: string</font></td></tr><tr><td align="left" port="approximationType"><font color="#8b0000">+ approximationType: string</font></td></tr><tr><td align="left" port="approximationLowerBound"><font color="#8b0000">+ approximationLowerBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationUpperBound"><font color="#8b0000">+ approximationUpperBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationError"><font color="#8b0000">+ approximationError: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponseFAP [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFAP</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfTuples"><font color="#8b0000">+ numberOfTuples: int  [0..1]</font></td></tr><tr><td align="left" port="tuples"><font color="#8b0000">+ tuples: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Network [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Network</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="institutions"><font color="#8b0000">+ institutions: string</font></td></tr><tr><td align="left" port="region"><font color="#8b0000">+ region: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="netClass"><font color="#8b0000">+ netClass: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ station: Station [0..*]</font></td></tr></table>>]
@@ -253,6 +255,7 @@ Classes
         Datalogger -> Decimation
         Inventory -> ResponsePAZ
         Inventory -> ResponseFIR
+        Inventory -> ResponseIIR
         Inventory -> ResponsePolynomial
         Inventory -> ResponseFAP
         Inventory -> Network
@@ -6434,6 +6437,15 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: add(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a ResponseIIR object to Inventory. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
    .. py:method:: add(responsePolynomial)
 
       :param responsePolynomial: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
@@ -6502,6 +6514,13 @@ Reference
       :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponseFIR object from Inventory.
+
+   .. py:method:: remove(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added ResponseIIR object from Inventory.
 
    .. py:method:: remove(responsePolynomial)
 
@@ -6584,6 +6603,16 @@ Reference
       :param responseFIRIndex: The index of the object to be removed of type ResponseFIRIndex.
       :rtype: A Boolean value indicating success with True, False otherwise.
 
+   .. py:method:: removeResponseIIR(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseIIR(responseIIRIndex);
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
    .. py:method:: removeResponsePolynomial(idx)
 
       :param idx: An integer index of the object to be removed.
@@ -6649,6 +6678,12 @@ Reference
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of ResponseFIR child objects.
+
+   .. py:method:: responseIIRCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of ResponseIIR child objects.
 
    .. py:method:: responsePolynomialCount()
 
@@ -6764,6 +6799,22 @@ Reference
       are compared by value which makes this function slower than the direct
       integer index look-up.
 
+   .. py:method:: responseIIR(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at index idx.
+
+   .. py:method:: responseIIR(responseIIRIndex)
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
    .. py:method:: responsePolynomial(idx)
 
       :param idx: An integer index of the object to be returned.
@@ -6851,6 +6902,13 @@ Reference
 
       :param publicID: The publicID of the object to find.
       :rtype: Object of type :ref:`ResponseFIR <api-python-datamodel-responsefir>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
+   .. py:method:: findResponseIIR(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
 
       Returns the child object with a certain publicID, None otherwise.
 
@@ -11982,6 +12040,269 @@ Reference
    .. py:method:: clone()
 
       :rtype: A cloned ResponseFIR.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-responseiir:
+
+.. py:class:: ResponseIIR
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type describes a infinite impulse response filter
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type ResponseIIR if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to ResponseIIR if the internal wrapped
+      representation is an ResponseIIR object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type ResponseIIRIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setName(name)
+
+      :param name: string
+
+      Unique response name
+
+   .. py:method:: name()
+
+      :rtype: string
+
+   .. py:method:: setType(type)
+
+      :param type: string
+
+      Response type \(43.05\/53.03\/54.03\): A \- Laplace transform analog
+      response in rad\/sec, B \- Analog response in Hz, C \- Composite \(currently
+      undefined\), D \- Digital \(Z \- transform\)
+
+   .. py:method:: type()
+
+      :rtype: string
+
+   .. py:method:: setGain(gain)
+
+      :param gain: float
+
+      Gain of response \(48.05\/58.04\)
+
+   .. py:method:: gain()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfNumerators(numberOfNumerators)
+
+      :param numberOfNumerators: int
+
+      Number of numerators \(54.07\)
+
+   .. py:method:: numberOfNumerators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfDenominators(numberOfDenominators)
+
+      :param numberOfDenominators: int
+
+      Number of denominators \(54.10\)
+
+   .. py:method:: numberOfDenominators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumerators(numerators)
+
+      :param numerators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Numerators \(54.08\-09\)
+
+   .. py:method:: numerators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDenominators(denominators)
+
+      :param denominators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Denominators \(54.11\-12\)
+
+   .. py:method:: denominators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setRemark(remark)
+
+      :param remark: :ref:`Blob <api-python-datamodel-blob>`
+
+   .. py:method:: remark()
+
+      :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: inventory()
+
+      :rtype: Inventory
+
+      Returns the parent Inventory if available. Returns None
+      if the parent is not a Inventory. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned ResponseIIR.
 
       Returns a new instance that is a clone of the current instance. Child
       objects are being ignored.

@@ -37,10 +37,11 @@ DROP TABLE IF EXISTS Sensor;
 DROP TABLE IF EXISTS ResponsePAZ;
 DROP TABLE IF EXISTS ResponsePolynomial;
 DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS ResponseIIR;
 DROP TABLE IF EXISTS DataloggerCalibration;
 DROP TABLE IF EXISTS Decimation;
 DROP TABLE IF EXISTS Datalogger;
-DROP TABLE IF EXISTS ResponseFIR;
 DROP TABLE IF EXISTS AuxStream;
 DROP TABLE IF EXISTS Stream;
 DROP TABLE IF EXISTS SensorLocation;
@@ -1221,6 +1222,55 @@ CREATE TABLE ResponseFAP (
 	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
+CREATE TABLE ResponseFIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	gain DOUBLE,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfCoefficients SMALLINT UNSIGNED,
+	symmetry CHAR(1),
+	coefficients_content BLOB,
+	coefficients_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
+CREATE TABLE ResponseIIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	type CHAR(1),
+	gain DOUBLE,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used TINYINT(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
 CREATE TABLE DataloggerCalibration (
 	_oid INTEGER(11) NOT NULL,
 	_parent_oid INTEGER(11) NOT NULL,
@@ -1276,29 +1326,6 @@ CREATE TABLE Datalogger (
 	clockType VARCHAR(10),
 	gain DOUBLE,
 	maxClockDrift DOUBLE UNSIGNED,
-	remark_content BLOB,
-	remark_used TINYINT(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	INDEX(_parent_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE KEY composite_index (_parent_oid,name)
-) ENGINE=INNODB;
-
-CREATE TABLE ResponseFIR (
-	_oid INTEGER(11) NOT NULL,
-	_parent_oid INTEGER(11) NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	name VARCHAR(255),
-	gain DOUBLE,
-	decimationFactor SMALLINT UNSIGNED,
-	delay DOUBLE UNSIGNED,
-	correction DOUBLE,
-	numberOfCoefficients SMALLINT UNSIGNED,
-	symmetry CHAR(1),
-	coefficients_content BLOB,
-	coefficients_used TINYINT(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),

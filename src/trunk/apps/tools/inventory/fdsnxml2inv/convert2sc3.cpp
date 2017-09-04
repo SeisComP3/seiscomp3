@@ -240,6 +240,27 @@ void checkFIR(DataModel::ResponseFIR *rf) {
 }
 
 
+void checkIIR(DataModel::ResponseIIR *rf) {
+	vector<double> &nums = rf->numerators().content();
+	int nc = nums.size();
+
+	if ( rf->numberOfNumerators() != nc ) {
+		SEISCOMP_WARNING("expected %d numerators, found %d: will be corrected",
+		                 rf->numberOfNumerators(), nc);
+		rf->setNumberOfNumerators(nc);
+	}
+
+	vector<double> &denoms = rf->denominators().content();
+	int dc = denoms.size();
+
+	if ( rf->numberOfDenominators() != dc ) {
+		SEISCOMP_WARNING("expected %d denominators, found %d: will be corrected",
+		                 rf->numberOfDenominators(), dc);
+		rf->setNumberOfDenominators(dc);
+	}
+}
+
+
 void checkPAZ(DataModel::ResponsePAZ *rp) {
 	if ( rp->numberOfPoles() != (int)rp->poles().content().size() ) {
 		SEISCOMP_WARNING("expected %d poles, found %lu", rp->numberOfPoles(),
@@ -338,10 +359,61 @@ bool equal(const DataModel::ResponseFIR *f1, const DataModel::ResponseFIR *f2) {
 }
 
 
+bool equal(const DataModel::ResponseIIR *f1, const DataModel::ResponseIIR *f2) {
+	COMPARE_AND_RETURN(string, f1, f2, type())
+	COMPARE_AND_RETURN(double, f1, f2, gain())
+	COMPARE_AND_RETURN(int, f1, f2, decimationFactor())
+	COMPARE_AND_RETURN(double, f1, f2, delay())
+	COMPARE_AND_RETURN(double, f1, f2, correction())
+	COMPARE_AND_RETURN(int, f1, f2, numberOfNumerators())
+	COMPARE_AND_RETURN(DataModel::Blob, f1, f2, remark())
+
+	const DataModel::RealArray *numerator1 = NULL;
+	const DataModel::RealArray *numerator2 = NULL;
+
+	try { numerator1 = &f1->numerators(); } catch ( ... ) {}
+	try { numerator2 = &f2->numerators(); } catch ( ... ) {}
+
+	// One set and not the other?
+	if ( (!numerator1 && numerator2) || (numerator1 && !numerator2) ) return false;
+
+	// Both unset?
+	if ( !numerator1 && !numerator2 ) return true;
+
+	// Both set, compare content
+	const vector<double> &n1 = numerator1->content();
+	const vector<double> &n2 = numerator2->content();
+	if ( n1.size() != n2.size() ) return false;
+	for ( size_t i = 0; i < n1.size(); ++i )
+		if ( n1[i] != n2[i] ) return false;
+
+	const DataModel::RealArray *denominators1 = NULL;
+	const DataModel::RealArray *denominators2 = NULL;
+
+	try { denominators1 = &f1->denominators(); } catch ( ... ) {}
+	try { denominators2 = &f2->denominators(); } catch ( ... ) {}
+
+	// One set and not the other?
+	if ( (!denominators1 && denominators2) || (denominators1 && !denominators2) ) return false;
+
+	// Both unset?
+	if ( !denominators1 && !denominators2 ) return true;
+
+	// Both set, compare content
+	const vector<double> &d1 = denominators1->content();
+	const vector<double> &d2 = denominators2->content();
+	if ( d1.size() != d2.size() ) return false;
+	for ( size_t i = 0; i < d1.size(); ++i )
+		if ( d1[i] != d2[i] ) return false;
+
+	return true;
+}
+
 
 bool equal(const DataModel::ResponsePAZ *p1, const DataModel::ResponsePAZ *p2) {
 	if ( p1->type() != p2->type() ) return false;
 
+	COMPARE_AND_RETURN(string, p1, p2, type())
 	COMPARE_AND_RETURN(double, p1, p2, gain())
 	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
 	COMPARE_AND_RETURN(double, p1, p2, normalizationFactor())

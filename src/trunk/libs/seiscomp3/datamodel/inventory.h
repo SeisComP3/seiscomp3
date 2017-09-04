@@ -26,6 +26,7 @@
 #include <seiscomp3/datamodel/datalogger.h>
 #include <seiscomp3/datamodel/responsepaz.h>
 #include <seiscomp3/datamodel/responsefir.h>
+#include <seiscomp3/datamodel/responseiir.h>
 #include <seiscomp3/datamodel/responsepolynomial.h>
 #include <seiscomp3/datamodel/responsefap.h>
 #include <seiscomp3/datamodel/network.h>
@@ -45,6 +46,7 @@ DEFINE_SMARTPOINTER(Sensor);
 DEFINE_SMARTPOINTER(Datalogger);
 DEFINE_SMARTPOINTER(ResponsePAZ);
 DEFINE_SMARTPOINTER(ResponseFIR);
+DEFINE_SMARTPOINTER(ResponseIIR);
 DEFINE_SMARTPOINTER(ResponsePolynomial);
 DEFINE_SMARTPOINTER(ResponseFAP);
 DEFINE_SMARTPOINTER(Network);
@@ -103,6 +105,7 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		bool add(Datalogger* obj);
 		bool add(ResponsePAZ* obj);
 		bool add(ResponseFIR* obj);
+		bool add(ResponseIIR* obj);
 		bool add(ResponsePolynomial* obj);
 		bool add(ResponseFAP* obj);
 		bool add(Network* obj);
@@ -120,6 +123,7 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		bool remove(Datalogger* obj);
 		bool remove(ResponsePAZ* obj);
 		bool remove(ResponseFIR* obj);
+		bool remove(ResponseIIR* obj);
 		bool remove(ResponsePolynomial* obj);
 		bool remove(ResponseFAP* obj);
 		bool remove(Network* obj);
@@ -142,6 +146,8 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		bool removeResponsePAZ(const ResponsePAZIndex& i);
 		bool removeResponseFIR(size_t i);
 		bool removeResponseFIR(const ResponseFIRIndex& i);
+		bool removeResponseIIR(size_t i);
+		bool removeResponseIIR(const ResponseIIRIndex& i);
 		bool removeResponsePolynomial(size_t i);
 		bool removeResponsePolynomial(const ResponsePolynomialIndex& i);
 		bool removeResponseFAP(size_t i);
@@ -156,6 +162,7 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		size_t dataloggerCount() const;
 		size_t responsePAZCount() const;
 		size_t responseFIRCount() const;
+		size_t responseIIRCount() const;
 		size_t responsePolynomialCount() const;
 		size_t responseFAPCount() const;
 		size_t networkCount() const;
@@ -180,6 +187,9 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		ResponseFIR* responseFIR(size_t i) const;
 		ResponseFIR* responseFIR(const ResponseFIRIndex& i) const;
 
+		ResponseIIR* responseIIR(size_t i) const;
+		ResponseIIR* responseIIR(const ResponseIIRIndex& i) const;
+
 		ResponsePolynomial* responsePolynomial(size_t i) const;
 		ResponsePolynomial* responsePolynomial(const ResponsePolynomialIndex& i) const;
 
@@ -196,6 +206,7 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		Datalogger* findDatalogger(const std::string& publicID) const;
 		ResponsePAZ* findResponsePAZ(const std::string& publicID) const;
 		ResponseFIR* findResponseFIR(const std::string& publicID) const;
+		ResponseIIR* findResponseIIR(const std::string& publicID) const;
 		ResponsePolynomial* findResponsePolynomial(const std::string& publicID) const;
 		ResponseFAP* findResponseFAP(const std::string& publicID) const;
 		Network* findNetwork(const std::string& publicID) const;
@@ -226,6 +237,7 @@ class SC_SYSTEM_CORE_API Inventory : public PublicObject {
 		std::vector<DataloggerPtr> _dataloggers;
 		std::vector<ResponsePAZPtr> _responsePAZs;
 		std::vector<ResponseFIRPtr> _responseFIRs;
+		std::vector<ResponseIIRPtr> _responseIIRs;
 		std::vector<ResponsePolynomialPtr> _responsePolynomials;
 		std::vector<ResponseFAPPtr> _responseFAPs;
 		std::vector<NetworkPtr> _networks;

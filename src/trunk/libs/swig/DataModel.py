@@ -11559,6 +11559,671 @@ def ResponseFAP_Find(publicID):
     """ResponseFAP_Find(std::string const & publicID) -> ResponseFAP"""
     return _DataModel.ResponseFAP_Find(publicID)
 
+class ResponseFIRIndex(_object):
+    """Proxy of C++ Seiscomp::DataModel::ResponseFIRIndex class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFIRIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFIRIndex, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::ResponseFIRIndex self) -> ResponseFIRIndex
+        __init__(Seiscomp::DataModel::ResponseFIRIndex self, std::string const & name) -> ResponseFIRIndex
+        __init__(Seiscomp::DataModel::ResponseFIRIndex self, ResponseFIRIndex arg2) -> ResponseFIRIndex
+        """
+        this = _DataModel.new_ResponseFIRIndex(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        """__eq__(ResponseFIRIndex self, ResponseFIRIndex arg2) -> bool"""
+        return _DataModel.ResponseFIRIndex___eq__(self, arg2)
+
+
+    def __ne__(self, arg2):
+        """__ne__(ResponseFIRIndex self, ResponseFIRIndex arg2) -> bool"""
+        return _DataModel.ResponseFIRIndex___ne__(self, arg2)
+
+    __swig_setmethods__["name"] = _DataModel.ResponseFIRIndex_name_set
+    __swig_getmethods__["name"] = _DataModel.ResponseFIRIndex_name_get
+    if _newclass:
+        name = _swig_property(_DataModel.ResponseFIRIndex_name_get, _DataModel.ResponseFIRIndex_name_set)
+    __swig_destroy__ = _DataModel.delete_ResponseFIRIndex
+    __del__ = lambda self: None
+ResponseFIRIndex_swigregister = _DataModel.ResponseFIRIndex_swigregister
+ResponseFIRIndex_swigregister(ResponseFIRIndex)
+
+class ResponseFIR(PublicObject):
+    """Proxy of C++ Seiscomp::DataModel::ResponseFIR class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFIR, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFIR, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.ResponseFIR_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.ResponseFIR_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(ResponseFIR self) -> char const *"""
+        return _DataModel.ResponseFIR_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(ResponseFIR self) -> RTTI"""
+        return _DataModel.ResponseFIR_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> ResponseFIR
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseFIR
+        """
+        return _DataModel.ResponseFIR_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> ResponseFIR
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseFIR
+        """
+        return _DataModel.ResponseFIR_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(ResponseFIR self, GenericArchive ar)"""
+        return _DataModel.ResponseFIR_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::ResponseFIR self, ResponseFIR other) -> ResponseFIR
+        __init__(Seiscomp::DataModel::ResponseFIR self, std::string const & publicID) -> ResponseFIR
+        """
+        this = _DataModel.new_ResponseFIR(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_ResponseFIR
+    __del__ = lambda self: None
+
+    def Create(*args):
+        """
+        Create() -> ResponseFIR
+        Create(std::string const & publicID) -> ResponseFIR
+        """
+        return _DataModel.ResponseFIR_Create(*args)
+
+    Create = staticmethod(Create)
+
+    def Find(publicID):
+        """Find(std::string const & publicID) -> ResponseFIR"""
+        return _DataModel.ResponseFIR_Find(publicID)
+
+    Find = staticmethod(Find)
+
+    def __eq__(self, other):
+        """__eq__(ResponseFIR self, ResponseFIR other) -> bool"""
+        return _DataModel.ResponseFIR___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ResponseFIR self, ResponseFIR other) -> bool"""
+        return _DataModel.ResponseFIR___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(ResponseFIR self, ResponseFIR other) -> bool"""
+        return _DataModel.ResponseFIR_equal(self, other)
+
+
+    def setName(self, name):
+        """setName(ResponseFIR self, std::string const & name)"""
+        return _DataModel.ResponseFIR_setName(self, name)
+
+
+    def name(self):
+        """name(ResponseFIR self) -> std::string const &"""
+        return _DataModel.ResponseFIR_name(self)
+
+
+    def setGain(self, gain):
+        """setGain(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & gain)"""
+        return _DataModel.ResponseFIR_setGain(self, gain)
+
+
+    def gain(self):
+        """gain(ResponseFIR self) -> double"""
+        return _DataModel.ResponseFIR_gain(self)
+
+
+    def setDecimationFactor(self, decimationFactor):
+        """setDecimationFactor(ResponseFIR self, Seiscomp::Core::Optional< int >::Impl const & decimationFactor)"""
+        return _DataModel.ResponseFIR_setDecimationFactor(self, decimationFactor)
+
+
+    def decimationFactor(self):
+        """decimationFactor(ResponseFIR self) -> int"""
+        return _DataModel.ResponseFIR_decimationFactor(self)
+
+
+    def setDelay(self, delay):
+        """setDelay(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & delay)"""
+        return _DataModel.ResponseFIR_setDelay(self, delay)
+
+
+    def delay(self):
+        """delay(ResponseFIR self) -> double"""
+        return _DataModel.ResponseFIR_delay(self)
+
+
+    def setCorrection(self, correction):
+        """setCorrection(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & correction)"""
+        return _DataModel.ResponseFIR_setCorrection(self, correction)
+
+
+    def correction(self):
+        """correction(ResponseFIR self) -> double"""
+        return _DataModel.ResponseFIR_correction(self)
+
+
+    def setNumberOfCoefficients(self, numberOfCoefficients):
+        """setNumberOfCoefficients(ResponseFIR self, Seiscomp::Core::Optional< int >::Impl const & numberOfCoefficients)"""
+        return _DataModel.ResponseFIR_setNumberOfCoefficients(self, numberOfCoefficients)
+
+
+    def numberOfCoefficients(self):
+        """numberOfCoefficients(ResponseFIR self) -> int"""
+        return _DataModel.ResponseFIR_numberOfCoefficients(self)
+
+
+    def setSymmetry(self, symmetry):
+        """setSymmetry(ResponseFIR self, std::string const & symmetry)"""
+        return _DataModel.ResponseFIR_setSymmetry(self, symmetry)
+
+
+    def symmetry(self):
+        """symmetry(ResponseFIR self) -> std::string const &"""
+        return _DataModel.ResponseFIR_symmetry(self)
+
+
+    def setCoefficients(self, coefficients):
+        """setCoefficients(ResponseFIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::RealArray >::Impl const & coefficients)"""
+        return _DataModel.ResponseFIR_setCoefficients(self, coefficients)
+
+
+    def coefficients(self, *args):
+        """
+        coefficients(ResponseFIR self) -> RealArray
+        coefficients(ResponseFIR self) -> RealArray
+        """
+        return _DataModel.ResponseFIR_coefficients(self, *args)
+
+
+    def setRemark(self, remark):
+        """setRemark(ResponseFIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::Blob >::Impl const & remark)"""
+        return _DataModel.ResponseFIR_setRemark(self, remark)
+
+
+    def remark(self, *args):
+        """
+        remark(ResponseFIR self) -> Blob
+        remark(ResponseFIR self) -> Blob
+        """
+        return _DataModel.ResponseFIR_remark(self, *args)
+
+
+    def index(self):
+        """index(ResponseFIR self) -> ResponseFIRIndex"""
+        return _DataModel.ResponseFIR_index(self)
+
+
+    def equalIndex(self, lhs):
+        """equalIndex(ResponseFIR self, ResponseFIR lhs) -> bool"""
+        return _DataModel.ResponseFIR_equalIndex(self, lhs)
+
+
+    def inventory(self):
+        """inventory(ResponseFIR self) -> Inventory"""
+        return _DataModel.ResponseFIR_inventory(self)
+
+
+    def assign(self, other):
+        """assign(ResponseFIR self, Object other) -> bool"""
+        return _DataModel.ResponseFIR_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(ResponseFIR self, PublicObject parent) -> bool"""
+        return _DataModel.ResponseFIR_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(ResponseFIR self, PublicObject parent) -> bool"""
+        return _DataModel.ResponseFIR_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(ResponseFIR self) -> bool"""
+        return _DataModel.ResponseFIR_detach(self)
+
+
+    def clone(self):
+        """clone(ResponseFIR self) -> Object"""
+        return _DataModel.ResponseFIR_clone(self)
+
+
+    def updateChild(self, child):
+        """updateChild(ResponseFIR self, Object child) -> bool"""
+        return _DataModel.ResponseFIR_updateChild(self, child)
+
+
+    def accept(self, arg2):
+        """accept(ResponseFIR self, Visitor arg2)"""
+        return _DataModel.ResponseFIR_accept(self, arg2)
+
+ResponseFIR_swigregister = _DataModel.ResponseFIR_swigregister
+ResponseFIR_swigregister(ResponseFIR)
+
+def ResponseFIR_ClassName():
+    """ResponseFIR_ClassName() -> char const *"""
+    return _DataModel.ResponseFIR_ClassName()
+
+def ResponseFIR_TypeInfo():
+    """ResponseFIR_TypeInfo() -> RTTI"""
+    return _DataModel.ResponseFIR_TypeInfo()
+
+def ResponseFIR_Cast(*args):
+    """
+    Cast(BaseObject o) -> ResponseFIR
+    ResponseFIR_Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseFIR
+    """
+    return _DataModel.ResponseFIR_Cast(*args)
+
+def ResponseFIR_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> ResponseFIR
+    ResponseFIR_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseFIR
+    """
+    return _DataModel.ResponseFIR_ConstCast(*args)
+
+def ResponseFIR_Create(*args):
+    """
+    Create() -> ResponseFIR
+    ResponseFIR_Create(std::string const & publicID) -> ResponseFIR
+    """
+    return _DataModel.ResponseFIR_Create(*args)
+
+def ResponseFIR_Find(publicID):
+    """ResponseFIR_Find(std::string const & publicID) -> ResponseFIR"""
+    return _DataModel.ResponseFIR_Find(publicID)
+
+class ResponseIIRIndex(_object):
+    """Proxy of C++ Seiscomp::DataModel::ResponseIIRIndex class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseIIRIndex, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseIIRIndex, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::ResponseIIRIndex self) -> ResponseIIRIndex
+        __init__(Seiscomp::DataModel::ResponseIIRIndex self, std::string const & name) -> ResponseIIRIndex
+        __init__(Seiscomp::DataModel::ResponseIIRIndex self, ResponseIIRIndex arg2) -> ResponseIIRIndex
+        """
+        this = _DataModel.new_ResponseIIRIndex(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        """__eq__(ResponseIIRIndex self, ResponseIIRIndex arg2) -> bool"""
+        return _DataModel.ResponseIIRIndex___eq__(self, arg2)
+
+
+    def __ne__(self, arg2):
+        """__ne__(ResponseIIRIndex self, ResponseIIRIndex arg2) -> bool"""
+        return _DataModel.ResponseIIRIndex___ne__(self, arg2)
+
+    __swig_setmethods__["name"] = _DataModel.ResponseIIRIndex_name_set
+    __swig_getmethods__["name"] = _DataModel.ResponseIIRIndex_name_get
+    if _newclass:
+        name = _swig_property(_DataModel.ResponseIIRIndex_name_get, _DataModel.ResponseIIRIndex_name_set)
+    __swig_destroy__ = _DataModel.delete_ResponseIIRIndex
+    __del__ = lambda self: None
+ResponseIIRIndex_swigregister = _DataModel.ResponseIIRIndex_swigregister
+ResponseIIRIndex_swigregister(ResponseIIRIndex)
+
+class ResponseIIR(PublicObject):
+    """Proxy of C++ Seiscomp::DataModel::ResponseIIR class."""
+
+    __swig_setmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseIIR, name, value)
+    __swig_getmethods__ = {}
+    for _s in [PublicObject]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ResponseIIR, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.ResponseIIR_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.ResponseIIR_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(ResponseIIR self) -> char const *"""
+        return _DataModel.ResponseIIR_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(ResponseIIR self) -> RTTI"""
+        return _DataModel.ResponseIIR_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> ResponseIIR
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseIIR
+        """
+        return _DataModel.ResponseIIR_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> ResponseIIR
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseIIR
+        """
+        return _DataModel.ResponseIIR_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(ResponseIIR self, GenericArchive ar)"""
+        return _DataModel.ResponseIIR_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::ResponseIIR self, ResponseIIR other) -> ResponseIIR
+        __init__(Seiscomp::DataModel::ResponseIIR self, std::string const & publicID) -> ResponseIIR
+        """
+        this = _DataModel.new_ResponseIIR(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _DataModel.delete_ResponseIIR
+    __del__ = lambda self: None
+
+    def Create(*args):
+        """
+        Create() -> ResponseIIR
+        Create(std::string const & publicID) -> ResponseIIR
+        """
+        return _DataModel.ResponseIIR_Create(*args)
+
+    Create = staticmethod(Create)
+
+    def Find(publicID):
+        """Find(std::string const & publicID) -> ResponseIIR"""
+        return _DataModel.ResponseIIR_Find(publicID)
+
+    Find = staticmethod(Find)
+
+    def __eq__(self, other):
+        """__eq__(ResponseIIR self, ResponseIIR other) -> bool"""
+        return _DataModel.ResponseIIR___eq__(self, other)
+
+
+    def __ne__(self, other):
+        """__ne__(ResponseIIR self, ResponseIIR other) -> bool"""
+        return _DataModel.ResponseIIR___ne__(self, other)
+
+
+    def equal(self, other):
+        """equal(ResponseIIR self, ResponseIIR other) -> bool"""
+        return _DataModel.ResponseIIR_equal(self, other)
+
+
+    def setName(self, name):
+        """setName(ResponseIIR self, std::string const & name)"""
+        return _DataModel.ResponseIIR_setName(self, name)
+
+
+    def name(self):
+        """name(ResponseIIR self) -> std::string const &"""
+        return _DataModel.ResponseIIR_name(self)
+
+
+    def setType(self, type):
+        """setType(ResponseIIR self, std::string const & type)"""
+        return _DataModel.ResponseIIR_setType(self, type)
+
+
+    def type(self):
+        """type(ResponseIIR self) -> std::string const &"""
+        return _DataModel.ResponseIIR_type(self)
+
+
+    def setGain(self, gain):
+        """setGain(ResponseIIR self, Seiscomp::Core::Optional< double >::Impl const & gain)"""
+        return _DataModel.ResponseIIR_setGain(self, gain)
+
+
+    def gain(self):
+        """gain(ResponseIIR self) -> double"""
+        return _DataModel.ResponseIIR_gain(self)
+
+
+    def setDecimationFactor(self, decimationFactor):
+        """setDecimationFactor(ResponseIIR self, Seiscomp::Core::Optional< int >::Impl const & decimationFactor)"""
+        return _DataModel.ResponseIIR_setDecimationFactor(self, decimationFactor)
+
+
+    def decimationFactor(self):
+        """decimationFactor(ResponseIIR self) -> int"""
+        return _DataModel.ResponseIIR_decimationFactor(self)
+
+
+    def setDelay(self, delay):
+        """setDelay(ResponseIIR self, Seiscomp::Core::Optional< double >::Impl const & delay)"""
+        return _DataModel.ResponseIIR_setDelay(self, delay)
+
+
+    def delay(self):
+        """delay(ResponseIIR self) -> double"""
+        return _DataModel.ResponseIIR_delay(self)
+
+
+    def setCorrection(self, correction):
+        """setCorrection(ResponseIIR self, Seiscomp::Core::Optional< double >::Impl const & correction)"""
+        return _DataModel.ResponseIIR_setCorrection(self, correction)
+
+
+    def correction(self):
+        """correction(ResponseIIR self) -> double"""
+        return _DataModel.ResponseIIR_correction(self)
+
+
+    def setNumberOfNumerators(self, numberOfNumerators):
+        """setNumberOfNumerators(ResponseIIR self, Seiscomp::Core::Optional< int >::Impl const & numberOfNumerators)"""
+        return _DataModel.ResponseIIR_setNumberOfNumerators(self, numberOfNumerators)
+
+
+    def numberOfNumerators(self):
+        """numberOfNumerators(ResponseIIR self) -> int"""
+        return _DataModel.ResponseIIR_numberOfNumerators(self)
+
+
+    def setNumberOfDenominators(self, numberOfDenominators):
+        """setNumberOfDenominators(ResponseIIR self, Seiscomp::Core::Optional< int >::Impl const & numberOfDenominators)"""
+        return _DataModel.ResponseIIR_setNumberOfDenominators(self, numberOfDenominators)
+
+
+    def numberOfDenominators(self):
+        """numberOfDenominators(ResponseIIR self) -> int"""
+        return _DataModel.ResponseIIR_numberOfDenominators(self)
+
+
+    def setNumerators(self, numerators):
+        """setNumerators(ResponseIIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::RealArray >::Impl const & numerators)"""
+        return _DataModel.ResponseIIR_setNumerators(self, numerators)
+
+
+    def numerators(self, *args):
+        """
+        numerators(ResponseIIR self) -> RealArray
+        numerators(ResponseIIR self) -> RealArray
+        """
+        return _DataModel.ResponseIIR_numerators(self, *args)
+
+
+    def setDenominators(self, denominators):
+        """setDenominators(ResponseIIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::RealArray >::Impl const & denominators)"""
+        return _DataModel.ResponseIIR_setDenominators(self, denominators)
+
+
+    def denominators(self, *args):
+        """
+        denominators(ResponseIIR self) -> RealArray
+        denominators(ResponseIIR self) -> RealArray
+        """
+        return _DataModel.ResponseIIR_denominators(self, *args)
+
+
+    def setRemark(self, remark):
+        """setRemark(ResponseIIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::Blob >::Impl const & remark)"""
+        return _DataModel.ResponseIIR_setRemark(self, remark)
+
+
+    def remark(self, *args):
+        """
+        remark(ResponseIIR self) -> Blob
+        remark(ResponseIIR self) -> Blob
+        """
+        return _DataModel.ResponseIIR_remark(self, *args)
+
+
+    def index(self):
+        """index(ResponseIIR self) -> ResponseIIRIndex"""
+        return _DataModel.ResponseIIR_index(self)
+
+
+    def equalIndex(self, lhs):
+        """equalIndex(ResponseIIR self, ResponseIIR lhs) -> bool"""
+        return _DataModel.ResponseIIR_equalIndex(self, lhs)
+
+
+    def inventory(self):
+        """inventory(ResponseIIR self) -> Inventory"""
+        return _DataModel.ResponseIIR_inventory(self)
+
+
+    def assign(self, other):
+        """assign(ResponseIIR self, Object other) -> bool"""
+        return _DataModel.ResponseIIR_assign(self, other)
+
+
+    def attachTo(self, parent):
+        """attachTo(ResponseIIR self, PublicObject parent) -> bool"""
+        return _DataModel.ResponseIIR_attachTo(self, parent)
+
+
+    def detachFrom(self, parent):
+        """detachFrom(ResponseIIR self, PublicObject parent) -> bool"""
+        return _DataModel.ResponseIIR_detachFrom(self, parent)
+
+
+    def detach(self):
+        """detach(ResponseIIR self) -> bool"""
+        return _DataModel.ResponseIIR_detach(self)
+
+
+    def clone(self):
+        """clone(ResponseIIR self) -> Object"""
+        return _DataModel.ResponseIIR_clone(self)
+
+
+    def updateChild(self, child):
+        """updateChild(ResponseIIR self, Object child) -> bool"""
+        return _DataModel.ResponseIIR_updateChild(self, child)
+
+
+    def accept(self, arg2):
+        """accept(ResponseIIR self, Visitor arg2)"""
+        return _DataModel.ResponseIIR_accept(self, arg2)
+
+ResponseIIR_swigregister = _DataModel.ResponseIIR_swigregister
+ResponseIIR_swigregister(ResponseIIR)
+
+def ResponseIIR_ClassName():
+    """ResponseIIR_ClassName() -> char const *"""
+    return _DataModel.ResponseIIR_ClassName()
+
+def ResponseIIR_TypeInfo():
+    """ResponseIIR_TypeInfo() -> RTTI"""
+    return _DataModel.ResponseIIR_TypeInfo()
+
+def ResponseIIR_Cast(*args):
+    """
+    Cast(BaseObject o) -> ResponseIIR
+    ResponseIIR_Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseIIR
+    """
+    return _DataModel.ResponseIIR_Cast(*args)
+
+def ResponseIIR_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> ResponseIIR
+    ResponseIIR_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseIIR
+    """
+    return _DataModel.ResponseIIR_ConstCast(*args)
+
+def ResponseIIR_Create(*args):
+    """
+    Create() -> ResponseIIR
+    ResponseIIR_Create(std::string const & publicID) -> ResponseIIR
+    """
+    return _DataModel.ResponseIIR_Create(*args)
+
+def ResponseIIR_Find(publicID):
+    """ResponseIIR_Find(std::string const & publicID) -> ResponseIIR"""
+    return _DataModel.ResponseIIR_Find(publicID)
+
 class DataloggerCalibrationIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::DataloggerCalibrationIndex class."""
 
@@ -12483,327 +13148,6 @@ def Datalogger_Create(*args):
 def Datalogger_Find(publicID):
     """Datalogger_Find(std::string const & publicID) -> Datalogger"""
     return _DataModel.Datalogger_Find(publicID)
-
-class ResponseFIRIndex(_object):
-    """Proxy of C++ Seiscomp::DataModel::ResponseFIRIndex class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFIRIndex, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFIRIndex, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(Seiscomp::DataModel::ResponseFIRIndex self) -> ResponseFIRIndex
-        __init__(Seiscomp::DataModel::ResponseFIRIndex self, std::string const & name) -> ResponseFIRIndex
-        __init__(Seiscomp::DataModel::ResponseFIRIndex self, ResponseFIRIndex arg2) -> ResponseFIRIndex
-        """
-        this = _DataModel.new_ResponseFIRIndex(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __eq__(self, arg2):
-        """__eq__(ResponseFIRIndex self, ResponseFIRIndex arg2) -> bool"""
-        return _DataModel.ResponseFIRIndex___eq__(self, arg2)
-
-
-    def __ne__(self, arg2):
-        """__ne__(ResponseFIRIndex self, ResponseFIRIndex arg2) -> bool"""
-        return _DataModel.ResponseFIRIndex___ne__(self, arg2)
-
-    __swig_setmethods__["name"] = _DataModel.ResponseFIRIndex_name_set
-    __swig_getmethods__["name"] = _DataModel.ResponseFIRIndex_name_get
-    if _newclass:
-        name = _swig_property(_DataModel.ResponseFIRIndex_name_get, _DataModel.ResponseFIRIndex_name_set)
-    __swig_destroy__ = _DataModel.delete_ResponseFIRIndex
-    __del__ = lambda self: None
-ResponseFIRIndex_swigregister = _DataModel.ResponseFIRIndex_swigregister
-ResponseFIRIndex_swigregister(ResponseFIRIndex)
-
-class ResponseFIR(PublicObject):
-    """Proxy of C++ Seiscomp::DataModel::ResponseFIR class."""
-
-    __swig_setmethods__ = {}
-    for _s in [PublicObject]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ResponseFIR, name, value)
-    __swig_getmethods__ = {}
-    for _s in [PublicObject]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, ResponseFIR, name)
-    __repr__ = _swig_repr
-
-    def ClassName():
-        """ClassName() -> char const *"""
-        return _DataModel.ResponseFIR_ClassName()
-
-    ClassName = staticmethod(ClassName)
-
-    def TypeInfo():
-        """TypeInfo() -> RTTI"""
-        return _DataModel.ResponseFIR_TypeInfo()
-
-    TypeInfo = staticmethod(TypeInfo)
-
-    def className(self):
-        """className(ResponseFIR self) -> char const *"""
-        return _DataModel.ResponseFIR_className(self)
-
-
-    def typeInfo(self):
-        """typeInfo(ResponseFIR self) -> RTTI"""
-        return _DataModel.ResponseFIR_typeInfo(self)
-
-
-    def Cast(*args):
-        """
-        Cast(BaseObject o) -> ResponseFIR
-        Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseFIR
-        """
-        return _DataModel.ResponseFIR_Cast(*args)
-
-    Cast = staticmethod(Cast)
-
-    def ConstCast(*args):
-        """
-        ConstCast(BaseObject o) -> ResponseFIR
-        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseFIR
-        """
-        return _DataModel.ResponseFIR_ConstCast(*args)
-
-    ConstCast = staticmethod(ConstCast)
-
-    def serialize(self, ar):
-        """serialize(ResponseFIR self, GenericArchive ar)"""
-        return _DataModel.ResponseFIR_serialize(self, ar)
-
-
-    def __init__(self, *args):
-        """
-        __init__(Seiscomp::DataModel::ResponseFIR self, ResponseFIR other) -> ResponseFIR
-        __init__(Seiscomp::DataModel::ResponseFIR self, std::string const & publicID) -> ResponseFIR
-        """
-        this = _DataModel.new_ResponseFIR(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-    __swig_destroy__ = _DataModel.delete_ResponseFIR
-    __del__ = lambda self: None
-
-    def Create(*args):
-        """
-        Create() -> ResponseFIR
-        Create(std::string const & publicID) -> ResponseFIR
-        """
-        return _DataModel.ResponseFIR_Create(*args)
-
-    Create = staticmethod(Create)
-
-    def Find(publicID):
-        """Find(std::string const & publicID) -> ResponseFIR"""
-        return _DataModel.ResponseFIR_Find(publicID)
-
-    Find = staticmethod(Find)
-
-    def __eq__(self, other):
-        """__eq__(ResponseFIR self, ResponseFIR other) -> bool"""
-        return _DataModel.ResponseFIR___eq__(self, other)
-
-
-    def __ne__(self, other):
-        """__ne__(ResponseFIR self, ResponseFIR other) -> bool"""
-        return _DataModel.ResponseFIR___ne__(self, other)
-
-
-    def equal(self, other):
-        """equal(ResponseFIR self, ResponseFIR other) -> bool"""
-        return _DataModel.ResponseFIR_equal(self, other)
-
-
-    def setName(self, name):
-        """setName(ResponseFIR self, std::string const & name)"""
-        return _DataModel.ResponseFIR_setName(self, name)
-
-
-    def name(self):
-        """name(ResponseFIR self) -> std::string const &"""
-        return _DataModel.ResponseFIR_name(self)
-
-
-    def setGain(self, gain):
-        """setGain(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & gain)"""
-        return _DataModel.ResponseFIR_setGain(self, gain)
-
-
-    def gain(self):
-        """gain(ResponseFIR self) -> double"""
-        return _DataModel.ResponseFIR_gain(self)
-
-
-    def setDecimationFactor(self, decimationFactor):
-        """setDecimationFactor(ResponseFIR self, Seiscomp::Core::Optional< int >::Impl const & decimationFactor)"""
-        return _DataModel.ResponseFIR_setDecimationFactor(self, decimationFactor)
-
-
-    def decimationFactor(self):
-        """decimationFactor(ResponseFIR self) -> int"""
-        return _DataModel.ResponseFIR_decimationFactor(self)
-
-
-    def setDelay(self, delay):
-        """setDelay(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & delay)"""
-        return _DataModel.ResponseFIR_setDelay(self, delay)
-
-
-    def delay(self):
-        """delay(ResponseFIR self) -> double"""
-        return _DataModel.ResponseFIR_delay(self)
-
-
-    def setCorrection(self, correction):
-        """setCorrection(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & correction)"""
-        return _DataModel.ResponseFIR_setCorrection(self, correction)
-
-
-    def correction(self):
-        """correction(ResponseFIR self) -> double"""
-        return _DataModel.ResponseFIR_correction(self)
-
-
-    def setNumberOfCoefficients(self, numberOfCoefficients):
-        """setNumberOfCoefficients(ResponseFIR self, Seiscomp::Core::Optional< int >::Impl const & numberOfCoefficients)"""
-        return _DataModel.ResponseFIR_setNumberOfCoefficients(self, numberOfCoefficients)
-
-
-    def numberOfCoefficients(self):
-        """numberOfCoefficients(ResponseFIR self) -> int"""
-        return _DataModel.ResponseFIR_numberOfCoefficients(self)
-
-
-    def setSymmetry(self, symmetry):
-        """setSymmetry(ResponseFIR self, std::string const & symmetry)"""
-        return _DataModel.ResponseFIR_setSymmetry(self, symmetry)
-
-
-    def symmetry(self):
-        """symmetry(ResponseFIR self) -> std::string const &"""
-        return _DataModel.ResponseFIR_symmetry(self)
-
-
-    def setCoefficients(self, coefficients):
-        """setCoefficients(ResponseFIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::RealArray >::Impl const & coefficients)"""
-        return _DataModel.ResponseFIR_setCoefficients(self, coefficients)
-
-
-    def coefficients(self, *args):
-        """
-        coefficients(ResponseFIR self) -> RealArray
-        coefficients(ResponseFIR self) -> RealArray
-        """
-        return _DataModel.ResponseFIR_coefficients(self, *args)
-
-
-    def setRemark(self, remark):
-        """setRemark(ResponseFIR self, Seiscomp::Core::Optional< Seiscomp::DataModel::Blob >::Impl const & remark)"""
-        return _DataModel.ResponseFIR_setRemark(self, remark)
-
-
-    def remark(self, *args):
-        """
-        remark(ResponseFIR self) -> Blob
-        remark(ResponseFIR self) -> Blob
-        """
-        return _DataModel.ResponseFIR_remark(self, *args)
-
-
-    def index(self):
-        """index(ResponseFIR self) -> ResponseFIRIndex"""
-        return _DataModel.ResponseFIR_index(self)
-
-
-    def equalIndex(self, lhs):
-        """equalIndex(ResponseFIR self, ResponseFIR lhs) -> bool"""
-        return _DataModel.ResponseFIR_equalIndex(self, lhs)
-
-
-    def inventory(self):
-        """inventory(ResponseFIR self) -> Inventory"""
-        return _DataModel.ResponseFIR_inventory(self)
-
-
-    def assign(self, other):
-        """assign(ResponseFIR self, Object other) -> bool"""
-        return _DataModel.ResponseFIR_assign(self, other)
-
-
-    def attachTo(self, parent):
-        """attachTo(ResponseFIR self, PublicObject parent) -> bool"""
-        return _DataModel.ResponseFIR_attachTo(self, parent)
-
-
-    def detachFrom(self, parent):
-        """detachFrom(ResponseFIR self, PublicObject parent) -> bool"""
-        return _DataModel.ResponseFIR_detachFrom(self, parent)
-
-
-    def detach(self):
-        """detach(ResponseFIR self) -> bool"""
-        return _DataModel.ResponseFIR_detach(self)
-
-
-    def clone(self):
-        """clone(ResponseFIR self) -> Object"""
-        return _DataModel.ResponseFIR_clone(self)
-
-
-    def updateChild(self, child):
-        """updateChild(ResponseFIR self, Object child) -> bool"""
-        return _DataModel.ResponseFIR_updateChild(self, child)
-
-
-    def accept(self, arg2):
-        """accept(ResponseFIR self, Visitor arg2)"""
-        return _DataModel.ResponseFIR_accept(self, arg2)
-
-ResponseFIR_swigregister = _DataModel.ResponseFIR_swigregister
-ResponseFIR_swigregister(ResponseFIR)
-
-def ResponseFIR_ClassName():
-    """ResponseFIR_ClassName() -> char const *"""
-    return _DataModel.ResponseFIR_ClassName()
-
-def ResponseFIR_TypeInfo():
-    """ResponseFIR_TypeInfo() -> RTTI"""
-    return _DataModel.ResponseFIR_TypeInfo()
-
-def ResponseFIR_Cast(*args):
-    """
-    Cast(BaseObject o) -> ResponseFIR
-    ResponseFIR_Cast(Seiscomp::Core::BaseObjectPtr o) -> ResponseFIR
-    """
-    return _DataModel.ResponseFIR_Cast(*args)
-
-def ResponseFIR_ConstCast(*args):
-    """
-    ConstCast(BaseObject o) -> ResponseFIR
-    ResponseFIR_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ResponseFIR
-    """
-    return _DataModel.ResponseFIR_ConstCast(*args)
-
-def ResponseFIR_Create(*args):
-    """
-    Create() -> ResponseFIR
-    ResponseFIR_Create(std::string const & publicID) -> ResponseFIR
-    """
-    return _DataModel.ResponseFIR_Create(*args)
-
-def ResponseFIR_Find(publicID):
-    """ResponseFIR_Find(std::string const & publicID) -> ResponseFIR"""
-    return _DataModel.ResponseFIR_Find(publicID)
 
 class AuxStreamIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::AuxStreamIndex class."""
@@ -14778,6 +15122,7 @@ class Inventory(PublicObject):
         add(Inventory self, Datalogger obj) -> bool
         add(Inventory self, ResponsePAZ obj) -> bool
         add(Inventory self, ResponseFIR obj) -> bool
+        add(Inventory self, ResponseIIR obj) -> bool
         add(Inventory self, ResponsePolynomial obj) -> bool
         add(Inventory self, ResponseFAP obj) -> bool
         add(Inventory self, Network obj) -> bool
@@ -14793,6 +15138,7 @@ class Inventory(PublicObject):
         remove(Inventory self, Datalogger obj) -> bool
         remove(Inventory self, ResponsePAZ obj) -> bool
         remove(Inventory self, ResponseFIR obj) -> bool
+        remove(Inventory self, ResponseIIR obj) -> bool
         remove(Inventory self, ResponsePolynomial obj) -> bool
         remove(Inventory self, ResponseFAP obj) -> bool
         remove(Inventory self, Network obj) -> bool
@@ -14848,6 +15194,14 @@ class Inventory(PublicObject):
         return _DataModel.Inventory_removeResponseFIR(self, *args)
 
 
+    def removeResponseIIR(self, *args):
+        """
+        removeResponseIIR(Inventory self, size_t i) -> bool
+        removeResponseIIR(Inventory self, ResponseIIRIndex i) -> bool
+        """
+        return _DataModel.Inventory_removeResponseIIR(self, *args)
+
+
     def removeResponsePolynomial(self, *args):
         """
         removeResponsePolynomial(Inventory self, size_t i) -> bool
@@ -14900,6 +15254,11 @@ class Inventory(PublicObject):
     def responseFIRCount(self):
         """responseFIRCount(Inventory self) -> size_t"""
         return _DataModel.Inventory_responseFIRCount(self)
+
+
+    def responseIIRCount(self):
+        """responseIIRCount(Inventory self) -> size_t"""
+        return _DataModel.Inventory_responseIIRCount(self)
 
 
     def responsePolynomialCount(self):
@@ -14965,6 +15324,14 @@ class Inventory(PublicObject):
         return _DataModel.Inventory_responseFIR(self, *args)
 
 
+    def responseIIR(self, *args):
+        """
+        responseIIR(Inventory self, size_t i) -> ResponseIIR
+        responseIIR(Inventory self, ResponseIIRIndex i) -> ResponseIIR
+        """
+        return _DataModel.Inventory_responseIIR(self, *args)
+
+
     def responsePolynomial(self, *args):
         """
         responsePolynomial(Inventory self, size_t i) -> ResponsePolynomial
@@ -15017,6 +15384,11 @@ class Inventory(PublicObject):
     def findResponseFIR(self, publicID):
         """findResponseFIR(Inventory self, std::string const & publicID) -> ResponseFIR"""
         return _DataModel.Inventory_findResponseFIR(self, publicID)
+
+
+    def findResponseIIR(self, publicID):
+        """findResponseIIR(Inventory self, std::string const & publicID) -> ResponseIIR"""
+        return _DataModel.Inventory_findResponseIIR(self, publicID)
 
 
     def findResponsePolynomial(self, publicID):
@@ -24373,6 +24745,11 @@ class DatabaseReader(DatabaseArchive):
     def loadResponseFIRs(self, arg2):
         """loadResponseFIRs(DatabaseReader self, Inventory arg2) -> int"""
         return _DataModel.DatabaseReader_loadResponseFIRs(self, arg2)
+
+
+    def loadResponseIIRs(self, arg2):
+        """loadResponseIIRs(DatabaseReader self, Inventory arg2) -> int"""
+        return _DataModel.DatabaseReader_loadResponseIIRs(self, arg2)
 
 
     def loadResponsePolynomials(self, arg2):

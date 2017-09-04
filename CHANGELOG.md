@@ -9,6 +9,32 @@ database from version 0.9 to 0.10 to following SQL script can be used:
 **MYSQL**
 
 ```sql
+CREATE TABLE ResponseIIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	type CHAR(1),
+	gain DOUBLE,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used TINYINT(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
 ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
 ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;
 ALTER TABLE DataloggerCalibration ADD start_ms INTEGER AFTER start;
@@ -57,6 +83,34 @@ UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 **PostgreSQL**
 
 ```sql
+CREATE TABLE ResponseIIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_type VARCHAR(1),
+	m_gain DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfNumerators SMALLINT,
+	m_numberOfDenominators SMALLINT,
+	m_numerators_content BYTEA,
+	m_numerators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_denominators_content BYTEA,
+	m_denominators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
+	CONSTRAINT responseiir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
 ALTER TABLE StationGroup ADD m_start_ms INTEGER;
 ALTER TABLE StationGroup ADD m_end_ms INTEGER;
 ALTER TABLE DataloggerCalibration ADD m_start_ms INTEGER;
@@ -101,7 +155,9 @@ and end time. The database schema did not support microsecond storage of those
 times although the structures in the source code do. This schema revision closes
 the gap. Furthermore a ResponsePAZ filter could be part of the decimation filter
 chain. Therefore the decimation attributes decimationFactor, delay and correction
-have been added.
+have been added. Furthermore the ResponseIIR type has been added to correctly
+store SEED response coefficients (blockette 54) without the need to convert IIR
+filters to poles and zeros.
 
 ----
 
