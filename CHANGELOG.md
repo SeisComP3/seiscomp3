@@ -97,6 +97,10 @@ have been added.
 
 ----
 
+* GUI
+
+  * The event list shows status REVIEWED as V and FINAL as F
+
 * scmv
 
   * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
