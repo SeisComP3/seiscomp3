@@ -43,8 +43,6 @@ class SC_GUI_API TensorSymbol : public Map::Symbol
 
 
 	public:
-		virtual void calculateMapPosition(const Map::Canvas *canvas);
-		virtual bool hasValidMapPosition() const;
 		virtual bool isInside(int x, int y) const;
 
 
@@ -60,10 +58,7 @@ class SC_GUI_API TensorSymbol : public Map::Symbol
 		Math::Matrix3f     _rotation;
 
 		QSize              _lastSize;
-		QSize              _size;
-		QPointF            _geoPosition;
 		QPoint             _offset;
-		QPoint             _mapPosition;
 
 		bool               _drawLocationConnector;
 

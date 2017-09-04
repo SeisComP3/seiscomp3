@@ -30,7 +30,6 @@ TensorSymbol::TensorSymbol(const Math::Tensor2Sd &t,
 	Math::tensor2matrix(_tensor, _rotation);
 	_renderer.setShadingEnabled(false);
 	_lastSize = QSize(-1, -1);
-	_mapPosition = QPoint(-1,-1);
 	_drawLocationConnector = true;
 	
 }
@@ -65,7 +64,7 @@ void TensorSymbol::setPColor(QColor c) {
 
 
 void TensorSymbol::setPosition(QPointF geoPosition) {
-	_geoPosition = geoPosition;
+	setLocation(geoPosition);
 }
 
 
@@ -75,19 +74,9 @@ void TensorSymbol::setOffset(QPoint offset) {
 
 
 void TensorSymbol::resize(int w, int h) {
-	_size = QSize(w,h);
-	_buffer = QImage(_size, QImage::Format_ARGB32);
+	setSize(QSize(w,h));
+	_buffer = QImage(size(), QImage::Format_ARGB32);
 	_renderer.render(_buffer, _tensor, _rotation);
-}
-
-
-void TensorSymbol::calculateMapPosition(const Map::Canvas *canvas) {
-	setClipped(!canvas->projection()->project(_mapPosition, _geoPosition));
-}
-
-
-bool TensorSymbol::hasValidMapPosition() const {
-	return (_mapPosition.x() >= 0) && (_mapPosition.y() >= 0);
 }
 
 
@@ -104,9 +93,10 @@ void TensorSymbol::customDraw(const Map::Canvas *, QPainter &p) {
 
 	if ( _drawLocationConnector ) {
 		p.setPen(QPen(Qt::black, 1, Qt::DashLine));
-		p.drawLine(_mapPosition, _mapPosition + _offset);
+		p.drawLine(pos(), pos() + _offset);
 	}
-	p.drawImage(_mapPosition + _offset - QPoint(_size.width()/2, _size.height()/2), _buffer);
+
+	p.drawImage(pos() + _offset - QPoint(_size.width()/2, _size.height()/2), _buffer);
 }
 
 
