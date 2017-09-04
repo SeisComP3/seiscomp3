@@ -10842,6 +10842,36 @@ class ResponsePAZ(PublicObject):
         return _DataModel.ResponsePAZ_remark(self, *args)
 
 
+    def setDecimationFactor(self, decimationFactor):
+        """setDecimationFactor(ResponsePAZ self, Seiscomp::Core::Optional< int >::Impl const & decimationFactor)"""
+        return _DataModel.ResponsePAZ_setDecimationFactor(self, decimationFactor)
+
+
+    def decimationFactor(self):
+        """decimationFactor(ResponsePAZ self) -> int"""
+        return _DataModel.ResponsePAZ_decimationFactor(self)
+
+
+    def setDelay(self, delay):
+        """setDelay(ResponsePAZ self, Seiscomp::Core::Optional< double >::Impl const & delay)"""
+        return _DataModel.ResponsePAZ_setDelay(self, delay)
+
+
+    def delay(self):
+        """delay(ResponsePAZ self) -> double"""
+        return _DataModel.ResponsePAZ_delay(self)
+
+
+    def setCorrection(self, correction):
+        """setCorrection(ResponsePAZ self, Seiscomp::Core::Optional< double >::Impl const & correction)"""
+        return _DataModel.ResponsePAZ_setCorrection(self, correction)
+
+
+    def correction(self):
+        """correction(ResponsePAZ self) -> double"""
+        return _DataModel.ResponsePAZ_correction(self)
+
+
     def index(self):
         """index(ResponsePAZ self) -> ResponsePAZIndex"""
         return _DataModel.ResponsePAZ_index(self)
