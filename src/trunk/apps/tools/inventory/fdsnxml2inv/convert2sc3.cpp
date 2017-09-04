@@ -2040,7 +2040,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		if ( filter == NULL ) {
 			if ( stageGain ) {
 #if LOG_STAGES
-				cerr << " + D#" << stage->number() << " " << stageType.toString() << " datalogger gain times "
+				cerr << " + D#" << stage->number() << " GAIN "
 				     << *stageGain << endl;
 #endif
 				dataloggerGainScale *= *stageGain;
