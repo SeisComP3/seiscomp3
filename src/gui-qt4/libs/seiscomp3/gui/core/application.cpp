@@ -994,10 +994,13 @@ bool Application::initLicense() {
 		License::printWarning(std::cout);
 		std::cout << std::endl << "Exiting..." << std::endl;
 
-		std::stringstream ss;
-		License::printWarning(ss);
-		QMessageBox::critical(NULL, "License error",
-		                      ss.str().c_str());
+		if ( type() != QApplication::Tty ) {
+			std::stringstream ss;
+			License::printWarning(ss);
+			QMessageBox::critical(NULL, "License error",
+			                      ss.str().c_str());
+		}
+
 		return false;
 	}
 
