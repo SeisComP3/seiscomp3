@@ -1755,7 +1755,7 @@ bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
 
 	QPointF geoPos;
 	if ( !_projection->unproject(geoPos, e->pos()) )
-		return  false;
+		return false;
 
 	while ( it != _mapSymbolCollection.begin() ) {
 		--it;

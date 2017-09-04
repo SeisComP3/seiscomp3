@@ -100,6 +100,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		void mouseMoveEvent(QMouseEvent*);
 		void mouseDoubleClickEvent(QMouseEvent*);
 		void keyPressEvent(QKeyEvent*);
+		void keyReleaseEvent(QKeyEvent*);
 		void wheelEvent(QWheelEvent*);
 		void contextMenuEvent(QContextMenuEvent*);
 		void leaveEvent(QEvent*);

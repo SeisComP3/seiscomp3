@@ -28,6 +28,7 @@
 
 
 class QContextMenuEvent;
+class QKeyEvent;
 class QMouseEvent;
 class QDialog;
 class QMenu;
@@ -115,6 +116,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual void handleLeaveEvent();
 
 		virtual bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
+		virtual bool filterKeyPressEvent(QKeyEvent *event);
+		virtual bool filterKeyReleaseEvent(QKeyEvent *event);
 		virtual bool filterMouseMoveEvent(QMouseEvent *event, const QPointF &geoPos);
 		virtual bool filterMousePressEvent(QMouseEvent *event, const QPointF &geoPos);
 		virtual bool filterMouseReleaseEvent(QMouseEvent *event, const QPointF &geoPos);
@@ -132,12 +135,12 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 
 	private:
-		Canvas                       *_canvas;
-		QString                       _name;
-		QString                       _description;
-		bool                          _visible;
-		bool                          _antiAliasing;
-		Legends                       _legends;
+		Canvas  *_canvas;
+		QString  _name;
+		QString  _description;
+		bool     _visible;
+		bool     _antiAliasing;
+		Legends  _legends;
 
 
 	friend class Canvas;

@@ -764,10 +764,14 @@ void MapWidget::keyPressEvent(QKeyEvent* e) {
 			_canvas.setDrawCities(!_canvas.isDrawCitiesEnabled());
 			break;
 		default:
+			e->ignore();
 			emit keyPressed(e);
 			break;
 	};
 }
+
+
+void MapWidget::keyReleaseEvent(QKeyEvent *e) {}
 
 
 void MapWidget::wheelEvent(QWheelEvent *e) {
