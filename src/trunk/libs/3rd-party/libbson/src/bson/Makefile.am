@@ -12,6 +12,7 @@ INST_H_FILES = \
 	src/bson/bson-clock.h \
 	src/bson/bson-compat.h \
 	src/bson/bson-context.h \
+	src/bson/bson-decimal128.h \
 	src/bson/bson-endian.h \
 	src/bson/bson-error.h \
 	src/bson/bson-iter.h \
@@ -27,6 +28,7 @@ INST_H_FILES = \
 	src/bson/bson-utf8.h \
 	src/bson/bson-value.h \
 	src/bson/bson-version.h \
+	src/bson/bson-version-functions.h \
 	src/bson/bson-writer.h
 
 if OS_WIN32
@@ -47,22 +49,18 @@ NOINST_H_FILES = \
 
 libbson_la_CPPFLAGS = \
 	-DBSON_COMPILATION \
+	-DJSONSL_PARSE_NAN \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/bson \
-	-I$(top_srcdir)/src/yajl \
+	-I$(top_srcdir)/src/jsonsl \
 	-I$(top_builddir)/src/bson
-
-if !ENABLE_DEBUG
-libbson_la_CPPFLAGS += \
-	-DBSON_DISABLE_ASSERT \
-	-DBSON_DISABLE_CHECKS
-endif
 
 libbson_la_CFLAGS = \
 	$(MAINTAINER_CFLAGS) \
 	$(OPTIMIZE_CFLAGS) \
 	$(COVERAGE_CFLAGS) \
-	$(PTHREAD_CFLAGS)
+	$(PTHREAD_CFLAGS) \
+	-fvisibility=hidden
 
 libbson_la_SOURCES = \
 	$(INST_H_FILES) \
@@ -72,6 +70,7 @@ libbson_la_SOURCES = \
 	src/bson/bson-atomic.c \
 	src/bson/bson-clock.c \
 	src/bson/bson-context.c \
+	src/bson/bson-decimal128.c \
 	src/bson/bson-error.c \
 	src/bson/bson-iter.c \
 	src/bson/bson-iso8601.c \
@@ -85,16 +84,10 @@ libbson_la_SOURCES = \
 	src/bson/bson-timegm.c \
 	src/bson/bson-utf8.c \
 	src/bson/bson-value.c \
-	src/bson/bson-version.c \
+	src/bson/bson-version-functions.c \
 	src/bson/bson-writer.c
 
 libbson_la_LIBADD =
-
-if !OS_WIN32
-libbson_la_LIBADD += $(PTHREAD_LIBS)
-else
-libbson_la_LIBADD += -lws2_32
-endif
 
 EXTRA_DIST += \
 	src/bson/bson-config.h.in \
