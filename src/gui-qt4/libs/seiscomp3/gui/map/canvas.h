@@ -216,8 +216,6 @@ class SC_GUI_API Canvas : public QObject {
 
 		QMenu* menu(QWidget*) const;
 
-		void setMargin(int);
-
 		void setVisible(Legend*);
 
 		//! Returns whether the rendering is complete or if there are
