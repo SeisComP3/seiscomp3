@@ -987,7 +987,7 @@ bool Application::initSubscriptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Application::init() {
+bool Application::initLicense() {
 	if ( !License::isValid() ) {
 		std::cout << std::endl;
 		std::cout << "<WARNING>" << std::endl << std::endl;
@@ -1000,6 +1000,17 @@ bool Application::init() {
 		                      ss.str().c_str());
 		return false;
 	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::init() {
+	if ( !initLicense() ) return false;
 
 	bool result = Client::Application::init();
 

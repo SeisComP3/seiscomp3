@@ -193,21 +193,22 @@ class SC_GUI_API Application : public QApplication,
 		void emitNotifier(Seiscomp::DataModel::Notifier* n);
 
 	protected:
-		bool init();
-		bool run();
-		void done();
+		virtual bool init();
+		virtual bool run();
+		virtual void done();
 
-		void exit(int returnCode);
+		virtual void exit(int returnCode);
 
-		void createCommandLineDescription();
+		virtual void createCommandLineDescription();
 
-		bool initConfiguration();
-		bool initSubscriptions();
+		virtual bool initLicense();
+		virtual bool initConfiguration();
+		virtual bool initSubscriptions();
 
-		bool validateParameters();
+		virtual bool validateParameters();
 
-		bool handleInitializationError(Stage);
-		void handleInterrupt(int) throw();
+		virtual bool handleInitializationError(Stage);
+		virtual void handleInterrupt(int) throw();
 
 		virtual QString splashImagePath() const;
 

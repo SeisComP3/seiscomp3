@@ -64,6 +64,7 @@ namespace Core {
    - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
    - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
    - Added Seiscomp::Gui::Application::messageGroups
+   - Added Seiscomp::Gui::Application::initLicense
    - Added Seiscomp::Gui::LUT::operator[]
    - Added class Seiscomp::Math::Filtering::Min<T>
    - Added class Seiscomp::Math::Filtering::Max<T>
