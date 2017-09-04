@@ -122,6 +122,13 @@ bool Sync::push(const Seiscomp::DataModel::Inventory *inv) {
 			process(r);
 	}
 
+	for ( size_t i = 0; i < inv->responseIIRCount(); ++i ) {
+		if ( _interrupted ) return false;
+		ResponseIIR *r = inv->responseIIR(i);
+		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
+			process(r);
+	}
+
 	for ( size_t i = 0; i < inv->responsePAZCount(); ++i ) {
 		if ( _interrupted ) return false;
 		ResponsePAZ *r = inv->responsePAZ(i);
@@ -595,14 +602,28 @@ bool Sync::process(Datalogger *dl, const Decimation *deci) {
 				if ( poly == NULL ) {
 					const ResponseFAP *fap = findFAP(filters[i]);
 					if ( fap == NULL ) {
-						/*
-						SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
-						                 dl->publicID().c_str(),
-						                 sc_deci->sampleRateNumerator(),
-						                 sc_deci->sampleRateDenominator(),
-						                 filters[i].c_str());
-						*/
-						deciAnalogueChain += filters[i];
+						const ResponseFIR *fir = findFIR(filters[i]);
+						if ( fir == NULL ) {
+							const ResponseIIR *iir = findIIR(filters[i]);
+							if ( iir == NULL ) {
+								/*
+								SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
+								                 dl->publicID().c_str(),
+								                 sc_deci->sampleRateNumerator(),
+								                 sc_deci->sampleRateDenominator(),
+								                 filters[i].c_str());
+								*/
+								deciAnalogueChain += filters[i];
+							}
+							else {
+								ResponseIIRPtr sc_iir = process(iir);
+								deciAnalogueChain += sc_iir->publicID();
+							}
+						}
+						else {
+							ResponseFIRPtr sc_fir = process(fir);
+							deciAnalogueChain += sc_fir->publicID();
+						}
 					}
 					else {
 						ResponseFAPPtr sc_fap = process(fap);
@@ -639,14 +660,21 @@ bool Sync::process(Datalogger *dl, const Decimation *deci) {
 			if ( paz == NULL ) {
 				const ResponseFIR *fir = findFIR(filters[i]);
 				if ( fir == NULL ) {
-					/*
-					SEISCOMP_WARNING("Datalogger %s/decimation %d/%d digital filter chain: response not found: %s",
-					                 dl->publicID().c_str(),
-					                 sc_deci->sampleRateNumerator(),
-					                 sc_deci->sampleRateDenominator(),
-					                 filters[i].c_str());
-					*/
-					deciDigitalChain += filters[i];
+					const ResponseIIR *iir = findIIR(filters[i]);
+					if ( iir == NULL ) {
+						/*
+						SEISCOMP_WARNING("Datalogger %s/decimation %d/%d digital filter chain: response not found: %s",
+						                 dl->publicID().c_str(),
+						                 sc_deci->sampleRateNumerator(),
+						                 sc_deci->sampleRateDenominator(),
+						                 filters[i].c_str());
+						*/
+						deciDigitalChain += filters[i];
+					}
+					else {
+						ResponseIIRPtr sc_iir = process(iir);
+						deciDigitalChain += sc_iir->publicID();
+					}
 				}
 				else {
 					ResponseFIRPtr sc_fir = process(fir);
@@ -753,11 +781,18 @@ bool Sync::process(Stream *cha, const Sensor *sensor) {
 			if ( poly == NULL ) {
 				const ResponseFAP *fap = findFAP(tmpSens.response());
 				if ( fap == NULL ) {
-					/*
-					SEISCOMP_WARNING("Sensor %s: response not found: %s",
-					                 sensor->publicID().c_str(),
-					                 sensor->response().c_str());
-					*/
+					const ResponseIIR *iir = findIIR(sensor->response());
+					if ( iir == NULL ) {
+						/*
+						SEISCOMP_WARNING("Sensor %s: response not found: %s",
+						                 sensor->publicID().c_str(),
+						                 sensor->response().c_str());
+						*/
+					}
+					else {
+						ResponseIIRPtr sc_iir = process(iir);
+						tmpSens.setResponse(sc_iir->publicID());
+					}
 				}
 				else {
 					ResponseFAPPtr sc_fap = process(fap);
@@ -935,6 +970,18 @@ ResponseFIR *Sync::process(const ResponseFIR *fir) {
 	ResponseFIR *sc_fir = InventoryTask::process(fir);
 	_touchedObjects.insert(sc_fir);
 	return sc_fir;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *Sync::process(const ResponseIIR *iir) {
+	_session.touchedPublics.insert(iir);
+	ResponseIIR *sc_iir = InventoryTask::process(iir);
+	_touchedObjects.insert(sc_iir);
+	return sc_iir;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

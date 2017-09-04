@@ -49,6 +49,11 @@ InventoryTask::InventoryTask(Seiscomp::DataModel::Inventory *inv) : _inv(inv) {
 		_FIRNames[r->name()] = r;
 	}
 
+	for ( size_t i = 0; i < _inv->responseIIRCount(); ++i ) {
+		ResponseIIR *r = _inv->responseIIR(i);
+		_IIRNames[r->name()] = r;
+	}
+
 	for ( size_t i = 0; i < _inv->responsePAZCount(); ++i ) {
 		ResponsePAZ *r = _inv->responsePAZ(i);
 		_PAZNames[r->name()] = r;
@@ -135,6 +140,17 @@ ResponseFIR *InventoryTask::respFIRByName(const std::string &name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *InventoryTask::respIIRByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _IIRNames.find(name);
+	if ( it == _IIRNames.end() ) return NULL;
+	return (ResponseIIR*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) const {
 	ObjectLookup::const_iterator it = _PAZNames.find(name);
 	if ( it == _PAZNames.end() ) return NULL;
@@ -194,6 +210,12 @@ void InventoryTask::prepareSession(const Seiscomp::DataModel::Inventory *inv) {
 		_session.firLookup[r->publicID()] = r;
 	}
 
+	_session.iirLookup.clear();
+	for ( size_t i = 0; i < inv->responseIIRCount(); ++i ) {
+		ResponseIIR *r = inv->responseIIR(i);
+		_session.iirLookup[r->publicID()] = r;
+	}
+
 	_session.pazLookup.clear();
 	for ( size_t i = 0; i < inv->responsePAZCount(); ++i ) {
 		ResponsePAZ *r = inv->responsePAZ(i);
@@ -224,6 +246,7 @@ void InventoryTask::cleanUp() {
 	_sensorNames.clear();
 	_auxDeviceNames.clear();
 	_FIRNames.clear();
+	_IIRNames.clear();
 	_PAZNames.clear();
 	_PolyNames.clear();
 	_FAPNames.clear();
@@ -232,6 +255,7 @@ void InventoryTask::cleanUp() {
 	_session.sensorLookup.clear();
 	_session.auxDeviceLookup.clear();
 	_session.firLookup.clear();
+	_session.iirLookup.clear();
 	_session.pazLookup.clear();
 	_session.polyLookup.clear();
 	_session.fapLookup.clear();
@@ -279,6 +303,17 @@ const ResponseFIR *InventoryTask::findFIR(const std::string &publicID) const {
 	ObjectLookup::const_iterator it = _session.firLookup.find(publicID);
 	if ( it == _session.firLookup.end() ) return NULL;
 	return (const ResponseFIR*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const ResponseIIR *InventoryTask::findIIR(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.iirLookup.find(publicID);
+	if ( it == _session.iirLookup.end() ) return NULL;
+	return (const ResponseIIR*)it->second;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -343,6 +378,38 @@ ResponseFIR *InventoryTask::process(const ResponseFIR *fir) {
 		sc_fir->update();
 
 	return sc_fir.get();
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *InventoryTask::process(const ResponseIIR *iir) {
+	ResponseIIRPtr sc_iir = respIIRByName(iir->name());
+	//ResponseFIRPtr sc_fir = _inv->responseFIR(fir->name());
+
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	if ( !sc_iir ) {
+		sc_iir = create<ResponseIIR>(iir->publicID());
+		newInstance = true;
+	}
+	else
+		needUpdate = !sc_iir->equal(*iir);
+
+	*sc_iir = *iir;
+
+	if ( newInstance ) {
+		_IIRNames[sc_iir->name()] = sc_iir.get();
+		_inv->add(sc_iir.get());
+	}
+	else if ( needUpdate )
+		sc_iir->update();
+
+	return sc_iir.get();
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

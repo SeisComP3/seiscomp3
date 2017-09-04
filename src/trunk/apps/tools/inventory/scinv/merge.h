@@ -77,6 +77,8 @@ class Merge : public InventoryTask {
 		process(const Seiscomp::DataModel::ResponsePolynomial *);
 		Seiscomp::DataModel::ResponseFAP *
 		process(const Seiscomp::DataModel::ResponseFAP *);
+		Seiscomp::DataModel::ResponseIIR *
+		process(const Seiscomp::DataModel::ResponseIIR *);
 
 		bool compareDatalogger(std::string &finalID,
 		                       const std::string &id1,

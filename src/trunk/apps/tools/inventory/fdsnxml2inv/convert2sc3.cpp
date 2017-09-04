@@ -420,6 +420,9 @@ bool equal(const DataModel::ResponsePAZ *p1, const DataModel::ResponsePAZ *p2) {
 	COMPARE_AND_RETURN(double, p1, p2, normalizationFrequency())
 	COMPARE_AND_RETURN(int, p1, p2, numberOfPoles())
 	COMPARE_AND_RETURN(int, p1, p2, numberOfZeros())
+	COMPARE_AND_RETURN(int, p1, p2, decimationFactor())
+	COMPARE_AND_RETURN(double, p1, p2, delay())
+	COMPARE_AND_RETURN(double, p1, p2, correction())
 
 	// Compare poles
 	const DataModel::ComplexArray *poles1 = NULL;
@@ -1088,6 +1091,11 @@ Convert2SC3::Convert2SC3(DataModel::Inventory *inv) : _inv(inv) {
 		DataModel::ResponseFIR *r = _inv->responseFIR(i);
 		_respFIRLookup[r->name()] = r;
 	}
+
+	for ( size_t i = 0; i < _inv->responseIIRCount(); ++i ) {
+		DataModel::ResponseIIR *r = _inv->responseIIR(i);
+		_respIIRLookup[r->name()] = r;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1148,6 +1156,16 @@ void Convert2SC3::addRespToInv<DataModel::ResponsePolynomial>(DataModel::Respons
 template <>
 void Convert2SC3::addRespToInv<DataModel::ResponseFIR>(DataModel::ResponseFIR *o) {
 	add(_inv, _respFIRLookup, o);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+template <>
+void Convert2SC3::addRespToInv<DataModel::ResponseIIR>(DataModel::ResponseIIR *o) {
+	add(_inv, _respIIRLookup, o);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

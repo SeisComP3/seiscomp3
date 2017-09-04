@@ -180,6 +180,7 @@ class Convert2SC3 : public Converter {
 		ObjectLookup          _respFAPLookup;
 		ObjectLookup          _respPolyLookup;
 		ObjectLookup          _respFIRLookup;
+		ObjectLookup          _respIIRLookup;
 
 		// List of responses of a certain channel epoch
 		Responses             _responses;
