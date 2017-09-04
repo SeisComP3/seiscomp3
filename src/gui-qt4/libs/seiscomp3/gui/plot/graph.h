@@ -36,6 +36,15 @@ class SC_GUI_API Graph : public QObject {
 	public:
 		//! C'tor
 		explicit Graph(Axis *keyAxis, Axis *valueAxis, QObject *parent=0);
+		explicit Graph(const QString &name, Axis *keyAxis, Axis *valueAxis, QObject *parent=0);
+
+
+	// ----------------------------------------------------------------------
+	//  Meta data
+	// ----------------------------------------------------------------------
+	public:
+		void setName(const QString &name);
+		const QString &name() const;
 
 
 	// ----------------------------------------------------------------------
@@ -124,9 +133,41 @@ class SC_GUI_API Graph : public QObject {
 
 
 	// ----------------------------------------------------------------------
+	//  Render interface
+	// ----------------------------------------------------------------------
+	public:
+		/**
+		 * @brief Draws the graph. The default implementation projects the
+		 *        associated dataset to screen coordinates and renders a
+		 *        polyline with the configured pen and style.
+		 *
+		 * Derived classes can reimplement this method to do custom drawing.
+		 * Note that screen space projection must be inverted to accomodate
+		 * for top-down coordinate system. The plot sets up the correct
+		 * clipping and translation before calling this method.
+		 *
+		 * @param p The painter
+		 */
+		virtual void draw(QPainter &p);
+
+		/**
+		 * @brief Draws a symbol to represent the graph. This is used by e.g.
+		 *        legends. The default implementation draws a horizontal line
+		 *        with the configured pen. The line is vertically centered in
+		 *        the target rectangle.
+		 * @param p The painter
+		 * @param r The target rect
+		 */
+		virtual void drawSymbol(QPainter &p, const QRect &r);
+
+
+	// ----------------------------------------------------------------------
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
+		// Meta data
+		QString          _name;
+
 		// Context
 		Axis            *_keyAxis;
 		Axis            *_valueAxis;
@@ -140,6 +181,10 @@ class SC_GUI_API Graph : public QObject {
 		bool             _dropShadow;
 };
 
+
+inline const QString &Graph::name() const {
+	return _name;
+}
 
 inline Axis *Graph::keyAxis() const {
 	return _keyAxis;

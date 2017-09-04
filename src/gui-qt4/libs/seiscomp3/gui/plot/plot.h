@@ -31,6 +31,7 @@ namespace Gui {
 
 class Axis;
 class Graph;
+class AbstractLegend;
 
 
 class SC_GUI_API Plot : public QObject {
@@ -55,6 +56,20 @@ class SC_GUI_API Plot : public QObject {
 		 * @return The graph pointer or NULL in case of error.
 		 */
 		Graph *addGraph(Axis *keyAxis = NULL, Axis *valueAxis = NULL);
+
+		/**
+		 * @brief Adds a graph instance to the plot.
+		 * @param graph The graph instance. The ownership is transferred to
+		 *              the plot.
+		 */
+		void addGraph(Graph *graph);
+
+		/**
+		 * @brief Sets a legend instance for which the draw method is called
+		 *        at every plot update
+		 * @param legend The legend instance. The ownership goes to the plot.
+		 */
+		void setLegend(AbstractLegend *legend);
 
 		/**
 		 * @brief Updates all axis ranges according to the bounds of the
@@ -82,8 +97,8 @@ class SC_GUI_API Plot : public QObject {
 
 	protected:
 		typedef QList<Graph*> Graphs;
-
-		Graphs _graphs;
+		Graphs          _graphs;
+		AbstractLegend *_legend;
 };
 
 

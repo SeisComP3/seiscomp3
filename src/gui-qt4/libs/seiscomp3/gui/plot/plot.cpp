@@ -15,6 +15,7 @@
 #include <seiscomp3/gui/plot/axis.h>
 #include <seiscomp3/gui/plot/graph.h>
 #include <seiscomp3/gui/plot/plot.h>
+#include <seiscomp3/gui/plot/abstractlegend.h>
 
 #include <QPainter>
 #include <iostream>
@@ -28,7 +29,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Plot::Plot(QObject *parent) : QObject(parent) {
+Plot::Plot(QObject *parent) : QObject(parent), _legend(NULL) {
 	xAxis = new Axis(this);
 	xAxis->setPosition(Axis::Bottom);
 	xAxis->setGrid(true);
@@ -57,6 +58,33 @@ Graph *Plot::addGraph(Axis *keyAxis, Axis *valueAxis) {
 	                         this);
 	_graphs.append(graph);
 	return graph;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Plot::addGraph(Graph *graph) {
+	graph->setParent(this);
+	_graphs.append(graph);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Plot::setLegend(AbstractLegend *legend) {
+	if ( _legend == legend ) return;
+
+	if ( _legend != NULL )
+		delete _legend;
+
+	_legend = legend;
+
+	if ( _legend != NULL )
+		_legend->setParent(this);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -144,21 +172,12 @@ void Plot::draw(QPainter &p, const QRect &rect) {
 	p.translate(plotRect.left(), plotRect.bottom()+1);
 	foreach ( Graph *graph, _graphs ) {
 		if ( graph->isEmpty() || !graph->isVisible() ) continue;
+		graph->draw(p);
+	}
 
-		QPolygonF poly;
-		graph->unproject(poly);
-
-		p.setRenderHint(QPainter::Antialiasing, graph->antiAliasing());
-
-		if ( graph->dropShadow() ) {
-			p.translate(2,2);
-			p.setPen(QPen(QColor(128,128,128,128), graph->lineWidth()));
-			p.drawPolyline(poly);
-			p.translate(-2,-2);
-		}
-
-		p.setPen(graph->pen());
-		p.drawPolyline(poly);
+	if ( (_legend != NULL) && _legend->isVisible() ) {
+		p.translate(-plotRect.left(), -plotRect.bottom()-1);
+		_legend->draw(p, plotRect, _graphs);
 	}
 
 	p.restore();
