@@ -233,7 +233,7 @@ Classes
         Datalogger [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Datalogger</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="digitizerModel"><font color="#8b0000">+ digitizerModel: string</font></td></tr><tr><td align="left" port="digitizerManufacturer"><font color="#8b0000">+ digitizerManufacturer: string</font></td></tr><tr><td align="left" port="recorderModel"><font color="#8b0000">+ recorderModel: string</font></td></tr><tr><td align="left" port="recorderManufacturer"><font color="#8b0000">+ recorderManufacturer: string</font></td></tr><tr><td align="left" port="clockModel"><font color="#8b0000">+ clockModel: string</font></td></tr><tr><td align="left" port="clockManufacturer"><font color="#8b0000">+ clockManufacturer: string</font></td></tr><tr><td align="left" port="clockType"><font color="#8b0000">+ clockType: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="maxClockDrift"><font color="#8b0000">+ maxClockDrift: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ dataloggerCalibration: DataloggerCalibration [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ decimation: Decimation [0..*]</font></td></tr></table>>]
         DataloggerCalibration [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataloggerCalibration</td></tr><tr><td align="left" port="serialNumber"><font color="#8b0000">+ serialNumber: string</font></td></tr><tr><td align="left" port="channel"><font color="#8b0000">+ channel: int</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Decimation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Decimation</td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int</font></td></tr><tr><td align="left" port="analogueFilterChain"><font color="#8b0000">+ analogueFilterChain: Blob  [0..1]</font></td></tr><tr><td align="left" port="digitalFilterChain"><font color="#8b0000">+ digitalFilterChain: Blob  [0..1]</font></td></tr></table>>]
-        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr></table>>]
         ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponsePolynomial [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePolynomial</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="frequencyUnit"><font color="#8b0000">+ frequencyUnit: string</font></td></tr><tr><td align="left" port="approximationType"><font color="#8b0000">+ approximationType: string</font></td></tr><tr><td align="left" port="approximationLowerBound"><font color="#8b0000">+ approximationLowerBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationUpperBound"><font color="#8b0000">+ approximationUpperBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationError"><font color="#8b0000">+ approximationError: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponseFAP [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFAP</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfTuples"><font color="#8b0000">+ numberOfTuples: int  [0..1]</font></td></tr><tr><td align="left" port="tuples"><font color="#8b0000">+ tuples: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
@@ -12212,6 +12212,51 @@ Reference
    .. py:method:: remark()
 
       :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
 
       .. note::
 

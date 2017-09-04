@@ -1165,6 +1165,9 @@ CREATE TABLE ResponsePAZ (
 	poles_used TINYINT(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)

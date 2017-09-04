@@ -39,6 +39,9 @@ ALTER TABLE Network ADD start_ms INTEGER AFTER start;
 ALTER TABLE Network ADD end_ms INTEGER AFTER end;
 DROP INDEX _parent_oid_2 ON Network;
 ALTER TABLE Network ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE ResponsePAZ ADD decimationFactor SMALLINT UNSIGNED;
+ALTER TABLE ResponsePAZ ADD delay DOUBLE UNSIGNED;
+ALTER TABLE ResponsePAZ ADD correction DOUBLE;
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
@@ -76,6 +79,9 @@ ALTER TABLE Network ADD m_start_ms INTEGER;
 ALTER TABLE Network ADD m_end_ms INTEGER;
 ALTER TABLE Network DROP CONSTRAINT network__parent_oid_m_code_m_start_key;
 ALTER TABLE Network ADD CONSTRAINT network_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE ResponsePAZ ADD m_decimationFactor SMALLINT UNSIGNED;
+ALTER TABLE ResponsePAZ ADD m_delay DOUBLE UNSIGNED;
+ALTER TABLE ResponsePAZ ADD m_correction DOUBLE;
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
@@ -85,7 +91,9 @@ UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 Most of the inventory objects are valid for certain epochs defined with start
 and end time. The database schema did not support microsecond storage of those
 times although the structures in the source code do. This schema revision closes
-the gap.
+the gap. Furthermore a ResponsePAZ filter could be part of the decimation filter
+chain. Therefore the decimation attributes decimationFactor, delay and correction
+have been added.
 
 ----
 

@@ -41,6 +41,9 @@ ResponsePAZ::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Me
 	addProperty(objectProperty<ComplexArray>("zeros", "ComplexArray", false, false, true, &ResponsePAZ::setZeros, &ResponsePAZ::zeros));
 	addProperty(objectProperty<ComplexArray>("poles", "ComplexArray", false, false, true, &ResponsePAZ::setPoles, &ResponsePAZ::poles));
 	addProperty(objectProperty<Blob>("remark", "Blob", false, false, true, &ResponsePAZ::setRemark, &ResponsePAZ::remark));
+	addProperty(Core::simpleProperty("decimationFactor", "int", false, false, false, false, true, false, NULL, &ResponsePAZ::setDecimationFactor, &ResponsePAZ::decimationFactor));
+	addProperty(Core::simpleProperty("delay", "float", false, false, false, false, true, false, NULL, &ResponsePAZ::setDelay, &ResponsePAZ::delay));
+	addProperty(Core::simpleProperty("correction", "float", false, false, false, false, true, false, NULL, &ResponsePAZ::setCorrection, &ResponsePAZ::correction));
 }
 
 
@@ -174,6 +177,9 @@ bool ResponsePAZ::operator==(const ResponsePAZ& rhs) const {
 	if ( _zeros != rhs._zeros ) return false;
 	if ( _poles != rhs._poles ) return false;
 	if ( _remark != rhs._remark ) return false;
+	if ( _decimationFactor != rhs._decimationFactor ) return false;
+	if ( _delay != rhs._delay ) return false;
+	if ( _correction != rhs._correction ) return false;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -449,6 +455,66 @@ const Blob& ResponsePAZ::remark() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setDecimationFactor(const OPT(int)& decimationFactor) {
+	_decimationFactor = decimationFactor;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int ResponsePAZ::decimationFactor() const {
+	if ( _decimationFactor )
+		return *_decimationFactor;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.decimationFactor is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setDelay(const OPT(double)& delay) {
+	_delay = delay;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponsePAZ::delay() const {
+	if ( _delay )
+		return *_delay;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.delay is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setCorrection(const OPT(double)& correction) {
+	_correction = correction;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponsePAZ::correction() const {
+	if ( _correction )
+		return *_correction;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.correction is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const ResponsePAZIndex& ResponsePAZ::index() const {
 	return _index;
 }
@@ -490,6 +556,9 @@ ResponsePAZ& ResponsePAZ::operator=(const ResponsePAZ& other) {
 	_zeros = other._zeros;
 	_poles = other._poles;
 	_remark = other._remark;
+	_decimationFactor = other._decimationFactor;
+	_delay = other._delay;
+	_correction = other._correction;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -634,6 +703,15 @@ void ResponsePAZ::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("zeros", _zeros, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("poles", _poles, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("remark", _remark, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("decimationFactor", _decimationFactor, Archive::XML_ELEMENT);
+	}
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("delay", _delay, Archive::XML_ELEMENT);
+	}
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("correction", _correction, Archive::XML_ELEMENT);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

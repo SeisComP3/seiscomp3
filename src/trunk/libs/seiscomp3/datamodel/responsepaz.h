@@ -173,6 +173,18 @@ class SC_SYSTEM_CORE_API ResponsePAZ : public PublicObject {
 		Blob& remark();
 		const Blob& remark() const;
 
+		//! Decimation factor (47.06/57.05)
+		void setDecimationFactor(const OPT(int)& decimationFactor);
+		int decimationFactor() const;
+
+		//! Estimated delay (47.08/57.07)
+		void setDelay(const OPT(double)& delay);
+		double delay() const;
+
+		//! Applied correction (47.09/57.08)
+		void setCorrection(const OPT(double)& correction);
+		double correction() const;
+
 
 	// ------------------------------------------------------------------
 	//  Index management
@@ -224,6 +236,9 @@ class SC_SYSTEM_CORE_API ResponsePAZ : public PublicObject {
 		OPT(ComplexArray) _zeros;
 		OPT(ComplexArray) _poles;
 		OPT(Blob) _remark;
+		OPT(int) _decimationFactor;
+		OPT(double) _delay;
+		OPT(double) _correction;
 
 	DECLARE_SC_CLASSFACTORY_FRIEND(ResponsePAZ);
 };

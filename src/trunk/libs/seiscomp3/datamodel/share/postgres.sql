@@ -1315,6 +1315,9 @@ CREATE TABLE ResponsePAZ (
 	m_poles_used BOOLEAN NOT NULL DEFAULT '0',
 	m_remark_content BYTEA,
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)

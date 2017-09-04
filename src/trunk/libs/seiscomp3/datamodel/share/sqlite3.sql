@@ -1381,6 +1381,9 @@ CREATE TABLE ResponsePAZ (
 	poles_used INTEGER(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
