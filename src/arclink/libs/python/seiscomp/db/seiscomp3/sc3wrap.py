@@ -2431,6 +2431,415 @@ class base_responsefap(object):
 
 
 # package: Inventory
+class base_responsefir(object):
+    def __init__(self, obj):
+        self.obj = obj
+        self._needsUpdate = False
+
+    def _sync_update(self):
+        if self._needsUpdate:
+            self.obj.lastModified = Core.Time.GMT()
+            self.obj.update()
+            self._needsUpdate = False
+
+    def _delete(self):
+        self.obj.detach()
+
+    def __get_last_modified(self):
+        return datetime.datetime(
+            *(time.strptime(
+                self.obj.lastModified.toString("%Y-%m-%dT%H:%M:%SZ"),
+                "%Y-%m-%dT%H:%M:%SZ")[0:6]
+            )
+        )    
+    last_modified = property(__get_last_modified)
+
+    def __get_publicID(self):
+        return self.obj.publicID()
+
+    def __set_publicID(self, arg):
+        if self.__get_publicID() != arg:
+            self._needsUpdate = True
+        self.obj.setPublicID(arg)
+    publicID = property(__get_publicID,__set_publicID)
+
+    def __get_name(self):
+        try: # @return: const std::string&
+            return self.obj.name()
+        except ValueError:
+            return None
+    def __set_name(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_name() != value:
+            self._needsUpdate = True
+        self.obj.setName(value)
+    name = property(__get_name, __set_name)
+
+    def __get_gain(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gain()
+        except ValueError:
+            return None
+    def __set_gain(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gain() != value:
+            self._needsUpdate = True
+        self.obj.setGain(value)
+    gain = property(__get_gain, __set_gain)
+
+    def __get_gainFrequency(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gainFrequency()
+        except ValueError:
+            return None
+    def __set_gainFrequency(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gainFrequency() != value:
+            self._needsUpdate = True
+        self.obj.setGainFrequency(value)
+    gainFrequency = property(__get_gainFrequency, __set_gainFrequency)
+
+    def __get_decimationFactor(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.decimationFactor()
+        except ValueError:
+            return None
+    def __set_decimationFactor(self, arg):
+        if self.__get_decimationFactor() != arg:
+            self._needsUpdate = True
+        self.obj.setDecimationFactor(arg)
+    decimationFactor = property(__get_decimationFactor, __set_decimationFactor)
+
+    def __get_delay(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.delay()
+        except ValueError:
+            return None
+    def __set_delay(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_delay() != value:
+            self._needsUpdate = True
+        self.obj.setDelay(value)
+    delay = property(__get_delay, __set_delay)
+
+    def __get_correction(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.correction()
+        except ValueError:
+            return None
+    def __set_correction(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_correction() != value:
+            self._needsUpdate = True
+        self.obj.setCorrection(value)
+    correction = property(__get_correction, __set_correction)
+
+    def __get_numberOfCoefficients(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.numberOfCoefficients()
+        except ValueError:
+            return None
+    def __set_numberOfCoefficients(self, arg):
+        if self.__get_numberOfCoefficients() != arg:
+            self._needsUpdate = True
+        self.obj.setNumberOfCoefficients(arg)
+    numberOfCoefficients = property(__get_numberOfCoefficients, __set_numberOfCoefficients)
+
+    def __get_symmetry(self):
+        try: # @return: const std::string&
+            return self.obj.symmetry()
+        except ValueError:
+            return None
+    def __set_symmetry(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_symmetry() != value:
+            self._needsUpdate = True
+        self.obj.setSymmetry(value)
+    symmetry = property(__get_symmetry, __set_symmetry)
+
+    def __get_coefficients(self):
+        # optional Attribute
+        try: # @return: RealArray
+            return RealArray2str(self.obj.coefficients().content())
+        except ValueError:
+            return None
+    def __set_coefficients(self, arg):
+        try: value = str2RealArray(arg)
+        except: value = None
+        ret = self.__get_coefficients()
+        if not str2RealArray(ret) == value:
+            self._needsUpdate = True
+        self.obj.setCoefficients(value)
+    coefficients = property(__get_coefficients, __set_coefficients)
+
+    def __get_remark(self):
+        # optional Attribute
+        try: # @return: Blob
+            B = self.obj.remark()
+            return B.content()
+        except ValueError:
+            return None
+    def __set_remark(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+            blob = DataModel.Blob()
+            if value:
+                blob.setContent(value)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_remark() != value:
+            self._needsUpdate = True
+        self.obj.setRemark(blob)
+    remark = property(__get_remark, __set_remark)
+
+
+# package: Inventory
+class base_responseiir(object):
+    def __init__(self, obj):
+        self.obj = obj
+        self._needsUpdate = False
+
+    def _sync_update(self):
+        if self._needsUpdate:
+            self.obj.lastModified = Core.Time.GMT()
+            self.obj.update()
+            self._needsUpdate = False
+
+    def _delete(self):
+        self.obj.detach()
+
+    def __get_last_modified(self):
+        return datetime.datetime(
+            *(time.strptime(
+                self.obj.lastModified.toString("%Y-%m-%dT%H:%M:%SZ"),
+                "%Y-%m-%dT%H:%M:%SZ")[0:6]
+            )
+        )    
+    last_modified = property(__get_last_modified)
+
+    def __get_publicID(self):
+        return self.obj.publicID()
+
+    def __set_publicID(self, arg):
+        if self.__get_publicID() != arg:
+            self._needsUpdate = True
+        self.obj.setPublicID(arg)
+    publicID = property(__get_publicID,__set_publicID)
+
+    def __get_name(self):
+        try: # @return: const std::string&
+            return self.obj.name()
+        except ValueError:
+            return None
+    def __set_name(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_name() != value:
+            self._needsUpdate = True
+        self.obj.setName(value)
+    name = property(__get_name, __set_name)
+
+    def __get_type(self):
+        try: # @return: const std::string&
+            return self.obj.type()
+        except ValueError:
+            return None
+    def __set_type(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_type() != value:
+            self._needsUpdate = True
+        self.obj.setType(value)
+    type = property(__get_type, __set_type)
+
+    def __get_gain(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gain()
+        except ValueError:
+            return None
+    def __set_gain(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gain() != value:
+            self._needsUpdate = True
+        self.obj.setGain(value)
+    gain = property(__get_gain, __set_gain)
+
+    def __get_gainFrequency(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.gainFrequency()
+        except ValueError:
+            return None
+    def __set_gainFrequency(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_gainFrequency() != value:
+            self._needsUpdate = True
+        self.obj.setGainFrequency(value)
+    gainFrequency = property(__get_gainFrequency, __set_gainFrequency)
+
+    def __get_decimationFactor(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.decimationFactor()
+        except ValueError:
+            return None
+    def __set_decimationFactor(self, arg):
+        if self.__get_decimationFactor() != arg:
+            self._needsUpdate = True
+        self.obj.setDecimationFactor(arg)
+    decimationFactor = property(__get_decimationFactor, __set_decimationFactor)
+
+    def __get_delay(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.delay()
+        except ValueError:
+            return None
+    def __set_delay(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_delay() != value:
+            self._needsUpdate = True
+        self.obj.setDelay(value)
+    delay = property(__get_delay, __set_delay)
+
+    def __get_correction(self):
+        # optional Attribute
+        try: # @return: double
+            return self.obj.correction()
+        except ValueError:
+            return None
+    def __set_correction(self, arg):
+        try: value = float(arg)
+        except: value = None
+        if self.__get_correction() != value:
+            self._needsUpdate = True
+        self.obj.setCorrection(value)
+    correction = property(__get_correction, __set_correction)
+
+    def __get_numberOfNumerators(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.numberOfNumerators()
+        except ValueError:
+            return None
+    def __set_numberOfNumerators(self, arg):
+        if self.__get_numberOfNumerators() != arg:
+            self._needsUpdate = True
+        self.obj.setNumberOfNumerators(arg)
+    numberOfNumerators = property(__get_numberOfNumerators, __set_numberOfNumerators)
+
+    def __get_numberOfDenominators(self):
+        # optional Attribute
+        try: # @return: int
+            return self.obj.numberOfDenominators()
+        except ValueError:
+            return None
+    def __set_numberOfDenominators(self, arg):
+        if self.__get_numberOfDenominators() != arg:
+            self._needsUpdate = True
+        self.obj.setNumberOfDenominators(arg)
+    numberOfDenominators = property(__get_numberOfDenominators, __set_numberOfDenominators)
+
+    def __get_numerators(self):
+        # optional Attribute
+        try: # @return: RealArray
+            return RealArray2str(self.obj.numerators().content())
+        except ValueError:
+            return None
+    def __set_numerators(self, arg):
+        try: value = str2RealArray(arg)
+        except: value = None
+        ret = self.__get_numerators()
+        if not str2RealArray(ret) == value:
+            self._needsUpdate = True
+        self.obj.setNumerators(value)
+    numerators = property(__get_numerators, __set_numerators)
+
+    def __get_denominators(self):
+        # optional Attribute
+        try: # @return: RealArray
+            return RealArray2str(self.obj.denominators().content())
+        except ValueError:
+            return None
+    def __set_denominators(self, arg):
+        try: value = str2RealArray(arg)
+        except: value = None
+        ret = self.__get_denominators()
+        if not str2RealArray(ret) == value:
+            self._needsUpdate = True
+        self.obj.setDenominators(value)
+    denominators = property(__get_denominators, __set_denominators)
+
+    def __get_remark(self):
+        # optional Attribute
+        try: # @return: Blob
+            B = self.obj.remark()
+            return B.content()
+        except ValueError:
+            return None
+    def __set_remark(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+            blob = DataModel.Blob()
+            if value:
+                blob.setContent(value)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_remark() != value:
+            self._needsUpdate = True
+        self.obj.setRemark(blob)
+    remark = property(__get_remark, __set_remark)
+
+
+# package: Inventory
 class base_dataloggercalibration(object):
     def __init__(self, obj):
         self.obj = obj
@@ -3033,183 +3442,6 @@ class base_datalogger(object):
                     print str(e)
         return list
     _decimation = property(__get_decimation)
-
-
-# package: Inventory
-class base_responsefir(object):
-    def __init__(self, obj):
-        self.obj = obj
-        self._needsUpdate = False
-
-    def _sync_update(self):
-        if self._needsUpdate:
-            self.obj.lastModified = Core.Time.GMT()
-            self.obj.update()
-            self._needsUpdate = False
-
-    def _delete(self):
-        self.obj.detach()
-
-    def __get_last_modified(self):
-        return datetime.datetime(
-            *(time.strptime(
-                self.obj.lastModified.toString("%Y-%m-%dT%H:%M:%SZ"),
-                "%Y-%m-%dT%H:%M:%SZ")[0:6]
-            )
-        )    
-    last_modified = property(__get_last_modified)
-
-    def __get_publicID(self):
-        return self.obj.publicID()
-
-    def __set_publicID(self, arg):
-        if self.__get_publicID() != arg:
-            self._needsUpdate = True
-        self.obj.setPublicID(arg)
-    publicID = property(__get_publicID,__set_publicID)
-
-    def __get_name(self):
-        try: # @return: const std::string&
-            return self.obj.name()
-        except ValueError:
-            return None
-    def __set_name(self, arg):
-        try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
-            logs.error(str(e))
-            return
-        if self.__get_name() != value:
-            self._needsUpdate = True
-        self.obj.setName(value)
-    name = property(__get_name, __set_name)
-
-    def __get_gain(self):
-        # optional Attribute
-        try: # @return: double
-            return self.obj.gain()
-        except ValueError:
-            return None
-    def __set_gain(self, arg):
-        try: value = float(arg)
-        except: value = None
-        if self.__get_gain() != value:
-            self._needsUpdate = True
-        self.obj.setGain(value)
-    gain = property(__get_gain, __set_gain)
-
-    def __get_decimationFactor(self):
-        # optional Attribute
-        try: # @return: int
-            return self.obj.decimationFactor()
-        except ValueError:
-            return None
-    def __set_decimationFactor(self, arg):
-        if self.__get_decimationFactor() != arg:
-            self._needsUpdate = True
-        self.obj.setDecimationFactor(arg)
-    decimationFactor = property(__get_decimationFactor, __set_decimationFactor)
-
-    def __get_delay(self):
-        # optional Attribute
-        try: # @return: double
-            return self.obj.delay()
-        except ValueError:
-            return None
-    def __set_delay(self, arg):
-        try: value = float(arg)
-        except: value = None
-        if self.__get_delay() != value:
-            self._needsUpdate = True
-        self.obj.setDelay(value)
-    delay = property(__get_delay, __set_delay)
-
-    def __get_correction(self):
-        # optional Attribute
-        try: # @return: double
-            return self.obj.correction()
-        except ValueError:
-            return None
-    def __set_correction(self, arg):
-        try: value = float(arg)
-        except: value = None
-        if self.__get_correction() != value:
-            self._needsUpdate = True
-        self.obj.setCorrection(value)
-    correction = property(__get_correction, __set_correction)
-
-    def __get_numberOfCoefficients(self):
-        # optional Attribute
-        try: # @return: int
-            return self.obj.numberOfCoefficients()
-        except ValueError:
-            return None
-    def __set_numberOfCoefficients(self, arg):
-        if self.__get_numberOfCoefficients() != arg:
-            self._needsUpdate = True
-        self.obj.setNumberOfCoefficients(arg)
-    numberOfCoefficients = property(__get_numberOfCoefficients, __set_numberOfCoefficients)
-
-    def __get_symmetry(self):
-        try: # @return: const std::string&
-            return self.obj.symmetry()
-        except ValueError:
-            return None
-    def __set_symmetry(self, arg):
-        try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-        except Exception, e:
-            logs.error(str(e))
-            return
-        if self.__get_symmetry() != value:
-            self._needsUpdate = True
-        self.obj.setSymmetry(value)
-    symmetry = property(__get_symmetry, __set_symmetry)
-
-    def __get_coefficients(self):
-        # optional Attribute
-        try: # @return: RealArray
-            return RealArray2str(self.obj.coefficients().content())
-        except ValueError:
-            return None
-    def __set_coefficients(self, arg):
-        try: value = str2RealArray(arg)
-        except: value = None
-        ret = self.__get_coefficients()
-        if not str2RealArray(ret) == value:
-            self._needsUpdate = True
-        self.obj.setCoefficients(value)
-    coefficients = property(__get_coefficients, __set_coefficients)
-
-    def __get_remark(self):
-        # optional Attribute
-        try: # @return: Blob
-            B = self.obj.remark()
-            return B.content()
-        except ValueError:
-            return None
-    def __set_remark(self, arg):
-        try:
-            if isinstance(arg, unicode):
-                value = arg.encode("utf-8", "replace")
-            else:
-                value = str(arg)
-            blob = DataModel.Blob()
-            if value:
-                blob.setContent(value)
-        except Exception, e:
-            logs.error(str(e))
-            return
-        if self.__get_remark() != value:
-            self._needsUpdate = True
-        self.obj.setRemark(blob)
-    remark = property(__get_remark, __set_remark)
 
 
 # package: Inventory
@@ -5091,6 +5323,8 @@ class base_inventory(object):
         except KeyError: pass
         try: obj.setGain(args["gain"])
         except KeyError: pass
+        try: obj.setGainFrequency(args["gainFrequency"])
+        except KeyError: pass
         try: obj.setDecimationFactor(args["decimationFactor"])
         except KeyError: pass
         try: obj.setDelay(args["delay"])
@@ -5129,6 +5363,60 @@ class base_inventory(object):
                 it.step()
         return list
     _responseFIR = property(__get_responsefir)
+
+    def _new_responseiir(self, **args):
+        publicID = args.get("publicID")
+        if publicID and DataModel.ResponseIIR.Find(publicID): publicID = None
+        if publicID: obj = DataModel.ResponseIIR.Create(publicID)
+        else: obj = DataModel.ResponseIIR.Create()
+        try: obj.setName(args["name"])
+        except KeyError: pass
+        try: obj.setType(args["type"])
+        except KeyError: pass
+        try: obj.setGain(args["gain"])
+        except KeyError: pass
+        try: obj.setGainFrequency(args["gainFrequency"])
+        except KeyError: pass
+        try: obj.setDecimationFactor(args["decimationFactor"])
+        except KeyError: pass
+        try: obj.setDelay(args["delay"])
+        except KeyError: pass
+        try: obj.setCorrection(args["correction"])
+        except KeyError: pass
+        try: obj.setNumberOfNumerators(args["numberOfNumerators"])
+        except KeyError: pass
+        try: obj.setNumberOfDenominators(args["numberOfDenominators"])
+        except KeyError: pass
+        try: obj.setNumerators(args["numerators"])
+        except KeyError: pass
+        try: obj.setDenominators(args["denominators"])
+        except KeyError: pass
+        try: obj.setRemark(args["remark"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.Inventory: error adding ResponseIIR"
+        return obj
+    def __get_responseiir(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.responseIIRCount()):
+                for i in xrange(self.obj.responseIIRCount()):
+                    obj = self.obj.responseIIR(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_responseiir(obj))
+        else:
+            # HACK to make last_modified usable ...
+            it = dbQuery.getObjects(self.obj, DataModel.ResponseIIR.TypeInfo())
+            while it.get():
+                try:
+                    obj = DataModel.ResponseIIR.Cast(it.get())
+                    obj.lastModified = it.lastModified()
+                    list.append(base_responseiir(obj))
+                except ValueError, e:
+                    print str(e)
+                it.step()
+        return list
+    _responseIIR = property(__get_responseiir)
 
     def _new_responsepolynomial(self, **args):
         publicID = args.get("publicID")

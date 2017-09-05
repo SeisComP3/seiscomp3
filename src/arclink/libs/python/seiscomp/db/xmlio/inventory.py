@@ -111,6 +111,26 @@ def _responseFIR_in(xresponseFIR, inventory):
         
     xresponseFIR._copy_to(responseFIR)
 
+def _responseIIR_in(xresponseIIR, inventory):
+    if xresponseIIR.action == "delete":
+        try:
+            inventory.remove_responseIIR(xresponseIIR.name)
+        except KeyError:
+            pass
+
+        return
+
+    try:
+        responseIIR = inventory.responseIIR[xresponseIIR.name]
+        if responseIIR.publicID != xresponseIIR.publicID:
+            inventory.remove_responseIIR(xresponseIIR.name)
+            raise KeyError
+
+    except KeyError:
+        responseIIR = inventory.insert_responseIIR(xresponseIIR.name, publicID=xresponseIIR.publicID)
+
+    xresponseIIR._copy_to(responseIIR)
+
 def _responsePAZ_in(xresponsePAZ, inventory):
     if xresponsePAZ.action == "delete":
         try:
@@ -444,6 +464,9 @@ def _xmldoc_in(xinventory, inventory):
     for xresponseFIR in xinventory.responseFIR:
         _responseFIR_in(xresponseFIR, inventory)
 
+    for xresponseIIR in xinventory.responseIIR:
+        _responseIIR_in(xresponseIIR, inventory)
+
     for xresponsePAZ in xinventory.responsePAZ:
         _responsePAZ_in(xresponsePAZ, inventory)
 
@@ -477,6 +500,15 @@ def _responseFIR_out(xinventory, responseFIR, modified_after):
         xresponseFIR = xinventory._new_responseFIR()
         xresponseFIR._copy_from(responseFIR)
         xinventory._append_child(xresponseFIR)
+        return True
+
+    return False
+
+def _responseIIR_out(xinventory, responseIIR, modified_after):
+    if modified_after is None or responseIIR.last_modified >= modified_after:
+        xresponseIIR = xinventory._new_responseIIR()
+        xresponseIIR._copy_from(responseIIR)
+        xinventory._append_child(xresponseIIR)
         return True
 
     return False
@@ -802,6 +834,10 @@ def _xmldoc_out(xinventory, inventory, instr, modified_after):
             if i.publicID in used_filters.filters:
                 _responseFIR_out(xinventory, i, modified_after)
 
+        for i in inventory.responseIIR.itervalues():
+            if i.publicID in used_filters.filters:
+                _responseIIR_out(xinventory, i, modified_after)
+
         for i in inventory.responsePAZ.itervalues():
             if i.publicID in used_filters.filters:
                 _responsePAZ_out(xinventory, i, modified_after)
@@ -832,6 +868,9 @@ def _xmldoc_out(xinventory, inventory, instr, modified_after):
 
         for i in inventory.responseFIR.itervalues():
             _responseFIR_out(xinventory, i, modified_after)
+
+        for i in inventory.responseIIR.itervalues():
+            _responseIIR_out(xinventory, i, modified_after)
 
         for i in inventory.responsePAZ.itervalues():
             _responsePAZ_out(xinventory, i, modified_after)

@@ -1276,6 +1276,15 @@ class ArclinkSynchronizer(Client.Application):
             logs.debug("[-] FIR %s" % rfir.name)
             inv.remove_responseFIR(name)
         
+        ## Clean Iir
+        for (name, riir) in inv.responseIIR.items():
+            if riir.publicID in sref:
+                continue
+            if riir.publicID in dref:
+                continue
+            logs.debug("[-] IIR %s" % riir.name)
+            inv.remove_responseIIR(name)
+
         ## Todo
         ## Clean AuxSource
         ## Clean AuxDevice

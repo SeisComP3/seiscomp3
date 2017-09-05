@@ -463,6 +463,108 @@ class _ResponseFAP(object):
 
 
 # ---------------------------------------------------------------------------------------
+class _ResponseFIR(object):
+	__slots__ = (
+		"my",
+		"object",
+		"publicID",
+		"name",
+		"gain",
+		"gainFrequency",
+		"decimationFactor",
+		"delay",
+		"correction",
+		"numberOfCoefficients",
+		"symmetry",
+		"coefficients",
+		"remark",
+		"last_modified",
+	)
+
+	def __init__(self, my, name, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
+		self.name = ""
+		self.gain = None
+		self.gainFrequency = None
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
+		self.numberOfCoefficients = None
+		self.symmetry = ""
+		self.coefficients = ""
+		self.remark = ""
+		self.my = my
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.name = name
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
+class _ResponseIIR(object):
+	__slots__ = (
+		"my",
+		"object",
+		"publicID",
+		"name",
+		"type",
+		"gain",
+		"gainFrequency",
+		"decimationFactor",
+		"delay",
+		"correction",
+		"numberOfNumerators",
+		"numberOfDenominators",
+		"numerators",
+		"denominators",
+		"remark",
+		"last_modified",
+	)
+
+	def __init__(self, my, name, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
+		self.name = ""
+		self.type = ""
+		self.gain = None
+		self.gainFrequency = None
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
+		self.numberOfNumerators = None
+		self.numberOfDenominators = None
+		self.numerators = ""
+		self.denominators = ""
+		self.remark = ""
+		self.my = my
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.name = name
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
 class _DataloggerCalibration(object):
 	__slots__ = (
 		"myDatalogger",
@@ -631,53 +733,6 @@ class _Datalogger(object):
 				del self.decimation[sampleRateNumerator]
 		except KeyError:
 			raise DBError, "Decimation [%s][%s] not found" % (sampleRateNumerator, sampleRateDenominator)
-# ---------------------------------------------------------------------------------------
-
-
-
-
-# ---------------------------------------------------------------------------------------
-class _ResponseFIR(object):
-	__slots__ = (
-		"my",
-		"object",
-		"publicID",
-		"name",
-		"gain",
-		"decimationFactor",
-		"delay",
-		"correction",
-		"numberOfCoefficients",
-		"symmetry",
-		"coefficients",
-		"remark",
-		"last_modified",
-	)
-
-	def __init__(self, my, name, args):
-		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
-		self.publicID = ""
-		self.name = ""
-		self.gain = None
-		self.decimationFactor = None
-		self.delay = None
-		self.correction = None
-		self.numberOfCoefficients = None
-		self.symmetry = ""
-		self.coefficients = ""
-		self.remark = ""
-		self.my = my
-		self.object = {}
-
-		for (a, v) in args.iteritems():
-			self.__setattr__(a, v)
-
-		self.name = name
-
-
-	def __setattr__(self, name, value):
-		object.__setattr__(self, name, value)
-		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
 # ---------------------------------------------------------------------------------------
 
 
@@ -1051,6 +1106,7 @@ class Inventory(object):
 		"datalogger",
 		"responsePAZ",
 		"responseFIR",
+		"responseIIR",
 		"responsePolynomial",
 		"responseFAP",
 		"network",
@@ -1068,6 +1124,7 @@ class Inventory(object):
 		self.datalogger = {}
 		self.responsePAZ = {}
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePolynomial = {}
 		self.responseFAP = {}
 		self.network = {}
@@ -1160,6 +1217,20 @@ class Inventory(object):
 		except KeyError:
 			raise DBError, "ResponseFIR [%s] not found" % (name)
 
+	def insert_responseIIR(self, name, **args):
+		if name in self.responseIIR:
+			raise DBError, "ResponseIIR %s already defined" % name
+		obj = _ResponseIIR(self, name, args)
+		self.responseIIR[name] = obj
+		self.object[obj.publicID] = obj
+		return obj
+
+	def remove_responseIIR(self, name):
+		try:
+			del self.responseIIR[name]
+		except KeyError:
+			raise DBError, "ResponseIIR [%s] not found" % (name)
+
 	def insert_responsePolynomial(self, name, **args):
 		if name in self.responsePolynomial:
 			raise DBError, "ResponsePolynomial %s already defined" % name
@@ -1213,6 +1284,7 @@ class Inventory(object):
 		self.datalogger = {}
 		self.responsePAZ = {}
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePolynomial = {}
 		self.responseFAP = {}
 

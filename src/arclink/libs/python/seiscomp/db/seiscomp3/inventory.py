@@ -31,6 +31,13 @@ class _ResponseFIR(_sc3wrap.base_responsefir):
 	def flush(self):
 		self._sync_update()
 
+class _ResponseIIR(_sc3wrap.base_responseiir):
+	def __init__(self, so):
+		_sc3wrap.base_responseiir.__init__(self, so)
+
+	def flush(self):
+		self._sync_update()
+
 class _ResponsePAZ(_sc3wrap.base_responsepaz):
 	def __init__(self, so):
 		_sc3wrap.base_responsepaz.__init__(self, so)
@@ -533,6 +540,7 @@ class Inventory(_sc3wrap.base_inventory):
 	def __init__(self, sc3Inv):	
 		_sc3wrap.base_inventory.__init__(self, sc3Inv)
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePAZ = {}
 		self.responsePolynomial = {}
 		self.responseFAP = {}
@@ -545,6 +553,10 @@ class Inventory(_sc3wrap.base_inventory):
 		
 	def _link_responseFIR(self, obj):
 		self.responseFIR[obj.name] = obj
+		self.object[obj.publicID] = obj
+
+	def _link_responseIIR(self, obj):
+		self.responseIIR[obj.name] = obj
 		self.object[obj.publicID] = obj
 
 	def _link_responsePAZ(self, obj):
@@ -585,6 +597,11 @@ class Inventory(_sc3wrap.base_inventory):
 		self._link_responseFIR(obj)
 		return obj
 	
+	def insert_responseIIR(self, name, **args):
+		obj = _ResponseIIR(self._new_responsefir(name=name, **args))
+		self._link_responseIIR(obj)
+		return obj
+
 	def insert_responsePAZ(self, name, **args):
 		obj = _ResponsePAZ(self._new_responsepaz(name=name, **args))
 		self._link_responsePAZ(obj)
@@ -633,6 +650,14 @@ class Inventory(_sc3wrap.base_inventory):
 		except KeyError:
 			raise DBError, "FIR response %s not found" % (name,)
 			
+	def remove_responseIIR(self, name):
+		try:
+			self.responseIIR[name]._delete()
+			del self.responseIIR[name]
+
+		except KeyError:
+			raise DBError, "IIR response %s not found" % (name,)
+
 	def remove_responsePAZ(self, name):
 		try:
 			self.responsePAZ[name]._delete()
@@ -701,6 +726,9 @@ class Inventory(_sc3wrap.base_inventory):
 			
 	def flush(self):
 		for i in self.responseFIR.itervalues():
+			i.flush()
+
+		for i in self.responseIIR.itervalues():
 			i.flush()
 
 		for i in self.responsePAZ.itervalues():
@@ -791,6 +819,12 @@ class Inventory(_sc3wrap.base_inventory):
 			RF = _ResponseFIR(respfir.obj)
 			self._link_responseFIR(RF)
 
+		for respiir in self._responseIIR:
+			if not _modifiedAfter(respiir, modified_after):
+				continue
+			RI = _ResponseIIR(respiir.obj)
+			self._link_responseIIR(RI)
+
 		for datalogger in self._datalogger:
 			if not _modifiedAfter(datalogger, modified_after):
 				continue
@@ -818,6 +852,7 @@ class Inventory(_sc3wrap.base_inventory):
 	def clear_instruments(self):
 		self.flush()
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePAZ = {}
 		self.responseFAP = {}
 		self.datalogger = {}
