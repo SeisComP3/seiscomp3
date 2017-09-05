@@ -274,6 +274,14 @@ Canvas::~Canvas() {
 	delete _projection;
 	_mapSymbolCollection.clear();
 
+	for ( CustomLayers::const_iterator it = _customLayers.begin();
+	      it != _customLayers.end(); ++it ) {
+		Layer *layer = it->get();
+		for ( int i = 0; i < layer->legendCount(); ++i ) {
+			layer->legend(i)->disconnect();
+		}
+	}
+
 	// Remove this from Layers parent
 	for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
 		(*it)->_canvas = NULL;
