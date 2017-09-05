@@ -84,6 +84,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 	public slots:
 		void setAntiAliasingEnabled(bool);
 		virtual void setVisible(bool);
+		virtual void show();
+		virtual void hide();
 
 
 	public:

@@ -1772,9 +1772,7 @@ QMenu* Canvas::menu(QMenu *parent) const {
 					subMenu->setTitle(layer->name());
 					QAction *separator = subMenu->insertSeparator(firstAction);
 					QAction *toggleAction = new QAction(tr("Hide layer"), subMenu);
-					toggleAction->setCheckable(true);
-					toggleAction->setChecked(true);
-					connect(toggleAction, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+					connect(toggleAction, SIGNAL(triggered()), layer, SLOT(hide()));
 
 					subMenu->insertAction(separator, toggleAction);
 					menu->addMenu(subMenu);

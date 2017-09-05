@@ -42,11 +42,12 @@ class SC_GUI_API GeoFeatureLayer : public Layer {
 
 	private slots:
 		void toggleFeatureVisibility(bool);
-
+		void showFeatures();
+		void hideFeatures();
 
 	private:
 		void initLayerProperites();
-
+		void setFeaturesVisibility(bool visible);
 
 	private:
 		bool _initialized;

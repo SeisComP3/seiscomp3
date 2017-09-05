@@ -188,6 +188,36 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 		connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleFeatureVisibility(bool)));
 	}
 
+	// Add "Select all" and "Select none" options if more than 1 property
+	// is available
+	if ( _layerProperties.size() >= 2 ) {
+		// count total number of visible layer properties
+		size_t visibleCount = 0;
+		std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
+		for ( ; it != _layerProperties.end(); ++it ) {
+			if ( (*it)->visible ) {
+				++visibleCount;
+			}
+		}
+
+		QAction *firstPropertyAction = menu->actions().first();
+
+		// Select all
+		QAction *allAction = new QAction(tr("Select all"), menu);
+		allAction->setEnabled(visibleCount < _layerProperties.size());
+		connect(allAction, SIGNAL(triggered()), this, SLOT(showFeatures()));
+		menu->insertAction(firstPropertyAction, allAction);
+
+		// Select none
+		QAction *noneAction = new QAction(tr("Select none"), menu);
+		noneAction->setEnabled(visibleCount >= 1);
+		connect(noneAction, SIGNAL(triggered()), this, SLOT(hideFeatures()));
+		menu->insertAction(firstPropertyAction, noneAction);
+
+		// Separator
+		menu->insertSeparator(firstPropertyAction);
+	}
+
 	return menu;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -221,6 +251,24 @@ void GeoFeatureLayer::toggleFeatureVisibility(bool checked) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void GeoFeatureLayer::showFeatures() {
+	setFeaturesVisibility(true);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void GeoFeatureLayer::hideFeatures() {
+	setFeaturesVisibility(false);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void GeoFeatureLayer::initLayerProperites() {
 	// Create a layer properties from BNA geo features
 	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
@@ -246,6 +294,26 @@ void GeoFeatureLayer::initLayerProperites() {
 		// Add fep properties
 		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
 		readLayerProperties(_layerProperties.back());
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void GeoFeatureLayer::setFeaturesVisibility(bool visible) {
+	bool updateRequired = false;
+	std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
+	for ( ; it != _layerProperties.end(); ++it ) {
+		if ( (*it)->visible != visible ) {
+			(*it)->visible = visible;
+			updateRequired = true;
+		}
+	}
+
+	if ( updateRequired ) {
+		emit updateRequested(RasterLayer);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
