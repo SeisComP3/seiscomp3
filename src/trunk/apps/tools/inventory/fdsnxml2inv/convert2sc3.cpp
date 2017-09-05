@@ -946,6 +946,8 @@ DataModel::ResponseFAPPtr convert(const FDSNXML::ResponseStage *resp,
 		tuples.push_back(elem->phase().value());
 	}
 
+	rp->setNumberOfTuples(rl->elementCount());
+
 	return rp;
 }
 
