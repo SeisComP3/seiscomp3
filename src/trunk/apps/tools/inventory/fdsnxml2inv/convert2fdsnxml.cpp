@@ -92,6 +92,32 @@ FDSNXML::Channel *findChannel(FDSNXML::Station *sta,
 }
 
 
+template <typename T>
+void populateStageGain(FDSNXML::ResponseStage *stage, T *resp) {
+	FDSNXML::Gain stageGain;
+	OPT(double) gain, gainFrequency;
+
+	try { gain = resp->gain(); } catch ( ... ) {}
+	try { gainFrequency = resp->gainFrequency(); } catch ( ... ) {}
+
+	if ( gain || gainFrequency ) {
+		if ( gain )
+			stageGain.setValue(*gain);
+		else
+			stageGain.setValue(0);
+
+		if ( gainFrequency )
+			stageGain.setFrequency(*gainFrequency);
+		else
+			stageGain.setFrequency(0);
+
+		stage->setStageGain(stageGain);
+	}
+	else
+		stage->setStageGain(Core::None);
+}
+
+
 // SC3 FIR responses are converted to fdsnxml FIR responses to
 // use optimizations (symmetry) though all fdsnxml files in the
 // wild are using Coefficient responses. This can be changed on
@@ -99,20 +125,12 @@ FDSNXML::Channel *findChannel(FDSNXML::Station *sta,
 FDSNXML::ResponseStagePtr convert(const DataModel::ResponseFIR *fir,
                                   const std::string &inputUnit,
                                   const std::string &outputUnit) {
-	double gain = 0;
-	try { gain = fir->gain(); } catch ( ... ) {}
-
 	FDSNXML::FrequencyType freq;
 	FDSNXML::FloatType ft;
 	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
+	populateStageGain(sx_resp.get(), fir);
 
-	freq.setValue(0);
 	ft.setValue(0);
-
-	FDSNXML::Gain stageGain;
-	stageGain.setValue(gain);
-	stageGain.setFrequency(freq);
-	sx_resp->setStageGain(stageGain);
 
 	OPT(int) decimationFactor;
 	try { decimationFactor = fir->decimationFactor(); }
@@ -172,20 +190,12 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseFIR *fir,
 FDSNXML::ResponseStagePtr convert(const DataModel::ResponseIIR *iir,
                                   const std::string &inputUnit,
                                   const std::string &outputUnit) {
-	double gain = 0;
-	try { gain = iir->gain(); } catch ( ... ) {}
-
 	FDSNXML::FrequencyType freq;
 	FDSNXML::FloatType ft;
 	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
+	populateStageGain(sx_resp.get(), iir);
 
-	freq.setValue(0);
 	ft.setValue(0);
-
-	FDSNXML::Gain stageGain;
-	stageGain.setValue(gain);
-	stageGain.setFrequency(freq);
-	sx_resp->setStageGain(stageGain);
 
 	OPT(int) decimationFactor;
 	try { decimationFactor = iir->decimationFactor(); }
@@ -259,21 +269,9 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseIIR *iir,
 FDSNXML::ResponseStagePtr convert(const DataModel::ResponsePAZ *paz,
                                   const std::string &inputUnit,
                                   const std::string &outputUnit) {
-	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
-	FDSNXML::Gain stageGain;
-
-	try { stageGain.setValue(paz->gain()); }
-	catch ( ... ) { stageGain.setValue(0); }
-
 	FDSNXML::FrequencyType freq;
-
-	try {
-		freq.setValue(paz->gainFrequency());
-		stageGain.setFrequency(freq);
-	}
-	catch ( ... ) {}
-
-	sx_resp->setStageGain(stageGain);
+	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
+	populateStageGain(sx_resp.get(), paz);
 
 	sx_resp->setPolesZeros(FDSNXML::PolesAndZeros());
 	FDSNXML::PolesAndZeros &sx_paz = sx_resp->polesZeros();
@@ -364,20 +362,7 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponseFAP *fap,
                                   const std::string &inputUnit,
                                   const std::string &outputUnit) {
 	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
-	FDSNXML::Gain stageGain;
-
-	try { stageGain.setValue(fap->gain()); }
-	catch ( ... ) { stageGain.setValue(0); }
-
-	FDSNXML::FrequencyType freq;
-
-	try {
-		freq.setValue(fap->gainFrequency());
-		stageGain.setFrequency(freq);
-	}
-	catch ( ... ) {}
-
-	sx_resp->setStageGain(stageGain);
+	populateStageGain(sx_resp.get(), fap);
 	sx_resp->setResponseList(FDSNXML::ResponseList());
 	FDSNXML::ResponseList &sx_fap = sx_resp->responseList();
 
@@ -408,20 +393,7 @@ FDSNXML::ResponseStagePtr convert(const DataModel::ResponsePolynomial *poly,
                                   const std::string &outputUnit) {
 	// Insert poly response
 	FDSNXML::ResponseStagePtr sx_resp = new FDSNXML::ResponseStage;
-	FDSNXML::Gain stageGain;
-
-	try { stageGain.setValue(poly->gain()); }
-	catch ( ... ) { stageGain.setValue(0); }
-
-	FDSNXML::FrequencyType freq;
-
-	try {
-		freq.setValue(poly->gainFrequency());
-		stageGain.setFrequency(freq);
-	}
-	catch ( ... ) {}
-
-	sx_resp->setStageGain(stageGain);
+	populateStageGain(sx_resp.get(), poly);
 	sx_resp->setPolynomial(FDSNXML::Polynomial());
 	FDSNXML::Polynomial &sx_poly = sx_resp->polynomial();
 
