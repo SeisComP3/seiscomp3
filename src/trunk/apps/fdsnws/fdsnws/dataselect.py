@@ -501,7 +501,13 @@ class FDSNDataSelect(resource.Resource):
 		if app._trackdbEnabled:
 			userid = ro.userName or app._trackdbDefaultUser
 			reqid = 'ws' + str(int(round(time.time() * 1000) - 1420070400000))
-			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", userid, "REQUEST WAVEFORM " + reqid, "fdsnws", req.getClientIP(), req.getClientIP())
+			xff = req.requestHeaders.getRawHeaders("x-forwarded-for")
+			if xff:
+				userIP = xff[0].split(",")[0].strip()
+			else:
+				userIP = req.getClientIP()
+
+			tracker = RequestTrackerDB("fdsnws", app.connection(), reqid, "WAVEFORM", userid, "REQUEST WAVEFORM " + reqid, "fdsnws", userIP, req.getClientIP())
 
 		else:
 			tracker = None
