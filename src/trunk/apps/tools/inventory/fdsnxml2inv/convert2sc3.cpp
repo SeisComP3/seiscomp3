@@ -328,6 +328,7 @@ void checkPoly(DataModel::ResponsePolynomial *rp) {
 
 bool equal(const DataModel::ResponseFIR *f1, const DataModel::ResponseFIR *f2) {
 	COMPARE_AND_RETURN(double, f1, f2, gain())
+	COMPARE_AND_RETURN(double, f1, f2, gainFrequency())
 	COMPARE_AND_RETURN(int, f1, f2, decimationFactor())
 	COMPARE_AND_RETURN(double, f1, f2, delay())
 	COMPARE_AND_RETURN(double, f1, f2, correction())
@@ -361,6 +362,7 @@ bool equal(const DataModel::ResponseFIR *f1, const DataModel::ResponseFIR *f2) {
 bool equal(const DataModel::ResponseIIR *f1, const DataModel::ResponseIIR *f2) {
 	COMPARE_AND_RETURN(string, f1, f2, type())
 	COMPARE_AND_RETURN(double, f1, f2, gain())
+	COMPARE_AND_RETURN(double, f1, f2, gainFrequency())
 	COMPARE_AND_RETURN(int, f1, f2, decimationFactor())
 	COMPARE_AND_RETURN(double, f1, f2, delay())
 	COMPARE_AND_RETURN(double, f1, f2, correction())
