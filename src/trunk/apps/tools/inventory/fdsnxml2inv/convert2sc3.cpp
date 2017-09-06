@@ -723,6 +723,7 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 	DataModel::ResponseFIRPtr rf = create<DataModel::ResponseFIR>(coeff);
 
 	try { rf->setGain(resp->stageGain().value()); } catch ( ... ) {}
+	try { rf->setGainFrequency(resp->stageGain().frequency()); } catch ( ... ) {}
 	try { rf->setDecimationFactor(resp->decimation().factor()); }
 	catch ( ... ) {}
 	try { rf->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
@@ -762,6 +763,7 @@ DataModel::ResponseIIRPtr convertIIR(const FDSNXML::ResponseStage *resp,
 	}
 
 	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
+	try { rp->setGainFrequency(resp->stageGain().frequency()); } catch ( ... ) {}
 	try { rp->setDecimationFactor(resp->decimation().factor()); }
 	catch ( ... ) {}
 	try { rp->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
@@ -797,6 +799,7 @@ DataModel::ResponseFIRPtr convert(const FDSNXML::ResponseStage *resp,
 	DataModel::ResponseFIRPtr rf = create<DataModel::ResponseFIR>(fir);
 
 	try { rf->setGain(resp->stageGain().value()); } catch ( ... ) {}
+	try { rf->setGainFrequency(resp->stageGain().frequency()); } catch ( ... ) {}
 	try { rf->setDecimationFactor(resp->decimation().factor()); }
 	catch ( ... ) {}
 	try { rf->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
@@ -957,8 +960,7 @@ DataModel::ResponsePolynomialPtr convert(const FDSNXML::ResponseStage *resp,
 	DataModel::ResponsePolynomialPtr rp = create<DataModel::ResponsePolynomial>(poly);
 
 	try { rp->setGain(resp->stageGain().value()); } catch ( ... ) {}
-	try { rp->setGainFrequency(resp->stageGain().frequency()); }
-	catch ( ... ) {}
+	try { rp->setGainFrequency(resp->stageGain().frequency()); } catch ( ... ) {}
 
 	// Frequency unit is fixed at Hz.
 	// https://github.com/FDSN/StationXML/blob/v1.0/fdsn-station.xsd#L790
