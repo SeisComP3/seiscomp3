@@ -181,10 +181,29 @@
 							<description>The color of the alignment marker in trace views.</description>
 						</parameter>
 						<group name="states">
-							<parameter name="unrequested" default="00000080"/>
-							<parameter name="requested" default="ffff0080"/>
-							<parameter name="inprogress" default="00ff0010"/>
-							<parameter name="notAvailable" default="ff000080"/>
+							<description>
+								Defines the background color of records depending on their state.
+							</description>
+							<parameter name="unrequested" type="color" default="00000080">
+								<description>
+									Additional data which was not requested.
+								</description>
+							</parameter>
+							<parameter name="requested" type="color" default="ffff0080">
+								<description>
+									Requested data Background color of requested data.
+								</description>
+							</parameter>
+							<parameter name="inProgress" type="color" default="00ff0010">
+								<description>
+									Data currently loading.
+								</description>
+							</parameter>
+							<parameter name="notAvailable" type="color" default="ff000080">
+								<description>
+									Data which was requested but is not available.
+								</description>
+							</parameter>
 						</group>
 					</group>
 
@@ -283,40 +302,40 @@
 						<description>
 							The color of QC.delay thresholds in scmv.
 						</description>
-						<parameter name="delay0" type="color">
+						<parameter name="delay0" type="color" default="00ffff">
 							<description></description>
 						</parameter>
-						<parameter name="delay1" type="color">
+						<parameter name="delay1" type="color" default="00ff00">
 							<description></description>
 						</parameter>
-						<parameter name="delay2" type="color">
+						<parameter name="delay2" type="color" default="fffd00">
 							<description></description>
 						</parameter>
-						<parameter name="delay3" type="color">
+						<parameter name="delay3" type="color" default="ff6633">
 							<description></description>
 						</parameter>
-						<parameter name="delay4" type="color">
+						<parameter name="delay4" type="color" default="ff0000">
 							<description></description>
 						</parameter>
-						<parameter name="delay5" type="color">
+						<parameter name="delay5" type="color" default="cccccc">
 							<description></description>
 						</parameter>
-						<parameter name="delay6" type="color">
+						<parameter name="delay6" type="color" default="999999">
 							<description></description>
 						</parameter>
-						<parameter name="delay7" type="color">
+						<parameter name="delay7" type="color" default="666666">
 							<description></description>
 						</parameter>
-						<parameter name="qcWarning" type="color">
+						<parameter name="qcWarning" type="color" default="ffff00">
 							<description></description>
 						</parameter>
-						<parameter name="qcError" type="color">
+						<parameter name="qcError" type="color" default="ff0000">
 							<description></description>
 						</parameter>
-						<parameter name="qcOk" type="color">
+						<parameter name="qcOk" type="color" default="00ff00">
 							<description></description>
 						</parameter>
-						<parameter name="qcNoSet" type="color">
+						<parameter name="qcNotSet" type="color" default="000000">
 							<description></description>
 						</parameter>
 					</group>
@@ -461,6 +480,22 @@
 							<description></description>
 						</parameter>
 					</group>
+
+					<group name="splash">
+						<description>
+						Defines colors used in the splash screen shown at application startup.
+						</description>
+						<parameter name="message" type="color" default="808080">
+							<description>
+								Text color of the message string.
+							</description>
+						</parameter>
+						<parameter name="version" type="color" default="02589e">
+							<description>
+								Text color of the version string.
+							</description>
+						</parameter>
+					</group>
 				</group>
 
 				<group name="marker">
@@ -518,7 +553,7 @@
 						<parameter name="underline" type="boolean" default="false"/>
 						<parameter name="overline" type="boolean" default="false"/>
 					</group>
-					<group name="smaller">
+					<group name="small">
 						<description>
 							The smallest available font. If undefined the point size is 2 points smaller than the base font.
 						</description>
@@ -821,6 +856,105 @@
 						</description>
 					</parameter>
 				</group>
+				<group name="splash">
+					<description>
+					Alignment an position of message and version string shown in splash
+					screen at application startup.
+					</description>
+					<group name="message">
+						<description>
+						Position of the message text.
+						</description>
+						<parameter name="align" type="int" default="44">
+							<description>
+							Qt::Alignment bit mask. Default: AlignHCenter | AlignBottom
+							</description>
+						</parameter>
+						<group name="pos">
+							<description>
+							Position in screen coordinates.
+							</description>
+							<parameter name="x" type="int" default="200">
+								<description>
+								Horizontal position.
+								</description>
+							</parameter>
+							<parameter name="y" type="int" default="260">
+								<description>
+								Vertical position.
+								</description>
+							</parameter>
+						</group>
+					</group>
+					<group name="version">
+						<description>
+						Position of the version string
+						</description>
+						<parameter name="align" type="int" default="34">
+							<description>
+							Qt::Alignment bit mask. Default: AlignRight | AlignBottom
+							</description>
+						</parameter>
+						<group name="pos">
+							<description>
+							Position in screen coordinates.
+							</description>
+							<parameter name="x" type="int" default="362">
+								<description>
+								Horizontal position.
+								</description>
+							</parameter>
+							<parameter name="y" type="int" default="190">
+								<description>
+								Vertical position.
+								</description>
+							</parameter>
+						</group>
+					</group>
+				</group>
+			</group>
+			<group name="events">
+				<group name="timeAgo">
+					<description>
+					Defines maximum age of events to load. The value of all parameters are aggregated.
+					</description>
+					<parameter name="days" type="int" unit="d" default="1">
+						<description>
+						Age in days.
+						</description>
+					</parameter>
+					<parameter name="hours" type="int" unit="h" default="0">
+						<description>
+						Age in hours.
+						</description>
+					</parameter>
+					<parameter name="minutes" type="int" unit="m" default="0">
+						<description>
+						Age in minutes.
+						</description>
+					</parameter>
+					<parameter name="seconds" type="int" unit="s" default="0">
+						<description>
+						Age in seconds.
+						</description>
+					</parameter>
+				</group>
+			</group>
+			<group name="mode">
+				<description>
+					Configuration of special applications modes.
+				</description>
+				<parameter name="interactive" type="boolean" default="true">
+					<description>
+						Defines if application interaction is allowed.
+					</description>
+				</parameter>
+				<parameter name="fullscreen" type="boolean" default="false">
+					<description>
+						Defines if the application should be launched in fullscreen
+						mode hiding title bar, main menu and status bar.
+					</description>
+				</parameter>
 			</group>
 			<group name="picker">
 				<parameter name="filters" type="list:string" default="&quot;BP 0.1 - 1 Hz  3rd order;BW(3,0.1,1)&quot;,&quot;BP 0.1 - 2 Hz  3rd order;BW(3,0.1,2)&quot;,&quot;BP 0.4 - 1 Hz  3rd order;BW(3,0.4,1)&quot;,&quot;@BP 0.7 - 2 Hz  3rd order;BW(3,0.7,2)&quot;&quot;BP 1 - 3 Hz  3rd order;BW(3,1.0,3)&quot;,&quot;BP 2 - 4 Hz  3rd order;BW(3,2.0,4)&quot;,&quot;BP 3 - 6 Hz  3rd order;BW(3,3.0,6)&quot;,&quot;BP 4 - 8 Hz  3rd order;BW(3,4.0,8)&quot;,&quot;BP 1 - 5 Hz  3rd order;BW(3,1.0,5)&quot;,&quot;BP 0.7 - 2 Hz + STA/LTA(1,50);RMHP(10)->ITAPER(30)->BW(3,0.7,2)->STALTA(1,50)&quot;">
@@ -844,6 +978,40 @@
 					the result set.
 					</description>
 				</parameter>
+				<parameter name="customColumn" type="string">
+					<description>
+					Name of an additional custom column which displays the value
+					of certain origin and event comments.
+					</description>
+				</parameter>
+				<group name="customColumn">
+					<parameter name="originCommentID" type="string">
+						<description>
+						ID of the origin comment to look up.
+						</description>
+					</parameter>
+					<parameter name="eventCommentID" type="string">
+						<description>
+						ID of the event comment to look up.
+						</description>
+					</parameter>
+					<parameter name="pos" type="int" default="-1">
+						<description>
+						Position of the column. If the configured position is less than 0 or if it
+						exceeds the total number of columns then the column is appended to the right.
+						</description>
+					</parameter>
+					<parameter name="default" type="string">
+						<description>
+						Default value to display if the specified origin or event comment id was not found.
+						</description>
+					</parameter>
+					<parameter name="colors" type="list:string">
+						<description>
+						Mapping of comment values to colors used as text color. E.g. "foo:#000,bar:red".
+						</description>
+					</parameter>
+				</group>
 				<group name="region">
 					<struct type="eventlist filter region" link="eventlist.regions">
 						<description>
@@ -920,6 +1088,44 @@
 							option.
 							</description>
 						</parameter>
+					</group>
+				</group>
+				<group name="scripts">
+					<parameter name="columns" type="list:string">
+						<description>
+						Registration of custom event list columns.
+						</description>
+					</parameter>
+					<group name="column">
+						<description>
+						Definition of custom event list column whose values are filled by external scripts.
+						</description>
+						<struct type="custom column profile">
+							<parameter name="script" type="path">
+								<description>
+								External script to invoke for each event list entry. The object represented by the
+								list entry is serialized to XML and passed to the script on stdin. If the return
+								code of the script is 0 ('success') then the script result is read from stdout and
+								displayed in the corresponding event list cell.
+								</description>
+							</parameter>
+							<parameter name="pos" type="int" default="-1">
+								<description>
+								Position of the column. If the configured position is less than 0 or if it
+								exceeds the total number of columns then the column is appended to the right.
+								</description>
+							</parameter>
+							<parameter name="label" type="string">
+								<description>
+								Column name shown in header of event list table.
+								</description>
+							</parameter>
+							<parameter name="types" type="list:string">
+								<description>
+								Object types this script should be invoked for. Supported values are 'Event' and 'Origin'.
+								</description>
+							</parameter>
+						</struct>
 					</group>
 				</group>
 			</group>
