@@ -642,7 +642,7 @@ void EventTool::handleTimeout() {
 	for ( DelayEventBuffer::iterator it = _delayEventBuffer.begin();
 	      it != _delayEventBuffer.end(); ) {
 		it->timeout -= DELAY_CHECK_INTERVAL;
-		if ( it->timeout <= 0 ) {
+		if ( it->timeout <= -DELAY_CHECK_INTERVAL ) {
 			if ( it->reason == SetPreferredFM ) {
 				SEISCOMP_LOG(_infoChannel, "Handling pending event update for %s", it->id.c_str());
 				EventInformationPtr info = cachedEvent(it->id);
