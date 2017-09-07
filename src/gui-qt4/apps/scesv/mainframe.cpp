@@ -121,8 +121,8 @@ MainFrame::MainFrame() {
 	// Connect events layer with map
 	Gui::EventLayer *eventMapLayer = new Gui::EventLayer(_eventSummary->map());
 	connect(_listPage, SIGNAL(reset()), eventMapLayer, SLOT(clear()));
-	connect(_listPage, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*)),
-	        eventMapLayer, SLOT(addEvent(Seiscomp::DataModel::Event*)));
+	connect(_listPage, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*,bool)),
+	        eventMapLayer, SLOT(addEvent(Seiscomp::DataModel::Event*,bool)));
 	connect(_listPage, SIGNAL(eventUpdatedInList(Seiscomp::DataModel::Event*)),
 	        eventMapLayer, SLOT(updateEvent(Seiscomp::DataModel::Event*)));
 	connect(_listPage, SIGNAL(eventRemovedFromList(Seiscomp::DataModel::Event*)),

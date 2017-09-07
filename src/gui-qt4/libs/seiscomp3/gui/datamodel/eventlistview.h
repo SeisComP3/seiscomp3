@@ -115,6 +115,8 @@ class SC_GUI_API EventListView : public QWidget {
 		QTreeWidget *eventTree() { return _treeWidget; }
 		Seiscomp::DataModel::Event *eventFromTreeItem(QTreeWidgetItem *item) const;
 
+		int eventCount() const;
+
 
 	signals:
 		void originAdded();
@@ -134,7 +136,7 @@ class SC_GUI_API EventListView : public QWidget {
 
 		//! Emitted when the event list is cleared
 		void reset();
-		void eventAddedToList(Seiscomp::DataModel::Event*);
+		void eventAddedToList(Seiscomp::DataModel::Event*, bool fromNotification);
 		void eventUpdatedInList(Seiscomp::DataModel::Event*);
 		void eventRemovedFromList(Seiscomp::DataModel::Event*);
 
@@ -212,7 +214,7 @@ class SC_GUI_API EventListView : public QWidget {
 	private:
 		void initTree();
 
-		Private::EventTreeItem* addEvent(Seiscomp::DataModel::Event*);
+		Private::EventTreeItem* addEvent(Seiscomp::DataModel::Event*, bool fromNotification);
 		Private::OriginTreeItem* addOrigin(Seiscomp::DataModel::Origin*, QTreeWidgetItem* parent, bool highPriority);
 		Private::FocalMechanismTreeItem* addFocalMechanism(Seiscomp::DataModel::FocalMechanism*, QTreeWidgetItem* parent);
 

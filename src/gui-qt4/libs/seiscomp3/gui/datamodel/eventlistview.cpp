@@ -1849,6 +1849,7 @@ EventListView::EventListView(Seiscomp::DataModel::DatabaseQuery* reader, bool wi
    _withOrigins(withOrigins), _withFocalMechanisms(withFocalMechanisms),
    _blockSelection(false), _blockRemovingOfExpiredEvents(false) {
 	_ui.setupUi(this);
+	_ui.btnFilter->setVisible(false);
 
 	_regionIndex = 0;
 	_commandWaitDialog = NULL;
@@ -2443,7 +2444,7 @@ void EventListView::updateHideState(QTreeWidgetItem *item) {
 		if ( hide )
 			emit eventRemovedFromList(event);
 		else
-			emit eventAddedToList(event);
+			emit eventAddedToList(event, false);
 	}
 }
 
@@ -2505,7 +2506,7 @@ void EventListView::add(Seiscomp::DataModel::Event* event,
 		}
 
 		if ( item == NULL )
-			item = addEvent(event);
+			item = addEvent(event, false);
 
 		for ( std::map<std::string, OriginPtr>::iterator it = orgs.begin(); it != orgs.end(); ++it )
 			addOrigin(it->second.get(), item, true);
@@ -2535,7 +2536,7 @@ void EventListView::add(Seiscomp::DataModel::Event* event,
 			if ( !prefMag && _reader && !event->preferredMagnitudeID().empty() )
 				prefMag = Magnitude::Cast(_reader->getObject(Magnitude::TypeInfo(), event->preferredMagnitudeID()));
 
-			item = addEvent(event);
+			item = addEvent(event, false);
 			if ( prefOrg ) {
 				if ( event->originReference(prefOrg->publicID()) == NULL )
 					event->add(new OriginReference(prefOrg->publicID()));
@@ -2577,7 +2578,7 @@ void EventListView::setEventModificationsEnabled(bool e) {
 void EventListView::initTree() {
 	_treeWidget->clear();
 	if ( _withOrigins )
-		_unassociatedEventItem = addEvent(NULL);
+		_unassociatedEventItem = addEvent(NULL, false);
 	else
 		_unassociatedEventItem = NULL;
 
@@ -3054,7 +3055,7 @@ void EventListView::readFromDatabase(const Filter &filter) {
 	for ( size_t i = 0; i < ep.eventCount(); ++i ) {
 		Event *event = ep.event(i);
 
-		EventTreeItem *eventItem = addEvent(event);
+		EventTreeItem *eventItem = addEvent(event, false);
 		bool update = false;
 
 		for ( size_t c = 0; c < event->commentCount(); ++c ) {
@@ -3195,7 +3196,7 @@ void EventListView::removeExpiredEvents() {
 }
 
 
-EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event) {
+EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event, bool fromNotification) {
 	removeExpiredEvents();
 
 	// Read preferred origin for display purpose
@@ -3258,7 +3259,7 @@ EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event) {
 	updateEventProcessColumns(item, true);
 
 	if ( event != NULL )
-		emit eventAddedToList(event);
+		emit eventAddedToList(event, fromNotification);
 
 	return item;
 }
@@ -3397,7 +3398,7 @@ void EventListView::onCommand(Seiscomp::Gui::CommandMessage* cmsg) {
 			if ( ev ) {
 				parent = findEvent(ev->publicID());
 				if ( !parent ) {
-					parent = addEvent(ev.get());
+					parent = addEvent(ev.get(), false);
 				}
 			}
 
@@ -3499,7 +3500,8 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 				{
 					EventTreeItem* item = (EventTreeItem*)findEvent(e->publicID());
 					if ( !item ) {
-						addEvent(e);
+						addEvent(e, true);
+						emit
 						break;
 					}
 				}
@@ -3516,7 +3518,7 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 				{
 					EventTreeItem* item = (EventTreeItem*)findEvent(e->publicID());
 					if ( !item )
-						item = (EventTreeItem*)addEvent(e);
+						item = (EventTreeItem*)addEvent(e, true);
 					else
 						updateHideState(item);
 
@@ -4326,6 +4328,11 @@ EventListView::eventFromTreeItem(QTreeWidgetItem *item) const {
 	SchemeTreeItem* schemeItem = dynamic_cast<SchemeTreeItem*>(item);
 	if ( schemeItem == NULL ) return NULL;
 	return Event::Cast(schemeItem->object());
+}
+
+
+int EventListView::eventCount() const {
+	return _treeWidget->topLevelItemCount()-1;
 }
 
 

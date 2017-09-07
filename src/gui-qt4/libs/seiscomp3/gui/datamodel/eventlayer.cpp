@@ -199,7 +199,7 @@ void EventLayer::clear() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void EventLayer::addEvent(Seiscomp::DataModel::Event *e) {
+void EventLayer::addEvent(Seiscomp::DataModel::Event *e, bool) {
 	SymbolMap::iterator it = _eventSymbols.find(e->publicID());
 
 	DataModel::Origin *org = DataModel::Origin::Find(e->preferredOriginID());

@@ -125,6 +125,18 @@
 						When creating an artificial origin this is the default depth used.
 					</description>
 				</parameter>
+				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
+					<description>
+						Adds advanced input parameters in artificial origin dialog.
+					</description>
+				</parameter>
+				<parameter name="systemTray" type="boolean" default="true">
+					<description>
+						Adds an icon to the system tray and displays a message
+						when a new event was received. Note that this feature
+						requires libQt4 version 4.3 or higher.
+					</description>
+				</parameter>
 				<group name="map">
 					<group name="stations">
 						<parameter name="unassociatedMaxDist" type="double" unit="deg" default="360">
@@ -172,11 +184,6 @@
 						</description>
 					</parameter>
 				</group>
-				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
-					<description>
-						Adds advanced input parameters in artificial origin dialog.
-					</description>
-				</parameter>
 			</group>
 			<group name="picker">
 				<parameter name="showCrossHairCursor" type="boolean" default="false">
