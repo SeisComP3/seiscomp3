@@ -42,7 +42,7 @@ using namespace Seiscomp::Client;
 using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Private;
 
-#define DELAY_CHECK_INTERVAL 10
+#define DELAY_CHECK_INTERVAL 1
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -590,7 +590,7 @@ void EventTool::handleTimeout() {
 	for ( DelayBuffer::iterator it = _delayBuffer.begin();
 	      it != _delayBuffer.end(); ) {
 		it->timeout -= DELAY_CHECK_INTERVAL;
-		if ( it->timeout <= 0 ) {
+		if ( it->timeout <= -DELAY_CHECK_INTERVAL ) {
 			OriginPtr org = Origin::Cast(it->obj);
 			if ( org ) {
 				SEISCOMP_LOG(_infoChannel, "Processing delayed origin %s",
