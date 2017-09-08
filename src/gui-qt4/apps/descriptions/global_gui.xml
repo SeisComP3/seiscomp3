@@ -858,9 +858,13 @@
 				</group>
 				<group name="splash">
 					<description>
-					Alignment an position of message and version string shown in splash
-					screen at application startup.
+					Defines the appearance of the splash screen shown at application startup.
 					</description>
+					<parameter name="image" type="path" default="@DATADIR/splash.png">
+						<description>
+						Path of an alternative backgroud image for the splash screen.
+						</description>
+					</parameter>
 					<group name="message">
 						<description>
 						Position of the message text.
