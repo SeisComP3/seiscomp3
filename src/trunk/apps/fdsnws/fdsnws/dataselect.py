@@ -167,7 +167,8 @@ class _MyRecordStream(object):
 				rs = RecordStream.Open(self.__url)
 
 				if rs is None:
-					raise Exception("could not open record stream")
+					Logging.error("could not open record stream")
+					break
 
 				rs.addStream(archNet, sta, loc, cha, startt, endt)
 				rsInput = RecordInput(rs, Array.INT, Record.SAVE_RAW)
@@ -513,13 +514,7 @@ class FDSNDataSelect(resource.Resource):
 			tracker = None
 
 		# Open record stream
-		try:
-			rs = _MyRecordStream(self._rsURL, tracker, self.__bufferSize)
-
-		except Exception, e:
-			Logging.warning("%s" % str(e))
-			msg = "could not open record stream"
-			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+		rs = _MyRecordStream(self._rsURL, tracker, self.__bufferSize)
 
 		# Add request streams
 		# iterate over inventory networks

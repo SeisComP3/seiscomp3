@@ -11,6 +11,7 @@ import os
 import datetime
 import fnmatch
 from seiscomp import mseedlite
+from seiscomp3 import Logging
 
 
 if hasattr(datetime.timedelta, "total_seconds"):
@@ -21,125 +22,15 @@ else:
         return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 
-class NoDataAvailable(Exception):
-    def __init__(self, message):
-        # Call the base class constructor with the parameters it needs
-        Exception.__init__(self, message)
-        # Now for your custom code...
-        #self.Errors = Errors
-
-
 class SDS(object):
     def __init__(self, sdsRoot):
         if isinstance(sdsRoot, basestring):
             self.sdsRoot = [sdsRoot]
+
         elif type(sdsRoot) == type(list()):
             self.sdsRoot = sdsRoot
 
-    def _date2int(self, d):
-        return d.year * 1000 + d.timetuple().tm_yday
-
-    def _iterFiles(self, root, year, net, sta, loc, cha, start, endt):
-        # Transform from date to int
-        # F.i. 2000.123 -> 2000123
-        auxStart = self._date2int(start)
-        auxEnd = self._date2int(endt)
-
-        for f in os.listdir('%s/%d/%s/%s/%s' % (root, year, net, sta, cha)):
-            if not fnmatch.fnmatch(f, '%s.%s.%s.%s.D.%d.???'% (net, sta, loc, cha.split('.')[0], year)):
-                continue
-
-            # Take the last three chars and check the date
-            try:
-                jd = int(f[-3:])
-                d = datetime.datetime(year, 1, 1) + datetime.timedelta(jd)
-                if auxStart <= self._date2int(d) <= auxEnd:
-                    yield '%s/%d/%s/%s/%s/%s' % (root, year, net, sta, cha, f)
-            except:
-                continue
-
-    def _iterDirs(self, net, sta, loc, cha, start, endt):
-        for r in self.sdsRoot:
-            for y in range(start.year, endt.year + 1):
-                if not os.path.isdir('%s/%d' % (r, y)):
-                   continue
-
-                # Check into the year to filter networks
-                for n in next(os.walk('%s/%d' % (r, y)))[1]:
-                    if not fnmatch.fnmatch(n, net):
-                        continue
-
-                    for s in next(os.walk('%s/%d/%s' % (r, y, n)))[1]:
-                        if not fnmatch.fnmatch(s, sta):
-                            continue
-
-                        for c in next(os.walk('%s/%d/%s/%s' % (r, y, n, s)))[1]:
-                            if not fnmatch.fnmatch(c, cha):
-                                continue
-
-                            # Now that I found the directory, check the files
-                            self._iterFiles(n, s, loc, c, start, endt)
-
-    def _iterStreams(self, net, sta, loc, cha, start, endt):
-        #print 'net %s; sta %s; cha %s' % (net, sta, cha)
-        resultSet = set()
-        for r in self.sdsRoot:
-            for y in range(start.year, endt.year + 1):
-                if not os.path.isdir('%s/%d' % (r, y)):
-                   continue
-                #print '%d OK' % y
-
-                # Check into the year to filter networks
-                #print next(os.walk('%s/%d' % (r, y)))[1]
-                for n in next(os.walk('%s/%d' % (r, y)))[1]:
-                    #print '%s OK2' % n
-                    if not fnmatch.fnmatch(n, net):
-                        continue
-
-                    for s in next(os.walk('%s/%d/%s' % (r, y, n)))[1]:
-                        if not fnmatch.fnmatch(s, sta):
-                            continue
-                        #print '%s OK3' % s
-
-                        for c in next(os.walk('%s/%d/%s/%s' % (r, y, n, s)))[1]:
-                            if not fnmatch.fnmatch(c.split('.')[0], cha):
-                                continue
-                            #print '%s OK4' % c
-
-                            # Now that I found the directory, check the files
-                            for l in self._iterLoc(r, y, n, s, loc, c, start, endt):
-                                c = c.split('.')[0]
-                                if (n, s, l, c) not in resultSet:
-                                    #print (n, s, l, c)
-                                    yield (n, s, l, c)
-                                    resultSet.add((n, s, l, c))
-
-    def _iterLoc(self, root, year, net, sta, loc, cha, start, endt):
-        # Transform from date to int
-        # F.i. 2000.123 -> 2000123
-        auxStart = self._date2int(start)
-        auxEnd = self._date2int(endt)
-
-        locSet = set()
-        for f in os.listdir('%s/%d/%s/%s/%s' % (root, year, net, sta, cha)):
-            if not fnmatch.fnmatch(f, '%s.%s.%s.%s.D.%d.???' % (net, sta, loc, cha.split('.')[0], year)):
-                continue
-
-            # Take the last three chars and check the date
-            # try:
-            jd = int(f[-3:])
-            d = datetime.datetime(year, 1, 1) + datetime.timedelta(jd)
-            if auxStart <= self._date2int(d) <= auxEnd:
-                # print cha, auxStart, self._date2int(d), auxEnd, 'Add "%s"' % f.split('.')[2]
-                locSet.add(f.split('.')[2])
-            # except:
-            #     continue
-        #print 'Locs: %d' % len(locSet)
-        return locSet
-
-    def _getMSName(self, reqDate, net, sta, loc, cha):
-        loc = loc if loc != '--' else ''
-
+    def __getMSName(self, reqDate, net, sta, loc, cha):
         for root in self.sdsRoot:
             yield '%s/%d/%s/%s/%s.D/%s.%s.%s.%s.D.%d.%s' % \
                 (root, reqDate.year, net, sta, cha, net, sta, loc, cha,
@@ -210,22 +101,29 @@ class SDS(object):
 
         return (rn, rec.end_time)
 
-    def __getWaveformNoIndex(self, startt, endt, msFile, bufferSize):
+    def __getWaveform(self, startt, endt, msFile, bufferSize):
+        if startt >= endt:
+            return
+
         rec = mseedlite.Record(msFile)
         reclen = rec.size
         recStart = 0
         timeStart = rec.begin_time
+
+        if rec.begin_time > endt:
+            return
 
         msFile.seek(-reclen, 2)
         rec = mseedlite.Record(msFile)
         recEnd = msFile.tell() / reclen - 1
         timeEnd = rec.begin_time
 
-        if startt > endt:
-            raise Exception("startt > endt")
+        if rec.end_time < startt:
+            return
 
-        if timeStart > timeEnd:
-            raise Exception("timeStart > timeEnd")
+        if timeStart >= timeEnd:
+            Logging.error("%s: overlap detected (start=%s, end=%s)" % (msFile.name, timeStart, timeEnd))
+            return
 
         (lower, et1) = self.__time2recno(msFile, reclen, timeStart, recStart, timeEnd, recEnd, startt)
         (upper, et2) = self.__time2recno(msFile, reclen, startt, lower, timeEnd, recEnd, endt)
@@ -233,8 +131,12 @@ class SDS(object):
         if et1 < startt:
             lower += 1
 
-        if et2 < endt or upper < lower:
+        if et2 < endt:
             upper += 1
+
+        if upper < lower:
+            Logging.error("%s: overlap detected (lower=%d, upper=%d)" % (msFile.name, lower, upper))
+            upper = lower
 
         msFile.seek(lower * reclen)
         remaining = (upper - lower + 1) * reclen
@@ -244,44 +146,30 @@ class SDS(object):
             remaining -= size
             yield msFile.read(size)
         
-    def getDayRaw(self, startt, endt, net, sta, loc, cha, bufferSize):
+    def __getDayRaw(self, day, startt, endt, net, sta, loc, cha, bufferSize):
         # Take into account the case of empty location
         if loc == '--':
             loc = ''
 
-        # For every file that contains information to be retrieved
-        try:
-            # Check that the data file exists
-            for dataFile in self._getMSName(startt, net, sta, loc, cha):
-                #print dataFile
-                if not os.path.exists(dataFile):
-                    continue
+        for dataFile in self.__getMSName(day, net, sta, loc, cha):
+            if not os.path.exists(dataFile):
+                continue
 
-                #print 'Try %s on %s' % (dataFile, startt)
+            try:
                 with open(dataFile, 'rb') as msFile:
-                    for buf in self.__getWaveformNoIndex(startt, endt, msFile, bufferSize):
+                    for buf in self.__getWaveform(startt, endt, msFile, bufferSize):
                         yield buf
 
-            else:
-                raise NoDataAvailable('Error: No data for %s on %d/%d/%d!' %
-                                      ((net, sta, loc, cha), startt.year,
-                                       startt.month, startt.day))
-        except:
-            raise
+            except mseedlite.MSeedError as e:
+                Logging.error("%s: %s" % (dataFile, str(e)))
 
     def getRawBytes(self, startt, endt, net, sta, loc, cha, bufferSize):
-        eoDay = datetime.datetime(startt.year, startt.month, startt.day)\
-            + datetime.timedelta(days=1)
-        while startt < endt:
-            try:
-                for buf in self.getDayRaw(startt, min(endt, eoDay), net, sta, loc, cha, bufferSize):
-                    yield buf
-            except NoDataAvailable:
-                pass
-            except:
-                raise
+        day = datetime.datetime(startt.year, startt.month, startt.day) - datetime.timedelta(days=1)
+        endDay = datetime.datetime(endt.year, endt.month, endt.day)
 
-            startt = datetime.datetime(startt.year, startt.month, startt.day)\
-                + datetime.timedelta(days=1)
-            eoDay = startt + datetime.timedelta(days=1)
+        while day <= endDay:
+            for buf in self.__getDayRaw(day, startt, endt, net, sta, loc, cha, bufferSize):
+                yield buf
+
+            day += datetime.timedelta(days=1)
 
