@@ -144,7 +144,12 @@ class SDS(object):
         while remaining > 0:
             size = min(remaining, bufferSize)
             remaining -= size
-            yield msFile.read(size)
+            data = msFile.read(size)
+
+            if not data:
+                break
+
+            yield data
         
     def __getDayRaw(self, day, startt, endt, net, sta, loc, cha, bufferSize):
         # Take into account the case of empty location

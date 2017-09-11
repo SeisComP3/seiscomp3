@@ -154,14 +154,17 @@ class _MyRecordStream(object):
 				end = dateutil.parser.parse(endt.iso()).replace(tzinfo=None)
 
 				for data in fastsds.getRawBytes(start, end, archNet, sta, loc, cha, self.__bufferSize):
-					if data:
-						size += len(data)
+					size += len(data)
 
-						if archNet == net:
-							yield data
+					if archNet == net:
+						yield data
 
-						else:
+					else:
+						try:
 							yield self.__override_network(data, net)
+
+						except Exception, e:
+							Logging.error("could not override network code: %s" % str(e))
 
 			else:
 				rs = RecordStream.Open(self.__url)
@@ -182,7 +185,7 @@ class _MyRecordStream(object):
 							rec = rsInput.next()
 
 						except Exception, e:
-							Logging.warning("%s" % str(e))
+							Logging.error("%s" % str(e))
 							eof = True
 							break
 
@@ -199,7 +202,11 @@ class _MyRecordStream(object):
 							yield data
 
 						else:
-							yield self.__override_network(data, net)
+							try:
+								yield self.__override_network(data, net)
+
+							except Exception, e:
+								Logging.error("could not override network code: %s" % str(e))
 
 			if self.__tracker:
 				net_class = 't' if net[0] in "0123456789XYZ" else 'p'
