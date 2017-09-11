@@ -697,11 +697,15 @@ bool Application::validateSchemaParameters() {
 	for ( vector<string>::const_iterator mn_it = moduleNames.begin();
 	      mn_it != moduleNames.end(); ++mn_it ) {
 		System::SchemaModule *module = defs.module(*mn_it);
-		cerr << "Schema module '" << *mn_it << "' "
-		     << ((module == NULL) ? "not found" : "loaded") << endl;
-
-		mapSchemaParameters(paramMap, module->parameters.get(),
-		                    "module " + module->name);
+		cerr << "Schema module '" << *mn_it << "' ";
+		if ( module == NULL ) {
+			cerr << "not found" << endl;
+		}
+		else {
+			cerr << "loaded" << endl;
+			mapSchemaParameters(paramMap, module->parameters.get(),
+			                    "module " + module->name);
+		}
 
 		System::SchemaDefinitions::PluginList plugins = defs.pluginsForModule(*mn_it);
 		System::SchemaDefinitions::PluginList::const_iterator p_it = plugins.begin();
