@@ -451,7 +451,7 @@ class _RequestTrackerDB(object):
         arclinkRequestLine = DataModel.ArclinkRequestLine()
         arclinkRequestLine.setStart(startTime)
         arclinkRequestLine.setEnd(endTime)
-        arclinkRequestLine.setStreamID(DataModel.WaveformStreamID(network, station, location, channel, ""))
+        arclinkRequestLine.setStreamID(DataModel.WaveformStreamID(network[:8], station[:8], location[:8], channel[:8], ""))
         arclinkRequestLine.setConstraints(constr)
         if isinstance(restricted, bool): arclinkRequestLine.setRestricted(restricted)
         arclinkRequestLine.setNetClass(net_class)
@@ -779,7 +779,7 @@ class _WaveformRequest(_Request):
                                 continue
 
                             # Check and report restrictions
-                            if strm.restricted & self.__not_reported :
+                            if strm.restricted and self.__not_reported:
                                 self._resp.req_restricted()
                                 self.__not_reported = False
 
@@ -799,7 +799,7 @@ class _WaveformRequest(_Request):
                                 continue
 
                             # Check and report restrictions
-                            if strm.restricted & self.__not_reported:
+                            if strm.restricted and self.__not_reported:
                                 self._resp.req_restricted()
                                 self.__not_reported = False
 
