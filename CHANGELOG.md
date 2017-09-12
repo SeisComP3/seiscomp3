@@ -185,12 +185,24 @@ Status computeMagnitude(double amplitude, double period,
 
 ----
 
+* trunk
+
+  * Set seiscomp3 database bytea encoding to 'escape' for PostgreSQL database
+    servers with version >= 9 in postgres.sql script.
+
 * GUI
 
   * The event list shows status REVIEWED as V and FINAL as F
   * Added option to allow map layer visibilities and order
   * Allow to add custom map layers via plugins to the map
   * Refactored Map API (Canvas, Layer, Legend)
+  * All GUI applications support an author and/or user blacklist to prevent sending
+    messages to scmaster. This is not a proper secure access control implementation
+    but helps to setup read-only applications to avoid accidental commits.
+    ```
+    blacklist.users = sysop1, sysop2
+    blacklist.authors = sysop1@host, sysop2@host
+    ```
 
 * scmv
 
