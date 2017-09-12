@@ -1754,22 +1754,22 @@ class _Response4xFactory(object):
         if resp_paz is None:
             raise SEEDError, "unknown PAZ response: " + name
 
-        k = self.__used_digital_paz.get(name)
+        deci_fac = resp_paz.decimationFactor or 1
+        delay = (resp_paz.delay or 0.0) / input_rate
+        correction = (resp_paz.correction or 0.0) / input_rate
+        gain = resp_paz.gain or 1.0
+        gain_freq = resp_paz.gainFrequency or 0.0
+
+        k = self.__used_digital_paz.get((name, input_rate))
         if k is not None:
             (k1, k2, k3) = k
-            return (k1, k2, k3, resp_paz.gain)
+            return (k1, k2, k3, input_rate / deci_fac, resp_paz.gain)
 
         #if resp_paz.deci_fac is None:
         #    raise SEEDError, "expected digital response, found analogue"
 
         if resp_paz.type != "D":
             raise SEEDError, "invalid PAZ response type of " + resp_paz.name
-
-        deci_fac = resp_paz.decimationFactor or 1
-        delay = (resp_paz.delay or 0.0) / input_rate
-        correction = (resp_paz.correction or 0.0) / input_rate
-        gain = resp_paz.gain or 1.0
-        gain_freq = resp_paz.gainFrequency or 0.0
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1804,7 +1804,7 @@ class _Response4xFactory(object):
         self.__blk47.append(b2)
         self.__blk48.append(b3)
         self.__num += 3
-        self.__used_digital_paz[name] = (k1, k2, k3)
+        self.__used_digital_paz[(name, input_rate)] = (k1, k2, k3)
         return (k1, k2, k3, input_rate / deci_fac, resp_paz.gain)
 
     def _lookup_digital_iir(self, name, input_rate):
@@ -1812,22 +1812,22 @@ class _Response4xFactory(object):
         if resp_iir is None:
             raise SEEDError, "unknown IIR response: " + name
 
-        k = self.__used_digital_iir.get(name)
+        deci_fac = resp_iir.decimationFactor or 1
+        delay = (resp_iir.delay or 0.0) / input_rate
+        correction = (resp_iir.correction or 0.0) / input_rate
+        gain = resp_iir.gain or 1.0
+        gain_freq = resp_iir.gainFrequency or 0.0
+
+        k = self.__used_digital_iir.get((name, input_rate))
         if k is not None:
             (k1, k2, k3) = k
-            return (k1, k2, k3, resp_iir.gain)
+            return (k1, k2, k3, input_rate / deci_fac, resp_iir.gain)
 
         #if resp_iir.deci_fac is None:
         #    raise SEEDError, "expected digital response, found analogue"
 
         if resp_iir.type != "D":
             raise SEEDError, "invalid IIR response type of " + resp_iir.name
-
-        deci_fac = resp_iir.decimationFactor or 1
-        delay = (resp_iir.delay or 0.0) / input_rate
-        correction = (resp_iir.correction or 0.0) / input_rate
-        gain = resp_iir.gain or 1.0
-        gain_freq = resp_iir.gainFrequency or 0.0
 
         k1 = self.__num + 1
         k2 = self.__num + 2
@@ -1860,7 +1860,7 @@ class _Response4xFactory(object):
         self.__blk47.append(b2)
         self.__blk48.append(b3)
         self.__num += 3
-        self.__used_digital_iir[name] = (k1, k2, k3)
+        self.__used_digital_iir[(name, input_rate)] = (k1, k2, k3)
         return (k1, k2, k3, input_rate / deci_fac, resp_iir.gain)
 
     def _lookup_fir(self, name, input_rate):
