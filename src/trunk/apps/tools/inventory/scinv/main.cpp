@@ -124,6 +124,12 @@ Out2<R,T> tabular(const R *reg, const T *src, int indentation) {
 
 ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
 	const DataModel::ResponsePAZ *paz = out.obj;
+	os << Fill(out.indent) << "type         ";
+	if ( paz->type().empty() )
+		os << "-";
+	else
+		os << paz->type();
+	os << endl;
 	os << Fill(out.indent) << "gain         ";
 	try { os << paz->gain(); }
 	catch (...) { os << "-"; }
@@ -227,6 +233,62 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
 }
 
 
+ostream &operator<<(ostream &os, const Out<DataModel::ResponseIIR> &out) {
+	const DataModel::ResponseIIR *iir = out.obj;
+
+	os << Fill(out.indent) << "type         ";
+	if ( iir->type().empty() )
+		os << "-";
+	else
+		os << iir->type();
+	os << endl;
+
+	os << Fill(out.indent) << "gain         ";
+	try { os << iir->gain(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "factor       ";
+	try { os << iir->decimationFactor(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "numerators   ";
+	try {
+		const vector<double> &nums = iir->numerators().content();
+		for ( size_t i = 0; i < nums.size(); ++i ) {
+			if ( i ) {
+				if ( i % 5 == 0 ) os << endl << Fill(out.indent+13);
+				else os << " ";
+			}
+			os << showpos << scientific << nums[i];
+		}
+		os << noshowpos;
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	os << Fill(out.indent) << "denominators ";
+	try {
+		const vector<double> &denoms = iir->denominators().content();
+		for ( size_t i = 0; i < denoms.size(); ++i ) {
+			if ( i ) {
+				if ( i % 5 == 0 ) os << endl << Fill(out.indent+13);
+				else os << " ";
+			}
+			os << showpos << scientific << denoms[i];
+		}
+		os << noshowpos;
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	return os;
+}
+
+
 template <typename R>
 ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 	try {
@@ -236,7 +298,11 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 			os << endl << Fill(out.indent) << "[analogue stage #" << (i+1) << "]" << endl;
 
 			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
-			if ( paz == NULL ) {
+			if ( paz ) {
+				os << Fill(out.indent) << "PAZ" << endl;
+				os << tabular(paz, out.indent);
+			}
+			else {
 				const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
 				if ( poly ) {
 					os << Fill(out.indent) << "POLY" << endl;
@@ -244,17 +310,27 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 				}
 				else {
 					const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
-					if ( fap == NULL )
-						os << Fill(out.indent) << "UNKNOWN" << endl;
-					else {
+					if ( fap ) {
 						os << Fill(out.indent) << "FAP" << endl;
 						os << tabular(fap, out.indent);
 					}
+					else {
+						const DataModel::ResponseIIR *iir = out.registry->findIIR(ids[i]);
+						if ( iir ) {
+							os << Fill(out.indent) << "IIR" << endl;
+							os << tabular(iir, out.indent);
+						}
+						else {
+							const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
+							if ( fir ) {
+								os << Fill(out.indent) << "FIR" << endl;
+								os << tabular(fir, out.indent);
+							}
+							else
+								os << Fill(out.indent) << "UNKNOWN" << endl;
+						}
+					}
 				}
-			}
-			else {
-				os << Fill(out.indent) << "PAZ" << endl;
-				os << tabular(paz, out.indent);
 			}
 
 			if ( i < ids.size()-1 ) os << endl;
@@ -268,33 +344,40 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 		for ( size_t i = 0; i < ids.size(); ++i ) {
 			os << endl << Fill(out.indent) << "[digital stage #" << (i+1) << "]" << endl;
 
-			const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
-			if ( fir == NULL ) {
-				const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
-				if ( paz == NULL ) {
-					const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
-					if ( poly ) {
-						os << Fill(out.indent) << "POLY" << endl;
-						os << tabular(poly, out.indent);
+			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
+			if ( paz ) {
+				os << Fill(out.indent) << "PAZ" << endl;
+				os << tabular(paz, out.indent);
+			}
+			else {
+				const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
+				if ( poly ) {
+					os << Fill(out.indent) << "POLY" << endl;
+					os << tabular(poly, out.indent);
+				}
+				else {
+					const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
+					if ( fap ) {
+						os << Fill(out.indent) << "FAP" << endl;
+						os << tabular(fap, out.indent);
 					}
 					else {
-						const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
-						if ( fap == NULL )
-							os << Fill(out.indent) << "UNKNOWN" << endl;
+						const DataModel::ResponseIIR *iir = out.registry->findIIR(ids[i]);
+						if ( iir ) {
+							os << Fill(out.indent) << "IIR" << endl;
+							os << tabular(iir, out.indent);
+						}
 						else {
-							os << Fill(out.indent) << "FAP" << endl;
-							os << tabular(fap, out.indent);
+							const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
+							if ( fir ) {
+								os << Fill(out.indent) << "FIR" << endl;
+								os << tabular(fir, out.indent);
+							}
+							else
+								os << Fill(out.indent) << "UNKNOWN" << endl;
 						}
 					}
 				}
-				else {
-					os << Fill(out.indent) << "PAZ" << endl;
-					os << tabular(paz, out.indent);
-				}
-			}
-			else {
-				os << Fill(out.indent) << "FIR" << endl;
-				os << tabular(fir, out.indent);
 			}
 
 			if ( i < ids.size()-1 ) os << endl;
@@ -1521,6 +1604,7 @@ class InventoryManager : public Client::Application,
 								const DataModel::ResponsePAZ *paz;
 								const DataModel::ResponsePolynomial *poly;
 								const DataModel::ResponseFAP *fap;
+								const DataModel::ResponseIIR *iir;
 
 								try {
 									int sr_num = str->sampleRateNumerator();
@@ -1562,6 +1646,13 @@ class InventoryManager : public Client::Application,
 											if ( fap ) {
 												cout << "          resp  fap" << endl;
 												cout << tabular(fap, 16) << endl;
+											}
+											else {
+												iir = merger.findIIR(sens->response());
+												if ( iir ) {
+													cout << "          resp  iir" << endl;
+													cout << tabular(iir, 16) << endl;
+												}
 											}
 										}
 									}
