@@ -129,7 +129,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return New origin object
 		 */
 		DataModel::Origin*
-		locate(PickList& pickList) throw();
+		locate(PickList& pickList);
 
 		/**
 		 * @brief  Indirectly performs localization
@@ -142,7 +142,7 @@ class Hypo71 : public LocatorInterface {
 		 */
 		DataModel::Origin*
 		locate(PickList& pickList, double initLat, double initLon,
-		       double initDepth, const Core::Time &initTime) throw();
+		       double initDepth, const Core::Time &initTime);
 
 		/**
 		 * @brief  Origin's relocator
@@ -150,7 +150,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return origin object
 		 */
 		DataModel::Origin*
-		relocate(const DataModel::Origin* origin) throw();
+		relocate(const DataModel::Origin* origin);
 
 		/**
 		 * @brief  Fetches last error message value
@@ -181,7 +181,7 @@ class Hypo71 : public LocatorInterface {
 		 */
 		std::string
 		formatString(std::string toFormat, const size_t& nb, const size_t& pos,
-		             const std::string& sender = "") throw();
+		             const std::string& sender = "");
 
 		/**
 		 * @brief  Converts string parameter to double
@@ -213,7 +213,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return ZRT value as a string
 		 **/
 		const std::string
-		getZTR(const PickList& pickList) throw();
+		getZTR(const PickList& pickList);
 
 		/**
 		 * @brief  Converts HYPO71 sexagesimal origin (73° 59.14’ W)

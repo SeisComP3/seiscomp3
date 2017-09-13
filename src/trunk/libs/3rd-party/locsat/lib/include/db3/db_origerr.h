@@ -36,4 +36,27 @@ typedef struct origerr {
 	float conf;
 } Origerr;
 
+
+#define Na_Origerr_Init \
+{ \
+	-1.0,   /*      sxx     */ \
+	-1.0,   /*      syy     */ \
+	-1,     /*      szz     */ \
+	-1.0,   /*      stt     */ \
+	-1.0,   /*      sxy     */ \
+	-1.0,   /*      sxz     */ \
+	-1.0,   /*      syz     */ \
+	-1.0,   /*      stx     */ \
+	-1.0,   /*      sty     */ \
+	-1.0,   /*      stz     */ \
+	-1.0,   /*      sdobs   */ \
+	-1.0,   /*      smajax  */ \
+	-1.0,   /*      sminax  */ \
+	-1.0,   /*      strike  */ \
+	-1.0,   /*      sdepth  */ \
+	-1.0,   /*      stime   */ \
+	 0.0    /*      conf    */ \
+}
+
+
 #endif /* DB_ORIGERR_H */

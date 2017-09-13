@@ -152,5 +152,43 @@ StationNotFoundException::StationNotFoundException(const std::string& str)
 : Core::GeneralException(str) {}
 
 
+int arrivalToFlags(const DataModel::Arrival *arrival) {
+	try {
+		if ( arrival->weight() == 0 )
+			return LocatorInterface::F_NONE;
+	}
+	catch ( ... ) {}
+
+	int flags = LocatorInterface::F_ALL;
+
+	try {
+		if ( !arrival->timeUsed() )
+			flags &= ~LocatorInterface::F_TIME;
+	}
+	catch ( ... ) {}
+
+	try {
+		if ( !arrival->backazimuthUsed() )
+			flags &= ~LocatorInterface::F_BACKAZIMUTH;
+	}
+	catch ( ... ) {}
+
+	try {
+		if ( !arrival->horizontalSlownessUsed() )
+			flags &= ~LocatorInterface::F_SLOWNESS;
+	}
+	catch ( ... ) {}
+
+	return flags;
+}
+
+
+void flagsToArrival(DataModel::Arrival *arrival, int flags) {
+	arrival->setTimeUsed(flags & LocatorInterface::F_TIME);
+	arrival->setBackazimuthUsed(flags & LocatorInterface::F_BACKAZIMUTH);
+	arrival->setHorizontalSlownessUsed(flags & LocatorInterface::F_SLOWNESS);
+}
+
+
 } // of namespace Seismology
 } // of namespace Seiscomp

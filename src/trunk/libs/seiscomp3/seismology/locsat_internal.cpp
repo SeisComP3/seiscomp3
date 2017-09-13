@@ -94,7 +94,6 @@ Loc* LocSAT::doLocation() {
 	if( (_num_sta > 9999) || (_num_obs > 9999))
 		throw LocatorException("error: Too many picks/stations [9999] - Please raise limits within pre-f2c locsat code!");
 
-
 	int ierr = locate_event (NULL, _sites, _num_sta, _arrival, _assoc,
 		 _origin, _origerr, _locator_params, _locator_errors,
 		 _num_obs);
@@ -158,30 +157,29 @@ void LocSAT::addSite(const char* station, float lat, float lon, float elev) {
 
 void LocSAT::addArrival(long arrival_id, const char* station, const char* phase,
                         double time, float deltim, int defining) {
-	if (!_arrival){
+	static Arrival Na_Arrival = Na_Arrival_Init;
+	static Assoc Na_Assoc = Na_Assoc_Init;
+
+	if ( !_arrival ){
 		_arrivalCount = 1;
 		_arrival = (Arrival*)malloc(_arrivalCount * sizeof(Arrival));
 		_assoc = (Assoc*)malloc(_arrivalCount * sizeof(Assoc));
 		_locator_errors = (Locator_errors*)malloc(sizeof(Locator_errors));
 	}
-	else{
-		_arrivalCount++;
+	else {
+		++_arrivalCount;
 		_arrival = (Arrival*)realloc(_arrival, _arrivalCount * sizeof(Arrival));
 		_assoc = (Assoc*)realloc(_assoc, _arrivalCount * sizeof(Assoc));
 		_locator_errors = (Locator_errors*)realloc(_locator_errors, _arrivalCount * sizeof(Locator_errors));
 	}
 
-	_arrival[_arrivalCount-1].time = time;
-	_arrival[_arrivalCount-1].deltim = deltim;
-	
-	if (defining > 0)
-		strcpy(_assoc[_arrivalCount-1].timedef, "d");
-	else
-		strcpy(_assoc[_arrivalCount-1].timedef, "n");
+	memcpy(&_arrival[_arrivalCount-1], &Na_Arrival, sizeof(Arrival));
+	memcpy(&_assoc[_arrivalCount-1], &Na_Assoc, sizeof(Assoc));
 
+	_arrival[_arrivalCount-1].time    = time;
+	_arrival[_arrivalCount-1].deltim  = deltim;
 
-	_arrival[_arrivalCount-1].azimuth = -1.0;
-	_arrival[_arrivalCount-1].slow 	 = -1.0;
+	strcpy(_assoc[_arrivalCount-1].timedef, defining > 0 ? "d" : "n");
 	strcpy(_assoc[_arrivalCount-1].azdef, "n");
 	strcpy(_assoc[_arrivalCount-1].slodef, "n");
 
@@ -204,7 +202,7 @@ void LocSAT::setArrivalAzimuth(float azimuth, float delaz, int defining) {
 	_arrival[_arrivalCount-1].azimuth = azimuth;
 	_arrival[_arrivalCount-1].delaz = delaz;
 
-	if (defining > 0)
+	if ( defining > 0 )
 		strcpy(_assoc[_arrivalCount-1].azdef, "d");
 	else
 		strcpy(_assoc[_arrivalCount-1].azdef, "n");
@@ -215,7 +213,7 @@ void LocSAT::setArrivalSlowness(float slow, float delslo, int defining) {
 	_arrival[_arrivalCount-1].slow = slow;
 	_arrival[_arrivalCount-1].delslo = delslo;
 
-	if (defining > 0)
+	if ( defining > 0 )
 		strcpy(_assoc[_arrivalCount-1].slodef, "d");
 	else
 		strcpy(_assoc[_arrivalCount-1].slodef, "n");

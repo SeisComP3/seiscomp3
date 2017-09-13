@@ -25,9 +25,9 @@ namespace Gui {
 namespace {
 
 struct comparePick {
-	bool operator()(const Seismology::LocatorInterface::WeightedPick &first,
-	                const Seismology::LocatorInterface::WeightedPick &second) const {
-		return first.first->time().value() < second.first->time().value();
+	bool operator()(const Seismology::LocatorInterface::PickItem &first,
+	                const Seismology::LocatorInterface::PickItem &second) const {
+		return first.pick->time().value() < second.pick->time().value();
 	}
 };
 
@@ -70,17 +70,18 @@ DataModel::Origin* relocate(Seismology::LocatorInterface *locator, DataModel::Or
 		if ( !pick )
 			throw Core::GeneralException("pick '" + arrival->pickID() + "' not found");
 
-		picks.push_back(Seismology::LocatorInterface::WeightedPick(pick,1));
+		picks.push_back(Seismology::LocatorInterface::PickItem(pick,
+		                                                       Seismology::LocatorInterface::F_ALL));
 	}
 
 	if ( picks.empty() )
 		throw Core::GeneralException("No picks given to relocate");
 
 	std::sort(picks.begin(), picks.end(), comparePick());
-	DataModel::SensorLocation *sloc = locator->getSensorLocation(picks.front().first.get());
+	DataModel::SensorLocation *sloc = locator->getSensorLocation(picks.front().pick.get());
 	if ( !sloc )
-		throw Core::GeneralException("station '" + picks.front().first->waveformID().networkCode() +
-		                             "." + picks.front().first->waveformID().stationCode() + "' not found");
+		throw Core::GeneralException("station '" + picks.front().pick->waveformID().networkCode() +
+		                             "." + picks.front().pick->waveformID().stationCode() + "' not found");
 
 	DataModel::OriginPtr tmp = DataModel::Origin::Create();
 	*tmp = *origin;
@@ -92,7 +93,7 @@ DataModel::Origin* relocate(Seismology::LocatorInterface *locator, DataModel::Or
 	tmp->setLatitude(sloc->latitude());
 	tmp->setLongitude(sloc->longitude());
 	tmp->setDepth(DataModel::RealQuantity(11.0));
-	tmp->setTime(picks.front().first->time());
+	tmp->setTime(picks.front().pick->time());
 
 	newOrg = locator->relocate(tmp.get());
 

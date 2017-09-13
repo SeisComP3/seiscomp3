@@ -90,6 +90,8 @@ namespace Core {
    - Added class Seiscomp::DataModel::ResponseIIR
    - Added hypocenter and receiver to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
+   - Add SC3_LOCATOR_INTERFACE_VERSION define and initialize with version 2
+   - Replace LocatorInterface WeightedPick with PickItem
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

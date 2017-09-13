@@ -35,4 +35,26 @@ typedef struct assoc {
 	char  vmodel[16];
 } Assoc;
 
+
+#define Na_Assoc_Init \
+{ \
+	-1,	/*	arid 	*/ \
+	"-",	/*	sta 	*/ \
+	"-",	/*	phase 	*/ \
+	-1.0,	/*	belief 	*/ \
+	-1.0,	/*	delta 	*/ \
+	-999.0,	/*	seaz 	*/ \
+	-999.0,	/*	esaz 	*/ \
+	-999.0,	/*	timeres 	*/ \
+	"-",	/*	timedef 	*/ \
+	-999.0,	/*	azres 	*/ \
+	"-",	/*	azdef 	*/ \
+	-999.0,	/*	slores 	*/ \
+	"-",	/*	slodef 	*/ \
+	-999.0,	/*	emares 	*/ \
+	-1.0,	/*	wgt 	*/ \
+	"-" 	/*	vmodel 	*/ \
+}
+
+
 #endif /* DB_ASSOC_H */

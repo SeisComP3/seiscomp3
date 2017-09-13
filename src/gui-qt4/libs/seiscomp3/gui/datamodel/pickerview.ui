@@ -676,9 +676,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>641</y>
+     <y>638</y>
      <width>948</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -870,7 +870,7 @@
      <x>0</x>
      <y>0</y>
      <width>948</width>
-     <height>29</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPicking" >
@@ -888,6 +888,13 @@
     <addaction name="actionScrollRight" />
     <addaction name="actionScrollFineLeft" />
     <addaction name="actionScrollFineRight" />
+   </widget>
+   <widget class="QMenu" name="menu_Filter" >
+    <property name="title" >
+     <string>&amp;Filter</string>
+    </property>
+    <addaction name="actionToggleFilter" />
+    <addaction name="actionLimitFilterToZoomTrace" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -956,13 +963,6 @@
     <addaction name="menu_Zoomtrace" />
     <addaction name="menuTraces" />
     <addaction name="menuComponents" />
-   </widget>
-   <widget class="QMenu" name="menu_Filter" >
-    <property name="title" >
-     <string>&amp;Filter</string>
-    </property>
-    <addaction name="actionToggleFilter" />
-    <addaction name="actionLimitFilterToZoomTrace" />
    </widget>
    <widget class="QMenu" name="menu_Locate" >
     <property name="title" >
@@ -1806,7 +1806,7 @@
     <string>Spectrum for current component. This can be also achieved by pressing Space while not in picking mode. (SPACE)</string>
    </property>
    <property name="shortcut" >
-    <string/>
+    <string>ctrl+s</string>
    </property>
   </action>
  </widget>

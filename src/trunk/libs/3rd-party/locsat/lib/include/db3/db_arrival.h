@@ -30,4 +30,20 @@ typedef struct arrival
 	float  delslo;
 } Arrival;
 
+
+#define Na_Arrival_Init \
+{ \
+	"-",	/*	sta 	*/ \
+	-9999999999.999,	/*	time 	*/ \
+	-1,	/*	arid 	*/ \
+	"-",	/*	iphase 	*/ \
+	"-",	/*	stype 	*/ \
+	-1.0,	/*	deltim 	*/ \
+	-1.0,	/*	azimuth 	*/ \
+	-1.0,	/*	delaz 	*/ \
+	-1.0,	/*	slow 	*/ \
+	-1.0	/*	delslo 	*/ \
+}
+
+
 #endif /* DB_ARRIVAL_H */

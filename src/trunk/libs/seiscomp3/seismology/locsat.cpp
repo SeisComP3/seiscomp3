@@ -167,7 +167,7 @@ DataModel::Origin* LocSAT::locate(PickList& picks) {
 }
 
 
-DataModel::Origin* LocSAT::fromPicks(PickList& picks){
+DataModel::Origin* LocSAT::fromPicks(PickList &picks){
 	if ( _usingFixedDepth ) {
 		_locator_params->fixing_depth = _fixedDepth;
 		_locator_params->fix_depth = 'y';
@@ -180,7 +180,8 @@ DataModel::Origin* LocSAT::fromPicks(PickList& picks){
 	int i = 0;
 
 	for (PickList::iterator it = picks.begin(); it != picks.end(); ++it){
-		DataModel::Pick* pick = it->first.get();
+		const PickItem &pickItem = *it;
+		DataModel::Pick* pick = pickItem.pick.get();
 		DataModel::SensorLocation* sloc = getSensorLocation(pick);
 
 		if ( sloc ) {
@@ -201,35 +202,37 @@ DataModel::Origin* LocSAT::fromPicks(PickList& picks){
 			catch(...) { phase = "P"; }
 
 			double cor = stationCorrection(stationID, pick->waveformID().stationCode(), phase);
-			_locateEvent->addArrival(i++, stationID.c_str(),
-			                         phase.c_str(),
+			_locateEvent->addArrival(i++, stationID.c_str(), phase.c_str(),
 			                         (double)pick->time().value()-cor,
-			                         ARRIVAL_TIME_ERROR,
-			                         it->second <= _minArrivalWeight?0:1);
+			                         ARRIVAL_TIME_ERROR, pickItem.flags & F_TIME);
 
 			// Set backazimuth
-			try {
-				float az = pick->backazimuth().value();
-				float delaz;
-				try { delaz = pick->backazimuth().uncertainty(); }
-				// Default delaz
-				catch ( ... ) { delaz = 0; }
-				_locateEvent->setArrivalAzimuth(az,delaz,1);
+			if ( pickItem.flags & F_BACKAZIMUTH ) {
+				try {
+					float az = pick->backazimuth().value();
+					float delaz;
+					try { delaz = pick->backazimuth().uncertainty(); }
+					// Default delaz
+					catch ( ... ) { delaz = 0; }
+					_locateEvent->setArrivalAzimuth(az,delaz, 1);
+				}
+				catch ( ... ) {}
 			}
-			catch ( ... ) {}
 
 			// Set slowness
-			try {
-				float slo = pick->horizontalSlowness().value();
-				float delslo;
+			if ( pickItem.flags & F_SLOWNESS ) {
+				try {
+					float slo = pick->horizontalSlowness().value();
+					float delslo;
 
-				try { delslo = pick->horizontalSlowness().uncertainty(); }
-				// Default delaz
-				catch ( ... ) { delslo = 0; }
+					try { delslo = pick->horizontalSlowness().uncertainty(); }
+					// Default delaz
+					catch ( ... ) { delslo = 0; }
 
-				_locateEvent->setArrivalSlowness(slo, delslo, 1);
+					_locateEvent->setArrivalSlowness(slo, delslo, 1);
+				}
+				catch ( ... ) {}
 			}
-			catch ( ... ) {}
 
 #ifdef LOCSAT_TESTING
 			SEISCOMP_DEBUG("pick station: %s", stationID.c_str());
@@ -247,7 +250,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList& picks){
 	_locateEvent->setLocatorParams(_locator_params);
 	Internal::Loc* newLoc = _locateEvent->doLocation();
 
-	DataModel::Origin* origin = loc2Origin(newLoc);
+	DataModel::Origin *origin = loc2Origin(newLoc);
 
 	if ( origin ) {
 		std::set<std::string> stationsUsed;
@@ -256,7 +259,7 @@ DataModel::Origin* LocSAT::fromPicks(PickList& picks){
 		for ( int i = 0; i < newLoc->arrivalCount; ++i ) {
 			size_t arid = (size_t)newLoc->arrival[i].arid;
 			if ( arid >= picks.size() ) continue;
-			Pick* p = picks[arid].first.get();
+			DataModel::Pick* p = picks[arid].pick.get();
 
 			if ( (size_t)i < origin->arrivalCount() ) {
 				origin->arrival(i)->setPickID(p->publicID());
@@ -470,7 +473,7 @@ double LocSAT::stationCorrection(const std::string &staid,
 }
 
 
-bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
+bool LocSAT::loadArrivals(const DataModel::Origin *origin, double timeError) {
 	if ( !origin )
 		return false;
 
@@ -488,11 +491,6 @@ bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
 		int defining = 1;
 
 		try{
-			double arrivalWeight = arrival->weight();
-// 			double arrivalWeight = rand()/(RAND_MAX + 1.0);
-			if ( arrivalWeight <= _minArrivalWeight ){
-				defining = 0;
-			}
 			// work around problem related to discontinuity in the travel-time tables
 			// at the P->PKS transition
 			if ( atTransitionPtoPKP(arrival) )
@@ -554,34 +552,57 @@ bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
 
 		double cor = stationCorrection(stationID, pick->waveformID().stationCode(), phaseCode);
 
-		_locateEvent->addArrival(i, stationID.c_str(),
-		                         phaseCode.c_str(),
+		bool timeUsed = defining ? true : false;
+		try {
+			timeUsed = arrival->timeUsed();
+		}
+		catch ( ... ) {}
+
+		_locateEvent->addArrival(i, stationID.c_str(), phaseCode.c_str(),
 		                         (double)pick->time().value()-cor,
-		                         timeError, defining);
+		                         timeError, timeUsed ? 1 : 0);
 
 		// Set backazimuth
+		bool backazimuthUsed = true;
 		try {
-			float az = pick->backazimuth().value();
-			float delaz;
-			try { delaz = pick->backazimuth().uncertainty(); }
-			// Default delaz
-			catch ( ... ) { delaz = 0; }
-			_locateEvent->setArrivalAzimuth(az,delaz,1);
+			backazimuthUsed = arrival->backazimuthUsed();
 		}
 		catch ( ... ) {}
+
+		if ( backazimuthUsed ) {
+			try {
+				float az = pick->backazimuth().value();
+				float delaz;
+
+				try { delaz = pick->backazimuth().uncertainty(); }
+				// Default delaz
+				catch ( ... ) { delaz = 0; }
+
+				_locateEvent->setArrivalAzimuth(az,delaz,1);
+			}
+			catch ( ... ) {}
+		}
 
 		// Set slowness
+		bool horizontalSlownessUsed = true;
 		try {
-			float slo = pick->horizontalSlowness().value();
-			float delslo;
-
-			try { delslo = pick->horizontalSlowness().uncertainty(); }
-			// Default delaz
-			catch ( ... ) { delslo = 0; }
-
-			_locateEvent->setArrivalSlowness(slo, delslo,1);
+			horizontalSlownessUsed = arrival->horizontalSlownessUsed();
 		}
 		catch ( ... ) {}
+
+		if ( horizontalSlownessUsed ) {
+			try {
+				float slo = pick->horizontalSlowness().value();
+				float delslo;
+
+				try { delslo = pick->horizontalSlowness().uncertainty(); }
+				// Default delaz
+				catch ( ... ) { delslo = 0; }
+
+				_locateEvent->setArrivalSlowness(slo, delslo,1);
+			}
+			catch ( ... ) {}
+		}
 	}
 
 	return true;
@@ -591,10 +612,11 @@ bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
 DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	if ( loc == NULL ) return NULL;
 
-	DataModel::Origin* origin = _newOriginID.empty()
-	             ?DataModel::Origin::Create()
-	             :DataModel::Origin::Create(_newOriginID);
-	if (!origin) return NULL;
+	DataModel::Origin *origin = _newOriginID.empty()
+	             ? DataModel::Origin::Create()
+	             : DataModel::Origin::Create(_newOriginID);
+
+	if ( !origin ) return NULL;
 
 	DataModel::CreationInfo ci;
 	ci.setCreationTime(Core::Time().gmt());
@@ -608,43 +630,50 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 
 	origin->setTime(DataModel::TimeQuantity(Core::Time(loc->origin->time), sqrt(loc->origerr->stt), Core::None, Core::None, Core::None));
 
-
 	double rms = 0;
 	int phaseAssocCount = 0;
 	int usedAssocCount = 0;
 	std::vector<double> dist;
 	std::vector<double> azi;
 	int depthPhaseCount = 0;
+	int rmsCount = 0;
 
 	for ( int i = 0; i < loc->arrivalCount; ++i ) {
 		++phaseAssocCount;
 
 		ArrivalPtr arrival = new DataModel::Arrival();
+
+		arrival->setTimeUsed(loc->assoc[i].timedef[0] == 'd' ? true : false);
+		arrival->setBackazimuthUsed(loc->assoc[i].azdef[0] == 'd' ? true : false);
+		arrival->setHorizontalSlownessUsed(loc->assoc[i].slodef[0] == 'd' ? true : false);
+
+		bool isUsed = arrival->timeUsed() || arrival->backazimuthUsed() || arrival->horizontalSlownessUsed();
+
 		// To have different pickID's just generate some based on
 		// the index. They become set correctly later on.
 		arrival->setPickID(Core::toString(i));
 
-		if (loc->locator_errors[i].arid != 0 ||
-		    !strcmp(loc->assoc[i].timedef, "n") ){
+		if ( loc->locator_errors[i].arid != 0 || !arrival->timeUsed() ) {
 			arrival->setWeight(0.0);
-// 			SEISCOMP_DEBUG("arrival %d : setting weight to 0.0 -  because it was not used in locsat", i);
 		}
 		else {
 			arrival->setWeight(1.0);
-			rms += (loc->assoc[i].timeres * loc->assoc[i].timeres);
 			dist.push_back(loc->assoc[i].delta);
 			azi.push_back(loc->assoc[i].esaz);
 			++usedAssocCount;
 		}
 
+		if ( arrival->timeUsed() ) {
+			rms += (loc->assoc[i].timeres * loc->assoc[i].timeres);
+			++rmsCount;
+		}
+
 		arrival->setDistance(loc->assoc[i].delta);
-//		arrival->setTimeResidual(loc->assoc[i].timeres < -990. ? 0. : loc->assoc[i].timeres);
 		arrival->setTimeResidual(loc->assoc[i].timeres);
 		arrival->setAzimuth(loc->assoc[i].esaz);
 		arrival->setPhase(Phase(loc->assoc[i].phase));
-		if (arrival->phase().code()[0] == 'p' || arrival->phase().code()[0] == 's')
-			if (arrival->weight() > 0.5)
-				depthPhaseCount++;
+		if ( arrival->phase().code()[0] == 'p' || arrival->phase().code()[0] == 's' )
+			if ( isUsed ) depthPhaseCount++;
 
 		// This is a workaround for what seems to be a problem with LocSAT,
 		// namely, that in a narrow distance range around 108 degrees
@@ -662,16 +691,12 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		}
 
 		// Populate horizontal slowness residual
-		if ( loc->assoc[i].slores > -990. ) {
+		if ( loc->assoc[i].slores > -990. )
 			arrival->setHorizontalSlownessResidual(loc->assoc[i].slores);
-			arrival->setHorizontalSlownessUsed(true);
-		}
 
 		// Populate backazimuth residual
-		if ( loc->assoc[i].azres > -990. ) {
+		if ( loc->assoc[i].azres > -990. )
 			arrival->setBackazimuthResidual(loc->assoc[i].azres);
-			arrival->setBackazimuthUsed(true);
-		}
 
 		if ( !origin->add(arrival.get()) )
 			SEISCOMP_DEBUG("arrival not added for some reason");
@@ -683,25 +708,27 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 	originQuality.setUsedPhaseCount(usedAssocCount);
 	originQuality.setDepthPhaseCount(depthPhaseCount);
 
-	if (phaseAssocCount > 0) {
-		rms /= usedAssocCount;
-		originQuality.setStandardError(sqrt(rms));
+	if ( rmsCount > 0 )
+		originQuality.setStandardError(sqrt(rms / rmsCount));
+
+	if ( !azi.empty() ) {
+		std::sort(azi.begin(), azi.end());
+		azi.push_back(azi.front()+360.);
+		double azGap = 0.;
+		if ( azi.size() > 2 )
+			for ( size_t i = 0; i < azi.size()-1; ++i )
+				azGap = (azi[i+1]-azi[i]) > azGap ? (azi[i+1]-azi[i]) : azGap;
+
+		if ( 0. < azGap && azGap < 360. )
+			originQuality.setAzimuthalGap(azGap);
 	}
 
-	std::sort(azi.begin(), azi.end());
-	azi.push_back(azi.front()+360.);
-	double azGap = 0.;
-	if ( azi.size() > 2 )
-		for ( size_t i = 0; i < azi.size()-1; ++i )
-			azGap = (azi[i+1]-azi[i]) > azGap ? (azi[i+1]-azi[i]) : azGap;
-
-	if ( 0. < azGap && azGap < 360. )
-		originQuality.setAzimuthalGap(azGap);
-
-	std::sort(dist.begin(), dist.end());
-	originQuality.setMinimumDistance(dist.front());
-	originQuality.setMaximumDistance(dist.back());
-	originQuality.setMedianDistance(dist[dist.size()/2]);
+	if ( !dist.empty() ) {
+		std::sort(dist.begin(), dist.end());
+		originQuality.setMinimumDistance(dist.front());
+		originQuality.setMaximumDistance(dist.back());
+		originQuality.setMedianDistance(dist[dist.size()/2]);
+	}
 
 // #ifdef LOCSAT_TESTING
 //	SEISCOMP_DEBUG("--- Confidence region at %4.2f level: ----------------", 0.9);

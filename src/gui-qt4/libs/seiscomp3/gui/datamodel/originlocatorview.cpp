@@ -74,6 +74,9 @@ namespace Gui {
 
 namespace {
 
+const int UsedRole = Qt::UserRole + 1;
+const int HoverRole = Qt::UserRole + 2;
+
 MAKEENUM(
 	ArrivalListColumns,
 	EVALUES(
@@ -91,6 +94,8 @@ MAKEENUM(
 		DISTANCE,
 		AZIMUTH,
 		TIME,
+		SLOWNESS,
+		BACKAZIMUTH,
 		UNCERTAINTY,
 		CREATED,
 		LATENCY
@@ -110,6 +115,8 @@ MAKEENUM(
 		"Dis",
 		"Az",
 		"Time",
+		"Baz",
+		"Slo",
 		"+/-",
 		"Created",
 		"Latency"
@@ -204,6 +211,45 @@ bool colVisibility[ArrivalListColumns::Quantity] = {
 	false
 };
 
+inline int getMask(const QModelIndex &index) {
+	int mask = 0;
+	if ( index.sibling(index.row(), BACKAZIMUTH).data().isValid() )
+		mask |= Seismology::LocatorInterface::F_BACKAZIMUTH;
+	if ( index.sibling(index.row(), SLOWNESS).data().isValid() )
+		mask |= Seismology::LocatorInterface::F_SLOWNESS;
+	if ( index.sibling(index.row(), TIME).data().isValid() )
+		mask |= Seismology::LocatorInterface::F_TIME;
+
+	return mask;
+}
+
+
+void getRects(QList<QRect> &rects, const QStyleOptionViewItem &option,
+              int labelWidth, int statusWidth, int spacing) {
+	QStyle *style = qApp->style();
+	int checkBoxWidth = style->subElementRect(QStyle::SE_CheckBoxIndicator,
+	                                          &option).width();
+
+	QRect statusRect = option.rect;
+	statusRect.setWidth(statusWidth);
+
+	QRect checkboxRect = statusRect;
+	checkboxRect.translate(statusRect.width() + spacing, 0);
+	checkboxRect.setWidth(checkBoxWidth);
+
+	QRect rect = checkboxRect;
+	rect.translate(checkboxRect.width() + spacing, 0);
+	rect.setWidth(labelWidth);
+
+	for ( int i = 0; i < 3; ++i ) {
+		rects.push_back(rect);
+		rect.translate(rect.width() + spacing, 0);
+	}
+
+	rects.append(statusRect);
+	rects.append(checkboxRect);
+}
+
 
 class ArrivalsSortFilterProxyModel : public QSortFilterProxyModel {
 	public:
@@ -217,7 +263,8 @@ class ArrivalsSortFilterProxyModel : public QSortFilterProxyModel {
 			     (left.column() == LATENCY && right.column() == LATENCY) ||
 			     (left.column() == TAKEOFF && right.column() == TAKEOFF) ||
 			     (left.column() == WEIGHT && right.column() == WEIGHT) )
-				return sourceModel()->data(left, Qt::UserRole).toDouble() < sourceModel()->data(right, Qt::UserRole).toDouble();
+				return sourceModel()->data(left, Qt::UserRole).toDouble() <
+				       sourceModel()->data(right, Qt::UserRole).toDouble();
 			else
 				return QSortFilterProxyModel::lessThan(left, right);
 		}
@@ -1028,10 +1075,252 @@ QString wfid2qstr(const DataModel::WaveformStreamID &id) {
 
 
 typedef std::pair<std::string, std::string> PickPhase;
-typedef std::pair<PickPtr, double> PickWithWeight;
-typedef std::map<PickPhase, PickWithWeight> PickedPhases;
+typedef std::pair<PickPtr, int> PickWithFlags;
+typedef std::map<PickPhase, PickWithFlags> PickedPhases;
 
 
+}
+
+
+ArrivalDelegate::ArrivalDelegate(QWidget *parent = NULL)
+: QStyledItemDelegate(parent)
+, _margin(2), _spacing(4), _statusRectWidth(6), _labelWidth(0) {
+	_flags[0] = Seismology::LocatorInterface::F_TIME;
+	_flags[1] = Seismology::LocatorInterface::F_SLOWNESS;
+	_flags[2] = Seismology::LocatorInterface::F_BACKAZIMUTH;
+
+	_labels[0] = "T";
+	_labels[1] = "S";
+	_labels[2] = "B";
+
+	if ( parent )
+		_statusRectWidth = parent->fontMetrics().width('A');
+}
+
+bool ArrivalDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
+                                  const QStyleOptionViewItem &option,
+                                  const QModelIndex &index) {
+	if ( index.column() != USED )
+		return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+	if ( event->type() == QEvent::MouseButtonPress ||
+	     event->type() == QEvent::MouseButtonDblClick ) {
+		QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+		if ( mouseEvent->buttons() & Qt::LeftButton ) {
+			QPoint pos = mouseEvent->pos();
+
+			bool ret = QStyledItemDelegate::editorEvent(event, model, option, index);
+
+			QList<QRect> rects;
+			getRects(rects, option, _labelWidth, _statusRectWidth, _spacing);
+
+			if ( rects[4].contains(pos) ) {
+				int flags = (Qt::CheckState)index.data(UsedRole).toInt(),
+				    mask = getMask(index);
+				if ( flags == 0 )
+					model->setData(index, mask, UsedRole);
+				else
+					model->setData(index, 0, UsedRole);
+			}
+			else {
+				int flags = index.data(UsedRole).toInt(),
+				    mask = getMask(index);
+				for ( int i = 0; i < 3; ++i ) {
+					bool enabled = mask & _flags[i];
+					if ( !enabled ) continue;
+
+					if ( rects[i].contains(pos) ) {
+						if ( flags & _flags[i] )
+							flags &= ~_flags[i];
+						else
+							flags |= _flags[i];
+
+						model->setData(index, flags, UsedRole);
+					}
+				}
+			}
+
+			return ret;
+		}
+	}
+	else if ( event->type() == QEvent::MouseMove ) {
+		QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+		QPoint pos = mouseEvent->pos();
+
+		QList<QRect> rects;
+		getRects(rects, option, _labelWidth, _statusRectWidth, _spacing);
+
+		int hover = -1,
+		    mask = getMask(index);
+		for ( int i = 0; i < 3; ++i ) {
+			bool enabled = mask & _flags[i];
+			if ( !enabled ) continue;
+
+			if ( rects[i].contains(pos) ) {
+				hover = i;
+				break;
+			}
+		}
+
+		model->setData(index, hover, HoverRole);
+
+		return false;
+	}
+
+	return QStyledItemDelegate::editorEvent(event, model, option, index);
+}
+
+bool ArrivalDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view,
+                                const QStyleOptionViewItem &option,
+                                const QModelIndex &index) {
+	if ( index.column() != USED )
+		return QStyledItemDelegate::helpEvent(event, view, option, index);
+
+	if ( event->type() == QEvent::ToolTip ) {
+		QPoint pos = event->pos();
+
+		QList<QRect> rects;
+		getRects(rects, option, _labelWidth, _statusRectWidth, _spacing);
+
+		if ( rects[4].contains(pos) ) {
+			QToolTip::showText(event->globalPos(),
+			                   tr("Toggle if arrival should be used or not."),
+			                   view);
+			return true;
+		}
+		else {
+			static const char *FlagNames[3] = {"time", "slowness", "backazimuth"};
+
+			int mask = getMask(index);
+
+			for ( int i = 0; i < 3; ++i ) {
+				if ( !rects[i].contains(pos) ) continue;
+
+				bool enabled = mask & _flags[i];
+				if ( !enabled ) {
+					QToolTip::showText(event->globalPos(),
+					                   tr("The pick does not have a %1 value and the usage flag is therefore disabled.")
+					                   .arg(FlagNames[i]),
+					                   view);
+					return true;
+				}
+
+				QToolTip::showText(event->globalPos(),
+				                   tr("Toggle %1 usage.")
+				                   .arg(FlagNames[i]),
+				                   view);
+				return true;
+			}
+		}
+	}
+
+	return QStyledItemDelegate::helpEvent(event, view, option, index);
+}
+
+void ArrivalDelegate::paint(QPainter *painter,
+                            const QStyleOptionViewItem &option,
+                            const QModelIndex &index) const {
+	if ( index.column() != USED ) {
+		QStyledItemDelegate::paint(painter, option, index);
+		return;
+	}
+
+	painter->save();
+
+	QPen pen = painter->pen();
+	if ( option.state & QStyle::State_Selected ) {
+		painter->fillRect(option.rect, option.palette.color(QPalette::Highlight));
+		pen.setColor(option.palette.color(QPalette::HighlightedText));
+	}
+	else {
+		pen.setColor(option.palette.color(QPalette::WindowText));
+	}
+
+	QList<QRect> rects;
+	getRects(rects, option, _labelWidth, _statusRectWidth, _spacing);
+
+	QRect statusRect = rects[3];//.center().x() - 4, rects[3].center().y() - 4, 9, 9);
+
+	painter->fillRect(statusRect, index.data(Qt::BackgroundRole).value<QColor>());
+
+	QStyleOptionButton boxStyle;
+	boxStyle.state = QStyle::State_Enabled;
+
+	int flags = index.data(UsedRole).toInt(),
+	    mask = getMask(index);
+
+	flags &= mask;
+
+	if( flags == mask ) {
+		boxStyle.state |= QStyle::State_On;
+	}
+	else if ( flags ) {
+		boxStyle.state |= QStyle::State_NoChange;
+	}
+	else {
+		boxStyle.state |= QStyle::State_Off;
+	}
+
+	boxStyle.direction = QApplication::layoutDirection();
+	boxStyle.rect = rects[4];
+	QApplication::style()->drawControl(QStyle::CE_CheckBox, &boxStyle, painter);
+
+	int hoverIndex = index.data(HoverRole).toInt();
+
+	for ( int i = 0; i < 3; ++i ) {
+		if ( i == hoverIndex && option.state & QStyle::State_MouseOver ) {
+			QFont font = option.font;
+			font.setBold(true);
+			font.setPointSize(font.pointSize() + 2);
+			painter->setFont(font);
+		}
+
+		bool enabled = mask & _flags[i];
+		bool checked = (flags & _flags[i]) && enabled;
+		if ( !enabled )
+			painter->setPen(option.palette.color(QPalette::Disabled, QPalette::WindowText));
+		else
+			painter->setPen(pen);
+
+		painter->drawText(rects[i], Qt::AlignVCenter | Qt::AlignHCenter,
+		                  checked?_labels[i]:"-");
+		painter->setFont(option.font);
+	}
+
+	painter->restore();
+}
+
+QSize ArrivalDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                const QModelIndex &index) const {
+	if ( index.column() != USED ) {
+		return QStyledItemDelegate::sizeHint(option, index);
+	}
+
+	QFont font = option.font;
+	font.setBold(true);
+
+	_labelWidth = 0;
+
+	font.setPointSize(font.pointSize() + 2);
+
+	QFontMetrics fm(font);
+	int labelHeight = 0;
+	for ( int i = 0; i < 3; ++i ) {
+		QRect rect = fm.boundingRect(_labels[i]);
+		_labelWidth = max(_labelWidth, rect.width());
+		labelHeight = max(labelHeight, rect.height());
+	}
+
+	QStyle *style = qApp->style();
+	int checkBoxWidth = style->subElementRect(QStyle::SE_CheckBoxIndicator,
+	                                          &option).width();
+
+	int width = 2 * _margin + _statusRectWidth + 3 * _labelWidth +
+	            4 * _spacing + checkBoxWidth,
+	    height = 2 * _margin + max(labelHeight,
+	                               option.decorationSize.height());
+
+	return QSize(width, height);
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1076,10 +1365,11 @@ void ArrivalModel::setOrigin(DataModel::Origin* origin) {
 
 	_origin = origin;
 	if ( _origin ) {
-		_used.fill(Qt::Unchecked, _origin->arrivalCount());
+		_used.fill(Seismology::LocatorInterface::F_NONE, _origin->arrivalCount());
 		_backgroundColors.fill(QVariant(), _origin->arrivalCount());
 		_enableState.fill(true, _origin->arrivalCount());
 		_takeOffs.fill(QVariant(), _origin->arrivalCount());
+		_hoverState.fill(-1, _origin->arrivalCount());
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1123,11 +1413,13 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 	if ( index.row() >= (int)_origin->arrivalCount() )
 		return QVariant();
 
-	if ( role == Qt::CheckStateRole && index.column() == 0 ) {
-		if ( index.row() < _used.size() )
-			return _used[index.row()];
-		else
-			return QVariant();
+	if ( index.column() == USED ) {
+		if ( role == UsedRole ) {
+			return (int)_used[index.row()];
+		}
+		else if ( role == HoverRole ) {
+			return _hoverState[index.row()];
+		}
 	}
 
 	Arrival* a = _origin->arrival(index.row());
@@ -1233,6 +1525,25 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return timeToString(pick->time().value(), _pickTimeFormat.c_str());
 				break;
 
+			case BACKAZIMUTH:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->backazimuth().value();
+				}
+				catch ( ValueException& ) {}
+				break;
+
+			case SLOWNESS:
+				pick = Pick::Cast(PublicObject::Find(a->pickID()));
+				try {
+					if ( pick )
+						return pick->horizontalSlowness().value();
+				}
+				catch ( ValueException& ) {}
+
+				break;
+
 			// Picktime
 			case UNCERTAINTY:
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
@@ -1282,7 +1593,6 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 					return (int)a->azimuth();
 				}
 				catch ( ValueException& ) {}
-				break;
 
 			case METHOD:
 				pick = Pick::Find(a->pickID());
@@ -1522,15 +1832,15 @@ Qt::ItemFlags ArrivalModel::flags(const QModelIndex &index) const {
 
 	Qt::ItemFlags f = QAbstractTableModel::flags(index);
 
-	if ( index.row() < _enableState.size() ) {
+	/*if ( index.row() < _enableState.size() ) {
 		if ( !_enableState[index.row()] ) {
-			if ( index.column() == 0 )
-				f = f & ~(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable);
+			if ( index.column() == USED )
+				f = f & ~(Qt::ItemIsUserCheckable);
 		}
-		else if ( index.column() == 0 ) {
-			f = (f | Qt::ItemIsUserCheckable) & ~Qt::ItemIsSelectable;
+		else if ( index.column() == USED ) {
+			f = (f | Qt::ItemIsUserCheckable);
 		}
-	}
+	}*/
 
 	return f;
 }
@@ -1542,10 +1852,18 @@ Qt::ItemFlags ArrivalModel::flags(const QModelIndex &index) const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ArrivalModel::setData(const QModelIndex &index, const QVariant &value,
                            int role) {
-	if ( index.isValid() && role == Qt::CheckStateRole ) {
+	if ( index.isValid() && index.column() == USED ) {
 		if ( !_enableState[index.row()] ) return false;
 
-		_used[index.row()] = (Qt::CheckState)value.toInt();
+		if ( role == UsedRole ) {
+			_used[index.row()] = value.toInt() & getMask(index);
+		}
+		else if (role == HoverRole ){
+			_hoverState[index.row()] = value.toInt();
+		}
+		else
+			return QAbstractTableModel::setData(index, value, role);
+
 		emit dataChanged(index, index);
 		return true;
 	}
@@ -1590,16 +1908,12 @@ void ArrivalModel::setTakeOffAngle(int row, const QVariant &val) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ArrivalModel::useNoArrivals() const {
-	return !_used.contains(Qt::Checked);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	for ( int i = 0; i < _used.count(); ++i ) {
+		if ( _used[i] != Seismology::LocatorInterface::F_NONE )
+			return false;
+	}
 
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ArrivalModel::useAllArrivals() const {
-	return !_used.contains(Qt::Unchecked) && !_used.contains(Qt::PartiallyChecked);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1608,10 +1922,133 @@ bool ArrivalModel::useAllArrivals() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ArrivalModel::useArrival(int row) const {
-	return _used[row] == Qt::Checked;
+	return _used[row] != Seismology::LocatorInterface::F_NONE;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
+	bool used = false;
+	try {
+		setBackazimuthUsed(row, arrival->backazimuthUsed());
+		used = true;
+	}
+	catch ( ... ) {
+		setBackazimuthUsed(row, true);
+	}
+
+	try {
+		setHorizontalSlownessUsed(row, arrival->horizontalSlownessUsed());
+		used = true;
+	}
+	catch ( ... ) {
+		setHorizontalSlownessUsed(row, true);
+	}
+
+	try {
+		setTimeUsed(row, arrival->timeUsed());
+		used = true;
+	}
+	catch ( ... ) {
+		setTimeUsed(row, true);
+	}
+
+	// TODO check if this is really required for backward compatibility
+	if ( !used  && arrival->weight() < 0.5 ) {
+		setBackazimuthUsed(row, false);
+		setHorizontalSlownessUsed(row, false);
+		setTimeUsed(row, false);
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ArrivalModel::backazimuthUsed(int row) const {
+	if ( row < 0 || row >= rowCount() ) return false;
+
+	return _used[row] & Seismology::LocatorInterface::F_BACKAZIMUTH;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArrivalModel::setBackazimuthUsed(int row, bool enabled) {
+	if ( row < 0 || row >= rowCount() ) return;
+
+	if ( enabled)
+		_used[row] |= Seismology::LocatorInterface::F_BACKAZIMUTH;
+	else
+		_used[row] &= ~Seismology::LocatorInterface::F_BACKAZIMUTH;
+
+	emit dataChanged(index(row, USED),
+	                 index(row, USED));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ArrivalModel::horizontalSlownessUsed(int row) const {
+	if ( row < 0 || row >= rowCount() ) return false;
+
+	return _used[row] & Seismology::LocatorInterface::F_SLOWNESS;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArrivalModel::setHorizontalSlownessUsed(int row, bool enabled) {
+	if ( row < 0 || row >= rowCount() ) return;
+
+	if ( enabled)
+		_used[row] |= Seismology::LocatorInterface::F_SLOWNESS;
+	else
+		_used[row] &= ~Seismology::LocatorInterface::F_SLOWNESS;
+
+	emit dataChanged(index(row, USED),
+	                 index(row, USED));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ArrivalModel::timeUsed(int row) const {
+	if ( row < 0 || row >= rowCount() ) return false;
+
+
+	return _used[row] & Seismology::LocatorInterface::F_TIME;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ArrivalModel::setTimeUsed(int row, bool enabled) {
+	if ( row < 0 || row >= rowCount() ) return;
+
+	if ( enabled)
+		_used[row] |= Seismology::LocatorInterface::F_TIME;
+	else
+		_used[row] &= ~Seismology::LocatorInterface::F_TIME;
+
+	emit dataChanged(index(row, USED), index(row, USED));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // Implementation of OriginLocatorView
 
@@ -1846,7 +2283,11 @@ void OriginLocatorView::init() {
 	_modelArrivalsProxy = NULL;
 	_modelArrivals.setDisabledForeground(palette().color(QPalette::Disabled, QPalette::Text));
 
+	ArrivalDelegate *delegate = new ArrivalDelegate(_ui.tableArrivals);
 	_ui.tableArrivals->horizontalHeader()->setMovable(true);
+	_ui.tableArrivals->setItemDelegate(delegate);
+	_ui.tableArrivals->setMouseTracking(true);
+	_ui.tableArrivals->resizeColumnToContents(0);
 
 	connect(_ui.tableArrivals->horizontalHeader(), SIGNAL(sectionClicked(int)),
 	        _ui.tableArrivals, SLOT(sortByColumn(int)));
@@ -1868,6 +2309,13 @@ void OriginLocatorView::init() {
 	_ui.tableArrivals->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
 	_ui.tableArrivals->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+	QAction *action = new QAction(this);
+	action->setShortcut(Qt::Key_Escape);
+	connect(action, SIGNAL(triggered()),
+	        _ui.tableArrivals, SLOT(clearSelection()));
+
+	addAction(action);
 
 	_residuals = new PlotWidget(_ui.groupResiduals, &_modelArrivals);
 	_residuals->setEnabled(false);
@@ -2349,7 +2797,7 @@ void OriginLocatorView::residualsSelected() {
 	QRectF brect = _residuals->getSelectedValuesRect();
 	if ( brect.isEmpty() && !brect.isNull() ) {
 		for ( int i = 0; i < _modelArrivals.rowCount(); ++i )
-			_modelArrivals.setData(_modelArrivals.index(i, 0), Qt::Unchecked, Qt::CheckStateRole);
+			_modelArrivals.setData(_modelArrivals.index(i, 0), 0, UsedRole);
 
 		return;
 	}
@@ -2358,14 +2806,15 @@ void OriginLocatorView::residualsSelected() {
 	int startIndex = 0;
 	for ( int i = 0; i < selectedIds.count(); ++i ) {
 		for ( int j = startIndex; j < selectedIds[i]; ++j )
-			_modelArrivals.setData(_modelArrivals.index(j, 0), Qt::Unchecked, Qt::CheckStateRole);
-
-		_modelArrivals.setData(_modelArrivals.index(selectedIds[i], 0), Qt::Checked, Qt::CheckStateRole);
+			_modelArrivals.setData(_modelArrivals.index(j, 0), 0, UsedRole);
+		_modelArrivals.setData(_modelArrivals.index(selectedIds[i], 0),
+		                       getMask(_modelArrivals.index(selectedIds[i], 0)),
+		                       UsedRole);
 		startIndex = selectedIds[i]+1;
 	}
 
 	for ( int j = startIndex; j < _modelArrivals.rowCount(); ++j )
-		_modelArrivals.setData(_modelArrivals.index(j, 0), Qt::Unchecked, Qt::CheckStateRole);
+		_modelArrivals.setData(_modelArrivals.index(j, 0), 0, UsedRole);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2550,7 +2999,8 @@ void OriginLocatorView::plotTabChanged(int tab) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::changeArrival(int id, bool state) {
-	_modelArrivals.setData(_modelArrivals.index(id, 0), state?Qt::Checked:Qt::Unchecked, Qt::CheckStateRole);
+	QModelIndex idx = _modelArrivals.index(id, 0);
+	_modelArrivals.setData(idx, state?getMask(idx):0, UsedRole);
 
 	_residuals->setValueSelected(id, state);
 	_map->setArrivalState(id, state);
@@ -3226,16 +3676,11 @@ void OriginLocatorView::updateOrigin(Seiscomp::DataModel::Origin* o) {
 
 	if ( _currentOrigin ) {
 		for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
-			if ( !Client::Inventory::Instance()->getStation(Pick::Find(_currentOrigin->arrival(i)->pickID())) ) {
+			Arrival *arrival = _currentOrigin->arrival(i);
+			if ( !Client::Inventory::Instance()->getStation(Pick::Find(arrival->pickID())) ) {
 				changeArrivalEnableState(i, false);
 			}
 			else {
-				try {
-					changeArrival(i, _currentOrigin->arrival(i)->weight() > 0.0);
-				}
-				catch ( ... ) {
-					changeArrival(i, true);
-				}
 			}
 		}
 	}
@@ -3498,20 +3943,18 @@ void OriginLocatorView::updateContent() {
 		else
 			pickColor = SCScheme.colors.arrivals.undefined;
 
-		QColor pickStateColor = pickColor;
+		addArrival(i, arrival, pickTime, pickColor);
 
-		try {
-			if ( arrival->weight() == 0.0 )
-				pickStateColor = SCScheme.colors.arrivals.disabled;
-			else
-				++activeArrivals;
-		}
-		catch ( ... ) {
+		_modelArrivals.setUseArrival(i, arrival);
+
+		QColor pickStateColor = pickColor;
+		if ( !_modelArrivals.useArrival(i) )
+			pickStateColor = SCScheme.colors.arrivals.disabled;
+		else
 			++activeArrivals;
-		}
 
 		_modelArrivals.setRowColor(i, pickStateColor);
-		addArrival(i, arrival, pickTime, pickColor);
+
 		/*
 		try {
 			addArrival(arrival, SCScheme.colors.arrivals.residuals.colorAt(arrival->residual()));
@@ -3838,8 +4281,8 @@ void OriginLocatorView::importArrivals() {
 	bool associateOnly = false;
 
 	DataModel::PublicObjectTimeSpanBuffer cache(_reader, Core::TimeSpan(3600,0));
-	typedef std::pair<std::string,double> PhaseWithWeight;
-	typedef std::map<std::string, PhaseWithWeight> PhasePicks;
+	typedef std::pair<std::string,int> PhaseWithFlags;
+	typedef std::map<std::string, PhaseWithFlags> PhasePicks;
 
 	PhasePicks sourcePhasePicks;
 
@@ -3878,8 +4321,7 @@ void OriginLocatorView::importArrivals() {
 				// Collect all picks with phases
 				for ( size_t i = 0; i < referenceOrigin->arrivalCount(); ++i ) {
 					Arrival *ar = referenceOrigin->arrival(i);
-					double weight = 1.0; try { weight = ar->weight(); } catch ( ... ) {}
-					try { sourcePhasePicks[ar->pickID()] = PhaseWithWeight(ar->phase().code(), weight); }
+					try { sourcePhasePicks[ar->pickID()] = PhaseWithFlags(ar->phase().code(), Seismology::arrivalToFlags(ar)); }
 					catch ( ... ) {}
 				}
 			}
@@ -3930,8 +4372,7 @@ void OriginLocatorView::importArrivals() {
 				// Collect all picks with phases
 				for ( size_t i = 0; i < referenceOrigin->arrivalCount(); ++i ) {
 					Arrival *ar = referenceOrigin->arrival(i);
-					double weight = 1.0; try { weight = ar->weight(); } catch ( ... ) {}
-					try { sourcePhasePicks[ar->pickID()] = PhaseWithWeight(ar->phase().code(), weight); }
+					try { sourcePhasePicks[ar->pickID()] = PhaseWithFlags(ar->phase().code(), Seismology::arrivalToFlags(ar)); }
 					catch ( ... ) {}
 				}
 			}
@@ -3976,8 +4417,7 @@ void OriginLocatorView::importArrivals() {
 				// Collect all picks with phases
 				for ( size_t i = 0; i < referenceOrigin->arrivalCount(); ++i ) {
 					Arrival *ar = referenceOrigin->arrival(i);
-					double weight = 1.0; try { weight = ar->weight(); } catch ( ... ) {}
-					try { sourcePhasePicks[ar->pickID()] = PhaseWithWeight(ar->phase().code(), weight); }
+					try { sourcePhasePicks[ar->pickID()] = PhaseWithFlags(ar->phase().code(), Seismology::arrivalToFlags(ar)); }
 					catch ( ... ) {}
 				}
 			}
@@ -4002,8 +4442,7 @@ void OriginLocatorView::importArrivals() {
 				// Collect all picks with phases
 				for ( size_t i = 0; i < o->arrivalCount(); ++i ) {
 					Arrival *ar = o->arrival(i);
-					double weight = 1.0; try { weight = ar->weight(); } catch ( ... ) {}
-					try { sourcePhasePicks[ar->pickID()] = PhaseWithWeight(ar->phase().code(), weight); }
+					try { sourcePhasePicks[ar->pickID()] = PhaseWithFlags(ar->phase().code(), Seismology::arrivalToFlags(ar)); }
 					catch ( ... ) {}
 				}
 			}
@@ -4035,12 +4474,10 @@ void OriginLocatorView::importArrivals() {
 			phaseCode[0] = 'P';
 
 		if ( !importAllPhases )
-			sourcePhases[PickPhase(pick->waveformID().networkCode() + "." + pick->waveformID().stationCode(), phaseCode)] = PickWithWeight(pick, it->second.second);
+			sourcePhases[PickPhase(pick->waveformID().networkCode() + "." + pick->waveformID().stationCode(), phaseCode)] = PickWithFlags(pick, it->second.second);
 		else
-			sourcePhases[PickPhase(wfid2str(pick->waveformID()), it->second.first)] = PickWithWeight(pick, it->second.second);
+			sourcePhases[PickPhase(wfid2str(pick->waveformID()), it->second.first)] = PickWithFlags(pick, it->second.second);
 	}
-
-	set<string> usedPickIDs;
 
 	// Collect target phases grouped by stream
 	for ( size_t i = 0; i < _currentOrigin->arrivalCount(); ++i ) {
@@ -4049,7 +4486,7 @@ void OriginLocatorView::importArrivals() {
 
 		if ( !p ) continue;
 
-		WaveformStreamID& wfsi = p->waveformID();
+		WaveformStreamID &wfsi = p->waveformID();
 
 		char phaseCode[2] = {'\0', '\0'};
 		try { phaseCode[0] = Util::getShortPhaseName(ar->phase().code()); }
@@ -4058,12 +4495,12 @@ void OriginLocatorView::importArrivals() {
 		if ( phaseCode[0] == '\0' )
 			phaseCode[0] = 'P';
 
-		double weight = 1.0; try { weight = ar->weight(); } catch ( ... ) {}
+		int flags = Seismology::arrivalToFlags(ar);
 
 		if ( !importAllPhases )
-			targetPhases[PickPhase(wfsi.networkCode() + "." + wfsi.stationCode(), phaseCode)] = PickWithWeight(p, weight);
+			targetPhases[PickPhase(wfsi.networkCode() + "." + wfsi.stationCode(), phaseCode)] = PickWithFlags(p, flags);
 		else
-			targetPhases[PickPhase(wfid2str(wfsi), ar->phase().code())] = PickWithWeight(p, weight);
+			targetPhases[PickPhase(wfid2str(wfsi), ar->phase().code())] = PickWithFlags(p, flags);
 	}
 
 	sourcePhasesPtr = &sourcePhases;
@@ -4092,9 +4529,9 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 	PickedPhases *sourcePhasesPtr, *targetPhasesPtr;
 	set<string> usedPickIDs;
 
-	std::vector<PhasePickWithWeight> additionalPicks;
+	std::vector<PhasePickWithFlags> additionalPicks;
 	typedef std::pair<std::string, std::string> PhaseStream;
-	typedef std::map<PhaseStream, PickWithWeight> NewPhases;
+	typedef std::map<PhaseStream, PickWithFlags> NewPhases;
 
 	NewPhases newPhases;
 
@@ -4133,7 +4570,7 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 		              it->first.first.c_str());
 
 		PhaseStream ps(it->first);
-		PickWithWeight newPick = newPhases[ps];
+		PickWithFlags newPick = newPhases[ps];
 
 		if ( newPick.first ) {
 			try {
@@ -4147,7 +4584,7 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 			}
 		}
 
-		newPhases[ps] = PickWithWeight(p, it->second.second);
+		newPhases[ps] = PickWithFlags(p, it->second.second);
 	}
 
 	if ( failOnNoNewPhases && newPhases.empty() ) return false;
@@ -4158,21 +4595,22 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 	for ( PickedPhases::iterator it = targetPhasesPtr->begin(); it != targetPhasesPtr->end(); ++it ) {
 		ArrivalPtr arrival = new Arrival;
 		arrival->setPickID(it->second.first->publicID());
-		arrival->setWeight(it->second.second);
+		arrival->setWeight(it->second.second ? 0 : 1);
+		Seismology::flagsToArrival(arrival.get(), it->second.second);
 		arrival->setPhase(Phase(it->first.second));
 		org->add(arrival.get());
-		SEISCOMP_DEBUG("! pick %s as phase %s for stream %s with weight %f",
+		SEISCOMP_DEBUG("! pick %s as phase %s for stream %s with flags %d",
 		               it->second.first->publicID().c_str(), it->first.second.c_str(),
 		               it->first.first.c_str(), it->second.second);
 	}
 
 	for ( NewPhases::iterator it = newPhases.begin(); it != newPhases.end(); ++it ) {
-		PhasePickWithWeight ppww;
-		ppww.pick = it->second.first;
-		ppww.phase = it->first.second;
-		ppww.weight = it->second.second;
-		additionalPicks.push_back(ppww);
-		SEISCOMP_DEBUG("A pick %s as phase %s for stream %s with weight %f",
+		PhasePickWithFlags ppwf;
+		ppwf.pick = it->second.first;
+		ppwf.phase = it->first.second;
+		ppwf.flags = it->second.second;
+		additionalPicks.push_back(ppwf);
+		SEISCOMP_DEBUG("A pick %s as phase %s for stream %s with flags %d",
 		               it->second.first->publicID().c_str(), it->first.second.c_str(),
 		               wfid2str(it->second.first->waveformID()).c_str(),
 		               it->second.second);
@@ -4185,6 +4623,7 @@ bool OriginLocatorView::merge(void *sourcePhases, void *targetPhases,
 
 			ArrivalPtr arrival = new Arrival();
 			arrival->setPickID(additionalPicks[i].pick->publicID());
+			Seismology::flagsToArrival(arrival.get(), 0);
 			arrival->setWeight(0.0);
 
 			double az, baz, dist;
@@ -4311,7 +4750,7 @@ void OriginLocatorView::relocate() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginLocatorView::relocate(std::vector<PhasePickWithWeight>* additionalPicks,
+void OriginLocatorView::relocate(std::vector<PhasePickWithFlags>* additionalPicks,
                                  bool associateOnly, bool replaceExistingPhases) {
 	relocate(_currentOrigin.get(), additionalPicks, associateOnly, replaceExistingPhases);
 }
@@ -4322,7 +4761,7 @@ void OriginLocatorView::relocate(std::vector<PhasePickWithWeight>* additionalPic
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::relocate(DataModel::Origin *org,
-                                 std::vector<PhasePickWithWeight>* additionalPicks,
+                                 std::vector<PhasePickWithFlags>* additionalPicks,
                                  bool associateOnly, bool replaceExistingPhases,
                                  bool useArrivalTable) {
 	OriginPtr oldOrigin = org;
@@ -4348,14 +4787,16 @@ void OriginLocatorView::relocate(DataModel::Origin *org,
 			if ( !_modelArrivals.isRowEnabled(i) ) continue;
 
 			ArrivalPtr arrival = new Arrival(*org->arrival(i));
+			arrival->setBackazimuthUsed(_modelArrivals.backazimuthUsed(i));
+			arrival->setTimeUsed(_modelArrivals.timeUsed(i));
+			arrival->setHorizontalSlownessUsed(_modelArrivals.horizontalSlownessUsed(i));
 
-			if ( _modelArrivals.useArrival(i) )
+			if ( arrival->timeUsed() || arrival->backazimuthUsed() || arrival->horizontalSlownessUsed() )
 				arrival->setWeight(1.0);
 			else
 				arrival->setWeight(0.0);
 
-			if ( !_locator->getSensorLocation(Pick::Find(arrival->pickID())) &&
-				 arrival->weight() < 0.5 )
+			if ( !_locator->getSensorLocation(Pick::Find(arrival->pickID())) )
 				continue;
 
 			oldOrigin->add(arrival.get());
@@ -4399,10 +4840,14 @@ void OriginLocatorView::relocate(DataModel::Origin *org,
 			ArrivalPtr arrival = new Arrival();
 			arrival->setPickID((*additionalPicks)[i].pick->publicID());
 
-			if ( associateOnly )
+			if ( associateOnly ) {
+				Seismology::flagsToArrival(arrival.get(), 0);
 				arrival->setWeight(0.0);
-			else
-				arrival->setWeight((*additionalPicks)[i].weight);
+			}
+			else {
+				Seismology::flagsToArrival(arrival.get(), (*additionalPicks)[i].flags);
+				arrival->setWeight(1.0);
+			}
 
 			try {
 				if ( (*additionalPicks)[i].phase != "" )
@@ -4623,7 +5068,7 @@ void OriginLocatorView::mergeOrigins(QList<DataModel::Origin*> orgs) {
 		if ( !importAllPicks && (objectAgencyID(pick.get()) != SCApp->agencyID()) )
 			continue;
 
-		sourcePhases[PickPhase(wfid2str(pick->waveformID()), it->second.first)] = PickWithWeight(pick, it->second.second);
+		sourcePhases[PickPhase(wfid2str(pick->waveformID()), it->second.first)] = PickWithFlags(pick, it->second.second);
 	}
 
 	qApp->restoreOverrideCursor();
@@ -5494,7 +5939,7 @@ struct ActivatedArrivalFilter : ArrivalModel::Filter {
 	ActivatedArrivalFilter(QAbstractItemModel *model) : _model(model) {}
 
 	bool accepts(int row, int, DataModel::Arrival *) const {
-		return _model->data(_model->index(row, 0), Qt::CheckStateRole).toBool();
+		return _model->data(_model->index(row, 0), UsedRole).toInt() != 0;
 	}
 
 	QAbstractItemModel *_model;
@@ -5505,7 +5950,7 @@ struct DeactivatedArrivalFilter : ArrivalModel::Filter {
 	DeactivatedArrivalFilter(QAbstractItemModel *model) : _model(model) {}
 
 	bool accepts(int row, int, DataModel::Arrival *) const {
-		return !_model->data(_model->index(row, 0), Qt::CheckStateRole).toBool();
+		return _model->data(_model->index(row, 0), UsedRole).toInt() == 0;
 	}
 
 	QAbstractItemModel *_model;
@@ -5534,8 +5979,18 @@ void OriginLocatorView::tableArrivalsContextMenuRequested(const QPoint &pos) {
 
 	menu.addSeparator();
 
-	QAction *actionActivate = menu.addAction("Activate");
-	QAction *actionDeactivate = menu.addAction("Deactivate");
+	QMenu *subActivate = menu.addMenu("Activate");
+	QMenu *subDeactivate = menu.addMenu("Deactivate");
+
+	QAction *actionActivate = subActivate->addAction("All");
+	QAction *actionActivateTime = subActivate->addAction("Time");
+	QAction *actionActivateBaz = subActivate->addAction("Backazimuth");
+	QAction *actionActivateSlow = subActivate->addAction("Slowness");
+
+	QAction *actionDeactivate = subDeactivate->addAction("All");
+	QAction *actionDeactivateTime = subDeactivate->addAction("Time");
+	QAction *actionDeactivateBaz = subDeactivate->addAction("Backazimuth");
+	QAction *actionDeactivateSlow = subDeactivate->addAction("Slowness");
 
 	if ( !hasSelection ) {
 		actionActivate->setEnabled(false);
@@ -5563,9 +6018,22 @@ void OriginLocatorView::tableArrivalsContextMenuRequested(const QPoint &pos) {
 	if ( result == actionDeleteSelectedArrivals )
 		deleteSelectedArrivals();
 	else if ( result == actionActivate )
-		activateSelectedArrivals(true);
+		activateSelectedArrivals(Seismology::LocatorInterface::F_ALL, true);
+	else if ( result == actionActivateTime )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_TIME, true);
+	else if ( result == actionActivateBaz )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_BACKAZIMUTH, true);
+	else if ( result == actionActivateSlow )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_SLOWNESS, true);
 	else if ( result == actionDeactivate )
-		activateSelectedArrivals(false);
+		activateSelectedArrivals(Seismology::LocatorInterface::F_ALL, false);
+	else if ( result == actionDeactivateTime )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_TIME, false);
+	else if ( result == actionDeactivateBaz )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_BACKAZIMUTH, false);
+	else if ( result == actionDeactivateSlow )
+		activateSelectedArrivals(Seismology::LocatorInterface::F_SLOWNESS, false);
+
 	else if ( result == actionInvertSelection )
 		selectArrivals(InvertFilter(_ui.tableArrivals->selectionModel()));
 	else if ( result == actionSelectAutomatic )
@@ -5701,7 +6169,8 @@ void OriginLocatorView::deleteSelectedArrivals() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginLocatorView::activateSelectedArrivals(bool active) {
+void OriginLocatorView::activateSelectedArrivals(Seismology::LocatorInterface::Flags flags,
+                                                 bool activate) {
 	if ( _ui.tableArrivals->selectionModel() == NULL )
 		return;
 
@@ -5711,12 +6180,19 @@ void OriginLocatorView::activateSelectedArrivals(bool active) {
 	bool changed = false;
 
 	foreach ( const QModelIndex &idx, rows ) {
-		bool prev = _modelArrivalsProxy->data(idx, Qt::CheckStateRole).toBool();
-		_modelArrivalsProxy->setData(idx, active?Qt::Checked:Qt::Unchecked,
-		                             Qt::CheckStateRole);
-		bool curr = _modelArrivalsProxy->data(idx, Qt::CheckStateRole).toBool();
-		if ( prev != curr )
+		int mask = getMask(idx);
+		int oldFlags = idx.data(UsedRole).toInt();
+		int newFlags = oldFlags;
+		if ( activate )
+			newFlags |= flags;
+		else
+			newFlags &= ~flags;
+		newFlags &= mask;
+
+		if ( oldFlags != newFlags ) {
+			_modelArrivalsProxy->setData(idx, newFlags, UsedRole);
 			changed = true;
+		}
 	}
 
 	if ( changed )
@@ -5803,15 +6279,16 @@ void OriginLocatorView::renameArrivals() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::dataChanged(const QModelIndex& topLeft, const QModelIndex&) {
-	if ( topLeft.column() != 0 ) return;
-	bool state = _modelArrivals.data(topLeft, Qt::CheckStateRole).toInt() == Qt::Checked;
+	if ( topLeft.column() != USED ) return;
 
-	_residuals->setValueSelected(topLeft.row(), state);
-	_map->setArrivalState(topLeft.row(), state);
+	int flags = _modelArrivals.data(topLeft, UsedRole).toInt();
+	bool used = flags != 0;
+	_residuals->setValueSelected(topLeft.row(), used);
+	_map->setArrivalState(topLeft.row(), used);
 	if ( _toolMap )
-		_toolMap->setArrivalState(topLeft.row(), state);
+		_toolMap->setArrivalState(topLeft.row(), used);
 	if ( _recordView )
-		_recordView->setArrivalState(topLeft.row(), state);
+		_recordView->setArrivalState(topLeft.row(), used);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

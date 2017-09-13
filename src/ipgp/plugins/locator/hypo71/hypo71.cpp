@@ -70,10 +70,6 @@ namespace {
 static const char alphanum[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 int stringLength = sizeof(alphanum) - 1;
 
-char genRandom() {
-	return alphanum[rand() % stringLength];
-}
-
 const string genRandomString(const size_t& length) {
 
 	string alpha;
@@ -577,7 +573,7 @@ const double Hypo71::getTimeValue(const PickList& pickList,
 	for (PickList::const_iterator i = pickList.begin();
 	        i != pickList.end(); ++i) {
 
-		PickPtr p = i->first;
+		PickPtr p = i->pick;
 
 		if ( p->phaseHint().code() != phaseCode )
 			continue;
@@ -624,7 +620,7 @@ const string Hypo71::getPickPolarity(const PickList& pickList,
 	for (PickList::const_iterator i = pickList.begin();
 	        i != pickList.end(); ++i) {
 
-		PickPtr p = i->first;
+		PickPtr p = i->pick;
 
 		if ( p->phaseHint().code() != phaseCode )
 			continue;
@@ -654,7 +650,7 @@ const string Hypo71::getPickPolarity(const PickList& pickList,
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string
 Hypo71::formatString(string toFormat, const size_t& nb, const size_t& pos,
-                     const string& sender) throw() {
+                     const string& sender) {
 
 	if ( toFormat.size() > nb ) {
 		SEISCOMP_ERROR("%s Can't format string %s : length(%d) > length(%d) [sender: %s]",
@@ -704,11 +700,12 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 	double upper = 0, lower = 0, uncertainty = 0;
 	string pickID;
 
+	bool useTime = false;
+
 	for ( PickList::const_iterator it = pickList.begin();
 	      it != pickList.end(); ++it ) {
 
-		PickPtr pick = it->first;
-		weight = it->second;
+		PickPtr pick = it->pick;
 
 		if ( pick->phaseHint().code() != phaseCode )
 			continue;
@@ -718,6 +715,8 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		if ( pick->waveformID().stationCode() != stationCode )
 			continue;
+
+		useTime = it->flags & F_TIME;
 
 		pickID = pick->publicID();
 		try {
@@ -739,11 +738,8 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 		break;
 	}
 
-	if ( pickID != "" ) {
-		if ( weight != 1.0 )
-			weight = 4;
-		else
-			weight = (int) round((3 / max) * (uncertainty));
+	if ( useTime) {
+		weight = (int) round((3 / max) * (uncertainty));
 	}
 
 	return weight;
@@ -758,20 +754,20 @@ const int Hypo71::getH71Weight(const PickList& pickList,
                                const string& networkCode,
                                const string& stationCode,
                                const string& phaseCode,
-							   const string& weightBoundaries) {
+                               const string& weightBoundaries) {
 
 	int weight = 4;
 	double upper = 0, lower = 0, uncertainty = 0;
 	string pickID;
 	vector<string> TweightBoundaries;
+	bool useTime = false;
 
 	stringExplode(weightBoundaries, ",", &TweightBoundaries);
 
 	for ( PickList::const_iterator it = pickList.begin();
 	      it != pickList.end(); ++it ) {
 
-		PickPtr pick = it->first;
-		weight = it->second;
+		PickPtr pick = it->pick;
 
 		if ( pick->phaseHint().code() != phaseCode )
 			continue;
@@ -781,6 +777,8 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 		if ( pick->waveformID().stationCode() != stationCode )
 			continue;
+
+		useTime = it->flags & F_TIME;
 
 		pickID = pick->publicID();
 		try {
@@ -802,18 +800,14 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 		break;
 	}
 
-	if ( pickID != "" ) {
-		if ( weight != 1.0 )
-			weight = 4;
-		else {
-			weight = 0;
-			for (size_t i = 0; i < TweightBoundaries.size(); ++i) {
-				if ( (uncertainty) > toDouble(TweightBoundaries.at(i)) )
-					weight = i+1;
-			}
-			if ( weight > 4 )
-				weight = 4;
+	if ( useTime ) {
+		weight = 0;
+		for (size_t i = 0; i < TweightBoundaries.size(); ++i) {
+			if ( (uncertainty) > toDouble(TweightBoundaries.at(i)) )
+				weight = i+1;
 		}
+		if ( weight > 4 )
+			weight = 4;
 	}
 
 	return weight;
@@ -824,7 +818,7 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* Hypo71::locate(PickList& pickList) throw() {
+Origin* Hypo71::locate(PickList& pickList) {
 
 	ofstream log(_logFile.c_str(), ios::app);
 
@@ -1061,7 +1055,7 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 	for (PickList::iterator it = pickList.begin();
 	        it != pickList.end(); ++it) {
 
-		PickPtr pick = it->first;
+		PickPtr pick = it->pick;
 		SensorLocationPtr sloc = getSensorLocation(pick.get());
 
 		if ( !sloc ) {
@@ -1331,7 +1325,7 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 	for (PickList::iterator i = pickList.begin();
 	        i != pickList.end(); ++i) {
 
-		PickPtr p = i->first;
+		PickPtr p = i->pick;
 
 		double ctime = (double) p->time().value();
 
@@ -1413,7 +1407,7 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 	for (PickList::iterator it = pickList.begin();
 	        it != pickList.end(); ++it) {
 
-		PickPtr pick = it->first;
+		PickPtr pick = it->pick;
 
 		string pMinute;
 		string pSec;
@@ -2107,20 +2101,23 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 			// P.S.: the weight actually stays the same as the one in picklist
 			// since it is not the real weight but just intel about whether or not
 			// to use arrival (rms too high or some like that) [act as boolean 1 or 0]
-			for (PickList::iterator it = pickList.begin();
-			        it != pickList.end(); ++it) {
+			for ( PickList::iterator it = pickList.begin();
+			      it != pickList.end(); ++it ) {
 
-				PickPtr pick = it->first;
-				double weight = it->second;
+				PickPtr pick = it->pick;
+				double weight = it->flags & F_TIME?1.0:0.0;
 
 				if ( (pick->phaseHint().code() == "P")
-				        && (pick->waveformID().stationCode() == staName)
-				        && (pick->waveformID().networkCode() == networkCode) ) {
+				  && (pick->waveformID().stationCode() == staName)
+				  && (pick->waveformID().networkCode() == networkCode) ) {
 
 					ArrivalPtr pArrival = new Arrival;
 					pArrival->setPickID(pick->publicID());
 					pArrival->setCreationInfo(aci);
 					pArrival->setWeight(weight);
+					pArrival->setTimeUsed(weight > 0);
+					pArrival->setBackazimuthUsed(false);
+					pArrival->setHorizontalSlownessUsed(false);
 					pArrival->setDistance(Math::Geo::km2deg(toDouble(dist)));
 					pArrival->setAzimuth(toInt(azimuth));
 					pArrival->setPhase(Phase("P"));
@@ -2134,13 +2131,16 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 				}
 
 				if ( (pick->phaseHint().code() == "S")
-				        && (pick->waveformID().stationCode() == staName)
-				        && (pick->waveformID().networkCode() == networkCode) ) {
+				  && (pick->waveformID().stationCode() == staName)
+				  && (pick->waveformID().networkCode() == networkCode) ) {
 
 					ArrivalPtr sArrival = new Arrival;
 					sArrival->setPickID(pick->publicID());
 					sArrival->setCreationInfo(aci);
 					sArrival->setWeight(weight);
+					sArrival->setTimeUsed(weight > 0);
+					sArrival->setBackazimuthUsed(false);
+					sArrival->setHorizontalSlownessUsed(false);
 					sArrival->setDistance(Math::Geo::km2deg(toDouble(dist)));
 					sArrival->setAzimuth(toInt(azimuth));
 					sArrival->setPhase(Phase("S"));
@@ -2232,7 +2232,7 @@ Origin* Hypo71::locate(PickList& pickList) throw() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const string
-Hypo71::getZTR(const PickList& pickList) throw() {
+Hypo71::getZTR(const PickList& pickList) {
 
 	vector<string> Tvelocity;
 	vector<string> Tdepth;
@@ -2399,7 +2399,7 @@ Hypo71::getZTR(const PickList& pickList) throw() {
 	log << head << "| Picklist content" << endl;
 	for (PickList::const_iterator i = pickList.begin();
 	        i != pickList.end(); ++i) {
-		PickPtr p = i->first;
+		PickPtr p = i->pick;
 		log << head << "|  " << p->phaseHint().code() << " "
 		    << p->waveformID().stationCode() << " a.k.a. "
 		    << getStationMappedCode(p->waveformID().networkCode(), p->waveformID().stationCode())
@@ -2457,7 +2457,7 @@ Hypo71::getZTR(const PickList& pickList) throw() {
 		for (PickList::const_iterator it = pickList.begin();
 		        it != pickList.end(); ++it) {
 
-			PickPtr pick = it->first;
+			PickPtr pick = it->pick;
 			SensorLocationPtr sloc = getSensorLocation(pick.get());
 			usedPicks.push_back(*it);
 
@@ -2626,7 +2626,7 @@ Hypo71::getZTR(const PickList& pickList) throw() {
 		for ( PickList::const_iterator i = pickList.begin();
 		      i != pickList.end(); ++i) {
 
-			PickPtr p = i->first;
+			PickPtr p = i->pick;
 			double ctime = (double) p->time().value();
 
 			if ( refTime == .0 )
@@ -2694,7 +2694,7 @@ Hypo71::getZTR(const PickList& pickList) throw() {
 		for (PickList::const_iterator it = pickList.begin();
 		        it != pickList.end(); ++it) {
 
-			PickPtr pick = it->first;
+			PickPtr pick = it->pick;
 
 			string pMinute;
 			string pSec;
@@ -3050,9 +3050,9 @@ Hypo71::getZTR(const PickList& pickList) throw() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
+Origin* Hypo71::locate(PickList &pickList, double initLat, double initLon,
                        double initDepth,
-                       const Time &initTime) throw() {
+                       const Time &initTime) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -3061,7 +3061,7 @@ Origin* Hypo71::locate(PickList& pickList, double initLat, double initLon,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* Hypo71::relocate(const Origin* origin) throw() {
+Origin* Hypo71::relocate(const Origin *origin) {
 
 	if ( !origin )
 		throw LocatorException("Initial origin is a NULL object. Nothing to do.");
@@ -3085,8 +3085,21 @@ Origin* Hypo71::relocate(const Origin* origin) throw() {
 
 	PickList picks;
 	for (size_t i = 0; i < origin->arrivalCount(); ++i) {
+		int flags = F_NONE;
 
-		double weight = 1.0;
+		try {
+			if ( origin->arrival(i)->timeUsed() )
+				flags |= F_TIME;
+		}
+		catch ( ... ) {
+			flags |= F_TIME;
+		}
+
+		try {
+			if ( origin->arrival(i)->weight() == 0 )
+				flags &= ~F_TIME;
+		}
+		catch ( ... ) {}
 
 		PickPtr pick = getPick(origin->arrival(i));
 
@@ -3117,13 +3130,7 @@ Origin* Hypo71::relocate(const Origin* origin) throw() {
 			throw StationNotFoundException("Station '" + pick->waveformID().networkCode()
 			        + "." + pick->waveformID().stationCode() + "' has not been found in database");
 
-		try {
-			if ( origin->arrival(i)->weight() <= 0 )
-				weight = .0;
-		} catch ( ... ) {}
-
-
-		picks.push_back(WeightedPick(pick, weight));
+		picks.push_back(PickItem(pick.get(), flags));
 		addNewStation(pick->waveformID().networkCode(), pick->waveformID().stationCode());
 	}
 

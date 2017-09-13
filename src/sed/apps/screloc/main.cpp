@@ -349,10 +349,12 @@ class Reloc : public Client::Application {
 				if ( !_useWeight ) {
 					// Set weight to 1
 					ar->setWeight(1.0);
+					ar->setTimeUsed(true);
+					ar->setBackazimuthUsed(true);
+					ar->setHorizontalSlownessUsed(true);
 				}
 
-				// Use all picks regardless of weight
-				picks.push_back(LocatorInterface::WeightedPick(pick,1));
+				picks.push_back(pick.get());
 			}
 
 			OriginPtr newOrg = _locator->relocate(org);
@@ -383,7 +385,7 @@ class Reloc : public Client::Application {
 
 				for ( LocatorInterface::PickList::iterator it = picks.begin();
 				      it != picks.end(); ++it ) {
-					ep->add(it->first.get());
+					ep->add(it->pick.get());
 				}
 
 				IO::XMLArchive ar;

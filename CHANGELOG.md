@@ -465,7 +465,7 @@ the magnitude processing: ```EpicenterOutOfRegions```.
 
 * GUI
 
-  * The event list shows status REVIEWED as V and FINAL as F
+  * The event list shows status REVIEWED as V, FINAL as F and REPORTED as R
   * Added option to allow map layer visibilities and order
   * Allow to add custom map layers via plugins to the map
   * Refactored Map API (Canvas, Layer, Legend)
@@ -505,6 +505,9 @@ the magnitude processing: ```EpicenterOutOfRegions```.
     ```
     olv.systemTray = false
     ```
+  * Replace single arrival usage flag with three separate usage flags: time used,
+    backazimuth used and horizontal slowness used which can also be toggled
+    separately
 
 * scqc
 
