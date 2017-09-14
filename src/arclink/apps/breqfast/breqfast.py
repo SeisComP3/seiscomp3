@@ -536,13 +536,17 @@ _oktext1 = """
 Your breq_fast request to the WebDC has been processed.
 
 *NOTE*: BREQ_FAST service will not be supported here at GEOFON indefinitely.
-As yet there is no anticipated date for shutting down the service.
-However, some more modern methods are available to access waveform data from
-the GEOFON archive, and we encourage you to transition to using these. See
 
-    http://geofon.gfz-potsdam.de/waveform/breq_fast.php
+=======================================================================
+We intend to stop BREQ_FAST service at GEOFON on ** 1 January 2018 **.
 
-for more information.
+Find more information on how to access waveform data from
+the GEOFON archive in the "Transition Guide for BREQ_FAST Users"
+available on the GEOFON web site at
+
+    http//geofon.gfz-potsdam.de/waveform/breq_fast.php
+=======================================================================
+
 
 Please find the resulting data file in your personal FTP directory for a limited time.:
 """
