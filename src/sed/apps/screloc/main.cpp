@@ -94,6 +94,9 @@ class Reloc : public Client::Application {
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
 			catch ( ... ) {}
 
+			try { _useWeight = configGetBool("reloc.useWeight"); }
+			catch ( ... ) {}
+
 			if ( !_epFile.empty() )
 				setMessagingEnabled(false);
 
