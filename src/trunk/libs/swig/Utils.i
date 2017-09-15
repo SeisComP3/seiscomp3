@@ -17,6 +17,7 @@
 #include "seiscomp3/utils/timer.h"
 %}
 
+%include stl.i
 %include "seiscomp3/core.h"
 %include "seiscomp3/utils/files.h"
 %include "seiscomp3/utils/timer.h"

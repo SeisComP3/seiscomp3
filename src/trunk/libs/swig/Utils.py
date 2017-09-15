@@ -95,6 +95,70 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
+class SwigPyIterator(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SwigPyIterator, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SwigPyIterator, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _Utils.delete_SwigPyIterator
+    __del__ = lambda self: None
+
+    def value(self):
+        return _Utils.SwigPyIterator_value(self)
+
+    def incr(self, n=1):
+        return _Utils.SwigPyIterator_incr(self, n)
+
+    def decr(self, n=1):
+        return _Utils.SwigPyIterator_decr(self, n)
+
+    def distance(self, x):
+        return _Utils.SwigPyIterator_distance(self, x)
+
+    def equal(self, x):
+        return _Utils.SwigPyIterator_equal(self, x)
+
+    def copy(self):
+        return _Utils.SwigPyIterator_copy(self)
+
+    def next(self):
+        return _Utils.SwigPyIterator_next(self)
+
+    def __next__(self):
+        return _Utils.SwigPyIterator___next__(self)
+
+    def previous(self):
+        return _Utils.SwigPyIterator_previous(self)
+
+    def advance(self, n):
+        return _Utils.SwigPyIterator_advance(self, n)
+
+    def __eq__(self, x):
+        return _Utils.SwigPyIterator___eq__(self, x)
+
+    def __ne__(self, x):
+        return _Utils.SwigPyIterator___ne__(self, x)
+
+    def __iadd__(self, n):
+        return _Utils.SwigPyIterator___iadd__(self, n)
+
+    def __isub__(self, n):
+        return _Utils.SwigPyIterator___isub__(self, n)
+
+    def __add__(self, n):
+        return _Utils.SwigPyIterator___add__(self, n)
+
+    def __sub__(self, *args):
+        return _Utils.SwigPyIterator___sub__(self, *args)
+    def __iter__(self):
+        return self
+SwigPyIterator_swigregister = _Utils.SwigPyIterator_swigregister
+SwigPyIterator_swigregister(SwigPyIterator)
+
 
 def basename(name):
     return _Utils.basename(name)
