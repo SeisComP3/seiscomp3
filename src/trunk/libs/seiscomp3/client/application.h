@@ -531,6 +531,12 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 */
 		bool reloadBindings();
 
+		/**
+		 * @brief Routes a notifier to either add/update or removeObject.
+		 * @param notifier The notifier pointer which must not be NULL
+		 */
+		void handleNotifier(DataModel::Notifier *notifier);
+
 
 	// ----------------------------------------------------------------------
 	//  Static public members
@@ -835,8 +841,6 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		void runMessageThread();
 
 		bool processEvent();
-
-		void handleNotifier(DataModel::Notifier*);
 
 		void timeout();
 

@@ -1030,6 +1030,11 @@ class Application(Core.InterruptibleObject):
         return _Client.Application_reloadBindings(self)
 
 
+    def handleNotifier(self, notifier):
+        """handleNotifier(Application self, Notifier notifier)"""
+        return _Client.Application_handleNotifier(self, notifier)
+
+
     def Instance():
         """Instance() -> Application"""
         return _Client.Application_Instance()

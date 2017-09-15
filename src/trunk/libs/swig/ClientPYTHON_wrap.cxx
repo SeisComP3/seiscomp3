@@ -17781,6 +17781,52 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Application_handleNotifier(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Client::Application *arg1 = (Seiscomp::Client::Application *) 0 ;
+  Seiscomp::DataModel::Notifier *arg2 = (Seiscomp::DataModel::Notifier *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Application_handleNotifier",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Client__Application, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Application_handleNotifier" "', argument " "1"" of type '" "Seiscomp::Client::Application *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Client::Application * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Seiscomp__DataModel__Notifier, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Application_handleNotifier" "', argument " "2"" of type '" "Seiscomp::DataModel::Notifier *""'"); 
+  }
+  arg2 = reinterpret_cast< Seiscomp::DataModel::Notifier * >(argp2);
+  {
+    try {
+      (arg1)->handleNotifier(arg2);
+    }
+    catch ( const Swig::DirectorException &e ) {
+      SWIG_fail;
+    }
+    catch ( const Seiscomp::Core::ValueException &e ) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e ) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Application_Instance(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Swig::Director *director = 0;
@@ -27984,6 +28030,7 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"Application_reloadInventory", _wrap_Application_reloadInventory, METH_VARARGS, (char *)"Application_reloadInventory(Application self) -> bool"},
 	 { (char *)"Application_reloadBindings", _wrap_Application_reloadBindings, METH_VARARGS, (char *)"Application_reloadBindings(Application self) -> bool"},
+	 { (char *)"Application_handleNotifier", _wrap_Application_handleNotifier, METH_VARARGS, (char *)"Application_handleNotifier(Application self, Notifier notifier)"},
 	 { (char *)"Application_Instance", _wrap_Application_Instance, METH_VARARGS, (char *)"Application_Instance() -> Application"},
 	 { (char *)"Application_HandleSignals", _wrap_Application_HandleSignals, METH_VARARGS, (char *)"Application_HandleSignals(bool termination, bool crash)"},
 	 { (char *)"Application_version", _wrap_Application_version, METH_VARARGS, (char *)"Application_version(Application self) -> char const *"},
@@ -29226,7 +29273,6 @@ static swig_type_info _swigt__p_Seiscomp__DataModel__Setup = {"_p_Seiscomp__Data
 static swig_type_info _swigt__p_Seiscomp__DataModel__Access = {"_p_Seiscomp__DataModel__Access", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__BitSet = {"_p_Seiscomp__BitSet", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__DataModel__Notifier_t = {"_p_Seiscomp__Core__GenericMessageT_Seiscomp__DataModel__Notifier_t", 0, 0, 0, 0, 0};
-static swig_type_info _swigt__p_Seiscomp__DataModel__Notifier = {"_p_Seiscomp__DataModel__Notifier", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__AuxSource = {"_p_Seiscomp__DataModel__AuxSource", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__IO__GFSource = {"_p_Seiscomp__IO__GFSource", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__Routing = {"_p_Seiscomp__DataModel__Routing", 0, 0, 0, 0, 0};
@@ -29592,6 +29638,7 @@ static swig_type_info _swigt__p_Seiscomp__DataModel__IntegerQuantity = {"_p_Seis
 static swig_type_info _swigt__p_Seiscomp__DataModel__Inventory = {"_p_Seiscomp__DataModel__Inventory", "Seiscomp::DataModel::Inventory *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__NodalPlane = {"_p_Seiscomp__DataModel__NodalPlane", "Seiscomp::DataModel::NodalPlane *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__NodalPlanes = {"_p_Seiscomp__DataModel__NodalPlanes", "Seiscomp::DataModel::NodalPlanes *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Seiscomp__DataModel__Notifier = {"_p_Seiscomp__DataModel__Notifier", "Seiscomp::DataModel::Notifier *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__Object = {"_p_Seiscomp__DataModel__Object", "Seiscomp::DataModel::Object *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__OriginQuality = {"_p_Seiscomp__DataModel__OriginQuality", "Seiscomp::DataModel::OriginQuality *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Seiscomp__DataModel__OriginUncertainty = {"_p_Seiscomp__DataModel__OriginUncertainty", "Seiscomp::DataModel::OriginUncertainty *", 0, 0, (void*)0, 0};
@@ -30355,7 +30402,6 @@ static swig_cast_info _swigc__p_Seiscomp__DataModel__Setup[] = {{&_swigt__p_Seis
 static swig_cast_info _swigc__p_Seiscomp__DataModel__Access[] = {{&_swigt__p_Seiscomp__DataModel__Access, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__BitSet[] = {{&_swigt__p_Seiscomp__BitSet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__Core__GenericMessageT_Seiscomp__DataModel__Notifier_t[] = {{&_swigt__p_Seiscomp__Core__GenericMessageT_Seiscomp__DataModel__Notifier_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Seiscomp__DataModel__Notifier[] = {{&_swigt__p_Seiscomp__DataModel__Notifier, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__AuxSource[] = {{&_swigt__p_Seiscomp__DataModel__AuxSource, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__IO__GFSource[] = {{&_swigt__p_Seiscomp__IO__GFSource, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__Routing[] = {{&_swigt__p_Seiscomp__DataModel__Routing, 0, 0, 0},{0, 0, 0, 0}};
@@ -30722,6 +30768,7 @@ static swig_cast_info _swigc__p_Seiscomp__DataModel__IntegerQuantity[] = {  {&_s
 static swig_cast_info _swigc__p_Seiscomp__DataModel__Inventory[] = {  {&_swigt__p_Seiscomp__DataModel__Inventory, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__NodalPlane[] = {  {&_swigt__p_Seiscomp__DataModel__NodalPlane, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__NodalPlanes[] = {  {&_swigt__p_Seiscomp__DataModel__NodalPlanes, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Seiscomp__DataModel__Notifier[] = {  {&_swigt__p_Seiscomp__DataModel__Notifier, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__Object[] = {  {&_swigt__p_Seiscomp__DataModel__RouteSeedlink, _p_Seiscomp__DataModel__RouteSeedlinkTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__CompositeTime, _p_Seiscomp__DataModel__CompositeTimeTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__MomentTensor, _p_Seiscomp__DataModel__MomentTensorTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__EventDescription, _p_Seiscomp__DataModel__EventDescriptionTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ResponsePolynomial, _p_Seiscomp__DataModel__ResponsePolynomialTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Inventory, _p_Seiscomp__DataModel__InventoryTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__RouteArclink, _p_Seiscomp__DataModel__RouteArclinkTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__StationReference, _p_Seiscomp__DataModel__StationReferenceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__PickReference, _p_Seiscomp__DataModel__PickReferenceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__AmplitudeReference, _p_Seiscomp__DataModel__AmplitudeReferenceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__OriginReference, _p_Seiscomp__DataModel__OriginReferenceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__FocalMechanismReference, _p_Seiscomp__DataModel__FocalMechanismReferenceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__MomentTensorPhaseSetting, _p_Seiscomp__DataModel__MomentTensorPhaseSettingTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__SensorLocation, _p_Seiscomp__DataModel__SensorLocationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__EventParameters, _p_Seiscomp__DataModel__EventParametersTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Outage, _p_Seiscomp__DataModel__OutageTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Arrival, _p_Seiscomp__DataModel__ArrivalTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__QualityControl, _p_Seiscomp__DataModel__QualityControlTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ArclinkStatusLine, _p_Seiscomp__DataModel__ArclinkStatusLineTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ParameterSet, _p_Seiscomp__DataModel__ParameterSetTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ArclinkRequest, _p_Seiscomp__DataModel__ArclinkRequestTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Station, _p_Seiscomp__DataModel__StationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ConfigStation, _p_Seiscomp__DataModel__ConfigStationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__AuxSource, _p_Seiscomp__DataModel__AuxSourceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Journaling, _p_Seiscomp__DataModel__JournalingTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Access, _p_Seiscomp__DataModel__AccessTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__QCLog, _p_Seiscomp__DataModel__QCLogTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Datalogger, _p_Seiscomp__DataModel__DataloggerTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Reading, _p_Seiscomp__DataModel__ReadingTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__WaveformQuality, _p_Seiscomp__DataModel__WaveformQualityTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__SensorCalibration, _p_Seiscomp__DataModel__SensorCalibrationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__DataloggerCalibration, _p_Seiscomp__DataModel__DataloggerCalibrationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Decimation, _p_Seiscomp__DataModel__DecimationTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ResponseFIR, _p_Seiscomp__DataModel__ResponseFIRTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__FocalMechanism, _p_Seiscomp__DataModel__FocalMechanismTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ResponseFAP, _p_Seiscomp__DataModel__ResponseFAPTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ResponseIIR, _p_Seiscomp__DataModel__ResponseIIRTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Comment, _p_Seiscomp__DataModel__CommentTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Magnitude, _p_Seiscomp__DataModel__MagnitudeTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__StationMagnitude, _p_Seiscomp__DataModel__StationMagnitudeTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__MomentTensorComponentContribution, _p_Seiscomp__DataModel__MomentTensorComponentContributionTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ResponsePAZ, _p_Seiscomp__DataModel__ResponsePAZTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__JournalEntry, _p_Seiscomp__DataModel__JournalEntryTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Parameter, _p_Seiscomp__DataModel__ParameterTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Pick, _p_Seiscomp__DataModel__PickTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__AuxStream, _p_Seiscomp__DataModel__AuxStreamTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ConfigModule, _p_Seiscomp__DataModel__ConfigModuleTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Object, 0, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Route, _p_Seiscomp__DataModel__RouteTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__PublicObject, _p_Seiscomp__DataModel__PublicObjectTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Origin, _p_Seiscomp__DataModel__OriginTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Routing, _p_Seiscomp__DataModel__RoutingTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ArclinkRequestLine, _p_Seiscomp__DataModel__ArclinkRequestLineTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__StationMagnitudeContribution, _p_Seiscomp__DataModel__StationMagnitudeContributionTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Config, _p_Seiscomp__DataModel__ConfigTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Sensor, _p_Seiscomp__DataModel__SensorTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__MomentTensorStationContribution, _p_Seiscomp__DataModel__MomentTensorStationContributionTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Amplitude, _p_Seiscomp__DataModel__AmplitudeTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Event, _p_Seiscomp__DataModel__EventTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Setup, _p_Seiscomp__DataModel__SetupTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__AuxDevice, _p_Seiscomp__DataModel__AuxDeviceTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ArclinkLog, _p_Seiscomp__DataModel__ArclinkLogTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Network, _p_Seiscomp__DataModel__NetworkTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__DataUsed, _p_Seiscomp__DataModel__DataUsedTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__Stream, _p_Seiscomp__DataModel__StreamTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__StationGroup, _p_Seiscomp__DataModel__StationGroupTo_p_Seiscomp__DataModel__Object, 0, 0},  {&_swigt__p_Seiscomp__DataModel__ArclinkUser, _p_Seiscomp__DataModel__ArclinkUserTo_p_Seiscomp__DataModel__Object, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__OriginQuality[] = {  {&_swigt__p_Seiscomp__DataModel__OriginQuality, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Seiscomp__DataModel__OriginUncertainty[] = {  {&_swigt__p_Seiscomp__DataModel__OriginUncertainty, 0, 0, 0},{0, 0, 0, 0}};
