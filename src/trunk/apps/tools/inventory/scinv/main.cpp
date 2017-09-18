@@ -16,6 +16,7 @@
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/client/application.h>
 #include <seiscomp3/client/inventory.h>
+#include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/utils/files.h>
@@ -890,6 +891,14 @@ class InventoryManager : public Client::Application,
 						cerr << "done" << endl;
 					}
 					else if ( !testMode ) {
+						// Notify about start of synchronization
+						DataModel::InventorySyncMessagePtr ismsg = new DataModel::InventorySyncMessage(false);
+						ismsg->creationInfo = DataModel::CreationInfo();
+						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
+						ismsg->creationInfo->setAuthor(author());
+						ismsg->creationInfo->setAgencyID(agencyID());
+						connection()->send(ismsg.get());
+
 						// Send an inital sync command to also wake-up the messaging
 						sync();
 
@@ -936,6 +945,11 @@ class InventoryManager : public Client::Application,
 
 						cerr << endl;
 						sync();
+
+						// Notify about end of synchronization
+						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
+						ismsg->isFinished = true;
+						connection()->send(ismsg.get());
 
 						doSyncKeys = true;
 					}
