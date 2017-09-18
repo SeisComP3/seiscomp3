@@ -897,7 +897,7 @@ class InventoryManager : public Client::Application,
 						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
 						ismsg->creationInfo->setAuthor(author());
 						ismsg->creationInfo->setAgencyID(agencyID());
-						connection()->send(ismsg.get());
+						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
 
 						// Send an inital sync command to also wake-up the messaging
 						sync();
@@ -949,7 +949,7 @@ class InventoryManager : public Client::Application,
 						// Notify about end of synchronization
 						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
 						ismsg->isFinished = true;
-						connection()->send(ismsg.get());
+						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
 
 						doSyncKeys = true;
 					}

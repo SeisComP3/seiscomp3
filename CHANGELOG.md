@@ -189,6 +189,10 @@ Status computeMagnitude(double amplitude, double period,
 
   * Set seiscomp3 database bytea encoding to 'escape' for PostgreSQL database
     servers with version >= 9 in postgres.sql script.
+  * Add InventorySyncMessage which is used to enclose an inventory synchronization
+    process. An application can listen to that message and trigger processing of
+    the updated inventory. The InventorySyncMessage is currently sent by
+    scinv (seiscomp update inventory) to STATUS_GROUP.
 
 * GUI
 
