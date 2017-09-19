@@ -740,7 +740,7 @@ parser.add_option('-y', '--year', dest='year', type='int', default=year,
 parser.add_option('-v', '--verbose', dest='verbose', help='increase verbosity',
                   action='store_true')
 parser.add_option('-q', '--quiet', dest='verbose',
-                  action='store_false', default=True)
+                  action='store_false')
 parser.add_option('-d', '--dcid', dest='dcid', type='str')
 
 (options, args) = parser.parse_args()
@@ -749,8 +749,8 @@ verbose = options.verbose
 default_dcid = options.dcid
 
 db = os.path.join(reqlogstats_db_dir, 'reqlogstats-%4i.db' % (year))
-scores = 4 * [0]  # [0, 0]
-scores_labels = ("rejected", "inserted", "not found", "unparseable")
+scores_labels = ('rejected', 'inserted', 'not found', 'unparseable')
+scores = len(scores_labels) * [0]
 unparsed_list = []
 
 if verbose:
@@ -764,7 +764,7 @@ if os.path.exists(db):
     # Only works if the tables exist:
     #print summary_data(db)
 else:
-    print "Creating new database file", db
+    print 'Creating new database file', db
     con = sqlite3.connect(db)
     new_table(con)
 
