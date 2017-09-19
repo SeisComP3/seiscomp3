@@ -25,7 +25,7 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='${HOME}/reqlogstats/var'
+db_dir="${HOME}/reqlogstats/var"
 
 if [ ! -d ${img_dir} ] ; then
     echo "${progname}: Images directory ${img_dir} does not exist. Bye."
