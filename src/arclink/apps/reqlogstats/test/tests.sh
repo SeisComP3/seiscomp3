@@ -1,8 +1,18 @@
-#!/bin/bash
+#!/bin/sh
+set -u
 
 # Reqlogstats.py tests:
+test_reqlogstats_quiet () {
+	python ../reqlogstats.py -q < /dev/null > /tmp/q
+	python ../reqlogstats.py -v < /dev/null > /tmp/v
+	diff /tmp/q /tmp/v > /tmp/diffs
+
+	rm -f /tmp/q /tmp/v /tmp/diffs
+}
+
 test_reqlogstats_noinput () {
 	python -R -d ../reqlogstats.py < /dev/null > /tmp/1
+	year=$(date +%Y)
 	cat > /tmp/2 <<EOF
 ----------------------------------------------------------------------
 Done with 0 file(s).
@@ -17,9 +27,9 @@ Summary : 0
 User : 0
 UserIP : 0
 Volume : 0
-Database /home/sysop/reqlogstats/var/reqlogstats-2016.db contains  0 source(s), and 0 day summaries.
+Database $HOME/reqlogstats/var/reqlogstats-${year}.db contains  0 source(s), and 0 day summaries.
 EOF
-	diff /tmp/1 /tmp/2
+	diff /tmp/1 /tmp/2 && echo "No differences found" || cat /tmp/1
 	rm -f /tmp/1 /tmp/2
 }
 
@@ -40,7 +50,7 @@ echo
 echo "GENERAL PYTHON CHECKS"
 echo
 
-for t in test_reqlogstats_noinput test_splitmail_noinput test_python_syntax ; do
+for t in test_reqlogstats_quiet test_reqlogstats_noinput test_splitmail_noinput test_python_syntax ; do
 	$t
 	echo "Done $t"
 done
@@ -85,12 +95,31 @@ fi
 test_web_content () {
 	for f in ../www/*.php ; do
                 php -l $f
-		grep "+ PHP_EOL" *.f  # Use '.' not '+'
+		grep "+ PHP_EOL" $f  # Use '.' not '+'
         done
 
         php ../www/reqlog.php | wc -l  # expect 0
         php ../www/reqlogdisplay.php | file -  # expect XML
         php ../www/reqlognetwork.php | file -  # expect XML
+
+}
+
+test_web_code () {
+    # Coding standard; see e.g.
+    # https://en.wikibooks.org/wiki/PHP_Programming/Coding_Standards
+
+    # Okay in HTML assignments but not PHP oens:
+    grep -n --color "[^ ]=[^\"= ]" ../www/*.php
+
+    # One space after control statements,
+    # between the control keyword and opening parenthesis:
+    grep -n --color "\(if\|for\|while\|switch\|foreach\)(" ../www/*.php
+
+    # One space after commas, generally:
+    grep -n --color ",[^ ]" ../www/*.php
+
+    # Use one tab, no spaces (not 4, not 8)
+    grep "        " ../www/*.php
 
 }
 
@@ -101,6 +130,7 @@ if [ 1 -eq 1 ] ; then
 	echo
 
 	test_web_content
+	test_web_code
 fi
 
 
