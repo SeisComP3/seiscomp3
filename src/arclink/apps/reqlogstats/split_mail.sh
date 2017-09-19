@@ -21,8 +21,3 @@ echo "copy (sentsince ${start}) ${latest}" \
 python split_mail.py < ${latest}
 rm -f ${latest}
 
-# Special hack for GFZ mail, Jan 2014!
-#for f in eida_stats/2014/01/msg-sysop_gfz-potsdam_de-2014-* ; do
-#   sed -e '/<\/html>/,//d' -e 's/<\/body>/<\/body><\/html>/' $f > tmp ; mv tmp $f ;
-#done
-

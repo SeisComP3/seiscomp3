@@ -11,6 +11,11 @@
 #         PNG plot - break-out by source.
 #         text total  
 #
+#
+# Copyright (C) 2017 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
+#
 # ----------------------------------------------------------------------
 set -u
 
@@ -21,7 +26,7 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='/home/sysop/reqlogstats/var'
+db_dir='${HOME}/reqlogstats/var'
 
 if [ ! -d ${img_dir} ] ; then
     echo "${progname}: Images directory ${img_dir} does not exist. Bye."

@@ -1,12 +1,16 @@
 #!/bin/sh
 #
-# Prototype/demonstrator for making a graph of bytes per day or month.
+# Make a graph of bytes per day or month.
 #
 # Begun by Peter L. Evans, December 2013/January 2014
 #
 # Input: reqlogstats-*.db SQLite database
 # Parameters: network code [optional]
 # Output: two plots - total, and break-out by source.
+#
+# Copyright (C) 2013-7 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
 #
 # ----------------------------------------------------------------------
 set -u
@@ -18,7 +22,7 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='/home/sysop/reqlogstats/var'
+db_dir='${HOME}/reqlogstats/var'
 
 if [ ! -d ${img_dir} ] ; then
     echo "${progname}: Images directory ${img_dir} does not exist. Bye."

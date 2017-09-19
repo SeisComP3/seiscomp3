@@ -12,6 +12,10 @@
 #         PNG plot - break-out by source.
 #         text total  
 #
+# Copyright (C) 2015-7 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
+#
 # ----------------------------------------------------------------------
 set -u
 
@@ -22,7 +26,7 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='/home/sysop/reqlogstats/var'
+db_dir="${HOME}/reqlogstats/var"
 
 if [ ! -d ${img_dir} ] ; then
     echo "${progname}: Images directory ${img_dir} does not exist. Bye."
@@ -38,6 +42,7 @@ show_usage() {
   echo "Usage: ${progname} {userpatt} [--dcid {dcid} ] [ {month} [ {year} [ {db file} ]]]"
   echo
   echo "Create usage images from {db file} for the given date."
+  echo " ** {userpatt} is UNUSED for FDSNWS summary **"
   echo "If {dcid} is not given, all DCIDs are included."
   echo "If {month} or {year} are not given, use today's date."
   echo "If {db file} is not given, use a default."
@@ -81,11 +86,15 @@ if [ ! -s ${dbfile} ] ; then
     exit 1
 fi
 
-what="start_day, dcid, sum(size) FROM ArcStatsUser as X JOIN ArcStatsSource as Y WHERE X.src = Y.id"
-user_constr="AND userID LIKE '${userpatt}'"
+tables="ArcStatsSource as Y JOIN ArcStatsVolume as V"
+join="WHERE (V.src = Y.id)"
+user_constr=""   # There is no user info in ArcStatsVolume.
+volume_type_patt=fdsnws
+volume_constr="AND (V.type = '$volume_type_patt')"
+what="start_day, dcid, size/1024.0/1024.0 FROM ${tables} ${join}"
 
 if [ -z "${dcid}" ] ; then
-    cmd="SELECT ${what} ${user_constr} ${dcid_constr} AND substr(X.start_day, 1, 4) = '${start_year}' GROUP BY start_day, dcid ORDER BY start_day, dcid;"
+    cmd="SELECT ${what} ${user_constr} ${dcid_constr} AND substr(V.start_day, 1, 4) = '${start_year}' GROUP BY start_day, dcid ORDER BY start_day, dcid;"
 else
     cmd="SELECT ${what} ${user_constr} ${dcid_constr} GROUP BY start_day, dcid ORDER BY start_day, dcid;"
 fi
@@ -114,7 +123,7 @@ set xlabel 'Date in $start_year'
 set xrange ['$start_year-01-01':]
 set xtics ${xtic_density}*24*3600
 set xtics format "%d\n%b"
-set ylabel 'Total bytes for "${userpatt}"'
+set ylabel 'Total bytes for "${volume_type_patt}"'
 set logscale y
 
 set key top left
@@ -126,7 +135,7 @@ set output 'out.svg'
 
 plot 'days3.dat' using 1:2 title 'All EIDA nodes', \
   '' using 1:5 title 'GFZ', \
-  '/srv/www/webdc/eida/data/total-2015.txt' using 1:(1024*1024*\$2) title 'All requests' w l
+  '/srv/www/webdc/eida/data/total-2017.txt' using 1:(1024*1024*\$2) title 'All requests' w l
 
 #set terminal dumb
 #set output
@@ -156,7 +165,7 @@ fi
 gnuplot <<EOF
 set xlabel 'Day in $start_year'
 
-set ylabel 'Size by day for user "${userpatt}"'
+set ylabel 'Size by day for type "${volume_type_patt}"'
 
 set key top left
 set nogrid
@@ -171,6 +180,7 @@ set output 'out.svg'
 
 # Default for ls 6 is dark blue, too close to pure blue for GFZ:
 set style line 3 linecolor rgb "#00589C"
+set style line 5 linecolor rgb "skyblue"
 set style line 6 linecolor rgb "violet"
 set style line 10 linecolor rgb "magenta"
 
@@ -182,8 +192,9 @@ plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf(
      '' using  8 title 'KOERI' ls 1, \
      '' using  9 title 'LMU' ls 7, \
      '' using 10 title 'NIEP' ls 10, \
-     '' using 11 title 'ODC' ls 9, \
-     '' using 12 title 'RESIF' ls 8
+     '' using 11 title 'NOA' ls 5, \
+     '' using 12 title 'ODC' ls 9, \
+     '' using 13 title 'RESIF' ls 8
 
 #set terminal dumb
 #set output

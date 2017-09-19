@@ -11,6 +11,9 @@
 # Output: PNG plot - total
 #         PNG plot - break-out by source.
 #         text total  
+# Copyright (C) 2015-7 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
 #
 # ----------------------------------------------------------------------
 set -u
@@ -22,7 +25,7 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='/home/sysop/reqlogstats/var'
+db_dir="${HOME}/reqlogstats/var"
 
 if [ ! -d ${img_dir} ] ; then
     echo "${progname}: Images directory ${img_dir} does not exist. Bye."
@@ -38,6 +41,7 @@ show_usage() {
   echo "Usage: ${progname} {userpatt} [--dcid {dcid} ] [ {month} [ {year} [ {db file} ]]]"
   echo
   echo "Create usage images from {db file} for the given date."
+  echo " ** {userpatt} is UNUSED for FDSNWS summary **"
   echo "If {dcid} is not given, all DCIDs are included."
   echo "If {month} or {year} are not given, use today's date."
   echo "If {db file} is not given, use a default."
@@ -81,13 +85,15 @@ if [ ! -s ${dbfile} ] ; then
     exit 1
 fi
 
-user_constr="AND userID LIKE '${userpatt}'"
+join="WHERE (V.src = Y.id)"
+user_constr=""   # There is no user info in ArcStatsVolume.
+volume_type_patt=fdsnws
+volume_constr="AND (V.type = '$volume_type_patt')"
 
-if [ -z "${dcid}" ] ; then
-    cmd="SELECT start_day, dcid, size/1024.0/1024.0 FROM ArcStatsUser as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${user_constr} ${dcid_constr} AND substr(X.start_day, 1, 4) = '${start_year}' GROUP BY start_day, dcid ORDER BY start_day, dcid;"
-else
-    cmd="SELECT start_day, dcid, size/1024.0/1024.0 FROM ArcStatsUser as X JOIN ArcStatsSource as Y WHERE X.src = Y.id ${user_constr} ${dcid_constr} GROUP BY start_day, dcid ORDER BY start_day, dcid;"
-fi
+tables="ArcStatsSource as Y JOIN ArcStatsVolume as V"
+
+cmd="SELECT start_day, dcid, size/1024.0/1024.0 FROM ${tables} ${join} ${user_constr} ${dcid_constr} ${volume_constr} GROUP BY start_day, dcid ORDER BY start_day, dcid;"
+
 echo ${cmd}
 
 echo ${cmd} \
@@ -162,7 +168,7 @@ set mxtics 7
 set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
 show xtics
 
-set ylabel 'Size by day for user "${userpatt}" (MiBytes)'
+set ylabel 'Size by day for type "${volume_type_patt}" (MiBytes)'
 
 set key top left
 set nogrid
