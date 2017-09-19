@@ -171,7 +171,7 @@ MainFrame::MainFrame(){
 	try { _expertMode = SCApp->configGetBool("mode.expert"); }
 	catch ( ... ) { _expertMode = true; }
 
-	try { _exportScript = SCApp->configGetString("scripts.export"); }
+	try { _exportScript = Seiscomp::Environment::Instance()->absolutePath(SCApp->configGetString("scripts.export")); }
 	catch ( ... ) { _exportScript = ""; }
 
 	try { _exportScriptTerminate = SCApp->configGetString("scripts.export.silentTerminate") == "true"; }
