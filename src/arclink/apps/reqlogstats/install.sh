@@ -41,12 +41,13 @@ progname=`basename $0`
 
 install_accumulator() {
 	diffs_found=0
+	ruser=sysop
 	mkdir -p tmp
 	for f in * ; do
 		if [ ! -f $f ] || [ "$f" = "install.sh" ]; then
 			continue
 		fi
-	        scp $target:$progdir/$f tmp 
+	        scp ${ruser}@${target}:${progdir}/$f tmp
 		diff -q $f tmp
 	        if [ $? -ne 0 ] ; then
 	                echo "diff $f tmp"
@@ -55,15 +56,15 @@ install_accumulator() {
 	done
 
 	if [ $diffs_found -eq 0 ] ; then
-	        echo "Identical code at $target:$progdir; nothing to update"
+	        echo "Identical code at ${target}:${progdir}; nothing to update"
 	        rm -r tmp
 	else
-		echo "Starting rsync to update code at $target:$progdir in $rsync_delay seconds..."
+		echo "Starting rsync to update code at ${target}:${progdir} in $rsync_delay seconds..."
 	        echo "CTRL-C to stop it."
 	        sleep $rsync_delay
 		# Non-recursive rsync:
-		rsync -v * --exclude install.sh --exclude tmp --exclude var --exclude webdc --exclude www $target:$progdir
-		ssh $target "(cd $progdir ; mkdir -p var )"
+		rsync -v * --exclude install.sh --exclude tmp --exclude var --exclude webdc --exclude www ${ruser}@${target}:${progdir}
+		ssh ${ruser}@${target} "(cd ${progdir} ; mkdir -p var )"
 	fi
 
 }
@@ -76,7 +77,7 @@ fi
 
 rsync_delay=10 # Seconds to wait before starting a dangerous rsync.
 target=$1
-if [ $target = "geofon-open1" ] || [ $target = "geofon-open2" ] ; then
+if [ ${target} = "geofon-open1" ] || [ ${target} = "geofon-open2" ] ; then
 	remotedir=/srv/www/webdc/eida/reqlogstats
 	progdir=/home/sysop/reqlogstats
 	webdcdir=${target}:${remotedir}
@@ -87,7 +88,7 @@ else
 	exit 1
 fi
 
-git status
+git status .
 
 install_accumulator
 
@@ -117,10 +118,10 @@ popd
 echo "Testing code at ${target}..."
 
 echo "Expect 0:"
-ssh ${target} "(cd ${remotedir}; php reqlog.php | wc -c)"
+ssh ${ruser}@${target} "(cd ${remotedir}; php reqlog.php | wc -c)"
 
 for f in reqlogdisplay.php reqlognetwork.php ; do
 	echo "Expect \"/dev/stdin: XML\""
-	ssh ${target} "(cd ${remotedir}; php $f | file - )"
+	ssh ${ruser}@${target} "(cd ${remotedir}; php $f | file - )"
 done
 
