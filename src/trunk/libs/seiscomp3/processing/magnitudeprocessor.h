@@ -18,6 +18,8 @@
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core/interfacefactory.h>
 #include <seiscomp3/core/enumeration.h>
+#include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/sensorlocation.h>
 #include <seiscomp3/processing/processor.h>
 #include <seiscomp3/client.h>
 
@@ -49,6 +51,9 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				DistanceOutOfRange,
 				//! Given period is out of range to continue processing
 				PeriodOutOfRange,
+				//! Either the origin or the sensor location hasn't been set
+				//! in call to computeMagnitude
+				MetaDataRequired,
 				//! The estimation of the Mw magnitude is not supported
 				MwEstimationNotSupported,
 				//! Unspecified error
@@ -60,6 +65,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				"depth out of range",
 				"distance out of range",
 				"period out of range",
+				"meta data required",
 				"Mw estimation not supported",
 				"error"
 			)
@@ -99,20 +105,37 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 
 		virtual bool setup(const Settings &settings);
 
-		//! Sets the trigger used to compute the timewindow to calculate
-		virtual Status computeMagnitude(
-			double amplitude,   // in micrometers per second
-			double period,      // in seconds
-			double delta,       // in degrees
-			double depth,       // in kilometers
-			double &value) = 0; // resulting magnitude value
+		/**
+		 * @brief Computes the magnitude from an amplitude. The method signature
+		 *        has changed with API version >= 11. Prior to that version,
+		 *        @hypocenter and @receiver were not present.
+		 * @param amplitude The amplitude value without unit. The unit is
+		 *                  implicitly defined by the requested amplitude
+		 *                  type.
+		 * @param period The measured period of the amplitude in seconds.
+		 * @param delta The distance from the epicenter in degrees.
+		 * @param depth The depth of the hypocenter in kilometers.
+		 * @param hypocenter The optional origin which describes the hypocenter.
+		 * @param receiver The sensor location meta-data of the receiver.
+		 * @param value The return value, the magnitude.
+		 * @return The status of the computation.
+		 */
+		virtual Status computeMagnitude(double amplitude, double period,
+		                                double delta, double depth,
+		                                const DataModel::Origin *hypocenter,
+		                                const DataModel::SensorLocation *receiver,
+		                                double &value) = 0;
 
-		//! Estimates the Mw magnitude of a given magnitude
-		//! The default implementation returns MwEstimationNotSupported
-		virtual Status estimateMw(
-			double magnitude,   // input magnitude
-			double &estimation, // output Mw estimation
-			double &stdError);  // output standard error
+		/**
+		 * @brief Estimates the Mw magnitude from a given magnitude. The
+		 *        default implementation returns MwEstimationNotSupported.
+		 * @param magnitude Input magnitude value.
+		 * @param estimation Resulting Mw estimation.
+		 * @param stdError Resulting standard error.
+		 * @return The status of the computation.
+		 */
+		virtual Status estimateMw(double magnitude, double &estimation,
+		                          double &stdError);
 
 		void setCorrectionCoefficients(double a, double b);
 

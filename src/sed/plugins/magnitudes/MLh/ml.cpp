@@ -552,6 +552,7 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 			double period,      // in seconds
 			double delta,       // in degrees
 			double depth,       // in kilometers
+			const DataModel::Origin *, const DataModel::SensorLocation *,
 			double &value) {
 			if ( delta < DELTA_MIN || delta > DELTA_MAX )
 				return DistanceOutOfRange;

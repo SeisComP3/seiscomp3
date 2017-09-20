@@ -43,6 +43,7 @@ MagnitudeProcessor::Status MagnitudeProcessor_mB::computeMagnitude(
 	double,           // period is unused
 	double delta,     // in degrees
 	double depth,     // in kilometers
+	const DataModel::Origin *, const DataModel::SensorLocation *,
 	double &value)
 {
 	// Clip depth to 0

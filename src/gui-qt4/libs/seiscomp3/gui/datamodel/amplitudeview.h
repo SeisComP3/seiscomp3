@@ -154,23 +154,24 @@ class SC_GUI_API AmplitudeRecordLabel : public StandardRecordLabel {
 		QColor          _labelColor;
 
 	public:
-		double               latitude;
-		double               longitude;
+		double                            latitude;
+		double                            longitude;
+		const DataModel::SensorLocation  *location;
 
-		Core::TimeWindow     timeWindow;
-		ThreeComponentTrace  data;
+		Core::TimeWindow                  timeWindow;
+		ThreeComponentTrace               data;
 
-		Math::Matrix3f       orientationZNE;
-		Math::Matrix3f       orientationZRT;
+		Math::Matrix3f                    orientationZNE;
+		Math::Matrix3f                    orientationZRT;
 
 		Processing::AmplitudeProcessorPtr processor;
 		Processing::MagnitudeProcessorPtr magnitudeProcessor;
 
-		QString              infoText;
-		bool                 isError;
+		QString                           infoText;
+		bool                              isError;
 
-		bool                 hasGotData;
-		bool                 isEnabledByConfig;
+		bool                              hasGotData;
+		bool                              isEnabledByConfig;
 
 	friend class Gui::AmplitudeView;
 };

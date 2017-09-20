@@ -104,6 +104,7 @@ MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
 	double,             // in seconds
 	double delta,       // in degrees
 	double depth,       // in kilometers
+	const DataModel::Origin *, const DataModel::SensorLocation *,
 	double &value)
 {
 	if ( amplitude <= 0 )

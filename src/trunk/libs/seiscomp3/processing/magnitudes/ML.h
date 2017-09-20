@@ -40,6 +40,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_ML : public MagnitudeProcessor {
 			double period,      // in seconds
 			double delta,     // in degrees
 			double depth,     // in kilometers
+			const DataModel::Origin *hypocenter,
+			const DataModel::SensorLocation *receiver,
 			double &value);
 
 

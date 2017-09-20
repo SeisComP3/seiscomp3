@@ -82,6 +82,7 @@ namespace Core {
    - Added Seiscomp::Client::Application::reloadBindings
    - Increased datamodel version to 0.10
    - Added class Seiscomp::DataModel::ResponseIIR
+   - Added hypocenter and receiver to MagnitudeProcessor::computeMagnitude
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

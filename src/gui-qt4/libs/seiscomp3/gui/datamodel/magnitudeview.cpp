@@ -2093,13 +2093,26 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			double dist, az;
 
 			// Compute station distance
+			SensorLocation *loc =  Client::Inventory::Instance()->getSensorLocation(
+				amp->waveformID().networkCode(), amp->waveformID().stationCode(),
+				amp->waveformID().locationCode(), amp->timeWindow().reference());
+
+			if ( loc == NULL ) {
+				SEISCOMP_ERROR("Failed to get meta data for %s.%s.%s",
+				               amp->waveformID().networkCode().c_str(),
+				               amp->waveformID().stationCode().c_str(),
+				               amp->waveformID().locationCode().empty() ? "--" : amp->waveformID().locationCode().c_str());
+				continue;
+			}
+
 			try {
-				Client::StationLocation loc;
 				double baz;
-				loc = Client::Inventory::Instance()->stationLocation(amp->waveformID().networkCode(), amp->waveformID().stationCode(), amp->timeWindow().reference());
-				Math::Geo::delazi(loc.latitude, loc.longitude, _origin->latitude(), _origin->longitude(), &dist, &az, &baz);
+				Math::Geo::delazi(loc->latitude(), loc->longitude(),
+				                  _origin->latitude(), _origin->longitude(),
+				                  &dist, &az, &baz);
 			}
 			catch ( Core::GeneralException &e ) {
+				SEISCOMP_ERROR("Magnitude distance computation: %s", e.what());
 				continue;
 			}
 
@@ -2111,7 +2124,7 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			Processing::MagnitudeProcessor::Status stat =
 				magProc->computeMagnitude(
 					amp->amplitude().value(), period,
-					dist, _origin->depth(), magValue
+					dist, _origin->depth(), _origin.get(), loc, magValue
 				);
 
 			if ( stat != Processing::MagnitudeProcessor::OK ) {

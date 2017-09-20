@@ -159,6 +159,30 @@ have been added. Furthermore the ResponseIIR type has been added to correctly
 store SEED response coefficients (blockette 54) without the need to convert IIR
 filters to poles and zeros.
 
+**Important API changes**
+
+The MagnitudeProcessor interface has changed to support regionalized
+magnitude computations. The method ```computeMagnitude``` receives additionally
+two parameters, the origin and the sensor location object.
+All external magnitude plugins need to be adapted. Change from
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth, double &value);
+```
+
+to
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth,
+#ifdef SC_API_VERSION >= SC_API_VERSION_CHECK(11,0,0)
+                        const DataModel::Origin *hypocenter,
+                        const DataModel::SensorLocation *receiver,
+#endif
+                        double &value);
+```
+
 ----
 
 * GUI

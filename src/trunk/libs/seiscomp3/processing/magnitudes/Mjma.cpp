@@ -48,6 +48,7 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mjma::computeMagnitude(
 	double period,    // in seconds
 	double delta,     // in degrees
 	double depth,     // in kilometers
+	const DataModel::Origin *, const DataModel::SensorLocation *,
 	double &value)
 {
 	if ( delta < DELTA_MIN || delta > DELTA_MAX )
