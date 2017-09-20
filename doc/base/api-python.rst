@@ -14924,7 +14924,7 @@ Reference
 
       :param code: string
 
-      Virtual network code \(up to 10 characters\)
+      Virtual network code \(up to 20 characters\)
 
    .. py:method:: code()
 

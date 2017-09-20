@@ -134,7 +134,7 @@ class SC_SYSTEM_CORE_API StationGroup : public PublicObject {
 		void setType(const OPT(StationGroupType)& type);
 		StationGroupType type() const;
 
-		//! Virtual network code (up to 10 characters)
+		//! Virtual network code (up to 20 characters)
 		void setCode(const std::string& code);
 		const std::string& code() const;
 

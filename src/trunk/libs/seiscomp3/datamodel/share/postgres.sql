@@ -1178,7 +1178,7 @@ CREATE TABLE StationGroup (
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_type VARCHAR(64),
-	m_code VARCHAR(10),
+	m_code VARCHAR(20),
 	m_start TIMESTAMP,
 	m_start_ms INTEGER,
 	m_end TIMESTAMP,

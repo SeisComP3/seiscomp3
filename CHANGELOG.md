@@ -79,6 +79,7 @@ ALTER TABLE ResponsePolynomial MODIFY approximationUpperBound DOUBLE;
 ALTER TABLE ResponseFAP MODIFY gain DOUBLE;
 ALTER TABLE DataloggerCalibration MODIFY gain DOUBLE;
 ALTER TABLE Datalogger MODIFY gain DOUBLE;
+ALTER TABLE StationGroup MODIFY code CHAR(20);
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
@@ -149,6 +150,7 @@ ALTER TABLE ResponseFIR ADD m_gainFrequency DOUBLE PRECISION;
 ALTER TABLE ResponsePAZ ADD m_decimationFactor SMALLINT UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_delay DOUBLE UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_correction DOUBLE;
+ALTER TABLE StationGroup MODIFY m_code VARCHAR(20);
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
