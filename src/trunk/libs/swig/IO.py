@@ -1472,6 +1472,8 @@ class XMLArchive(Core.GenericArchive):
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, XMLArchive, name)
     __repr__ = _swig_repr
+    ZIP = _IO.XMLArchive_ZIP
+    GZIP = _IO.XMLArchive_GZIP
 
     def __init__(self, *args):
         """
@@ -1526,6 +1528,11 @@ class XMLArchive(Core.GenericArchive):
     def setCompression(self, enable):
         """setCompression(XMLArchive self, bool enable)"""
         return _IO.XMLArchive_setCompression(self, enable)
+
+
+    def setCompressionMethod(self, method):
+        """setCompressionMethod(XMLArchive self, Seiscomp::IO::XMLArchive::CompressionMethod method)"""
+        return _IO.XMLArchive_setCompressionMethod(self, method)
 
 
     def rootNamespace(self):

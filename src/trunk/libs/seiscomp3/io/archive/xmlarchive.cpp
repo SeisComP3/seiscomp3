@@ -22,6 +22,7 @@
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 
 #include <iostream>
@@ -168,6 +169,7 @@ XMLArchive::XMLArchive() : Seiscomp::Core::Archive() {
 	_buf = NULL;
 	_formattedOutput = false;
 	_compression = false;
+	_compressionMethod = ZIP;
 	_rootTag = "seiscomp";
 	_forceWriteVersion = -1;
 
@@ -250,7 +252,18 @@ bool XMLArchive::open() {
 
 	if ( _compression ) {
 		boost::iostreams::filtering_istreambuf filtered_buf;
-		filtered_buf.push(boost::iostreams::zlib_decompressor());
+
+		switch ( _compressionMethod ) {
+			case ZIP:
+				filtered_buf.push(boost::iostreams::zlib_decompressor());
+				break;
+			case GZIP:
+				filtered_buf.push(boost::iostreams::gzip_decompressor());
+				break;
+			default:
+				break;
+		}
+
 		filtered_buf.push(*_buf);
 
 		doc = xmlReadIO(streamBufReadCallback,
@@ -389,7 +402,17 @@ void XMLArchive::close() {
 					boost::iostreams::filtering_ostreambuf filtered_buf;
 
 					if ( _compression ) {
-						filtered_buf.push(boost::iostreams::zlib_compressor());
+						switch ( _compressionMethod ) {
+							case ZIP:
+								filtered_buf.push(boost::iostreams::zlib_compressor());
+								break;
+							case GZIP:
+								filtered_buf.push(boost::iostreams::gzip_compressor());
+								break;
+							default:
+								break;
+						}
+
 						filtered_buf.push(*_buf);
 						xmlBuf->context = &filtered_buf;
 					}
@@ -457,6 +480,11 @@ void XMLArchive::setFormattedOutput(bool enable) {
 
 void XMLArchive::setCompression(bool enable) {
 	_compression = enable;
+}
+
+
+void XMLArchive::setCompressionMethod(CompressionMethod method) {
+	_compressionMethod = method;
 }
 
 

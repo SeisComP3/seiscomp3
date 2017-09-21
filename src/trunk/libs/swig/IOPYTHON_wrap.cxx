@@ -17459,6 +17459,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_XMLArchive_setCompressionMethod(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
+  Seiscomp::IO::XMLArchive::CompressionMethod arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:XMLArchive_setCompressionMethod",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__IO__XMLArchive, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XMLArchive_setCompressionMethod" "', argument " "1"" of type '" "Seiscomp::IO::XMLArchive *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::IO::XMLArchive * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "XMLArchive_setCompressionMethod" "', argument " "2"" of type '" "Seiscomp::IO::XMLArchive::CompressionMethod""'");
+  } 
+  arg2 = static_cast< Seiscomp::IO::XMLArchive::CompressionMethod >(val2);
+  {
+    try {
+      (arg1)->setCompressionMethod(arg2);
+    }
+    catch ( const Seiscomp::Core::ValueException &e) {
+      SWIG_exception(SWIG_ValueError, e.what());
+    }
+    catch ( const std::exception &e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+    catch ( ... ) {
+      SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_XMLArchive_rootNamespace(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Seiscomp::IO::XMLArchive *arg1 = (Seiscomp::IO::XMLArchive *) 0 ;
@@ -37223,6 +37266,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XMLArchive_setRootName", _wrap_XMLArchive_setRootName, METH_VARARGS, (char *)"XMLArchive_setRootName(XMLArchive self, string name)"},
 	 { (char *)"XMLArchive_setFormattedOutput", _wrap_XMLArchive_setFormattedOutput, METH_VARARGS, (char *)"XMLArchive_setFormattedOutput(XMLArchive self, bool enable)"},
 	 { (char *)"XMLArchive_setCompression", _wrap_XMLArchive_setCompression, METH_VARARGS, (char *)"XMLArchive_setCompression(XMLArchive self, bool enable)"},
+	 { (char *)"XMLArchive_setCompressionMethod", _wrap_XMLArchive_setCompressionMethod, METH_VARARGS, (char *)"XMLArchive_setCompressionMethod(XMLArchive self, Seiscomp::IO::XMLArchive::CompressionMethod method)"},
 	 { (char *)"XMLArchive_rootNamespace", _wrap_XMLArchive_rootNamespace, METH_VARARGS, (char *)"XMLArchive_rootNamespace(XMLArchive self) -> string"},
 	 { (char *)"XMLArchive_rootNamespaceUri", _wrap_XMLArchive_rootNamespaceUri, METH_VARARGS, (char *)"XMLArchive_rootNamespaceUri(XMLArchive self) -> string"},
 	 { (char *)"XMLArchive_setRootNamespace", _wrap_XMLArchive_setRootNamespace, METH_VARARGS, (char *)"XMLArchive_setRootNamespace(XMLArchive self, string name, string uri)"},
@@ -40020,6 +40064,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "ios_base_erase_event",SWIG_From_int(static_cast< int >(std::ios_base::erase_event)));
   SWIG_Python_SetConstant(d, "ios_base_imbue_event",SWIG_From_int(static_cast< int >(std::ios_base::imbue_event)));
   SWIG_Python_SetConstant(d, "ios_base_copyfmt_event",SWIG_From_int(static_cast< int >(std::ios_base::copyfmt_event)));
+  SWIG_Python_SetConstant(d, "XMLArchive_ZIP",SWIG_From_int(static_cast< int >(Seiscomp::IO::XMLArchive::ZIP)));
+  SWIG_Python_SetConstant(d, "XMLArchive_GZIP",SWIG_From_int(static_cast< int >(Seiscomp::IO::XMLArchive::GZIP)));
   SWIG_Python_SetConstant(d, "NEXTRAS",SWIG_From_int(static_cast< int >(21)));
   SWIG_Python_SetConstant(d, "AH_DATATYPE_UNDEFINED",SWIG_From_int(static_cast< int >(0)));
   SWIG_Python_SetConstant(d, "AH_DATATYPE_FLOAT",SWIG_From_int(static_cast< int >(1)));
