@@ -412,7 +412,7 @@ void OriginLocatorMap::setOrigin(DataModel::Origin* o) {
 
 	if ( !_origin ) return;
 
-	TTDecorator *ttd = new TTDecorator(&canvas());
+	TTDecorator *ttd = new TTDecorator();
 	ttd->setLatitude(o->latitude());
 	ttd->setLongitude(o->longitude());
 	ttd->setOriginTime(o->time());

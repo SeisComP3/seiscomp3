@@ -1690,7 +1690,7 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 		return NULL;
 	}
 
-	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator(&_mapWidget->canvas());
+	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator();
 	ttDecorator->setDepth(origin->depth());
 	ttDecorator->setOriginTime(origin->time());
 	ttDecorator->setLatitude(origin->latitude());
