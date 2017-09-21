@@ -193,6 +193,9 @@ Status computeMagnitude(double amplitude, double period,
     process. An application can listen to that message and trigger processing of
     the updated inventory. The InventorySyncMessage is currently sent by
     scinv (seiscomp update inventory) to STATUS_GROUP.
+  * Changed default publicID pattern from "@classname@#@time/%Y%m%d%H%M%S.%f@.@id@"
+    to "@classname@/@time/%Y%m%d%H%M%S.%f@.@id@". The hash was removed due to
+    possible conflicts with QuakeML publicID constraints.
 
 * GUI
 
