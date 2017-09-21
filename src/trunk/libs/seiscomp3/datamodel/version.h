@@ -19,7 +19,8 @@
 #define __SEISCOMP_DATAMODEL_VERSION_H__
 
 
-#define SEISCOMP_DATAMODEL_XMLNS "http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10"
+#define SEISCOMP_DATAMODEL_XMLNS_ROOT "http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/"
+#define SEISCOMP_DATAMODEL_XMLNS SEISCOMP_DATAMODEL_XMLNS_ROOT "0.10"
 
 namespace Seiscomp {
 namespace DataModel {

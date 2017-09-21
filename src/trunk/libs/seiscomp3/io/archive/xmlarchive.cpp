@@ -374,7 +374,7 @@ bool XMLArchive::create(bool writeVersion, bool headerNode) {
 	else
 		setVersion(Core::Version(0,0));
 
-	_namespace.second = SEISCOMP_DATAMODEL_XMLNS;
+	_namespace.second = SEISCOMP_DATAMODEL_XMLNS_ROOT + version().toString();
 
 	xmlDocPtr doc = xmlNewDoc(NULL);
 	void* rootNode = NULL;
@@ -448,7 +448,10 @@ void XMLArchive::close() {
 	_namespace.first = "";
 	_namespace.second = "";
 
+	_forceWriteVersion = -1;
+
 	initGenericErrorDefaultFunc(NULL);
+	setVersion(Core::Version(0,0));
 }
 
 
