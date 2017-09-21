@@ -34,6 +34,9 @@ for x in sys.stdin.readlines():
 
     day = words[0]
     dcid = words[1]
+    if len(words) < 3:
+        print "# Skipping", line
+        continue
     val = words[2]
 
     if day == curday:
