@@ -82,7 +82,7 @@ class SC_GUI_API Canvas : public QObject {
 
 	public:
 		Canvas(const MapsDesc &);
-		Canvas(ImageTree* mapTree);
+		Canvas(ImageTree *mapTree);
 		~Canvas();
 
 		void setFont(QFont f);
@@ -94,8 +94,24 @@ class SC_GUI_API Canvas : public QObject {
 
 		void setSize(int w, int h);
 		QSize size() const { return _buffer.size(); }
+
 		int width() const { return _buffer.width(); }
 		int height() const { return _buffer.height(); }
+
+		/**
+		 * @brief Sets the margin of the legend area with respect to the
+		 *        canvas border. The default value is 10 pixels. This methods
+		 *        was added with API 11.
+		 * @param margin The margin in pixels.
+		 */
+		void setLegendMargin(int margin);
+
+		/**
+		 * @brief Returns the margin of the legend area with respect to the
+		 *        canvas border. This methods was added with API 11.
+		 * @return The margin in pixels
+		 */
+		int legendMargin() const { return _margin; }
 
 		void setGrayScale(bool);
 		bool isGrayScale() const;

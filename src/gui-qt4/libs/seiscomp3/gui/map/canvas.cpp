@@ -371,6 +371,15 @@ void Canvas::setSize(int w, int h) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::setLegendMargin(int margin) {
+	_margin = margin;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::init() {
 	_font = SCScheme.fonts.base;
 	_projection = NULL;
@@ -1265,10 +1274,11 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLegends(QPainter& painter) {
 	QFontMetrics fm(painter.font());
-	int margin = 9;
 
 	QPainter::RenderHints hints = painter.renderHints();
 	painter.setRenderHint(QPainter::Antialiasing, false);
+
+	int innerMargin = 9;
 
 	for ( LegendAreas::iterator it = _legendAreas.begin();
 	      it != _legendAreas.end(); ++it ) {
@@ -1294,7 +1304,7 @@ void Canvas::drawLegends(QPainter& painter) {
 
 		QRect decorationRect(0, 0, 52, 22);
 		const QString &title = legend->title();
-		QRect textRect(0, 0, fm.width(title) + 2 * margin, fm.height());
+		QRect textRect(0, 0, fm.width(title) + 2 * innerMargin, fm.height());
 		QSize contentSize = legend->size();
 		int contentHeight = contentSize.height(),
 		    contentWidth = contentSize.width(),
