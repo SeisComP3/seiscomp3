@@ -177,6 +177,7 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 
 	QMenu *menu = new QMenu(parent);
 
+	size_t visibleCount = 0;
 	std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
 	const LayerProperties *root = *it++;
 	for ( ; it != _layerProperties.end(); ++it ) {
@@ -184,6 +185,7 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 		QAction *action = menu->addAction((*it)->name.c_str());
 		action->setCheckable(true);
 		action->setChecked((*it)->visible);
+		if ( (*it)->visible ) ++visibleCount;
 		action->setData(QVariant::fromValue<void*>(*it));
 		connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleFeatureVisibility(bool)));
 	}
@@ -191,15 +193,6 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 	// Add "Select all" and "Select none" options if more than 1 property
 	// is available
 	if ( _layerProperties.size() >= 2 ) {
-		// count total number of visible layer properties
-		size_t visibleCount = 0;
-		std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
-		for ( ; it != _layerProperties.end(); ++it ) {
-			if ( (*it)->visible ) {
-				++visibleCount;
-			}
-		}
-
 		QAction *firstPropertyAction = menu->actions().first();
 
 		// Select all
@@ -210,7 +203,7 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 
 		// Select none
 		QAction *noneAction = new QAction(tr("Select none"), menu);
-		noneAction->setEnabled(visibleCount >= 1);
+		noneAction->setEnabled(visibleCount > 0);
 		connect(noneAction, SIGNAL(triggered()), this, SLOT(hideFeatures()));
 		menu->insertAction(firstPropertyAction, noneAction);
 
