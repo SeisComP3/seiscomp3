@@ -208,7 +208,14 @@ class Reloc : public Client::Application {
 				for ( int i = 0; i < numberOfOrigins; ++i ) {
 					OriginPtr org = ep->origin(i);
 					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
-					org = process(org.get());
+					try {
+						org = process(org.get());
+					}
+					catch ( std::exception &e ) {
+						std::cerr << "ERROR: " << e.what() << std::endl;
+						continue;
+					}
+
 					if ( org ) {
 						if ( replace ) {
 							ep->removeOrigin(i);
