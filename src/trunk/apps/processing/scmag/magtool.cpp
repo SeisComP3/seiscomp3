@@ -303,7 +303,7 @@ DataModel::StationMagnitude *MagTool::getStationMagnitude(
 		if ( SCCoreApp->hasCustomPublicIDPattern() )
 			mag = StaMag::Create();
 		else {
-			string id = origin->publicID() + "#staMag." + type + "#" +
+			string id = origin->publicID() + "/staMag/" + type + "/" +
 			            wfid.networkCode() + "." + wfid.stationCode();
 
 			mag = StaMag::Create(id);
@@ -382,7 +382,7 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin* origin,
 		if ( SCCoreApp->hasCustomPublicIDPattern() )
 			mag = NetMag::Create();
 		else {
-			std::string id = origin->publicID() + "#netMag." + type;
+			std::string id = origin->publicID() + "/netMag/" + type;
 			mag = NetMag::Create(id);
 		}
 
