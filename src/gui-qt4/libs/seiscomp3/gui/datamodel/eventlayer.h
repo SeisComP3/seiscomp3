@@ -56,10 +56,10 @@ class SC_GUI_API EventLayer : public Map::Layer {
 	//  Slots
 	// ----------------------------------------------------------------------
 	public slots:
-		void clear();
-		void addEvent(Seiscomp::DataModel::Event*,bool);
-		void updateEvent(Seiscomp::DataModel::Event*);
-		void removeEvent(Seiscomp::DataModel::Event*);
+		virtual void clear();
+		virtual void addEvent(Seiscomp::DataModel::Event*,bool);
+		virtual void updateEvent(Seiscomp::DataModel::Event*);
+		virtual void removeEvent(Seiscomp::DataModel::Event*);
 
 
 	// ----------------------------------------------------------------------
