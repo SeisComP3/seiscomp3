@@ -188,6 +188,9 @@ Status computeMagnitude(double amplitude, double period,
                         double &value);
 ```
 
+Furthermore a new enumeration has been added to return the status of
+the magnitude processing: ```EpicentreOutOfRegions```.
+
 ----
 
 * trunk

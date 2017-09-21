@@ -54,6 +54,8 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				//! Either the origin or the sensor location hasn't been set
 				//! in call to computeMagnitude
 				MetaDataRequired,
+				//! The epicentre is out of supported regions
+				EpicentreOutOfRegions,
 				//! The estimation of the Mw magnitude is not supported
 				MwEstimationNotSupported,
 				//! Unspecified error
@@ -66,6 +68,7 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor : public Processor {
 				"distance out of range",
 				"period out of range",
 				"meta data required",
+				"epicentre out of regions",
 				"Mw estimation not supported",
 				"error"
 			)
