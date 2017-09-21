@@ -89,7 +89,7 @@ namespace Core {
    - Increased datamodel version to 0.10
    - Added class Seiscomp::DataModel::ResponseIIR
    - Added hypocenter and receiver to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
-   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicentreOutOfRegions
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

@@ -189,7 +189,7 @@ Status computeMagnitude(double amplitude, double period,
 ```
 
 Furthermore a new enumeration has been added to return the status of
-the magnitude processing: ```EpicentreOutOfRegions```.
+the magnitude processing: ```EpicenterOutOfRegions```.
 
 ----
 
