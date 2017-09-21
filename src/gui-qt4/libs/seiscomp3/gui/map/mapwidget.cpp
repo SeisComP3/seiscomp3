@@ -600,6 +600,11 @@ void MapWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 
 
 void MapWidget::keyPressEvent(QKeyEvent* e) {
+	if ( _canvas.filterKeyPressEvent(e) ) {
+		e->accept();
+		return;
+	}
+
 	e->accept();
 
 	int key = e->key();
@@ -645,7 +650,12 @@ void MapWidget::keyPressEvent(QKeyEvent* e) {
 }
 
 
-void MapWidget::keyReleaseEvent(QKeyEvent *e) {}
+void MapWidget::keyReleaseEvent(QKeyEvent *e) {
+	if ( _canvas.filterKeyReleaseEvent(e) ) {
+		e->accept();
+		return;
+	}
+}
 
 
 void MapWidget::wheelEvent(QWheelEvent *e) {

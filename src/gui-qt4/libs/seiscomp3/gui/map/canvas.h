@@ -241,6 +241,8 @@ class SC_GUI_API Canvas : public QObject {
 		void raise(Layer*);
 
 		bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
+		bool filterKeyPressEvent(QKeyEvent *event);
+		bool filterKeyReleaseEvent(QKeyEvent *event);
 		bool filterMouseMoveEvent(QMouseEvent*);
 		bool filterMousePressEvent(QMouseEvent*);
 		bool filterMouseReleaseEvent(QMouseEvent*);

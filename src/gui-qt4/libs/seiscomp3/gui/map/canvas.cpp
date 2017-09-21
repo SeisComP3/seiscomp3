@@ -1645,6 +1645,30 @@ void Canvas::lower(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterKeyPressEvent(QKeyEvent *event) {
+	if ( _hoverLayer )
+		return _hoverLayer->filterKeyPressEvent(event);
+	else
+		return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterKeyReleaseEvent(QKeyEvent *event) {
+	if ( _hoverLayer )
+		return _hoverLayer->filterKeyReleaseEvent(event);
+	else
+		return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
 	SymbolCollection::iterator it = _mapSymbolCollection.end();
 
