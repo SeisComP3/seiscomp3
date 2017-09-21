@@ -1742,7 +1742,7 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QMenu* Canvas::menu(QWidget* parent) const {
+QMenu* Canvas::menu(QMenu *parent) const {
 	QMenu *menu = new QMenu(tr("Layers"), parent);
 	foreach ( Layer *layer, _layers ) {
 		if ( layer == &_citiesLayer ||

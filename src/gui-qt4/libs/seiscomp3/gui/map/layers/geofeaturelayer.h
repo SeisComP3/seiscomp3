@@ -37,7 +37,7 @@ class SC_GUI_API GeoFeatureLayer : public Layer {
 		virtual void setVisible(bool flag);
 		virtual void bufferUpdated(Canvas *canvas);
 
-		virtual QMenu *menu(QWidget*) const;
+		virtual QMenu *menu(QMenu*) const;
 
 
 	private slots:

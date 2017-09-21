@@ -132,7 +132,7 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual bool filterMouseReleaseEvent(QMouseEvent *event, const QPointF &geoPos);
 		virtual bool filterMouseDoubleClickEvent(QMouseEvent *event, const QPointF &geoPos);
 
-		virtual QMenu *menu(QWidget*) const;
+		virtual QMenu *menu(QMenu*) const;
 
 
 	signals:

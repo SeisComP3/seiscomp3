@@ -441,7 +441,7 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 	action->setChecked(_canvas.isDrawCitiesEnabled());
 
 	// Layers (if any)
-	QMenu* subMenu = _canvas.menu(menu);
+	QMenu *subMenu = _canvas.menu(menu);
 	if ( subMenu )
 		menu->addMenu(subMenu);
 }

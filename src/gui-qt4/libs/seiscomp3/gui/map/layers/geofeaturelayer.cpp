@@ -171,7 +171,7 @@ void GeoFeatureLayer::bufferUpdated(Canvas *canvas) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QMenu *GeoFeatureLayer::menu(QWidget *parent) const {
+QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 	if ( _layerProperties.size() < 2 )
 		return NULL;
 

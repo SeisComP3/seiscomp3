@@ -231,7 +231,7 @@ class SC_GUI_API Canvas : public QObject {
 		bool filterMouseReleaseEvent(QMouseEvent*);
 		bool filterMouseDoubleClickEvent(QMouseEvent*);
 
-		QMenu* menu(QWidget*) const;
+		QMenu* menu(QMenu*) const;
 
 		void setVisible(Legend*);
 
