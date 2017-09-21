@@ -1,4 +1,4 @@
-set xlabel 'Day in $start_year'
+set xlabel 'Date in #year#'
 set xrange [0:366]
 set xtics nomirror out
 # Trickery to make level 0 ticks smaller than level 1, and without text labels
@@ -8,7 +8,7 @@ set mxtics 7
 set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
 show xtics
 
-set ylabel 'Size by day for type "${volume_type_patt}" (MiBytes)'
+set ylabel 'Size by day for type "#volume_type_patt#" (MiBytes)'
 
 set key top left inside
 set key vertical maxrows 4
@@ -16,6 +16,7 @@ set key title "Data served by DCID"
 set key spacing 1.25  # vertical space
 set key width 0.25
 set key invert        # For stacked histogram
+set key box
 set nogrid
 
 set style data histograms
@@ -46,7 +47,7 @@ plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
      '' using 11 title 'NOA' ls 5, \
      '' using 12 title 'ODC' ls 9, \
      '' using 13 title 'RESIF' ls 8, \
-     '' using 2 title 'All' with lines
+     '' using 2 title 'All' with lines ls -1
 
 #set terminal dumb
 #set output

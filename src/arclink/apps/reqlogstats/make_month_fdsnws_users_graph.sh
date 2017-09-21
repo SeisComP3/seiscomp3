@@ -29,13 +29,13 @@ img_dir='/srv/www/webdc/eida/data'
 db_dir="${HOME}/reqlogstats/var"
 
 if [ ! -d ${img_dir} ] ; then
-    echo "${progname}: Images directory ${img_dir} does not exist. Bye."
-    exit 1
+    echo "${progname}: Images directory ${img_dir} does not exist. Using local var."
+    img_dir=var
 fi
 
 if [ ! -d ${db_dir} ] ; then
-    echo "${progname}: SQLite DB directory ${db_dir} does not exist. Bye."
-    exit 1
+    echo "${progname}: SQLite DB directory ${db_dir} does not exist. Using local var."
+    db_dir=var
 fi
 
 show_usage() {
@@ -81,8 +81,8 @@ else
     dbfile="${db_dir}/reqlogstats-${start_year}.db"
 fi
 echo "Looking in ${dbfile} for ${start_year} month ${start_month}" 
-if [ ! -s ${dbfile} ] ; then
-    echo "Error: ${dbfile} not found. Bye"
+if [ ! -s "${dbfile}" ] ; then
+    echo "Error: ${dbfile} not found or is empty. Bye"
     exit 1
 fi
 
@@ -116,31 +116,10 @@ tail -5 days3.dat
 start_month_name=$(date +%B -d "$start_year-$start_month-01")
 
 xtic_density=14
-gnuplot <<EOF
-set xdata time
-set timefmt "%Y-%m-%d"
-set xlabel 'Date in $start_year'
-set xrange ['$start_year-01-01':]
-set xtics ${xtic_density}*24*3600
-set xtics format "%d\n%b"
-set ylabel 'Total bytes for "${volume_type_patt}"'
-set logscale y
-
-set key top left
-set grid x
-set style data impulses
-
-set terminal svg font "arial,14" size 960,480   # even "giant" is not enough font.
-set output 'out.svg'
-
-plot 'days3.dat' using 1:2 title 'All EIDA nodes', \
-  '' using 1:5 title 'GFZ', \
-  '/srv/www/webdc/eida/data/total-2017.txt' using 1:(1024*1024*\$2) title 'All requests' w l
-
-#set terminal dumb
-#set output
-#replot
-EOF
+sed -e "s/\#year\#/${start_year}/g" \
+    -e "s/\#xtic_density\#/${xtic_density}/g" \
+    -e "s/\#volume_type_patt\#/$volume_type_patt/" \
+    total_user.gnu | gnuplot
 
 if [ -z "${dcid}" ] ; then
     out_dir="${img_dir}"
@@ -162,44 +141,10 @@ fi
 
 # ----------------------------------------------------------------------
 
-gnuplot <<EOF
-set xlabel 'Day in $start_year'
-
-set ylabel 'Size by day for type "${volume_type_patt}"'
-
-set key top left
-set nogrid
-
-set style data histograms
-set style histogram rowstacked
-set boxwidth 0.7 relative
-set style fill solid 1.0 border 0
-
-set terminal svg font "arial,14" size 960,480
-set output 'out.svg'
-
-# Default for ls 6 is dark blue, too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
-
-plot '<cut -c9- days3.dat' using 3:xtic(int(\$0) % ${xtic_density} == 0?sprintf("%i", \$0):"") title 'BGR' ls 2, \
-     '' using  4 title 'ETHZ' ls 1, \
-     '' using  5 title 'GFZ' ls 3, \
-     '' using  6 title 'INGV' ls 4, \
-     '' using  7 title 'IPGP' ls 6, \
-     '' using  8 title 'KOERI' ls 1, \
-     '' using  9 title 'LMU' ls 7, \
-     '' using 10 title 'NIEP' ls 10, \
-     '' using 11 title 'NOA' ls 5, \
-     '' using 12 title 'ODC' ls 9, \
-     '' using 13 title 'RESIF' ls 8
-
-#set terminal dumb
-#set output
-#replot
-EOF
+sed -e "s/\#year\#/${start_year}/g" \
+    -e "s/\#xtic_density\#/${xtic_density}/g" \
+    -e "s/\#volume_type_patt\#/$volume_type_patt/" \
+    sources_fdsnws_users.gnu | gnuplot
 
 if [ -z "${dcid}" ] ; then
     out_dir="${img_dir}"
