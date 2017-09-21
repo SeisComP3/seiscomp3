@@ -38,7 +38,7 @@ namespace Gui {
 OriginSymbol::OriginSymbol(Map::Decorator* decorator)
 : Symbol(decorator)
 , _filled(false)
-, _preferredMagnitudeValue(0)
+, _magnitude(0)
 , _depth(0) {
 	init();
 }
@@ -63,45 +63,22 @@ OriginSymbol::OriginSymbol(double latitude,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
-	painter.save();
-
 	QPen pen;
 	pen.setColor(_color);
 	pen.setWidth(SCScheme.colors.originSymbol.classic ? 4 : 2);
 	pen.setJoinStyle(Qt::MiterJoin);
 	painter.setPen(pen);
 
-	QBrush brush;
 	if ( SCScheme.colors.originSymbol.classic ) {
-		brush.setColor(_color);
-		brush.setStyle(isFilled() ? Qt::SolidPattern : Qt::NoBrush);
+		if ( isFilled() )
+			painter.setBrush(_fillColor.isValid() ? _fillColor : _color);
 	}
-	else {
-		brush.setColor(isFilled() ? _color : QColor(_color.red(), _color.green(), _color.black(), 128));
-		brush.setStyle(Qt::SolidPattern);
-	}
-
-	/*
-	QBrush brush;
-	brush.setStyle(Qt::SolidPattern);
-	if ( isFilled() )
-		brush.setColor(_color);
 	else
-		brush.setColor(QColor(_color.red(), _color.green(), _color.blue(), 64));
-	*/
+		painter.setBrush(_fillColor.isValid() ? _fillColor : (isFilled() ? _color : QColor(_color.red(), _color.green(), _color.black(), 128)));
 
-	painter.setBrush(brush);
-
-	const QSize &size = Seiscomp::Gui::Map::Symbol::size();
-
-	int height = size.height(),
-	    width = size.width(),
-	    r = int(width / 2);
-	QRect rect(_position.x() - r, _position.y() - r, width, height);
-	_poly = rect;
-	painter.drawEllipse(rect);
-
-	painter.restore();
+	int rx = size().width()/2;
+	int ry = size().height()/2;
+	painter.drawEllipse(QRect(x()-rx, y()-ry, size().width(), size().height()));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -110,7 +87,7 @@ void OriginSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::setPreferredMagnitudeValue(double magnitudeValue) {
-	_preferredMagnitudeValue = magnitudeValue;
+	_magnitude = magnitudeValue;
 	updateSize();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -120,7 +97,17 @@ void OriginSymbol::setPreferredMagnitudeValue(double magnitudeValue) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double OriginSymbol::preferredMagnitudeValue() const {
-	return _preferredMagnitudeValue;
+	return _magnitude;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginSymbol::setDepth(double depth) {
+	_depth = depth;
+	depthColorCoding();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -137,9 +124,17 @@ double OriginSymbol::depth() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setDepth(double depth) {
-	_depth = depth;
-	depthColorCoding();
+void OriginSymbol::setColor(const QColor &c) {
+	_color = c;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginSymbol::setFillColor(const QColor &c) {
+	_fillColor = c;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -165,8 +160,16 @@ bool OriginSymbol::isFilled() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::isInside(int x, int y) const {
-	return _poly.boundingRect().contains(x, y);
+bool OriginSymbol::isInside(int px, int py) const {
+	int rx = size().width()/2;
+	int ry = size().height()/2;
+
+	if ( px < x()-rx ) return false;
+	if ( py < y()-ry ) return false;
+	if ( px > x()+rx ) return false;
+	if ( py > y()+ry ) return false;
+
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -184,7 +187,7 @@ int OriginSymbol::getSize(double mag) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::updateSize() {
-	int width = getSize(_preferredMagnitudeValue);
+	int width = getSize(_magnitude);
 	setSize(QSize(width, width));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -194,21 +197,20 @@ void OriginSymbol::updateSize() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::init() {
-	_color                   = Qt::black;
-	_defaultSize             = 20;
-	_preferredMagnitudeValue = 0.;
-
+	_color = Qt::black;
 	setPriority(Symbol::HIGH);
-	setSize(QSize(_defaultSize, _defaultSize));
+	setSize(QSize(20, 20));
 	depthColorCoding();
 	updateSize();
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::depthColorCoding() {
+	_fillColor = QColor();
 	_color = SCScheme.colors.originSymbol.depth.gradient.colorAt(
 	            _depth,
 	            SCScheme.colors.originSymbol.depth.discrete
@@ -218,5 +220,7 @@ void OriginSymbol::depthColorCoding() {
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // namespace Gui
 } // namespace Seiscomp

@@ -62,6 +62,10 @@ namespace Core {
    - Removed virtual declaration of Seiscomp::Gui::Map::Legend::size
    - Removed class Seiscomp::Gui::Map::CanvasDelegate
    - Added class Seiscomp::Gui::EventLayer
+   - Added Seiscomp::Gui::OriginSymbol::setColor
+   - Added Seiscomp::Gui::OriginSymbol::color
+   - Added Seiscomp::Gui::OriginSymbol::setFillColor
+   - Added Seiscomp::Gui::OriginSymbol::fillColor
    - Added Seiscomp::Gui::MapWidget::setDrawLegends
    - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
    - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
