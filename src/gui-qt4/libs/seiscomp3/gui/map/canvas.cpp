@@ -571,6 +571,8 @@ void Canvas::setDrawLegends(bool e) {
 				area[area.currentIndex]->setVisible(true);
 		}
 	}
+
+	emit legendVisibilityChanged(_isDrawLegendsEnabled);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

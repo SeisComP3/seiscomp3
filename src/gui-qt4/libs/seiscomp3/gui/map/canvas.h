@@ -267,6 +267,7 @@ class SC_GUI_API Canvas : public QObject {
 
 		void bufferUpdated();
 		void projectionChanged(Seiscomp::Gui::Map::Projection*);
+		void legendVisibilityChanged(bool);
 		void updateRequested();
 		void customLayer(QPainter*);
 
@@ -293,6 +294,7 @@ class SC_GUI_API Canvas : public QObject {
 	private slots:
 		void updatedTiles();
 		void updateLayer(const Layer::UpdateHints&);
+
 
 	private:
 		typedef QVector<Legend*> Legends;
