@@ -139,6 +139,10 @@ class SC_SYSTEM_CORE_API ResponseIIR : public PublicObject {
 		void setGain(const OPT(double)& gain);
 		double gain() const;
 
+		//! Gain frequency (48.06/58.05)
+		void setGainFrequency(const OPT(double)& gainFrequency);
+		double gainFrequency() const;
+
 		//! Decimation factor (47.06/57.05)
 		void setDecimationFactor(const OPT(int)& decimationFactor);
 		int decimationFactor() const;
@@ -216,6 +220,7 @@ class SC_SYSTEM_CORE_API ResponseIIR : public PublicObject {
 		// Attributes
 		std::string _type;
 		OPT(double) _gain;
+		OPT(double) _gainFrequency;
 		OPT(int) _decimationFactor;
 		OPT(double) _delay;
 		OPT(double) _correction;

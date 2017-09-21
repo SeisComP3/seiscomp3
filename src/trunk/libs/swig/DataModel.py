@@ -11749,6 +11749,16 @@ class ResponseFIR(PublicObject):
         return _DataModel.ResponseFIR_gain(self)
 
 
+    def setGainFrequency(self, gainFrequency):
+        """setGainFrequency(ResponseFIR self, Seiscomp::Core::Optional< double >::Impl const & gainFrequency)"""
+        return _DataModel.ResponseFIR_setGainFrequency(self, gainFrequency)
+
+
+    def gainFrequency(self):
+        """gainFrequency(ResponseFIR self) -> double"""
+        return _DataModel.ResponseFIR_gainFrequency(self)
+
+
     def setDecimationFactor(self, decimationFactor):
         """setDecimationFactor(ResponseFIR self, Seiscomp::Core::Optional< int >::Impl const & decimationFactor)"""
         return _DataModel.ResponseFIR_setDecimationFactor(self, decimationFactor)
@@ -12078,6 +12088,16 @@ class ResponseIIR(PublicObject):
     def gain(self):
         """gain(ResponseIIR self) -> double"""
         return _DataModel.ResponseIIR_gain(self)
+
+
+    def setGainFrequency(self, gainFrequency):
+        """setGainFrequency(ResponseIIR self, Seiscomp::Core::Optional< double >::Impl const & gainFrequency)"""
+        return _DataModel.ResponseIIR_setGainFrequency(self, gainFrequency)
+
+
+    def gainFrequency(self):
+        """gainFrequency(ResponseIIR self) -> double"""
+        return _DataModel.ResponseIIR_gainFrequency(self)
 
 
     def setDecimationFactor(self, decimationFactor):

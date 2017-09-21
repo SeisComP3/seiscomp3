@@ -32,6 +32,7 @@ IMPLEMENT_SC_CLASS_DERIVED(ResponseFIR, PublicObject, "ResponseFIR");
 ResponseFIR::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObject(rtti) {
 	addProperty(Core::simpleProperty("name", "string", false, false, true, false, false, false, NULL, &ResponseFIR::setName, &ResponseFIR::name));
 	addProperty(Core::simpleProperty("gain", "float", false, false, false, false, true, false, NULL, &ResponseFIR::setGain, &ResponseFIR::gain));
+	addProperty(Core::simpleProperty("gainFrequency", "float", false, false, false, false, true, false, NULL, &ResponseFIR::setGainFrequency, &ResponseFIR::gainFrequency));
 	addProperty(Core::simpleProperty("decimationFactor", "int", false, false, false, false, true, false, NULL, &ResponseFIR::setDecimationFactor, &ResponseFIR::decimationFactor));
 	addProperty(Core::simpleProperty("delay", "float", false, false, false, false, true, false, NULL, &ResponseFIR::setDelay, &ResponseFIR::delay));
 	addProperty(Core::simpleProperty("correction", "float", false, false, false, false, true, false, NULL, &ResponseFIR::setCorrection, &ResponseFIR::correction));
@@ -163,6 +164,7 @@ ResponseFIR* ResponseFIR::Find(const std::string& publicID) {
 bool ResponseFIR::operator==(const ResponseFIR& rhs) const {
 	if ( _index != rhs._index ) return false;
 	if ( _gain != rhs._gain ) return false;
+	if ( _gainFrequency != rhs._gainFrequency ) return false;
 	if ( _decimationFactor != rhs._decimationFactor ) return false;
 	if ( _delay != rhs._delay ) return false;
 	if ( _correction != rhs._correction ) return false;
@@ -227,6 +229,26 @@ double ResponseFIR::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponseFIR.gain is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponseFIR::setGainFrequency(const OPT(double)& gainFrequency) {
+	_gainFrequency = gainFrequency;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponseFIR::gainFrequency() const {
+	if ( _gainFrequency )
+		return *_gainFrequency;
+	throw Seiscomp::Core::ValueException("ResponseFIR.gainFrequency is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -426,6 +448,7 @@ ResponseFIR& ResponseFIR::operator=(const ResponseFIR& other) {
 	PublicObject::operator=(other);
 	_index = other._index;
 	_gain = other._gain;
+	_gainFrequency = other._gainFrequency;
 	_decimationFactor = other._decimationFactor;
 	_delay = other._delay;
 	_correction = other._correction;
@@ -568,6 +591,7 @@ void ResponseFIR::serialize(Archive& ar) {
 
 	ar & NAMED_OBJECT_HINT("name", _index.name, Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("gain", _gain, Archive::XML_ELEMENT);
+	ar & NAMED_OBJECT_HINT("gainFrequency", _gainFrequency, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("decimationFactor", _decimationFactor, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("delay", _delay, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("correction", _correction, Archive::XML_ELEMENT);

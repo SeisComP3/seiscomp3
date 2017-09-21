@@ -16,6 +16,7 @@ CREATE TABLE ResponseIIR (
 	name VARCHAR(255),
 	type CHAR(1),
 	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
 	decimationFactor SMALLINT UNSIGNED,
 	delay DOUBLE UNSIGNED,
 	correction DOUBLE,
@@ -34,6 +35,7 @@ CREATE TABLE ResponseIIR (
 		ON DELETE CASCADE,
 	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
+
 
 ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
 ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;
@@ -66,6 +68,7 @@ ALTER TABLE Network ADD start_ms INTEGER AFTER start;
 ALTER TABLE Network ADD end_ms INTEGER AFTER end;
 DROP INDEX _parent_oid_2 ON Network;
 ALTER TABLE Network ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE ResponseFIR ADD gainFrequency DOUBLE UNSIGNED AFTER gain;
 ALTER TABLE ResponsePAZ ADD decimationFactor SMALLINT UNSIGNED;
 ALTER TABLE ResponsePAZ ADD delay DOUBLE UNSIGNED;
 ALTER TABLE ResponsePAZ ADD correction DOUBLE;
@@ -90,6 +93,7 @@ CREATE TABLE ResponseIIR (
 	m_name VARCHAR(255),
 	m_type VARCHAR(1),
 	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
 	m_decimationFactor SMALLINT,
 	m_delay DOUBLE PRECISION,
 	m_correction DOUBLE PRECISION,
@@ -141,6 +145,7 @@ ALTER TABLE Network ADD m_start_ms INTEGER;
 ALTER TABLE Network ADD m_end_ms INTEGER;
 ALTER TABLE Network DROP CONSTRAINT network__parent_oid_m_code_m_start_key;
 ALTER TABLE Network ADD CONSTRAINT network_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE ResponseFIR ADD m_gainFrequency DOUBLE PRECISION;
 ALTER TABLE ResponsePAZ ADD m_decimationFactor SMALLINT UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_delay DOUBLE UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_correction DOUBLE;

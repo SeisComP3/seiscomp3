@@ -33,6 +33,7 @@ ResponseIIR::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Me
 	addProperty(Core::simpleProperty("name", "string", false, false, true, false, false, false, NULL, &ResponseIIR::setName, &ResponseIIR::name));
 	addProperty(Core::simpleProperty("type", "string", false, false, false, false, false, false, NULL, &ResponseIIR::setType, &ResponseIIR::type));
 	addProperty(Core::simpleProperty("gain", "float", false, false, false, false, true, false, NULL, &ResponseIIR::setGain, &ResponseIIR::gain));
+	addProperty(Core::simpleProperty("gainFrequency", "float", false, false, false, false, true, false, NULL, &ResponseIIR::setGainFrequency, &ResponseIIR::gainFrequency));
 	addProperty(Core::simpleProperty("decimationFactor", "int", false, false, false, false, true, false, NULL, &ResponseIIR::setDecimationFactor, &ResponseIIR::decimationFactor));
 	addProperty(Core::simpleProperty("delay", "float", false, false, false, false, true, false, NULL, &ResponseIIR::setDelay, &ResponseIIR::delay));
 	addProperty(Core::simpleProperty("correction", "float", false, false, false, false, true, false, NULL, &ResponseIIR::setCorrection, &ResponseIIR::correction));
@@ -166,6 +167,7 @@ bool ResponseIIR::operator==(const ResponseIIR& rhs) const {
 	if ( _index != rhs._index ) return false;
 	if ( _type != rhs._type ) return false;
 	if ( _gain != rhs._gain ) return false;
+	if ( _gainFrequency != rhs._gainFrequency ) return false;
 	if ( _decimationFactor != rhs._decimationFactor ) return false;
 	if ( _delay != rhs._delay ) return false;
 	if ( _correction != rhs._correction ) return false;
@@ -249,6 +251,26 @@ double ResponseIIR::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponseIIR.gain is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponseIIR::setGainFrequency(const OPT(double)& gainFrequency) {
+	_gainFrequency = gainFrequency;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponseIIR::gainFrequency() const {
+	if ( _gainFrequency )
+		return *_gainFrequency;
+	throw Seiscomp::Core::ValueException("ResponseIIR.gainFrequency is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -482,6 +504,7 @@ ResponseIIR& ResponseIIR::operator=(const ResponseIIR& other) {
 	_index = other._index;
 	_type = other._type;
 	_gain = other._gain;
+	_gainFrequency = other._gainFrequency;
 	_decimationFactor = other._decimationFactor;
 	_delay = other._delay;
 	_correction = other._correction;
@@ -626,6 +649,7 @@ void ResponseIIR::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("name", _index.name, Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("type", _type, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("gain", _gain, Archive::XML_ELEMENT);
+	ar & NAMED_OBJECT_HINT("gainFrequency", _gainFrequency, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("decimationFactor", _decimationFactor, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("delay", _delay, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("correction", _correction, Archive::XML_ELEMENT);
