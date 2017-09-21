@@ -2381,17 +2381,22 @@ void EventListView::updateAgencyState() {
 
 
 void EventListView::updateHideState() {
+	bool changed = false;
+
 	for ( int i = 0; i < _treeWidget->topLevelItemCount(); ++i ) {
 		EventTreeItem* item = (EventTreeItem*)_treeWidget->topLevelItem(i);
-		updateHideState(item);
+		if ( updateHideState(item) ) changed = true;
 	}
+
+	if ( changed )
+		emit eventsUpdated();
 }
 
 
-void EventListView::updateHideState(QTreeWidgetItem *item) {
+bool EventListView::updateHideState(QTreeWidgetItem *item) {
 	EventTreeItem *eitem = static_cast<EventTreeItem*>(item);
 	Event* event = eitem->event();
-	if ( !event ) return;
+	if ( !event ) return false;
 
 	bool hide = false;
 
@@ -2445,7 +2450,11 @@ void EventListView::updateHideState(QTreeWidgetItem *item) {
 			emit eventRemovedFromList(event);
 		else
 			emit eventAddedToList(event, false);
+
+		return true;
 	}
+
+	return false;
 }
 
 
@@ -2576,7 +2585,9 @@ void EventListView::setEventModificationsEnabled(bool e) {
 
 
 void EventListView::initTree() {
+
 	_treeWidget->clear();
+
 	if ( _withOrigins )
 		_unassociatedEventItem = addEvent(NULL, false);
 	else
@@ -2735,7 +2746,7 @@ void EventListView::selectEvent(int index) {
 		return;
 
 	_treeWidget->setCurrentItem(_treeWidget->topLevelItem(index));
-	itemSelected(_treeWidget->currentItem(), 0);
+	loadItem(_treeWidget->currentItem());
 }
 
 
@@ -2743,7 +2754,7 @@ void EventListView::selectEventID(const std::string& publicID) {
 	SchemeTreeItem *item = findEvent(publicID);
 	if ( item ) {
 		_treeWidget->setCurrentItem(item);
-		itemSelected(_treeWidget->currentItem(), 0);
+		loadItem(_treeWidget->currentItem());
 	}
 }
 
@@ -3124,6 +3135,8 @@ void EventListView::readFromDatabase(const Filter &filter) {
 	QApplication::restoreOverrideCursor();
 	_blockSelection = false;
 	_blockRemovingOfExpiredEvents = false;
+
+	emit eventsUpdated();
 }
 
 
@@ -3258,7 +3271,7 @@ EventTreeItem* EventListView::addEvent(Seiscomp::DataModel::Event* event, bool f
 
 	updateEventProcessColumns(item, true);
 
-	if ( event != NULL )
+	if ( (event != NULL) && !item->isHidden() )
 		emit eventAddedToList(event, fromNotification);
 
 	return item;
@@ -3378,7 +3391,7 @@ void EventListView::onCommand(Seiscomp::Gui::CommandMessage* cmsg) {
 	if ( cmsg->command() == CM_SHOW_ORIGIN ) {
 		QTreeWidgetItem* item = findOrigin(cmsg->parameter());
 		if ( item ) {
-			itemSelected(item, 0);
+			loadItem(item);
 			return;
 		}
 
@@ -3407,8 +3420,10 @@ void EventListView::onCommand(Seiscomp::Gui::CommandMessage* cmsg) {
 
 			QTreeWidgetItem* item = addOrigin(o.get(), parent, true);
 			if ( parent ) parent->update(this);
-			itemSelected(item, 0);
+			loadItem(item);
 		}
+		else
+			QMessageBox::warning(NULL, tr("Load origin"), tr("Received a request to show origin %1\nwhich has not been found.").arg(o->publicID().c_str()));
 	}
 	else if ( cmsg->command() == CM_OBSERVE_LOCATION ) {
 		Origin* o = Origin::Cast(cmsg->object());
@@ -3432,7 +3447,7 @@ void EventListView::notifierAvailable(Seiscomp::DataModel::Notifier *n) {
 						QTreeWidgetItem* item = addOrigin(o, NULL, false);
 						if ( _autoSelect )
 							//_treeWidget->setItemSelected(item, true);
-							itemSelected(item, 0);
+							loadItem(item);
 					}
 					break;
 				case OP_UPDATE:

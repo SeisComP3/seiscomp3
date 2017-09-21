@@ -139,6 +139,9 @@ class SC_GUI_API EventListView : public QWidget {
 		void eventAddedToList(Seiscomp::DataModel::Event*, bool fromNotification);
 		void eventUpdatedInList(Seiscomp::DataModel::Event*);
 		void eventRemovedFromList(Seiscomp::DataModel::Event*);
+		//! Emitted when a bigger update process has finished, such as show/hide
+		//! of a subset of events.
+		void eventsUpdated();
 
 
 	public slots:
@@ -224,7 +227,7 @@ class SC_GUI_API EventListView : public QWidget {
 
 		void removeExpiredEvents();
 		void updateHideState();
-		void updateHideState(QTreeWidgetItem *item);
+		bool updateHideState(QTreeWidgetItem *item);
 
 		void updateOriginProcessColumns(QTreeWidgetItem *item, bool highPriority);
 		void updateEventProcessColumns(QTreeWidgetItem *item, bool highPriority);
