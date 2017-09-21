@@ -145,6 +145,8 @@ class SC_GUI_API Symbol {
 		//! Returns the screen y position
 		int y() const;
 
+		void setDecorator(Decorator *);
+
 		//! Returns the attached decorator
 		Decorator *decorator() const;
 
