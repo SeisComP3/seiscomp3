@@ -139,7 +139,10 @@ void Axis::setSubGridPen(const QPen &pen) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double Axis::project(double pixelValue) const {
-	return 0;
+	if ( _logScale )
+		return exp(_axisStartValue + pixelValue / _axisPixelScale) + _logBase;
+	else
+		return _axisStartValue + pixelValue / _axisPixelScale;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
