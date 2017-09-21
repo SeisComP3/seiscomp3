@@ -131,7 +131,6 @@ class SC_GUI_API Canvas : public QObject {
 		void setDrawCities(bool);
 		bool isDrawCitiesEnabled() const;
 
-		void setDrawLegends(bool);
 		bool isDrawLegendsEnabled() const;
 
 		void setImageFilter(bool);
@@ -233,8 +232,6 @@ class SC_GUI_API Canvas : public QObject {
 
 		QMenu* menu(QMenu*) const;
 
-		void setVisible(Legend*);
-
 		//! Returns whether the rendering is complete or if there are
 		//! still some updates in the pipeline that updated later. If this
 		//! function return false, the signal renderingCompleted() is emitted
@@ -247,6 +244,15 @@ class SC_GUI_API Canvas : public QObject {
 		//! Reloads all tiles and empties the texture cache
 		//! This slot was introduced in API 1.1.
 		void reload();
+
+		//! This slot was added in API 11
+		void setDrawLegends(bool);
+
+		//! This slot was added in API 11
+		void showLegends();
+
+		//! This slot was added in API 11
+		void hideLegends();
 
 		void bringToFront(Seiscomp::Gui::Map::Legend*);
 		void onObjectDestroyed(QObject *object);

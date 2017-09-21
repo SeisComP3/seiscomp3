@@ -40,9 +40,6 @@ const static char *cmStrProjection = "Projection";
 const static char *cmStrFilter = "Filter";
 const static char *cmStrNearest = "Nearest";
 const static char *cmStrBilinear = "Bilinear";
-const static char *cmStrReload = "Reload";
-const static char *cmStrGrid = "Show Grid";
-const static char *cmStrCities = "Show Cities";
 
 
 inline QString lat2String(double lat, int precision) {
@@ -427,23 +424,7 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 	action = _contextFilterMenu->addAction(cmStrBilinear);
 	action->setEnabled(!_filterMap);
 
-	// Refresh
-	action = menu->addAction(cmStrReload);
-
-	// Grid
-	action = menu->addAction(cmStrGrid);
-	action->setCheckable(true);
-	action->setChecked(_canvas.isDrawGridEnabled());
-
-	// Cities
-	action = menu->addAction(cmStrCities);
-	action->setCheckable(true);
-	action->setChecked(_canvas.isDrawCitiesEnabled());
-
-	// Layers (if any)
-	QMenu *subMenu = _canvas.menu(menu);
-	if ( subMenu )
-		menu->addMenu(subMenu);
+	_canvas.menu(menu);
 }
 
 
@@ -520,18 +501,13 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 			break;
 		}
 	}
-	else if ( action->text() == cmStrReload )
-		_canvas.reload();
-	else if ( action->text() == cmStrCities )
-		_canvas.setDrawCities(action->isChecked());
-	else if ( action->text() == cmStrGrid )
-		_canvas.setDrawGrid(action->isChecked());
 
 	_contextProjectionMenu = NULL;
 	_contextFilterMenu = NULL;
 
 	update();
 }
+
 
 void MapWidget::contextMenuEvent(QContextMenuEvent *event) {
 	if ( _canvas.filterContextMenuEvent(event, this) ) return;

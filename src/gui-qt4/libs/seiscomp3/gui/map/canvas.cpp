@@ -548,13 +548,17 @@ bool Canvas::isDrawCitiesEnabled() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLegends(bool e) {
+	if ( _isDrawLegendsEnabled == e ) return;
+
 	_isDrawLegendsEnabled = e;
+
 	foreach ( const LegendArea& area, _legendAreas ) {
-		if ( e == false ) {
+		if ( !e ) {
 			foreach (Seiscomp::Gui::Map::Legend* legend, area) {
 				legend->setVisible(false);
 			}
-		} else {
+		}
+		else {
 			if ( area.currentIndex != -1 )
 				area[area.currentIndex]->setVisible(true);
 		}
@@ -568,6 +572,24 @@ void Canvas::setDrawLegends(bool e) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawLegendsEnabled() const {
 	return _isDrawLegendsEnabled;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::showLegends() {
+	setDrawLegends(true);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::hideLegends() {
+	setDrawLegends(false);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1743,16 +1765,14 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QMenu* Canvas::menu(QMenu *parent) const {
+	QAction *action;
+
 	QMenu *menu = new QMenu(tr("Layers"), parent);
 	foreach ( Layer *layer, _layers ) {
-		if ( layer == &_citiesLayer ||
-		     layer == &_gridLayer )
-			continue;
-
 		if ( layer->name().isEmpty() ) continue;
 
 		if ( !layer->isVisible() ) {
-			QAction *action = menu->addAction(layer->name());
+			action = menu->addAction(layer->name());
 			action->setCheckable(true);
 			action->setChecked(false);
 			connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
@@ -1790,10 +1810,24 @@ QMenu* Canvas::menu(QMenu *parent) const {
 
 	if ( menu->isEmpty() ) {
 		delete menu;
-		return NULL;
+		menu = NULL;
+	}
+	else
+		parent->addMenu(menu);
+
+	action = parent->addAction(tr("Reload"));
+	connect(action, SIGNAL(triggered()), this, SLOT(reload()));
+
+	if ( isDrawLegendsEnabled() ) {
+		action = parent->addAction(tr("Hide legend(s)"));
+		connect(action, SIGNAL(triggered()), this, SLOT(hideLegends()));
+	}
+	else {
+		action = parent->addAction(tr("Show legend(s)"));
+		connect(action, SIGNAL(triggered()), this, SLOT(showLegends()));
 	}
 
-	return menu;
+	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
