@@ -42,7 +42,10 @@ Layer::Layer(QObject* parent)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Layer::~Layer() {}
+Layer::~Layer() {
+	foreach ( Legend *legend, _legends )
+		legend->disconnect(this);
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
