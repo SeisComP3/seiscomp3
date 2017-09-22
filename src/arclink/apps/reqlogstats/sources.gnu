@@ -5,7 +5,7 @@ set yrange [0:]
 
 set key top left
 set key maxrows 5
-set key invert      #  For stacked histogram
+set key invert        # For stacked histogram
 set grid
 
 set style data histograms
@@ -13,7 +13,7 @@ set style histogram rowstacked
 set boxwidth 0.5 relative
 set style fill solid 1.0 border -1
 
-set terminal svg font "arial,14" size 960,480
+set terminal svg font "arial,14" size 960,480 dynamic
 set output 'out.svg'
 
 # Default for ls 6 is dark blue, too close to pure blue for GFZ:
