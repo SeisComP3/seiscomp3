@@ -290,13 +290,20 @@ class ReportDataResif(ReportData):
         except ValueError:
             byte_size = 0  # I don't want to accept floats + units
 
+        reqs = summary['requests']
+        lines = summary['lines']
+        errs = summary['error_count']
         self.user = (
             ('User', 'Requests', 'Lines', 'Nodata/Errors', 'Size'),
-            (who, summary['requests'], summary['lines'], summary['error_count'], byte_size),
+            (who, reqs, lines, errs, byte_size),
         )
         self.network = (
             ('Network', 'Requests', 'Lines', 'Nodata', 'Errors', 'Size'),
-            ('unknown', summary['requests'], summary['lines'], 0, summary['error_count'], byte_size),
+            ('unknown', reqs, lines, 0, errs, byte_size),
+        )
+        self.volume = (
+            ('Type', 'Lines',  'Nodata', 'Errors', 'Size'),
+            ('fdsnws', lines, 0, errs, byte_size),
         )
         return
 
