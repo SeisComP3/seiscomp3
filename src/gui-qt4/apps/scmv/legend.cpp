@@ -420,6 +420,8 @@ void EQSymbolLegend::customDraw(const Seiscomp::Gui::Map::Canvas *canvas,
 	int x = pos().x();
 	int y = p.window().height()-pos().y()-height;
 
+	p.setRenderHint(QPainter::Antialiasing, false);
+
 	p.setPen(SCScheme.colors.legend.border);
 	p.setBrush(SCScheme.colors.legend.background);
 	p.drawRect(x, y, width, height);
