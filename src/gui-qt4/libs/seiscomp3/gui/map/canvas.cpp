@@ -1055,14 +1055,15 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 	// Draw the name if requested and if there is enough space
 	if ( layProp->drawName ) {
 		QPoint p1, p2;
-		_projection->project(p1, QPointF(bbox.lonMin, bbox.latMax));
-		_projection->project(p2, QPointF(bbox.lonMax, bbox.latMin));
-		QRect bboxRect = QRect(p1, p2);
-		QString name = f->name().c_str();
-		QRect textRect = painter.fontMetrics().boundingRect(name);
-		if ( textRect.width()*100 < bboxRect.width()*80 &&
-		     textRect.height()*100 < bboxRect.height()*80 )
-			painter.drawText(bboxRect, Qt::AlignCenter, name);
+		if ( _projection->project(p1, QPointF(bbox.lonMin, bbox.latMax))
+		  && _projection->project(p2, QPointF(bbox.lonMax, bbox.latMin)) ) {
+			QRect bboxRect = QRect(p1, p2);
+			QString name = f->name().c_str();
+			QRect textRect = painter.fontMetrics().boundingRect(name);
+			if ( textRect.width()*100 < bboxRect.width()*80 &&
+			     textRect.height()*100 < bboxRect.height()*80 )
+				painter.drawText(bboxRect, Qt::AlignCenter, name);
+		}
 	}
 
 	// Debug: Print the segment name and draw the bounding box
@@ -1072,21 +1073,23 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 		// project the center of the bounding box
 		float bboxWidth = bbox.lonMax - bbox.lonMin;
 		float bboxHeight = bbox.latMax - bbox.latMin;
-		_projection->project(debugPoint, QPointF(
-		                     bbox.lonMin + bboxWidth/2,
-		                     bbox.latMin + bboxHeight/2));
-		QFont font;
-		float maxBBoxEdge = bboxWidth > bboxHeight ? bboxWidth : bboxHeight;
-		int pixelSize = (int)(_projection->pixelPerDegree() * maxBBoxEdge / 10.0);
-		font.setPixelSize(pixelSize < 1 ? 1 : pixelSize > 30 ? 30 : pixelSize);
-		QFontMetrics metrics(font);
-		QRect labelRect(metrics.boundingRect(f->name().c_str()));
-		labelRect.moveTo(debugPoint.x() - labelRect.width()/2,
-		                 debugPoint.y() - labelRect.height()/2);
 
-		painter.setFont(font);
-		painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop,
-		                 f->name().c_str());
+		if ( _projection->project(debugPoint, QPointF(
+		                          bbox.lonMin + bboxWidth/2,
+		                          bbox.latMin + bboxHeight/2)) ) {
+			QFont font;
+			float maxBBoxEdge = bboxWidth > bboxHeight ? bboxWidth : bboxHeight;
+			int pixelSize = (int)(_projection->pixelPerDegree() * maxBBoxEdge / 10.0);
+			font.setPixelSize(pixelSize < 1 ? 1 : pixelSize > 30 ? 30 : pixelSize);
+			QFontMetrics metrics(font);
+			QRect labelRect(metrics.boundingRect(f->name().c_str()));
+			labelRect.moveTo(debugPoint.x() - labelRect.width()/2,
+			                 debugPoint.y() - labelRect.height()/2);
+
+			painter.setFont(font);
+			painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop,
+			                 f->name().c_str());
+		}
 
 		_projection->moveTo(QPointF(bbox.lonMin, bbox.latMin));
 		_projection->lineTo(painter, QPointF(bbox.lonMax, bbox.latMin));
