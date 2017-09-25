@@ -59,18 +59,19 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		int heightForWidth(int w) const;
 
-		/**
-		 * @brief Sets map rendering in grayscale mode even if the widget is
-		 *        enabled.
-		 * @param f The enable flag
-		 */
-		void setGrayScale(bool f);
 		bool isGrayScale() const;
 
 		virtual void draw(QPainter&);
 
 
 	public slots:
+		/**
+		 * @brief Sets map rendering in grayscale mode even if the widget is
+		 *        enabled.
+		 * @param f The enable flag
+		 */
+		void setGrayScale(bool f);
+
 		void setDrawGrid(bool);
 		void setDrawLayers(bool);
 		void setDrawCities(bool);
