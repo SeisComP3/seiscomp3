@@ -1,31 +1,30 @@
-set xlabel 'Day in #year#'
+load 'year_ticks.gnu'
+show xtics
 
 set ylabel 'Distinct users'
-set yrange [0:300]  # Good for all 8 EIDA nodes stacked in 2014.
+set yrange [0:350]  # Good for all 11 EIDA nodes, stacked, in 2017.
 
-set key top left
-set key invert        # For stacked histogram
-set key maxrows 5
-set nogrid
+set key vertical
+set key maxrows 3
+set key spacing 1.25  # vertical space
+set key box
 
-set style data histograms
-set style histogram rowstacked
-set boxwidth 0.7 relative
+load 'histo_settings.gnu'
 set style fill solid 1.0 noborder
 
-set terminal svg font "arial,14" size 960,480
+set terminal svg font "arial,14" size 960,480 dynamic
 set output 'out.svg'
 
-# Default for ls 6 is dark blue, too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
+load 'node_colors.gnu'
 
 # Set integer default value for template variable:
-xtic_density = ('#' . 'xtic_density' . '#' eq '#xtic_density#')?7:#xtic_density#
+#xtic_density = ('#' . 'xtic_density' . '#' ne '#xtic_density#')?value('#xtic_density#'):7
+#xtic_density = int(xtic_density)
+#print "xtic_density: " . xtic_density
+## plot '<cut -c9- days3.dat' using 3:xtic(int($0) % xtic_density == 0?sprintf("%i", $0):"") title 'BGR' ls 2, \
+## plot '<cut -c9- days3.dat' using 3:xtic((substr($1, 9, 10) eq '01')?substr($1, 6, 7):"") title 'BGR' ls 2,
 
-plot '<cut -c9- days3.dat' using 3:xtic(int($0) % xtic_density == 0?sprintf("%i", $0):"") title 'BGR' ls 2, \
+plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \
      '' using  5 title 'GFZ' ls 3, \
      '' using  6 title 'INGV' ls 4, \

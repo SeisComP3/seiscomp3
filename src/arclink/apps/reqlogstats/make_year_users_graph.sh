@@ -87,7 +87,7 @@ fi
 echo ${cmd}
 
 echo ${cmd} \
-    | sqlite3 ${dbfile} | sed -e 's/|/  /g' \
+    | sqlite3 ${dbfile} | tee raw.sql | sed -e 's/|/  /g' \
     | python ${dirname}/t2.py > days3.dat
 
 if [ $(wc -l days3.dat | awk '{print $1}') -le 1 ] ; then

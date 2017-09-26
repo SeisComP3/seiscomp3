@@ -16,11 +16,7 @@ set style fill solid 1.0 border -1
 set terminal svg font "arial,14" size 960,480 dynamic
 set output 'out.svg'
 
-# Default for ls 6 is dark blue, too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
+load 'node_colors.gnu'
 
 plot '<cut -c9- days3.dat' using 3:xtic(1) title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \

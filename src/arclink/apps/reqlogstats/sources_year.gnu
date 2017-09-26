@@ -1,32 +1,16 @@
-set xlabel 'Day in #year#'
-set xrange [0:366]
-set xtics out nomirror
-set xtics 0,7,366 format ""
-set mxtics 7
-set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
+load 'year_ticks.gnu'
 show xtics
 
 set ylabel 'total_size, MiB'
 set yrange [0:]
 
-set key top left
-set key invert        # For stacked histogram
+load 'histo_settings.gnu'
 set key maxrows 5
-set nogrid
-
-set style data histograms
-set style histogram rowstacked
-set boxwidth 0.9 relative
-set style fill solid 1.0 noborder
 
 set terminal svg font "arial,14" size 960,480 dynamic
 set output 'out.svg'
 
-# Default for ls 6 is dark blue, but that is too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
+load 'node_colors.gnu'
 
 plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
      '' using  4 title 'ETHZ' ls 1, \

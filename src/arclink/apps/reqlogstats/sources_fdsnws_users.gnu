@@ -2,24 +2,16 @@ set xlabel 'Day in #year#'
 
 set ylabel 'Size by day for type "#patt#"'
 
-set key top left
-set key invert        # For stacked histogram
+load 'histo_settings.gnu'
 set key maxrows 6
-set nogrid
 
-set style data histograms
-set style histogram rowstacked
 set boxwidth 0.7 relative
 set style fill solid 1.0 border 0
 
 set terminal svg font "arial,14" size 960,480 dynamic
 set output 'out.svg'
 
-# Default for ls 6 is dark blue, but that is too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
+load 'node_colors.gnu'
 
 xtic_density = 7
 xtic_density = ('#' . 'xtic_density' . '#' ne '#xtic_density#')?value('#xtic_density#'):xtic_density
