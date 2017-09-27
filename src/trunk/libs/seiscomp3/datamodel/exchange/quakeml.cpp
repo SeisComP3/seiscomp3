@@ -24,7 +24,7 @@
 #define NS_QML_RT        "http://quakeml.org/xmlns/quakeml-rt/1.2"
 #define NS_QML_BED       "http://quakeml.org/xmlns/bed/1.2"
 #define NS_QML_BED_RT    "http://quakeml.org/xmlns/bed-rt/1.2"
-#define RES_REF_PREFIX   "smi:scs/0.7/"
+#define RES_REF_PREFIX   "smi:org.gfz-potsdam.de/geofon/"
 
 using namespace Seiscomp::DataModel;
 
@@ -75,6 +75,13 @@ struct RTTypeMap : TypeMapCommon {
 TypeMap __typeMap;
 RTTypeMap __rtTypeMap;
 
+inline std::string& replaceIDChars(std::string &id) {
+	std::string::iterator it;
+	for ( it = id.begin(); it != id.end(); ++it )
+		if ( *it == ' ' || *it == ':' ) *it = '_';
+	return id;
+}
+
 struct ResRefFormatter : Formatter {
 	bool mandatory;
 	ResRefFormatter(bool mandatory = false) : mandatory(mandatory) {}
@@ -89,9 +96,7 @@ struct ResRefFormatter : Formatter {
 			// If it does not yet start with "smi:" and thus seems
 			// to be a valid smi
 			if ( v.compare(0, 4, "smi:") != 0 && v.compare(0, 8, "quakeml:") ) {
-				std::string::iterator it;
-				for ( it = v.begin(); it != v.end(); ++it )
-					if ( *it == ' ' || *it == ':' ) *it = '_';
+				replaceIDChars(v);
 				v.insert(0, RES_REF_PREFIX);
 			}
 		}
@@ -335,9 +340,11 @@ struct StaticHandler : IO::XML::MemberHandler {
 struct ArrivalPublicIDHandler : IO::XML::MemberHandler {
 	std::string value(Core::BaseObject *obj) {
 		Arrival *arrival = Arrival::Cast(obj);
-		return arrival && arrival->origin() ?
-			   RES_REF_PREFIX + arrival->pickID() + "#" + arrival->origin()->publicID() :
-		       RES_REF_PREFIX"NA";
+		if ( arrival && arrival->origin() ) {
+			std::string oid = arrival->origin()->publicID();
+			return RES_REF_PREFIX + arrival->pickID() + "_" + replaceIDChars(oid);
+		}
+		return RES_REF_PREFIX"NA";
 	}
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
