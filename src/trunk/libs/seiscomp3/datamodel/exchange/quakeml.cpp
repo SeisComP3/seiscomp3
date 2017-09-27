@@ -121,6 +121,15 @@ MaxLenFormatter __maxLen32(32);
 MaxLenFormatter __maxLen64(64);
 MaxLenFormatter __maxLen128(128);
 
+struct AmplitudeUnitFormatter : Formatter {
+	void to(std::string &v) {
+		if ( v != "m" && v != "s" && v != "m/s" && v != "m/(s*s)" &&
+		     v != "m*s" && v != "dimensionless" )
+			v = "other";
+	}
+};
+static AmplitudeUnitFormatter __amplitudeUnit;
+
 struct EvaluationStatusFormatter : Formatter {
 	void to(std::string& v) {
 		if ( v == "reported" ) {
@@ -643,10 +652,11 @@ struct AmplitudeHandler : TypedClassHandler<Amplitude> {
 	AmplitudeHandler() {
 		addPID();
 		// NA: category, evaluationStatus
-		addList("comment, period, snr, unit, timeWindow, waveformID, "
+		addList("comment, period, snr, timeWindow, waveformID, "
 		        "scalingTime, evaluationMode, creationInfo");
 		add("amplitude", "genericAmplitude");
 		add("type", &__maxLen32);
+		add("unit", &__amplitudeUnit);
 		add("methodID", &__resRef);
 		add("pickID", &__resRef);
 		add("filterID", &__resRef);
