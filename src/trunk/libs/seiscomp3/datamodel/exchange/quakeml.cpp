@@ -788,18 +788,41 @@ struct DataUsedHandler : TypedClassHandler<DataUsed> {
 	}
 };
 
+struct MomentTensorMethodHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		MomentTensor *mt = MomentTensor::Cast(object);
+		try {
+			MomentTensorMethod method = mt->method();
+			const char *tagCategory = "category";
+			if ( (method == TELESEISMIC || method == REGIONAL) &&
+			     output->openElement(tagCategory, "") ) {
+				output->put(EMomentTensorMethodNames::name(method));
+				output->closeElement(tagCategory, "");
+				return true;
+			}
+		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
 struct MomentTensorHandler : TypedClassHandler<MomentTensor> {
 	MomentTensorHandler() {
 		addPID();
-		// NA: category, inversionType
+		//NA: inversionType
 		addList("dataUsed, comment, scalarMoment, tensor, variance, "
 		    "varianceReduction, doubleCouple, clvd, iso, sourceTimeFunction, "
 		    "creationInfo");
+
 		add("derivedOriginID", &__resRef);
 		add("momentMagnitudeID", &__resRef);
 		add("greensFunctionID", &__resRef);
 		add("filterID", &__resRef);
 		add("methodID", &__resRef);
+		addChild("method", "", new MomentTensorMethodHandler());
 	}
 };
 
