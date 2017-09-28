@@ -656,23 +656,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -1440,11 +1440,11 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStatus(status)
 
@@ -1682,19 +1682,19 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStreamID(streamID)
 
@@ -2854,23 +2854,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format \(52.22\)
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(52.23\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -4291,14 +4291,14 @@ Reference
 
    .. py:method:: setCreationTime(creationTime)
 
-      :param creationTime: datetime
+      :param creationTime: seiscomp3.Core.Time
 
       Time of creation of a resource, in ISO 8601 format. It has to be given in
       UTC.
 
    .. py:method:: creationTime()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -4307,14 +4307,14 @@ Reference
 
    .. py:method:: setModificationTime(modificationTime)
 
-      :param modificationTime: datetime
+      :param modificationTime: seiscomp3.Core.Time
 
       Time of last modification of a resource, in ISO 8601 format. It has to be
       given in UTC.
 
    .. py:method:: modificationTime()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -4848,23 +4848,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -7080,11 +7080,11 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -8632,24 +8632,24 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of network epoch in ISO datetime format. Needed primarily to
       identifytemorary networks that re\-use network codes
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of station epoch. Empty string if the station is open
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -10082,27 +10082,27 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -10366,11 +10366,11 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -11107,27 +11107,27 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setMessage(message)
 
@@ -13428,23 +13428,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of data
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of data
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -14120,23 +14120,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -14293,23 +14293,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -14817,23 +14817,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of station epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of station epoch. Empty string if the station is open
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -15238,13 +15238,13 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -15253,13 +15253,13 @@ Reference
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(empty string if the station is open\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -15937,23 +15937,23 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format \(52.22\)
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(52.23\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
@@ -16541,13 +16541,13 @@ Reference
 
    .. py:method:: setValue(value)
 
-      :param value: datetime
+      :param value: seiscomp3.Core.Time
 
       Point in time \(UTC\), given in ISO 8601 format.
 
    .. py:method:: value()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setUncertainty(uncertainty)
 
@@ -16659,14 +16659,14 @@ Reference
 
    .. py:method:: setReference(reference)
 
-      :param reference: datetime
+      :param reference: seiscomp3.Core.Time
 
       Reference point in time \(\"central\" point\), in ISO 8601 format. It
       has to be given in UTC.
 
    .. py:method:: reference()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setBegin(begin)
 
@@ -16750,27 +16750,27 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
