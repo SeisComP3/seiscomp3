@@ -220,12 +220,16 @@ struct OriginConnector : IO::XML::MemberHandler {
 			if ( orgRefs.find(origin->publicID()) != orgRefs.end() ) {
 				for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
 					magnitude = origin->magnitude(mi);
+					if ( magnitude->originID().empty() )
+						magnitude->setOriginID(origin->publicID());
 					if ( event->preferredMagnitudeID() == magnitude->publicID() )
 						foundPreferredMagnitude = true;
 					output->handle(origin->magnitude(mi), "magnitude", "");
 				}
 				for ( size_t si = 0; si < origin->stationMagnitudeCount(); ++si ) {
 					staMag = origin->stationMagnitude(si);
+					if ( staMag->originID().empty() )
+						staMag->setOriginID(origin->publicID());
 					amplitude = findAmplitude(ep, staMag->amplitudeID());
 					if ( amplitude != NULL) {
 						output->handle(amplitude, "amplitude", "");
@@ -274,10 +278,16 @@ struct RTMagnitudeConnector : IO::XML::MemberHandler {
 		for ( size_t oi = 0; oi < ep->originCount(); ++oi ) {
 			origin = ep->origin(oi);
 			for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
-				output->handle(origin->magnitude(mi), tag, ns);
+				Magnitude *magnitude = origin->magnitude(mi);
+				if ( magnitude->originID().empty() )
+					magnitude->setOriginID(origin->publicID());
+				output->handle(magnitude, tag, ns);
 			}
 			for ( size_t si = 0; si < origin->stationMagnitudeCount(); ++si ) {
-				output->handle(origin->stationMagnitude(si), "stationMagnitude", "");
+				StationMagnitude *staMag = origin->stationMagnitude(si);
+				if ( staMag->originID().empty() )
+					staMag->setOriginID(origin->publicID());
+				output->handle(staMag, "stationMagnitude", "");
 			}
 		}
 		return true;
@@ -674,7 +684,7 @@ struct StationMagnitudeHandler : TypedClassHandler<StationMagnitude> {
 		addPID();
 		addList("comment, waveformID, creationInfo");
 		add("magnitude", "mag", NULL, Mandatory);
-		add("originID", &__resRef);//, Mandatory);
+		add("originID", &__resRef);
 		add("type", &__maxLen32);
 		add("amplitudeID", &__resRef);
 		add("methodID", &__resRef);
