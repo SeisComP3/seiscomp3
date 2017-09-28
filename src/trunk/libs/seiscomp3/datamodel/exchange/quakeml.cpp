@@ -545,6 +545,32 @@ struct OriginDepthHandler : IO::XML::MemberHandler {
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
 
+struct TakeOffAngleHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Arrival *arrival = Arrival::Cast(object);
+		if ( arrival == NULL ) return false;
+		try {
+			std::string v = Core::toString(arrival->takeOffAngle());
+			const char *tagTA = "takeoffAngle";
+			const char *tagV = "value";
+			if ( !output->openElement(tagTA, ns) ||
+			     !output->openElement(tagV, ns)) {
+				SEISCOMP_WARNING("could not open takeoffAngle element");
+				return false;
+			}
+			output->put(v.c_str());
+			output->closeElement(tagV, ns);
+			output->closeElement(tagTA, ns);
+			return true;
+		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
 struct ArrivalHandler : TypedClassHandler<Arrival> {
 	ArrivalHandler() {
 		// public ID is composed of pickID and originID
@@ -558,7 +584,7 @@ struct ArrivalHandler : TypedClassHandler<Arrival> {
 		        "creationInfo");
 		add("pickID", &__resRefMan, Mandatory);
 		add("phase", NULL, Mandatory);
-		add("takeOffAngle", "takeoffAngle");
+		addChild("takeOffAngle", "", new TakeOffAngleHandler());
 		add("weight", "timeWeight");
 		add("earthModelID", &__resRef);
 	}
