@@ -538,9 +538,8 @@ struct OriginDepthHandler : IO::XML::MemberHandler {
 
 			return true;
 		}
-		catch ( Core::ValueException ) {
-			return false;
-		}
+		catch ( Core::ValueException ) {}
+		return false;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
@@ -578,13 +577,48 @@ struct ConfidenceEllipsoidHandler : TypedClassHandler<ConfidenceEllipsoid> {
 		        "majorAxisAzimuth, majorAxisRotation", Mandatory); }
 };
 
-struct OriginUncertaintyHandler : TypedClassHandler<OriginUncertainty> {
-	OriginUncertaintyHandler() {
+
+struct OriginUncertaintySecondaryHandler : TypedClassHandler<OriginUncertainty> {
+	OriginUncertaintySecondaryHandler() {
 		addList("horizontalUncertainty, minHorizontalUncertainty, "
 		        "maxHorizontalUncertainty, azimuthMaxHorizontalUncertainty, "
 		        "confidenceEllipsoid");
 		add("preferredDescription", &__originUncertaintyDescription);
 	}
+};
+static OriginUncertaintySecondaryHandler __originUncertaintySecondaryHandler;
+
+
+// QuakeML requires some uncertainty values in meter (not kilometer)
+struct OriginUncertaintyHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Origin *o = Origin::Cast(object);
+		if ( o == NULL ) return false;
+		try {
+			OriginUncertainty &ou = o->uncertainty();
+			try { ou.setHorizontalUncertainty(ou.horizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try { ou.setMinHorizontalUncertainty(ou.minHorizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try { ou.setMaxHorizontalUncertainty(ou.maxHorizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try {
+				ConfidenceEllipsoid &ce = ou.confidenceEllipsoid();
+				ce.setSemiMajorAxisLength(ce.semiMajorAxisLength() * 1000);
+				ce.setSemiMinorAxisLength(ce.semiMinorAxisLength() * 1000);
+				ce.setSemiIntermediateAxisLength(ce.semiIntermediateAxisLength() * 1000);
+			}
+			catch ( Core::ValueException ) {}
+
+			output->handle(&ou, "originUncertainty", ns, &__originUncertaintySecondaryHandler);
+			return true;
+		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
 
 struct CompositeTimeHandler : TypedClassHandler<CompositeTime> {
@@ -601,7 +635,7 @@ struct OriginHandler : TypedClassHandler<Origin> {
 		        "depthType, timeFixed, epicenterFixed, quality, type, "
 		        "evaluationMode, creationInfo");
 		addChild("depth", "", new OriginDepthHandler());
-		add("uncertainty", "originUncertainty");
+		addChild("uncertainty", "", new OriginUncertaintyHandler());
 		add("referenceSystemID", &__resRef);
 		add("methodID", &__resRef);
 		add("earthModelID", &__resRef);
@@ -908,14 +942,12 @@ TypeMapCommon::TypeMapCommon() {
 	// Origin
 	static OriginHandler originHandler;
 	static CompositeTimeHandler compositeTimeHandler;
-	static OriginUncertaintyHandler originUncertaintyHandler;
 	static ConfidenceEllipsoidHandler confidenceEllipsoidHandler;
 	static ArrivalHandler arrivalHandler;
 	static OriginQualityHandler originQualityHandler;
 	static PhaseHandler phaseHandler;
 	registerMapping("origin", "", "Origin", &originHandler);
 	registerMapping<CompositeTime>("compositeTime", "", &compositeTimeHandler);
-	registerMapping<OriginUncertainty>("originUncertainty", "", &originUncertaintyHandler);
 	registerMapping<ConfidenceEllipsoid>("confidenceEllipsoid", "", &confidenceEllipsoidHandler);
 	registerMapping<Arrival>("arrival", "", &arrivalHandler);
 	registerMapping<OriginQuality>("quality", "", &originQualityHandler);
