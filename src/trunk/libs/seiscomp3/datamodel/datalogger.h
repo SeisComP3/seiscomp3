@@ -130,7 +130,7 @@ class SC_SYSTEM_CORE_API Datalogger : public PublicObject {
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! Unique Datalogger name
+		//! Unique datalogger name
 		void setName(const std::string& name);
 		const std::string& name() const;
 

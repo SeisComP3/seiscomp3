@@ -128,7 +128,7 @@ class SC_SYSTEM_CORE_API Sensor : public PublicObject {
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! Unique response name
+		//! Unique sensor name
 		void setName(const std::string& name);
 		const std::string& name() const;
 

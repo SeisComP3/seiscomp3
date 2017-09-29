@@ -80,6 +80,15 @@ ALTER TABLE ResponseFAP MODIFY gain DOUBLE;
 ALTER TABLE DataloggerCalibration MODIFY gain DOUBLE;
 ALTER TABLE Datalogger MODIFY gain DOUBLE;
 ALTER TABLE StationGroup MODIFY code CHAR(20);
+ALTER TABLE StationGroup MODIFY description VARCHAR(255);
+ALTER TABLE AuxSource MODIFY name VARCHAR(255);
+ALTER TABLE AuxSource MODIFY description VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY name VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY description VARCHAR(255);
+ALTER TABLE Sensor MODIFY name VARCHAR(255);
+ALTER TABLE Datalogger MODIFY description VARCHAR(255);
+ALTER TABLE Station MODIFY description VARCHAR(255);
+ALTER TABLE Network MODIFY description VARCHAR(255);
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
@@ -151,6 +160,15 @@ ALTER TABLE ResponsePAZ ADD m_decimationFactor SMALLINT UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_delay DOUBLE UNSIGNED;
 ALTER TABLE ResponsePAZ ADD m_correction DOUBLE;
 ALTER TABLE StationGroup MODIFY m_code VARCHAR(20);
+ALTER TABLE StationGroup MODIFY m_description VARCHAR(255);
+ALTER TABLE AuxSource MODIFY m_name VARCHAR(255);
+ALTER TABLE AuxSource MODIFY m_description VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY m_name VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY m_description VARCHAR(255);
+ALTER TABLE Sensor MODIFY m_name VARCHAR(255);
+ALTER TABLE Datalogger MODIFY m_description VARCHAR(255);
+ALTER TABLE Station MODIFY m_description VARCHAR(255);
+ALTER TABLE Network MODIFY m_description VARCHAR(255);
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```

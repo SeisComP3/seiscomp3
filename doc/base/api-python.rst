@@ -4433,7 +4433,7 @@ Reference
 
       :param name: string
 
-      Unique Datalogger name
+      Unique datalogger name
 
    .. py:method:: name()
 
@@ -13643,7 +13643,7 @@ Reference
 
       :param name: string
 
-      Unique response name
+      Unique sensor name
 
    .. py:method:: name()
 
