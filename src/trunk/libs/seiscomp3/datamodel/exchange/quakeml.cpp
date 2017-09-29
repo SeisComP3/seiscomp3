@@ -788,6 +788,24 @@ struct AmplitudeHandler : TypedClassHandler<Amplitude> {
 		add("filterID", &__resRef);
 		add("magnitudeHint", &__maxLen32);
 	}
+
+	// remove amplitude if amplitude value is not set since genericAmplitude
+	// is mandatory in QuakeML
+	bool put(Core::BaseObject *obj, const char *tag, const char *ns,
+	         IO::XML::OutputHandler *output) {
+		Amplitude *amplitude = Amplitude::Cast(obj);
+		if ( amplitude == NULL ) return false;
+
+		try {
+			amplitude->amplitude();
+		}
+		catch ( Core::ValueException ) {
+			SEISCOMP_WARNING("skipping amplitude %s: amplitude value not set",
+			                 amplitude->publicID().c_str());
+			return false;
+		}
+		return TypedClassHandler<Amplitude>::put(obj, tag, ns, output);
+	}
 };
 
 struct AxisHandler : TypedClassHandler<Axis> {
