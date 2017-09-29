@@ -562,7 +562,7 @@ void XMLArchive::read(std::vector<std::complex<double> >& value) {
 }
 
 void XMLArchive::read(bool& value) {
-	value = _property == "true";
+	value = _property == "true" || _property == "1";
 }
 
 void XMLArchive::read(std::string& value) {
