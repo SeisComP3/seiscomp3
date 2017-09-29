@@ -581,6 +581,56 @@ struct TakeOffAngleHandler : IO::XML::MemberHandler {
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
 
+struct ArrivalWeightHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Arrival *arrival = Arrival::Cast(object);
+		if ( arrival == NULL ) return false;
+
+		bool weightSet = false;
+		std::string weight = "1";
+		try {
+			weight = Core::toString(arrival->weight());
+			weightSet = true;
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *twTag = "timeWeight";
+			if ( (weightSet || arrival->timeUsed()) &&
+			     output->openElement(twTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(twTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *hzwTag = "horizontalSlownessWeight";
+			if ( arrival->horizontalSlownessUsed() &&
+			     output->openElement(hzwTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(hzwTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *bawTag = "backazimuthWeight";
+			if ( arrival->backazimuthUsed() &&
+			     output->openElement(bawTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(bawTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		return true;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
 struct ArrivalHandler : TypedClassHandler<Arrival> {
 	ArrivalHandler() {
 		// public ID is composed of pickID and originID
@@ -588,15 +638,21 @@ struct ArrivalHandler : TypedClassHandler<Arrival> {
 		                                 IO::XML::ClassHandler::Mandatory,
 		                                 IO::XML::ClassHandler::Attribute,
 		                                 new ArrivalPublicIDHandler());
-		// NA: comment, backazimuthWeight, horizontalSlownessWeight
+		// NA: comment
 		addList("timeCorrection, azimuth, distance, timeResidual, "
 		        "horizontalSlownessResidual, backazimuthResidual, "
 		        "creationInfo");
 		add("pickID", &__resRefMan, Mandatory);
 		add("phase", NULL, Mandatory);
 		addChild("takeOffAngle", "", new TakeOffAngleHandler());
-		add("weight", "timeWeight");
 		add("earthModelID", &__resRef);
+
+		// weight, timeUsed,horizontalSlownessUsed and backazimuthUsed is
+		// converted to timeWeight, horizontalSlownessWeight backazimuthWeight
+		IO::XML::ClassHandler::addMember("", "",
+		                                 IO::XML::ClassHandler::Mandatory,
+		                                 IO::XML::ClassHandler::Element,
+		                                 new ArrivalWeightHandler());
 	}
 };
 
@@ -768,16 +824,16 @@ struct TensorHandler : TypedClassHandler<Tensor> {
 
 struct DataUsedHandler : TypedClassHandler<DataUsed> {
 	struct DataUsedWaveFormatter : Formatter {
-			void to(std::string &v) {
-				if ( v == "P body waves" )
-					v = "P waves";
-				else if ( v == "long-period body waves" )
-					v = "body waves";
-				else if ( v == "intermediate-period surface waves")
-					v = "surface waves";
-				else if ( v == "long-period mantle waves" )
-					v = "mantle waves";
-			}
+		void to(std::string &v) {
+			if ( v == "P body waves" )
+				v = "P waves";
+			else if ( v == "long-period body waves" )
+				v = "body waves";
+			else if ( v == "intermediate-period surface waves")
+				v = "surface waves";
+			else if ( v == "long-period mantle waves" )
+				v = "mantle waves";
+		}
 	};
 
 	DataUsedHandler() {
