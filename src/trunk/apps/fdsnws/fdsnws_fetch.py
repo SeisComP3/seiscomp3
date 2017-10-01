@@ -74,6 +74,9 @@ import csv
 import re
 import struct
 import io
+import os
+import fnmatch
+import subprocess
 import dateutil.parser
 
 try:
@@ -97,7 +100,7 @@ except ImportError:
     import urllib.parse as urlparse
     import urllib.parse as urllib
 
-VERSION = "2017.223"
+VERSION = "2017.271"
 
 GET_PARAMS = set(('net', 'network',
                   'sta', 'station',
@@ -123,6 +126,8 @@ DATA_ONLY_BLOCKETTE_SIZE = 8
 
 DATA_ONLY_BLOCKETTE_NUMBER = 1000
 MINIMUM_RECORD_LENGTH = 256
+
+DEFAULT_TOKEN_LOCATION = os.environ.get("HOME", "") + "/.eidatoken"
 
 
 class Error(Exception):
@@ -476,8 +481,16 @@ class BreqParser(object):
 msglock = threading.Lock()
 
 
-def msg(s, verbose=True):
+def msg(s, verbose=3):
     if verbose:
+        if verbose == 3:
+            if sys.stderr.isatty():
+                s = "\033[31m" + s + "\033[m"
+
+        elif verbose == 2:
+            if sys.stderr.isatty():
+                s = "\033[32m" + s + "\033[m"
+
         with msglock:
             sys.stderr.write(s + '\n')
             sys.stderr.flush()
@@ -520,8 +533,8 @@ def retry(urlopen, url, data, timeout, count, wait, verbose):
             time.sleep(wait)
 
 
-def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
-          retry_count, retry_wait, finished, lock, verbose):
+def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, chans,
+          timeout, retry_count, retry_wait, finished, lock, verbose):
     try:
         url_handlers = []
 
@@ -555,42 +568,50 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
 
                 msg("authenticating at %s" % auth_url, verbose)
 
-                if not isinstance(authdata, bytes):
-                    authdata = authdata.encode('utf-8')
-
                 try:
                     fd = retry(urllib2.urlopen, auth_url, authdata, timeout,
                                retry_count, retry_wait, verbose)
 
                     try:
+                        resp = fd.read()
+
+                        if isinstance(resp, bytes):
+                            resp = resp.decode('utf-8')
+
                         if fd.getcode() == 200:
-                            up = fd.read()
-
-                            if isinstance(up, bytes):
-                                up = up.decode('utf-8')
-
                             try:
-                                (user, passwd) = up.split(':')
+                                (user, passwd) = resp.split(':')
                                 mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
                                 mgr.add_password(None, query_url, user, passwd)
                                 h = urllib2.HTTPDigestAuthHandler(mgr)
                                 url_handlers.append(h)
 
                             except ValueError:
-                                msg("invalid auth response: %s" % up)
+                                msg("invalid auth response: %s" % resp)
                                 return
 
                             msg("authentication at %s successful"
                                 % auth_url, verbose)
 
                         else:
-                            msg("authentication at %s failed with HTTP "
-                                "status code %d" % (auth_url, fd.getcode()))
+                            msg("authentication at %s failed with HTTP status "
+                                "code %d:\n%s" % (auth_url, fd.getcode(), resp))
 
                             query_url = url.post()
 
                     finally:
                         fd.close()
+
+                except urllib2.HTTPError as e:
+                    resp = e.read()
+
+                    if isinstance(resp, bytes):
+                        resp = resp.decode('utf-8')
+
+                    msg("authentication at %s failed with HTTP status "
+                        "code %d:\n%s" % (auth_url, e.code, resp))
+
+                    query_url = url.post()
 
                 except (urllib2.URLError, socket.error) as e:
                     msg("authentication at %s failed: %s" % (auth_url, str(e)))
@@ -638,11 +659,16 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
 
                 try:
                     if fd.getcode() == 204:
-                        msg("received no data from %s" % query_url, verbose)
+                        msg("received no data from %s" % query_url)
 
                     elif fd.getcode() != 200:
+                        resp = fd.read()
+
+                        if isinstance(resp, bytes):
+                            resp = resp.decode('utf-8')
+
                         msg("getting data from %s failed with HTTP status "
-                            "code %d" % (query_url, fd.getcode()))
+                            "code %d:\n%s" % (query_url, fd.getcode(), resp))
 
                         break
 
@@ -676,7 +702,7 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
                                 # 2 bytes, unsigned short)
                                 data_offset_idx = FIXED_DATA_HEADER_SIZE - 4
                                 data_offset, = struct.unpack(
-                                    '!H',
+                                    b'!H',
                                     buf[data_offset_idx:data_offset_idx+2])
 
                                 if data_offset >= FIXED_DATA_HEADER_SIZE:
@@ -718,13 +744,13 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
 
                                     # 2 bytes, unsigned short
                                     blockette_id, = struct.unpack(
-                                        '!H',
+                                        b'!H',
                                         buf[blockette_start:blockette_start+2])
 
                                     # get start of next blockette (second
                                     # value, 2 bytes, unsigned short)
                                     next_blockette_start, = struct.unpack(
-                                        '!H',
+                                        b'!H',
                                         buf[blockette_start+2:blockette_start+4])
 
                                     if blockette_id == \
@@ -753,7 +779,7 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
                                 # get record size (1 byte, unsigned char)
                                 record_size_exponent_idx = blockette_start + 6
                                 record_size_exponent, = struct.unpack(
-                                    '!B',
+                                    b'!B',
                                     buf[record_size_exponent_idx:\
                                     record_size_exponent_idx+1])
 
@@ -771,16 +797,20 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
 
                                 # collect network IDs
                                 try:
-                                    netcode = record[18:20].decode('ascii')
+                                    net = record[18:20].decode('ascii').rstrip()
+                                    sta = record[8:13].decode('ascii').rstrip()
+                                    loc = record[13:15].decode('ascii').rstrip()
+                                    cha = record[15:18].decode('ascii').rstrip()
 
                                 except UnicodeDecodeError:
-                                    msg("invalid network code")
+                                    msg("invalid miniseed record")
                                     break
 
-                                year, = struct.unpack('!H', record[20:22])
+                                year, = struct.unpack(b'!H', record[20:22])
 
                                 with lock:
-                                    nets.add((netcode, year))
+                                    nets.add((net, year))
+                                    chans.add('.'.join((net, sta, loc, cha)))
                                     dest.write(record)
 
                                 size += len(record)
@@ -847,8 +877,13 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
                     n = -(n//-2)
 
                 else:
-                    msg("getting data from %s failed: %s"
-                        % (query_url, str(e)))
+                    resp = e.read()
+
+                    if isinstance(resp, bytes):
+                        resp = resp.decode('utf-8')
+
+                    msg("getting data from %s failed with HTTP status "
+                        "code %d:\n%s" % (query_url, e.code, resp))
 
                     break
 
@@ -862,8 +897,8 @@ def fetch(url, cred, authdata, postlines, xc, tc, dest, nets, timeout,
         finished.put(threading.current_thread())
 
 
-def route(url, cred, authdata, postdata, dest, timeout, retry_count,
-          retry_wait, maxthreads, verbose):
+def route(url, cred, authdata, postdata, dest, chans_to_check, timeout,
+          retry_count, retry_wait, maxthreads, verbose):
     threads = []
     running = 0
     finished = Queue.Queue()
@@ -871,6 +906,10 @@ def route(url, cred, authdata, postdata, dest, timeout, retry_count,
     xc = XMLCombiner()
     tc = TextCombiner()
     nets = set()
+    check = bool(chans_to_check)
+    chans1 = chans_to_check
+    chans2 = set()
+    chans3 = set()
 
     if postdata:
         query_url = url.post()
@@ -892,11 +931,16 @@ def route(url, cred, authdata, postdata, dest, timeout, retry_count,
 
         try:
             if fd.getcode() == 204:
-                raise Error("received no routes from %s" % query_url)
+                msg("received no routes from %s" % query_url)
 
             elif fd.getcode() != 200:
-                raise Error("getting routes from %s failed with HTTP status "
-                            "code %d" % (query_url, fd.getcode()))
+                resp = fd.read()
+
+                if isinstance(resp, bytes):
+                    resp = resp.decode('utf-8')
+
+                msg("getting routes from %s failed with HTTP status "
+                    "code %d:\n%s" % (query_url, fd.getcode(), resp))
 
             else:
                 urlline = None
@@ -924,6 +968,7 @@ def route(url, cred, authdata, postdata, dest, timeout, retry_count,
                                                                   tc,
                                                                   dest,
                                                                   nets,
+                                                                  chans3,
                                                                   timeout,
                                                                   retry_count,
                                                                   retry_wait,
@@ -940,11 +985,35 @@ def route(url, cred, authdata, postdata, dest, timeout, retry_count,
                     else:
                         postlines.append(line)
 
+                        if check:
+                            nslc = line.split()[:4]
+                            if nslc[2] == '--': nslc[2] = ''
+                            chans2.add('.'.join(nslc))
+
         finally:
             fd.close()
 
+    except urllib2.HTTPError as e:
+        resp = e.read()
+
+        if isinstance(resp, bytes):
+            resp = resp.decode('utf-8')
+
+        msg("getting routes from %s failed with HTTP status "
+            "code %d:\n%s" % (query_url, e.code, resp))
+
     except (urllib2.URLError, socket.error) as e:
-        raise Error("getting routes from %s failed: %s" % (query_url, str(e)))
+        msg("getting routes from %s failed: %s" % (query_url, str(e)))
+
+    if check:
+        for c1 in list(chans1):
+            for c2 in list(chans2):
+                if fnmatch.fnmatch(c2, c1):
+                    chans1.remove(c1)
+                    break
+
+        if chans1:
+            msg("did not receive routes to %s" % ", ".join(sorted(chans1)))
 
     for t in threads:
         if running >= maxthreads:
@@ -963,6 +1032,20 @@ def route(url, cred, authdata, postdata, dest, timeout, retry_count,
     xc.dump(dest)
     tc.dump(dest)
 
+    if check:
+        for p in url.post_params():
+            if p[0] == 'service' and p[1] != 'dataselect':
+                return nets
+
+        for c2 in list(chans2):
+            for c3 in list(chans3):
+                if fnmatch.fnmatch(c3, c2):
+                    chans2.remove(c2)
+                    break
+
+        if chans2:
+            msg("did not receive data from %s" % ", ".join(sorted(chans2)))
+
     return nets
 
 
@@ -976,7 +1059,7 @@ def get_citation(nets, options):
     url = RoutingURL(urlparse.urlparse(options.url), qp)
     dest = io.BytesIO()
 
-    route(url, None, None, postdata, dest, options.timeout,
+    route(url, None, None, postdata, dest, None, options.timeout,
           options.retries, options.retry_wait, options.threads,
           options.verbose)
 
@@ -1005,10 +1088,10 @@ def get_citation(nets, options):
         else:
             net_desc[code] = desc
 
-    msg("\nYou received seismic waveform data from the following network(s):")
+    msg("\nYou received seismic waveform data from the following network(s):", 2)
 
     for code in sorted(net_desc):
-        msg("%s %s" % (code, net_desc[code]))
+        msg("%s %s" % (code, net_desc[code]), 2)
 
     msg("\nAcknowledgment is extremely important for network operators\n"
         "providing open data. When preparing publications, please\n"
@@ -1016,7 +1099,7 @@ def get_citation(nets, options):
         "    http://www.fdsn.org/networks/citation/?networks=%s\n\n"
         "provides a helpful guide based on available network\n"
         "Digital Object Identifiers.\n"
-        % "+".join(sorted(net_desc)))
+        % "+".join(sorted(net_desc)), 2)
 
 
 def main():
@@ -1126,6 +1209,9 @@ def main():
     parser.add_option("-z", "--no-citation", action="store_true", default=False,
                       help="suppress network citation info")
 
+    parser.add_option("-Z", "--no-check", action="store_true", default=False,
+                      help="suppress checking received routes and data")
+
     (options, args) = parser.parse_args()
 
     if options.help:
@@ -1152,6 +1238,7 @@ def main():
         cred = {}
         authdata = None
         postdata = None
+        chans_to_check = set()
 
         if options.credentials_file:
             with open(options.credentials_file) as fd:
@@ -1162,24 +1249,80 @@ def main():
                 except (ValueError, csv.Error):
                     raise Error("error parsing %s" % options.credentials_file)
 
+                except UnicodeDecodeError:
+                    raise Error("invalid unicode character found in %s"
+                                % options.credentials_file)
+
         if options.auth_file:
-            with open(options.auth_file) as fd:
+            with open(options.auth_file, 'rb') as fd:
                 authdata = fd.read()
 
+        else:
+            try:
+                with open(DEFAULT_TOKEN_LOCATION, 'rb') as fd:
+                    authdata = fd.read()
+                    options.auth_file = DEFAULT_TOKEN_LOCATION
+
+            except IOError:
+                pass
+
+        if authdata:
+            msg("using token in %s:" % options.auth_file, options.verbose)
+
+            try:
+                proc = subprocess.Popen(['gpg', '--decrypt'],
+                                        stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+
+                out, err = proc.communicate(authdata)
+
+                if not out:
+                    if isinstance(err, bytes):
+                        err = err.decode('utf-8')
+
+                    msg(err)
+                    return 1
+
+                if isinstance(out, bytes):
+                    out = out.decode('utf-8')
+
+                msg(out, options.verbose)
+
+            except OSError as e:
+                msg(str(e))
+
         if options.post_file:
-            with open(options.post_file) as fd:
-                postdata = fd.read()
+            try:
+                with open(options.post_file) as fd:
+                    postdata = fd.read()
+
+            except UnicodeDecodeError:
+                raise Error("invalid unicode character found in %s"
+                            % options.post_file)
 
         else:
             parser = None
 
             if options.arclink_file:
                 parser = ArclinkParser()
-                parser.parse(options.arclink_file)
+
+                try:
+                    parser.parse(options.arclink_file)
+
+                except UnicodeDecodeError:
+                    raise Error("invalid unicode character found in %s"
+                                % options.arclink_file)
 
             elif options.breqfast_file:
                 parser = BreqParser()
-                parser.parse(options.breqfast_file)
+
+                try:
+                    parser.parse(options.breqfast_file)
+
+                except UnicodeDecodeError:
+                    raise Error("invalid unicode character found in %s"
+                                % options.breqfast_file)
 
             if parser is not None:
                 if parser.failstr:
@@ -1188,12 +1331,32 @@ def main():
 
                 postdata = parser.postdata
 
+        if not options.no_check:
+            if postdata:
+                for line in postdata.splitlines():
+                    nslc = line.split()[:4]
+                    if nslc[2] == '--': nslc[2] = ''
+                    chans_to_check.add('.'.join(nslc))
+
+            else:
+                net = qp.get('network', '*')
+                sta = qp.get('station', '*')
+                loc = qp.get('location', '*')
+                cha = qp.get('channel', '*')
+
+                for n in net.split(','):
+                    for s in sta.split(','):
+                        for l in loc.split(','):
+                            for c in cha.split(','):
+                                if l == '--': l = ''
+                                chans_to_check.add('.'.join((n, s, l, c)))
+
         url = RoutingURL(urlparse.urlparse(options.url), qp)
         dest = open(options.output_file, 'wb')
 
-        nets = route(url, cred, authdata, postdata, dest, options.timeout,
-                     options.retries, options.retry_wait, options.threads,
-                     options.verbose)
+        nets = route(url, cred, authdata, postdata, dest, chans_to_check,
+                     options.timeout, options.retries, options.retry_wait,
+                     options.threads, options.verbose)
 
         if nets and not options.no_citation:
               msg("retrieving network citation info", options.verbose)
