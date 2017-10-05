@@ -108,10 +108,8 @@ class SC_GUI_API Legend : public QObject {
 		Qt::Alignment                 _alignment;
 		bool                          _enabled;
 		QPoint                        _pos;
-
-
-	private:
 		bool                          _visible;
+
 
 	friend class Canvas;
 };
