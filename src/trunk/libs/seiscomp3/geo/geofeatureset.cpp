@@ -81,8 +81,10 @@ size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 	}
 
 	// Read the BNA directory recursively
+	Core::Time start = Core::Time::GMT();
 	size_t fileCount = readBNADirRecursive(directory, addNewCategory(""));
-	SEISCOMP_INFO("%s", initStatus(fileCount).c_str());
+	SEISCOMP_INFO("%s in %fs", initStatus(fileCount).c_str(),
+	              (Core::Time::GMT()-start).length());
 
 	// Sort the features according to their rank
  	std::sort(_features.begin(), _features.end(), compareByRank);
@@ -150,13 +152,11 @@ const std::string GeoFeatureSet::initStatus(unsigned int fileCount) const {
 }
 
 /** Reads the BNA-header, e.g. "segment name","rank 3",123 */
-bool GeoFeatureSet::readBNAHeader(std::ifstream& infile, std::string& segment,
+bool GeoFeatureSet::readBNAHeader(const std::string& line, std::string& segment,
                                   unsigned int& rank, unsigned int& points,
                                   bool& isClosed) const {
-
 	size_t pos1, pos2;
-	std::string line, tmpStr;
-	std::getline(infile, line);
+	std::string tmpStr;
 
 	// segment
 	if ( (pos1 = line.find('"')) == std::string::npos ) return false;
@@ -244,50 +244,87 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 		return false;
 	}
 
-	GeoFeature* feature;
+	std::vector<GeoFeature*> features;
+	GeoFeature *feature;
 	unsigned int lineNum = 0;
-	std::string tmpStr;
 	std::string segment;
 	unsigned int rank;
 	unsigned int points;
+	std::string line;
+	const char *nptr;
+	char *endptr;
 	bool isClosed;
 	Vertex v;
 	bool startSubFeature;
+	bool fileValid = true;
 
 	while ( infile.good() ) {
 		++lineNum;
 
-		if ( !readBNAHeader(infile, segment, rank, points, isClosed) ) {
-			if ( infile.eof() ) break;
-			SEISCOMP_WARNING("error reading BNA header in file %s at line %i",
-			                 filename.c_str(), lineNum);
+		// read BNA header
+		std::getline(infile, line);
+		if ( Core::trim(line).empty() ) {
 			continue;
+		}
+
+		if ( !readBNAHeader(line, segment, rank, points, isClosed) ) {
+			SEISCOMP_ERROR("error reading BNA header in file %s at line %i",
+			               filename.c_str(), lineNum);
+			fileValid = false;
+			break;
 		}
 		startSubFeature = false;
 
 		feature = new GeoFeature(segment, category, rank);
-		_features.push_back(feature);
+		features.push_back(feature);
 		if ( isClosed )
 			feature->setClosedPolygon(true);
 
 		// read vertices
-		for ( unsigned int pi = 0; pi < points && infile.good(); ++pi ) {
+		unsigned int pi = 0;
+		for ( ; pi < points; ++pi ) {
+			if ( !infile.good() ) {
+				SEISCOMP_ERROR("to few vertices (%i/%i) for feature starting "
+				               "at line %i", pi, points, lineNum - pi);
+				fileValid = false;
+				break;
+			}
 			++lineNum;
-			std::getline(infile, tmpStr, ',');
-			v.lon = atof(tmpStr.c_str());
-			std::getline(infile, tmpStr);
-			v.lat = atof(tmpStr.c_str());
 
-			if ( v.lon < -180 || v.lon > 180 ) {
-				SEISCOMP_DEBUG("invalid longitude in file %s at line %i",
+			// read line, expected format: "lon, lat\n"
+			std::getline(infile, line);
+			nptr = line.c_str();
+
+			// read longitude
+			endptr = NULL;
+			errno = 0;
+			v.lon = strtof(nptr, &endptr);
+			if ( errno != 0 || endptr == NULL || endptr == nptr ||
+			     v.lon < -180 || v.lon > 180) {
+				SEISCOMP_ERROR("invalid longitude in file %s at line %i",
 				               filename.c_str(), lineNum);
-				continue;
+				fileValid = false;
+				break;
 			}
 
-			if ( v.lat < -90 || v.lat > 90 ) {
-				SEISCOMP_DEBUG("invalid latitude in file %s at line %i",
+			// search for comma
+			nptr = strchr(endptr, ',');
+			if ( nptr == NULL ) {
+				SEISCOMP_ERROR("invalid coordinate separator in file %s at line %i",
 				               filename.c_str(), lineNum);
-				continue;
+				fileValid = false;
+				break;
+			}
+
+			// read latitude
+			endptr = NULL; nptr += 1;
+			v.lat = strtof(nptr, &endptr);
+			if ( errno != 0 || endptr == NULL || endptr == nptr ||
+			     v.lat < -90 || v.lat > 90) {
+				SEISCOMP_ERROR("invalid latitude in file %s at line %i",
+				               filename.c_str(), lineNum);
+				fileValid = false;
+				break;
 			}
 
 			if ( !feature->vertices().empty() ) {
@@ -309,6 +346,15 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 
 			feature->addVertex(v, startSubFeature);
 			startSubFeature = false;
+		}
+	}
+
+	if ( fileValid ) {
+		_features.insert(_features.end(), features.begin(), features.end());
+	}
+	else {
+		for ( size_t i = 0; i < features.size(); ++i ) {
+			delete features[i];
 		}
 	}
 
