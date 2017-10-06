@@ -475,12 +475,15 @@ class FDSNWS(Application):
 		# file then messaging is disabled. Messaging is only used to get
 		# the configured database connection URI.
 		if self.databaseURI() != "":
-			self.setMessagingEnabled(False)
+			if not self._trackdbEnabled:
+				self.setMessagingEnabled(False)
 		else:
-			# Without the event service, event a database connection is not
+			# Without the event service, even a database connection is not
 			# required if the inventory is loaded from file
 			if not self._serveEvent and not self._useArclinkAccess and not self.isInventoryDatabaseEnabled():
-				self.setMessagingEnabled(False)
+				if not self._trackdbEnabled:
+					self.setMessagingEnabled(False)
+
 				self.setDatabaseEnabled(False, False)
 
 		return True
