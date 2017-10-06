@@ -110,7 +110,7 @@ class SDS(object):
         recStart = 0
         timeStart = rec.begin_time
 
-        if rec.begin_time > endt:
+        if rec.begin_time >= endt:
             return
 
         msFile.seek(-reclen, 2)
@@ -118,7 +118,7 @@ class SDS(object):
         recEnd = msFile.tell() / reclen - 1
         timeEnd = rec.begin_time
 
-        if rec.end_time < startt:
+        if rec.end_time <= startt:
             return
 
         if timeStart >= timeEnd:
@@ -128,29 +128,55 @@ class SDS(object):
         (lower, et1) = self.__time2recno(msFile, reclen, timeStart, recStart, timeEnd, recEnd, startt)
         (upper, et2) = self.__time2recno(msFile, reclen, startt, lower, timeEnd, recEnd, endt)
 
-        if et1 < startt:
-            lower += 1
-
-        if et2 < endt:
-            upper += 1
-
         if upper < lower:
             Logging.error("%s: overlap detected (lower=%d, upper=%d)" % (msFile.name, lower, upper))
             upper = lower
 
         msFile.seek(lower * reclen)
         remaining = (upper - lower + 1) * reclen
+        check = True
+
+        if bufferSize % reclen:
+            bufferSize += reclen - bufferSize % reclen
 
         while remaining > 0:
             size = min(remaining, bufferSize)
-            remaining -= size
             data = msFile.read(size)
+            remaining -= size
+            offset = 0
 
             if not data:
-                break
+                return
+
+            if check:
+                while offset < len(data):
+                    rec = mseedlite.Record(data[offset:offset+reclen])
+
+                    if rec.begin_time >= endt:
+                        return
+
+                    if rec.end_time > startt:
+                        break
+
+                    offset += reclen
+
+                check = False
+
+            yield data[offset:] if offset else data
+
+        while True:
+            data = msFile.read(reclen)
+
+            if not data:
+                return
+
+            rec = mseedlite.Record(data)
+
+            if rec.begin_time >= endt:
+                return
 
             yield data
-        
+
     def __getDayRaw(self, day, startt, endt, net, sta, loc, cha, bufferSize):
         # Take into account the case of empty location
         if loc == '--':
