@@ -257,8 +257,7 @@ class _WaveformProducer(object):
 	def _finish(self):
 		if self.written == 0:
 			msg = "no waveform data found"
-			data = HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
-			self.req.write(data)
+			HTTP.renderErrorPage(self.req, http.NO_CONTENT, msg, self.ro)
 
 			if self.tracker:
 				self.tracker.volume_status("fdsnws", "NODATA", 0, "")
