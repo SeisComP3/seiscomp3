@@ -4642,8 +4642,6 @@ void OriginLocatorView::mergeOrigins(QList<DataModel::Origin*> orgs) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::setLocalAmplitudes(Seiscomp::DataModel::Origin *org,
                                            AmplitudeSet *amps, StringSet *ampIDs) {
-	cerr << "Set local amplitudes" << endl;
-
 	if ( org != _currentOrigin ) return;
 
 	for ( AmplitudeSet::iterator it = _changedAmplitudes.begin();
@@ -5048,6 +5046,22 @@ void OriginLocatorView::commit(bool associate) {
 		// try to find the pick somewhere in the client memory
 		PickPtr pick = Pick::Find(pickID);
 		if ( pick ) _associatedPicks[pickID] = pick;
+	}
+
+	if ( _localOrigin ) {
+		// Strip invalid magnitudes
+		size_t i = 0;
+		while ( i < _currentOrigin->magnitudeCount() ) {
+			Magnitude *mag = _currentOrigin->magnitude(i);
+			try {
+				if ( mag->evaluationStatus() == REJECTED ) {
+					_currentOrigin->removeMagnitude(i);
+					continue;
+				}
+			}
+			catch ( ... ) {}
+			++i;
+		}
 	}
 
 	if ( /*_currentOrigin == _baseOrigin || */ !_localOrigin )

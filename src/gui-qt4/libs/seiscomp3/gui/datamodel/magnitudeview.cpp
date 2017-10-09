@@ -1714,6 +1714,20 @@ void MagnitudeView::computeMagnitudes() {
 				}
 			}
 		}
+		else {
+			MagnitudePtr mag = Magnitude::Create();
+			mag->setType(magnitudeTypes[i]);
+			mag->setEvaluationStatus(EvaluationStatus(REJECTED));
+
+			CreationInfo ci;
+			ci.setAgencyID(SCApp->agencyID());
+			ci.setAuthor(SCApp->author());
+			ci.setCreationTime(Core::Time::GMT());
+
+			mag->setCreationInfo(ci);
+
+			_origin->add(mag.get());
+		}
 	}
 
 	// Synchronize local amplitudes for commit
@@ -2906,8 +2920,15 @@ void MagnitudeView::updateContent() {
 	_ui.tableStationMagnitudes->resizeRowsToContents();
 	_ui.tableStationMagnitudes->sortByColumn(_ui.tableStationMagnitudes->horizontalHeader()->sortIndicatorSection());
 
-	if ( _netMag->stationMagnitudeContributionCount() == 0 )
+	if ( _netMag->stationMagnitudeContributionCount() == 0 ) {
 		_ui.groupReview->setEnabled(false);
+
+		try {
+			if ( _netMag->evaluationStatus() == REJECTED )
+				_ui.groupReview->setEnabled(true);
+		}
+		catch ( ... ) {}
+	}
 	else
 		_ui.groupReview->setEnabled(true);
 }
