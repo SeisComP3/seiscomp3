@@ -395,19 +395,11 @@ istream &FDSNWSConnectionBase::stream() {
 std::string FDSNWSConnectionBase::readBinary(int size) {
 	if ( size <= 0 ) return "";
 
-	if ( !_chunkMode ) {
-		string data = _sock->read(size);
-		_remainingBytes -= data.size();
-		if ( _remainingBytes <= 0 )
-			_sock->close();
-		return data;
-	}
-
 	string data;
 	int bytesLeft = size;
 
 	while ( bytesLeft > 0 ) {
-		if ( _remainingBytes <= 0 ) {
+		if ( _chunkMode && _remainingBytes <= 0 ) {
 			string r = _sock->readline();
 			size_t pos = r.find(' ');
 			unsigned int remainingBytes;
@@ -425,19 +417,29 @@ std::string FDSNWSConnectionBase::readBinary(int size) {
 			}
 		}
 
-		int toBeRead = _remainingBytes;
-		if ( toBeRead > bytesLeft ) toBeRead = bytesLeft;
+		int toBeRead = bytesLeft > BUFSIZE ? BUFSIZE : bytesLeft;
+		if ( toBeRead > _remainingBytes ) toBeRead = _remainingBytes;
 
 		int bytesRead = (int)data.size();
 		data += _sock->read(toBeRead);
 		bytesRead = (int)data.size() - bytesRead;
+		if ( bytesRead <= 0 ) {
+			SEISCOMP_WARNING("socket read returned not data");
+			break;
+		}
 
-		_remainingBytes -= bytesLeft;
+		_remainingBytes -= bytesRead;
 		bytesLeft -= bytesRead;
 
-		if ( _remainingBytes <= 0 )
-			// Read trailing new line
-			_sock->readline();
+		if ( _remainingBytes <= 0 ) {
+			if ( _chunkMode ) {
+				// Read trailing new line
+				_sock->readline();
+			}
+			else {
+				_sock->close();
+			}
+		}
 	}
 
 	return data;
