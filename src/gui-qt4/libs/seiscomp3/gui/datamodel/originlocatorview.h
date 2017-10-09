@@ -216,6 +216,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 
 		void setMagnitudeCalculationEnabled(bool);
 		void computeMagnitudes();
+		void magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*);
 
 		void mergeOrigins(QList<Seiscomp::DataModel::Origin*>);
 		void setLocalAmplitudes(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*);

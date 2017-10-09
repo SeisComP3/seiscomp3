@@ -71,6 +71,7 @@ class SC_GUI_API TensorRenderer {
 		void render(QImage& img, const Math::Matrix3d &m);
 		void render(QImage& img, const Math::Tensor2Sd &t, const Math::Matrix3f &m);
 		void render(QImage& img, const Math::Tensor2Sd &t);
+		void renderNP(QImage& img, double strike, double dip, double slip, QColor color);
 
 
 	private:

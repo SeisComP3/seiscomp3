@@ -111,6 +111,26 @@ def _responseFIR_in(xresponseFIR, inventory):
         
     xresponseFIR._copy_to(responseFIR)
 
+def _responseIIR_in(xresponseIIR, inventory):
+    if xresponseIIR.action == "delete":
+        try:
+            inventory.remove_responseIIR(xresponseIIR.name)
+        except KeyError:
+            pass
+
+        return
+
+    try:
+        responseIIR = inventory.responseIIR[xresponseIIR.name]
+        if responseIIR.publicID != xresponseIIR.publicID:
+            inventory.remove_responseIIR(xresponseIIR.name)
+            raise KeyError
+
+    except KeyError:
+        responseIIR = inventory.insert_responseIIR(xresponseIIR.name, publicID=xresponseIIR.publicID)
+
+    xresponseIIR._copy_to(responseIIR)
+
 def _responsePAZ_in(xresponsePAZ, inventory):
     if xresponsePAZ.action == "delete":
         try:
@@ -150,6 +170,26 @@ def _responsePolynomial_in(xresponsePolynomial, inventory):
         responsePolynomial = inventory.insert_responsePolynomial(xresponsePolynomial.name, publicID=xresponsePolynomial.publicID)
         
     xresponsePolynomial._copy_to(responsePolynomial)
+
+def _responseFAP_in(xresponseFAP, inventory):
+    if xresponseFAP.action == "delete":
+        try:
+            inventory.remove_responseFAP(xresponseFAP.name)
+        except KeyError:
+            pass
+
+        return
+
+    try:
+        responseFAP = inventory.responseFAP[xresponseFAP.name]
+        if responseFAP.publicID != xresponseFAP.publicID:
+            inventory.remove_responseFAP(xresponseFAP.name)
+            raise KeyError
+
+    except KeyError:
+        responseFAP = inventory.insert_responseFAP(xresponseFAP.name, publicID=xresponseFAP.publicID)
+
+    xresponseFAP._copy_to(responseFAP)
 
 def _decimation_in(xdecim, device):
     if xdecim.action == "delete":
@@ -424,11 +464,17 @@ def _xmldoc_in(xinventory, inventory):
     for xresponseFIR in xinventory.responseFIR:
         _responseFIR_in(xresponseFIR, inventory)
 
+    for xresponseIIR in xinventory.responseIIR:
+        _responseIIR_in(xresponseIIR, inventory)
+
     for xresponsePAZ in xinventory.responsePAZ:
         _responsePAZ_in(xresponsePAZ, inventory)
 
     for xresponsePolynomial in xinventory.responsePolynomial:
         _responsePolynomial_in(xresponsePolynomial, inventory)
+
+    for xresponseFAP in xinventory.responseFAP:
+        _responseFAP_in(xresponseFAP, inventory)
 
     for xsensor in xinventory.sensor:
         _sensor_in(xsensor, inventory)
@@ -458,6 +504,15 @@ def _responseFIR_out(xinventory, responseFIR, modified_after):
 
     return False
 
+def _responseIIR_out(xinventory, responseIIR, modified_after):
+    if modified_after is None or responseIIR.last_modified >= modified_after:
+        xresponseIIR = xinventory._new_responseIIR()
+        xresponseIIR._copy_from(responseIIR)
+        xinventory._append_child(xresponseIIR)
+        return True
+
+    return False
+
 def _responsePAZ_out(xinventory, responsePAZ, modified_after):
     if modified_after is None or responsePAZ.last_modified >= modified_after:
         xresponsePAZ = xinventory._new_responsePAZ()
@@ -476,6 +531,15 @@ def _responsePolynomial_out(xinventory, responsePolynomial, modified_after):
 
     return False
     
+def _responseFAP_out(xinventory, responseFAP, modified_after):
+    if modified_after is None or responseFAP.last_modified >= modified_after:
+        xresponseFAP = xinventory._new_responseFAP()
+        xresponseFAP._copy_from(responseFAP)
+        xinventory._append_child(xresponseFAP)
+        return True
+
+    return False
+
 def _decimation_out(xdevice, decim, modified_after, filters):
     if filters is not None:
         for f in str(decim.digitalFilterChain).split():
@@ -770,6 +834,10 @@ def _xmldoc_out(xinventory, inventory, instr, modified_after):
             if i.publicID in used_filters.filters:
                 _responseFIR_out(xinventory, i, modified_after)
 
+        for i in inventory.responseIIR.itervalues():
+            if i.publicID in used_filters.filters:
+                _responseIIR_out(xinventory, i, modified_after)
+
         for i in inventory.responsePAZ.itervalues():
             if i.publicID in used_filters.filters:
                 _responsePAZ_out(xinventory, i, modified_after)
@@ -777,6 +845,10 @@ def _xmldoc_out(xinventory, inventory, instr, modified_after):
         for i in inventory.responsePolynomial.itervalues():
             if i.publicID in used_filters.filters:
                 _responsePolynomial_out(xinventory, i, modified_after)
+
+        for i in inventory.responseFAP.itervalues():
+            if i.publicID in used_filters.filters:
+                _responseFAP_out(xinventory, i, modified_after)
     elif instr == 2:
         for i in inventory.network.itervalues():
             for j in i.itervalues():
@@ -797,11 +869,17 @@ def _xmldoc_out(xinventory, inventory, instr, modified_after):
         for i in inventory.responseFIR.itervalues():
             _responseFIR_out(xinventory, i, modified_after)
 
+        for i in inventory.responseIIR.itervalues():
+            _responseIIR_out(xinventory, i, modified_after)
+
         for i in inventory.responsePAZ.itervalues():
             _responsePAZ_out(xinventory, i, modified_after)
 
         for i in inventory.responsePolynomial.itervalues():
             _responsePolynomial_out(xinventory, i, modified_after)
+
+        for i in inventory.responseFAP.itervalues():
+            _responseFAP_out(xinventory, i, modified_after)
 
 #***************************************************************************** 
 # Incremental Parser

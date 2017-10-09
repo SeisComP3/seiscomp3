@@ -54,17 +54,22 @@ class SC_SYSTEM_CLIENT_API Application : public Client::StreamApplication {
 		                  const std::string& locationCode,
 		                  const std::string& channelCode,
 		                  WaveformProcessor *wp);
+		void addProcessor(const DataModel::WaveformStreamID &wfid,
+				  WaveformProcessor *wp);
 
 		void addProcessor(const std::string& networkCode,
 		                  const std::string& stationCode,
 		                  const std::string& locationCode,
 		                  const std::string& channelCode,
 		                  TimeWindowProcessor *twp);
+		void addProcessor(const DataModel::WaveformStreamID &wfid,
+				  TimeWindowProcessor *twp);
 
 		void removeProcessors(const std::string& networkCode,
 		                      const std::string& stationCode,
 		                      const std::string& locationCode,
 		                      const std::string& channelCode);
+		void removeProcessors(const DataModel::WaveformStreamID &wfid);
 
 		void removeProcessor(WaveformProcessor *wp);
 
@@ -99,12 +104,16 @@ class SC_SYSTEM_CLIENT_API Application : public Client::StreamApplication {
 		                       const std::string& locationCode,
 		                       const std::string& channelCode,
 		                       WaveformProcessor *wp);
+		void registerProcessor(const DataModel::WaveformStreamID &wfid,
+				       WaveformProcessor *twp);
 
 		void registerProcessor(const std::string& networkCode,
 		                       const std::string& stationCode,
 		                       const std::string& locationCode,
 		                       const std::string& channelCode,
 		                       TimeWindowProcessor *twp);
+		void registerProcessor(const DataModel::WaveformStreamID &wfid,
+				       TimeWindowProcessor *twp);
 
 
 	// ----------------------------------------------------------------------
@@ -117,16 +126,18 @@ class SC_SYSTEM_CLIENT_API Application : public Client::StreamApplication {
 		typedef std::pair<WID, WaveformProcessorPtr>             WaveformProcessorItem;
 		typedef std::pair<WID, TimeWindowProcessorPtr>           TimeWindowProcessorItem;
 		typedef std::list<WaveformProcessorItem>                 WaveformProcessorQueue;
+		typedef std::list<WaveformProcessorPtr>                  WaveformProcessorRemovalQueue;
 		typedef std::list<TimeWindowProcessorItem>               TimeWindowProcessorQueue;
 
-		ProcessorMap _processors;
-		StationProcessors _stationProcessors;
+		ProcessorMap                    _processors;
+		StationProcessors               _stationProcessors;
 
-		StreamBuffer _waveformBuffer;
+		StreamBuffer                    _waveformBuffer;
 
-		WaveformProcessorQueue _waveformProcessorQueue;
-		TimeWindowProcessorQueue _timeWindowProcessorQueue;
-		bool _registrationBlocked;
+		WaveformProcessorQueue          _waveformProcessorQueue;
+		WaveformProcessorRemovalQueue   _waveformProcessorRemovalQueue;
+		TimeWindowProcessorQueue        _timeWindowProcessorQueue;
+		bool                            _registrationBlocked;
 };
 
 

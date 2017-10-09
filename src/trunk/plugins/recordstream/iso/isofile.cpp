@@ -287,7 +287,7 @@ void IsoFile::extractFiles() {
     _readingData = true;
 }
 
-istream& IsoFile::stream() throw(ArchiveException) {
+istream& IsoFile::stream() {
     if (!_readingData)
 	extractFiles();
     

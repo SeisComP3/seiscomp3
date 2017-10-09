@@ -34,16 +34,15 @@ QTableWidgetItem* createTableWidgetItem(const QString& text, bool isActiveEvent 
 
 
 EventTableWidget::EventTableWidget(QWidget* parent)
- : QTableWidget(parent),
-   _controlKeyPressed(false),
-   _selectedRow(-1) {
+: QTableWidget(parent)
+, _controlKeyPressed(false)
+, _selectedRow(-1) {
 
 	uiInit();
 
 	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(handleCellDoubleClickEvent(int)));
 	connect(this, SIGNAL(cellPressed(int, int)), this, SLOT(handleCellPressedEvent(int)));
 }
-
 
 
 
@@ -92,9 +91,8 @@ void EventTableWidget::addRow(RowData& rowData) {
 
 	resizeColumnsToContents();
 
-	QHeaderView* horizontalHeaderRef = horizontalHeader();
-	horizontalHeaderRef->setResizeMode(horizontalHeaderRef->count()-1, QHeaderView::Stretch);
-
+	QHeaderView *horizontalHeaderRef = horizontalHeader();
+	horizontalHeaderRef->setResizeMode(_lastVisibleSection, QHeaderView::Stretch);
 }
 
 
@@ -132,7 +130,8 @@ void EventTableWidget::handleCellPressedEvent(int row) {
 		setSelectedRow(-1);
 		clearSelection();
 		emit eventDeselected(eventId);
-	} else {
+	}
+	else {
 		setSelectedRow(row);
 		emit eventSelected(eventId);
 	}
@@ -144,21 +143,49 @@ void EventTableWidget::handleCellPressedEvent(int row) {
 void EventTableWidget::uiInit() {
 	QStringList tableHeader;
 	tableHeader << "Event" << "Origin Time" << "Magnitude" << "Magnitude Type"
-				<< "Region" << "Latitude" << "Longitude" << "Depth";
+	            << "Region" << "Latitude" << "Longitude" << "Depth";
+
+	QVector<bool> sectionsVisible;
+	for ( int i = 0; i < tableHeader.count(); ++i )
+		sectionsVisible.append(true);
+
+	try {
+		std::vector<std::string> cols = SCApp->configGetStrings("eventTable.columns");
+
+		// Switch all section to invisible
+		for ( int i = 0; i < sectionsVisible.count(); ++i )
+			sectionsVisible[i] = false;
+
+		for ( size_t i = 0; i < cols.size(); ++i ) {
+			int idx = tableHeader.indexOf(cols[i].c_str());
+			if ( idx < 0 ) continue;
+			sectionsVisible[idx] = true;
+		}
+	}
+	catch ( ... ) {}
 
 	setRowCount(0);
 	setColumnCount(tableHeader.size());
 	setHorizontalHeaderLabels(tableHeader);
 
-	QHeaderView* horizontalHeaderRef = horizontalHeader();
-	horizontalHeaderRef->setResizeMode(horizontalHeaderRef->count()-1, QHeaderView::Stretch);
+	QHeaderView *horizontalHeaderRef = horizontalHeader();
+
+	_lastVisibleSection = -1;
+	for ( int i = 0; i < horizontalHeaderRef->count(); ++i ) {
+		if ( !sectionsVisible[i] )
+			horizontalHeaderRef->hideSection(i);
+		else
+			_lastVisibleSection = i;
+	}
+
+	horizontalHeaderRef->setResizeMode(_lastVisibleSection, QHeaderView::Stretch);
 	resizeColumnsToContents();
 
 	setAlternatingRowColors(true);
 	setSelectionBehavior(QAbstractItemView::SelectRows);
 	setSelectionMode(QAbstractItemView::SingleSelection);
 
-	QVBoxLayout* layout = new QVBoxLayout;
+	QVBoxLayout *layout = new QVBoxLayout;
 	setLayout(layout);
 
 	QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

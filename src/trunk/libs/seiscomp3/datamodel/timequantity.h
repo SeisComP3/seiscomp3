@@ -94,19 +94,19 @@ class SC_SYSTEM_CORE_API TimeQuantity : public Core::BaseObject {
 
 		//! Symmetric uncertainty of point in time in seconds.
 		void setUncertainty(const OPT(double)& uncertainty);
-		double uncertainty() const throw(Seiscomp::Core::ValueException);
+		double uncertainty() const;
 
 		//! Lower uncertainty of point in time in seconds.
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 		//! Upper uncertainty of point in time in seconds.
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		//! Confidence level of the uncertainty, given in percent.
 		void setConfidenceLevel(const OPT(double)& confidenceLevel);
-		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+		double confidenceLevel() const;
 
 
 	// ------------------------------------------------------------------

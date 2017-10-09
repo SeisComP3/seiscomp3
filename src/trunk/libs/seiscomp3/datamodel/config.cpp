@@ -226,10 +226,10 @@ ParameterSet* Config::parameterSet(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ParameterSet* Config::findParameterSet(const std::string& publicID) const {
-	ParameterSet* object = ParameterSet::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ParameterSetPtr>::const_iterator it = _parameterSets.begin(); it != _parameterSets.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -363,10 +363,10 @@ ConfigModule* Config::configModule(size_t i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ConfigModule* Config::findConfigModule(const std::string& publicID) const {
-	ConfigModule* object = ConfigModule::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ConfigModulePtr>::const_iterator it = _configModules.begin(); it != _configModules.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -484,7 +484,7 @@ bool Config::removeConfigModule(size_t i) {
 void Config::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Config skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

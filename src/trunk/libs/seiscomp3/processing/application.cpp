@@ -80,6 +80,20 @@ void Application::addProcessor(const std::string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::addProcessor(const DataModel::WaveformStreamID &wfid,
+			       WaveformProcessor *proc) {
+	addProcessor(wfid.networkCode(),
+		     wfid.stationCode(),
+		     wfid.locationCode(),
+		     wfid.channelCode(),
+		     proc);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::addProcessor(const std::string& networkCode,
                                const std::string& stationCode,
                                const std::string& locationCode,
@@ -95,6 +109,20 @@ void Application::addProcessor(const std::string& networkCode,
 
 	registerProcessor(networkCode, stationCode,
 	                  locationCode, channelCode, twp);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::addProcessor(const DataModel::WaveformStreamID &wfid,
+			       TimeWindowProcessor *proc) {
+	addProcessor(wfid.networkCode(),
+		     wfid.stationCode(),
+		     wfid.locationCode(),
+		     wfid.channelCode(),
+		     proc);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -128,12 +156,28 @@ void Application::registerProcessor(const std::string& networkCode,
 
 	wp->setEnabled(isStationEnabled(networkCode, stationCode));
 
-	SEISCOMP_DEBUG("Added processor on stream %s.%s.%s.%s, current size: %lu/%lu, object count: %d",
-	              networkCode.c_str(), stationCode.c_str(),
-	              locationCode.c_str(), channelCode.c_str(),
-	              (unsigned long)_processors.size(), (unsigned long)_stationProcessors.size(),
-	              Core::BaseObject::ObjectCount());
-	SEISCOMP_DEBUG("Added proc %ld", (long)wp);
+	SEISCOMP_DEBUG("Added processor on stream %s.%s.%s.%s    addr=0x%lx",
+                       networkCode.c_str(), stationCode.c_str(),
+	               locationCode.c_str(), channelCode.c_str(),
+                       (long)wp);
+	SEISCOMP_DEBUG("Current processor count: %lu/%lu, object count: %d",
+		      (unsigned long)_processors.size(),
+	              (unsigned long)_stationProcessors.size(),
+		      Core::BaseObject::ObjectCount());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::registerProcessor(const DataModel::WaveformStreamID &wfid,
+			            WaveformProcessor *proc) {
+	registerProcessor(wfid.networkCode(),
+		          wfid.stationCode(),
+		          wfid.locationCode(),
+		          wfid.channelCode(),
+		          proc);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -199,6 +243,20 @@ void Application::registerProcessor(const std::string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::registerProcessor(const DataModel::WaveformStreamID &wfid,
+			            TimeWindowProcessor *proc) {
+	registerProcessor(wfid.networkCode(),
+		          wfid.stationCode(),
+		          wfid.locationCode(),
+		          wfid.channelCode(),
+		          proc);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::removeProcessors(const std::string& networkCode,
                                    const std::string& stationCode,
                                    const std::string& locationCode,
@@ -255,13 +313,30 @@ void Application::removeProcessors(const std::string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Application::removeProcessors(const DataModel::WaveformStreamID &wfid) {
+	removeProcessors(wfid.networkCode(),
+		         wfid.stationCode(),
+		         wfid.locationCode(),
+		         wfid.channelCode());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::removeProcessor(Processing::WaveformProcessor *wp) {
+	if ( _registrationBlocked ) {
+		_waveformProcessorRemovalQueue.push_back(wp);
+		return;
+	}
+
 	for ( ProcessorMap::iterator it = _processors.begin();
 	      it != _processors.end(); )
 	{
 		if ( it->second.get() == wp ) {
-			SEISCOMP_DEBUG("Removed proc %ld", (long)wp);
-			SEISCOMP_DEBUG("Removed processor from stream %s", it->first.c_str());
+			SEISCOMP_DEBUG("Removed processor from stream %s    addr=0x%lx",
+				       it->first.c_str(), (long)wp);
 			_processors.erase(it++);
 		}
 		else
@@ -371,7 +446,13 @@ void Application::handleRecord(Record *rec) {
 	_registrationBlocked = true;
 
 	std::pair<ProcessorMap::iterator, ProcessorMap::iterator> itq = _processors.equal_range(streamID);
-	for (ProcessorMap::iterator it = itq.first; it != itq.second; ++it) {
+	for ( ProcessorMap::iterator it = itq.first; it != itq.second; ++it ) {
+		// The proc must not be already on the removal list
+		if ( std::find(_waveformProcessorRemovalQueue.begin(),
+		               _waveformProcessorRemovalQueue.end(),
+		               it->second) != _waveformProcessorRemovalQueue.end() )
+			continue;
+
 		// Schedule the processor for deletion when finished
 		if ( it->second->isFinished() )
 			trashList.push_back(it->second.get());
@@ -382,7 +463,23 @@ void Application::handleRecord(Record *rec) {
 		}
 	}
 
+	// Delete finished processors
+	for ( std::list<WaveformProcessor*>::iterator itt = trashList.begin();
+	      itt != trashList.end(); ++itt ) {
+		processorFinished(rec, *itt);
+		removeProcessor(*itt);
+	}
+
+	trashList.clear();
+
 	_registrationBlocked = false;
+
+	// Remove outdated processors if not already on the trash list
+	while ( !_waveformProcessorRemovalQueue.empty() ) {
+		WaveformProcessorPtr wp = _waveformProcessorRemovalQueue.front();
+		_waveformProcessorRemovalQueue.pop_front();
+		removeProcessor(wp.get());
+	}
 
 	// Register pending processors
 	while ( !_waveformProcessorQueue.empty() ) {
@@ -401,13 +498,6 @@ void Application::handleRecord(Record *rec) {
 
 		registerProcessor(wid.networkCode(), wid.stationCode(),
 		                  wid.locationCode(), wid.channelCode(), twp.get());
-	}
-
-	// Delete finished processors
-	for ( std::list<WaveformProcessor*>::iterator itt = trashList.begin();
-	      itt != trashList.end(); ++itt ) {
-		processorFinished(rec, *itt);
-		removeProcessor(*itt);
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -2,23 +2,651 @@
 
 ## Release YYYY.DDD
 
-* system
+The database schema has changed since the previous version. To upgrade your
+database from version 0.9 to 0.10 to following SQL script can be used:
 
-  * Upgrade libmseed to 2.17
+
+**MYSQL**
+
+```sql
+CREATE TABLE ResponseIIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	type CHAR(1),
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used TINYINT(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
+
+ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
+ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;
+ALTER TABLE DataloggerCalibration ADD start_ms INTEGER AFTER start;
+ALTER TABLE DataloggerCalibration ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON DataloggerCalibration;
+ALTER TABLE DataloggerCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
+ALTER TABLE SensorCalibration ADD start_ms INTEGER AFTER start;
+ALTER TABLE SensorCalibration ADD end_ms INTEGER AFTER end;
+ALTER TABLE SensorCalibration MODIFY gain DOUBLE;
+DROP INDEX _parent_oid_2 ON SensorCalibration;
+ALTER TABLE SensorCalibration ADD CONSTRAINT composite_index UNIQUE(_parent_oid,serialNumber,channel,start,start_ms);
+ALTER TABLE AuxStream ADD start_ms INTEGER AFTER start;
+ALTER TABLE AuxStream ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON AuxStream;
+ALTER TABLE AuxStream ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Stream ADD start_ms INTEGER AFTER start;
+ALTER TABLE Stream ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Stream;
+ALTER TABLE Stream ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE SensorLocation ADD start_ms INTEGER AFTER start;
+ALTER TABLE SensorLocation ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON SensorLocation;
+ALTER TABLE SensorLocation ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Station ADD start_ms INTEGER AFTER start;
+ALTER TABLE Station ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Station;
+ALTER TABLE Station ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE Network ADD start_ms INTEGER AFTER start;
+ALTER TABLE Network ADD end_ms INTEGER AFTER end;
+DROP INDEX _parent_oid_2 ON Network;
+ALTER TABLE Network ADD CONSTRAINT composite_index UNIQUE(_parent_oid,code,start,start_ms);
+ALTER TABLE ResponseFIR ADD gainFrequency DOUBLE UNSIGNED AFTER gain;
+ALTER TABLE ResponsePAZ ADD decimationFactor SMALLINT UNSIGNED;
+ALTER TABLE ResponsePAZ ADD delay DOUBLE UNSIGNED;
+ALTER TABLE ResponsePAZ ADD correction DOUBLE;
+ALTER TABLE ResponsePAZ MODIFY gain DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY gain DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY approximationLowerBound DOUBLE;
+ALTER TABLE ResponsePolynomial MODIFY approximationUpperBound DOUBLE;
+ALTER TABLE ResponseFAP MODIFY gain DOUBLE;
+ALTER TABLE DataloggerCalibration MODIFY gain DOUBLE;
+ALTER TABLE Datalogger MODIFY gain DOUBLE;
+ALTER TABLE StationGroup MODIFY code CHAR(20);
+ALTER TABLE StationGroup MODIFY description VARCHAR(255);
+ALTER TABLE AuxSource MODIFY name VARCHAR(255);
+ALTER TABLE AuxSource MODIFY description VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY name VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY description VARCHAR(255);
+ALTER TABLE Sensor MODIFY name VARCHAR(255);
+ALTER TABLE Datalogger MODIFY description VARCHAR(255);
+ALTER TABLE Station MODIFY description VARCHAR(255);
+ALTER TABLE Network MODIFY description VARCHAR(255);
+
+UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+CREATE TABLE ResponseIIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_type VARCHAR(1),
+	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfNumerators SMALLINT,
+	m_numberOfDenominators SMALLINT,
+	m_numerators_content BYTEA,
+	m_numerators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_denominators_content BYTEA,
+	m_denominators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+		REFERENCES Object(_oid)
+		ON DELETE CASCADE,
+	CONSTRAINT responseiir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+ALTER TABLE StationGroup ADD m_start_ms INTEGER;
+ALTER TABLE StationGroup ADD m_end_ms INTEGER;
+ALTER TABLE DataloggerCalibration ADD m_start_ms INTEGER;
+ALTER TABLE DataloggerCalibration ADD m_end_ms INTEGER;
+ALTER TABLE DataloggerCalibration DROP CONSTRAINT dataloggercalibration__parent_oid_m_serialnumber_m_channel__key;
+ALTER TABLE DataloggerCalibration ADD CONSTRAINT dataloggercalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms);
+ALTER TABLE SensorCalibration ADD m_start_ms INTEGER;
+ALTER TABLE SensorCalibration ADD m_end_ms INTEGER;
+ALTER TABLE SensorCalibration DROP CONSTRAINT sensorcalibration__parent_oid_m_serialnumber_m_channel_m_st_key;
+ALTER TABLE SensorCalibration ADD CONSTRAINT sensorcalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms);
+ALTER TABLE AuxStream ADD m_start_ms INTEGER;
+ALTER TABLE AuxStream ADD m_end_ms INTEGER;
+ALTER TABLE AuxStream DROP CONSTRAINT auxstream__parent_oid_m_code_m_start_key;
+ALTER TABLE AuxStream ADD CONSTRAINT auxstream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Stream ADD m_start_ms INTEGER;
+ALTER TABLE Stream ADD m_end_ms INTEGER;
+ALTER TABLE Stream DROP CONSTRAINT stream__parent_oid_m_code_m_start_key;
+ALTER TABLE Stream ADD CONSTRAINT stream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE SensorLocation ADD m_start_ms INTEGER;
+ALTER TABLE SensorLocation ADD m_end_ms INTEGER;
+ALTER TABLE SensorLocation DROP CONSTRAINT sensorlocation__parent_oid_m_code_m_start_key;
+ALTER TABLE SensorLocation ADD CONSTRAINT sensorlocation_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Station ADD m_start_ms INTEGER;
+ALTER TABLE Station ADD m_end_ms INTEGER;
+ALTER TABLE Station DROP CONSTRAINT station__parent_oid_m_code_m_start_key;
+ALTER TABLE Station ADD CONSTRAINT station_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE Network ADD m_start_ms INTEGER;
+ALTER TABLE Network ADD m_end_ms INTEGER;
+ALTER TABLE Network DROP CONSTRAINT network__parent_oid_m_code_m_start_key;
+ALTER TABLE Network ADD CONSTRAINT network_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms);
+ALTER TABLE ResponseFIR ADD m_gainFrequency DOUBLE PRECISION;
+ALTER TABLE ResponsePAZ ADD m_decimationFactor SMALLINT UNSIGNED;
+ALTER TABLE ResponsePAZ ADD m_delay DOUBLE UNSIGNED;
+ALTER TABLE ResponsePAZ ADD m_correction DOUBLE;
+ALTER TABLE StationGroup MODIFY m_code VARCHAR(20);
+ALTER TABLE StationGroup MODIFY m_description VARCHAR(255);
+ALTER TABLE AuxSource MODIFY m_name VARCHAR(255);
+ALTER TABLE AuxSource MODIFY m_description VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY m_name VARCHAR(255);
+ALTER TABLE AuxDevice MODIFY m_description VARCHAR(255);
+ALTER TABLE Sensor MODIFY m_name VARCHAR(255);
+ALTER TABLE Datalogger MODIFY m_description VARCHAR(255);
+ALTER TABLE Station MODIFY m_description VARCHAR(255);
+ALTER TABLE Network MODIFY m_description VARCHAR(255);
+
+UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
+```
+
+**Rationale**
+
+Most of the inventory objects are valid for certain epochs defined with start
+and end time. The database schema did not support microsecond storage of those
+times although the structures in the source code do. This schema revision closes
+the gap. Furthermore a ResponsePAZ filter could be part of the decimation filter
+chain. Therefore the decimation attributes decimationFactor, delay and correction
+have been added. Furthermore the ResponseIIR type has been added to correctly
+store SEED response coefficients (blockette 54) without the need to convert IIR
+filters to poles and zeros.
+
+**Important API changes**
+
+The MagnitudeProcessor interface has changed to support regionalized
+magnitude computations. The method ```computeMagnitude``` receives additionally
+two parameters, the origin and the sensor location object.
+All external magnitude plugins need to be adapted. Change from
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth, double &value);
+```
+
+to
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth,
+#ifdef SC_API_VERSION >= SC_API_VERSION_CHECK(11,0,0)
+                        const DataModel::Origin *hypocenter,
+                        const DataModel::SensorLocation *receiver,
+#endif
+                        double &value);
+```
+
+Furthermore a new enumeration has been added to return the status of
+the magnitude processing: ```EpicenterOutOfRegions```.
+
+----
+
+* trunk
+
+  * Set seiscomp3 database bytea encoding to 'escape' for PostgreSQL database
+    servers with version >= 9 in postgres.sql script.
+  * Add InventorySyncMessage which is used to enclose an inventory synchronization
+    process. An application can listen to that message and trigger processing of
+    the updated inventory. The InventorySyncMessage is currently sent by
+    scinv (seiscomp update inventory) to STATUS_GROUP.
+  * Changed default publicID pattern from "@classname@#@time/%Y%m%d%H%M%S.%f@.@id@"
+    to "@classname@/@time/%Y%m%d%H%M%S.%f@.@id@". The hash was removed due to
+    possible conflicts with QuakeML publicID constraints.
+
+* GUI
+
+  * The event list shows status REVIEWED as V and FINAL as F
+  * Added option to allow map layer visibilities and order
+  * Allow to add custom map layers via plugins to the map
+  * Refactored Map API (Canvas, Layer, Legend)
+  * All GUI applications support an author and/or user blacklist to prevent sending
+    messages to scmaster. This is not a proper secure access control implementation
+    but helps to setup read-only applications to avoid accidental commits.
+    ```
+    blacklist.users = sysop1, sysop2
+    blacklist.authors = sysop1@host, sysop2@host
+    ```
+
+* scmv
+
+  * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
+    The default value is 0 and does disable the interval check.
+  * Added option to show the event table initially and to configure visible columns
+    ```
+    eventTable.visible = true
+    eventTable.columns = Event, Depth
+    ```
+  * Add legend for event symbols
+
+* GUI
+
+  * All GUI applications support an author and/or user blacklist to prevent sending
+    messages to scmaster. This is not a proper secure access control implementation
+    but helps to setup read-only applications to avoid accidental commits.
+    ```
+    blacklist.users = sysop1, sysop2
+    blacklist.authors = sysop1@host, sysop2@host
+    ```
+
+* scolv
+
+  * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
+  * ```olv.locator``` is now deprecated in favour of ```olv.locator.interface```
+  * Add option to configure the default checkstate of the event association button and
+    fix origin button of the popup for committing with additional options: ```olv.commit.forceEventAssociation```
+    and ```olv.commit.fixOrigin```. Either default value is true.
+
+* scqc
+
+  * Added configuration option ```use3Components``` that allows to use all
+    3 components of a configured station. This only applies if ```useConfiguredStreams```
+    is active (default).
+
+* scinv
+
+  * Print file source of conflicting definitions
+
+* seiscomp
+
+  * An init script can not forward its configuration to another module. This is
+    especially useful if e.g. ```seiscomp update-config scautopick``` is ran
+    which did not do anything. Now it forwards its configuration to module
+    *trunk* and will update the bindings database. The old behaviour has always
+    confused users.
+
+* fdsnxml2inv
+
+  * Declare NumeratorCoefficient.i as optional according to the official schema. Before
+    that change, a lot of responses failed to convert.
+  * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
+    bloating the XML.
+
+
+## Release 2017.124
+
+* seiscomp
+
+  * Use symbolic links to module defaults and configurations instead of
+    copying when creating module aliases
+
+* seiscomp
+
+  * Use symbolic links to module defaults and configurations instead of 
+    copying when creating module aliases
+
+* doc
+
+  * Added plugin section to module documentation with all documented
+    plugins
+
+* spread
+
+  * Upgraded to version 4.4
+
+* LocSAT
+
+  * Started to clean up code and to remove f2c dependencies. Goal of this
+    was to make compute_tt work in subsequent calls. Prior to the changes
+    travel time computation with LocSAT gave unpredictable results which
+    is now fixed.
+
+* scconfig
+
+  * Fixed issue with deleted structures when saving a configuration file.
+    Prior to that fix the structure was not deleted.
+  * Added documentation section which allows to browse changelogs and
+    documentations of installed modules
+
+* scautopick
+
+  * Added the option ```killPendingSPickers``` to configure whether to
+    terminate pending secondary processors if a new detection has been
+    found or not. The downside of disabling that is that two picks will
+    be possibly sent: a P and an S pick.
+
+* GUI
+
+  * Fixed bug in map tilestore that caused custom tilestore implementations
+    to crash under certain circumstances
+  * Add option to show times in localtime
+    ```
+    scheme.dateTime.useLocalTime = true
+    ```
+    This will show (hopefully) all times in the GUI with respect to the
+    systems timezone instead of UTC.
+
+* scesv
+
+  * Fixed crash if no event was loaded and either "Show full tensor" or
+    "Show waveform propagation" was toggled
+
+* scrttv
+
+  * If loading data from a file then all data is loaded and --buffer-size
+    is being ignored. Furthermore XML event parameter files can be loaded
+    (File->Open) and picks will be shown on top of loaded traces.
+
+* scolv
+
+  * Show symbols for unassociated station by default up to 360 degrees.
+    This distance Can be changed with:
+    ```
+    # Show unassociated stations up to 20 degrees
+    olv.map.stations.unassociatedMaxDist = 20
+    ```
+  * Apply show spectrogram values initially
+  * Use separate trace color if spectrogram is shown: ```scheme.colors.records.spectrogram```
+  * Read and apply scolv/global bindings to the repicker
+
+* scmv
+
+  * Add "Show Details" button to event details widget
+
+* scevent
+
+  * Added parameter to also compare picks that are associated with
+    weight 0
+    ```
+    eventAssociation.allowLooseAssociatedArrivals = true
+    ```
+  * Added region check plugin that allows to configure a list of arbitrary
+    regions and to set the event type to "outside of network interest" if
+    its location is outside any region configured.
+
+* scevtls
+
+  * Added --modified-after option
+
+* dlsv2inv, fdsnxml2inv
+
+  * Make sample rate conversion from float to fraction more stable
+
+* fdsnxml2inv
+
+  * Fix epoch creation of sensor locations for some channel epoch
+    combinations which caused the creation of two sensor locations
+    with split epochs
+
+* fdsnws
+
+  * Make arclink-access bindings optional through configuration parameter
+    useArclinkAccess
+  * Add option ```recordBulkSize``` which defaults to 100kb and improves
+    the dataselect performance significantly
+
+* seedlink
+
+  * Added ps2400_eth plugin configuration
+
+
+## Release 2016.333
+
+The database schema has changed since the previous version. To upgrade your
+database from version 0.8 to 0.9 to following SQL script can be used:
+
+
+**MYSQL**
+
+```sql
+ALTER TABLE ConfigStation ADD creationInfo_agencyID VARCHAR(64);
+ALTER TABLE ConfigStation ADD creationInfo_agencyURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD creationInfo_author VARCHAR(128);
+ALTER TABLE ConfigStation ADD creationInfo_authorURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD creationInfo_creationTime DATETIME;
+ALTER TABLE ConfigStation ADD creationInfo_creationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD creationInfo_modificationTime DATETIME;
+ALTER TABLE ConfigStation ADD creationInfo_modificationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD creationInfo_version VARCHAR(64);
+ALTER TABLE ConfigStation ADD creationInfo_used TINYINT(1) NOT NULL DEFAULT '0';
+
+UPDATE Meta SET value='0.9' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+ALTER TABLE ConfigStation ADD m_creationInfo_agencyID VARCHAR(64);
+ALTER TABLE ConfigStation ADD m_creationInfo_agencyURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD m_creationInfo_author VARCHAR(128);
+ALTER TABLE ConfigStation ADD m_creationInfo_authorURI VARCHAR(255);
+ALTER TABLE ConfigStation ADD m_creationInfo_creationTime TIMESTAMP;
+ALTER TABLE ConfigStation ADD m_creationInfo_creationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD m_creationInfo_modificationTime TIMESTAMP;
+ALTER TABLE ConfigStation ADD m_creationInfo_modificationTime_ms INTEGER;
+ALTER TABLE ConfigStation ADD m_creationInfo_version VARCHAR(64);
+ALTER TABLE ConfigStation ADD m_creationInfo_used BOOLEAN NOT NULL DEFAULT '0';
+
+UPDATE Meta SET value='0.9' WHERE name='Schema-Version';
+```
+
+**Rationale**
+
+The ConfigStation object will be updated by three instances in SeisComP3:
+```seiscomp update-config```, ```scrttv``` and ```scqcv```. To track which
+module has disabled or enabled a particular station the CreationInfo
+structure has been added to ConfigStation.
+
+----
+
+* slmon
+
+  * Ported package from SeisComP 2.5
+
+* trunk
+
+  * Set default author to appname@hostname instead of user@hostname
+  * Upgraded rapidjson library to 1.1.0
+  * Apply processing stage0 gain correction if streams gain frequency
+    does not match the sensors gain frequency
+
+* scconfig
+
+  * Fix parameter tooltip if description text contains special HTML characters
+    such as < (less than) or > (greater than)
+
+* fdsnws
+
+  * Add URL builder page to each service
+
+* ql2sc
+
+  * Use socket timeout of 60s if keepAlive is activated
+
+* scinv
+
+  * Split Spread messages into smaller chunks if the payload size exceeds
+    allowed limit
+
+* scautopick
+
+  * Fixed removal of expired secondary pickers that caused a segmentation
+    fault
+
+* fdsnxml2inv
+
+  * Correct types of some attributes of FDSNXML::PolynomialResponse
+  * Convert polynomial responses correctly
+  * Made FDSNXML::Comment::id optional according to the standard
+  * Output line numbers in case of errors
+
+* inv2dlsv
+
+  * Fix handling of blockette62
+
+* dlsv2inv
+
+  * Fix bug that caused wrong sensor calibration gain
+
+* seedlink
+
+  * Fix Q330 setup if multiple instances are configured per station
+  * Fix scream_ring setup in combination with a configured map file
+
+* scwfparam
+
+  * Apply lost patch again to use the same path name as earthquake.id for input files
+  * Add configuration of output XML encoding due to Shakemap issues with non ASCII
+    characters
+  * Add station bindings to configure saturation threshold
+
+* scrttv
+
+  * Add option `autoApplyFilter` to apply the configured filter initially
+
+* scalert
+
+  * Fix Python import issue
+
+* fdsnws
+
+  * Add support for logging Arclink-style request statistics
+  * Add support for EIDA authentication scheme
+  * Set CORS headers to allow cross-site Javascript use
+  * Fix geo filter for POST queries
+  * Allow access to non-restricted streams even if network or station is marked as restricted
+  * Include fdsnws_fetch client
+
+* scevent
+
+  * Fix segfault
+
+* GUIs
+
+  * Connection setup dialog removes the fetch database parameters button
+    and replaces it with "Switch to reported" action that connects to the
+    database as reported by scmaster while handshaking
+
+* NonLinLoc
+
+  * Fix compilation and linking for gcc >= 5
+
+## Release 2016.161
+
+The database schema has changed since the previous version. To upgrade your
+database from version 0.7 to 0.8 the following SQL script can be used:
+
+**MYSQL**
+
+```sql
+CREATE TABLE ResponseFAP (
+  _oid INTEGER(11) NOT NULL,
+  _parent_oid INTEGER(11) NOT NULL,
+  _last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  name VARCHAR(255),
+  gain DOUBLE UNSIGNED,
+  gainFrequency DOUBLE UNSIGNED,
+  numberOfTuples SMALLINT UNSIGNED,
+  tuples_content BLOB,
+  tuples_used TINYINT(1) NOT NULL DEFAULT '0',
+  remark_content BLOB,
+  remark_used TINYINT(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY(_oid),
+  INDEX(_parent_oid),
+  FOREIGN KEY(_oid)
+    REFERENCES Object(_oid)
+    ON DELETE CASCADE,
+  UNIQUE(_parent_oid,name)
+) ENGINE=INNODB;
+
+UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
+```
+
+**PostgreSQL**
+
+```sql
+CREATE TABLE ResponseFAP (
+  _oid BIGINT NOT NULL,
+  _parent_oid BIGINT NOT NULL,
+  _last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  m_name VARCHAR(255),
+  m_gain DOUBLE PRECISION,
+  m_gainFrequency DOUBLE PRECISION,
+  m_numberOfTuples SMALLINT,
+  m_tuples_content BYTEA,
+  m_tuples_used BOOLEAN NOT NULL DEFAULT '0',
+  m_remark_content BYTEA,
+  m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+  PRIMARY KEY(_oid),
+  FOREIGN KEY(_oid)
+    REFERENCES Object(_oid)
+    ON DELETE CASCADE,
+  UNIQUE(_parent_oid,m_name)
+);
+
+UPDATE Meta SET value='0.8' WHERE name='Schema-Version';
+```
+
+----
 
 * documentation
 
   * Enhance documentation of scqc and others
 
-* seiscomp
+* scart
 
- * Fixed resolving the path to the seiscomp script when it is a symlink
+  * Fix bug that caused wrong or no data to be returned if a request spans
+    multiple years
+
+* NonLinLoc
+
+  * Fixed bug that caused wrong confidence ellipsoid axis length measures.
+    Values are expected in meters but the wrapper exported then as kilometers.
 
 * trunk
 
   * Add support for HMB (http messaging bus) messaging protocol
   * Add recordstream implementation for HMB (http messaging bus) protocol
   * Remove parent_oid foreign key constraint in database tables
+  * Add support for FAP responses (response list) to datamodel
+  * Add support for FAP responses to processing
+  * Make ML logA0 configurable in bindings and add documentation
+  * Hide database passwords in logfiles
+
+* dlsv2inv
+
+  * Add support for response list (blockette 55) which are converted to
+    ResponseFAP
+
+* fdsnxml2inv
+
+  * Add support for reponse list
+  * Prefer SampleRateRatio over SampleRate when converting to SC3
+
+* scinv
+
+  * Synchronize ResponseFAP objects
 
 * scimport
 
@@ -33,11 +661,37 @@
   * Wait until the time of the last data point in record has been reached
   * Add option to reopen the pipe if closed
 
+* GUI
+
+  * Display also degrees when measuring distance in a map
+
 * scolv
 
   * Fix timing quality rendering in picker
   * Fix magnitude table distance entries if distance is displayed in km
   * Fix spectrum display on 32bit systems
+  * Fall back to detecStream for vertical component in picker if 3
+    components are not available in inventory
+  * Add spectra plotting in picker (hit space if picking is disabled) for
+    the current trace
+  * Fix sorting of take off column in Arrival table
+  * Allow columns to be reorderd for the current session
+
+* scmv
+
+  * Add plotting of event focal mechanism if available
+
+* fseed
+
+  * Add conversion from ResponseFAP to blockette 55
+
+* system
+
+  * Upgrade libmseed to 2.17
+
+* seiscomp
+
+  * Fixed resolving the path to the seiscomp script when it is a symlink
 
 ## Release 2016.062
 

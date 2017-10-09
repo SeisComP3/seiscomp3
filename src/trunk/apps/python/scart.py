@@ -111,11 +111,11 @@ class Archive:
 
         return its
 
-    it = StreamIterator(self, begin, end, net, sta, loc, cha)
-    if it.record is None:
-      return []
+      it = StreamIterator(self, begin, end, net, sta, loc, cha)
+      if not it.record is None:
+        return [it]
 
-    return [it]
+    return []
 
 
   def location(self, rt, net, sta, loc, cha):

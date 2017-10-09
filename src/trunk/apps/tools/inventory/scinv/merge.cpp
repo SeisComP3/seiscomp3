@@ -33,10 +33,6 @@ string id(const SensorLocation *obj) {
 	return id(obj->station()) + "." + obj->code();
 }
 
-string id(const Stream *obj) {
-	return id(obj->sensorLocation()) + "." + obj->code();
-}
-
 string id(const PublicObject *obj) {
 	return obj->publicID();
 }
@@ -46,32 +42,6 @@ string id(const Core::Time &t) {
 		return t.toString("%F %T.%f");
 	else
 		return t.toString("%F %T");
-}
-
-
-Network *findNetwork(Inventory *inv, const string &code,
-                     const Core::Time &start, const OPT(Core::Time)&end ) {
-	for ( size_t i = 0; i < inv->networkCount(); ++i ) {
-		Network *net = inv->network(i);
-		if ( net->code() != code ) continue;
-
-		// Check for overlapping time windows
-		if ( start < net->start() ) continue;
-		OPT(Core::Time) net_end;
-		try { net_end = net->end(); } catch ( ... ) {}
-
-		// Network time window open, ok
-		if ( !net_end ) return net;
-		// Epoch time window open, not ok
-		if ( !end ) continue;
-
-		// Epoch time window end greater than network end, not ok
-		if ( *end > *net_end ) continue;
-
-		return net;
-	}
-
-	return NULL;
 }
 
 
@@ -88,162 +58,26 @@ Network *findNetwork(Inventory *inv, const string &code,
 	}
 
 
-bool equal(const ResponseFIR *f1, const ResponseFIR *f2) {
-	COMPARE_AND_RETURN(double, f1, f2, gain())
-	COMPARE_AND_RETURN(int, f1, f2, decimationFactor())
-	COMPARE_AND_RETURN(double, f1, f2, delay())
-	COMPARE_AND_RETURN(double, f1, f2, correction())
-	COMPARE_AND_RETURN(int, f1, f2, numberOfCoefficients())
+class InventoryVisitor : public Seiscomp::DataModel::Visitor {
+	public:
+		InventoryVisitor(Seiscomp::DataModel::Inventory *inv,
+		                 InventoryTask::SourceMap *map)
+		: _source(inv), _map(map) {}
 
-	if ( f1->symmetry() != f2->symmetry() ) return false;
+	public:
+		bool visit(PublicObject *po) {
+			(*_map)[po] = _source;
+			return true;
+		}
 
-	const RealArray *coeff1 = NULL;
-	const RealArray *coeff2 = NULL;
+		virtual void visit(Object *o) {
+			(*_map)[o] = _source;
+		}
 
-	try { coeff1 = &f1->coefficients(); } catch ( ... ) {}
-	try { coeff2 = &f2->coefficients(); } catch ( ... ) {}
-
-	// One set and not the other?
-	if ( (!coeff1 && coeff2) || (coeff1 && !coeff2) ) return false;
-
-	// Both unset?
-	if ( !coeff1 && !coeff2 ) return true;
-
-	// Both set, compare content
-	const vector<double> &c1 = coeff1->content();
-	const vector<double> &c2 = coeff2->content();
-	if ( c1.size() != c2.size() ) return false;
-	for ( size_t i = 0; i < c1.size(); ++i )
-		if ( c1[i] != c2[i] ) return false;
-
-	return true;
-}
-
-
-
-bool equal(const ResponsePAZ *p1, const ResponsePAZ *p2) {
-	if ( p1->type() != p2->type() ) return false;
-
-	COMPARE_AND_RETURN(double, p1, p2, gain())
-	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
-	COMPARE_AND_RETURN(double, p1, p2, normalizationFactor())
-	COMPARE_AND_RETURN(double, p1, p2, normalizationFrequency())
-	COMPARE_AND_RETURN(int, p1, p2, numberOfPoles())
-	COMPARE_AND_RETURN(int, p1, p2, numberOfZeros())
-
-	// Compare poles
-	const ComplexArray *poles1 = NULL;
-	const ComplexArray *poles2 = NULL;
-
-	try { poles1 = &p1->poles(); } catch ( ... ) {}
-	try { poles2 = &p2->poles(); } catch ( ... ) {}
-
-	// One set and not the other?
-	if ( (!poles1 && poles2) || (poles1 && !poles2) ) return false;
-
-	// Both unset?
-	if ( !poles1 && !poles2 ) return true;
-
-	// Both set, compare content
-	const vector< complex<double> > &pc1 = poles1->content();
-	const vector< complex<double> > &pc2 = poles2->content();
-
-	if ( pc1.size() != pc2.size() ) return false;
-	for ( size_t i = 0; i < pc1.size(); ++i )
-		if ( pc1[i] != pc2[i] ) return false;
-
-	// Compare zeros
-	const ComplexArray *zeros1 = NULL;
-	const ComplexArray *zeros2 = NULL;
-
-	try { zeros1 = &p1->zeros(); } catch ( ... ) {}
-	try { zeros2 = &p2->zeros(); } catch ( ... ) {}
-
-	// One set and not the other?
-	if ( (!zeros1 && zeros2) || (zeros1 && !zeros2) ) return false;
-
-	// Both unset?
-	if ( !zeros1 && !zeros2 ) return true;
-
-	// Both set, compare content
-	const vector< complex<double> > &zc1 = zeros1->content();
-	const vector< complex<double> > &zc2 = zeros2->content();
-
-	if ( zc1.size() != zc2.size() ) return false;
-	for ( size_t i = 0; i < zc1.size(); ++i )
-		if ( zc1[i] != zc2[i] ) return false;
-
-	// Everything is equal
-	return true;
-}
-
-
-bool equal(const ResponsePolynomial *p1, const ResponsePolynomial *p2) {
-	COMPARE_AND_RETURN(double, p1, p2, gain())
-	COMPARE_AND_RETURN(double, p1, p2, gainFrequency())
-
-	if ( p1->frequencyUnit() != p2->frequencyUnit() ) return false;
-	if ( p1->approximationType() != p2->approximationType() ) return false;
-
-	COMPARE_AND_RETURN(double, p1, p2, approximationLowerBound())
-	COMPARE_AND_RETURN(double, p1, p2, approximationUpperBound())
-	COMPARE_AND_RETURN(double, p1, p2, approximationError())
-	COMPARE_AND_RETURN(int, p1, p2, numberOfCoefficients())
-
-	const RealArray *coeff1 = NULL;
-	const RealArray *coeff2 = NULL;
-
-	try { coeff1 = &p1->coefficients(); } catch ( ... ) {}
-	try { coeff2 = &p2->coefficients(); } catch ( ... ) {}
-
-	// One set and not the other?
-	if ( (!coeff1 && coeff2) || (coeff1 && !coeff2) ) return false;
-
-	// Both unset?
-	if ( !coeff1 && !coeff2 ) return true;
-
-	// Both set, compare content
-	const vector<double> &c1 = coeff1->content();
-	const vector<double> &c2 = coeff2->content();
-	if ( c1.size() != c2.size() ) return false;
-	for ( size_t i = 0; i < c1.size(); ++i )
-		if ( c1[i] != c2[i] ) return false;
-
-	return true;
-}
-
-
-bool equal(const Datalogger *d1, const Datalogger *d2) {
-	if ( d1->description() != d2->description() ) return false;
-	if ( d1->digitizerModel() != d2->digitizerModel() ) return false;
-	if ( d1->digitizerManufacturer() != d2->digitizerManufacturer() ) return false;
-	if ( d1->recorderModel() != d2->recorderModel() ) return false;
-	if ( d1->recorderManufacturer() != d2->recorderManufacturer() ) return false;
-	if ( d1->clockModel() != d2->clockModel() ) return false;
-	if ( d1->clockManufacturer() != d2->clockManufacturer() ) return false;
-	if ( d1->clockType() != d2->clockType() ) return false;
-
-	COMPARE_AND_RETURN(double, d1, d2, gain())
-	COMPARE_AND_RETURN(double, d1, d2, maxClockDrift())
-
-	return true;
-}
-
-
-bool equal(const Sensor *s1, const Sensor *s2) {
-	if ( s1->description() != s2->description() ) return false;
-	if ( s1->model() != s2->model() ) return false;
-	if ( s1->manufacturer() != s2->manufacturer() ) return false;
-	if ( s1->type() != s2->type() ) return false;
-	if ( s1->unit() != s2->unit() ) return false;
-	if ( s1->response() != s2->response() ) return false;
-
-	COMPARE_AND_RETURN(double, s1, s2, lowFrequency())
-	COMPARE_AND_RETURN(double, s1, s2, highFrequency())
-
-	return true;
-}
-
+	private:
+		Seiscomp::DataModel::Inventory *_source;
+		InventoryTask::SourceMap *_map;
+};
 
 
 }
@@ -276,8 +110,12 @@ Merge::Merge(Inventory *inv) : InventoryTask(inv) {}
 		target->add(o.get());\
 	}
 
+
 bool Merge::push(Inventory *inv) {
 	if ( _inv == NULL ) return false;
+
+	InventoryVisitor bindToSource(inv, &_sources);
+	inv->accept(&bindToSource);
 
 	bool bckReg = PublicObject::IsRegistrationEnabled();
 	bool bckNot = Notifier::IsEnabled();
@@ -298,9 +136,13 @@ bool Merge::push(Inventory *inv) {
 	if ( _interrupted ) return false;
 	MOVE_GEN_NAME(_tmpInv, inv, ResponsePAZ, responsePAZ)
 	if ( _interrupted ) return false;
-	MOVE_GEN_NAME(_tmpInv, inv, ResponseFIR, responseFIR)
+	MOVE_GEN_NAME(_tmpInv, inv, ResponseFAP, responseFAP)
 	if ( _interrupted ) return false;
 	MOVE_GEN_NAME(_tmpInv, inv, ResponsePolynomial, responsePolynomial)
+	if ( _interrupted ) return false;
+	MOVE_GEN_NAME(_tmpInv, inv, ResponseFIR, responseFIR)
+	if ( _interrupted ) return false;
+	MOVE_GEN_NAME(_tmpInv, inv, ResponseIIR, responseIIR)
 	if ( _interrupted ) return false;
 	MOVE(_tmpInv, inv, Network, network)
 
@@ -382,6 +224,22 @@ bool Merge::merge(bool stripUnreferenced) {
 			process(r);
 	}
 
+	for ( size_t i = 0; i < inv->responseFAPCount(); ++i ) {
+		if ( _interrupted ) return false;
+		ResponseFAP *r = inv->responseFAP(i);
+		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
+			process(r);
+	}
+
+	for ( size_t i = 0; i < inv->responseIIRCount(); ++i ) {
+		if ( _interrupted ) return false;
+		ResponseIIR *r = inv->responseIIR(i);
+		if ( _session.touchedPublics.find(r) == _session.touchedPublics.end() )
+			process(r);
+	}
+
+	_sources.clear();
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -459,6 +317,7 @@ bool Merge::process(const Network *net) {
 	bool newInstance = false;
 	if ( !sc_net ) {
 		sc_net = create<Network>(net->publicID());
+		_sources[sc_net.get()] = _sources[net];
 		newInstance = true;
 	}
 	else {
@@ -495,6 +354,7 @@ bool Merge::process(Network *net, const Station *sta) {
 	bool newInstance = false;
 	if ( !sc_sta ) {
 		sc_sta = create<Station>(sta->publicID());
+		_sources[sc_sta.get()] = _sources[sta];
 		newInstance = true;
 	}
 	else {
@@ -536,13 +396,14 @@ bool Merge::process(Station *sta, const SensorLocation *loc) {
 	bool newInstance = false;
 	if ( !sc_loc ) {
 		sc_loc = create<SensorLocation>(loc->publicID());
+		_sources[sc_loc.get()] = _sources[loc];
 		newInstance = true;
 	}
 	else {
 		if ( !sc_loc->equal(*loc) ) {
 			stringstream ss;
 			ss << "Conflicting definitions for sensor location " << sta->network()->code()
-			   << "." << sta->code() << "." << loc->code() << " / "
+			   << "." << sta->code() << "." << (loc->code().empty() ? "--" : loc->code()) << " / "
 			   << loc->start().toString("%FT%T");
 			log(LogHandler::Conflict, ss.str().c_str(), sc_loc.get(), loc);
 		}
@@ -578,6 +439,7 @@ bool Merge::process(SensorLocation *loc, const Stream *stream) {
 	bool newInstance = false;
 	if ( !sc_cha ) {
 		sc_cha = new Stream();
+		_sources[sc_cha.get()] = _sources[stream];
 		newInstance = true;
 
 		// Assign values
@@ -677,6 +539,7 @@ bool Merge::process(SensorLocation *loc, const AuxStream *aux) {
 	bool newInstance = false;
 	if ( !sc_aux ) {
 		sc_aux = new AuxStream();
+		_sources[sc_aux.get()] = _sources[aux];
 		newInstance = true;
 	}
 
@@ -715,6 +578,7 @@ bool Merge::process(Stream *cha, const Datalogger *dl) {
 	bool newInstance = false;
 	if ( !sc_dl ) {
 		sc_dl = create<Datalogger>(dl->publicID());
+		_sources[sc_dl.get()] = _sources[dl];
 		newInstance = true;
 	}
 
@@ -766,6 +630,7 @@ bool Merge::process(Datalogger *dl, const Decimation *deci) {
 	bool newInstance = false;
 	if ( !sc_deci ) {
 		sc_deci = new Decimation();
+		_sources[sc_deci.get()] = _sources[deci];
 		newInstance = true;
 	}
 
@@ -792,17 +657,38 @@ bool Merge::process(Datalogger *dl, const Decimation *deci) {
 			if ( paz == NULL ) {
 				const ResponsePolynomial *poly = findPoly(filters[i]);
 				if ( poly == NULL ) {
-					log(LogHandler::Unresolved,
-					    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
-					    "analogue filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
-					/*
-					SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
-					                 dl->publicID().c_str(),
-					                 sc_deci->sampleRateNumerator(),
-					                 sc_deci->sampleRateDenominator(),
-					                 filters[i].c_str());
-					*/
-					deciAnalogueChain += filters[i];
+					const ResponseFAP *fap = findFAP(filters[i]);
+					if ( fap == NULL ) {
+						const ResponseFIR *fir = findFIR(filters[i]);
+						if ( fir == NULL ) {
+							const ResponseIIR *iir = findIIR(filters[i]);
+							if ( iir == NULL ) {
+								log(LogHandler::Unresolved,
+								    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
+								    "analogue filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
+								/*
+								SEISCOMP_WARNING("Datalogger %s/decimation %d/%d analogue filter chain: response not found: %s",
+								                 dl->publicID().c_str(),
+								                 sc_deci->sampleRateNumerator(),
+								                 sc_deci->sampleRateDenominator(),
+								                 filters[i].c_str());
+								*/
+								deciAnalogueChain += filters[i];
+							}
+							else {
+								ResponseIIRPtr sc_iir = process(iir);
+								deciAnalogueChain += sc_iir->publicID();
+							}
+						}
+						else {
+							ResponseFIRPtr sc_fir = process(fir);
+							deciAnalogueChain += sc_fir->publicID();
+						}
+					}
+					else {
+						ResponseFAPPtr sc_fap = process(fap);
+						deciAnalogueChain += sc_fap->publicID();
+					}
 				}
 				else {
 					ResponsePolynomialPtr sc_poly = process(poly);
@@ -834,17 +720,24 @@ bool Merge::process(Datalogger *dl, const Decimation *deci) {
 			if ( paz == NULL ) {
 				const ResponseFIR *fir = findFIR(filters[i]);
 				if ( fir == NULL ) {
-					log(LogHandler::Unresolved,
-					    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
-					    "digital filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
-					/*
-					SEISCOMP_WARNING("Datalogger %s/decimation %d/%d digital filter chain: response not found: %s",
-					                 dl->publicID().c_str(),
-					                 sc_deci->sampleRateNumerator(),
-					                 sc_deci->sampleRateDenominator(),
-					                 filters[i].c_str());
-					*/
-					deciDigitalChain += filters[i];
+					const ResponseIIR *iir = findIIR(filters[i]);
+					if ( iir == NULL ) {
+						log(LogHandler::Unresolved,
+						    (string(dl->className()) + " " + id(dl) + "/decimation " + Core::toString(sc_deci->sampleRateNumerator()) + "/" + Core::toString(sc_deci->sampleRateDenominator()) + "\n  "
+						    "digital filter chain: response not found: " + filters[i]).c_str(), NULL, NULL);
+						/*
+						SEISCOMP_WARNING("Datalogger %s/decimation %d/%d digital filter chain: response not found: %s",
+						                 dl->publicID().c_str(),
+						                 sc_deci->sampleRateNumerator(),
+						                 sc_deci->sampleRateDenominator(),
+						                 filters[i].c_str());
+						*/
+						deciDigitalChain += filters[i];
+					}
+					else {
+						ResponseIIRPtr sc_iir = process(iir);
+						deciDigitalChain += sc_iir->publicID();
+					}
 				}
 				else {
 					ResponseFIRPtr sc_fir = process(fir);
@@ -889,6 +782,7 @@ bool Merge::process(Datalogger *dl, const DataloggerCalibration *cal) {
 	bool newInstance = false;
 	if ( !sc_cal ) {
 		sc_cal = new DataloggerCalibration();
+		_sources[sc_cal.get()] = _sources[cal];
 		newInstance = true;
 	}
 
@@ -913,6 +807,7 @@ bool Merge::process(Stream *cha, const Sensor *sensor) {
 	bool newInstance = false;
 	if ( !sc_sensor ) {
 		sc_sensor = create<Sensor>(sensor->publicID());
+		_sources[sc_sensor.get()] = _sources[sensor];
 		newInstance = true;
 	}
 
@@ -931,14 +826,28 @@ bool Merge::process(Stream *cha, const Sensor *sensor) {
 		if ( paz == NULL ) {
 			const ResponsePolynomial *poly = findPoly(sensor->response());
 			if ( poly == NULL ) {
-				log(LogHandler::Unresolved,
-				    (string(sensor->className()) + " " + id(sensor) + "\n  "
-				     "referenced response is not available").c_str(), NULL, NULL);
-				/*
-				SEISCOMP_WARNING("Sensor %s: response not found: %s",
-				                 sensor->publicID().c_str(),
-				                 sensor->response().c_str());
-				*/
+				const ResponseFAP *fap = findFAP(sensor->response());
+				if ( fap == NULL ) {
+					const ResponseIIR *iir = findIIR(sensor->response());
+					if ( iir == NULL ) {
+						log(LogHandler::Unresolved,
+						    (string(sensor->className()) + " " + id(sensor) + "\n  "
+						     "referenced response is not available").c_str(), NULL, NULL);
+						/*
+						SEISCOMP_WARNING("Sensor %s: response not found: %s",
+						                 sensor->publicID().c_str(),
+						                 sensor->response().c_str());
+						*/
+					}
+					else {
+						ResponseIIRPtr sc_iir = process(iir);
+						sc_sensor->setResponse(sc_iir->publicID());
+					}
+				}
+				else {
+					ResponseFAPPtr sc_fap = process(fap);
+					sc_sensor->setResponse(sc_fap->publicID());
+				}
 			}
 			else {
 				ResponsePolynomialPtr sc_poly = process(poly);
@@ -970,6 +879,7 @@ bool Merge::process(Sensor *sensor, const SensorCalibration *cal) {
 	bool newInstance = false;
 	if ( !sc_cal ) {
 		sc_cal = new SensorCalibration();
+		_sources[sc_cal.get()] = _sources[cal];
 		newInstance = true;
 	}
 
@@ -994,6 +904,7 @@ bool Merge::process(AuxStream *aux, const AuxDevice *device) {
 	bool newInstance = false;
 	if ( !sc_device ) {
 		sc_device = create<AuxDevice>(device->publicID());
+		_sources[sc_device.get()] = _sources[device];
 		newInstance = true;
 	}
 
@@ -1026,6 +937,7 @@ bool Merge::process(AuxDevice *device, const AuxSource *source) {
 	bool newInstance = false;
 	if ( !sc_source ) {
 		sc_source = new AuxSource();
+		_sources[sc_source.get()] = _sources[source];
 		newInstance = true;
 	}
 
@@ -1067,6 +979,28 @@ ResponsePolynomial *Merge::process(const ResponsePolynomial *poly) {
 	if ( !_stripUnreferenced )
 		_session.touchedPublics.insert(poly);
 	return InventoryTask::process(poly);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *Merge::process(const ResponseFAP *fap) {
+	if ( !_stripUnreferenced )
+		_session.touchedPublics.insert(fap);
+	return InventoryTask::process(fap);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *Merge::process(const ResponseIIR *iir) {
+	if ( !_stripUnreferenced )
+		_session.touchedPublics.insert(iir);
+	return InventoryTask::process(iir);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

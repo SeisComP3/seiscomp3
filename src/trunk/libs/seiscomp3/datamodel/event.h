@@ -135,17 +135,17 @@ class SC_SYSTEM_CORE_API Event : public PublicObject {
 
 		//! Describes the type of an event (Storchak et al. 2012).
 		void setType(const OPT(EventType)& type);
-		EventType type() const throw(Seiscomp::Core::ValueException);
+		EventType type() const;
 
 		//! Denotes how certain the information on event type is
 		//! (Storchak et al. 2012).
 		void setTypeCertainty(const OPT(EventTypeCertainty)& typeCertainty);
-		EventTypeCertainty typeCertainty() const throw(Seiscomp::Core::ValueException);
+		EventTypeCertainty typeCertainty() const;
 
 		//! CreationInfo for the Event object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

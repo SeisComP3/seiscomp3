@@ -20,20 +20,20 @@ namespace Processing {
 
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorDelay, QcProcessor, "QcProcessorDelay");
 
-QcProcessorDelay::QcProcessorDelay() 
-    : QcProcessor() {}
+QcProcessorDelay::QcProcessorDelay() : QcProcessor() {}
 
-double QcProcessorDelay::getDelay() throw (Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+double QcProcessorDelay::getDelay() {
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch ( const boost::bad_any_cast & ) {
+		throw Core::ValueException("no data");
+	}
 }
 
 bool QcProcessorDelay::setState(const Record *record, const DoubleArray &data) {
 	try {
-	    //! (mean) data delay time calculated at time of arrival
+		//! (mean) data delay time calculated at time of arrival
 		//! calculate *mean* delay time, valid for all samples of this record
 		//_qcp->parameter = (double)(Core::Time::GMT() - record->endTime()) + 0.5 * (double)(record->endTime() - record->startTime());
 
@@ -44,7 +44,7 @@ bool QcProcessorDelay::setState(const Record *record, const DoubleArray &data) {
 	}
 	catch (Core::ValueException) {}
 
-    return false;
+	return false;
 }
 
 

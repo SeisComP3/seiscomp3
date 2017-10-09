@@ -609,6 +609,12 @@ void VsMagnitude::handleEvent(Event *event) {
 	if ( _expirationTimeReference == "ot" )
 		vsevent->expirationTime = org->time().value() + Core::TimeSpan(_eventExpirationTime, 0);
 
+	/// if no arrival then no Mvs, but expiration time is updated
+	if ( org->arrivalCount() == 0 ){
+		SEISCOMP_DEBUG("Ignoring current preferred origin %s (it has no arrival), but expiration time updated", org->publicID().c_str());
+		return;
+	}
+
 	/// Generate some statistics for later use in delta-pick quality measure
 	Timeline::StationList pickedThresholdStations; // all picked stations at a limited distance from the epicenter
 	vsevent->pickedStations.clear();
@@ -856,7 +862,7 @@ void VsMagnitude::process(VsEvent *evt, Event *event) {
 
 		// Record single station magnitudes
 		Notifier::SetEnabled(true);
-		_creationInfo.setCreationTime(_currentTime);
+		_creationInfo.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 		_creationInfo.setModificationTime(Core::None);
 		DataModel::StationMagnitudePtr staMag = DataModel::StationMagnitude::Create();
 		staMag->setMagnitude(RealQuantity(input.mest));
@@ -1066,7 +1072,7 @@ void VsMagnitude::updateVSMagnitude(Event *event, VsEvent *vsevt) {
 	}
 
 	Notifier::SetEnabled(true);
-	_creationInfo.setCreationTime(_currentTime);
+	_creationInfo.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 	_creationInfo.setModificationTime(Core::None);
 	_creationInfo.setVersion(Core::toString(vsevt->update));
 	MagnitudePtr nmag = Magnitude::Create();
@@ -1122,7 +1128,7 @@ bool VsMagnitude::setComments(Magnitude *mag, const std::string id,
 	cmt->setId(id);
 	cmt->setText(Core::toString(value));
 	CreationInfo ci;
-	ci.setCreationTime(_currentTime);
+	ci.setCreationTime(Core::Time::GMT()); // was "_currentTime);" before but didn't allow sub-second precision.
 	cmt->setCreationInfo(ci);
 
 	if ( !mag->add(cmt.get()) ) {

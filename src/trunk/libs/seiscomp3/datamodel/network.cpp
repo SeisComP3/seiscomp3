@@ -256,7 +256,7 @@ void Network::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Network::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Network::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Network.end is not set");
@@ -384,7 +384,7 @@ void Network::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Network::restricted() const throw(Seiscomp::Core::ValueException) {
+bool Network::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("Network.restricted is not set");
@@ -404,7 +404,7 @@ void Network::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Network::shared() const throw(Seiscomp::Core::ValueException) {
+bool Network::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("Network.shared is not set");
@@ -424,7 +424,7 @@ void Network::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& Network::remark() throw(Seiscomp::Core::ValueException) {
+Blob& Network::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Network.remark is not set");
@@ -435,7 +435,7 @@ Blob& Network::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& Network::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& Network::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("Network.remark is not set");
@@ -652,10 +652,10 @@ Station* Network::station(const StationIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Station* Network::findStation(const std::string& publicID) const {
-	Station* object = Station::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<StationPtr>::const_iterator it = _stations.begin(); it != _stations.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -784,7 +784,7 @@ bool Network::removeStation(const StationIndex& i) {
 void Network::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Network skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -795,8 +795,14 @@ void Network::serialize(Archive& ar) {
 	if ( !ar.success() ) return;
 
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("description", _description, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("institutions", _institutions, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("region", _region, Archive::XML_ELEMENT);

@@ -75,6 +75,9 @@ void Stream::init(const DataModel::Stream *stream) {
 
 	DataModel::Sensor *sensor = DataModel::Sensor::Find(stream->sensor());
 	if ( sensor ) {
+		Math::Restitution::FFT::TransferFunctionPtr tf;
+		OPT(double) sensorGainFrequency;
+
 		SensorPtr proc_sensor = new Sensor;
 		proc_sensor->setModel(sensor->model());
 		proc_sensor->setManufacturer(sensor->manufacturer());
@@ -105,7 +108,105 @@ void Stream::init(const DataModel::Stream *stream) {
 					proc_response->convertFromHz();
 
 				proc_sensor->setResponse(proc_response.get());
+
+				tf = proc_response->getTransferFunction();
 			}
+
+			try {
+				sensorGainFrequency = paz->gainFrequency();
+			}
+			catch ( ... ) {}
+		}
+		else {
+			DataModel::ResponseFAP *fap = DataModel::ResponseFAP::Find(sensor->response());
+			if ( fap ) {
+				ResponseFAPPtr proc_response = new ResponseFAP;
+
+				try {
+					sensorGainFrequency = fap->gainFrequency();
+				}
+				catch ( ... ) {}
+
+				try {
+					Math::SeismometerResponse::FAPs faps;
+
+					const std::vector<double> &tuples = fap->tuples().content();
+					for ( size_t i = 0; i < tuples.size(); i += 3 )
+						faps.push_back(Math::SeismometerResponse::FAP(tuples[i], tuples[i+1], tuples[i+2]));
+
+					std::sort(faps.begin(), faps.end());
+
+					proc_response->setFAPs(faps);
+				}
+				catch ( ... ) {}
+
+				proc_sensor->setResponse(proc_response.get());
+
+				tf = proc_response->getTransferFunction();
+			}
+		}
+
+		OPT(double) gainFrequency;
+
+		try {
+			gainFrequency = stream->gainFrequency();
+		}
+		catch ( ... ) {}
+
+		if ( gainFrequency && sensorGainFrequency ) {
+			if ( *gainFrequency != *sensorGainFrequency ) {
+				SEISCOMP_DEBUG("%s.%s.%s.%s: sensor gain frequency does not match overall gain frequency: %f != %f",
+				               stream->sensorLocation()->station()->network()->code().c_str(),
+				               stream->sensorLocation()->station()->code().c_str(),
+				               stream->sensorLocation()->code().c_str(),
+				               stream->code().c_str(),
+				               *sensorGainFrequency, *gainFrequency);
+
+				if ( !tf ) {
+					SEISCOMP_WARNING("%s.%s.%s.%s: no sensor transfer function available",
+					                 stream->sensorLocation()->station()->network()->code().c_str(),
+					                 stream->sensorLocation()->station()->code().c_str(),
+					                 stream->sensorLocation()->code().c_str(),
+					                 stream->code().c_str());
+				}
+				else {
+					Math::Complex overallValue, sensorValue;
+
+					tf->evaluate(&overallValue, 1, &*gainFrequency);
+					tf->evaluate(&sensorValue, 1, &*sensorGainFrequency);
+
+					double scale = abs(sensorValue) / abs(overallValue);
+
+					SEISCOMP_DEBUG("%s.%s.%s.%s: correct gain by factor %f: %f -> %f",
+					               stream->sensorLocation()->station()->network()->code().c_str(),
+				                   stream->sensorLocation()->station()->code().c_str(),
+				                   stream->sensorLocation()->code().c_str(),
+				                   stream->code().c_str(),
+					               scale, gain, gain*scale);
+
+					gain *= scale;
+				}
+			}
+		}
+		else {
+			if ( !gainFrequency && !sensorGainFrequency )
+				SEISCOMP_WARNING("%s.%s.%s.%s: gain correction disabled: neither overall gain frequency nor sensor gain frequency defined",
+				                 stream->sensorLocation()->station()->network()->code().c_str(),
+				                 stream->sensorLocation()->station()->code().c_str(),
+				                 stream->sensorLocation()->code().c_str(),
+				                 stream->code().c_str());
+			else if ( !gainFrequency )
+				SEISCOMP_WARNING("%s.%s.%s.%s: gain correction disabled: overall gain frequency not defined",
+				                 stream->sensorLocation()->station()->network()->code().c_str(),
+				                 stream->sensorLocation()->station()->code().c_str(),
+				                 stream->sensorLocation()->code().c_str(),
+				                 stream->code().c_str());
+			else
+				SEISCOMP_WARNING("%s.%s.%s.%s: gain correction disabled: sensor gain frequency not defined",
+				                 stream->sensorLocation()->station()->network()->code().c_str(),
+				                 stream->sensorLocation()->station()->code().c_str(),
+				                 stream->sensorLocation()->code().c_str(),
+				                 stream->code().c_str());
 		}
 	}
 }

@@ -227,7 +227,7 @@ void ResponsePolynomial::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePolynomial::gain() const throw(Seiscomp::Core::ValueException) {
+double ResponsePolynomial::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.gain is not set");
@@ -247,7 +247,7 @@ void ResponsePolynomial::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePolynomial::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponsePolynomial::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.gainFrequency is not set");
@@ -303,7 +303,7 @@ void ResponsePolynomial::setApproximationLowerBound(const OPT(double)& approxima
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePolynomial::approximationLowerBound() const throw(Seiscomp::Core::ValueException) {
+double ResponsePolynomial::approximationLowerBound() const {
 	if ( _approximationLowerBound )
 		return *_approximationLowerBound;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.approximationLowerBound is not set");
@@ -323,7 +323,7 @@ void ResponsePolynomial::setApproximationUpperBound(const OPT(double)& approxima
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePolynomial::approximationUpperBound() const throw(Seiscomp::Core::ValueException) {
+double ResponsePolynomial::approximationUpperBound() const {
 	if ( _approximationUpperBound )
 		return *_approximationUpperBound;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.approximationUpperBound is not set");
@@ -343,7 +343,7 @@ void ResponsePolynomial::setApproximationError(const OPT(double)& approximationE
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePolynomial::approximationError() const throw(Seiscomp::Core::ValueException) {
+double ResponsePolynomial::approximationError() const {
 	if ( _approximationError )
 		return *_approximationError;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.approximationError is not set");
@@ -363,7 +363,7 @@ void ResponsePolynomial::setNumberOfCoefficients(const OPT(int)& numberOfCoeffic
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponsePolynomial::numberOfCoefficients() const throw(Seiscomp::Core::ValueException) {
+int ResponsePolynomial::numberOfCoefficients() const {
 	if ( _numberOfCoefficients )
 		return *_numberOfCoefficients;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.numberOfCoefficients is not set");
@@ -383,7 +383,7 @@ void ResponsePolynomial::setCoefficients(const OPT(RealArray)& coefficients) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealArray& ResponsePolynomial::coefficients() throw(Seiscomp::Core::ValueException) {
+RealArray& ResponsePolynomial::coefficients() {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.coefficients is not set");
@@ -394,7 +394,7 @@ RealArray& ResponsePolynomial::coefficients() throw(Seiscomp::Core::ValueExcepti
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealArray& ResponsePolynomial::coefficients() const throw(Seiscomp::Core::ValueException) {
+const RealArray& ResponsePolynomial::coefficients() const {
 	if ( _coefficients )
 		return *_coefficients;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.coefficients is not set");
@@ -414,7 +414,7 @@ void ResponsePolynomial::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& ResponsePolynomial::remark() throw(Seiscomp::Core::ValueException) {
+Blob& ResponsePolynomial::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.remark is not set");
@@ -425,7 +425,7 @@ Blob& ResponsePolynomial::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& ResponsePolynomial::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& ResponsePolynomial::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePolynomial.remark is not set");
@@ -600,7 +600,7 @@ void ResponsePolynomial::accept(Visitor* visitor) {
 void ResponsePolynomial::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ResponsePolynomial skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

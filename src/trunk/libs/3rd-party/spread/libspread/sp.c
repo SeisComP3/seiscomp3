@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -622,7 +623,7 @@ int	SP_connect_timeout( const char *spread_name, const char *private_name,
 
 #else	/* ARCH_PC_WIN95 */
 		/* win32: intentional fall through this case to option <port_num>@<host_name> where <host_name> = localhost */
-		strcpy( hostname, "@localhost" );
+		strcpy( host_name, "@localhost" );
 #endif	/* ARCH_PC_WIN95 */
 
 	case 2:  /* option <port_num>@<host_name> */
@@ -959,7 +960,7 @@ int	SP_join( mailbox mbox, const char *group )
 	len = strlen( group );
 	if ( len == 0 ) return( ILLEGAL_GROUP );
         if ( len >= MAX_GROUP_NAME ) return( ILLEGAL_GROUP );
-	for( i=0; i < len; i++ )
+	for( i=0; i < (int) len; i++ )
 		if( group[i] < 36 || group[i] > 126 ) return( ILLEGAL_GROUP );
 
 	send_group[MAX_GROUP_NAME-1]=0;
@@ -980,8 +981,8 @@ int	SP_leave( mailbox mbox, const char *group )
 
 	len = strlen( group );
 	if ( len == 0 ) return( ILLEGAL_GROUP );
-	if ( len >= MAX_GROUP_NAME ) return( ILLEGAL_GROUP );
-	for( i=0; i < len; i++ )
+	if ( (int) len >= MAX_GROUP_NAME ) return( ILLEGAL_GROUP );
+	for( i=0; i < (int) len; i++ )
 		if( group[i] < 36 || group[i] > 126 ) return( ILLEGAL_GROUP );
 
 	send_group[MAX_GROUP_NAME-1]=0;
@@ -1098,9 +1099,8 @@ static	int	SP_internal_multicast( mailbox mbox, service service_type,
 
 	Mutex_unlock( &Struct_mutex );
 
-	for( i=0, mess_len=0; i < scat_mess->num_elements; i++ )
+	for( i=0, mess_len=0; i < (int) scat_mess->num_elements; i++ )
 	{
-		if( scat_mess->elements[i].len < 0 ) return ( ILLEGAL_MESSAGE );
 		mess_len += scat_mess->elements[i].len;
 	}
 
@@ -1121,7 +1121,7 @@ static	int	SP_internal_multicast( mailbox mbox, service service_type,
 	memcpy( group_ptr, groups, MAX_GROUP_NAME * num_groups );
 
 	Mutex_lock( &Sessions[ses].send_mutex );
-        for ( buf_len = 0; buf_len < sizeof(message_header)+MAX_GROUP_NAME*num_groups; buf_len += ret) 
+        for ( buf_len = 0; buf_len < (int) sizeof(message_header)+MAX_GROUP_NAME*num_groups; buf_len += ret) 
         {
             while(((ret=send( mbox, &head_buf[buf_len], sizeof(message_header)+MAX_GROUP_NAME*num_groups - buf_len, 0 )) == -1) 
                   && ((sock_errno == EINTR) || (sock_errno == EAGAIN) || (sock_errno == EWOULDBLOCK)) )
@@ -1144,9 +1144,9 @@ static	int	SP_internal_multicast( mailbox mbox, service service_type,
 		return( CONNECTION_CLOSED );
             }
         }
-	for( len=0, i=0; i < scat_mess->num_elements; len+=buf_len, i++ )
+	for( len=0, i=0; i < (int) scat_mess->num_elements; len+=buf_len, i++ )
 	{
-            for ( buf_len = 0; buf_len < scat_mess->elements[i].len; buf_len += ret) 
+            for ( buf_len = 0; buf_len < (int) scat_mess->elements[i].len; buf_len += ret) 
             {
 		while(((ret=send( mbox, &scat_mess->elements[i].buf[buf_len], scat_mess->elements[i].len - buf_len, 0 )) == -1)
                       && ((sock_errno == EINTR) || (sock_errno == EAGAIN) || (sock_errno == EWOULDBLOCK)) )
@@ -1317,25 +1317,11 @@ static	char		dummy_buf[10240];
                         Flip_mess( head_ptr );
                 }
         }
-        /* Validate user's scatter */
-	for( max_mess_len = 0, i=0; i < scat_mess->num_elements; i++ ) {
-                if ( scat_mess->elements[i].len < 0 )   {
-                        if ( !drop_semantics && !This_session_message_saved) {
-                                Mutex_lock( &Struct_mutex );
-                                if( ses != SP_get_session( mbox ) ){
-                                        Mutex_unlock( &Struct_mutex );
-					Mutex_unlock( &Sessions[ses].recv_mutex );
-                                        return( ILLEGAL_SESSION );
-                                }
-                                memcpy(&(Sessions[ses].recv_saved_head), &mess_head, sizeof(message_header) );
-                                Sessions[ses].recv_message_saved = 1;
-                                Mutex_unlock( &Struct_mutex );
-                        }
-			Mutex_unlock( &Sessions[ses].recv_mutex );
-                        return( ILLEGAL_MESSAGE );
-                }
+
+	for( max_mess_len = 0, i=0; i < (int) scat_mess->num_elements; i++ ) {
 		max_mess_len += scat_mess->elements[i].len;
         }
+
         /* Validate num_groups and data_len */
         if (head_ptr->num_groups < 0) {
             /* reject this message since it has an impossible (negative) num_groups
@@ -1558,9 +1544,9 @@ static	char		dummy_buf[10240];
 	 */
 
 	/* calculate scat_index and byte_index based on ret and scat_mess */
-	for( byte_index=ret, scat_index=0; scat_index < scat_mess->num_elements; scat_index++ )
+	for( byte_index=ret, scat_index=0; scat_index < (int) scat_mess->num_elements; scat_index++ )
 	{
-		if( scat_mess->elements[scat_index].len > byte_index ) break;
+		if( (int) scat_mess->elements[scat_index].len > byte_index ) break;
 		byte_index -= scat_mess->elements[scat_index].len;
 	}
 
@@ -1641,7 +1627,7 @@ static	char		dummy_buf[10240];
 		for( bytes_index = 0, scat = 0 ; bytes_index < flip_size ; bytes_index += bytes_to_copy )
 		{
 			bytes_to_copy = flip_size - bytes_index;
-			if( bytes_to_copy > scat_mess->elements[scat].len )
+			if( bytes_to_copy > (int) scat_mess->elements[scat].len )
 				bytes_to_copy = scat_mess->elements[scat].len;
 			memcpy( &groups_buf[bytes_index], scat_mess->elements[scat].buf, bytes_to_copy );
                         if( bytes_to_copy == scat_mess->elements[scat].len )
@@ -1673,15 +1659,15 @@ static	char		dummy_buf[10240];
 		for( bytes_index = 0, j = 0 ; bytes_index < flip_size ; j++, bytes_index += bytes_to_copy )
 		{
 			bytes_to_copy = flip_size - bytes_index;
-			if( bytes_to_copy > scat_mess->elements[j].len )
+			if( bytes_to_copy > (int) scat_mess->elements[j].len )
 				bytes_to_copy = scat_mess->elements[j].len;
 			memcpy( scat_mess->elements[j].buf, &groups_buf[bytes_index], bytes_to_copy );
 		}
-                for( i = 0; i < num_vs_sets; ++i )
+                for( i = 0; i < (int) num_vs_sets; ++i )
                 {
                         while( total_index < target_index )
                         {
-                                if( target_index - total_index < scat_mess->elements[scat].len - scat_index )
+                                if( target_index - total_index < (int) scat_mess->elements[scat].len - scat_index )
                                 {
                                         scat_index  += target_index - total_index;
                                         total_index  = target_index;
@@ -1699,7 +1685,7 @@ static	char		dummy_buf[10240];
                         for( bytes_index = 0 ; bytes_index < flip_size ; bytes_index += bytes_to_copy )
                         {
                                 bytes_to_copy = flip_size - bytes_index;
-                                if( bytes_to_copy > scat_mess->elements[scat].len - scat_index )
+                                if( bytes_to_copy > (int) scat_mess->elements[scat].len - scat_index )
                                         bytes_to_copy = scat_mess->elements[scat].len - scat_index;
                                 memcpy( &groups_buf[bytes_index], &(scat_mess->elements[scat].buf[scat_index]),
                                         bytes_to_copy );
@@ -1721,7 +1707,7 @@ static	char		dummy_buf[10240];
                              j++, bytes_index += bytes_to_copy )
                         {
                                 bytes_to_copy = flip_size - bytes_index;
-                                if( bytes_to_copy > scat_mess->elements[j].len - first_scat_index )
+                                if( bytes_to_copy > (int) scat_mess->elements[j].len - first_scat_index )
                                         bytes_to_copy = scat_mess->elements[j].len - first_scat_index;
                                 memcpy( &(scat_mess->elements[j].buf[first_scat_index]),
                                         &groups_buf[bytes_index], bytes_to_copy );
@@ -1897,14 +1883,14 @@ int     SP_get_vs_sets_info( const char *memb_mess,
 
         actual_num_vs_sets = *((int32u *)&memb_mess[SP_get_num_vs_sets_offset_memb_mess()]);
 
-        if (num_vs_sets < actual_num_vs_sets)
+        if (num_vs_sets < (int) actual_num_vs_sets)
                 return(BUFFER_TOO_SHORT);
 
         local_vs_set_offset = *((int32u *)&memb_mess[SP_get_offset_to_local_vs_set_offset()]);
         local_vs_set_offset += SP_get_first_vs_set_offset_memb_mess();
         memb_offset = SP_get_first_vs_set_offset_memb_mess();
 
-        for ( i=0; i < actual_num_vs_sets; i++, vs_sets++ )
+        for ( i=0; i < (int) actual_num_vs_sets; i++, vs_sets++ )
         {
                 if (memb_offset == local_vs_set_offset)
                         *my_vs_set_index = i;
@@ -1924,11 +1910,11 @@ int     SP_get_vs_set_members( const char *memb_mess,
         int i;
         const char *members_ptr;
 
-        if (member_names_count < vs_set->num_members)
+        if (member_names_count < (int) vs_set->num_members)
                 return(BUFFER_TOO_SHORT);
 
         members_ptr = &memb_mess[vs_set->members_offset];
-        for ( i=0; i < vs_set->num_members; i++, members_ptr += MAX_GROUP_NAME )
+        for ( i=0; i < (int) vs_set->num_members; i++, members_ptr += MAX_GROUP_NAME )
         {
                 memcpy(&member_names[i][0], members_ptr, MAX_GROUP_NAME);
         }
@@ -1941,7 +1927,7 @@ static  void    scat_read(void *dest_ptr, const scatter *msg, int start_byte, in
 
         scat = 0;
         scat_index = 0;
-        while(start_byte > msg->elements[scat].len) 
+        while(start_byte > (int) msg->elements[scat].len) 
         {
                 scat++;
                 start_byte -= msg->elements[scat].len;
@@ -1950,7 +1936,7 @@ static  void    scat_read(void *dest_ptr, const scatter *msg, int start_byte, in
         for( bytes_index = 0; bytes_index < copy_size ; bytes_index += bytes_to_copy )
         {
                 bytes_to_copy = copy_size - bytes_index;
-                if( bytes_to_copy > msg->elements[scat].len - scat_index )
+                if( bytes_to_copy > (int) msg->elements[scat].len - scat_index )
                         bytes_to_copy = msg->elements[scat].len - scat_index;
                 memcpy( dest_ptr, &(msg->elements[scat].buf[scat_index]), bytes_to_copy );
                 if( bytes_to_copy == msg->elements[scat].len - scat_index )
@@ -2009,7 +1995,7 @@ int     SP_scat_get_vs_sets_info( const scatter *memb_mess_scat,
 
         scat_read( &actual_num_vs_sets, memb_mess_scat, SP_get_num_vs_sets_offset_memb_mess(), sizeof( int32u ) );
 
-        if (num_vs_sets < actual_num_vs_sets)
+        if (num_vs_sets < (int) actual_num_vs_sets)
                 return(BUFFER_TOO_SHORT);
 
         scat_read( &local_vs_set_offset, memb_mess_scat, SP_get_offset_to_local_vs_set_offset(), sizeof( int32u ) );
@@ -2033,7 +2019,7 @@ int     SP_scat_get_vs_set_members( const scatter *memb_mess_scat,
                                     char member_names[][MAX_GROUP_NAME],
                                     int member_names_count)
 {
-        if (member_names_count < vs_set->num_members)
+        if (member_names_count < (int) vs_set->num_members)
                 return(BUFFER_TOO_SHORT);
 
         scat_read( member_names, memb_mess_scat, vs_set->members_offset, vs_set->num_members * MAX_GROUP_NAME);

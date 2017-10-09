@@ -21,30 +21,31 @@ raw integer samples with accompanying timing information. In the latter case,
 the SeedLink server uses an inegrated "Stream Processor" to create the desired
 data streams and assemble Mini-SEED packets.
 
-======================================================================= =====================================================================================================
-Digitizer/DAS                                                           Plugin Implementer
-======================================================================= =====================================================================================================
-SeedLink                                                                GFZ
-LISS                                                                    Chad Trabant (IRIS)
-Quanterra Q330                                                          Jet Spring, Inc.; ISTI, Inc.; Chad Trabant (IRIS); GFZ
-Quanterra Q380/Q680, Q4120, Q720   (not supported by SeisComp 3.0)      GFZ (based on Comserv by Quanterra, Inc.)
-Earth Data PS2400/PS6-24                                                GFZ
-Lennartz M24                                                            Lennartz Electronic GmbH
-Geotech DR24                                                            GFZ
-Nanometrics HRD24                                                       GFZ; Recai Yalgin
-Guralp DM24                                                             GFZ (based on libgcf2 from Guralp)
-SARA SADC10/18/20/30                                                    GFZ
-RefTek RTPD                                                             GFZ (based on software library provided by RefTek, Inc.)
-NRTS                                                                    GFZ (based on ISI toolkit from David E. Chavez)
-NAQS                                                                    Chad Trabant (IRIS; based on sample code from Nanometrics, Inc.); Matteo Quintiliani (INGV; nmxptool)
-SCREAM                                                                  Reinoud Sleeman (KNMI)
-Earthworm                                                               Chad Trabant (IRIS)
-Antelope                                                                Chad Trabant (IRIS)
-WIN                                                                     GFZ (based on source code of WIN system)
-Lacrosse 2300 Weather Station                                           GFZ (based on open2300 library from Kenneth Lavrsen)
-Reinhardt MWS5/MWS9 Weather Station                                     GFZ
-Generic MODBUS/TCP devices                                              GFZ
-======================================================================= =====================================================================================================
+======================================================================== =====================================================================================================
+Digitizer/DAS                                                            Plugin Implementer
+======================================================================== =====================================================================================================
+SeedLink                                                                 GFZ
+LISS                                                                     Chad Trabant (IRIS)
+Quanterra Q330                                                           Jet Spring, Inc.; ISTI, Inc.; Chad Trabant (IRIS); GFZ
+Quanterra Q380/Q680, Q4120, Q720   (not supported by SeisComp 3.0)       GFZ (based on Comserv by Quanterra, Inc.)
+Earth Data PS2400/PS6-24                                                 GFZ
+:ref:`Earth Data PS2400/PS6 Ethernet<seedlink-sources-ps2400_eth-label>` GFZ; `gempa GmbH <https://gempa.de>`_
+Lennartz M24                                                             Lennartz Electronic GmbH
+Geotech DR24                                                             GFZ
+Nanometrics HRD24                                                        GFZ; Recai Yalgin
+Guralp DM24                                                              GFZ (based on libgcf2 from Guralp)
+SARA SADC10/18/20/30                                                     GFZ
+RefTek RTPD                                                              GFZ (based on software library provided by RefTek, Inc.)
+NRTS                                                                     GFZ (based on ISI toolkit from David E. Chavez)
+NAQS                                                                     Chad Trabant (IRIS; based on sample code from Nanometrics, Inc.); Matteo Quintiliani (INGV; nmxptool)
+SCREAM                                                                   Reinoud Sleeman (KNMI)
+Earthworm                                                                Chad Trabant (IRIS)
+Antelope                                                                 Chad Trabant (IRIS)
+WIN                                                                      GFZ (based on source code of WIN system)
+Lacrosse 2300 Weather Station                                            GFZ (based on open2300 library from Kenneth Lavrsen)
+Reinhardt MWS5/MWS9 Weather Station                                      GFZ
+Generic MODBUS/TCP devices                                               GFZ
+======================================================================== =====================================================================================================
 
 
 Supported data sources
@@ -175,13 +176,13 @@ General format of selectors is LLCCC.T where LL is location, CCC is channel, and
 SELECT is a modifier command (it modifies the function of subsequent DATA, FETCH or TIME commands) so a response follows with "OK" on success, "ERROR" otherwise.
 
 DATA [n [begin time]]
-    in multi-station mode this sets the current station into real-time mode and (optionally) the current sequence number to n; in uni-station mode this starts data transfer in real-time mode from packet n or from the next packet available if used without arguments. If begin time is used, any older packets are filtered out. begin time should be in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00’. DATA is a modifier command in multi-station mode (responds with "OK" or "ERROR"); in uni-station mode it is an action command (no explicit response is sent).
+    in multi-station mode this sets the current station into real-time mode and (optionally) the current sequence number to n; in uni-station mode this starts data transfer in real-time mode from packet n or from the next packet available if used without arguments. If begin time is used, any older packets are filtered out. begin time should be in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00,00’. DATA is a modifier command in multi-station mode (responds with "OK" or "ERROR"); in uni-station mode it is an action command (no explicit response is sent).
 
 FETCH [n [begin time]]
     works like DATA but sets the station to dial-up mode instead of real-time mode.
 
 TIME [begin time [end time]]
-    extracts the time window from begin time to end time. The times are specified in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00’.
+    extracts the time window from begin time to end time. The times are specified in the form of 6 decimal numbers separated by commas in the form: year,month,day,hour,minute,second, e.g. ’2002,08,05,14,00,00’.
 
 INFO level
     requests an INFO packet containing XML data embedded in a Mini-SEED log record. level should be one of the following: ID, CAPABILITIES, STATIONS, STREAMS, GAPS, CONNECTIONS, ALL. The XML document conforms to the Document Type Definition (DTD) shown in section ???. The amount of info available depends on the configuration of the SeedLink server.
@@ -208,10 +209,10 @@ pt
 usec_correction
     time correction in microseconds to be written in the SEED data header. Can be useful if the digitizer is not phase locked to GPS.
 
-timing_quality 
+timing_quality
     timing quality in percent (0-100). The number is directly written into Mini-SEED header (blockette 1001). Semantics is implementation-defined. Usually 100 means that GPS is in lock and 0 means there never was a GPS lock, so the timing is completely unreliable. When GPS goes out of lock, the value can slowly decrease reflecting a possible timedrift.
 
-dataptr 
+dataptr
     Array of signed 32-bit samples.
 
 Number_of_samples
@@ -229,9 +230,9 @@ same as send_raw3() except time is measured in seconds since 1/1/1970 (depoch). 
 
 .. c:function:: int send flush3(const char *station, const char *channel)
 
-flushes all Mini-SEED data streams associated with a channel. All buffered data is sent out creating "unfilled" Mini-SEED records if necessary. The parameters are: 
+flushes all Mini-SEED data streams associated with a channel. All buffered data is sent out creating "unfilled" Mini-SEED records if necessary. The parameters are:
 
-station 
+station
     station ID.
 
 Channel
@@ -241,13 +242,13 @@ Channel
 
 is used to send a Mini-SEED packet to SeedLink. Such packets are not further processed. The  parameters are:
 
-station 
+station
     station ID.
 
-dataptr 
+dataptr
     pointer to 512-byte Mini-SEED packet.
 
-packet size 
+packet size
     must be 512.
 
 
@@ -258,10 +259,10 @@ is used to send a log message to SeedLink (LOG stream). It must be noted that en
 station
     station ID.
 
-pt 
+pt
     the timestamp of the message.
 
-fmt 
+fmt
     format string, as used by printf(), followed by a variable number of arguments.
 
 Compatibility with Earlier Versions
@@ -282,13 +283,13 @@ The following configuration files are used by SeedLink and its plugins.
    not be modified. If modifications are necessary then the generator needs to be changed to better support
    the desired user options.
 
-plugins.ini 
+plugins.ini
     Configuration file for SeedLink plugins. Used by serial_plugin, fs_plugin and comserv_plugin.
 
 seedlink.ini
     Main configuration file for SeedLink. For more details see below.
 
-filters.fir 
+filters.fir
     Coefficients of SeedLink’s decimating FIR filters. If a filter’s name ends with "M", it is a minimum-phase filter – causal filter with minimized (non-constant) phase delay; since the filter is non-symmetric all coefficients must be given. Otherwise the filter is a zero-phase filter, i.e. a non-causal filter with zero phase delay; in this case the filter is symmetric and so only half of the coefficients must be given (it is not possible to use a zero-phase filter with an odd number of coefficients).
 
 .. warning::
@@ -353,22 +354,22 @@ Here is the description of all elements and attributes:
 **element** proc
     defines a "proc" object (set of "stream trees"), referenced from seedlink.ini.
 
-**attribute** name 
+**attribute** name
     name of "proc" object, for reference.
 
-**element** using 
+**element** using
     used to include all "stream trees" defined by one "proc" object in another "proc" object.
 
-**attribute** name 
+**attribute** name
     the name of referenced "proc" object.
 
 **element** tree
     defines a "stream tree" – a downsampling scheme of an input channel.
 
-**element** input 
+**element** input
     associates an input channel with the stream tree.
 
-**attribute** name 
+**attribute** name
     name of the input channel; depends on the configuration of the particular plugin (usual channel names are "Z", "N" and "E").
 
 **attribute** channel

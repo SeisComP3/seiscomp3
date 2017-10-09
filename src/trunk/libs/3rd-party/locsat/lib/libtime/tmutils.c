@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef	lint
-static	char	SccsId[] = "@(#)tmutils.c	44.1	9/23/91";
-#endif
-
 /* collection of time conversion utility subroutines */
 #include <ctype.h>
 #include <time.h>
@@ -33,10 +29,9 @@ long date;
 	days += day - 1;
 	return( (double)days * 86400. );
 }
+
 /* return true if leap year else false */
-isleap(year)
-int year;
-{
+int isleap(int year) {
 	return(year % 4 == 0 && year % 100 != 0 || year % 400 == 0);
 }
 	/* time conversion stolen from original archive */
@@ -68,8 +63,7 @@ char *timstr;
 	return(tnum);
 }
 /* return todays date in a long (epoch = Jan 1,1970) */
-todaysdate()
-{
+int todaysdate() {
 	long now;
 	struct tm *tsp,*gmtime();
 

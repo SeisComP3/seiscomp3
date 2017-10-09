@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>327</width>
-    <height>464</height>
+    <width>459</width>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -93,7 +93,7 @@
         <item>
          <widget class="QCheckBox" name="cbFixSolution" >
           <property name="toolTip" >
-           <string>If checked </string>
+           <string>If checked this origin will be fixed as preferred solution.</string>
           </property>
           <property name="text" >
            <string>Fix this origin as preferred location.</string>

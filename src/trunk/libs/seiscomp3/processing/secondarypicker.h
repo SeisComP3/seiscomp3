@@ -122,7 +122,7 @@ class SC_SYSTEM_CLIENT_API SecondaryPicker : public TimeWindowProcessor {
 		//! Sets the trigger used to compute the timewindow to calculate
 		//! the amplitude.
 		//! Once a trigger has been set all succeeding calls will fail.
-		void setTrigger(const Trigger& trigger) throw(Core::ValueException);
+		void setTrigger(const Trigger& trigger);
 		const Trigger &trigger() const { return _trigger; }
 
 		void setPublishFunction(const PublishFunc& func);

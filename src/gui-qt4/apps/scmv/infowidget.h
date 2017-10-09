@@ -163,8 +163,6 @@ class StationInfoWidget : public InfoWidget {
 		void resizeColumnsToContent();
 
 	private slots:
-	    // void showWaveformData();
-
 		void updateRecordWidget(Seiscomp::Record* record);
 		void updateRecordWidgetAlignment();
 
@@ -198,7 +196,7 @@ class StationInfoWidget : public InfoWidget {
 
 class OriginInfoWidget : public InfoWidget {
 	Q_OBJECT
-    
+
 	private:
 		enum OriginInfoTag {
 			ORIGIN_ID_TAG,
@@ -240,6 +238,9 @@ class OriginInfoWidget : public InfoWidget {
 		void setAzimuthGap(const QString& azimuthGap);
 		void setMinimumDistance(const QString& minimumDistance);
 		void setMaximumDistance(const QString& maximumDistance);
+
+	private slots:
+		void showDetails();
 
 	private:
 		void uiInit();

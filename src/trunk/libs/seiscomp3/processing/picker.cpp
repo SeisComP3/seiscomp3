@@ -115,7 +115,7 @@ void Picker::reset() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Picker::setTrigger(const Core::Time& trigger) throw(Core::ValueException) {
+void Picker::setTrigger(const Core::Time& trigger) {
 	if ( _trigger )
 		throw Core::ValueException("The trigger has been set already");
 

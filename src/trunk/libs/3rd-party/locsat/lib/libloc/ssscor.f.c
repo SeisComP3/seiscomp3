@@ -14,7 +14,7 @@ struct sccsssscor_1_ {
 #define sccsssscor_1 (*(struct sccsssscor_1_ *) &sccsssscor_)
 
 static struct {
-    real splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
+    float splat[18900]	/* was [3][15][2][210] */, splon[18900]	/* was [3][15]
 	    [2][210] */, xlat1[1350]	/* was [3][15][2][15] */, xlat2[1350]	
 	    /* was [3][15][2][15] */, xlon1[1350]	/* was [3][15][2][15] 
 	    */, xlon2[1350]	/* was [3][15][2][15] */;
@@ -74,25 +74,22 @@ struct {
 /* 	Source-specific station correction read routine, rdcortab(). */
 /* AUTHOR */
 /* 	Walter Nagy, October 1990. */
-/* Subroutine */ int ssscor_(elat, elon, correct, itype, ista, iwav)
-real *elat, *elon, *correct;
-integer *itype, *ista, *iwav;
-{
+int ssscor_(float *elat, float *elon, float *correct, int *itype, int *ista, int *iwav) {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
 
     /* Local variables */
-    static integer ibeg, iend;
-    static real dlat;
-    static integer ilat;
-    static real dlon;
-    static integer icnt, nlat, ilon, isrc, ncnt, nlon, isrc2, i__, j, iarea;
+    static int ibeg, iend;
+    static float dlat;
+    static int ilat;
+    static float dlon;
+    static int icnt, nlat, ilon, isrc, ncnt, nlon, isrc2, i__, j, iarea;
     extern /* Subroutine */ int splie2_(), splin2_();
-    static real ya[225]	/* was [15][15] */;
-    static integer is;
-    static real x1a[15], x2a[15], y2a[225]	/* was [15][15] */;
-    static integer is2;
-    static real xln1, xln2;
+    static float ya[225]	/* was [15][15] */;
+    static int is;
+    static float x1a[15], x2a[15], y2a[225]	/* was [15][15] */;
+    static int is2;
+    static float xln1, xln2;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- On entry ---- */
@@ -107,14 +104,12 @@ integer *itype, *ista, *iwav;
 /*     ---- On return ---- */
 /*     ---- Internal variables ---- */
 /*     Check if this station/correction-type exists */
-    is = corrs_1.indexstacor[(797400 + (0 + (*itype + (*ista + 150) * 3 - 454 
-	    << 1)) - 797400) / 2];
+    is = corrs_1.indexstacor[(797400 + (0 + ((*itype + (*ista + 150) * 3 - 454) << 1)) - 797400) / 2];
     if (is == 0) {
 	return 0;
     }
 /*     Check if this station/correction-type/phase-type exists */
-    iend = corrs_1.cumulsrcs[*itype + (is + ((*iwav << 1) + 1) * 15) * 3 - 
-	    139];
+    iend = corrs_1.cumulsrcs[*itype + (is + ((*iwav << 1) + 1) * 15) * 3 - 139];
     if (iend == 0) {
 	return 0;
     }
@@ -124,10 +119,8 @@ integer *itype, *ista, *iwav;
 /*     source regions -- If not, return w/o a correction */
     i__1 = iend;
     for (isrc = ibeg; isrc <= i__1; ++isrc) {
-	xln1 = corrs_1.xlon1[*itype + (is + ((isrc << 1) + 1) * 15) * 3 - 139]
-		;
-	xln2 = corrs_1.xlon2[*itype + (is + ((isrc << 1) + 1) * 15) * 3 - 139]
-		;
+	xln1 = corrs_1.xlon1[*itype + (is + ((isrc << 1) + 1) * 15) * 3 - 139];
+	xln2 = corrs_1.xlon2[*itype + (is + ((isrc << 1) + 1) * 15) * 3 - 139];
 	dlon = *elon;
 	if (*elat < corrs_1.xlat1[*itype + (is + ((isrc << 1) + 1) * 15) * 3 
 		- 139] && *elat > corrs_1.xlat2[*itype + (is + ((isrc << 1) + 
@@ -212,22 +205,19 @@ L1040:
     i__1 = nlat;
     for (i__ = 2; i__ <= i__1; ++i__) {
 /* L1050: */
-	x1a[i__ - 1] = x1a[i__ - 2] + corrs_1.splat[*itype + (is + (iarea + (
-		ilat + i__ - 1 << 1)) * 15) * 3 - 139];
+	x1a[i__ - 1] = x1a[i__ - 2] + corrs_1.splat[*itype + (is + (iarea + ((ilat + i__ - 1) << 1)) * 15) * 3 - 139];
     }
     i__1 = nlon;
     for (i__ = 2; i__ <= i__1; ++i__) {
 /* L1060: */
-	x2a[i__ - 1] = x2a[i__ - 2] + corrs_1.splon[*itype + (is + (iarea + (
-		ilon + i__ - 1 << 1)) * 15) * 3 - 139];
+	x2a[i__ - 1] = x2a[i__ - 2] + corrs_1.splon[*itype + (is + (iarea + ((ilon + i__ - 1) << 1)) * 15) * 3 - 139];
     }
     i__1 = nlat;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = nlon;
 	for (j = 1; j <= i__2; ++j) {
 /* L1070: */
-	    ya[i__ + j * 15 - 16] = (real) corrs_1.stacor[*itype + (is + (
-		    iarea + (ncnt + j << 1)) * 15) * 3 - 139] / (float)100.;
+	    ya[i__ + j * 15 - 16] = (real) corrs_1.stacor[*itype + (is + (iarea + ((ncnt + j) << 1)) * 15) * 3 - 139] / (float)100.;
 	}
 	ncnt += nlon;
 /* L1080: */

@@ -1,62 +1,64 @@
-DROP TABLE EventDescription;
-DROP TABLE Comment;
-DROP TABLE DataUsed;
-DROP TABLE CompositeTime;
-DROP TABLE PickReference;
-DROP TABLE AmplitudeReference;
-DROP TABLE Reading;
-DROP TABLE MomentTensorComponentContribution;
-DROP TABLE MomentTensorStationContribution;
-DROP TABLE MomentTensorPhaseSetting;
-DROP TABLE MomentTensor;
-DROP TABLE FocalMechanism;
-DROP TABLE Amplitude;
-DROP TABLE StationMagnitudeContribution;
-DROP TABLE Magnitude;
-DROP TABLE StationMagnitude;
-DROP TABLE Pick;
-DROP TABLE OriginReference;
-DROP TABLE FocalMechanismReference;
-DROP TABLE Event;
-DROP TABLE Arrival;
-DROP TABLE Origin;
-DROP TABLE Parameter;
-DROP TABLE ParameterSet;
-DROP TABLE Setup;
-DROP TABLE ConfigStation;
-DROP TABLE ConfigModule;
-DROP TABLE QCLog;
-DROP TABLE WaveformQuality;
-DROP TABLE Outage;
-DROP TABLE StationReference;
-DROP TABLE StationGroup;
-DROP TABLE AuxSource;
-DROP TABLE AuxDevice;
-DROP TABLE SensorCalibration;
-DROP TABLE Sensor;
-DROP TABLE ResponsePAZ;
-DROP TABLE ResponsePolynomial;
-DROP TABLE DataloggerCalibration;
-DROP TABLE Decimation;
-DROP TABLE Datalogger;
-DROP TABLE ResponseFIR;
-DROP TABLE AuxStream;
-DROP TABLE Stream;
-DROP TABLE SensorLocation;
-DROP TABLE Station;
-DROP TABLE Network;
-DROP TABLE RouteArclink;
-DROP TABLE RouteSeedlink;
-DROP TABLE Route;
-DROP TABLE Access;
-DROP TABLE JournalEntry;
-DROP TABLE ArclinkUser;
-DROP TABLE ArclinkStatusLine;
-DROP TABLE ArclinkRequestLine;
-DROP TABLE ArclinkRequest;
-DROP TABLE PublicObject;
-DROP TABLE Object;
-DROP TABLE Meta;
+DROP TABLE IF EXISTS EventDescription;
+DROP TABLE IF EXISTS Comment;
+DROP TABLE IF EXISTS DataUsed;
+DROP TABLE IF EXISTS CompositeTime;
+DROP TABLE IF EXISTS PickReference;
+DROP TABLE IF EXISTS AmplitudeReference;
+DROP TABLE IF EXISTS Reading;
+DROP TABLE IF EXISTS MomentTensorComponentContribution;
+DROP TABLE IF EXISTS MomentTensorStationContribution;
+DROP TABLE IF EXISTS MomentTensorPhaseSetting;
+DROP TABLE IF EXISTS MomentTensor;
+DROP TABLE IF EXISTS FocalMechanism;
+DROP TABLE IF EXISTS Amplitude;
+DROP TABLE IF EXISTS StationMagnitudeContribution;
+DROP TABLE IF EXISTS Magnitude;
+DROP TABLE IF EXISTS StationMagnitude;
+DROP TABLE IF EXISTS Pick;
+DROP TABLE IF EXISTS OriginReference;
+DROP TABLE IF EXISTS FocalMechanismReference;
+DROP TABLE IF EXISTS Event;
+DROP TABLE IF EXISTS Arrival;
+DROP TABLE IF EXISTS Origin;
+DROP TABLE IF EXISTS Parameter;
+DROP TABLE IF EXISTS ParameterSet;
+DROP TABLE IF EXISTS Setup;
+DROP TABLE IF EXISTS ConfigStation;
+DROP TABLE IF EXISTS ConfigModule;
+DROP TABLE IF EXISTS QCLog;
+DROP TABLE IF EXISTS WaveformQuality;
+DROP TABLE IF EXISTS Outage;
+DROP TABLE IF EXISTS StationReference;
+DROP TABLE IF EXISTS StationGroup;
+DROP TABLE IF EXISTS AuxSource;
+DROP TABLE IF EXISTS AuxDevice;
+DROP TABLE IF EXISTS SensorCalibration;
+DROP TABLE IF EXISTS Sensor;
+DROP TABLE IF EXISTS ResponsePAZ;
+DROP TABLE IF EXISTS ResponsePolynomial;
+DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS ResponseIIR;
+DROP TABLE IF EXISTS DataloggerCalibration;
+DROP TABLE IF EXISTS Decimation;
+DROP TABLE IF EXISTS Datalogger;
+DROP TABLE IF EXISTS AuxStream;
+DROP TABLE IF EXISTS Stream;
+DROP TABLE IF EXISTS SensorLocation;
+DROP TABLE IF EXISTS Station;
+DROP TABLE IF EXISTS Network;
+DROP TABLE IF EXISTS RouteArclink;
+DROP TABLE IF EXISTS RouteSeedlink;
+DROP TABLE IF EXISTS Route;
+DROP TABLE IF EXISTS Access;
+DROP TABLE IF EXISTS JournalEntry;
+DROP TABLE IF EXISTS ArclinkUser;
+DROP TABLE IF EXISTS ArclinkStatusLine;
+DROP TABLE IF EXISTS ArclinkRequestLine;
+DROP TABLE IF EXISTS ArclinkRequest;
+DROP TABLE IF EXISTS PublicObject;
+DROP TABLE IF EXISTS Object;
+DROP TABLE IF EXISTS Meta;
 
 CREATE TABLE Meta (
 	name CHAR NOT NULL,
@@ -80,7 +82,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -1061,6 +1063,16 @@ CREATE TABLE ConfigStation (
 	networkCode CHAR NOT NULL,
 	stationCode CHAR NOT NULL,
 	enabled INTEGER(1) NOT NULL,
+	creationInfo_agencyID VARCHAR,
+	creationInfo_agencyURI VARCHAR,
+	creationInfo_author VARCHAR,
+	creationInfo_authorURI VARCHAR,
+	creationInfo_creationTime DATETIME,
+	creationInfo_creationTime_ms INTEGER,
+	creationInfo_modificationTime DATETIME,
+	creationInfo_modificationTime_ms INTEGER,
+	creationInfo_version VARCHAR,
+	creationInfo_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1224,7 +1236,9 @@ CREATE TABLE StationGroup (
 	type VARCHAR(64),
 	code CHAR,
 	start DATETIME,
+	start_ms INTEGER,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1300,8 +1314,10 @@ CREATE TABLE SensorCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1309,7 +1325,7 @@ CREATE TABLE SensorCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
@@ -1354,7 +1370,7 @@ CREATE TABLE ResponsePAZ (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	normalizationFactor DOUBLE UNSIGNED,
 	normalizationFrequency DOUBLE UNSIGNED,
@@ -1366,6 +1382,9 @@ CREATE TABLE ResponsePAZ (
 	poles_used INTEGER(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1385,12 +1404,12 @@ CREATE TABLE ResponsePolynomial (
 	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	frequencyUnit CHAR,
 	approximationType CHAR,
-	approximationLowerBound DOUBLE UNSIGNED,
-	approximationUpperBound DOUBLE UNSIGNED,
+	approximationLowerBound DOUBLE,
+	approximationUpperBound DOUBLE,
 	approximationError DOUBLE UNSIGNED,
 	numberOfCoefficients SMALLINT UNSIGNED,
 	coefficients_content BLOB,
@@ -1411,6 +1430,95 @@ BEGIN
   UPDATE ResponsePolynomial SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
+CREATE TABLE ResponseFAP (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	numberOfTuples SMALLINT UNSIGNED,
+	tuples_content BLOB,
+	tuples_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
+
+CREATE TRIGGER ResponseFAPUpdate UPDATE ON ResponseFAP
+BEGIN
+  UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE ResponseFIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfCoefficients SMALLINT UNSIGNED,
+	symmetry CHAR,
+	coefficients_content BLOB,
+	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
+
+CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
+BEGIN
+  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE ResponseIIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	type CHAR,
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used INTEGER(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+
+CREATE TRIGGER ResponseIIRUpdate UPDATE ON ResponseIIR
+BEGIN
+  UPDATE ResponseIIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
 CREATE TABLE DataloggerCalibration (
 	_oid INTEGER NOT NULL,
 	_parent_oid INTEGER NOT NULL,
@@ -1418,8 +1526,10 @@ CREATE TABLE DataloggerCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1427,7 +1537,7 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
@@ -1474,7 +1584,7 @@ CREATE TABLE Datalogger (
 	clockModel VARCHAR,
 	clockManufacturer VARCHAR,
 	clockType VARCHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	maxClockDrift DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1492,42 +1602,15 @@ BEGIN
   UPDATE Datalogger SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
-CREATE TABLE ResponseFIR (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	name VARCHAR,
-	gain DOUBLE UNSIGNED,
-	decimationFactor SMALLINT UNSIGNED,
-	delay DOUBLE UNSIGNED,
-	correction DOUBLE,
-	numberOfCoefficients SMALLINT UNSIGNED,
-	symmetry CHAR,
-	coefficients_content BLOB,
-	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
-	remark_content BLOB,
-	remark_used INTEGER(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
-);
-
-CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
-
-CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
-BEGIN
-  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
-END;
-
 CREATE TABLE AuxStream (
 	_oid INTEGER NOT NULL,
 	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	device VARCHAR,
 	deviceSerialNumber VARCHAR,
 	source VARCHAR,
@@ -1539,7 +1622,7 @@ CREATE TABLE AuxStream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
@@ -1555,7 +1638,9 @@ CREATE TABLE Stream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	datalogger VARCHAR,
 	dataloggerSerialNumber VARCHAR,
 	dataloggerChannel INT UNSIGNED,
@@ -1579,7 +1664,7 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
@@ -1595,7 +1680,9 @@ CREATE TABLE SensorLocation (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1603,7 +1690,7 @@ CREATE TABLE SensorLocation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
@@ -1619,7 +1706,9 @@ CREATE TABLE Station (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1638,7 +1727,7 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Station__parent_oid ON Station(_parent_oid);
@@ -1654,7 +1743,9 @@ CREATE TABLE Network (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	institutions VARCHAR,
 	region VARCHAR,
@@ -1669,7 +1760,7 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Network__parent_oid ON Network(_parent_oid);

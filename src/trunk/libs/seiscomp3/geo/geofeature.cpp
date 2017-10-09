@@ -95,47 +95,24 @@ bool GeoFeature::contains(const Vertex& v, const Vertex *polygon,
 	// no polygon if less than 3 sites
 	if ( sides < 3 ) return false;
 
-	int l = sides - 2;
-	int i = sides - 1;
+	size_t i, j;
 	bool oddCrossings = false;
 
-//#define epsilon 1E-10
-#define epsilon 0
+	for ( i = 0, j = sides-1; i < sides; j = i++ ) {
+		Vertex::ValueType relLonLeft = sub(polygon[i].lon, v.lon);
+		Vertex::ValueType relLonRight = sub(polygon[j].lon, v.lon);
+		Vertex::ValueType relWidth = relLonLeft-relLonRight;
+		if ( fabs(relWidth) > 180 ) {
+			if ( relWidth < -180 )
+				relWidth += 360;
+			else
+				relWidth -= 360;
 
-	for ( size_t n = 0; n < sides; l = i, i = n++ ) {
-		Vertex::ValueType segWidth = sub(polygon[i].lon, polygon[l].lon);
-		Vertex::ValueType relLonLeft = sub(v.lon, polygon[l].lon);
-		Vertex::ValueType relLonRight = sub(v.lon, polygon[i].lon);
-
-		bool touch = relLonLeft * sub(v.lon, polygon[n].lon) > 0;
-
-		// Skip segments where v.lon falls outside the segments horizontal
-		// boundings
-		if ( touch ) {
-			if ( segWidth >= 0 ) {
-				if ( relLonLeft < -epsilon || relLonRight > epsilon ) continue;
-			}
-			else {
-				if ( relLonLeft > epsilon || relLonRight < -epsilon ) continue;
-			}
-		}
-		else {
-			if ( segWidth >= 0 ) {
-				if ( relLonLeft < -epsilon || relLonRight >= epsilon ) continue;
-			}
-			else {
-				if ( relLonLeft > epsilon || relLonRight <= -epsilon ) continue;
-			}
+			relLonLeft = relLonRight+relWidth;
 		}
 
-		Vertex::ValueType y0;
-
-		// y0 = latitude of crossing
-		y0 = relLonLeft * (polygon[i].lat - polygon[l].lat) /
-		     segWidth + polygon[l].lat;
-
-		// North crossing
-		if ( y0 > v.lat )
+		if ( (relLonLeft > 0) == (relLonRight > 0) ) continue;
+		if ( v.lat < (polygon[j].lat-polygon[i].lat) * sub(v.lon, polygon[i].lon) / sub(polygon[j].lon, polygon[i].lon) + polygon[i].lat )
 			oddCrossings = !oddCrossings;
 	}
 

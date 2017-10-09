@@ -116,11 +116,11 @@ class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 		virtual int capabilities() const = 0;
 
 		//! the following all return NULL if (re)location failed
-		virtual DataModel::Origin *locate(PickList& pickList) throw(Core::GeneralException) = 0;
+		virtual DataModel::Origin *locate(PickList& pickList) = 0;
 		virtual DataModel::Origin *locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  const Core::Time &initTime) throw(Core::GeneralException) = 0;
-		virtual DataModel::Origin *relocate(const DataModel::Origin *origin) throw(Core::GeneralException) = 0;
+		                                  const Core::Time &initTime) = 0;
+		virtual DataModel::Origin *relocate(const DataModel::Origin *origin) = 0;
 
 		//! Returns a string (optional) valid for the last
 		//! (re)locate call. Supported are log and warning

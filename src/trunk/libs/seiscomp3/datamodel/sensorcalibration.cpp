@@ -217,7 +217,7 @@ void SensorCalibration::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time SensorCalibration::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time SensorCalibration::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("SensorCalibration.end is not set");
@@ -237,7 +237,7 @@ void SensorCalibration::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorCalibration::gain() const throw(Seiscomp::Core::ValueException) {
+double SensorCalibration::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("SensorCalibration.gain is not set");
@@ -257,7 +257,7 @@ void SensorCalibration::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorCalibration::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double SensorCalibration::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("SensorCalibration.gainFrequency is not set");
@@ -277,7 +277,7 @@ void SensorCalibration::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& SensorCalibration::remark() throw(Seiscomp::Core::ValueException) {
+Blob& SensorCalibration::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("SensorCalibration.remark is not set");
@@ -288,7 +288,7 @@ Blob& SensorCalibration::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& SensorCalibration::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& SensorCalibration::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("SensorCalibration.remark is not set");
@@ -439,7 +439,7 @@ void SensorCalibration::accept(Visitor* visitor) {
 void SensorCalibration::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: SensorCalibration skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -448,8 +448,14 @@ void SensorCalibration::serialize(Archive& ar) {
 
 	ar & NAMED_OBJECT_HINT("serialNumber", _index.serialNumber, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
 	ar & NAMED_OBJECT_HINT("channel", _index.channel, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("gain", _gain, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("gainFrequency", _gainFrequency, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("remark", _remark, Archive::STATIC_TYPE | Archive::XML_ELEMENT);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <seiscomp>
-	<module name="scwfparam" category="Processing">
+	<module name="scwfparam" category="Processing" inherit-global-bindings="true">
 		<description>Waveform parametrization module.</description>
 		<configuration>
 			<group name="wfparam">
@@ -124,7 +124,7 @@
 				<parameter name="Tmin" type="double" unit="s" default="0">
 					<description>
 					Specifies the minimum period (Tmin) in seconds for computation of the
-					relative displacement lastic response spectrum.
+					relative displacement elastic response spectrum.
 					</description>
 				</parameter>
 				<parameter name="Tmax" type="double" unit="s" default="5">
@@ -419,6 +419,11 @@
 							attribute, the publicID, lat, lon otherwise.
 							</description>
 						</parameter>
+						<parameter name="encoding" type="string" default="UTF-8">
+							<description>
+							The XML encoding string written to the Shakemap XML file.
+							</description>
+						</parameter>
 					</group>
 				</group>
 				<parameter name="magnitudeTolerance" type="double" default="0.5">
@@ -519,4 +524,32 @@
 			</group>
 		</command-line>
 	</module>
+
+	<!-- The basic binding description. This could also go into a separate file, but its integrated
+		 into the core description to have everything in one place. -->
+	<binding module="scwfparam">
+		<configuration>
+			<group name="amplitudes">
+				<group name="PGAV">
+					<parameter name="saturationThreshold" type="string">
+						<description>
+						Defines the saturation threshold for the optional saturation check.
+						By default the saturation check is configured for all stations
+						as module parameter. This parameters overrides the threshold
+						per station.
+
+						This value can either be an absolute value such as &quot;100000&quot;
+						or a relative value (optionally in percent) with respect to
+						the number of effective bits, e.g. &quot;0.8@23&quot; or
+						&quot;80%@23&quot;. The first version uses 1**23 * 0.8
+						whereas the latter uses 1**23 * 80/100.
+
+						The special value &quot;false&quot; explicitly disables
+						the check.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</binding>
 </seiscomp>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="gempa GmbH">
+  <title>SeisComP3 FDSNWS - DataSelect</title>
+  <link rel="stylesheet" type="text/css" href="../../css/fdsnws.css">
+  <link rel="stylesheet" type="text/css" href="../../js/tcal/tcal.css">
+  <script type="text/javascript" src="../../js/tcal/tcal.js"></script>
+  <script type="text/javascript" src="../../js/fdsnws-query.js"></script>
+  <script type="text/javascript">
+    A_TCALCONF['format'] = 'Y-m-dT00:00:00';
+
+    window.onload = fdsnwsInitQueryForm;
+  </script>
+</head>
+<body>
+  <h1>SeisComP3 FDSNWS DataSelect - URL Builder</h1>
+  <form id="query-form" action="query" method="GET">
+  <fieldset>
+    <legend>Time constraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Start Time</td>
+          <td><input type="text" size="10"  maxlength="26" name="starttime" value="" class="tcal"/></td>
+        </tr>
+        <tr>
+          <td>End Time</td>
+          <td><input type="text" size="10" maxlength="26" name="endtime" value="" class="tcal"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Channel constraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Network</td>
+          <td><input type="text" size="10" name="network" value="" placeholder="AB,C?" /></td>
+        </tr>
+        <tr>
+          <td>Station</td>
+          <td><input type="text" size="10" name="station" value="" placeholder="ABC,D*" /></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td><input type="text" size="10" name="location" value="" placeholder="00" /></td>
+        </tr>
+        <tr>
+          <td>Channel</td>
+          <td><input type="text" size="10" name="channel" value="" placeholder="BH?" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Service specific constraints</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Quality</td>
+          <td><select name="quality" disabled="disabled"><option value="B">B</option></select></td>
+        </tr>
+        <tr>
+          <td>Minimum Length (s)</td>
+          <td><input type="text" size="10" name="minimumlength" value="0.0" disabled="disabled"/></td>
+        </tr>
+        <tr>
+          <td>Longest Only</td>
+          <td><input type="checkbox" name="longestonly" value="false" disabled="disabled"/></td>
+        </tr>
+        <tr>
+          <td>Authentication</td>
+          <td><input type="checkbox" name="queryauth"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Output control</legend>
+    <table class="builder">
+      <tbody>
+        <tr>
+          <td>Format</td>
+          <td><select name="format" disabled="disabled"><option value="miniseed">miniseed</option></select></td>
+        </tr>
+        <tr>
+          <td>No Data 404</td>
+          <td><input type="checkbox" name="nodata" value="404" checked="checked"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  </form>
+  <fieldset>
+    <legend>URL</legend>
+    <p><a id="query-url" href=""></a></p>
+  </fieldset>
+</body>
+</html>

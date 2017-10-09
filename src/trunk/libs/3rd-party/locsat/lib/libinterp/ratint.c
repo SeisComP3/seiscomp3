@@ -1,4 +1,3 @@
-
 /*
  * NAME
  *	ratint -- Rational function interpolating function routine.
@@ -41,18 +40,18 @@
 static char	SccsId[] = "@(#)ratint.c	44.1	9/20/91";
 #endif
 
-#define	TINY		1.0e-25;
-#define	FREERETURN	{ free_dvector(d,1,n); free_dvector(c,1,n); return; }
+#define TINY        1.0e-25;
+#define FREERETURN  { free_dvector(d,1); free_dvector(c,1); return; }
 
-void ratint (xa, ya, n, x, y, dy)
 
-double	xa[], ya[], x, *y, *dy;
-int	n;
+double *dvector(int nl, int nh);
+void nrerror(char error_text[]);
+void free_dvector(double *v, int nl);
 
-{
-	int	i, m, ns = 1;
-	double	*c, *d, dd, h, hh, t, w, *dvector();
-	void	nrerror(), free_dvector();
+
+void ratint(double xa[], double ya[], int n, double x, double *y, double *dy) {
+	int i, m, ns = 1;
+	double *c, *d, dd, h, hh, t, w;
 
 	c  = dvector(1,n);
 	d  = dvector(1,n);
@@ -73,8 +72,8 @@ int	n;
 			hh = h;
 		}
 		c[i] = ya[i];
-		d[i] = ya[i] + TINY;	/* The TINY part is needed to prevent */
-	}				/* a rare zero-over-zero condition    */
+		d[i] = ya[i] + TINY; /* The TINY part is needed to prevent */
+	} /* a rare zero-over-zero condition    */
 
 	*y = ya[ns--];
 
@@ -96,4 +95,3 @@ int	n;
 	}
 	FREERETURN
 }
-

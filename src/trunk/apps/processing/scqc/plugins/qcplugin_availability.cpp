@@ -103,6 +103,10 @@ void QcPluginAvailability::generateReport(const QcBuffer* buf) const {
 	std::vector<double> result = availability(buf);
 	WaveformQuality* obj;
 
+	SEISCOMP_DEBUG("%s: %s - availability: %f   gaps count: %f   overlaps count: %f",
+	               _streamID.c_str(), _name.c_str(),
+	               result[0], result[1], result[2]);
+
 	obj = new WaveformQuality();
 	obj->setWaveformID(getWaveformID(_streamID));
 	obj->setCreatorID(_app->creatorID());

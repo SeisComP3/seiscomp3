@@ -133,7 +133,7 @@ void ResponsePAZ::setNormalizationFactor(const OPT(double)& normalizationFactor)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFactor() const throw(Core::ValueException) {
+double ResponsePAZ::normalizationFactor() const {
 	if ( !_normalizationFactor )
 		throw Core::ValueException("normalization factor not set");
 	return *_normalizationFactor;
@@ -153,7 +153,7 @@ void ResponsePAZ::setNormalizationFrequency(const OPT(double)& normalizationFreq
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFrequency() const throw(Core::ValueException) {
+double ResponsePAZ::normalizationFrequency() const {
 	if ( !_normalizationFrequency )
 		throw Core::ValueException("normalization frequency not set");
 	return *_normalizationFrequency;
@@ -227,6 +227,64 @@ ResponsePAZ::getTransferFunction(int numberOfIntegrations) {
 				(int)_zeros.size(), &_zeros[0],
 				normalizationFactor(), numberOfIntegrations);
 		return paz;
+	}
+	catch ( ... ) {}
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP::ResponseFAP() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP::~ResponseFAP() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponseFAP::setFAPs(const Math::SeismometerResponse::FAPs& faps) {
+	_faps = faps;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const Math::SeismometerResponse::FAPs& ResponseFAP::faps() const {
+	return _faps;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponseFAP::convertFromHz() {
+	for ( size_t i = 0; i < _faps.size(); ++i )
+		_faps[i].frequency *= 180.0/M_PI;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Math::Restitution::FFT::TransferFunction *ResponseFAP::getTransferFunction(int numberOfIntegrations) {
+	try {
+		Math::Restitution::FFT::ResponseList *tf =
+			new Math::Restitution::FFT::ResponseList(_faps, numberOfIntegrations);
+		return tf;
 	}
 	catch ( ... ) {}
 

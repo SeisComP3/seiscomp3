@@ -35,30 +35,29 @@
 static char	SccsId[] = "@(#)splint.c	40.1	10/12/90";
 #endif
 
-void splint (xa, ya, y2a, n, x, y)
 
-float	xa[], ya[], y2a[], x, *y;
-int	n;
+#include <stdio.h>
 
-{
-	int	klo, khi, k;
-	float	h, b, a;
+
+void splint (float xa[], float ya[], float y2a[], int n, float x, float *y) {
+	int klo, khi, k;
+	float h, b, a;
 
 	klo = 1;
 	khi = n;
-	while (khi-klo > 1)
-	{
+
+	while ( khi-klo > 1 ) {
 		k = (khi + klo) >> 1;
 		if (xa[k] > x)	khi = k;
 		else		klo = k;
-	}	/* klo and khi now bracket the input value of x */
+	} /* klo and khi now bracket the input value of x */
 
 	h = xa[khi] - xa[klo];
-	if (h == 0) printf ("Bad xa input to routine splint");
+
+	if ( h == 0 )
+		printf ("Bad xa input to routine splint");
 
 	a  = (xa[khi] - x)/h;
 	b  = (x - xa[klo])/h;
-	*y = a*ya[klo] + b*ya[khi] + ((a*a*a - a)*y2a[klo] 
-	     + (b*b*b - b)*y2a[khi])*(h*h)/6.0;
+	*y = a*ya[klo] + b*ya[khi] + ((a*a*a - a)*y2a[klo] + (b*b*b - b)*y2a[khi])*(h*h)/6.0;
 }
-

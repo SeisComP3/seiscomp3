@@ -75,21 +75,28 @@ size_t PolyRegions::read(const std::string& location) {
 		return regionCount();
 
 	fs::directory_iterator end_itr;
+	std::vector<std::string> files;
 
-	try{
-		for (fs::directory_iterator itr(directory); itr != end_itr; ++itr ){
+	try {
+		for ( fs::directory_iterator itr(directory); itr != end_itr; ++itr ) {
 
-			if (fs::is_directory(*itr))
+			if ( fs::is_directory(*itr) )
 				continue;
 
-			if (boost::regex_match(SC_FS_IT_LEAF(itr), boost::regex(".*\\.(?:fep)")))
-				if (! readFepBoundaries(SC_FS_IT_STR(itr)))
-					SEISCOMP_ERROR("Error reading file: %s", SC_FS_IT_STR(itr).c_str());
+			if ( boost::regex_match(SC_FS_IT_LEAF(itr), boost::regex(".*\\.(?:fep)")) )
+				files.push_back(SC_FS_IT_STR(itr));
 		}
 	}
-	catch (const std::exception &ex) {
+	catch ( const std::exception &ex ) {
 		SEISCOMP_ERROR("Reading regions: %s", ex.what());
 		return regionCount();
+	}
+
+	std::sort(files.begin(), files.end());
+
+	for ( size_t i = 0; i < files.size(); ++i ) {
+		if ( !readFepBoundaries(files[i]) )
+			SEISCOMP_ERROR("Error reading file: %s", files[i].c_str());
 	}
 
 	info();
@@ -102,7 +109,6 @@ size_t PolyRegions::read(const std::string& location) {
 
 
 bool PolyRegions::readFepBoundaries(const std::string& filename) {
-
 	SEISCOMP_DEBUG("reading boundary polygons from file: %s", filename.c_str());
 
 	std::ifstream infile(filename.c_str());
@@ -113,8 +119,8 @@ bool PolyRegions::readFepBoundaries(const std::string& filename) {
 	boost::regex vertexLine("^\\s*([-+]?[0-9]*\\.?[0-9]+)\\s+([-+]?[0-9]*\\.?[0-9]+)(?:\\s+([^\\d\\s].*)$|\\s*$)");
 	boost::regex LLine("^\\s*L\\s+(.*)$");
 	boost::smatch what;
-	
-  	std::string line;
+
+	std::string line;
 	bool newPolygon = true;
 	GeoFeature *pr = NULL;
 	OPT(Vertex) last;

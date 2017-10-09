@@ -134,10 +134,10 @@ class SC_SYSTEM_CORE_API MomentTensorComponentContribution : public Object {
 		std::vector< double >& dataTimeWindow();
 
 		void setMisfit(const OPT(double)& misfit);
-		double misfit() const throw(Seiscomp::Core::ValueException);
+		double misfit() const;
 
 		void setSnr(const OPT(double)& snr);
-		double snr() const throw(Seiscomp::Core::ValueException);
+		double snr() const;
 
 
 	// ------------------------------------------------------------------

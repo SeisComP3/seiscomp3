@@ -11,8 +11,10 @@
  ***************************************************************************/
 
 #include "heliwidget.h"
-#include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/math/filter/butterworth.h>
+#include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/core/utils.h>
 
 
 using namespace Seiscomp;
@@ -93,7 +95,8 @@ void HeliCanvas::Row::update() {
 }
 
 
-HeliCanvas::HeliCanvas() {
+HeliCanvas::HeliCanvas(bool saveUnfiltered)
+: _saveUnfiltered(saveUnfiltered) {
 	_records = NULL;
 	_filteredRecords = NULL;
 	_scale = 1.0f;
@@ -224,25 +227,29 @@ bool HeliCanvas::feed(Record *rec) {
 		arr->typedData()[i] *= _scale;
 
 	crec->setData(arr.get());
-	if ( !_records->feed(crec.get()) ) return false;
 
-	arr = (FloatArray*)crec->data()->copy(Array::FLOAT);
-	GenericRecordPtr frec = new GenericRecord(*crec);
+	GenericRecordPtr frec;
+
+	if ( _saveUnfiltered ) {
+		if ( !_records->feed(crec.get()) ) return false;
+		arr = (FloatArray*)crec->data()->copy(Array::FLOAT);
+		frec = new GenericRecord(*crec);
+		frec->setData(arr.get());
+	}
+	else
+		frec = crec;
 
 	if ( _filter ) {
 		if ( _filteredRecords->empty() ) {
 			_filter->setSamplingFrequency(frec->samplingFrequency());
 			_filter->setStartTime(frec->startTime());
 			_filter->setStreamID(frec->networkCode(), frec->stationCode(),
-								 frec->locationCode(), frec->channelCode());
+			                     frec->locationCode(), frec->channelCode());
 		}
 		_filter->apply(arr->size(), arr->typedData());
 	}
 
-	frec->setData(arr.get());
-
-	_filteredRecords->feed(frec.get());
-
+	if ( !_filteredRecords->feed(frec.get()) ) return false;
 	if ( _rows.empty() ) return false;
 
 	Core::Time startTime = rec->startTime();
@@ -449,7 +456,7 @@ void HeliCanvas::render(QPainter &p) {
 		if ( currentTextLine == 0 ) {
 			p.drawText(QRect(0, rowPos-fontHeight, _labelMargin, rowHeight+2*fontHeight + heightOfs),
 			           Qt::AlignLeft | Qt::AlignVCenter,
-			           _rows[i].time.toString("%H:%M").c_str());
+			           Gui::timeToString(_rows[i].time, "%H:%M"));
 			currentTextLine = skipTextLines;
 		}
 		else

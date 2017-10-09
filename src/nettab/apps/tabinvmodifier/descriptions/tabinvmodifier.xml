@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+        <module name="tabinvmodifier" category="Inventory" standalone="true">
+                <description>tab-based inventory modifier</description>
+
+                <command-line>
+                        <synopsis>tabinvmodifier { -r | --rules } {rules file} [options]</synopsis>
+
+                        <group name="Options">
+
+			<option long-flag="rules" flag="r">
+				<description>Input filename of the rules file. A rules file is mandatory.</description>
+			</option>
+
+                        <option long-flag="relaxed" flag="e">
+                                <description>Relax rules for matching NSLC items</description>
+                        </option>
+
+                        <option long-flag="output" flag="o">
+                                <description>Output XML filename. Without an output file, tabinvmodifier will attempt to write to the local SeisComp3 database.</description>
+                        </option>
+
+			<option long-flag="inventory-db">
+				<description>Input file containing inventory. If this option is given, an output file must be provided with `--output`.</description>
+			</option>
+
+			</group>
+                </command-line>
+	</module>
+</seiscomp>

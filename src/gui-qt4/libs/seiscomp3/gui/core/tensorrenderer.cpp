@@ -942,6 +942,101 @@ void TensorRenderer::render(QImage& img, const Math::Tensor2Sd &t) {
 	}
 }
 
+void TensorRenderer::renderNP(QImage& img, double strike, double dip, double slip, QColor color) {
+	Math::Matrix3f m;
+	Math::NODAL_PLANE np;
+	np.str = strike;
+	np.dip = dip;
+	np.rake = slip;
+
+	Math::Vector3f n, d;
+	np2nd(np, n, d);
+
+	Math::Vector3f v;
+	v = v.cross(n, d);
+
+	m.d[0][0] = d[0];
+	m.d[0][1] = v[0];
+	m.d[0][2] = n[0];
+
+	m.d[1][0] = d[1];
+	m.d[1][1] = v[1];
+	m.d[1][2] = n[1];
+
+	m.d[2][0] = d[2];
+	m.d[2][1] = v[2];
+	m.d[2][2] = n[2];
+
+	QSize size(img.size());
+
+	int diameter = std::min(size.width(), size.height());
+	_radius = diameter / 2;
+	_projectRadius = _radius - _projectMargin;
+	_ballRadius = _radius - _margin;
+
+	_center = QPoint(size.width()/2, size.height()/2);
+
+	float dt = 1.0f / float(_ballRadius-1);
+
+	float ixf = -_center.x() * dt;
+	float iyf = -_center.y() * dt;
+
+	QRgb c;
+	QRgb *data = (QRgb *)img.bits();
+
+	//float smoothDist = 1.5f*dt;
+	float smoothDist = std::max(0.01f, dt);
+
+	float yf = iyf;
+
+	for ( int i = 0; i < size.height(); ++i, yf += dt ) {
+		float xf = ixf;
+		for ( int j = 0; j < size.width(); ++j, ++data, xf += dt ) {
+			Math::Vector3f v;
+
+			float dist = xf*xf + yf*yf;
+
+			if ( dist > 1.0f ) continue;
+
+#define STEREO_PROJECTION
+#ifdef STEREO_PROJECTION
+			float div_z = 1.0f / (1.0f + dist);
+			float div_xy = M_SQRT2 * div_z;
+
+			v[0] = yf * div_xy;
+			v[1] = -xf * div_xy;
+			v[2] = -(1.0f - dist) * div_z;
+#else
+			v[0] = yf;
+			v[1] = xf;
+			v[2] = float(sqrt(1.0f - dist));
+#endif
+
+			float tmp(smoothDist);
+			smoothDist += (1.0 - sqrt(dist)) * smoothDist;
+
+			Math::Vector3f vr;
+			m.invTransform(vr, v);
+
+			float y = vr[2];
+
+			if ( (y >= 0 && y < smoothDist) || (y < 0 && y > -smoothDist) ) {
+				float smooth = fabs(y) / smoothDist;
+				if ( smooth > 1 ) smooth = 1;
+
+				int intens = (int)(smooth * 255);
+				int iintens = 255 - intens;
+				c = qRgb((qRed(*data) * intens + color.red() * iintens)/255,
+				        (qGreen(*data) * intens + color.green() * iintens)/255,
+				        (qBlue(*data) * intens + color.blue() * iintens)/255);
+				*data = c;
+			}
+
+			smoothDist = tmp;
+		}
+	}
+}
+
 
 QPoint TensorRenderer::project(Math::Vector3f &v) const {
 	float px = -v.y / (1.0 - v.z);

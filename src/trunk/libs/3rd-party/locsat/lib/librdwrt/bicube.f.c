@@ -77,9 +77,9 @@ struct {
 
 /* Table of constant values */
 
-static real c_b4 = (float)1e30;
-static integer c__9 = 9;
-static integer c__1 = 1;
+static float c_b4 = (float)1e30;
+static int c__9 = 9;
+static int c__1 = 1;
 
 /* NAME */
 /* 	splie2 -- Construct natural splines and second derivatives. */
@@ -107,17 +107,17 @@ static integer c__1 = 1;
 /* AUTHOR */
 
 /* Subroutine */ int splie2_(x1a, x2a, ya, m, n, y2a)
-real *x1a, *x2a, *ya;
-integer *m, *n;
-real *y2a;
+float *x1a, *x2a, *ya;
+int *m, *n;
+float *y2a;
 {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
 
     /* Local variables */
-    static real ytmp[15];
-    static integer j, k;
-    static real y2tmp[15];
+    static float ytmp[15];
+    static int j, k;
+    static float y2tmp[15];
     extern /* Subroutine */ int spline_();
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
@@ -176,17 +176,17 @@ real *y2a;
 /* AUTHOR */
 
 /* Subroutine */ int splin2_(x1a, x2a, ya, y2a, m, n, x1, x2, y)
-real *x1a, *x2a, *ya, *y2a;
-integer *m, *n;
-real *x1, *x2, *y;
+float *x1a, *x2a, *ya, *y2a;
+int *m, *n;
+float *x1, *x2, *y;
 {
     /* System generated locals */
-    integer i__1, i__2;
+    int i__1, i__2;
 
     /* Local variables */
-    static real ytmp[15];
-    static integer j, k;
-    static real y2tmp[15], yytmp[15];
+    static float ytmp[15];
+    static int j, k;
+    static float y2tmp[15], yytmp[15];
     extern /* Subroutine */ int spline_(), splint_();
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
@@ -245,16 +245,16 @@ real *x1, *x2, *y;
 /* AUTHOR */
 
 /* Subroutine */ int spline_(x, y, n, yp1, ypn, y2)
-real *x, *y;
-integer *n;
-real *yp1, *ypn, *y2;
+float *x, *y;
+int *n;
+float *yp1, *ypn, *y2;
 {
     /* System generated locals */
-    integer i__1;
+    int i__1;
 
     /* Local variables */
-    static integer i__, k;
-    static real p, u[15], qn, un, sig;
+    static int i__, k;
+    static float p, u[15], qn, un, sig;
 
 /* K.S. 1-Dec-97, changed 'undefined' to 'none' */
 /*     ---- Parameter declarations ---- */
@@ -324,16 +324,16 @@ real *yp1, *ypn, *y2;
 /* AUTHOR */
 
 /* Subroutine */ int splint_(xa, ya, y2a, n, x, y)
-real *xa, *ya, *y2a;
-integer *n;
-real *x, *y;
+float *xa, *ya, *y2a;
+int *n;
+float *x, *y;
 {
     /* Builtin functions */
-    integer s_wsle(), do_lio(), e_wsle();
+    int s_wsle(), do_lio(), e_wsle();
 
     /* Local variables */
-    static real a, b, h__;
-    static integer k, khi, klo;
+    static float a, b, h__;
+    static int k, khi, klo;
 
     /* Fortran I/O blocks */
     static cilist io___21 = { 0, 6, 0, 0, 0 };

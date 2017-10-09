@@ -23,18 +23,24 @@
 #include <seiscomp3/gui/core/timescale.h>
 #include <seiscomp3/gui/core/uncertainties.h>
 #include <seiscomp3/gui/core/spectrogramrenderer.h>
+#include <seiscomp3/gui/core/spectrumwidget.h>
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/client/configdb.h>
 #include <seiscomp3/datamodel/eventparameters.h>
 #include <seiscomp3/datamodel/arrival.h>
 #include <seiscomp3/datamodel/parameter.h>
 #include <seiscomp3/datamodel/utils.h>
+#include <seiscomp3/math/fft.h>
 #include <seiscomp3/math/geo.h>
 #include <seiscomp3/math/filter.h>
+#include <seiscomp3/math/windows/cosine.h>
+#include <seiscomp3/math/windows/hann.h>
+#include <seiscomp3/math/windows/hamming.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/core/interfacefactory.ipp>
 #include <seiscomp3/seismology/ttt.h>
 #include <seiscomp3/utils/misc.h>
+#include <seiscomp3/utils/keyvalues.h>
 #include <seiscomp3/logging/log.h>
 
 #include <QMessageBox>
@@ -72,6 +78,10 @@ using namespace Seiscomp::Math;
 using namespace Seiscomp::Util;
 using namespace Seiscomp::Gui;
 using namespace Seiscomp::Gui::PrivatePickerView;
+
+
+QSize PickerView::_defaultSpectrumWidgetSize = QSize(500,400);
+QByteArray PickerView::_spectrumWidgetGeometry;
 
 
 IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Gui::PickerMarkerActionPlugin, SC_GUI_API);
@@ -161,6 +171,7 @@ class ZoomRecordWidget : public RecordWidget {
 			if ( showSpectrogram == enable ) return;
 
 			showSpectrogram = enable;
+			updateTraceColor();
 
 			resetSpectrogram();
 			update();
@@ -200,6 +211,7 @@ class ZoomRecordWidget : public RecordWidget {
 		void setTraces(ThreeComponentTrace::Component *t) {
 			traces = t;
 			resetSpectrogram();
+			updateTraceColor();
 		}
 
 		void feedRaw(int slot, const Seiscomp::Record *rec) {
@@ -238,6 +250,17 @@ class ZoomRecordWidget : public RecordWidget {
 			spectrogram[slot].setAlignment(alignment());
 			spectrogram[slot].setTimeRange(tmin(), tmax());
 			spectrogram[slot].renderAxis(painter, r, false);
+		}
+
+		void updateTraceColor() {
+			if ( showSpectrogram ) {
+				for ( int i = 0; i < slotCount(); ++i )
+					setRecordPen(i, QPen(SCScheme.colors.records.spectrogram, SCScheme.records.lineWidth));
+			}
+			else {
+				for ( int i = 0; i < slotCount(); ++i )
+					setRecordPen(i, QPen(SCScheme.colors.records.foreground, SCScheme.records.lineWidth));
+			}
 		}
 
 	protected:
@@ -462,7 +485,7 @@ class PickerMarker : public RecordMarker {
 				if ( text.isEmpty() ) {
 					try {
 						text = pick()->phaseHint().code().c_str();
-						setText(QString("%1"AUTOMATIC_POSTFIX).arg(text));
+						setText(QString("%1" AUTOMATIC_POSTFIX).arg(text));
 					}
 					catch (...) {}
 				}
@@ -795,7 +818,7 @@ class PickerMarker : public RecordMarker {
 			catch ( ... ) {}
 
 			try {
-				text += QString(" at %1").arg(_referencedPick->creationInfo().creationTime().toString("%F %T").c_str());
+				text += QString(" at %1").arg(timeToString(_referencedPick->creationInfo().creationTime(), "%F %T"));
 			}
 			catch ( ... ) {}
 
@@ -884,6 +907,242 @@ class PickerMarker : public RecordMarker {
 		int               _rot;
 		bool              _drawUncertaintyValues;
 };
+
+
+class SpectrumView : public SpectrumViewBase {
+	public:
+		enum WindowFunc {
+			None,
+			Cosine,
+			Hamming,
+			Hann
+		};
+
+		SpectrumView(QWidget *parent = 0, Qt::WindowFlags f = 0)
+		: SpectrumViewBase(parent, f)
+		, _windowFunc(None)
+		, _windowWidth(5) {
+			QFrame *frame = new QFrame;
+			QHBoxLayout *hl = new QHBoxLayout;
+
+			spectrumWidget = new SpectrumWidget;
+			_infoLabel = new QLabel;
+
+			QComboBox *windowCombo = new QComboBox;
+			windowCombo->addItem(tr("Boxcar window"));
+			windowCombo->addItem(tr("Cosine window"));
+			windowCombo->addItem(tr("Hamming window"));
+			windowCombo->addItem(tr("Hann window"));
+			connect(windowCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(windowFuncChanged(int)));
+
+			QDoubleSpinBox *spinWindowWidth = new QDoubleSpinBox;
+			spinWindowWidth->setToolTip(tr("The data portion in percent at either side where the window function is applied on."));
+			spinWindowWidth->setRange(0, 50);
+			spinWindowWidth->setSuffix("%");
+			spinWindowWidth->setValue(_windowWidth);
+			connect(spinWindowWidth, SIGNAL(valueChanged(double)), this, SLOT(windowWidthChanged(double)));
+
+			QComboBox *modeCombo = new QComboBox;
+			modeCombo->addItem(tr("Amplitude spectrum"));
+			modeCombo->addItem(tr("Power spectrum"));
+			modeCombo->addItem(tr("Phase spectrum"));
+			connect(modeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged(int)));
+
+			QToolButton *toggleLogX = new QToolButton;
+			toggleLogX->setText(tr("Log scale X"));
+			toggleLogX->setCheckable(true);
+			toggleLogX->setChecked(true);
+			connect(toggleLogX, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleX(bool)));
+
+			_toggleLogY = new QToolButton;
+			_toggleLogY->setText(tr("Log scale Y"));
+			_toggleLogY->setCheckable(true);
+			_toggleLogY->setChecked(true);
+			connect(_toggleLogY, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setLogScaleY(bool)));
+
+			hl->addWidget(toggleLogX);
+			hl->addWidget(_toggleLogY);
+			hl->addWidget(windowCombo);
+			hl->addWidget(spinWindowWidth);
+			hl->addWidget(modeCombo);
+			hl->addStretch();
+
+			QToolButton *toggleSpec = new QToolButton;
+			toggleSpec->setText(tr("Raw spectrum"));
+			toggleSpec->setCheckable(true);
+			toggleSpec->setChecked(true);
+			connect(toggleSpec, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowSpectrum(bool)));
+
+			QToolButton *toggleCorrSpec = new QToolButton;
+			toggleCorrSpec->setText(tr("Corrected spectrum"));
+			toggleCorrSpec->setCheckable(true);
+			toggleCorrSpec->setChecked(false);
+			connect(toggleCorrSpec, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowCorrected(bool)));
+
+			QToolButton *toggleResp = new QToolButton;
+			toggleResp->setText(tr("Response"));
+			toggleResp->setCheckable(true);
+			toggleResp->setChecked(false);
+			connect(toggleResp, SIGNAL(toggled(bool)), spectrumWidget, SLOT(setShowResponse(bool)));
+
+			hl->addWidget(toggleSpec);
+			hl->addWidget(toggleCorrSpec);
+			hl->addWidget(toggleResp);
+
+			QVBoxLayout *vl = new QVBoxLayout;
+
+			vl->addWidget(_infoLabel);
+			vl->addWidget(frame);
+			vl->addLayout(hl);
+
+			hl = new QHBoxLayout;
+			QPushButton *exportButton = new QPushButton;
+			exportButton->setText(tr("Export"));
+			connect(exportButton, SIGNAL(clicked()), spectrumWidget, SLOT(exportSpectra()));
+			hl->addWidget(exportButton);
+			hl->addStretch();
+			QPushButton *closeButton = new QPushButton;
+			closeButton->setText(tr("Close"));
+			connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+			hl->addWidget(closeButton);
+			vl->addLayout(hl);
+
+			setLayout(vl);
+
+			frame->setFrameShadow(QFrame::Sunken);
+			frame->setFrameShape(QFrame::StyledPanel);
+
+			vl = new QVBoxLayout;
+			vl->setMargin(0);
+			vl->addWidget(spectrumWidget);
+			frame->setLayout(vl);
+
+			spectrumWidget->setLogScaleX(toggleLogX->isChecked());
+			spectrumWidget->setLogScaleY(_toggleLogY->isChecked());
+			spectrumWidget->setShowSpectrum(toggleSpec->isChecked());
+			spectrumWidget->setShowCorrected(toggleCorrSpec->isChecked());
+			spectrumWidget->setShowResponse(toggleResp->isChecked());
+		}
+
+		void setData(Record *rec, Processing::Sensor *sensor) {
+			_trace = rec;
+			_response = sensor && sensor->response() ? sensor->response() : NULL;
+
+			setInfo(sensor);
+			updateData();
+		}
+
+
+		void setInfo(Processing::Sensor *sensor) {
+			if ( sensor == NULL ) {
+				_infoLabel->setText(QString());
+				return;
+			}
+
+			_infoLabel->setText(QString("%1, %2, %3, %4")
+			                    .arg(sensor->manufacturer().c_str())
+			                    .arg(sensor->model().c_str())
+			                    .arg(sensor->type().c_str())
+			                    .arg(sensor->unit().c_str()));
+		}
+
+
+	private:
+		void windowFuncChanged(int index) {
+			switch ( index ) {
+				case 0:
+					_windowFunc = None;
+					break;
+				case 1:
+					_windowFunc = Cosine;
+					break;
+				case 2:
+					_windowFunc = Hamming;
+					break;
+				case 3:
+					_windowFunc = Hann;
+					break;
+				default:
+					break;
+			}
+
+			updateData();
+		}
+
+
+		void windowWidthChanged(double value) {
+			_windowWidth = value;
+			if ( _windowWidth < 0 )
+				_windowWidth = 0;
+			if ( _windowWidth > 50 )
+				_windowWidth = 50;
+
+			updateData();
+		}
+
+
+		void modeChanged(int index) {
+			switch ( index ) {
+				case 0:
+					spectrumWidget->setAmplitudeSpectrum();
+					_toggleLogY->setChecked(true);
+					break;
+				case 1:
+					spectrumWidget->setPowerSpectrum();
+					_toggleLogY->setChecked(true);
+					break;
+				case 2:
+					spectrumWidget->setPhaseSpectrum();
+					_toggleLogY->setChecked(false);
+					break;
+				default:
+					break;
+			}
+		}
+
+
+		void updateData() {
+			if ( !_trace ) return;
+
+			std::vector<double> data(static_cast<const DoubleArray*>(_trace->data())->impl());
+			double wwidth = _windowWidth * 0.01;
+
+			switch ( _windowFunc ) {
+				case Cosine:
+					Math::CosineWindow<double>().apply(data, wwidth);
+					break;
+				case Hamming:
+					Math::HammingWindow<double>().apply(data, wwidth);
+					break;
+				case Hann:
+					Math::HannWindow<double>().apply(data, wwidth);
+					break;
+				default:
+					break;
+			}
+
+			Math::ComplexArray spectrum;
+			Math::fft(spectrum, data);
+
+			spectrumWidget->setSpectrum(_trace->samplingFrequency()*0.5,
+			                            spectrum, _response.get(),
+			                            _trace->streamID().c_str());
+		}
+
+
+	private:
+		QLabel                  *_infoLabel;
+		QToolButton             *_toggleLogY;
+		RecordPtr                _trace;
+		Processing::ResponsePtr  _response;
+		WindowFunc               _windowFunc;
+		double                   _windowWidth;
+
+
+	public:
+		SpectrumWidget *spectrumWidget;
+};
+
 
 
 bool isTraceUsed(Seiscomp::Gui::RecordWidget* w) {
@@ -1615,10 +1874,13 @@ PickerRecordLabel::PickerRecordLabel(int items, QWidget *parent, const char* nam
 
 PickerRecordLabel::~PickerRecordLabel() {}
 
+void PickerRecordLabel::setConfigState(bool state) {
+	isEnabledByConfig = state;
+}
+
 void PickerRecordLabel::setLinkedItem(bool li) {
 	_isLinkedItem = li;
 }
-
 
 void PickerRecordLabel::setControlledItem(RecordViewItem *controlledItem) {
 	_linkedItem = controlledItem;
@@ -1693,15 +1955,29 @@ void PickerRecordLabel::resizeEvent(QResizeEvent *e) {
 void PickerRecordLabel::paintEvent(QPaintEvent *e) {
 	QPainter p(this);
 
+	int fontSize = p.fontMetrics().ascent();
+
 	if ( _hasLabelColor ) {
 		QRect r(rect());
 
 		r.setLeft(r.right()-16);
 
-		QColor bg = palette().color(QPalette::Window);
 		QLinearGradient gradient(r.left(), 0, r.right(), 0);
-		gradient.setColorAt(0, bg);
+		gradient.setColorAt(0, palette().color(QPalette::Window));
 		gradient.setColorAt(1, _labelColor);
+
+		p.fillRect(r, gradient);
+	}
+
+	if ( !isEnabledByConfig ) {
+		QRect r(rect());
+
+		r.setRight(r.left()+16);
+		r.setTop(r.bottom()-fontSize);
+
+		QLinearGradient gradient(r.left(), 0, r.right(), 0);
+		gradient.setColorAt(0, QColor(192,0,0));
+		gradient.setColorAt(1, palette().color(QPalette::Window));
 
 		p.fillRect(r, gradient);
 	}
@@ -1713,7 +1989,6 @@ void PickerRecordLabel::paintEvent(QPaintEvent *e) {
 
 	int posX = 0;
 
-	int fontSize = p.fontMetrics().ascent();
 	int posY = (h - fontSize*2 - 4)/2;
 
 	for ( int i = 0; i < _items.count()-1; ++i ) {
@@ -1778,6 +2053,8 @@ PickerView::Config::Config() {
 	alignmentPosition = 0.5;
 	offsetWindowStart = 0;
 	offsetWindowEnd = 0;
+
+	hideDisabledStations = true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1918,6 +2195,8 @@ void PickerView::init() {
 
 	_centerSelection = false;
 	_checkVisibility = true;
+
+	_spectrumView = NULL;
 
 	_recordView->setSelectionMode(RecordView::SingleSelection);
 	_recordView->setMinimumRowHeight(fontMetrics().ascent()*2+6);
@@ -2153,10 +2432,8 @@ void PickerView::init() {
 	connect(_ui.actionShowSpectrogram, SIGNAL(triggered(bool)),
 	        this, SLOT(showSpectrogram(bool)));
 
-	/*
-	connect(_ui.actionOpenSprectrum, SIGNAL(triggered(bool)),
+	connect(_ui.actionOpenSpectrum, SIGNAL(triggered(bool)),
 	        this, SLOT(showSpectrum()));
-	*/
 
 	_spinDistance = new QDoubleSpinBox;
 	_spinDistance->setValue(15);
@@ -2220,6 +2497,7 @@ void PickerView::init() {
 	spinTW->setToolTip(tr("Sets the time window length of raw data to be used to compute a column of the spectrogram."));
 	connect(spinTW, SIGNAL(valueChanged(double)), this, SLOT(specTimeWindow(double)));
 	specTimeWindow(spinTW->value());
+	specApply();
 
 	_ui.toolBarSpectrogram->addSeparator();
 	_ui.toolBarSpectrogram->addWidget(spinTW);
@@ -2863,37 +3141,26 @@ bool PickerView::setConfig(const Config &c, QString *error) {
 		}
 	}
 
+	bool reselectCurrentItem = false;
 
-	if ( _config.hideStationsWithoutData ) {
-		bool reselectCurrentItem = false;
+	for ( int r = 0; r < _recordView->rowCount(); ++r ) {
+		RecordViewItem* item = _recordView->itemAt(r);
+		PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+		if ( isLinkedItem(item) ) continue;
 
-		for ( int r = 0; r < _recordView->rowCount(); ++r ) {
-			RecordViewItem* item = _recordView->itemAt(r);
-			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-			if ( isLinkedItem(item) ) continue;
+		// Force state to false if item has no data yet and should be hidden
+		item->forceInvisibilty(!isTracePicked(item->widget())
+		                    && ((_config.hideStationsWithoutData && !label->hasGotData)
+		                     || (_config.hideDisabledStations && !label->isEnabledByConfig)));
 
-			if ( !isTracePicked(item->widget()) && !label->hasGotData ) {
-				item->forceInvisibilty(true);
-				if ( item == _recordView->currentItem() )
-					reselectCurrentItem = true;
-			}
-		}
-
-		if ( _recordView->currentItem() == NULL ) reselectCurrentItem = true;
-
-		if ( reselectCurrentItem )
-			selectFirstVisibleItem(_recordView);
+		if ( item == _recordView->currentItem() )
+			reselectCurrentItem = true;
 	}
-	else {
-		for ( int r = 0; r < _recordView->rowCount(); ++r ) {
-			RecordViewItem* item = _recordView->itemAt(r);
-			PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-			if ( isLinkedItem(item) ) continue;
 
-			if ( !isTracePicked(item->widget()) && !label->hasGotData )
-				item->forceInvisibilty(!label->isEnabledByConfig);
-		}
-	}
+	if ( _recordView->currentItem() == NULL ) reselectCurrentItem = true;
+
+	if ( reselectCurrentItem )
+		selectFirstVisibleItem(_recordView);
 
 	_ui.actionShowUnassociatedPicks->setChecked(_config.loadAllPicks);
 
@@ -3141,7 +3408,7 @@ void PickerView::updatePhaseMarker(Seiscomp::Gui::RecordWidget* widget,
 
 	if ( _recordView->currentItem()->widget() == widget &&
 	     widget->cursorText() == "P" && marker ) {
-		RecordMarker* marker2 = widget->marker("P"THEORETICAL_POSTFIX);
+		RecordMarker* marker2 = widget->marker("P" THEORETICAL_POSTFIX);
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(marker->correctedTime() - marker2->correctedTime())));
@@ -3178,7 +3445,7 @@ void PickerView::declareArrival(RecordMarker *m_, const QString &phase,
 
 	if ( _recordView->currentItem()->widget() == w &&
 	     w->cursorText() == "P" && m ) {
-		RecordMarker* marker2 = w->marker("P"THEORETICAL_POSTFIX);
+		RecordMarker* marker2 = w->marker("P" THEORETICAL_POSTFIX);
 		if ( marker2 )
 			_recordView->currentItem()->setValue(ITEM_RESIDUAL_INDEX,
 				-fabs((double)(m->correctedTime() - marker2->correctedTime())));
@@ -3664,9 +3931,9 @@ void PickerView::loadNextStations(float distance) {
 	if ( inv != NULL ) {
 
 		for ( size_t i = 0; i < inv->networkCount(); ++i ) {
-			Network* n = inv->network(i);
+			Network *n = inv->network(i);
 			for ( size_t j = 0; j < n->stationCount(); ++j ) {
-				Station* s = n->station(j);
+				Station *s = n->station(j);
 
 				QString code = (n->code() + "." + s->code()).c_str();
 
@@ -3676,11 +3943,19 @@ void PickerView::loadNextStations(float distance) {
 					if ( s->end() <= _origin->time() )
 						continue;
 				}
-				catch ( Core::ValueException& ) {}
+				catch ( Core::ValueException & ) {}
 
-				double lat = s->latitude();
-				double lon = s->longitude();
+				double lat, lon;
 				double delta, az1, az2;
+
+				try {
+					lat = s->latitude(); lon = s->longitude();
+				}
+				catch ( Core::ValueException & ) {
+					SEISCOMP_WARNING("Station %s.%s has no valid coordinates",
+					                 n->code().c_str(), s->code().c_str());
+					continue;
+				}
 
 				Geo::delazi(_origin->latitude(), _origin->longitude(),
 				            lat, lon, &delta, &az1, &az2);
@@ -3718,9 +3993,21 @@ void PickerView::loadNextStations(float distance) {
 				}
 
 				if ( stream ) {
+					try {
+						stream->sensorLocation()->latitude();
+						stream->sensorLocation()->longitude();
+					}
+					catch ( ... ) {
+						SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+						                 stream->sensorLocation()->station()->network()->code().c_str(),
+						                 stream->sensorLocation()->station()->code().c_str(),
+						                 stream->sensorLocation()->code().c_str());
+						continue;
+					}
+
 					WaveformStreamID streamID(n->code(), s->code(), stream->sensorLocation()->code(), stream->code().substr(0,stream->code().size()-1) + '?', "");
 
-					RecordViewItem* item = addStream(stream->sensorLocation(), streamID, delta, streamID.stationCode().c_str(), false, true);
+					RecordViewItem* item = addStream(stream->sensorLocation(), streamID, delta, streamID.stationCode().c_str(), false, true, stream);
 					if ( item ) {
 						_stations.insert(code);
 						item->setVisible(!_ui.actionShowUsedStations->isChecked());
@@ -4185,9 +4472,17 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		double delta, az1, az2;
 		double elat = _origin->latitude();
 		double elon = _origin->longitude();
-		double slat = loc->latitude();
-		double slon = loc->longitude();
+		double slat, slon;
 		double salt = loc->elevation();
+
+		try {
+			slat = loc->latitude(); slon = loc->longitude();
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+			                 netCode.c_str(), staCode.c_str(), locCode.c_str());
+			return false;
+		}
 
 		Geo::delazi(elat, elon, slat, slon, &delta, &az1, &az2);
 
@@ -4298,7 +4593,7 @@ bool PickerView::addTheoreticalArrivals(RecordViewItem* item,
 		for ( int i = 0; i < item->widget()->markerCount(); ++i ) {
 			PickerMarker* m = static_cast<PickerMarker*>(item->widget()->marker(i));
 			if ( m->text() == "P" && m->isArrival() ) {
-				RecordMarker* m2 = item->widget()->marker("P"THEORETICAL_POSTFIX);
+				RecordMarker* m2 = item->widget()->marker("P" THEORETICAL_POSTFIX);
 				if ( m2 ) {
 					item->setValue(ITEM_RESIDUAL_INDEX, -fabs((double)(m->correctedTime() - m2->correctedTime())));
 					break;
@@ -4371,16 +4666,16 @@ void PickerView::addPick(Seiscomp::DataModel::Pick* pick) {
 void PickerView::setStationEnabled(const std::string& networkCode,
                                    const std::string& stationCode,
                                    bool state) {
+
 	QList<RecordViewItem*> streams = _recordView->stationStreams(networkCode, stationCode);
 	foreach ( RecordViewItem* item, streams ) {
 		PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-		label->isEnabledByConfig = state;
+		label->setConfigState(state);
 
 		// Force state to false if item has no data yet and should be hidden
-		if ( _config.hideStationsWithoutData && !label->hasGotData && !isTracePicked(item->widget()) )
-			state = false;
-
-		item->forceInvisibilty(!state);
+		item->forceInvisibilty(!isTracePicked(item->widget())
+		                    && ((_config.hideStationsWithoutData && !label->hasGotData)
+		                     || (_config.hideDisabledStations && !label->isEnabledByConfig)));
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -4407,7 +4702,7 @@ bool PickerView::addRawPick(Seiscomp::DataModel::Pick *pick) {
 	widget->insertMarker(0, marker);
 
 	try {
-		marker->setText(QString("%1"AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
+		marker->setText(QString("%1" AUTOMATIC_POSTFIX).arg(pick->phaseHint().code().c_str()));
 
 		if ( !pick->methodID().empty() ) {
 			marker->setDescription(QString("%1<%2>")
@@ -4442,14 +4737,17 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
                                       const WaveformStreamID& streamID,
                                       double distance,
                                       const std::string& text,
-                                      bool showDisabled,
-                                      bool theoreticalArrivals) {
+                                      bool /*showDisabled*/,
+                                      bool theoreticalArrivals, const Stream *base) {
+	/*
 	bool isEnabled = true;
 	if ( !showDisabled ) {
 		isEnabled = SCApp->isStationEnabled(streamID.networkCode(), streamID.stationCode());
 		if ( !isEnabled )
 			return NULL;
 	}
+	*/
+	bool isEnabled = SCApp->isStationEnabled(streamID.networkCode(), streamID.stationCode());
 
 	// HACK: Add strong motion
 	WaveformStreamID smStreamID(streamID);
@@ -4457,7 +4755,6 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 	bool hasStrongMotion = false;
 
 	if ( _config.loadStrongMotionData ) {
-
 		Station *sta = Client::Inventory::Instance()->getStation(
 			streamID.networkCode(),
 			streamID.stationCode(),
@@ -4484,19 +4781,18 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 				hasStrongMotion = true;
 			}
 		}
-
 	}
 
-	RecordViewItem *item = addRawStream(sloc, streamID, distance, text, theoreticalArrivals);
+	RecordViewItem *item = addRawStream(sloc, streamID, distance, text, theoreticalArrivals, base);
 	if ( item == NULL ) return NULL;
 
 	item->setValue(ITEM_PRIORITY_INDEX, 0);
 
 	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
-	label->isEnabledByConfig = isEnabled;
+	label->setConfigState(isEnabled);
 	label->hasGotData = false;
 
-	item->forceInvisibilty(!label->isEnabledByConfig);
+	item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
 
 	if ( hasStrongMotion ) {
 		// Try to find a corresponding StrongMotion stream and add
@@ -4505,10 +4801,10 @@ RecordViewItem* PickerView::addStream(const DataModel::SensorLocation *sloc,
 		if ( sm_item ) {
 			label = static_cast<PickerRecordLabel*>(sm_item->label());
 			label->setLinkedItem(true);
-			label->isEnabledByConfig = isEnabled;
+			label->setConfigState(isEnabled);
 			label->hasGotData = false;
 			sm_item->setValue(ITEM_PRIORITY_INDEX, 1);
-			sm_item->forceInvisibilty(!label->isEnabledByConfig);
+			sm_item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
 			sm_item->setVisible(false);
 
 			// Start showing the expandable button when the first record arrives
@@ -4677,6 +4973,16 @@ void PickerView::openContextMenu(const QPoint &p) {
 		catch ( Seiscomp::Core::ValueException& ) {}
 
 		if ( loc->start() > _origin->time() ) continue;
+
+		try {
+			loc->latitude(); loc->longitude();
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("SensorLocation %s.%s.%s has no valid coordinates",
+			                 loc->station()->network()->code().c_str(),
+			                 loc->station()->code().c_str(), loc->code().c_str());
+			continue;
+		}
 
 		for ( size_t j = 0; j < loc->streamCount(); ++j ) {
 			Stream* stream = loc->stream(j);
@@ -5019,16 +5325,31 @@ void PickerView::openConnectionInfo(const QPoint &p) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void PickerView::destroyedSpectrumWidget(QObject *o) {
+	QWidget *w = static_cast<QWidget*>(o);
+	if ( w == _spectrumView ) {
+		_spectrumView = NULL;
+		_defaultSpectrumWidgetSize = w->size();
+		_spectrumWidgetGeometry = w->saveGeometry();
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
                                          const WaveformStreamID& sid,
                                          double distance,
                                          const std::string& text,
-                                         bool theoreticalArrivals) {
+                                         bool theoreticalArrivals,
+                                         const Stream *base) {
 	WaveformStreamID streamID(sid);
 
 	// Lookup station channel mapping
 	QList<Config::ChannelMapItem> channelMapping = _config.channelMap.values((streamID.networkCode() + "." + streamID.stationCode()).c_str());
-	if ( channelMapping.isEmpty() )
+ 	if ( channelMapping.isEmpty() )
 		channelMapping = _config.channelMap.values((std::string("*.") + streamID.stationCode()).c_str());
 	if ( channelMapping.isEmpty() )
 		channelMapping = _config.channelMap.values((streamID.networkCode() + ".*").c_str());
@@ -5084,11 +5405,15 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 
 	if ( loc ) {
 		getThreeComponents(tc, loc, streamID.channelCode().substr(0, streamID.channelCode().size()-1).c_str(), _origin->time());
+
 		if ( tc.comps[ThreeComponents::Vertical] )
 			comps[0] = *tc.comps[ThreeComponents::Vertical]->code().rbegin();
 		else {
 			allComponents = false;
-			comps[0] = COMP_NO_METADATA;
+			if ( base )
+				comps[0] = *base->code().rbegin();
+			else
+				comps[0] = COMP_NO_METADATA;
 		}
 
 		if ( tc.comps[ThreeComponents::FirstHorizontal] )
@@ -6239,7 +6564,14 @@ void PickerView::pickP(bool) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::pickNone(bool) {
+	if ( _recordView->currentItem() ) {
+		// Only close widget if picking is already disabled
+		if ( _recordView->currentItem()->widget()->cursorText().isEmpty() && _spectrumView )
+			_spectrumView->close();
+	}
+
 	setCursorText("");
+
 	if ( _recordView->currentItem() )
 		_recordView->currentItem()->widget()->setCurrentMarker(NULL);
 }
@@ -6494,11 +6826,38 @@ void PickerView::automaticRepick() {
 			}
 
 			WaveformStreamID wid = _recordView->streamID(_recordView->currentItem()->row());
+			KeyValues params;
+			DataModel::ConfigModule *module = SCApp->configModule();
+			for ( size_t i = 0; i < module->configStationCount(); ++i ) {
+				DataModel::ConfigStation *station = module->configStation(i);
+				if ( station->networkCode() != wid.networkCode() ||
+				     station->stationCode() != wid.stationCode() ) continue;
+
+				DataModel::Setup *configSetup = DataModel::findSetup(station, SCApp->name(), true);
+
+				if ( configSetup ) {
+					DataModel::ParameterSet* ps = NULL;
+					try {
+						ps = DataModel::ParameterSet::Find(configSetup->parameterSetID());
+					}
+					catch ( Core::ValueException ) {
+						continue;
+					}
+
+					if ( !ps ) {
+						SEISCOMP_ERROR("Cannot find parameter set %s",
+						               configSetup->parameterSetID().c_str());
+						continue;
+					}
+
+					params.init(ps);
+				}
+			}
 
 			if ( !picker->setup(Processing::Settings(SCApp->configModuleName(),
 			                    wid.networkCode(), wid.stationCode(),
 			                    wid.locationCode(), wid.channelCode(), &SCApp->configuration(),
-			                    NULL)) ) {
+			                    &params)) ) {
 				statusBar()->showMessage("Automatic picking: unable to inialize picker");
 				return;
 			}
@@ -7027,11 +7386,11 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 	// Check for out-of-order records
 	if ( (label->data.traces[i].filter || label->data.enableTransformation) &&
 	     label->data.traces[i].raw->back() != (const Record*)rec ) {
-		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
-		               rec->networkCode().c_str(),
-		               rec->stationCode().c_str(),
-		               rec->locationCode().c_str(),
-		               rec->channelCode().c_str());
+//		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
+//		               rec->networkCode().c_str(),
+//		               rec->stationCode().c_str(),
+//		               rec->locationCode().c_str(),
+//		               rec->channelCode().c_str());
 		label->data.reset();
 	}
 	else
@@ -7043,8 +7402,10 @@ void PickerView::receivedRecord(Seiscomp::Record *rec) {
 		item->widget()->setRecordBackgroundColor(i, SCScheme.colors.records.states.inProgress);
 		label->hasGotData = true;
 
-		if ( _config.hideStationsWithoutData )
-			item->forceInvisibilty(!label->isEnabledByConfig);
+		if ( _config.hideStationsWithoutData ) {
+			if ( !isTracePicked(item->widget()) )
+				item->forceInvisibilty(!label->isEnabledByConfig && _config.hideDisabledStations);
+		}
 
 		// If this item is linked to another item, enable the expand button of
 		// the controller
@@ -7266,7 +7627,7 @@ void PickerView::addStations() {
 
 			RecordViewItem* item = addStream(stream->sensorLocation(), streamID,
 			                                 delta, streamID.stationCode().c_str(),
-			                                 false, true);
+			                                 false, true, stream);
 			if ( item ) {
 				_stations.insert(code);
 				item->setVisible(!_ui.actionShowUsedStations->isChecked());
@@ -7442,6 +7803,9 @@ void PickerView::setPick() {
 		onSelectedTime(item->widget(), item->widget()->cursorPos());
 		onSelectedTime(_currentRecord, _currentRecord->cursorPos());
 	}
+	else
+		// Only show spectrum if picking is not enabled
+		showSpectrum();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -7707,7 +8071,60 @@ void PickerView::showSpectrogram(bool v) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void PickerView::showSpectrum() {
-	//
+	RecordViewItem *item = _recordView->currentItem();
+	if ( !item ) return;
+
+	PickerRecordLabel *label = static_cast<PickerRecordLabel*>(item->label());
+
+	if ( (_currentSlot < 0) || (_currentSlot > 2) ) {
+		statusBar()->showMessage(tr("Error: invalid component selected"));
+		return;
+	}
+
+	RecordSequence *seq = label->data.traces[_currentSlot].filter ? label->data.traces[_currentSlot].transformed : label->data.traces[_currentSlot].raw;
+	if ( !seq ) {
+		statusBar()->showMessage(tr("Error: cannot show spectrum, no data for current slot"));
+		return;
+	}
+
+	Core::TimeWindow tw = _currentRecord->visibleTimeWindow();
+	GenericRecordPtr trace = seq->continuousRecord<double>(&tw);
+	if ( !trace ) {
+		statusBar()->showMessage(tr("Error: failed to extract trace for spectrum"));
+		return;
+	}
+
+	Processing::Stream tmp;
+	tmp.init(trace->networkCode(), trace->stationCode(), trace->locationCode(), trace->channelCode(), trace->startTime());
+
+	// Correct for gain if given
+	if ( tmp.gain > 0.0 )
+		tmp.applyGain(*static_cast<DoubleArray*>(trace->data()));
+
+	// Remove mean
+	*static_cast<DoubleArray*>(trace->data()) -= static_cast<DoubleArray*>(trace->data())->mean();
+
+	if ( _spectrumView != NULL ) {
+		_spectrumView->setWindowTitle(tr("Spectrum of %1").arg(trace->streamID().c_str()));
+		static_cast<SpectrumView*>(_spectrumView)->setData(trace.get(), tmp.sensor());
+		return;
+	}
+
+	SpectrumView *spectrumView = new SpectrumView(this, Qt::Tool);
+	_spectrumView = spectrumView;
+
+	spectrumView->setAttribute(Qt::WA_DeleteOnClose);
+	spectrumView->setWindowTitle(tr("Spectrum of %1").arg(trace->streamID().c_str()));
+
+	connect(spectrumView, SIGNAL(destroyed(QObject*)), this, SLOT(destroyedSpectrumWidget(QObject*)));
+
+	spectrumView->setData(trace.get(), tmp.sensor());
+
+	if ( _spectrumWidgetGeometry.isEmpty() )
+		spectrumView->resize(_defaultSpectrumWidgetSize);
+	else
+		spectrumView->restoreGeometry(_spectrumWidgetGeometry);
+	spectrumView->show();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

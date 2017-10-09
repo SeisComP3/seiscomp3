@@ -21,7 +21,7 @@ distclean:
 		( $(MAKE) -C $$dir distclean); \
 	done
 	rm -f config.cache config.log core
-	rm -rf autom4te.cache
+	rm -rf autom4te.cache lib/win32
 	rm -f Makefile config.h config.status *~
 
 veryclean: distclean

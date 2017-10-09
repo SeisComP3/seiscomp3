@@ -216,7 +216,7 @@ int unpack_steim1
 		    "Data integrity for STEIM1 data frame",
 		    last_data, *pxn);
 	    if (p_errmsg) *p_errmsg = errmsg;
-	    else fprintf (info, errmsg);
+	    else fprintf (info, "%s", errmsg);
 	    return (MS_ERROR);
 	}
     }
@@ -316,7 +316,7 @@ int unpack_steim2
 		    sprintf (errmsg, "invalid ck, dnib, fn, wn = %d, %d, %d, %d\n", 
 			     c, dnib, fn, wn);
 		    if (p_errmsg) *p_errmsg = errmsg;
-		    else fprintf (info, errmsg);
+		    else fprintf (info, "%s", errmsg);
 		    return(MS_ERROR);
 		    break;
 		}
@@ -342,7 +342,7 @@ int unpack_steim2
 		    sprintf (errmsg, "invalid ck, dnib, fn, wn = %d, %d, %d, %d\n",
 			     c, dnib, fn, wn);
 		    if (p_errmsg) *p_errmsg = errmsg;
-		    else fprintf (info, errmsg);
+		    else fprintf (info, "%s", errmsg);
 		    return(MS_ERROR);
 		    break;
 		}
@@ -403,7 +403,7 @@ int unpack_steim2
 		    "Data integrity for STEIM2 data frame",
 		    last_data, *pxn);
 	    if (p_errmsg) *p_errmsg = errmsg;
-	    else fprintf (info, errmsg);
+	    else fprintf (info, "%s", errmsg);
 	    return (MS_ERROR);
 	    }
     }

@@ -19,6 +19,7 @@
 #define __SEISCOMP_DATAMODEL_CONFIGSTATION_H__
 
 
+#include <seiscomp3/datamodel/creationinfo.h>
 #include <vector>
 #include <string>
 #include <seiscomp3/datamodel/setup.h>
@@ -135,6 +136,11 @@ class SC_SYSTEM_CORE_API ConfigStation : public PublicObject {
 		void setEnabled(bool enabled);
 		bool enabled() const;
 
+		//! CreationInfo for the ConfigStation object.
+		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
+
 
 	// ------------------------------------------------------------------
 	//  Index management
@@ -215,6 +221,7 @@ class SC_SYSTEM_CORE_API ConfigStation : public PublicObject {
 
 		// Attributes
 		bool _enabled;
+		OPT(CreationInfo) _creationInfo;
 
 		// Aggregations
 		std::vector<SetupPtr> _setups;

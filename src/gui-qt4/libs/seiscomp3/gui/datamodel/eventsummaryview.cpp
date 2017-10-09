@@ -1642,7 +1642,7 @@ void EventSummaryView::setOrigin(Seiscomp::DataModel::Origin* origin) {
 	}
 
 
-	ui._lbOriginTime->setText(_currentOrigin->time().value().toString("%F %T UTC").c_str());
+	timeToLabel(ui._lbOriginTime, _currentOrigin->time().value(), "%F %T", true);
 
 	try {
 		uiHypocenter._lbOriginStatus->setText(_currentOrigin->evaluationMode().toString());
@@ -1808,7 +1808,7 @@ void EventSummaryView::setAutomaticOrigin(DataModel::Origin* origin) {
 	}
 
 
-	ui._lbOriginTimeAutomatic->setText(origin->time().value().toString("%F %T UTC").c_str());
+	timeToLabel(ui._lbOriginTimeAutomatic, origin->time().value(), "%F %T", true);
 
 	try {
 		uiHypocenter._lbOriginStatusAutomatic->setText(origin->evaluationMode().toString());
@@ -2283,37 +2283,37 @@ void EventSummaryView::deferredMapUpdate(){
 void EventSummaryView::updateMap(bool realignView){
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-		if ( !_currentOrigin->arrivalCount() && _reader )
-			_reader->loadArrivals(_currentOrigin.get());
+	if ( _currentOrigin && !_currentOrigin->arrivalCount() && _reader )
+		_reader->loadArrivals(_currentOrigin.get());
 
-		_map->setOrigin(_currentOrigin.get());
+	_map->setOrigin(_currentOrigin.get());
 
-		if ( realignView ) {
-			if ( _recenterMap ) {
-				double radius = 30;
-				try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
-				catch ( ... ) {}
-				_map->canvas().displayRect(QRectF(_currentOrigin->longitude()-radius, _currentOrigin->latitude()-radius, radius*2, radius*2));
-			}
-			else {
-				if ( !_map->canvas().isVisible(_currentOrigin->longitude(), _currentOrigin->latitude()) ) {
-					_map->canvas().setView(QPointF(_currentOrigin->longitude(), _currentOrigin->latitude()), _map->canvas().zoomLevel());
-				}
+	if ( _currentOrigin && realignView ) {
+		if ( _recenterMap ) {
+			double radius = 30;
+			try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
+			catch ( ... ) {}
+			_map->canvas().displayRect(QRectF(_currentOrigin->longitude()-radius, _currentOrigin->latitude()-radius, radius*2, radius*2));
+		}
+		else {
+			if ( !_map->canvas().isVisible(_currentOrigin->longitude(), _currentOrigin->latitude()) ) {
+				_map->canvas().setView(QPointF(_currentOrigin->longitude(), _currentOrigin->latitude()), _map->canvas().zoomLevel());
 			}
 		}
+	}
 
-		if ( _displayFocMechs ) {
-			if ( _currentFocalMechanism )
-				showFocalMechanism(_currentFocalMechanism.get(), -80, -80, palette().color(QPalette::WindowText));
+	if ( _displayFocMechs ) {
+		if ( _currentFocalMechanism )
+			showFocalMechanism(_currentFocalMechanism.get(), -80, -80, palette().color(QPalette::WindowText));
 
-			// Only show the last automatic solution if there is a preferred
-			// solution and if both are different
-			if ( _lastAutomaticFocalMechanism && _currentFocalMechanism &&
-				 _lastAutomaticFocalMechanism != _currentFocalMechanism )
-				showFocalMechanism(_lastAutomaticFocalMechanism.get(), 80, -80, _automaticOriginEnabledColor);
-		}
+		// Only show the last automatic solution if there is a preferred
+		// solution and if both are different
+		if ( _lastAutomaticFocalMechanism && _currentFocalMechanism &&
+			 _lastAutomaticFocalMechanism != _currentFocalMechanism )
+			showFocalMechanism(_lastAutomaticFocalMechanism.get(), 80, -80, _automaticOriginEnabledColor);
+	}
 
-		_map->update();
+	_map->update();
 
 	QApplication::restoreOverrideCursor();
 }
@@ -2515,7 +2515,7 @@ void EventSummaryView::clearOriginParameter(){
 	uiHypocenter._lbLongError->setText(QString("+/-%1 km").arg(0.0, 6, 'f', 0));
 	uiHypocenter._lbDepthError->setText(QString("+/-%1 km").arg(0.0, 6, 'f', 0));
 
-	ui._lbOriginTime->setText("0000/00/00  00:00:00 UTC");
+	ui._lbOriginTime->setText("0000/00/00  00:00:00");
 	ui._lbTimeAgo->setVisible(false);
 
 	ui._lbRegion->setText(""); ui._lbRegion->setVisible(false);
@@ -2540,7 +2540,7 @@ void EventSummaryView::clearOriginParameter(){
 void EventSummaryView::clearAutomaticOriginParameter() {
 	setLastAutomaticOriginColor(_automaticOriginDisabledColor);
 
-	ui._lbOriginTimeAutomatic->setText("0000/00/00  00:00:00 UTC");
+	ui._lbOriginTimeAutomatic->setText("0000/00/00  00:00:00");
 	uiHypocenter._lbLatitudeAutomatic->setText("---.--");
 	uiHypocenter._lbLatitudeUnitAutomatic->setText("");
 	uiHypocenter._lbLongitudeAutomatic->setText("---.--");
@@ -2791,7 +2791,7 @@ void EventSummaryView::switchToAutomaticPressed() {
 	NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 	NotifierMessagePtr nm = new NotifierMessage;
 	nm->attach(n.get());
-	SCApp->sendMessage("EVENT", nm.get());
+	SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get());
 }
 
 
@@ -2880,16 +2880,6 @@ bool EventSummaryView::checkAndDisplay(DataModel::Event *e) {
 
 	processEventMsg(e);
 	return true;
-}
-
-
-namespace {
-
-bool lessThan(const std::pair<Seiscomp::DataModel::StationPtr, double>& op1,
-              const std::pair<Seiscomp::DataModel::StationPtr, double>& op2) {
-	return op1.second < op2.second;
-}
-
 }
 
 

@@ -9,9 +9,7 @@ static	char	SccsId[] = "@(#)htoe.c	44.1	9/23/91";
 #include "csstime.h"
 static int days_in_month[] = {31,28,31,30,31,30,31,31,30,31,30,31,31};
 
-htoe(dt)
-register struct date_time *dt;
-{
+int htoe(register struct date_time *dt) {
 	double dtoepoch();
 	dt->epoch = 
 	dtoepoch(dt->date) + 
@@ -20,9 +18,8 @@ register struct date_time *dt;
 	dt->second;
 	return(0);
 }
-timeprint(dt)
-register struct date_time *dt;
-{
+
+int timeprint(register struct date_time *dt) {
 	printf("%15.3lf %8d %s %2d,%4d %2d:%02d:%02.3f\n",
 	dt->epoch,
 	dt->date,
@@ -34,18 +31,16 @@ register struct date_time *dt;
 	dt->second);
 	return(0);
 }
-zh_today(dt)
-register struct date_time *dt;
-{
+
+int zh_today(register struct date_time *dt) {
 	double dtoepoch();
 	long todaysdate();
 	dt->epoch = dtoepoch( todaysdate());
 	etoh(dt);
 	return(0);
 }
-mdtodate(dt)
-register struct date_time *dt;
-{
+
+int mdtodate(register struct date_time *dt) {
 	int i,dim;
 	dt->doy = 0;
 	for( i = 0 ; i < dt->month - 1 ; i++ ){

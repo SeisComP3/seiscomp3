@@ -24,16 +24,6 @@ QcProcessorObserver::QcProcessorObserver() {}
 IMPLEMENT_SC_CLASS(QcParameter, "QcParameter");
 IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(QcProcessor, WaveformProcessor, "QcProcessor");
 
-// QcParameter::QcParameter() 
-//     : recordSampleCount(0), recordSamplingFrequency(0) {}
-
-// Core::Time QcParameter::recordEndTime() throw (Core::ValueException) {
-//     if (recordStartTime != Core::Time() && recordSampleCount && recordSamplingFrequency > 0.0) {
-//         return(recordStartTime + Core::Time(recordSampleCount / recordSamplingFrequency));
-//     }
-
-//     throw (Core::ValueException);
-// }
 
 QcProcessor::QcProcessor(const Core::TimeSpan &deadTime,
 						const Core::TimeSpan &gapThreshold) 
@@ -79,21 +69,22 @@ QcParameter* QcProcessor::getState() const {
 
 
 void QcProcessor::process(const Record *record, const DoubleArray &data) {
-	if (!record) return;
+	if ( !record ) return;
 
 	_qcp = new QcParameter;
-	_setFlag = false;    
+	_setFlag = false;
 
-	if ((record->samplingFrequency() > 0.0) && (data.size() > 0)) {
+	if ( (record->samplingFrequency() > 0.0) && (data.size() > 0) ) {
 		_qcp->recordStartTime = record->startTime();
 		_qcp->recordEndTime = record->endTime();
 		_qcp->recordSamplingFrequency = record->samplingFrequency();
 
 		_setFlag = true;
 		_validFlag = setState(record,data);
-	} 
+	}
 	
-	for (std::deque<QcProcessorObserver *>::iterator it = _observers.begin(); it != _observers.end(); ++it)
+	for ( std::deque<QcProcessorObserver *>::iterator it = _observers.begin();
+	      it != _observers.end(); ++it )
 		(*it)->update();
 }
 

@@ -12,12 +12,18 @@
 
 
 #define SEISCOMP_COMPONENT Utils
+
+#include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
+
 #include <sstream>
 #include <iostream>
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <cerrno>
 
@@ -28,9 +34,9 @@ namespace Core {
 
 namespace {
 
-const char* timeFormat = "%FT%T.0000Z";
-const char* timeFormatPrecise = "%FT%T.%fZ";
-const char* timeFormat2 = "%FT%TZ";
+const char *timeFormat = "%FT%T.0000Z";
+const char *timeFormatPrecise = "%FT%T.%fZ";
+const char *timeFormat2 = "%FT%TZ";
 
 }
 
@@ -313,6 +319,55 @@ bool fromString(std::string& value, const std::string& str) {
 }
 
 
+std::string stringify(const char* fmt, ...) {
+	// A static buffer that hopefully covers 99% of all use cases
+	char staticBuffer[64];
+
+	// The dynamic buffer that will be used if the static buffer is
+	// not large enough
+	char* dynamicBuffer = NULL;
+
+	// The buffer actually written to
+	char *buffer = staticBuffer;
+	int size = sizeof(staticBuffer);
+	int nsize;
+	va_list params;
+	int maxIterations = 10;
+
+	va_start(params, fmt);
+	nsize = vsnprintf(buffer, size, fmt, params);
+
+	while ( nsize > size ) { //fail -> create dynamic buffer with more space
+		if ( dynamicBuffer != NULL )
+			delete [] dynamicBuffer;
+
+		dynamicBuffer = new char[nsize + 1]; //+1 for /0
+		size = nsize+1;
+		buffer = dynamicBuffer;
+
+		va_end(params);
+		va_start(params, fmt);
+		nsize = vsnprintf(buffer, size, fmt, params);
+
+		--maxIterations;
+		if ( !maxIterations ) {
+			SEISCOMP_ERROR("Stringify failed after 10 iterations: buffer still not large enough: %d < %d: aborting",
+			               size, nsize);
+			*buffer = '\0';
+			break;
+		}
+	}
+
+	std::string ret(buffer);
+	va_end(params);
+
+	if ( dynamicBuffer != NULL )
+		delete [] dynamicBuffer;
+
+	return ret;
+}
+
+
 int split(std::vector<std::string>& tokens, const char* source, const char* delimiter, bool compressOn) {
 	boost::split(tokens, source, boost::is_any_of(delimiter),
 	             ((compressOn) ? boost::token_compress_on : boost::token_compress_off));
@@ -343,14 +398,16 @@ int compareNoCase(const std::string& a, const std::string& b) {
 
 
 std::string& trim(std::string& str) {
-// 	const char whitespace[] = "\t\n\v\f\r ";
-//
-// 	std::string::size_type pos;
-// 	pos = str.find_first_not_of(whitespace);
-// 	if (pos != 0) str.erase(0, pos);
-//
-// 	pos = str.find_last_not_of(whitespace);
-// 	if (pos != std::string::npos) str.erase(pos + 1, std::string::npos);
+	/*
+	const char whitespace[] = "\t\n\v\f\r ";
+
+	std::string::size_type pos;
+	pos = str.find_first_not_of(whitespace);
+	if (pos != 0) str.erase(0, pos);
+
+	pos = str.find_last_not_of(whitespace);
+	if (pos != std::string::npos) str.erase(pos + 1, std::string::npos);
+	*/
 	boost::trim(str);
 	return str;
 }

@@ -1,6 +1,6 @@
-scesv is the the summary display of the event parameters. It shows the primary information
+scesv is the summary display of the event parameters. It shows the primary information
 about the current event including location, time, strength, type and processing status.
-Additional to the current event also older events can be chosen from the eventlist in the
+Additional to the current event older events can also be chosen from the eventlist in the
 events tab.
 
 The two tabs of scesv are shown in :ref:`fig-events` and :ref:`fig-summary`.

@@ -51,14 +51,16 @@ class SC_GUI_API ConnectionDialog : public QDialog {
 
 		bool setMessagingEnabled(bool);
 
-		bool setDatabaseParameters(const QString& uri);
-		bool setDatabaseParameters(const QString& type, const QString& connection);
+		bool setDatabaseParameters(const QString &uri);
+		bool setDatabaseParameters(const QString &type, const QString &connection);
+
+		bool setDefaultDatabaseParameters(const QString &uri);
+		bool setDefaultDatabaseParameters(const QString &type, const QString &connection);
 
 		std::string databaseURI() const;
 
 		bool connectToMessaging();
 		bool connectToDatabase();
-		bool fetchDatabase();
 
 		bool hasConnectionChanged() const;
 		bool hasDatabaseChanged() const;
@@ -87,7 +89,7 @@ class SC_GUI_API ConnectionDialog : public QDialog {
 	// ------------------------------------------------------------------
 	protected slots:
 		void onConnect();
-		void onFetch();
+		void onSwitchToReported();
 		void onDatabaseConnect();
 		void onItemChanged(QListWidgetItem *item);
 		void onSelectAll();
@@ -102,11 +104,15 @@ class SC_GUI_API ConnectionDialog : public QDialog {
 		Seiscomp::Communication::ConnectionPtr* _connection;
 		Seiscomp::IO::DatabaseInterfacePtr* _db;
 		QStringList _requestedGroups;
+
 		bool _requestAllGroups;
 		bool _messagingEnabled;
 
 		bool _changedDatabase;
 		bool _changedConnection;
+
+		QString _reportedDbType;
+		QString _reportedDbParameters;
 };
 
 

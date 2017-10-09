@@ -83,7 +83,10 @@ HCApp::~HCApp() {
 	for ( it = _helis.begin(); it != _helis.end(); ++it )
 		delete it.value().canvas;
 
-	if ( _streamThread ) delete _streamThread;
+	if ( _streamThread ) {
+		_streamThread->stop(true);
+		delete _streamThread;
+	}
 }
 
 
@@ -303,7 +306,7 @@ bool HCApp::run() {
 		Core::Time endTime = _endTime.valid()?_endTime:Core::Time::GMT();
 
 		for ( size_t i = 0; i < _streamCodes.size(); ++i ) {
-			HeliCanvas *heli = new HeliCanvas;
+			HeliCanvas *heli = new HeliCanvas();
 			_helis[_streamCodes[i]] = heli;
 
 			heli->setAntialiasingEnabled(_antialiasing);
@@ -319,8 +322,6 @@ bool HCApp::run() {
 				colors.append(SCScheme.colors.records.alternateForeground);
 				heli->setRowColors(colors);
 			}
-
-
 
 			if ( !_filterString.empty() )
 				if ( !heli->setFilter(_filterString) ) {

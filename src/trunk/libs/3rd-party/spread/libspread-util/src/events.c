@@ -69,6 +69,9 @@
 #include "spu_memory.h"     /* for memory */
 #include "spu_alarm.h"
 
+#define SPU_EVENTS_EXIT_NORMAL     1
+#define SPU_EVENTS_EXIT_ASYNC_SAFE 2
+
 typedef	struct dummy_t_event {
 	sp_time		t;
 	void		(* func)( int code, void *data );
@@ -177,8 +180,8 @@ sp_time	E_get_time(void)
 
 	_ftime( &timebuffer );
 
-	t.sec   = timebuffer.time;
-	t.usec  = timebuffer.millitm;
+	t.sec   = (long) timebuffer.time;
+	t.usec  = (long) timebuffer.millitm;
 	t.usec *= 1000;	
 
 #endif	/* ARCH_PC_WIN95 */
@@ -617,7 +620,7 @@ int	E_attach_fd( int fd, int fd_type,
 
 int 	E_detach_fd( int fd, int fd_type )
 {
-	int	i,j;
+	int	i;
 	int	found;
 
 	if( fd_type < 0 || fd_type > NUM_FDTYPES )
@@ -628,21 +631,45 @@ int 	E_detach_fd( int fd, int fd_type )
 
 	found = 0;
 	for( i=0; i < NUM_PRIORITY; i++ )
-	    for( j=0; j < Fd_queue[i].num_fds; j++ )
+        {
+            if( E_detach_fd_priority( fd, fd_type, i ) == 0 )
+            {
+                found = 1;
+            }
+	}
+
+	if( ! found ) return( -1 );
+
+	return( 0 );
+}
+
+int 	E_detach_fd_priority( int fd, int fd_type, int priority )
+{
+	int	i;
+	int	found;
+
+	if( fd_type < 0 || fd_type > NUM_FDTYPES )
+	{
+		Alarm( PRINT, "E_detach_fd: invalid fd_type %d for fd %d\n", fd_type, fd );
+		return( -1 );
+	}
+
+	found = 0;
+	for( i=0; i < Fd_queue[priority].num_fds; i++ )
+	{
+	    if( ( Fd_queue[priority].events[i].fd == fd ) && ( Fd_queue[priority].events[i].fd_type == fd_type ) )
 	    {
-		if( ( Fd_queue[i].events[j].fd == fd ) && ( Fd_queue[i].events[j].fd_type == fd_type ) )
-		{
-                        if (Fd_queue[i].events[j].active)
-                                Fd_queue[i].num_active_fds--;
-			Fd_queue[i].num_fds--;
-			Fd_queue[i].events[j] = Fd_queue[i].events[Fd_queue[i].num_fds];
+                    if (Fd_queue[priority].events[i].active)
+                            Fd_queue[priority].num_active_fds--;
+	            Fd_queue[priority].num_fds--;
+		    Fd_queue[priority].events[i] = Fd_queue[priority].events[Fd_queue[priority].num_fds];
 
-			FD_CLR( fd, &Fd_mask[fd_type] );
-			found = 1;
+		    FD_CLR( fd, &Fd_mask[fd_type] );
+		    found = 1;
 
-			break; /* from the j for only */
-		}
-	    }
+		    break;
+            }
+	}
 
 	if( ! found ) return( -1 );
 
@@ -981,11 +1008,19 @@ static	const sp_time		mili_sec 	= {     0, 1000};
      * in the for loop.
      */
 
+    if (Exit_events == SPU_EVENTS_EXIT_ASYNC_SAFE) 
+        Alarm(EVENTS, "E_handle_events: exiting due to call to E_exit_events_async_safe() (e.g. - signal handler)\n");
+
     return;
 }
 
 void 	E_exit_events(void)
 {
 	Alarm( EVENTS, "E_exit_events:\n");
-	Exit_events = 1;
+	Exit_events = SPU_EVENTS_EXIT_NORMAL;
+}
+
+void    E_exit_events_async_safe(void)
+{
+        Exit_events = SPU_EVENTS_EXIT_ASYNC_SAFE;
 }

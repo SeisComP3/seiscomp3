@@ -20,7 +20,7 @@
 namespace Seiscomp {
 namespace RecordStream {
 
-class SC_SYSTEM_CORE_API StreamIdx  {
+class SC_SYSTEM_CORE_API StreamIdx {
 	public:
 		StreamIdx();
 

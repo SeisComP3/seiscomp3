@@ -82,6 +82,14 @@
 				connection with a large request.
 				</description>
 			</parameter>
+			<parameter name="recordBulkSize" type="int" default="102400" unit="bytes">
+				<description>
+				Set the number of bytes to buffer for each chunk of waveform data
+				served to the client. The lower the buffer the higher the overhead
+				of Python Twisted. The higher the buffer the higher the memory
+				usage per request. 100kB seems to be a good trade-off.
+				</description>
+			</parameter>
 			<parameter name="htpasswd" type="string" default="@CONFIGDIR@/fdsnws.htpasswd">
 				<description>
 				Path to password file used in fdsnws-station/queryauth. The
@@ -98,6 +106,13 @@
 			<parameter name="allowRestricted" type="boolean" default="true">
 				<description>
 				Enables/disables access to restricted inventory data.
+				</description>
+			</parameter>
+			<parameter name="useArclinkAccess" type="boolean" default="false">
+				<description>
+				If enabled, then access to restricted waveform data is controlled
+				by arclink-access bindings. By default authenticated users have
+				access to all data.
 				</description>
 			</parameter>
 			<parameter name="hideAuthor" type="boolean" default="false">
@@ -118,6 +133,12 @@
 					<description>List of disabled event types</description>
 				</parameter>
 			</group>
+			<parameter name="eventFormats" type="list:string">
+				<description>
+				List of enabled event formats. If unspecified all supported
+				formats are enabled.
+				</description>
+			</parameter>
 			<parameter name="serveDataSelect" type="boolean" default="true">
 				<description>
 				Enables/disables the DataSelect service.
@@ -155,6 +176,35 @@
 				For data loaded using dataselect, it is thus fdsnws.mseed by default.
 				</description>
 			</parameter>
+			<group name="trackdb">
+				<parameter name="enable" type="boolean" default="false">
+					<description>
+					Save request log to database.
+					</description>
+				</parameter>
+				<parameter name="defaultUser" type="string" default="fdsnws">
+					<description>
+					Default user.
+					</description>
+				</parameter>
+			</group>
+			<group name="auth">
+				<parameter name="enable" type="boolean" default="false">
+					<description>
+					Enable auth extension.
+					</description>
+				</parameter>
+				<parameter name="gnupgHome" type="string" default="@ROOTDIR@/var/lib/gpg">
+					<description>
+					GnuPG home directory.
+					</description>
+				</parameter>
+				<parameter name="blacklist" type="list:string">
+					<description>
+					List of revoked token IDs.
+					</description>
+				</parameter>
+			</group>
 		</configuration>
 	</module>
 </seiscomp>

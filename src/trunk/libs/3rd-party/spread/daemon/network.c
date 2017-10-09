@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -61,12 +62,6 @@ static	int16		Bcast_port;
 static	int		Num_send_needed;
 static  int32		Send_address[MAX_SEGMENTS];
 static	int16		Send_ports[MAX_SEGMENTS];
-
-/* ### Pack: 3 lines */
-/* Global in function so both Net_queue_bcast and Net_flush_bcast can access them */
-static  sys_scatter     Queue_scat;
-static  int             Queued_bytes = 0;
-static  const char      align_padding[4] = "padd";
 
 /* address for token sending - which is always needed */
 static	int32		Token_address;
@@ -172,9 +167,10 @@ void	Net_set_membership( configuration memb )
 	Net_membership = memb;
 	my_seg = Net_membership.segments[My.seg_index];
 	my_index_in_seg = Conf_id_in_seg( &my_seg, My.id );
-	if( my_index_in_seg < 0 )
-		Alarm( EXIT,"Net_set_membership: I am not in membership %c",
-			Conf_print( &Net_membership ) );
+	if( my_index_in_seg < 0 ) {
+		Conf_print( &Net_membership );
+		Alarm( EXIT, "Net_set_membership: I am not in membership\n" );
+	}
 	else if( my_index_in_seg == 0) {
 		Segment_leader = 1;
 		Alarm( NETWORK,"Net_set_membership: I am a Segment leader\n");
@@ -276,114 +272,6 @@ int	Net_bcast( sys_scatter *scat )
 	return( ret );
 }
 
-/* ### Pack: 2 routines */
-int	Net_queue_bcast( sys_scatter *scat )
-{
-	packet_header	*pack_ptr;
-        int             new_bytes;
-	int 		i, j;
-        int             ret;
-        int             align_bytes, align_num_scatter;
-
-        /* This line is redundent because of static initialization to 0 */
-        if ( Queued_bytes == 0 ) Queue_scat.num_elements = 0;
-
-        ret = 0;
-        new_bytes = 0;
-
-        for ( i=0; i < scat->num_elements; i++) {
-                new_bytes += scat->elements[i].len;
-        }
-        /* Fix alignment of packed messages  so they will each begin on a 4 byte alignment 
-         * This is needed for Sparc, might need enhancement if other archs 
-         * have more extensive alignement rules
-         */
-        align_bytes = 0;
-        align_num_scatter = 0;
-        switch(Queued_bytes % 4) {
-        case 1:
-                align_bytes++;
-        case 2:
-                align_bytes++;
-        case 3:
-                align_bytes++;
-                align_num_scatter = 1;
-        case 0:
-                /* nothing since already aligned */
-                break; 
-        }
-
-        if ( ( (Queued_bytes + new_bytes + align_bytes)  >  MAX_PACKET_SIZE ) ||
-             ( (Queue_scat.num_elements + scat->num_elements + align_num_scatter) > ARCH_SCATTER_SIZE ) )
-        {
-                ret = Net_flush_bcast();
-                align_bytes = 0;
-                align_num_scatter = 0;
-        }
-
-        if ( Queued_bytes == 0 ) {
-                /* routing on channels if needed according to membership */
-                pack_ptr = (packet_header *)scat->elements[0].buf;
-                pack_ptr->type  = Set_routed( pack_ptr->type );
-                pack_ptr->type  = Set_endian( pack_ptr->type );
-                pack_ptr->conf_hash = Cn->hash_code;
-                pack_ptr->transmiter_id = My.id;
-        }
-
-        if ( align_bytes > 0 )
-        {
-                Queue_scat.elements[Queue_scat.num_elements].len = align_bytes;
-                Queue_scat.elements[Queue_scat.num_elements].buf = (char *)align_padding;
-
-                Queued_bytes += align_bytes;
-                Queue_scat.num_elements += 1;
-                Alarm(NETWORK, "Net_queue_bcast: Inserted padding of %d bytes to message of size %d\n", align_bytes, new_bytes );
-        }
-
-        /* Add new packet to Queue_scat to be sent as packed packet */
-        for ( i=0, j=Queue_scat.num_elements; i < scat->num_elements; i++, j++) {
-                Queue_scat.elements[j].len = scat->elements[i].len;
-                Queue_scat.elements[j].buf = scat->elements[i].buf;
-        }
-        Queued_bytes += new_bytes;
-        Queue_scat.num_elements += scat->num_elements ;
-        
-	return( ret );
-}
-
-int     Net_flush_bcast(void)
-{
-        packet_header   *pack_ptr;
-        int             i;
-        int             ret;
-
-        if (Queued_bytes == 0 ) return( 0 );
-        
-        Alarm(NETWORK, "Net_flush_bcast: Flushing with Queued_bytes = %d; num_elements in scat = %d; size of scat0,1 = %d %d\n", Queued_bytes, Queue_scat.num_elements, Queue_scat.elements[0].len, Queue_scat.elements[1].len);
-        
-        ret = 0;
-
-        for ( i=0; i< Num_send_needed; i++ )
-        {
-                ret = DL_send( Send_channel, Send_address[i], Send_ports[i], &Queue_scat );
-        }
-        pack_ptr = (packet_header *)Queue_scat.elements[0].buf; 
-	pack_ptr->type = Clear_routed( pack_ptr->type );
-
-        /* broadcasting if needed according to configuration */
-        if( Bcast_needed )
-        {	
-                ret = DL_send( Send_channel, Bcast_address, Bcast_port, &Queue_scat );
-        }
-
-        if( !Bcast_needed && (Num_send_needed == 0) )
-            ret = 1; /* No actual send is needed, but 'packet' can be considered 'sent' */
-
-        Queue_scat.num_elements = 0;
-        Queued_bytes = 0;
-        return( ret );
-}
-
 int	Net_scast( int16 seg_index, sys_scatter *scat )
 {
 	packet_header	*pack_ptr;
@@ -446,9 +334,7 @@ int	Net_recv ( channel fd, sys_scatter *scat )
 static	scatter		save;
 	packet_header	*pack_ptr;
 	int		bytes_left;
-	int		received_bytes, body_offset;
-	int		processed_bytes;
-	int		pack_same_endian;
+	int		received_bytes;
 	int		i;
         bool            ch_found;
 
@@ -476,7 +362,7 @@ static	scatter		save;
 		return( -1 );
 	}
 
-	/* Fliping packet header to my form if needed */
+	/* Flipping packet header to my form if needed */
 	if( !Same_endian( pack_ptr->type ) ) Flip_pack( pack_ptr );
 
         /* First reject any message whose daemon has a different configuration */
@@ -529,6 +415,13 @@ static	scatter		save;
 	if( pack_ptr->transmiter_id == My.id )
 		return( 0 );
 
+        /* packet validity check */
+	if( received_bytes != sizeof( packet_header ) + pack_ptr->data_len) {
+                Alarm( PRINT, "Net_recv: Received invalid packet - received bytes (%d) != expected length (%d)\n", 
+                       received_bytes, sizeof( packet_header ) + pack_ptr->data_len );
+                return( -1 );
+        }
+
 	if( Bcast_needed && Is_routed( pack_ptr->type ) )
 	{
 		if( !Segment_leader ) Alarm( NETWORK, 
@@ -537,7 +430,7 @@ static	scatter		save;
 
 		/* saving scat lens for another DL_recv */
 		save.num_elements = scat->num_elements;
-		for( i=0; i < save.num_elements; i++ )
+		for( i=0; i < (int) save.num_elements; i++ )
 			save.elements[i].len = scat->elements[i].len;
 
 		/* computing true scat lens for sending */
@@ -545,7 +438,7 @@ static	scatter		save;
 		i = 0;
 		while ( bytes_left > 0 )
 		{
-			if( bytes_left < scat->elements[i].len )
+			if( bytes_left < (int) scat->elements[i].len )
 				scat->elements[i].len = bytes_left;
 			bytes_left -=  scat->elements[i].len;			
 			i ++;
@@ -563,7 +456,7 @@ static	scatter		save;
 
 		/* restoring scat lens for another DL_recv */
 		scat->num_elements = save.num_elements;
-		for( i=0; i < save.num_elements; i++ )
+		for( i=0; i < (int) save.num_elements; i++ )
 			scat->elements[i].len = save.elements[i].len;
 
 	}
@@ -575,80 +468,45 @@ static	scatter		save;
 	 */
 	pack_ptr->type = Clear_routed ( pack_ptr->type );
 
-	/* 
-	 * Check validity of packet size and flip every packet header 
-	 * other than first header (which is already flipped).
-	 * If packet size is not valid, return -1, otherwise 
-	 * return size of received packet.
-	 */
-	processed_bytes = sizeof( packet_header ) + pack_ptr->data_len;
-	pack_same_endian = Same_endian( pack_ptr->type );
-        /* ignore any alignment padding */
-        if ( processed_bytes < received_bytes ) {
-                switch(processed_bytes % 4)
-                {
-                case 1:
-                        processed_bytes++;
-                case 2:
-                        processed_bytes++;
-                case 3:
-                        processed_bytes++;
-                case 0:
-                        /* already aligned */
-                        break;
-                }
-        }
-	while( processed_bytes < received_bytes )
-	{
-                body_offset = processed_bytes - sizeof(packet_header); 
-                pack_ptr = (packet_header *)&scat->elements[1].buf[body_offset];
-
-                /* flip contigues packet header */
-		if( !pack_same_endian  ) {
-                        Flip_pack( pack_ptr );
-		}
-
-		processed_bytes += sizeof( packet_header ) + pack_ptr->data_len;
-                /* ignore any alignment padding */
-                if ( processed_bytes < received_bytes ) {
-                        switch(processed_bytes % 4)
-                        {
-                        case 1:
-                                processed_bytes++;
-                        case 2:
-                                processed_bytes++;
-                        case 3:
-                                processed_bytes++;
-                        case 0:
-                                /* already aligned */
-                                break;
-                        }
-                }
-	}                
-        Alarm( NETWORK, "Net_recv: Received Packet - packet length(%d), packed message length(%d)\n", received_bytes, processed_bytes);
-	if( processed_bytes != received_bytes ) {
-                Alarm( PRINT, "Net_recv: Received Packet - packet length(%d) != packed message length(%d)\n", received_bytes, processed_bytes);
-                return( -1 );
-        }
 	return( received_bytes );
 }
 
 int	Net_send_token( sys_scatter *scat )
 {
-	token_header	*token_ptr;
-	int		ret;
+	token_header *token_ptr = (token_header *)scat->elements[0].buf;
+        int           send_len  = 0;
+	int	      ret;
+        int           i;
 
-	token_ptr = (token_header *)scat->elements[0].buf;
-	token_ptr->type = Set_endian( token_ptr->type );
-        token_ptr->conf_hash = Cn->hash_code;
+        for ( i = 0; i < ( int ) scat->num_elements; ++i )
+                send_len += scat->elements[i].len;
+
+        if ( send_len != (int) sizeof( token_header ) + token_ptr->rtr_len )
+        {
+                Alarmp( SPLOG_FATAL, NETWORK, "Net_send_token: Wrong size token %d (send_len) != %d (expected)!\n",                        
+                        send_len, (int) sizeof( token_header) + token_ptr->rtr_len );
+        }
+        else if ( send_len > (int) ( sizeof( token_header) + sizeof( token_body ) ) )
+        {
+                Alarmp( SPLOG_FATAL, NETWORK, "Net_send_token: Token too long (%d > %d bytes)!\n",
+                        send_len, (int) ( sizeof( token_header) + sizeof( token_body ) ) );
+        }
+        else if ( send_len > MAX_PACKET_SIZE )
+        {
+                Alarmp( SPLOG_WARNING, PRINT, "Net_send_token: WARNING!!! Token is longer (%d bytes) than a single MTU (%d bytes)! "
+                        "IP fragmentation will occur and greatly increase the chance the token is lost!\n",
+                        send_len, MAX_PACKET_SIZE );
+        }
+
+	token_ptr->type          = Set_endian( token_ptr->type );
+        token_ptr->conf_hash     = Cn->hash_code;
 	token_ptr->transmiter_id = My.id;
 
-        if ( token_ptr->rtr_len > (MAX_PACKET_SIZE - sizeof(token_header) ) )
-        {
-            if ( Is_form( token_ptr->type ) )
-                Memb_print_form_token( scat );
-            Alarmp( SPLOG_FATAL, PRINT, "Net_send_token: Token too long for packet!\n");
-        }
+	Alarmp( SPLOG_INFO, NETWORK, 
+		"Net_send_token: type = 0x%08X; transmitter_id = 0x%08X; seq = %d; proc_id = 0x%08X; "
+                "aru = %d; aru_last_id = 0x%08X; Token_address = 0x%08X; send_len = %d\n", 
+		token_ptr->type, token_ptr->transmiter_id, token_ptr->seq, token_ptr->proc_id, 
+                token_ptr->aru, token_ptr->aru_last_id, Token_address, send_len );
 
 	ret = DL_send( Send_channel, Token_address, Token_port, scat );
 	return ( ret );
@@ -701,26 +559,50 @@ int	Net_recv_token( channel fd, sys_scatter *scat )
 
 int	Net_ucast_token( int32 proc_id, sys_scatter *scat )
 {
-	token_header	*token_ptr;
-	proc		p;
-	int		ret;
+	token_header *token_ptr = ( token_header * ) scat->elements[0].buf;
+        int           send_len  = 0;
+	proc	      p;
+	int	      ret;
+        int           i;
 
-	token_ptr = (token_header *)scat->elements[0].buf;
+        for ( i = 0; i < ( int ) scat->num_elements; ++i )
+                send_len += scat->elements[i].len;
+
+        if ( send_len != (int) sizeof( token_header ) + token_ptr->rtr_len )
+        {
+                Alarmp( SPLOG_FATAL, NETWORK, "Net_ucast_token: Wrong size token %d (send_len) != %d (expected)!\n",                        
+                        send_len, (int) sizeof( token_header) + token_ptr->rtr_len );
+        }
+        else if ( send_len > (int) ( sizeof( token_header) + sizeof( token_body ) ) )
+        {
+                Alarmp( SPLOG_FATAL, NETWORK, "Net_ucast_token: Token too long (%d > %d bytes)!\n",
+                        send_len, (int) ( sizeof( token_header) + sizeof( token_body ) ) );
+        }
+        else if ( send_len > MAX_PACKET_SIZE )
+        {
+                Alarmp( SPLOG_WARNING, PRINT, "Net_ucast_token: WARNING!!! Token is longer (%d bytes) than a single MTU (%d bytes)! "
+                        "IP fragmentation will occur and greatly increase the chance the token is lost!\n",
+                        send_len, MAX_PACKET_SIZE );
+        }
+
 	token_ptr->type = Set_endian( token_ptr->type );
         token_ptr->conf_hash = Cn->hash_code;
 	token_ptr->transmiter_id = My.id;
+
 	ret = Conf_proc_by_id( proc_id, &p );
+
 	if( ret < 0 )
 	{
 		Alarm( PRINT, "Net_ucast_token: non existing proc_id %d\n",
 			proc_id );
 		return( ret );
 	}
-        if ( token_ptr->rtr_len > (MAX_PACKET_SIZE - sizeof(token_header) ) )
-        {
-            Memb_print_form_token( scat );
-            Alarmp( SPLOG_FATAL, PRINT, "Net_ucast_token: Token too long for packet!\n");
-        }
+
+	Alarmp( SPLOG_INFO, NETWORK, 
+		"Net_ucast_token(" IPF "): type = 0x%08X; transmitter_id = 0x%08X; seq = %d; proc_id = 0x%08X; "
+                "aru = %d; aru_last_id = 0x%08X; Token_address = 0x%08X; send_len = %d\n", 
+		IP( proc_id ), token_ptr->type, token_ptr->transmiter_id, token_ptr->seq, token_ptr->proc_id, 
+                token_ptr->aru, token_ptr->aru_last_id, Token_address, send_len );
 
 	ret = DL_send( Send_channel, proc_id, p.port+1, scat );
 	return( ret );
@@ -785,6 +667,9 @@ static	int	In_my_component( int32	proc_id )
 	return( Partition[Partition_my_index] == Partition[proc_index] );
 }
 
+/* The first fragment header is not flipped here, even though it is
+   part of the packet header. It will be flipped with the other
+   fragment headers in Prot_handle_bcast */
 void	Flip_pack( packet_header *pack_ptr )
 {
 	pack_ptr->type		  = Flip_int32( pack_ptr->type );
@@ -793,21 +678,22 @@ void	Flip_pack( packet_header *pack_ptr )
 	pack_ptr->memb_id.proc_id = Flip_int32( pack_ptr->memb_id.proc_id );
 	pack_ptr->memb_id.time	  = Flip_int32( pack_ptr->memb_id.time );
 	pack_ptr->seq		  = Flip_int32( pack_ptr->seq );
-	pack_ptr->fifo_seq	  = Flip_int32( pack_ptr->fifo_seq );
-	pack_ptr->packet_index	  = Flip_int16( pack_ptr->packet_index );
-	pack_ptr->data_len	  = Flip_int16( pack_ptr->data_len );
+	pack_ptr->token_round	  = Flip_int32( pack_ptr->token_round ); /* fifo_seq changed to token_round */
 	pack_ptr->conf_hash	  = Flip_int32( pack_ptr->conf_hash );
+	pack_ptr->data_len	  = Flip_int16( pack_ptr->data_len );
 }
 
 void	Flip_token( token_header *token_ptr )
 {
-	token_ptr->type		 = Flip_int32( token_ptr->type );
-	token_ptr->transmiter_id = Flip_int32( token_ptr->transmiter_id );
-	token_ptr->seq		 = Flip_int32( token_ptr->seq );
-	token_ptr->proc_id	 = Flip_int32( token_ptr->proc_id );
-	token_ptr->aru		 = Flip_int32( token_ptr->aru );
-	token_ptr->aru_last_id	 = Flip_int32( token_ptr->aru_last_id );
-	token_ptr->flow_control	 = Flip_int16( token_ptr->flow_control );
-	token_ptr->rtr_len	 = Flip_int16( token_ptr->rtr_len );
-        token_ptr->conf_hash     = Flip_int32( token_ptr->conf_hash );
+	token_ptr->type		   = Flip_int32( token_ptr->type );
+	token_ptr->transmiter_id   = Flip_int32( token_ptr->transmiter_id );
+	token_ptr->proc_id	   = Flip_int32( token_ptr->proc_id );
+	token_ptr->memb_id.proc_id = Flip_int32( token_ptr->memb_id.proc_id );
+	token_ptr->memb_id.time	   = Flip_int32( token_ptr->memb_id.time );
+	token_ptr->seq		   = Flip_int32( token_ptr->seq );
+	token_ptr->aru		   = Flip_int32( token_ptr->aru );
+	token_ptr->aru_last_id	   = Flip_int32( token_ptr->aru_last_id );
+	token_ptr->flow_control	   = Flip_int16( token_ptr->flow_control );
+	token_ptr->rtr_len	   = Flip_int16( token_ptr->rtr_len );
+        token_ptr->conf_hash       = Flip_int32( token_ptr->conf_hash );
 }

@@ -80,8 +80,11 @@ class SC_GUI_API Scheme {
 			struct Records {
 				Records();
 				QColor alignment;
+				QColor background;
+				QColor alternateBackground;
 				QColor foreground;
 				QColor alternateForeground;
+				QColor spectrogram;
 				QColor gaps;
 				QColor overlaps;
 				RecordStates states;
@@ -123,6 +126,7 @@ class SC_GUI_API Scheme {
 
 			struct OriginSymbol {
 				OriginSymbol();
+				bool           classic;
 				ConfigGradient depth;
 			};
 
@@ -266,6 +270,12 @@ class SC_GUI_API Scheme {
 			bool distanceInKM;
 		};
 
+		struct DateTime {
+			DateTime();
+
+			bool useLocalTime;
+		};
+
 	public:
 		bool      showMenu;
 		bool      showStatusBar;
@@ -278,6 +288,7 @@ class SC_GUI_API Scheme {
 		Map       map;
 		Precision precision;
 		Unit      unit;
+		DateTime  dateTime;
 
 		Fonts     fonts;
 

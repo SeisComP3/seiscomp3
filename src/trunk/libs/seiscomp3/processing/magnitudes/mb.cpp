@@ -38,10 +38,11 @@ MagnitudeProcessor_mb::MagnitudeProcessor_mb()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_mb::computeMagnitude(
-	double amplitude, // in micrometers per second
-	double period,      // in seconds
+    double amplitude, // in micrometers per second
+	double period,    // in seconds
 	double delta,     // in degrees
 	double depth,     // in kilometers
+	const DataModel::Origin *, const DataModel::SensorLocation *,
 	double &value)
 {
 	// Clip depth to 0

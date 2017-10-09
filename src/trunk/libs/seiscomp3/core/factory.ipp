@@ -22,12 +22,12 @@ namespace Generic {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE>
-ClassFactoryInterface<ROOT_TYPE>::ClassFactoryInterface(const RTTI* typeInfo) {
+ClassFactoryInterface<ROOT_TYPE>::ClassFactoryInterface(const RTTI* typeInfo, bool reregister) {
 	_typeInfo = typeInfo;
 
 	// while construction the interface will be added
 	// to the classpool
-	RegisterFactory(this);
+	RegisterFactory(this, reregister);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -180,13 +180,15 @@ typename ClassFactoryInterface<ROOT_TYPE>::ClassNames& ClassFactoryInterface<ROO
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename ROOT_TYPE>
-bool ClassFactoryInterface<ROOT_TYPE>::RegisterFactory(ClassFactoryInterface<ROOT_TYPE>* factory) {
+bool ClassFactoryInterface<ROOT_TYPE>::RegisterFactory(ClassFactoryInterface<ROOT_TYPE>* factory, bool reregister) {
 	if ( factory == NULL )
 		return false;
 
-	if ( Classes().find(factory->className()) != Classes().end() ) {
-		throw DuplicateClassname(factory->className());
-		return false;
+	if ( !reregister ) {
+		if ( Classes().find(factory->className()) != Classes().end() ) {
+			throw DuplicateClassname(factory->className());
+			return false;
+		}
 	}
 
 	Classes()[factory->className()] = factory;

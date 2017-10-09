@@ -91,6 +91,7 @@ class QcTool : public QcApp, public boost_signals::trackable {
 		std::string _streamMask;
 
 		bool _useConfiguredStreams;
+		bool _use3Components;
 		std::set<std::string> _streamIDs;
 
 		std::string _creator;

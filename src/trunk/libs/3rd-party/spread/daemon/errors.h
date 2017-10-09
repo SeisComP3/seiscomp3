@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -37,7 +38,7 @@
  * Copyright (c) 1997 Jonathan Stanton <jonathan@cs.jhu.edu>
  * Defines all Error codes used in spread
  *
- * $Id: errors.h 557 2013-03-25 05:01:02Z jonathan $
+ * $Id: errors.h 683 2014-01-24 19:31:48Z jonathan $
  *
  */
 

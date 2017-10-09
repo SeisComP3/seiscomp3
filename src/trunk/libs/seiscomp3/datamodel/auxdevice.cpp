@@ -275,7 +275,7 @@ void AuxDevice::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& AuxDevice::remark() throw(Seiscomp::Core::ValueException) {
+Blob& AuxDevice::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxDevice.remark is not set");
@@ -286,7 +286,7 @@ Blob& AuxDevice::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& AuxDevice::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& AuxDevice::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxDevice.remark is not set");
@@ -608,7 +608,7 @@ bool AuxDevice::removeAuxSource(const AuxSourceIndex& i) {
 void AuxDevice::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: AuxDevice skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

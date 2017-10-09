@@ -22,6 +22,7 @@
 
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
 
 #include <iostream>
@@ -40,14 +41,6 @@ namespace {
 
 
 const char *null_file = "";
-
-
-void xmlGenericErrorHandler(void *ctx, const char* msg, ...) {
-	va_list argp;
-	va_start(argp, msg);
-	vfprintf(stderr, msg, argp);
-	va_end(argp);
-}
 
 
 void xmlStructuredErrorHandler(void * userData, xmlErrorPtr error) {
@@ -157,15 +150,6 @@ xmlNodePtr findNextTag(xmlDocPtr doc, xmlNodePtr node, const char* name, const c
 }
 
 
-xmlNodePtr getFirstElementNode(xmlNodePtr node) {
-	for ( xmlNodePtr child = node->xmlChildrenNode; child != NULL; child = child->next )
-		if ( child->type == XML_ELEMENT_NODE )
-			return child;
-
-	return NULL;
-}
-
-
 xmlChar *nodeGetContent(xmlNodePtr node) {
 	for ( xmlNodePtr child = node->xmlChildrenNode; child != NULL; child = child->next )
 		if ( child->type == XML_TEXT_NODE || child->type == XML_CDATA_SECTION_NODE )
@@ -185,6 +169,7 @@ XMLArchive::XMLArchive() : Seiscomp::Core::Archive() {
 	_buf = NULL;
 	_formattedOutput = false;
 	_compression = false;
+	_compressionMethod = ZIP;
 	_rootTag = "seiscomp";
 	_forceWriteVersion = -1;
 
@@ -267,7 +252,18 @@ bool XMLArchive::open() {
 
 	if ( _compression ) {
 		boost::iostreams::filtering_istreambuf filtered_buf;
-		filtered_buf.push(boost::iostreams::zlib_decompressor());
+
+		switch ( _compressionMethod ) {
+			case ZIP:
+				filtered_buf.push(boost::iostreams::zlib_decompressor());
+				break;
+			case GZIP:
+				filtered_buf.push(boost::iostreams::gzip_decompressor());
+				break;
+			default:
+				break;
+		}
+
 		filtered_buf.push(*_buf);
 
 		doc = xmlReadIO(streamBufReadCallback,
@@ -378,7 +374,7 @@ bool XMLArchive::create(bool writeVersion, bool headerNode) {
 	else
 		setVersion(Core::Version(0,0));
 
-	_namespace.second = SEISCOMP_DATAMODEL_XMLNS;
+	_namespace.second = SEISCOMP_DATAMODEL_XMLNS_ROOT + version().toString();
 
 	xmlDocPtr doc = xmlNewDoc(NULL);
 	void* rootNode = NULL;
@@ -406,7 +402,17 @@ void XMLArchive::close() {
 					boost::iostreams::filtering_ostreambuf filtered_buf;
 
 					if ( _compression ) {
-						filtered_buf.push(boost::iostreams::zlib_compressor());
+						switch ( _compressionMethod ) {
+							case ZIP:
+								filtered_buf.push(boost::iostreams::zlib_compressor());
+								break;
+							case GZIP:
+								filtered_buf.push(boost::iostreams::gzip_compressor());
+								break;
+							default:
+								break;
+						}
+
 						filtered_buf.push(*_buf);
 						xmlBuf->context = &filtered_buf;
 					}
@@ -442,7 +448,10 @@ void XMLArchive::close() {
 	_namespace.first = "";
 	_namespace.second = "";
 
+	_forceWriteVersion = -1;
+
 	initGenericErrorDefaultFunc(NULL);
+	setVersion(Core::Version(0,0));
 }
 
 
@@ -474,6 +483,11 @@ void XMLArchive::setFormattedOutput(bool enable) {
 
 void XMLArchive::setCompression(bool enable) {
 	_compression = enable;
+}
+
+
+void XMLArchive::setCompressionMethod(CompressionMethod method) {
+	_compressionMethod = method;
 }
 
 

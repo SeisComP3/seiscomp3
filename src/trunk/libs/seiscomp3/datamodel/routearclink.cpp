@@ -189,7 +189,7 @@ void RouteArclink::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time RouteArclink::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time RouteArclink::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("RouteArclink.end is not set");
@@ -209,7 +209,7 @@ void RouteArclink::setPriority(const OPT(int)& priority) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int RouteArclink::priority() const throw(Seiscomp::Core::ValueException) {
+int RouteArclink::priority() const {
 	if ( _priority )
 		return *_priority;
 	throw Seiscomp::Core::ValueException("RouteArclink.priority is not set");
@@ -358,7 +358,7 @@ void RouteArclink::accept(Visitor* visitor) {
 void RouteArclink::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: RouteArclink skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

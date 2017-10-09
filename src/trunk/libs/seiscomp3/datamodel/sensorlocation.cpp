@@ -249,7 +249,7 @@ void SensorLocation::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time SensorLocation::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time SensorLocation::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("SensorLocation.end is not set");
@@ -269,7 +269,7 @@ void SensorLocation::setLatitude(const OPT(double)& latitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::latitude() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::latitude() const {
 	if ( _latitude )
 		return *_latitude;
 	throw Seiscomp::Core::ValueException("SensorLocation.latitude is not set");
@@ -289,7 +289,7 @@ void SensorLocation::setLongitude(const OPT(double)& longitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::longitude() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::longitude() const {
 	if ( _longitude )
 		return *_longitude;
 	throw Seiscomp::Core::ValueException("SensorLocation.longitude is not set");
@@ -309,7 +309,7 @@ void SensorLocation::setElevation(const OPT(double)& elevation) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double SensorLocation::elevation() const throw(Seiscomp::Core::ValueException) {
+double SensorLocation::elevation() const {
 	if ( _elevation )
 		return *_elevation;
 	throw Seiscomp::Core::ValueException("SensorLocation.elevation is not set");
@@ -784,7 +784,7 @@ bool SensorLocation::removeStream(const StreamIndex& i) {
 void SensorLocation::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: SensorLocation skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -795,8 +795,14 @@ void SensorLocation::serialize(Archive& ar) {
 	if ( !ar.success() ) return;
 
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("latitude", _latitude, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("longitude", _longitude, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("elevation", _elevation, Archive::XML_ELEMENT);

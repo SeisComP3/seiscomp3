@@ -117,7 +117,7 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 
 		//! End of epoch (52.23)
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Reference to datalogger/@publicID
 		void setDatalogger(const std::string& datalogger);
@@ -129,7 +129,7 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 
 		//! Reference to datalogger/calibration/@channel
 		void setDataloggerChannel(const OPT(int)& dataloggerChannel);
-		int dataloggerChannel() const throw(Seiscomp::Core::ValueException);
+		int dataloggerChannel() const;
 
 		//! Reference to sensor/@publicID
 		void setSensor(const std::string& sensor);
@@ -141,7 +141,7 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 
 		//! Reference to sensor/calibration/@channel
 		void setSensorChannel(const OPT(int)& sensorChannel);
-		int sensorChannel() const throw(Seiscomp::Core::ValueException);
+		int sensorChannel() const;
 
 		//! Serial no. of clock (GPS). Mostly unused
 		void setClockSerialNumber(const std::string& clockSerialNumber);
@@ -150,32 +150,32 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 		//! Sample rate numerator (always >0, eg., not identical to
 		//! 52.18)
 		void setSampleRateNumerator(const OPT(int)& sampleRateNumerator);
-		int sampleRateNumerator() const throw(Seiscomp::Core::ValueException);
+		int sampleRateNumerator() const;
 
 		//! Sample rate denominator (always >0, eg., not identical to
 		//! 52.19)
 		void setSampleRateDenominator(const OPT(int)& sampleRateDenominator);
-		int sampleRateDenominator() const throw(Seiscomp::Core::ValueException);
+		int sampleRateDenominator() const;
 
 		//! Depth (52.13)
 		void setDepth(const OPT(double)& depth);
-		double depth() const throw(Seiscomp::Core::ValueException);
+		double depth() const;
 
 		//! Azimuth (52.14)
 		void setAzimuth(const OPT(double)& azimuth);
-		double azimuth() const throw(Seiscomp::Core::ValueException);
+		double azimuth() const;
 
 		//! Dip (52.15)
 		void setDip(const OPT(double)& dip);
-		double dip() const throw(Seiscomp::Core::ValueException);
+		double dip() const;
 
 		//! Overall sensitivity (58.04) in counts/gainUnit
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Gain frequency (58.05)
 		void setGainFrequency(const OPT(double)& gainFrequency);
-		double gainFrequency() const throw(Seiscomp::Core::ValueException);
+		double gainFrequency() const;
 
 		//! Sensor's unit of measurement (eg., M/S, M/S**2)
 		void setGainUnit(const std::string& gainUnit);
@@ -192,11 +192,11 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 
 		//! Whether the stream is "restricted"
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		//! Whether the metadata is synchronized with other datacenters
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 
 	// ------------------------------------------------------------------

@@ -120,7 +120,7 @@ void OriginUncertainty::setHorizontalUncertainty(const OPT(double)& horizontalUn
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginUncertainty::horizontalUncertainty() const throw(Seiscomp::Core::ValueException) {
+double OriginUncertainty::horizontalUncertainty() const {
 	if ( _horizontalUncertainty )
 		return *_horizontalUncertainty;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.horizontalUncertainty is not set");
@@ -140,7 +140,7 @@ void OriginUncertainty::setMinHorizontalUncertainty(const OPT(double)& minHorizo
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginUncertainty::minHorizontalUncertainty() const throw(Seiscomp::Core::ValueException) {
+double OriginUncertainty::minHorizontalUncertainty() const {
 	if ( _minHorizontalUncertainty )
 		return *_minHorizontalUncertainty;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.minHorizontalUncertainty is not set");
@@ -160,7 +160,7 @@ void OriginUncertainty::setMaxHorizontalUncertainty(const OPT(double)& maxHorizo
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginUncertainty::maxHorizontalUncertainty() const throw(Seiscomp::Core::ValueException) {
+double OriginUncertainty::maxHorizontalUncertainty() const {
 	if ( _maxHorizontalUncertainty )
 		return *_maxHorizontalUncertainty;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.maxHorizontalUncertainty is not set");
@@ -180,7 +180,7 @@ void OriginUncertainty::setAzimuthMaxHorizontalUncertainty(const OPT(double)& az
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginUncertainty::azimuthMaxHorizontalUncertainty() const throw(Seiscomp::Core::ValueException) {
+double OriginUncertainty::azimuthMaxHorizontalUncertainty() const {
 	if ( _azimuthMaxHorizontalUncertainty )
 		return *_azimuthMaxHorizontalUncertainty;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.azimuthMaxHorizontalUncertainty is not set");
@@ -200,7 +200,7 @@ void OriginUncertainty::setConfidenceEllipsoid(const OPT(ConfidenceEllipsoid)& c
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ConfidenceEllipsoid& OriginUncertainty::confidenceEllipsoid() throw(Seiscomp::Core::ValueException) {
+ConfidenceEllipsoid& OriginUncertainty::confidenceEllipsoid() {
 	if ( _confidenceEllipsoid )
 		return *_confidenceEllipsoid;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.confidenceEllipsoid is not set");
@@ -211,7 +211,7 @@ ConfidenceEllipsoid& OriginUncertainty::confidenceEllipsoid() throw(Seiscomp::Co
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ConfidenceEllipsoid& OriginUncertainty::confidenceEllipsoid() const throw(Seiscomp::Core::ValueException) {
+const ConfidenceEllipsoid& OriginUncertainty::confidenceEllipsoid() const {
 	if ( _confidenceEllipsoid )
 		return *_confidenceEllipsoid;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.confidenceEllipsoid is not set");
@@ -231,7 +231,7 @@ void OriginUncertainty::setPreferredDescription(const OPT(OriginUncertaintyDescr
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginUncertaintyDescription OriginUncertainty::preferredDescription() const throw(Seiscomp::Core::ValueException) {
+OriginUncertaintyDescription OriginUncertainty::preferredDescription() const {
 	if ( _preferredDescription )
 		return *_preferredDescription;
 	throw Seiscomp::Core::ValueException("OriginUncertainty.preferredDescription is not set");
@@ -260,7 +260,7 @@ OriginUncertainty& OriginUncertainty::operator=(const OriginUncertainty& other) 
 void OriginUncertainty::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: OriginUncertainty skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

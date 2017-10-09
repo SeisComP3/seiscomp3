@@ -14,7 +14,7 @@ from twisted.python.failure import Failure
 
 from seiscomp3 import Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import Time, ValueException
+from seiscomp3.Core import Time
 from seiscomp3.IO import ExportSink
 
 
@@ -23,7 +23,7 @@ from seiscomp3.IO import ExportSink
 def isRestricted(obj):
 	try:
 		return obj.restricted()
-	except ValueException:
+	except ValueError:
 		return False
 
 
@@ -137,6 +137,13 @@ class AccessLogEntry:
 		# down the request
 		self.msgPrefix = "%s|%s|%s|" % (service, req.getRequestHostname(),
 		                                accessTime)
+
+		xff = req.requestHeaders.getRawHeaders("x-forwarded-for")
+		if xff:
+			self.userIP = xff[0].split(",")[0].strip()
+		else:
+			self.userIP = req.getClientIP()
+
 		self.clientIP = req.getClientIP()
 		self.msgSuffix = "|%s|%i|%i|%s|%s|%i|%s|%s|%s|%s|%s||" % (
 		                 self.clientIP, length, procTime, err, agent, code,
@@ -144,9 +151,9 @@ class AccessLogEntry:
 
 	def __str__(self):
 		try:
-			clientName = socket.gethostbyaddr(self.clientIP)[0]
+			userHost = socket.gethostbyaddr(self.userIP)[0]
 		except socket.herror:
-			clientName = ""
-		return self.msgPrefix + clientName + self.msgSuffix
+			userHost = self.userIP
+		return self.msgPrefix + userHost + self.msgSuffix
 
 

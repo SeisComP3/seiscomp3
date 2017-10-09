@@ -78,8 +78,8 @@ class Comment : public Core::BaseObject {
 		DateTime endEffectiveTime() const throw(Seiscomp::Core::ValueException);
 
 		//! XML tag: id
-		void setId(int id);
-		int id() const;
+		void setId(const OPT(int)& id);
+		int id() const throw(Seiscomp::Core::ValueException);
 
 	
 	// ------------------------------------------------------------------
@@ -129,7 +129,7 @@ class Comment : public Core::BaseObject {
 		std::string _value;
 		OPT(DateTime) _beginEffectiveTime;
 		OPT(DateTime) _endEffectiveTime;
-		int _id;
+		OPT(int) _id;
 
 		// Aggregations
 		std::vector<PersonPtr> _authors;

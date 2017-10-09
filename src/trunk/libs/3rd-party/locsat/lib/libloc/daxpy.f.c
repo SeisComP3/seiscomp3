@@ -54,17 +54,17 @@ struct {
 /* AUTHOR */
 /* 	John Dongarra, March 1978. */
 /* Subroutine */ int daxpy_(n, da, dx, incx, dy, incy)
-integer *n;
+int *n;
 doublereal *da, *dx;
-integer *incx;
+int *incx;
 doublereal *dy;
-integer *incy;
+int *incy;
 {
     /* System generated locals */
-    integer i__1;
+    int i__1;
 
     /* Local variables */
-    static integer i__, m, ix, iy, mp1;
+    static int i__, m, ix, iy, mp1;
 
 /* K.S. 1-Dec-97, change 'undefined' to 'none' */
 /*     ---- On entry ---- */

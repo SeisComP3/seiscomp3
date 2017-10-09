@@ -33,15 +33,22 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_MLv : public MagnitudeProcessor {
 
 	public:
 		bool setup(const Settings &settings);
-	public:
+
 		Status computeMagnitude(
 			double amplitude, // in micrometers per second
 			double period,      // in seconds
 			double delta,     // in degrees
 			double depth,     // in kilometers
+			const DataModel::Origin *hypocenter,
+			const DataModel::SensorLocation *receiver,
 			double &value);
+
+
 	private:
-		double logA0(double dist_km) const throw(Core::ValueException);
+		double logA0(double dist_km) const;
+
+
+	private:
 		std::vector<double> logA0_dist, logA0_val;
 		double maxDistanceKm;
 };

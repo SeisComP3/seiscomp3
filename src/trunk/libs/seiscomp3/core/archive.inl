@@ -386,7 +386,10 @@ struct ContainerReader<ROOT_TYPE, T,1> {
 		}
 
 		ar._first = true;
-		ar._validObject = oldState;
+
+		// Restore old state if not in strict mode otherwise pass it through
+		if ( !ar._strict )
+			ar._validObject = oldState;
 	}
 };
 
@@ -454,7 +457,10 @@ void operator()(Archive<ROOT_TYPE>& ar, const ObjectNamer<std::vector<T> >& name
 		}
 
 		ar._first = true;
-		ar._validObject = oldState;
+
+		// Restore old state if not in strict mode otherwise pass it through
+		if ( !ar._strict )
+			ar._validObject = oldState;
 	}
 };
 
@@ -529,7 +535,10 @@ void operator()(Archive<ROOT_TYPE>& ar, const ObjectNamer<std::list<T> >& namedO
 		}
 
 		ar._first = true;
-		ar._validObject = oldState;
+
+		// Restore old state if not in strict mode otherwise pass it through
+		if ( !ar._strict )
+			ar._validObject = oldState;
 	}
 };
 
@@ -616,7 +625,9 @@ inline void Archive<ROOT_TYPE>::read(::boost::optional<T>& object) {
 	if ( !success() )
 		object = boost::none;
 
-	_validObject = oldState;
+	// Restore old state if not in strict mode otherwise pass it through
+	if ( !_strict )
+		_validObject = oldState;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -700,6 +711,8 @@ inline void Archive<ROOT_TYPE>::read(const char* name, T& object, const char* ta
 		read(object);
 	else if ( !(boost::is_base_of<std::string, T>::value || boost::is_same<std::string, T>::value) )
 		_validObject = false;
+	else
+		object = T();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

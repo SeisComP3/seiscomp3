@@ -16,6 +16,7 @@
 
 #include "amplitudeview.h"
 #include <seiscomp3/core/platform/platform.h>
+#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/gui/datamodel/selectstation.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/core/application.h>
@@ -472,7 +473,7 @@ class AmplitudeViewMarker : public RecordMarker {
 				catch ( ... ) {}
 
 				try {
-					text += QString(" at %1").arg(_referencedAmplitude->creationInfo().creationTime().toString("%F %T").c_str());
+					text += QString(" at %1").arg(timeToString(_referencedAmplitude->creationInfo().creationTime(), "%F %T"));
 				}
 				catch ( ... ) {}
 
@@ -2577,7 +2578,7 @@ RecordMarker* AmplitudeView::updatePhaseMarker(Seiscomp::Gui::RecordViewItem *it
 		Processing::MagnitudeProcessor::Status status;
 		status = label->magnitudeProcessor->computeMagnitude(
 		         res.amplitude.value, res.period, item->value(ITEM_DISTANCE_INDEX),
-		         _origin->depth(), m);
+		         _origin->depth(), _origin.get(), label->location, m);
 		if ( status == Processing::MagnitudeProcessor::OK )
 			mag = m;
 		else
@@ -3151,7 +3152,7 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 		AmplitudeViewMarker *marker;
 		marker = new AmplitudeViewMarker(widget, amp->timeWindow().reference(), AmplitudeViewMarker::Amplitude, false);
 		marker->setAmplitude(amp);
-		marker->setText(_amplitudeType.c_str());
+		marker->setText(_magnitudeType.c_str());
 		marker->setId(id);
 
 		if ( amp->waveformID().channelCode().size() > 2 )
@@ -3166,7 +3167,7 @@ void AmplitudeView::addAmplitude(Gui::RecordViewItem *item,
 			Processing::MagnitudeProcessor::Status stat;
 			stat = label->magnitudeProcessor->computeMagnitude(
 			         amp->amplitude().value(), per, item->value(ITEM_DISTANCE_INDEX),
-			         _origin->depth(), m);
+			         _origin->depth(), _origin.get(), label->location, m);
 			if ( stat == Processing::MagnitudeProcessor::OK )
 				marker->setMagnitude(m, QString());
 			else
@@ -3772,6 +3773,7 @@ RecordViewItem* AmplitudeView::addRawStream(const DataModel::SensorLocation *loc
 	label->processor->setTrigger(referenceTime);
 	label->magnitudeProcessor = magProc;
 
+	label->location = loc;
 	label->latitude = loc->latitude();
 	label->longitude = loc->longitude();
 
@@ -5353,7 +5355,8 @@ void AmplitudeView::commit() {
 		Processing::MagnitudeProcessor::Status stat =
 			label->magnitudeProcessor->computeMagnitude(
 				amp->amplitude().value(), period,
-				item->value(ITEM_DISTANCE_INDEX), _origin->depth(), magValue
+				item->value(ITEM_DISTANCE_INDEX), _origin->depth(),
+				_origin.get(), label->location, magValue
 			);
 
 		if ( stat != Processing::MagnitudeProcessor::OK ) {
@@ -5606,11 +5609,11 @@ void AmplitudeView::receivedRecord(Seiscomp::Record *rec) {
 	// Check for out-of-order records
 	if ( (label->data.traces[i].filter || label->data.enableTransformation) &&
 	     label->data.traces[i].raw->back() != (const Record*)rec ) {
-		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
-		               rec->networkCode().c_str(),
-		               rec->stationCode().c_str(),
-		               rec->locationCode().c_str(),
-		               rec->channelCode().c_str());
+//		SEISCOMP_DEBUG("%s.%s.%s.%s: out of order record, reinitialize trace",
+//		               rec->networkCode().c_str(),
+//		               rec->stationCode().c_str(),
+//		               rec->locationCode().c_str(),
+//		               rec->channelCode().c_str());
 		RecordWidget::Filter *f = label->data.traces[i].filter->clone();
 		label->data.setFilter(f, label->data.filterID);
 		delete f;

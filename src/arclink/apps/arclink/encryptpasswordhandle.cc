@@ -90,7 +90,11 @@ EVP_CIPHER_CTX* EncryptPasswordHandle::makeContext(int direction){
 						  iv);
 	
 	// Context Initialization
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 	ctx = (EVP_CIPHER_CTX*) calloc(sizeof(EVP_CIPHER_CTX),1);
+#else
+	ctx = EVP_CIPHER_CTX_new();
+#endif
 
 	if (direction == 0)
 		result = EVP_EncryptInit (ctx, EVP_des_cbc (), key, iv);
@@ -246,8 +250,7 @@ int EncryptPasswordHandle::Email(std::string username, std::string password){
 	cmdLine += " | /usr/bin/formail -I'From: " + this->dcemail + "' ";
 	cmdLine += "-I'To: " + username + "' ";
 	cmdLine += "-I'Subject: New password for restricted data from Arclink @ " + this->dcname + " [" + this->dcid + "]' -a'Message-ID:' ";
-	cmdLine += " | /usr/sbin/sendmail -f" + this->dcemail;
-	cmdLine += " " + username;
+	cmdLine += " | /usr/bin/mail -t -S from=" + this->dcemail;
 
 	// Execute
 	r = system(cmdLine.c_str ());

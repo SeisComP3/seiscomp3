@@ -141,7 +141,7 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 
 		//! End of station epoch. Empty string if the station is open
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Station description in ASCII (50.09)
 		void setDescription(const std::string& description);
@@ -149,15 +149,15 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 
 		//! Station latitude (50.04)
 		void setLatitude(const OPT(double)& latitude);
-		double latitude() const throw(Seiscomp::Core::ValueException);
+		double latitude() const;
 
 		//! Station longitude (50.05)
 		void setLongitude(const OPT(double)& longitude);
-		double longitude() const throw(Seiscomp::Core::ValueException);
+		double longitude() const;
 
 		//! Station elevation (50.06)
 		void setElevation(const OPT(double)& elevation);
-		double elevation() const throw(Seiscomp::Core::ValueException);
+		double elevation() const;
 
 		//! Place where the station is located (UTF-8)
 		void setPlace(const std::string& place);
@@ -185,16 +185,16 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 
 		//! Whether the station is "restricted"
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		//! Whether the metadata is synchronized with other datacenters
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 		//! Any notes
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

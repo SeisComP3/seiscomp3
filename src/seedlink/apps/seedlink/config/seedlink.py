@@ -571,6 +571,9 @@ class Module(TemplateModule):
     def supportsAliases(self):
         return True
 
+    def requiresKernelModules(self):
+        return False
+
     def updateConfig(self):
         # Set default values
         try: self._set_default("organization", self.env.getString("organization"), False)

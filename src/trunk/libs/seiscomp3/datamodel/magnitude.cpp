@@ -256,7 +256,7 @@ void Magnitude::setStationCount(const OPT(int)& stationCount) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Magnitude::stationCount() const throw(Seiscomp::Core::ValueException) {
+int Magnitude::stationCount() const {
 	if ( _stationCount )
 		return *_stationCount;
 	throw Seiscomp::Core::ValueException("Magnitude.stationCount is not set");
@@ -276,7 +276,7 @@ void Magnitude::setAzimuthalGap(const OPT(double)& azimuthalGap) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Magnitude::azimuthalGap() const throw(Seiscomp::Core::ValueException) {
+double Magnitude::azimuthalGap() const {
 	if ( _azimuthalGap )
 		return *_azimuthalGap;
 	throw Seiscomp::Core::ValueException("Magnitude.azimuthalGap is not set");
@@ -296,7 +296,7 @@ void Magnitude::setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatu
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationStatus Magnitude::evaluationStatus() const throw(Seiscomp::Core::ValueException) {
+EvaluationStatus Magnitude::evaluationStatus() const {
 	if ( _evaluationStatus )
 		return *_evaluationStatus;
 	throw Seiscomp::Core::ValueException("Magnitude.evaluationStatus is not set");
@@ -316,7 +316,7 @@ void Magnitude::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Magnitude::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Magnitude::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Magnitude.creationInfo is not set");
@@ -327,7 +327,7 @@ CreationInfo& Magnitude::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Magnitude::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Magnitude::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Magnitude.creationInfo is not set");
@@ -786,7 +786,7 @@ bool Magnitude::removeStationMagnitudeContribution(const StationMagnitudeContrib
 void Magnitude::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Magnitude skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

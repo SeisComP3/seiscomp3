@@ -41,6 +41,9 @@ ResponsePAZ::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Me
 	addProperty(objectProperty<ComplexArray>("zeros", "ComplexArray", false, false, true, &ResponsePAZ::setZeros, &ResponsePAZ::zeros));
 	addProperty(objectProperty<ComplexArray>("poles", "ComplexArray", false, false, true, &ResponsePAZ::setPoles, &ResponsePAZ::poles));
 	addProperty(objectProperty<Blob>("remark", "Blob", false, false, true, &ResponsePAZ::setRemark, &ResponsePAZ::remark));
+	addProperty(Core::simpleProperty("decimationFactor", "int", false, false, false, false, true, false, NULL, &ResponsePAZ::setDecimationFactor, &ResponsePAZ::decimationFactor));
+	addProperty(Core::simpleProperty("delay", "float", false, false, false, false, true, false, NULL, &ResponsePAZ::setDelay, &ResponsePAZ::delay));
+	addProperty(Core::simpleProperty("correction", "float", false, false, false, false, true, false, NULL, &ResponsePAZ::setCorrection, &ResponsePAZ::correction));
 }
 
 
@@ -174,6 +177,9 @@ bool ResponsePAZ::operator==(const ResponsePAZ& rhs) const {
 	if ( _zeros != rhs._zeros ) return false;
 	if ( _poles != rhs._poles ) return false;
 	if ( _remark != rhs._remark ) return false;
+	if ( _decimationFactor != rhs._decimationFactor ) return false;
+	if ( _delay != rhs._delay ) return false;
+	if ( _correction != rhs._correction ) return false;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -245,7 +251,7 @@ void ResponsePAZ::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::gain() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.gain is not set");
@@ -265,7 +271,7 @@ void ResponsePAZ::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.gainFrequency is not set");
@@ -285,7 +291,7 @@ void ResponsePAZ::setNormalizationFactor(const OPT(double)& normalizationFactor)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFactor() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::normalizationFactor() const {
 	if ( _normalizationFactor )
 		return *_normalizationFactor;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.normalizationFactor is not set");
@@ -305,7 +311,7 @@ void ResponsePAZ::setNormalizationFrequency(const OPT(double)& normalizationFreq
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponsePAZ::normalizationFrequency() const {
 	if ( _normalizationFrequency )
 		return *_normalizationFrequency;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.normalizationFrequency is not set");
@@ -325,7 +331,7 @@ void ResponsePAZ::setNumberOfZeros(const OPT(int)& numberOfZeros) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponsePAZ::numberOfZeros() const throw(Seiscomp::Core::ValueException) {
+int ResponsePAZ::numberOfZeros() const {
 	if ( _numberOfZeros )
 		return *_numberOfZeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.numberOfZeros is not set");
@@ -345,7 +351,7 @@ void ResponsePAZ::setNumberOfPoles(const OPT(int)& numberOfPoles) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponsePAZ::numberOfPoles() const throw(Seiscomp::Core::ValueException) {
+int ResponsePAZ::numberOfPoles() const {
 	if ( _numberOfPoles )
 		return *_numberOfPoles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.numberOfPoles is not set");
@@ -365,7 +371,7 @@ void ResponsePAZ::setZeros(const OPT(ComplexArray)& zeros) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ComplexArray& ResponsePAZ::zeros() throw(Seiscomp::Core::ValueException) {
+ComplexArray& ResponsePAZ::zeros() {
 	if ( _zeros )
 		return *_zeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.zeros is not set");
@@ -376,7 +382,7 @@ ComplexArray& ResponsePAZ::zeros() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ComplexArray& ResponsePAZ::zeros() const throw(Seiscomp::Core::ValueException) {
+const ComplexArray& ResponsePAZ::zeros() const {
 	if ( _zeros )
 		return *_zeros;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.zeros is not set");
@@ -396,7 +402,7 @@ void ResponsePAZ::setPoles(const OPT(ComplexArray)& poles) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ComplexArray& ResponsePAZ::poles() throw(Seiscomp::Core::ValueException) {
+ComplexArray& ResponsePAZ::poles() {
 	if ( _poles )
 		return *_poles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.poles is not set");
@@ -407,7 +413,7 @@ ComplexArray& ResponsePAZ::poles() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ComplexArray& ResponsePAZ::poles() const throw(Seiscomp::Core::ValueException) {
+const ComplexArray& ResponsePAZ::poles() const {
 	if ( _poles )
 		return *_poles;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.poles is not set");
@@ -427,7 +433,7 @@ void ResponsePAZ::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& ResponsePAZ::remark() throw(Seiscomp::Core::ValueException) {
+Blob& ResponsePAZ::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.remark is not set");
@@ -438,10 +444,70 @@ Blob& ResponsePAZ::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& ResponsePAZ::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& ResponsePAZ::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponsePAZ.remark is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setDecimationFactor(const OPT(int)& decimationFactor) {
+	_decimationFactor = decimationFactor;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int ResponsePAZ::decimationFactor() const {
+	if ( _decimationFactor )
+		return *_decimationFactor;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.decimationFactor is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setDelay(const OPT(double)& delay) {
+	_delay = delay;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponsePAZ::delay() const {
+	if ( _delay )
+		return *_delay;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.delay is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void ResponsePAZ::setCorrection(const OPT(double)& correction) {
+	_correction = correction;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+double ResponsePAZ::correction() const {
+	if ( _correction )
+		return *_correction;
+	throw Seiscomp::Core::ValueException("ResponsePAZ.correction is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -490,6 +556,9 @@ ResponsePAZ& ResponsePAZ::operator=(const ResponsePAZ& other) {
 	_zeros = other._zeros;
 	_poles = other._poles;
 	_remark = other._remark;
+	_decimationFactor = other._decimationFactor;
+	_delay = other._delay;
+	_correction = other._correction;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -613,7 +682,7 @@ void ResponsePAZ::accept(Visitor* visitor) {
 void ResponsePAZ::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ResponsePAZ skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -634,6 +703,15 @@ void ResponsePAZ::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("zeros", _zeros, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("poles", _poles, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("remark", _remark, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("decimationFactor", _decimationFactor, Archive::XML_ELEMENT);
+	}
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("delay", _delay, Archive::XML_ELEMENT);
+	}
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("correction", _correction, Archive::XML_ELEMENT);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

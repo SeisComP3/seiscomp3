@@ -1,6 +1,6 @@
 <application xmlns="http://wadl.dev.java.net/2009/02"
 		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<resources base="http://localhost:8080/fdsnws/1/station">
+	<resources base="http://localhost:8080/fdsnws/station/1">
 		<resource path="query">
 			<method name="GET">
 				<request>

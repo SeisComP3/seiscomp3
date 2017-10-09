@@ -1,1 +1,1 @@
-SUBDIRS(mmi)
+SUBDIRS(mmi regioncheck)

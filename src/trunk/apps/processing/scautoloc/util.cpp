@@ -311,10 +311,10 @@ std::string printOrigin(const Origin *origin, bool oneliner)
 		out << "SGAP  = " << origin->quality.aziGapSecondary << std::endl;
 		out << "SCORE = " << originScore(origin) << std::endl;
 		out << "errorEllipsoid";
-		out << "  smaj=" << origin->errorEllipsoid.semiMajorAxis;
-		out << "  smin=" << origin->errorEllipsoid.semiMinorAxis;
+		out << "  smaj=" << origin->errorEllipsoid.semiMajorAxis << "km";
+		out << "  smin=" << origin->errorEllipsoid.semiMinorAxis << "km";
 		out << "  strike=" << origin->errorEllipsoid.strike;
-		out << "  sdep=" << origin->errorEllipsoid.sdepth;
+		out << "  sdep=" << origin->errorEllipsoid.sdepth << "km";
 		out << "  stime="  << origin->errorEllipsoid.stime         << std::endl;
 		out << "preliminary = "  << (origin->preliminary ? "true":"false") << std::endl;
 

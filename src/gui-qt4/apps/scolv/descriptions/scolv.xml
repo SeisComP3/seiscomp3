@@ -81,7 +81,7 @@
 						parameter &quot;magnitudes&quot;.
 					</description>
 				</parameter>
-				<parameter name="Pvel" type="double" default="6.0">
+				<parameter name="Pvel" type="double"  unit="km/s" default="6.0">
 					<description>
 						The P reduction velocity used in the &quot;move out&quot; plot.
 					</description>
@@ -114,18 +114,36 @@
 						If enabled then all traces without data are hidden in the picker.
 					</description>
 				</parameter>
+				<parameter name="hideDisabledStations" type="boolean" default="true">
+					<description>
+						If enabled then all traces of disabled stations are hidden if
+						they are not picked.
+					</description>
+				</parameter>
 				<parameter name="defaultDepth" type="double" unit="km" default="10">
 					<description>
 						When creating an artificial origin this is the default depth used.
 					</description>
 				</parameter>
+				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
+					<description>
+						Adds advanced input parameters in artificial origin dialog.
+					</description>
+				</parameter>
+				<parameter name="systemTray" type="boolean" default="true">
+					<description>
+						Adds an icon to the system tray and displays a message
+						when a new event was received. Note that this feature
+						requires libQt4 version 4.3 or higher.
+					</description>
+				</parameter>
 				<group name="map">
 					<group name="stations">
-						<parameter name="unassociatedMaxDist" type="double" unit="deg" default="-1">
+						<parameter name="unassociatedMaxDist" type="double" unit="deg" default="360">
 							<description>
 								Maximum distance in degrees up to which also unassociated stations are
-								shown in the map. The default value is -1 which will not
-								show any unassociated station.
+								shown in the map. The default value is 360 which will
+								show all unassociated stations.
 							</description>
 						</parameter>
 					</group>
@@ -148,11 +166,9 @@
 					</parameter>
 				</group>
 				<group name="locator">
-					<parameter name="minimumDepth" type="double">
+					<parameter name="interface" type="string" default="LOCSAT">
 						<description>
-							Minimum depth which is set if the locator used supports fixing
-							the depth. If the depth is lower than this value the depth is then
-							fixed to this configured value and the origin is relocated again.
+							The default locator interface to use.
 						</description>
 					</parameter>
 					<parameter name="defaultProfile" type="string">
@@ -160,17 +176,30 @@
 							The default locator profile to use.
 						</description>
 					</parameter>
+					<parameter name="minimumDepth" type="double" unit="km">
+						<description>
+							Minimum depth which is set if the locator used supports fixing
+							the depth. If the depth is lower than this value the depth is then
+							fixed to this configured value and the origin is relocated again.
+						</description>
+					</parameter>
 				</group>
-				<parameter name="locator" type="string">
-					<description>
-						The default locator interface to use.
-					</description>
-				</parameter>
-				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
-					<description>
-						Adds advanced input parameters in artificial origin dialog.
-					</description>
-				</parameter>
+				<group name="commit">
+					<parameter name="forceEventAssociation" type="boolean" default="true">
+						<description>
+						Activates the button &quot;Force association with event&quot; when
+						committing with additional options. This is just the default
+						setting and can be changed manually when the dialog pops up.
+						</description>
+					</parameter>
+					<parameter name="fixOrigin" type="boolean" default="true">
+						<description>
+						Activates the button &quot;Fix this origin as preferred solution&quot; when
+						committing with additional options. This is just the default
+						setting and can be changed manually when the dialog pops up.
+						</description>
+					</parameter>
+				</group>
 			</group>
 			<group name="picker">
 				<parameter name="showCrossHairCursor" type="boolean" default="false">
@@ -238,7 +267,7 @@
 						first arrival depending on the usePerStreamTimeWindows flag.
 					</description>
 				</parameter>
-				<parameter name="postOffset" type="int" unti="s" default="120">
+				<parameter name="postOffset" type="int" unit="s" default="120">
 					<description>
 						The data time span added to the right of the requested time window.
 					</description>
@@ -248,7 +277,7 @@
 						Minimum data time window length.
 					</description>
 				</parameter>
-				<parameter name="alignmentPosition" type="double" default="0.5">
+				<parameter name="alignmentPosition" type="double" unit="s" default="0.5">
 					<description>
 						Defines the relative position of the alignment when traces are
 						aligned at a phase. This value is bound
@@ -257,14 +286,14 @@
 					</description>
 				</parameter>
 				<group name="uncertainties">
-					<parameter name="preferred" type="list:string">
+					<parameter name="preferred" type="list:string" unit="s">
 						<description>
 							Defines a list of preferred pick uncertainty profiles.
 						</description>
 					</parameter>
 					<group name="profile">
 						<struct type="Uncertainty profile" link="picker.uncertainties.preferred">
-							<parameter type="list:string">
+							<parameter type="list:string" unit="s">
 								<description>
 									Defines a list of pick uncertainties.
 									The format of each list item is either a double value or a pair of
@@ -275,7 +304,7 @@
 						</struct>
 					</group>
 				</group>
-				<parameter name="uncertainties" type="list:string">
+				<parameter name="uncertainties" type="list:string" unit="s">
 					<description>
 						Defines a list of predefined uncategorised uncertainties.
 						The format of each list item is either a double value or a pair of

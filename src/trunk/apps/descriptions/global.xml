@@ -33,7 +33,33 @@
 			</parameter>
 			<parameter name="cityXML" type="string">
 				<description>
-					The path to the city.xml file. This overrides the default paths.
+					Path to the cities.xml file. If undefined the data is read from
+					@CONFIGDIR@/cities.xml@ or @DATADIR@/cities.xml@.
+				</description>
+			</parameter>
+			<parameter name="loadCities" type="boolean" default="false">
+				<description>
+					Enables loading of cities from file configured by cityXML parameter.
+				</description>
+			</parameter>
+			<parameter name="loadRegions" type="boolean" default="false">
+				<description>
+					Enables loading of custom fep regions from @CONFIGDIR@/fep or @DATADIR@/fep.
+				</description>
+			</parameter>
+			<parameter name="publicIDPattern" type="string">
+				<description>
+					Defines a custom pattern for generation of public object ids. The following
+					variables are resolved:
+					@classname@ (class name of object),
+					@id@ (public object count),
+					@globalid@ (general object count),
+					@time@ (current time, use '/' to supply custom format, e.g. @time/%FT%T.%fZ@
+				</description>
+			</parameter>
+			<parameter name="configModule" type="string" default="trunk">
+				<description>
+					Name of the configuration module.
 				</description>
 			</parameter>
 			<group name="logging">
@@ -76,7 +102,11 @@
 					</description>
 				</parameter>
 				<group name="file">
-					<parameter name="rotator" type="boolean" default="true"/>
+					<parameter name="rotator" type="boolean" default="true">
+						<description>
+						Enables rotation of log files.
+						</description>
+					</parameter>
 					<group name="rotator">
 						<parameter name="timeSpan" type="int" unit="s" default="86400">
 							<description>
@@ -88,7 +118,22 @@
 								How many historic log files to keep.
 							</description>
 						</parameter>
+						<parameter name="maxFileSize" type="int" default="104857600" unit="byte">
+							<description>
+							The maximum size of a logfile in byte. The default value
+							is 100 megabyte. If a logfile exceeds that size then it
+							is rotated. To disable the size limit give 0 or a negative
+							value.
+							</description>
+						</parameter>
 					</group>
+				</group>
+				<group name="objects">
+					<parameter name="timeSpan" type="int" unit="s" default="60">
+						<description>
+							Timespan for counting input/output of objects.
+						</description>
+					</parameter>
 				</group>
 				<group name="syslog">
 					<parameter name="facility" type="string" default="local0">
@@ -172,12 +217,16 @@
 					</description>
 				</parameter>
 				<parameter name="inventory" type="string">
+					<description>
 					Load the inventory database from a given XML file if set. This
 					overrides the inventory definitions loaded from the database backend.
+					</description>
 				</parameter>
 				<parameter name="config" type="string">
+					<description>
 					Load the configuration database from a given XML file if set. This
 					overrides the configuration definitions loaded from the database backend.
+					</description>
 				</parameter>
 			</group>
 			<group name="processing">
@@ -196,18 +245,84 @@
 					</parameter>
 				</group>
 			</group>
+			<group name="inventory">
+				<group name="whitelist">
+					<parameter name="nettype" type="list:string">
+						<description>
+						List of network types to include when loading the inventory.
+						</description>
+					</parameter>
+					<parameter name="statype" type="list:string">
+						<description>
+						List of station types to include when loading the inventory.
+						</description>
+					</parameter>
+				</group>
+				<group name="blacklist">
+					<parameter name="nettype" type="list:string">
+						<description>
+						List of network types to exclude when loading the inventory.
+						</description>
+					</parameter>
+					<parameter name="statype" type="list:string">
+						<description>
+						List of station types to exclude when loading the inventory.
+						</description>
+					</parameter>
+				</group>
+			</group>
 			<group name="recordstream">
-				<parameter name="service" type="string" default="slink"/>
-				<parameter name="source" type="string" default="localhost:18000"/>
+				<description>
+				SeisComP3 applications access waveform data through the RecordStream
+				interface. Please consult the SeisComP3 documentation for a list of
+				supported services and their configuration.
+				</description>
+				<parameter name="service" type="string" default="slink">
+					<description>
+					Name of the recordstream service implementation.
+					</description>
+				</parameter>
+				<parameter name="source" type="string" default="localhost:18000">
+					<description>
+					Service specific parameters like a IP address or a file name to use.
+					</description>
+				</parameter>
+			</group>
+			<group name="scripts">
+				<parameter name="crashHandler" type="path">
+					<description>
+						Path to crash handler script
+					</description>
+				</parameter>
 			</group>
 			<group name="core">
-				<parameter name="plugins" type="list:string" default="dbmysql"/>
+				<parameter name="plugins" type="list:string" default="dbmysql">
+					<description>
+					Defines a list of core modules loaded at startup.
+					</description>
+				</parameter>
 			</group>
 			<group name="client">
-				<parameter name="startStopMessage" type="boolean" default="false"/>
-				<parameter name="autoShutdown" type="boolean" default="false"/>
-				<parameter name="shutdownMasterModule" type="string"/>
-				<parameter name="shutdownMasterUsername" type="string"/>
+				<parameter name="startStopMessage" type="boolean" default="false">
+					<description>
+					Enables sending of an application start- and stop message to the STATUS_GROUP.
+					</description>
+				</parameter>
+				<parameter name="autoShutdown" type="boolean" default="false">
+					<description>
+					Enablgs automatic application shutdown triggered by a status message.
+					</description>
+				</parameter>
+				<parameter name="shutdownMasterModule" type="string">
+					<description>
+					Triggers shutdown if the module name of the received messages match
+					</description>
+				</parameter>
+				<parameter name="shutdownMasterUsername" type="string">
+					<description>
+					Triggers shutdown if the user name of the received messages match
+					</description>
+				</parameter>
 			</group>
 			<group name="commands">
 				<parameter name="target" type="string">
@@ -459,6 +574,9 @@
 				</description>
 			</parameter>
 			<group name="amplitudes">
+				<description>
+					Defines general parameters for amplitude of a certain type, e.g. time windows to derive magnitudes.
+				</description>
 				<group name="WoodAnderson">
 					<description>
 						Allows to configure the Wood-Anderson seismometer response.
@@ -484,21 +602,28 @@
 						</description>
 					</parameter>
 				</group>
-				<description>
-					Defines general parameters for amplitudes of a certain type.
-				</description>
+				<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
+					<description>
+					Defines the saturation threshold for the optional saturation check.
+					By default the saturation check is disabled but giving a value above
+					0 will enable it. Waveforms that are saturated are not used
+					for amplitude calculations.
+
+					This value can either be an absolute value of counts such
+					as &quot;100000&quot; counts or a relative value
+					(optionally in percent) with respect to the number of
+					effective bits, e.g. &quot;0.8@23&quot; or &quot;80%@23&quot;.
+					The first version uses 1**23 * 0.8 whereas the latter
+					uses 1**23 * 80/100.
+
+					The boolean value &quot;false&quot; explicitly disables
+					the check.
+					</description>
+				</parameter>
 				<parameter name="enable" type="boolean" default="true">
 					<description>
 					Defines if amplitude calculation is enabled. If disabled then
 					this station will be skipped for amplitudes and magnitudes.
-					</description>
-				</parameter>
-				<parameter name="saturationThreshold" type="double" default="-1">
-					<description>
-					Defines the saturation threshold for the optional saturation check.
-					By default the saturation check is disabled but giving a value above
-					0 will enable it. Waveforms that are saturated are not used  at all
-					for amplitude calculations.
 					</description>
 				</parameter>
 				<parameter name="enableResponses" type="boolean" default="false">
@@ -515,6 +640,24 @@
 					the type must match the one defined in the corresponding
 					AmplitudeProcessor.
 					</description>
+					<parameter name="saturationThreshold" type="string" default="false" unit="counts; %">
+						<description>
+						Defines the saturation threshold for the optional saturation check.
+						By default the saturation check is disabled but giving a value above
+						0 will enable it. Waveforms that are saturated are not used
+						for amplitude calculations.
+
+						This value can either be an absolute value of counts such
+						as &quot;100000&quot; counts or a relative value
+						(optionally in percent) with respect to the number of
+						effective bits, e.g. &quot;0.8@23&quot; or &quot;80%@23&quot;.
+						The first version uses 1**23 * 0.8 whereas the latter
+						uses 1**23 * 80/100.
+
+						The boolean value &quot;false&quot; explicitly disables
+						the check.
+						</description>
+					</parameter>
 					<parameter name="enable" type="boolean" default="true">
 						<description>
 						Defines if amplitude calculation of certain type is enabled.
@@ -527,13 +670,6 @@
 						will be used instead.
 						</description>
 					</parameter>
-					<parameter name="saturationThreshold" type="double" default="-1">
-						<description>
-						If greater than 0 and the absolute value of an incoming
-						unfiltered sample exceeds this value, the trace data is rejected and
-						not used (saturation check).
-						</description>
-					</parameter>
 					<parameter name="minSNR" type="double">
 						<description>
 						Defines the mininum SNR to be reached to compute the
@@ -541,7 +677,7 @@
 						has no global default value.
 						</description>
 					</parameter>
-					<parameter name="noiseBegin" type="double">
+					<parameter name="noiseBegin" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the noise window used to compute
@@ -550,7 +686,7 @@
 						should only be changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="noiseEnd" type="double">
+					<parameter name="noiseEnd" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the end of the noise window used to compute
@@ -559,7 +695,7 @@
 						should only be changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="signalBegin" type="double">
+					<parameter name="signalBegin" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to compute
@@ -568,7 +704,7 @@
 						changed if you know what you are doing.
 						</description>
 					</parameter>
-					<parameter name="signalEnd" type="double">
+					<parameter name="signalEnd" type="double" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the end of the signal window used to compute
@@ -602,11 +738,11 @@
 			</group>
 			<group name="mag">
 				<description>
-					Defines general parameters for magnitudes of a certain type.
+					Defines correction parameters for magnitudes, e.g. station corrections.
 				</description>
 				<struct type="Magnitude type profile">
 					<description>
-					An magnitude profile configures global parameters for a
+					A magnitude profile configures global parameters for a
 					particular magnitude type. The available magnitude types
 					are not fixed and can be extended by plugins. The name of
 					the type must match the one defined in the corresponding
@@ -616,7 +752,7 @@
 						<description>
 						Part of the magnitude station correction. The final
 						magnitude value is multiplier*M+offset. This value
-						is usually not required but there for completeness.
+						is usually not required but is here for completeness.
 						</description>
 					</parameter>
 					<parameter name="offset" type="double" default="0">
@@ -646,13 +782,13 @@
 						is the minimum of noiseBegin and signalBegin.
 						</description>
 					</parameter>
-					<parameter name="signalBegin" type="double" default="-20">
+					<parameter name="signalBegin" type="double" default="-20" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to pick.
 						</description>
 					</parameter>
-					<parameter name="signalEnd" type="double" default="80">
+					<parameter name="signalEnd" type="double" default="80" unit="s">
 						<description>
 						Overrides the default time (relative to the trigger
 						time) of the begin of the signal window used to pick.

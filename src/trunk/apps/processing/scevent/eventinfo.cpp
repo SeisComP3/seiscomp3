@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -148,7 +148,8 @@ size_t EventInformation::matchingPicks(DataModel::DatabaseQuery *q,
 		for ( size_t i = 0; i < o->arrivalCount(); ++i ) {
 			if ( !o->arrival(i) ) continue;
 			// weight = 0 => raus
-			if ( Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
+			if ( !cfg->matchingLooseAssociatedPicks
+			  && Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
 			if ( pickIDs.find(o->arrival(i)->pickID()) != pickIDs.end() )
 				++matches;
 		}
@@ -156,7 +157,8 @@ size_t EventInformation::matchingPicks(DataModel::DatabaseQuery *q,
 	else {
 		for ( size_t i = 0; i < o->arrivalCount(); ++i ) {
 			if ( !o->arrival(i) ) continue;
-			if ( Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
+			if ( !cfg->matchingLooseAssociatedPicks
+			  && Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
 			PickPtr p = cache->get<Pick>(o->arrival(i)->pickID());
 			if ( !p ) {
 				SEISCOMP_WARNING("could not load origin pick %s",
@@ -216,7 +218,8 @@ bool EventInformation::associate(DataModel::Origin *o) {
 	event->add(new OriginReference(o->publicID()));
 	for ( size_t i = 0; i < o->arrivalCount(); ++i ) {
 		if ( !o->arrival(i) ) continue;
-		if ( Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
+		if ( !cfg->matchingLooseAssociatedPicks
+		  && Private::arrivalWeight(o->arrival(i)) == 0 ) continue;
 		pickIDs.insert(o->arrival(i)->pickID());
 		if ( cfg->maxMatchingPicksTimeDiff >= 0 ) {
 			PickPtr p = cache->get<Pick>(o->arrival(i)->pickID());

@@ -253,7 +253,7 @@ class Bulletin(object):
                     m = mag.magnitude()
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
-                except seiscomp3.Core.ValueException:
+                except ValueError:
                     pass # just don't print any error, that's it
                 except Exception, e:
                     sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
@@ -285,7 +285,7 @@ class Bulletin(object):
                     m = mag.magnitude()
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
-                except seiscomp3.Core.ValueException:
+                except ValueError:
                     pass # just don't print any error, that's it
                 except Exception, e:
                     sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))

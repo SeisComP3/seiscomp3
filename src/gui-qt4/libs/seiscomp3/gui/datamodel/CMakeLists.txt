@@ -25,6 +25,7 @@ SET(GUI_DATAMODEL_SOURCES
 	selectstation.cpp
 	locatorsettings.cpp
 	utils.cpp
+	eventlayer.cpp
 )
 
 SET(GUI_DATAMODEL_HEADERS
@@ -58,11 +59,12 @@ SET(GUI_DATAMODEL_MOC_HEADERS
 	locatorsettings.h
 	origindialog.h
 	utils.h
+	eventlayer.h
 )
 
 SET(GUI_DATAMODEL_UI
 	eventlistview.ui
-	eventlistviewfilterdialog.ui
+	eventlistviewregionfilterdialog.ui
 	eventsummaryview.ui
 	eventsummaryview_hypocenter.ui
 	eventsummary.ui

@@ -12,84 +12,111 @@
 #    SeisComP Public License for more details.                             #
 ############################################################################
 
-import traceback, sys
-import seiscomp3.Client
-
-class EventList(seiscomp3.Client.Application):
-  def __init__(self, argc, argv):
-    seiscomp3.Client.Application.__init__(self, argc, argv)
-
-    self.setMessagingEnabled(False)
-    self.setDatabaseEnabled(True, False)
-    self.setDaemonEnabled(False)
-
-    self._startTime = None
-    self._endTime = None
-    self._delimiter = None
+import sys
+from seiscomp3 import Core, Client, DataModel, Logging
 
 
-  def createCommandLineDescription(self):
-    self.commandline().addGroup("Events")
-    self.commandline().addStringOption("Events", "begin", "specify the lower bound of the time interval")
-    self.commandline().addStringOption("Events", "end", "specify the upper bound of the time interval")
-    self.commandline().addStringOption("Events", "delimiter,D", "specify the delimiter of the resulting event ids (default: '\\n')")
-    return True
+def _parseTime(timestring):
+    t = Core.Time()
+    if t.fromString(timestring, "%F %T"):
+        return t
+    if t.fromString(timestring, "%FT%T"):
+        return t
+    if t.fromString(timestring, "%FT%TZ"):
+        return t
+    return None
 
 
-  def init(self):
-    if not seiscomp3.Client.Application.init(self): return False
+class EventList(Client.Application):
 
-    try:
-      start = self.commandline().optionString("begin")
-      self._startTime = seiscomp3.Core.Time()
-      if self._startTime.fromString(start, "%F %T") == False:
-        print >> sys.stderr, "Wrong 'begin' format '%s' -> setting to None" % start
-    except:
-      print >> sys.stderr, "Wrong 'begin' format -> setting to None"
-      self._startTime = seiscomp3.Core.Time()
+    def __init__(self, argc, argv):
+        Client.Application.__init__(self, argc, argv)
 
-    print >> sys.stderr, "Setting start to %s" % self._startTime.toString("%F %T")
+        self.setMessagingEnabled(False)
+        self.setDatabaseEnabled(True, False)
+        self.setDaemonEnabled(False)
 
-    try:
-      end = self.commandline().optionString("end")
-      self._endTime = seiscomp3.Core.Time.FromString(end, "%F %T")
-    except:
-      self._endTime = seiscomp3.Core.Time.GMT()
-
-    print >> sys.stderr, "Setting end to %s" % self._endTime.toString("%F %T")
-
-    try:
-      self._delimiter = self.commandline().optionString("delimiter")
-    except:
-      pass
-
-    return True
+        self._startTime = None
+        self._endTime = None
+        self._delimiter = None
+        self._modifiedAfterTime = None
 
 
-  def run(self):
-    first = True
-    for obj in self.query().getEvents(self._startTime, self._endTime):
-      evt = seiscomp3.DataModel.Event.Cast(obj)
-      if evt is None: continue
-
-      if self._delimiter is None:
-        print evt.publicID()
-      else:
-        if first:
-          first = False
-          sys.stdout.write(evt.publicID())
-        else:
-          sys.stdout.write("%s%s" % (self._delimiter, evt.publicID()))
-        sys.stdout.flush()
-
-    return True
+    def createCommandLineDescription(self):
+        self.commandline().addGroup("Events")
+        self.commandline().addStringOption("Events", "begin", "specify the lower bound of the time interval")
+        self.commandline().addStringOption("Events", "modified-after", "select events modified after the specified time")
+        self.commandline().addStringOption("Events", "end", "specify the upper bound of the time interval")
+        self.commandline().addStringOption("Events", "delimiter,D", "specify the delimiter of the resulting event ids (default: '\\n')")
+        return True
 
 
-try:
-  app = EventList(len(sys.argv), sys.argv)
-  rc = app()
-except:
-  print traceback.format_exc()
-  sys.exit(1)
+    def init(self):
+        if not Client.Application.init(self):
+            return False
 
-sys.exit(rc)
+        try:
+            start = self.commandline().optionString("begin")
+        except:
+            start = "1900-01-01T00:00:00Z"
+        self._startTime = _parseTime(start)
+        if self._startTime is None:
+            Logging.error("Wrong 'begin' format '%s'" % start)
+            return False
+        Logging.debug("Setting start to %s" % self._startTime.toString("%FT%TZ"))
+
+        try:
+            end = self.commandline().optionString("end")
+        except:
+            end = "2500-01-01T00:00:00Z"
+        self._endTime = _parseTime(end)
+        if self._endTime is None:
+            Logging.error("Wrong 'end' format '%s'" % end)
+            return False
+        Logging.debug("Setting end to %s" % self._endTime.toString("%FT%TZ"))
+
+        try:
+            self._delimiter = self.commandline().optionString("delimiter")
+        except:
+            self._delimiter = "\n"
+
+        try:
+            modifiedAfter = self.commandline().optionString("modified-after")
+            self._modifiedAfterTime = _parseTime(modifiedAfter)
+            if self._modifiedAfterTime is None:
+                Logging.error("Wrong 'modified-after' format '%s'" % modifiedAfter)
+                return False
+            Logging.debug("Setting 'modified-after' time to %s" % self._modifiedAfterTime.toString("%FT%TZ"))
+        except: pass
+
+        return True
+
+
+    def run(self):
+        first = True
+        out = []
+        for obj in self.query().getEvents(self._startTime, self._endTime):
+            evt = DataModel.Event.Cast(obj)
+            if not evt:
+                continue
+
+            if self._modifiedAfterTime is not None:
+                try:
+                    if evt.creationInfo().modificationTime() < self._modifiedAfterTime:
+                        continue
+                except ValueError:
+                    continue
+
+            out.append(evt.publicID())
+
+        sys.stdout.write("%s\n" % self._delimiter.join(out))
+
+        return True
+
+
+def main():
+    app = EventList(len(sys.argv), sys.argv)
+    app()
+
+if __name__ == "__main__":
+    main()

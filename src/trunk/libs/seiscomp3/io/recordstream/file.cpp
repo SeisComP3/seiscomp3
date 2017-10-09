@@ -59,6 +59,7 @@ File &File::operator=(const File &f) {
 
 bool File::setSource(string name) {
 	_name = name;
+	_closeRequested = false;
 
 	if ( _fstream.is_open() )
 		_fstream.close();
@@ -129,10 +130,7 @@ bool File::setTimeout(int seconds) {
 
 
 void File::close() {
-	if (_name != "-")
-		_fstream.close();
-	_current = &_fstream;
-	_filter.clear();
+	_closeRequested = true;
 }
 
 
@@ -142,6 +140,14 @@ string File::name() const {
 
 
 istream& File::stream() {
+	if ( _closeRequested ) {
+		if (_name != "-")
+			_fstream.close();
+		_current = &_fstream;
+		_filter.clear();
+		_closeRequested = false;
+	}
+
 	return *_current;
 }
 

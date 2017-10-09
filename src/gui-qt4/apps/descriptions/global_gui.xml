@@ -8,6 +8,50 @@
 			and feel.
 		</description>
 		<configuration>
+			<group name="groups">
+				<description>
+				Configures the target messaging groups for various object types.
+				These parameters should only be touched if you know what you
+				are doing.
+				</description>
+				<parameter name="pick" type="string" default="PICK">
+					<description>
+					Defines the target messaging group for manual picks, e.g.
+					made in scolv.
+					</description>
+				</parameter>
+				<parameter name="amplitude" type="string" default="AMPLITUDE">
+					<description>
+					Defines the target messaging group for amplitudes, e.g.
+					computed in scolv.
+					</description>
+				</parameter>
+				<parameter name="magnitude" type="string" default="MAGNITUDE">
+					<description>
+					Defines the target messaging group for magnitudes. scolv does
+					not use this group but sends magnitudes together with the
+					origin to the origin group.
+					</description>
+				</parameter>
+				<parameter name="location" type="string" default="LOCATION">
+					<description>
+					Defines the target messaging group for origins created in
+					e.g. scolv.
+					</description>
+				</parameter>
+				<parameter name="focalMechanism" type="string" default="FOCMECH">
+					<description>
+					Defines the target messaging group for focal mechanisms created in
+					e.g. scolv.
+					</description>
+				</parameter>
+				<parameter name="event" type="string" default="EVENT">
+					<description>
+					Defines the target messaging group for events and event
+					journal entries.
+					</description>
+				</parameter>
+			</group>
 			<group name="map">
 				<parameter name="location" type="string" default="@DATADIR@/maps/world%s.png">
 					<description>
@@ -38,6 +82,41 @@
 						Used to distinguish tile store implementations provided by plug-ins.
 					</description>
 				</parameter>
+				<parameter name="customLayers" type="list:string">
+					<description>
+						Allows to add custom layers that are included via plugins.
+						This is a list of layer names. A plugin must implement
+						the layer interface and register itself with the
+						name used in this list. The order of layers is the
+						default order. The custom layers are prepended to
+						the maps defaults layers such as the grid and the cities.
+					</description>
+				</parameter>
+				<parameter name="layers" type="string">
+					<description>
+						Defines the order of all configured layers. This
+						includes the standard layers (grid, cities) as
+						well as custom layers. The name of the grid layer
+						is &quot;grid&quot; and the name of the cities
+						layer is &quot;cities&quot;.
+					</description>
+				</parameter>
+				<group name="layers">
+					<group name="events">
+						<description>
+						Configuration options for the events layer that
+						shows all events on the map that are loaded in the
+						event list.
+						</description>
+						<parameter name="visible" type="boolean" default="false">
+						</parameter>
+					</group>
+				</group>
+				<group name="zoom">
+					<parameter name="sensitivity" type="double" default="0.5">
+						<description>Zoom sensitivity of the map</description>
+					</parameter>
+				</group>
 			</group>
 			<group name="scheme">
 				<description>
@@ -83,6 +162,15 @@
 						<parameter name="alternateForeground" type="color" default="808080">
 							<description>A general trace color of the alternate trace (eg scheli).</description>
 						</parameter>
+						<parameter name="background" type="color">
+							<description>The general background color of records/traces.</description>
+						</parameter>
+						<parameter name="alternateBackground" type="color">
+							<description>A general background color of the alternate trace.</description>
+						</parameter>
+						<parameter name="spectrogram" type="color" default="000000">
+							<description>The trace color used on top of a spectrogram.</description>
+						</parameter>
 						<parameter name="gaps" type="color" default="FFFF0040">
 							<description>The color of data gaps in trace views.</description>
 						</parameter>
@@ -92,6 +180,31 @@
 						<parameter name="alignment" type="color" default="FF0000">
 							<description>The color of the alignment marker in trace views.</description>
 						</parameter>
+						<group name="states">
+							<description>
+								Defines the background color of records depending on their state.
+							</description>
+							<parameter name="unrequested" type="color" default="00000080">
+								<description>
+									Additional data which was not requested.
+								</description>
+							</parameter>
+							<parameter name="requested" type="color" default="ffff0080">
+								<description>
+									Requested data Background color of requested data.
+								</description>
+							</parameter>
+							<parameter name="inProgress" type="color" default="00ff0010">
+								<description>
+									Data currently loading.
+								</description>
+							</parameter>
+							<parameter name="notAvailable" type="color" default="ff000080">
+								<description>
+									Data which was requested but is not available.
+								</description>
+							</parameter>
+						</group>
 					</group>
 
 					<group name="picks">
@@ -156,6 +269,12 @@
 					</group>
 
 					<group name="stations">
+						<parameter name="text" type="color" default="ffffff">
+							<description>The color of the station name.</description>
+						</parameter>
+						<parameter name="selected" type="color" default="4D4DB8">
+							<description>The color of a selected station.</description>
+						</parameter>
 						<parameter name="associated" type="color" default="82AD58">
 							<description>The color of associated stations (e.g. in scmv).</description>
 						</parameter>
@@ -183,40 +302,40 @@
 						<description>
 							The color of QC.delay thresholds in scmv.
 						</description>
-						<parameter name="delay0" type="color">
+						<parameter name="delay0" type="color" default="00ffff">
 							<description></description>
 						</parameter>
-						<parameter name="delay1" type="color">
+						<parameter name="delay1" type="color" default="00ff00">
 							<description></description>
 						</parameter>
-						<parameter name="delay2" type="color">
+						<parameter name="delay2" type="color" default="fffd00">
 							<description></description>
 						</parameter>
-						<parameter name="delay3" type="color">
+						<parameter name="delay3" type="color" default="ff6633">
 							<description></description>
 						</parameter>
-						<parameter name="delay4" type="color">
+						<parameter name="delay4" type="color" default="ff0000">
 							<description></description>
 						</parameter>
-						<parameter name="delay5" type="color">
+						<parameter name="delay5" type="color" default="cccccc">
 							<description></description>
 						</parameter>
-						<parameter name="delay6" type="color">
+						<parameter name="delay6" type="color" default="999999">
 							<description></description>
 						</parameter>
-						<parameter name="delay7" type="color">
+						<parameter name="delay7" type="color" default="666666">
 							<description></description>
 						</parameter>
-						<parameter name="qcWarning" type="color">
+						<parameter name="qcWarning" type="color" default="ffff00">
 							<description></description>
 						</parameter>
-						<parameter name="qcError" type="color">
+						<parameter name="qcError" type="color" default="ff0000">
 							<description></description>
 						</parameter>
-						<parameter name="qcOk" type="color">
+						<parameter name="qcOk" type="color" default="00ff00">
 							<description></description>
 						</parameter>
-						<parameter name="qcNoSet" type="color">
+						<parameter name="qcNotSet" type="color" default="000000">
 							<description></description>
 						</parameter>
 					</group>
@@ -336,6 +455,7 @@
 					</group>
 
 					<group name="originSymbol">
+						<parameter name="classic" type="boolean" default="false"/>
 						<group name="depth">
 							<parameter name="gradient" type="gradient" default="0:FF0000,50:ffA500,100:FFFF00,250:00FF00,600:0000FF">
 								<description>The depth gradient.</description>
@@ -360,6 +480,22 @@
 							<description></description>
 						</parameter>
 					</group>
+
+					<group name="splash">
+						<description>
+						Defines colors used in the splash screen shown at application startup.
+						</description>
+						<parameter name="message" type="color" default="808080">
+							<description>
+								Text color of the message string.
+							</description>
+						</parameter>
+						<parameter name="version" type="color" default="02589e">
+							<description>
+								Text color of the version string.
+							</description>
+						</parameter>
+					</group>
 				</group>
 
 				<group name="marker">
@@ -376,7 +512,7 @@
 						The line width of the records / traces.
 						</description>
 					</parameter>
-					<parameter name="antiAliasing" type="bool" default="false">
+					<parameter name="antiAliasing" type="boolean" default="false">
 						<description>
 						Configures antialiasing of records / traces. Antialiasing
 						needs more processing time and does not look as good as
@@ -384,7 +520,7 @@
 						visual quality, disable trace optimization as well.
 						</description>
 					</parameter>
-					<parameter name="optimize" type="bool" default="true">
+					<parameter name="optimize" type="boolean" default="true">
 						<description>
 						Configures optimization of trace polylines. If activated
 						then lines on the same pixel line or same pixel row
@@ -397,36 +533,216 @@
 				</group>
 
 				<group name="fonts">
-					<parameter name="base" type="font">
+					<group name="base">
 						<description>
 							The general base font of an application. This overrides
 							the default Qt4 application font.
 						</description>
-					</parameter>
-					<parameter name="small" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="normal" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="large" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="highlight" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading1" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading2" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="heading3" type="font">
-						<description></description>
-					</parameter>
-					<parameter name="cityLabels" type="font">
-						<description></description>
-					</parameter>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="small">
+						<description>
+							The smallest available font. If undefined the point size is 2 points smaller than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="normal">
+						<description>
+							The default text font. If undefined the point size is 2 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="large">
+						<description>
+							The largest text font. If undefined the point size is 6 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="highlight">
+						<description>
+							Font used to highlight text. If undefined it equals the normal font except for a bold font face.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading1">
+						<description>
+							The largest heading font. If undefined it uses a bold font face and a font size twice as large as the normal font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading2">
+						<description>
+							The second largest heading font. If undefined it uses a bold font face and a font size twice as large as the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="heading3">
+						<description>
+							The smallest heading font. If undefined it uses a bold font face and a font size 4 points larger than the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="cityLabels">
+						<description>
+							Font used for city labels. If undefined it equals the base font.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="splashVersion">
+						<description>
+							Font used for version string in the splash dialog shown at application startup. If undefined it equals the base font with a bold font face and a font size of 12.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
+					<group name="splashMessage">
+						<description>
+							Font used for the message text in the splash dialog shown at application startup. If undefined it equals the base font with a font size of 12.
+						</description>
+						<parameter name="family" type="string">
+							<description>
+								Sets the family name of the font. The name is case insensitive and may include a foundry name.
+							</description>
+						</parameter>
+						<parameter name="size" type="int">
+							<description>
+								Defines the point size of the font
+							</description>
+						</parameter>
+						<parameter name="bold" type="boolean" default="false"/>
+						<parameter name="italic" type="boolean" default="false"/>
+						<parameter name="underline" type="boolean" default="false"/>
+						<parameter name="overline" type="boolean" default="false"/>
+					</group>
 				</group>
 
 				<group name="map">
@@ -483,6 +799,11 @@
 							Other projections may be provided through plug-ins.
 						</description>
 					</parameter>
+					<parameter name="toBGR" type="boolean" default="false">
+						<description>
+							Converts map colors from RGB color scheme to BGR.
+						</description>
+					</parameter>
 				</group>
 				<group name="precision">
 					<parameter name="depth" type="int" default="0">
@@ -528,6 +849,116 @@
 						</description>
 					</parameter>
 				</group>
+				<group name="dateTime">
+					<parameter name="useLocalTime" type="boolean" default="false">
+						<description>
+							Display times in localtime or UTC (default).
+						</description>
+					</parameter>
+				</group>
+				<group name="splash">
+					<description>
+					Defines the appearance of the splash screen shown at application startup.
+					</description>
+					<parameter name="image" type="path" default="@DATADIR/splash.png">
+						<description>
+						Path of an alternative backgroud image for the splash screen.
+						</description>
+					</parameter>
+					<group name="message">
+						<description>
+						Position of the message text.
+						</description>
+						<parameter name="align" type="int" default="44">
+							<description>
+							Qt::Alignment bit mask. Default: AlignHCenter | AlignBottom
+							</description>
+						</parameter>
+						<group name="pos">
+							<description>
+							Position in screen coordinates.
+							</description>
+							<parameter name="x" type="int" default="200">
+								<description>
+								Horizontal position.
+								</description>
+							</parameter>
+							<parameter name="y" type="int" default="260">
+								<description>
+								Vertical position.
+								</description>
+							</parameter>
+						</group>
+					</group>
+					<group name="version">
+						<description>
+						Position of the version string
+						</description>
+						<parameter name="align" type="int" default="34">
+							<description>
+							Qt::Alignment bit mask. Default: AlignRight | AlignBottom
+							</description>
+						</parameter>
+						<group name="pos">
+							<description>
+							Position in screen coordinates.
+							</description>
+							<parameter name="x" type="int" default="362">
+								<description>
+								Horizontal position.
+								</description>
+							</parameter>
+							<parameter name="y" type="int" default="190">
+								<description>
+								Vertical position.
+								</description>
+							</parameter>
+						</group>
+					</group>
+				</group>
+			</group>
+			<group name="events">
+				<group name="timeAgo">
+					<description>
+					Defines maximum age of events to load. The value of all parameters are aggregated.
+					</description>
+					<parameter name="days" type="int" unit="d" default="1">
+						<description>
+						Age in days.
+						</description>
+					</parameter>
+					<parameter name="hours" type="int" unit="h" default="0">
+						<description>
+						Age in hours.
+						</description>
+					</parameter>
+					<parameter name="minutes" type="int" unit="m" default="0">
+						<description>
+						Age in minutes.
+						</description>
+					</parameter>
+					<parameter name="seconds" type="int" unit="s" default="0">
+						<description>
+						Age in seconds.
+						</description>
+					</parameter>
+				</group>
+			</group>
+			<group name="mode">
+				<description>
+					Configuration of special applications modes.
+				</description>
+				<parameter name="interactive" type="boolean" default="true">
+					<description>
+						Defines if application interaction is allowed.
+					</description>
+				</parameter>
+				<parameter name="fullscreen" type="boolean" default="false">
+					<description>
+						Defines if the application should be launched in fullscreen
+						mode hiding title bar, main menu and status bar.
+					</description>
+				</parameter>
 			</group>
 			<group name="picker">
 				<parameter name="filters" type="list:string" default="&quot;BP 0.1 - 1 Hz  3rd order;BW(3,0.1,1)&quot;,&quot;BP 0.1 - 2 Hz  3rd order;BW(3,0.1,2)&quot;,&quot;BP 0.4 - 1 Hz  3rd order;BW(3,0.4,1)&quot;,&quot;@BP 0.7 - 2 Hz  3rd order;BW(3,0.7,2)&quot;&quot;BP 1 - 3 Hz  3rd order;BW(3,1.0,3)&quot;,&quot;BP 2 - 4 Hz  3rd order;BW(3,2.0,4)&quot;,&quot;BP 3 - 6 Hz  3rd order;BW(3,3.0,6)&quot;,&quot;BP 4 - 8 Hz  3rd order;BW(3,4.0,8)&quot;,&quot;BP 1 - 5 Hz  3rd order;BW(3,1.0,5)&quot;,&quot;BP 0.7 - 2 Hz + STA/LTA(1,50);RMHP(10)->ITAPER(30)->BW(3,0.7,2)->STALTA(1,50)&quot;">
@@ -551,6 +982,40 @@
 					the result set.
 					</description>
 				</parameter>
+				<parameter name="customColumn" type="string">
+					<description>
+					Name of an additional custom column which displays the value
+					of certain origin and event comments.
+					</description>
+				</parameter>
+				<group name="customColumn">
+					<parameter name="originCommentID" type="string">
+						<description>
+						ID of the origin comment to look up.
+						</description>
+					</parameter>
+					<parameter name="eventCommentID" type="string">
+						<description>
+						ID of the event comment to look up.
+						</description>
+					</parameter>
+					<parameter name="pos" type="int" default="-1">
+						<description>
+						Position of the column. If the configured position is less than 0 or if it
+						exceeds the total number of columns then the column is appended to the right.
+						</description>
+					</parameter>
+					<parameter name="default" type="string">
+						<description>
+						Default value to display if the specified origin or event comment id was not found.
+						</description>
+					</parameter>
+					<parameter name="colors" type="list:string">
+						<description>
+						Mapping of comment values to colors used as text color. E.g. "foo:#000,bar:red".
+						</description>
+					</parameter>
+				</group>
 				<group name="region">
 					<struct type="eventlist filter region" link="eventlist.regions">
 						<description>
@@ -627,6 +1092,44 @@
 							option.
 							</description>
 						</parameter>
+					</group>
+				</group>
+				<group name="scripts">
+					<parameter name="columns" type="list:string">
+						<description>
+						Registration of custom event list columns.
+						</description>
+					</parameter>
+					<group name="column">
+						<description>
+						Definition of custom event list column whose values are filled by external scripts.
+						</description>
+						<struct type="custom column profile">
+							<parameter name="script" type="path">
+								<description>
+								External script to invoke for each event list entry. The object represented by the
+								list entry is serialized to XML and passed to the script on stdin. If the return
+								code of the script is 0 ('success') then the script result is read from stdout and
+								displayed in the corresponding event list cell.
+								</description>
+							</parameter>
+							<parameter name="pos" type="int" default="-1">
+								<description>
+								Position of the column. If the configured position is less than 0 or if it
+								exceeds the total number of columns then the column is appended to the right.
+								</description>
+							</parameter>
+							<parameter name="label" type="string">
+								<description>
+								Column name shown in header of event list table.
+								</description>
+							</parameter>
+							<parameter name="types" type="list:string">
+								<description>
+								Object types this script should be invoked for. Supported values are 'Event' and 'Origin'.
+								</description>
+							</parameter>
+						</struct>
 					</group>
 				</group>
 			</group>

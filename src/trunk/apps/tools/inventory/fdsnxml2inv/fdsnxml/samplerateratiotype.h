@@ -59,12 +59,12 @@ class SampleRateRatioType : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	public:
 		//! XML tag: NumberSamples
-		void setNumberSamples(double numberSamples);
-		double numberSamples() const;
+		void setNumberSamples(int numberSamples);
+		int numberSamples() const;
 
 		//! XML tag: NumberSeconds
-		void setNumberSeconds(double numberSeconds);
-		double numberSeconds() const;
+		void setNumberSeconds(int numberSeconds);
+		int numberSeconds() const;
 
 
 	// ------------------------------------------------------------------
@@ -72,8 +72,8 @@ class SampleRateRatioType : public Core::BaseObject {
 	// ------------------------------------------------------------------
 	private:
 		// Attributes
-		double _numberSamples;
-		double _numberSeconds;
+		int _numberSamples;
+		int _numberSeconds;
 };
 
 

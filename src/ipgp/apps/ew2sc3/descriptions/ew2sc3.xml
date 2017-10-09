@@ -57,7 +57,7 @@
 					Name of the earth model used by Earthworm location process
 					</description>
 				</parameter>
-				<parameter name="enableArchiving" type="bool">
+				<parameter name="enableArchiving" type="boolean">
 					<description>
 					Enable/Disable hypo2000_arc message file archiving (usefull for troobleshooting)
 					</description>
@@ -92,7 +92,7 @@
 					This string should be identical as Earthworm export_generic SendAliveText string
 					</description>
 				</parameter>
-				<parameter name="enableUncertainties" type="bool">
+				<parameter name="enableUncertainties" type="boolean">
 					<description>
 					Enable/Disable uncertainties conversions.
 					Earthworm doesn't have uncertainties but weight from 0 to 4.

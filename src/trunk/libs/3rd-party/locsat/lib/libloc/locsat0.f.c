@@ -5,33 +5,44 @@
 
 #include "f2c.h"
 
-/* Common Block Declarations */
 
-struct sccslocsat0_1_ {
-    char sccsid[80];
-};
+int hypcut0_(char *staid, float *stalat, float *stalon, int *nsta,
+             float *dobs, float *dsd, char *dwavid,
+             int *ipsta, int *ipwav, int *nwav, int *maxtbd, int *maxtbz, int *ntbd,
+             float *tbd, float *tbtt, int *idtyp, int *iderr,
+             char *atype, int *ndata, int *luout, char *prtflg, float *alat0, float *alon0,
+             int *ierr, int staid_len, int dwavid_len, int atype_len, int prtflg_len);
 
-#define sccslocsat0_1 (*(struct sccslocsat0_1_ *) &sccslocsat0_)
-
-/* Initialized data */
-
-struct {
-    char e_1[80];
-    } sccslocsat0_ = { {'@', '(', '#', ')', 'l', 'o', 'c', 's', 'a', 't', '0',
-	     '.', 'f', '\t', '4', '4', '.', '1', '\t', '9', '/', '2', '0', 
-	    '/', '9', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-	    ' ', ' ', ' ', ' ', ' '} };
+int hypinv0_(char *dstaid, char *dwavid, char *dtype, char *atype,
+             float *dobs, float *dsd, int *ndata,
+             float *stalat, float *stalon, int *nsta, int *maxtbd, int *maxtbz, int *ntbd, int *ntbz,
+             float *tbd, float *tbz, float *tbtt,
+             int *ipsta, int *ipwav, int *idtyp, int *iderr,
+             float *alat0, float *alon0, float *zfoc0, float *sig0,
+             int *ndf0,
+             float *pconf, float *radius, float *azwt, float *damp,
+             int *maxit,
+             char *prtflg, char *fxdflg,
+             int *luout,
+             float *alat, float *alon, float *zfoc, float *torg, float *sighat, float *snssd,
+             int *ndf,
+             float *epmaj, float *epmin, float *epstr,
+             float *zfint, float *toint,
+             float *sxx, float *syy, float *szz, float *stt, float *sxy,
+             float *sxz, float *syz, float *stx, float *sty, float *stz,
+             float *stadel, float *staazi, float *stabaz, float *epimp,
+             double *rank, float *resid,
+             int *igap, int *niter, int *nd, int *ierr,
+             int dstaid_len, int dwavid_len, int dtype_len, int atype_len,
+             int prtflg_len, int fxdflg_len);
 
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static integer c__9 = 9;
-static real c_b80 = (float)6371.;
-static real c_b183 = (float)0.;
+static int c__1 = 1;
+static int c__9 = 9;
+static float c_b80 = (float)6371.;
+static float c_b183 = (float)0.;
 static doublereal c_b322 = .5;
 
 /* NAME */
@@ -200,25 +211,25 @@ static doublereal c_b322 = .5;
 	dstaid_len, dwavid_len, dtype_len, atype_len, staid_len, wavid_len, 
 	prtflg_len, fxdflg_len, outfile_len)
 char *dstaid, *dwavid, *dtype, *atype;
-real *dobs, *dsd;
-integer *idarid, *ndata;
+float *dobs, *dsd;
+int *idarid, *ndata;
 char *staid;
-real *stalat, *stalon, *stelev, *stacor;
-integer *nsta;
+float *stalat, *stalon, *stelev, *stacor;
+int *nsta;
 char *wavid;
-integer *nwav, *maxtbd, *maxtbz, *ntbd, *ntbz;
-real *tbd, *tbz, *tbtt, *alat0, *alon0, *zfoc0, *sig0;
-integer *ndf0;
-real *pconf, *azwt, *damp;
-integer *maxit;
+int *nwav, *maxtbd, *maxtbz, *ntbd, *ntbz;
+float *tbd, *tbz, *tbtt, *alat0, *alon0, *zfoc0, *sig0;
+int *ndf0;
+float *pconf, *azwt, *damp;
+int *maxit;
 char *prtflg, *fxdflg, *outfile;
-integer *luout;
-real *alat, *alon, *zfoc, *torg, *sighat, *snssd;
-integer *ndf;
-real *epmaj, *epmin, *epstr, *zfint, *toint, *sxx, *syy, *szz, *stt, *sxy, *
+int *luout;
+float *alat, *alon, *zfoc, *torg, *sighat, *snssd;
+int *ndf;
+float *epmaj, *epmin, *epstr, *zfint, *toint, *sxx, *syy, *szz, *stt, *sxy, *
 	sxz, *syz, *stx, *sty, *stz, *stadel, *staazi, *stabaz, *epimp, *
 	zfimp, *resid;
-integer *ipsta, *iderr, *niter, *ierr;
+int *ipsta, *iderr, *niter, *ierr;
 ftnlen dstaid_len;
 ftnlen dwavid_len;
 ftnlen dtype_len;
@@ -230,48 +241,47 @@ ftnlen fxdflg_len;
 ftnlen outfile_len;
 {
     /* System generated locals */
-    integer tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
+    int tbd_dim1, tbd_offset, tbtt_dim1, tbtt_dim2, tbtt_offset, tbz_dim1,
 	     tbz_offset, i__1, i__2;
-    real r__1, r__2, r__3, r__4;
+    float r__1, r__2, r__3, r__4;
     doublereal d__1, d__2;
     olist o__1;
     cllist cl__1;
 
     /* Builtin functions */
-    integer s_wsfe(), do_fio(), e_wsfe(), s_cmp();
+    int s_wsfe(), do_fio(), e_wsfe(), s_cmp();
     /* Subroutine */ int s_copy();
-    integer i_len(), f_open(), s_wsle(), do_lio(), e_wsle();
+    int i_len(), f_open(), s_wsle(), do_lio(), e_wsle();
     double sqrt(), cos(), pow_dd();
-    integer f_clos();
+    int f_clos();
 
     /* Local variables */
-    static integer igap, iday;
+    static int igap, iday;
     static doublereal rank;
-    static integer imin, icnt;
+    static int imin, icnt;
     extern /* Subroutine */ int etoh_();
     static doublereal azim[9999];
-    static integer indx[9999], idoy;
+    static int indx[9999], idoy;
     static doublereal dist[9999];
     static logical lprt[19];
-    static integer indx2[50], i__, j, m, n;
+    static int indx2[50], i__, j, m, n;
     static char mname[3];
-    static integer isave;
+    static int isave;
     static logical opfil;
-    static integer itdex[50], len_phase__;
+    static int itdex[50], len_phase__;
     static doublereal torgd;
-    static integer ipwav[9999], idtyp[9999], k2;
+    static int ipwav[9999], idtyp[9999], k2;
     static doublereal slovecres;
-    static integer nd;
+    static int nd;
     extern /* Subroutine */ int check_data__();
     static char ew[2], ns[2];
-    extern integer lnblnk_();
+    extern int lnblnk_();
     static doublereal slodel;
-    static integer itimes;
-    static real sec;
-    extern /* Subroutine */ int hypcut0_(), hypinv0_();
-    static integer ihr;
+    static int itimes;
+    static float sec;
+    static int ihr;
     static doublereal obs[50];
-    static integer imo, y1970, ios, iyr, len_sta__;
+    static int imo, y1970, ios, iyr, len_sta__;
     static doublereal timeref, dsdnorm;
     extern /* Subroutine */ int index_array__();
 
@@ -380,7 +390,7 @@ f9.3,                          f8.2,f8.3,i4)", 0 };
 	s_wsfe(&io___1);
 	do_fio(&c__1, " Insufficient data for a solution: # of Data = ", (
 		ftnlen)47);
-	do_fio(&c__1, (char *)&nd, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&nd, (ftnlen)sizeof(int));
 	e_wsfe();
 	*ierr = 5;
 	return 0;
@@ -443,17 +453,17 @@ f9.3,                          f8.2,f8.3,i4)", 0 };
 	do_fio(&c__1, " =======================================", (ftnlen)40);
 	do_fio(&c__1, "======================================= ", (ftnlen)40);
 	do_fio(&c__1, "  First arrival detected at: ", (ftnlen)29);
-	do_fio(&c__1, (char *)&ihr, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&ihr, (ftnlen)sizeof(int));
 	do_fio(&c__1, ":", (ftnlen)1);
-	do_fio(&c__1, (char *)&imin, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&imin, (ftnlen)sizeof(int));
 	do_fio(&c__1, ":", (ftnlen)1);
-	do_fio(&c__1, (char *)&sec, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sec, (ftnlen)sizeof(float));
 	do_fio(&c__1, " (GMT) on: ", (ftnlen)11);
 	do_fio(&c__1, mname, (ftnlen)3);
 	do_fio(&c__1, ".", (ftnlen)1);
-	do_fio(&c__1, (char *)&iday, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&iday, (ftnlen)sizeof(int));
 	do_fio(&c__1, ",", (ftnlen)1);
-	do_fio(&c__1, (char *)&iyr, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&iyr, (ftnlen)sizeof(int));
 	do_fio(&c__1, " =======================================", (ftnlen)40);
 	do_fio(&c__1, "======================================= ", (ftnlen)40);
 	e_wsfe();
@@ -463,9 +473,9 @@ f9.3,                          f8.2,f8.3,i4)", 0 };
 	    io___24.ciunit = *luout;
 	    s_wsfe(&io___24);
 	    do_fio(&c__1, staid + i__ * staid_len, staid_len);
-	    do_fio(&c__1, (char *)&stalat[i__], (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&stalon[i__], (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&stelev[i__], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&stalat[i__], (ftnlen)sizeof(float));
+	    do_fio(&c__1, (char *)&stalon[i__], (ftnlen)sizeof(float));
+	    do_fio(&c__1, (char *)&stelev[i__], (ftnlen)sizeof(float));
 	    e_wsfe();
 	}
 	io___25.ciunit = *luout;
@@ -478,14 +488,14 @@ f9.3,                          f8.2,f8.3,i4)", 0 };
 /* L1020: */
 	    io___26.ciunit = *luout;
 	    s_wsfe(&io___26);
-	    do_fio(&c__1, (char *)&idarid[n], (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&idarid[n], (ftnlen)sizeof(int));
 	    do_fio(&c__1, dstaid + n * dstaid_len, dstaid_len);
 	    do_fio(&c__1, dwavid + n * dwavid_len, dwavid_len);
 	    do_fio(&c__1, dtype + n * dtype_len, dtype_len);
 	    do_fio(&c__1, atype + n * atype_len, atype_len);
-	    do_fio(&c__1, (char *)&dobs[n], (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&dsd[n], (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&iderr[n], (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&dobs[n], (ftnlen)sizeof(float));
+	    do_fio(&c__1, (char *)&dsd[n], (ftnlen)sizeof(float));
+	    do_fio(&c__1, (char *)&iderr[n], (ftnlen)sizeof(int));
 	    e_wsfe();
 	}
 	io___27.ciunit = *luout;
@@ -540,21 +550,21 @@ L1040:
 	    io___32.ciunit = *luout;
 	    s_wsfe(&io___32);
 	    do_fio(&c__1, " Location ran for", (ftnlen)17);
-	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(int));
 	    do_fio(&c__1, " iterations ... Converged!", (ftnlen)26);
 	    e_wsfe();
 	} else if (*ierr == 1) {
 	    io___33.ciunit = *luout;
 	    s_wsfe(&io___33);
 	    do_fio(&c__1, " Location ran for", (ftnlen)17);
-	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(int));
 	    do_fio(&c__1, " iterations ... Exhausted!", (ftnlen)26);
 	    e_wsfe();
 	} else if (*ierr == 2) {
 	    io___34.ciunit = *luout;
 	    s_wsfe(&io___34);
 	    do_fio(&c__1, " Location ran for", (ftnlen)17);
-	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&(*niter), (ftnlen)sizeof(int));
 	    do_fio(&c__1, " iterations ... Diverged!", (ftnlen)25);
 	    e_wsfe();
 	} else if (*ierr == 5) {
@@ -562,7 +572,7 @@ L1040:
 	    s_wsfe(&io___35);
 	    do_fio(&c__1, " Insufficient data for a solution: # of Data = ", (
 		    ftnlen)47);
-	    do_fio(&c__1, (char *)&nd, (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&nd, (ftnlen)sizeof(int));
 	    e_wsfe();
 	    goto L1120;
 	} else if (*ierr == 6) {
@@ -594,12 +604,12 @@ L1040:
 	    do_fio(&c__1, " Final location estimate:", (ftnlen)25);
 	    do_fio(&c__1, "      Latitude:", (ftnlen)15);
 	    r__1 = dabs(*alat);
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, ns, (ftnlen)2);
 	    do_fio(&c__1, "     Longitude:", (ftnlen)15);
 	    r__2 = dabs(*alon);
-	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, ew, (ftnlen)2);
 	    e_wsfe();
@@ -609,21 +619,21 @@ L1040:
 	    do_fio(&c__1, " Final location estimate (+/- S.D.):", (ftnlen)36);
 	    do_fio(&c__1, "      Latitude:", (ftnlen)15);
 	    r__1 = dabs(*alat);
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, ns, (ftnlen)2);
 	    do_fio(&c__1, " +/- ", (ftnlen)5);
 	    r__2 = sqrt(*syy);
-	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " km.", (ftnlen)4);
 	    do_fio(&c__1, "     Longitude:", (ftnlen)15);
 	    r__3 = dabs(*alon);
-	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " deg.", (ftnlen)5);
 	    do_fio(&c__1, ew, (ftnlen)2);
 	    do_fio(&c__1, " +/- ", (ftnlen)5);
 	    r__4 = sqrt(*sxx);
-	    do_fio(&c__1, (char *)&r__4, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__4, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " km.", (ftnlen)4);
 	    e_wsfe();
 	}
@@ -632,17 +642,17 @@ L1040:
 		io___42.ciunit = *luout;
 		s_wsfe(&io___42);
 		do_fio(&c__1, "Depth:", (ftnlen)6);
-		do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(float));
 		do_fio(&c__1, " km.", (ftnlen)4);
 		e_wsfe();
 	    } else {
 		io___43.ciunit = *luout;
 		s_wsfe(&io___43);
 		do_fio(&c__1, "Depth:", (ftnlen)6);
-		do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(float));
 		do_fio(&c__1, "  km.   +/- ", (ftnlen)12);
 		r__1 = sqrt(*szz);
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
 		do_fio(&c__1, " km.", (ftnlen)4);
 		e_wsfe();
 	    }
@@ -650,9 +660,9 @@ L1040:
 	    io___44.ciunit = *luout;
 	    s_wsfe(&io___44);
 	    do_fio(&c__1, "         Depth:", (ftnlen)15);
-	    do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&(*zfoc), (ftnlen)sizeof(float));
 	    do_fio(&c__1, "  km.   +/- ", (ftnlen)12);
-	    do_fio(&c__1, (char *)&c_b183, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&c_b183, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " km. (Fixed)", (ftnlen)12);
 	    e_wsfe();
 	}
@@ -660,7 +670,7 @@ L1040:
 	    io___45.ciunit = *luout;
 	    s_wsfe(&io___45);
 	    do_fio(&c__1, " Relative O.T.:", (ftnlen)15);
-	    do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(float));
 	    do_fio(&c__1, " sec.", (ftnlen)5);
 	    do_fio(&c__1, " Absolute O.T.:", (ftnlen)15);
 	    do_fio(&c__1, (char *)&torgd, (ftnlen)sizeof(doublereal));
@@ -670,16 +680,16 @@ L1040:
 	    io___46.ciunit = *luout;
 	    s_wsfe(&io___46);
 	    do_fio(&c__1, " Relative O.T.:", (ftnlen)15);
-	    do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&(*torg), (ftnlen)sizeof(float));
 	    do_fio(&c__1, " sec.   +/- ", (ftnlen)12);
 	    r__1 = sqrt(*stt);
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " sec.", (ftnlen)5);
 	    do_fio(&c__1, " Absolute O.T.:", (ftnlen)15);
 	    do_fio(&c__1, (char *)&torgd, (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, " sec.   +/- ", (ftnlen)12);
 	    r__2 = sqrt(*stt);
-	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(float));
 	    do_fio(&c__1, " sec.", (ftnlen)5);
 	    e_wsfe();
 	}
@@ -691,70 +701,70 @@ L1040:
 	io___47.ciunit = *luout;
 	s_wsfe(&io___47);
 	do_fio(&c__1, " Confidence region at ", (ftnlen)22);
-	do_fio(&c__1, (char *)&(*pconf), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*pconf), (ftnlen)sizeof(float));
 	do_fio(&c__1, " level:", (ftnlen)7);
 	do_fio(&c__1, "   Semi-major axis:", (ftnlen)19);
-	do_fio(&c__1, (char *)&(*epmaj), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*epmaj), (ftnlen)sizeof(float));
 	do_fio(&c__1, "  km. =", (ftnlen)7);
 	r__1 = *epmaj * (float).00899322;
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(float));
 	do_fio(&c__1, " deg.", (ftnlen)5);
 	do_fio(&c__1, "   Semi-minor axis:", (ftnlen)19);
-	do_fio(&c__1, (char *)&(*epmin), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*epmin), (ftnlen)sizeof(float));
 	do_fio(&c__1, "  km. =", (ftnlen)7);
 	r__2 = *epmin * (float).00899322;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(float));
 	do_fio(&c__1, " deg.", (ftnlen)5);
 	e_wsfe();
 	io___48.ciunit = *luout;
 	s_wsfe(&io___48);
 	do_fio(&c__1, " Major-axis strike:", (ftnlen)19);
-	do_fio(&c__1, (char *)&(*epstr), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*epstr), (ftnlen)sizeof(float));
 	do_fio(&c__1, " deg. clockwise from North", (ftnlen)26);
 	e_wsfe();
 	if (s_cmp(fxdflg, "n", fxdflg_len, (ftnlen)1) == 0) {
 	    io___49.ciunit = *luout;
 	    s_wsfe(&io___49);
 	    do_fio(&c__1, "       Depth error:", (ftnlen)19);
-	    do_fio(&c__1, (char *)&(*zfint), (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&(*zfint), (ftnlen)sizeof(float));
 	    do_fio(&c__1, "  km.", (ftnlen)5);
 	    e_wsfe();
 	}
 	io___50.ciunit = *luout;
 	s_wsfe(&io___50);
 	do_fio(&c__1, "  Orig. time error:", (ftnlen)19);
-	do_fio(&c__1, (char *)&(*toint), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*toint), (ftnlen)sizeof(float));
 	do_fio(&c__1, " sec.", (ftnlen)5);
 	do_fio(&c__1, " Standard errors (sigma):", (ftnlen)25);
 	do_fio(&c__1, "              Prior:", (ftnlen)20);
-	do_fio(&c__1, (char *)&(*sig0), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*sig0), (ftnlen)sizeof(float));
 	do_fio(&c__1, " (", (ftnlen)2);
-	do_fio(&c__1, (char *)&(*ndf0), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*ndf0), (ftnlen)sizeof(int));
 	do_fio(&c__1, " deg. of freedom)", (ftnlen)17);
 	do_fio(&c__1, "          Posterior:", (ftnlen)20);
-	do_fio(&c__1, (char *)&(*sighat), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*sighat), (ftnlen)sizeof(float));
 	do_fio(&c__1, " (", (ftnlen)2);
-	do_fio(&c__1, (char *)&(*ndf), (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&(*ndf), (ftnlen)sizeof(int));
 	do_fio(&c__1, " deg. of freedom)", (ftnlen)17);
 	do_fio(&c__1, "          Posterior:", (ftnlen)20);
-	do_fio(&c__1, (char *)&(*snssd), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*snssd), (ftnlen)sizeof(float));
 	do_fio(&c__1, " (Normalized sample S.D.)", (ftnlen)25);
 	e_wsfe();
 	io___51.ciunit = *luout;
 	s_wsfe(&io___51);
 	do_fio(&c__1, "      Azimuthal weighting: ", (ftnlen)27);
-	do_fio(&c__1, (char *)&(*azwt), (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&(*azwt), (ftnlen)sizeof(float));
 	do_fio(&c__1, " Effective rank of matrix: ", (ftnlen)27);
 	do_fio(&c__1, (char *)&rank, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, "    Maximum azimuthal GAP: ", (ftnlen)27);
-	do_fio(&c__1, (char *)&igap, (ftnlen)sizeof(integer));
+	do_fio(&c__1, (char *)&igap, (ftnlen)sizeof(int));
 	do_fio(&c__1, " deg.", (ftnlen)5);
 	e_wsfe();
 	if (*damp >= (float)0.) {
 	    io___52.ciunit = *luout;
 	    s_wsfe(&io___52);
 	    do_fio(&c__1, " Percent damping: ", (ftnlen)18);
-	    do_fio(&c__1, (char *)&(*damp), (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&(*damp), (ftnlen)sizeof(float));
 	    e_wsfe();
 /*        else */
 /*           write (luout, '(a)') '  - No damping required !' */
@@ -853,17 +863,17 @@ L1040:
 	    }
 	    io___70.ciunit = *luout;
 	    s_wsfe(&io___70);
-	    do_fio(&c__1, (char *)&idarid[j], (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&idarid[j], (ftnlen)sizeof(int));
 	    do_fio(&c__1, dstaid + j * dstaid_len, dstaid_len);
 	    do_fio(&c__1, dwavid + j * dwavid_len, dwavid_len);
 	    do_fio(&c__1, dtype + j * dtype_len, dtype_len);
 	    do_fio(&c__1, atype + j * atype_len, atype_len);
-	    do_fio(&c__1, (char *)&resid[j], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&resid[j], (ftnlen)sizeof(float));
 	    do_fio(&c__1, (char *)&dsdnorm, (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&dist[j - 1], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&azim[j - 1], (ftnlen)sizeof(doublereal));
-	    do_fio(&c__1, (char *)&epimp[j], (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&iderr[j], (ftnlen)sizeof(integer));
+	    do_fio(&c__1, (char *)&epimp[j], (ftnlen)sizeof(float));
+	    do_fio(&c__1, (char *)&iderr[j], (ftnlen)sizeof(int));
 	    e_wsfe();
 	    if (iderr[n] > 0) {
 		lprt[iderr[n] - 1] = TRUE_;

@@ -210,7 +210,7 @@ struct ResponsePolynomialHandler : public IO::XML::TypedClassHandler<ResponsePol
 		addProperty("approximationUpperBound", "", Optional, Attribute, "approximationUpperBound");
 		addProperty("approximationError", "", Optional, Attribute, "approximationError");
 		addProperty("numberOfCoefficients", "", Optional, Attribute, "numberOfCoefficients");
-		addProperty("coefficients", "", Optional, Attribute, "coefficients");
+		addProperty("coefficients", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "coefficients");
 		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
 	}
 };

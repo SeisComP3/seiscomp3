@@ -113,7 +113,7 @@ void JournalEntry::setCreated(const OPT(Seiscomp::Core::Time)& created) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time JournalEntry::created() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time JournalEntry::created() const {
 	if ( _created )
 		return *_created;
 	throw Seiscomp::Core::ValueException("JournalEntry.created is not set");
@@ -317,7 +317,7 @@ void JournalEntry::accept(Visitor* visitor) {
 void JournalEntry::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: JournalEntry skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -1374,6 +1374,9 @@ class xml_ResponsePAZ(object):
         self.zeros = src.zeros
         self.poles = src.poles
         self.remark = src.remark
+        self.decimationFactor = src.decimationFactor
+        self.delay = src.delay
+        self.correction = src.correction
         self.publicID = src.publicID
 
     def _copy_to(self, dest):
@@ -1399,6 +1402,12 @@ class xml_ResponsePAZ(object):
             dest.poles = self.poles
         if self._element.find(xml_ResponsePAZ._xmlns + "remark") is not None:
             dest.remark = self.remark
+        if self._element.get("decimationFactor") is not None:
+            dest.decimationFactor = self.decimationFactor
+        if self._element.get("delay") is not None:
+            dest.delay = self.delay
+        if self._element.get("correction") is not None:
+            dest.correction = self.correction
         if self._element.get("publicID") is not None:
             dest.publicID = self.publicID
 
@@ -1515,6 +1524,33 @@ class xml_ResponsePAZ(object):
             return _get_blob(self._element, xml_ResponsePAZ._xmlns + "remark")
         def fset(self, value):
             _set_blob(self._element, xml_ResponsePAZ._xmlns + "remark", value)
+        return locals()
+
+    @Property
+    def decimationFactor():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("decimationFactor"))
+        def fset(self, value):
+            self._element.set("decimationFactor", _int_toxml(value))
+        return locals()
+
+    @Property
+    def delay():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("delay"))
+        def fset(self, value):
+            self._element.set("delay", _float_toxml(value))
+        return locals()
+
+    @Property
+    def correction():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("correction"))
+        def fset(self, value):
+            self._element.set("correction", _float_toxml(value))
         return locals()
 
 
@@ -1683,6 +1719,450 @@ class xml_ResponsePolynomial(object):
             return _get_blob(self._element, xml_ResponsePolynomial._xmlns + "remark")
         def fset(self, value):
             _set_blob(self._element, xml_ResponsePolynomial._xmlns + "remark", value)
+        return locals()
+
+
+# Inventory::ResponseFAP
+class xml_ResponseFAP(object):
+    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
+    def __init__(self, e = None):
+        if e is None:
+            self._element = ET.Element(xml_ResponseFAP._xmlns + "responseFAP")
+        else:
+            self._element = e
+
+    def _append_child(self, obj):
+        self._element.append(obj._element)
+
+    def _copy_from(self, src):
+        self.name = src.name
+        self.gain = src.gain
+        self.gainFrequency = src.gainFrequency
+        self.numberOfTuples = src.numberOfTuples
+        self.tuples = src.tuples
+        self.remark = src.remark
+        self.publicID = src.publicID
+
+    def _copy_to(self, dest):
+        if self._element.get("name") is not None:
+            dest.name = self.name
+        if self._element.get("gain") is not None:
+            dest.gain = self.gain
+        if self._element.get("gainFrequency") is not None:
+            dest.gainFrequency = self.gainFrequency
+        if self._element.get("numberOfTuples") is not None:
+            dest.numberOfTuples = self.numberOfTuples
+        if self._element.find(xml_ResponseFAP._xmlns + "tuples") is not None:
+            dest.tuples = self.tuples
+        if self._element.find(xml_ResponseFAP._xmlns + "remark") is not None:
+            dest.remark = self.remark
+        if self._element.get("publicID") is not None:
+            dest.publicID = self.publicID
+
+    @Property
+    def publicID():
+        def fget(self):
+            return _string_fromxml(self._element.get("publicID"))
+        def fset(self, value):
+            self._element.set("publicID", _string_toxml(value))
+        return locals()
+
+    @Property
+    def action():
+        def fget(self):
+            return _string_fromxml(self._element.get("action"))
+        def fset(self, value):
+            self._element.set("action", _string_toxml(value))
+        return locals()
+
+    @Property
+    def name():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("name"))
+        def fset(self, value):
+            self._element.set("name", _string_toxml(value))
+        return locals()
+
+    @Property
+    def gain():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gain"))
+        def fset(self, value):
+            self._element.set("gain", _float_toxml(value))
+        return locals()
+
+    @Property
+    def gainFrequency():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gainFrequency"))
+        def fset(self, value):
+            self._element.set("gainFrequency", _float_toxml(value))
+        return locals()
+
+    @Property
+    def numberOfTuples():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("numberOfTuples"))
+        def fset(self, value):
+            self._element.set("numberOfTuples", _int_toxml(value))
+        return locals()
+
+    @Property
+    def tuples():
+    # type: RealArray
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFAP._xmlns + "tuples")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFAP._xmlns + "tuples", value)
+        return locals()
+
+    @Property
+    def remark():
+    # type: Blob
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFAP._xmlns + "remark")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFAP._xmlns + "remark", value)
+        return locals()
+
+
+# Inventory::ResponseFIR
+class xml_ResponseFIR(object):
+    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
+    def __init__(self, e = None):
+        if e is None:
+            self._element = ET.Element(xml_ResponseFIR._xmlns + "responseFIR")
+        else:
+            self._element = e
+
+    def _append_child(self, obj):
+        self._element.append(obj._element)
+
+    def _copy_from(self, src):
+        self.name = src.name
+        self.gain = src.gain
+        self.gainFrequency = src.gainFrequency
+        self.decimationFactor = src.decimationFactor
+        self.delay = src.delay
+        self.correction = src.correction
+        self.numberOfCoefficients = src.numberOfCoefficients
+        self.symmetry = src.symmetry
+        self.coefficients = src.coefficients
+        self.remark = src.remark
+        self.publicID = src.publicID
+
+    def _copy_to(self, dest):
+        if self._element.get("name") is not None:
+            dest.name = self.name
+        if self._element.get("gain") is not None:
+            dest.gain = self.gain
+        if self._element.get("gainFrequency") is not None:
+            dest.gainFrequency = self.gainFrequency
+        if self._element.get("decimationFactor") is not None:
+            dest.decimationFactor = self.decimationFactor
+        if self._element.get("delay") is not None:
+            dest.delay = self.delay
+        if self._element.get("correction") is not None:
+            dest.correction = self.correction
+        if self._element.get("numberOfCoefficients") is not None:
+            dest.numberOfCoefficients = self.numberOfCoefficients
+        if self._element.get("symmetry") is not None:
+            dest.symmetry = self.symmetry
+        if self._element.find(xml_ResponseFIR._xmlns + "coefficients") is not None:
+            dest.coefficients = self.coefficients
+        if self._element.find(xml_ResponseFIR._xmlns + "remark") is not None:
+            dest.remark = self.remark
+        if self._element.get("publicID") is not None:
+            dest.publicID = self.publicID
+
+    @Property
+    def publicID():
+        def fget(self):
+            return _string_fromxml(self._element.get("publicID"))
+        def fset(self, value):
+            self._element.set("publicID", _string_toxml(value))
+        return locals()
+
+    @Property
+    def action():
+        def fget(self):
+            return _string_fromxml(self._element.get("action"))
+        def fset(self, value):
+            self._element.set("action", _string_toxml(value))
+        return locals()
+
+    @Property
+    def name():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("name"))
+        def fset(self, value):
+            self._element.set("name", _string_toxml(value))
+        return locals()
+
+    @Property
+    def gain():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gain"))
+        def fset(self, value):
+            self._element.set("gain", _float_toxml(value))
+        return locals()
+
+    @Property
+    def gainFrequency():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gainFrequency"))
+        def fset(self, value):
+            self._element.set("gainFrequency", _float_toxml(value))
+        return locals()
+
+    @Property
+    def decimationFactor():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("decimationFactor"))
+        def fset(self, value):
+            self._element.set("decimationFactor", _int_toxml(value))
+        return locals()
+
+    @Property
+    def delay():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("delay"))
+        def fset(self, value):
+            self._element.set("delay", _float_toxml(value))
+        return locals()
+
+    @Property
+    def correction():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("correction"))
+        def fset(self, value):
+            self._element.set("correction", _float_toxml(value))
+        return locals()
+
+    @Property
+    def numberOfCoefficients():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("numberOfCoefficients"))
+        def fset(self, value):
+            self._element.set("numberOfCoefficients", _int_toxml(value))
+        return locals()
+
+    @Property
+    def symmetry():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("symmetry"))
+        def fset(self, value):
+            self._element.set("symmetry", _string_toxml(value))
+        return locals()
+
+    @Property
+    def coefficients():
+    # type: RealArray
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFIR._xmlns + "coefficients")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFIR._xmlns + "coefficients", value)
+        return locals()
+
+    @Property
+    def remark():
+    # type: Blob
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseFIR._xmlns + "remark")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseFIR._xmlns + "remark", value)
+        return locals()
+
+
+# Inventory::ResponseIIR
+class xml_ResponseIIR(object):
+    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
+    def __init__(self, e = None):
+        if e is None:
+            self._element = ET.Element(xml_ResponseIIR._xmlns + "responseIIR")
+        else:
+            self._element = e
+
+    def _append_child(self, obj):
+        self._element.append(obj._element)
+
+    def _copy_from(self, src):
+        self.name = src.name
+        self.type = src.type
+        self.gain = src.gain
+        self.gainFrequency = src.gainFrequency
+        self.decimationFactor = src.decimationFactor
+        self.delay = src.delay
+        self.correction = src.correction
+        self.numberOfNumerators = src.numberOfNumerators
+        self.numberOfDenominators = src.numberOfDenominators
+        self.numerators = src.numerators
+        self.denominators = src.denominators
+        self.remark = src.remark
+        self.publicID = src.publicID
+
+    def _copy_to(self, dest):
+        if self._element.get("name") is not None:
+            dest.name = self.name
+        if self._element.get("type") is not None:
+            dest.type = self.type
+        if self._element.get("gain") is not None:
+            dest.gain = self.gain
+        if self._element.get("gainFrequency") is not None:
+            dest.gainFrequency = self.gainFrequency
+        if self._element.get("decimationFactor") is not None:
+            dest.decimationFactor = self.decimationFactor
+        if self._element.get("delay") is not None:
+            dest.delay = self.delay
+        if self._element.get("correction") is not None:
+            dest.correction = self.correction
+        if self._element.get("numberOfNumerators") is not None:
+            dest.numberOfNumerators = self.numberOfNumerators
+        if self._element.get("numberOfDenominators") is not None:
+            dest.numberOfDenominators = self.numberOfDenominators
+        if self._element.find(xml_ResponseIIR._xmlns + "numerators") is not None:
+            dest.numerators = self.numerators
+        if self._element.find(xml_ResponseIIR._xmlns + "denominators") is not None:
+            dest.denominators = self.denominators
+        if self._element.find(xml_ResponseIIR._xmlns + "remark") is not None:
+            dest.remark = self.remark
+        if self._element.get("publicID") is not None:
+            dest.publicID = self.publicID
+
+    @Property
+    def publicID():
+        def fget(self):
+            return _string_fromxml(self._element.get("publicID"))
+        def fset(self, value):
+            self._element.set("publicID", _string_toxml(value))
+        return locals()
+
+    @Property
+    def action():
+        def fget(self):
+            return _string_fromxml(self._element.get("action"))
+        def fset(self, value):
+            self._element.set("action", _string_toxml(value))
+        return locals()
+
+    @Property
+    def name():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("name"))
+        def fset(self, value):
+            self._element.set("name", _string_toxml(value))
+        return locals()
+
+    @Property
+    def type():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("type"))
+        def fset(self, value):
+            self._element.set("type", _string_toxml(value))
+        return locals()
+
+    @Property
+    def gain():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gain"))
+        def fset(self, value):
+            self._element.set("gain", _float_toxml(value))
+        return locals()
+
+    @Property
+    def gainFrequency():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("gainFrequency"))
+        def fset(self, value):
+            self._element.set("gainFrequency", _float_toxml(value))
+        return locals()
+
+    @Property
+    def decimationFactor():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("decimationFactor"))
+        def fset(self, value):
+            self._element.set("decimationFactor", _int_toxml(value))
+        return locals()
+
+    @Property
+    def delay():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("delay"))
+        def fset(self, value):
+            self._element.set("delay", _float_toxml(value))
+        return locals()
+
+    @Property
+    def correction():
+    # type: float
+        def fget(self):
+            return _float_fromxml(self._element.get("correction"))
+        def fset(self, value):
+            self._element.set("correction", _float_toxml(value))
+        return locals()
+
+    @Property
+    def numberOfNumerators():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("numberOfNumerators"))
+        def fset(self, value):
+            self._element.set("numberOfNumerators", _int_toxml(value))
+        return locals()
+
+    @Property
+    def numberOfDenominators():
+    # type: int
+        def fget(self):
+            return _int_fromxml(self._element.get("numberOfDenominators"))
+        def fset(self, value):
+            self._element.set("numberOfDenominators", _int_toxml(value))
+        return locals()
+
+    @Property
+    def numerators():
+    # type: RealArray
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseIIR._xmlns + "numerators")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseIIR._xmlns + "numerators", value)
+        return locals()
+
+    @Property
+    def denominators():
+    # type: RealArray
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseIIR._xmlns + "denominators")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseIIR._xmlns + "denominators", value)
+        return locals()
+
+    @Property
+    def remark():
+    # type: Blob
+        def fget(self):
+            return _get_blob(self._element, xml_ResponseIIR._xmlns + "remark")
+        def fset(self, value):
+            _set_blob(self._element, xml_ResponseIIR._xmlns + "remark", value)
         return locals()
 
 
@@ -2064,150 +2544,6 @@ class xml_Datalogger(object):
             yield xml_Decimation(e1)
 
 
-# Inventory::ResponseFIR
-class xml_ResponseFIR(object):
-    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
-    def __init__(self, e = None):
-        if e is None:
-            self._element = ET.Element(xml_ResponseFIR._xmlns + "responseFIR")
-        else:
-            self._element = e
-
-    def _append_child(self, obj):
-        self._element.append(obj._element)
-
-    def _copy_from(self, src):
-        self.name = src.name
-        self.gain = src.gain
-        self.decimationFactor = src.decimationFactor
-        self.delay = src.delay
-        self.correction = src.correction
-        self.numberOfCoefficients = src.numberOfCoefficients
-        self.symmetry = src.symmetry
-        self.coefficients = src.coefficients
-        self.remark = src.remark
-        self.publicID = src.publicID
-
-    def _copy_to(self, dest):
-        if self._element.get("name") is not None:
-            dest.name = self.name
-        if self._element.get("gain") is not None:
-            dest.gain = self.gain
-        if self._element.get("decimationFactor") is not None:
-            dest.decimationFactor = self.decimationFactor
-        if self._element.get("delay") is not None:
-            dest.delay = self.delay
-        if self._element.get("correction") is not None:
-            dest.correction = self.correction
-        if self._element.get("numberOfCoefficients") is not None:
-            dest.numberOfCoefficients = self.numberOfCoefficients
-        if self._element.get("symmetry") is not None:
-            dest.symmetry = self.symmetry
-        if self._element.find(xml_ResponseFIR._xmlns + "coefficients") is not None:
-            dest.coefficients = self.coefficients
-        if self._element.find(xml_ResponseFIR._xmlns + "remark") is not None:
-            dest.remark = self.remark
-        if self._element.get("publicID") is not None:
-            dest.publicID = self.publicID
-
-    @Property
-    def publicID():
-        def fget(self):
-            return _string_fromxml(self._element.get("publicID"))
-        def fset(self, value):
-            self._element.set("publicID", _string_toxml(value))
-        return locals()
-
-    @Property
-    def action():
-        def fget(self):
-            return _string_fromxml(self._element.get("action"))
-        def fset(self, value):
-            self._element.set("action", _string_toxml(value))
-        return locals()
-
-    @Property
-    def name():
-    # type: string
-        def fget(self):
-            return _string_fromxml(self._element.get("name"))
-        def fset(self, value):
-            self._element.set("name", _string_toxml(value))
-        return locals()
-
-    @Property
-    def gain():
-    # type: float
-        def fget(self):
-            return _float_fromxml(self._element.get("gain"))
-        def fset(self, value):
-            self._element.set("gain", _float_toxml(value))
-        return locals()
-
-    @Property
-    def decimationFactor():
-    # type: int
-        def fget(self):
-            return _int_fromxml(self._element.get("decimationFactor"))
-        def fset(self, value):
-            self._element.set("decimationFactor", _int_toxml(value))
-        return locals()
-
-    @Property
-    def delay():
-    # type: float
-        def fget(self):
-            return _float_fromxml(self._element.get("delay"))
-        def fset(self, value):
-            self._element.set("delay", _float_toxml(value))
-        return locals()
-
-    @Property
-    def correction():
-    # type: float
-        def fget(self):
-            return _float_fromxml(self._element.get("correction"))
-        def fset(self, value):
-            self._element.set("correction", _float_toxml(value))
-        return locals()
-
-    @Property
-    def numberOfCoefficients():
-    # type: int
-        def fget(self):
-            return _int_fromxml(self._element.get("numberOfCoefficients"))
-        def fset(self, value):
-            self._element.set("numberOfCoefficients", _int_toxml(value))
-        return locals()
-
-    @Property
-    def symmetry():
-    # type: string
-        def fget(self):
-            return _string_fromxml(self._element.get("symmetry"))
-        def fset(self, value):
-            self._element.set("symmetry", _string_toxml(value))
-        return locals()
-
-    @Property
-    def coefficients():
-    # type: RealArray
-        def fget(self):
-            return _get_blob(self._element, xml_ResponseFIR._xmlns + "coefficients")
-        def fset(self, value):
-            _set_blob(self._element, xml_ResponseFIR._xmlns + "coefficients", value)
-        return locals()
-
-    @Property
-    def remark():
-    # type: Blob
-        def fget(self):
-            return _get_blob(self._element, xml_ResponseFIR._xmlns + "remark")
-        def fset(self, value):
-            _set_blob(self._element, xml_ResponseFIR._xmlns + "remark", value)
-        return locals()
-
-
 # Inventory::AuxStream
 class xml_AuxStream(object):
     _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
@@ -2230,6 +2566,7 @@ class xml_AuxStream(object):
         self.format = src.format
         self.flags = src.flags
         self.restricted = src.restricted
+        self.shared = src.shared
 
     def _copy_to(self, dest):
         if self._element.get("code") is not None:
@@ -2250,6 +2587,8 @@ class xml_AuxStream(object):
             dest.flags = self.flags
         if self._element.get("restricted") is not None:
             dest.restricted = self.restricted
+        if self._element.get("shared") is not None:
+            dest.shared = self.shared
 
     @Property
     def action():
@@ -2338,6 +2677,15 @@ class xml_AuxStream(object):
             return _boolean_fromxml(self._element.get("restricted"))
         def fset(self, value):
             self._element.set("restricted", _boolean_toxml(value))
+        return locals()
+
+    @Property
+    def shared():
+    # type: boolean
+        def fget(self):
+            return _boolean_fromxml(self._element.get("shared"))
+        def fset(self, value):
+            self._element.set("shared", _boolean_toxml(value))
         return locals()
 
 
@@ -3261,6 +3609,14 @@ class xml_Inventory(object):
         for e1 in self._element.findall(xml_ResponseFIR._xmlns + "responseFIR"):
             yield xml_ResponseFIR(e1)
 
+    # Aggregation: ResponseIIR
+    def _new_responseIIR(self):
+        return xml_ResponseIIR(ET.Element(xml_ResponseIIR._xmlns + "responseIIR"))
+    @property
+    def responseIIR(self):
+        for e1 in self._element.findall(xml_ResponseIIR._xmlns + "responseIIR"):
+            yield xml_ResponseIIR(e1)
+
     # Aggregation: ResponsePolynomial
     def _new_responsePolynomial(self):
         return xml_ResponsePolynomial(ET.Element(xml_ResponsePolynomial._xmlns + "responsePolynomial"))
@@ -3268,6 +3624,14 @@ class xml_Inventory(object):
     def responsePolynomial(self):
         for e1 in self._element.findall(xml_ResponsePolynomial._xmlns + "responsePolynomial"):
             yield xml_ResponsePolynomial(e1)
+
+    # Aggregation: ResponseFAP
+    def _new_responseFAP(self):
+        return xml_ResponseFAP(ET.Element(xml_ResponseFAP._xmlns + "responseFAP"))
+    @property
+    def responseFAP(self):
+        for e1 in self._element.findall(xml_ResponseFAP._xmlns + "responseFAP"):
+            yield xml_ResponseFAP(e1)
 
     # Aggregation: Network
     def _new_network(self):

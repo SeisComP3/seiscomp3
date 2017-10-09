@@ -315,7 +315,7 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 		}
 
 
-		void setTrigger(const Core::Time &trigger) throw(Core::ValueException) {
+		void setTrigger(const Core::Time &trigger) {
 			// Set the trigger in 'this' as well to be able to query it
 			// correctly from outside.
 			AmplitudeProcessor::setTrigger(trigger);
@@ -508,175 +508,178 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 
 
 class MagnitudeProcessor_ML : public MagnitudeProcessor {
-public:
-    struct param_struct {
-        double dist;
-        double A;
-        double B;
-        bool nomag;
-    };
+	public:
+		struct param_struct {
+			double dist;
+			double A;
+			double B;
+			bool nomag;
+		};
 
-    list<param_struct> list_of_parametersets;
-    param_struct selected_parameterset;
-
-    MagnitudeProcessor_ML() : MagnitudeProcessor(MAG_TYPE) {}
+		list<param_struct> list_of_parametersets;
+		param_struct selected_parameterset;
 
 
-    bool setup(const Settings &settings) {
-        try {
-            // Read the settings variable MLh.params. This can be found in the applications
-            // configuration file at:
-            // module.trunk.global.MLh.params
-            //   or per station (highest priority)
-            // module.trunk.CH.AIGLE.MLh.params
-            if ( !initParameters(list_of_parametersets, settings.getString("MLh.params")) )
-                return false;
-        }
-        catch ( ... ) {}
-
-        return true;
-    }
+	public:
+		MagnitudeProcessor_ML() : MagnitudeProcessor(MAG_TYPE) {}
 
 
-    string amplitudeType() const {
-        return MAG_TYPE;
-    }
+		bool setup(const Settings &settings) {
+			list_of_parametersets.clear();
+
+			try {
+				// Read the settings variable MLh.params. This can be found in the applications
+				// configuration file at:
+				// module.trunk.global.MLh.params
+				//   or per station (highest priority)
+				// module.trunk.CH.AIGLE.MLh.params
+				if ( !initParameters(list_of_parametersets, settings.getString("MLh.params")) )
+					return false;
+			}
+			catch ( ... ) {}
+
+			return true;
+		}
 
 
-    MagnitudeProcessor::Status computeMagnitude(
-        double amplitude,   // in milimeters per second
-        double period,      // in seconds
-        double delta,       // in degrees
-        double depth,       // in kilometers
-        double &value)
-    {
-        if ( delta < DELTA_MIN || delta > DELTA_MAX )
-            return DistanceOutOfRange;
-
-        if ( depth > DEPTH_MAX )
-            return DepthOutOfRange;
-
-        return compute_ML_sed(amplitude, delta, depth, &value);
-    }
-
-private:
-    // create a C++ list of structs containing all configured
-    // parameter sets.
-    // run this once at program start
-    bool initParameters(list<param_struct> &paramlist, const string &params) {
-        string paramset, range_str,minrange_str;
-        string A_str, B_str;
-
-        // for each parameter set
-        istringstream iss_params(params);
-        while ( getline(iss_params,paramset,';') ) {
-            // extract the parameters from this parameter set
-            istringstream iss_paramset(paramset);
-            iss_paramset >> range_str;
-            iss_paramset >> A_str;
-
-            param_struct new_paramset;
-            if ( !Core::fromString(new_paramset.dist, range_str) ) {
-                SEISCOMP_ERROR("MLh: %s: range is not a numeric value",
-                               params.c_str());
-                return false;
-            }
-
-            if ( A_str == "nomag" ) {
-                new_paramset.A     = 0;
-                new_paramset.B     = 0;
-                new_paramset.nomag = true;
-            }
-            else {
-                if ( !Core::fromString(new_paramset.A, A_str) ) {
-                    SEISCOMP_ERROR("MLh: %s: not a numeric value",
-                                   A_str.c_str());
-                    return false;
-                }
-                iss_paramset >> B_str;
-                if ( !Core::fromString(new_paramset.B, B_str) ) {
-                    SEISCOMP_ERROR("MLh: %s: not a numeric value",
-                                   B_str.c_str());
-                    return false;
-                }
-                new_paramset.nomag = false;
-            }
+		string amplitudeType() const {
+			return MAG_TYPE;
+		}
 
 
-            paramlist.push_back(new_paramset);
-        }
+		MagnitudeProcessor::Status computeMagnitude(
+			double amplitude,   // in milimeters per second
+			double period,      // in seconds
+			double delta,       // in degrees
+			double depth,       // in kilometers
+			const DataModel::Origin *, const DataModel::SensorLocation *,
+			double &value) {
+			if ( delta < DELTA_MIN || delta > DELTA_MAX )
+				return DistanceOutOfRange;
 
-        return true;
-    }
+			if ( depth > DEPTH_MAX )
+				return DepthOutOfRange;
+
+			return compute_ML_sed(amplitude, delta, depth, &value);
+		}
+
+	private:
+		// create a C++ list of structs containing all configured
+		// parameter sets.
+		// run this once at program start
+		bool initParameters(list<param_struct> &paramlist, const string &params) {
+			string paramset, range_str,minrange_str;
+			string A_str, B_str;
+
+			// for each parameter set
+			istringstream iss_params(params);
+			while ( getline(iss_params,paramset,';') ) {
+				// extract the parameters from this parameter set
+				istringstream iss_paramset(paramset);
+				iss_paramset >> range_str;
+				iss_paramset >> A_str;
+
+				param_struct new_paramset;
+				if ( !Core::fromString(new_paramset.dist, range_str) ) {
+					SEISCOMP_ERROR("MLh: %s: range is not a numeric value",
+								   params.c_str());
+					return false;
+				}
+
+				if ( A_str == "nomag" ) {
+					new_paramset.A     = 0;
+					new_paramset.B     = 0;
+					new_paramset.nomag = true;
+				}
+				else {
+					if ( !Core::fromString(new_paramset.A, A_str) ) {
+						SEISCOMP_ERROR("MLh: %s: not a numeric value",
+									   A_str.c_str());
+						return false;
+					}
+					iss_paramset >> B_str;
+					if ( !Core::fromString(new_paramset.B, B_str) ) {
+						SEISCOMP_ERROR("MLh: %s: not a numeric value",
+									   B_str.c_str());
+						return false;
+					}
+					new_paramset.nomag = false;
+				}
+
+				paramlist.push_back(new_paramset);
+			}
+
+			return true;
+		}
 
 
-    // select the right parameter set for a given distance. init_parameters() must
-    // have been called before using this function.
-    param_struct selectParameters(double distance, const list<param_struct> &paramlist) {
-        double last_dist = 1000000; // arbitrary number larger than any expected distance;
-        param_struct selected_parameters;
+		// select the right parameter set for a given distance. init_parameters() must
+		// have been called before using this function.
+		param_struct selectParameters(double distance, const list<param_struct> &paramlist) {
+			double last_dist = 1000000; // arbitrary number larger than any expected distance;
+			param_struct selected_parameters;
 
-        // defaults in case the distance is out of the definded ranges
-        selected_parameters.nomag=true;
-        selected_parameters.dist=0;
-        selected_parameters.A=0;
-        selected_parameters.B=0;
+			// defaults in case the distance is out of the definded ranges
+			selected_parameters.nomag=true;
+			selected_parameters.dist=0;
+			selected_parameters.A=0;
+			selected_parameters.B=0;
 
-        list<param_struct>::const_iterator paramit;
-        for ( paramit = paramlist.begin(); paramit != paramlist.end(); ++paramit ) {
-            if ( (paramit->dist < last_dist) && (paramit->dist >= distance) ) {
-                selected_parameters = *paramit;
-                last_dist = paramit->dist;
-            }
-        }
-        return selected_parameters;
-    }
+			list<param_struct>::const_iterator paramit;
+			for ( paramit = paramlist.begin(); paramit != paramlist.end(); ++paramit ) {
+				if ( (paramit->dist < last_dist) && (paramit->dist >= distance) ) {
+					selected_parameters = *paramit;
+					last_dist = paramit->dist;
+				}
+			}
+			return selected_parameters;
+		}
 
 
-    MagnitudeProcessor::Status compute_ML_sed(
-        double amplitude, // in micrometers
-        double delta,     // in degrees
-        double depth,     // in kilometers
-        double *mag) {
+		MagnitudeProcessor::Status compute_ML_sed(
+			double amplitude, // in micrometers
+			double delta,     // in degrees
+			double depth,     // in kilometers
+			double *mag) {
 
-        float epdistkm,hypdistkm;
+			float epdistkm,hypdistkm;
 
-        if (amplitude <= 0. ) {
-            *mag = 0;
-            return Error;
-        }
+			if (amplitude <= 0. ) {
+				*mag = 0;
+				return Error;
+			}
 
-        // examples:
-        // epdistkm <= 60 km =>    mag=log10(waampl) + 0.018 *epdistkm+1.77 + 0.40;
-        // 60 < epdistkm <= 700 => mag=log10(waampl) + 0.0038*epdistkm+2.62 + 0.40;
-        //
-        // more generic: mag = log10(waampl) + A * epdistkm + B
-        // a list of distance ranges and corresponding values for A and B
-        // is read from the config file.
+			// examples:
+			// epdistkm <= 60 km =>    mag=log10(waampl) + 0.018 *epdistkm+1.77 + 0.40;
+			// 60 < epdistkm <= 700 => mag=log10(waampl) + 0.0038*epdistkm+2.62 + 0.40;
+			//
+			// more generic: mag = log10(waampl) + A * epdistkm + B
+			// a list of distance ranges and corresponding values for A and B
+			// is read from the config file.
 
-        // calculate the distance in kilometers from the distance in degrees
-        epdistkm = Math::Geo::deg2km(delta);
-        hypdistkm = sqrt(epdistkm*epdistkm + depth * depth);
+			// calculate the distance in kilometers from the distance in degrees
+			epdistkm = Math::Geo::deg2km(delta);
+			hypdistkm = sqrt(epdistkm*epdistkm + depth * depth);
 
-        // read the values for A, B and epdistkm from the config file and
-        // select the right set depending on the distance
-        selected_parameterset = selectParameters(hypdistkm, list_of_parametersets);
+			// read the values for A, B and epdistkm from the config file and
+			// select the right set depending on the distance
+			selected_parameterset = selectParameters(hypdistkm, list_of_parametersets);
 
-        SEISCOMP_DEBUG("epdistkm: %f\n",epdistkm);
-        SEISCOMP_DEBUG("hypdistkm: %f\n",hypdistkm);
+			SEISCOMP_DEBUG("epdistkm: %f\n",epdistkm);
+			SEISCOMP_DEBUG("hypdistkm: %f\n",hypdistkm);
 
-        if ( selected_parameterset.nomag ) {
-            SEISCOMP_DEBUG( "epicenter distance out of configured range, no magnitude");
-            return DistanceOutOfRange;
-        }
-        else {
-            SEISCOMP_DEBUG("The selected range is: %f", selected_parameterset.dist);
-            SEISCOMP_DEBUG("A:     %f", selected_parameterset.A);
-            SEISCOMP_DEBUG("B:     %f", selected_parameterset.B);
-            *mag = log10(amplitude)  + selected_parameterset.A * hypdistkm + selected_parameterset.B;
-            return OK;
-        }
-    }
+			if ( selected_parameterset.nomag ) {
+				SEISCOMP_DEBUG( "epicenter distance out of configured range, no magnitude");
+				return DistanceOutOfRange;
+			}
+			else {
+				SEISCOMP_DEBUG("The selected range is: %f", selected_parameterset.dist);
+				SEISCOMP_DEBUG("A:     %f", selected_parameterset.A);
+				SEISCOMP_DEBUG("B:     %f", selected_parameterset.B);
+				*mag = log10(amplitude)  + selected_parameterset.A * hypdistkm + selected_parameterset.B;
+				return OK;
+			}
+		}
 };
 
 

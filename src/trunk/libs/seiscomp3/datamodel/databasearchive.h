@@ -93,7 +93,7 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 		//! Returns the number of elements read
 		size_t count() const;
 
-		Core::Time lastModified() const throw(Core::ValueException) {
+		Core::Time lastModified() const {
 			if ( _lastModified ) return *_lastModified;
 			throw Core::ValueException("DatabaseIterator.lastModified is not set");
 		}

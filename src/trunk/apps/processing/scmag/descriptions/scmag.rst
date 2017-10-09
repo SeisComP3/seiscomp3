@@ -1,5 +1,6 @@
-The purpose of scmag is to compute magnitudes. It takes amplitudes and origins
-as input and produces StationMagnitudes and Magnitudes as output.
+The purpose of scmag is to compute magnitudes from pre-computed amplitudes.
+Instead it takes amplitudes and origins as input and produces StationMagnitudes
+and (network) Magnitudes as output. It does not access waveforms.
 The resulting magnitudes are sent to the "MAGNITUDE" group. scmag doesn’t access
 any waveforms. It only uses amplitudes previously calculated, e.g. by :ref:`scamp`.
 The purpose of scmag is the decoupling of magnitude computation from amplitude
@@ -16,8 +17,7 @@ MLh
    Local magnitude calculated on the horizontal components to SED specifications.
 
 mb
-   Narrow band body wave magnitude using a third order Butterworth filter with
-   corner frequencies of 0.7 and 2.0 Hz.
+   Narrow band body wave magnitude measured on a WWSSN-SP filtered trace
 
 mB
    Broad band body wave magnitude.

@@ -162,7 +162,6 @@ const Array* AHRecord::data() const
 }
 
 void AHRecord::setData(Array* data)
-	throw (Core::TypeException)
 {
 	switch (data->dataType()) {
 	case Array::INT: // XXX will be serialized as float
@@ -179,10 +178,7 @@ void AHRecord::setData(Array* data)
 }
 
 
-void AHRecord::setData(int size, const void *data,
-		       Array::DataType dataType)
-	throw (Core::TypeException)
-{
+void AHRecord::setData(int size, const void *data, Array::DataType dataType) {
 	switch (dataType) {
 	case Array::INT: // XXX will be serialized as float
 	case Array::FLOAT:
@@ -209,8 +205,7 @@ void AHRecord::_reset()
 }
 
 
-void AHRecord::read(istream &in) throw(Core::StreamException)
-{
+void AHRecord::read(istream &in) {
 	_reset();
 
 	if (ah_get(in, *this) == AH_SUCCESS) {
@@ -227,15 +222,13 @@ void AHRecord::read(istream &in) throw(Core::StreamException)
 }
 
 
-void AHRecord::write(ostream &out) throw(Core::StreamException)
-{
+void AHRecord::write(ostream &out) {
 	if (ah_put(out, *this) != AH_SUCCESS)
 		throw Core::StreamException();
 }
 
 
-void AHRecord::setGain(float value) throw(Core::ValueException)
-{
+void AHRecord::setGain(float value) {
 	if (value==0.)
 		throw Core::ValueException("Gain must not be 0");
 	_gain = value;

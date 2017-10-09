@@ -1,15 +1,19 @@
 OPTIMIZE_CFLAGS=""
 OPTIMIZE_LDFLAGS=""
 
+AC_DEFUN([check_link_flag],
+ [AX_CHECK_LINK_FLAG([$1], [$2], [$3], [-Werror $4])])
+
 # Enable -Bsymbolic
 AS_IF([test "$enable_optimizations" != "no"], [
     check_link_flag([-Wl,-Bsymbolic], [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -Wl,-Bsymbolic"])
+    CFLAGS="$CFLAGS -O2"
 ])
 
 # Enable Link-Time-Optimization
 AS_IF([test "$enable_lto" = "yes"],
       [AS_IF([test "$c_compiler" = "gcc"],
-          [check_cc_cxx_flag([-flto], [OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS -flto"])
+          [AX_CHECK_COMPILE_FLAG([-flto], [OPTIMIZE_CFLAGS="$OPTIMIZE_CFLAGS -flto"])
            check_link_flag([-flto], [OPTIMIZE_LDFLAGS="$OPTIMIZE_LDFLAGS -flto"])],
           [AC_MSG_WARN([LTO is not yet available on your compiler.])])])
 
@@ -23,13 +27,3 @@ elif test "$enable_debug_symbols" != "no"; then
     CFLAGS="$CFLAGS -g"
 fi
 
-# Add the appropriate 'O' level for optimized builds.
-if test "$enable_optimizations" = "yes"; then
-    CFLAGS="$CFLAGS -O2"
-
-    if test "$c_compiler" = "gcc"; then
-        CFLAGS="$CFLAGS -D_FORTIFY_SOURCE=2"
-    fi
-else
-    CFLAGS="$CFLAGS -O0"
-fi

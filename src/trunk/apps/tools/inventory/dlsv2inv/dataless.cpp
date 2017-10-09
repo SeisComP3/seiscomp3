@@ -46,62 +46,63 @@ bool Dataless::SynchronizeDataless(Seiscomp::DataModel::Inventory *inv,
 * Returns:      nothing                                                        *
 * Description:  reads the file and processes every 4096 bytes of metadata      *
 ********************************************************************************/
-bool Dataless::ParseDataless(const string &file)
-{
+bool Dataless::ParseDataless(const string &file) {
 	char buf[LRECL];
 	int pos1, pos2;
-	ifstream dataless(file.c_str());
-	
-	try
-	{
-		if(dataless.is_open())
-		{
-			while(dataless.read(buf, LRECL))
-			{
-				pos1 = pos2 = 0;
-				string record(buf);
-				string volume = SplitString(record, LINE_SEPARATOR, pos1, pos2);
-				if(volume.size()!=7)
-				{
-					pos1 = pos2 = 0;
-					volume = SplitString(record, '*', pos1, pos2);
-				}
-				pos2++;
-				if(volume[volume.size()-1] == 'V')
-				{
-					invent->vic->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
-				}
-				else if(volume[volume.size()-1] == 'A')
-				{ 
-					invent->adc->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
-				}
-				else if(volume[volume.size()-1] == 'S')
-				{
-					invent->sc->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
-				}
-			}
-		
-			invent->SynchronizeInventory();
-			invent->vic->EmptyVectors();
-			invent->adc->EmptyVectors();
-			invent->sc->EmptyVectors();
+	istream *dataless;
+	ifstream filestream;
 
-			if ( invent->fixedErrors() > 0 ) {
-				std::cerr << "********************************************************************************" << std::endl;
-				std::cerr << "* WARNING!                                                                     *" << std::endl;
-				std::cerr << "*------------------------------------------------------------------------------*" << std::endl;
-				std::cerr << "* Errors found in input dataless SEED which were fixed by the conversion. This *" << std::endl;
-				std::cerr << "* may lead to subsequent errors or undefined behaviour. Check and correct the  *" << std::endl;
-				std::cerr << "* errors in dataless SEED and do the conversion again.                         *" << std::endl;
-				std::cerr << "********************************************************************************" << std::endl;
-			}
-
-			return true;
-		}
-		else
-		{
+	if ( file == "-" )
+		dataless = &cin;
+	else {
+		filestream.open(file.c_str());
+		if ( !filestream.is_open() ) {
 			SEISCOMP_ERROR("Cannot open %s", file.c_str());
+			return false;
 		}
+
+		dataless = &filestream;
+	}
+
+	try {
+		while ( dataless->read(buf, LRECL) ) {
+			pos1 = pos2 = 0;
+			string record(buf);
+			string volume = SplitString(record, LINE_SEPARATOR, pos1, pos2);
+
+			if ( volume.size() != 7 ) {
+				pos1 = pos2 = 0;
+				volume = SplitString(record, '*', pos1, pos2);
+			}
+
+			pos2++;
+
+			if ( volume[volume.size()-1] == 'V' )
+				invent->vic->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
+			else if ( volume[volume.size()-1] == 'A' )
+				invent->adc->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
+			else if ( volume[volume.size()-1] == 'S' )
+				invent->sc->ParseVolumeRecord(record.substr(pos2, (LRECL-pos2)));
+		}
+
+		invent->sc->Flush();
+
+		invent->SynchronizeInventory();
+		invent->vic->EmptyVectors();
+		invent->adc->EmptyVectors();
+		invent->sc->EmptyVectors();
+
+		if ( invent->fixedErrors() > 0 ) {
+			std::cerr << "********************************************************************************" << std::endl;
+			std::cerr << "* WARNING!                                                                     *" << std::endl;
+			std::cerr << "*------------------------------------------------------------------------------*" << std::endl;
+			std::cerr << "* Errors found in input dataless SEED which were fixed by the conversion. This *" << std::endl;
+			std::cerr << "* may lead to subsequent errors or undefined behaviour. Check and correct the  *" << std::endl;
+			std::cerr << "* errors in dataless SEED and do the conversion again.                         *" << std::endl;
+			std::cerr << "********************************************************************************" << std::endl;
+		}
+
+		return true;
 	}
 	catch(BadConversion &o)
 	{
@@ -117,11 +118,11 @@ bool Dataless::ParseDataless(const string &file)
 	}
 	catch(Seiscomp::Core::ValueException &o)
 	{
-		SEISCOMP_ERROR("Seiscomp::Core::ValueException: %s", o.what());
+		SEISCOMP_ERROR("Value error: %s", o.what());
 	}
 	catch(Seiscomp::Core::GeneralException &o)
 	{
-		SEISCOMP_ERROR("Seiscomp::Core::GeneralException: %s", o.what());
+		SEISCOMP_ERROR("Error: %s", o.what());
 	}
 	catch(...)
 	{

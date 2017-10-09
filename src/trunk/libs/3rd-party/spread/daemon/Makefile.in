@@ -48,6 +48,7 @@ ENT=@ENT@
 EXEEXT=@EXEEXT@
 
 TARGETS=spread$(EXEEXT) spmonitor$(EXEEXT)
+OTHER_TARGETS=spsend$(EXEEXT) sprecv$(EXEEXT) sptmonitor$(EXEEXT)
 
 SPREADOBJS= spread.o protocol.o session.o groups.o membership.o network.o status.o log.o flow_control.o message.o lex.yy.o y.tab.o configuration.o acm.o acp-permit.o auth-null.o auth-ip.o ip_enum.o
 
@@ -86,18 +87,18 @@ spmonitor$(EXEEXT): $(MONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
 	$(LD) -o $@ $(LDFLAGS) $(MONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a $(LIBS)
 
 sptmonitor$(EXEEXT): $(TMONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
-	$(LD) $(THLDFLAGS) -o $@ $(TMONITOR_OBJS) $(THLIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) $(THLDFLAGS) -o $@ $(TMONITOR_OBJS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a $(THLIBS)
 
 testprog: spsend$(EXEEXT) sprecv$(EXEEXT)
 
 spsend$(EXEEXT): s.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
-	$(LD) -o $@ $(LDFLAGS) s.o $(LIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) -o $@ $(LDFLAGS) s.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a $(LIBS)
 
 sprecv$(EXEEXT): r.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
-	$(LD) -o $@ $(LDFLAGS) r.o $(LIBS) $(LIBSPREADUTIL_DIR)/lib/libspread-util.a
+	$(LD) -o $@ $(LDFLAGS) r.o $(LIBSPREADUTIL_DIR)/lib/libspread-util.a $(LIBS)
 
 clean:
-	rm -f *.lo *.tlo *.to *.o *.a *.dylib $(TARGETS) spsimple_user
+	rm -f *.lo *.tlo *.to *.o *.a *.dylib $(TARGETS) $(OTHER_TARGETS)
 	rm -f config.cache config.log docs/*.out core
 	rm -rf autom4te.cache
 	rm -rf ../bin/$(host)

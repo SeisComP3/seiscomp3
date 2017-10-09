@@ -21,18 +21,12 @@
 
 typedef struct site
 {
-	char    sta[16];
-	long    ondate;
-	long    offdate;
-	float   lat;
-	float   lon;
-	float   elev;
-	char	staname[256];
-	char	statype[5];
-	char	refsta[7];
-	float   dnorth;
-	float   deast;
-	char    lddate[18];
+	char  sta[16];
+	long  ondate;
+	long  offdate;
+	float lat;
+	float lon;
+	float elev;
 } Site;
 
 #endif /* DB_SITE_H */

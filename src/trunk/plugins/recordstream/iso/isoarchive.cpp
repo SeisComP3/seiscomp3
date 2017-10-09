@@ -134,7 +134,7 @@ static void _LOG_HANDLER(cdio_log_level_t level, const char message[]) {
       SEISCOMP_ERROR("%s",message);
 }
 
-istream& IsoArchive::stream() throw(ArchiveException) {  
+istream& IsoArchive::stream() {
     if (_recstream) {
 	/* eof check: try to read from stream */
 	istream &tmpstream = _recstream->stream();

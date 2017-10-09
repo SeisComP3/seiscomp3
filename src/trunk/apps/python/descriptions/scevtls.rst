@@ -1,4 +1,5 @@
 scevtls lists all available event ids within a given time range to stdout.
+Use :ref:`scorgls` for listing all origin ids.
 
 Example
 =======

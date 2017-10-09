@@ -26,6 +26,12 @@ namespace IO {
 /** \brief An archive using XML streams
  */
 class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
+	public:
+		enum CompressionMethod {
+			ZIP,
+			GZIP
+		};
+
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------
@@ -76,6 +82,12 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		 * @param enable The state of this flag
 		 */
 		void setCompression(bool enable);
+
+		/**
+		 * Sets the compression method if compression is enabled
+		 * @param method The method to be used
+		 */
+		void setCompressionMethod(CompressionMethod method);
 
 		//! Returns the used namesspace. If no namespace has been used,
 		//! an empty string will be returned
@@ -211,6 +223,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 
 		bool _formattedOutput;
 		bool _compression;
+		CompressionMethod _compressionMethod;
 
 		std::pair<std::string, std::string> _namespace;
 };

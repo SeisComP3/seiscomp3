@@ -18,11 +18,11 @@
 #include <seiscomp3/core/datamessage.h>
 #include <seiscomp3/io/recordinput.h>
 #include <seiscomp3/io/recordstream/file.h>
+#include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/inventory_package.h>
 #include <seiscomp3/datamodel/config_package.h>
-#include <seiscomp3/datamodel/event.h>
-#include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/eventparameters_package.h>
 #include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/utils/keyvalues.h>
@@ -54,14 +54,6 @@ QString waveformIDToString(const WaveformStreamID& id) {
 string waveformIDToStdString(const WaveformStreamID& id) {
 	return (id.networkCode() + "." + id.stationCode() + "." +
 	        id.locationCode() + "." + id.channelCode());
-}
-
-
-
-bool compareChannelCode(const QString& left, const QString& right) {
-	if ( left.count() < 2 || right.count() < 2 ) return false;
-	return (left[0] == right[0] || left[0] == '?' || right[0] == '?') &&
-	       (left[1] == right[1] || left[1] == '?' || right[1] == '?');
 }
 
 
@@ -379,10 +371,12 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	                              "to tell all clients adding/removing this station(s).\n"
 	                              "Do you want to continue changing the state?");
 
-	_bufferSize = 1800;
+	_bufferSize = Core::TimeSpan(1800,0);
 	_recordStreamThread = NULL;
 	_tabWidget = NULL;
 	_currentFilterIdx = -1;
+	_autoApplyFilter = false;
+	_allowTimeWindowExtraction = true;
 
 	_statusBarFile   = new QLabel;
 	_statusBarFilter = new QLabel(" Filter OFF ");
@@ -415,6 +409,7 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 
 	connect(_ui.actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
 	connect(_ui.actionOpenSeedLink, SIGNAL(triggered()), this, SLOT(openAcquisition()));
+	connect(_ui.actionOpenXMLFile, SIGNAL(triggered()), this, SLOT(openXML()));
 	connect(_ui.actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
 	connect(_ui.actionCycleFilters, SIGNAL(triggered(bool)), this, SLOT(cycleFilters(bool)));
@@ -473,6 +468,8 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	_rowSpacing = 0;
 	_withFrames = false;
 	_frameMargin = 0;
+	_rowHeight = -1;
+	_numberOfRows = -1;
 
 	try { _rowSpacing = SCApp->configGetInt("streams.rowSpacing"); }
 	catch ( ... ) {}
@@ -481,9 +478,20 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 	try { _frameMargin = SCApp->configGetInt("streams.frameMargin"); }
 	catch ( ... ) {}
 
+	try { _rowHeight = SCApp->configGetInt("streams.height"); }
+	catch ( ... ) {}
+
+	try { _numberOfRows = SCApp->configGetInt("streams.rows"); }
+	catch ( ... ) {}
+
 	QPen defaultMinPen, defaultMaxPen;
 	QBrush defaultMinBrush, defaultMaxBrush;
 	OPT(double) defaultMinMaxMargin;
+
+	try {
+		_autoApplyFilter = SCApp->configGetBool("autoApplyFilter");
+	}
+	catch ( ... ) {}
 
 	try {
 		defaultMinMaxMargin = SCApp->configGetDouble("streams.defaults.minMaxMargin");
@@ -535,6 +543,8 @@ MainWindow::MainWindow() : _questionApplyChanges(this) {
 			catch ( ... ) {}
 			try { desc.minValue = SCApp->configGetDouble(prefix + "minimum.value"); }
 			catch ( ... ) {}
+			try { desc.fixedScale = SCApp->configGetBool(prefix + "fixedScale"); }
+			catch ( ... ) { desc.fixedScale = false; }
 			try { desc.minPen = SCApp->configGetPen(prefix + "minimum.pen", defaultMinPen); }
 			catch ( ... ) {}
 			try { desc.minBrush = SCApp->configGetBrush(prefix + "minimum.brush", defaultMinBrush); }
@@ -620,6 +630,15 @@ void MainWindow::setEndTime(const Seiscomp::Core::Time &t) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainWindow::setAllowTimeWindowExtraction(bool f) {
+	_allowTimeWindowExtraction = f;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainWindow::setMaximumDelay(int d) {
 	_maxDelay = d;
 }
@@ -656,11 +675,13 @@ void MainWindow::setInventoryEnabled(bool e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainWindow::setBufferSize(size_t bs) {
+void MainWindow::setBufferSize(Core::TimeSpan bs) {
 	_bufferSize = bs;
 
-	foreach ( TraceView* view, _traceViews )
+	foreach ( TraceView* view, _traceViews ) {
+		view->setTimeSpan(_bufferSize);
 		view->setTimeRange(-_bufferSize, 0);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -670,6 +691,9 @@ void MainWindow::setBufferSize(size_t bs) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainWindow::setFiltersByName(const std::vector<std::string> &filters) {
 	_filters = filters;
+
+	if ( _autoApplyFilter )
+		cycleFilters(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -726,6 +750,13 @@ void MainWindow::setStationEnabled(const string& networkCode,
 		newCs->setStationCode(stationCode);
 		newCs->setEnabled(enable);
 
+		CreationInfo ci;
+		ci.setAuthor(SCApp->author());
+		ci.setAgencyID(SCApp->agencyID());
+		ci.setCreationTime(Core::Time::GMT());
+
+		newCs->setCreationInfo(ci);
+
 		Notifier::Enable();
 		module->add(newCs.get());
 		Notifier::Disable();
@@ -739,6 +770,20 @@ void MainWindow::setStationEnabled(const string& networkCode,
 		              cs->networkCode().c_str(),
 		              cs->stationCode().c_str(),
 		              enable);
+
+		CreationInfo *ci;
+		try {
+			ci = &cs->creationInfo();
+			ci->setModificationTime(Core::Time::GMT());
+		}
+		catch ( ... ) {
+			cs->setCreationInfo(CreationInfo());
+			ci = &cs->creationInfo();
+			ci->setCreationTime(Core::Time::GMT());
+		}
+
+		ci->setAuthor(SCApp->author());
+		ci->setAgencyID(SCApp->agencyID());
 
 		Notifier::Enable();
 		cs->update();
@@ -839,6 +884,11 @@ TraceView* MainWindow::createTraceView() {
 	traceView->setRowSpacing(_rowSpacing);
 	traceView->setFramesEnabled(_withFrames);
 	traceView->setFrameMargin(_frameMargin);
+	if ( _rowHeight > 0 ) {
+		traceView->setMinimumRowHeight(_rowHeight);
+		traceView->setMaximumRowHeight(_rowHeight);
+	}
+	traceView->setRelativeRowHeight(_numberOfRows);
 	traceView->setAlternatingRowColors(true);
 	traceView->setAutoScale(true);
 	traceView->setDefaultDisplay();
@@ -1010,8 +1060,12 @@ void MainWindow::setupItem(const Record*, Gui::RecordViewItem* item) {
 			double center = (*desc.minValue + *desc.maxValue) * 0.5;
 			double vmin = (*desc.minValue-center)*(1+*desc.minMaxMargin)+center;
 			double vmax = (*desc.maxValue-center)*(1+*desc.minMaxMargin)+center;
-			item->widget()->setMinimumAmplRange(vmin / *item->widget()->recordScale(0),
-			                                    vmax / *item->widget()->recordScale(0));
+			if ( desc.fixedScale )
+				item->widget()->setAmplRange(vmin / *item->widget()->recordScale(0),
+				                             vmax / *item->widget()->recordScale(0));
+			else
+				item->widget()->setMinimumAmplRange(vmin / *item->widget()->recordScale(0),
+				                                    vmax / *item->widget()->recordScale(0));
 		}
 
 		break;
@@ -1197,7 +1251,7 @@ void MainWindow::openFile(const std::vector<std::string> &files) {
 	while ( _tabWidget != NULL )
 		removeTab(0);
 
-	TRACEVIEWS(setBufferSize(Core::TimeSpan(_bufferSize)));
+	TRACEVIEWS(setBufferSize(Core::TimeSpan(0,0)));
 
 	_traceViews.front()->setAutoInsertItem(true);
 	_traceViews.front()->clear();
@@ -1224,28 +1278,22 @@ void MainWindow::openFile(const std::vector<std::string> &files) {
 
 		IO::RecordInput input(&stream, Array::FLOAT, Record::DATA_ONLY);
 
-		_originTime = Core::Time();
-	
 		cout << "loading " << files[i] << "..." << flush;
 		Util::StopWatch t;
 	
-		for ( RecordIterator it = input.begin(); it != input.end(); ++it ) {
-			try {
-				if ( _originTime < (*it)->endTime() )
-					_originTime = (*it)->endTime();
-			}
-			catch ( ... ) {
-				continue;
-			}
-
+		for ( RecordIterator it = input.begin(); it != input.end(); ++it )
 			_traceViews.front()->feed(*it);
-		}
 	
 		cout << "(" << t.elapsed() << " sec)" << endl;
 	}
 
+	Core::TimeWindow tw = _traceViews.front()->coveredTimeRange();
+	_originTime = tw.endTime();
 	_traceViews.front()->setAlignment(_originTime);
+
+	setBufferSize(tw.length());
 	alignRight();
+
 	_traceViews.front()->setUpdatesEnabled(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1287,7 +1335,8 @@ void MainWindow::openAcquisition() {
 		_tabWidget->setCurrentIndex(0);
 	}
 
-	_recordStreamThread->setTimeWindow(Core::TimeWindow(_originTime - Core::TimeSpan(_bufferSize), _endTime));
+	if ( _allowTimeWindowExtraction )
+		_recordStreamThread->setTimeWindow(Core::TimeWindow(_originTime - Core::TimeSpan(_bufferSize), _endTime));
 
 	if ( _inventoryEnabled ) {
 		typedef QPair<QString,int> ChannelEntry;
@@ -1658,6 +1707,52 @@ void MainWindow::openAcquisition() {
 
 	alignRight();
 	checkTraceDelay();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainWindow::openXML() {
+	QString filename = QFileDialog::getOpenFileName(this,
+		tr("Open XML file"), "", tr("XML files (*.xml);;All (*.*)"));
+
+	if ( filename.isEmpty() ) return;
+
+	qApp->setOverrideCursor(Qt::WaitCursor);
+
+	IO::XMLArchive ar;
+	ar.open(filename.toStdString().c_str());
+
+	bool regWasEnabled = PublicObject::IsRegistrationEnabled();
+	PublicObject::SetRegistrationEnabled(false);
+
+	DataModel::EventParametersPtr ep;
+	ar >> ep;
+
+	PublicObject::SetRegistrationEnabled(regWasEnabled);
+
+	if ( !ep ) {
+		qApp->restoreOverrideCursor();
+		QMessageBox::information(this, tr("Error"), tr("No event parameters found in XML file."));
+		return;
+	}
+
+	cerr << "Loaded " << ep->pickCount() << " picks" << endl;
+
+	int accepted = 0, rejected = 0;
+	for ( size_t i = 0; i < ep->pickCount(); ++i ) {
+		if ( addPick(ep->pick(i)) )
+			++accepted;
+		else
+			++rejected;
+	}
+
+	QMessageBox::information(this, "Load XML", tr("Added %1/%2 picks")
+	                         .arg(accepted).arg(accepted+rejected));
+
+	qApp->restoreOverrideCursor();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -2312,7 +2407,7 @@ void MainWindow::objectUpdated(const QString &parentID,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void MainWindow::addPick(Pick* pick) {
+bool MainWindow::addPick(Pick* pick) {
 	// HACK: Z is appended because sent Picks does not have the component code
 	// set correctly
 	Seiscomp::Gui::RecordViewItem* item = NULL;
@@ -2329,60 +2424,63 @@ void MainWindow::addPick(Pick* pick) {
 		if ( item ) break;
 	}
 
-	if ( item ) {
-		// Remove old markers
-		for ( int i = 0; i < item->widget()->markerCount(); ++i ) {
-			Seiscomp::Gui::RecordMarker* marker = item->widget()->marker(i);
-			if ( (double)(marker->time() - _traceViews.front()->alignment()) < -(double)_bufferSize )
-				delete marker;
-		}
+	// No trace found
+	if ( item == NULL ) return false;
 
-		double age = (double)(pick->time().value() - _traceViews.front()->alignment());
-		if ( age > -(double)_bufferSize ) {
-			QString phaseCode;
+	// Remove old markers
+	for ( int i = 0; i < item->widget()->markerCount(); ++i ) {
+		Seiscomp::Gui::RecordMarker* marker = item->widget()->marker(i);
+		if ( (double)(marker->time() - _traceViews.front()->alignment()) < -(double)_bufferSize )
+			delete marker;
+	}
 
-			try {
-				phaseCode = pick->phaseHint().code().c_str();
-			}
-			catch ( ... ) {}
+	double age = (double)(pick->time().value() - _traceViews.front()->alignment());
+	if ( age <= -(double)_bufferSize ) {
+		cout << "pick '"
+		     << pick->publicID()
+		     << "' is too old ("
+		     << pick->time().value().toString("%F %T") << "), "
+		     << -age << " sec > "
+		     << (double)(_bufferSize)
+		     << " sec"
+		     << endl;
+		return false;
+	}
 
-			Seiscomp::Gui::RecordMarker* marker =
-				new Seiscomp::Gui::RecordMarker(item->widget(),
-				                                pick->time(),
-				                                phaseCode);
-			marker->setData(QString(pick->publicID().c_str()));
-			marker->setMovable(false);
+	QString phaseCode;
 
-			try {
-				switch ( pick->evaluationMode() ) {
-					case AUTOMATIC:
-						marker->setColor(SCScheme.colors.picks.automatic);
-						break;
-					case MANUAL:
-						marker->setColor(SCScheme.colors.picks.manual);
-						break;
-					default:
-						marker->setColor(SCScheme.colors.picks.undefined);
-						break;
-				}
-			}
-			catch ( ... ) {
+	try {
+		phaseCode = pick->phaseHint().code().c_str();
+	}
+	catch ( ... ) {}
+
+	Seiscomp::Gui::RecordMarker* marker =
+		new Seiscomp::Gui::RecordMarker(item->widget(),
+		                                pick->time(),
+		                                phaseCode);
+	marker->setData(QString(pick->publicID().c_str()));
+	marker->setMovable(false);
+
+	try {
+		switch ( pick->evaluationMode() ) {
+			case AUTOMATIC:
+				marker->setColor(SCScheme.colors.picks.automatic);
+				break;
+			case MANUAL:
+				marker->setColor(SCScheme.colors.picks.manual);
+				break;
+			default:
 				marker->setColor(SCScheme.colors.picks.undefined);
-			}
-
-			item->widget()->update();
-		}
-		else {
-			cout << "pick '"
-			     << pick->publicID()
-			     << "' is too old ("
-			     << pick->time().value().toString("%F %T") << "), "
-			     << -age << " sec > "
-			     << (double)(_bufferSize)
-			     << " sec"
-			     << endl;
+				break;
 		}
 	}
+	catch ( ... ) {
+		marker->setColor(SCScheme.colors.picks.undefined);
+	}
+
+	item->widget()->update();
+
+	return true;
 }
 
 

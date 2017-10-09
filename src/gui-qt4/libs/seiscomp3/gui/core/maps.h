@@ -22,7 +22,16 @@ namespace Seiscomp {
 namespace Gui {
 
 
-#define TILESTORE_VERSION 1
+/**
+ * ----------------------------------------------------------------------------
+ * Tilestore version history
+ * ----------------------------------------------------------------------------
+ * 1
+ *   - Initial version
+ * 2
+ *   - Allow TileStore::load to return null images
+ */
+#define TILESTORE_VERSION 2
 
 
 struct SC_GUI_API MapsDesc {

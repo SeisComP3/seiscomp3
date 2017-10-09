@@ -76,6 +76,13 @@ class SC_GUI_API RecordPolyline : public std::vector<QPolygon>
 	                 float amplMin, float amplMax, float amplOffset,
 	                 int height, QVector<QPair<int,int> >* gaps = NULL);
 
+	void createSteps(RecordSequence const *,
+	                 const Core::Time &start,
+	                 const Core::Time &end,
+	                 double pixelPerSecond,
+	                 float amplMin, float amplMax, float amplOffset,
+	                 int height, QVector<QPair<int,int> >* gaps = NULL);
+
 	void draw(QPainter&);
 	void drawGaps(QPainter&, int yofs, int height, const QColor& gapColor, const QColor& overlapColor);
 	void draw(QPainter&, int yofs, int height, const QColor& gapColor, const QColor& overlapColor);

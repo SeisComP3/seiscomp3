@@ -85,10 +85,16 @@ class Reloc : public Client::Application {
 			try { _locatorType = configGetString("reloc.locator"); }
 			catch ( ... ) {}
 
+			try { _locatorProfile = configGetString("reloc.profile"); }
+			catch ( ... ) {}
+
 			try { _ignoreRejected = configGetBool("reloc.ignoreRejectedOrigins"); }
 			catch ( ... ) {}
 
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
+			catch ( ... ) {}
+
+			try { _useWeight = configGetBool("reloc.useWeight"); }
 			catch ( ... ) {}
 
 			if ( !_epFile.empty() )
@@ -202,7 +208,14 @@ class Reloc : public Client::Application {
 				for ( int i = 0; i < numberOfOrigins; ++i ) {
 					OriginPtr org = ep->origin(i);
 					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
-					org = process(org.get());
+					try {
+						org = process(org.get());
+					}
+					catch ( std::exception &e ) {
+						std::cerr << "ERROR: " << e.what() << std::endl;
+						continue;
+					}
+
 					if ( org ) {
 						if ( replace ) {
 							ep->removeOrigin(i);

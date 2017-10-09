@@ -87,8 +87,8 @@ class SC_SYSTEM_CORE_API PrincipalAxes : public Core::BaseObject {
 
 		//! N (neutral) axis of a double-couple moment tensor solution.
 		void setNAxis(const OPT(Axis)& nAxis);
-		Axis& nAxis() throw(Seiscomp::Core::ValueException);
-		const Axis& nAxis() const throw(Seiscomp::Core::ValueException);
+		Axis& nAxis();
+		const Axis& nAxis() const;
 
 
 	// ------------------------------------------------------------------

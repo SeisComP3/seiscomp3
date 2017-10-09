@@ -163,3 +163,7 @@ Cua, G., M. Fischer, T. Heaton, S. Wiemer, 2009: Real-time performance of the Vi
 
 Behr, Y., Cua, G., Clinton, J., Heaton, T., 2012: Evaluation of Real-Time Performance of the Virtual Seismologist Earthquake
 Early Warning Algorithm in Switzerland and California. Abstract 1481084 presented at 2012 Fall Meeting, AGU, San Francisco, Calif., 3-7 Dec.
+
+Behr, Y., J. F. Clinton, C. Cauzzi, E. Hauksson, K. Jónsdóttir, C. G. Marius, A. Pinar, J. Salichon, and E. Sokos (2016) The Virtual Seismologist in SeisComP3: A New Implementation Strategy for Earthquake Early Warning Algorithms `<http://www.seismo.ethz.ch/research/groups/alrt/people/clintonj/publ_jc/Behr_et_all_SRL201602_VS_SC3_.pdf>`_, Seismological Research Letters, March/March 2016, v. 87, p. 363-373, doi:10.1785/0220150235
+
+Behr, Y., J. Clinton, P. Kästli, C. Cauzzi, R. Racine,  M‐A. Meier (2015) Anatomy of an Earthquake Early Warning (EEW) Alert: Predicting Time Delays for an End‐to‐End EEW System, Seismological Research Letters, May/June 2015, v. 86, p. 830-840, doi:10.1785/0220140179

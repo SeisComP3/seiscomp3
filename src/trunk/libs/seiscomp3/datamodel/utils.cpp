@@ -38,6 +38,8 @@ namespace DataModel {
 
 namespace {
 
+#define ERR(x) do { if ( err < x ) err = x; } while(0)
+
 class CloneVisitor : public Visitor {
 	public:
 		CloneVisitor() : Visitor(TM_TOPDOWN) { reset(); }
@@ -90,22 +92,6 @@ class CloneVisitor : public Visitor {
 
 }
 
-namespace {
-	std::ostream &operator<<(std::ostream &os, const ComplexArray &ar) {
-		os << "Complex Array of " << ar.content().size() << " elements";
-		return os;
-	}
-	
-	std::ostream &operator<<(std::ostream &os, const RealArray &ar) {
-		os << "Real Array of " << ar.content().size() << " elements";
-		return os;
-	}
-	
-	std::ostream &operator<<(std::ostream &os, const Blob &ar) {
-		os << "Blob size: " << ar.content().size();
-		return os;
-	}
-}
 
 ThreeComponents::ThreeComponents() {
 	comps[0] = NULL;
@@ -131,13 +117,19 @@ std::string eventRegion(const Event *ev) {
 Station* getStation(const Inventory *inventory,
                     const std::string &networkCode,
                     const std::string &stationCode,
-                    const Core::Time &time) {
+                    const Core::Time &time,
+                    InventoryError *error) {
 	if ( inventory == NULL )
 		return NULL;
+
+	InventoryError err;
+	ERR(NETWORK_CODE_NOT_FOUND);
 
 	for ( size_t i = 0; i < inventory->networkCount(); ++i ) {
 		DataModel::Network* network = inventory->network(i);
 		if ( network->code() != networkCode ) continue;
+
+		ERR(NETWORK_EPOCH_NOT_FOUND);
 
 		try {
 			if ( network->end() < time ) continue;
@@ -147,9 +139,13 @@ Station* getStation(const Inventory *inventory,
 
 		if ( network->start() > time ) continue;
 
+		ERR(STATION_CODE_NOT_FOUND);
+
 		for ( size_t j = 0; j < network->stationCount(); ++j ) {
 			DataModel::Station* station = network->station(j);
 			if ( station->code() != stationCode ) continue;
+
+			ERR(STATION_EPOCH_NOT_FOUND);
 
 			try {
 				if ( station->end() < time ) continue;
@@ -162,6 +158,8 @@ Station* getStation(const Inventory *inventory,
 		}
 	}
 
+	if ( error ) *error = err;
+
 	return NULL;
 }
 
@@ -170,7 +168,7 @@ SensorLocation* getSensorLocation(const Inventory *inventory,
                                   const std::string &networkCode,
                                   const std::string &stationCode,
                                   const std::string &locationCode,
-                                  const Core::Time &time) {
+                                  const Core::Time &time, InventoryError *error) {
 	/*
 	DataModel::Station *sta = getStation(inventory, networkCode, stationCode, time);
 	if ( sta == NULL )
@@ -196,17 +194,26 @@ SensorLocation* getSensorLocation(const Inventory *inventory,
 	if ( inventory == NULL )
 		return NULL;
 
+	InventoryError err;
+	ERR(NETWORK_CODE_NOT_FOUND);
+
 	for ( size_t i = 0; i < inventory->networkCount(); ++i ) {
 		DataModel::Network* network = inventory->network(i);
 		if ( network->code() != networkCode ) continue;
+
+		ERR(STATION_CODE_NOT_FOUND);
 
 		for ( size_t j = 0; j < network->stationCount(); ++j ) {
 			DataModel::Station* sta = network->station(j);
 			if ( sta->code() != stationCode ) continue;
 
-			for ( size_t i = 0; i < sta->sensorLocationCount(); ++i ) {
-				DataModel::SensorLocation* loc = sta->sensorLocation(i);
+			ERR(SENSOR_CODE_NOT_FOUND);
+
+			for ( size_t k = 0; k < sta->sensorLocationCount(); ++k ) {
+				DataModel::SensorLocation* loc = sta->sensorLocation(k);
 				if ( loc->code() != locationCode ) continue;
+
+				ERR(SENSOR_EPOCH_NOT_FOUND);
 
 				try {
 					if ( loc->end() <= time ) continue;
@@ -220,6 +227,8 @@ SensorLocation* getSensorLocation(const Inventory *inventory,
 		}
 	}
 
+	if ( error ) *error = err;
+
 	return NULL;
 }
 
@@ -229,24 +238,30 @@ Stream* getStream(const Inventory *inventory,
                   const std::string &stationCode,
                   const std::string &locationCode,
                   const std::string &channelCode,
-                  const Core::Time &time) {
-	DataModel::SensorLocation *loc = getSensorLocation(inventory, networkCode, stationCode, locationCode, time);
-	if ( loc == NULL )
-		return NULL;
+                  const Core::Time &time, InventoryError *error) {
+	InventoryError err;
+	DataModel::SensorLocation *loc = getSensorLocation(inventory, networkCode, stationCode,
+	                                                   locationCode, time, &err);
+	if ( loc != NULL ) {
+		ERR(STREAM_CODE_NOT_FOUND);
+		for ( size_t i = 0; i < loc->streamCount(); ++i ) {
+			DataModel::Stream *stream = loc->stream(i);
+			if ( stream->code() != channelCode ) continue;
 
-	for ( size_t i = 0; i < loc->streamCount(); ++i ) {
-		DataModel::Stream *stream = loc->stream(i);
-		if ( stream->code() != channelCode ) continue;
+			ERR(STREAM_EPOCH_NOT_FOUND);
 
-		try {
-			if ( stream->end() <= time ) continue;
+			try {
+				if ( stream->end() <= time ) continue;
+			}
+			catch (...) {}
+
+			if ( stream->start() > time ) continue;
+
+			return stream;
 		}
-		catch (...) {}
-
-		if ( stream->start() > time ) continue;
-
-		return stream;
 	}
+
+	if ( error ) *error = err;
 
 	return NULL;
 }
@@ -611,12 +626,12 @@ void DiffMerge::LogNode::show(std::ostream &os, int padding, int indent,
 
 	padding += indent;
 
-	for ( uint i = 0; i < _messages.size(); ++i ) {
+	for ( size_t i = 0; i < _messages.size(); ++i ) {
 		for ( int p = 0; p < padding; ++p ) os << " ";
 		os << _messages[i] << std::endl;
 	}
 
-	for ( uint i = 0; i < _childs.size(); ++i )
+	for ( size_t i = 0; i < _childs.size(); ++i )
 		_childs[i]->show(os, padding, indent);
 
 	return;

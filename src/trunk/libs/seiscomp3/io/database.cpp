@@ -73,8 +73,6 @@ DatabaseInterface* DatabaseInterface::Open(const char* uri) {
 
 	source = uri;
 
-	SEISCOMP_DEBUG("trying to open database %s://%s", service.c_str(), source.c_str());
-
 	DatabaseInterface* db = Create(service.c_str());
 	if ( !db ) {
 		SEISCOMP_ERROR("Database driver '%s' is not supported", service.c_str());
@@ -82,7 +80,9 @@ DatabaseInterface* DatabaseInterface::Open(const char* uri) {
 	}
 
 	if ( !db->connect(source.c_str()) ) {
-		SEISCOMP_ERROR("Connection to failed to %s", source.c_str());
+		SEISCOMP_ERROR("Connection failed to %s://%s:******@%s/%s",
+		               service.c_str(), db->_user.c_str(),
+		               db->_host.c_str(), db->_database.c_str());
 		delete db;
 		return NULL;
 	}

@@ -29,7 +29,7 @@ class SC_SYSTEM_CLIENT_API QcProcessorAvailability : public QcProcessor {
 
 public:
     QcProcessorAvailability();
-    double getAvailability() throw (Core::ValueException);    
+    double getAvailability();
     bool setState(const Record* record, const DoubleArray& data);		
 };
 

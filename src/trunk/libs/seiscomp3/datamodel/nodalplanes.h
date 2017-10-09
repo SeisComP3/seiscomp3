@@ -77,18 +77,18 @@ class SC_SYSTEM_CORE_API NodalPlanes : public Core::BaseObject {
 	public:
 		//! First nodal plane of double-couple moment tensor solution.
 		void setNodalPlane1(const OPT(NodalPlane)& nodalPlane1);
-		NodalPlane& nodalPlane1() throw(Seiscomp::Core::ValueException);
-		const NodalPlane& nodalPlane1() const throw(Seiscomp::Core::ValueException);
+		NodalPlane& nodalPlane1();
+		const NodalPlane& nodalPlane1() const;
 
 		//! Second nodal plane of double-couple moment tensor solution.
 		void setNodalPlane2(const OPT(NodalPlane)& nodalPlane2);
-		NodalPlane& nodalPlane2() throw(Seiscomp::Core::ValueException);
-		const NodalPlane& nodalPlane2() const throw(Seiscomp::Core::ValueException);
+		NodalPlane& nodalPlane2();
+		const NodalPlane& nodalPlane2() const;
 
 		//! Indicator for preferred nodal plane of moment tensor
 		//! solution. It can take integer values 1 or 2.
 		void setPreferredPlane(const OPT(int)& preferredPlane);
-		int preferredPlane() const throw(Seiscomp::Core::ValueException);
+		int preferredPlane() const;
 
 
 	// ------------------------------------------------------------------

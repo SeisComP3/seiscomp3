@@ -201,7 +201,7 @@ void AuxStream::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time AuxStream::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time AuxStream::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("AuxStream.end is not set");
@@ -311,7 +311,7 @@ void AuxStream::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AuxStream::restricted() const throw(Seiscomp::Core::ValueException) {
+bool AuxStream::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("AuxStream.restricted is not set");
@@ -331,7 +331,7 @@ void AuxStream::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool AuxStream::shared() const throw(Seiscomp::Core::ValueException) {
+bool AuxStream::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("AuxStream.shared is not set");
@@ -486,7 +486,7 @@ void AuxStream::accept(Visitor* visitor) {
 void AuxStream::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: AuxStream skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -494,8 +494,14 @@ void AuxStream::serialize(Archive& ar) {
 	}
 
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT("device", _device);
 	ar & NAMED_OBJECT_HINT("deviceSerialNumber", _deviceSerialNumber, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("source", _source, Archive::XML_ELEMENT);

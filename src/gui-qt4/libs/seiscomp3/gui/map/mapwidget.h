@@ -30,6 +30,20 @@
 namespace Seiscomp {
 namespace Gui {
 
+class SaveBNADialog : public QDialog {
+	Q_OBJECT
+
+	public:
+		SaveBNADialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
+
+	public:
+		QLineEdit *name;
+		QCheckBox *closedPolygon;
+		QCheckBox *fileAppend;
+		QSpinBox  *rank;
+		QLineEdit *filename;
+};
+
 
 class SC_GUI_API MapWidget : public QWidget {
 	Q_OBJECT
@@ -45,6 +59,14 @@ class SC_GUI_API MapWidget : public QWidget {
 
 		int heightForWidth(int w) const;
 
+		/**
+		 * @brief Sets map rendering in grayscale mode even if the widget is
+		 *        enabled.
+		 * @param f The enable flag
+		 */
+		void setGrayScale(bool f);
+		bool isGrayScale() const;
+
 		virtual void draw(QPainter&);
 
 
@@ -52,6 +74,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		void setDrawGrid(bool);
 		void setDrawLayers(bool);
 		void setDrawCities(bool);
+		void setDrawLegends(bool);
 
 
 	protected slots:
@@ -77,6 +100,7 @@ class SC_GUI_API MapWidget : public QWidget {
 		void mouseMoveEvent(QMouseEvent*);
 		void mouseDoubleClickEvent(QMouseEvent*);
 		void keyPressEvent(QKeyEvent*);
+		void keyReleaseEvent(QKeyEvent*);
 		void wheelEvent(QWheelEvent*);
 		void contextMenuEvent(QContextMenuEvent*);
 		void leaveEvent(QEvent*);
@@ -97,15 +121,17 @@ class SC_GUI_API MapWidget : public QWidget {
 		bool     _firstDrag;
 		bool     _isDragging;
 		bool     _isMeasuring;
+		bool     _isMeasureDragging;
 		bool     _filterMap;
+		bool     _forceGrayScale;
 
-		QPointF  _measureStart;
-		QPointF  _measureEnd;
+		QVector<QPointF> _measurePoints;
+		QString          _measureText;
+		SaveBNADialog   *_measureBNADialog;
 		QPoint   _lastDraggingPosition;
 
 		QMenu   *_contextProjectionMenu;
 		QMenu   *_contextFilterMenu;
-		QMenu   *_contextLayerMenu;
 
 		double   _zoomSensitivity;
 

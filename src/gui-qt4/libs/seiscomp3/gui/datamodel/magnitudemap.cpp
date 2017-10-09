@@ -142,10 +142,8 @@ void MagnitudeMap::drawCustomLayer(QPainter *painter) {
 	if ( _origin ) {
 		int currentSymbolSize = 0;
 
-		if ( canvas().symbolCollection()->size() > 0 ) {
-			(*canvas().symbolCollection()->begin())->update();
+		if ( canvas().symbolCollection()->size() > 0 )
 			currentSymbolSize = (*canvas().symbolCollection()->begin())->size().width();
-		}
 
 		if ( currentSymbolSize != _lastSymbolSize ) {
 			_lastSymbolSize = currentSymbolSize;

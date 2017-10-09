@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -49,7 +50,7 @@ WSADATA		WSAData;
 #endif	/* ARCH_PC_WIN95 */
 
 static	char	IP[16];
-static	int16	Port;
+static	int16u	Port;
 static	int32	Address;
 static 	int32	Interface_addr;
 static	int	Detailed_report;
@@ -95,7 +96,7 @@ int main( int argc, char *argv[] )
 	corrupt = 0;
 	total_missed = 0;
 
-printf("Ready to receive on port %d\n", Port );
+printf("Ready to receive on port %hu\n", Port );
 
 	for(i=0; ; i++ )
 	{
@@ -168,7 +169,7 @@ static  void    Usage(int argc, char *argv[])
 			Detailed_report = 1;
 			argc--;
 		}else if( !strncmp( *argv, "-p", 2 ) ){
-			sscanf(argv[1], "%hd", &Port );
+			sscanf(argv[1], "%hu", &Port );
 			argc--; argv++;
                 }else if( !strncmp( *argv, "-a", 2 ) ){
 			sscanf(argv[1], "%s", IP );

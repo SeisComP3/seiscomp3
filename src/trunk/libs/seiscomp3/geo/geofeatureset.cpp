@@ -162,6 +162,7 @@ bool GeoFeatureSet::readBNAHeader(std::ifstream& infile, std::string& segment,
 	if ( (pos1 = line.find('"')) == std::string::npos ) return false;
 	if ( (pos2 = line.find('"', pos1+1)) == std::string::npos ) return false;
 	segment = line.substr(pos1+1, pos2-pos1-1);
+	Core::trim(segment);
 
 	// rank
 	if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ) return false;
@@ -276,11 +277,13 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 			v.lon = atof(tmpStr.c_str());
 			std::getline(infile, tmpStr);
 			v.lat = atof(tmpStr.c_str());
+
 			if ( v.lon < -180 || v.lon > 180 ) {
 				SEISCOMP_DEBUG("invalid longitude in file %s at line %i",
-						       filename.c_str(), lineNum);
+				               filename.c_str(), lineNum);
 				continue;
 			}
+
 			if ( v.lat < -90 || v.lat > 90 ) {
 				SEISCOMP_DEBUG("invalid latitude in file %s at line %i",
 				               filename.c_str(), lineNum);
@@ -303,6 +306,7 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 					continue;
 				}
 			}
+
 			feature->addVertex(v, startSubFeature);
 			startSubFeature = false;
 		}

@@ -37,6 +37,7 @@ void Legend::bringToFront() {
 }
 
 void Legend::setEnabled(bool e) {
+	if ( _enabled == e ) return;
 	_enabled = e;
 	emit enabled(this, e);
 }

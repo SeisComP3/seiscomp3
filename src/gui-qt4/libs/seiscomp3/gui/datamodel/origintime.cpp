@@ -55,7 +55,6 @@ Seiscomp::Core::Time OriginTimeDialog::time() const {
 	      _ui.timeEdit->time().second(),
 	      0);
 
-	std::cout << t.toString("%F %T") << std::endl;
 	return t;
 }
 

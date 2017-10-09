@@ -1,0 +1,14 @@
+#query-form fieldset {
+  width: 400px;
+  display: table-cell;
+  vertical-align: top;
+}
+
+fieldset > legend {
+  font-weight: bold;
+}
+
+input {
+  text-align: left;
+}
+

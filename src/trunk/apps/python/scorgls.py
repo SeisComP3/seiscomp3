@@ -19,7 +19,7 @@ import seiscomp3.Client
 class OriginList(seiscomp3.Client.Application):
   def __init__(self, argc, argv):
     seiscomp3.Client.Application.__init__(self, argc, argv)
-    
+
     self.setMessagingEnabled(False)
     self.setDatabaseEnabled(True, False)
     self.setDaemonEnabled(False)
@@ -29,9 +29,9 @@ class OriginList(seiscomp3.Client.Application):
 
 
   def createCommandLineDescription(self):
-    self.commandline().addGroup("Events")
-    self.commandline().addStringOption("Events", "begin", "specify the lower bound of the time interval")
-    self.commandline().addStringOption("Events", "end", "specify the upper bound of the time interval")
+    self.commandline().addGroup("Origins")
+    self.commandline().addStringOption("Origins", "begin", "specify the lower bound of the time interval. Time format: '1970-01-01 00:00:00'")
+    self.commandline().addStringOption("Origins", "end", "specify the upper bound of the time interval. Time format: '1970-01-01 00:00:00'")
     return True
 
 

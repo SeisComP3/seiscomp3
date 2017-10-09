@@ -141,7 +141,7 @@ class SC_GUI_API RecordView : public QWidget {
 		void clearRecords();
 
 		//! Sets the height of a row in pixels
-		void setRowHeight(int height);
+		void setRowHeight(int height, bool allowStretch = false);
 
 		//! Returns the current row height
 		int rowHeight() const;
@@ -182,6 +182,8 @@ class SC_GUI_API RecordView : public QWidget {
 		QPointF zoomSpot() const;
 
 		void setMinimumRowHeight(int);
+		void setMaximumRowHeight(int);
+		void setRelativeRowHeight(int desiredNumberOfTraces);
 
 		//! Returns the current alignment
 		Seiscomp::Core::Time alignment() const;
@@ -237,6 +239,12 @@ class SC_GUI_API RecordView : public QWidget {
 
 		QWidget* infoWidget() const;
 		TimeScale* timeWidget() const;
+
+		/**
+		 * @brief Returns the time window covered by all available data
+		 * @return The data time window
+		 */
+		Core::TimeWindow coveredTimeRange() const;
 
 
 	public slots:
@@ -540,6 +548,8 @@ class SC_GUI_API RecordView : public QWidget {
 
 		int    _rowHeight;
 		int    _minRowHeight;
+		int    _maxRowHeight;
+		int    _numberOfRows;
 		int    _defaultRowHeight;
 		float  _zoomFactor;
 

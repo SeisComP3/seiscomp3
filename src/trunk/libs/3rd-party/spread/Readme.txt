@@ -2,8 +2,8 @@ SPREAD: A Reliable Multicast and Group Communication Toolkit
 -----------------------------------------------------------
 
 /=============================================================================\
-| The Spread Group Communication Toolkit                                      |
-| Copyright (c) 1993-2013 Spread Concepts LLC                                 |
+| The Spread Group Communication Toolkit - Accelerated Ring Research Version  |
+| Copyright (c) 1993-2014 Spread Concepts LLC                                 |
 | All rights reserved.                                                        |
 |                                                                             |
 | The Spread package is licensed under the Spread Open-Source License.        |
@@ -23,6 +23,7 @@ SPREAD: A Reliable Multicast and Group Communication Toolkit
 |    John Schultz            jschultz@spreadconcepts.com		      |
 |                                                                             |
 | Major Contributors:                                                         |
+|    Amy Babay               babay@cs.jhu.edu - accelerated ring protocol     |
 |    Ryan Caudy              rcaudy@gmail.com - contribution to process groups|
 |    Claudiu Danilov	     claudiu@acm.org - scalable, wide-area support    |
 |    Cristina Nita-Rotaru    crisn@cs.purdue.edu - GC security                |
@@ -48,8 +49,71 @@ SPREAD: A Reliable Multicast and Group Communication Toolkit
 | WWW    : http://www.spread.org  and  http://www.spreadconcepts.com          |
 | Contact: info@spreadconcepts.com                                            |
 |                                                                             |
-| Version 4.3.0  built 11/June/2013                                           |
+| Version 4.4.0 built 27/May/2014                                             |
 \=============================================================================/
+
+May 27, 2014 Ver 4.4.0
+----------------------
+
+No changes versus 4.4.0 RC2.
+
+May 19, 2014 Ver 4.4.0 RC2
+--------------------------
+
+Improvements:
+  - Slightly improved MSVS project files -- will work with MSBuild 4.0 (e.g. - .NET 4.0, MSVS 2010) now. Later versions of MSVS can auto-upgrade solution (thanks to Johann Lochner)
+  - Remove named pipe for accepting UNIX socket connections on exit
+  - Allow token sizes up to 64KB (uses IP fragmentation may exacerbate loss -- will log a warning) rather than hard failure if > 1.5KB
+  - Send bcast retransmissions immediately rather than queue to suppress unnecessary re-requests in accelerated protocol
+
+Bug fixes:
+  - Reset Commit_set to only contain this daemon after installing a regular membership
+  - Improved validity check for FORM1 tokens to either process or swallow
+  - Only process FORM2 token that corresponds to most recent FORM1 token
+  - Block delivery of < AGREED msgs until GROUPS algorithm is completed
+  - Consult Last_discarded rather than Aru for deciding whether we have a packet already or not (Prot_handle_bcast)
+  - Handle receiving packet after FORM1 processed and it is still listed as a hole on FORM2
+
+January 22, 2014 Ver 4.4.0 RC1
+------------------------------
+Features:
+
+ - New accelerated ring protocol tailored for data center networks.
+   This protocol provides 30%-50% higher throughput and 20-35% lower latency 
+   in modern local area networks. Both the original protocol and the accelerated
+   ring protocol are available in this version.
+
+ - More efficient packet packing.
+
+ - Windows project files now build again.
+
+ - New spread-service project to make Spread into a proper Windows service.
+	- Needs testing from the community!
+
+ - Additional and improved MEMBERSHIP and PROTOCOL logging.
+
+Bug fixes:
+
+ - EVS bugs:
+	- Set Aru to 0 when we transition to EVS.
+	- Ignore Token->seq when in EVS.
+	- Fixed Backoff_membership referring to wrong packet when ring breaks in EVS.
+	- Fixed token retransmissions while transitioning from EVS to OP.
+
+ - Token bugs:
+	- Token->aru calculaton fixed; Set_aru eliminated.
+	- Ignore tokens from wrong membership + sender.
+
+ - Alarm on Windows:
+	- Alarm(EXIT) now exits with non-zero code instead of aborting.
+	- Fixed long log lines crash bug.
+
+ - Allow ports >= 2^15 to be used.
+
+ - Turned off Nagle algorithm in Java library.
+
+July 2, 2013 Ver 4.3.0 Final
+----------------------------
 
 June 11, 2013 Ver 4.3.0 Final
 -----------------------------
@@ -59,12 +123,10 @@ Features:
 April 4, 2013 Ver 4.3.0 RC3
 ----------------------------
 Features:
-
  - Updated copyright
 
 March 25, 2013 Ver 4.3.0 RC1
 ----------------------------
-
 Features:
 
  - C library supports using a single <port> value as the spread name to connect 
@@ -109,92 +171,19 @@ than just that it compiles.
  - Performance bug fix to protocol.c to only decrement retrans_allowed when we 
 actually request a retransmission.
 
-
-June 18, 2012 Ver 4.2.0
------------------------
-This release has one significant bugfixe over RC2.
-
-1) Fix regression from 4.1 release in which daemons were not connecting 
-when using multicast groups in a configuration with limited interfaces 
-for clients and daemons. This includes updating included libspread-util 
-version to 4.2.0rc1. 
-
-
-May 03, 2012 Ver 4.2.0 RC2
---------------------------
-This release has two significant bugfixe over RC1.
-
-1) Fix regression from 4.1 release in which daemons were not connecting 
-when using multicast groups.
-
-2) Fix crashes when a new configuration is loaded while the daemons are running.
-This is a bug from the previous 4.1 release. 
-
-
-March 20, 2012 Ver 4.2.0 RC1
-----------------------------
-This release has a large number of small changes which include bugfixes,
-very specific performance improvements, and general improvements to the code 
-and build process.
-
-Details of all changes can be found in the daemon/Changelog file. Note with 
-the new libspread-util library broken out into it's own package, to see the 
-changes to that library (which used to be included as code in the daemon
-directory) read the libspread-util/Changelog file. 
-
-Features:
-
--) Added Keepalive support to client-server TCP connections. Requires correct
-operating system values set for keepalives in order to be useful. 
--) Switch internal code to use MONOTONIC clocks when available and appropriate
-to remove chance of system clock changes (from the clock being set) from affecting
-message processing
--) Break out events, memory, data_link and alarm code into separate 
-libspread-util package. This package also has a number of improvements in
-the functionality of those code files which are listed in the internal
-package release notes. 
-
-Fixes:
-
--) Fix bug with structure size on 64 bit platforms causing crash.
--) Fix several deadlocks and race conditions in java Listener code.
--) Fix 100 ms timeout in java socket handling code so it does not corrupt 
-messages that take a long time to arrive. 
--) Fix java disconnect bug that prevented client from reconnecting until restarted.
--) Fix crash when adding array of groups in java library. . 
--) Improve mutex initialization on Windows and POSIX systems.
--) Remove cause of slow message delivery when a client is receiving a lot of
-messages and gets into a badger state. 
--) Print useful help messages for spmonitor and correct error messages when bad
-commandline options provided. 
--) Remove printf calls in libspread that should not be there as they interrupt
-client program output. 
--) Fix token hurry bug that caused messages to have a 2 second latency in 
-specific circumstances.
--) Fix Solaris linker compile bug.
--) Build fixes for sprecv program.
--) Fix autoconf so it correctly detects the endianness of PPC systems. 
-
-Known Regressions:
-
-1) The Windows build is broken by the separation of the libspread-util library
-into a separate package. The code is intended to be Windows compatible, but 
-requires build changes and testing in order to work. 
-
-
 SOURCE INSTALL:
 ---------------
 
 The source install uses autoconf and make to support many Unix and unix-like 
 platforms as well as Windows 95+.
 
-Windows is supported by a set of Visual Studio desktop and project files in
+Windows is supported by a set of Visual Studio project files in
 the win32 subdirectory. These files build the daemon, libraries, and user
 programs.
 
-Any not-specifically supported
-platform that has reasonably close to normal sockets networking should also 
-be easily portable. See the file PORTING for hints on porting.
+Any not-specifically supported platform that has reasonably close to normal 
+sockets networking should also  be easily portable. See the file PORTING for 
+hints on porting.
 
 From the directory where you unpacked the Spread source distribution do 
 the following:
@@ -208,9 +197,9 @@ installation location. (/usr/local/{bin,man,sbin,include,lib} by default)
 
 4) Create a spread.conf file appropriate to your local configuration. For 
 more info on how to do this look at the sample file "sample.spread.conf"
-or below in the binary install instructions.
+in docs or below in the binary install instructions.
 
-5) To build the java library and documentation see the Readme.txt file 
+5) To build the java library and documentation, see the Readme.txt file 
 in the java directory.
 
 6) To build the perl library see the README file in the perl directory.
@@ -222,7 +211,7 @@ Packaged binary releases of Spread are available from third parties
 for several platforms, such as through the FreeBSD Ports system or as 
 RPMs for Linux distributions. The Spread binary release consists of 
 prebuilt binaries for several OS's that can be run without being installed
-offially into the system.
+officially into the system.
 
 We recommend that if you are experimenting with spread you create a special
 'spread' directory (for example /usr/local/spread or /opt/spread) and keep
@@ -254,7 +243,6 @@ can be found in docs/
 
     You can run "spread usage" to see the spread running options.
 
-
 To use the Java classes and examples you need to have a copy of the 
 main 'spread' daemon running.  Then the class files give you the 
 equivelent of the libspread.a as a set of java classes.  The user.java,  
@@ -262,43 +250,42 @@ and user.class files give you a demonstration application and source code.
 Under the java/docs directory is a full verison of the Spread Java API
 provided by javadocs. 
 
-For Microsoft Windows systems use the spread.exe daemon and the libspread.lib 
-to link with your programs.
-
+For Microsoft Windows systems use the spread.exe executable or spread-service.exe
+service and the libspread.lib to link with your programs.
 
 OVERVIEW:
 ---------
 
 Spread consists of two parts, an executable daemon which is executed on 
 each machine which is part of the heavyweight 'machine' group, and a library
- which provides a programming interface for writing group multicast 
+which provides a programming interface for writing group multicast 
 applications and which is linked into the application.
 
-	The daemon, called "spread", should be run as a non-priveledged 
+The daemon, called "spread", should be run as a non-priveledged 
 user (we created a 'spread' user) and only needs permissions to create a 
 socket in /tmp and read its config file which should be in the same 
 directory as the executable.  By default the daemon binds to and runs 
 off the non-priveledged port 4803 unless the config file indicates otherwise.
-	Each daemon can be started independently and if it does not find 
+
+Each daemon can be started independently and if it does not find 
 any other members of its defined configuration currently active it runs as 
 a machine group of 1 machine.  When other daemons are started they will join
 this machine group.
 
-	The machines which are running a daemon with a common config file 
+The machines which are running a daemon with a common config file 
 form a 'machine group' (in contrast to a 'process group').  The daemons 
 handle multicasting mesages between each other,providing ordering and 
 delivery guarantees, detecting and handling failures of nodes or links, and 
 managing all applications which are connected to each daemon.
 
-	Each application utilizing the spread system needs to link with 
+Each application utilizing the spread system needs to link with 
 the 'libspread.a', 'libtspread.a', 'libtspread.lib' or 'libspread.lib' 
 library and needs to use the calls defined in the 'sp.h' and 'sp_func.h' 
 header files. Documentation for the interface is currenly incomplete, but 
 a basic application must do at least the following:
 
 1) Before using any other spread calls you need to 'connect' to a daemon 
-   by calling the
-	SP_connect(...) call.  This will set a mbox which is an integer 
+by calling the SP_connect(...) call.  This will set a mbox which is an integer 
 representing your connection to the daemon.  You use this when making other
 spread calls.  You CAN connect to daemons multiple times from the same 
 application (and we know of times when this is very useful).
@@ -347,7 +334,6 @@ application connection.
 
 For more detail, much of which IS important, see papers on 
 Extended Virtual Sychrony, Transis and Totem.
-
 
 UTILITY PROGRAMS:
 -----------------

@@ -56,7 +56,7 @@ extern "C" {
 // BIANCHI|ENCRYPTION: Added the encryption class to arclink
 #include "encrypt.h"
 
-#define MYVERSION "1.2 (2013.070)"
+#define MYVERSION "1.2 (2017.055)"
 
 using namespace std;
 using namespace CfgParser;

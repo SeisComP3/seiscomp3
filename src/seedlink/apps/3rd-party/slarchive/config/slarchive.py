@@ -97,6 +97,8 @@ class Module(seiscomp3.Kernel.Module):
 
     return line
 
+  def requiresKernelModules(self):
+    return False
 
   def updateConfig(self):
     self._readConfig()

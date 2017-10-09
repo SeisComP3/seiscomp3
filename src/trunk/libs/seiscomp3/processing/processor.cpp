@@ -72,8 +72,7 @@ Settings::Settings(const string &mod,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define ROOT_CONFIG_KEY "module."
-string Settings::getString(const string &parameter) const
-throw(Config::Exception) {
+string Settings::getString(const string &parameter) const {
 	std::string value;
 	if ( !getValue(value, parameter) )
 		throw Config::OptionNotFoundException(parameter);
@@ -85,8 +84,7 @@ throw(Config::Exception) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Settings::getInt(const string &parameter) const
-throw(Config::Exception) {
+int Settings::getInt(const string &parameter) const {
 	int value;
 	if ( !getValue(value, parameter) )
 		throw Config::OptionNotFoundException(parameter);
@@ -98,8 +96,7 @@ throw(Config::Exception) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Settings::getDouble(const string &parameter) const
-throw(Config::Exception) {
+double Settings::getDouble(const string &parameter) const {
 	double value;
 	if ( !getValue(value, parameter) )
 		throw Config::OptionNotFoundException(parameter);
@@ -111,8 +108,7 @@ throw(Config::Exception) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Settings::getBool(const string &parameter) const
-throw(Config::Exception) {
+bool Settings::getBool(const string &parameter) const {
 	bool value;
 	if ( !getValue(value, parameter) )
 		throw Config::OptionNotFoundException(parameter);

@@ -85,12 +85,12 @@ bool Bindings::init(const DataModel::ConfigModule *cfg, const std::string &setup
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const KeyValues *Bindings::getKeys(const std::string &networkCode,
-                                   const std::string &stationCode) {
-	NetworkMap::iterator it = _bindings.find(networkCode);
+                                   const std::string &stationCode) const {
+	NetworkMap::const_iterator it = _bindings.find(networkCode);
 	if ( it == _bindings.end() )
 		return NULL;
 
-	StationMap::iterator it2 = it->second.find(stationCode);
+	StationMap::const_iterator it2 = it->second.find(stationCode);
 	if ( it2 == it->second.end() )
 		return NULL;
 
@@ -102,7 +102,7 @@ const KeyValues *Bindings::getKeys(const std::string &networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const KeyValues *Bindings::getKeys(const DataModel::Station *station) {
+const KeyValues *Bindings::getKeys(const DataModel::Station *station) const {
 	if ( station->network() == NULL )
 		return NULL;
 

@@ -1,18 +1,19 @@
 SET(FILTER_SOURCES
 	abs.cpp
-        const.cpp
-        cutoff.cpp
-        biquad.cpp
-        butterworth.cpp
-        iirfilter.cpp
-        iirintegrate.cpp
+	const.cpp
+	cutoff.cpp
+	biquad.cpp
+	butterworth.cpp
+	iirfilter.cpp
+	iirintegrate.cpp
 	iirdifferentiate.cpp
-        average.cpp
-        stalta.cpp
-        taper.cpp
-        rmhp.cpp
-        chainfilter.cpp
-        seismometers.cpp
+	average.cpp
+	minmax.cpp
+	stalta.cpp
+	taper.cpp
+	rmhp.cpp
+	chainfilter.cpp
+	seismometers.cpp
 )
 
 SET(FILTER_HEADERS
@@ -27,6 +28,7 @@ SET(FILTER_HEADERS
 	iirintegrate.h
 	iirdifferentiate.h
 	average.h
+	minmax.h
 	stalta.h
 	taper.h
 	rmhp.h

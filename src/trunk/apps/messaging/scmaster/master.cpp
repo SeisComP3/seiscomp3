@@ -266,7 +266,11 @@ bool Master::init() {
 	readPluginNames(conf, "plugins");
 
 	Client::PluginRegistry::Instance()->addPackagePath("scmaster");
-	Client::PluginRegistry::Instance()->loadPlugins();
+	if ( Client::PluginRegistry::Instance()->loadPlugins() < 0 ) {
+		SEISCOMP_ERROR("Failed to load requested plugins");
+		return false;
+	}
+
 	if ( Client::PluginRegistry::Instance()->pluginCount() > 0 ) {
 		std::cerr << "Plugins:" << std::endl;
 		std::cerr << "--------" << std::endl;

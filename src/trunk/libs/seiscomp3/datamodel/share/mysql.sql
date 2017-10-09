@@ -36,10 +36,12 @@ DROP TABLE IF EXISTS SensorCalibration;
 DROP TABLE IF EXISTS Sensor;
 DROP TABLE IF EXISTS ResponsePAZ;
 DROP TABLE IF EXISTS ResponsePolynomial;
+DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS ResponseIIR;
 DROP TABLE IF EXISTS DataloggerCalibration;
 DROP TABLE IF EXISTS Decimation;
 DROP TABLE IF EXISTS Datalogger;
-DROP TABLE IF EXISTS ResponseFIR;
 DROP TABLE IF EXISTS AuxStream;
 DROP TABLE IF EXISTS Stream;
 DROP TABLE IF EXISTS SensorLocation;
@@ -80,7 +82,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 ) ENGINE=INNODB;
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.7');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -109,7 +111,7 @@ CREATE TABLE EventDescription (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,type)
+	UNIQUE KEY composite_index (_parent_oid,type)
 ) ENGINE=INNODB;
 
 CREATE TABLE Comment (
@@ -133,7 +135,7 @@ CREATE TABLE Comment (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,id)
+	UNIQUE KEY composite_index (_parent_oid,id)
 ) ENGINE=INNODB;
 
 CREATE TABLE DataUsed (
@@ -209,7 +211,7 @@ CREATE TABLE PickReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,pickID)
+	UNIQUE KEY composite_index (_parent_oid,pickID)
 ) ENGINE=INNODB;
 
 CREATE TABLE AmplitudeReference (
@@ -223,7 +225,7 @@ CREATE TABLE AmplitudeReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,amplitudeID)
+	UNIQUE KEY composite_index (_parent_oid,amplitudeID)
 ) ENGINE=INNODB;
 
 CREATE TABLE Reading (
@@ -253,7 +255,7 @@ CREATE TABLE MomentTensorComponentContribution (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,phaseCode,component)
+	UNIQUE KEY composite_index (_parent_oid,phaseCode,component)
 ) ENGINE=INNODB;
 
 CREATE TABLE MomentTensorStationContribution (
@@ -290,7 +292,7 @@ CREATE TABLE MomentTensorPhaseSetting (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code)
+	UNIQUE KEY composite_index (_parent_oid,code)
 ) ENGINE=INNODB;
 
 CREATE TABLE MomentTensor (
@@ -557,7 +559,7 @@ CREATE TABLE StationMagnitudeContribution (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,stationMagnitudeID)
+	UNIQUE KEY composite_index (_parent_oid,stationMagnitudeID)
 ) ENGINE=INNODB;
 
 CREATE TABLE Magnitude (
@@ -695,7 +697,7 @@ CREATE TABLE OriginReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,originID)
+	UNIQUE KEY composite_index (_parent_oid,originID)
 ) ENGINE=INNODB;
 
 CREATE TABLE FocalMechanismReference (
@@ -709,7 +711,7 @@ CREATE TABLE FocalMechanismReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,focalMechanismID)
+	UNIQUE KEY composite_index (_parent_oid,focalMechanismID)
 ) ENGINE=INNODB;
 
 CREATE TABLE Event (
@@ -776,7 +778,7 @@ CREATE TABLE Arrival (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,pickID)
+	UNIQUE KEY composite_index (_parent_oid,pickID)
 ) ENGINE=INNODB;
 
 CREATE TABLE Origin (
@@ -901,7 +903,7 @@ CREATE TABLE Setup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE ConfigStation (
@@ -911,12 +913,22 @@ CREATE TABLE ConfigStation (
 	networkCode CHAR(8) NOT NULL,
 	stationCode CHAR(8) NOT NULL,
 	enabled TINYINT(1) NOT NULL,
+	creationInfo_agencyID VARCHAR(64),
+	creationInfo_agencyURI VARCHAR(255),
+	creationInfo_author VARCHAR(128),
+	creationInfo_authorURI VARCHAR(255),
+	creationInfo_creationTime DATETIME,
+	creationInfo_creationTime_ms INTEGER,
+	creationInfo_modificationTime DATETIME,
+	creationInfo_modificationTime_ms INTEGER,
+	creationInfo_version VARCHAR(64),
+	creationInfo_used TINYINT(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,networkCode,stationCode)
+	UNIQUE KEY composite_index (_parent_oid,networkCode,stationCode)
 ) ENGINE=INNODB;
 
 CREATE TABLE ConfigModule (
@@ -956,7 +968,7 @@ CREATE TABLE QCLog (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
+	UNIQUE KEY composite_index (_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI)
 ) ENGINE=INNODB;
 
 CREATE TABLE WaveformQuality (
@@ -990,7 +1002,7 @@ CREATE TABLE WaveformQuality (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,type,parameter)
+	UNIQUE KEY composite_index (_parent_oid,start,start_ms,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,type,parameter)
 ) ENGINE=INNODB;
 
 CREATE TABLE Outage (
@@ -1014,7 +1026,7 @@ CREATE TABLE Outage (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,start,start_ms)
+	UNIQUE KEY composite_index (_parent_oid,waveformID_networkCode,waveformID_stationCode,waveformID_locationCode,waveformID_channelCode,waveformID_resourceURI,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE StationReference (
@@ -1028,7 +1040,7 @@ CREATE TABLE StationReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,stationID)
+	UNIQUE KEY composite_index (_parent_oid,stationID)
 ) ENGINE=INNODB;
 
 CREATE TABLE StationGroup (
@@ -1036,10 +1048,12 @@ CREATE TABLE StationGroup (
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	type VARCHAR(64),
-	code CHAR(10),
+	code CHAR(20),
 	start DATETIME,
+	start_ms INTEGER,
 	end DATETIME,
-	description VARCHAR(80),
+	end_ms INTEGER,
+	description VARCHAR(255),
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1048,15 +1062,15 @@ CREATE TABLE StationGroup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code)
+	UNIQUE KEY composite_index (_parent_oid,code)
 ) ENGINE=INNODB;
 
 CREATE TABLE AuxSource (
 	_oid INTEGER(11) NOT NULL,
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	name VARCHAR(80) NOT NULL,
-	description VARCHAR(80),
+	name VARCHAR(255) NOT NULL,
+	description VARCHAR(255),
 	unit VARCHAR(20),
 	conversion VARCHAR(80),
 	sampleRateNumerator INT UNSIGNED,
@@ -1068,15 +1082,15 @@ CREATE TABLE AuxSource (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE AuxDevice (
 	_oid INTEGER(11) NOT NULL,
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	name VARCHAR(80) NOT NULL,
-	description VARCHAR(80),
+	name VARCHAR(255) NOT NULL,
+	description VARCHAR(255),
 	model VARCHAR(80),
 	manufacturer VARCHAR(50),
 	remark_content BLOB,
@@ -1086,7 +1100,7 @@ CREATE TABLE AuxDevice (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE SensorCalibration (
@@ -1096,8 +1110,10 @@ CREATE TABLE SensorCalibration (
 	serialNumber VARCHAR(80) NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
@@ -1106,14 +1122,14 @@ CREATE TABLE SensorCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE KEY composite_index (_parent_oid,serialNumber,channel,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE Sensor (
 	_oid INTEGER(11) NOT NULL,
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	name VARCHAR(80) NOT NULL,
+	name VARCHAR(255) NOT NULL,
 	description VARCHAR(255),
 	model VARCHAR(80),
 	manufacturer VARCHAR(50),
@@ -1129,7 +1145,7 @@ CREATE TABLE Sensor (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE ResponsePAZ (
@@ -1138,7 +1154,7 @@ CREATE TABLE ResponsePAZ (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	name VARCHAR(255),
 	type CHAR(1),
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	normalizationFactor DOUBLE UNSIGNED,
 	normalizationFrequency DOUBLE UNSIGNED,
@@ -1150,12 +1166,15 @@ CREATE TABLE ResponsePAZ (
 	poles_used TINYINT(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	INDEX(_parent_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE ResponsePolynomial (
@@ -1163,12 +1182,12 @@ CREATE TABLE ResponsePolynomial (
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	name VARCHAR(255),
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	frequencyUnit CHAR(1),
 	approximationType CHAR(1),
-	approximationLowerBound DOUBLE UNSIGNED,
-	approximationUpperBound DOUBLE UNSIGNED,
+	approximationLowerBound DOUBLE,
+	approximationUpperBound DOUBLE,
 	approximationError DOUBLE UNSIGNED,
 	numberOfCoefficients SMALLINT UNSIGNED,
 	coefficients_content BLOB,
@@ -1180,7 +1199,78 @@ CREATE TABLE ResponsePolynomial (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
+CREATE TABLE ResponseFAP (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	numberOfTuples SMALLINT UNSIGNED,
+	tuples_content BLOB,
+	tuples_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
+CREATE TABLE ResponseFIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfCoefficients SMALLINT UNSIGNED,
+	symmetry CHAR(1),
+	coefficients_content BLOB,
+	coefficients_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
+) ENGINE=INNODB;
+
+CREATE TABLE ResponseIIR (
+	_oid INTEGER(11) NOT NULL,
+	_parent_oid INTEGER(11) NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	name VARCHAR(255),
+	type CHAR(1),
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used TINYINT(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used TINYINT(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used TINYINT(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	INDEX(_parent_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE DataloggerCalibration (
@@ -1190,8 +1280,10 @@ CREATE TABLE DataloggerCalibration (
 	serialNumber VARCHAR(80) NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
@@ -1200,7 +1292,7 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE KEY composite_index (_parent_oid,serialNumber,channel,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE Decimation (
@@ -1218,7 +1310,7 @@ CREATE TABLE Decimation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,sampleRateNumerator,sampleRateDenominator)
+	UNIQUE KEY composite_index (_parent_oid,sampleRateNumerator,sampleRateDenominator)
 ) ENGINE=INNODB;
 
 CREATE TABLE Datalogger (
@@ -1226,7 +1318,7 @@ CREATE TABLE Datalogger (
 	_parent_oid INTEGER(11) NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	name VARCHAR(255),
-	description VARCHAR(80),
+	description VARCHAR(255),
 	digitizerModel VARCHAR(80),
 	digitizerManufacturer VARCHAR(50),
 	recorderModel VARCHAR(80),
@@ -1234,7 +1326,7 @@ CREATE TABLE Datalogger (
 	clockModel VARCHAR(80),
 	clockManufacturer VARCHAR(50),
 	clockType VARCHAR(10),
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	maxClockDrift DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used TINYINT(1) NOT NULL DEFAULT '0',
@@ -1243,30 +1335,7 @@ CREATE TABLE Datalogger (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
-) ENGINE=INNODB;
-
-CREATE TABLE ResponseFIR (
-	_oid INTEGER(11) NOT NULL,
-	_parent_oid INTEGER(11) NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	name VARCHAR(255),
-	gain DOUBLE UNSIGNED,
-	decimationFactor SMALLINT UNSIGNED,
-	delay DOUBLE UNSIGNED,
-	correction DOUBLE,
-	numberOfCoefficients SMALLINT UNSIGNED,
-	symmetry CHAR(1),
-	coefficients_content BLOB,
-	coefficients_used TINYINT(1) NOT NULL DEFAULT '0',
-	remark_content BLOB,
-	remark_used TINYINT(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	INDEX(_parent_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
+	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
 CREATE TABLE AuxStream (
@@ -1275,11 +1344,13 @@ CREATE TABLE AuxStream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	code CHAR(3) NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	device VARCHAR(255),
 	deviceSerialNumber VARCHAR(80),
 	source VARCHAR(80),
-	format VARCHAR(20),
+	format VARCHAR(50),
 	flags VARCHAR(20),
 	restricted TINYINT(1),
 	shared TINYINT(1),
@@ -1288,7 +1359,7 @@ CREATE TABLE AuxStream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE KEY composite_index (_parent_oid,code,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE Stream (
@@ -1297,7 +1368,9 @@ CREATE TABLE Stream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	code CHAR(3) NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	datalogger VARCHAR(255),
 	dataloggerSerialNumber VARCHAR(80),
 	dataloggerChannel INT UNSIGNED,
@@ -1313,7 +1386,7 @@ CREATE TABLE Stream (
 	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	gainUnit CHAR(20),
-	format VARCHAR(20),
+	format VARCHAR(50),
 	flags VARCHAR(20),
 	restricted TINYINT(1),
 	shared TINYINT(1),
@@ -1322,7 +1395,7 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE KEY composite_index (_parent_oid,code,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE SensorLocation (
@@ -1331,7 +1404,9 @@ CREATE TABLE SensorLocation (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	code CHAR(8) NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1340,7 +1415,7 @@ CREATE TABLE SensorLocation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE KEY composite_index (_parent_oid,code,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE Station (
@@ -1349,8 +1424,10 @@ CREATE TABLE Station (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	code CHAR(8) NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	description VARCHAR(80),
+	end_ms INTEGER,
+	description VARCHAR(255),
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1369,7 +1446,7 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE KEY composite_index (_parent_oid,code,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE Network (
@@ -1378,8 +1455,10 @@ CREATE TABLE Network (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	code CHAR(8) NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	description VARCHAR(80),
+	end_ms INTEGER,
+	description VARCHAR(255),
 	institutions VARCHAR(100),
 	region VARCHAR(100),
 	type VARCHAR(50),
@@ -1394,7 +1473,7 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE KEY composite_index (_parent_oid,code,start,start_ms)
 ) ENGINE=INNODB;
 
 CREATE TABLE RouteArclink (
@@ -1410,7 +1489,7 @@ CREATE TABLE RouteArclink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,address,start)
+	UNIQUE KEY composite_index (_parent_oid,address,start)
 ) ENGINE=INNODB;
 
 CREATE TABLE RouteSeedlink (
@@ -1424,7 +1503,7 @@ CREATE TABLE RouteSeedlink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,address)
+	UNIQUE KEY composite_index (_parent_oid,address)
 ) ENGINE=INNODB;
 
 CREATE TABLE Route (
@@ -1440,7 +1519,7 @@ CREATE TABLE Route (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode)
+	UNIQUE KEY composite_index (_parent_oid,networkCode,stationCode,locationCode,streamCode)
 ) ENGINE=INNODB;
 
 CREATE TABLE Access (
@@ -1459,7 +1538,7 @@ CREATE TABLE Access (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,networkCode,stationCode,locationCode,streamCode,user,start)
+	UNIQUE KEY composite_index (_parent_oid,networkCode,stationCode,locationCode,streamCode,user,start)
 ) ENGINE=INNODB;
 
 CREATE TABLE JournalEntry (
@@ -1492,7 +1571,7 @@ CREATE TABLE ArclinkUser (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name,email)
+	UNIQUE KEY composite_index (_parent_oid,name,email)
 ) ENGINE=INNODB;
 
 CREATE TABLE ArclinkStatusLine (
@@ -1509,7 +1588,7 @@ CREATE TABLE ArclinkStatusLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,volumeID,type,status)
+	UNIQUE KEY composite_index (_parent_oid,volumeID,type,status)
 ) ENGINE=INNODB;
 
 CREATE TABLE ArclinkRequestLine (
@@ -1539,7 +1618,7 @@ CREATE TABLE ArclinkRequestLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,start,start_ms,end,end_ms,streamID_networkCode,streamID_stationCode,streamID_locationCode,streamID_channelCode,streamID_resourceURI)
+	UNIQUE KEY composite_index (_parent_oid,start,start_ms,end,end_ms,streamID_networkCode,streamID_stationCode,streamID_locationCode,streamID_channelCode,streamID_resourceURI)
 ) ENGINE=INNODB;
 
 CREATE TABLE ArclinkRequest (
@@ -1567,5 +1646,5 @@ CREATE TABLE ArclinkRequest (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,created,created_ms,requestID,userID)
+	UNIQUE KEY composite_index (_parent_oid,created,created_ms,requestID,userID)
 ) ENGINE=INNODB;

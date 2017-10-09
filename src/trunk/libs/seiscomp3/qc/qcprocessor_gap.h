@@ -25,12 +25,12 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorGap);
 
 class SC_SYSTEM_CLIENT_API QcProcessorGap : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorGap);
+	DECLARE_SC_CLASS(QcProcessorGap);
 
-public:
-    QcProcessorGap();
-    double getGap() throw(Core::ValueException);		
-    bool setState(const Record* record, const DoubleArray& data);
+	public:
+		QcProcessorGap();
+		double getGap();
+		bool setState(const Record *record, const DoubleArray &data);
 };
 
 

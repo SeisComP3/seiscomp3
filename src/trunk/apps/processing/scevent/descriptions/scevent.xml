@@ -46,21 +46,19 @@
 					<parameter name="rect" type = "string" >
 						<description>
 							Region in which scevent is allowed to create events.
-						</description>	
-					</parameter>	
-				</group>
+						</description>
+					</parameter>
 
-				<group name="depths">
-					<parameter name="minimum" type = "double" >
+					<parameter name="minDepth" type="double" >
 						<description>
 							Minimum depth for which scevent is allowed to create events.
-						</description>	
-					</parameter>	
-				
-					<parameter name="maximum" type = "double" >
+						</description>
+					</parameter>
+
+					<parameter name="maxDepth" type="double" >
 						<description>
 							Maximum depth for which scevent is allowed to create events.
-						</description>	
+						</description>
 					</parameter>
 				</group>
 
@@ -78,10 +76,10 @@
 					</description>
 				</parameter>
 
-				<parameter name="maximumMatchingArrivalTimeDiff" type="float" unit="s" default="-1">
+				<parameter name="maximumMatchingArrivalTimeDiff" type="double" unit="s" default="-1">
 					<description>
-						If this time window in seconds is negative, pickIDs
-						are compared to find matching arrivals. A non negative
+						Negative time window: compare only pickIDs to find
+						matching arrivals. A non negative
 						value (including 0) compares pick times regardless
 						of the pickID. Pass: |pick1.time - pick2.time| &lt;= threshold
 					</description>
@@ -99,6 +97,12 @@
 					</description>
 				</parameter>
 
+				<parameter name="allowLooseAssociatedArrivals" type="boolean" default="false">
+					<description>
+						Allows to match picks that are associated with weight 0.
+					</description>
+				</parameter>
+
 				<parameter name="minimumDefiningPhases" type="int" default="10">
 					<description>
 						Minimum number of Picks for an Origin that is automatic and cannot be
@@ -106,21 +110,21 @@
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeBefore" type="int" unit="s" default="1800">
+				<parameter name="eventTimeBefore" type="double" unit="s" default="1800">
 					<description>
 						Time range before the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeAfter" type="int" unit="s" default="1800">
+				<parameter name="eventTimeAfter" type="double" unit="s" default="1800">
 					<description>
 						Time range after the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="maximumTimeSpan" type="int" unit="s" default="60">
+				<parameter name="maximumTimeSpan" type="double" unit="s" default="60">
 					<description>
 					Associates an origin with an existing event  if the origin
 					time differs not more than 60 seconds unless the
@@ -149,7 +153,7 @@
 					</description>
 				</parameter>
 
-				<parameter name="mbOverMwValue" type="int" default="6">
+				<parameter name="mbOverMwValue" type="double" default="6">
 					<description>
 						Average between mb and Mw(mB) which must be exceeded to become Mw(mB)
 						preferred.
@@ -205,6 +209,16 @@
 					</description>
 				</parameter>
 
+				<parameter name="methods" type="list:string">
+					<description>
+						The method priority list. When the eventtool comes to the point to
+						select a preferred origin it orders all origins by its methodID priority and
+						selects then the best one among the highest priority method. It also defines the
+						method priority for custom priority checks (eventAssociation.priorities).
+						A defined method string must match exactly the string in Origin.methodID.
+					</description>
+				</parameter>
+
 				<parameter name="priorities" type="list:string">
 					<description>
 						The general priority list to decide if an origin becomes preferred.
@@ -227,7 +241,13 @@
 
 						AUTHOR: check based on author priorities
 
-						STATUS: manual origins rule out automatic ones
+						MODE: evaluation mode priority: 0 = unset, 1 = automatic, 2 = manual
+
+						STATUS: evaluation mode and evaluation status combination priority:
+						-100 = status is rejected, -1 = status is reported,
+						0 = status is preliminary or status is unset and mode is automatic,
+						1 = status is confirmed or status is unset and mode is manual,
+						2 = status is reviewed, 3 = status is final,
 
 						METHOD: check based on the method priorities
 
@@ -293,7 +313,7 @@
 					</description>
 				</option>
 			</group>
-			
+
 			<group name="Verbosity">
 				<optionReference>verbosity#verbosity</optionReference>
 				<optionReference>verbosity#v</optionReference>
@@ -305,7 +325,7 @@
 				<optionReference>verbosity#debug</optionReference>
 				<optionReference>verbosity#log-file</optionReference>
 			</group>
-			
+
 			<group name="Messaging">
 				<optionReference>messaging#user</optionReference>
 				<optionReference>messaging#host</optionReference>
@@ -315,7 +335,7 @@
 				<optionReference>messaging#encoding</optionReference>
 				<optionReference>messaging#start-stop-msg</optionReference>
 			</group>
-			
+
 			<group name="Database">
 				<optionReference>database#db-driver-list</optionReference>
 				<optionReference>database#database</optionReference>

@@ -550,6 +550,24 @@ bool PGAV::setup(const Settings &settings) {
 
 	if ( !TimeWindowProcessor::setup(settings) ) return false;
 
+	// Preset with internal config
+	setSaturationCheckEnabled(_config.saturationThreshold >= 0);
+	TimeWindowProcessor::setSaturationThreshold(_config.saturationThreshold);
+
+	if ( !parseSaturationThreshold(settings, "amplitudes.saturationThreshold") )
+		return false;
+
+	if ( !parseSaturationThreshold(settings, "amplitudes.PGAV.saturationThreshold") )
+		return false;
+
+	if ( isSaturationCheckEnabled() )
+		_config.saturationThreshold = saturationThreshold();
+	else
+		_config.saturationThreshold = -1;
+
+	// Disable native saturation check because it is performed here anyways
+	setSaturationCheckEnabled(false);
+
 	settings.getValue(_config.preEventWindowLength, "PGAV.preEventWindowLength");
 	settings.getValue(_config.totalTimeWindowLength, "PGAV.totalTimeWindowLength");
 	settings.getValue(_config.STAlength, "PGAV.STA");
@@ -801,7 +819,8 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 	// Saturation check
 	// -------------------------------------------------------------------
 	if ( _config.saturationThreshold >= 0 ) {
-		double maxCounts = (_config.saturationThreshold * 0.01) * (1 << 23);
+		SEISCOMP_DEBUG(">  saturation threshold = %f", _config.saturationThreshold);
+		double maxCounts = _config.saturationThreshold;
 		for ( int i = 0; i < n; ++i ) {
 			if ( fabs(_data[i]) > maxCounts ) {
 				setStatus(DataClipped, _data[i]);
@@ -811,6 +830,8 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 			}
 		}
 	}
+	else
+		SEISCOMP_DEBUG(">  saturation threshold = %f, check disabled", _config.saturationThreshold);
 
 
 	// -------------------------------------------------------------------
@@ -1436,7 +1457,8 @@ void PGAV::process(const Record *record, const DoubleArray &) {
 
 			double x = 0;
 			double xp = 0;
-			double xpp = _data[0];
+			// f = -f: thats why -_data[0] is used
+			double xpp = -_data[0];
 			double maxx = x;
 
 			for ( int j = 1; j < sig1i; ++j ) {

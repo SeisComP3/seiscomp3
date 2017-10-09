@@ -118,7 +118,7 @@ class SC_SYSTEM_CORE_API Outage : public Object {
 		Seiscomp::Core::Time start() const;
 
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 
 	// ------------------------------------------------------------------

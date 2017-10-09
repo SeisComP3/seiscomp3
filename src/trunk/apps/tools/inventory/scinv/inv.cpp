@@ -49,6 +49,11 @@ InventoryTask::InventoryTask(Seiscomp::DataModel::Inventory *inv) : _inv(inv) {
 		_FIRNames[r->name()] = r;
 	}
 
+	for ( size_t i = 0; i < _inv->responseIIRCount(); ++i ) {
+		ResponseIIR *r = _inv->responseIIR(i);
+		_IIRNames[r->name()] = r;
+	}
+
 	for ( size_t i = 0; i < _inv->responsePAZCount(); ++i ) {
 		ResponsePAZ *r = _inv->responsePAZ(i);
 		_PAZNames[r->name()] = r;
@@ -57,6 +62,11 @@ InventoryTask::InventoryTask(Seiscomp::DataModel::Inventory *inv) : _inv(inv) {
 	for ( size_t i = 0; i < _inv->responsePolynomialCount(); ++i ) {
 		ResponsePolynomial *r = _inv->responsePolynomial(i);
 		_PolyNames[r->name()] = r;
+	}
+
+	for ( size_t i = 0; i < _inv->responseFAPCount(); ++i ) {
+		ResponseFAP *r = _inv->responseFAP(i);
+		_FAPNames[r->name()] = r;
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -78,7 +88,7 @@ void InventoryTask::log(LogHandler::Level level, const char *message,
                         const Seiscomp::DataModel::Object *obj1,
                         const Seiscomp::DataModel::Object *obj2) {
 	if ( _logHandler == NULL ) return;
-	_logHandler->publish(level, message, obj1, obj2);
+	_logHandler->publish(level, message, obj1, _sources[obj1], obj2, _sources[obj2]);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -130,10 +140,32 @@ ResponseFIR *InventoryTask::respFIRByName(const std::string &name) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *InventoryTask::respIIRByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _IIRNames.find(name);
+	if ( it == _IIRNames.end() ) return NULL;
+	return (ResponseIIR*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponsePAZ *InventoryTask::respPAZByName(const std::string &name) const {
 	ObjectLookup::const_iterator it = _PAZNames.find(name);
 	if ( it == _PAZNames.end() ) return NULL;
 	return (ResponsePAZ*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *InventoryTask::respFAPByName(const std::string &name) const {
+	ObjectLookup::const_iterator it = _FAPNames.find(name);
+	if ( it == _FAPNames.end() ) return NULL;
+	return (ResponseFAP*)it->second;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -178,6 +210,12 @@ void InventoryTask::prepareSession(const Seiscomp::DataModel::Inventory *inv) {
 		_session.firLookup[r->publicID()] = r;
 	}
 
+	_session.iirLookup.clear();
+	for ( size_t i = 0; i < inv->responseIIRCount(); ++i ) {
+		ResponseIIR *r = inv->responseIIR(i);
+		_session.iirLookup[r->publicID()] = r;
+	}
+
 	_session.pazLookup.clear();
 	for ( size_t i = 0; i < inv->responsePAZCount(); ++i ) {
 		ResponsePAZ *r = inv->responsePAZ(i);
@@ -188,6 +226,12 @@ void InventoryTask::prepareSession(const Seiscomp::DataModel::Inventory *inv) {
 	for ( size_t i = 0; i < inv->responsePolynomialCount(); ++i ) {
 		ResponsePolynomial *r = inv->responsePolynomial(i);
 		_session.polyLookup[r->publicID()] = r;
+	}
+
+	_session.fapLookup.clear();
+	for ( size_t i = 0; i < inv->responseFAPCount(); ++i ) {
+		ResponseFAP *r = inv->responseFAP(i);
+		_session.fapLookup[r->publicID()] = r;
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -202,15 +246,19 @@ void InventoryTask::cleanUp() {
 	_sensorNames.clear();
 	_auxDeviceNames.clear();
 	_FIRNames.clear();
+	_IIRNames.clear();
 	_PAZNames.clear();
 	_PolyNames.clear();
+	_FAPNames.clear();
 
 	_session.dataloggerLookup.clear();
 	_session.sensorLookup.clear();
 	_session.auxDeviceLookup.clear();
 	_session.firLookup.clear();
+	_session.iirLookup.clear();
 	_session.pazLookup.clear();
 	_session.polyLookup.clear();
+	_session.fapLookup.clear();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -262,6 +310,17 @@ const ResponseFIR *InventoryTask::findFIR(const std::string &publicID) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const ResponseIIR *InventoryTask::findIIR(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.iirLookup.find(publicID);
+	if ( it == _session.iirLookup.end() ) return NULL;
+	return (const ResponseIIR*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const ResponsePAZ *InventoryTask::findPAZ(const std::string &publicID) const {
 	ObjectLookup::const_iterator it = _session.pazLookup.find(publicID);
 	if ( it == _session.pazLookup.end() ) return NULL;
@@ -277,6 +336,17 @@ const ResponsePolynomial *InventoryTask::findPoly(const std::string &publicID) c
 	ObjectLookup::const_iterator it = _session.polyLookup.find(publicID);
 	if ( it == _session.polyLookup.end() ) return NULL;
 	return (const ResponsePolynomial*)it->second;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const ResponseFAP *InventoryTask::findFAP(const std::string &publicID) const {
+	ObjectLookup::const_iterator it = _session.fapLookup.find(publicID);
+	if ( it == _session.fapLookup.end() ) return NULL;
+	return (const ResponseFAP*)it->second;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -308,6 +378,38 @@ ResponseFIR *InventoryTask::process(const ResponseFIR *fir) {
 		sc_fir->update();
 
 	return sc_fir.get();
+}
+
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR *InventoryTask::process(const ResponseIIR *iir) {
+	ResponseIIRPtr sc_iir = respIIRByName(iir->name());
+	//ResponseFIRPtr sc_fir = _inv->responseFIR(fir->name());
+
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	if ( !sc_iir ) {
+		sc_iir = create<ResponseIIR>(iir->publicID());
+		newInstance = true;
+	}
+	else
+		needUpdate = !sc_iir->equal(*iir);
+
+	*sc_iir = *iir;
+
+	if ( newInstance ) {
+		_IIRNames[sc_iir->name()] = sc_iir.get();
+		_inv->add(sc_iir.get());
+	}
+	else if ( needUpdate )
+		sc_iir->update();
+
+	return sc_iir.get();
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -372,6 +474,38 @@ ResponsePolynomial *InventoryTask::process(const ResponsePolynomial *poly) {
 
 	return sc_poly.get();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseFAP *InventoryTask::process(const ResponseFAP *fap) {
+	ResponseFAPPtr sc_fap = respFAPByName(fap->name());
+	//ResponseFAPPtr sc_fap = _inv->responseFAP(fap->name());
+
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	if ( !sc_fap ) {
+		sc_fap = create<ResponseFAP>(fap->publicID());
+		newInstance = true;
+	}
+	else
+		needUpdate = !sc_fap->equal(*fap);
+
+	*sc_fap = *fap;
+
+	if ( newInstance ) {
+		_FAPNames[sc_fap->name()] = sc_fap.get();
+		_inv->add(sc_fap.get());
+	}
+	else if ( needUpdate )
+		sc_fap->update();
+
+	return sc_fap.get();
+}
+
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

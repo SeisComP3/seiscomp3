@@ -119,6 +119,16 @@ class Archive {
 		
 		virtual void close() = 0;
 
+		/**
+		 * @brief Sets strict reading mode. In strict mode optional attributes
+		 *        must be parsed correctly otherwise the archive is not valid.
+		 *        If strict mode is disabled then invalid optional attributes
+		 *        or objects are set to None or NULL.
+		 * @param strict Enabled or disabled
+		 */
+		void setStrictMode(bool strict);
+		bool isStrictMode() const;
+
 		//! Queries whether the archive is in reading mode or not
 		bool isReading() const;
 
@@ -481,7 +491,9 @@ class Archive {
 		bool    _validObject;
 		bool    _first;
 		bool    _found;
+		bool    _strict;
 		Version _version;
+
 
 	template <typename ROOT, typename T, int CLASS_TYPE>
 	friend struct VectorReader;

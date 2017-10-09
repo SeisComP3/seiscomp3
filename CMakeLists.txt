@@ -69,6 +69,8 @@ SET(PROJECT_CONFIG_DIR etc)
 SET(PROJECT_SHARE_DIR share)
 SET(PROJECT_API_H api.h)
 
+SET(SC3_PACKAGE_ROOT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 # Default directories that can be overridden in the
 # subprojects
 SET(SC3_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -99,6 +101,24 @@ IF (CMAKE_COMPILER_IS_GNUCC)
 	ELSE ( ${CMAKE_BUILD_TYPE} MATCHES "Debug" )
 		ADD_DEFINITIONS(-Wall)
 	ENDIF ( ${CMAKE_BUILD_TYPE} MATCHES "Debug" )
+
+	# Query gcc version. We can't use CMAKE_CXX_COMPILER_VERSION which is
+	# only supported in cmake >= 2.8.10. SLES 11 still comes with cmake 2.6.
+	EXECUTE_PROCESS(
+		COMMAND ${CMAKE_C_COMPILER} -dumpversion
+		OUTPUT_VARIABLE GCC_VERSION
+	)
+
+	STRING(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
+	LIST(GET GCC_VERSION_COMPONENTS 0 GCC_VERSION_MAJOR)
+	LIST(GET GCC_VERSION_COMPONENTS 1 GCC_VERSION_MINOR)
+
+	MESSAGE(STATUS "Found gcc version ${GCC_VERSION_MAJOR}.${GCC_VERSION_MINOR}")
+
+	# gcc 6 defaults to C++14 which might break compilation
+	IF(GCC_VERSION_MAJOR GREATER 5)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-deprecated-declarations")
+	ENDIF(GCC_VERSION_MAJOR GREATER 5)
 ENDIF (CMAKE_COMPILER_IS_GNUCC)
 
 # Set the platform specific suffix for dynamic libraries

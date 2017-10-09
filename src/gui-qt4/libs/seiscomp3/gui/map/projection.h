@@ -8,8 +8,9 @@
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
+ *                                                                         *
+ *   Author: Jan Becker, gempa GmbH, jabe@gempa.de                         *
  ***************************************************************************/
-
 
 
 #ifndef __SEISCOMP_GUI_MAP_PROJECTION_H__
@@ -25,6 +26,22 @@
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
+
+
+/**
+ * @brief The CompositionMode enum define composition modes when
+ *        drawing an image.
+ */
+enum CompositionMode {
+	CompositionMode_Default,     // Either Source or SourceOver depending on image format.
+	CompositionMode_Source,      // Image pixels replace map pixels.
+	CompositionMode_SourceOver,  // Image pixels are blended with map according
+	                             // to the image pixels alpha value.
+	CompositionMode_Xor,         // Colors are bitwise xor'd
+	CompositionMode_Plus,        // Colors are added together
+	CompositionMode_Multiply     // Image pixels are multiplied with map pixels, alpha
+	                             // is ignored.
+};
 
 
 // All QPointF instances are geographical coordinates where
@@ -66,7 +83,8 @@ class SC_GUI_API Projection {
 		virtual void centerOn(const QPointF &geoCoords) = 0;
 		virtual void displayRect(const QRectF& rect);
 
-		virtual void drawImage(QImage &buffer, const QRectF &geoReference, const QImage &image, bool highQuality);
+		virtual void drawImage(QImage &buffer, const QRectF &geoReference, const QImage &image, bool highQuality,
+		                       CompositionMode compositionMode = CompositionMode_Default);
 
 		//! Returns the number of interpolation steps when drawing a
 		//! geometric line.
@@ -142,6 +160,58 @@ struct NearestFilter {
 struct BilinearFilter {
 	static void fetch(TextureCache *cache, QRgb &c, Coord u, Coord v, int level) {
 		cache->getTexelBilinear(c,u,v,level);
+	}
+};
+
+
+struct CompositionSourceOver {
+	static void combine(QRgb &target, QRgb source) {
+		int alpha = qAlpha(source);
+		int iAlpha = 255 - alpha;
+		target = qRgb(
+			(qRed(source)*alpha + qRed(target)*iAlpha) >> 8,
+			(qGreen(source)*alpha + qGreen(target)*iAlpha) >> 8,
+			(qBlue(source)*alpha + qBlue(target)*iAlpha) >> 8
+		);
+	}
+};
+
+
+struct CompositionSource {
+	static void combine(QRgb &target, QRgb source) {
+		target = source;
+	}
+};
+
+
+struct CompositionMultiply {
+	static void combine(QRgb &target, QRgb source) {
+		target = qRgb(
+			(qRed(source) * qRed(target)) >> 8,
+			(qGreen(source) * qGreen(target)) >> 8,
+			(qBlue(source) * qBlue(target)) >> 8
+		);
+	}
+};
+
+
+struct CompositionXor {
+	static void combine(QRgb &target, QRgb source) {
+		target = qRgb(
+			(qRed(source) xor qRed(target)),
+			(qGreen(source) xor qGreen(target)),
+			(qBlue(source) xor qBlue(target))
+		);
+	}
+};
+
+
+struct CompositionPlus {
+	static void combine(QRgb &target, QRgb source) {
+		int r = qRed(source) + qRed(target);
+		int g = qGreen(source) + qGreen(target);
+		int b = qBlue(source) + qBlue(target);
+		target = qRgb(r > 255 ? 255 : r, g > 255 ? 255 : g, b > 255 ? 255 : b);
 	}
 };
 

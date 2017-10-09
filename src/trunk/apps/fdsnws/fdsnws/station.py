@@ -29,7 +29,7 @@ from twisted.web import http, resource, server
 
 from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import Time, ValueException
+from seiscomp3.Core import Time
 from seiscomp3.IO import Exporter
 
 from http import HTTP
@@ -131,7 +131,7 @@ class _StationRequestOptions(RequestOptions):
 				# start and end time
 				if matchTime and ro.time:
 					try: end = net.end()
-					except ValueException: end = None
+					except ValueError: end = None
 					if not ro.time.match(net.start(), end):
 						continue
 
@@ -144,25 +144,26 @@ class _StationRequestOptions(RequestOptions):
 		for i in xrange(net.stationCount()):
 			sta = net.station(i)
 
+			# geographic location
+			if self.geo:
+				try:
+					lat = sta.latitude()
+					lon = sta.longitude()
+				except ValueError: continue
+				if not self.geo.match(lat, lon):
+					continue
+
 			for ro in self.streams:
 				# station code
-				if ro.channel and not ro.channel.matchSta(sta.code()):
+				if ro.channel and (not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
 				if matchTime and ro.time:
 					try: end = sta.end()
-					except ValueException: end = None
+					except ValueError: end = None
 					if not ro.time.match(sta.start(), end):
-						continue
-
-				# geographic location
-				if ro.geo:
-					try:
-						lat = sta.latitude()
-						lon = sta.longitude()
-					except ValueException: continue
-					if not ro.geo.match(lat, lon):
 						continue
 
 				yield sta
@@ -170,19 +171,21 @@ class _StationRequestOptions(RequestOptions):
 
 
 	#---------------------------------------------------------------------------
-	def locationIter(self, sta, matchTime=False):
+	def locationIter(self, net, sta, matchTime=False):
 		for i in xrange(sta.sensorLocationCount()):
 			loc = sta.sensorLocation(i)
 
 			for ro in self.streams:
 				# location code
-				if ro.channel and not ro.channel.matchLoc(loc.code()):
+				if ro.channel and (not ro.channel.matchLoc(loc.code()) or \
+						   not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
 				if matchTime and ro.time:
 					try: end = loc.end()
-					except ValueException: end = None
+					except ValueError: end = None
 					if not ro.time.match(loc.start(), end):
 						continue
 
@@ -191,19 +194,22 @@ class _StationRequestOptions(RequestOptions):
 
 
 	#---------------------------------------------------------------------------
-	def streamIter(self, loc, matchTime=False):
+	def streamIter(self, net, sta, loc, matchTime=False):
 		for i in xrange(loc.streamCount()):
 			stream = loc.stream(i)
 
 			for ro in self.streams:
 				# stream code
-				if ro.channel and not ro.channel.matchCha(stream.code()):
+				if ro.channel and (not ro.channel.matchCha(stream.code()) or \
+						   not ro.channel.matchLoc(loc.code()) or \
+						   not ro.channel.matchSta(sta.code()) or \
+						   not ro.channel.matchNet(net.code())):
 					continue
 
 				# start and end time
 				if matchTime and ro.time:
 					try: end = stream.end()
-					except ValueException: end = None
+					except ValueError: end = None
 					if not ro.time.match(stream.start(), end):
 						continue
 
@@ -227,6 +233,15 @@ class FDSNStation(resource.Resource):
 		                      + inv.responsePolynomialCount()
 		for i in xrange(inv.dataloggerCount()):
 			self._resLevelCount += inv.datalogger(i).decimationCount()
+
+
+	#---------------------------------------------------------------------------
+	def render_OPTIONS(self, req):
+		req.setHeader('Access-Control-Allow-Origin', '*')
+		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Content-Type', 'text/plain')
+		return ""
 
 
 	#---------------------------------------------------------------------------
@@ -328,7 +343,7 @@ class FDSNStation(resource.Resource):
 				if not HTTP.checkObjects(req, objCount, self._maxObj): return False
 				if ro.includeCha:
 					numCha, numLoc, d, s = \
-						self._processStation(newNet, sta, ro, skipRestricted)
+						self._processStation(newNet, net, sta, ro, skipRestricted)
 					if numCha > 0:
 						locCount += numLoc
 						chaCount += numCha
@@ -337,7 +352,7 @@ class FDSNStation(resource.Resource):
 							return False
 						dataloggers |= d
 						sensors |= s
-				elif self._matchStation(sta, ro):
+				elif self._matchStation(net, sta, ro):
 					if ro.includeSta:
 						newNet.add(DataModel.Station(sta))
 					else:
@@ -410,13 +425,13 @@ class FDSNStation(resource.Resource):
 				# at least one matching station is required
 				stationFound = False
 				for sta in ro.stationIter(net, False):
-					if self._matchStation(sta, ro):
+					if self._matchStation(net, sta, ro):
 						stationFound = True
 						break
 				if not stationFound: continue
 
 				try: end = net.end().toString(df)
-				except ValueException: end = ''
+				except ValueError: end = ''
 
 				lines.append(("%s %s" % (
 				                  net.code(), net.start().iso()),
@@ -436,18 +451,18 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations
 				for sta in ro.stationIter(net, True):
-					if not self._matchStation(sta, ro): continue
+					if not self._matchStation(net, sta, ro): continue
 
 					try: lat = str(sta.latitude())
-					except ValueException: lat = ''
+					except ValueError: lat = ''
 					try: lon = str(sta.longitude())
-					except ValueException: lon = ''
+					except ValueError: lon = ''
 					try: elev = str(sta.elevation())
-					except ValueException: elev = ''
+					except ValueError: elev = ''
 					try: desc = sta.description()
-					except ValueException: desc = ''
+					except ValueError: desc = ''
 					try: end = sta.end().toString(df)
-					except ValueException: end = ''
+					except ValueError: end = ''
 
 					lines.append(("%s.%s %s" % (net.code(), sta.code(),
 					                  sta.start().iso()),
@@ -467,43 +482,43 @@ class FDSNStation(resource.Resource):
 				if skipRestricted and utils.isRestricted(net): continue
 				# iterate over inventory stations, locations, streams
 				for sta in ro.stationIter(net, False):
-					for loc in ro.locationIter(sta, True):
-						for stream in ro.streamIter(loc, True):
+					for loc in ro.locationIter(net, sta, True):
+						for stream in ro.streamIter(net, sta, loc, True):
 							if skipRestricted and utils.isRestricted(stream): continue
 
 							try: lat = str(loc.latitude())
-							except ValueException: lat = ''
+							except ValueError: lat = ''
 							try: lon = str(loc.longitude())
-							except ValueException: lon = ''
+							except ValueError: lon = ''
 							try: elev = str(loc.elevation())
-							except ValueException: elev = ''
+							except ValueError: elev = ''
 							try: depth = str(stream.depth())
-							except ValueException: depth = ''
+							except ValueError: depth = ''
 							try: azi = str(stream.azimuth())
-							except ValueException: azi = ''
+							except ValueError: azi = ''
 							try: dip = str(stream.dip())
-							except ValueException: dip = ''
+							except ValueError: dip = ''
 
 							desc = ''
 							try:
 								sensor = self._inv.findSensor(stream.sensor())
 								if sensor is not None:
 									desc = sensor.description()
-							except ValueException: pass
+							except ValueError: pass
 
 							try: scale = str(stream.gain())
-							except ValueException: scale = ''
+							except ValueError: scale = ''
 							try: scaleFreq = str(stream.gainFrequency())
-							except ValueException: scaleFreq = ''
+							except ValueError: scaleFreq = ''
 							try: scaleUnit = str(stream.gainUnit())
-							except ValueException: scaleUnit = ''
+							except ValueError: scaleUnit = ''
 							try:
 								sr = str(stream.sampleRateNumerator() /
 								     float(stream.sampleRateDenominator()))
-							except ValueException, ZeroDevisionError:
+							except ValueError, ZeroDevisionError:
 								sr = ''
 							try: end = stream.end().toString(df)
-							except ValueException: end = ''
+							except ValueError: end = ''
 
 							lines.append(("%s.%s.%s.%s %s" % (
 							                  net.code(), sta.code(),
@@ -542,16 +557,16 @@ class FDSNStation(resource.Resource):
 	# Checks if at least one location and channel combination matches the
 	# request options
 	@staticmethod
-	def _matchStation(sta, ro):
+	def _matchStation(net, sta, ro):
 		# No filter: return true immediately
 		if not ro.channel or (not ro.channel.loc and not ro.channel.cha):
 			return True
 
-		for loc in ro.locationIter(sta, False):
+		for loc in ro.locationIter(net, sta, False):
 			if not ro.channel.cha and not ro.time:
 				return True
 
-			for stream in ro.streamIter(loc, False):
+			for stream in ro.streamIter(net, sta, loc, False):
 				return True
 
 		return False
@@ -561,13 +576,13 @@ class FDSNStation(resource.Resource):
 	# Adds a deep copy of the specified station to the new network if the
 	# location and channel combination matches the request options (if any)
 	@staticmethod
-	def _processStation(newNet, sta, ro, skipRestricted):
+	def _processStation(newNet, net, sta, ro, skipRestricted):
 		chaCount = 0
 		dataloggers, sensors = set(), set()
 		newSta = DataModel.Station(sta)
-		for loc in ro.locationIter(sta, True):
+		for loc in ro.locationIter(net, sta, True):
 			newLoc = DataModel.SensorLocation(loc)
-			for stream in ro.streamIter(loc, True):
+			for stream in ro.streamIter(net, sta, loc, True):
 				if skipRestricted and utils.isRestricted(stream): continue
 				newLoc.add(DataModel.Stream(stream))
 				dataloggers.add(stream.datalogger())
@@ -611,9 +626,9 @@ class FDSNStation(resource.Resource):
 					# collect response ids
 					filterStr = ""
 					try: filterStr = decimation.analogueFilterChain().content() + " "
-					except ValueException: pass
+					except ValueError: pass
 					try: filterStr += decimation.digitalFilterChain().content()
-					except ValueException: pass
+					except ValueError: pass
 					for resp in filterStr.split():
 						responses.add(resp)
 				decCount += newLogger.decimationCount()

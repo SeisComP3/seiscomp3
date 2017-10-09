@@ -219,7 +219,7 @@ void Arrival::setTimeCorrection(const OPT(double)& timeCorrection) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::timeCorrection() const throw(Seiscomp::Core::ValueException) {
+double Arrival::timeCorrection() const {
 	if ( _timeCorrection )
 		return *_timeCorrection;
 	throw Seiscomp::Core::ValueException("Arrival.timeCorrection is not set");
@@ -239,7 +239,7 @@ void Arrival::setAzimuth(const OPT(double)& azimuth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::azimuth() const throw(Seiscomp::Core::ValueException) {
+double Arrival::azimuth() const {
 	if ( _azimuth )
 		return *_azimuth;
 	throw Seiscomp::Core::ValueException("Arrival.azimuth is not set");
@@ -259,7 +259,7 @@ void Arrival::setDistance(const OPT(double)& distance) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::distance() const throw(Seiscomp::Core::ValueException) {
+double Arrival::distance() const {
 	if ( _distance )
 		return *_distance;
 	throw Seiscomp::Core::ValueException("Arrival.distance is not set");
@@ -279,7 +279,7 @@ void Arrival::setTakeOffAngle(const OPT(double)& takeOffAngle) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::takeOffAngle() const throw(Seiscomp::Core::ValueException) {
+double Arrival::takeOffAngle() const {
 	if ( _takeOffAngle )
 		return *_takeOffAngle;
 	throw Seiscomp::Core::ValueException("Arrival.takeOffAngle is not set");
@@ -299,7 +299,7 @@ void Arrival::setTimeResidual(const OPT(double)& timeResidual) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::timeResidual() const throw(Seiscomp::Core::ValueException) {
+double Arrival::timeResidual() const {
 	if ( _timeResidual )
 		return *_timeResidual;
 	throw Seiscomp::Core::ValueException("Arrival.timeResidual is not set");
@@ -319,7 +319,7 @@ void Arrival::setHorizontalSlownessResidual(const OPT(double)& horizontalSlownes
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::horizontalSlownessResidual() const throw(Seiscomp::Core::ValueException) {
+double Arrival::horizontalSlownessResidual() const {
 	if ( _horizontalSlownessResidual )
 		return *_horizontalSlownessResidual;
 	throw Seiscomp::Core::ValueException("Arrival.horizontalSlownessResidual is not set");
@@ -339,7 +339,7 @@ void Arrival::setBackazimuthResidual(const OPT(double)& backazimuthResidual) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::backazimuthResidual() const throw(Seiscomp::Core::ValueException) {
+double Arrival::backazimuthResidual() const {
 	if ( _backazimuthResidual )
 		return *_backazimuthResidual;
 	throw Seiscomp::Core::ValueException("Arrival.backazimuthResidual is not set");
@@ -359,7 +359,7 @@ void Arrival::setTimeUsed(const OPT(bool)& timeUsed) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Arrival::timeUsed() const throw(Seiscomp::Core::ValueException) {
+bool Arrival::timeUsed() const {
 	if ( _timeUsed )
 		return *_timeUsed;
 	throw Seiscomp::Core::ValueException("Arrival.timeUsed is not set");
@@ -379,7 +379,7 @@ void Arrival::setHorizontalSlownessUsed(const OPT(bool)& horizontalSlownessUsed)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Arrival::horizontalSlownessUsed() const throw(Seiscomp::Core::ValueException) {
+bool Arrival::horizontalSlownessUsed() const {
 	if ( _horizontalSlownessUsed )
 		return *_horizontalSlownessUsed;
 	throw Seiscomp::Core::ValueException("Arrival.horizontalSlownessUsed is not set");
@@ -399,7 +399,7 @@ void Arrival::setBackazimuthUsed(const OPT(bool)& backazimuthUsed) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Arrival::backazimuthUsed() const throw(Seiscomp::Core::ValueException) {
+bool Arrival::backazimuthUsed() const {
 	if ( _backazimuthUsed )
 		return *_backazimuthUsed;
 	throw Seiscomp::Core::ValueException("Arrival.backazimuthUsed is not set");
@@ -419,7 +419,7 @@ void Arrival::setWeight(const OPT(double)& weight) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Arrival::weight() const throw(Seiscomp::Core::ValueException) {
+double Arrival::weight() const {
 	if ( _weight )
 		return *_weight;
 	throw Seiscomp::Core::ValueException("Arrival.weight is not set");
@@ -457,7 +457,7 @@ void Arrival::setPreliminary(const OPT(bool)& preliminary) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Arrival::preliminary() const throw(Seiscomp::Core::ValueException) {
+bool Arrival::preliminary() const {
 	if ( _preliminary )
 		return *_preliminary;
 	throw Seiscomp::Core::ValueException("Arrival.preliminary is not set");
@@ -477,7 +477,7 @@ void Arrival::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Arrival::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Arrival::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Arrival.creationInfo is not set");
@@ -488,7 +488,7 @@ CreationInfo& Arrival::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Arrival::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Arrival::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Arrival.creationInfo is not set");
@@ -650,7 +650,7 @@ void Arrival::accept(Visitor* visitor) {
 void Arrival::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Arrival skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -662,8 +662,9 @@ void Arrival::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("timeCorrection", _timeCorrection, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("azimuth", _azimuth, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("distance", _distance, Archive::XML_ELEMENT);
-	if ( ar.supportsVersion<0,6>() )
+	if ( ar.supportsVersion<0,6>() ) {
 		ar & NAMED_OBJECT_HINT("takeOffAngle", _takeOffAngle, Archive::XML_ELEMENT);
+	}
 	ar & NAMED_OBJECT_HINT("timeResidual", _timeResidual, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("horizontalSlownessResidual", _horizontalSlownessResidual, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("backazimuthResidual", _backazimuthResidual, Archive::XML_ELEMENT);

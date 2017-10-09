@@ -12,8 +12,21 @@ from twisted.web import http, resource, server, static, util
 from seiscomp3 import Core, Logging
 
 import utils
+import json
+import gnupg
+import base64
+import hashlib
+import random
+import os
+import time
+import datetime
+import sys
+try:
+	import dateutil.parser
+except ImportError, e:
+	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 ################################################################################
 class HTTP:
@@ -132,6 +145,8 @@ class ListingResource(resource.Resource):
 		for child in self.children.items():
 			if child[1].isLeaf:
 				continue
+			if hasattr(child[1], 'hideInListing') and child[1].hideInListing:
+				continue
 			name = child[0]
 			lis += """<li><a href="%s/">%s/</a></li>\n""" % (name, name)
 		return ListingResource.html % (request.path, lis)
@@ -170,6 +185,55 @@ class DirectoryResource(static.File):
 
 
 ################################################################################
+class AuthResource(resource.Resource):
+	isLeaf = True
+
+	def __init__(self, gnupghome, userdb):
+		resource.Resource.__init__(self)
+		self.__gpg = gnupg.GPG(gnupghome=gnupghome)
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
+	def render_POST(self, request):
+		request.setHeader('Content-Type', 'text/plain')
+
+		try:
+			verified = self.__gpg.decrypt(request.content.getvalue())
+
+		except Exception, e:
+			msg = "invalid token"
+			Logging.warning("%s: %s" % (msg, str(e)))
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+
+		if verified.trust_level is None or verified.trust_level < verified.TRUST_FULLY:
+			msg = "token has invalid signature"
+			Logging.warning(msg)
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+
+		try:
+			attributes = json.loads(verified.data)
+			td = dateutil.parser.parse(attributes['valid_until']) - \
+					datetime.datetime.now(dateutil.tz.tzutc())
+			lifetime = td.seconds + td.days * 24 * 3600
+
+		except Exception, e:
+			msg = "token has invalid validity"
+			Logging.warning("%s: %s" % (msg, str(e)))
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+
+		if lifetime <= 0:
+			msg = "token is expired"
+			Logging.warning(msg)
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
+
+		userid = base64.urlsafe_b64encode(hashlib.sha256(verified.data).digest()[:18])
+		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600), verified.data)
+		utils.accessLog(request, None, http.OK, len(userid)+len(password)+1, None)
+		return '%s:%s' % (userid, password)
+
+
+
+################################################################################
 class Site(server.Site):
 
 	#---------------------------------------------------------------------------
@@ -177,4 +241,8 @@ class Site(server.Site):
 		Logging.debug("request (%s): %s" % (request.getClientIP(),
 		              request.uri))
 		request.setHeader('Server', "SeisComP3-FDSNWS/%s" % VERSION)
+		request.setHeader('Access-Control-Allow-Origin', '*')
+		request.setHeader('Access-Control-Allow-Headers', 'Authorization')
+		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)
+

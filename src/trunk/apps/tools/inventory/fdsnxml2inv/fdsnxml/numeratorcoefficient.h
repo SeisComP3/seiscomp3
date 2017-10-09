@@ -41,7 +41,7 @@ class NumeratorCoefficient : public Core::BaseObject {
 		//! Custom constructor
 		NumeratorCoefficient(double value);
 		NumeratorCoefficient(double value,
-		                     int i);
+		                     const OPT(int)& i);
 
 		//! Destructor
 		~NumeratorCoefficient();
@@ -65,8 +65,8 @@ class NumeratorCoefficient : public Core::BaseObject {
 		double value() const;
 
 		//! XML tag: i
-		void setI(int i);
-		int i() const;
+		void setI(const OPT(int)& i);
+		int i() const throw(Seiscomp::Core::ValueException);
 
 
 	// ------------------------------------------------------------------
@@ -75,7 +75,7 @@ class NumeratorCoefficient : public Core::BaseObject {
 	private:
 		// Attributes
 		double _value;
-		int _i;
+		OPT(int) _i;
 };
 
 

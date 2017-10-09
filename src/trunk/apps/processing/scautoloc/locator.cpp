@@ -37,6 +37,7 @@ Locator::Locator()
 	_count = 0;
 	_usingFixedDepth = false;
 	_minDepth = 5;
+	setFixedDepth(_minDepth, _usingFixedDepth);
 }
 
 Locator::~Locator()
@@ -114,7 +115,6 @@ Origin *Locator::relocate(const Origin *origin)
 	// if the origin to relocate has a fixed depth, keep it fixed!
 	if (fixedDepth(origin)) {
 		setFixedDepth(origin->dep);
-		useFixedDepth(true);
 	}
 // ^^^^^^^^^^^^^^^^
 /*
@@ -285,8 +285,8 @@ Origin* Locator::_sc3relocate(const Origin *origin, double fixedDepth)
 		if ( (arr.phase == "P" || arr.phase == "P1") && arr.distance > 115)
 			arr.phase = "PKP";
 
-		if (arr.residual == -999.)
-			arr.residual = 0; // FIXME preliminary cosmetics;
+//		if (arr.residual == -999.)
+//			arr.residual = 0; // FIXME preliminary cosmetics;
 
 // We do not copy the weight back, because it is still there in the original arrival
 //		arr.weight   = sc3relo->arrival(i)->weight();

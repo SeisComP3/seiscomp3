@@ -31,40 +31,6 @@ using namespace Seiscomp::RecordStream;
 REGISTER_RECORDSTREAM(Resample, "resample");
 
 
-namespace {
-
-GenericRecord *createRecord(const Record *rec) {
-	return new GenericRecord(rec->networkCode(), rec->stationCode(),
-	                         rec->locationCode(), rec->channelCode(),
-	                         rec->startTime(), rec->samplingFrequency());
-}
-
-
-GenericRecord *convert(const Record *rec) {
-	if ( rec->data() == NULL ) return NULL;
-
-	GenericRecord *out;
-
-	switch ( rec->dataType() ) {
-		case Array::CHAR:
-		case Array::INT:
-		case Array::FLOAT:
-		case Array::DOUBLE:
-			out = createRecord(rec);
-			break;
-		default:
-			return NULL;
-	}
-
-	ArrayPtr data = rec->data()->clone();
-	out->setData(data.get());
-
-	return out;
-}
-
-}
-
-
 Resample::Resample()
 : _stream(stringstream::in|stringstream::out|stringstream::binary) {
 	// Default target rate is 1Hz

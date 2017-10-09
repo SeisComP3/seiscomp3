@@ -133,16 +133,16 @@ class SC_SYSTEM_CORE_API AuxSource : public Object {
 		//! Output sample rate (numerator); referred from
 		//! network/station/AuxStream/@sampleRateNumerator
 		void setSampleRateNumerator(const OPT(int)& sampleRateNumerator);
-		int sampleRateNumerator() const throw(Seiscomp::Core::ValueException);
+		int sampleRateNumerator() const;
 
 		//! Output sample rate (denominator); referred from
 		//! network/station/AuxStream/@sampleRateDenominator
 		void setSampleRateDenominator(const OPT(int)& sampleRateDenominator);
-		int sampleRateDenominator() const throw(Seiscomp::Core::ValueException);
+		int sampleRateDenominator() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

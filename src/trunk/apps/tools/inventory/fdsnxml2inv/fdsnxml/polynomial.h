@@ -14,7 +14,6 @@
 #include <fdsnxml/metadata.h>
 #include <vector>
 #include <fdsnxml/basefilter.h>
-#include <string>
 #include <fdsnxml/frequencytype.h>
 #include <fdsnxml/types.h>
 #include <seiscomp3/core/exceptions.h>
@@ -82,16 +81,16 @@ class Polynomial : public BaseFilter {
 		const FrequencyType& frequencyUpperBound() const;
 
 		//! XML tag: ApproximationLowerBound
-		void setApproximationLowerBound(const std::string& approximationLowerBound);
-		const std::string& approximationLowerBound() const;
+		void setApproximationLowerBound(double approximationLowerBound);
+		double approximationLowerBound() const;
 
 		//! XML tag: ApproximationUpperBound
-		void setApproximationUpperBound(const std::string& approximationUpperBound);
-		const std::string& approximationUpperBound() const;
+		void setApproximationUpperBound(double approximationUpperBound);
+		double approximationUpperBound() const;
 
 		//! XML tag: MaximumError
-		void setMaximumError(const std::string& maximumError);
-		const std::string& maximumError() const;
+		void setMaximumError(double maximumError);
+		double maximumError() const;
 
 	
 	// ------------------------------------------------------------------
@@ -141,9 +140,9 @@ class Polynomial : public BaseFilter {
 		ApproximationType _approximationType;
 		FrequencyType _frequencyLowerBound;
 		FrequencyType _frequencyUpperBound;
-		std::string _approximationLowerBound;
-		std::string _approximationUpperBound;
-		std::string _maximumError;
+		double _approximationLowerBound;
+		double _approximationUpperBound;
+		double _maximumError;
 
 		// Aggregations
 		std::vector<PolynomialCoefficientPtr> _coefficients;

@@ -208,7 +208,7 @@ void GenericRecord::serialize(Archive& ar) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void GenericRecord::read(std::istream &in) throw(Core::StreamException) {
+void GenericRecord::read(std::istream &in) {
 	//
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -217,6 +217,6 @@ void GenericRecord::read(std::istream &in) throw(Core::StreamException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void GenericRecord::write(std::ostream &out) throw(Core::StreamException) {
+void GenericRecord::write(std::ostream &out) {
 	//
 }

@@ -14,6 +14,7 @@
 
 #define SEISCOMP_COMPONENT Application
 
+#include <seiscomp3/core/system.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/aboutwidget.h>
@@ -225,15 +226,16 @@ Application* Application::_instance = NULL;
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Application::Application(int& argc, char **argv, int flags, Type type)
- : QApplication(argc, argv, type),
-   Client::Application(argc, argv),
-   _settings(NULL),
-   _intervalSOH(60),
-   _mainWidget(NULL),
-   _splash(NULL),
-   _dlgConnection(NULL),
-   _settingsOpened(false),
-   _flags(flags) {
+: QApplication(argc, argv, type)
+, Client::Application(argc, argv)
+, _settings(NULL)
+, _intervalSOH(60)
+, _readOnlyMessaging(false)
+, _mainWidget(NULL)
+, _splash(NULL)
+, _dlgConnection(NULL)
+, _settingsOpened(false)
+, _flags(flags) {
 
 	if ( type == QApplication::Tty )
 		_flags &= ~SHOW_SPLASH;
@@ -573,6 +575,15 @@ bool Application::nonInteractive() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const MapsDesc &Application::mapsDesc() const {
 	return _mapsDesc;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const MessageGroups &Application::messageGroups() const {
+	return _messageGroups;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -978,21 +989,84 @@ bool Application::initSubscriptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Application::init() {
+void Application::schemaValidationNames(std::vector<std::string> &modules,
+                                        std::vector<std::string> &plugins) const {
+	Client::Application::schemaValidationNames(modules, plugins);
+	plugins.push_back("GUI");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::initLicense() {
 	if ( !License::isValid() ) {
 		std::cout << std::endl;
 		std::cout << "<WARNING>" << std::endl << std::endl;
 		License::printWarning(std::cout);
 		std::cout << std::endl << "Exiting..." << std::endl;
 
-		std::stringstream ss;
-		License::printWarning(ss);
-		QMessageBox::critical(NULL, "License error",
-		                      ss.str().c_str());
+		if ( type() != QApplication::Tty ) {
+			std::stringstream ss;
+			License::printWarning(ss);
+			QMessageBox::critical(NULL, "License error",
+			                      ss.str().c_str());
+		}
+
 		return false;
 	}
 
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::init() {
+	if ( !initLicense() ) return false;
+
 	bool result = Client::Application::init();
+
+	// Check author read-only
+	try {
+		vector<string> blacklistedAuthors = configGetStrings("blacklist.authors");
+		if ( find(blacklistedAuthors.begin(), blacklistedAuthors.end(), author()) != blacklistedAuthors.end() )
+			_readOnlyMessaging = true;
+	}
+	catch ( ... ) {}
+
+	try {
+		vector<string> blacklistedUsers = configGetStrings("blacklist.users");
+		SEISCOMP_DEBUG("Check if user %s is blacklisted", Seiscomp::Core::getLogin().c_str());
+		if ( find(blacklistedUsers.begin(), blacklistedUsers.end(), Seiscomp::Core::getLogin()) != blacklistedUsers.end() ) {
+			SEISCOMP_DEBUG("User %s is blacklisted, setup read-only connection", Seiscomp::Core::getLogin().c_str());
+			_readOnlyMessaging = true;
+		}
+	}
+	catch ( ... ) {}
+
+	_messageGroups.pick = "PICK";
+	_messageGroups.amplitude = "AMPLITUDE";
+	_messageGroups.magnitude = "MAGNITUDE";
+	_messageGroups.location = "LOCATION";
+	_messageGroups.focalMechanism = "FOCMECH";
+	_messageGroups.event = "EVENT";
+
+	try { _messageGroups.pick = configGetString("groups.pick"); }
+	catch ( ... ) {}
+	try { _messageGroups.amplitude = configGetString("groups.amplitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.magnitude = configGetString("groups.magnitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.location = configGetString("groups.location"); }
+	catch ( ... ) {}
+	try { _messageGroups.focalMechanism = configGetString("groups.focalMechanism"); }
+	catch ( ... ) {}
+	try { _messageGroups.event = configGetString("groups.event"); }
+	catch ( ... ) {}
 
 	try { _intervalSOH = configGetInt("IntervalSOH"); }
 	catch ( ... ) {}
@@ -1018,6 +1092,8 @@ bool Application::init() {
 	}
 
 	if ( isDatabaseEnabled() && (type() != QApplication::Tty) ) {
+		cdlg()->setDefaultDatabaseParameters(_db.c_str());
+
 		if ( !cdlg()->hasDatabaseChanged() )
 			cdlg()->setDatabaseParameters(_db.c_str());
 
@@ -1061,7 +1137,7 @@ QString Application::splashImagePath() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ConnectionDialog* Application::cdlg() {
+ConnectionDialog *Application::cdlg() {
 	createSettingsDialog();
 	return _dlgConnection;
 }
@@ -1073,6 +1149,8 @@ ConnectionDialog* Application::cdlg() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::createSettingsDialog() {
 	if ( _dlgConnection ) return;
+	if ( type() == QApplication::Tty )
+		return;
 
 	_dlgConnection = new ConnectionDialog(&_connection, &_database);
 	_dlgConnection->setMessagingEnabled(isMessagingEnabled());
@@ -1093,8 +1171,18 @@ void Application::createSettingsDialog() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Application::handleInitializationError(Stage stage) {
-	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) )
+	if ( (type() == QApplication::Tty) || (stage != MESSAGING && stage != DATABASE) ) {
+		if ( stage == PLUGINS ) {
+			std::cerr << "Failed to load plugins: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+		else if ( stage == LOGGING ) {
+			std::cerr << "Failed to initialize logging: check the log for more details" << std::endl;
+			this->exit(1);
+		}
+
 		return false;
+	}
 
 	if ( (_flags & OPEN_CONNECTION_DIALOG) && !_settingsOpened ) {
 		const set<string>& subscriptions = subscribedGroups();
@@ -1226,6 +1314,12 @@ bool Application::sendMessage(Seiscomp::Core::Message* msg) {
 bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 	bool result = false;
 
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return false;
+	}
+
 	if ( SCApp->connection() )
 		result =
 			group?
@@ -1307,7 +1401,7 @@ void Application::createConnection(QString host, QString user,
 	               timeout);
 
 	_connection = Connection::Create(host.toStdString(), user.toStdString(), group.toStdString(),
-                                     Protocol::PRIORITY_DEFAULT, timeout, &status);
+	                                 Protocol::PRIORITY_DEFAULT, timeout, &status);
 
 	if ( _connection == NULL ) {
 		QMessageBox::warning(NULL, "ConnectionError",
@@ -1354,6 +1448,10 @@ void Application::destroyConnection() {
 		_connection->disconnect();
 
 	closeMessageThread();
+
+	ConnectionDialog *dlg = cdlg();
+	if ( dlg != NULL )
+		dlg->setDefaultDatabaseParameters("","");
 
 	_connection = NULL;
 	emit changedConnection();
@@ -1440,14 +1538,17 @@ void Application::messagesAvailable() {
 			continue;
 		}
 
-		if ( isDatabaseEnabled() && (database() == NULL) ) {
+		if ( isDatabaseEnabled() ) {
 			Communication::DatabaseProvideMessage* dbmsg = Communication::DatabaseProvideMessage::Cast(msg);
-			if ( dbmsg && !_database ) {
-				cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
-				cdlg()->connectToDatabase();
-				if ( cdlg()->hasDatabaseChanged() ) {
-					_db = cdlg()->databaseURI();
-					setDatabase(database());
+			if ( dbmsg ) {
+				cdlg()->setDefaultDatabaseParameters(dbmsg->service(), dbmsg->parameters());
+				if ( database() == NULL ) {
+					cdlg()->setDatabaseParameters(dbmsg->service(), dbmsg->parameters());
+					cdlg()->connectToDatabase();
+					if ( cdlg()->hasDatabaseChanged() ) {
+						_db = cdlg()->databaseURI();
+						setDatabase(database());
+					}
 				}
 			}
 		}
@@ -1607,6 +1708,12 @@ void Application::sendCommand(Command command, const std::string& parameter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::sendCommand(Command command, const std::string& parameter, Core::BaseObject *obj) {
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return;
+	}
+
 	if ( commandTarget().empty() ) {
 		QMessageBox::critical(NULL,
 		            "Commands",

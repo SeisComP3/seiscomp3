@@ -8,7 +8,7 @@
 <project name="spread" default="jar" basedir=".">
 
         <property name="Name" value="Spread"/>
-        <property name="version" value="4.3.0"/>
+        <property name="version" value="4.4.0"/>
         <property name="project" value="spread"/>
         <property name="title" value="${Name} ${version} API for Java"/>
         <property name="year" value="2013"/>

@@ -29,19 +29,19 @@ struct {
 
 /* Subroutine */ int clitok_(list, itok, tok, ilist, list_len, tok_len)
 char *list;
-integer *itok;
+int *itok;
 char *tok;
-integer *ilist;
+int *ilist;
 ftnlen list_len;
 ftnlen tok_len;
 {
     /* Builtin functions */
-    integer i_len();
+    int i_len();
     /* Subroutine */ int s_copy();
-    integer i_indx();
+    int i_indx();
 
     /* Local variables */
-    static integer lenl, i__, jl, kl, it;
+    static int lenl, i__, jl, kl, it;
 
 
 /* TOK = ITOK'th token in LIST. */

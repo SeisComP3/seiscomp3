@@ -7,13 +7,13 @@ by the user with a web browser. No client side installation is required but
 JavaScript has to be enabled in the user's web browser.
  
 Requirements:
-The python library SeisPy implemented by Joachim Saul at the GFZ is needed
-for the travel time and azimut/distance calculations.
-Furthermore the python modules libxml2 and libxslt must be installed at the
+The Python library SeisPy implemented by Joachim Saul at the GFZ is needed
+for the travel time and azimuth/distance calculations.
+Furthermore the Python modules libxml2 and libxslt must be installed at the
 server side.
 
 Installation:
-The Apache2 webserver and its python support mod_python has to be installed
+The Apache2 webserver and its Python support mod_python has to be installed
 and configured. Create a config file arclink.conf in /etc/apache2/conf.d 
 with the following content (where '?' is the corresponding installation 
 directory of SeisComp3 and SeisPy) 
@@ -60,5 +60,5 @@ user under which Apache daemon is running.
 Start Apache2 using 'apache2ctl start' or 'rcapache2 start' ... depending on 
 your operating system.
 
-After a successfull installation the web interface is avaiable under 
+After a successful installation the web interface is available under 
 http://hostname/arclink/query.

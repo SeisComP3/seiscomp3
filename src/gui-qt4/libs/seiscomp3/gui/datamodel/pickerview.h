@@ -55,6 +55,7 @@ namespace Gui {
 
 class TimeScale;
 class PickerView;
+class SpectrumWidget;
 
 
 namespace PrivatePickerView {
@@ -107,6 +108,8 @@ class SC_GUI_API PickerRecordLabel : public StandardRecordLabel {
 
 
 	public:
+		void setConfigState(bool);
+
 		void setControlledItem(RecordViewItem *controlledItem);
 		RecordViewItem *controlledItem() const;
 
@@ -184,6 +187,20 @@ class SC_GUI_API PickerMarkerActionPlugin : public QObject {
 DEFINE_INTERFACE_FACTORY(PickerMarkerActionPlugin);
 
 
+class SpectrumViewBase : public QWidget {
+	Q_OBJECT
+
+	public:
+		SpectrumViewBase(QWidget *parent = 0, Qt::WindowFlags f = 0)
+		: QWidget(parent, f) {}
+
+	protected slots:
+		virtual void modeChanged(int) = 0;
+		virtual void windowFuncChanged(int) = 0;
+		virtual void windowWidthChanged(double) = 0;
+};
+
+
 class SC_GUI_API PickerView : public QMainWindow {
 	public:
 		struct SC_GUI_API Config {
@@ -227,6 +244,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 			bool limitStations;
 			bool showAllComponents;
 			bool hideStationsWithoutData;
+			bool hideDisabledStations;
 
 			int    limitStationCount;
 			double allComponentsMaximumStationDistance;
@@ -470,6 +488,7 @@ class SC_GUI_API PickerView : public QMainWindow {
 		void previewUncertainty(double lower, double upper);
 
 		void openConnectionInfo(const QPoint &);
+		void destroyedSpectrumWidget(QObject *);
 
 
 	protected:
@@ -493,13 +512,15 @@ class SC_GUI_API PickerView : public QMainWindow {
 		                          double distance,
 		                          const std::string& text,
 		                          bool showDisabled,
-		                          bool addTheoreticalArrivals);
+		                          bool addTheoreticalArrivals,
+		                          const DataModel::Stream *base = NULL);
 
 		RecordViewItem* addRawStream(const DataModel::SensorLocation *,
 		                             const DataModel::WaveformStreamID& streamID,
 		                             double distance,
 		                             const std::string& text,
-		                             bool addTheoreticalArrivals);
+		                             bool addTheoreticalArrivals,
+		                             const DataModel::Stream *base = NULL);
 
 		void queueStream(double dist, const DataModel::WaveformStreamID& streamID, char component);
 
@@ -601,6 +622,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 		QLineEdit *_searchStation;
 		QLabel *_searchLabel;
 
+		static QSize _defaultSpectrumWidgetSize;
+		static QByteArray _spectrumWidgetGeometry;
 		Config::UncertaintyList _uncertainties;
 
 		//QScrollArea* _zoomTrace;
@@ -667,6 +690,8 @@ class SC_GUI_API PickerView : public QMainWindow {
 
 		Config _config;
 		SpectrogramOptions _specOpts;
+
+		QWidget *_spectrumView;
 
 		::Ui::PickerView _ui;
 		bool _settingsRestored;

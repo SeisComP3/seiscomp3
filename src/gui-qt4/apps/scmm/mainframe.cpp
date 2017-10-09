@@ -553,7 +553,12 @@ void MainFrame::onItemSelected(QTreeWidgetItem * item, int) {
 
 void MainFrame::addMessage(Seiscomp::Core::Message *msg, Seiscomp::Communication::NetworkMessage *nmsg) {
 	std::stringbuf sb;
-	XMLArchive ar(&sb, false);
+	XMLArchive ar;
+
+	// use schema version of connection if available
+	if ( SCApp->connection() != NULL ) ar.setVersion(SCApp->connection()->schemaVersion());
+
+	ar.create(&sb);
 	ar << msg;
 	ar.close();
 	QTreeWidgetItem *item = new MsgItem(sb.str().c_str());

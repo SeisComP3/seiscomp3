@@ -21,6 +21,12 @@
 					Note: The distances of the first and last sample specify the distance range within which MLv shall be computed.
 					</description>
 				</parameter>
+				<parameter name="maxDistanceKm" type="double" unit="km" default="-1.0">
+					<description>
+						Maximum epicentral distance for computing MLv.
+						No distance limitation for maxDistanceKm=-1
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 	</binding>

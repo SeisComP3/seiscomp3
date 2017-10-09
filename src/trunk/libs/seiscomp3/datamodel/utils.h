@@ -49,9 +49,11 @@ char objectStatusToChar(const T *o) {
 			case PRELIMINARY:
 				return 'P';
 			case CONFIRMED:
-			case REVIEWED:
-			case FINAL:
 				return 'C';
+			case REVIEWED:
+				return 'V';
+			case FINAL:
+				return 'F';
 			case REJECTED:
 				return 'X';
 			case REPORTED:
@@ -104,6 +106,30 @@ double quantityUncertainty(const T &o) {
 	}
 }
 
+MAKEENUM(
+	InventoryError,
+	EVALUES(
+		NETWORK_CODE_NOT_FOUND,
+		NETWORK_EPOCH_NOT_FOUND,
+		STATION_CODE_NOT_FOUND,
+		STATION_EPOCH_NOT_FOUND,
+		SENSOR_CODE_NOT_FOUND,
+		SENSOR_EPOCH_NOT_FOUND,
+		STREAM_CODE_NOT_FOUND,
+		STREAM_EPOCH_NOT_FOUND
+	),
+	ENAMES(
+		"network code not found",
+		"no matching network epoch found",
+		"station code not found",
+		"no matching station epoch found",
+		"sensor location code not found",
+		"no matching sensor location epoch found",
+		"stream code not found",
+		"no matching stream epoch found"
+	)
+);
+
 
 //! Returns the station for a network- and stationcode and
 //! a time. If the station has not been found NULL will be returned.
@@ -111,7 +137,7 @@ SC_SYSTEM_CORE_API
 Station* getStation(const Inventory *inventory,
                     const std::string &networkCode,
                     const std::string &stationCode,
-                    const Core::Time &);
+                    const Core::Time &, InventoryError *error = NULL);
 
 //! Returns the sensorlocation for a network-, station- and locationcode and
 //! a time. If the sensorlocation has not been found NULL will be returned.
@@ -120,7 +146,8 @@ SensorLocation* getSensorLocation(const Inventory *inventory,
                                   const std::string &networkCode,
                                   const std::string &stationCode,
                                   const std::string &locationCode,
-                                  const Core::Time &);
+                                  const Core::Time &,
+                                  InventoryError *error = NULL);
 
 //! Returns the stream for a network-, station-, location- and channelcode and
 //! a time. If the stream has not been found NULL will be returned.
@@ -130,7 +157,8 @@ Stream* getStream(const Inventory *inventory,
                   const std::string &stationCode,
                   const std::string &locationCode,
                   const std::string &channelCode,
-                  const Core::Time &);
+                  const Core::Time &,
+                  InventoryError *error = NULL);
 
 //! Returns the station used for a pick. If the station has not been found
 //! NULL will be returned.

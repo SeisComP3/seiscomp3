@@ -1,3 +1,176 @@
+May 27, 2014 Ver 4.4.0
+----------------------
+
+May 19, 2014 Ver 4.4.0 RC2
+--------------------------
+
+r724 | jschultz | 2014-05-15 11:04:35 -0400 (Thu, 15 May 2014)
+	After delivering all EVS packets; sweep the Packets struct to ensure it is empty; exit if not
+
+r723 | jschultz | 2014-05-15 10:53:35 -0400 (Thu, 15 May 2014)
+	Bugfix for receiving a packet after processing FORM1 token and it's still listed as a hole on FORM2 token
+
+r722 | jschultz | 2014-05-15 00:38:00 -0400 (Thu, 15 May 2014)
+	Bugfix to only process FORM2 token that corresponds to most recent FORM1 token processed
+	Should fix reading a FORM2 that doesn't have my ring ID in it
+
+r718 | jschultz | 2014-05-13 14:10:07 -0400 (Tue, 13 May 2014)
+	Updates to MSVS project files and winservice.c from Johann Lochner
+
+r721 | jschultz | 2014-05-14 14:59:16 -0400 (Wed, 14 May 2014)
+r714 | jschultz | 2014-05-07 11:28:12 -0400 (Wed, 07 May 2014)
+	Bugfix for Prot_handle_bcast to consult Last_discarded rather than Aru for deciding if we already have a packet (in conjunction with .exist).
+	Aru is inappropriate for this check because during EVS a "foreign" ring can lower it (WAY) below Last_discarded.
+	My_aru is jumped when we're closing an EVS round and recalculated when we Backoff_membership.  Last_discarded has no such changes.
+
+r707 | jschultz | 2014-05-02 16:20:31 -0400 (Fri, 02 May 2014)
+r706 | jschultz | 2014-05-02 16:14:33 -0400 (Fri, 02 May 2014)
+	Reworked patch from Johannes Wienke to clean up unix socket on exit
+
+r704 | jschultz | 2014-05-02 12:46:12 -0400 (Fri, 02 May 2014)
+	Amy Babay's patch to send bcast retrans immediately rather than queue bcast
+
+r699 | jschultz | 2014-03-14 14:04:53 -0400 (Fri, 14 Mar 2014)
+	Allow tokens larger than MTU (~1450 bytes) to use IP fragmentation (up to 64KB) if necessary rather than crash (will log warnings)
+
+r711 | jschultz | 2014-05-06 13:59:02 -0400 (Tue, 06 May 2014)
+r709 | jschultz | 2014-05-04 21:23:27 -0400 (Sun, 04 May 2014)
+r703 | jschultz | 2014-04-30 15:29:26 -0400 (Wed, 30 Apr 2014)
+r699 | jschultz | 2014-03-14 14:04:53 -0400 (Fri, 14 Mar 2014)
+r698 | jschultz | 2014-02-28 15:54:26 -0500 (Fri, 28 Feb 2014)
+r697 | jschultz | 2014-02-28 15:41:33 -0500 (Fri, 28 Feb 2014)
+r695 | jschultz | 2014-02-28 12:55:12 -0500 (Fri, 28 Feb 2014)
+	Bugfix for early RELIABLE_MESS delivery at daemon who has not yet completed groups algorithm
+
+r696 | jschultz | 2014-02-28 13:02:41 -0500 (Fri, 28 Feb 2014)
+r694 | jschultz | 2014-02-27 12:10:38 -0500 (Thu, 27 Feb 2014)
+r693 | jschultz | 2014-02-25 23:54:59 -0500 (Tue, 25 Feb 2014)
+	Bugfix of improper Commit_set computation
+
+r693 | jschultz | 2014-02-25 23:54:59 -0500 (Tue, 25 Feb 2014)
+	Bugfix of Smallest_member / Sort_members bug; make Fill_form1 GATHER logic more picky about swallowing or processing a form1 token
+
+January 22, 2014 Ver 4.4.0 RC1
+------------------------------
+
+r687 | jschultz | 2014-01-24 18:28:55 -0500 (Fri, 24 Jan 2014)
+	Bugfix of Send_new_packets: using previously disposed structure
+
+r686 | jschultz | 2014-01-24 16:09:16 -0500 (Fri, 24 Jan 2014)
+r685 | jschultz | 2014-01-24 15:57:17 -0500 (Fri, 24 Jan 2014)
+	Fix some Windows build problems + warnings
+
+r676 | jschultz | 2014-01-22 03:21:47 -0500 (Wed, 22 Jan 2014)
+	Bugfix in Conf_previous().
+
+r675 | jschultz | 2014-01-22 03:20:59 -0500 (Wed, 22 Jan 2014) 
+r674 | jschultz | 2014-01-22 02:53:22 -0500 (Wed, 22 Jan 2014)
+r673 | jschultz | 2014-01-22 02:12:08 -0500 (Wed, 22 Jan 2014)
+	More MEMB token logging.
+
+r672 | jschultz | 2014-01-22 01:24:57 -0500 (Wed, 22 Jan 2014)
+	Add membership id to EVS/OP token. Further bugfix to prevent getting tokens 
+	from wrong transmitter.
+
+r671 | jschultz | 2014-01-22 01:17:58 -0500 (Wed, 22 Jan 2014)
+	Partial cleanup of code -- mostly white space changes. 
+	Eliminated some redundant / pointless #defines. 
+	Improved and largely eliminated retry logic in DL_send.
+
+r670 | jschultz | 2014-01-21 22:45:18 -0500 (Tue, 21 Jan 2014)
+	Cleanup of membership prototypes to be explicit; spacing; prints
+
+r669 | jschultz | 2014-01-21 21:40:17 -0500 (Tue, 21 Jan 2014)
+	Added bounds checks to Create_form1, Fill_form1 and Read_form2.
+
+r668 | jschultz | 2014-01-21 18:36:16 -0500 (Tue, 21 Jan 2014)
+	Partial bugfix for getting live token from wrong transmitter.
+
+r666 | jschultz | 2014-01-21 18:20:18 -0500 (Tue, 21 Jan 2014)
+	Change windows return code from Alarm to be non-zero
+
+r667 | jschultz | 2014-01-21 18:26:55 -0500 (Tue, 21 Jan 2014)
+r663 | jschultz | 2014-01-20 22:49:35 -0500 (Mon, 20 Jan 2014)
+	Bugfix to set Aru = 0 when we transition to EVS.
+	Added invariants that Aru may not decrease.
+	Bugfix to Token->aru calculation: eliminate Set_aru and simplify logic.
+	Moved Just_Installed to Memb_Just_Installed in membership.c
+	Added more PROTOCOL and MEMB logging.
+
+2014-01-19 r658, r659 Jonathan Stanton  <jonathan@spreadconcepts.com>
+	Fix function prototype warnings on windows by defining _event callback 
+	functions with correct prototype and calling them or the direct functions 
+	as needed.  Move standard libraries later in linking path to avoid errors 
+	on some platforms for sptmonitor.
+
+2014-01-17 r655, r656, r657 John Schultz <jschultz@spreadconcepts.com>
+	Updates to libspread-util windows project files.
+	Updates to windows project files.
+	Got rid of warnings from windows compile:
+        	- un/signed comparisons
+        	- prototypes of fcns called from event system
+
+2014-01-17 r654 John Schultz <jschultz@spreadconcepts.com>
+	alarm.c: Bugfix for alarm on windows for large log lines.
+
+2014-01-17 r647, r648 John Schultz <jschultz@spreadconcepts.com>
+	Added new spread-service projects to win32.
+	Added winservice.c to daemon directory.
+
+	-- Thanks to Johann Lochner for this contribution!
+
+2014-01-14 r645 John Schultz <jschultz@spreadconcepts.com>
+	Updates to default window, personal window and accelerated window.
+
+2014-01-14 r644 John Schultz <jschultz@spreadconcepts.com>
+	Added spu_system.h.win32. Fixed a couple of minor Windows compile errors.
+
+2014-01-14 r641, r642, r643 John Schultz <jschultz@spreadconcepts.com>
+	win32/*, libspread-util/win32/*: Updated MS visual studio project files.
+	
+2014-01-14 r640 John Schultz <jschultz@spreadconcepts.com>
+	* daemon/arch.c: Removed: was previously exported out to libspread-util.
+
+2014-01-06 r632, r633 John Schultz <jschultz@spreadconcepts.com>
+	* alarm.c, data_link.c, scatter.h, spread.c, protocol.c, daemon/arch.h: 
+	Alarm(EXIT) no longer calls abort on Windows.  Eliminated some warnings
+	on Windows.
+
+	-- Thanks to Juan Pizzorno for these ideas!
+
+2014-01-06 r631 John Schultz <jschultz@spreadconcepts.com>
+	* sp.c, fl.c, scatp.c: Eliminated redundant comparisons.
+
+2014-01-06 r630 John Schultz <jschultz@spreadconcepts.com>
+	* membership.c configuration.[ch], config_parse.y:
+	Added default logic for use of accelerated ring.
+
+2013-12-17 r629 John Schultz <jschultz@spreadconcepts.com>
+	* Most files: Added accelerated ring protocol.
+
+	-- Thanks to Amy Babay for this major contribution!
+
+2013-11-18 r627, r628 John Schultz <jschultz@spreadconcepts.com>	
+	* spread.c, network.c, membership.c, protocol.c, arch.h, flooder.c:
+	Bugfix for token retransmissions when transitioning from EVS to OP.
+	Bugfix to not consider Token->seq in EVS when updating Token->aru.
+	Changed flooder to not use RELIABLE_MESS due to known issue that they
+	can be delivered before groups state transfer is complete.  Added
+	a good bit of MEMB and PROTOCOL logging.  Added initialization logic 
+	for random number generators.
+
+2013-10-09 r594 John Schultz <jschultz@spreadconcepts.com>
+	* SpeadConnection.java: Turn off Nagle algorithm in Java library.
+
+2013-09-23 r592 John Schultz <jschultz@spreadconcepts.com>
+	* membership.c: Bugfix for Backoff_membership referring to wrong packet.
+
+2013-08-08 r584, r585 John Schultz <jschultz@spreadconcepts.com>
+	* configuration.[ch], session.c, s.c, r.c: Changed 16b ports to be unsigned.
+
+June 11, 2013 Ver 4.3.0 
+-----------------------
+
 Tue Jun 11 23:40:30 2013  Jonathan Stanton  <jonathan@spreadconcepts.com>
 
 	* protocol.c, flow_control.c (FC_signal_conf_reload): Reload flow control 

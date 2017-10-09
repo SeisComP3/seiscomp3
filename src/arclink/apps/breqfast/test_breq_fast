@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# Launch a few BREQ_FAST requests at the GFZ BREQ_FAST
+# instance.
+#
+# ----------------------------------------------------------------------
+
+# Nice BREQ_FAST users should send requests at a slow rate.
+delay=30
+
+# Change 'tester' to your e-mail address. Otherwise I will
+# see your tests and you won't! 
+tester=pevans@gfz-potsdam.de
+
+run_tests () {
+	echo "Found $(ls tests/*.req | wc -l) tests; mailing as $tester ..."
+	for f in tests/*.req ; do
+		when=$(date -u +"%b%d_%H%M%S")
+		echo "$when: Mailing $f"
+		sed -e 's/^.EMAIL .*$/.EMAIL '$tester'/' \
+		    -e '/^.PHONE/a.LABEL '$f \
+		    $f \
+		    | mail breqfast@webdc.eu 
+		sleep $delay
+	done
+}
+
+
+run_tests
+

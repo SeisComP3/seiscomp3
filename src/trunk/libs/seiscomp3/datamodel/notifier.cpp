@@ -34,7 +34,7 @@ class BaseObjectProperty : public Core::MetaProperty {
 		BaseObjectProperty(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(Core::BaseObject *object, Core::MetaValue value) const throw(Core::GeneralException) {
+		bool write(Core::BaseObject *object, Core::MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -62,7 +62,7 @@ class BaseObjectProperty : public Core::MetaProperty {
 			return true;
 		}
 
-		Core::MetaValue read(Core::BaseObject *object) const throw(Core::GeneralException) {
+		Core::MetaValue read(Core::BaseObject *object) const {
 			T *target = T::Cast(object);
 			if ( !target ) throw Core::GeneralException("invalid object");
 			return static_cast<Core::BaseObject*>((target->*_getter)());

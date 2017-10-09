@@ -190,7 +190,7 @@ void CreationInfo::setCreationTime(const OPT(Seiscomp::Core::Time)& creationTime
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time CreationInfo::creationTime() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time CreationInfo::creationTime() const {
 	if ( _creationTime )
 		return *_creationTime;
 	throw Seiscomp::Core::ValueException("CreationInfo.creationTime is not set");
@@ -210,7 +210,7 @@ void CreationInfo::setModificationTime(const OPT(Seiscomp::Core::Time)& modifica
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time CreationInfo::modificationTime() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time CreationInfo::modificationTime() const {
 	if ( _modificationTime )
 		return *_modificationTime;
 	throw Seiscomp::Core::ValueException("CreationInfo.modificationTime is not set");
@@ -258,7 +258,7 @@ CreationInfo& CreationInfo::operator=(const CreationInfo& other) {
 void CreationInfo::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: CreationInfo skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -73,7 +73,10 @@
 					</group>
 					<parameter name="keepAlive" type="boolean" default="false">
 						<description>
-							Request server to send keep alive messages to prevent connection reset by firewalls on long idle periods.
+							Request server to send keep alive message every 30s to
+							prevent connection reset by firewalls on long idle
+							periods. If activated the client will reset the
+							connection if no alive message is received within 60s.
 						</description>
 					</parameter>
 					<parameter name="filter" type="string">

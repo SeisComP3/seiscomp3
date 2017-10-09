@@ -227,7 +227,7 @@ void ArclinkRequestLine::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ArclinkRequestLine::restricted() const throw(Seiscomp::Core::ValueException) {
+bool ArclinkRequestLine::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("ArclinkRequestLine.restricted is not set");
@@ -247,7 +247,7 @@ void ArclinkRequestLine::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool ArclinkRequestLine::shared() const throw(Seiscomp::Core::ValueException) {
+bool ArclinkRequestLine::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("ArclinkRequestLine.shared is not set");
@@ -462,7 +462,7 @@ void ArclinkRequestLine::accept(Visitor* visitor) {
 void ArclinkRequestLine::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ArclinkRequestLine skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

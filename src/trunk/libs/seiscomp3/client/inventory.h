@@ -58,7 +58,7 @@ class SC_SYSTEM_CLIENT_API Inventory {
 	public:
 		static Inventory* Instance();
 
-		void load(const char *filename) throw(std::exception);
+		void load(const char *filename);
 		void load(DataModel::DatabaseReader*);
 		void setInventory(DataModel::Inventory*);
 
@@ -76,24 +76,27 @@ class SC_SYSTEM_CLIENT_API Inventory {
 
 		//! Returns the station for a network- and stationcode and
 		//! a time. If the station has not been found NULL will be returned.
-		DataModel::Station* getStation(const std::string& networkCode,
-		                               const std::string& stationCode,
-		                               const Core::Time&) const;
+		DataModel::Station* getStation(const std::string &networkCode,
+		                               const std::string &stationCode,
+		                               const Core::Time &,
+		                               DataModel::InventoryError *error = NULL) const;
 
 		//! Returns the sensorlocation for a network-, station- and locationcode and
 		//! a time. If the sensorlocation has not been found NULL will be returned.
-		DataModel::SensorLocation* getSensorLocation(const std::string& networkCode,
-		                                             const std::string& stationCode,
-		                                             const std::string& locationCode,
-		                                             const Core::Time&) const;
+		DataModel::SensorLocation* getSensorLocation(const std::string &networkCode,
+		                                             const std::string &stationCode,
+		                                             const std::string &locationCode,
+		                                             const Core::Time &,
+		                                             DataModel::InventoryError *error = NULL) const;
 
 		//! Returns the stream for a network-, station-, location- and channelcode and
 		//! a time. If the stream has not been found NULL will be returned.
-		DataModel::Stream* getStream(const std::string& networkCode,
-		                             const std::string& stationCode,
-		                             const std::string& locationCode,
-		                             const std::string& channelCode,
-		                             const Core::Time&) const;
+		DataModel::Stream* getStream(const std::string &networkCode,
+		                             const std::string &stationCode,
+		                             const std::string &locationCode,
+		                             const std::string &channelCode,
+		                             const Core::Time &,
+		                             DataModel::InventoryError *error = NULL) const;
 
 		//! Returns the three streams (vertical, horizontal1, horizontal2) corresponding
 		//! to the given network-, station-, location- and channel code
@@ -101,8 +104,7 @@ class SC_SYSTEM_CLIENT_API Inventory {
 		                                             const std::string& stationCode,
 		                                             const std::string& locationCode,
 		                                             const std::string& channelCode,
-		                                             const Core::Time&) const
-		throw(Core::ValueException);
+		                                             const Core::Time&) const;
 
 		//! Returns the station used for a pick. If the station has not been found
 		//! NULL will be returned.
@@ -114,14 +116,13 @@ class SC_SYSTEM_CLIENT_API Inventory {
 
 		//! Returns the three streams (vertical, horizontal1, horizontal2) corresponding
 		//! to the picked stream.
-		DataModel::ThreeComponents getThreeComponents(const DataModel::Pick*) const
-		throw(Core::ValueException);
+		DataModel::ThreeComponents getThreeComponents(const DataModel::Pick*) const;
 
 		double getGain(const std::string& networkCode,
 		               const std::string& stationCode,
 		               const std::string& locationCode,
 		               const std::string& channelCode,
-		               const Core::Time&) throw(Core::ValueException);
+		               const Core::Time&);
 
 		//! Returns all defined stations for the given time
 		int getAllStations(StationList&, const Core::Time&);

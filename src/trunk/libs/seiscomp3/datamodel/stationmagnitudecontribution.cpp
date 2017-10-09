@@ -189,7 +189,7 @@ void StationMagnitudeContribution::setResidual(const OPT(double)& residual) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationMagnitudeContribution::residual() const throw(Seiscomp::Core::ValueException) {
+double StationMagnitudeContribution::residual() const {
 	if ( _residual )
 		return *_residual;
 	throw Seiscomp::Core::ValueException("StationMagnitudeContribution.residual is not set");
@@ -209,7 +209,7 @@ void StationMagnitudeContribution::setWeight(const OPT(double)& weight) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double StationMagnitudeContribution::weight() const throw(Seiscomp::Core::ValueException) {
+double StationMagnitudeContribution::weight() const {
 	if ( _weight )
 		return *_weight;
 	throw Seiscomp::Core::ValueException("StationMagnitudeContribution.weight is not set");
@@ -358,7 +358,7 @@ void StationMagnitudeContribution::accept(Visitor* visitor) {
 void StationMagnitudeContribution::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: StationMagnitudeContribution skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

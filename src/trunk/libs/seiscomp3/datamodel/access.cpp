@@ -279,7 +279,7 @@ void Access::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Access::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Access::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Access.end is not set");
@@ -427,7 +427,7 @@ void Access::accept(Visitor* visitor) {
 void Access::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Access skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

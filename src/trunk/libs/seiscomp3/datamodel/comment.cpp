@@ -193,7 +193,7 @@ void Comment::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Comment::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Comment::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Comment.creationInfo is not set");
@@ -204,7 +204,7 @@ CreationInfo& Comment::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Comment::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Comment::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Comment.creationInfo is not set");
@@ -614,7 +614,7 @@ void Comment::accept(Visitor* visitor) {
 void Comment::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Comment skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -23,6 +23,7 @@
 
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/messages.h>
+#include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/datamodel/stationsymbol.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
 #include <seiscomp3/gui/datamodel/ttdecorator.h>
@@ -50,14 +51,14 @@
 
 using namespace Seiscomp;
 
+
 namespace {
 
 
-DataModel::Amplitude* debugGetAmplitudeForPickFromDataBase(const std::string& publicID) {
-	return SCApp->query()->getAmplitude(publicID, "snr");
-}
-
-
+enum SymbolType {
+	OriginSymbolType,
+	StationSymbolType
+};
 
 
 inline std::string getStationId(const DataModel::WaveformStreamID* waveformID) {
@@ -68,20 +69,14 @@ inline std::string getStationId(const DataModel::WaveformStreamID* waveformID) {
 }
 
 
-
-
 inline std::string getStationId(const DataModel::Pick* pick) {
 	return getStationId(&pick->waveformID());
 }
 
 
-
-
 inline std::string getStationId(const DataModel::Amplitude* amplitude) {
 	return getStationId(&amplitude->waveformID());
 }
-
-
 
 
 inline std::string getStationId(const Record* record) {
@@ -92,13 +87,9 @@ inline std::string getStationId(const Record* record) {
 }
 
 
-
-
 inline std::string getStationId(DataModel::WaveformQuality* waveformQuality) {
 	return getStationId(&waveformQuality->index().waveformID);
 }
-
-
 
 
 inline bool areOriginSymbolsVisible() {
@@ -106,8 +97,6 @@ inline bool areOriginSymbolsVisible() {
 		return false;
 	return true;
 }
-
-
 
 
 bool isFakeEvent(const DataModel::Event* event) {
@@ -121,8 +110,6 @@ bool isFakeEvent(const DataModel::Event* event) {
 }
 
 
-
-
 bool hasEventCountChanged(const EventDataRepository& repository) {
 	static int preceededEventCount = 0;
 	if ( repository.eventCount() == preceededEventCount )
@@ -133,13 +120,11 @@ bool hasEventCountChanged(const EventDataRepository& repository) {
 }
 
 
-
-
 void addEventWidgetRowData(EventTableWidget::RowData& rowData,
                            const EventData& eventData,
                            const DataModel::Origin* origin) {
 	QString eventId = QString(eventData.id().c_str());
-	QString originTime(origin->time().value().toString("%d.%m.%y %T").c_str());
+	QString originTime = Gui::timeToString(origin->time().value(), "%d.%m.%y %T");
 
 	QString eventRegion(DataModel::eventRegion(eventData.object()).c_str());
 
@@ -162,8 +147,6 @@ void addEventWidgetRowData(EventTableWidget::RowData& rowData,
 }
 
 
-
-
 void addEventWidgetRowData(EventTableWidget::RowData& rowData,
                            const DataModel::Magnitude* magnitude) {
 	QString magnitudeValue = QString("%1").arg(magnitude->magnitude(), 0, 'f', 2);
@@ -174,15 +157,11 @@ void addEventWidgetRowData(EventTableWidget::RowData& rowData,
 }
 
 
-
-
 void showInfoWidget(InfoWidget* infoWidget) {
 	infoWidget->init();
 	infoWidget->move(QCursor::pos());
 	infoWidget->show();
 }
-
-
 
 
 void configureInfoWidgetForRecordAcquisition(StationInfoWidget* infoWidget,
@@ -194,11 +173,9 @@ void configureInfoWidgetForRecordAcquisition(StationInfoWidget* infoWidget,
 }
 
 
-
-
 void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplitude* amplitude) {
 	try	{
-		QString time = amplitude->timeWindow().reference().toString("%F-%T").c_str();
+		QString time = Gui::timeToString(amplitude->timeWindow().reference(), "%F-%T");
 		infoWidget->setAmplitudeTime(time);
 	}
 	catch ( Core::ValueException& ) {}
@@ -208,20 +185,19 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, const DataModel::Amplit
 
 	try {
 		Core::Time amplTime(amplitude->timeWindow().reference()
-							+ Core::TimeSpan(amplitude->timeWindow().end()));
-		QString amplitudeValueTime = amplTime.toString("%F-%T").c_str();
+		                    + Core::TimeSpan(amplitude->timeWindow().end()));
+		QString amplitudeValueTime = Gui::timeToString(amplTime, "%F-%T");
 		infoWidget->setAmplitudeMaxValueTime(amplitudeValueTime);
 	}
 	catch ( Core::ValueException& )	{}
 }
 
 
-
-
 void setInfoWidgetContent(StationInfoWidget* infoWidget, DataModel::Station* station) {
 	infoWidget->setLongitude(QString("%1").arg(station->longitude()));
 	infoWidget->setLatitude(QString("%1").arg(station->latitude()));
-	infoWidget->setElevation(QString("%1").arg(station->elevation()));
+	try { infoWidget->setElevation(QString("%1").arg(station->elevation())); }
+	catch ( ... ) {}
 	/* TODO: Find a replacement
 	infoWidget->setDepth(QString("%1").arg(station->depth()));
 	*/
@@ -229,8 +205,6 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, DataModel::Station* sta
 	infoWidget->setCountry(station->country().c_str());
 	infoWidget->setDescription(station->description().c_str());
 }
-
-
 
 
 void setInfoWidgetContent(StationInfoWidget* infoWidget, StationData* stationData) {
@@ -262,13 +236,12 @@ void setInfoWidgetContent(StationInfoWidget* infoWidget, StationData* stationDat
 }
 
 
-
-
-void setInfoWidgetContent(OriginInfoWidget* infoWidget, const DataModel::Origin* origin,
+void setInfoWidgetContent(OriginInfoWidget* infoWidget, const std::string &eventID,
+                          const DataModel::Origin* origin,
                           const std::string& preferredMagnitudeId) {
 	infoWidget->setPreferredOriginId(origin->publicID().c_str());
 
-	QString time = origin->time().value().toString("%F - %T").c_str();
+	QString time = Gui::timeToString(origin->time().value(), "%F - %T");
 	infoWidget->setTime(time);
 
 	QString latitude = QString("%1").arg(origin->latitude());
@@ -325,8 +298,6 @@ void setInfoWidgetContent(OriginInfoWidget* infoWidget, const DataModel::Origin*
 }
 
 
-
-
 class StationRenderParameter {
 	public:
 		virtual ~StationRenderParameter() {}
@@ -362,8 +333,6 @@ class StationRenderParameter {
 };
 
 
-
-
 class DisabledStationRenderParameter : public StationRenderParameter {
 	public:
 		virtual QColor color() const {
@@ -390,8 +359,6 @@ class DisabledStationRenderParameter : public StationRenderParameter {
 			return true;
 		}
 };
-
-
 
 
 class GMStationRenderParameter : public StationRenderParameter {
@@ -443,8 +410,6 @@ class GMStationRenderParameter : public StationRenderParameter {
 			return Gui::Map::Symbol::NONE;
 		}
 };
-
-
 
 
 class QCStationRenderParameter : public StationRenderParameter {
@@ -509,7 +474,6 @@ class QCStationRenderParameter : public StationRenderParameter {
 };
 
 
-
 StationRenderParameter* selectRenderParameterInstance(bool isStationEnabled) {
 	if ( !isStationEnabled ) {
 		static DisabledStationRenderParameter disabledRenderParameter;
@@ -534,8 +498,6 @@ StationRenderParameter* selectRenderParameterInstance(bool isStationEnabled) {
 }
 
 
-
-
 DisplayMode selectDisplayModeFromString(const std::string& mode) {
 	if ( mode == "groundmotion")
 		return GROUND_MOTION;
@@ -547,34 +509,20 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 }
 
 
-
-
-QWidget* selectTabFromDisplayMode(DisplayMode mode, const Ui::MvMainWindow& ui) {
-	if ( mode == GROUND_MOTION )
-		return ui.gmTab;
-
-	if ( mode == QUALITY_CONTROL )
-		return ui.qcTab;
-
-	return NULL;
-}
-
-
 } // namespace
 
 
-
-
 MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
- : Gui::MainWindow(parent, flags),
-   _mapWidget(NULL),
-   _displayMode(NONE),
-   _mapUpdateInterval(1E3),
-   _configStationPickCacheLifeSpan(15 * 60),
-   _configEventActivityLifeSpan(15 * 60),
-   _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600)),
-   _configReadEventsNotOlderThanTimeSpan(0.0),
-   _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
+: Gui::MainWindow(parent, flags)
+, _mapWidget(NULL)
+, _displayMode(NONE)
+, _mapUpdateInterval(1000)
+, _expiredEventsInterval(0)
+, _configStationPickCacheLifeSpan(15 * 60)
+, _configEventActivityLifeSpan(15 * 60)
+, _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600))
+, _configReadEventsNotOlderThanTimeSpan(0.0)
+, _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
 
 	setupStandardUi();
 }
@@ -735,7 +683,13 @@ void MvMainWindow::setupStandardUi() {
 	_ui.splitter->setStretchFactor(0, 1);
 
 	// Setup menu
-	_ui.showEventTableWidgetAction->setChecked(false);
+	try {
+		_ui.showEventTableWidgetAction->setChecked(SCApp->configGetBool("eventTable.visible"));
+	}
+	catch ( ... ) {
+		_ui.showEventTableWidgetAction->setChecked(false);
+	}
+
 	_ui.showWaveformPropagationAction->setChecked(true);
 	_ui.showMapLegendAction->setChecked(true);
 	_ui.showHistoricOriginsAction->setChecked(true);
@@ -813,6 +767,14 @@ void MvMainWindow::setupStandardUi() {
 
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
 	        this, SLOT(handleNewMessage(Seiscomp::Core::Message*)));
+
+	try { _expiredEventsInterval = (int)SCApp->configGetDouble("expiredEventsInterval")*1000; }
+	catch ( ... ) {}
+
+	if ( _expiredEventsInterval > 0 ) {
+		connect(&_expiredEventsTimer, SIGNAL(timeout()), this, SLOT(removeExpiredEvents()));
+		_expiredEventsTimer.start(_expiredEventsInterval);
+	}
 
 	connect(&_mapUpdateTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
 
@@ -909,13 +871,13 @@ bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 		if ( !mapSymbol->isInside(contextMenuEvent->x(), contextMenuEvent->y()) )
 			continue;
 
-		if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
+		if ( mapSymbol->type() == OriginSymbolType ) {
 			QString title = QString("Event %1").arg(mapSymbol->id().c_str());
 			QAction* action = createAndConfigureContextMenuAction(title, mapSymbol);
 
 			originActionCollection.push_back(action);
 		}
-		else if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+		else if ( mapSymbol->type() == StationSymbolType ) {
 			QString title = QString("Station: %1").arg(mapSymbol->id().c_str());
 			QAction* action = createAndConfigureContextMenuAction(title, mapSymbol);
 
@@ -944,7 +906,7 @@ bool MvMainWindow::handleMapContextMenu(QContextMenuEvent* contextMenuEvent) {
 
 
 
-QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString& title, Gui::Map::Symbol* mapSymbol) {
+QAction* MvMainWindow::createAndConfigureContextMenuAction(const QString &title, Gui::Map::Symbol *mapSymbol) {
 	QAction* action = new QAction(title, NULL);
 
 	QVariant variant = qVariantFromValue(static_cast<void*>(mapSymbol));
@@ -1164,14 +1126,24 @@ bool MvMainWindow::readStationsFromDataBase() {
 			}
 			catch ( Core::ValueException& ) {}
 
-			if ( _mapWidget->canvas().isInside(station->longitude(), station->latitude()) ) {
-				std::string key = station->network()->code() + "." + station->code();
+			double lat = 0.0;
+			double lon = 0.0;
+			std::string key = station->network()->code() + "." + station->code();
+			try {
+				lat = station->latitude();
+				lon = station->longitude();
+			}
+			catch ( Core::ValueException& ) {
+				SEISCOMP_DEBUG("No coordinates set for station: %s", key.data());
+				continue;
+			}
+			if ( _mapWidget->canvas().isInside(lon, lat) ) {
 				std::map<std::string, StationData>::iterator it = stations.find(key);
 				if ( it == stations.end() ) continue;
 
 				it->second.stationRef = station;
-				it->second.stationSymbolRef = new MvStationSymbol(station->latitude(),
-				                                                  station->longitude());
+				it->second.stationSymbolRef = new MvStationSymbol(lat, lon);
+				it->second.stationSymbolRef->setType(StationSymbolType);
 				it->second.stationSymbolRef->setID(it->second.id);
 				it->second.stationSymbolRef->setNetworkCode(station->network()->code());
 				it->second.stationSymbolRef->setStationCode(station->code());
@@ -1185,6 +1157,8 @@ bool MvMainWindow::readStationsFromDataBase() {
 			}
 		}
 	}
+
+	_mapWidget->canvas().symbolCollection()->sortByLatitude();
 
 	return true;
 }
@@ -1553,8 +1527,10 @@ void MvMainWindow::selectStations(const EventData* eventData, bool isSelected) {
 void MvMainWindow::showOriginSymbols(bool val) {
 	EventDataRepository::event_iterator it = _eventDataRepository.eventsBegin();
 	for ( ; it != _eventDataRepository.eventsEnd(); it++ ) {
-		if ( it->originSymbol()->TypeInfo() == Gui::OriginSymbol::TypeInfo() )
+		if ( it->originSymbol()->type() == OriginSymbolType )
 			it->originSymbol()->setVisible(val);
+		if ( it->tensorSymbol() != NULL )
+			it->tensorSymbol()->setVisible(val);
 	}
 }
 
@@ -1562,17 +1538,11 @@ void MvMainWindow::showOriginSymbols(bool val) {
 
 
 void MvMainWindow::removeExpiredEvents() {
+	SEISCOMP_DEBUG("Check for expired events");
 	while ( true ) {
-		EventData* expiredEvent = _eventDataRepository.findNextExpiredEvent();
+		EventData *expiredEvent = _eventDataRepository.findNextExpiredEvent();
 		if ( !expiredEvent ) break;
-
-        removeEventData(expiredEvent);
-
-		//Gui::OriginSymbol* originSymbol = expiredEvent->originSymbol();
-		//_mapWidget->canvas().symbolCollection()->remove(originSymbol);
-
-		//std::string id = expiredEvent->id();
-		//_eventDataRepository.removeEvent(id);
+		removeEventData(expiredEvent);
 	}
 }
 
@@ -1697,14 +1667,14 @@ void MvMainWindow::updateInfoWidget(const DataModel::Amplitude* amplitude) {
 void MvMainWindow::updateInfoWidget(const DataModel::Event* event) {
 	if ( EventInfoWidgetRegistry::Instance()->count() == 0 ) return;
 
-	std::string eventId = event->publicID();
+	const std::string &eventId = event->publicID();
 	OriginInfoWidget* infoWidget = EventInfoWidgetRegistry::Instance()->find(eventId);
 	if ( !infoWidget ) return;
 
 	std::string originId = event->preferredOriginID();
 	DataModel::Origin* origin = _eventDataRepository.findOrigin(originId);
 
-	setInfoWidgetContent(infoWidget, origin, event->preferredMagnitudeID());
+	setInfoWidgetContent(infoWidget, eventId, origin, event->preferredMagnitudeID());
 	infoWidget->updateContent();
 }
 
@@ -1720,7 +1690,7 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 		return NULL;
 	}
 
-	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator(&_mapWidget->canvas());
+	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator();
 	ttDecorator->setDepth(origin->depth());
 	ttDecorator->setOriginTime(origin->time());
 	ttDecorator->setLatitude(origin->latitude());
@@ -1735,6 +1705,7 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 	ttDecorator->setVisible(_ui.showWaveformPropagationAction->isChecked());
 
 	Gui::OriginSymbol *originSymbol = new Gui::OriginSymbol(ttDecorator);
+	originSymbol->setType(OriginSymbolType);
 	originSymbol->setLatitude(origin->latitude());
 	originSymbol->setLongitude(origin->longitude());
 	originSymbol->setID(event->publicID());
@@ -1851,21 +1822,20 @@ void MvMainWindow::markSearchWidgetResults() {
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
-		if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+		if ( mapSymbol->type() == StationSymbolType ) {
 			SearchWidget::Matches::const_iterator found = std::find(_searchWidgetRef->matches().begin(),
 			                                                        _searchWidgetRef->matches().end(),
 			                                                        mapSymbol->id());
 			if ( found != _searchWidgetRef->matches().end() ) {
 				mapSymbol->setVisible(true);
 				if ( idOfFirstMatch == mapSymbol->id() )
-					_mapWidget->canvas().centerMap(QPoint(static_cast<MvStationSymbol*>(mapSymbol)->x(),
-					                             static_cast<MvStationSymbol*>(mapSymbol)->y()));
+					_mapWidget->canvas().centerMap(mapSymbol->pos());
 			}
 			else {
 				mapSymbol->setVisible(false);
 			}
 		}
-		else if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
+		else if ( mapSymbol->type() == OriginSymbolType ) {
 			mapSymbol->setVisible(false);
 		}
 	}
@@ -1879,7 +1849,7 @@ void MvMainWindow::searchWidgetClosed() {
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
 		Gui::Map::Symbol* mapSymbol = *it;
 
-		if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() )
+		if ( mapSymbol->type() == StationSymbolType )
 			mapSymbol->setVisible(true);
 	}
 
@@ -2019,11 +1989,11 @@ void MvMainWindow::showInfoWidget() {
 
 	QVariant variant = contextMenuAction->data();
 	void* data = variant.value<void*>();
-	Gui::Map::Symbol* mapSymbol = static_cast<Gui::Map::Symbol*>(data);
+	Gui::Map::Symbol *mapSymbol = static_cast<Gui::Map::Symbol*>(data);
 
 	std::string mapSymbolId = mapSymbol->id();
 
-	if ( mapSymbol->typeInfo() == MvStationSymbol::TypeInfo() ) {
+	if ( mapSymbol->type() == StationSymbolType ) {
 		StationInfoWidget* infoWidget = new StationInfoWidget(mapSymbolId, this);
 
 		StationData* stationData = _stationDataCollection.find(mapSymbolId);
@@ -2049,16 +2019,16 @@ void MvMainWindow::showInfoWidget() {
 
 		::showInfoWidget(infoWidget);
 	}
-	else if ( mapSymbol->typeInfo() == Gui::OriginSymbol::TypeInfo() ) {
-		OriginInfoWidget* infoWidget = new OriginInfoWidget(mapSymbolId, this);
+	else if ( mapSymbol->type() == OriginSymbolType ) {
+		OriginInfoWidget *infoWidget = new OriginInfoWidget(mapSymbolId, this);
 
-		std::string eventId = mapSymbol->id();
-		EventData* eventData = _eventDataRepository.findEvent(eventId);
+		const std::string &eventId = mapSymbol->id();
+		EventData *eventData = _eventDataRepository.findEvent(eventId);
 
 		std::string preferredOriginId = eventData->object()->preferredOriginID();
-		DataModel::Origin* origin = _eventDataRepository.findOrigin(preferredOriginId);
+		DataModel::Origin *origin = _eventDataRepository.findOrigin(preferredOriginId);
 
-		setInfoWidgetContent(infoWidget, origin, eventData->object()->preferredMagnitudeID());
+		setInfoWidgetContent(infoWidget, eventId, origin, eventData->object()->preferredMagnitudeID());
 		::showInfoWidget(infoWidget);
 	}
 }
@@ -2110,9 +2080,9 @@ void MvMainWindow::updateOriginSymbolDisplay() {
 void MvMainWindow::setWaveformPropagationVisible(bool val) {
 	Gui::Map::SymbolCollection::iterator it = _mapWidget->canvas().symbolCollection()->begin();
 	for ( ; it != _mapWidget->canvas().symbolCollection()->end(); it++ ) {
-		Gui::Map::Symbol* mapSymbol = *it;
-		if ( Gui::OriginSymbol::TypeInfo() == mapSymbol->typeInfo() ) {
-			Gui::Map::Decorator* decorator = mapSymbol->decorator();
+		Gui::Map::Symbol *mapSymbol = *it;
+		if ( mapSymbol->type() == OriginSymbolType ) {
+			Gui::Map::Decorator *decorator = mapSymbol->decorator();
 			if ( decorator )
 				decorator->setVisible(val);
 		}

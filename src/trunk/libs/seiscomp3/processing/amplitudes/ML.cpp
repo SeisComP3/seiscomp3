@@ -235,7 +235,7 @@ bool AmplitudeProcessor_ML::setup(const Settings &settings) {
 }
 
 
-void AmplitudeProcessor_ML::setTrigger(const Core::Time& trigger) throw(Core::ValueException) {
+void AmplitudeProcessor_ML::setTrigger(const Core::Time& trigger) {
 	AmplitudeProcessor::setTrigger(trigger);
 	_ampE.setTrigger(trigger);
 	_ampN.setTrigger(trigger);

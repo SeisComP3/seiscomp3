@@ -75,7 +75,7 @@ void SecondaryPicker::reset() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void SecondaryPicker::setTrigger(const Trigger& trigger) throw(Core::ValueException) {
+void SecondaryPicker::setTrigger(const Trigger& trigger) {
 	if ( _trigger.onset.valid() )
 		throw Core::ValueException("The trigger has been set already");
 	_trigger = trigger;

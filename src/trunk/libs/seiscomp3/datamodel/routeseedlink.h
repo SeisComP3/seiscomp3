@@ -109,7 +109,7 @@ class SC_SYSTEM_CORE_API RouteSeedlink : public Object {
 
 		//! priority (1 is highest)
 		void setPriority(const OPT(int)& priority);
-		int priority() const throw(Seiscomp::Core::ValueException);
+		int priority() const;
 
 
 	// ------------------------------------------------------------------

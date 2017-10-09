@@ -160,7 +160,7 @@ void PrincipalAxes::setNAxis(const OPT(Axis)& nAxis) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Axis& PrincipalAxes::nAxis() throw(Seiscomp::Core::ValueException) {
+Axis& PrincipalAxes::nAxis() {
 	if ( _nAxis )
 		return *_nAxis;
 	throw Seiscomp::Core::ValueException("PrincipalAxes.nAxis is not set");
@@ -171,7 +171,7 @@ Axis& PrincipalAxes::nAxis() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Axis& PrincipalAxes::nAxis() const throw(Seiscomp::Core::ValueException) {
+const Axis& PrincipalAxes::nAxis() const {
 	if ( _nAxis )
 		return *_nAxis;
 	throw Seiscomp::Core::ValueException("PrincipalAxes.nAxis is not set");
@@ -197,7 +197,7 @@ PrincipalAxes& PrincipalAxes::operator=(const PrincipalAxes& other) {
 void PrincipalAxes::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: PrincipalAxes skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

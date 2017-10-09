@@ -194,7 +194,7 @@ void ArclinkStatusLine::setSize(const OPT(int)& size) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ArclinkStatusLine::size() const throw(Seiscomp::Core::ValueException) {
+int ArclinkStatusLine::size() const {
 	if ( _size )
 		return *_size;
 	throw Seiscomp::Core::ValueException("ArclinkStatusLine.size is not set");
@@ -379,7 +379,7 @@ void ArclinkStatusLine::accept(Visitor* visitor) {
 void ArclinkStatusLine::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ArclinkStatusLine skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # reqlogstats EIDA log statistics
 #  - back end and front end
@@ -42,7 +43,7 @@ install_accumulator() {
 	diffs_found=0
 	mkdir -p tmp
 	for f in * ; do
-		if [ ! -f $f ] || [ "$f" == "install.sh" ]; then
+		if [ ! -f $f ] || [ "$f" = "install.sh" ]; then
 			continue
 		fi
 	        scp $target:$progdir/$f tmp 
@@ -75,7 +76,7 @@ fi
 
 rsync_delay=10 # Seconds to wait before starting a dangerous rsync.
 target=$1
-if [ $target == "geofon-open1" ] || [ $target == "geofon-open2" ] ; then
+if [ $target = "geofon-open1" ] || [ $target = "geofon-open2" ] ; then
 	remotedir=/srv/www/webdc/eida/reqlogstats
 	progdir=/home/sysop/reqlogstats
 	webdcdir=${target}:${remotedir}

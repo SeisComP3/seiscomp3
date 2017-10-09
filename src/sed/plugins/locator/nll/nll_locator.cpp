@@ -615,7 +615,7 @@ int NLLocator::capabilities() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
+Origin* NLLocator::locate(PickList &pickList) {
 	_lastWarning = "";
 
 	if ( pickList.empty() )
@@ -1000,7 +1000,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Origin* NLLocator::locate(PickList& pickList,
                            double initLat, double initLon, double initDepth,
-                           const Time &initTime) throw(Core::GeneralException) {
+                           const Time &initTime) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1009,7 +1009,7 @@ Origin* NLLocator::locate(PickList& pickList,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) {
+Origin* NLLocator::relocate(const Origin* origin) {
 	_lastWarning = "";
 
 	if ( origin == NULL ) return NULL;
@@ -1383,9 +1383,9 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 	ConfidenceEllipsoid ce;
 
 	// Create confidence ellipsoid
-	ce.setSemiMajorAxisLength(phypo->ellipsoid.len3);
-	ce.setSemiMinorAxisLength(phypo->ellipsoid.len1);
-	ce.setSemiIntermediateAxisLength(phypo->ellipsoid.len2);
+	ce.setSemiMajorAxisLength(phypo->ellipsoid.len3 * 1000.0);
+	ce.setSemiMinorAxisLength(phypo->ellipsoid.len1 * 1000.0);
+	ce.setSemiIntermediateAxisLength(phypo->ellipsoid.len2 * 1000.0);
 
 	Math::Vector3d a,b,c;
 

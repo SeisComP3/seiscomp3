@@ -27,8 +27,6 @@
 
 
 class Legend : public Seiscomp::Gui::Map::Symbol {
-	DECLARE_RTTI;
-
 	private:
 		typedef QPair<QString, QChar> Annotation;
 		typedef QPair<Annotation, QColor> ContentItem;
@@ -55,6 +53,7 @@ class Legend : public Seiscomp::Gui::Map::Symbol {
 		void setMode(ApplicationStatus::Mode mode);
 
 	private:
+		virtual bool isInside(int x, int y) const { return false; }
 		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
 
 	private:
@@ -66,11 +65,10 @@ class Legend : public Seiscomp::Gui::Map::Symbol {
 		void handleQcStatus(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
 
 	private:
-		ApplicationStatus::Mode   _mode;
-		int    _stationSize;
-		int    _offset;
-		int    _headingOffset;
-		QPoint _legendPos;
+		ApplicationStatus::Mode _mode;
+		int                     _stationSize;
+		int                     _offset;
+		QPoint                  _legendPos;
 
 		Content _qcDelay;
 		Content _qcLatency;
@@ -84,5 +82,35 @@ class Legend : public Seiscomp::Gui::Map::Symbol {
 		Content _event;
 		Content _gm;
 };
+
+
+class EQSymbolLegend : public Seiscomp::Gui::Map::Symbol {
+	public:
+		EQSymbolLegend();
+
+
+	public:
+		/**
+		 * @brief Sets the relative position to the lower left corner of the
+		 *        parent widget.
+		 * @param pos
+		 */
+		void setRelativePosition(const QPoint &pos);
+
+
+	protected:
+		virtual bool isInside(int x, int y) const { return false; }
+		virtual void customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& painter);
+
+
+	private:
+		typedef QPair<QString, int> StringWithWidth;
+		typedef QPair<QColor, StringWithWidth> DepthItem;
+		typedef QPair<int, StringWithWidth> MagItem;
+
+		QVector<DepthItem> _depthItems;
+		QVector<MagItem> _magItems;
+};
+
 
 #endif

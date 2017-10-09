@@ -315,7 +315,7 @@ void MomentTensorComponentContribution::setMisfit(const OPT(double)& misfit) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorComponentContribution::misfit() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorComponentContribution::misfit() const {
 	if ( _misfit )
 		return *_misfit;
 	throw Seiscomp::Core::ValueException("MomentTensorComponentContribution.misfit is not set");
@@ -335,7 +335,7 @@ void MomentTensorComponentContribution::setSnr(const OPT(double)& snr) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorComponentContribution::snr() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorComponentContribution::snr() const {
 	if ( _snr )
 		return *_snr;
 	throw Seiscomp::Core::ValueException("MomentTensorComponentContribution.snr is not set");
@@ -488,7 +488,7 @@ void MomentTensorComponentContribution::accept(Visitor* visitor) {
 void MomentTensorComponentContribution::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: MomentTensorComponentContribution skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

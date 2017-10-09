@@ -187,8 +187,14 @@ TimeSpan::TimeSpan() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeSpan::TimeSpan(struct timeval* t) {
-	_timeval.tv_sec = t->tv_sec;
-	_timeval.tv_usec = t->tv_usec;
+	if ( t != NULL ) {
+		_timeval.tv_sec = t->tv_sec;
+		_timeval.tv_usec = t->tv_usec;
+	}
+	else {
+		_timeval.tv_sec = 0;
+		_timeval.tv_usec = 0;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -342,7 +348,7 @@ TimeSpan& TimeSpan::operator=(double t) {
 	if( t > MaxTime || t < MinTime )
 		throw Core::OverflowException("TimeSpan::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
-	_timeval.tv_usec = (long)((t-_timeval.tv_sec)*MICROS);
+	_timeval.tv_usec = (long)((t-_timeval.tv_sec)*MICROS + 0.5);
 
 	return *this;
 }
@@ -614,7 +620,7 @@ Time& Time::operator=(double t) {
 	if( t > MaxTime || t < MinTime )
 		throw Core::OverflowException("Time::operator=(): double doesn't fit into int");
 	_timeval.tv_sec = (long)t;
-	_timeval.tv_usec = (long)((t-(double)_timeval.tv_sec)*MICROS);
+	_timeval.tv_usec = (long)((t-(double)_timeval.tv_sec)*MICROS + 0.5);
 
 	return *this;
 }
@@ -748,6 +754,22 @@ Time Time::LocalTime() {
 	Time t;
 	t.localtime();
 	return t;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+std::string Time::LocalTimeZone() {
+	time_t t;
+	struct tm *tm_;
+	char tz[40];
+	::time(&t);
+	tm_ = ::localtime(&t);
+	strftime(tz, sizeof(tz)-1, "%Z", tm_);
+	tz[sizeof(tz)-1] = '\0';
+	return tz;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

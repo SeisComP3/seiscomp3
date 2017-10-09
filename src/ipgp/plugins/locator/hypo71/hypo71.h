@@ -129,7 +129,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return New origin object
 		 */
 		DataModel::Origin*
-		locate(PickList& pickList) throw (Core::GeneralException);
+		locate(PickList& pickList) throw();
 
 		/**
 		 * @brief  Indirectly performs localization
@@ -142,7 +142,7 @@ class Hypo71 : public LocatorInterface {
 		 */
 		DataModel::Origin*
 		locate(PickList& pickList, double initLat, double initLon,
-		       double initDepth, const Core::Time &initTime) throw (Core::GeneralException);
+		       double initDepth, const Core::Time &initTime) throw();
 
 		/**
 		 * @brief  Origin's relocator
@@ -150,7 +150,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return origin object
 		 */
 		DataModel::Origin*
-		relocate(const DataModel::Origin* origin) throw (Core::GeneralException);
+		relocate(const DataModel::Origin* origin) throw();
 
 		/**
 		 * @brief  Fetches last error message value
@@ -181,7 +181,7 @@ class Hypo71 : public LocatorInterface {
 		 */
 		std::string
 		formatString(std::string toFormat, const size_t& nb, const size_t& pos,
-		             const std::string& sender = "") throw (Core::GeneralException);
+		             const std::string& sender = "") throw();
 
 		/**
 		 * @brief  Converts string parameter to double
@@ -213,7 +213,7 @@ class Hypo71 : public LocatorInterface {
 		 * @return ZRT value as a string
 		 **/
 		const std::string
-		getZTR(const PickList& pickList) throw (Core::GeneralException);
+		getZTR(const PickList& pickList) throw();
 
 		/**
 		 * @brief  Converts HYPO71 sexagesimal origin (73° 59.14’ W)
@@ -290,6 +290,25 @@ class Hypo71 : public LocatorInterface {
 		                       const std::string& stationCode,
 		                       const std::string& phaseCode,
 		                       const double& max);
+
+		/**
+		 * @brief  Evaluates and converts weights from upper/lower time
+		 *         uncertainties into Hypo71 1-4 weight value
+		 * @param  pickList the list of picks
+		 * @param  networkCode the station's network code
+		 * @param  stationCode the station's code
+		 * @param  phaseCode the station's phase code
+		 * @param  weight0 the maximum Uncertainty for an Hypo71 weight of 0
+		 * @param  weight1 the maximum Uncertainty for an Hypo71 weight of 1
+		 * @param  weight2 the maximum Uncertainty for an Hypo71 weight of 2
+		 * @param  weight3 the maximum Uncertainty for an Hypo71 weight of 3
+		 * @return Hypo71 weight value as integer
+		 */
+		const int getH71Weight(const PickList& pickList,
+		                       const std::string& networkCode,
+		                       const std::string& stationCode,
+		                       const std::string& phaseCode,
+		                       const std::string& weightBoundaries);
 
 		/**
 		 * @brief This method adds a station into the mapped list by giving it

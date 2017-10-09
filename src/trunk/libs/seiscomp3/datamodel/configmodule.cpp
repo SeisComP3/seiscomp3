@@ -381,10 +381,10 @@ ConfigStation* ConfigModule::configStation(const ConfigStationIndex& i) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ConfigStation* ConfigModule::findConfigStation(const std::string& publicID) const {
-	ConfigStation* object = ConfigStation::Cast(PublicObject::Find(publicID));
-	if ( object != NULL && object->parent() == this )
-		return object;
-	
+	for ( std::vector<ConfigStationPtr>::const_iterator it = _configStations.begin(); it != _configStations.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
 	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -513,7 +513,7 @@ bool ConfigModule::removeConfigStation(const ConfigStationIndex& i) {
 void ConfigModule::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,7>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ConfigModule skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

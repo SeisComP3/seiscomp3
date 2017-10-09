@@ -7,15 +7,15 @@ SeisComP applications access waveform data through the RecordStream interface. T
    ":ref:`rs-arclink`", "``arclink``", "Connects to :ref:`ArcLink server <arclink>`"
    ":ref:`rs-fdsnws`", "``fdsnws``", "Connects to :ref:`FDSN Web service <fdsnws>`"
    ":ref:`rs-file`", "``file``", "Reads records from file"
-   ":ref:`rs-archive`", "``archive``", "Reads all record files found in directory (and subdirectories)"
    ":ref:`rs-sdsarchive`", "``sdsarchive``", "Reads records from SeisComP archive (SDS)"
    ":ref:`rs-odcarchive`", "``odcarchive``", "Reads records from Orpheus archive (ODC)"
    ":ref:`rs-memory`", "``memory``", "Reads records from memory"
    ":ref:`rs-combined`", "``combined``", "Combines archive and real-time stream"
    ":ref:`rs-balanced`", "``balanced``", "Distributes requests to multiple proxy streams"
    ":ref:`rs-dec`", "``dec``", "Decimates (resamples) a proxy stream"
+   ":ref:`rs-resample`", "``resample``", "Resamples (up or down) a proxy stream to a given sampling rate"
 
-The RecordStream used by an application is either specified on the the
+The RecordStream used by an application is either specified on the
 commandline (`-I URI`) or configured through using the parameters
 :confval:`recordstream.service` and :confval:`recordstream.source`. While the
 `service` defines the RecordSteam implementation, the `source` supplies
@@ -27,7 +27,7 @@ SeedLink
 --------
 
 This RecordStream fetches data from a SeedLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18000`. Optional parameters are:
 
 - `timeout` - connection timeout in seconds, default: 300
@@ -47,7 +47,7 @@ ArcLink
 -------
 
 This RecordStream fetches data from a ArcLink server. The source is read as an
-URL and supports URL encoded parameters. The default host ist set to
+URL and supports URL encoded parameters. The default host is set to
 `localhost`, the default port to `18001`. Optional parameters are:
 
 - `user` - user name required on some servers
@@ -99,20 +99,6 @@ Examples
 
 - ``file://-``
 - ``file:///tmp/input.mseed``
-
-.. _rs-archive:
-
-Archive
--------
-
-This RecordStream recursively traverses a directory and reads records from all
-files found using the :ref:`rs-file` RecordStream. The source is interpreted as
-a directory path.
-
-Example
-^^^^^^^
-
-- ``archive:///path/to/record/archive``
 
 .. _rs-sdsarchive:
 
@@ -178,7 +164,7 @@ Examples
    "``combined://slink/localhost:18000;arclink/localhost:18001``", "Same as above"
    "``combined://;``", "Same as above"
    "``combined://:18042;?user=foo&pwd=secret??rtMax=1800``", "Seedlink on localhost:18042 combined with Arclink on localhost 18001, real-time (SeedLink) buffer size set to 30min"
-   "``combined://;sdsarchive//home/sysop/seiscomp3/var/lib/archive?``", Seedlink combined with SDS archive
+   "``combined://slink/localhost:18000;sdsarchive//home/sysop/seiscomp3/var/lib/archive``", Seedlink combined with SDS archive
 
 .. _rs-balanced:
 
@@ -234,3 +220,29 @@ Examples
 - ``dec://file?rate=2/-``
 - ``dec://combined/;``
 
+.. _rs-resample:
+
+Resample
+--------
+
+This RecordStream resamples (up or down) a proxy stream, e.g. :ref:`rs-slink`,
+to a given sampling rate. The syntax for the source is similar to an URL:
+
+``resample://proxy-stream?parameters/address``
+
+Optional parameters are:
+
+- `rate` - target sampling rate in Hz, default: 1
+- `fp` - default: 0.7
+- `fs` - default: 0.9
+- `cs` - coefficient scale, default: 10
+- `lw` - lanczos kernel width, default: 3
+- `debug` - enables debug output, default: false
+
+
+Examples
+^^^^^^^^
+
+- ``resample://slink/localhost:18000``
+- ``resample://file?rate=2/-``
+- ``resample://combined/;``

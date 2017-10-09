@@ -13,6 +13,7 @@
 
 #include <seiscomp3/client/inventory.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <seiscomp3/datamodel/responsefap.h>
 #include <seiscomp3/datamodel/inventory_package.h>
 
 #include <set>
@@ -71,7 +72,7 @@ Inventory* Inventory::Instance() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Inventory::load(const char *filename) throw(std::exception) {
+void Inventory::load(const char *filename) {
 	IO::XMLArchive ar;
 
 	if ( !ar.open(filename) )
@@ -254,6 +255,17 @@ void Inventory::load(DataModel::DatabaseReader* reader) {
 			_inventory->add(poly.get());
 	}
 	it.close();
+
+	// Read FAP responses
+	if ( reader->version() >= Core::Version(0,8) ) {
+		it = reader->getObjects(_inventory.get(), DataModel::ResponseFAP::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::ResponseFAPPtr fap = DataModel::ResponseFAP::Cast(obj);
+			if ( fap )
+				_inventory->add(fap.get());
+		}
+		it.close();
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -426,10 +438,11 @@ StationLocation Inventory::stationLocation(const std::string& networkCode,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::Station* Inventory::getStation(const std::string& networkCode,
-                                          const std::string& stationCode,
-                                          const Core::Time& time) const {
-	return DataModel::getStation(_inventory.get(), networkCode, stationCode, time);
+DataModel::Station* Inventory::getStation(const std::string &networkCode,
+                                          const std::string &stationCode,
+                                          const Core::Time &time,
+                                          DataModel::InventoryError *error) const {
+	return DataModel::getStation(_inventory.get(), networkCode, stationCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -441,8 +454,10 @@ DataModel::SensorLocation*
 Inventory::getSensorLocation(const std::string &networkCode,
                              const std::string &stationCode,
                              const std::string &locationCode,
-                             const Core::Time &time) const {
-	return DataModel::getSensorLocation(_inventory.get(), networkCode, stationCode, locationCode, time);
+                             const Core::Time &time,
+                             DataModel::InventoryError *error) const {
+	return DataModel::getSensorLocation(_inventory.get(), networkCode, stationCode,
+	                                    locationCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -455,8 +470,7 @@ Inventory::getThreeComponents(const std::string& networkCode,
                               const std::string& stationCode,
                               const std::string& locationCode,
                               const std::string& channelCode,
-                              const Core::Time &time) const
-                              throw(Core::ValueException) {
+                              const Core::Time &time) const {
 	DataModel::SensorLocation *loc = getSensorLocation(networkCode, stationCode, locationCode, time);
 	if ( loc == NULL )
 		throw Core::ValueException("sensor location not found");
@@ -476,12 +490,14 @@ Inventory::getThreeComponents(const std::string& networkCode,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataModel::Stream*
-Inventory::getStream(const std::string& networkCode,
-                     const std::string& stationCode,
-                     const std::string& locationCode,
-                     const std::string& channelCode,
-                     const Core::Time &time) const {
-	return DataModel::getStream(_inventory.get(), networkCode, stationCode, locationCode, channelCode, time);
+Inventory::getStream(const std::string &networkCode,
+                     const std::string &stationCode,
+                     const std::string &locationCode,
+                     const std::string &channelCode,
+                     const Core::Time &time,
+                     DataModel::InventoryError *error) const {
+	return DataModel::getStream(_inventory.get(), networkCode, stationCode,
+	                            locationCode, channelCode, time, error);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -554,8 +570,7 @@ DataModel::SensorLocation* Inventory::getSensorLocation(const DataModel::Pick *p
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const
-throw(Core::ValueException) {
+DataModel::ThreeComponents Inventory::getThreeComponents(const DataModel::Pick *pick) const {
 	DataModel::SensorLocation *loc = getSensorLocation(pick);
 	if ( loc == NULL )
 		throw Core::ValueException("sensor location not found");
@@ -578,7 +593,7 @@ double Inventory::getGain(const std::string& networkCode,
                           const std::string& stationCode,
                           const std::string& locationCode,
                           const std::string& channelCode,
-                          const Core::Time& t) throw(Core::ValueException) {
+                          const Core::Time& t) {
 	if ( channelCode.size() != 3 )
 		throw Core::ValueException("invalid channel code");
 

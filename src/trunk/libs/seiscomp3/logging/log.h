@@ -317,7 +317,7 @@ enum LogLevel {
  */
 
 #define SEISCOMP_DEF_LOGCHANNEL(path,level) SEISCOMP_CHANNEL_IMPL(SEISCOMP_COMPONENT, path, level)
-#define SEISCOMP_CHANNEL(path) SEISCOMP_CHANNEL_IMPL(SEISCOMP_COMPONENT, path, Seiscomp::Logging::UNDEFINED)
+#define SEISCOMP_CHANNEL(path) SEISCOMP_CHANNEL_IMPL(SEISCOMP_COMPONENT, path, Seiscomp::Logging::LL_UNDEFINED)
 #define SEISCOMP_CHANNEL_IMPL(COMPONENT,path,level) \
     Seiscomp::Logging::getComponentChannel(LOG_STR(COMPONENT),path,level)
 

@@ -68,12 +68,20 @@ time_t OriginDialog::getTime_t() const {
 	      _ui.dateTimeEdit->dateTime().time().minute(),
 	      _ui.dateTimeEdit->dateTime().time().second(),
 	      0);
+
+	if ( SCScheme.dateTime.useLocalTime )
+		t = t.toGMT();
+
 	return t;
 }
 
 
 void OriginDialog::setTime(Core::Time t) {
 	int y = 0, M = 0, d = 0, h = 0, m = 0, s = 0;
+
+	if ( SCScheme.dateTime.useLocalTime )
+		t = t.toLocalTime();
+
 	t.get(&y, &M, &d, &h, &m, &s);
 	_ui.dateTimeEdit->setTime(QTime(h, m, s));
 	_ui.dateTimeEdit->setDate(QDate(y, M, d));
@@ -215,6 +223,11 @@ void OriginDialog::saveSettings(const QString &groupName) {
 void OriginDialog::init(double lon, double lat, double dep) {
 	_ui.setupUi(this);
 	_ui.advancedGB->hide();
+
+	if ( SCScheme.dateTime.useLocalTime )
+		_ui.dateTimeEdit->setDisplayFormat(_ui.dateTimeEdit->displayFormat() + " " + Core::Time::LocalTimeZone().c_str());
+	else
+		_ui.dateTimeEdit->setDisplayFormat(_ui.dateTimeEdit->displayFormat() + " UTC");
 
 	setTime(Core::Time::GMT());
 	setLongitude(lon);

@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -57,12 +58,12 @@
 
 struct spread_if_info {
         int32u  ip;
-        int16   port;
+        int16u  port;
         int16   type;
 };
 typedef struct dummy_proc{
 	char	name[MAX_PROC_NAME]; 
-	int16	port;
+	int16u	port;
 	int16	seg_index;
 	int16	index_in_seg;
 	int32u	id;
@@ -72,7 +73,7 @@ typedef struct dummy_proc{
 
 typedef struct dummy_segment{
 	int32 	bcast_address;
-	int16	port;
+	int16u	port;
 	int	num_procs;
 	proc    *procs[MAX_PROCS_SEGMENT];
 } segment;
@@ -107,13 +108,14 @@ int		Conf_num_procs( configuration *config );
 int             Conf_num_segments( configuration *config );
 int32u		Conf_leader( configuration *config );
 int32u		Conf_last( configuration *config );
+int32u		Conf_previous( configuration *config );
 int32u		Conf_seg_leader( configuration *config, int16 seg_index );
 int32u		Conf_seg_last( configuration *config, int16 seg_index );
 int             Conf_append_id_to_seg( segment *seg, int32u id);
 int	        Conf_num_procs_in_seg( configuration *config, int16 seg_index );
 void		Conf_id_to_str( int32u id, char *str );
-char 		Conf_print(configuration *config);
-char	        Conf_print_procs(configuration *config);
+int 		Conf_print(configuration *config);
+int	        Conf_print_procs(configuration *config);
 
 bool            Conf_in_reload_state(void);
 void            Conf_reload_state_begin(void);
@@ -144,7 +146,12 @@ void		Conf_set_window(int window);
 int		Conf_get_window(void);
 void		Conf_set_personal_window(int pwindow);
 int		Conf_get_personal_window(void);
-
+void		Conf_set_accelerated_ring_flag(bool new_state);
+bool		Conf_get_accelerated_ring_flag(void);
+void		Conf_set_accelerated_ring(bool new_state);
+bool		Conf_get_accelerated_ring(void);
+void		Conf_set_accelerated_window(int pwindow);
+int		Conf_get_accelerated_window(void);
 int             Conf_memb_timeouts_set(void);
 int             Conf_all_memb_timeouts_set(void);
 void		Conf_set_token_timeout(int timeout);

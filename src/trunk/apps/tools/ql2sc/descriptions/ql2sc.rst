@@ -8,7 +8,7 @@ possible server-side filters should be preferred to reduce both the network
 bandwidth consumption as well as the CPU and memory utilization on the local
 machine.
 
-.. _event_filter:
+.. _ql2sc_event_filter:
 
 Server-side event filter
 ========================
@@ -31,7 +31,7 @@ magnitude of 6, detected by at least 10 stations and which are shallower than
 
    MAG >= 6.0 AND PHASES >= 10 AND DEPTH < 100
 
-.. _object_filter:
+.. _ql2sc_object_filter:
 
 Server-side object filter
 =========================

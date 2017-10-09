@@ -52,6 +52,7 @@ OriginLocatorMap::OriginLocatorMap(const MapsDesc &maps,
 , _origin(NULL), _drawStations(false)
 , _drawStationsLines(true), _interactive(true)
 {
+	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;
@@ -70,6 +71,7 @@ OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
 , _drawStations(false), _drawStationsLines(true)
 , _interactive(true)
 {
+	_originSymbol = NULL;
 	_lastSymbolSize = 0;
 	_waveformPropagation = false;
 	_enabledCreateOrigin = false;
@@ -83,9 +85,10 @@ OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
-	QPainter &p(*painter);
-
 	if ( _origin ) {
+		QPainter &p(*painter);
+		p.save();
+
 		QPointF originLocationF(_origin->longitude(), _origin->latitude());
 
 		try {
@@ -174,10 +177,8 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 
 				QPoint originLocation;
 				if ( canvas().projection()->project(originLocation, originLocationF) ) {
-					if ( canvas().symbolCollection()->size() > 0 ) {
-						(*canvas().symbolCollection()->begin())->update();
+					if ( canvas().symbolCollection()->size() > 0 )
 						cutOff = (*canvas().symbolCollection()->begin())->size().width();
-					}
 
 					if ( cutOff ) {
 						p.setClipping(true);
@@ -242,6 +243,8 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 		#undef STAR_POINTS
 		#undef STAR_RADIUS
 		*/
+
+		p.restore();
 	}
 
 	/* --- DEBUG OUTPUT ---
@@ -409,7 +412,7 @@ void OriginLocatorMap::setOrigin(DataModel::Origin* o) {
 
 	if ( !_origin ) return;
 
-	TTDecorator *ttd = new TTDecorator(&canvas());
+	TTDecorator *ttd = new TTDecorator();
 	ttd->setLatitude(o->latitude());
 	ttd->setLongitude(o->longitude());
 	ttd->setOriginTime(o->time());
@@ -624,7 +627,7 @@ bool OriginLocatorMap::drawStations() const {
 void OriginLocatorMap::setWaveformPropagation(bool p) {
 	if ( _waveformPropagation == p ) return;
 	_waveformPropagation = p;
-	if ( _originSymbol ) {
+	if ( _originSymbol && _originSymbol->decorator() ) {
 		// TTDecorator::ShowWaveformPropagation(_waveformPropagation);
 		_originSymbol->decorator()->setVisible(_waveformPropagation);
 		update();

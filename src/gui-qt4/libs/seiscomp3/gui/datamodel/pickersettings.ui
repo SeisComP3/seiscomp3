@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>650</height>
+    <width>614</width>
+    <height>724</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -43,8 +43,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>499</width>
-        <height>438</height>
+        <width>596</width>
+        <height>496</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -272,6 +272,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbHideDisabledStations" >
+         <property name="text" >
+          <string>Hide disabled stations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -291,8 +298,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>96</width>
-        <height>26</height>
+        <width>596</width>
+        <height>608</height>
        </rect>
       </property>
       <property name="autoFillBackground" >

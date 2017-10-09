@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp xmlns="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.8" version="0.8">
+  <Inventory>
+    <sensor publicID="Sensor#20161122093321.729627.39" name="4A.MI01.EHZ.2009.097.07" response="ResponsePAZ#20161122093321.727858.16">
+      <description>LENNARTZ LE3D-LITE</description>
+      <unit>M/S</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-07T07:00:00.0000Z</start>
+        <end>2009-04-27T11:15:00.0000Z</end>
+        <gain>400</gain>
+        <gainFrequency>5</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.731875.75" name="4A.MI01.HNZ.2009.097.07" response="ResponsePAZ#20161122093321.730402.52">
+      <description>KINEMETRICS EPISENSOR-FBA-ES-T</description>
+      <unit>M/S**2</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-07T07:00:00.0000Z</start>
+        <end>2009-04-27T11:15:00.0000Z</end>
+        <gain>1.0197</gain>
+        <gainFrequency>1</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.734292.113" name="4A.MI02.EHZ.2009.097.08" response="ResponsePAZ#20161122093321.732782.90">
+      <description>LENNARTZ LE3D-5S</description>
+      <unit>M/S</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-07T08:38:00.0000Z</start>
+        <end>2009-04-29T07:40:00.0000Z</end>
+        <gain>400</gain>
+        <gainFrequency>5</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.736514.149" name="4A.MI02.HNZ.2009.097.08" response="ResponsePAZ#20161122093321.730402.52">
+      <description>KINEMETRICS EPISENSOR-FBA-ES-T</description>
+      <unit>M/S**2</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-07T08:38:00.0000Z</start>
+        <end>2009-04-29T07:40:00.0000Z</end>
+        <gain>1.0197</gain>
+        <gainFrequency>1</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.767032.633" name="4A.MI10.EHZ.2009.119.11" response="ResponsePAZ#20161122093321.727858.16">
+      <description>LENNARTZ LE3D-LITE</description>
+      <unit>M/S</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T11:30:00.0000Z</start>
+        <end>2009-06-08T15:00:00.0000Z</end>
+        <gain>400</gain>
+        <gainFrequency>5</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.769294.669" name="4A.MI10.HNZ.2009.119.11" response="ResponsePAZ#20161122093321.730402.52">
+      <description>KINEMETRICS EPISENSOR-FBA-ES-T</description>
+      <unit>M/S**2</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T11:30:00.0000Z</start>
+        <end>2009-06-08T15:00:00.0000Z</end>
+        <gain>1.0197</gain>
+        <gainFrequency>1</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.770537.683" name="4A.PC04.EHZ.2009.119.16" response="ResponsePAZ#20161122093321.769813.676">
+      <description>LENNARTZ LE3D-5S</description>
+      <unit>M/S</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T16:30:00.0000Z</start>
+        <end>2009-05-07T15:30:00.0000Z</end>
+        <gain>400</gain>
+        <gainFrequency>1</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.771629.695" name="4A.PC04.HNZ.2009.119.16" response="ResponsePAZ#20161122093321.770918.688">
+      <description>KINEMETRICS EPISENSOR-FBA-ES-T</description>
+      <unit>M/S**2</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T16:30:00.0000Z</start>
+        <end>2009-05-07T15:30:00.0000Z</end>
+        <gain>1.01937</gain>
+        <gainFrequency>0.2</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.772854.709" name="4A.PC05.EHZ.2009.119.17" response="ResponsePAZ#20161122093321.769813.676">
+      <description>LENNARTZ LE3D-5S</description>
+      <unit>M/S</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T17:30:00.0000Z</start>
+        <end>2009-05-07T16:00:00.0000Z</end>
+        <gain>400</gain>
+        <gainFrequency>1</gainFrequency>
+      </calibration>
+    </sensor>
+    <sensor publicID="Sensor#20161122093321.773989.721" name="4A.PC05.HNZ.2009.119.17" response="ResponsePAZ#20161122093321.770918.688">
+      <description>KINEMETRICS EPISENSOR-FBA-ES-T</description>
+      <unit>M/S**2</unit>
+      <calibration serialNumber="yyyy" channel="0">
+        <start>2009-04-29T17:30:00.0000Z</start>
+        <end>2009-05-07T16:00:00.0000Z</end>
+        <gain>1.01937</gain>
+        <gainFrequency>0.2</gainFrequency>
+      </calibration>
+    </sensor>
+    <datalogger publicID="Datalogger#20161122093321.729076.29" name="4A.MI01.EHZ.2009.097.07">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-07T07:00:00.0000Z</start>
+        <end>2009-04-27T11:15:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.731335.65" name="4A.MI01.HNZ.2009.097.07">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-07T07:00:00.0000Z</start>
+        <end>2009-04-27T11:15:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.733745.103" name="4A.MI02.EHZ.2009.097.08">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-07T08:38:00.0000Z</start>
+        <end>2009-04-29T07:40:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.735967.139" name="4A.MI02.HNZ.2009.097.08">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-07T08:38:00.0000Z</start>
+        <end>2009-04-29T07:40:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.754739.437" name="4A.MI07.EHZ.2009.117.17">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-27T17:15:00.0000Z</start>
+        <end>2009-06-09T08:15:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.76649.623" name="4A.MI10.EHZ.2009.119.11">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T11:30:00.0000Z</start>
+        <end>2009-06-08T15:00:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.768727.659" name="4A.MI10.HNZ.2009.119.11">
+      <gain>1</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T11:30:00.0000Z</start>
+        <end>2009-06-08T15:00:00.0000Z</end>
+        <gain>1</gain>
+        <gainFrequency>0.05</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.727111.6 ResponseFIR#20161122093321.727278.7 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727349.8 ResponseFIR#20161122093321.727579.13 ResponseFIR#20161122093321.727628.14</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.770365.681" name="4A.PC04.EHZ.2009.119.16">
+      <gain>419430</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T16:30:00.0000Z</start>
+        <end>2009-05-07T15:30:00.0000Z</end>
+        <gain>419430</gain>
+        <gainFrequency>0</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.769695.674</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.771458.693" name="4A.PC04.HNZ.2009.119.16">
+      <gain>419430</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T16:30:00.0000Z</start>
+        <end>2009-05-07T15:30:00.0000Z</end>
+        <gain>419430</gain>
+        <gainFrequency>0</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.769695.674</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.772683.707" name="4A.PC05.EHZ.2009.119.17">
+      <gain>419430</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T17:30:00.0000Z</start>
+        <end>2009-05-07T16:00:00.0000Z</end>
+        <gain>419430</gain>
+        <gainFrequency>0</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.769695.674</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <datalogger publicID="Datalogger#20161122093321.773816.719" name="4A.PC05.HNZ.2009.119.17">
+      <gain>419430</gain>
+      <maxClockDrift>0</maxClockDrift>
+      <calibration serialNumber="xxxx" channel="0">
+        <start>2009-04-29T17:30:00.0000Z</start>
+        <end>2009-05-07T16:00:00.0000Z</end>
+        <gain>419430</gain>
+        <gainFrequency>0</gainFrequency>
+      </calibration>
+      <decimation sampleRateNumerator="100" sampleRateDenominator="1">
+        <digitalFilterChain>ResponseFIR#20161122093321.769695.674</digitalFilterChain>
+      </decimation>
+    </datalogger>
+    <responsePAZ publicID="ResponsePAZ#20161122093321.727858.16" name="ResponsePAZ#20161122093321.727858.16">
+      <type>A</type>
+      <gain>400</gain>
+      <gainFrequency>5</gainFrequency>
+      <normalizationFactor>1</normalizationFactor>
+      <normalizationFrequency>5</normalizationFrequency>
+      <numberOfZeros>3</numberOfZeros>
+      <numberOfPoles>3</numberOfPoles>
+      <zeros>(0,0) (0,0) (0,0)</zeros>
+      <poles>(-4.444,4.444) (-4.444,-4.444) (-1.083,0)</poles>
+    </responsePAZ>
+    <responsePAZ publicID="ResponsePAZ#20161122093321.730402.52" name="ResponsePAZ#20161122093321.730402.52">
+      <type>A</type>
+      <gain>1.0197</gain>
+      <gainFrequency>1</gainFrequency>
+      <normalizationFactor>2.45957e+13</normalizationFactor>
+      <normalizationFrequency>1</normalizationFrequency>
+      <numberOfZeros>0</numberOfZeros>
+      <numberOfPoles>4</numberOfPoles>
+      <zeros/>
+      <poles>(-981,1009) (-981,-1009) (-3290,1263) (-3290,-1263)</poles>
+    </responsePAZ>
+    <responsePAZ publicID="ResponsePAZ#20161122093321.732782.90" name="ResponsePAZ#20161122093321.732782.90">
+      <type>A</type>
+      <gain>400</gain>
+      <gainFrequency>5</gainFrequency>
+      <normalizationFactor>1</normalizationFactor>
+      <normalizationFrequency>5</normalizationFrequency>
+      <numberOfZeros>3</numberOfZeros>
+      <numberOfPoles>3</numberOfPoles>
+      <zeros>(0,0) (0,0) (0,0)</zeros>
+      <poles>(-0.888,0.888) (-0.888,-0.888) (-0.29,0)</poles>
+    </responsePAZ>
+    <responsePAZ publicID="ResponsePAZ#20161122093321.769813.676" name="ResponsePAZ#20161122093321.769813.676">
+      <type>A</type>
+      <gain>400</gain>
+      <gainFrequency>1</gainFrequency>
+      <normalizationFactor>1</normalizationFactor>
+      <normalizationFrequency>3</normalizationFrequency>
+      <numberOfZeros>3</numberOfZeros>
+      <numberOfPoles>3</numberOfPoles>
+      <zeros>(0,0) (0,0) (0,0)</zeros>
+      <poles>(-0.885,0.887) (-0.885,-0.887) (-0.427,0)</poles>
+    </responsePAZ>
+    <responsePAZ publicID="ResponsePAZ#20161122093321.770918.688" name="ResponsePAZ#20161122093321.770918.688">
+      <type>A</type>
+      <gain>1.01937</gain>
+      <gainFrequency>0.2</gainFrequency>
+      <normalizationFactor>2.46e+13</normalizationFactor>
+      <normalizationFrequency>0.2</normalizationFrequency>
+      <numberOfZeros>0</numberOfZeros>
+      <numberOfPoles>4</numberOfPoles>
+      <zeros/>
+      <poles>(-981,-1009) (-981,1009) (-3290,-1263) (-3290,1263)</poles>
+    </responsePAZ>
+    <responseFIR publicID="ResponseFIR#20161122093321.727111.6" name="ResponseFIR#20161122093321.727111.6">
+      <gain>629129</gain>
+      <decimationFactor>1</decimationFactor>
+      <delay>0</delay>
+      <correction>0</correction>
+      <numberOfCoefficients>1</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>1</coefficients>
+    </responseFIR>
+    <responseFIR publicID="ResponseFIR#20161122093321.727278.7" name="ResponseFIR#20161122093321.727278.7">
+      <gain>1</gain>
+      <decimationFactor>8</decimationFactor>
+      <delay>14.000128</delay>
+      <correction>14.000128</correction>
+      <numberOfCoefficients>15</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>0.000244141 0.000976562 0.00244141 0.00488281 0.00854492 0.0136719 0.0205078 0.0292969 0.0393066 0.0498047 0.0600586 0.0693359 0.0769043 0.0820312 0.0839844</coefficients>
+    </responseFIR>
+    <responseFIR publicID="ResponseFIR#20161122093321.727349.8" name="ResponseFIR#20161122093321.727349.8">
+      <gain>1</gain>
+      <decimationFactor>2</decimationFactor>
+      <delay>6</delay>
+      <correction>6</correction>
+      <numberOfCoefficients>7</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>0.000244141 0.00292969 0.0161133 0.0537109 0.12085 0.193359 0.225586</coefficients>
+    </responseFIR>
+    <responseFIR publicID="ResponseFIR#20161122093321.727579.13" name="ResponseFIR#20161122093321.727579.13">
+      <gain>1</gain>
+      <decimationFactor>2</decimationFactor>
+      <delay>50</delay>
+      <correction>50</correction>
+      <numberOfCoefficients>51</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>-7.15032e-07 -5.60109e-06 -2.62179e-06 -4.31403e-05 -4.64771e-06 1.43006e-06 2.34769e-05 1.43006e-06 -5.27932e-05 -0.000366692 0.000376107 0.000854226 3.05081e-05 -0.00127621 -0.000910951 0.00127669 0.00215165 -0.000461554 -0.00333765 -0.00140933 0.00377072 0.00419414 -0.00264288 -0.00720121 -0.000644006 0.009184 0.00608445 -0.00857824 -0.0127401 0.00398225 0.0186261 0.0052052 -0.0209407 -0.0181629 0.0166669 0.0322447 -0.00346588 -0.0429528 -0.0193265 0.044309 0.0497909 -0.0294164 -0.0826078 -0.00934166 0.107552 0.0816604 -0.10311 -0.204208 -3.12231e-05 0.390432 0.589958</coefficients>
+    </responseFIR>
+    <responseFIR publicID="ResponseFIR#20161122093321.727628.14" name="ResponseFIR#20161122093321.727628.14">
+      <gain>1</gain>
+      <decimationFactor>2</decimationFactor>
+      <delay>47</delay>
+      <correction>47</correction>
+      <numberOfCoefficients>48</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>-4.7042e-05 -0.000186167 -0.000292263 -0.000145131 0.000212191 0.000310279 -0.000124111 -0.000523471 -0.000114103 0.000692624 0.000534481 -0.000695627 -0.00109999 0.000406366 0.00169853 0.000273246 -0.00213993 -0.00136523 0.00218096 0.0027785 -0.00156841 -0.00427885 0.000108097 0.00549495 0.00226304 -0.00595036 -0.00541087 0.00513563 0.00895507 -0.00260134 -0.0122651 -0.00193975 0.014478 0.00851968 -0.0145601 -0.0168652 0.0113402 0.0263838 -0.0034461 -0.0362236 -0.011103 0.0453779 0.03664 -0.0528236 -0.0888721 0.057688 0.312634 0.441072</coefficients>
+    </responseFIR>
+    <responseFIR publicID="ResponseFIR#20161122093321.769695.674" name="ResponseFIR#20161122093321.769695.674">
+      <gain>1</gain>
+      <decimationFactor>1</decimationFactor>
+      <delay>4.1607</delay>
+      <correction>4.1607</correction>
+      <numberOfCoefficients>33</numberOfCoefficients>
+      <symmetry>B</symmetry>
+      <coefficients>1.31549e-11 0.000150107 0.0133968 0.164429 0.568809 0.517383 -0.260836 -0.122033 0.257181 -0.202903 0.0707588 0.0387967 -0.114313 0.13548 -0.111447 0.0670548 -0.0192712 -0.0209313 0.0476806 -0.0593383 0.0575793 -0.0462333 0.0297771 -0.0124829 -0.00236608 0.0127882 -0.0184698 0.0187973 -0.0171387 0.012782 -0.00767579 0.00325516 -8.94756e-05</coefficients>
+    </responseFIR>
+    <network publicID="NET/4A/20161122093321.725161.15719" code="4A">
+      <start>2009-04-07T00:00:00.0000Z</start>
+      <end>2009-12-31T23:59:59.0000Z</end>
+      <description>Emersito Seismic Network for Site Effect Studies in L'Aquila town, Central Italy</description>
+      <restricted>false</restricted>
+      <shared>true</shared>
+      <station publicID="STA/4A/MI01/20161122093321.726375.15720" code="MI01">
+        <start>2009-04-07T07:00:00.0000Z</start>
+        <end>2009-04-27T11:15:00.0000Z</end>
+        <description>Pescomaggiore</description>
+        <latitude>42.358035</latitude>
+        <longitude>13.509768</longitude>
+        <elevation>740</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/MI01//20161122093321.726562.15721" code="">
+          <start>2009-04-07T07:00:00.0000Z</start>
+          <end>2009-04-27T11:15:00.0000Z</end>
+          <latitude>42.358035</latitude>
+          <longitude>13.509768</longitude>
+          <elevation>740</elevation>
+          <stream code="EHZ" datalogger="Datalogger#20161122093321.729076.29" sensor="Sensor#20161122093321.729627.39">
+            <start>2009-04-07T07:00:00.0000Z</start>
+            <end>2009-04-27T11:15:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>175430</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+          <stream code="HNZ" datalogger="Datalogger#20161122093321.731335.65" sensor="Sensor#20161122093321.731875.75">
+            <start>2009-04-07T07:00:00.0000Z</start>
+            <end>2009-04-27T11:15:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>641524</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S**2</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/MI02/20161122093321.731964.15780" code="MI02">
+        <start>2009-04-07T08:38:00.0000Z</start>
+        <end>2009-04-29T07:40:00.0000Z</end>
+        <description>Paganica</description>
+        <latitude>42.354487</latitude>
+        <longitude>13.474283</longitude>
+        <elevation>648</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/MI02//20161122093321.732041.15781" code="">
+          <start>2009-04-07T08:38:00.0000Z</start>
+          <end>2009-04-29T07:40:00.0000Z</end>
+          <latitude>42.354487</latitude>
+          <longitude>13.474283</longitude>
+          <elevation>648</elevation>
+          <stream code="EHZ" datalogger="Datalogger#20161122093321.733745.103" sensor="Sensor#20161122093321.734292.113">
+            <start>2009-04-07T08:38:00.0000Z</start>
+            <end>2009-04-29T07:40:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>11550000</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+          <stream code="HNZ" datalogger="Datalogger#20161122093321.735967.139" sensor="Sensor#20161122093321.736514.149">
+            <start>2009-04-07T08:38:00.0000Z</start>
+            <end>2009-04-29T07:40:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>641524</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S**2</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/MI07/20161122093321.752967.15982" code="MI07">
+        <start>2009-04-27T17:15:00.0000Z</start>
+        <end>2009-06-09T08:15:00.0000Z</end>
+        <description>Bazzano</description>
+        <latitude>42.336215</latitude>
+        <longitude>13.445907</longitude>
+        <elevation>662</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+      </station>
+      <station publicID="STA/4A/MI08/20161122093321.757656.16026" code="MI08">
+        <start>2009-04-28T13:15:00.0000Z</start>
+        <end>2009-06-09T10:15:00.0000Z</end>
+        <description>Sant`Antonio</description>
+        <latitude>42.357417</latitude>
+        <longitude>13.371338</longitude>
+        <elevation>650</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/MI08//20161122093321.757725.16027" code="">
+          <start>2009-04-28T13:15:00.0000Z</start>
+          <end>2009-06-09T10:15:00.0000Z</end>
+          <latitude>42.357417</latitude>
+          <longitude>13.371338</longitude>
+          <elevation>650</elevation>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/MI09/20161122093321.762339.16070" code="MI09">
+        <start>2009-04-28T15:20:00.0000Z</start>
+        <end>2009-06-09T08:20:00.0000Z</end>
+        <description>San Giacomo</description>
+        <latitude>42.365768</latitude>
+        <longitude>13.414442</longitude>
+        <elevation>782</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/MI09//20161122093321.762408.16071" code="">
+          <start>2009-04-28T15:20:00.0000Z</start>
+          <end>2009-06-09T08:20:00.0000Z</end>
+          <latitude>42.365768</latitude>
+          <longitude>13.414442</longitude>
+          <elevation>782</elevation>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/MI10/20161122093321.764726.16093" code="MI10">
+        <start>2009-04-29T11:30:00.0000Z</start>
+        <end>2009-06-08T15:00:00.0000Z</end>
+        <description>Sant`Elia</description>
+        <latitude>42.336762</latitude>
+        <longitude>13.430795</longitude>
+        <elevation>607</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/MI10//20161122093321.764795.16094" code="">
+          <start>2009-04-29T11:30:00.0000Z</start>
+          <end>2009-06-08T15:00:00.0000Z</end>
+          <latitude>42.336762</latitude>
+          <longitude>13.430795</longitude>
+          <elevation>607</elevation>
+          <stream code="EHZ" datalogger="Datalogger#20161122093321.76649.623" sensor="Sensor#20161122093321.767032.633">
+            <start>2009-04-29T11:30:00.0000Z</start>
+            <end>2009-06-08T15:00:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>175430</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+          <stream code="HNZ" datalogger="Datalogger#20161122093321.768727.659" sensor="Sensor#20161122093321.769294.669">
+            <start>2009-04-29T11:30:00.0000Z</start>
+            <end>2009-06-08T15:00:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>641524</gain>
+            <gainFrequency>0.05</gainFrequency>
+            <gainUnit>M/S**2</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/PC04/20161122093321.769382.16137" code="PC04">
+        <start>2009-04-29T16:30:00.0000Z</start>
+        <end>2009-05-07T15:30:00.0000Z</end>
+        <description>Monticchio (on limestone)</description>
+        <latitude>42.316841</latitude>
+        <longitude>13.46598</longitude>
+        <elevation>684</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/PC04//20161122093321.769453.16138" code="">
+          <start>2009-04-29T16:30:00.0000Z</start>
+          <end>2009-05-07T15:30:00.0000Z</end>
+          <latitude>42.316841</latitude>
+          <longitude>13.46598</longitude>
+          <elevation>684</elevation>
+          <stream code="EHZ" datalogger="Datalogger#20161122093321.770365.681" sensor="Sensor#20161122093321.770537.683">
+            <start>2009-04-29T16:30:00.0000Z</start>
+            <end>2009-05-07T15:30:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>167772000</gain>
+            <gainFrequency>0</gainFrequency>
+            <gainUnit>M/S</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+          <stream code="HNZ" datalogger="Datalogger#20161122093321.771458.693" sensor="Sensor#20161122093321.771629.695">
+            <start>2009-04-29T16:30:00.0000Z</start>
+            <end>2009-05-07T15:30:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>427554</gain>
+            <gainFrequency>0</gainFrequency>
+            <gainUnit>M/S**2</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+        </sensorLocation>
+      </station>
+      <station publicID="STA/4A/PC05/20161122093321.771715.16189" code="PC05">
+        <start>2009-04-29T17:30:00.0000Z</start>
+        <end>2009-05-07T16:00:00.0000Z</end>
+        <description>Monticchio (on alluvial deposits)</description>
+        <latitude>42.31691</latitude>
+        <longitude>13.46131</longitude>
+        <elevation>660</elevation>
+        <restricted>false</restricted>
+        <shared>true</shared>
+        <sensorLocation publicID="LOC/4A/PC05//20161122093321.771785.16190" code="">
+          <start>2009-04-29T17:30:00.0000Z</start>
+          <end>2009-05-07T16:00:00.0000Z</end>
+          <latitude>42.31691</latitude>
+          <longitude>13.46131</longitude>
+          <elevation>660</elevation>
+          <stream code="EHZ" datalogger="Datalogger#20161122093321.772683.707" sensor="Sensor#20161122093321.772854.709">
+            <start>2009-04-29T17:30:00.0000Z</start>
+            <end>2009-05-07T16:00:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>167772000</gain>
+            <gainFrequency>0</gainFrequency>
+            <gainUnit>M/S</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+          <stream code="HNZ" datalogger="Datalogger#20161122093321.773816.719" sensor="Sensor#20161122093321.773989.721">
+            <start>2009-04-29T17:30:00.0000Z</start>
+            <end>2009-05-07T16:00:00.0000Z</end>
+            <dataloggerSerialNumber>xxxx</dataloggerSerialNumber>
+            <dataloggerChannel>0</dataloggerChannel>
+            <sensorSerialNumber>yyyy</sensorSerialNumber>
+            <sensorChannel>0</sensorChannel>
+            <sampleRateNumerator>100</sampleRateNumerator>
+            <sampleRateDenominator>1</sampleRateDenominator>
+            <depth>0</depth>
+            <azimuth>0</azimuth>
+            <dip>-90</dip>
+            <gain>427554</gain>
+            <gainFrequency>0</gainFrequency>
+            <gainUnit>M/S**2</gainUnit>
+            <format>Steim2</format>
+            <restricted>false</restricted>
+          </stream>
+        </sensorLocation>
+      </station>
+    </network>
+  </Inventory>
+</seiscomp>

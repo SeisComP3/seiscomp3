@@ -634,8 +634,8 @@ ParseResult CitedSourceDictionary::Parse(string record) {
 	source_lookup_code = FromString<int>(substr(record, 0, 2));
 	int pos1=2, pos2;
 	name_of_publication = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	date_published = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	publisher_name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	date_published = SplitString(record, SEED_SEPARATOR, ++pos2, pos1);
+	publisher_name = SplitString(record, SEED_SEPARATOR, ++pos1, pos2);
 	return PR_OK;
 }
 
@@ -660,7 +660,7 @@ ParseResult UnitsAbbreviations::Parse(string record) {
 	lookup_code = FromString<int>(substr(record, 0, 3));
 	int pos1=3, pos2;
 	name = SplitString(record, SEED_SEPARATOR, pos1, pos2);
-	description = SplitString(record, SEED_SEPARATOR, pos1, pos2);
+	description = SplitString(record, SEED_SEPARATOR, ++pos2, pos1);
 	return PR_OK;
 }
 
@@ -1139,6 +1139,38 @@ void StationControl::ParseVolumeRecord(string record)
 }
 
 /****************************************************************************************************************************
+* Function:     Flush                                                                                                       *
+* Parameters:   None                                                                                                        *
+* Returns:      Nothing                                                                                                     *
+* Description:  Merges channel responses after reading has finished                                                         *
+****************************************************************************************************************************/
+void StationControl::Flush()
+{
+	for ( size_t eos = 0; eos < si.size(); ++eos ) {
+		for ( size_t eoc = 0; eoc < si[eos]->ci.size(); ++eoc ) {
+			ResponseListList &rl = si[eos]->ci[eoc]->rl;
+			for ( size_t i = 1; i < rl.size(); ) {
+				ResponseList *last = rl[i-1].get();
+				ResponseList *curr = rl[i].get();
+
+				int lastStage = last->GetStageSequenceNumber();
+				int stage = curr->GetStageSequenceNumber();
+				if ( stage == lastStage ) {
+					// Merge records
+					last->number_of_responses += curr->number_of_responses;
+					last->responses_listed.insert(last->responses_listed.end(),
+					                              curr->responses_listed.begin(),
+					                              curr->responses_listed.end());
+					rl.erase(rl.begin()+i);
+				}
+				else
+					++i;
+			}
+		}
+	}
+}
+
+/****************************************************************************************************************************
 * Function:     AddChannelToStation											    *
 * Parameters:   chan	ChannelIdentifier										    *
 * Returns:      number of station in vector										    *
@@ -1327,6 +1359,26 @@ void ChannelIdentifier::EmptyVectors()
 	firr.clear();
 	rp.clear();
 }
+
+
+/*******************************************************************************
+* Function:     GetMinimumInputDecimationSampleRate                            *
+* Parameters:   none                                                           *
+* Returns:      The minimum sample rate of all decimation stages or 0          *
+* Description:  clear all vectors after the data has been written to inventory *
+********************************************************************************/
+double ChannelIdentifier::GetMinimumInputDecimationSampleRate() const {
+	int maxStage = -1;
+	double samprate = 0.0;
+	for( size_t i = 0; i < dec.size(); ++i ) {
+		if ( maxStage < 0 || maxStage < dec[i]->GetStageSequenceNumber() ) {
+			maxStage = dec[i]->GetStageSequenceNumber();
+			samprate = dec[i]->GetInputSampleRate() / dec[i]->GetDecimationFactor();
+		}
+	}
+	return samprate;
+}
+
 
 /*******************************************************************************
 * Function:     GetMaximumInputDecimationSampleRate                            *
@@ -1534,9 +1586,14 @@ string ResponseCoefficients::GetDenominators()
 ParseResult ResponseList::Parse(string record)
 {
 	stage_sequence_number = FromString<int>(substr(record, 0, 2));
-	signal_in_units = FromString<int>(substr(record, 2, 3));
-	signal_out_units = FromString<int>(substr(record, 5, 3));
-	number_of_responses = FromString<int>(substr(record, 8, 4));
+
+	// No merging
+	if ( responses_listed.empty() ) {
+		signal_in_units = FromString<int>(substr(record, 2, 3));
+		signal_out_units = FromString<int>(substr(record, 5, 3));
+		number_of_responses = FromString<int>(substr(record, 8, 4));
+	}
+
 	int pos1 = 12;
 	ListedResponses lr;
 

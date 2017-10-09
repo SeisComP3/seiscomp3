@@ -29,20 +29,17 @@
 
 namespace Seiscomp {
 namespace Gui {
-
-
-IMPLEMENT_RTTI(OriginSymbol, "OriginSymbol", Map::Symbol)
-IMPLEMENT_RTTI_METHODS(OriginSymbol)
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginSymbol::OriginSymbol(Map::Decorator* decorator)
- : Symbol(decorator),
-   _filled(false),
-   _geoPosition(0, 0),
-   _depth(0) {
-
+: Symbol(decorator)
+, _filled(false)
+, _magnitude(0)
+, _depth(0) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -55,11 +52,9 @@ OriginSymbol::OriginSymbol(double latitude,
                            double longitude,
                            double depth,
                            Map::Decorator* decorator)
- : Symbol(decorator),
-   _filled(false),
-   _geoPosition(latitude, longitude),
-   _depth(depth) {
-
+: Symbol(latitude, longitude, decorator)
+, _filled(false)
+, _depth(depth) {
 	init();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -67,110 +62,32 @@ OriginSymbol::OriginSymbol(double latitude,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-OriginSymbol::~OriginSymbol() {
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::update() {
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::calculateMapPosition(const Map::Canvas *canvas) {
-	double latitude = _geoPosition.x();
-	double longitude = _geoPosition.y();
-
-	setClipped(!canvas->projection()->project(_mapPosition, QPointF(longitude, latitude)));
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::hasValidMapPosition() const {
-	if ( _mapPosition.x() < 0 && _mapPosition.y() < 0 )
-		return false;
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::customDraw(const Map::Canvas *canvas, QPainter& painter) {
-	drawOriginSymbol(canvas, painter);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::drawOriginSymbol(const Map::Canvas*, QPainter& painter) {
-	painter.save();
-
+void OriginSymbol::customDraw(const Map::Canvas *, QPainter& painter) {
 	QPen pen;
 	pen.setColor(_color);
-	pen.setWidth(4);
+	pen.setWidth(SCScheme.colors.originSymbol.classic ? 4 : 2);
 	pen.setJoinStyle(Qt::MiterJoin);
 	painter.setPen(pen);
 
-	QBrush brush;
-	brush.setColor(_color);
-	brush.setStyle(Qt::NoBrush);
-	if ( isFilled() )
-		brush.setStyle(Qt::SolidPattern);
-
-	/*
-	QBrush brush;
-	brush.setStyle(Qt::SolidPattern);
-	if ( isFilled() )
-		brush.setColor(_color);
+	if ( SCScheme.colors.originSymbol.classic ) {
+		if ( isFilled() )
+			painter.setBrush(_fillColor.isValid() ? _fillColor : _color);
+	}
 	else
-		brush.setColor(QColor(_color.red(), _color.green(), _color.blue(), 64));
-	*/
+		painter.setBrush(_fillColor.isValid() ? _fillColor : (isFilled() ? _color : QColor(_color.red(), _color.green(), _color.black(), 128)));
 
-	painter.setBrush(brush);
-
-	const QSize& size = Seiscomp::Gui::Map::Symbol::size();
-	int height = size.height(),
-	    width = size.width(),
-	    r = int(width / 2);
-	QRect rect(_mapPosition.x() - r, _mapPosition.y() - r, width, height);
-	_poly = rect;
-	painter.drawEllipse(rect);
-
-	painter.restore();
+	int rx = size().width()/2;
+	int ry = size().height()/2;
+	painter.drawEllipse(QRect(x()-rx, y()-ry, size().width(), size().height()));
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::isClipped(const Map::Canvas *canvas) {
-	double latitude = _geoPosition.x();
-	double longitude = _geoPosition.y();
-
-	return canvas->isInside(longitude, latitude);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::setPreferredMagnitudeValue(double magnitudeValue) {
-	_preferredMagnitudeValue = magnitudeValue;
+	_magnitude = magnitudeValue;
 	updateSize();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -180,16 +97,7 @@ void OriginSymbol::setPreferredMagnitudeValue(double magnitudeValue) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double OriginSymbol::preferredMagnitudeValue() const {
-	return _preferredMagnitudeValue;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginSymbol::depth() const {
-	return _depth;
+	return _magnitude;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -207,8 +115,8 @@ void OriginSymbol::setDepth(double depth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setLatitude(double latitude) {
-	_geoPosition.setX(latitude);
+double OriginSymbol::depth() const {
+	return _depth;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -216,8 +124,8 @@ void OriginSymbol::setLatitude(double latitude) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginSymbol::latitude() const {
-	return _geoPosition.x();
+void OriginSymbol::setColor(const QColor &c) {
+	_color = c;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -225,53 +133,8 @@ double OriginSymbol::latitude() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setLongitude(double longitude) {
-	_geoPosition.setY(longitude);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginSymbol::longitude() const {
-	return _geoPosition.y();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginSymbol::x() const {
-	return _mapPosition.x();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setX(int xPos) {
-	_mapPosition.setX(xPos);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginSymbol::y() const {
-	return _mapPosition.y();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void OriginSymbol::setY(int yPos) {
-	_mapPosition.setY(yPos);
+void OriginSymbol::setFillColor(const QColor &c) {
+	_fillColor = c;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -297,8 +160,25 @@ bool OriginSymbol::isFilled() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool OriginSymbol::isInside(int x, int y) const {
-	return _poly.boundingRect().contains(x, y);
+bool OriginSymbol::isInside(int px, int py) const {
+	int rx = size().width()/2;
+	int ry = size().height()/2;
+
+	if ( px < x()-rx ) return false;
+	if ( py < y()-ry ) return false;
+	if ( px > x()+rx ) return false;
+	if ( py > y()+ry ) return false;
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int OriginSymbol::getSize(double mag) {
+	return std::max(SCScheme.map.originSymbolMinSize, int(4.9*(mag-1.2)));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -307,14 +187,7 @@ bool OriginSymbol::isInside(int x, int y) const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::updateSize() {
-	int width;
-	if ( _preferredMagnitudeValue > 0 )
-		// 2.7**1.6 = 4.9
-		// 2.7**0.19 = 1.2
-		width = std::max(SCScheme.map.originSymbolMinSize, int(4.9 * (_preferredMagnitudeValue - 1.2)));
-	else
-		width = SCScheme.map.originSymbolMinSize;
-
+	int width = getSize(_magnitude);
 	setSize(QSize(width, width));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -324,22 +197,20 @@ void OriginSymbol::updateSize() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::init() {
-	_color                   = Qt::black;
-	_defaultSize             = 20;
-	_mapPosition             = QPoint(-1, -1);
-	_preferredMagnitudeValue = 0.;
-
+	_color = Qt::black;
 	setPriority(Symbol::HIGH);
-	setSize(QSize(_defaultSize, _defaultSize));
+	setSize(QSize(20, 20));
 	depthColorCoding();
 	updateSize();
 }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginSymbol::depthColorCoding() {
+	_fillColor = QColor();
 	_color = SCScheme.colors.originSymbol.depth.gradient.colorAt(
 	            _depth,
 	            SCScheme.colors.originSymbol.depth.discrete
@@ -349,5 +220,7 @@ void OriginSymbol::depthColorCoding() {
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // namespace Gui
 } // namespace Seiscomp

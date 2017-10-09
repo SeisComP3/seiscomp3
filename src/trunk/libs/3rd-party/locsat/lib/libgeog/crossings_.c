@@ -52,26 +52,18 @@
  */
 
 
-#ifdef SCCSID
-static  char	SccsId[] = "@(#)crossings_.c	40.1	12/28/90";
-#endif
-
 #include <math.h>
 
 #define DEG_TO_RAD	0.017453293
 #define	SIGN(a1, a2)	((a2) >= 0 ? -(a1) : (a1))
 
-void
-crossings_ (olat1, olon1, olat2, olon2, rsmall, rlarge, xlat1, xlon1,
-		xlat2, xlon2, icerr)
- 
-int	*icerr;
-double	*olat1, *olat2, *olon1, *olon2, *rlarge, *rsmall;
-double	*xlat1, *xlat2, *xlon1, *xlon2;
+void distaz2_(double *alat1, double *alon1, double *alat2, double *alon2, double *delta, double *azi, double *baz);
+void latlon2_(double *alat1, double *alon1, double *delta, double *azi, double *alat2, double *alon2);
 
-{
-	double	alpha, arg, azi, baz, s, stadist, tmp;
-	double	atan(), fabs(), sin(), sqrt();
+void
+crossings_(double *olat1, double *olon1, double *olat2, double *olon2, double *rsmall, double *rlarge,
+           double *xlat1, double *xlon1, double *xlat2, double *xlon2, int *icerr) {
+	double alpha, arg, azi, baz, s, stadist, tmp;
 
 	*icerr = 0;
 
@@ -90,7 +82,7 @@ double	*xlat1, *xlat2, *xlon1, *xlon2;
 		*olon2  = tmp;
 	}
 
-	distaz2_ (olat1, olon1, olat2, olon2, &stadist, &azi, &baz);
+	distaz2_(olat1, olon1, olat2, olon2, &stadist, &azi, &baz);
 
 	/* Test for the case of no intersection, if so, ignore */
 
@@ -131,11 +123,10 @@ double	*xlat1, *xlat2, *xlon1, *xlon2;
 	azi = baz + alpha;
 	if (fabs(azi) > 180.0)
 		azi = SIGN((360.0-fabs(azi)), azi);
-	latlon2_ (olat2, olon2, rlarge, &azi, &xlat1, &xlon1);
+	latlon2_(olat2, olon2, rlarge, &azi, xlat1, xlon1);
 
 	azi = azi - 2.0*alpha;
 	if (fabs(azi) > 180.0)
 		azi = SIGN((360.0-fabs(azi)), azi);
-	latlon2_ (olat2, olon2, rlarge, &azi, &xlat2, &xlon2);
+	latlon2_ (olat2, olon2, rlarge, &azi, xlat2, xlon2);
 }
-

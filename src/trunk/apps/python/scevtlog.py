@@ -104,16 +104,18 @@ class EventHistory(seiscomp3.Client.Application):
     self._eventToMag = dict()
     self._magToEvent = dict()
 
-    self._directory = None
-    self._format = "autoloc3"
+    self._directory = "@LOGDIR@/events"
+    self._format = "xml"
     self._currentDirectory = ""
+    self._revisionFileExt = ".zip"
+    self._useGZIP = False
 
 
   def createCommandLineDescription(self):
     try:
       self.commandline().addGroup("Storage")
       self.commandline().addStringOption("Storage", "directory,o", "Specify the storage directory")
-      self.commandline().addStringOption("Storage", "format,f", "Specify storage format (autoloc1, autoloc3 [default], xml)")
+      self.commandline().addStringOption("Storage", "format,f", "Specify storage format (autoloc1, autoloc3, xml [default])")
     except:
       seiscomp3.Logging.warning("caught unexpected error %s" % sys.exc_info())
     return True
@@ -126,6 +128,12 @@ class EventHistory(seiscomp3.Client.Application):
     except: pass
 
     try: self._format = self.configGetString("format")
+    except: pass
+
+    try:
+      if self.configGetBool("gzip") == True:
+        self._useGZIP = True
+        self._revisionFileExt = ".gz"
     except: pass
 
     return True
@@ -141,7 +149,7 @@ class EventHistory(seiscomp3.Client.Application):
     except: pass
 
     if self._format != "autoloc1" and self._format != "autoloc3" and self._format != "xml":
-      self._format = "autoloc3"
+      self._format = "xml"
 
     try:
       if self._directory[-1] != "/":
@@ -307,6 +315,12 @@ class EventHistory(seiscomp3.Client.Application):
       self.query().loadEventDescriptions(evt)
 
     org = self._cache.get(seiscomp3.DataModel.Origin, evt.preferredOriginID())
+
+    if evt.preferredFocalMechanismID():
+      fm = self._cache.get(seiscomp3.DataModel.FocalMechanism, evt.preferredFocalMechanismID())
+    else:
+      fm = None
+
     # Load comments
     if org.commentCount() == 0:
       self.query().loadComments(org)
@@ -324,6 +338,55 @@ class EventHistory(seiscomp3.Client.Application):
     ep.add(evt_cloned)
 
     summary = self.getSummary(now, org, prefmag)
+
+    if fm:
+      ep.add(fm)
+
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+
+      # Load focal mechainsm references
+      if evt.focalMechanismReferenceCount() == 0:
+        self.query().loadFocalMechanismReferences(evt)
+
+      # Load moment tensors
+      if fm.momentTensorCount() == 0:
+        self.query().loadMomentTensors(fm)
+
+      seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+      # Copy focal mechanism reference
+      fm_ref = evt.focalMechanismReference(seiscomp3.DataModel.FocalMechanismReferenceIndex(fm.publicID()))
+      if fm_ref:
+        fm_ref_cloned = seiscomp3.DataModel.FocalMechanismReference.Cast(fm_ref.clone())
+        if fm_ref_cloned is None: fm_ref_cloned = seiscomp3.DataModel.FocalMechanismReference(fm.publicID())
+        evt_cloned.add(fm_ref_cloned)
+
+      nmt = fm.momentTensorCount()
+      for i in xrange(nmt):
+        mt = fm.momentTensor(i)
+        if not mt.derivedOriginID(): continue
+
+        # Origin already added
+        if ep.findOrigin(mt.derivedOriginID()) is not None:
+          continue
+
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+        derivedOrigin = self._cache.get(seiscomp3.DataModel.Origin, mt.derivedOriginID())
+        seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+        if derivedOrigin is None:
+          seiscomp3.Logging.warning("derived origin for MT %s not found" % mt.derivedOriginID())
+          continue
+
+        # Origin has been read from database -> read all childs
+        if not self._cache.cached():
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
+          self.query().load(derivedOrigin);
+          seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(False)
+
+        # Add it to the event parameters
+        ep.add(derivedOrigin)
+
 
     if org:
       seiscomp3.DataModel.PublicObject.SetRegistrationEnabled(wasEnabled)
@@ -442,13 +505,15 @@ class EventHistory(seiscomp3.Client.Application):
       self._currentDirectory = directory
       #self.writeLog(self._currentDirectory + evt.publicID(), "#<\n" + txt + "#>\n")
       #self.writeLog(self._currentDirectory + evt.publicID() + ".last", txt, "w")
-      ar.create(self._currentDirectory + self.convertID(evt.publicID()) + "." + ("%06d" % self.eventProgress(evt.publicID(), directory)) + ".xml.zip")
+      ar.create(self._currentDirectory + self.convertID(evt.publicID()) + "." + ("%06d" % self.eventProgress(evt.publicID(), directory)) + ".xml" + self._revisionFileExt)
       ar.setCompression(True)
+      if self._useGZIP: ar.setCompressionMethod(seiscomp3.IO.XMLArchive.GZIP)
       ar.writeObject(ep)
       ar.close()
       # Write last file to root
-      ar.create(self._directory + "last.xml.zip")
+      ar.create(self._directory + "last.xml" + self._revisionFileExt)
       ar.setCompression(True)
+      if self._useGZIP: ar.setCompressionMethod(seiscomp3.IO.XMLArchive.GZIP)
       ar.writeObject(ep)
       ar.close()
       # Write last xml

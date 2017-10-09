@@ -41,9 +41,9 @@ class SC_SYSTEM_CORE_API RecordIterator : public std::iterator<std::input_iterat
 	//  Operators
 	// ------------------------------------------------------------------
 	public:
-		RecordIterator& operator=(const RecordIterator &iter);
-		Record* operator*();
-		RecordIterator& operator++();
+		RecordIterator &operator=(const RecordIterator &iter);
+		Record *operator*();
+		RecordIterator &operator++();
 		RecordIterator operator++(int);
 		bool operator!=(const RecordIterator &iter) const;
 		bool operator==(const RecordIterator &iter) const;
@@ -58,7 +58,7 @@ class SC_SYSTEM_CORE_API RecordIterator : public std::iterator<std::input_iterat
 		 * @return A RecordInput pointer which must not be deleted
 		 *         by the caller!
 		 */
-		RecordInput* source() const;
+		RecordInput *source() const;
 
 		/**
 		 * Returns the current record read from the input stream.
@@ -66,7 +66,7 @@ class SC_SYSTEM_CORE_API RecordIterator : public std::iterator<std::input_iterat
 		 * by the caller.
 		 * @return The raw record pointer.
 		 */
-		Record* current() const;
+		Record *current() const;
 
 
 	// ------------------------------------------------------------------
@@ -74,8 +74,8 @@ class SC_SYSTEM_CORE_API RecordIterator : public std::iterator<std::input_iterat
 	// ------------------------------------------------------------------
 	private:
 		RecordIterator(RecordInput *from, Record *cur);
-		RecordInput* _source;
-		Record* _current;
+		RecordInput *_source;
+		Record      *_current;
 
 	friend class RecordInput;
 };
@@ -95,21 +95,23 @@ class SC_SYSTEM_CORE_API RecordInput : public Seiscomp::Core::BaseObject {
 	//  Iteration
 	// ------------------------------------------------------------------
 	public:
-		RecordIterator begin() throw(Core::GeneralException);
+		RecordIterator begin();
 		RecordIterator end();
-		Record* next() throw(Core::GeneralException);
+		Record *next();
 
 
 	// ------------------------------------------------------------------
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
-		RecordStream* _in;
-		Array::DataType _datatype;
-		Record::Hint _hint;
+		RecordStream    *_in;
+		Array::DataType  _datatype;
+		Record::Hint     _hint;
 };
+
 
 }
 }
+
 
 #endif

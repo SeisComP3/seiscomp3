@@ -235,18 +235,21 @@ DECLARE_BLOCKETTE(UnitsAbbreviations) {
 	public:
 		virtual ParseResult Parse(std::string record);
 
-		int GetLookup(){return lookup_code;}
-		std::string GetName(){return name;}
-		std::string GetDescription(){return description;}
+		int GetLookup() const { return lookup_code; }
+		std::string GetName() const { return name; }
+		std::string GetDescription() const { return description; }
 
 	private:
 		int         lookup_code;
 		std::string name, description;
 };
 
-struct Component
-{
-	std::string	station, location, channel, subchannel, component_weight;
+struct Component {
+	std::string station,
+	            location,
+	            channel,
+	            subchannel,
+	            component_weight;
 };
 
 DECLARE_BLOCKETTE(BeamConfiguration) {
@@ -410,6 +413,8 @@ DECLARE_BLOCKETTE2(ResponseCoefficients, SequenceRecord) {
 		int	number_of_numerators, number_of_denominators;
 		int  signal_in_units, signal_out_units;
 		char response_type;
+
+	public:
 		std::vector<Coefficient> numerators;
 		std::vector<Coefficient> denominators;
 };
@@ -445,6 +450,8 @@ DECLARE_BLOCKETTE2(ResponseList, SequenceRecord) {
 		int	number_of_responses;
 		int	signal_in_units, signal_out_units;
 		std::vector<ListedResponses> responses_listed;
+
+	friend class StationControl;
 };
 
 DECLARE_BLOCKETTE2(ResponseListDictionary, ResponseList) {
@@ -566,6 +573,24 @@ class AbbreviationDictionaryControl : public Control
 		GenericResponseDictionaryList        grd;
 		DecimationDictionaryList             dd;
 		ChannelSensitivityGainDictionaryList csgd;
+
+		std::string UnitName(int lookup) const {
+			for ( size_t i = 0; i < ua.size(); ++i ) {
+				if ( lookup == ua[i]->GetLookup() )
+					return ua[i]->GetName();
+			}
+
+			return std::string();
+		}
+
+		std::string UnitDescription(int lookup) const {
+			for ( size_t i = 0; i < ua.size(); ++i ) {
+				if ( lookup == ua[i]->GetLookup() )
+					return ua[i]->GetDescription();
+			}
+
+			return std::string();
+		}
 };
 
 // definition of all Station Control Headers blockettes
@@ -643,6 +668,7 @@ DECLARE_BLOCKETTE(ChannelIdentifier) {
 		double GetDip(){return dip;}
 		double GetSampleRate(){return sample_rate;}
 		double GetMaxClockDrift(){return max_clock_drift;}
+		double GetMinimumInputDecimationSampleRate() const;
 		double GetMaximumInputDecimationSampleRate() const;
 		std::string GetLocation(){return location;}
 		std::string GetChannel(){return channel;}
@@ -700,8 +726,11 @@ class StationControl : public Control
 	public:
 		void ParseVolumeRecord(std::string);
 		void EmptyVectors();
+		// Reading is finished, do post processing such as merging responses
+		void Flush();
+
 		StationIdentifierList si;
- 	protected:
+
 	private:
 		Logging log;
 		int last_blockette, rest_size, eos, eoc;

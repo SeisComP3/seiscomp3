@@ -1814,7 +1814,13 @@ int DatabaseReader::load(Inventory* inventory) {
 
 	count += loadResponseFIRs(inventory);
 
+	if ( supportsVersion<0,10>() )
+		count += loadResponseIIRs(inventory);
+
 	count += loadResponsePolynomials(inventory);
+
+	if ( supportsVersion<0,8>() )
+		count += loadResponseFAPs(inventory);
 
 	count += loadNetworks(inventory);
 	{
@@ -2011,6 +2017,36 @@ int DatabaseReader::loadResponseFIRs(Inventory* inventory) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadResponseIIRs(Inventory* inventory) {
+	if ( !validInterface() || inventory == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(inventory, ResponseIIR::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			inventory->add(ResponseIIR::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("Inventory::add(ResponseIIR) -> ResponseIIR has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int DatabaseReader::loadResponsePolynomials(Inventory* inventory) {
 	if ( !validInterface() || inventory == NULL ) return 0;
 
@@ -2027,6 +2063,36 @@ int DatabaseReader::loadResponsePolynomials(Inventory* inventory) {
 		}
 		else
 			SEISCOMP_INFO("Inventory::add(ResponsePolynomial) -> ResponsePolynomial has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadResponseFAPs(Inventory* inventory) {
+	if ( !validInterface() || inventory == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(inventory, ResponseFAP::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			inventory->add(ResponseFAP::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("Inventory::add(ResponseFAP) -> ResponseFAP has already another parent");
 		++it;
 	}
 	it.close();

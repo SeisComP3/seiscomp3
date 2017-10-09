@@ -58,7 +58,7 @@ WaveformProcessor::WaveformProcessor(const Core::TimeSpan &initTime,
 	_gapTolerance = 0.;
 	_enableGapInterpolation = false;
 	_enableSaturationCheck = false;
-	_saturationThreshold = 0.9*((1 << 23)-1);
+	_saturationThreshold = -1;
 	reset();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -326,7 +326,7 @@ bool WaveformProcessor::store(const Record *record) {
 		if ( _stream.receivedSamples > _stream.neededSamples ) {
 			//_initialized = true;
 			process(record, *arr);
-			// NOTE: To allow derived classes to notice modification of the variable 
+			// NOTE: To allow derived classes to notice modification of the variable
 			//       _initialized, it is necessary to set this after calling process.
 			_stream.initialized = true;
 		}
@@ -385,8 +385,10 @@ void WaveformProcessor::fill(size_t n, double *samples) {
 
 	if ( _enableSaturationCheck ) {
 		for ( size_t i = 0; i < n; ++i ) {
-			if ( fabs(samples[i]) >= _saturationThreshold )
+			if ( fabs(samples[i]) >= _saturationThreshold ) {
 				setStatus(DataClipped, samples[i]);
+				break;
+			}
 		}
 	}
 
@@ -476,14 +478,105 @@ void WaveformProcessor::close() const {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool WaveformProcessor::setup(const Settings &settings) {
-	double sat_thrs;
-	if ( settings.getValue(sat_thrs, "waveforms.saturationThreshold") ) {
+bool WaveformProcessor::parseSaturationThreshold(const Settings &settings,
+                                                 const std::string &optionName) {
+	std::string saturationThreshold;
+
+	if ( settings.getValue(saturationThreshold, optionName) ) {
+		Core::trim(saturationThreshold);
+
+		if ( saturationThreshold == "false" ) {
+			setSaturationCheckEnabled(false);
+			return true;
+		}
+
+		// Parse it
+		size_t atPos = saturationThreshold.find('@');
+		double sat_thrs = -1;
+
+		if ( atPos == std::string::npos ) {
+			// This is an absolute value
+			if ( !Core::fromString(sat_thrs, saturationThreshold) ) {
+				SEISCOMP_ERROR("Invalid saturation threshold: %s", saturationThreshold.c_str());
+				return false;
+			}
+		}
+		else {
+			std::string strBits = saturationThreshold.substr(atPos+1);
+			std::string strValue;
+			int bits;
+			double value;
+
+			if ( strBits.empty() ) {
+				SEISCOMP_ERROR("No effective bits specified: %s",
+				               saturationThreshold.c_str());
+				return false;
+			}
+
+			if ( !Core::fromString(bits, strBits) ) {
+				SEISCOMP_ERROR("Invalid saturation threshold bits: %s",
+				               saturationThreshold.c_str());
+				return false;
+			}
+
+			if ( bits <= 0 || bits > 64 ) {
+				SEISCOMP_ERROR("Number of effective bits out of range: %d", bits);
+				return false;
+			}
+
+			strValue = saturationThreshold.substr(0, atPos);
+			Core::trim(strValue);
+
+			if ( strValue.empty() ) {
+				SEISCOMP_ERROR("Saturation threshold relative value is empty: %s",
+				               saturationThreshold.c_str());
+				return false;
+			}
+
+			bool isPercent = false;
+			if ( *strValue.rbegin() == '%' ) {
+				isPercent = true;
+				strValue.resize(strValue.size()-1);
+			}
+
+			if ( strValue.empty() ) {
+				SEISCOMP_ERROR("Saturation threshold relative value is empty: %s",
+				               saturationThreshold.c_str());
+				return false;
+			}
+
+			if ( !Core::fromString(value, strValue) ) {
+				SEISCOMP_ERROR("Invalid saturation threshold relative value: %s",
+				               saturationThreshold.c_str());
+				return false;
+			}
+
+			if ( isPercent )
+				value *= 0.01;
+
+			if ( value < 0 || value > 1 ) {
+				SEISCOMP_ERROR("Number of relative value out of range [0,1]: %f", value);
+				return false;
+			}
+
+			sat_thrs = (1 << bits) * value;
+		}
+
 		setSaturationThreshold(sat_thrs);
 		setSaturationCheckEnabled(true);
 	}
-	else
-		setSaturationCheckEnabled(false);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool WaveformProcessor::setup(const Settings &settings) {
+	if ( !parseSaturationThreshold(settings, "waveforms.saturationThreshold") )
+		return false;
 
 	return Processor::setup(settings);
 }

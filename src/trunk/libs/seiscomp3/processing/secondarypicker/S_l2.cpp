@@ -469,7 +469,8 @@ void SL2Picker::process(const Record *rec, const DoubleArray &filteredData) {
 			// Apply detection filter
 			if ( _stream.filter )
 				_stream.filter->apply(1, &fv);
-				if ( _saveIntermediate ) _detectionTrace.append(1, fv);
+
+			if ( _saveIntermediate ) _detectionTrace.append(1, fv);
 
 			//std::cout << v << " " << fv << std::endl;
 

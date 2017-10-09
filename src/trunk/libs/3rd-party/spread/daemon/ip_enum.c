@@ -18,12 +18,13 @@
  * The Creators of Spread are:
  *  Yair Amir, Michal Miskin-Amir, Jonathan Stanton, John Schultz.
  *
- *  Copyright (C) 1993-2013 Spread Concepts LLC <info@spreadconcepts.com>
+ *  Copyright (C) 1993-2014 Spread Concepts LLC <info@spreadconcepts.com>
  *
  *  All Rights Reserved.
  *
  * Major Contributor(s):
  * ---------------
+ *    Amy Babay            babay@cs.jhu.edu - accelerated ring protocol.
  *    Ryan Caudy           rcaudy@gmail.com - contributions to process groups.
  *    Claudiu Danilov      claudiu@acm.org - scalable wide area support.
  *    Cristina Nita-Rotaru crisn@cs.purdue.edu - group communication security.
@@ -33,19 +34,21 @@
  */
 
 #include <string.h>
-#include <netdb.h>
+
+#include "ip_enum.h"
+#include "spu_alarm.h"
 
 #ifndef ARCH_PC_WIN95
+#  include <netdb.h>
 #  include <net/if.h>
 #  include <sys/ioctl.h>
 #  include <netinet/in.h>
 #  ifdef sun
 #    include <sys/sockio.h>  /* for SIOCGIFCONF */
 #  endif
+#else
+#  include <WinSock2.h>
 #endif
-
-#include "ip_enum.h"
-#include "spu_alarm.h"
 
 #define MAX_IF 8192     /* max interfaces to look up */
 #define MIN_IF 10       /* must be able to look up at least this many */

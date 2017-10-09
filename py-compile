@@ -62,6 +62,14 @@ while test $# -ne 0; do
       fi
       shift
       ;;
+    --python)
+      PYTHON=$2
+      if test -z "$PYTHON"; then
+         echo "$0: Missing argument to --python." 1>&2
+         exit 1
+      fi
+      shift
+      ;;
     -h|--h*)
       cat <<\EOF
 Usage: py-compile [--help] [--version] [--basedir DIR] [--destdir DIR] [--outputdir DIR] FILES..."
@@ -89,6 +97,8 @@ EOF
   esac
   shift
 done
+
+echo "$PYTHON" 1>&2
 
 if test -z "$files"; then
     echo "$0: No files given.  Try \`$0 --help' for more information." 1>&2

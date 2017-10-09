@@ -138,6 +138,10 @@ class Config {
 		// The secondary picker type to use
 		std::string secondaryPickerType;
 
+		// Whether kill previously started secondary pickers when a new
+		// primary pick has been declared
+		bool        killPendingSecondaryProcessors;
+
 		// Send detections as well if a picker is configured?
 		bool        sendDetections;
 

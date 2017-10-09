@@ -55,7 +55,7 @@ class SC_GUI_API Decorator {
 		// Public Interface
 		// ------------------------------------------------------------------
 	public:
-		void draw(const Canvas *canvas, QPainter& painter) {
+		void draw(const Canvas *canvas, QPainter &painter) {
 			if ( _decorator.get() )
 				_decorator->draw(canvas, painter);
 			customDraw(canvas, painter);

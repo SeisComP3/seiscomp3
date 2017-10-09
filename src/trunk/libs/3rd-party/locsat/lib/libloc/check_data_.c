@@ -86,7 +86,6 @@ char	*data_phase_type, *data_sta_id, *data_type, *phase_type, *sta_id;
 
 	int	i, j, n, len_d_p_t, len_pt, longer;
 	int	len_d_t = 4, len_sta = *sta_len, len_p_t = *phase_len;
-	char	*wave_test;
 
 	for (n = 0; n < *num_data; n++)
 	{

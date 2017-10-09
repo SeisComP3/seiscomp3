@@ -36,6 +36,8 @@ Edit History:
    10 2009-09-15 rdr Add DSS support for serial connection to Q330.
    11 2010-03-27 rdr Add Q335 support.
    12 2010-08-21 rdr In lib_destroy_330 clear ct before doing any deallocations.
+   13 2015-09-25 dsn Configure pthread for libthread as detached thread, 
+                     libthread calls pthread_detach() and pthread_exit().
 */
 /* Make sure libstrucs.h is included */
 #ifndef libstrucs_h
@@ -483,6 +485,7 @@ begin
   double now_, diff ;
   longint new_ten_sec ;
 
+  pthread_detach(pthread_self());
   q330 = p ;
   repeat
     switch (q330->libstate) begin
@@ -653,6 +656,7 @@ begin
   pq330 q330 ;
 #ifndef X86_WIN32
   integer err ;
+  pthread_attr_t attr;
 #endif
 
   *ct = malloc(sizeof(tq330)) ;
@@ -723,7 +727,9 @@ begin
 #ifdef CMEX32
   err = 0 ;
 #else
-  err = pthread_create(addr(q330->threadid), NULL, libthread, q330) ;
+  err = pthread_attr_init(&attr);
+  if (! err) err = pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
+  if (! err) err = pthread_create(addr(q330->threadid), NULL, libthread, q330) ;
 #endif
   if (err)
 #endif

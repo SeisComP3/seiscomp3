@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(7, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(11, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x070000
+#define SC_API_VERSION 0x0B0000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,109 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "11.0.0"   0x0B0000
+   - Remove dynamic type throw declarations from all methods as this is
+     deprecated in current C++ standard
+   - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
+   - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent
+     canvas
+   - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
+   - Added Seiscomp::Gui::Map::Canvas::size
+   - Changed Seiscomp::Gui::Map::Canvas::menu parent parameter type from QWidget to QMenu
+   - Changed Seiscomp::Gui::Map::Layer::menu parent parameter type from QWidget to QMenu
+   - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added Seiscomp::Gui::Map::Layer::baseBufferUpdated
+   - Added Seiscomp::Gui::Map::Layer::size
+   - Added Seiscomp::Gui::Map::Layer::isInside
+   - Added Seiscomp::Gui::Map::Layer::handleEnterEvent
+   - Added Seiscomp::Gui::Map::Layer::handleLeaveEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseMoveEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseDoubleClickEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMousePressEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseReleaseEvent
+   - Added Seiscomp::Gui::Map::Legend::contextResizeEvent
+   - Removed virtual declaration of Seiscomp::Gui::Map::Legend::size
+   - Removed class Seiscomp::Gui::Map::CanvasDelegate
+   - Added class Seiscomp::Gui::EventLayer
+   - Added Seiscomp::Gui::OriginSymbol::setColor
+   - Added Seiscomp::Gui::OriginSymbol::color
+   - Added Seiscomp::Gui::OriginSymbol::setFillColor
+   - Added Seiscomp::Gui::OriginSymbol::fillColor
+   - Added Seiscomp::Gui::MapWidget::setDrawLegends
+   - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
+   - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
+   - Added Seiscomp::Gui::Application::messageGroups
+   - Added Seiscomp::Gui::Application::initLicense
+   - Added Seiscomp::Gui::LUT::operator[]
+   - Added class Seiscomp::Math::Filtering::Min<T>
+   - Added class Seiscomp::Math::Filtering::Max<T>
+   - Added Seiscomp::Gui::RecordWidget::setGridVSpacing
+   - Added Seiscomp::Gui::RecordWidget::setGridVRange
+   - Added Seiscomp::Gui::RecordWidget::setGridVScale
+   - Added Seiscomp::Gui::AbstractLegend
+   - Added Seiscomp::Gui::Plot::addGraph(graph)
+   - Added Seiscomp::Gui::Plot::setLegend
+   - Added Seiscomp::Gui::Plot::isInsidePlot
+   - Added Seiscomp::Gui::Plot::plotRect
+   - Added virtual Seiscomp::Gui::Graph::draw
+   - Added virtual Seiscomp::Gui::Graph::drawSymbol
+   - Added Seiscomp::Gui::Graph::setName/name
+   - Added Seiscomp::Client::Application::reloadBindings
+   - Increased datamodel version to 0.10
+   - Added class Seiscomp::DataModel::ResponseIIR
+   - Added hypocenter and receiver to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
+
+ "10.0.0"   0x0A0000
+   - Added Seiscomp::Core::Time::LocalTimeZone()
+   - Added Seiscomp::IO::GFArchive::getTravelTime(...)
+   - Added Seiscomp::Math::WindowFunc and several implementations
+   - Changed Seiscomp::Util::Bindings::getKeys to const
+   - Added Seiscomp::Gui::Map:Canvas::prependLayer(...)
+   - Added Seiscomp::Gui::Map:Canvas::insertLayerBefore(...)
+   - Fixed bug in Seiscomp::Gui::Map::TextureCache that affected custom
+     Seiscomp::Gui::Map::TileStore implementations
+   - Added Seiscomp::Gui::RecordView::coveredTimeRange()
+   - Added Seiscomp::Core::stringify(...)
+   - Added Seiscomp::Gui::timeToString()
+   - Added Seiscomp::Gui::timeToLabel(...)
+   - Added Seiscomp::Gui::MapWidget::setGrayScale(...)
+   - Added Seiscomp::Gui::Map::Layer::bufferUpdated(...)
+   - Added Seiscomp::Gui::Map::CompositionMode (Source, SourceOver, Multiply)
+   - Changed prototype of Seiscomp::Gui::Map::Canvas::drawImage(..., +CompositionMode)
+   - Changed prototype of Seiscomp::Gui::Map::Projection::drawImage(..., +CompositionMode)
+   - Reworked Seiscomp::Gui::Map::Symbol and add geodetic location and screen
+     position attributes (Symbol API v2)
+   - Add default implementation of Seiscomp::Gui::Map::Symbol::calculateMapPosition
+
+ "9.1.0"   0x090100
+   - Added Seiscomp::Client::Application::Stage enum PLUGINS
+   - Added Seiscomp::Gui::TensorRenderer::renderNP
+   - Fixed parameter const'ness of Seiscomp::Math::Tensor2S
+
+ "9.0.0"   0x090000
+   - Added member creationInfo to class Seiscomp::DataModel::ConfigStation
+     and increased datamodel version to 0.9
+   - Added optional error code to Seiscomp::Communication class methods
+   - Changed internal Seiscomp::Util::Timer API
+   - Added Seiscomp::Util::Timer::setTimeout2
+   - Added Seiscomp::Core::Archive::setStrictMode
+   - Added Seiscomp::Core::Archive::isStrictMode
+   - Added Seiscomp::IO::DatabaseInterface::numberOfAffectedRows
+   - Added optional error code to Seiscomp::Inventory class
+   - Added macro REREGISTER_CLASS which allows to overwrite class registrations
+   - Added method Seiscomp::Gui::Alg::MapTreeNode::parent()
+   - Allow Seiscomp::Gui::Map::TileStore::load to return null images
+   - Increased TILESTORE version to 2
+
+ "8.0.0"   0x080000
+   - Added class Seiscomp::DataModel::ResponseFAP
+   - Changed Seiscomp::IO::GFArchive::addRequest from 1D request signature to
+     3D request signature (distance,depth) -> (source,receiver)
+   - Made Seiscomp::RecordStream::SDSArchive private members and methods
+     protected
+   - Added GUI plotting library
+
  "7.0.0"   0x070000
    - Added support for httpmsgbus messaging protocol
    - Added Seiscomp::IO::HttpSocket
@@ -45,6 +148,7 @@ namespace Core {
    - Added Seiscomp::Communication::NetworkInterface::getSequenceNumber
    - Added Seiscomp::Communication::SystemConnection::setSequenceNumber
    - Added Seiscomp::Communication::SystemConnection::getSequenceNumber
+   - Modify Seiscomp::IO::Socket don't start timeout stopwatch automatically
 
  "6.1.0"   0x060100
    - Added Seiscomp::Gui::RecordWidget::setRecordStepFunction

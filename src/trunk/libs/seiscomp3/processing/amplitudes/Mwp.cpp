@@ -37,21 +37,6 @@ namespace Processing {
 namespace {
 
 
-// [density]=kg/m^3
-double rho(void) {
-	return 3400.;
-}
-
-// [velocity]=m/s
-double alpha(void) {
-	return 7900.;
-}
-
-// radiation pattern
-double fp(void) {
-	return 1.;
-}
-
 /*
 double calcSlope(DoubleArray& ar, double dt) {
 	double varx = 0.;

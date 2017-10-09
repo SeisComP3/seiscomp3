@@ -73,7 +73,7 @@ class SC_SYSTEM_CORE_API JournalEntry : public Object {
 	// ------------------------------------------------------------------
 	public:
 		void setCreated(const OPT(Seiscomp::Core::Time)& created);
-		Seiscomp::Core::Time created() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time created() const;
 
 		void setObjectID(const std::string& objectID);
 		const std::string& objectID() const;

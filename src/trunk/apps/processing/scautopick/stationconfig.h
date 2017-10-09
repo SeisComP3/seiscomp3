@@ -31,7 +31,7 @@ struct StreamConfig {
 	StreamConfig(double on, double off, double tcorr,
 	             const std::string &f);
 
-	std::string  locCode;
+	std::string  locationCode;
 	std::string  channel;
 
 	OPT(double)  triggerOn;

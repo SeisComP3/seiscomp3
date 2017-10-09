@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -9,8 +9,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
-
-
 
 
 #ifndef __SEISCOMP_APPLICATIONS_EVENTTOOL_CONFIG_H__
@@ -56,6 +54,7 @@ struct Config {
 	size_t          minMatchingPicks;
 	double          maxMatchingPicksTimeDiff;
 	bool            matchingPicksTimeDiffAND;
+	bool            matchingLooseAssociatedPicks;
 	size_t          minStationMagnitudes;
 	double          maxDist;
 	Core::TimeSpan  maxTimeDiff;

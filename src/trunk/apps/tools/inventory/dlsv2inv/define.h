@@ -7,23 +7,17 @@
 #define LINE_SEPARATOR  ' '
 #define TIME_SEPARATOR  ','
 #define ATTR_SEPARATOR  '='
-#define CSV_SEPARATOR	'|'
-#define SEED_SEPARATOR	'~'
+#define CSV_SEPARATOR   '|'
+#define SEED_SEPARATOR  '~'
 
 // waiting time for responses coming back
-#define LRECL		4096
-#define	LINE		512
+#define LRECL       4096
+#define	LINE        512
 
 // abbreviations for analogue or digital transformation
-#define ACCEL1		 "M/S**2"
-#define ACCEL2		 "M/S2"
-#define VELOCITY	 "M/S"
-#define DISPLACE	 "M"
-#define VOLTAGE		 "V"
-#define DIGITAL		 "COUNTS"
-#define TEMPERATURE  "C"
-#define TEMPERATURE2 "CELSIUS"
-#define PRESSURE     "PA"
+#define VOLTAGE     "V"
+#define AMPERE      "A"
+#define DIGITAL     "COUNTS"
 
 // initializing values for gettting or saving data
 #define ARCHIVE     "ARCH"

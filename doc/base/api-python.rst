@@ -148,7 +148,7 @@ Classes
         Parameter [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Parameter</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="value"><font color="#8b0000">+ value: string</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
         ConfigModule [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigModule</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ configStation: ConfigStation [0..*]</font></td></tr></table>>]
-        ConfigStation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigStation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="networkCode"><font color="#8b0000">+ networkCode: string</font></td></tr><tr><td align="left" port="stationCode"><font color="#8b0000">+ stationCode: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ setup: Setup [0..*]</font></td></tr></table>>]
+        ConfigStation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigStation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="networkCode"><font color="#8b0000">+ networkCode: string</font></td></tr><tr><td align="left" port="stationCode"><font color="#8b0000">+ stationCode: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ setup: Setup [0..*]</font></td></tr></table>>]
         Setup [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Setup</td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr></table>>]
         Config -> ParameterSet
         ParameterSet -> Parameter
@@ -199,7 +199,9 @@ Classes
   * :ref:`Decimation <api-python-datamodel-decimation>`
   * :ref:`Network <api-python-datamodel-network>`
   * :ref:`RealArray <api-python-datamodel-realarray>`
+  * :ref:`ResponseFAP <api-python-datamodel-responsefap>`
   * :ref:`ResponseFIR <api-python-datamodel-responsefir>`
+  * :ref:`ResponseIIR <api-python-datamodel-responseiir>`
   * :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
   * :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
   * :ref:`Sensor <api-python-datamodel-sensor>`
@@ -232,9 +234,11 @@ Classes
         Datalogger [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Datalogger</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="digitizerModel"><font color="#8b0000">+ digitizerModel: string</font></td></tr><tr><td align="left" port="digitizerManufacturer"><font color="#8b0000">+ digitizerManufacturer: string</font></td></tr><tr><td align="left" port="recorderModel"><font color="#8b0000">+ recorderModel: string</font></td></tr><tr><td align="left" port="recorderManufacturer"><font color="#8b0000">+ recorderManufacturer: string</font></td></tr><tr><td align="left" port="clockModel"><font color="#8b0000">+ clockModel: string</font></td></tr><tr><td align="left" port="clockManufacturer"><font color="#8b0000">+ clockManufacturer: string</font></td></tr><tr><td align="left" port="clockType"><font color="#8b0000">+ clockType: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="maxClockDrift"><font color="#8b0000">+ maxClockDrift: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ dataloggerCalibration: DataloggerCalibration [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ decimation: Decimation [0..*]</font></td></tr></table>>]
         DataloggerCalibration [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataloggerCalibration</td></tr><tr><td align="left" port="serialNumber"><font color="#8b0000">+ serialNumber: string</font></td></tr><tr><td align="left" port="channel"><font color="#8b0000">+ channel: int</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Decimation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Decimation</td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int</font></td></tr><tr><td align="left" port="analogueFilterChain"><font color="#8b0000">+ analogueFilterChain: Blob  [0..1]</font></td></tr><tr><td align="left" port="digitalFilterChain"><font color="#8b0000">+ digitalFilterChain: Blob  [0..1]</font></td></tr></table>>]
-        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
-        ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr></table>>]
+        ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponseIIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseIIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfNumerators"><font color="#8b0000">+ numberOfNumerators: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfDenominators"><font color="#8b0000">+ numberOfDenominators: int  [0..1]</font></td></tr><tr><td align="left" port="numerators"><font color="#8b0000">+ numerators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="denominators"><font color="#8b0000">+ denominators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponsePolynomial [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePolynomial</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="frequencyUnit"><font color="#8b0000">+ frequencyUnit: string</font></td></tr><tr><td align="left" port="approximationType"><font color="#8b0000">+ approximationType: string</font></td></tr><tr><td align="left" port="approximationLowerBound"><font color="#8b0000">+ approximationLowerBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationUpperBound"><font color="#8b0000">+ approximationUpperBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationError"><font color="#8b0000">+ approximationError: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponseFAP [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFAP</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfTuples"><font color="#8b0000">+ numberOfTuples: int  [0..1]</font></td></tr><tr><td align="left" port="tuples"><font color="#8b0000">+ tuples: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Network [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Network</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="institutions"><font color="#8b0000">+ institutions: string</font></td></tr><tr><td align="left" port="region"><font color="#8b0000">+ region: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="netClass"><font color="#8b0000">+ netClass: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ station: Station [0..*]</font></td></tr></table>>]
         Station [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Station</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left" port="place"><font color="#8b0000">+ place: string</font></td></tr><tr><td align="left" port="country"><font color="#8b0000">+ country: string</font></td></tr><tr><td align="left" port="affiliation"><font color="#8b0000">+ affiliation: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="archiveNetworkCode"><font color="#8b0000">+ archiveNetworkCode: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ sensorLocation: SensorLocation [0..*]</font></td></tr></table>>]
         SensorLocation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>SensorLocation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ auxStream: AuxStream [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stream: Stream [0..*]</font></td></tr></table>>]
@@ -251,7 +255,9 @@ Classes
         Datalogger -> Decimation
         Inventory -> ResponsePAZ
         Inventory -> ResponseFIR
+        Inventory -> ResponseIIR
         Inventory -> ResponsePolynomial
+        Inventory -> ResponseFAP
         Inventory -> Network
         Network -> Station
         Station -> SensorLocation
@@ -360,25 +366,25 @@ Reference
    .. py:method:: setParent(parent)
 
       :param parent: A PublicObject.
-      :rtype: A boolean flag indicating success with True, False otherwise.
+      :rtype: A Boolean flag indicating success with True, False otherwise.
 
       Sets the parent to :ref:`PublicObject <api-python-datamodel-publicobject>`.
       This is an internal method and should not be called from applications.
       Instead a class should be derived from Object which calls
-      this method internally when childs are being added or removed.
+      this method internally when children are being added or removed.
 
    .. py:method:: update()
 
-      Creates an update notifier for this object ignoring its childs. If an
+      Creates an update notifier for this object ignoring its children. If an
       attribute of an object is changed this methods needs to be called
       manually since attribute changes are not tracked automatically by the
-      notifier framework. Only hierachy modifications such as add and remove
+      notifier framework. Only hierarchy modifications such as add and remove
       child objects.
 
    .. py:method:: assign(other)
 
       :param other: A Object.
-      :rtype: A boolean flag indicating success with True, False otherwise.
+      :rtype: A Boolean flag indicating success with True, False otherwise.
 
       Assign the metadata of 'other' to 'this' without others children.
       Returns True, if 'this' and 'other' are of same type, False otherwise.
@@ -394,21 +400,21 @@ Reference
 
    .. py:method:: attachTo(parent)
 
-      :rtype: A boolean flag indicating success with True, False otherwise.
+      :rtype: A Boolean flag indicating success with True, False otherwise.
 
       Adds the object to a parent. If it has already a parent or is of
       wrong type, False is returned.
 
    .. py:method:: detachFrom(parent)
 
-      :rtype: A boolean flag indicating success with True, False otherwise.
+      :rtype: A Boolean flag indicating success with True, False otherwise.
 
       Removes the object from a parent. If it has another or no parent,
       False is returned.
 
    .. py:method:: detach()
 
-      :rtype: A boolean flag indicating success with True, False otherwise.
+      :rtype: A Boolean flag indicating success with True, False otherwise.
 
       Removes the object from its parent object if a parent is set.
 
@@ -437,7 +443,7 @@ Reference
 .. py:class:: Notifier(parentID, operation, object)
 
    Class to represent a change in the object tree. A notifier takes a parentID,
-   an operation to apply and a child object. The child object is without childs.
+   an operation to apply and a child object. The child object is without children.
 
    .. py:staticmethod:: Enable()
 
@@ -492,7 +498,7 @@ Reference
 
    .. py:staticmethod:: Create(parentID, operation, object)
 
-      :param parentID: The publicId of the parent object that is target of the operation.
+      :param parentID: The publicID of the parent object that is target of the operation.
       :param operation: The operation applied to the parent object.
       :param object: The object that is the operation's "operand".
       :rtype: The Notifier object.
@@ -518,7 +524,7 @@ Reference
 
       Applies the notifier to the local object tree.
 
-   .. py:method: setParentID(parenbtID)
+   .. py:method: setParentID(parentID)
 
       Setter of parentID.
 
@@ -568,7 +574,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Access <api-python-datamodel-access>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -584,7 +590,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Access <api-python-datamodel-access>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setNetworkCode(networkCode)
@@ -659,7 +665,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: routing()
@@ -727,20 +733,20 @@ Reference
 
       :rtype: a new object of type Amplitude.
 
-      Creates and registeres (if enabled) a Amplitude instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Amplitude instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Amplitude.
 
-      Creates and registeres (if enabled) a Amplitude instance with
+      Creates and registers (if enabled) a Amplitude instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Amplitude <api-python-datamodel-amplitude>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -784,7 +790,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeWindow(timeWindow)
@@ -800,7 +806,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPeriod(period)
@@ -816,7 +822,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -832,7 +838,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUnit(unit)
@@ -869,7 +875,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFilterID(filterID)
@@ -903,7 +909,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMagnitudeHint(magnitudeHint)
@@ -930,7 +936,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -945,13 +951,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Amplitude. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -960,19 +966,19 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Amplitude.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -994,7 +1000,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: eventParameters()
 
@@ -1031,13 +1037,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -1070,7 +1076,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`AmplitudeReference <api-python-datamodel-amplitudereference>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1086,7 +1092,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`AmplitudeReference <api-python-datamodel-amplitudereference>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setAmplitudeID(amplitudeID)
@@ -1158,7 +1164,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkLog <api-python-datamodel-arclinklog>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1167,7 +1173,7 @@ Reference
    .. py:method:: add(arclinkRequest)
 
       :param arclinkRequest: Object of type :ref:`ArclinkRequest <api-python-datamodel-arclinkrequest>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ArclinkRequest object to ArclinkLog. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -1176,7 +1182,7 @@ Reference
    .. py:method:: add(arclinkUser)
 
       :param arclinkUser: Object of type :ref:`ArclinkUser <api-python-datamodel-arclinkuser>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ArclinkUser object to ArclinkLog. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -1185,36 +1191,36 @@ Reference
    .. py:method:: remove(arclinkRequest)
 
       :param arclinkRequest: Object of type :ref:`ArclinkRequest <api-python-datamodel-arclinkrequest>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ArclinkRequest object from ArclinkLog.
 
    .. py:method:: remove(arclinkUser)
 
       :param arclinkUser: Object of type :ref:`ArclinkUser <api-python-datamodel-arclinkuser>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ArclinkUser object from ArclinkLog.
 
    .. py:method:: removeArclinkRequest(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkRequest(arclinkRequestIndex);
 
       :param arclinkRequestIndex: The index of the object to be removed of type ArclinkRequestIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkUser(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkUser(arclinkUserIndex);
 
       :param arclinkUserIndex: The index of the object to be removed of type ArclinkUserIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: arclinkRequestCount()
 
@@ -1242,7 +1248,7 @@ Reference
 
       Returns the ArclinkRequest at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: arclinkUser(idx)
 
@@ -1258,7 +1264,7 @@ Reference
 
       Returns the ArclinkUser at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findArclinkRequest(publicID)
 
@@ -1301,13 +1307,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -1341,20 +1347,20 @@ Reference
 
       :rtype: a new object of type ArclinkRequest.
 
-      Creates and registeres (if enabled) a ArclinkRequest instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ArclinkRequest instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ArclinkRequest.
 
-      Creates and registeres (if enabled) a ArclinkRequest instance with
+      Creates and registers (if enabled) a ArclinkRequest instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkRequest <api-python-datamodel-arclinkrequest>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1370,7 +1376,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ArclinkRequest <api-python-datamodel-arclinkrequest>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setRequestID(requestID)
@@ -1471,13 +1477,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(arclinkStatusLine)
 
       :param arclinkStatusLine: Object of type :ref:`ArclinkStatusLine <api-python-datamodel-arclinkstatusline>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ArclinkStatusLine object to ArclinkRequest. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -1486,7 +1492,7 @@ Reference
    .. py:method:: add(arclinkRequestLine)
 
       :param arclinkRequestLine: Object of type :ref:`ArclinkRequestLine <api-python-datamodel-arclinkrequestline>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ArclinkRequestLine object to ArclinkRequest. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -1495,36 +1501,36 @@ Reference
    .. py:method:: remove(arclinkStatusLine)
 
       :param arclinkStatusLine: Object of type :ref:`ArclinkStatusLine <api-python-datamodel-arclinkstatusline>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ArclinkStatusLine object from ArclinkRequest.
 
    .. py:method:: remove(arclinkRequestLine)
 
       :param arclinkRequestLine: Object of type :ref:`ArclinkRequestLine <api-python-datamodel-arclinkrequestline>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ArclinkRequestLine object from ArclinkRequest.
 
    .. py:method:: removeArclinkStatusLine(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkStatusLine(arclinkStatusLineIndex);
 
       :param arclinkStatusLineIndex: The index of the object to be removed of type ArclinkStatusLineIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkRequestLine(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArclinkRequestLine(arclinkRequestLineIndex);
 
       :param arclinkRequestLineIndex: The index of the object to be removed of type ArclinkRequestLineIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: arclinkStatusLineCount()
 
@@ -1552,7 +1558,7 @@ Reference
 
       Returns the ArclinkStatusLine at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: arclinkRequestLine(idx)
 
@@ -1568,7 +1574,7 @@ Reference
 
       Returns the ArclinkRequestLine at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: arclinkLog()
 
@@ -1605,13 +1611,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -1644,7 +1650,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkRequestLine <api-python-datamodel-arclinkrequestline>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1660,7 +1666,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ArclinkRequestLine <api-python-datamodel-arclinkrequestline>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setStart(start)
@@ -1697,7 +1703,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -1710,7 +1716,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNetClass(netClass)
@@ -1798,7 +1804,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkRequestSummary <api-python-datamodel-arclinkrequestsummary>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1851,7 +1857,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkStatusLine <api-python-datamodel-arclinkstatusline>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -1867,7 +1873,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ArclinkStatusLine <api-python-datamodel-arclinkstatusline>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setType(type)
@@ -1896,7 +1902,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMessage(message)
@@ -1977,20 +1983,20 @@ Reference
 
       :rtype: a new object of type ArclinkUser.
 
-      Creates and registeres (if enabled) a ArclinkUser instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ArclinkUser instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ArclinkUser.
 
-      Creates and registeres (if enabled) a ArclinkUser instance with
+      Creates and registers (if enabled) a ArclinkUser instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ArclinkUser <api-python-datamodel-arclinkuser>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -2006,7 +2012,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ArclinkUser <api-python-datamodel-arclinkuser>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -2068,13 +2074,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -2116,7 +2122,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Arrival <api-python-datamodel-arrival>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -2132,7 +2138,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Arrival <api-python-datamodel-arrival>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setPickID(pickID)
@@ -2170,7 +2176,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -2185,7 +2191,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDistance(distance)
@@ -2200,7 +2206,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTakeOffAngle(takeOffAngle)
@@ -2216,7 +2222,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeResidual(timeResidual)
@@ -2233,7 +2239,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessResidual(horizontalSlownessResidual)
@@ -2250,7 +2256,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthResidual(backazimuthResidual)
@@ -2266,7 +2272,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeUsed(timeUsed)
@@ -2279,7 +2285,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessUsed(horizontalSlownessUsed)
@@ -2295,7 +2301,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthUsed(backazimuthUsed)
@@ -2308,7 +2314,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -2324,7 +2330,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEarthModelID(earthModelID)
@@ -2351,7 +2357,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -2366,7 +2372,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -2432,20 +2438,20 @@ Reference
 
       :rtype: a new object of type AuxDevice.
 
-      Creates and registeres (if enabled) a AuxDevice instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a AuxDevice instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type AuxDevice.
 
-      Creates and registeres (if enabled) a AuxDevice instance with
+      Creates and registers (if enabled) a AuxDevice instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`AuxDevice <api-python-datamodel-auxdevice>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -2461,7 +2467,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`AuxDevice <api-python-datamodel-auxdevice>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -2514,13 +2520,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(auxSource)
 
       :param auxSource: Object of type :ref:`AuxSource <api-python-datamodel-auxsource>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a AuxSource object to AuxDevice. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -2529,19 +2535,19 @@ Reference
    .. py:method:: remove(auxSource)
 
       :param auxSource: Object of type :ref:`AuxSource <api-python-datamodel-auxsource>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added AuxSource object from AuxDevice.
 
    .. py:method:: removeAuxSource(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAuxSource(auxSourceIndex);
 
       :param auxSourceIndex: The index of the object to be removed of type AuxSourceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: auxSourceCount()
 
@@ -2563,7 +2569,7 @@ Reference
 
       Returns the AuxSource at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: inventory()
 
@@ -2600,13 +2606,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -2640,7 +2646,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`AuxSource <api-python-datamodel-auxsource>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -2656,7 +2662,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`AuxSource <api-python-datamodel-auxsource>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -2712,7 +2718,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -2728,7 +2734,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -2741,7 +2747,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: auxDevice()
@@ -2806,7 +2812,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`AuxStream <api-python-datamodel-auxstream>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -2822,7 +2828,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`AuxStream <api-python-datamodel-auxstream>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -2857,7 +2863,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDevice(device)
@@ -2923,7 +2929,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -2938,7 +2944,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensorLocation()
@@ -3005,7 +3011,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Axis <api-python-datamodel-axis>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3068,7 +3074,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Blob <api-python-datamodel-blob>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3107,7 +3113,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3123,7 +3129,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setText(text)
@@ -3158,7 +3164,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -3294,7 +3300,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ComplexArray <api-python-datamodel-complexarray>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3310,7 +3316,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-compositetime:
@@ -3352,7 +3358,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`CompositeTime <api-python-datamodel-compositetime>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3370,7 +3376,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMonth(month)
@@ -3385,7 +3391,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDay(day)
@@ -3400,7 +3406,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHour(hour)
@@ -3415,7 +3421,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinute(minute)
@@ -3430,7 +3436,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecond(second)
@@ -3446,7 +3452,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -3539,7 +3545,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`ConfidenceEllipsoid <api-python-datamodel-confidenceellipsoid>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3639,7 +3645,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Config <api-python-datamodel-config>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3648,7 +3654,7 @@ Reference
    .. py:method:: add(parameterSet)
 
       :param parameterSet: Object of type :ref:`ParameterSet <api-python-datamodel-parameterset>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ParameterSet object to Config. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -3657,7 +3663,7 @@ Reference
    .. py:method:: add(configModule)
 
       :param configModule: Object of type :ref:`ConfigModule <api-python-datamodel-configmodule>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ConfigModule object to Config. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -3666,26 +3672,26 @@ Reference
    .. py:method:: remove(parameterSet)
 
       :param parameterSet: Object of type :ref:`ParameterSet <api-python-datamodel-parameterset>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ParameterSet object from Config.
 
    .. py:method:: remove(configModule)
 
       :param configModule: Object of type :ref:`ConfigModule <api-python-datamodel-configmodule>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ConfigModule object from Config.
 
    .. py:method:: removeParameterSet(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeConfigModule(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: parameterSetCount()
 
@@ -3754,13 +3760,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -3794,20 +3800,20 @@ Reference
 
       :rtype: a new object of type ConfigModule.
 
-      Creates and registeres (if enabled) a ConfigModule instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ConfigModule instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ConfigModule.
 
-      Creates and registeres (if enabled) a ConfigModule instance with
+      Creates and registers (if enabled) a ConfigModule instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ConfigModule <api-python-datamodel-configmodule>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3840,7 +3846,7 @@ Reference
    .. py:method:: add(configStation)
 
       :param configStation: Object of type :ref:`ConfigStation <api-python-datamodel-configstation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ConfigStation object to ConfigModule. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -3849,19 +3855,19 @@ Reference
    .. py:method:: remove(configStation)
 
       :param configStation: Object of type :ref:`ConfigStation <api-python-datamodel-configstation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ConfigStation object from ConfigModule.
 
    .. py:method:: removeConfigStation(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeConfigStation(configStationIndex);
 
       :param configStationIndex: The index of the object to be removed of type ConfigStationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: configStationCount()
 
@@ -3883,7 +3889,7 @@ Reference
 
       Returns the ConfigStation at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findConfigStation(publicID)
 
@@ -3927,13 +3933,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -3967,20 +3973,20 @@ Reference
 
       :rtype: a new object of type ConfigStation.
 
-      Creates and registeres (if enabled) a ConfigStation instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ConfigStation instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ConfigStation.
 
-      Creates and registeres (if enabled) a ConfigStation instance with
+      Creates and registers (if enabled) a ConfigStation instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ConfigStation <api-python-datamodel-configstation>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -3996,7 +4002,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ConfigStation <api-python-datamodel-configstation>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setNetworkCode(networkCode)
@@ -4023,10 +4029,25 @@ Reference
 
       :rtype: boolean
 
+   .. py:method:: setCreationInfo(creationInfo)
+
+      :param creationInfo: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
+
+      CreationInfo for the ConfigStation object.
+
+   .. py:method:: creationInfo()
+
+      :rtype: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
    .. py:method:: add(setup)
 
       :param setup: Object of type :ref:`Setup <api-python-datamodel-setup>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Setup object to ConfigStation. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -4035,19 +4056,19 @@ Reference
    .. py:method:: remove(setup)
 
       :param setup: Object of type :ref:`Setup <api-python-datamodel-setup>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Setup object from ConfigStation.
 
    .. py:method:: removeSetup(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSetup(setupIndex);
 
       :param setupIndex: The index of the object to be removed of type SetupIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: setupCount()
 
@@ -4069,7 +4090,7 @@ Reference
 
       Returns the Setup at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: configModule()
 
@@ -4106,13 +4127,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -4147,7 +4168,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -4208,7 +4229,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setModificationTime(modificationTime)
@@ -4224,7 +4245,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVersion(version)
@@ -4262,7 +4283,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`DataUsed <api-python-datamodel-dataused>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -4310,7 +4331,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -4376,20 +4397,20 @@ Reference
 
       :rtype: a new object of type Datalogger.
 
-      Creates and registeres (if enabled) a Datalogger instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Datalogger instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Datalogger.
 
-      Creates and registeres (if enabled) a Datalogger instance with
+      Creates and registers (if enabled) a Datalogger instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Datalogger <api-python-datamodel-datalogger>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -4405,14 +4426,14 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Datalogger <api-python-datamodel-datalogger>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
 
       :param name: string
 
-      Unique Datalogger name
+      Unique datalogger name
 
    .. py:method:: name()
 
@@ -4510,7 +4531,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxClockDrift(maxClockDrift)
@@ -4526,7 +4547,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4539,13 +4560,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(dataloggerCalibration)
 
       :param dataloggerCalibration: Object of type :ref:`DataloggerCalibration <api-python-datamodel-dataloggercalibration>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a DataloggerCalibration object to Datalogger. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -4554,7 +4575,7 @@ Reference
    .. py:method:: add(decimation)
 
       :param decimation: Object of type :ref:`Decimation <api-python-datamodel-decimation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Decimation object to Datalogger. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -4563,36 +4584,36 @@ Reference
    .. py:method:: remove(dataloggerCalibration)
 
       :param dataloggerCalibration: Object of type :ref:`DataloggerCalibration <api-python-datamodel-dataloggercalibration>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added DataloggerCalibration object from Datalogger.
 
    .. py:method:: remove(decimation)
 
       :param decimation: Object of type :ref:`Decimation <api-python-datamodel-decimation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Decimation object from Datalogger.
 
    .. py:method:: removeDataloggerCalibration(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDataloggerCalibration(dataloggerCalibrationIndex);
 
       :param dataloggerCalibrationIndex: The index of the object to be removed of type DataloggerCalibrationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDecimation(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDecimation(decimationIndex);
 
       :param decimationIndex: The index of the object to be removed of type DecimationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: dataloggerCalibrationCount()
 
@@ -4620,7 +4641,7 @@ Reference
 
       Returns the DataloggerCalibration at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: decimation(idx)
 
@@ -4636,7 +4657,7 @@ Reference
 
       Returns the Decimation at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: inventory()
 
@@ -4673,13 +4694,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -4713,7 +4734,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`DataloggerCalibration <api-python-datamodel-dataloggercalibration>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -4729,7 +4750,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`DataloggerCalibration <api-python-datamodel-dataloggercalibration>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setSerialNumber(serialNumber)
@@ -4774,7 +4795,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -4789,7 +4810,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -4804,7 +4825,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4817,7 +4838,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -4882,7 +4903,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Decimation <api-python-datamodel-decimation>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -4898,7 +4919,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Decimation <api-python-datamodel-decimation>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setSampleRateNumerator(sampleRateNumerator)
@@ -4936,7 +4957,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDigitalFilterChain(digitalFilterChain)
@@ -4953,7 +4974,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -5026,20 +5047,20 @@ Reference
 
       :rtype: a new object of type Event.
 
-      Creates and registeres (if enabled) a Event instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Event instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Event.
 
-      Creates and registeres (if enabled) a Event instance with
+      Creates and registers (if enabled) a Event instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Event <api-python-datamodel-event>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -5087,7 +5108,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTypeCertainty(typeCertainty)
@@ -5103,7 +5124,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -5118,13 +5139,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(eventDescription)
 
       :param eventDescription: Object of type :ref:`EventDescription <api-python-datamodel-eventdescription>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a EventDescription object to Event. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5133,7 +5154,7 @@ Reference
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Event. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5142,7 +5163,7 @@ Reference
    .. py:method:: add(originReference)
 
       :param originReference: Object of type :ref:`OriginReference <api-python-datamodel-originreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a OriginReference object to Event. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5151,7 +5172,7 @@ Reference
    .. py:method:: add(focalMechanismReference)
 
       :param focalMechanismReference: Object of type :ref:`FocalMechanismReference <api-python-datamodel-focalmechanismreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a FocalMechanismReference object to Event. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5160,70 +5181,70 @@ Reference
    .. py:method:: remove(eventDescription)
 
       :param eventDescription: Object of type :ref:`EventDescription <api-python-datamodel-eventdescription>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added EventDescription object from Event.
 
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Event.
 
    .. py:method:: remove(originReference)
 
       :param originReference: Object of type :ref:`OriginReference <api-python-datamodel-originreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added OriginReference object from Event.
 
    .. py:method:: remove(focalMechanismReference)
 
       :param focalMechanismReference: Object of type :ref:`FocalMechanismReference <api-python-datamodel-focalmechanismreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added FocalMechanismReference object from Event.
 
    .. py:method:: removeEventDescription(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeEventDescription(eventDescriptionIndex);
 
       :param eventDescriptionIndex: The index of the object to be removed of type EventDescriptionIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeOriginReference(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeOriginReference(originReferenceIndex);
 
       :param originReferenceIndex: The index of the object to be removed of type OriginReferenceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeFocalMechanismReference(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeFocalMechanismReference(focalMechanismReferenceIndex);
 
       :param focalMechanismReferenceIndex: The index of the object to be removed of type FocalMechanismReferenceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: eventDescriptionCount()
 
@@ -5263,7 +5284,7 @@ Reference
 
       Returns the EventDescription at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: comment(idx)
 
@@ -5279,7 +5300,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: originReference(idx)
 
@@ -5295,7 +5316,7 @@ Reference
 
       Returns the OriginReference at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: focalMechanismReference(idx)
 
@@ -5311,7 +5332,7 @@ Reference
 
       Returns the FocalMechanismReference at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: eventParameters()
 
@@ -5348,13 +5369,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -5390,7 +5411,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`EventDescription <api-python-datamodel-eventdescription>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -5406,7 +5427,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`EventDescription <api-python-datamodel-eventdescription>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setText(text)
@@ -5492,7 +5513,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`EventParameters <api-python-datamodel-eventparameters>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -5501,7 +5522,7 @@ Reference
    .. py:method:: add(pick)
 
       :param pick: Object of type :ref:`Pick <api-python-datamodel-pick>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Pick object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5510,7 +5531,7 @@ Reference
    .. py:method:: add(amplitude)
 
       :param amplitude: Object of type :ref:`Amplitude <api-python-datamodel-amplitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Amplitude object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5519,7 +5540,7 @@ Reference
    .. py:method:: add(reading)
 
       :param reading: Object of type :ref:`Reading <api-python-datamodel-reading>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Reading object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5528,7 +5549,7 @@ Reference
    .. py:method:: add(origin)
 
       :param origin: Object of type :ref:`Origin <api-python-datamodel-origin>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Origin object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5537,7 +5558,7 @@ Reference
    .. py:method:: add(focalMechanism)
 
       :param focalMechanism: Object of type :ref:`FocalMechanism <api-python-datamodel-focalmechanism>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a FocalMechanism object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5546,7 +5567,7 @@ Reference
    .. py:method:: add(event)
 
       :param event: Object of type :ref:`Event <api-python-datamodel-event>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Event object to EventParameters. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -5555,74 +5576,74 @@ Reference
    .. py:method:: remove(pick)
 
       :param pick: Object of type :ref:`Pick <api-python-datamodel-pick>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Pick object from EventParameters.
 
    .. py:method:: remove(amplitude)
 
       :param amplitude: Object of type :ref:`Amplitude <api-python-datamodel-amplitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Amplitude object from EventParameters.
 
    .. py:method:: remove(reading)
 
       :param reading: Object of type :ref:`Reading <api-python-datamodel-reading>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Reading object from EventParameters.
 
    .. py:method:: remove(origin)
 
       :param origin: Object of type :ref:`Origin <api-python-datamodel-origin>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Origin object from EventParameters.
 
    .. py:method:: remove(focalMechanism)
 
       :param focalMechanism: Object of type :ref:`FocalMechanism <api-python-datamodel-focalmechanism>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added FocalMechanism object from EventParameters.
 
    .. py:method:: remove(event)
 
       :param event: Object of type :ref:`Event <api-python-datamodel-event>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Event object from EventParameters.
 
    .. py:method:: removePick(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAmplitude(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeReading(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeOrigin(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeFocalMechanism(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeEvent(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: pickCount()
 
@@ -5771,13 +5792,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -5815,20 +5836,20 @@ Reference
 
       :rtype: a new object of type FocalMechanism.
 
-      Creates and registeres (if enabled) a FocalMechanism instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a FocalMechanism instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type FocalMechanism.
 
-      Creates and registeres (if enabled) a FocalMechanism instance with
+      Creates and registers (if enabled) a FocalMechanism instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`FocalMechanism <api-python-datamodel-focalmechanism>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -5856,7 +5877,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPrincipalAxes(principalAxes)
@@ -5871,7 +5892,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -5887,7 +5908,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationPolarityCount(stationPolarityCount)
@@ -5902,7 +5923,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMisfit(misfit)
@@ -5919,7 +5940,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationDistributionRatio(stationDistributionRatio)
@@ -5936,7 +5957,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -5962,7 +5983,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -5977,7 +5998,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -5990,13 +6011,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to FocalMechanism. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6005,7 +6026,7 @@ Reference
    .. py:method:: add(momentTensor)
 
       :param momentTensor: Object of type :ref:`MomentTensor <api-python-datamodel-momenttensor>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a MomentTensor object to FocalMechanism. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6014,31 +6035,31 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from FocalMechanism.
 
    .. py:method:: remove(momentTensor)
 
       :param momentTensor: Object of type :ref:`MomentTensor <api-python-datamodel-momenttensor>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added MomentTensor object from FocalMechanism.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMomentTensor(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -6066,7 +6087,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: momentTensor(idx)
 
@@ -6117,13 +6138,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -6156,7 +6177,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`FocalMechanismReference <api-python-datamodel-focalmechanismreference>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -6172,7 +6193,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`FocalMechanismReference <api-python-datamodel-focalmechanismreference>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setFocalMechanismID(focalMechanismID)
@@ -6254,7 +6275,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`IntegerQuantity <api-python-datamodel-integerquantity>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -6283,7 +6304,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -6299,7 +6320,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -6315,7 +6336,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -6330,7 +6351,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-inventory:
@@ -6356,7 +6377,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Inventory <api-python-datamodel-inventory>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -6365,7 +6386,7 @@ Reference
    .. py:method:: add(stationGroup)
 
       :param stationGroup: Object of type :ref:`StationGroup <api-python-datamodel-stationgroup>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a StationGroup object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6374,7 +6395,7 @@ Reference
    .. py:method:: add(auxDevice)
 
       :param auxDevice: Object of type :ref:`AuxDevice <api-python-datamodel-auxdevice>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a AuxDevice object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6383,7 +6404,7 @@ Reference
    .. py:method:: add(sensor)
 
       :param sensor: Object of type :ref:`Sensor <api-python-datamodel-sensor>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Sensor object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6392,7 +6413,7 @@ Reference
    .. py:method:: add(datalogger)
 
       :param datalogger: Object of type :ref:`Datalogger <api-python-datamodel-datalogger>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Datalogger object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6401,7 +6422,7 @@ Reference
    .. py:method:: add(responsePAZ)
 
       :param responsePAZ: Object of type :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ResponsePAZ object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6410,25 +6431,43 @@ Reference
    .. py:method:: add(responseFIR)
 
       :param responseFIR: Object of type :ref:`ResponseFIR <api-python-datamodel-responsefir>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ResponseFIR object to Inventory. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: add(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a ResponseIIR object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
    .. py:method:: add(responsePolynomial)
 
       :param responsePolynomial: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a ResponsePolynomial object to Inventory. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: add(responseFAP)
+
+      :param responseFAP: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a ResponseFAP object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
    .. py:method:: add(network)
 
       :param network: Object of type :ref:`Network <api-python-datamodel-network>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Network object to Inventory. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6437,138 +6476,172 @@ Reference
    .. py:method:: remove(stationGroup)
 
       :param stationGroup: Object of type :ref:`StationGroup <api-python-datamodel-stationgroup>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added StationGroup object from Inventory.
 
    .. py:method:: remove(auxDevice)
 
       :param auxDevice: Object of type :ref:`AuxDevice <api-python-datamodel-auxdevice>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added AuxDevice object from Inventory.
 
    .. py:method:: remove(sensor)
 
       :param sensor: Object of type :ref:`Sensor <api-python-datamodel-sensor>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Sensor object from Inventory.
 
    .. py:method:: remove(datalogger)
 
       :param datalogger: Object of type :ref:`Datalogger <api-python-datamodel-datalogger>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Datalogger object from Inventory.
 
    .. py:method:: remove(responsePAZ)
 
       :param responsePAZ: Object of type :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponsePAZ object from Inventory.
 
    .. py:method:: remove(responseFIR)
 
       :param responseFIR: Object of type :ref:`ResponseFIR <api-python-datamodel-responsefir>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponseFIR object from Inventory.
+
+   .. py:method:: remove(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added ResponseIIR object from Inventory.
 
    .. py:method:: remove(responsePolynomial)
 
       :param responsePolynomial: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponsePolynomial object from Inventory.
+
+   .. py:method:: remove(responseFAP)
+
+      :param responseFAP: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added ResponseFAP object from Inventory.
 
    .. py:method:: remove(network)
 
       :param network: Object of type :ref:`Network <api-python-datamodel-network>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Network object from Inventory.
 
    .. py:method:: removeStationGroup(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStationGroup(stationGroupIndex);
 
       :param stationGroupIndex: The index of the object to be removed of type StationGroupIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAuxDevice(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAuxDevice(auxDeviceIndex);
 
       :param auxDeviceIndex: The index of the object to be removed of type AuxDeviceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSensor(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSensor(sensorIndex);
 
       :param sensorIndex: The index of the object to be removed of type SensorIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDatalogger(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDatalogger(dataloggerIndex);
 
       :param dataloggerIndex: The index of the object to be removed of type DataloggerIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponsePAZ(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponsePAZ(responsePAZIndex);
 
       :param responsePAZIndex: The index of the object to be removed of type ResponsePAZIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponseFIR(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponseFIR(responseFIRIndex);
 
       :param responseFIRIndex: The index of the object to be removed of type ResponseFIRIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseIIR(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseIIR(responseIIRIndex);
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponsePolynomial(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeResponsePolynomial(responsePolynomialIndex);
 
       :param responsePolynomialIndex: The index of the object to be removed of type ResponsePolynomialIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseFAP(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseFAP(responseFAPIndex);
+
+      :param responseFAPIndex: The index of the object to be removed of type ResponseFAPIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeNetwork(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeNetwork(networkIndex);
 
       :param networkIndex: The index of the object to be removed of type NetworkIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: stationGroupCount()
 
@@ -6606,11 +6679,23 @@ Reference
 
       Returns the number of ResponseFIR child objects.
 
+   .. py:method:: responseIIRCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of ResponseIIR child objects.
+
    .. py:method:: responsePolynomialCount()
 
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of ResponsePolynomial child objects.
+
+   .. py:method:: responseFAPCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of ResponseFAP child objects.
 
    .. py:method:: networkCount()
 
@@ -6632,7 +6717,7 @@ Reference
 
       Returns the StationGroup at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: auxDevice(idx)
 
@@ -6648,7 +6733,7 @@ Reference
 
       Returns the AuxDevice at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: sensor(idx)
 
@@ -6664,7 +6749,7 @@ Reference
 
       Returns the Sensor at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: datalogger(idx)
 
@@ -6680,7 +6765,7 @@ Reference
 
       Returns the Datalogger at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: responsePAZ(idx)
 
@@ -6696,7 +6781,7 @@ Reference
 
       Returns the ResponsePAZ at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: responseFIR(idx)
 
@@ -6712,7 +6797,23 @@ Reference
 
       Returns the ResponseFIR at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
+
+   .. py:method:: responseIIR(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at index idx.
+
+   .. py:method:: responseIIR(responseIIRIndex)
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: responsePolynomial(idx)
 
@@ -6728,7 +6829,23 @@ Reference
 
       Returns the ResponsePolynomial at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
+
+   .. py:method:: responseFAP(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
+
+      Returns the ResponseFAP at index idx.
+
+   .. py:method:: responseFAP(responseFAPIndex)
+
+      :param responseFAPIndex: The index of the object to be removed of type ResponseFAPIndex.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
+
+      Returns the ResponseFAP at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: network(idx)
 
@@ -6744,7 +6861,7 @@ Reference
 
       Returns the Network at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findStationGroup(publicID)
 
@@ -6788,10 +6905,24 @@ Reference
 
       Returns the child object with a certain publicID, None otherwise.
 
+   .. py:method:: findResponseIIR(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
    .. py:method:: findResponsePolynomial(publicID)
 
       :param publicID: The publicID of the object to find.
       :rtype: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
+   .. py:method:: findResponseFAP(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`ResponseFAP <api-python-datamodel-responsefap>`.
 
       Returns the child object with a certain publicID, None otherwise.
 
@@ -6829,13 +6960,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -6868,7 +6999,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`JournalEntry <api-python-datamodel-journalentry>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -6884,7 +7015,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setObjectID(objectID)
@@ -6980,7 +7111,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Journaling <api-python-datamodel-journaling>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -6989,7 +7120,7 @@ Reference
    .. py:method:: add(journalEntry)
 
       :param journalEntry: Object of type :ref:`JournalEntry <api-python-datamodel-journalentry>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a JournalEntry object to Journaling. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -6998,14 +7129,14 @@ Reference
    .. py:method:: remove(journalEntry)
 
       :param journalEntry: Object of type :ref:`JournalEntry <api-python-datamodel-journalentry>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added JournalEntry object from Journaling.
 
    .. py:method:: removeJournalEntry(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: journalEntryCount()
 
@@ -7054,13 +7185,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -7098,20 +7229,20 @@ Reference
 
       :rtype: a new object of type Magnitude.
 
-      Creates and registeres (if enabled) a Magnitude instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Magnitude instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Magnitude.
 
-      Creates and registeres (if enabled) a Magnitude instance with
+      Creates and registers (if enabled) a Magnitude instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Magnitude <api-python-datamodel-magnitude>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -7177,7 +7308,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -7192,7 +7323,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -7207,7 +7338,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -7222,13 +7353,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Magnitude. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7237,7 +7368,7 @@ Reference
    .. py:method:: add(stationMagnitudeContribution)
 
       :param stationMagnitudeContribution: Object of type :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a StationMagnitudeContribution object to Magnitude. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7246,36 +7377,36 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Magnitude.
 
    .. py:method:: remove(stationMagnitudeContribution)
 
       :param stationMagnitudeContribution: Object of type :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added StationMagnitudeContribution object from Magnitude.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStationMagnitudeContribution(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStationMagnitudeContribution(stationMagnitudeContributionIndex);
 
       :param stationMagnitudeContributionIndex: The index of the object to be removed of type StationMagnitudeContributionIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -7303,7 +7434,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: stationMagnitudeContribution(idx)
 
@@ -7319,7 +7450,7 @@ Reference
 
       Returns the StationMagnitudeContribution at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: origin()
 
@@ -7356,13 +7487,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -7398,20 +7529,20 @@ Reference
 
       :rtype: a new object of type MomentTensor.
 
-      Creates and registeres (if enabled) a MomentTensor instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a MomentTensor instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type MomentTensor.
 
-      Creates and registeres (if enabled) a MomentTensor instance with
+      Creates and registers (if enabled) a MomentTensor instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`MomentTensor <api-python-datamodel-momenttensor>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -7451,7 +7582,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTensor(tensor)
@@ -7466,7 +7597,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVariance(variance)
@@ -7481,7 +7612,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVarianceReduction(varianceReduction)
@@ -7498,7 +7629,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDoubleCouple(doubleCouple)
@@ -7515,7 +7646,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClvd(clvd)
@@ -7532,7 +7663,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setIso(iso)
@@ -7548,7 +7679,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGreensFunctionID(greensFunctionID)
@@ -7583,7 +7714,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -7608,7 +7739,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStatus(status)
@@ -7623,7 +7754,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCmtName(cmtName)
@@ -7654,13 +7785,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to MomentTensor. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7669,7 +7800,7 @@ Reference
    .. py:method:: add(dataUsed)
 
       :param dataUsed: Object of type :ref:`DataUsed <api-python-datamodel-dataused>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a DataUsed object to MomentTensor. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7678,7 +7809,7 @@ Reference
    .. py:method:: add(momentTensorPhaseSetting)
 
       :param momentTensorPhaseSetting: Object of type :ref:`MomentTensorPhaseSetting <api-python-datamodel-momenttensorphasesetting>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a MomentTensorPhaseSetting object to MomentTensor. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7687,7 +7818,7 @@ Reference
    .. py:method:: add(momentTensorStationContribution)
 
       :param momentTensorStationContribution: Object of type :ref:`MomentTensorStationContribution <api-python-datamodel-momenttensorstationcontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a MomentTensorStationContribution object to MomentTensor. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -7696,60 +7827,60 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from MomentTensor.
 
    .. py:method:: remove(dataUsed)
 
       :param dataUsed: Object of type :ref:`DataUsed <api-python-datamodel-dataused>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added DataUsed object from MomentTensor.
 
    .. py:method:: remove(momentTensorPhaseSetting)
 
       :param momentTensorPhaseSetting: Object of type :ref:`MomentTensorPhaseSetting <api-python-datamodel-momenttensorphasesetting>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added MomentTensorPhaseSetting object from MomentTensor.
 
    .. py:method:: remove(momentTensorStationContribution)
 
       :param momentTensorStationContribution: Object of type :ref:`MomentTensorStationContribution <api-python-datamodel-momenttensorstationcontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added MomentTensorStationContribution object from MomentTensor.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeDataUsed(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMomentTensorPhaseSetting(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMomentTensorPhaseSetting(momentTensorPhaseSettingIndex);
 
       :param momentTensorPhaseSettingIndex: The index of the object to be removed of type MomentTensorPhaseSettingIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMomentTensorStationContribution(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -7789,7 +7920,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: dataUsed(idx)
 
@@ -7812,7 +7943,7 @@ Reference
 
       Returns the MomentTensorPhaseSetting at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: momentTensorStationContribution(idx)
 
@@ -7870,13 +8001,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -7909,7 +8040,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`MomentTensorComponentContribution <api-python-datamodel-momenttensorcomponentcontribution>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -7925,7 +8056,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`MomentTensorComponentContribution <api-python-datamodel-momenttensorcomponentcontribution>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setPhaseCode(phaseCode)
@@ -7986,7 +8117,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -7999,7 +8130,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensorStationContribution()
@@ -8063,7 +8194,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`MomentTensorPhaseSetting <api-python-datamodel-momenttensorphasesetting>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8079,7 +8210,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`MomentTensorPhaseSetting <api-python-datamodel-momenttensorphasesetting>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -8116,7 +8247,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaximumTimeShift(maximumTimeShift)
@@ -8129,7 +8260,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -8194,20 +8325,20 @@ Reference
 
       :rtype: a new object of type MomentTensorStationContribution.
 
-      Creates and registeres (if enabled) a MomentTensorStationContribution instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a MomentTensorStationContribution instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type MomentTensorStationContribution.
 
-      Creates and registeres (if enabled) a MomentTensorStationContribution instance with
+      Creates and registers (if enabled) a MomentTensorStationContribution instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`MomentTensorStationContribution <api-python-datamodel-momenttensorstationcontribution>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8231,7 +8362,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -8244,7 +8375,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeShift(timeShift)
@@ -8257,13 +8388,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(momentTensorComponentContribution)
 
       :param momentTensorComponentContribution: Object of type :ref:`MomentTensorComponentContribution <api-python-datamodel-momenttensorcomponentcontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a MomentTensorComponentContribution object to MomentTensorStationContribution. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -8272,19 +8403,19 @@ Reference
    .. py:method:: remove(momentTensorComponentContribution)
 
       :param momentTensorComponentContribution: Object of type :ref:`MomentTensorComponentContribution <api-python-datamodel-momenttensorcomponentcontribution>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added MomentTensorComponentContribution object from MomentTensorStationContribution.
 
    .. py:method:: removeMomentTensorComponentContribution(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMomentTensorComponentContribution(momentTensorComponentContributionIndex);
 
       :param momentTensorComponentContributionIndex: The index of the object to be removed of type MomentTensorComponentContributionIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: momentTensorComponentContributionCount()
 
@@ -8306,7 +8437,7 @@ Reference
 
       Returns the MomentTensorComponentContribution at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: momentTensor()
 
@@ -8343,13 +8474,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -8384,20 +8515,20 @@ Reference
 
       :rtype: a new object of type Network.
 
-      Creates and registeres (if enabled) a Network instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Network instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Network.
 
-      Creates and registeres (if enabled) a Network instance with
+      Creates and registers (if enabled) a Network instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Network <api-python-datamodel-network>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8413,7 +8544,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Network <api-python-datamodel-network>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -8449,7 +8580,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -8524,7 +8655,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -8539,7 +8670,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -8554,13 +8685,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(station)
 
       :param station: Object of type :ref:`Station <api-python-datamodel-station>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Station object to Network. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -8569,19 +8700,19 @@ Reference
    .. py:method:: remove(station)
 
       :param station: Object of type :ref:`Station <api-python-datamodel-station>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Station object from Network.
 
    .. py:method:: removeStation(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStation(stationIndex);
 
       :param stationIndex: The index of the object to be removed of type StationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: stationCount()
 
@@ -8603,7 +8734,7 @@ Reference
 
       Returns the Station at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findStation(publicID)
 
@@ -8647,13 +8778,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -8688,7 +8819,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`NodalPlane <api-python-datamodel-nodalplane>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8750,7 +8881,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`NodalPlanes <api-python-datamodel-nodalplanes>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8768,7 +8899,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNodalPlane2(nodalPlane2)
@@ -8783,7 +8914,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredPlane(preferredPlane)
@@ -8799,7 +8930,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-origin:
@@ -8829,20 +8960,20 @@ Reference
 
       :rtype: a new object of type Origin.
 
-      Creates and registeres (if enabled) a Origin instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Origin instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Origin.
 
-      Creates and registeres (if enabled) a Origin instance with
+      Creates and registers (if enabled) a Origin instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Origin <api-python-datamodel-origin>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -8896,7 +9027,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthType(depthType)
@@ -8911,7 +9042,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeFixed(timeFixed)
@@ -8927,7 +9058,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEpicenterFixed(epicenterFixed)
@@ -8942,7 +9073,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setReferenceSystemID(referenceSystemID)
@@ -8991,7 +9122,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUncertainty(uncertainty)
@@ -9006,7 +9137,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -9021,7 +9152,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -9036,7 +9167,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -9051,7 +9182,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -9066,13 +9197,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Origin. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9081,7 +9212,7 @@ Reference
    .. py:method:: add(compositeTime)
 
       :param compositeTime: Object of type :ref:`CompositeTime <api-python-datamodel-compositetime>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a CompositeTime object to Origin. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9090,7 +9221,7 @@ Reference
    .. py:method:: add(arrival)
 
       :param arrival: Object of type :ref:`Arrival <api-python-datamodel-arrival>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Arrival object to Origin. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9099,7 +9230,7 @@ Reference
    .. py:method:: add(stationMagnitude)
 
       :param stationMagnitude: Object of type :ref:`StationMagnitude <api-python-datamodel-stationmagnitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a StationMagnitude object to Origin. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9108,7 +9239,7 @@ Reference
    .. py:method:: add(magnitude)
 
       :param magnitude: Object of type :ref:`Magnitude <api-python-datamodel-magnitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Magnitude object to Origin. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9117,72 +9248,72 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Origin.
 
    .. py:method:: remove(compositeTime)
 
       :param compositeTime: Object of type :ref:`CompositeTime <api-python-datamodel-compositetime>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added CompositeTime object from Origin.
 
    .. py:method:: remove(arrival)
 
       :param arrival: Object of type :ref:`Arrival <api-python-datamodel-arrival>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Arrival object from Origin.
 
    .. py:method:: remove(stationMagnitude)
 
       :param stationMagnitude: Object of type :ref:`StationMagnitude <api-python-datamodel-stationmagnitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added StationMagnitude object from Origin.
 
    .. py:method:: remove(magnitude)
 
       :param magnitude: Object of type :ref:`Magnitude <api-python-datamodel-magnitude>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Magnitude object from Origin.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeCompositeTime(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArrival(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeArrival(arrivalIndex);
 
       :param arrivalIndex: The index of the object to be removed of type ArrivalIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStationMagnitude(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeMagnitude(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -9228,7 +9359,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: compositeTime(idx)
 
@@ -9251,7 +9382,7 @@ Reference
 
       Returns the Arrival at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: stationMagnitude(idx)
 
@@ -9323,13 +9454,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -9366,7 +9497,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`OriginQuality <api-python-datamodel-originquality>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -9384,7 +9515,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedPhaseCount(usedPhaseCount)
@@ -9401,7 +9532,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAssociatedStationCount(associatedStationCount)
@@ -9416,7 +9547,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedStationCount(usedStationCount)
@@ -9431,7 +9562,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthPhaseCount(depthPhaseCount)
@@ -9447,7 +9578,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStandardError(standardError)
@@ -9464,7 +9595,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -9480,7 +9611,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecondaryAzimuthalGap(secondaryAzimuthalGap)
@@ -9496,7 +9627,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGroundTruthLevel(groundTruthLevel)
@@ -9523,7 +9654,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinimumDistance(minimumDistance)
@@ -9538,7 +9669,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMedianDistance(medianDistance)
@@ -9553,7 +9684,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-originreference:
@@ -9579,7 +9710,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`OriginReference <api-python-datamodel-originreference>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -9595,7 +9726,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`OriginReference <api-python-datamodel-originreference>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setOriginID(originID)
@@ -9672,7 +9803,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`OriginUncertainty <api-python-datamodel-originuncertainty>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -9691,7 +9822,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinHorizontalUncertainty(minHorizontalUncertainty)
@@ -9706,7 +9837,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxHorizontalUncertainty(maxHorizontalUncertainty)
@@ -9721,7 +9852,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthMaxHorizontalUncertainty(azimuthMaxHorizontalUncertainty)
@@ -9737,7 +9868,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceEllipsoid(confidenceEllipsoid)
@@ -9752,7 +9883,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredDescription(preferredDescription)
@@ -9767,7 +9898,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-outage:
@@ -9793,7 +9924,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Outage <api-python-datamodel-outage>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -9809,7 +9940,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Outage <api-python-datamodel-outage>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setWaveformID(waveformID)
@@ -9854,7 +9985,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()
@@ -9919,20 +10050,20 @@ Reference
 
       :rtype: a new object of type Parameter.
 
-      Creates and registeres (if enabled) a Parameter instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Parameter instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Parameter.
 
-      Creates and registeres (if enabled) a Parameter instance with
+      Creates and registers (if enabled) a Parameter instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Parameter <api-python-datamodel-parameter>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -9957,7 +10088,7 @@ Reference
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Parameter. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -9966,19 +10097,19 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Parameter.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -10000,7 +10131,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: parameterSet()
 
@@ -10037,13 +10168,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -10077,20 +10208,20 @@ Reference
 
       :rtype: a new object of type ParameterSet.
 
-      Creates and registeres (if enabled) a ParameterSet instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ParameterSet instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ParameterSet.
 
-      Creates and registeres (if enabled) a ParameterSet instance with
+      Creates and registers (if enabled) a ParameterSet instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ParameterSet <api-python-datamodel-parameterset>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10122,13 +10253,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(parameter)
 
       :param parameter: Object of type :ref:`Parameter <api-python-datamodel-parameter>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Parameter object to ParameterSet. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10137,7 +10268,7 @@ Reference
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to ParameterSet. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10146,31 +10277,31 @@ Reference
    .. py:method:: remove(parameter)
 
       :param parameter: Object of type :ref:`Parameter <api-python-datamodel-parameter>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Parameter object from ParameterSet.
 
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from ParameterSet.
 
    .. py:method:: removeParameter(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: parameterCount()
 
@@ -10205,7 +10336,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findParameter(publicID)
 
@@ -10249,13 +10380,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -10290,7 +10421,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Phase <api-python-datamodel-phase>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10333,20 +10464,20 @@ Reference
 
       :rtype: a new object of type Pick.
 
-      Creates and registeres (if enabled) a Pick instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Pick instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Pick.
 
-      Creates and registeres (if enabled) a Pick instance with
+      Creates and registers (if enabled) a Pick instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Pick <api-python-datamodel-pick>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10408,7 +10539,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuth(backazimuth)
@@ -10424,7 +10555,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSlownessMethodID(slownessMethodID)
@@ -10449,7 +10580,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPhaseHint(phaseHint)
@@ -10464,7 +10595,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPolarity(polarity)
@@ -10479,7 +10610,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -10494,7 +10625,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -10509,7 +10640,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -10524,13 +10655,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to Pick. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10539,19 +10670,19 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from Pick.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -10573,7 +10704,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: eventParameters()
 
@@ -10610,13 +10741,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -10649,7 +10780,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`PickReference <api-python-datamodel-pickreference>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10665,7 +10796,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`PickReference <api-python-datamodel-pickreference>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setPickID(pickID)
@@ -10740,7 +10871,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`PrincipalAxes <api-python-datamodel-principalaxes>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10778,7 +10909,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-qclog:
@@ -10805,20 +10936,20 @@ Reference
 
       :rtype: a new object of type QCLog.
 
-      Creates and registeres (if enabled) a QCLog instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a QCLog instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type QCLog.
 
-      Creates and registeres (if enabled) a QCLog instance with
+      Creates and registers (if enabled) a QCLog instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`QCLog <api-python-datamodel-qclog>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10834,7 +10965,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`QCLog <api-python-datamodel-qclog>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setWaveformID(waveformID)
@@ -10920,13 +11051,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -10959,7 +11090,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`QualityControl <api-python-datamodel-qualitycontrol>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -10968,7 +11099,7 @@ Reference
    .. py:method:: add(qCLog)
 
       :param qCLog: Object of type :ref:`QCLog <api-python-datamodel-qclog>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a QCLog object to QualityControl. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10977,7 +11108,7 @@ Reference
    .. py:method:: add(waveformQuality)
 
       :param waveformQuality: Object of type :ref:`WaveformQuality <api-python-datamodel-waveformquality>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a WaveformQuality object to QualityControl. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10986,7 +11117,7 @@ Reference
    .. py:method:: add(outage)
 
       :param outage: Object of type :ref:`Outage <api-python-datamodel-outage>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Outage object to QualityControl. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -10995,53 +11126,53 @@ Reference
    .. py:method:: remove(qCLog)
 
       :param qCLog: Object of type :ref:`QCLog <api-python-datamodel-qclog>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added QCLog object from QualityControl.
 
    .. py:method:: remove(waveformQuality)
 
       :param waveformQuality: Object of type :ref:`WaveformQuality <api-python-datamodel-waveformquality>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added WaveformQuality object from QualityControl.
 
    .. py:method:: remove(outage)
 
       :param outage: Object of type :ref:`Outage <api-python-datamodel-outage>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Outage object from QualityControl.
 
    .. py:method:: removeQCLog(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeQCLog(qCLogIndex);
 
       :param qCLogIndex: The index of the object to be removed of type QCLogIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeWaveformQuality(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeWaveformQuality(waveformQualityIndex);
 
       :param waveformQualityIndex: The index of the object to be removed of type WaveformQualityIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeOutage(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeOutage(outageIndex);
 
       :param outageIndex: The index of the object to be removed of type OutageIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: qCLogCount()
 
@@ -11075,7 +11206,7 @@ Reference
 
       Returns the QCLog at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: waveformQuality(idx)
 
@@ -11091,7 +11222,7 @@ Reference
 
       Returns the WaveformQuality at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: outage(idx)
 
@@ -11107,7 +11238,7 @@ Reference
 
       Returns the Outage at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findQCLog(publicID)
 
@@ -11143,13 +11274,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -11185,20 +11316,20 @@ Reference
 
       :rtype: a new object of type Reading.
 
-      Creates and registeres (if enabled) a Reading instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Reading instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Reading.
 
-      Creates and registeres (if enabled) a Reading instance with
+      Creates and registers (if enabled) a Reading instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Reading <api-python-datamodel-reading>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -11207,7 +11338,7 @@ Reference
    .. py:method:: add(pickReference)
 
       :param pickReference: Object of type :ref:`PickReference <api-python-datamodel-pickreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a PickReference object to Reading. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -11216,7 +11347,7 @@ Reference
    .. py:method:: add(amplitudeReference)
 
       :param amplitudeReference: Object of type :ref:`AmplitudeReference <api-python-datamodel-amplitudereference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a AmplitudeReference object to Reading. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -11225,36 +11356,36 @@ Reference
    .. py:method:: remove(pickReference)
 
       :param pickReference: Object of type :ref:`PickReference <api-python-datamodel-pickreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added PickReference object from Reading.
 
    .. py:method:: remove(amplitudeReference)
 
       :param amplitudeReference: Object of type :ref:`AmplitudeReference <api-python-datamodel-amplitudereference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added AmplitudeReference object from Reading.
 
    .. py:method:: removePickReference(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removePickReference(pickReferenceIndex);
 
       :param pickReferenceIndex: The index of the object to be removed of type PickReferenceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAmplitudeReference(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAmplitudeReference(amplitudeReferenceIndex);
 
       :param amplitudeReferenceIndex: The index of the object to be removed of type AmplitudeReferenceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: pickReferenceCount()
 
@@ -11282,7 +11413,7 @@ Reference
 
       Returns the PickReference at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: amplitudeReference(idx)
 
@@ -11298,7 +11429,7 @@ Reference
 
       Returns the AmplitudeReference at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: eventParameters()
 
@@ -11335,13 +11466,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -11374,7 +11505,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`RealArray <api-python-datamodel-realarray>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -11390,7 +11521,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-realquantity:
@@ -11426,7 +11557,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`RealQuantity <api-python-datamodel-realquantity>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -11455,7 +11586,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -11471,7 +11602,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -11487,7 +11618,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -11502,8 +11633,205 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+.. _api-python-datamodel-responsefap:
+
+.. py:class:: ResponseFAP
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type describes a sensor response composed of frequency\/amplitude\/phase
+   angle tuples. According to the SEED manual \(blockette 55\) this description
+   alone is not an acceptable response description.
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type ResponseFAP if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to ResponseFAP if the internal wrapped
+      representation is an ResponseFAP object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type ResponseFAP.
+
+      Creates and registers (if enabled) a ResponseFAP instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type ResponseFAP.
+
+      Creates and registers (if enabled) a ResponseFAP instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type ResponseFAPIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`ResponseFAP <api-python-datamodel-responsefap>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setName(name)
+
+      :param name: string
+
+      Unique response name
+
+   .. py:method:: name()
+
+      :rtype: string
+
+   .. py:method:: setGain(gain)
+
+      :param gain: float
+
+      Gain of response \(48.05\/58.04\)
+
+   .. py:method:: gain()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfTuples(numberOfTuples)
+
+      :param numberOfTuples: int
+
+      The number of fap tuples in the response
+
+   .. py:method:: numberOfTuples()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setTuples(tuples)
+
+      :param tuples: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      The tuples organized as linear array. The array size must be numberOfTuples
+      * 3. Each tuple consists of frequency \(in Hz\), amplitude and phase angle
+      \(in degree\).
+
+   .. py:method:: tuples()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setRemark(remark)
+
+      :param remark: :ref:`Blob <api-python-datamodel-blob>`
+
+      Optional remark
+
+   .. py:method:: remark()
+
+      :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: inventory()
+
+      :rtype: Inventory
+
+      Returns the parent Inventory if available. Returns None
+      if the parent is not a Inventory. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned ResponseFAP.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 .. _api-python-datamodel-responsefir:
 
@@ -11530,20 +11858,20 @@ Reference
 
       :rtype: a new object of type ResponseFIR.
 
-      Creates and registeres (if enabled) a ResponseFIR instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ResponseFIR instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ResponseFIR.
 
-      Creates and registeres (if enabled) a ResponseFIR instance with
+      Creates and registers (if enabled) a ResponseFIR instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ResponseFIR <api-python-datamodel-responsefir>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -11559,7 +11887,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ResponseFIR <api-python-datamodel-responsefir>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -11584,7 +11912,22 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecimationFactor(decimationFactor)
@@ -11599,7 +11942,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDelay(delay)
@@ -11614,7 +11957,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCorrection(correction)
@@ -11629,7 +11972,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -11644,7 +11987,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSymmetry(symmetry)
@@ -11669,7 +12012,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11682,7 +12025,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -11720,13 +12063,291 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-responseiir:
+
+.. py:class:: ResponseIIR
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type describes a infinite impulse response filter
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type ResponseIIR if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to ResponseIIR if the internal wrapped
+      representation is an ResponseIIR object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type ResponseIIRIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setName(name)
+
+      :param name: string
+
+      Unique response name
+
+   .. py:method:: name()
+
+      :rtype: string
+
+   .. py:method:: setType(type)
+
+      :param type: string
+
+      Response type \(43.05\/53.03\/54.03\): A \- Laplace transform analog
+      response in rad\/sec, B \- Analog response in Hz, C \- Composite \(currently
+      undefined\), D \- Digital \(Z \- transform\)
+
+   .. py:method:: type()
+
+      :rtype: string
+
+   .. py:method:: setGain(gain)
+
+      :param gain: float
+
+      Gain of response \(48.05\/58.04\)
+
+   .. py:method:: gain()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfNumerators(numberOfNumerators)
+
+      :param numberOfNumerators: int
+
+      Number of numerators \(54.07\)
+
+   .. py:method:: numberOfNumerators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfDenominators(numberOfDenominators)
+
+      :param numberOfDenominators: int
+
+      Number of denominators \(54.10\)
+
+   .. py:method:: numberOfDenominators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumerators(numerators)
+
+      :param numerators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Numerators \(54.08\-09\)
+
+   .. py:method:: numerators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDenominators(denominators)
+
+      :param denominators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Denominators \(54.11\-12\)
+
+   .. py:method:: denominators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setRemark(remark)
+
+      :param remark: :ref:`Blob <api-python-datamodel-blob>`
+
+   .. py:method:: remark()
+
+      :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: inventory()
+
+      :rtype: Inventory
+
+      Returns the parent Inventory if available. Returns None
+      if the parent is not a Inventory. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned ResponseIIR.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -11761,20 +12382,20 @@ Reference
 
       :rtype: a new object of type ResponsePAZ.
 
-      Creates and registeres (if enabled) a ResponsePAZ instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ResponsePAZ instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ResponsePAZ.
 
-      Creates and registeres (if enabled) a ResponsePAZ instance with
+      Creates and registers (if enabled) a ResponsePAZ instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -11790,7 +12411,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -11827,7 +12448,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -11842,7 +12463,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFactor(normalizationFactor)
@@ -11857,7 +12478,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFrequency(normalizationFrequency)
@@ -11872,7 +12493,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfZeros(numberOfZeros)
@@ -11887,7 +12508,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfPoles(numberOfPoles)
@@ -11902,7 +12523,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setZeros(zeros)
@@ -11917,7 +12538,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPoles(poles)
@@ -11932,7 +12553,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11945,7 +12566,52 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -11983,13 +12649,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -12024,20 +12690,20 @@ Reference
 
       :rtype: a new object of type ResponsePolynomial.
 
-      Creates and registeres (if enabled) a ResponsePolynomial instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a ResponsePolynomial instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type ResponsePolynomial.
 
-      Creates and registeres (if enabled) a ResponsePolynomial instance with
+      Creates and registers (if enabled) a ResponsePolynomial instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12053,7 +12719,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -12078,7 +12744,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -12093,7 +12759,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFrequencyUnit(frequencyUnit)
@@ -12130,7 +12796,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationUpperBound(approximationUpperBound)
@@ -12145,7 +12811,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationError(approximationError)
@@ -12161,7 +12827,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -12177,7 +12843,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCoefficients(coefficients)
@@ -12192,7 +12858,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -12205,7 +12871,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12243,13 +12909,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -12285,20 +12951,20 @@ Reference
 
       :rtype: a new object of type Route.
 
-      Creates and registeres (if enabled) a Route instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Route instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Route.
 
-      Creates and registeres (if enabled) a Route instance with
+      Creates and registers (if enabled) a Route instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Route <api-python-datamodel-route>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12314,7 +12980,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Route <api-python-datamodel-route>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setNetworkCode(networkCode)
@@ -12360,7 +13026,7 @@ Reference
    .. py:method:: add(routeArclink)
 
       :param routeArclink: Object of type :ref:`RouteArclink <api-python-datamodel-routearclink>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a RouteArclink object to Route. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -12369,7 +13035,7 @@ Reference
    .. py:method:: add(routeSeedlink)
 
       :param routeSeedlink: Object of type :ref:`RouteSeedlink <api-python-datamodel-routeseedlink>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a RouteSeedlink object to Route. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -12378,36 +13044,36 @@ Reference
    .. py:method:: remove(routeArclink)
 
       :param routeArclink: Object of type :ref:`RouteArclink <api-python-datamodel-routearclink>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added RouteArclink object from Route.
 
    .. py:method:: remove(routeSeedlink)
 
       :param routeSeedlink: Object of type :ref:`RouteSeedlink <api-python-datamodel-routeseedlink>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added RouteSeedlink object from Route.
 
    .. py:method:: removeRouteArclink(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeRouteArclink(routeArclinkIndex);
 
       :param routeArclinkIndex: The index of the object to be removed of type RouteArclinkIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeRouteSeedlink(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeRouteSeedlink(routeSeedlinkIndex);
 
       :param routeSeedlinkIndex: The index of the object to be removed of type RouteSeedlinkIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: routeArclinkCount()
 
@@ -12435,7 +13101,7 @@ Reference
 
       Returns the RouteArclink at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: routeSeedlink(idx)
 
@@ -12451,7 +13117,7 @@ Reference
 
       Returns the RouteSeedlink at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: routing()
 
@@ -12488,13 +13154,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -12528,7 +13194,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`RouteArclink <api-python-datamodel-routearclink>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12544,7 +13210,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`RouteArclink <api-python-datamodel-routearclink>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setAddress(address)
@@ -12579,7 +13245,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPriority(priority)
@@ -12594,7 +13260,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -12659,7 +13325,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`RouteSeedlink <api-python-datamodel-routeseedlink>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12675,7 +13341,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`RouteSeedlink <api-python-datamodel-routeseedlink>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setAddress(address)
@@ -12700,7 +13366,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -12764,7 +13430,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Routing <api-python-datamodel-routing>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12773,7 +13439,7 @@ Reference
    .. py:method:: add(route)
 
       :param route: Object of type :ref:`Route <api-python-datamodel-route>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Route object to Routing. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -12782,7 +13448,7 @@ Reference
    .. py:method:: add(access)
 
       :param access: Object of type :ref:`Access <api-python-datamodel-access>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Access object to Routing. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -12791,36 +13457,36 @@ Reference
    .. py:method:: remove(route)
 
       :param route: Object of type :ref:`Route <api-python-datamodel-route>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Route object from Routing.
 
    .. py:method:: remove(access)
 
       :param access: Object of type :ref:`Access <api-python-datamodel-access>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Access object from Routing.
 
    .. py:method:: removeRoute(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeRoute(routeIndex);
 
       :param routeIndex: The index of the object to be removed of type RouteIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAccess(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAccess(accessIndex);
 
       :param accessIndex: The index of the object to be removed of type AccessIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: routeCount()
 
@@ -12848,7 +13514,7 @@ Reference
 
       Returns the Route at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: access(idx)
 
@@ -12864,7 +13530,7 @@ Reference
 
       Returns the Access at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findRoute(publicID)
 
@@ -12900,13 +13566,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -12941,20 +13607,20 @@ Reference
 
       :rtype: a new object of type Sensor.
 
-      Creates and registeres (if enabled) a Sensor instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Sensor instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Sensor.
 
-      Creates and registeres (if enabled) a Sensor instance with
+      Creates and registers (if enabled) a Sensor instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Sensor <api-python-datamodel-sensor>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -12970,14 +13636,14 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Sensor <api-python-datamodel-sensor>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
 
       :param name: string
 
-      Unique response name
+      Unique sensor name
 
    .. py:method:: name()
 
@@ -13045,7 +13711,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHighFrequency(highFrequency)
@@ -13060,14 +13726,15 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setResponse(response)
 
       :param response: string
 
-      Reference to responsePAZ\/\@publicID or responsePolynomial\/\@publicID
+      Reference to responsePAZ\/\@publicID or responsePolynomial\/\@publicID or
+      responseFAP\/\@publicID
 
    .. py:method:: response()
 
@@ -13083,13 +13750,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(sensorCalibration)
 
       :param sensorCalibration: Object of type :ref:`SensorCalibration <api-python-datamodel-sensorcalibration>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a SensorCalibration object to Sensor. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -13098,19 +13765,19 @@ Reference
    .. py:method:: remove(sensorCalibration)
 
       :param sensorCalibration: Object of type :ref:`SensorCalibration <api-python-datamodel-sensorcalibration>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added SensorCalibration object from Sensor.
 
    .. py:method:: removeSensorCalibration(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSensorCalibration(sensorCalibrationIndex);
 
       :param sensorCalibrationIndex: The index of the object to be removed of type SensorCalibrationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: sensorCalibrationCount()
 
@@ -13132,7 +13799,7 @@ Reference
 
       Returns the SensorCalibration at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: inventory()
 
@@ -13169,13 +13836,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -13209,7 +13876,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`SensorCalibration <api-python-datamodel-sensorcalibration>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -13225,7 +13892,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`SensorCalibration <api-python-datamodel-sensorcalibration>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setSerialNumber(serialNumber)
@@ -13270,7 +13937,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -13285,7 +13952,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -13300,7 +13967,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -13313,7 +13980,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensor()
@@ -13379,20 +14046,20 @@ Reference
 
       :rtype: a new object of type SensorLocation.
 
-      Creates and registeres (if enabled) a SensorLocation instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a SensorLocation instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type SensorLocation.
 
-      Creates and registeres (if enabled) a SensorLocation instance with
+      Creates and registers (if enabled) a SensorLocation instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`SensorLocation <api-python-datamodel-sensorlocation>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -13408,7 +14075,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`SensorLocation <api-python-datamodel-sensorlocation>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -13443,7 +14110,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLatitude(latitude)
@@ -13458,7 +14125,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -13473,7 +14140,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -13488,13 +14155,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(auxStream)
 
       :param auxStream: Object of type :ref:`AuxStream <api-python-datamodel-auxstream>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a AuxStream object to SensorLocation. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -13503,7 +14170,7 @@ Reference
    .. py:method:: add(stream)
 
       :param stream: Object of type :ref:`Stream <api-python-datamodel-stream>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Stream object to SensorLocation. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -13512,36 +14179,36 @@ Reference
    .. py:method:: remove(auxStream)
 
       :param auxStream: Object of type :ref:`AuxStream <api-python-datamodel-auxstream>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added AuxStream object from SensorLocation.
 
    .. py:method:: remove(stream)
 
       :param stream: Object of type :ref:`Stream <api-python-datamodel-stream>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Stream object from SensorLocation.
 
    .. py:method:: removeAuxStream(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAuxStream(auxStreamIndex);
 
       :param auxStreamIndex: The index of the object to be removed of type AuxStreamIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStream(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStream(streamIndex);
 
       :param streamIndex: The index of the object to be removed of type StreamIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: auxStreamCount()
 
@@ -13569,7 +14236,7 @@ Reference
 
       Returns the AuxStream at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: stream(idx)
 
@@ -13585,7 +14252,7 @@ Reference
 
       Returns the Stream at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: station()
 
@@ -13622,13 +14289,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -13661,7 +14328,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Setup <api-python-datamodel-setup>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -13677,7 +14344,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Setup <api-python-datamodel-setup>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setName(name)
@@ -13766,7 +14433,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`SourceTimeFunction <api-python-datamodel-sourcetimefunction>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -13805,7 +14472,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecayTime(decayTime)
@@ -13820,7 +14487,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-station:
@@ -13848,20 +14515,20 @@ Reference
 
       :rtype: a new object of type Station.
 
-      Creates and registeres (if enabled) a Station instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a Station instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type Station.
 
-      Creates and registeres (if enabled) a Station instance with
+      Creates and registers (if enabled) a Station instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`Station <api-python-datamodel-station>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -13877,7 +14544,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Station <api-python-datamodel-station>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -13912,7 +14579,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -13937,7 +14604,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -13952,7 +14619,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -13967,7 +14634,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPlace(place)
@@ -14042,7 +14709,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -14057,7 +14724,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -14072,13 +14739,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(sensorLocation)
 
       :param sensorLocation: Object of type :ref:`SensorLocation <api-python-datamodel-sensorlocation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a SensorLocation object to Station. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -14087,19 +14754,19 @@ Reference
    .. py:method:: remove(sensorLocation)
 
       :param sensorLocation: Object of type :ref:`SensorLocation <api-python-datamodel-sensorlocation>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added SensorLocation object from Station.
 
    .. py:method:: removeSensorLocation(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSensorLocation(sensorLocationIndex);
 
       :param sensorLocationIndex: The index of the object to be removed of type SensorLocationIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: sensorLocationCount()
 
@@ -14121,7 +14788,7 @@ Reference
 
       Returns the SensorLocation at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: findSensorLocation(publicID)
 
@@ -14165,13 +14832,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -14206,20 +14873,20 @@ Reference
 
       :rtype: a new object of type StationGroup.
 
-      Creates and registeres (if enabled) a StationGroup instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a StationGroup instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type StationGroup.
 
-      Creates and registeres (if enabled) a StationGroup instance with
+      Creates and registers (if enabled) a StationGroup instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`StationGroup <api-python-datamodel-stationgroup>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -14235,7 +14902,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`StationGroup <api-python-datamodel-stationgroup>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setType(type)
@@ -14250,14 +14917,14 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCode(code)
 
       :param code: string
 
-      Virtual network code \(up to 10 characters\)
+      Virtual network code \(up to 20 characters\)
 
    .. py:method:: code()
 
@@ -14275,7 +14942,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEnd(end)
@@ -14290,7 +14957,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -14315,7 +14982,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -14330,7 +14997,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -14345,13 +15012,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(stationReference)
 
       :param stationReference: Object of type :ref:`StationReference <api-python-datamodel-stationreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a StationReference object to StationGroup. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -14360,19 +15027,19 @@ Reference
    .. py:method:: remove(stationReference)
 
       :param stationReference: Object of type :ref:`StationReference <api-python-datamodel-stationreference>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added StationReference object from StationGroup.
 
    .. py:method:: removeStationReference(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStationReference(stationReferenceIndex);
 
       :param stationReferenceIndex: The index of the object to be removed of type StationReferenceIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: stationReferenceCount()
 
@@ -14394,7 +15061,7 @@ Reference
 
       Returns the StationReference at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: inventory()
 
@@ -14431,13 +15098,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -14472,20 +15139,20 @@ Reference
 
       :rtype: a new object of type StationMagnitude.
 
-      Creates and registeres (if enabled) a StationMagnitude instance. The
-      publicID is autogenerated.
+      Creates and registers (if enabled) a StationMagnitude instance. The
+      publicID is auto-generated.
 
    .. py:staticmethod:: Create(publicID)
 
       :rtype: a new object of type StationMagnitude.
 
-      Creates and registeres (if enabled) a StationMagnitude instance with
+      Creates and registers (if enabled) a StationMagnitude instance with
       passed publicID.
 
    .. py:method:: equal(other)
 
       :param other: :ref:`StationMagnitude <api-python-datamodel-stationmagnitude>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -14560,7 +15227,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -14575,13 +15242,13 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Adds a Comment object to StationMagnitude. The object is not
       copied but managed by this instance. Any change to the passed object
@@ -14590,19 +15257,19 @@ Reference
    .. py:method:: remove(comment)
 
       :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Comment object from StationMagnitude.
 
    .. py:method:: removeComment(idx)
 
       :param idx: An integer index of the object to be removed.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeComment(commentIndex);
 
       :param commentIndex: The index of the object to be removed of type CommentIndex.
-      :rtype: A boolean value indicating success with True, False otherwise.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: commentCount()
 
@@ -14624,7 +15291,7 @@ Reference
 
       Returns the Comment at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
-      integer index lookup.
+      integer index look-up.
 
    .. py:method:: origin()
 
@@ -14661,13 +15328,13 @@ Reference
    .. py:method:: updateChild(ref)
 
       :param ref: A child object derived from class Object.
-      :rtype: A boolean flag indicating success with True, False otherwise
+      :rtype: A Boolean flag indicating success with True, False otherwise
 
       This method takes the passed reference object and searches for a child
       with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
       or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
       The the child was found the reference objects attributes are copied to
-      the child object. Childs of child are being ignored during this operation.
+      the child object. Children of child are being ignored during this operation.
       This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
@@ -14703,7 +15370,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -14719,7 +15386,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setStationMagnitudeID(stationMagnitudeID)
@@ -14744,7 +15411,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -14763,7 +15430,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: magnitude()
@@ -14828,7 +15495,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`StationReference <api-python-datamodel-stationreference>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -14844,7 +15511,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`StationReference <api-python-datamodel-stationreference>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setStationID(stationID)
@@ -14919,7 +15586,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Stream <api-python-datamodel-stream>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -14935,7 +15602,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`Stream <api-python-datamodel-stream>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setCode(code)
@@ -14970,7 +15637,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDatalogger(datalogger)
@@ -15005,7 +15672,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSensor(sensor)
@@ -15040,7 +15707,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClockSerialNumber(clockSerialNumber)
@@ -15065,7 +15732,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -15080,7 +15747,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepth(depth)
@@ -15095,7 +15762,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -15110,7 +15777,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDip(dip)
@@ -15125,7 +15792,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -15140,7 +15807,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -15155,7 +15822,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainUnit(gainUnit)
@@ -15201,7 +15868,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -15216,7 +15883,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensorLocation()
@@ -15284,7 +15951,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`Tensor <api-python-datamodel-tensor>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -15376,7 +16043,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`TimeQuantity <api-python-datamodel-timequantity>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -15404,7 +16071,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -15419,7 +16086,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15434,7 +16101,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -15449,7 +16116,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-timewindow:
@@ -15479,7 +16146,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`TimeWindow <api-python-datamodel-timewindow>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -15541,7 +16208,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`WaveformQuality <api-python-datamodel-waveformquality>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared
@@ -15557,7 +16224,7 @@ Reference
    .. py:method:: equalIndex(lhs)
 
       :param lhs: :ref:`WaveformQuality <api-python-datamodel-waveformquality>`
-      :rtype: A boolean value indicating True if both indexes are equal or
+      :rtype: A Boolean value indicating True if both indexes are equal or
               False otherwise.
 
    .. py:method:: setWaveformID(waveformID)
@@ -15602,7 +16269,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -15639,7 +16306,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15652,7 +16319,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWindowLength(windowLength)
@@ -15665,7 +16332,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()
@@ -15739,7 +16406,7 @@ Reference
    .. py:method:: equal(other)
 
       :param other: :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
-      :rtype: A boolean value indicating True if both objects are equal or
+      :rtype: A Boolean value indicating True if both objects are equal or
               False otherwise.
 
       Compares two objects without its child objects. Both objects are compared

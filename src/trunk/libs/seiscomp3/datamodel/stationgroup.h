@@ -132,19 +132,19 @@ class SC_SYSTEM_CORE_API StationGroup : public PublicObject {
 	public:
 		//! ARRAY or DEPLOYMENT
 		void setType(const OPT(StationGroupType)& type);
-		StationGroupType type() const throw(Seiscomp::Core::ValueException);
+		StationGroupType type() const;
 
-		//! Virtual network code (up to 10 characters)
+		//! Virtual network code (up to 20 characters)
 		void setCode(const std::string& code);
 		const std::string& code() const;
 
 		//! Start of epoch in ISO datetime format
 		void setStart(const OPT(Seiscomp::Core::Time)& start);
-		Seiscomp::Core::Time start() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time start() const;
 
 		//! End of epoch (empty string if the station is open)
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Station group description
 		void setDescription(const std::string& description);
@@ -152,15 +152,15 @@ class SC_SYSTEM_CORE_API StationGroup : public PublicObject {
 
 		//! Optional latitude (eg., of the central station)
 		void setLatitude(const OPT(double)& latitude);
-		double latitude() const throw(Seiscomp::Core::ValueException);
+		double latitude() const;
 
 		//! Optional longitude (eg., of the central station)
 		void setLongitude(const OPT(double)& longitude);
-		double longitude() const throw(Seiscomp::Core::ValueException);
+		double longitude() const;
 
 		//! Optional elevation (eg., of the central station)
 		void setElevation(const OPT(double)& elevation);
-		double elevation() const throw(Seiscomp::Core::ValueException);
+		double elevation() const;
 
 
 	// ------------------------------------------------------------------

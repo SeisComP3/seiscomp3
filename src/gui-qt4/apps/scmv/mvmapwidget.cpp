@@ -19,8 +19,7 @@ using namespace Seiscomp;
 
 MvMapWidget::MvMapWidget(const Seiscomp::Gui::MapsDesc &maps,
                          QWidget* parent, Qt::WFlags f)
- : Gui::MapWidget(maps, parent, f),
-   _mapLegend(new Legend) {
+: Gui::MapWidget(maps, parent, f) {
 	setMouseTracking(true);
 }
 
@@ -28,26 +27,29 @@ MvMapWidget::MvMapWidget(const Seiscomp::Gui::MapsDesc &maps,
 
 void MvMapWidget::draw(QPainter& painter) {
 	Gui::MapWidget::draw(painter);
-	_mapLegend->draw(&canvas(), painter);
+	_eqSymbolLegend.draw(&canvas(), painter);
+	_mapLegend.draw(&canvas(), painter);
 }
 
 
 
 
 ApplicationStatus::Mode MvMapWidget::mode() const {
-	return _mapLegend->mode();
+	return _mapLegend.mode();
 }
 
 
 
 
 void MvMapWidget::setMode(ApplicationStatus::Mode mode) {
-	_mapLegend->setMode(mode);
+	_mapLegend.setMode(mode);
 }
 
 
 
 
 void MvMapWidget::showMapLegend(bool val) {
-	_mapLegend->setVisible(val);
+	_mapLegend.setVisible(val);
+	_eqSymbolLegend.setVisible(val);
+	update();
 }

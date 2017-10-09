@@ -93,7 +93,7 @@ class Pick : public Seiscomp::Core::BaseObject {
 	Status status;
 	bool   xxl;		// Does it look like a very big event?
 
-	Seiscomp::Core::BaseObjectCPtr attachement;
+	Seiscomp::Core::BaseObjectCPtr attachment;
 
   private:
 	mutable OriginPtr  _origin; // The (one and only) origin this pick is associated to

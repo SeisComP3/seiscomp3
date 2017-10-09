@@ -5,7 +5,7 @@
 #error "system_defs_windows.h should never be directly included. Include system_defs.h."
 #endif
 
-#define         LOC_INLINE      __inline__
+#define         LOC_INLINE
 
 #ifndef int16
 #define int16 short

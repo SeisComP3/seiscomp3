@@ -65,10 +65,7 @@ class App : public Processing::Application {
 		                   Processing::WaveformProcessor::Component comp,
 		                   const Core::Time &time,
 		                   const std::string &streamID,
-		                   const std::string &networkCode,
-		                   const std::string &stationCode,
-		                   const std::string &locationCode,
-		                   const std::string &channelCode,
+				   const DataModel::WaveformStreamID &waveformID,
 		                   bool metaDataRequired);
 
 		// Initializes a processor which can use multiple components. This
@@ -77,18 +74,12 @@ class App : public Processing::Application {
 		                   Processing::WaveformProcessor::StreamComponent comp,
 		                   const Core::Time &time,
 		                   const std::string &streamID,
-		                   const std::string &networkCode,
-		                   const std::string &stationCode,
-		                   const std::string &locationCode,
-		                   const std::string &channelCode,
+				   const DataModel::WaveformStreamID &waveformID,
 		                   bool metaDataRequired);
 
-		bool initDetector(const std::string &streamID,
-		                  const std::string &networkCode,
-		                  const std::string &stationCode,
-		                  const std::string &locationCode,
-		                  const std::string &channelCode,
-		                  const Core::Time &time);
+		bool initDetector( const std::string &streamID,
+				   const DataModel::WaveformStreamID &waveformID,
+		                   const Core::Time &time);
 
 		void addSecondaryPicker(const Core::Time &onset, const Record *rec,
 		                        const std::string& pickID);
@@ -134,6 +125,7 @@ class App : public Processing::Application {
 		typedef std::map<TWProc*, std::string> ProcReverseMap;
 		typedef DataModel::EventParametersPtr EP;
 
+		bool           _playbackMode;
 		int            _sentMessages;
 		StreamMap      _streams;
 		Config         _config;

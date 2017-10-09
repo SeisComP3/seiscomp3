@@ -20,7 +20,47 @@ namespace DataModel {
 
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+IMPLEMENT_SC_CLASS_DERIVED(InventorySyncMessage, Message, "inventory_sync_message");
 IMPLEMENT_SC_CLASS_DERIVED(ArtificialOriginMessage, Message, "artificial_origin_message");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+InventorySyncMessage::InventorySyncMessage() : isFinished(false) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+InventorySyncMessage::InventorySyncMessage(bool finished)
+: isFinished(finished) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool InventorySyncMessage::empty() const {
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void InventorySyncMessage::serialize(Archive& ar) {
+	ar & NAMED_OBJECT_HINT("isFinished", isFinished, Archive::XML_ELEMENT | Archive::XML_MANDATORY);
+	ar & NAMED_OBJECT_HINT("creationInfo", creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArtificialOriginMessage::ArtificialOriginMessage() {}
@@ -30,9 +70,8 @@ ArtificialOriginMessage::ArtificialOriginMessage() {}
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ArtificialOriginMessage::ArtificialOriginMessage(DataModel::Origin* origin) :
-		_origin(origin) {
-}
+ArtificialOriginMessage::ArtificialOriginMessage(DataModel::Origin* origin)
+: _origin(origin) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

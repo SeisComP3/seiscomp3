@@ -227,7 +227,7 @@ bool Detector::handleGap(Filter *filter, const Core::TimeSpan& gapLength,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Detector::emitPick(const Record* rec, const Core::Time& t) {
+bool Detector::emitPick(const Record *rec, const Core::Time &t) {
 	// Is there a last pick and a last snr amplitude? Then defer the pick
 	// until the max amplitude has been calculated
 	if ( _lastAmplitude && (bool)_lastPick ) {
@@ -304,6 +304,11 @@ bool Detector::validateOn(const Record *record, size_t &i, const DoubleArray &fi
 	_minAmplitude = Core::None;
 	_pickID = "";
 
+	SEISCOMP_DEBUG("[%s] trigger on = %s, amp = %f",
+	               record->streamID().c_str(),
+	               (record->startTime() + Core::TimeSpan(double(i)/record->samplingFrequency())).iso().c_str(),
+	               _triggeredAmplitude);
+
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -324,8 +329,15 @@ bool Detector::validateOff(const Record *record, size_t i,
 		Core::Time offTime;
 		offTime = record->startTime() +
 		          Core::TimeSpan(double(i)/record->samplingFrequency());
-		SEISCOMP_DEBUG("[%s] duration = %.2f", _pickID.c_str(),
+		SEISCOMP_DEBUG("[%s] trigger off = %s, amp = %f",
+		               record->streamID().c_str(),
+		               offTime.iso().c_str(),
+		               filteredData[i]);
+		SEISCOMP_DEBUG("[%s] duration = %.2f",
+			       record->streamID().c_str(),
 		               double(offTime - _lastPick));
+		SEISCOMP_DEBUG("[%s] pick id is '%s'",
+			       record->streamID().c_str(), _pickID.c_str());
 	}
 
 	// Pick window is gone, reset pickID
@@ -366,12 +378,12 @@ void Detector::sendMaxAmplitude(const Record *record) {
 	_amplProc.reset();
 
 	if ( !_lastAmplitude ) {
-		SEISCOMP_ERROR("This should never happen: no SNR amplitude to be sent");
+		SEISCOMP_ERROR("%s: This should never happen: no SNR amplitude to be sent", record->streamID().c_str());
 		return;
 	}
 
 	if ( _minAmplitude && *_lastAmplitude < *_minAmplitude ) {
-		SEISCOMP_DEBUG("Skipping pick, minimum amplitude not reached: %.2f < %.2f", *_lastAmplitude, *_minAmplitude);
+		SEISCOMP_DEBUG("%s: Skipping pick, minimum amplitude not reached: %.2f < %.2f", record->streamID().c_str(), *_lastAmplitude, *_minAmplitude);
 		return;
 	}
 
@@ -380,7 +392,6 @@ void Detector::sendMaxAmplitude(const Record *record) {
 		sendPick(_currentPickRecord.get(), _currentPick);
 
 	Core::Time t = _lastPick + Core::TimeSpan(offset);
-
 	if ( _amplPublish && isEnabled() ) {
 		if ( _pickID.empty() ) {
 			SEISCOMP_DEBUG("No valid pickID set (pick has not been sent), cancel sending 'snr' amplitude");

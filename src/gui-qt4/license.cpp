@@ -34,7 +34,9 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/core/system.h>
 #include <seiscomp3/system/environment.h>
+#include <seiscomp3/utils/files.h>
 
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
@@ -154,7 +156,11 @@ RSA *readKey(const char *fn, int which, int minbits, int maxbits, int &strength)
 	(void)BIO_free_all(in);
 	
 	if ( rsa != NULL ) {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 		strength = BN_num_bits(rsa->n);
+#else
+		strength = RSA_bits(rsa);
+#endif
 		if ( strength < minbits || strength > maxbits ) {
 			RSA_free(rsa);
 			rsa = NULL;
@@ -200,6 +206,7 @@ bool readNID(char** str, X509* x509, int nid) {
 }
 
 
+
 bool isValid() {
 	static bool hasValidated = false;
 	static bool validates = false;
@@ -218,9 +225,20 @@ bool isValid() {
 	string licenseFile = licenseDir + "/License";
 	string licenseKeyfile = licenseDir + "/License.key";
 	string licenseSignature = licenseDir + "/License.signed";
-	string licenseCert = licenseDir + "/License.crt";
 
-	X509 *x509 = readCertificate(licenseCert);
+	boost::filesystem::path path = SC_FS_PATH(env->shareDir())
+	    / SC_FS_PATH("licenses") / SC_FS_PATH("seiscomp3.crt");
+
+	if ( !Seiscomp::Util::fileExists(path.string().c_str()) ) {
+		path = SC_FS_PATH(env->configDir())
+		    / SC_FS_PATH("licenses") / SC_FS_PATH("seiscomp3.crt");
+		if ( !Seiscomp::Util::fileExists(path.string()) ) {
+			path = SC_FS_PATH(env->configDir())
+			    / SC_FS_PATH("key") / SC_FS_PATH("License.crt");
+		}
+	}
+
+	X509 *x509 = readCertificate(path.string());
 	if ( x509 ) {
 		ASN1_TIME* notAfter = X509_get_notAfter(x509),
 		         * notBefore = X509_get_notBefore(x509);
@@ -229,14 +247,14 @@ bool isValid() {
 		int res = X509_cmp_time(notBefore, &ptime);
 		if ( res == 0 || res > 0 ) {
 			X509_free(x509);
-			cerr << "FATAL ERROR: License has expired: " << licenseCert << endl;
+			cerr << "FATAL ERROR: License has expired: " << path.string() << endl;
 			return false;
 		}
 
 		res = X509_cmp_time(notAfter, &ptime);
 		if ( res == 0 || res < 0 ) {
 			X509_free(x509);
-			cerr << "FATAL ERROR: License has expired: " << licenseCert << endl;
+			cerr << "FATAL ERROR: License has expired: " << path.string() << endl;
 			return false;
 		}
 
@@ -248,7 +266,7 @@ bool isValid() {
 		if ( !pkey ) {
 			X509_free(x509);
 			EVP_cleanup();
-			cerr << "FATAL ERROR: License verification has failed: " << licenseCert << endl;
+			cerr << "FATAL ERROR: License verification has failed: " << path.string() << endl;
 			return false;
 		}
 
@@ -257,7 +275,7 @@ bool isValid() {
 			X509_free(x509);
 			EVP_PKEY_free(pkey);
 			EVP_cleanup();
-			cerr << "FATAL ERROR: License verification has failed: " << licenseCert << endl;
+			cerr << "FATAL ERROR: License verification has failed: " << path.string() << endl;
 			return false;
 		}
 
@@ -285,19 +303,34 @@ bool isValid() {
 
 	ifstream f;
 
-	f.open(licenseFile.c_str(), ios_base::in);
+	try {
+		f.open(licenseFile.c_str(), ios_base::in);
+	}
+	catch ( std::exception &e ) {
+		cerr << "FATAL ERROR: Failed to open license file: " << licenseFile << endl;
+		validates = false;
+		return false;
+	}
 
 	if ( !f.good() ) {
-		cerr << "FATAL ERROR: Invalid license file: " << licenseFile << endl;
+		cerr << "FATAL ERROR: Failed to open license file: " << licenseFile << endl;
 		validates = false;
 		return false;
 	}
 
 	licenseText.clear();
 
-	while ( (len = f.rdbuf()->sgetn(data, 64)) > 0 ) {
-		licenseText.append(data, len);
-		MD5_Update(&ctx, data, len);
+	try {
+		while ( (len = f.rdbuf()->sgetn(data, sizeof(data))) > 0 ) {
+			licenseText.append(data, len);
+			MD5_Update(&ctx, data, len);
+		}
+	}
+	catch ( ... ) {
+		cerr << "FATAL ERROR: Invalid license file: " << licenseFile << endl;
+		f.close();
+		validates = false;
+		return false;
 	}
 
 	f.close();

@@ -26,6 +26,9 @@
 #include "ui_mainframe.h"
 
 
+class QSystemTrayIcon;
+
+
 namespace Seiscomp {
 namespace Gui {
 
@@ -62,6 +65,7 @@ class MainFrame : public MainWindow {
 	private slots:
 		void configureAcquisition();
 
+		void eventAdded(Seiscomp::DataModel::Event*, bool);
 		void setOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool, bool);
 		void updateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
 		void releaseFixedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
@@ -75,13 +79,27 @@ class MainFrame : public MainWindow {
 		void showWaveforms();
 		void publishEvent();
 
+		void hoverEvent(const std::string &eventID);
+		void selectEvent(const std::string &eventID);
+
 		void raiseLocator();
 
 		void fileOpen();
 		void fileSave();
 
+#if QT_VERSION >= 0x040300
+		void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+		void trayIconMessageClicked();
+#endif
+
 	private:
 		void populateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool);
+
+		// This creates an EventParameters instance containing copies
+		// of all event attributes relevant for publication incl.
+		// focal mechanisms, moment magnitude etc. if available.
+		// TODO: evaluate if this fits better somewhere else.
+		Seiscomp::DataModel::EventParametersPtr _createEventParametersForPublication(const Seiscomp::DataModel::Event *event);
 
 	protected:
 		void toggledFullScreen(bool);
@@ -89,6 +107,10 @@ class MainFrame : public MainWindow {
 
 	private:
 		Ui::MainFrame      _ui;
+#if QT_VERSION >= 0x040300
+		QSystemTrayIcon   *_trayIcon;
+		std::string        _trayMessageEventID;
+#endif
 		QAction           *_actionConfigureAcquisition;
 		EventListView     *_eventList;
 		EventSummary      *_eventSmallSummary;

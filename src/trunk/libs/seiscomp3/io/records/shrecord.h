@@ -68,10 +68,10 @@ class SC_SYSTEM_CORE_API SHRecord : public Record {
 	const Array* raw() const;
 
 	//! Sets the data sample array. The ownership goes over to the record.
-	void setData(Array* data) throw(Core::TypeException);
+	void setData(Array* data);
 
 	//! Sets the data sample array.
-	void setData(int size, const void *data, Array::DataType datatype) throw(Core::TypeException);
+	void setData(int size, const void *data, Array::DataType datatype);
 
 	//! Frees the memory allocated for the data samples.
 	void saveSpace() const {}
@@ -79,8 +79,8 @@ class SC_SYSTEM_CORE_API SHRecord : public Record {
 	//! Returns a deep copy of the calling object.
 	SHRecord* copy() const;
 
-	void read(std::istream &in) throw(Core::StreamException);
-	void write(std::ostream &out) throw(Core::StreamException);
+	void read(std::istream &in);
+	void write(std::ostream &out);
 
 
     private:

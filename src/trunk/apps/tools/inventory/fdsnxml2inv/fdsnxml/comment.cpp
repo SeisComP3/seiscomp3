@@ -22,7 +22,7 @@ Comment::MetaObject::MetaObject(const Core::RTTI *rtti, const Core::MetaObject *
 	addProperty(Core::simpleProperty("value", "string", false, false, false, false, false, false, NULL, &Comment::setValue, &Comment::value));
 	addProperty(Core::simpleProperty("beginEffectiveTime", "datetime", false, false, false, false, true, false, NULL, &Comment::setBeginEffectiveTime, &Comment::beginEffectiveTime));
 	addProperty(Core::simpleProperty("endEffectiveTime", "datetime", false, false, false, false, true, false, NULL, &Comment::setEndEffectiveTime, &Comment::endEffectiveTime));
-	addProperty(Core::simpleProperty("id", "int", false, false, false, false, false, false, NULL, &Comment::setId, &Comment::id));
+	addProperty(Core::simpleProperty("id", "int", false, false, false, false, true, false, NULL, &Comment::setId, &Comment::id));
 	addProperty(arrayClassProperty<Person>("author", "FDSNXML::Person", &Comment::authorCount, &Comment::author, static_cast<bool (Comment::*)(Person*)>(&Comment::addAuthor), &Comment::removeAuthor, static_cast<bool (Comment::*)(Person*)>(&Comment::removeAuthor)));
 }
 
@@ -33,7 +33,6 @@ IMPLEMENT_METAOBJECT(Comment)
 
 
 Comment::Comment() {
-	_id = 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -133,7 +132,7 @@ DateTime Comment::endEffectiveTime() const throw(Seiscomp::Core::ValueException)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Comment::setId(int id) {
+void Comment::setId(const OPT(int)& id) {
 	_id = id;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -142,8 +141,10 @@ void Comment::setId(int id) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Comment::id() const {
-	return _id;
+int Comment::id() const throw(Seiscomp::Core::ValueException) {
+	if ( _id )
+		return *_id;
+	throw Seiscomp::Core::ValueException("Comment.id is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

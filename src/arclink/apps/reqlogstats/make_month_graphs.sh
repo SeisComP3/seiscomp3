@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Prepare summary graphs for all networks.
 #

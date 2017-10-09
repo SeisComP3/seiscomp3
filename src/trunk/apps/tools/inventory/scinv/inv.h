@@ -43,11 +43,19 @@ struct LogHandler {
 	 */
 	virtual void publish(Level level, const char *message,
 	                     const Seiscomp::DataModel::Object *obj1,
-	                     const Seiscomp::DataModel::Object *obj2) = 0;
+	                     const Seiscomp::DataModel::Inventory *source1,
+	                     const Seiscomp::DataModel::Object *obj2,
+	                     const Seiscomp::DataModel::Inventory *source2) = 0;
 };
 
 
 class InventoryTask : public Task {
+	public:
+		typedef Seiscomp::DataModel::Object Object;
+		typedef Seiscomp::DataModel::Inventory Inventory;
+		typedef std::map<const Object*,Inventory*> SourceMap;
+
+
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
@@ -65,8 +73,10 @@ class InventoryTask : public Task {
 		const Seiscomp::DataModel::Sensor *findSensor(const std::string &) const;
 		const Seiscomp::DataModel::AuxDevice *findAuxDevice(const std::string &) const;
 		const Seiscomp::DataModel::ResponseFIR *findFIR(const std::string &) const;
+		const Seiscomp::DataModel::ResponseIIR *findIIR(const std::string &) const;
 		const Seiscomp::DataModel::ResponsePAZ *findPAZ(const std::string &) const;
 		const Seiscomp::DataModel::ResponsePolynomial *findPoly(const std::string &) const;
+		const Seiscomp::DataModel::ResponseFAP *findFAP(const std::string &) const;
 
 
 	// ------------------------------------------------------------------
@@ -77,7 +87,9 @@ class InventoryTask : public Task {
 		Seiscomp::DataModel::Sensor *sensorByName(const std::string &) const;
 		Seiscomp::DataModel::AuxDevice *auxDeviceByName(const std::string &) const;
 		Seiscomp::DataModel::ResponseFIR *respFIRByName(const std::string &) const;
+		Seiscomp::DataModel::ResponseIIR *respIIRByName(const std::string &) const;
 		Seiscomp::DataModel::ResponsePAZ *respPAZByName(const std::string &) const;
+		Seiscomp::DataModel::ResponseFAP *respFAPByName(const std::string &) const;
 		Seiscomp::DataModel::ResponsePolynomial *respPolynomialByName(const std::string &) const;
 
 		void log(LogHandler::Level level, const char *message,
@@ -95,18 +107,20 @@ class InventoryTask : public Task {
 		// the input publicID can differ from the output
 		Seiscomp::DataModel::ResponseFIR *
 		process(const Seiscomp::DataModel::ResponseFIR *);
+		Seiscomp::DataModel::ResponseIIR *
+		process(const Seiscomp::DataModel::ResponseIIR *);
 		Seiscomp::DataModel::ResponsePAZ *
 		process(const Seiscomp::DataModel::ResponsePAZ *);
 		Seiscomp::DataModel::ResponsePolynomial *
 		process(const Seiscomp::DataModel::ResponsePolynomial *);
+		Seiscomp::DataModel::ResponseFAP *
+		process(const Seiscomp::DataModel::ResponseFAP *);
 
 
 	// ------------------------------------------------------------------
 	//  Protected types and members
 	// ------------------------------------------------------------------
 	protected:
-		typedef Seiscomp::DataModel::Object Object;
-		typedef Seiscomp::DataModel::Inventory Inventory;
 		typedef std::map<std::string, const Object*> ObjectLookup;
 		typedef std::map<std::string, std::string> IDMap;
 		typedef std::set<const Object*> ObjectSet;
@@ -116,8 +130,10 @@ class InventoryTask : public Task {
 			ObjectLookup sensorLookup;
 			ObjectLookup auxDeviceLookup;
 			ObjectLookup firLookup;
+			ObjectLookup iirLookup;
 			ObjectLookup pazLookup;
 			ObjectLookup polyLookup;
+			ObjectLookup fapLookup;
 			ObjectSet    touchedPublics;
 		};
 
@@ -127,12 +143,15 @@ class InventoryTask : public Task {
 		ObjectLookup  _sensorNames;
 		ObjectLookup  _auxDeviceNames;
 		ObjectLookup  _FIRNames;
+		ObjectLookup  _IIRNames;
 		ObjectLookup  _PAZNames;
 		ObjectLookup  _PolyNames;
+		ObjectLookup  _FAPNames;
 
 		Session       _session;
 
 		LogHandler   *_logHandler;
+		SourceMap     _sources;
 };
 
 

@@ -1758,6 +1758,11 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 		return false;
 	}
 
+	if ( _objectAttributes->empty() ) {
+		SEISCOMP_DEBUG("no update for object type '%s' possible, empty list of non-index attributes", object->className());
+		return true;
+	}
+
 	if ( iPublicID )
 		_indexAttributes["_oid"] = toString(iPublicID);
 
@@ -1987,7 +1992,7 @@ void DatabaseArchive::locateNullObjectByName(const char* name, const char* targe
 	if ( !isEmpty(name) ) {
 		if ( !isEmpty(targetClass) ) {
 			if ( !(hint() & DB_TABLE) ) {
-				_currentAttributeName = std::string(name) + ATTRIBUTE_SEPERATOR""OBJECT_USED_POSTFIX;
+				_currentAttributeName = std::string(name) + ATTRIBUTE_SEPERATOR "" OBJECT_USED_POSTFIX;
 				write((bool)false);
 				return;
 			}

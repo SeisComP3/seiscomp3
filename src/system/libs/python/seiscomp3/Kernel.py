@@ -311,8 +311,19 @@ class Module:
     self.env.logStatus(self.name, self.isRunning(), shouldRun, self.env.isModuleEnabled(self.name) or isinstance(self, CoreModule))
 
 
+  def requiresKernelModules(self):
+    # The default handler triggers a start of kernel modules before updating
+    # its configuration
+    return True
+
+  def updateConfigProxy(self):
+    # This function must return either a string containing the module name
+    # of the proxy module that should be configured as well or None.
+    return None
+
   def updateConfig(self):
-    # The default handler doesn't do anything
+    # This function must return a number indicating the error code where
+    # 0 means no error. The default handler doesn't do anything.
     return 0
 
 

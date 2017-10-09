@@ -142,22 +142,22 @@ class SC_SYSTEM_CORE_API Origin : public PublicObject {
 		//! defined
 		//! in km.
 		void setDepth(const OPT(RealQuantity)& depth);
-		RealQuantity& depth() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& depth() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& depth();
+		const RealQuantity& depth() const;
 
 		//! Type of depth determination.
 		void setDepthType(const OPT(OriginDepthType)& depthType);
-		OriginDepthType depthType() const throw(Seiscomp::Core::ValueException);
+		OriginDepthType depthType() const;
 
 		//! Boolean flag. True if focal time was kept fixed for
 		//! computation of the Origin.
 		void setTimeFixed(const OPT(bool)& timeFixed);
-		bool timeFixed() const throw(Seiscomp::Core::ValueException);
+		bool timeFixed() const;
 
 		//! Boolean flag. True if epicenter was kept fixed for
 		//! computation of Origin.
 		void setEpicenterFixed(const OPT(bool)& epicenterFixed);
-		bool epicenterFixed() const throw(Seiscomp::Core::ValueException);
+		bool epicenterFixed() const;
 
 		//! Identifies the reference system used for hypocenter
 		//! determination. This is only necessary if
@@ -178,31 +178,31 @@ class SC_SYSTEM_CORE_API Origin : public PublicObject {
 		//! Additional parameters describing the quality of an Origin
 		//! determination.
 		void setQuality(const OPT(OriginQuality)& quality);
-		OriginQuality& quality() throw(Seiscomp::Core::ValueException);
-		const OriginQuality& quality() const throw(Seiscomp::Core::ValueException);
+		OriginQuality& quality();
+		const OriginQuality& quality() const;
 
 		//! Additional parameters describing the uncertainty of an
 		//! Origin determination.
 		void setUncertainty(const OPT(OriginUncertainty)& uncertainty);
-		OriginUncertainty& uncertainty() throw(Seiscomp::Core::ValueException);
-		const OriginUncertainty& uncertainty() const throw(Seiscomp::Core::ValueException);
+		OriginUncertainty& uncertainty();
+		const OriginUncertainty& uncertainty() const;
 
 		//! Describes the Origin type.
 		void setType(const OPT(OriginType)& type);
-		OriginType type() const throw(Seiscomp::Core::ValueException);
+		OriginType type() const;
 
 		//! Evaluation mode of Origin.
 		void setEvaluationMode(const OPT(EvaluationMode)& evaluationMode);
-		EvaluationMode evaluationMode() const throw(Seiscomp::Core::ValueException);
+		EvaluationMode evaluationMode() const;
 
 		//! Evaluation status of Origin.
 		void setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus);
-		EvaluationStatus evaluationStatus() const throw(Seiscomp::Core::ValueException);
+		EvaluationStatus evaluationStatus() const;
 
 		//! CreationInfo for the Origin object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

@@ -78,7 +78,7 @@ install-headers: spu_system.h
 	$(INSTALL) -m 644 spu_system.h $(DESTDIR)$(includedir)/spu_system.h
 
 clean:
-	rm -f system.h
+	rm -f spu_system.h
 
 distclean: clean
 	rm -f Makefile *~

@@ -144,20 +144,20 @@ class SC_SYSTEM_CORE_API Magnitude : public PublicObject {
 
 		//! Number of used stations for this magnitude computation.
 		void setStationCount(const OPT(int)& stationCount);
-		int stationCount() const throw(Seiscomp::Core::ValueException);
+		int stationCount() const;
 
 		//! Azimuthal gap for this magnitude computation in degrees.
 		void setAzimuthalGap(const OPT(double)& azimuthalGap);
-		double azimuthalGap() const throw(Seiscomp::Core::ValueException);
+		double azimuthalGap() const;
 
 		//! Evaluation status of Magnitude.
 		void setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus);
-		EvaluationStatus evaluationStatus() const throw(Seiscomp::Core::ValueException);
+		EvaluationStatus evaluationStatus() const;
 
 		//! CreationInfo for the Magnitude object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

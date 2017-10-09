@@ -15,7 +15,7 @@ def get_library_path():
         return LD_LIBRARY_PATH + ":" + DYLD_FALLBACK_FRAMEWORK_PATH
     else:
         return LD_LIBRARY_PATH
-        
+
 def get_framework_path():
         return DYLD_FALLBACK_FRAMEWORK_PATH
 
@@ -189,8 +189,6 @@ def stop_kernel_modules():
 # ------------------------------------------------------------------------------
 def on_setup(args, flags):
   import seiscomp3.Setup
-
-  params = {}
 
   if "stdin" in flags:
     cfg = seiscomp3.Config.Config()
@@ -602,14 +600,52 @@ def on_install_deps_help(args):
 
 
 def on_update_config(args, flags):
-  print "* starting kernel modules"
-  start_kernel_modules()
-  for mod in config_mods:
-    if len(args) == 0 or mod.name in args:
-      print "* configure %s" % mod.name
-      if mod.updateConfig() != 0:
-        error("updating configuration for %s failed" % mod.name)
-        return 1
+  kernelModsStarted = False
+  configuredMods = {}
+
+  listOfMods = args
+  if len(listOfMods) == 0:
+    listOfMods = []
+    for mod in config_mods: listOfMods.append(mod.name)
+
+  while len(listOfMods) > 0:
+    for mod in config_mods:
+      if mod.name in listOfMods:
+        if not kernelModsStarted and mod.requiresKernelModules():
+          print "* starting kernel modules"
+          start_kernel_modules()
+          kernelModsStarted = True
+        print "* configure %s" % mod.name
+
+        proxy = None
+
+        try:
+          proxy = mod.updateConfigProxy()
+          if isinstance(proxy, basestring):
+            configuredMods.setdefault(proxy, False)
+        except Exception, e:
+          pass
+
+        if proxy is None:
+          result = mod.updateConfig()
+
+          try:
+            error_code = int(result)
+          except Exception, e:
+            error("unexpected return type when updating configuration of %s" % mod.name)
+            return 1
+
+            if error_code != 0:
+              error("updating configuration for %s failed" % mod.name)
+              return 1
+
+        configuredMods[mod.name] = True
+
+    listOfMods = []
+    # Collect all unconfigured but indirectly requested mods
+    for name, configured in configuredMods.iteritems():
+      if not configured: listOfMods.append(name)
+
   return 0
 
 
@@ -706,14 +742,23 @@ def on_alias(args, flags):
 
     if has_alias: return 1
 
-    # copy defaults from etc/defaults/mod1.cfg to etc/defaults/mod2.cfg
-    default_cfg1 = os.path.join("etc", "defaults", args[1] + ".cfg")
-    default_cfg2 = os.path.join("etc", "defaults", args[2] + ".cfg")
+    # create symlink of defaults from etc/defaults/mod1.cfg to etc/defaults/mod2.cfg
+    # use relative path to default_cfg2
+    cwd = os.getcwd()
+    os.chdir(os.path.join(SEISCOMP_ROOT,"etc", "defaults"))
+    default_cfg1 = args[1] + ".cfg"
+    default_cfg2 = args[2] + ".cfg"
     if os.path.exists(default_cfg2):
-      print "Copy default configuration: %s -> %s" % (default_cfg2, default_cfg1)
-      shutil.copyfile(os.path.join(SEISCOMP_ROOT, default_cfg2), os.path.join(SEISCOMP_ROOT, default_cfg1))
+      print "Linking default configuration: %s -> %s" % (default_cfg2, default_cfg1)
+      # - first: remove target
+      try: os.remove(default_cfg1)
+      except: pass
+      # create symlink
+      os.symlink(os.path.relpath(default_cfg2), default_cfg1)
     else:
-      print "No default configuration to copy"
+      print "No default configuration to link"
+    # return to initial directory
+    os.chdir(cwd)
 
     # create symlink from bin/mod1 to bin/mod2
     # - first: remove target
@@ -723,10 +768,18 @@ def on_alias(args, flags):
     os.symlink(mod2, os.path.join(SEISCOMP_ROOT, mod1))
 
     # create symlink from etc/init/mod1.py to etc/init/mod2.py
-    init1 = os.path.join("etc", "init", args[1] + ".py")
-    init2 = os.path.join("etc", "init", args[2] + ".py")
-    print "Copy init script: %s -> %s" % (init2, init1)
-    shutil.copyfile(os.path.join(SEISCOMP_ROOT, init2), os.path.join(SEISCOMP_ROOT, init1))
+    cwd = os.getcwd()
+    os.chdir(os.path.join(SEISCOMP_ROOT,"etc", "init"))
+    init1 = args[1] + ".py"
+    init2 = args[2] + ".py"
+    print "Link init script: %s -> %s" % (init2, init1)
+    # - first: remove target
+    try: os.remove(init1)
+    except: pass
+    # create symlink with relative path
+    os.symlink(os.path.relpath(init2), init1)
+    # return to initial directory
+    os.chdir(cwd)
 
     return 0
   elif args[0] == "remove":
@@ -980,7 +1033,7 @@ except: pass
 if not isWrapped:
   try: os.environ["PATH"] = BIN_PATH + ":" + os.environ["PATH"]
   except: os.environ["PATH"] = BIN_PATH
-  
+
   try:
     os.environ[SysLibraryPathVar] = get_library_path() + ":" + os.environ[SysLibraryPathVar]
   except:

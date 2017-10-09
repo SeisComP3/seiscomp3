@@ -131,11 +131,11 @@ class SC_SYSTEM_CORE_API ResponsePolynomial : public PublicObject {
 
 		//! Gain of response (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Gain frequency (48.06/58.05)
 		void setGainFrequency(const OPT(double)& gainFrequency);
-		double gainFrequency() const throw(Seiscomp::Core::ValueException);
+		double gainFrequency() const;
 
 		//! A single character describing valid frequency units
 		//! (42.09/62.08): A - rad/s, B - Hz
@@ -149,32 +149,32 @@ class SC_SYSTEM_CORE_API ResponsePolynomial : public PublicObject {
 
 		//! Lower bound of approximation (42.12/62.11)
 		void setApproximationLowerBound(const OPT(double)& approximationLowerBound);
-		double approximationLowerBound() const throw(Seiscomp::Core::ValueException);
+		double approximationLowerBound() const;
 
 		//! Upper bound of approximation (42.13/62.12)
 		void setApproximationUpperBound(const OPT(double)& approximationUpperBound);
-		double approximationUpperBound() const throw(Seiscomp::Core::ValueException);
+		double approximationUpperBound() const;
 
 		//! The maximum absolute error of the polynomial approximation
 		//! (42.14/62.13; Put 0.0 if the value is unknown or actually
 		//! zero)
 		void setApproximationError(const OPT(double)& approximationError);
-		double approximationError() const throw(Seiscomp::Core::ValueException);
+		double approximationError() const;
 
 		//! The number of coefficients in the polynomial approximation
 		//! (42.15/62.14; one more than the degree of the polynomial
 		void setNumberOfCoefficients(const OPT(int)& numberOfCoefficients);
-		int numberOfCoefficients() const throw(Seiscomp::Core::ValueException);
+		int numberOfCoefficients() const;
 
 		//! The polynomial coefficients, lowest order first
 		//! (42.16/62.15)
 		void setCoefficients(const OPT(RealArray)& coefficients);
-		RealArray& coefficients() throw(Seiscomp::Core::ValueException);
-		const RealArray& coefficients() const throw(Seiscomp::Core::ValueException);
+		RealArray& coefficients();
+		const RealArray& coefficients() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

@@ -58,8 +58,8 @@ MAKEENUM(
 		OL_REGION
 	),
 	ENAMES(
-		"Created(GMT)",
-		"OT(GMT)",
+		"Created(%1)",
+		"OT(%1)",
 		"Phases",
 		"Lat.",
 		"Lon.",
@@ -114,7 +114,7 @@ MAKEENUM(
 		MLC_DUMMY
 	),
 	ENAMES(
-		"Created(GMT)",
+		"Created(%1)",
 		"TP",
 		"M",
 		"Count",
@@ -158,7 +158,7 @@ MAKEENUM(
 		FML_AUTHOR
 	),
 	ENAMES(
-		"Created(GMT)",
+		"Created(%1)",
 		"Azi. Gap",
 		"Count",
 		"Misfit",
@@ -218,19 +218,6 @@ bool itemTextLessThan(const QPair<QTreeWidgetItem*, int>& left, const QPair<QTre
 
 bool itemTextGreaterThan(const QPair<QTreeWidgetItem*, int>& left, const QPair<QTreeWidgetItem*, int>& right) {
 	return left.first->text(left.second) > right.first->text(right.second);
-}
-
-
-void setupFont(QWidget *w, const QFont &f) {
-	w->setFont(f);
-}
-
-void setupFont(QWidget *w, const QFont &f, const QColor &c) {
-	w->setFont(f);
-
-	QPalette pal = w->palette();
-	pal.setColor(QPalette::WindowText, c);
-	w->setPalette(pal);
 }
 
 
@@ -303,13 +290,6 @@ class OriginTreeWidget : public QTreeWidget {
 	private:
 		EventEdit *_eventEdit;
 };
-
-
-QString axisToString(const Axis &a) {
-	return QString("%1/%2/%3").arg(a.azimuth(), 0, 'f', 2)
-	                          .arg(a.plunge(), 0, 'f', 2)
-	                          .arg(a.length(), 0, 'f', 2);
-}
 
 
 double subGeo(double a, double b) {
@@ -396,13 +376,13 @@ void ExtTensorSymbol::customDraw(const Map::Canvas *c, QPainter &p) {
 		symbolPos += _offset;
 		QColor color = _selected ? Qt::black : QColor(64, 64, 64);
 		p.setPen(QPen(color, 1, _selected ? Qt::SolidLine : Qt::DashLine));
-		p.drawLine(_mapPosition, symbolPos);
+		p.drawLine(pos(), symbolPos);
 		p.setPen(color);
 		p.setBrush(QBrush(color));
-		p.drawEllipse(QRect(_mapPosition.x()-2, _mapPosition.y()-2, 4, 4));
+		p.drawEllipse(QRect(pos().x()-2, pos().y()-2, 4, 4));
 	}
 	else
-		symbolPos = _mapPosition;
+		symbolPos = pos();
 
 	p.drawImage(symbolPos - QPoint(_size.width()/2, _size.height()/2), _buffer);
 
@@ -902,15 +882,31 @@ void EventEdit::init() {
 
 	_originTableHeader.clear();
 	for ( int i = 0; i < OriginListColumns::Quantity; ++i ) {
-		if ( i == _customColumn ) _originTableHeader << _customColumnLabel;
+		if ( i == _customColumn )
+			_originTableHeader << _customColumnLabel;
+		else if ( i == OL_CREATED || i == OL_TIME ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_originTableHeader << QString(EOriginListColumnsNames::name(i)).arg("UTC");
+		}
+		else
 			_originTableHeader << EOriginListColumnsNames::name(i);
 	}
 
 	if ( _customColumn == OriginListColumns::Quantity )
 		_originTableHeader << _customColumnLabel;
 
-	for ( int i = 0; i < FMListColumns::Quantity; ++i )
-		_fmTableHeader << EFMListColumnsNames::name(i);
+	for ( int i = 0; i < FMListColumns::Quantity; ++i ) {
+		if ( i == FML_CREATED ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_fmTableHeader << QString(EFMListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_fmTableHeader << QString(EFMListColumnsNames::name(i)).arg("UTC");
+		}
+		else
+			_fmTableHeader << EFMListColumnsNames::name(i);
+	}
 
 	_ui.comboTypes->addItem("- unset -");
 	for ( int i = (int)EventType::First; i < (int)EventType::Quantity; ++i ) {
@@ -1783,7 +1779,7 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 	QTreeWidgetItem *item = _originTree->topLevelItem(row);
 
 	item->setData(0, Qt::UserRole, QString(org->publicID().c_str()));
-	item->setText(_originColumnMap[OL_TIME], org->time().value().toString("%T").c_str());
+	item->setText(_originColumnMap[OL_TIME], timeToString(org->time().value(), "%T"));
 	item->setText(_originColumnMap[OL_LAT], QString("%1 %2").arg(fabs(org->latitude()), 0, 'f', SCScheme.precision.location).arg(org->latitude() < 0?"S":"N"));
 	item->setData(_originColumnMap[OL_LAT], Qt::UserRole, org->latitude().value());
 	item->setText(_originColumnMap[OL_LON], QString("%1 %2").arg(fabs(org->longitude()), 0, 'f', SCScheme.precision.location).arg(org->longitude() < 0?"W":"E"));
@@ -1834,7 +1830,7 @@ void EventEdit::updateOriginRow(int row, Origin *org) {
 		item->setData(_originColumnMap[OL_RMS], Qt::UserRole, QVariant());
 	}
 	try {
-		item->setText(_originColumnMap[OL_CREATED], org->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(_originColumnMap[OL_CREATED], timeToString(org->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(_originColumnMap[OL_CREATED], "");
@@ -1873,7 +1869,7 @@ void EventEdit::updateMagnitudeRow(int row, Magnitude *mag) {
 	item->setData(0, Qt::UserRole, QString(mag->publicID().c_str()));
 
 	try {
-		item->setText(MLC_TIMESTAMP, mag->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(MLC_TIMESTAMP, timeToString(mag->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(MLC_TIMESTAMP, "");
@@ -1985,7 +1981,7 @@ void EventEdit::updateFMRow(int row, FocalMechanism *fm) {
 	}
 
 	try {
-		item->setText(_fmColumnMap[FML_CREATED], fm->creationInfo().creationTime().toString("%F %T").c_str());
+		item->setText(_fmColumnMap[FML_CREATED], timeToString(fm->creationInfo().creationTime(), "%F %T"));
 	}
 	catch ( ... ) {
 		item->setText(_fmColumnMap[FML_CREATED], "");
@@ -2269,7 +2265,7 @@ bool EventEdit::sendJournal(const std::string &action,
 		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 		NotifierMessagePtr nm = new NotifierMessage;
 		nm->attach(n.get());
-		if ( SCApp->sendMessage("EVENT", nm.get()) ) {
+		if ( SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get()) ) {
 			addJournal(entry.get());
 			return true;
 		}
@@ -2286,7 +2282,7 @@ bool EventEdit::sendJournal(const std::string &action,
 void EventEdit::addJournal(JournalEntry *entry) {
 	QString created;
 	try {
-		created = entry->created().toString("%F %T").c_str();
+		created = timeToString(entry->created(), "%F %T");
 	}
 	catch ( ... ) {
 		created = "--/--/---- --:--:--";
@@ -2439,7 +2435,7 @@ void EventEdit::updateEvent() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventEdit::updateOrigin() {
-	_ui.labelTimeValue->setText(_currentOrigin->time().value().toString("%F %T").c_str());
+	timeToLabel(_ui.labelTimeValue, _currentOrigin->time().value(), "%F %T");
 
 	_ui.labelLatitudeValue->setText(latitudeToString(_currentOrigin->latitude(), true, false, SCScheme.precision.location));
 	_ui.labelLatitudeUnit->setText(latitudeToString(_currentOrigin->latitude(), false, true));
@@ -2611,7 +2607,7 @@ void EventEdit::updateMT() {
 		_ui.mtOriginInfo->setEnabled(true);
 
 		// time
-		_ui.mtOriginTime->setText(o->time().value().toString("%F %T").c_str());
+		timeToLabel(_ui.mtOriginTime, o->time().value(), "%F %T");
 
 		// region
 		Regions regions;
@@ -2900,8 +2896,17 @@ void EventEdit::currentOriginChanged(QTreeWidgetItem* item, QTreeWidgetItem*) {
 	_ui.treeMagnitudes->setColumnCount(MagnitudeListColumns::Quantity);
 
 	QStringList headerLabels;
-	for ( int i = 0; i < MagnitudeListColumns::Quantity; ++i )
-		headerLabels << EMagnitudeListColumnsNames::name(i);
+	for ( int i = 0; i < MagnitudeListColumns::Quantity; ++i ) {
+		if ( i == MLC_TIMESTAMP ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				headerLabels << QString(EMagnitudeListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				headerLabels << QString(EMagnitudeListColumnsNames::name(i)).arg("UTC");
+		}
+		else
+			headerLabels << EMagnitudeListColumnsNames::name(i);
+	}
+
 	_ui.treeMagnitudes->setHeaderLabels(headerLabels);
 
 	_preferredMagnitudeIdx = -1;

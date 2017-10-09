@@ -26,6 +26,11 @@
 namespace Seiscomp {
 namespace Client {
 
+class QueueClosedException : public Core::GeneralException {
+	public:
+		QueueClosedException() : Core::GeneralException("Queue has been closed") {}
+		QueueClosedException(const std::string& str ) : Core::GeneralException(str) {}
+};
 
 template <typename T>
 class ThreadedQueue : private boost::noncopyable {

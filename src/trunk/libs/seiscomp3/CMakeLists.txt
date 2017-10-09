@@ -14,11 +14,7 @@ INCLUDE_DIRECTORIES(${Boost_thread_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${THIRD_PARTY_DIRECTORY}/libbson/src/bson)
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/src/trunk/libs/3rd-party/libbson/src/bson)
 
-IF(CMAKE_BUILD_TYPE STREQUAL Debug)
-	ADD_DEFINITIONS(-DWITH_GIT_REVISION -DWITH_BUILD_INFOS)
-ELSE(CMAKE_BUILD_TYPE STREQUAL Debug)
-	ADD_DEFINITIONS(-DWITH_GIT_REVISION)
-ENDIF(CMAKE_BUILD_TYPE STREQUAL Debug)
+ADD_DEFINITIONS(-DWITH_GIT_REVISION -DWITH_BUILD_INFOS)
 
 ADD_CUSTOM_TARGET(
 	build_and_git_infos ALL
@@ -144,7 +140,9 @@ IF(NOT WIN32)
         IF(CMAKE_HOST_ARCHITECTURE)
                 ADD_CUSTOM_COMMAND(
                         OUTPUT ${SPREAD_LIBRARIES}
+                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
                         COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR} --host ${CMAKE_HOST_ARCHITECTURE}
+                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
                         COMMAND ${CMAKE_MAKE_PROGRAM}
                         COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
                         WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}
@@ -153,7 +151,9 @@ IF(NOT WIN32)
         ELSE(CMAKE_HOST_ARCHITECTURE)
                 ADD_CUSTOM_COMMAND(
                         OUTPUT ${SPREAD_LIBRARIES}
+                        DEPENDS ${SPREAD_SOURCE_DIR}/daemon/scatter.h ${SPREAD_SOURCE_DIR}/libspread-util/include/spu_scatter.h
                         COMMAND ./configure ARGS --prefix=${SPREAD_BINARY_DIR} --libdir=${SPREAD_LIB_DIR} --sysconfdir=${SPREAD_CONF_DIR}
+                        COMMAND ${CMAKE_MAKE_PROGRAM} clean
                         COMMAND ${CMAKE_MAKE_PROGRAM}
                         COMMAND ${CMAKE_MAKE_PROGRAM} ARGS install
                         WORKING_DIRECTORY ${SPREAD_SOURCE_DIR}

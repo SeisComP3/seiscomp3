@@ -1052,6 +1052,12 @@ ArrivalModel::ArrivalModel(DataModel::Origin* origin, QObject *parent)
 			else
 				_header << QString("%1 (deg)").arg(EArrivalListColumnsNames::name(i));
 		}
+		else if ( i == TIME ) {
+			if ( SCScheme.dateTime.useLocalTime )
+				_header << QString("%1 (%2)").arg(EArrivalListColumnsNames::name(i)).arg(Core::Time::LocalTimeZone().c_str());
+			else
+				_header << QString("%1 (UTC)").arg(EArrivalListColumnsNames::name(i));
+		}
 		else
 			_header << EArrivalListColumnsNames::name(i);
 
@@ -1145,7 +1151,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick ) {
 					try {
-						return QString(pick->creationInfo().creationTime().toString("%T.%1f").c_str());
+						return timeToString(pick->creationInfo().creationTime(), "%T.%1f");
 					}
 					catch ( ValueException& ) {}
 				}
@@ -1224,7 +1230,7 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 			case TIME:
 				pick = Pick::Cast(PublicObject::Find(a->pickID()));
 				if ( pick )
-					return pick->time().value().toString(_pickTimeFormat.c_str()).c_str();
+					return timeToString(pick->time().value(), _pickTimeFormat.c_str());
 				break;
 
 			// Picktime
@@ -1326,7 +1332,12 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 				try { return a->azimuth(); } catch ( ValueException& ) {}
 				break;
 			case TAKEOFF:
-				try { return a->takeOffAngle(); } catch ( ValueException& ) {}
+				try {
+					return a->takeOffAngle();
+				}
+				catch ( ValueException& ) {
+					return _takeOffs[index.row()];
+				}
 				break;
 			case WEIGHT:
 				try { return a->weight(); } catch ( ValueException& ) {}
@@ -1382,11 +1393,10 @@ QVariant ArrivalModel::data(const QModelIndex &index, int role) const {
 		pick = Pick::Cast(PublicObject::Find(a->pickID()));
 
 		if ( pick ) {
-			if (l++) summary += '\n';
-			summary += QString("%1").arg(wfid2qstr(pick->waveformID()));
-
-			if (l++) summary += '\n';
-			summary += QString("%1").arg(pick->time().value().toString(_pickTimeFormat.c_str()).c_str());
+			if ( l++ ) summary += '\n';
+			summary += wfid2qstr(pick->waveformID());
+			if ( l++ ) summary += '\n';
+			summary += timeToString(pick->time().value(), _pickTimeFormat.c_str());
 		}
 
 		/*
@@ -1836,6 +1846,8 @@ void OriginLocatorView::init() {
 	_modelArrivalsProxy = NULL;
 	_modelArrivals.setDisabledForeground(palette().color(QPalette::Disabled, QPalette::Text));
 
+	_ui.tableArrivals->horizontalHeader()->setMovable(true);
+
 	connect(_ui.tableArrivals->horizontalHeader(), SIGNAL(sectionClicked(int)),
 	        _ui.tableArrivals, SLOT(sortByColumn(int)));
 
@@ -1867,10 +1879,13 @@ void OriginLocatorView::init() {
 	_map = new OriginLocatorMap(_maptree.get(), _ui.frameMap);
 	_map->setMouseTracking(true);
 	_map->setOriginCreationEnabled(true);
+
 	try {
 		_map->setStationsMaxDist(SCApp->configGetDouble("olv.map.stations.unassociatedMaxDist"));
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		_map->setStationsMaxDist(360);
+	}
 
 	// Read custom column configuration
 	try {
@@ -2034,8 +2049,15 @@ void OriginLocatorView::init() {
 	catch ( ... ) {}
 
 	std::string defaultLocator = "LOCSAT";
-	try { defaultLocator = SCApp->configGetString("olv.locator"); }
-	catch ( ... ) {}
+	try {
+		defaultLocator = SCApp->configGetString("olv.locator.interface");
+	}
+	catch ( ... ) {
+		try {
+			defaultLocator = SCApp->configGetString("olv.locator");
+		}
+		catch ( ... ) {}
+	}
 
 	vector<string> *locatorInterfaces = Seismology::LocatorInterfaceFactory::Services();
 	if ( locatorInterfaces ) {
@@ -2060,12 +2082,19 @@ void OriginLocatorView::init() {
 
 	connect(_ui.btnLocatorSettings, SIGNAL(clicked()),
 	        this, SLOT(configureLocator()));
+
 	_minimumDepth = -999;
+
 	try {
 		// "locator.minimumDepth" preferred
-		_minimumDepth = SCApp->configGetDouble("locator.minimumDepth");
+		_minimumDepth = SCApp->configGetDouble("olv.locator.minimumDepth");
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		try {
+			_minimumDepth = SCApp->configGetDouble("locator.minimumDepth");
+		}
+		catch ( ... ) {}
+	}
 
 	try {
 		_ui.btnCustom0->setText(SCApp->configGetString("button0").c_str());
@@ -3256,7 +3285,7 @@ void OriginLocatorView::updateContent() {
 	//_ui.tableArrivals->resize(_ui.tableArrivals->size());
 	_ui.tableArrivals->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-	_ui.buttonEditComment->setEnabled(_baseEvent);
+	_ui.buttonEditComment->setEnabled(_baseEvent.get());
 
 	// Reset custom labels and set background
 	resetCustomLabels();
@@ -3291,8 +3320,8 @@ void OriginLocatorView::updateContent() {
 	Time t = _currentOrigin->time();
 	Regions regions;
 	_ui.labelRegion->setText(regions.getRegionName(_currentOrigin->latitude(), _currentOrigin->longitude()).c_str());
-	//_ui.labelDate->setText(t.toString("%Y-%m-%d").c_str());
-	_ui.labelTime->setText(t.toString("%Y-%m-%d %H:%M:%S").c_str());
+	//timeToLabel(_ui.labelDate, timeToString(t, "%Y-%m-%d");
+	timeToLabel(_ui.labelTime, t, "%Y-%m-%d %H:%M:%S");
 
 	double radius;
 	if ( _config.defaultEventRadius > 0 )
@@ -3418,8 +3447,17 @@ void OriginLocatorView::updateContent() {
 	}
 
 	try {
-		std::string t = _currentOrigin->creationInfo().creationTime().toString("%Y-%m-%d %H:%M:%S");
-		_ui.labelCreated->setText(t.c_str());
+		try {
+			timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().modificationTime(), "%Y-%m-%d %H:%M:%S");
+			try {
+				_ui.labelCreated->setToolTip(tr("Creation time: %1").arg(timeToString(_currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S")));
+			}
+			catch ( ... ) {}
+		}
+		catch ( ... ) {
+			timeToLabel(_ui.labelCreated, _currentOrigin->creationInfo().creationTime(), "%Y-%m-%d %H:%M:%S");
+			_ui.labelCreated->setToolTip(tr("That is actually the creation time"));
+		}
 	}
 	catch ( ValueException& ) {
 		_ui.labelCreated->setText("");
@@ -4604,8 +4642,6 @@ void OriginLocatorView::mergeOrigins(QList<DataModel::Origin*> orgs) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorView::setLocalAmplitudes(Seiscomp::DataModel::Origin *org,
                                            AmplitudeSet *amps, StringSet *ampIDs) {
-	cerr << "Set local amplitudes" << endl;
-
 	if ( org != _currentOrigin ) return;
 
 	for ( AmplitudeSet::iterator it = _changedAmplitudes.begin();
@@ -4631,6 +4667,22 @@ void OriginLocatorView::computeMagnitudes() {
 
 	if ( _currentOrigin->magnitudeCount() > 0 ) {
 		emit magnitudesAdded(_currentOrigin.get(), _baseEvent.get());
+		evaluateOrigin(_currentOrigin.get(), _baseEvent.get(),
+		               _localOrigin, false);
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void OriginLocatorView::magnitudeRemoved(const QString &id, Seiscomp::DataModel::Object *obj) {
+	if ( id != _currentOrigin->publicID().c_str() ) return;
+
+	_ui.btnMagnitudes->setEnabled(_currentOrigin->magnitudeCount() == 0);
+
+	if ( _currentOrigin->magnitudeCount() > 0 ) {
 		evaluateOrigin(_currentOrigin.get(), _baseEvent.get(),
 		               _localOrigin, false);
 	}
@@ -4859,11 +4911,11 @@ void OriginLocatorView::editComment() {
 			catch ( ... ) {}
 
 			try {
-				dlg.ui.labelDate->setText(_baseEvent->comment(i)->creationInfo().modificationTime().toString("%F %T").c_str());
+				timeToLabel(dlg.ui.labelDate, _baseEvent->comment(i)->creationInfo().modificationTime(), "%F %T");
 			}
 			catch ( ... ) {
 				try {
-					dlg.ui.labelDate->setText(_baseEvent->comment(i)->creationInfo().creationTime().toString("%F %T").c_str());
+					timeToLabel(dlg.ui.labelDate, _baseEvent->comment(i)->creationInfo().creationTime(), "%F %T");
 				}
 				catch ( ... ) {}
 			}
@@ -4994,6 +5046,22 @@ void OriginLocatorView::commit(bool associate) {
 		// try to find the pick somewhere in the client memory
 		PickPtr pick = Pick::Find(pickID);
 		if ( pick ) _associatedPicks[pickID] = pick;
+	}
+
+	if ( _localOrigin ) {
+		// Strip invalid magnitudes
+		size_t i = 0;
+		while ( i < _currentOrigin->magnitudeCount() ) {
+			Magnitude *mag = _currentOrigin->magnitude(i);
+			try {
+				if ( mag->evaluationStatus() == REJECTED ) {
+					_currentOrigin->removeMagnitude(i);
+					continue;
+				}
+			}
+			catch ( ... ) {}
+			++i;
+		}
 	}
 
 	if ( /*_currentOrigin == _baseOrigin || */ !_localOrigin )
@@ -5148,6 +5216,20 @@ void OriginLocatorView::commitWithOptions() {
 	CommitOptions dlg;
 	int idx;
 	string eqName, eqComment;
+
+	try {
+		if ( SCApp->configGetBool("olv.commit.forceEventAssociation") == false ) {
+			dlg.ui.cbAssociate->setChecked(false);
+		}
+	}
+	catch ( ... ) {}
+
+	try {
+		if ( SCApp->configGetBool("olv.commit.fixOrigin") == false ) {
+			dlg.ui.cbFixSolution->setChecked(false);
+		}
+	}
+	catch ( ... ) {}
 
 	if ( _defaultEventType ) {
 		int idx = dlg.ui.comboEventTypes->findText(_defaultEventType->toString());
@@ -5330,7 +5412,7 @@ bool OriginLocatorView::sendJournal(const std::string &objectID,
 		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 		NotifierMessagePtr nm = new NotifierMessage;
 		nm->attach(n.get());
-		return SCApp->sendMessage("EVENT", nm.get());
+		return SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get());
 	}
 
 	return false;

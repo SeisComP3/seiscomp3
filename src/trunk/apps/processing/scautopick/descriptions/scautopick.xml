@@ -64,6 +64,18 @@
 					will only receive the data it subscribed to.
 				</description>
 			</parameter>
+			<parameter name="killPendingSPickers" type="boolean" default="true">
+				<description>
+					If enabled the all secondary pickers that were triggered by
+					a previous pick will be terminated when a new detection or
+					pick has been found. This aims to avoid the case where an
+					S phase is wrongly picked as P but would also be picked as
+					S by the secondary picker. But suppressing the S pick can
+					lead to undesired results. It might be better in some
+					situations to have two picks (P and S) instead only a wrong
+					P.
+				</description>
+			</parameter>
 			<parameter name="sendDetections" type="boolean" default="false">
 				<description>
 					If enabled and a :confval:`picker` is configured then detections are sent as well.

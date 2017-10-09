@@ -432,8 +432,8 @@ bool Instaseis::setTimeSpan(const Core::TimeSpan &span) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Instaseis::addRequest(const string &id,
-                           const string &model, double distance,
-                           double depth) {
+                           const string &model, const GFSource &source,
+                           const GFReceiver &receiver) {
 	if ( !getInfo() ) return false;
 
 	if ( _model != model ) {
@@ -441,20 +441,27 @@ bool Instaseis::addRequest(const string &id,
 		return false;
 	}
 
-	if ( (distance < _minDist) || (distance > _maxDist) ) {
-		SEISCOMP_DEBUG("Depth out of range: %f", depth);
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
+	dist = Math::Geo::deg2km(dist);
+
+	if ( (dist < _minDist) || (dist > _maxDist) ) {
+		SEISCOMP_DEBUG("Distance out of range: %f", dist);
 		return false;
 	}
 
-	if ( (depth < _minDepth) || (depth > _maxDepth) ) {
-		SEISCOMP_DEBUG("Distance out of range: %f", distance);
+	if ( (source.depth < _minDepth) || (source.depth > _maxDepth) ) {
+		SEISCOMP_DEBUG("Depth out of range: %f", source.depth);
 		return false;
 	}
 
 	_requests.push_back(Request());
 	_requests.back().id = id;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = dist;
+	_requests.back().depth = source.depth;
 
 	return true;
 }
@@ -465,8 +472,8 @@ bool Instaseis::addRequest(const string &id,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Instaseis::addRequest(const string &id,
-                           const string &model, double distance,
-                           double depth,
+                           const string &model, const GFSource &source,
+                           const GFReceiver &receiver,
                            const Core::TimeSpan &span) {
 	if ( !getInfo() ) return false;
 
@@ -475,20 +482,27 @@ bool Instaseis::addRequest(const string &id,
 		return false;
 	}
 
-	if ( (distance < _minDist) || (distance > _maxDist) ) {
-		SEISCOMP_DEBUG("Depth out of range: %f", depth);
+	double dist, az, baz;
+	Math::Geo::delazi_wgs84(source.lat, source.lon,
+	                        receiver.lat, receiver.lon,
+	                        &dist, &az, &baz);
+
+	dist = Math::Geo::deg2km(dist);
+
+	if ( (dist < _minDist) || (dist > _maxDist) ) {
+		SEISCOMP_DEBUG("Distance out of range: %f", dist);
 		return false;
 	}
 
-	if ( (depth < _minDepth) || (depth > _maxDepth) ) {
-		SEISCOMP_DEBUG("Distance out of range: %f", distance);
+	if ( (source.depth < _minDepth) || (source.depth > _maxDepth) ) {
+		SEISCOMP_DEBUG("Depth out of range: %f", source.depth);
 		return false;
 	}
 
 	_requests.push_back(Request());
 	_requests.back().id = id;
-	_requests.back().distance = distance;
-	_requests.back().depth = depth;
+	_requests.back().distance = dist;
+	_requests.back().depth = source.depth;
 	_requests.back().timeSpan = span;
 
 	return true;
@@ -650,6 +664,18 @@ Core::GreensFunction *Instaseis::get() {
 	}
 
 	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+OPT(double) Instaseis::getTravelTime(const std::string &phase,
+                                     const std::string &model,
+                                     const GFSource &source,
+                                     const GFReceiver &receiver) {
+	return Core::None;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

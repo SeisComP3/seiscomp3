@@ -128,7 +128,7 @@
  ********************************************************************** -->
 <xsl:stylesheet version="1.0"
         xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.7"
+        xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.9"
         xmlns:qml="http://quakeml.org/xmlns/quakeml/1.0"
         xmlns="http://quakeml.org/xmlns/bed-rt/1.2"
 	xmlns:vs="http://quakeml.org/xmlns/vstypes/0.1"
@@ -238,16 +238,11 @@
 
             <!-- Add the MVS likelihood as child of event -->
             <xsl:for-each select="../scs:origin/scs:magnitude/scs:type[.='MVS']">
-	      <xsl:sort select="../@publicID"/>
-	      <xsl:choose>
-		<xsl:when test="position() = last()">
-		  <xsl:for-each select="../scs:comment/scs:id[.='likelihood']">
-		    <xsl:element name='vs:likelihood'>
-		      <xsl:value-of select="../scs:text"/>
-		    </xsl:element>
-		  </xsl:for-each>
-		</xsl:when>
-	      </xsl:choose>
+            	<xsl:for-each select="../scs:comment/scs:id[.='likelihood']">
+            		<xsl:element name='vs:likelihood'>
+	            		<xsl:value-of select="../scs:text"/>
+	            	</xsl:element>
+	            </xsl:for-each>
             </xsl:for-each>
         </xsl:element>
     </xsl:template>
@@ -332,7 +327,7 @@
         <xsl:element name="{local-name()}">
             <xsl:attribute name="{$PID}">
                 <xsl:call-template name="convertID">
-                    <xsl:with-param name="id" select="concat(scs:pickID, '/', ../@publicID)"/>
+                    <xsl:with-param name="id" select="concat(scs:pickID, '#', ../@publicID)"/>
                 </xsl:call-template>
             </xsl:attribute>
             <!--comment/-->
@@ -464,10 +459,17 @@
         </xsl:element>
     </xsl:template>
 
-    <!-- Converts and returns value of an id node -->
+    <!-- Converts and returns value of an id node 
     <xsl:template name="valueOfIDNode">
         <xsl:call-template name="convertOptionalID">
             <xsl:with-param name="id" select="string(.)"/>
+        </xsl:call-template>
+    </xsl:template> -->
+
+    <!-- Carlo from Enrico - Converts and returns value of an id node -->
+    <xsl:template name="valueOfIDNode">
+        <xsl:call-template name="convertOptionalID">
+            <xsl:with-param name="id" select="translate(., '&gt;', '')"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -493,7 +495,7 @@
     <!-- Converts a scs id to a quakeml id -->
     <xsl:template name="convertID">
         <xsl:param name="id"/>
-        <xsl:value-of select="concat($ID_PREFIX, translate(translate($id, ' :', '__'),'#','/'))"/>
+        <xsl:value-of select="concat($ID_PREFIX, translate($id, ' :', '__'))"/>
     </xsl:template>
 </xsl:stylesheet>
 

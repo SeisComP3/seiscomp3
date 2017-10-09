@@ -137,10 +137,12 @@ class MagTool {
 		getMagnitude(DataModel::Origin*, const std::string&,
 		             bool* newInstance = NULL) const;
 
-		bool computeStationMagnitude(const DataModel::Amplitude*, const DataModel::Origin*,
+		bool computeStationMagnitude(const DataModel::Amplitude*,
+		                             const DataModel::Origin*,
+		                             const DataModel::SensorLocation *,
 		                              double, double, MagnitudeList&);
 
-		bool computeMagnitude(DataModel::Origin*, const std::string&, DataModel::MagnitudePtr);
+		bool computeNetworkMagnitude(DataModel::Origin*, const std::string&, DataModel::MagnitudePtr);
 		bool computeSummaryMagnitude(DataModel::Origin*);
 
 

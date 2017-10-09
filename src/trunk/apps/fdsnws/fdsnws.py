@@ -16,13 +16,14 @@
 ################################################################################
 
 
-import os, sys, fnmatch
+import os, sys, time, fnmatch, base64, signal
 
 try:
 	from twisted.cred import checkers, credentials, error, portal
-	from twisted.internet import reactor, defer
+	from twisted.internet import reactor, defer, task
 	from twisted.web import guard, resource, server, static
-	from twisted.python import log
+	from twisted.python import log, failure
+	from zope.interface import implements
 except ImportError, e:
 	sys.exit("%s\nIs python twisted installed?" % str(e))
 
@@ -30,16 +31,14 @@ try:
 	from seiscomp3 import Core, DataModel, Logging
 	from seiscomp3.Client import Application, Inventory
 	from seiscomp3.System import Environment
-	from seiscomp3.Config import Exception as ConfigException
-	from seiscomp3.Core import ValueException
 except ImportError, e:
 	sys.exit("%s\nIs the SeisComP environment set correctly?" % str(e))
 
-from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm
+from seiscomp3.fdsnws.dataselect import FDSNDataSelect, FDSNDataSelectRealm, FDSNDataSelectAuthRealm
 from seiscomp3.fdsnws.event import FDSNEvent
 from seiscomp3.fdsnws.station import FDSNStation
 from seiscomp3.fdsnws.http import DirectoryResource, ListingResource, NoResource, \
-                                  Site, ServiceVersion
+                                  Site, ServiceVersion, AuthResource
 from seiscomp3.fdsnws.log import Log
 
 def logSC3(entry):
@@ -101,6 +100,187 @@ class BugfixedDigest(credentials.DigestCredentialFactory):
 			                                       auth)
 
 
+################################################################################
+# Make CORS work with queryauth
+class HTTPAuthSessionWrapper(guard.HTTPAuthSessionWrapper):
+	def __init__(self, *args, **kwargs):
+		guard.HTTPAuthSessionWrapper.__init__(self, *args, **kwargs)
+
+	def render(self, request):
+		if request.method == 'OPTIONS':
+			request.setHeader('Allow', 'GET,HEAD,POST,OPTIONS')
+			return ''
+
+		else:
+			return guard.HTTPAuthSessionWrapper.render(self, request)
+
+
+################################################################################
+class UsernamePasswordChecker(object):
+	implements(checkers.ICredentialsChecker)
+
+	credentialInterfaces = (credentials.IUsernamePassword,
+				credentials.IUsernameHashedPassword)
+
+	#---------------------------------------------------------------------------
+	def __init__(self, userdb):
+		self.__userdb = userdb
+
+	#---------------------------------------------------------------------------
+	def __cbPasswordMatch(self, matched, username):
+		if matched:
+			return username
+		else:
+			return failure.Failure(error.UnauthorizedLogin())
+
+	#---------------------------------------------------------------------------
+	def requestAvatarId(self, credentials):
+		return defer.maybeDeferred(self.__userdb.checkPassword, credentials) \
+			.addCallback(self.__cbPasswordMatch, str(credentials.username))
+
+
+################################################################################
+class UserDB(object):
+
+	#---------------------------------------------------------------------------
+	def __init__(self):
+		self.__users = {}
+		self.__blacklist = set()
+		task.LoopingCall(self.__expireUsers).start(60, False)
+
+	#---------------------------------------------------------------------------
+	def __expireUsers(self):
+		for (name, (password, attributes, expires)) in self.__users.items():
+			if time.time() > expires:
+				Logging.info("de-registering %s" % name)
+				del self.__users[name]
+
+	#---------------------------------------------------------------------------
+	def blacklistUser(self, name):
+		Logging.info("blacklisting %s" % name)
+		self.__blacklist.add(name)
+
+	#---------------------------------------------------------------------------
+	def addUser(self, name, attributes, expires, data):
+		try:
+			password = self.__users[name][0]
+
+		except KeyError:
+			bl = " (blacklisted)" if name in self.__blacklist else ""
+			Logging.notice("registering %s%s %s" % (name, bl, data))
+			password = base64.urlsafe_b64encode(os.urandom(12))
+
+		attributes['blacklisted'] = name in self.__blacklist
+		self.__users[name] = (password, attributes, expires)
+		return password
+
+	#---------------------------------------------------------------------------
+	def checkPassword(self, credentials):
+		try:
+			pw = self.__users[str(credentials.username)][0]
+
+		except KeyError:
+			return False
+
+		return credentials.checkPassword(pw)
+
+	#---------------------------------------------------------------------------
+	def getAttributes(self, name):
+		return self.__users[name][1]
+
+	#---------------------------------------------------------------------------
+	def dump(self):
+		Logging.info("known users:")
+
+		for name, user in self.__users.items():
+			Logging.info(" %s %s %d" % (name, user[1], user[2]))
+
+
+################################################################################
+class Access(object):
+
+	#---------------------------------------------------------------------------
+	def __init__(self):
+		self.__access = {}
+
+	#---------------------------------------------------------------------------
+	def initFromSC3Routing(self, routing):
+		for i in xrange(routing.accessCount()):
+			acc = routing.access(i)
+			net = acc.networkCode()
+			sta = acc.stationCode()
+			loc = acc.locationCode()
+			cha = acc.streamCode()
+			user = acc.user()
+			start = acc.start()
+
+			try:
+				end = acc.end()
+
+			except ValueError:
+				end = None
+
+			self.__access.setdefault((net, sta, loc, cha), []) \
+				.append((user, start, end))
+
+	#---------------------------------------------------------------------------
+	def __matchTime(self, t1, t2, accessStart, accessEnd):
+		return (not accessStart or (t1 and t1 >= accessStart)) and \
+			(not accessEnd or (t2 and t2 <= accessEnd))
+
+	#---------------------------------------------------------------------------
+	def __matchEmail(self, emailAddress, accessUser):
+		defaultPrefix = "mail:"
+
+		if accessUser.startswith(defaultPrefix):
+			accessUser = accessUser[len(defaultPrefix):]
+
+		return (emailAddress.upper() == accessUser.upper() or \
+				(accessUser[:1] == '@' and emailAddress[:1] != '@' and \
+					emailAddress.upper().endswith(accessUser.upper())))
+
+	#---------------------------------------------------------------------------
+	def __matchAttribute(self, attribute, accessUser):
+		return (attribute.upper() == accessUser.upper())
+
+	#---------------------------------------------------------------------------
+	def authorize(self, user, net, sta, loc, cha, t1, t2):
+		if user['blacklisted']:
+			return False
+
+		matchers = []
+
+		try:
+			# OID 0.9.2342.19200300.100.1.3 (RFC 2798)
+			emailAddress = user['mail']
+			matchers.append((self.__matchEmail, emailAddress))
+
+		except KeyError:
+			pass
+
+		try:
+			# B2ACCESS
+			for memberof in user['memberof'].split(';'):
+				matchers.append((self.__matchAttribute, "group:" + memberof))
+
+		except KeyError:
+			pass
+
+		for m in matchers:
+			for (u, start, end) in self.__access.get((net, '', '', ''), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
+
+			for (u, start, end) in self.__access.get((net, sta, '', ''), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
+
+			for (u, start, end) in self.__access.get((net, sta, loc, cha), []):
+				if self.__matchTime(t1, t2, start, end) and m[0](m[1], u):
+					return True
+
+		return False
+
 
 ################################################################################
 class FDSNWS(Application):
@@ -108,22 +288,24 @@ class FDSNWS(Application):
 	#---------------------------------------------------------------------------
 	def __init__(self):
 		Application.__init__(self, len(sys.argv), sys.argv)
-		self.setMessagingEnabled(False)
+		self.setMessagingEnabled(True)
 		self.setDatabaseEnabled(True, True)
 		self.setRecordStreamEnabled(True)
 		self.setLoadInventoryEnabled(True)
 
-		self._serverRoot    = os.path.dirname(__file__)
-		self._listenAddress = '0.0.0.0' # all interfaces
-		self._port          = 8080
-		self._connections   = 5
-		self._queryObjects  = 100000    # maximum number of objects per query
-		self._realtimeGap   = None      # minimum data age: 5min
-		self._samplesM      = None      # maximum number of samples per query
-		self._htpasswd      = '@CONFIGDIR@/fdsnws.htpasswd'
-		self._accessLogFile = ''
+		self._serverRoot     = os.path.dirname(__file__)
+		self._listenAddress  = '0.0.0.0' # all interfaces
+		self._port           = 8080
+		self._connections    = 5
+		self._queryObjects   = 100000    # maximum number of objects per query
+		self._realtimeGap    = None      # minimum data age: 5min
+		self._samplesM       = None      # maximum number of samples per query
+		self._recordBulkSize = 102400    # desired record bulk size
+		self._htpasswd       = '@CONFIGDIR@/fdsnws.htpasswd'
+		self._accessLogFile  = ''
 
 		self._allowRestricted   = True
+		self._useArclinkAccess  = False
 		self._serveDataSelect   = True
 		self._serveEvent        = True
 		self._serveStation      = True
@@ -132,6 +314,7 @@ class FDSNWS(Application):
 		self._evaluationMode        = None
 		self._eventTypeWhitelist    = None
 		self._eventTypeBlacklist    = None
+		self._eventFormats          = None
 		self._stationFilter         = None
 		self._dataSelectFilter      = None
 		self._debugFilter           = False
@@ -139,6 +322,16 @@ class FDSNWS(Application):
 		self._accessLog     = None
 
 		self._fileNamePrefix = 'fdsnws'
+
+		self._trackdbEnabled = False
+		self._trackdbDefaultUser = 'fdsnws'
+
+		self._authEnabled   = False
+		self._authGnupgHome = '@ROOTDIR@/var/lib/gpg'
+		self._authBlacklist = []
+
+		self._userdb        = UserDB()
+		self._access        = Access()
 
 		# Leave signal handling to us
 		Application.HandleSignals(False, False)
@@ -151,56 +344,67 @@ class FDSNWS(Application):
 
 		# bind address and port
 		try: self._listenAddress = self.configGetString('listenAddress')
-		except ConfigException: pass
+		except Exception: pass
 		try: self._port = self.configGetInt('port')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of connections
 		try: self._connections = self.configGetInt('connections')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of objects per query, used in fdsnws-station and
 		# fdsnws-event to limit main memory consumption
 		try: self._queryObjects = self.configGetInt('queryObjects')
-		except ConfigException: pass
+		except Exception: pass
 
 		# restrict end time of request to now-realtimeGap seconds, used in
 		# fdsnws-dataselect
 		try: self._realtimeGap = self.configGetInt('realtimeGap')
-		except ConfigException: pass
+		except Exception: pass
 
 		# maximum number of samples (in units of million) per query, used in
 		# fdsnws-dataselect to limit bandwidth
 		try: self._samplesM = self.configGetDouble('samplesM')
-		except ConfigException: pass
+		except Exception: pass
+
+		try: self._recordBulkSize = self.configGetInt('recordBulkSize')
+		except Exception: pass
+
+		if self._recordBulkSize < 1:
+			print >> sys.stderr, "Invalid recordBulkSize, must be larger than 0"
+			return False
 
 		# location of htpasswd file
 		try:
 			self._htpasswd = self.configGetString('htpasswd')
-		except ConfigException: pass
+		except Exception: pass
 		self._htpasswd = Environment.Instance().absolutePath(self._htpasswd)
 
 		# location of access log file
 		try:
 			self._accessLogFile = Environment.Instance().absolutePath(
 			                      self.configGetString('accessLog'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# access to restricted inventory information
 		try: self._allowRestricted = self.configGetBool('allowRestricted')
-		except: pass
+		except Exception: pass
+
+		# use arclink-access bindings
+		try: self._useArclinkAccess = self.configGetBool('useArclinkAccess')
+		except Exception: pass
 
 		# services to enable
 		try: self._serveDataSelect = self.configGetBool('serveDataSelect')
-		except: pass
+		except Exception: pass
 		try: self._serveEvent = self.configGetBool('serveEvent')
-		except: pass
+		except Exception: pass
 		try: self._serveStation = self.configGetBool('serveStation')
-		except: pass
+		except Exception: pass
 
 		# event filter
 		try: self._hideAuthor = self.configGetBool('hideAuthor')
-		except: pass
+		except Exception: pass
 		try:
 			name = self.configGetString('evaluationMode')
 			if name.lower() == DataModel.EEvaluationModeNames.name(DataModel.MANUAL):
@@ -210,33 +414,77 @@ class FDSNWS(Application):
 			else:
 				print >> sys.stderr, "invalid evaluation mode string: %s" % name
 				return False
-		except: pass
+		except Exception: pass
 		try:
 			strings = self.configGetStrings('eventType.whitelist')
 			if len(strings) > 1 or len(strings[0]):
 				self._eventTypeWhitelist = [ s.lower() for s in strings ]
-		except: pass
+		except Exception: pass
 		try:
 			strings = self.configGetStrings('eventType.blacklist')
 			if len(strings) > 0 or len(strings[0]):
 				self._eventTypeBlacklist = [ s.lower() for s in strings ]
-		except: pass
+		except Exception: pass
+		try:
+			strings = self.configGetStrings('eventFormats')
+			if len(strings) > 1 or len(strings[0]):
+				self._eventFormats = [ s.lower() for s in strings ]
+		except Exception: pass
 
 		# station filter
 		try: self._stationFilter = Environment.Instance().absolutePath(self.configGetString('stationFilter'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# dataSelect filter
 		try: self._dataSelectFilter = Environment.Instance().absolutePath(self.configGetString('dataSelectFilter'))
-		except ConfigException: pass
+		except Exception: pass
 
 		# output filter debug information
 		try: self._debugFilter = self.configGetBool('debugFilter')
-		except: pass
+		except Exception: pass
 
 		# prefix to be used as default for output filenames
 		try: self._fileNamePrefix = self.configGetString('fileNamePrefix')
-		except ConfigException: pass
+		except Exception: pass
+
+		# save request logs in database?
+		try: self._trackdbEnabled = self.configGetBool('trackdb.enable')
+		except Exception: pass
+
+		# default user
+		try: self._trackdbDefaultUser = self.configGetString('trackdb.defaultUser')
+		except Exception: pass
+
+		# enable authentication extension?
+		try: self._authEnabled = self.configGetBool('auth.enable')
+		except Exception: pass
+
+		# GnuPG home directory
+		try: self._authGnupgHome = self.configGetString('auth.gnupgHome')
+		except Exception: pass
+		self._authGnupgHome = Environment.Instance().absolutePath(self._authGnupgHome)
+
+		# blacklist of users/tokens
+		try:
+			strings = self.configGetStrings('auth.blacklist')
+			if len(strings) > 1 or len(strings[0]):
+				self._authBlacklist = strings
+		except Exception: pass
+
+		# If the database connection is passed via command line or configuration
+		# file then messaging is disabled. Messaging is only used to get
+		# the configured database connection URI.
+		if self.databaseURI() != "":
+			if not self._trackdbEnabled:
+				self.setMessagingEnabled(False)
+		else:
+			# Without the event service, even a database connection is not
+			# required if the inventory is loaded from file
+			if not self._serveEvent and not self._useArclinkAccess and not self.isInventoryDatabaseEnabled():
+				if not self._trackdbEnabled:
+					self.setMessagingEnabled(False)
+
+				self.setDatabaseEnabled(False, False)
 
 		return True
 
@@ -254,7 +502,7 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def run(self):
+	def _site(self):
 		modeStr = None
 		if self._evaluationMode is not None:
 			modeStr = DataModel.EEvaluationModeNames.name(self._evaluationMode)
@@ -284,7 +532,9 @@ class FDSNWS(Application):
 		               "  queryObjects    : %i\n" \
 		               "  realtimeGap     : %s\n" \
 		               "  samples (M)     : %s\n" \
+		               "  recordBulkSize  : %i\n" \
 		               "  allowRestricted : %s\n" \
+		               "  useArclinkAccess: %s\n" \
 		               "  hideAuthor      : %s\n" \
 		               "  evaluationMode  : %s\n" \
 		               "  eventType\n" \
@@ -293,19 +543,28 @@ class FDSNWS(Application):
 		               "  inventory filter\n" \
 		               "    station       : %s\n" \
 		               "    dataSelect    : %s\n" \
-		               "    debug enabled : %s\n" % (
+		               "    debug enabled : %s\n" \
+		               "  trackdb\n" \
+		               "    enabled       : %s\n" \
+		               "    defaultUser   : %s\n" \
+		               "  auth\n" \
+		               "    enabled       : %s\n" \
+		               "    gnupgHome     : %s\n" % (
 		               self._serveDataSelect, self._serveEvent,
 		               self._serveStation, self._listenAddress, self._port,
 		               self._connections, self._htpasswd, self._accessLogFile,
 		               self._queryObjects, self._realtimeGap, self._samplesM,
-		               self._allowRestricted, self._hideAuthor, modeStr,
+		               self._recordBulkSize, self._allowRestricted,
+		               self._useArclinkAccess, self._hideAuthor, modeStr,
 		               whitelistStr, blacklistStr, stationFilterStr,
-		               dataSelectFilterStr, self._debugFilter))
+		               dataSelectFilterStr, self._debugFilter,
+		               self._trackdbEnabled, self._trackdbDefaultUser,
+		               self._authEnabled, self._authGnupgHome))
 
 		if not self._serveDataSelect and not self._serveEvent and \
 		   not self._serveStation:
 			Logging.error("all services disabled through configuration")
-			return False
+			return None
 
 		# access logger if requested
 		if self._accessLogFile:
@@ -327,14 +586,18 @@ class FDSNWS(Application):
 					       self._filterInventory(dataSelectInv, self._dataSelectFilter, "dataSelect")
 				else:
 					retn = self._filterInventory(stationInv, self._stationFilter)
-			elif self._serveDataSelect:
+			elif self._serveStation:
 				retn = self._filterInventory(stationInv, self._stationFilter)
 			else:
 				retn = self._filterInventory(dataSelectInv, self._dataSelectFilter)
 
 			if not retn:
-				return False
+				return None
 
+		self._access = Access()
+
+		if self._serveDataSelect and self._useArclinkAccess:
+			self._access.initFromSC3Routing(self.query().loadRouting())
 
 		DataModel.PublicObject.SetRegistrationEnabled(False)
 
@@ -368,14 +631,21 @@ class FDSNWS(Application):
 			dataselect1 = DirectoryResource(os.path.join(shareDir, 'dataselect.html'))
 			dataselect.putChild('1', dataselect1)
 
-			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv))
+			dataselect1.putChild('query', FDSNDataSelect(dataSelectInv, self._recordBulkSize))
 			msg = 'authorization for restricted time series data required'
-			authSession = self._getAuthSessionWrapper(FDSNDataSelectRealm(), msg)
+			authSession = self._getAuthSessionWrapper(dataSelectInv, msg)
 			dataselect1.putChild('queryauth', authSession)
 			dataselect1.putChild('version', serviceVersion)
 			fileRes = static.File(os.path.join(shareDir, 'dataselect.wadl'))
 			fileRes.childNotFound = NoResource()
 			dataselect1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'dataselect-builder.html'))
+			fileRes.childNotFound = NoResource()
+			dataselect1.putChild('builder', fileRes)
+
+			if self._authEnabled:
+				dataselect1.putChild('auth', AuthResource(self._authGnupgHome,
+									  self._userdb))
 
 		# event
 		if self._serveEvent:
@@ -387,7 +657,8 @@ class FDSNWS(Application):
 			event1.putChild('query', FDSNEvent(self._hideAuthor,
 			                                   self._evaluationMode,
 			                                   self._eventTypeWhitelist,
-			                                   self._eventTypeBlacklist))
+			                                   self._eventTypeBlacklist,
+			                                   self._eventFormats))
 			fileRes = static.File(os.path.join(shareDir, 'catalogs.xml'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('catalogs', fileRes)
@@ -398,6 +669,9 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'event.wadl'))
 			fileRes.childNotFound = NoResource()
 			event1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'event-builder.html'))
+			fileRes.childNotFound = NoResource()
+			event1.putChild('builder', fileRes)
 
 		# station
 		if self._serveStation:
@@ -413,12 +687,75 @@ class FDSNWS(Application):
 			fileRes = static.File(os.path.join(shareDir, 'station.wadl'))
 			fileRes.childNotFound = NoResource()
 			station1.putChild('application.wadl', fileRes)
+			fileRes = static.File(os.path.join(shareDir, 'station-builder.html'))
+			fileRes.childNotFound = NoResource()
+			station1.putChild('builder', fileRes)
 
+
+		# static files
+		fileRes = static.File(os.path.join(shareDir, 'js'))
+		fileRes.childNotFound = NoResource()
+		fileRes.hideInListing = True
+		prefix.putChild('js', fileRes)
+
+		fileRes = static.File(os.path.join(shareDir, 'css'))
+		fileRes.childNotFound = NoResource()
+		fileRes.hideInListing = True
+		prefix.putChild('css', fileRes)
+
+		return Site(root)
+
+
+	#---------------------------------------------------------------------------
+	def _reloadTask(self):
+		if not self.__sighup:
+			return
+
+		self.__sighup = False
+
+		Logging.info("reloading inventory")
+		self.reloadInventory()
+
+		site = self._site()
+
+		if site:
+			self.__tcpPort.factory = site
+			Logging.info("reload successful")
+
+		else:
+			Logging.info("reload failed")
+
+		self._userdb.dump()
+
+
+	#---------------------------------------------------------------------------
+	def _sighupHandler(self, signum, frame):
+		Logging.info("SIGHUP received")
+		self.__sighup = True
+
+
+	#---------------------------------------------------------------------------
+	def run(self):
 		retn = False
 		try:
+			for user in self._authBlacklist:
+				self._userdb.blacklistUser(user)
+
+			site = self._site()
+
+			if not site:
+				return False
+
 			# start listen for incoming request
-			reactor.listenTCP(self._port, Site(root), self._connections,
-			                  self._listenAddress)
+			self.__tcpPort = reactor.listenTCP(self._port,
+			                                   site,
+	 		                                   self._connections,
+			                                   self._listenAddress)
+
+			# setup signal handler
+			self.__sighup = False
+			signal.signal(signal.SIGHUP, self._sighupHandler)
+		        task.LoopingCall(self._reloadTask).start(60, False)
 
 			# start processing
 			Logging.info("start listening")
@@ -541,9 +878,9 @@ class FDSNWS(Application):
 			net = inv.network(iNet)
 
 			try: netRestricted = net.restricted()
-			except ValueException: netRestricted = None
+			except ValueError: netRestricted = None
 			try: netShared = net.shared()
-			except ValueException: netShared = None
+			except ValueError: netShared = None
 
 			# stations
 			iSta = 0
@@ -552,9 +889,9 @@ class FDSNWS(Application):
 				staCode = "%s.%s" % (net.code(), sta.code())
 
 				try: staRestricted = sta.restricted()
-				except ValueException: staRestricted = None
+				except ValueError: staRestricted = None
 				try: staShared = sta.shared()
-				except ValueException: staShared = None
+				except ValueError: staShared = None
 
 				# sensor locations
 				iLoc = 0
@@ -580,7 +917,7 @@ class FDSNWS(Application):
 								try:
 									if cha.restricted() != rule.restricted:
 										continue
-								except ValueException:
+								except ValueError:
 									if staRestricted != None:
 										if sta.Restricted != rule.Restricted:
 											continue
@@ -593,7 +930,7 @@ class FDSNWS(Application):
 								try:
 									if cha.shared() != rule.shared:
 										continue
-								except ValueException:
+								except ValueError:
 									if staShared != None:
 										if sta.Shared != rule.Shared:
 											continue
@@ -667,14 +1004,31 @@ class FDSNWS(Application):
 
 
 	#---------------------------------------------------------------------------
-	def _getAuthSessionWrapper(self, realm, msg):
-		checker = checkers.FilePasswordDB(self._htpasswd)
+	def _getAuthSessionWrapper(self, inv, msg):
+		if self._useArclinkAccess:
+			access = self._access
+
+		else:
+			access = None
+
+		if self._authEnabled:  # auth extension
+			access = self._access  # requires useArclinkAccess for security reasons
+			realm = FDSNDataSelectAuthRealm(inv, self._recordBulkSize, access, self._userdb)
+			checker = UsernamePasswordChecker(self._userdb)
+
+		else:  # htpasswd
+			realm = FDSNDataSelectRealm(inv, self._recordBulkSize, access)
+			checker = checkers.FilePasswordDB(self._htpasswd)
+
 		p = portal.Portal(realm, [checker])
-		f = guard.DigestCredentialFactory('md5', msg)
-		f.digest = BugfixedDigest('md5', msg)
-		return guard.HTTPAuthSessionWrapper(p, [f])
+		f = guard.DigestCredentialFactory('MD5', msg)
+		f.digest = BugfixedDigest('MD5', msg)
+		return HTTPAuthSessionWrapper(p, [f])
 
 
 
 app = FDSNWS()
 sys.exit(app())
+
+
+# vim: ts=4 noet

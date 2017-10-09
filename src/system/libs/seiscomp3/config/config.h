@@ -29,6 +29,11 @@
 namespace Seiscomp {
 namespace Config {
 
+/**
+ * Mapping of configuration variable to type
+ */
+typedef std::map<std::string, std::string> Variables;
+
 
 /**
  * This is a class for reading and writing configuration files. Currently the
@@ -96,7 +101,7 @@ class SC_CONFIG_API Config {
 		//! Gets an integer from the configuration file
 		//! @param name name of the element
 		//! @return value
-		int getInt(const std::string& name) const throw(Exception);
+		int getInt(const std::string& name) const;
 		int getInt(const std::string& name, bool* error) const;
 		bool getInt(int& value, const std::string& name) const;
 
@@ -106,7 +111,7 @@ class SC_CONFIG_API Config {
 		 * @param name name of the element
 		 * @return double
 		 */
-		double getDouble(const std::string& name) const throw(Exception);
+		double getDouble(const std::string& name) const;
 		double getDouble(const std::string& name, bool* error) const;
 		bool getDouble(double& value, const std::string& name) const;
 
@@ -116,7 +121,7 @@ class SC_CONFIG_API Config {
 		 * @param name name of the element
 		 * @return boolean
 		 */
-		bool getBool(const std::string& name) const throw(Exception);
+		bool getBool(const std::string& name) const;
 		bool getBool(const std::string& name, bool* error) const;
 		bool getBool(bool& value, const std::string& name) const;
 
@@ -126,7 +131,7 @@ class SC_CONFIG_API Config {
 		 * @param name name of the element
 		 * @return string
 		 */
-		std::string getString(const std::string& name) const throw(Exception);
+		std::string getString(const std::string& name) const;
 		std::string getString(const std::string& name, bool* error) const;
 		bool getString(std::string& value, const std::string& name) const;
 
@@ -137,29 +142,25 @@ class SC_CONFIG_API Config {
 		 */
 		bool remove(const std::string& name);
 
-		std::vector<int> getInts(const std::string& name) const
-		throw(Exception);
+		std::vector<int> getInts(const std::string& name) const;
 
 		std::vector<int> getInts(const std::string& name, bool* error) const;
 
 		bool setInts(const std::string& name, const std::vector<int>& values);
 
-		std::vector<double> getDoubles(const std::string& name) const
-		throw(Exception);
+		std::vector<double> getDoubles(const std::string& name) const;
 
 		std::vector<double> getDoubles(const std::string& name, bool* error) const;
 
 		bool setDoubles(const std::string& name, const std::vector<double>& values);
 
-		std::vector<bool> getBools(const std::string& name) const
-		throw(Exception);
+		std::vector<bool> getBools(const std::string& name) const;
 
 		std::vector<bool> getBools(const std::string& name, bool* error) const;
 
 		bool setBools(const std::string& name, const std::vector<bool>& values);
 
-		std::vector<std::string> getStrings(const std::string& name) const
-		throw(Exception);
+		std::vector<std::string> getStrings(const std::string& name) const;
 
 		std::vector<std::string> getStrings(const std::string& name, bool* error) const;
 
@@ -211,6 +212,15 @@ class SC_CONFIG_API Config {
 		 */
 		static void writeSymbol(std::ostream &os, const Symbol *symbol);
 
+		/** Enables/disables tracking of configuration variables.
+		 */
+		void trackVariables(bool enabled);
+
+		/** Returns all configuration variables read by an application mapped
+		 * to a type
+		 */
+		const Variables& getVariables() const;
+
 
 		// ----------------------------------------------------------------------
 		// Protected interface
@@ -246,8 +256,7 @@ class SC_CONFIG_API Config {
 		                        int stage=-1, bool raw=false);
 
 		template <typename T>
-		T get(const std::string& name) const
-		throw(Exception);
+		T get(const std::string& name) const;
 
 		template <typename T>
 		T get(const std::string& name, bool* error) const;
@@ -256,8 +265,7 @@ class SC_CONFIG_API Config {
 		bool get(T& value, const std::string& name) const;
 
 		template <typename T>
-		std::vector<T> getVec(const std::string& name) const
-		throw(Exception);
+		std::vector<T> getVec(const std::string& name) const;
 
 		template <typename T>
 		std::vector<T> getVec(const std::string& name, bool* error) const;
@@ -277,6 +285,8 @@ class SC_CONFIG_API Config {
 		template <typename T>
 		bool set(const std::string& name, const std::vector<T>& values);
 
+		inline void addVariable(const std::string &name, const char *type) const;
+
 
 		// ------------------------------------------------------------------------
 		// Private data members
@@ -290,6 +300,8 @@ class SC_CONFIG_API Config {
 		Logger      *_logger;
 
 		SymbolTable *_symbolTable;
+		bool         _trackVariables;
+		Variables    _variables;
 
 };
 

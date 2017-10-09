@@ -201,7 +201,6 @@ class Connection : public Core::BaseObject {
 		 *                UPDATED|OTIME op time |
 		 *                MAG|DEPTH|LAT|LON|PHASES|OTIME|UPDATED IS [NOT] NULL
 		 *   op        := =|>|>=|<|<=|eq|gt|ge|lt|ge
-		 * @return True if the query could be executed
 		 * @param updatedBufferSize Size of the buffer to store updated events
 		 * until all archived events have been processed. If set to a negative
 		 * value the buffer will be disabled. In this case archived and updated

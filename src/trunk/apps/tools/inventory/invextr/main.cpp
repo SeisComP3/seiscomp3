@@ -218,9 +218,23 @@ class InventoryExtractor : public Client::Application {
 					++i;
 			}
 
+			for ( size_t i = 0; i < inv->responseFAPCount(); ) {
+				if ( usedResponses.find(inv->responseFAP(i)->publicID()) == usedResponses.end() )
+					inv->removeResponseFAP(i);
+				else
+					++i;
+			}
+
 			for ( size_t i = 0; i < inv->responseFIRCount(); ) {
 				if ( usedResponses.find(inv->responseFIR(i)->publicID()) == usedResponses.end() )
 					inv->removeResponseFIR(i);
+				else
+					++i;
+			}
+
+			for ( size_t i = 0; i < inv->responseIIRCount(); ) {
+				if ( usedResponses.find(inv->responseIIR(i)->publicID()) == usedResponses.end() )
+					inv->removeResponseIIR(i);
 				else
 					++i;
 			}

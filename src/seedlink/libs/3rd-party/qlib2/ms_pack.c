@@ -291,7 +291,7 @@ int ms_pack_steim
 			(blksize != (int)pow(2.0,rint(log2((double)blksize))))) {
 		sprintf (errmsg, "Warning: invalid blksize: %d\n", blksize);
 		if (p_errmsg) strcpy(p_errmsg, errmsg);
-		else fprintf (stderr, errmsg);
+		else fprintf (stderr, "%s", errmsg);
 		return (MS_ERROR);
 	}
 	
@@ -300,7 +300,7 @@ int ms_pack_steim
 		if ((diff = (int *)malloc(num_samples * sizeof(int))) == NULL) {
 	    sprintf (errmsg, "Error mallocing diff buffer\n");
 	    if (p_errmsg) strcpy(p_errmsg, errmsg);
-	    else fprintf (stderr, errmsg);
+	    else fprintf (stderr, "%s", errmsg);
 	    return (QLIB2_MALLOC_ERROR);
 		}
 		free_diff = 1;
@@ -352,7 +352,7 @@ int ms_pack_steim
 	    if (*pp_ms == NULL) {
 				sprintf (errmsg, "Error mallocing Mini-SEED buffer\n");
 				if (p_errmsg) strcpy(p_errmsg, errmsg);
-				else fprintf (stderr, errmsg);	    
+				else fprintf (stderr, "%s", errmsg);
 				if (free_diff) free ((char *)diff);
 				free_data_hdr (hdr);
 				return (QLIB2_MALLOC_ERROR);
@@ -365,7 +365,7 @@ int ms_pack_steim
 		if (init_miniseed_hdr ((SDR_HDR *)p_ms, hdr, init_bs) < 0) {
 	    sprintf (errmsg, "Error: initializing MiniSEED header");
 	    if (p_errmsg) strcpy(p_errmsg, errmsg);
-	    else fprintf (stderr, errmsg);	    
+	    else fprintf (stderr, "%s", errmsg);
 	    if (free_diff) free ((char *)diff);
 	    free_data_hdr (hdr);
 	    if (nblks_malloced > 0) free(*pp_ms);
@@ -392,7 +392,7 @@ int ms_pack_steim
 	    sprintf (errmsg, "Error: invalid format %d for ms_pack_steim\n",
 							 hdr->data_type);
 	    if (p_errmsg) strcpy(p_errmsg, errmsg);
-	    else fprintf (stderr, errmsg);	    
+	    else fprintf (stderr, "%s", errmsg);
 	    fflush (stderr);
 	    if (QLIB2_CLASSIC) exit (1);
 	    if (free_diff) free ((char *)diff);
@@ -406,7 +406,7 @@ int ms_pack_steim
 			sprintf (errmsg, "Error packing %s data\n",
 							 (hdr->data_type == STEIM1) ? "STEIM1" : "STEIM2");
 			if (p_errmsg) strcpy(p_errmsg, errmsg);
-			else fprintf (stderr, errmsg);
+			else fprintf (stderr, "%s", errmsg);
 			if (free_diff) free ((char *)diff);
 			free_data_hdr (hdr);
 			*n_blocks = num_blocks;
@@ -483,7 +483,7 @@ int ms_pack_int
 	(blksize != (int)pow(2.0,rint(log2((double)blksize))))) {
 	sprintf (errmsg, "Warning: invalid blksize: %d\n", blksize);
 	if (p_errmsg) strcpy(p_errmsg, errmsg);
-	else fprintf (stderr, errmsg);
+	else fprintf (stderr, "%s", errmsg);
 	return (MS_ERROR);
     }
 
@@ -527,7 +527,7 @@ int ms_pack_int
 	    if (*pp_ms == NULL) {
 		sprintf (errmsg, "Error mallocing miniSEED buffer\n");
 		if (p_errmsg) strcpy(p_errmsg, errmsg);
-		else fprintf (stderr, errmsg);	    
+		else fprintf (stderr, "%s", errmsg);
 		free_data_hdr (hdr);
 		return (QLIB2_MALLOC_ERROR);
 	    }
@@ -539,7 +539,7 @@ int ms_pack_int
 	if (init_miniseed_hdr ((SDR_HDR *)p_ms, hdr, init_bs) < 0) {
 	    sprintf (errmsg, "Error: initializing MiniSEED header");
 	    if (p_errmsg) strcpy(p_errmsg, errmsg);
-	    else fprintf (stderr, errmsg);	    
+	    else fprintf (stderr, "%s", errmsg);
 	    free_data_hdr (hdr);
 	    if (nblks_malloced > 0) free(*pp_ms);
 	    return (MS_ERROR);
@@ -632,7 +632,7 @@ int ms_pack_text
 	(blksize != (int)pow(2.0,rint(log2((double)blksize))))) {
 	sprintf (errmsg, "Warning: invalid blksize: %d\n", blksize);
 	if (p_errmsg) strcpy(p_errmsg, errmsg);
-	else fprintf (stderr, errmsg);
+	else fprintf (stderr, "%s", errmsg);
 	return (MS_ERROR);
     }
 
@@ -676,7 +676,7 @@ int ms_pack_text
 	    if (*pp_ms == NULL) {
 		sprintf (errmsg, "Error mallocing miniSEED buffer\n");
 		if (p_errmsg) strcpy(p_errmsg, errmsg);
-		else fprintf (stderr, errmsg);	    
+		else fprintf (stderr, "%s", errmsg);
 		free_data_hdr (hdr);
 		return (QLIB2_MALLOC_ERROR);
 	    }
@@ -688,7 +688,7 @@ int ms_pack_text
 	if (init_miniseed_hdr ((SDR_HDR *)p_ms, hdr, init_bs) < 0) {
 	    sprintf (errmsg, "Error: initializing MiniSEED header");
 	    if (p_errmsg) strcpy(p_errmsg, errmsg);
-	    else fprintf (stderr, errmsg);	    
+	    else fprintf (stderr, "%s", errmsg);
 	    free_data_hdr (hdr);
 	    if (nblks_malloced > 0) free(*pp_ms);
 	    return (MS_ERROR);

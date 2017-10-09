@@ -51,6 +51,7 @@ class PostgreSQLDatabase : public Seiscomp::IO::DatabaseInterface {
 		void endQuery();
 
 		unsigned long lastInsertId(const char* table);
+		uint64_t numberOfAffectedRows();
 
 		bool fetchRow();
 		int findColumn(const char* name);

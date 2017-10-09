@@ -122,40 +122,40 @@ class SC_SYSTEM_CORE_API MomentTensor : public PublicObject {
 
 		//! Scalar moment as derived in moment tensor inversion in Nm.
 		void setScalarMoment(const OPT(RealQuantity)& scalarMoment);
-		RealQuantity& scalarMoment() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& scalarMoment() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& scalarMoment();
+		const RealQuantity& scalarMoment() const;
 
 		//! Tensor object holding the moment tensor elements.
 		void setTensor(const OPT(Tensor)& tensor);
-		Tensor& tensor() throw(Seiscomp::Core::ValueException);
-		const Tensor& tensor() const throw(Seiscomp::Core::ValueException);
+		Tensor& tensor();
+		const Tensor& tensor() const;
 
 		//! Variance of moment tensor inversion.
 		void setVariance(const OPT(double)& variance);
-		double variance() const throw(Seiscomp::Core::ValueException);
+		double variance() const;
 
 		//! Variance reduction of moment tensor inversion, given in
 		//! percent (Dreger 2003). This is a
 		//! goodness-of-fit measure.
 		void setVarianceReduction(const OPT(double)& varianceReduction);
-		double varianceReduction() const throw(Seiscomp::Core::ValueException);
+		double varianceReduction() const;
 
 		//! Double couple parameter obtained from moment tensor
 		//! inversion (decimal fraction between 0
 		//! and 1).
 		void setDoubleCouple(const OPT(double)& doubleCouple);
-		double doubleCouple() const throw(Seiscomp::Core::ValueException);
+		double doubleCouple() const;
 
 		//! CLVD (compensated linear vector dipole) parameter obtained
 		//! from moment tensor inversion (decimal
 		//! fraction between 0 and 1).
 		void setClvd(const OPT(double)& clvd);
-		double clvd() const throw(Seiscomp::Core::ValueException);
+		double clvd() const;
 
 		//! Isotropic part obtained from moment tensor inversion
 		//! (decimal fraction between 0 and 1).
 		void setIso(const OPT(double)& iso);
-		double iso() const throw(Seiscomp::Core::ValueException);
+		double iso() const;
 
 		//! Resource identifier of the Green's function used in moment
 		//! tensor inversion.
@@ -169,8 +169,8 @@ class SC_SYSTEM_CORE_API MomentTensor : public PublicObject {
 
 		//! Source time function used in moment-tensor inversion.
 		void setSourceTimeFunction(const OPT(SourceTimeFunction)& sourceTimeFunction);
-		SourceTimeFunction& sourceTimeFunction() throw(Seiscomp::Core::ValueException);
-		const SourceTimeFunction& sourceTimeFunction() const throw(Seiscomp::Core::ValueException);
+		SourceTimeFunction& sourceTimeFunction();
+		const SourceTimeFunction& sourceTimeFunction() const;
 
 		//! Resource identifier of the method used for moment-tensor
 		//! inversion.
@@ -179,11 +179,11 @@ class SC_SYSTEM_CORE_API MomentTensor : public PublicObject {
 
 		//! Moment tensor method used.
 		void setMethod(const OPT(MomentTensorMethod)& method);
-		MomentTensorMethod method() const throw(Seiscomp::Core::ValueException);
+		MomentTensorMethod method() const;
 
 		//! Status of moment tensor.
 		void setStatus(const OPT(MomentTensorStatus)& status);
-		MomentTensorStatus status() const throw(Seiscomp::Core::ValueException);
+		MomentTensorStatus status() const;
 
 		void setCmtName(const std::string& cmtName);
 		const std::string& cmtName() const;
@@ -193,8 +193,8 @@ class SC_SYSTEM_CORE_API MomentTensor : public PublicObject {
 
 		//! CreationInfo for the MomentTensor object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

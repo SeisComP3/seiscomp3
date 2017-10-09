@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9820b133-2cd3-4e0c-9f30-2b0eadbbc157}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Source Files\stdutil">
+      <UniqueIdentifier>{fef1417d-7135-44a6-9da1-140ec5ff97c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libspread\fl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread\scatp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread\sp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdarr.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdcarr.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stddll.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stderror.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdhash.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdit.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdskl.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdthread.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdtime.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\stdutil\src\stdutil.c">
+      <Filter>Source Files\stdutil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread-util\src\memory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread-util\src\events.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread-util\src\data_link.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread-util\src\arch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libspread-util\src\alarm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

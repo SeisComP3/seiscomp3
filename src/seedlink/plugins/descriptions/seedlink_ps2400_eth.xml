@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="ps2400_eth" category="sources">
+		<description>
+		The ps2400_eth plug-in fetches data from a Earth Data PS2400/PS6-24
+		digitizer (firmware >= 2.23) using TCP/IP. Other configurable parameters
+		are in $SEISCOMP_ROOT/share/templates/seedlink/ps2400_eth/plugins.ini.tpl.
+		</description>
+		<configuration>
+			<parameter name="address" type="string" default="127.0.0.1">
+				<description>
+				IP of the Earth Data PS2400/PS6-24 digitizer.
+				</description>
+			</parameter>
+			<parameter name="port" type="int" default="1411">
+				<description>
+				Port of the Earth Data PS2400/PS6-24 digitizer.
+				</description>
+			</parameter>
+			<parameter name="proc" type="string" default="ps2400_eth_edata_100">
+				<description>
+				Name of the proc object (defined in streams.xml); used for processing
+				raw streams (streams submitted by a plugin as raw samples).
+				</description>
+			</parameter>
+		</configuration>
+	</binding>
+</seiscomp>

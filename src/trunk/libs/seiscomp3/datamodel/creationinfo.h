@@ -96,12 +96,12 @@ class SC_SYSTEM_CORE_API CreationInfo : public Core::BaseObject {
 		//! Time of creation of a resource, in ISO 8601 format. It has
 		//! to be given in UTC.
 		void setCreationTime(const OPT(Seiscomp::Core::Time)& creationTime);
-		Seiscomp::Core::Time creationTime() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time creationTime() const;
 
 		//! Time of last modification of a resource, in ISO 8601
 		//! format. It has to be given in UTC.
 		void setModificationTime(const OPT(Seiscomp::Core::Time)& modificationTime);
-		Seiscomp::Core::Time modificationTime() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time modificationTime() const;
 
 		//! Version string of a resource.
 		void setVersion(const std::string& version);

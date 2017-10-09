@@ -114,7 +114,7 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 		virtual void setStartTime(const Core::Time& time);
 
 		//! Returns the end time
-		Core::Time endTime() const throw(Seiscomp::Core::ValueException);
+		Core::Time endTime() const;
 
 		//! Returns the time window between start and end time of a record
 		Core::TimeWindow timeWindow() const;
@@ -172,8 +172,8 @@ class SC_SYSTEM_CORE_API Record : public Seiscomp::Core::BaseObject {
 		//! Frees the memory allocated for the data samples.
 		virtual void saveSpace() const = 0;
 
-		virtual void read(std::istream &in) throw(Core::StreamException) = 0;
-		virtual void write(std::ostream &out) throw(Core::StreamException) = 0;
+		virtual void read(std::istream &in) = 0;
+		virtual void write(std::ostream &out) = 0;
 	
 
 	// ----------------------------------------------------------------------

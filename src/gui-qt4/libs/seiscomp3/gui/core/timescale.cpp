@@ -22,6 +22,7 @@
 #include <QResizeEvent>
 
 #include "timescale.h"
+#include "utils.h"
 
 #include <seiscomp3/core/exceptions.h>
 
@@ -142,7 +143,7 @@ bool TimeScale::getTickText(double pos, double lastPos,
 			Seiscomp::Core::Time time(pos);
 			if ( !time.valid() ) return false;
 
-			str = time.toString(_primaryTimeFormat).c_str();
+			str = timeToString(time, _primaryTimeFormat);
 			return true;
 		}
 		catch ( const Core::OverflowException&) { return false; }
@@ -153,11 +154,11 @@ bool TimeScale::getTickText(double pos, double lastPos,
 		try {
 			Seiscomp::Core::Time time(pos);
 			if ( time.valid() ) {
-				std::string timeStr = time.toString(_secondaryTimeFormat);
+				QString timeStr = timeToString(time, _secondaryTimeFormat);
 				Seiscomp::Core::Time prevTime(lastPos);
 				if ( !prevTime.valid() ||
-				     prevTime.toString(_secondaryTimeFormat) != timeStr ) {
-					str = timeStr.c_str();
+				     timeToString(prevTime, _secondaryTimeFormat) != timeStr ) {
+					str = timeStr;
 					return true;
 				}
 			}

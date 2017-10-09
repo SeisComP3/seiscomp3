@@ -8,8 +8,9 @@
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
+ *                                                                         *
+ *   Author: Jan Becker, gempa GmbH, jabe@gempa.de                         *
  ***************************************************************************/
-
 
 
 #include <seiscomp3/gui/map/rectangularprojection.h>
@@ -41,8 +42,25 @@ const qreal ooLat = 1.0 / 90.0;
 const qreal ooLon = 1.0 / 180.0;
 
 
+bool checkPrecision(double val, int scale) {
+	double sval = val*scale;
+	return fabs(sval-round(sval)) < 1E-8;
+}
+
+
 QString lat2String(qreal lat) {
-	return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
+	if ( checkPrecision(lat, 1) )
+		return QString("%1%2").arg(abs((int)lat)).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 10) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 1).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 100) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 2).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 1000) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 3).arg(lat < 0?" S":lat > 0?" N":"");
+	else if ( checkPrecision(lat, 10000) )
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 4).arg(lat < 0?" S":lat > 0?" N":"");
+	else
+		return QString("%1%2").arg(fabs(lat), 0, 'f', 5).arg(lat < 0?" S":lat > 0?" N":"");
 }
 
 
@@ -51,7 +69,323 @@ QString lon2String(qreal lon) {
 	if ( lon < 0 ) lon += 360.0;
 	if ( lon > 180.0 ) lon -= 360.0;
 
-	return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
+	if ( checkPrecision(lon, 1) )
+		return QString("%1%2").arg(abs((int)lon)).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 10) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 1).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 100) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 2).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 1000) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 3).arg(lon < 0?" W":lon > 0?" E":"");
+	else if ( checkPrecision(lon, 10000) )
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 4).arg(lon < 0?" W":lon > 0?" E":"");
+	else
+		return QString("%1%2").arg(fabs(lon), 0, 'f', 5).arg(lon < 0?" W":lon > 0?" E":"");
+}
+
+
+class RectangularProjectionProxy : public RectangularProjection {
+	template <typename COMPOSITOR>
+	friend void drawLowQualityImage(RectangularProjectionProxy *proj, QImage &buffer, const QRectF &geoReference, const QImage &image);
+
+	template <typename COMPOSITOR>
+	friend void drawHighQualityImage(RectangularProjectionProxy *proj, QImage &buffer, const QRectF &geoReference, const QImage &image);
+};
+
+
+// Low quality
+template <typename COMPOSITOR>
+void drawLowQualityImage(RectangularProjectionProxy *proj, QImage &buffer, const QRectF &geoReference, const QImage &image) {
+	QPoint p00, p11;
+
+	qreal minLat, maxLat;
+	qreal minLon, maxLon;
+
+	minLat = geoReference.top();
+	maxLat = geoReference.bottom();
+
+	minLon = geoReference.left();
+	maxLon = geoReference.right();
+
+	if ( minLat > maxLat ) std::swap(minLat, maxLat);
+
+	proj->project(p00, QPointF(minLon, minLat));
+	proj->project(p11, QPointF(maxLon, maxLat));
+
+	bool wrap = fabs(maxLon - minLon) >= 360.;
+
+	int x0 = p00.x();
+	int x1 = p11.x();
+
+	int y0 = p00.y();
+	int y1 = p11.y();
+
+
+	// X can be wrapped, so we have to check more cases
+	if ( geoReference.width() < 180.0f ) {
+		if ( x0 >= proj->_width ) {
+			if ( x1 < 0 || x1 >= proj->_width ) return;
+		}
+
+		if ( x1 < 0 ) {
+			if ( x0 < 0 || x0 >= proj->_width ) return;
+		}
+	}
+
+	if ( y0 > y1 ) std::swap(y0,y1);
+
+	// Y has no wrapping, so the checks are more simply
+	if ( y0 >= proj->_height ) return;
+	if ( y1 < 0 ) return;
+
+	bool drawTwoParts = false;
+
+	// Quick hack just for testing
+	// TODO: This special case has to be handled.
+	if ( x0 >= x1 || wrap ) {
+		drawTwoParts = true;
+		if ( x0 >= x1 ) x0 -= proj->_mapWidth;
+		else if ( wrap ) x0 = x1 - proj->_mapWidth;
+	}
+
+	int scaledWidth = x1-x0+1;
+	int scaledHeight = y1-y0+1;
+
+	Coord ratioX, ratioY;
+
+	ratioX.parts.hi = image.width();
+	ratioX.parts.lo = 0;
+	ratioY.parts.hi = image.height();
+	ratioY.parts.lo = 0;
+
+	ratioX.value /= scaledWidth;
+	ratioY.value /= scaledHeight;
+
+	while ( true ) {
+		int width = image.width();
+		int height = image.height();
+
+		Coord xofs, yofs;
+
+		int x0c = x0,
+		    y0c = y0,
+		    x1c = x1;
+
+		// Something has to be painted
+		const QRgb *data = (const QRgb*)image.bits();
+
+		QRgb *targetData = (QRgb*)buffer.bits();
+		int targetWidth = buffer.width();
+
+		if ( x0c < 0 ) {
+			xofs.value = ratioX.value * -x0c;
+			x0c = 0;
+		}
+		else
+			xofs.value = 0;
+
+		if ( x1c >= proj->_width )
+			x1c = proj->_width-1;
+
+		if ( y0c < 0 ) {
+			yofs.value = ratioY.value * -y0c;
+			height -= yofs.parts.hi;
+			data += image.width() * yofs.parts.hi;
+			y0c = 0;
+		}
+		else
+			yofs.value = 0;
+
+		if ( y1 >= proj->_height )
+			y1 = proj->_height-1;
+
+		targetData += targetWidth * y0c + x0c;
+
+		Coord y;
+		y.parts.hi = 0;
+		y.parts.lo = yofs.parts.lo;
+
+		for ( int i = y0c; i <= y1; ++i ) {
+			QRgb *targetPixel = targetData;
+
+			Coord x;
+			x.value = xofs.value;
+
+			for ( int j = x0c; j <= x1c; ++j ) {
+				COMPOSITOR::combine(*targetPixel, data[x.parts.hi]);
+				++targetPixel;
+
+				x.value += ratioX.value;
+			}
+
+			targetData += targetWidth;
+
+			y.value += ratioY.value;
+			int skipLines = y.parts.hi;
+			while ( skipLines ) {
+				data += width;
+				--skipLines;
+			}
+			y.parts.hi = 0;
+		}
+
+		if ( drawTwoParts ) {
+			x0 += proj->_mapWidth;
+			x1 += proj->_mapWidth;
+			drawTwoParts = false;
+		}
+		else
+			break;
+	}
+}
+
+
+template <typename COMPOSITOR>
+void drawHighQualityImage(RectangularProjectionProxy *proj, QImage &buffer, const QRectF &geoReference, const QImage &image) {
+	QPoint p00, p11;
+
+	qreal minLat, maxLat;
+	qreal minLon, maxLon;
+
+	minLat = geoReference.top();
+	maxLat = geoReference.bottom();
+
+	minLon = geoReference.left();
+	maxLon = geoReference.right();
+
+	if ( minLat > maxLat ) std::swap(minLat, maxLat);
+
+	proj->project(p00, QPointF(minLon, minLat));
+	proj->project(p11, QPointF(maxLon, maxLat));
+
+	bool wrap = fabs(maxLon - minLon) >= 360.;
+
+	int x0 = p00.x();
+	int x1 = p11.x();
+
+	int y0 = p00.y();
+	int y1 = p11.y();
+
+
+	// X can be wrapped, so we have to check more cases
+	if ( geoReference.width() < 180.0f ) {
+		if ( x0 >= proj->_width ) {
+			if ( x1 < 0 || x1 >= proj->_width ) return;
+		}
+
+		if ( x1 < 0 ) {
+			if ( x0 < 0 || x0 >= proj->_width ) return;
+		}
+	}
+
+	if ( y0 > y1 ) std::swap(y0,y1);
+
+	// Y has no wrapping, so the checks are more simply
+	if ( y0 >= proj->_height ) return;
+	if ( y1 < 0 ) return;
+
+	bool drawTwoParts = false;
+
+	// Quick hack just for testing
+	// TODO: This special case has to be handled.
+	if ( x0 >= x1 || wrap ) {
+		drawTwoParts = true;
+		if ( x0 >= x1 ) x0 -= proj->_mapWidth;
+		else if ( wrap ) x0 = x1 - proj->_mapWidth;
+	}
+
+	int scaledWidth = x1-x0+1;
+	int scaledHeight = y1-y0+1;
+
+	Coord ratioX, ratioY;
+
+	ratioX.parts.hi = image.width();
+	ratioX.parts.lo = 0;
+	ratioY.parts.hi = image.height();
+	ratioY.parts.lo = 0;
+
+	ratioX.value /= scaledWidth;
+	ratioY.value /= scaledHeight;
+
+	while ( true ) {
+		int width = image.width();
+		int height = image.height();
+
+		Coord xofs, yofs;
+
+		int x0c = x0,
+		    y0c = y0,
+		    x1c = x1;
+
+		// Something has to be painted
+		const QRgb *data = (const QRgb*)image.bits();
+
+		QRgb *targetData = (QRgb*)buffer.bits();
+		int targetWidth = buffer.width();
+
+		if ( x0c < 0 ) {
+			xofs.value = ratioX.value * -x0c;
+			x0c = 0;
+		}
+		else
+			xofs.value = 0;
+
+		if ( x1c >= proj->_width )
+			x1c = proj->_width-1;
+
+		if ( y0c < 0 ) {
+			yofs.value = ratioY.value * -y0c;
+			height -= yofs.parts.hi;
+			data += image.width() * yofs.parts.hi;
+			y0c = 0;
+		}
+		else
+			yofs.value = 0;
+
+		if ( y1 >= proj->_height )
+			y1 = proj->_height-1;
+
+		targetData += targetWidth * y0c + x0c;
+
+		Coord y;
+		y.parts.hi = 0;
+		y.parts.lo = yofs.parts.lo;
+
+		for ( int i = y0c; i <= y1; ++i ) {
+			QRgb *targetPixel = targetData;
+
+			Coord x;
+			x.value = xofs.value;
+
+			for ( int j = x0c; j <= x1c; ++j ) {
+				QRgb c;
+				getTexelBilinear(c, data, width, height, x, y);
+				COMPOSITOR::combine(*targetPixel, c);
+				++targetPixel;
+
+				x.value += ratioX.value;
+			}
+
+			targetData += targetWidth;
+
+			y.value += ratioY.value;
+			int skipLines = y.parts.hi;
+			height -= skipLines;
+			while ( skipLines ) {
+				data += width;
+				--skipLines;
+			}
+			y.parts.hi = 0;
+		}
+
+		if ( drawTwoParts ) {
+			x0 += proj->_mapWidth;
+			x1 += proj->_mapWidth;
+			drawTwoParts = false;
+		}
+		else
+			break;
+	}
 }
 
 
@@ -344,262 +678,55 @@ int RectangularProjection::lineSteps(const QPointF &p0, const QPointF &p1) {
 
 
 void RectangularProjection::drawImage(QImage &buffer, const QRectF &geoReference,
-                                      const QImage &image, bool highQuality) {
+                                      const QImage &image, bool highQuality,
+                                      CompositionMode cm) {
 	if ( image.format() != QImage::Format_RGB32 &&
 	     image.format() != QImage::Format_ARGB32 )
 		return;
 
 	bool useAlpha = image.format() == QImage::Format_ARGB32;
 
-	QPoint p00, p11;
+	if ( cm == CompositionMode_Default )
+		cm = useAlpha ? CompositionMode_SourceOver : CompositionMode_Source;
 
-	qreal minLat, maxLat;
-	qreal minLon, maxLon;
+	// This step is required to give draw*QualityImage access to protected methods.
+	// Declaring friend in the header would expose the functions as public symbols
+	// which is not desired.
+	RectangularProjectionProxy *self = (RectangularProjectionProxy*)this;
 
-	minLat = geoReference.top();
-	maxLat = geoReference.bottom();
-
-	minLon = geoReference.left();
-	maxLon = geoReference.right();
-
-	if ( minLat > maxLat ) std::swap(minLat, maxLat);
-
-	project(p00, QPointF(minLon, minLat));
-	project(p11, QPointF(maxLon, maxLat));
-
-	bool wrap = fabs(maxLon - minLon) >= 360.;
-
-	int x0 = p00.x();
-	int x1 = p11.x();
-
-	int y0 = p00.y();
-	int y1 = p11.y();
-
-
-	// X can be wrapped, so we have to check more cases
-	if ( geoReference.width() < 180.0f ) {
-		if ( x0 >= _width ) {
-			if ( x1 < 0 || x1 >= _width ) return;
-		}
-
-		if ( x1 < 0 ) {
-			if ( x0 < 0 || x0 >= _width ) return;
-		}
-	}
-
-	if ( y0 > y1 ) std::swap(y0,y1);
-
-	// Y has no wrapping, so the checks are more simply
-	if ( y0 >= _height ) return;
-	if ( y1 < 0 ) return;
-
-	bool drawTwoParts = false;
-
-	// Quick hack just for testing
-	// TODO: This special case has to be handled.
-	if ( x0 >= x1 || wrap ) {
-		drawTwoParts = true;
-		if ( x0 >= x1 ) x0 -= _mapWidth;
-		else if ( wrap ) x0 = x1 - _mapWidth;
-	}
-
-	int scaledWidth = x1-x0+1;
-	int scaledHeight = y1-y0+1;
-
-	Coord ratioX, ratioY;
-
-	ratioX.parts.hi = image.width();
-	ratioX.parts.lo = 0;
-	ratioY.parts.hi = image.height();
-	ratioY.parts.lo = 0;
-
-	ratioX.value /= scaledWidth;
-	ratioY.value /= scaledHeight;
-
-	while ( true ) {
-		int width = image.width();
-		int height = image.height();
-
-		Coord xofs, yofs;
-
-		int x0c = x0,
-		    y0c = y0,
-		    x1c = x1;
-
-		// Something has to be painted
-		const QRgb *data = (const QRgb*)image.bits();
-	
-		QRgb *targetData = (QRgb*)buffer.bits();
-		int targetWidth = buffer.width();
-
-		if ( x0c < 0 ) {
-			xofs.value = ratioX.value * -x0c;
-			x0c = 0;
-		}
-		else
-			xofs.value = 0;
-	
-		if ( x1c >= _width )
-			x1c = _width-1;
-	
-		if ( y0c < 0 ) {
-			yofs.value = ratioY.value * -y0c;
-			height -= yofs.parts.hi;
-			data += image.width() * yofs.parts.hi;
-			y0c = 0;
-		}
-		else
-			yofs.value = 0;
-	
-		if ( y1 >= _height )
-			y1 = _height-1;
-	
-		targetData += targetWidth * y0c + x0c;
-	
-		Coord y;
-		y.parts.hi = 0;
-		y.parts.lo = yofs.parts.lo;
-
-		if ( useAlpha ) {
-
-			if ( highQuality ) {
-
-				for ( int i = y0c; i <= y1; ++i ) {
-					QRgb *targetPixel = targetData;
-		
-					Coord x;
-					x.value = xofs.value;
-			
-					for ( int j = x0c; j <= x1c; ++j ) {
-						QRgb c;
-						getTexelBilinear(c, data, width, height, x, y);
-						int alpha = qAlpha(c);
-						int iAlpha = 255 - alpha;
-						*targetPixel = qRgb(
-							(qRed(c)*alpha + qRed(*targetPixel)*iAlpha) >> 8,
-							(qGreen(c)*alpha + qGreen(*targetPixel)*iAlpha) >> 8,
-							(qBlue(c)*alpha + qBlue(*targetPixel)*iAlpha) >> 8
-						);
-						++targetPixel;
-		
-						x.value += ratioX.value;
-					}
-		
-					targetData += targetWidth;
-		
-					y.value += ratioY.value;
-					int skipLines = y.parts.hi;
-					height -= skipLines;
-					while ( skipLines ) {
-						data += width;
-						--skipLines;
-					}
-					y.parts.hi = 0;
-				}
-
-			}
-			else {
-
-				for ( int i = y0c; i <= y1; ++i ) {
-					QRgb *targetPixel = targetData;
-		
-					Coord x;
-					x.value = xofs.value;
-			
-					for ( int j = x0c; j <= x1c; ++j ) {
-						QRgb c = data[x.parts.hi];
-						int alpha = qAlpha(c);
-						int iAlpha = 255 - alpha;
-						*targetPixel = qRgb(
-							(qRed(c)*alpha + qRed(*targetPixel)*iAlpha) >> 8,
-							(qGreen(c)*alpha + qGreen(*targetPixel)*iAlpha) >> 8,
-							(qBlue(c)*alpha + qBlue(*targetPixel)*iAlpha) >> 8
-						);
-						++targetPixel;
-		
-						x.value += ratioX.value;
-					}
-		
-					targetData += targetWidth;
-		
-					y.value += ratioY.value;
-					int skipLines = y.parts.hi;
-					while ( skipLines ) {
-						data += width;
-						--skipLines;
-					}
-					y.parts.hi = 0;
-				}
-
-			}
-
-		}
-		else {
-
-			if ( highQuality ) {
-
-				for ( int i = y0c; i <= y1; ++i ) {
-					QRgb *targetPixel = targetData;
-		
-					Coord x;
-					x.value = xofs.value;
-
-					for ( int j = x0c; j <= x1c; ++j ) {
-						getTexelBilinear(*targetPixel, data, width, height, x, y);
-						++targetPixel;
-		
-						x.value += ratioX.value;
-					}
-		
-					targetData += targetWidth;
-		
-					y.value += ratioY.value;
-					int skipLines = y.parts.hi;
-					height -= skipLines;
-					while ( skipLines ) {
-						data += width;
-						--skipLines;
-					}
-					y.parts.hi = 0;
-				}
-
-			}
-			else {
-
-				for ( int i = y0c; i <= y1; ++i ) {
-					QRgb *targetPixel = targetData;
-		
-					Coord x;
-					x.value = xofs.value;
-			
-					for ( int j = x0c; j <= x1c; ++j ) {
-						*targetPixel = data[x.parts.hi];
-						++targetPixel;
-		
-						x.value += ratioX.value;
-					}
-		
-					targetData += targetWidth;
-		
-					y.value += ratioY.value;
-					int skipLines = y.parts.hi;
-					while ( skipLines ) {
-						data += width;
-						--skipLines;
-					}
-					y.parts.hi = 0;
-				}
-
-			}
-
-		}
-
-		if ( drawTwoParts ) {
-			x0 += _mapWidth;
-			x1 += _mapWidth;
-			drawTwoParts = false;
-		}
-		else
+	switch ( cm ) {
+		case CompositionMode_Source:
+			if ( highQuality )
+				drawHighQualityImage<CompositionSource>(self, buffer, geoReference, image);
+			else
+				drawLowQualityImage<CompositionSource>(self, buffer, geoReference, image);
+			break;
+		case CompositionMode_SourceOver:
+			if ( highQuality )
+				drawHighQualityImage<CompositionSourceOver>(self, buffer, geoReference, image);
+			else
+				drawLowQualityImage<CompositionSourceOver>(self, buffer, geoReference, image);
+			break;
+		case CompositionMode_Multiply:
+			if ( highQuality )
+				drawHighQualityImage<CompositionMultiply>(self, buffer, geoReference, image);
+			else
+				drawLowQualityImage<CompositionMultiply>(self, buffer, geoReference, image);
+			break;
+		case CompositionMode_Xor:
+			if ( highQuality )
+				drawHighQualityImage<CompositionXor>(self, buffer, geoReference, image);
+			else
+				drawLowQualityImage<CompositionXor>(self, buffer, geoReference, image);
+			break;
+		case CompositionMode_Plus:
+			if ( highQuality )
+				drawHighQualityImage<CompositionPlus>(self, buffer, geoReference, image);
+			else
+				drawLowQualityImage<CompositionPlus>(self, buffer, geoReference, image);
+			break;
+		default:
+			std::cerr << "ERROR: Invalid composition mode: " << cm << std::endl;
 			break;
 	}
 }
@@ -708,9 +835,6 @@ bool RectangularProjection::lineTo(QPainter &p, const QPointF &to) {
 bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 	QPoint pp;
 
-	// Round to nearest integer since the text label is without decimals
-	lon = round(lon);
-
 	if ( project(pp, QPointF(lon, 90)) ) {
 		if ( pp.x() >= 0 && pp.x() < _width ) {
 			int top = std::max(0, pp.y());
@@ -729,9 +853,6 @@ bool RectangularProjection::drawLatCircle(QPainter &p, qreal lon) {
 
 bool RectangularProjection::drawLonCircle(QPainter &p, qreal lat) {
 	QPoint pp;
-
-	// Round to nearest integer since the text label is without decimals
-	lat = round(lat);
 
 	if ( project(pp, QPointF(0, lat)) ) {
 		if ( pp.y() >= 0 && pp.y() < _height ) {

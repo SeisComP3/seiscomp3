@@ -44,6 +44,8 @@
 #define _LINEAR_CORRECTION 1.0
 #define _OFFSET 0.0
 #define _SNR_MIN 1.2
+#define _TAPER 5
+#define _SIGNAL_LENGTH 150
 #define _DELTA_MAX 400.0
 #define _MD_MAX 5.0
 #define _FMA -0.87
@@ -88,6 +90,8 @@ struct ampConfig {
 		double DEPTH_MAX;
 		double SIGNAL_WINDOW_END;
 		double SNR_MIN;
+        double TAPER;
+        double SIGNAL_LENGTH;
 		double DELTA_MAX;
 		double MD_MAX;
 		double FMA;
@@ -108,7 +112,7 @@ AmplitudeProcessor_Md::AmplitudeProcessor_Md() :
 		AmplitudeProcessor("Md") {
 
 	setSignalStart(0.);
-	setSignalEnd(150.);
+    setSignalEnd(aFile.SIGNAL_LENGTH);
 	setMinSNR(aFile.SNR_MIN);
 	setMaxDist(8);
 	_computeAbsMax = true;
@@ -124,7 +128,7 @@ AmplitudeProcessor_Md::AmplitudeProcessor_Md(const Core::Time& trigger) :
 		AmplitudeProcessor(trigger, "Md") {
 
 	setSignalStart(0.);
-	setSignalEnd(150.);
+    setSignalEnd(aFile.SIGNAL_LENGTH);
 	setMinSNR(aFile.SNR_MIN);
 	setMaxDist(8);
 	_computeAbsMax = true;
@@ -236,6 +240,28 @@ bool AmplitudeProcessor_Md::setup(const Settings& settings) {
 		SEISCOMP_ERROR("%s can not read SNR MIN value from configuration file [%s.%s]", AMPTAG,
 		    settings.networkCode.c_str(), settings.stationCode.c_str());
 	}
+
+    try {
+        aFile.TAPER = settings.getDouble("md.taper");
+        SEISCOMP_DEBUG("%s sets TAPER to  %.2f [%s.%s]", AMPTAG, aFile.TAPER,
+        settings.networkCode.c_str(), settings.stationCode.c_str());
+    }
+    catch ( ... ) {
+        aFile.TAPER = _TAPER;
+        SEISCOMP_ERROR("%s can not read TAPER value from configuration file [%s.%s]", AMPTAG,
+                settings.networkCode.c_str(), settings.stationCode.c_str());
+    }
+
+    try {
+        aFile.SIGNAL_LENGTH = settings.getDouble("md.signal_length");
+        SEISCOMP_DEBUG("%s sets SIGNAL LENGTH to  %.2f [%s.%s]", AMPTAG, aFile.SIGNAL_LENGTH,
+                settings.networkCode.c_str(), settings.stationCode.c_str());
+    }
+    catch ( ... ) {
+        aFile.SIGNAL_LENGTH = _SIGNAL_LENGTH;
+        SEISCOMP_ERROR("%s can not read SIGNAL LENGTH value from configuration file [%s.%s]", AMPTAG,
+                settings.networkCode.c_str(), settings.stationCode.c_str());
+    }
 
 	try {
 		aFile.MD_MAX = settings.getDouble("md.mdmax");
@@ -350,6 +376,7 @@ void AmplitudeProcessor_Md::initFilter(double fsamp) {
 				AmplitudeProcessor::setFilter(f);
 			break;
 			case 8:
+                // hardcoded ! We have to read the aFile.BUTTERWORTH
 				f = new Math::Filtering::IIR::ButterworthBandpass<double>(3, 1, 15, 1, true);
 				AmplitudeProcessor::setFilter(f);
 			break;
@@ -480,6 +507,9 @@ bool AmplitudeProcessor_Md::deconvolveData(Response* resp,
 	Math::Statistics::computeLinearTrend(data.size(), data.typedData(), m, n);
 	Math::Statistics::detrend(data.size(), data.typedData(), m, n);
 
+    _config.respTaper = aFile.TAPER;
+    SEISCOMP_DEBUG("%s TAPER is set to %.2f", AMPTAG, aFile.TAPER);
+
 	return Math::Restitution::transformFFT(data.size(), data.typedData(),
 	    _stream.fsamp, cascade.get(), _config.respTaper, _config.respMinFreq,
 	    _config.respMaxFreq);
@@ -498,6 +528,9 @@ bool AmplitudeProcessor_Md::computeAmplitude(const DoubleArray& data, size_t i1,
 
 	double amax, Imax, ofs_sig, amp_sig;
 	DoubleArrayPtr d;
+
+    if ( *snr < aFile.SNR_MIN )
+        SEISCOMP_DEBUG("%s computed SNR is under configured SNR MIN", AMPTAG);
 
 	if ( _computeAbsMax ) {
 		size_t imax = find_absmax(data.size(), data.typedData(), si1, si2, offset);
@@ -596,6 +629,8 @@ double AmplitudeProcessor_Md::timeWindowLength(double distance_deg) const {
 		aFile.FMB = _FMB;
 		aFile.FMF = _FMF;
 		aFile.SNR_MIN = _SNR_MIN;
+        aFile.TAPER = _TAPER;
+        aFile.SIGNAL_LENGTH = _SIGNAL_LENGTH;
 		aFile.DELTA_MAX = _DELTA_MAX;
 		aFile.SIGNAL_WINDOW_END = _SIGNAL_WINDOW_END;
 		aFile.SEISMO = _SEISMO;
@@ -630,6 +665,9 @@ struct magConfig {
 		double OFFSET;
 		double DELTA_MAX;
 		double MD_MAX;
+        double TAPER;
+        double SIGNAL_LENGTH;
+        double SNR_MIN;
 		double FMA;
 		double FMB;
 		double FMD;
@@ -756,6 +794,37 @@ bool MagnitudeProcessor_Md::setup(const Settings& settings) {
 	}
 
 	try {
+		mFile.SNR_MIN = settings.getDouble("md.snrmin");
+		SEISCOMP_DEBUG("%s sets SNR MIN to  %.4f [%s.%s]", MAGTAG, mFile.SNR_MIN,
+				settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+	catch ( ... ) {
+		mFile.SNR_MIN = _SNR_MIN;
+		SEISCOMP_ERROR("%s can not read SNR MIN value from configuration file [%s.%s]",
+				MAGTAG, settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+	try {
+		mFile.TAPER = settings.getDouble("md.taper");
+		SEISCOMP_DEBUG("%s sets TAPER to  %.4f [%s.%s]", MAGTAG, mFile.TAPER,
+				settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+	catch ( ... ) {
+		mFile.TAPER = _TAPER;
+		SEISCOMP_ERROR("%s can not read TAPER value from configuration file [%s.%s]",
+				MAGTAG, settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+	try {
+		mFile.SIGNAL_LENGTH = settings.getDouble("md.signal_length");
+		SEISCOMP_DEBUG("%s sets SIGNAL LENGTH to  %.4f [%s.%s]", MAGTAG, mFile.SIGNAL_LENGTH,
+				settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+	catch ( ... ) {
+		mFile.SIGNAL_LENGTH = _SIGNAL_LENGTH;
+		SEISCOMP_ERROR("%s can not read SIGNAL LENGTH value from configuration file [%s.%s]",
+				MAGTAG, settings.networkCode.c_str(), settings.stationCode.c_str());
+	}
+
+	try {
 		mFile.FMZ = settings.getDouble("md.fmz");
 		SEISCOMP_DEBUG("%s sets FMZ to  %.4f [%s.%s]", MAGTAG, mFile.FMZ,
 		    settings.networkCode.c_str(), settings.stationCode.c_str());
@@ -788,6 +857,8 @@ bool MagnitudeProcessor_Md::setup(const Settings& settings) {
 MagnitudeProcessor::Status
 MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
                                         double delta, double depth,
+                                        const DataModel::Origin *hypocenter,
+                                        const DataModel::SensorLocation *receiver,
                                         double& value) {
 
 	double epdistkm;
@@ -796,6 +867,9 @@ MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
 	SEISCOMP_DEBUG("%s --------------------------------", MAGTAG);
 	SEISCOMP_DEBUG("%s |    PARAMETERS   |    VALUE   |", MAGTAG);
 	SEISCOMP_DEBUG("%s --------------------------------", MAGTAG);
+	SEISCOMP_DEBUG("%s | window length   | %.2f ", MAGTAG, mFile.SIGNAL_LENGTH);
+	SEISCOMP_DEBUG("%s | taper           | %.2f ", MAGTAG, mFile.TAPER);
+	SEISCOMP_DEBUG("%s | min snr         | %.2f ", MAGTAG, mFile.SNR_MIN);
 	SEISCOMP_DEBUG("%s | delta max       | %.2f ", MAGTAG, mFile.DELTA_MAX);
 	SEISCOMP_DEBUG("%s | depth max       | %.2f ", MAGTAG, mFile.DEPTH_MAX);
 	SEISCOMP_DEBUG("%s | md max          | %.2f ", MAGTAG, mFile.MD_MAX);

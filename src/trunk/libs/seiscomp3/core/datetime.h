@@ -184,6 +184,11 @@ class SC_SYSTEM_CORE_API Time : public TimeSpan {
 		//! Returns the current localtime
 		static Time LocalTime();
 
+		/**
+		 * @return A string containing the local time zone name/abbreviation
+		 */
+		static std::string LocalTimeZone();
+
 		//! Returns the current gmtime
 		static Time GMT();
 
@@ -195,10 +200,10 @@ class SC_SYSTEM_CORE_API Time : public TimeSpan {
 		static Time FromYearDay(int year, int year_day);
 
 		//! Saves the current localtime in the calling object
-		Time& localtime();
+		Time &localtime();
 
 		//! Saves the current gmtime in the calling object
-		Time& gmt();
+		Time &gmt();
 
 		//! Converts the time to localtime
 		Time toLocalTime() const;
