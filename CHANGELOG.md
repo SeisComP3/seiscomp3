@@ -264,6 +264,9 @@ the magnitude processing: ```EpicenterOutOfRegions```.
 
   * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
   * ```olv.locator``` is now deprecated in favour of ```olv.locator.interface```
+  * Add option to configure the default checkstate of the event association button and
+    fix origin button of the popup for committing with additional options: ```olv.commit.forceEventAssociation```
+    and ```olv.commit.fixOrigin```. Either default value is true.
 
 * scqc
 

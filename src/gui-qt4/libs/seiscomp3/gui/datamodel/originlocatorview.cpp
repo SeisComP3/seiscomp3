@@ -5217,6 +5217,20 @@ void OriginLocatorView::commitWithOptions() {
 	int idx;
 	string eqName, eqComment;
 
+	try {
+		if ( SCApp->configGetBool("olv.commit.forceEventAssociation") == false ) {
+			dlg.ui.cbAssociate->setChecked(false);
+		}
+	}
+	catch ( ... ) {}
+
+	try {
+		if ( SCApp->configGetBool("olv.commit.fixOrigin") == false ) {
+			dlg.ui.cbFixSolution->setChecked(false);
+		}
+	}
+	catch ( ... ) {}
+
 	if ( _defaultEventType ) {
 		int idx = dlg.ui.comboEventTypes->findText(_defaultEventType->toString());
 		if ( idx >= 0 ) dlg.ui.comboEventTypes->setCurrentIndex(idx);
