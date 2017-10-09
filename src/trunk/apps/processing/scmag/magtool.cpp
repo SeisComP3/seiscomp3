@@ -711,6 +711,13 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 		if ( type == _summaryMagnitudeType )
 			continue;
 
+		try {
+			// Ignore rejected magnitudes
+			if ( nmag->evaluationStatus() == DataModel::REJECTED )
+				continue;
+		}
+		catch ( ... ) {}
+
 		if ( !isTypeEnabledForSummaryMagnitude(type) ) continue;
 
 		try { n = nmag->stationCount(); }
