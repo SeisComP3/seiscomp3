@@ -162,7 +162,8 @@ class SDS(object):
 
                 check = False
 
-            yield data[offset:] if offset else data
+            if offset < len(data):
+                yield data[offset:] if offset else data
 
         while True:
             data = msFile.read(reclen)
