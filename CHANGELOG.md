@@ -293,6 +293,9 @@ the magnitude processing: ```EpicenterOutOfRegions```.
   * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
     bloating the XML.
 
+* scsohlog
+
+  * Add description and documentation
 
 * seedlink
 

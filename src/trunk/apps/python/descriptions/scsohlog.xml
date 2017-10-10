@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scsohlog" category="Utilities">
+		<description>
+		Connect to the messaging and collect all information sent from connected clients.
+		</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Messaging">
+				<optionReference>messaging#user</optionReference>
+				<optionReference>messaging#host</optionReference>
+				<optionReference>messaging#timeout</optionReference>
+				<optionReference>messaging#primary-group</optionReference>
+				<optionReference>messaging#subscribe-group</optionReference>
+				<optionReference>messaging#encoding</optionReference>
+				<optionReference>messaging#start-stop-msg</optionReference>
+			</group>
+
+			<group name="Output">
+				<option flag="o" long-flag="file" argument="file">
+					<description>
+					The output XML file.
+					</description>
+				</option>
+				<option flag="i" long-flag="interval" argument="arg">
+					<description>
+					The output interval in seconds.
+					</description>
+				</option>
+				<option long-flag="script" argument="arg">
+					<description>
+					The script to execute. Example: path/scsohlog_script.sh.
+					</description>
+				</option>
+			</group>
+		</command-line>
+
+		<configuration>
+			<group name="monitor">
+				<group name="output">
+					<parameter name="interval" type="uint" default="60" unit="s">
+						<description>
+						The output interval in seconds.
+						</description>
+					</parameter>
+					<parameter name="file" type="string" default="@LOGDIR@/server.xml">
+						<description>
+						The output XML file.
+						</description>
+					</parameter>
+					<parameter name="script" type="string" default="">
+						<description>
+						The script to execute. Example: @CONFIGDIR@/scripts/scsohlog_script.sh.
+						</description>
+					</parameter>
+				</group>
+			</group>
+		</configuration>
+	</module>
+</seiscomp>
