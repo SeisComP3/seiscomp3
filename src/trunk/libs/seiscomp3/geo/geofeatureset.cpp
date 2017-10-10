@@ -152,38 +152,50 @@ const std::string GeoFeatureSet::initStatus(unsigned int fileCount) const {
 }
 
 /** Reads the BNA-header, e.g. "segment name","rank 3",123 */
-bool GeoFeatureSet::readBNAHeader(const std::string& line, std::string& segment,
-                                  unsigned int& rank, unsigned int& points,
-                                  bool& isClosed) const {
+bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
+                                  unsigned int& points, bool& isClosed,
+                                  std::string& error, const std::string &line) const {
 	size_t pos1, pos2;
 	std::string tmpStr;
 
 	// segment
-	if ( (pos1 = line.find('"')) == std::string::npos ) return false;
-	if ( (pos2 = line.find('"', pos1+1)) == std::string::npos ) return false;
+	if ( (pos1 = line.find('"')) == std::string::npos ||
+	     (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
+		error = "missing quote sign in first header field";
+		return false;
+	}
 	segment = line.substr(pos1+1, pos2-pos1-1);
 	Core::trim(segment);
 
 	// rank
-	if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ) return false;
-	if ( (pos2 = line.find('"', pos1+1)) == std::string::npos ) return false;
+	if ( (pos1 = line.find('"', pos2+1)) == std::string::npos ||
+	     (pos2 = line.find('"', pos1+1)) == std::string::npos ) {
+		error = "missing quote sign in second header field";
+		return false;
+	}
 	tmpStr = line.substr(pos1+1, pos2-pos1-1);
 
 	if ( tmpStr.length() >= 6 && strncmp(tmpStr.c_str(), "rank ", 5) == 0 ) {
 		rank = atoi(tmpStr.substr(5, tmpStr.length()-5).c_str());
 	}
 	else {
-		SEISCOMP_DEBUG("No rank found, setting to 1");
+		SEISCOMP_DEBUG("no rank found, setting to 1");
 		rank = 1;
 	}
 
 	// points
-	if ( (pos1 = line.find(',', pos2+1)) == std::string::npos ) return false;
+	if ( (pos1 = line.rfind(',')) == std::string::npos || pos1 <= pos2 ) {
+		error = "could not find position of length field";
+		return false;
+	}
 	tmpStr = line.substr(pos1+1);
 
 	Seiscomp::Core::trim(tmpStr);
 	int p;
-	if ( !Seiscomp::Core::fromString(p, tmpStr) ) return false;
+	if ( !Seiscomp::Core::fromString(p, tmpStr) ) {
+		error = "invalid number format in length field";
+		return false;
+	}
 	if ( p >= 0 ) {
 		points = p;
 		isClosed = true;
@@ -246,16 +258,14 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 
 	std::vector<GeoFeature*> features;
 	GeoFeature *feature;
-	unsigned int lineNum = 0;
-	std::string segment;
-	unsigned int rank;
-	unsigned int points;
-	std::string line;
+	unsigned int lineNum = 0, rank, points;
+	std::string line, segment, error;
 	const char *nptr;
 	char *endptr;
 	bool isClosed;
 	Vertex v;
 	bool startSubFeature;
+
 	bool fileValid = true;
 
 	while ( infile.good() ) {
@@ -267,9 +277,9 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 			continue;
 		}
 
-		if ( !readBNAHeader(line, segment, rank, points, isClosed) ) {
-			SEISCOMP_ERROR("error reading BNA header in file %s at line %i",
-			               filename.c_str(), lineNum);
+		if ( !readBNAHeader(segment, rank, points, isClosed, error, line) ) {
+			SEISCOMP_ERROR("error reading BNA header in file %s at line %i: %s",
+			               filename.c_str(), lineNum, error.c_str());
 			fileValid = false;
 			break;
 		}

@@ -68,8 +68,9 @@ private:
 	const std::string initStatus(unsigned int fileCount) const;
 
 	/** Reads the BNA-header */
-	bool readBNAHeader(const std::string &line, std::string& segment,
-	                   unsigned int& rank, unsigned int& points, bool& isClosed) const;
+	bool readBNAHeader(std::string& segment, unsigned int& rank,
+	                   unsigned int& points, bool& isClosed, std::string& error,
+	                   const std::string &line) const;
 
 	/** Compares two GeoFeatures by their rank */
 	static const bool compareByRank(const GeoFeature* gf1,
