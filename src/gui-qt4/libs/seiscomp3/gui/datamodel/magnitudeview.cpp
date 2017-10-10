@@ -1327,13 +1327,17 @@ void MagnitudeView::recalculateMagnitude() {
 	_netMag->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	_netMag->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 
+	int idx = findType(_tabMagnitudes, _netMag->type().c_str());
+	_tabMagnitudes->setTabTextColor(idx, QColor());
+	_tabMagnitudes->setTabIcon(idx, QIcon());
+
 	// Update corresponding Mw estimation
 	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
 	if ( proc ) {
 		double Mw, MwError;
 		if ( proc->estimateMw(netmag, Mw, MwError) == Processing::MagnitudeProcessor::OK ) {
 			string type = proc->typeMw();
-			int idx = findType(_tabMagnitudes, type.c_str());
+			idx = findType(_tabMagnitudes, type.c_str());
 			//int idx = _ui.comboMagType->findText(type.c_str());
 			if ( idx != -1 ) {
 				MagnitudePtr magMw =
@@ -1359,7 +1363,7 @@ void MagnitudeView::recalculateMagnitude() {
 
 	QVariant data;
 	data.setValue(QString(_netMag->publicID().c_str()));
-	int idx = findData(_tabMagnitudes, data);
+	idx = findData(_tabMagnitudes, data);
 	if ( idx != -1 )
 		_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(_netMag->type().c_str()).arg(_netMag->magnitude().value(), 0, 'f', 2));
 
@@ -1718,6 +1722,10 @@ void MagnitudeView::computeMagnitudes() {
 			MagnitudePtr mag = Magnitude::Create();
 			mag->setType(magnitudeTypes[i]);
 			mag->setEvaluationStatus(EvaluationStatus(REJECTED));
+			if ( numeric_limits<double>::has_quiet_NaN )
+				mag->setMagnitude(RealQuantity(numeric_limits<double>::quiet_NaN()));
+			else
+				mag->setMagnitude(RealQuantity(-999));
 
 			CreationInfo ci;
 			ci.setAgencyID(SCApp->agencyID());
@@ -2689,6 +2697,16 @@ int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
 	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
 	_tabMagnitudes->setTabData(tabIndex, data);
 
+	if ( std::isnan(netMag->magnitude().value()) ) {
+		_tabMagnitudes->setTabTextColor(tabIndex, palette().color(QPalette::Disabled, QPalette::WindowText));
+	}
+
+	try {
+		if ( netMag->evaluationStatus() == REJECTED )
+			_tabMagnitudes->setTabIcon(tabIndex, QIcon(":icons/icons/disabled.png"));
+	}
+	catch ( ... ) {}
+
 	if ( tabIndex == _tabMagnitudes->currentIndex() )
 		updateContent();
 
@@ -2922,6 +2940,7 @@ void MagnitudeView::updateContent() {
 
 	if ( _netMag->stationMagnitudeContributionCount() == 0 ) {
 		_ui.groupReview->setEnabled(false);
+		updateMinMaxMagnitude();
 
 		try {
 			if ( _netMag->evaluationStatus() == REJECTED )

@@ -817,7 +817,7 @@ MainFrame::MainFrame(){
 	connect(_originLocator, SIGNAL(committedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*,
 	                                               const Seiscomp::Gui::ObjectChangeList<Seiscomp::DataModel::Pick>&,
 	                                               const std::vector<Seiscomp::DataModel::AmplitudePtr>&)),
-	        this, SLOT(releaseFixedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));
+	        this, SLOT(committedNewOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));
 #endif
 
 	/*
@@ -1218,7 +1218,8 @@ void MainFrame::updateOrigin(Seiscomp::DataModel::Origin *o, Seiscomp::DataModel
 }
 
 
-void MainFrame::releaseFixedOrigin(Seiscomp::DataModel::Origin *, Seiscomp::DataModel::Event *e) {
+void MainFrame::committedNewOrigin(Seiscomp::DataModel::Origin *, Seiscomp::DataModel::Event *e) {
+	_magnitudes->reload();
 }
 
 

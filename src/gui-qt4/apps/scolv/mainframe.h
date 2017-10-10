@@ -68,7 +68,7 @@ class MainFrame : public MainWindow {
 		void eventAdded(Seiscomp::DataModel::Event*, bool);
 		void setOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*, bool, bool);
 		void updateOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
-		void releaseFixedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
+		void committedNewOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
 		void setArtificialOrigin(Seiscomp::DataModel::Origin*);
 		void setData(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*);
 		void setFMData(Seiscomp::DataModel::Event*);
