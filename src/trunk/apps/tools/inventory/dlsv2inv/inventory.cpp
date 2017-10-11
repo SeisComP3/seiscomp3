@@ -312,6 +312,8 @@ bool IsDummy(const ChannelIdentifier& ci, const Inventory::StageItem &item) {
 				return true;
 			}
 			break;
+		case Inventory::RT_None:
+			return true;
 		default:
 			break;
 	}
