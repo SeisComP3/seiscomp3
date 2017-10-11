@@ -294,16 +294,16 @@ the magnitude processing: ```EpicenterOutOfRegions```.
     bloating the XML.
 
 
+* seedlink
+
+  * Removed option -C from nmxptool plugin template. This should go into the
+    additional options parameter.
+
 ## Release 2017.124
 
 * seiscomp
 
   * Use symbolic links to module defaults and configurations instead of
-    copying when creating module aliases
-
-* seiscomp
-
-  * Use symbolic links to module defaults and configurations instead of 
     copying when creating module aliases
 
 * doc
