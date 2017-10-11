@@ -268,7 +268,7 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 
 	bool fileValid = true;
 
-	while ( infile.good() ) {
+	while ( infile.good() && fileValid ) {
 		++lineNum;
 
 		// read BNA header
@@ -290,20 +290,48 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 		if ( isClosed )
 			feature->setClosedPolygon(true);
 
-		// read vertices
+		// read vertices, expected format:
+		//   "lon1,lat1 lon2,lat2 ... lon_i,lat_i\n"
+		//   "lon_i+1,lat_i+1 lon_i+2,lat_i+2 ... \n
+		nptr = NULL;
 		unsigned int pi = 0;
-		for ( ; pi < points; ++pi ) {
-			if ( !infile.good() ) {
-				SEISCOMP_ERROR("to few vertices (%i/%i) for feature starting "
-				               "at line %i", pi, points, lineNum - pi);
+		while ( true ) {
+			if ( nptr == NULL ) {
+				// stop if all points have been read
+				if ( pi == points ) break;
+
+				// read next line
+				if ( infile.good() ) {
+					++lineNum;
+					std::getline(infile, line);
+					nptr = line.c_str();
+				}
+				else {
+					SEISCOMP_ERROR("to few vertices (%i/%i) for feature "
+					               "starting at line %i",
+					               pi, points, lineNum - pi);
+					fileValid = false;
+					break;
+				}
+			}
+
+			// advance nptr to next none white space
+			while ( isspace(*nptr) ) ++nptr;
+
+			// read next line if end of line is reached
+			if ( *nptr == '\0' ) {
+				nptr = NULL;
+				continue;
+			}
+
+			// file invalid if extra characters are found after last vertex
+			if ( pi == points ) {
+				SEISCOMP_ERROR("extra characters after last vertex (%i) of "
+				              "feature starting at line %i",
+				               pi, lineNum - pi);
 				fileValid = false;
 				break;
 			}
-			++lineNum;
-
-			// read line, expected format: "lon, lat\n"
-			std::getline(infile, line);
-			nptr = line.c_str();
 
 			// read longitude
 			endptr = NULL;
@@ -336,6 +364,10 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 				fileValid = false;
 				break;
 			}
+			nptr = endptr;
+
+			// increase number of succesfully read points
+			pi += 1;
 
 			if ( !feature->vertices().empty() ) {
 				// check if the current vertex marks the end of a (sub-) or
