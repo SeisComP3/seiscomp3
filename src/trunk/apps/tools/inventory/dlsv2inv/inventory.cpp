@@ -627,7 +627,7 @@ void Inventory::GetChannelComment(ChannelIdentifier& ci, DataModel::WaveformStre
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Core::Time Inventory::GetTime(string strTime, bool *ok) {
-	int year=0, yday=0, month=0, day=0, hour=0, minute=0, second=0;
+	int year=0, yday=0, month=0, day=0, hour=0, minute=0, second=0, fraction=0;
 	int ondergrens, bovengrens;
 	std::vector<std::string> date, time;
 	stringstream ss;
@@ -665,14 +665,15 @@ Core::Time Inventory::GetTime(string strTime, bool *ok) {
 		sscanf(time[1].c_str(), "%d", &minute);
 
 	if(time.size() > 2)
-		sscanf(time[2].c_str(), "%d", &second);
+		sscanf(time[2].c_str(), "%d.%d", &second, &fraction);
+	fraction *= 100;
 
 	if ( year <= 1970 || year > 2037 ) {
 		if ( ok ) *ok = false;
 		return Core::Time();
 	}
 
-	return Core::Time(year, month, day, hour, minute, second);
+	return Core::Time(year, month, day, hour, minute, second, fraction);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
