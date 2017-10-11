@@ -44,6 +44,9 @@ inline bool fromString(DateTime& date, const std::string& str) {
 		//return Core::Time(2037,12,31);
 		return false;
 
+	if ( date.fromString(str.c_str(), "%FT%T.%f") )
+		return true;
+
 	return date.fromString(str.c_str(), "%FT%T");
 }
 
