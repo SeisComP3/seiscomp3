@@ -885,6 +885,13 @@ DataModel::ResponsePAZPtr convert(const FDSNXML::ResponseStage *resp,
 	rp->setNumberOfZeros(paz->zeroCount());
 	rp->setNumberOfPoles(paz->poleCount());
 
+	try { rp->setDecimationFactor(resp->decimation().factor()); }
+	catch ( ... ) {}
+	try { rp->setDelay(resp->decimation().delay().value()*resp->decimation().inputSampleRate().value()); }
+	catch ( ... ) {}
+	try { rp->setCorrection(resp->decimation().correction().value()*resp->decimation().inputSampleRate().value()); }
+	catch ( ... ) {}
+
 	rp->setZeros(DataModel::ComplexArray());
 	vector< complex<double> > &zeros = rp->zeros().content();
 
