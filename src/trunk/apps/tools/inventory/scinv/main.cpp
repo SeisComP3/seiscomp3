@@ -139,6 +139,31 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
 	try { os << paz->gainFrequency(); }
 	catch (...) { os << "-"; }
 	os << endl;
+
+	try {
+		paz->decimationFactor();
+		os << Fill(out.indent) << "dec factor   "
+		   << paz->decimationFactor()
+		   << endl;
+	}
+	catch (...) {}
+
+	try {
+		paz->delay();
+		os << Fill(out.indent) << "delay        "
+		   << paz->delay()
+		   << endl;
+	}
+	catch (...) {}
+
+	try {
+		paz->correction();
+		os << Fill(out.indent) << "correction   "
+		   << paz->correction()
+		   << endl;
+	}
+	catch (...) {}
+
 	os << Fill(out.indent) << "norm freq    ";
 	try { os << paz->normalizationFrequency() << "Hz"; }
 	catch (...) { os << "-"; }
@@ -292,6 +317,8 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponseIIR> &out) {
 
 template <typename R>
 ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
+	bool hasAnalogStages = false;
+
 	try {
 		vector<string> ids;
 		Core::split(ids, out.obj->analogueFilterChain().content().c_str(), " ");
@@ -334,6 +361,7 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 				}
 			}
 
+			hasAnalogStages = true;
 			if ( i < ids.size()-1 ) os << endl;
 		}
 	}
@@ -343,6 +371,7 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 		vector<string> ids;
 		Core::split(ids, out.obj->digitalFilterChain().content().c_str(), " ");
 		for ( size_t i = 0; i < ids.size(); ++i ) {
+			if ( !i && hasAnalogStages ) os << endl;
 			os << endl << Fill(out.indent) << "[digital stage #" << (i+1) << "]" << endl;
 
 			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
