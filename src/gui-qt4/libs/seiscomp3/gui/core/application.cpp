@@ -27,7 +27,6 @@
 #include <license.h>
 #include <seiscomp3/utils/files.h>
 
-#include <boost/assign.hpp>
 #include <QSplashScreen>
 #include <QMessageBox>
 #include <set>
@@ -600,25 +599,6 @@ Core::TimeSpan Application::maxEventAge() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-namespace {
-
-QColor readColor(const std::string &query, const std::string &str, const QColor &base, bool *ok = NULL) {
-	QColor r(base);
-
-	if ( !fromString(r, str) ) {
-		SEISCOMP_ERROR("%s: %s", query.c_str(), colorConvertError.c_str());
-		if ( ok ) *ok = false;
-	}
-	else {
-		if ( ok ) *ok = true;
-	}
-
-	return r;
-}
-
-}
-
-
 QColor Application::configGetColor(const std::string& query,
                                    const QColor& base) const {
 	try {
@@ -733,18 +713,8 @@ QPen Application::configGetPen(const std::string& query, const QPen& base) const
 
 	// Style
 	try {
-		static const std::map<std::string, Qt::PenStyle> styleNameMap =
-			boost::assign::map_list_of<std::string, Qt::PenStyle>
-			("customdashline", Qt::CustomDashLine)
-			("dashdotdotline", Qt::DashDotDotLine)
-			("dashdotline", Qt::DashDotLine)
-			("dashline", Qt::DashLine)
-			("dotline", Qt::DotLine)
-			("nopen", Qt::NoPen)
-			("solidline", Qt::SolidLine);
-		std::string value = configGetString(query + ".style");
-		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-		p.setStyle(styleNameMap.at(value));
+		const std::string& styleQuery = query + ".style";
+		p.setStyle(readPenStyle(styleQuery, configGetString(styleQuery), base.style()));
 	}
 	catch ( ... ) {}
 
@@ -774,26 +744,8 @@ QBrush Application::configGetBrush(const std::string& query, const QBrush& base)
 
 	// Style
 	try {
-		static const std::map<std::string, Qt::BrushStyle> styleNameMap =
-			boost::assign::map_list_of<std::string, Qt::BrushStyle>
-			("solid", Qt::SolidPattern)
-			("dense1", Qt::Dense1Pattern)
-			("dense2", Qt::Dense2Pattern)
-			("dense3", Qt::Dense3Pattern)
-			("dense4", Qt::Dense4Pattern)
-			("dense5", Qt::Dense5Pattern)
-			("dense6", Qt::Dense6Pattern)
-			("dense7", Qt::Dense7Pattern)
-			("nobrush", Qt::NoBrush)
-			("horizontal", Qt::HorPattern)
-			("vertical", Qt::VerPattern)
-			("cross", Qt::CrossPattern)
-			("bdiag", Qt::BDiagPattern)
-			("fdiag", Qt::FDiagPattern)
-			("diagcross", Qt::DiagCrossPattern);
-		std::string value = configGetString(query + ".pattern");
-		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-		b.setStyle(styleNameMap.at(value));
+		const std::string& styleQuery = query + ".style";
+		b.setStyle(readBrushStyle(styleQuery, configGetString(styleQuery), base.style()));
 	}
 	catch ( ... ) {}
 

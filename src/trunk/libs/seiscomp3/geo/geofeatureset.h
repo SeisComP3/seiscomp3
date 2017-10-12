@@ -61,11 +61,12 @@ private:
 	GeoFeatureSet(const GeoFeatureSet &);
 
 	/** Reads a BNADir recursively, used by readBNADir() */
-	size_t readBNADirRecursive(const boost::filesystem::path directory,
-	                           const Category* category);
+	size_t readBNADirRecursive(const boost::filesystem::path &directory,
+	                           Category *category);
 
 	/** Prints the number of polygons read */
-	const std::string initStatus(unsigned int fileCount) const;
+	const std::string initStatus(const std::string &directory,
+	                             unsigned int fileCount) const;
 
 	/** Reads the BNA-header */
 	bool readBNAHeader(std::string& segment, unsigned int& rank,

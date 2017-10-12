@@ -10,12 +10,16 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+#define SEISCOMP_COMPONENT Gui::Utils
 
 #include <cstdio>
 #include <cmath>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/utils.h>
+#include <seiscomp3/logging/log.h>
+
+#include <boost/assign.hpp>
 
 #include <QEvent>
 #include <QLabel>
@@ -111,6 +115,90 @@ bool fromString(QColor& value, const std::string& str) {
 	return true;
 }
 
+QColor readColor(const std::string &query, const std::string &str,
+                 const QColor &base, bool *ok) {
+	QColor r(base);
+
+	if ( !fromString(r, str) ) {
+		SEISCOMP_ERROR("%s: %s", query.c_str(), colorConvertError.c_str());
+		if ( ok ) *ok = false;
+	}
+	else {
+		if ( ok ) *ok = true;
+	}
+
+	return r;
+}
+
+Qt::PenStyle stringToPenStyle(const std::string &str) {
+	static const std::map<std::string, Qt::PenStyle> styleNameMap =
+		boost::assign::map_list_of<std::string, Qt::PenStyle>
+		("customdashline", Qt::CustomDashLine)
+		("dashdotdotline", Qt::DashDotDotLine)
+		("dashdotline", Qt::DashDotLine)
+		("dashline", Qt::DashLine)
+		("dotline", Qt::DotLine)
+		("nopen", Qt::NoPen)
+		("solidline", Qt::SolidLine);
+	std::string lower = str;
+	std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+	return styleNameMap.at(lower);
+}
+
+Qt::PenStyle readPenStyle(const std::string &query, const std::string &str,
+                          Qt::PenStyle base, bool *ok) {
+	Qt::PenStyle r(base);
+
+	try {
+		r = stringToPenStyle(str);
+		if ( ok ) *ok = true;
+	}
+	catch ( const std::out_of_range & ) {
+		SEISCOMP_ERROR("%s: invalid pen style", query.c_str());
+		if ( ok ) *ok = false;
+	}
+
+	return r;
+}
+
+Qt::BrushStyle stringToBrushStyle(const std::string &str) {
+	static const std::map<std::string, Qt::BrushStyle> styleNameMap =
+		boost::assign::map_list_of<std::string, Qt::BrushStyle>
+		("solid", Qt::SolidPattern)
+		("dense1", Qt::Dense1Pattern)
+		("dense2", Qt::Dense2Pattern)
+		("dense3", Qt::Dense3Pattern)
+		("dense4", Qt::Dense4Pattern)
+		("dense5", Qt::Dense5Pattern)
+		("dense6", Qt::Dense6Pattern)
+		("dense7", Qt::Dense7Pattern)
+		("nobrush", Qt::NoBrush)
+		("horizontal", Qt::HorPattern)
+		("vertical", Qt::VerPattern)
+		("cross", Qt::CrossPattern)
+		("bdiag", Qt::BDiagPattern)
+		("fdiag", Qt::FDiagPattern)
+		("diagcross", Qt::DiagCrossPattern);
+	std::string lower = str;
+	std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+	return styleNameMap.at(lower);
+}
+
+Qt::BrushStyle readBrushStyle(const std::string &query, const std::string &str,
+                              Qt::BrushStyle base, bool *ok) {
+	Qt::BrushStyle r(base);
+
+	try {
+		r = stringToBrushStyle(str);
+		if ( ok ) *ok = true;
+	}
+	catch ( const std::out_of_range & ) {
+		SEISCOMP_ERROR("%s: invalid pen style", query.c_str());
+		if ( ok ) *ok = false;
+	}
+
+	return r;
+}
 
 QString latitudeToString(double lat, bool withValue, bool withUnit, int precision) {
 	if ( withValue && withUnit )

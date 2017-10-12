@@ -11,6 +11,7 @@
  ***************************************************************************/
 
 #include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/map/layers/geofeaturelayer.h>
 #include <seiscomp3/gui/map/canvas.h>
 #include <seiscomp3/geo/geofeatureset.h>
@@ -18,6 +19,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 namespace Seiscomp {
 namespace Gui {
@@ -28,19 +30,111 @@ namespace {
 
 #define CFG_LAYER_PREFIX "map.layers"
 
-void readLayerProperties(LayerProperties *props) {
-	const static std::string cfgVisible = ".visible";
-	const static std::string cfgPen = ".pen";
-	const static std::string cfgBrush = ".brush";
-	const static std::string cfgFont = ".font";
-	const static std::string cfgDrawName = ".drawName";
-	const static std::string cfgDebug = ".debug";
-	const static std::string cfgRank = ".rank";
-	const static std::string cfgRoughness = ".roughness";
+QPen readPen(const Config::Config &cfg, const string &query, const QPen &base) {
+	QPen p(base);
+
+	try {
+		const string &q = query + ".color";
+		p.setColor(readColor(q, cfg.getString(q), base.color()));
+	}
+	catch ( ... ) {}
+
+	try {
+		const string &q = query + ".style";
+		p.setStyle(readPenStyle(q, cfg.getString(q), base.style()));
+	}
+	catch ( ... ) {}
+
+	try {
+		p.setWidth(cfg.getDouble(query + ".width"));
+	}
+	catch ( ... ) {}
+
+	return p;
+}
+
+QBrush readBrush(const Config::Config &cfg, const string &query, const QBrush &base) {
+	QBrush b(base);
+
+	try {
+		const string &q = query + ".color";
+		b.setColor(readColor(q, cfg.getString(q), base.color()));
+	}
+	catch ( ... ) {}
+
+	try {
+		const string &q = query + ".style";
+		b.setStyle(readBrushStyle(q, cfg.getString(q), base.style()));
+	}
+	catch ( ... ) {}
+
+	return b;
+}
+
+QFont readFont(const Config::Config &cfg, const string& query, const QFont &base) {
+	QFont f(base);
+
+	try {
+		f.setFamily(cfg.getString(query + ".family").c_str());
+	}
+	catch ( ... ) {}
+
+	try {
+		f.setPointSize(cfg.getInt(query + ".size"));
+	}
+	catch ( ... ) {}
+
+	try {
+		f.setBold(cfg.getBool(query + ".bold"));
+	}
+	catch ( ... ) {}
+
+	try {
+		f.setItalic(cfg.getBool(query + ".italic"));
+	}
+	catch ( ... ) {}
+
+	try {
+		f.setUnderline(cfg.getBool(query + ".underline"));
+	}
+	catch ( ... ) {}
+
+	try {
+		f.setOverline(cfg.getBool(query + ".overline"));
+	}
+	catch ( ... ) {}
+
+	return f;
+}
+
+void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
+	const static string cfgVisible = "visible";
+	const static string cfgPen = "pen";
+	const static string cfgBrush = "brush";
+	const static string cfgFont = "font";
+	const static string cfgDrawName = "drawName";
+	const static string cfgDebug = "debug";
+	const static string cfgRank = "rank";
+	const static string cfgRoughness = "roughness";
+
+	// Read additional configuration file (e.g. map.cfg in BNA folder)
+	if ( !dataDir.empty() ) {
+		Config::Config cfg;
+		if ( cfg.readConfig(dataDir + "/map.cfg", -1, true) ) {
+			try { props->visible = cfg.getBool(cfgVisible); } catch( ... ) {}
+			props->pen = readPen(cfg, cfgPen, props->pen);
+			props->brush = readBrush(cfg, cfgBrush, props->brush);
+			props->font = readFont(cfg, cfgFont, props->font);
+			try { props->drawName = cfg.getBool(cfgDrawName); } catch( ... ) {}
+			try { props->debug = cfg.getBool(cfgDebug); } catch( ... ) {}
+			try { props->rank = cfg.getInt(cfgRank); } catch( ... ) {}
+			try { props->roughness = cfg.getInt(cfgRoughness); } catch( ... ) {}
+		}
+	}
 
 	// Query properties from config
-	std::string query = CFG_LAYER_PREFIX;
-	if ( !props->name.empty() ) query += "." + props->name;
+	string query = CFG_LAYER_PREFIX ".";
+	if ( !props->name.empty() ) query += props->name + ".";
 
 	if ( SCApp ) {
 		try { props->visible = SCApp->configGetBool(query + cfgVisible); } catch( ... ) {}
@@ -124,7 +218,7 @@ void GeoFeatureLayer::bufferUpdated(Canvas *canvas) {
 	                      !canvas->previewMode() && SCScheme.map.vectorLayerAntiAlias);
 
 	// Iterate over all features
-	std::vector<Geo::GeoFeature*>::const_iterator itf = featureSet.features().begin();
+	vector<Geo::GeoFeature*>::const_iterator itf = featureSet.features().begin();
 	for ( ; itf != featureSet.features().end(); ++itf ) {
 		// Update painter settings if necessary
 		if ( layProp == NULL || categoryId != (*itf)->category()->id ) {
@@ -178,7 +272,7 @@ QMenu *GeoFeatureLayer::menu(QMenu *parent) const {
 	QMenu *menu = new QMenu(parent);
 
 	size_t visibleCount = 0;
-	std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
+	vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
 	const LayerProperties *root = *it++;
 	for ( ; it != _layerProperties.end(); ++it ) {
 		if ( (*it)->parent != root ) continue;
@@ -230,7 +324,7 @@ void GeoFeatureLayer::toggleFeatureVisibility(bool checked) {
 
 	prop->visible = checked;
 
-	std::vector<Map::LayerProperties*>::const_iterator it;
+	vector<Map::LayerProperties*>::const_iterator it;
 	for ( it = _layerProperties.begin(); it != _layerProperties.end(); ++it ) {
 		if ( !prop->isChild(*it) ) continue;
 		(*it)->visible = checked;
@@ -265,7 +359,7 @@ void GeoFeatureLayer::hideFeatures() {
 void GeoFeatureLayer::initLayerProperites() {
 	// Create a layer properties from BNA geo features
 	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
-	std::vector<Geo::Category*>::const_iterator itc = featureSet.categories().begin();
+	vector<Geo::Category*>::const_iterator itc = featureSet.categories().begin();
 	for ( ; itc != featureSet.categories().end(); ++itc ) {
 		// Initialize the base pen with the parent pen if available,
 		// else use the default constructor
@@ -274,7 +368,7 @@ void GeoFeatureLayer::initLayerProperites() {
 			new LayerProperties(cat->name.c_str()) :
 			new LayerProperties(cat->name.c_str(), _layerProperties.at(cat->parent->id));
 		_layerProperties.push_back(props);
-		readLayerProperties(props);
+		readLayerProperties(props, cat->dataDir);
 	}
 
 	const Geo::PolyRegions &fepRegions = Regions::polyRegions();
@@ -286,7 +380,7 @@ void GeoFeatureLayer::initLayerProperites() {
 		}
 		// Add fep properties
 		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
-		readLayerProperties(_layerProperties.back());
+		readLayerProperties(_layerProperties.back(), fepRegions.dataDir());
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -297,7 +391,7 @@ void GeoFeatureLayer::initLayerProperites() {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void GeoFeatureLayer::setFeaturesVisibility(bool visible) {
 	bool updateRequired = false;
-	std::vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
+	vector<LayerProperties*>::const_iterator it = _layerProperties.begin();
 	for ( ; it != _layerProperties.end(); ++it ) {
 		if ( (*it)->visible != visible ) {
 			(*it)->visible = visible;

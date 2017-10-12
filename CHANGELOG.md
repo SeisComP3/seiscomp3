@@ -238,6 +238,9 @@ the magnitude processing: ```EpicenterOutOfRegions```.
     blacklist.users = sysop1, sysop2
     blacklist.authors = sysop1@host, sysop2@host
     ```
+  * Map layer drawing properties may be additionally defined in a "map.cfg" file
+    located in the data set folder and subfolder, e.g. @~/.seiscomp3/fep/map.cfg@,
+    @~/.seiscomp3/bna/map.cfg@, @~/.seiscomp3/bna/category/map.cfg@
 
 * scmv
 

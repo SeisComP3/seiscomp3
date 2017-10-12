@@ -83,7 +83,7 @@ size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 	// Read the BNA directory recursively
 	Core::Time start = Core::Time::GMT();
 	size_t fileCount = readBNADirRecursive(directory, addNewCategory(""));
-	SEISCOMP_INFO("%s in %fs", initStatus(fileCount).c_str(),
+	SEISCOMP_INFO("%s in %fs", initStatus(dirPath, fileCount).c_str(),
 	              (Core::Time::GMT()-start).length());
 
 	// Sort the features according to their rank
@@ -93,8 +93,10 @@ size_t GeoFeatureSet::readBNADir(const std::string& dirPath) {
 }
 
 
-size_t GeoFeatureSet::readBNADirRecursive(const fs::path directory,
-                                          const Category* category) {
+size_t GeoFeatureSet::readBNADirRecursive(const fs::path &directory,
+                                          Category *category) {
+	// store directory path the data was read from
+	category->dataDir = directory.string();
 
 	size_t fileCount = 0;
 
@@ -134,7 +136,8 @@ Category* GeoFeatureSet::addNewCategory(const std::string name,
 	return category;
 }
 
-const std::string GeoFeatureSet::initStatus(unsigned int fileCount) const {
+const std::string GeoFeatureSet::initStatus(const std::string &directory,
+                                            unsigned int fileCount) const {
 	unsigned int vertexCount = 0;
 
 	std::vector<GeoFeature*>::const_iterator itf;
@@ -146,7 +149,8 @@ const std::string GeoFeatureSet::initStatus(unsigned int fileCount) const {
 	std::ostringstream buffer;
 	buffer << "Read " << _features.size()
 	       << " segment(s) with a total number of "
-	       << vertexCount << " vertice(s) from " << fileCount << " file(s)";
+	       << vertexCount << " vertice(s) from " << fileCount
+	       << " BNA file(s) found under " << directory;
 
 	return buffer.str();
 }
@@ -179,7 +183,6 @@ bool GeoFeatureSet::readBNAHeader(std::string& segment, unsigned int& rank,
 		rank = atoi(tmpStr.substr(5, tmpStr.length()-5).c_str());
 	}
 	else {
-		SEISCOMP_DEBUG("no rank found, setting to 1");
 		rank = 1;
 	}
 
@@ -380,8 +383,8 @@ bool GeoFeatureSet::readBNAFile(const std::string& filename,
 				// Don't add the vertex if it is equal to the start point of
 				// the current subfeature
 				else if ( !startSubFeature &&
-				         !feature->subFeatures().empty() &&
-				         v == feature->vertices()[feature->subFeatures().back()] ) {
+				          !feature->subFeatures().empty() &&
+				          v == feature->vertices()[feature->subFeatures().back()] ) {
 					continue;
 				}
 			}
