@@ -2044,6 +2044,17 @@ DataModel::ResponsePAZPtr Inventory::InsertResponsePAZ(ChannelIdentifier& ci, co
 	DataModel::ResponsePAZPtr rp = DataModel::ResponsePAZ::Create();
 
 	rp->setName(name);
+	rp->setDecimationFactor(Core::None);
+	rp->setDelay(Core::None);
+	rp->setCorrection(Core::None);
+
+	for ( size_t i = 0; i < ci.dec.size(); ++i ) {
+		if ( ci.dec[i]->GetStageSequenceNumber() == seqnum ) {
+			rp->setDecimationFactor(ci.dec[i]->GetDecimationFactor());
+			rp->setDelay(ci.dec[i]->GetEstimatedDelay() * ci.dec[i]->GetInputSampleRate());
+			rp->setCorrection(ci.dec[i]->GetCorrectionApplied() * ci.dec[i]->GetInputSampleRate());
+		}
+	}
 
 	char c = ci.rpz[seq]->GetTransferFunctionType();
 	rp->setType(string(&c, 1));
