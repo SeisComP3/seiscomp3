@@ -1666,6 +1666,114 @@ class NotifierCreator(Visitor):
 NotifierCreator_swigregister = _DataModel.NotifierCreator_swigregister
 NotifierCreator_swigregister(NotifierCreator)
 
+class InventorySyncMessage(Core.Message):
+    """Proxy of C++ Seiscomp::DataModel::InventorySyncMessage class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InventorySyncMessage, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, InventorySyncMessage, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.InventorySyncMessage_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.InventorySyncMessage_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(InventorySyncMessage self) -> char const *"""
+        return _DataModel.InventorySyncMessage_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(InventorySyncMessage self) -> RTTI"""
+        return _DataModel.InventorySyncMessage_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> InventorySyncMessage
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
+        """
+        return _DataModel.InventorySyncMessage_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> InventorySyncMessage
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
+        """
+        return _DataModel.InventorySyncMessage_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(InventorySyncMessage self, GenericArchive ar)"""
+        return _DataModel.InventorySyncMessage_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::InventorySyncMessage self) -> InventorySyncMessage
+        __init__(Seiscomp::DataModel::InventorySyncMessage self, bool finished) -> InventorySyncMessage
+        """
+        this = _DataModel.new_InventorySyncMessage(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def empty(self):
+        """empty(InventorySyncMessage self) -> bool"""
+        return _DataModel.InventorySyncMessage_empty(self)
+
+    __swig_setmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_set
+    __swig_getmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_get
+    if _newclass:
+        isFinished = _swig_property(_DataModel.InventorySyncMessage_isFinished_get, _DataModel.InventorySyncMessage_isFinished_set)
+    __swig_setmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_set
+    __swig_getmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_get
+    if _newclass:
+        creationInfo = _swig_property(_DataModel.InventorySyncMessage_creationInfo_get, _DataModel.InventorySyncMessage_creationInfo_set)
+    __swig_destroy__ = _DataModel.delete_InventorySyncMessage
+    __del__ = lambda self: None
+InventorySyncMessage_swigregister = _DataModel.InventorySyncMessage_swigregister
+InventorySyncMessage_swigregister(InventorySyncMessage)
+
+def InventorySyncMessage_ClassName():
+    """InventorySyncMessage_ClassName() -> char const *"""
+    return _DataModel.InventorySyncMessage_ClassName()
+
+def InventorySyncMessage_TypeInfo():
+    """InventorySyncMessage_TypeInfo() -> RTTI"""
+    return _DataModel.InventorySyncMessage_TypeInfo()
+
+def InventorySyncMessage_Cast(*args):
+    """
+    Cast(BaseObject o) -> InventorySyncMessage
+    InventorySyncMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
+    """
+    return _DataModel.InventorySyncMessage_Cast(*args)
+
+def InventorySyncMessage_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> InventorySyncMessage
+    InventorySyncMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
+    """
+    return _DataModel.InventorySyncMessage_ConstCast(*args)
+
 class ArtificialOriginMessage(Core.Message):
     """Proxy of C++ Seiscomp::DataModel::ArtificialOriginMessage class."""
 
@@ -2397,6 +2505,34 @@ PLANE_CRASH = _DataModel.PLANE_CRASH
 SONIC_BOOM = _DataModel.SONIC_BOOM
 DUPLICATE = _DataModel.DUPLICATE
 OTHER_EVENT = _DataModel.OTHER_EVENT
+NOT_REPORTED = _DataModel.NOT_REPORTED
+ANTHROPOGENIC_EVENT = _DataModel.ANTHROPOGENIC_EVENT
+COLLAPSE = _DataModel.COLLAPSE
+CAVITY_COLLAPSE = _DataModel.CAVITY_COLLAPSE
+ACCIDENTAL_EXPLOSION = _DataModel.ACCIDENTAL_EXPLOSION
+CONTROLLED_EXPLOSION = _DataModel.CONTROLLED_EXPLOSION
+EXPERIMENTAL_EXPLOSION = _DataModel.EXPERIMENTAL_EXPLOSION
+INDUSTRIAL_EXPLOSION = _DataModel.INDUSTRIAL_EXPLOSION
+MINING_EXPLOSION = _DataModel.MINING_EXPLOSION
+ROAD_CUT = _DataModel.ROAD_CUT
+BLASTING_LEVEE = _DataModel.BLASTING_LEVEE
+INDUCED_OR_TRIGGERED_EVENT = _DataModel.INDUCED_OR_TRIGGERED_EVENT
+ROCK_BURST = _DataModel.ROCK_BURST
+RESERVOIR_LOADING = _DataModel.RESERVOIR_LOADING
+FLUID_INJECTION = _DataModel.FLUID_INJECTION
+FLUID_EXTRACTION = _DataModel.FLUID_EXTRACTION
+CRASH = _DataModel.CRASH
+TRAIN_CRASH = _DataModel.TRAIN_CRASH
+BOAT_CRASH = _DataModel.BOAT_CRASH
+ATMOSPHERIC_EVENT = _DataModel.ATMOSPHERIC_EVENT
+SONIC_BLAST = _DataModel.SONIC_BLAST
+ACOUSTIC_NOISE = _DataModel.ACOUSTIC_NOISE
+THUNDER = _DataModel.THUNDER
+AVALANCHE = _DataModel.AVALANCHE
+HYDROACOUSTIC_EVENT = _DataModel.HYDROACOUSTIC_EVENT
+ICE_QUAKE = _DataModel.ICE_QUAKE
+SLIDE = _DataModel.SLIDE
+METEORITE = _DataModel.METEORITE
 EEventTypeQuantity = _DataModel.EEventTypeQuantity
 class EEventTypeNames(_object):
     """Proxy of C++ Seiscomp::DataModel::EEventTypeNames class."""
