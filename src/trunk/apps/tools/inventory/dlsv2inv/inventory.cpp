@@ -2128,6 +2128,17 @@ void Inventory::UpdateResponsePAZ(ChannelIdentifier& ci, DataModel::ResponsePAZP
 	rp->setType(string(&c, 1));
 	rp->setGain(stageGain);
 	rp->setGainFrequency(Core::None);
+	rp->setDecimationFactor(Core::None);
+	rp->setDelay(Core::None);
+	rp->setCorrection(Core::None);
+
+	for ( size_t i = 0; i < ci.dec.size(); ++i ) {
+		if ( ci.dec[i]->GetStageSequenceNumber() == seqnum ) {
+			rp->setDecimationFactor(ci.dec[i]->GetDecimationFactor());
+			rp->setDelay(ci.dec[i]->GetEstimatedDelay() * ci.dec[i]->GetInputSampleRate());
+			rp->setCorrection(ci.dec[i]->GetCorrectionApplied() * ci.dec[i]->GetInputSampleRate());
+		}
+	}
 
 	for ( size_t i = 0; i < ci.csg.size(); ++i ) {
 		if ( ci.csg[i]->GetStageSequenceNumber() == seqnum ) {
