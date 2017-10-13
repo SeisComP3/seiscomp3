@@ -471,7 +471,7 @@ double LocSAT::stationCorrection(const std::string &staid,
 
 
 bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
-	if ( ! origin)
+	if ( !origin )
 		return false;
 
 #ifdef LOCSAT_TESTING
@@ -490,12 +490,12 @@ bool LocSAT::loadArrivals(const DataModel::Origin* origin, double timeError) {
 		try{
 			double arrivalWeight = arrival->weight();
 // 			double arrivalWeight = rand()/(RAND_MAX + 1.0);
-			if (arrivalWeight <= _minArrivalWeight){
+			if ( arrivalWeight <= _minArrivalWeight ){
 				defining = 0;
 			}
 			// work around problem related to discontinuity in the travel-time tables
 			// at the P->PKS transition
-			if (atTransitionPtoPKP(arrival))
+			if ( atTransitionPtoPKP(arrival) )
 				defining = 0;
 		}
 		catch (...) {}
