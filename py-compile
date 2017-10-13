@@ -98,8 +98,6 @@ EOF
   shift
 done
 
-echo "$PYTHON" 1>&2
-
 if test -z "$files"; then
     echo "$0: No files given.  Try \`$0 --help' for more information." 1>&2
     exit 1
