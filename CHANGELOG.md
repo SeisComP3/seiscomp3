@@ -250,16 +250,6 @@ the magnitude processing: ```EpicenterOutOfRegions```.
     ```
   * Add legend for event symbols
 
-* GUI
-
-  * All GUI applications support an author and/or user blacklist to prevent sending
-    messages to scmaster. This is not a proper secure access control implementation
-    but helps to setup read-only applications to avoid accidental commits.
-    ```
-    blacklist.users = sysop1, sysop2
-    blacklist.authors = sysop1@host, sysop2@host
-    ```
-
 * scolv
 
   * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
@@ -286,8 +276,15 @@ the magnitude processing: ```EpicenterOutOfRegions```.
     *trunk* and will update the bindings database. The old behaviour has always
     confused users.
 
+* dlsv2inv
+
+  * Improve conversion to SC3. Many thanks to Arnaud Lemarchand from IPGP France
+    for his exhaustive tests and valuable advises.
+
 * fdsnxml2inv
 
+  * Improve conversion to SC3. Many thanks to Arnaud Lemarchand from IPGP France
+    for his exhaustive tests and valuable advises.
   * Declare NumeratorCoefficient.i as optional according to the official schema. Before
     that change, a lot of responses failed to convert.
   * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
