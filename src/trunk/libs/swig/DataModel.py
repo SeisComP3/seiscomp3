@@ -1666,221 +1666,6 @@ class NotifierCreator(Visitor):
 NotifierCreator_swigregister = _DataModel.NotifierCreator_swigregister
 NotifierCreator_swigregister(NotifierCreator)
 
-class InventorySyncMessage(Core.Message):
-    """Proxy of C++ Seiscomp::DataModel::InventorySyncMessage class."""
-
-    __swig_setmethods__ = {}
-    for _s in [Core.Message]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, InventorySyncMessage, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Core.Message]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, InventorySyncMessage, name)
-    __repr__ = _swig_repr
-
-    def ClassName():
-        """ClassName() -> char const *"""
-        return _DataModel.InventorySyncMessage_ClassName()
-
-    ClassName = staticmethod(ClassName)
-
-    def TypeInfo():
-        """TypeInfo() -> RTTI"""
-        return _DataModel.InventorySyncMessage_TypeInfo()
-
-    TypeInfo = staticmethod(TypeInfo)
-
-    def className(self):
-        """className(InventorySyncMessage self) -> char const *"""
-        return _DataModel.InventorySyncMessage_className(self)
-
-
-    def typeInfo(self):
-        """typeInfo(InventorySyncMessage self) -> RTTI"""
-        return _DataModel.InventorySyncMessage_typeInfo(self)
-
-
-    def Cast(*args):
-        """
-        Cast(BaseObject o) -> InventorySyncMessage
-        Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
-        """
-        return _DataModel.InventorySyncMessage_Cast(*args)
-
-    Cast = staticmethod(Cast)
-
-    def ConstCast(*args):
-        """
-        ConstCast(BaseObject o) -> InventorySyncMessage
-        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
-        """
-        return _DataModel.InventorySyncMessage_ConstCast(*args)
-
-    ConstCast = staticmethod(ConstCast)
-
-    def serialize(self, ar):
-        """serialize(InventorySyncMessage self, GenericArchive ar)"""
-        return _DataModel.InventorySyncMessage_serialize(self, ar)
-
-
-    def __init__(self, *args):
-        """
-        __init__(Seiscomp::DataModel::InventorySyncMessage self) -> InventorySyncMessage
-        __init__(Seiscomp::DataModel::InventorySyncMessage self, bool finished) -> InventorySyncMessage
-        """
-        this = _DataModel.new_InventorySyncMessage(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def empty(self):
-        """empty(InventorySyncMessage self) -> bool"""
-        return _DataModel.InventorySyncMessage_empty(self)
-
-    __swig_setmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_set
-    __swig_getmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_get
-    if _newclass:
-        isFinished = _swig_property(_DataModel.InventorySyncMessage_isFinished_get, _DataModel.InventorySyncMessage_isFinished_set)
-    __swig_setmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_set
-    __swig_getmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_get
-    if _newclass:
-        creationInfo = _swig_property(_DataModel.InventorySyncMessage_creationInfo_get, _DataModel.InventorySyncMessage_creationInfo_set)
-    __swig_destroy__ = _DataModel.delete_InventorySyncMessage
-    __del__ = lambda self: None
-InventorySyncMessage_swigregister = _DataModel.InventorySyncMessage_swigregister
-InventorySyncMessage_swigregister(InventorySyncMessage)
-
-def InventorySyncMessage_ClassName():
-    """InventorySyncMessage_ClassName() -> char const *"""
-    return _DataModel.InventorySyncMessage_ClassName()
-
-def InventorySyncMessage_TypeInfo():
-    """InventorySyncMessage_TypeInfo() -> RTTI"""
-    return _DataModel.InventorySyncMessage_TypeInfo()
-
-def InventorySyncMessage_Cast(*args):
-    """
-    Cast(BaseObject o) -> InventorySyncMessage
-    InventorySyncMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
-    """
-    return _DataModel.InventorySyncMessage_Cast(*args)
-
-def InventorySyncMessage_ConstCast(*args):
-    """
-    ConstCast(BaseObject o) -> InventorySyncMessage
-    InventorySyncMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
-    """
-    return _DataModel.InventorySyncMessage_ConstCast(*args)
-
-class ArtificialOriginMessage(Core.Message):
-    """Proxy of C++ Seiscomp::DataModel::ArtificialOriginMessage class."""
-
-    __swig_setmethods__ = {}
-    for _s in [Core.Message]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ArtificialOriginMessage, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Core.Message]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, ArtificialOriginMessage, name)
-    __repr__ = _swig_repr
-
-    def ClassName():
-        """ClassName() -> char const *"""
-        return _DataModel.ArtificialOriginMessage_ClassName()
-
-    ClassName = staticmethod(ClassName)
-
-    def TypeInfo():
-        """TypeInfo() -> RTTI"""
-        return _DataModel.ArtificialOriginMessage_TypeInfo()
-
-    TypeInfo = staticmethod(TypeInfo)
-
-    def className(self):
-        """className(ArtificialOriginMessage self) -> char const *"""
-        return _DataModel.ArtificialOriginMessage_className(self)
-
-
-    def typeInfo(self):
-        """typeInfo(ArtificialOriginMessage self) -> RTTI"""
-        return _DataModel.ArtificialOriginMessage_typeInfo(self)
-
-
-    def Cast(*args):
-        """
-        Cast(BaseObject o) -> ArtificialOriginMessage
-        Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialOriginMessage
-        """
-        return _DataModel.ArtificialOriginMessage_Cast(*args)
-
-    Cast = staticmethod(Cast)
-
-    def ConstCast(*args):
-        """
-        ConstCast(BaseObject o) -> ArtificialOriginMessage
-        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialOriginMessage
-        """
-        return _DataModel.ArtificialOriginMessage_ConstCast(*args)
-
-    ConstCast = staticmethod(ConstCast)
-
-    def serialize(self, ar):
-        """serialize(ArtificialOriginMessage self, GenericArchive ar)"""
-        return _DataModel.ArtificialOriginMessage_serialize(self, ar)
-
-
-    def __init__(self, origin):
-        """__init__(Seiscomp::DataModel::ArtificialOriginMessage self, Origin origin) -> ArtificialOriginMessage"""
-        this = _DataModel.new_ArtificialOriginMessage(origin)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def origin(self):
-        """origin(ArtificialOriginMessage self) -> Origin"""
-        return _DataModel.ArtificialOriginMessage_origin(self)
-
-
-    def setOrigin(self, origin):
-        """setOrigin(ArtificialOriginMessage self, Origin origin)"""
-        return _DataModel.ArtificialOriginMessage_setOrigin(self, origin)
-
-
-    def empty(self):
-        """empty(ArtificialOriginMessage self) -> bool"""
-        return _DataModel.ArtificialOriginMessage_empty(self)
-
-    __swig_destroy__ = _DataModel.delete_ArtificialOriginMessage
-    __del__ = lambda self: None
-ArtificialOriginMessage_swigregister = _DataModel.ArtificialOriginMessage_swigregister
-ArtificialOriginMessage_swigregister(ArtificialOriginMessage)
-
-def ArtificialOriginMessage_ClassName():
-    """ArtificialOriginMessage_ClassName() -> char const *"""
-    return _DataModel.ArtificialOriginMessage_ClassName()
-
-def ArtificialOriginMessage_TypeInfo():
-    """ArtificialOriginMessage_TypeInfo() -> RTTI"""
-    return _DataModel.ArtificialOriginMessage_TypeInfo()
-
-def ArtificialOriginMessage_Cast(*args):
-    """
-    Cast(BaseObject o) -> ArtificialOriginMessage
-    ArtificialOriginMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialOriginMessage
-    """
-    return _DataModel.ArtificialOriginMessage_Cast(*args)
-
-def ArtificialOriginMessage_ConstCast(*args):
-    """
-    ConstCast(BaseObject o) -> ArtificialOriginMessage
-    ArtificialOriginMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialOriginMessage
-    """
-    return _DataModel.ArtificialOriginMessage_ConstCast(*args)
-
 
 def eventRegion(arg1):
     """eventRegion(Event arg1) -> std::string"""
@@ -25314,6 +25099,221 @@ class DatabaseQuery(DatabaseReader):
 
 DatabaseQuery_swigregister = _DataModel.DatabaseQuery_swigregister
 DatabaseQuery_swigregister(DatabaseQuery)
+
+class InventorySyncMessage(Core.Message):
+    """Proxy of C++ Seiscomp::DataModel::InventorySyncMessage class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InventorySyncMessage, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, InventorySyncMessage, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.InventorySyncMessage_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.InventorySyncMessage_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(InventorySyncMessage self) -> char const *"""
+        return _DataModel.InventorySyncMessage_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(InventorySyncMessage self) -> RTTI"""
+        return _DataModel.InventorySyncMessage_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> InventorySyncMessage
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
+        """
+        return _DataModel.InventorySyncMessage_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> InventorySyncMessage
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
+        """
+        return _DataModel.InventorySyncMessage_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(InventorySyncMessage self, GenericArchive ar)"""
+        return _DataModel.InventorySyncMessage_serialize(self, ar)
+
+
+    def __init__(self, *args):
+        """
+        __init__(Seiscomp::DataModel::InventorySyncMessage self) -> InventorySyncMessage
+        __init__(Seiscomp::DataModel::InventorySyncMessage self, bool finished) -> InventorySyncMessage
+        """
+        this = _DataModel.new_InventorySyncMessage(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def empty(self):
+        """empty(InventorySyncMessage self) -> bool"""
+        return _DataModel.InventorySyncMessage_empty(self)
+
+    __swig_setmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_set
+    __swig_getmethods__["isFinished"] = _DataModel.InventorySyncMessage_isFinished_get
+    if _newclass:
+        isFinished = _swig_property(_DataModel.InventorySyncMessage_isFinished_get, _DataModel.InventorySyncMessage_isFinished_set)
+    __swig_setmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_set
+    __swig_getmethods__["creationInfo"] = _DataModel.InventorySyncMessage_creationInfo_get
+    if _newclass:
+        creationInfo = _swig_property(_DataModel.InventorySyncMessage_creationInfo_get, _DataModel.InventorySyncMessage_creationInfo_set)
+    __swig_destroy__ = _DataModel.delete_InventorySyncMessage
+    __del__ = lambda self: None
+InventorySyncMessage_swigregister = _DataModel.InventorySyncMessage_swigregister
+InventorySyncMessage_swigregister(InventorySyncMessage)
+
+def InventorySyncMessage_ClassName():
+    """InventorySyncMessage_ClassName() -> char const *"""
+    return _DataModel.InventorySyncMessage_ClassName()
+
+def InventorySyncMessage_TypeInfo():
+    """InventorySyncMessage_TypeInfo() -> RTTI"""
+    return _DataModel.InventorySyncMessage_TypeInfo()
+
+def InventorySyncMessage_Cast(*args):
+    """
+    Cast(BaseObject o) -> InventorySyncMessage
+    InventorySyncMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> InventorySyncMessage
+    """
+    return _DataModel.InventorySyncMessage_Cast(*args)
+
+def InventorySyncMessage_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> InventorySyncMessage
+    InventorySyncMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> InventorySyncMessage
+    """
+    return _DataModel.InventorySyncMessage_ConstCast(*args)
+
+class ArtificialOriginMessage(Core.Message):
+    """Proxy of C++ Seiscomp::DataModel::ArtificialOriginMessage class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ArtificialOriginMessage, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Core.Message]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ArtificialOriginMessage, name)
+    __repr__ = _swig_repr
+
+    def ClassName():
+        """ClassName() -> char const *"""
+        return _DataModel.ArtificialOriginMessage_ClassName()
+
+    ClassName = staticmethod(ClassName)
+
+    def TypeInfo():
+        """TypeInfo() -> RTTI"""
+        return _DataModel.ArtificialOriginMessage_TypeInfo()
+
+    TypeInfo = staticmethod(TypeInfo)
+
+    def className(self):
+        """className(ArtificialOriginMessage self) -> char const *"""
+        return _DataModel.ArtificialOriginMessage_className(self)
+
+
+    def typeInfo(self):
+        """typeInfo(ArtificialOriginMessage self) -> RTTI"""
+        return _DataModel.ArtificialOriginMessage_typeInfo(self)
+
+
+    def Cast(*args):
+        """
+        Cast(BaseObject o) -> ArtificialOriginMessage
+        Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialOriginMessage
+        """
+        return _DataModel.ArtificialOriginMessage_Cast(*args)
+
+    Cast = staticmethod(Cast)
+
+    def ConstCast(*args):
+        """
+        ConstCast(BaseObject o) -> ArtificialOriginMessage
+        ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialOriginMessage
+        """
+        return _DataModel.ArtificialOriginMessage_ConstCast(*args)
+
+    ConstCast = staticmethod(ConstCast)
+
+    def serialize(self, ar):
+        """serialize(ArtificialOriginMessage self, GenericArchive ar)"""
+        return _DataModel.ArtificialOriginMessage_serialize(self, ar)
+
+
+    def __init__(self, origin):
+        """__init__(Seiscomp::DataModel::ArtificialOriginMessage self, Origin origin) -> ArtificialOriginMessage"""
+        this = _DataModel.new_ArtificialOriginMessage(origin)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def origin(self):
+        """origin(ArtificialOriginMessage self) -> Origin"""
+        return _DataModel.ArtificialOriginMessage_origin(self)
+
+
+    def setOrigin(self, origin):
+        """setOrigin(ArtificialOriginMessage self, Origin origin)"""
+        return _DataModel.ArtificialOriginMessage_setOrigin(self, origin)
+
+
+    def empty(self):
+        """empty(ArtificialOriginMessage self) -> bool"""
+        return _DataModel.ArtificialOriginMessage_empty(self)
+
+    __swig_destroy__ = _DataModel.delete_ArtificialOriginMessage
+    __del__ = lambda self: None
+ArtificialOriginMessage_swigregister = _DataModel.ArtificialOriginMessage_swigregister
+ArtificialOriginMessage_swigregister(ArtificialOriginMessage)
+
+def ArtificialOriginMessage_ClassName():
+    """ArtificialOriginMessage_ClassName() -> char const *"""
+    return _DataModel.ArtificialOriginMessage_ClassName()
+
+def ArtificialOriginMessage_TypeInfo():
+    """ArtificialOriginMessage_TypeInfo() -> RTTI"""
+    return _DataModel.ArtificialOriginMessage_TypeInfo()
+
+def ArtificialOriginMessage_Cast(*args):
+    """
+    Cast(BaseObject o) -> ArtificialOriginMessage
+    ArtificialOriginMessage_Cast(Seiscomp::Core::BaseObjectPtr o) -> ArtificialOriginMessage
+    """
+    return _DataModel.ArtificialOriginMessage_Cast(*args)
+
+def ArtificialOriginMessage_ConstCast(*args):
+    """
+    ConstCast(BaseObject o) -> ArtificialOriginMessage
+    ArtificialOriginMessage_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> ArtificialOriginMessage
+    """
+    return _DataModel.ArtificialOriginMessage_ConstCast(*args)
 
 # This file is compatible with both classic and new-style classes.
 

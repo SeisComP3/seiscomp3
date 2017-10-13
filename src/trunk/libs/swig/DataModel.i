@@ -43,6 +43,7 @@
 #include "seiscomp3/datamodel/arclinkrequestsummary.h"
 #include "seiscomp3/datamodel/databasereader.h"
 #include "seiscomp3/datamodel/databasequery.h"
+#include "seiscomp3/datamodel/messages.h"
 %}
 
 %newobject Seiscomp::DataModel::DatabaseReader::loadJournaling;
@@ -211,3 +212,4 @@ optional_enum(Seiscomp::DataModel::StationGroupType);
 // additional headers
 %include "seiscomp3/datamodel/databasereader.h"
 %include "seiscomp3/datamodel/databasequery.h"
+%include "seiscomp3/datamodel/messages.h"

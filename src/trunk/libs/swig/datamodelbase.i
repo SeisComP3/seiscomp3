@@ -44,7 +44,6 @@
 #include <seiscomp3/io/records/ahrecord.h>
 #include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/datamodel/notifier.h>
-#include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/publicobjectcache.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/datamodel/diff.h>
@@ -112,7 +111,6 @@ namespace std {
 %include "seiscomp3/datamodel/databasearchive.h"
 %include "seiscomp3/datamodel/publicobjectcache.h"
 %include "seiscomp3/datamodel/notifier.h"
-%include "seiscomp3/datamodel/messages.h"
 %include "seiscomp3/datamodel/utils.h"
 %include "seiscomp3/datamodel/diff.h"
 
