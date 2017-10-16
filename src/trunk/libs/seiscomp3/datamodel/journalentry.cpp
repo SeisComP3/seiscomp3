@@ -50,7 +50,7 @@ JournalEntry::JournalEntry() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 JournalEntry::JournalEntry(const JournalEntry& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -99,7 +99,7 @@ QCLog::QCLog() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QCLog::QCLog(const QCLog& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -109,7 +109,7 @@ QCLog::QCLog(const QCLog& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QCLog::QCLog(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

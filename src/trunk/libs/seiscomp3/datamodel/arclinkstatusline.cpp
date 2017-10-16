@@ -102,7 +102,7 @@ ArclinkStatusLine::ArclinkStatusLine() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkStatusLine::ArclinkStatusLine(const ArclinkStatusLine& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -55,7 +55,7 @@ OriginUncertainty::OriginUncertainty() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginUncertainty::OriginUncertainty(const OriginUncertainty& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

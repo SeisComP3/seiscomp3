@@ -90,7 +90,7 @@ AmplitudeReference::AmplitudeReference() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeReference::AmplitudeReference(const AmplitudeReference& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -101,7 +101,7 @@ AmplitudeReference::AmplitudeReference(const AmplitudeReference& other)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeReference::AmplitudeReference(const std::string& amplitudeID)
 {
-	 _index.amplitudeID = amplitudeID;
+	_index.amplitudeID = amplitudeID;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

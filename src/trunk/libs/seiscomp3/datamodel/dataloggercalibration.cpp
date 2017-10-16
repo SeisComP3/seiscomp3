@@ -105,7 +105,7 @@ DataloggerCalibration::DataloggerCalibration() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataloggerCalibration::DataloggerCalibration(const DataloggerCalibration& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

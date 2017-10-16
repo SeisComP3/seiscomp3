@@ -96,7 +96,7 @@ AuxDevice::AuxDevice() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxDevice::AuxDevice(const AuxDevice& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -106,7 +106,7 @@ AuxDevice::AuxDevice(const AuxDevice& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxDevice::AuxDevice(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

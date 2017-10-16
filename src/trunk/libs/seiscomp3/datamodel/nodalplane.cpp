@@ -47,7 +47,7 @@ NodalPlane::NodalPlane() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 NodalPlane::NodalPlane(const NodalPlane& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

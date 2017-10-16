@@ -112,7 +112,7 @@ ArclinkRequest::ArclinkRequest() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkRequest::ArclinkRequest(const ArclinkRequest& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -122,7 +122,7 @@ ArclinkRequest::ArclinkRequest(const ArclinkRequest& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkRequest::ArclinkRequest(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -101,7 +101,7 @@ ResponseIIR::ResponseIIR() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponseIIR::ResponseIIR(const ResponseIIR& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -111,7 +111,7 @@ ResponseIIR::ResponseIIR(const ResponseIIR& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponseIIR::ResponseIIR(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

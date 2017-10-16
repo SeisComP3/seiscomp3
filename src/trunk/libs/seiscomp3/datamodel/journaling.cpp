@@ -38,7 +38,7 @@ Journaling::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Met
 IMPLEMENT_METAOBJECT(Journaling)
 
 
-Journaling::Journaling() : PublicObject("Journaling") {
+Journaling::Journaling(): PublicObject("Journaling") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +47,7 @@ Journaling::Journaling() : PublicObject("Journaling") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Journaling::Journaling(const Journaling& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

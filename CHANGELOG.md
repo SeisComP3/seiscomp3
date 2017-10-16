@@ -94,6 +94,119 @@ ALTER TABLE Datalogger MODIFY description VARCHAR(255);
 ALTER TABLE Station MODIFY description VARCHAR(255);
 ALTER TABLE Network MODIFY description VARCHAR(255);
 
+ALTER TABLE CompositeTime ADD second_pdf_variable_content BLOB;
+ALTER TABLE CompositeTime ADD second_pdf_probability_content BLOB;
+ALTER TABLE CompositeTime ADD second_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE MomentTensor ADD scalarMoment_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD scalarMoment_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD scalarMoment_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mrr_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrr_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrr_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mtt_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mtt_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mtt_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mpp_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mpp_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mpp_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mrt_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrt_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrt_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mrp_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrp_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mrp_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD tensor_Mtp_pdf_variable_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mtp_pdf_probability_content BLOB;
+ALTER TABLE MomentTensor ADD tensor_Mtp_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_strike_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_strike_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_strike_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_dip_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_dip_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_dip_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_rake_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_rake_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane1_rake_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_strike_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_strike_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_strike_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_dip_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_dip_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_dip_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_rake_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_rake_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD nodalPlanes_nodalPlane2_rake_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_azimuth_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_azimuth_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_azimuth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_plunge_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_plunge_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_plunge_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_length_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_length_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_tAxis_length_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_azimuth_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_azimuth_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_azimuth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_plunge_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_plunge_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_plunge_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_length_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_length_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_pAxis_length_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_azimuth_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_azimuth_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_azimuth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_plunge_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_plunge_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_plunge_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_length_pdf_variable_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_length_pdf_probability_content BLOB;
+ALTER TABLE FocalMechanism ADD principalAxes_nAxis_length_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE Amplitude ADD amplitude_pdf_variable_content BLOB;
+ALTER TABLE Amplitude ADD amplitude_pdf_probability_content BLOB;
+ALTER TABLE Amplitude ADD amplitude_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Amplitude ADD period_pdf_variable_content BLOB;
+ALTER TABLE Amplitude ADD period_pdf_probability_content BLOB;
+ALTER TABLE Amplitude ADD period_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Amplitude ADD scalingTime_pdf_variable_content BLOB;
+ALTER TABLE Amplitude ADD scalingTime_pdf_probability_content BLOB;
+ALTER TABLE Amplitude ADD scalingTime_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE Magnitude ADD magnitude_pdf_variable_content BLOB;
+ALTER TABLE Magnitude ADD magnitude_pdf_probability_content BLOB;
+ALTER TABLE Magnitude ADD magnitude_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE StationMagnitude ADD magnitude_pdf_variable_content BLOB;
+ALTER TABLE StationMagnitude ADD magnitude_pdf_probability_content BLOB;
+ALTER TABLE StationMagnitude ADD magnitude_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE Pick ADD time_pdf_variable_content BLOB;
+ALTER TABLE Pick ADD time_pdf_probability_content BLOB;
+ALTER TABLE Pick ADD time_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Pick ADD horizontalSlowness_pdf_variable_content BLOB;
+ALTER TABLE Pick ADD horizontalSlowness_pdf_probability_content BLOB;
+ALTER TABLE Pick ADD horizontalSlowness_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Pick ADD backazimuth_pdf_variable_content BLOB;
+ALTER TABLE Pick ADD backazimuth_pdf_probability_content BLOB;
+ALTER TABLE Pick ADD backazimuth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE Origin ADD time_pdf_variable_content BLOB;
+ALTER TABLE Origin ADD time_pdf_probability_content BLOB;
+ALTER TABLE Origin ADD time_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD latitude_pdf_variable_content BLOB;
+ALTER TABLE Origin ADD latitude_pdf_probability_content BLOB;
+ALTER TABLE Origin ADD latitude_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD longitude_pdf_variable_content BLOB;
+ALTER TABLE Origin ADD longitude_pdf_probability_content BLOB;
+ALTER TABLE Origin ADD longitude_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD depth_pdf_variable_content BLOB;
+ALTER TABLE Origin ADD depth_pdf_probability_content BLOB;
+ALTER TABLE Origin ADD depth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
+
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
 
@@ -179,6 +292,119 @@ ALTER TABLE Datalogger ALTER COLUMN m_description TYPE VARCHAR(255);
 ALTER TABLE Station ALTER COLUMN m_description TYPE VARCHAR(255);
 ALTER TABLE Network ALTER COLUMN m_description TYPE VARCHAR(255);
 
+ALTER TABLE CompositeTime ADD m_second_pdf_variable_content BYTEA;
+ALTER TABLE CompositeTime ADD m_second_pdf_probability_content BYTEA;
+ALTER TABLE CompositeTime ADD m_second_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE MomentTensor ADD m_scalarMoment_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_scalarMoment_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_scalarMoment_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mrr_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrr_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrr_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mtt_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mtt_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mtt_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mpp_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mpp_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mpp_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mrt_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrt_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrt_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mrp_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrp_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mrp_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE MomentTensor ADD m_tensor_Mtp_pdf_variable_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mtp_pdf_probability_content BYTEA;
+ALTER TABLE MomentTensor ADD m_tensor_Mtp_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_strike_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_strike_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_strike_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_dip_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_dip_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_dip_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_rake_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_rake_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane1_rake_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_strike_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_strike_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_strike_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_dip_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_dip_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_dip_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_rake_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_rake_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_nodalPlanes_nodalPlane2_rake_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_azimuth_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_azimuth_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_plunge_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_plunge_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_length_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_length_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_tAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_azimuth_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_azimuth_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_plunge_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_plunge_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_length_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_length_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_pAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_azimuth_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_azimuth_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_plunge_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_plunge_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_length_pdf_variable_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_length_pdf_probability_content BYTEA;
+ALTER TABLE FocalMechanism ADD m_principalAxes_nAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE Amplitude ADD m_amplitude_pdf_variable_content BYTEA;
+ALTER TABLE Amplitude ADD m_amplitude_pdf_probability_content BYTEA;
+ALTER TABLE Amplitude ADD m_amplitude_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Amplitude ADD m_period_pdf_variable_content BYTEA;
+ALTER TABLE Amplitude ADD m_period_pdf_probability_content BYTEA;
+ALTER TABLE Amplitude ADD m_period_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Amplitude ADD m_scalingTime_pdf_variable_content BYTEA;
+ALTER TABLE Amplitude ADD m_scalingTime_pdf_probability_content BYTEA;
+ALTER TABLE Amplitude ADD m_scalingTime_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE Magnitude ADD m_magnitude_pdf_variable_content BYTEA;
+ALTER TABLE Magnitude ADD m_magnitude_pdf_probability_content BYTEA;
+ALTER TABLE Magnitude ADD m_magnitude_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE StationMagnitude ADD m_magnitude_pdf_variable_content BYTEA;
+ALTER TABLE StationMagnitude ADD m_magnitude_pdf_probability_content BYTEA;
+ALTER TABLE StationMagnitude ADD m_magnitude_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE Pick ADD m_time_pdf_variable_content BYTEA;
+ALTER TABLE Pick ADD m_time_pdf_probability_content BYTEA;
+ALTER TABLE Pick ADD m_time_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Pick ADD m_horizontalSlowness_pdf_variable_content BYTEA;
+ALTER TABLE Pick ADD m_horizontalSlowness_pdf_probability_content BYTEA;
+ALTER TABLE Pick ADD m_horizontalSlowness_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Pick ADD m_backazimuth_pdf_variable_content BYTEA;
+ALTER TABLE Pick ADD m_backazimuth_pdf_probability_content BYTEA;
+ALTER TABLE Pick ADD m_backazimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
+ALTER TABLE Origin ADD m_time_pdf_variable_content BYTEA;
+ALTER TABLE Origin ADD m_time_pdf_probability_content BYTEA;
+ALTER TABLE Origin ADD m_time_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD m_latitude_pdf_variable_content BYTEA;
+ALTER TABLE Origin ADD m_latitude_pdf_probability_content BYTEA;
+ALTER TABLE Origin ADD m_latitude_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD m_longitude_pdf_variable_content BYTEA;
+ALTER TABLE Origin ADD m_longitude_pdf_probability_content BYTEA;
+ALTER TABLE Origin ADD m_longitude_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+ALTER TABLE Origin ADD m_depth_pdf_variable_content BYTEA;
+ALTER TABLE Origin ADD m_depth_pdf_probability_content BYTEA;
+ALTER TABLE Origin ADD m_depth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
+
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
 ```
 
@@ -192,6 +418,9 @@ chain. Therefore the decimation attributes decimationFactor, delay and correctio
 have been added. Furthermore the ResponseIIR type has been added to correctly
 store SEED response coefficients (blockette 54) without the need to convert IIR
 filters to poles and zeros.
+
+Furthermore a description of a pdf (probability density function) has been added
+to the RealQuantity and TimeQuantity type.
 
 **Important API changes**
 

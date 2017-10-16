@@ -88,8 +88,8 @@ class SC_SYSTEM_CORE_API MomentTensorComponentContribution : public Object {
 		                                  double weight,
 		                                  double timeShift,
 		                                  double dataTimeWindow,
-		                                  const OPT(double)& misfit,
-		                                  const OPT(double)& snr);
+		                                  const OPT(double)& misfit = Seiscomp::Core::None,
+		                                  const OPT(double)& snr = Seiscomp::Core::None);
 
 		//! Destructor
 		~MomentTensorComponentContribution();

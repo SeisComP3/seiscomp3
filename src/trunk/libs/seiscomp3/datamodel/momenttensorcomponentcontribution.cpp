@@ -105,7 +105,7 @@ MomentTensorComponentContribution::MomentTensorComponentContribution() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorComponentContribution::MomentTensorComponentContribution(const MomentTensorComponentContribution& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -116,7 +116,7 @@ MomentTensorComponentContribution::MomentTensorComponentContribution(const Momen
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorComponentContribution::MomentTensorComponentContribution(const std::string& phaseCode)
 {
-	 _index.phaseCode = phaseCode;
+	_index.phaseCode = phaseCode;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -132,13 +132,13 @@ MomentTensorComponentContribution::MomentTensorComponentContribution(const std::
                                                                      double dataTimeWindow,
                                                                      const OPT(double)& misfit,
                                                                      const OPT(double)& snr)
- : _active(active),
-   _weight(weight),
-   _timeShift(timeShift),
-   _dataTimeWindow(dataTimeWindow),
-   _misfit(misfit),
-   _snr(snr) {
-	_index.phaseCode = phaseCode;
+: _active(active)
+, _weight(weight)
+, _timeShift(timeShift)
+, _dataTimeWindow(dataTimeWindow)
+, _misfit(misfit)
+, _snr(snr)
+{	_index.phaseCode = phaseCode;
 	_index.component = component;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

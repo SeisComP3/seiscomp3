@@ -46,11 +46,15 @@ Classes
   * :ref:`PickReference <api-python-datamodel-pickreference>`
   * :ref:`PrincipalAxes <api-python-datamodel-principalaxes>`
   * :ref:`Reading <api-python-datamodel-reading>`
+  * :ref:`RealArray <api-python-datamodel-realarray>`
+  * :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
   * :ref:`RealQuantity <api-python-datamodel-realquantity>`
   * :ref:`SourceTimeFunction <api-python-datamodel-sourcetimefunction>`
   * :ref:`StationMagnitude <api-python-datamodel-stationmagnitude>`
   * :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
   * :ref:`Tensor <api-python-datamodel-tensor>`
+  * :ref:`TimeArray <api-python-datamodel-timearray>`
+  * :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
   * :ref:`TimeQuantity <api-python-datamodel-timequantity>`
   * :ref:`TimeWindow <api-python-datamodel-timewindow>`
   * :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
@@ -11632,6 +11636,73 @@ Reference
          As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
+.. _api-python-datamodel-realpdf1d:
+
+.. py:class:: RealPDF1D
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+   A probability density function description. It can be used in three
+   different modes:
+   
+   1\) \"raw samples mode\"
+   
+   variable is a list of M values, no probability. The values represent
+   samples, no binning\/probabilities made.
+   
+   2\) \"implicitly binned PDF\"
+   
+   variable and probabilty arrays have length N. variable values to be
+   interpreted as \"bin centers\" \(or representative values\),
+   no bin edges given.
+   
+   3\) \"explicitly binned PDF\"
+   
+   variable has length N+1, probability has length N. variable values
+   describe bin edges \(upper bin edge is lower edge of next bin\).
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type RealPDF1D if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to RealPDF1D if the internal wrapped
+      representation is an RealPDF1D object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setVariable(variable)
+
+      :param variable: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of values
+
+   .. py:method:: variable()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+   .. py:method:: setProbability(probability)
+
+      :param probability: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of probabilities
+
+   .. py:method:: probability()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
 .. _api-python-datamodel-realquantity:
 
 .. py:class:: RealQuantity
@@ -11738,6 +11809,21 @@ Reference
    .. py:method:: confidenceLevel()
 
       :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setPdf(pdf)
+
+      :param pdf: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
+
+      Probability density function of the quantity.
+
+   .. py:method:: pdf()
+
+      :rtype: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
 
       .. note::
 
@@ -16221,6 +16307,115 @@ Reference
 
       :rtype: :ref:`RealQuantity <api-python-datamodel-realquantity>`
 
+.. _api-python-datamodel-timearray:
+
+.. py:class:: TimeArray
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type TimeArray if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to TimeArray if the internal wrapped
+      representation is an TimeArray object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`TimeArray <api-python-datamodel-timearray>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setContent(content)
+
+      :param content: seiscomp3.Core.Time
+
+   .. py:method:: content()
+
+      :rtype: seiscomp3.Core.Time
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+.. _api-python-datamodel-timepdf1d:
+
+.. py:class:: TimePDF1D
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+   A probability density function description. It can be used in three
+   different modes:
+   
+   1\) \"raw samples mode\"
+   
+   variable is a list of M values, no probability. The values represent
+   samples, no binning\/probabilities made.
+   
+   2\) \"implicitly binned PDF\"
+   
+   variable and probabilty arrays have length N. variable values to be
+   interpreted as \"bin centers\" \(or representative values\),
+   no bin edges given.
+   
+   3\) \"explicitly binned PDF\"
+   
+   variable has length N+1, probability has length N. variable values
+   describe bin edges \(upper bin edge is lower edge of next bin\).
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type TimePDF1D if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to TimePDF1D if the internal wrapped
+      representation is an TimePDF1D object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setVariable(variable)
+
+      :param variable: :ref:`TimeArray <api-python-datamodel-timearray>`
+
+      List of datetimes
+
+   .. py:method:: variable()
+
+      :rtype: :ref:`TimeArray <api-python-datamodel-timearray>`
+
+   .. py:method:: setProbability(probability)
+
+      :param probability: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of probabilities
+
+   .. py:method:: probability()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
 .. _api-python-datamodel-timequantity:
 
 .. py:class:: TimeQuantity
@@ -16317,6 +16512,21 @@ Reference
    .. py:method:: confidenceLevel()
 
       :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setPdf(pdf)
+
+      :param pdf: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
+
+      Probability density function of the quantity.
+
+   .. py:method:: pdf()
+
+      :rtype: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
 
       .. note::
 

@@ -39,7 +39,7 @@ QualityControl::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core:
 IMPLEMENT_METAOBJECT(QualityControl)
 
 
-QualityControl::QualityControl() : PublicObject("QualityControl") {
+QualityControl::QualityControl(): PublicObject("QualityControl") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,7 +48,7 @@ QualityControl::QualityControl() : PublicObject("QualityControl") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QualityControl::QualityControl(const QualityControl& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -96,7 +96,7 @@ AuxSource::AuxSource() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxSource::AuxSource(const AuxSource& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -107,7 +107,7 @@ AuxSource::AuxSource(const AuxSource& other)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxSource::AuxSource(const std::string& name)
 {
-	 _index.name = name;
+	_index.name = name;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -122,13 +122,13 @@ AuxSource::AuxSource(const std::string& name,
                      const OPT(int)& sampleRateNumerator,
                      const OPT(int)& sampleRateDenominator,
                      const OPT(Blob)& remark)
- : _description(description),
-   _unit(unit),
-   _conversion(conversion),
-   _sampleRateNumerator(sampleRateNumerator),
-   _sampleRateDenominator(sampleRateDenominator),
-   _remark(remark) {
-	_index.name = name;
+: _description(description)
+, _unit(unit)
+, _conversion(conversion)
+, _sampleRateNumerator(sampleRateNumerator)
+, _sampleRateDenominator(sampleRateDenominator)
+, _remark(remark)
+{	_index.name = name;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

@@ -20,10 +20,15 @@
 #include "seiscomp3/datamodel/eventparameters_package.h"
 #include "seiscomp3/datamodel/config_package.h"
 #include "seiscomp3/datamodel/routing_package.h"
+#include "seiscomp3/datamodel/realarray.h"
+#include "seiscomp3/datamodel/timearray.h"
+#include "seiscomp3/datamodel/timepdf1d.h"
 #include "seiscomp3/datamodel/timequantity.h"
 #include "seiscomp3/datamodel/creationinfo.h"
 #include "seiscomp3/datamodel/phase.h"
 #include "seiscomp3/datamodel/comment.h"
+#include "seiscomp3/datamodel/complexarray.h"
+#include "seiscomp3/datamodel/realpdf1d.h"
 #include "seiscomp3/datamodel/realquantity.h"
 #include "seiscomp3/datamodel/integerquantity.h"
 #include "seiscomp3/datamodel/axis.h"
@@ -38,8 +43,6 @@
 #include "seiscomp3/datamodel/confidenceellipsoid.h"
 #include "seiscomp3/datamodel/originuncertainty.h"
 #include "seiscomp3/datamodel/blob.h"
-#include "seiscomp3/datamodel/realarray.h"
-#include "seiscomp3/datamodel/complexarray.h"
 #include "seiscomp3/datamodel/arclinkrequestsummary.h"
 #include "seiscomp3/datamodel/databasereader.h"
 #include "seiscomp3/datamodel/databasequery.h"
@@ -57,9 +60,14 @@
 %include "datamodelbase.i"
 %include "seiscomp3/datamodel/types.h"
 
+optional(Seiscomp::DataModel::RealArray);
+optional(Seiscomp::DataModel::TimeArray);
+optional(Seiscomp::DataModel::TimePDF1D);
 optional(Seiscomp::DataModel::TimeQuantity);
 optional(Seiscomp::DataModel::CreationInfo);
 optional(Seiscomp::DataModel::Phase);
+optional(Seiscomp::DataModel::ComplexArray);
+optional(Seiscomp::DataModel::RealPDF1D);
 optional(Seiscomp::DataModel::RealQuantity);
 optional(Seiscomp::DataModel::IntegerQuantity);
 optional(Seiscomp::DataModel::Axis);
@@ -74,8 +82,6 @@ optional(Seiscomp::DataModel::NodalPlanes);
 optional(Seiscomp::DataModel::ConfidenceEllipsoid);
 optional(Seiscomp::DataModel::OriginUncertainty);
 optional(Seiscomp::DataModel::Blob);
-optional(Seiscomp::DataModel::RealArray);
-optional(Seiscomp::DataModel::ComplexArray);
 optional(Seiscomp::DataModel::ArclinkRequestSummary);
 enum(Seiscomp::DataModel::OriginUncertaintyDescription);
 optional_enum(Seiscomp::DataModel::OriginUncertaintyDescription);
@@ -109,10 +115,15 @@ enum(Seiscomp::DataModel::StationGroupType);
 optional_enum(Seiscomp::DataModel::StationGroupType);
 
 // package base
+%include "seiscomp3/datamodel/realarray.h"
+%include "seiscomp3/datamodel/timearray.h"
+%include "seiscomp3/datamodel/timepdf1d.h"
 %include "seiscomp3/datamodel/timequantity.h"
 %include "seiscomp3/datamodel/creationinfo.h"
 %include "seiscomp3/datamodel/phase.h"
 %include "seiscomp3/datamodel/comment.h"
+%include "seiscomp3/datamodel/complexarray.h"
+%include "seiscomp3/datamodel/realpdf1d.h"
 %include "seiscomp3/datamodel/realquantity.h"
 %include "seiscomp3/datamodel/integerquantity.h"
 %include "seiscomp3/datamodel/axis.h"
@@ -127,8 +138,6 @@ optional_enum(Seiscomp::DataModel::StationGroupType);
 %include "seiscomp3/datamodel/confidenceellipsoid.h"
 %include "seiscomp3/datamodel/originuncertainty.h"
 %include "seiscomp3/datamodel/blob.h"
-%include "seiscomp3/datamodel/realarray.h"
-%include "seiscomp3/datamodel/complexarray.h"
 %include "seiscomp3/datamodel/arclinkrequestsummary.h"
 
 // package Journaling

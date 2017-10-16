@@ -49,7 +49,7 @@ WaveformStreamID::WaveformStreamID() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WaveformStreamID::WaveformStreamID(const WaveformStreamID& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -59,7 +59,7 @@ WaveformStreamID::WaveformStreamID(const WaveformStreamID& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WaveformStreamID::WaveformStreamID(const std::string& resourceURI)
- : _resourceURI(resourceURI) {
+: _resourceURI(resourceURI) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -72,12 +72,12 @@ WaveformStreamID::WaveformStreamID(const std::string& networkCode,
                                    const std::string& locationCode,
                                    const std::string& channelCode,
                                    const std::string& resourceURI)
- : _networkCode(networkCode),
-   _stationCode(stationCode),
-   _locationCode(locationCode),
-   _channelCode(channelCode),
-   _resourceURI(resourceURI) {
-}
+: _networkCode(networkCode)
+, _stationCode(stationCode)
+, _locationCode(locationCode)
+, _channelCode(channelCode)
+, _resourceURI(resourceURI)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

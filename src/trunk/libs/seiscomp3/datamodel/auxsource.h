@@ -87,9 +87,9 @@ class SC_SYSTEM_CORE_API AuxSource : public Object {
 		          const std::string& description,
 		          const std::string& unit,
 		          const std::string& conversion,
-		          const OPT(int)& sampleRateNumerator,
-		          const OPT(int)& sampleRateDenominator,
-		          const OPT(Blob)& remark);
+		          const OPT(int)& sampleRateNumerator = Seiscomp::Core::None,
+		          const OPT(int)& sampleRateDenominator = Seiscomp::Core::None,
+		          const OPT(Blob)& remark = Seiscomp::Core::None);
 
 		//! Destructor
 		~AuxSource();

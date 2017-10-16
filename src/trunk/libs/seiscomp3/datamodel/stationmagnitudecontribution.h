@@ -83,10 +83,9 @@ class SC_SYSTEM_CORE_API StationMagnitudeContribution : public Object {
 		StationMagnitudeContribution(const StationMagnitudeContribution& other);
 
 		//! Custom constructor
-		StationMagnitudeContribution(const std::string& stationMagnitudeID);
 		StationMagnitudeContribution(const std::string& stationMagnitudeID,
-		                             const OPT(double)& residual,
-		                             const OPT(double)& weight);
+		                             const OPT(double)& residual = Seiscomp::Core::None,
+		                             const OPT(double)& weight = Seiscomp::Core::None);
 
 		//! Destructor
 		~StationMagnitudeContribution();

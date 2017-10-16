@@ -50,17 +50,8 @@ IntegerQuantity::IntegerQuantity() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IntegerQuantity::IntegerQuantity(const IntegerQuantity& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity::IntegerQuantity(int value)
- : _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -73,12 +64,12 @@ IntegerQuantity::IntegerQuantity(int value,
                                  const OPT(int)& lowerUncertainty,
                                  const OPT(int)& upperUncertainty,
                                  const OPT(double)& confidenceLevel)
- : _value(value),
-   _uncertainty(uncertainty),
-   _lowerUncertainty(lowerUncertainty),
-   _upperUncertainty(upperUncertainty),
-   _confidenceLevel(confidenceLevel) {
-}
+: _value(value)
+, _uncertainty(uncertainty)
+, _lowerUncertainty(lowerUncertainty)
+, _upperUncertainty(upperUncertainty)
+, _confidenceLevel(confidenceLevel)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 

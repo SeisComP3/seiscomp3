@@ -46,7 +46,7 @@ Inventory::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Meta
 IMPLEMENT_METAOBJECT(Inventory)
 
 
-Inventory::Inventory() : PublicObject("Inventory") {
+Inventory::Inventory(): PublicObject("Inventory") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -55,7 +55,7 @@ Inventory::Inventory() : PublicObject("Inventory") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::Inventory(const Inventory& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

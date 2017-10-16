@@ -34,6 +34,7 @@ TimeQuantity::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::M
 	addProperty(Core::simpleProperty("lowerUncertainty", "float", false, false, false, false, true, false, NULL, &TimeQuantity::setLowerUncertainty, &TimeQuantity::lowerUncertainty));
 	addProperty(Core::simpleProperty("upperUncertainty", "float", false, false, false, false, true, false, NULL, &TimeQuantity::setUpperUncertainty, &TimeQuantity::upperUncertainty));
 	addProperty(Core::simpleProperty("confidenceLevel", "float", false, false, false, false, true, false, NULL, &TimeQuantity::setConfidenceLevel, &TimeQuantity::confidenceLevel));
+	addProperty(objectProperty<TimePDF1D>("pdf", "TimePDF1D", false, false, true, &TimeQuantity::setPdf, &TimeQuantity::pdf));
 }
 
 
@@ -49,17 +50,8 @@ TimeQuantity::TimeQuantity() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeQuantity::TimeQuantity(const TimeQuantity& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-TimeQuantity::TimeQuantity(Seiscomp::Core::Time value)
- : _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -71,13 +63,15 @@ TimeQuantity::TimeQuantity(Seiscomp::Core::Time value,
                            const OPT(double)& uncertainty,
                            const OPT(double)& lowerUncertainty,
                            const OPT(double)& upperUncertainty,
-                           const OPT(double)& confidenceLevel)
- : _value(value),
-   _uncertainty(uncertainty),
-   _lowerUncertainty(lowerUncertainty),
-   _upperUncertainty(upperUncertainty),
-   _confidenceLevel(confidenceLevel) {
-}
+                           const OPT(double)& confidenceLevel,
+                           const OPT(TimePDF1D)& pdf)
+: _value(value)
+, _uncertainty(uncertainty)
+, _lowerUncertainty(lowerUncertainty)
+, _upperUncertainty(upperUncertainty)
+, _confidenceLevel(confidenceLevel)
+, _pdf(pdf)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -120,6 +114,8 @@ bool TimeQuantity::operator==(const TimeQuantity& rhs) const {
 	if ( !(_upperUncertainty == rhs._upperUncertainty) )
 		return false;
 	if ( !(_confidenceLevel == rhs._confidenceLevel) )
+		return false;
+	if ( !(_pdf == rhs._pdf) )
 		return false;
 	return true;
 }
@@ -245,12 +241,44 @@ double TimeQuantity::confidenceLevel() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void TimeQuantity::setPdf(const OPT(TimePDF1D)& pdf) {
+	_pdf = pdf;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+TimePDF1D& TimeQuantity::pdf() {
+	if ( _pdf )
+		return *_pdf;
+	throw Seiscomp::Core::ValueException("TimeQuantity.pdf is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const TimePDF1D& TimeQuantity::pdf() const {
+	if ( _pdf )
+		return *_pdf;
+	throw Seiscomp::Core::ValueException("TimeQuantity.pdf is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeQuantity& TimeQuantity::operator=(const TimeQuantity& other) {
 	_value = other._value;
 	_uncertainty = other._uncertainty;
 	_lowerUncertainty = other._lowerUncertainty;
 	_upperUncertainty = other._upperUncertainty;
 	_confidenceLevel = other._confidenceLevel;
+	_pdf = other._pdf;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -274,6 +302,9 @@ void TimeQuantity::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("lowerUncertainty", _lowerUncertainty, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("upperUncertainty", _upperUncertainty, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("confidenceLevel", _confidenceLevel, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("pdf", _pdf, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

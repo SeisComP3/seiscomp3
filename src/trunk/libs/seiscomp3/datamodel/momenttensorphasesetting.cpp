@@ -96,7 +96,7 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorPhaseSetting::MomentTensorPhaseSetting(const MomentTensorPhaseSetting& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -107,7 +107,7 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting(const MomentTensorPhaseSettin
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorPhaseSetting::MomentTensorPhaseSetting(const std::string& code)
 {
-	 _index.code = code;
+	_index.code = code;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -120,11 +120,11 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting(const std::string& code,
                                                    double upperPeriod,
                                                    const OPT(double)& minimumSNR,
                                                    const OPT(double)& maximumTimeShift)
- : _lowerPeriod(lowerPeriod),
-   _upperPeriod(upperPeriod),
-   _minimumSNR(minimumSNR),
-   _maximumTimeShift(maximumTimeShift) {
-	_index.code = code;
+: _lowerPeriod(lowerPeriod)
+, _upperPeriod(upperPeriod)
+, _minimumSNR(minimumSNR)
+, _maximumTimeShift(maximumTimeShift)
+{	_index.code = code;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

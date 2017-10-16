@@ -52,7 +52,7 @@ MomentTensorStationContribution::MomentTensorStationContribution() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorStationContribution::MomentTensorStationContribution(const MomentTensorStationContribution& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -62,7 +62,7 @@ MomentTensorStationContribution::MomentTensorStationContribution(const MomentTen
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorStationContribution::MomentTensorStationContribution(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 	_active = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

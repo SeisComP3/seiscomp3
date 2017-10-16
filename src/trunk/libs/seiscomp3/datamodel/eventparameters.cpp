@@ -48,7 +48,7 @@ EventParameters::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core
 IMPLEMENT_METAOBJECT(EventParameters)
 
 
-EventParameters::EventParameters() : PublicObject("EventParameters") {
+EventParameters::EventParameters(): PublicObject("EventParameters") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -57,7 +57,7 @@ EventParameters::EventParameters() : PublicObject("EventParameters") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventParameters::EventParameters(const EventParameters& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

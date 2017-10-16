@@ -34,6 +34,7 @@ RealQuantity::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::M
 	addProperty(Core::simpleProperty("lowerUncertainty", "float", false, false, false, false, true, false, NULL, &RealQuantity::setLowerUncertainty, &RealQuantity::lowerUncertainty));
 	addProperty(Core::simpleProperty("upperUncertainty", "float", false, false, false, false, true, false, NULL, &RealQuantity::setUpperUncertainty, &RealQuantity::upperUncertainty));
 	addProperty(Core::simpleProperty("confidenceLevel", "float", false, false, false, false, true, false, NULL, &RealQuantity::setConfidenceLevel, &RealQuantity::confidenceLevel));
+	addProperty(objectProperty<RealPDF1D>("pdf", "RealPDF1D", false, false, true, &RealQuantity::setPdf, &RealQuantity::pdf));
 }
 
 
@@ -50,17 +51,8 @@ RealQuantity::RealQuantity() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RealQuantity::RealQuantity(const RealQuantity& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity::RealQuantity(double value)
- : _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -72,13 +64,15 @@ RealQuantity::RealQuantity(double value,
                            const OPT(double)& uncertainty,
                            const OPT(double)& lowerUncertainty,
                            const OPT(double)& upperUncertainty,
-                           const OPT(double)& confidenceLevel)
- : _value(value),
-   _uncertainty(uncertainty),
-   _lowerUncertainty(lowerUncertainty),
-   _upperUncertainty(upperUncertainty),
-   _confidenceLevel(confidenceLevel) {
-}
+                           const OPT(double)& confidenceLevel,
+                           const OPT(RealPDF1D)& pdf)
+: _value(value)
+, _uncertainty(uncertainty)
+, _lowerUncertainty(lowerUncertainty)
+, _upperUncertainty(upperUncertainty)
+, _confidenceLevel(confidenceLevel)
+, _pdf(pdf)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -121,6 +115,8 @@ bool RealQuantity::operator==(const RealQuantity& rhs) const {
 	if ( !(_upperUncertainty == rhs._upperUncertainty) )
 		return false;
 	if ( !(_confidenceLevel == rhs._confidenceLevel) )
+		return false;
+	if ( !(_pdf == rhs._pdf) )
 		return false;
 	return true;
 }
@@ -246,12 +242,44 @@ double RealQuantity::confidenceLevel() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RealQuantity::setPdf(const OPT(RealPDF1D)& pdf) {
+	_pdf = pdf;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RealPDF1D& RealQuantity::pdf() {
+	if ( _pdf )
+		return *_pdf;
+	throw Seiscomp::Core::ValueException("RealQuantity.pdf is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const RealPDF1D& RealQuantity::pdf() const {
+	if ( _pdf )
+		return *_pdf;
+	throw Seiscomp::Core::ValueException("RealQuantity.pdf is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RealQuantity& RealQuantity::operator=(const RealQuantity& other) {
 	_value = other._value;
 	_uncertainty = other._uncertainty;
 	_lowerUncertainty = other._lowerUncertainty;
 	_upperUncertainty = other._upperUncertainty;
 	_confidenceLevel = other._confidenceLevel;
+	_pdf = other._pdf;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -275,6 +303,9 @@ void RealQuantity::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("lowerUncertainty", _lowerUncertainty, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("upperUncertainty", _upperUncertainty, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("confidenceLevel", _confidenceLevel, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("pdf", _pdf, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

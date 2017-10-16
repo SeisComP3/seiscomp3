@@ -90,7 +90,7 @@ FocalMechanismReference::FocalMechanismReference() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FocalMechanismReference::FocalMechanismReference(const FocalMechanismReference& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -101,7 +101,7 @@ FocalMechanismReference::FocalMechanismReference(const FocalMechanismReference& 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FocalMechanismReference::FocalMechanismReference(const std::string& focalMechanismID)
 {
-	 _index.focalMechanismID = focalMechanismID;
+	_index.focalMechanismID = focalMechanismID;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

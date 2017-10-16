@@ -40,7 +40,7 @@ Config::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObj
 IMPLEMENT_METAOBJECT(Config)
 
 
-Config::Config() : PublicObject("Config") {
+Config::Config(): PublicObject("Config") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -49,7 +49,7 @@ Config::Config() : PublicObject("Config") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Config::Config(const Config& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

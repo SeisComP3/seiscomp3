@@ -66,12 +66,11 @@ class SC_SYSTEM_CORE_API IntegerQuantity : public Core::BaseObject {
 		IntegerQuantity(const IntegerQuantity& other);
 
 		//! Custom constructor
-		IntegerQuantity(int value);
 		IntegerQuantity(int value,
-		                const OPT(int)& uncertainty,
-		                const OPT(int)& lowerUncertainty,
-		                const OPT(int)& upperUncertainty,
-		                const OPT(double)& confidenceLevel);
+		                const OPT(int)& uncertainty = Seiscomp::Core::None,
+		                const OPT(int)& lowerUncertainty = Seiscomp::Core::None,
+		                const OPT(int)& upperUncertainty = Seiscomp::Core::None,
+		                const OPT(double)& confidenceLevel = Seiscomp::Core::None);
 
 		//! Destructor
 		~IntegerQuantity();

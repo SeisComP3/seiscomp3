@@ -92,18 +92,8 @@ StationMagnitudeContribution::StationMagnitudeContribution() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationMagnitudeContribution::StationMagnitudeContribution(const StationMagnitudeContribution& other)
- : Object() {
+: Object() {
 	*this = other;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-StationMagnitudeContribution::StationMagnitudeContribution(const std::string& stationMagnitudeID)
-{
-	 _index.stationMagnitudeID = stationMagnitudeID;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -114,9 +104,9 @@ StationMagnitudeContribution::StationMagnitudeContribution(const std::string& st
 StationMagnitudeContribution::StationMagnitudeContribution(const std::string& stationMagnitudeID,
                                                            const OPT(double)& residual,
                                                            const OPT(double)& weight)
- : _residual(residual),
-   _weight(weight) {
-	_index.stationMagnitudeID = stationMagnitudeID;
+: _residual(residual)
+, _weight(weight)
+{	_index.stationMagnitudeID = stationMagnitudeID;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

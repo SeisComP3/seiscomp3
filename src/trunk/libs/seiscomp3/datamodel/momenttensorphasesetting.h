@@ -82,8 +82,8 @@ class SC_SYSTEM_CORE_API MomentTensorPhaseSetting : public Object {
 		MomentTensorPhaseSetting(const std::string& code,
 		                         double lowerPeriod,
 		                         double upperPeriod,
-		                         const OPT(double)& minimumSNR,
-		                         const OPT(double)& maximumTimeShift);
+		                         const OPT(double)& minimumSNR = Seiscomp::Core::None,
+		                         const OPT(double)& maximumTimeShift = Seiscomp::Core::None);
 
 		//! Destructor
 		~MomentTensorPhaseSetting();

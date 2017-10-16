@@ -38,7 +38,7 @@ Routing::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaOb
 IMPLEMENT_METAOBJECT(Routing)
 
 
-Routing::Routing() : PublicObject("Routing") {
+Routing::Routing(): PublicObject("Routing") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +47,7 @@ Routing::Routing() : PublicObject("Routing") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Routing::Routing(const Routing& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

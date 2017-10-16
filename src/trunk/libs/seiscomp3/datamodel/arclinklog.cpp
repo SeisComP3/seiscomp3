@@ -38,7 +38,7 @@ ArclinkLog::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Met
 IMPLEMENT_METAOBJECT(ArclinkLog)
 
 
-ArclinkLog::ArclinkLog() : PublicObject("ArclinkLog") {
+ArclinkLog::ArclinkLog(): PublicObject("ArclinkLog") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +47,7 @@ ArclinkLog::ArclinkLog() : PublicObject("ArclinkLog") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkLog::ArclinkLog(const ArclinkLog& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
