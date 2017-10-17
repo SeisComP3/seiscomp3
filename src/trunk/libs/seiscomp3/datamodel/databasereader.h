@@ -211,10 +211,13 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int loadDataloggerCalibrations(Datalogger*);
 		int loadDecimations(Datalogger*);
 		int load(Network*);
+		int loadComments(Network*);
 		int loadStations(Network*);
 		int load(Station*);
+		int loadComments(Station*);
 		int loadSensorLocations(Station*);
 		int load(SensorLocation*);
+		int loadComments(SensorLocation*);
 		int loadAuxStreams(SensorLocation*);
 		int loadStreams(SensorLocation*);
 		

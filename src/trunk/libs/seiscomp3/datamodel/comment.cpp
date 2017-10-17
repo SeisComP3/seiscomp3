@@ -27,6 +27,9 @@
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/parameter.h>
 #include <seiscomp3/datamodel/parameterset.h>
+#include <seiscomp3/datamodel/sensorlocation.h>
+#include <seiscomp3/datamodel/station.h>
+#include <seiscomp3/datamodel/network.h>
 #include <seiscomp3/datamodel/metadata.h>
 #include <seiscomp3/logging/log.h>
 
@@ -41,6 +44,8 @@ IMPLEMENT_SC_CLASS_DERIVED(Comment, Object, "Comment");
 Comment::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObject(rtti) {
 	addProperty(Core::simpleProperty("text", "string", false, false, false, false, false, false, NULL, &Comment::setText, &Comment::text));
 	addProperty(Core::simpleProperty("id", "string", false, false, true, false, false, false, NULL, &Comment::setId, &Comment::id));
+	addProperty(Core::simpleProperty("start", "datetime", false, false, false, false, true, false, NULL, &Comment::setStart, &Comment::start));
+	addProperty(Core::simpleProperty("end", "datetime", false, false, false, false, true, false, NULL, &Comment::setEnd, &Comment::end));
 	addProperty(objectProperty<CreationInfo>("creationInfo", "CreationInfo", false, false, true, &Comment::setCreationInfo, &Comment::creationInfo));
 }
 
@@ -121,6 +126,8 @@ Comment::~Comment() {
 bool Comment::operator==(const Comment& rhs) const {
 	if ( _index != rhs._index ) return false;
 	if ( _text != rhs._text ) return false;
+	if ( _start != rhs._start ) return false;
+	if ( _end != rhs._end ) return false;
 	if ( _creationInfo != rhs._creationInfo ) return false;
 	return true;
 }
@@ -177,6 +184,46 @@ void Comment::setId(const std::string& id) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const std::string& Comment::id() const {
 	return _index.id;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Comment::setStart(const OPT(Seiscomp::Core::Time)& start) {
+	_start = start;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Seiscomp::Core::Time Comment::start() const {
+	if ( _start )
+		return *_start;
+	throw Seiscomp::Core::ValueException("Comment.start is not set");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Comment::setEnd(const OPT(Seiscomp::Core::Time)& end) {
+	_end = end;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Seiscomp::Core::Time Comment::end() const {
+	if ( _end )
+		return *_end;
+	throw Seiscomp::Core::ValueException("Comment.end is not set");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -324,9 +371,38 @@ ParameterSet* Comment::parameterSet() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+SensorLocation* Comment::sensorLocation() const {
+	return SensorLocation::Cast(parent());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Station* Comment::station() const {
+	return Station::Cast(parent());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Network* Comment::network() const {
+	return Network::Cast(parent());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Comment& Comment::operator=(const Comment& other) {
 	_index = other._index;
 	_text = other._text;
+	_start = other._start;
+	_end = other._end;
 	_creationInfo = other._creationInfo;
 	return *this;
 }
@@ -385,6 +461,15 @@ bool Comment::attachTo(PublicObject* parent) {
 	ParameterSet* parameterSet = ParameterSet::Cast(parent);
 	if ( parameterSet != NULL )
 		return parameterSet->add(this);
+	SensorLocation* sensorLocation = SensorLocation::Cast(parent);
+	if ( sensorLocation != NULL )
+		return sensorLocation->add(this);
+	Station* station = Station::Cast(parent);
+	if ( station != NULL )
+		return station->add(this);
+	Network* network = Network::Cast(parent);
+	if ( network != NULL )
+		return network->add(this);
 
 	SEISCOMP_ERROR("Comment::attachTo(%s) -> wrong class type", parent->className());
 	return false;
@@ -569,6 +654,57 @@ bool Comment::detachFrom(PublicObject* object) {
 			}
 		}
 	}
+	SensorLocation* sensorLocation = SensorLocation::Cast(object);
+	if ( sensorLocation != NULL ) {
+		// If the object has been added already to the parent locally
+		// just remove it by pointer
+		if ( object == parent() )
+			return sensorLocation->remove(this);
+		// The object has not been added locally so it must be looked up
+		else {
+			Comment* child = sensorLocation->comment(index());
+			if ( child != NULL )
+				return sensorLocation->remove(child);
+			else {
+				SEISCOMP_DEBUG("Comment::detachFrom(SensorLocation): comment has not been found");
+				return false;
+			}
+		}
+	}
+	Station* station = Station::Cast(object);
+	if ( station != NULL ) {
+		// If the object has been added already to the parent locally
+		// just remove it by pointer
+		if ( object == parent() )
+			return station->remove(this);
+		// The object has not been added locally so it must be looked up
+		else {
+			Comment* child = station->comment(index());
+			if ( child != NULL )
+				return station->remove(child);
+			else {
+				SEISCOMP_DEBUG("Comment::detachFrom(Station): comment has not been found");
+				return false;
+			}
+		}
+	}
+	Network* network = Network::Cast(object);
+	if ( network != NULL ) {
+		// If the object has been added already to the parent locally
+		// just remove it by pointer
+		if ( object == parent() )
+			return network->remove(this);
+		// The object has not been added locally so it must be looked up
+		else {
+			Comment* child = network->comment(index());
+			if ( child != NULL )
+				return network->remove(child);
+			else {
+				SEISCOMP_DEBUG("Comment::detachFrom(Network): comment has not been found");
+				return false;
+			}
+		}
+	}
 
 	SEISCOMP_ERROR("Comment::detachFrom(%s) -> wrong class type", object->className());
 	return false;
@@ -623,6 +759,12 @@ void Comment::serialize(Archive& ar) {
 
 	ar & NAMED_OBJECT_HINT("text", _text, Archive::XML_ELEMENT | Archive::XML_MANDATORY);
 	ar & NAMED_OBJECT_HINT("id", _index.id, Archive::XML_ELEMENT | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("start", _start, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	}
+	if ( ar.supportsVersion<0,10>() ) {
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	}
 	ar & NAMED_OBJECT_HINT("creationInfo", _creationInfo, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

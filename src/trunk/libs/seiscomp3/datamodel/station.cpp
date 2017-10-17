@@ -47,6 +47,7 @@ Station::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaOb
 	addProperty(Core::simpleProperty("restricted", "boolean", false, false, false, false, true, false, NULL, &Station::setRestricted, &Station::restricted));
 	addProperty(Core::simpleProperty("shared", "boolean", false, false, false, false, true, false, NULL, &Station::setShared, &Station::shared));
 	addProperty(objectProperty<Blob>("remark", "Blob", false, false, true, &Station::setRemark, &Station::remark));
+	addProperty(arrayClassProperty<Comment>("comment", "Comment", &Station::commentCount, &Station::comment, static_cast<bool (Station::*)(Comment*)>(&Station::add), &Station::removeComment, static_cast<bool (Station::*)(Comment*)>(&Station::remove)));
 	addProperty(arrayObjectProperty("sensorLocation", "SensorLocation", &Station::sensorLocationCount, &Station::sensorLocation, static_cast<bool (Station::*)(SensorLocation*)>(&Station::add), &Station::removeSensorLocation, static_cast<bool (Station::*)(SensorLocation*)>(&Station::remove)));
 }
 
@@ -130,6 +131,10 @@ Station::Station(const std::string& publicID)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Station::~Station() {
+	std::for_each(_comments.begin(), _comments.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&Comment::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&CommentPtr::get)));
 	std::for_each(_sensorLocations.begin(), _sensorLocations.end(),
 	              std::compose1(std::bind2nd(std::mem_fun(&SensorLocation::setParent),
 	                                         (PublicObject*)NULL),
@@ -672,6 +677,16 @@ Object* Station::clone() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Station::updateChild(Object* child) {
+	Comment* commentChild = Comment::Cast(child);
+	if ( commentChild != NULL ) {
+		Comment* commentElement = comment(commentChild->index());
+		if ( commentElement != NULL ) {
+			*commentElement = *commentChild;
+			return true;
+		}
+		return false;
+	}
+
 	SensorLocation* sensorLocationChild = SensorLocation::Cast(child);
 	if ( sensorLocationChild != NULL ) {
 		SensorLocation* sensorLocationElement
@@ -696,6 +711,8 @@ void Station::accept(Visitor* visitor) {
 		if ( !visitor->visit(this) )
 			return;
 
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it )
+		(*it)->accept(visitor);
 	for ( std::vector<SensorLocationPtr>::iterator it = _sensorLocations.begin(); it != _sensorLocations.end(); ++it )
 		(*it)->accept(visitor);
 
@@ -703,6 +720,147 @@ void Station::accept(Visitor* visitor) {
 		visitor->visit(this);
 	else
 		visitor->finished();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Station::commentCount() const {
+	return _comments.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Station::comment(size_t i) const {
+	return _comments[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Station::comment(const CommentIndex& i) const {
+	for ( std::vector<CommentPtr>::const_iterator it = _comments.begin(); it != _comments.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Station::add(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( comment->parent() != NULL ) {
+		SEISCOMP_ERROR("Station::add(Comment*) -> element has already a parent");
+		return false;
+	}
+
+	// Duplicate index check
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it ) {
+		if ( (*it)->index() == comment->index() ) {
+			SEISCOMP_ERROR("Station::add(Comment*) -> an element with the same index has been added already");
+			return false;
+		}
+	}
+
+	// Add the element
+	_comments.push_back(comment);
+	comment->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		comment->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(comment);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Station::remove(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	if ( comment->parent() != this ) {
+		SEISCOMP_ERROR("Station::remove(Comment*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<CommentPtr>::iterator it;
+	it = std::find(_comments.begin(), _comments.end(), comment);
+	// Element has not been found
+	if ( it == _comments.end() ) {
+		SEISCOMP_ERROR("Station::remove(Comment*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_comments.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Station::removeComment(size_t i) {
+	// index out of bounds
+	if ( i >= _comments.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_comments[i]->accept(&nc);
+	}
+
+	_comments[i]->setParent(NULL);
+	childRemoved(_comments[i].get());
+	
+	_comments.erase(_comments.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Station::removeComment(const CommentIndex& i) {
+	Comment* object = comment(i);
+	if ( object == NULL ) return false;
+	return remove(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -907,6 +1065,11 @@ void Station::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("shared", _shared, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("remark", _remark, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("comment",
+		                       Seiscomp::Core::Generic::containerMember(_comments,
+		                       Seiscomp::Core::Generic::bindMemberFunction<Comment>(static_cast<bool (Station::*)(Comment*)>(&Station::add), this)),
+		                       Archive::STATIC_TYPE);
 	ar & NAMED_OBJECT_HINT("sensorLocation",
 	                       Seiscomp::Core::Generic::containerMember(_sensorLocations,
 	                       Seiscomp::Core::Generic::bindMemberFunction<SensorLocation>(static_cast<bool (Station::*)(SensorLocation*)>(&Station::add), this)),

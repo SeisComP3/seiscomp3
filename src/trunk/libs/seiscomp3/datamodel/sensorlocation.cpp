@@ -37,6 +37,7 @@ SensorLocation::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core:
 	addProperty(Core::simpleProperty("latitude", "float", false, false, false, false, true, false, NULL, &SensorLocation::setLatitude, &SensorLocation::latitude));
 	addProperty(Core::simpleProperty("longitude", "float", false, false, false, false, true, false, NULL, &SensorLocation::setLongitude, &SensorLocation::longitude));
 	addProperty(Core::simpleProperty("elevation", "float", false, false, false, false, true, false, NULL, &SensorLocation::setElevation, &SensorLocation::elevation));
+	addProperty(arrayClassProperty<Comment>("comment", "Comment", &SensorLocation::commentCount, &SensorLocation::comment, static_cast<bool (SensorLocation::*)(Comment*)>(&SensorLocation::add), &SensorLocation::removeComment, static_cast<bool (SensorLocation::*)(Comment*)>(&SensorLocation::remove)));
 	addProperty(arrayClassProperty<AuxStream>("auxStream", "AuxStream", &SensorLocation::auxStreamCount, &SensorLocation::auxStream, static_cast<bool (SensorLocation::*)(AuxStream*)>(&SensorLocation::add), &SensorLocation::removeAuxStream, static_cast<bool (SensorLocation::*)(AuxStream*)>(&SensorLocation::remove)));
 	addProperty(arrayClassProperty<Stream>("stream", "Stream", &SensorLocation::streamCount, &SensorLocation::stream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::add), &SensorLocation::removeStream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::remove)));
 }
@@ -121,6 +122,10 @@ SensorLocation::SensorLocation(const std::string& publicID)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SensorLocation::~SensorLocation() {
+	std::for_each(_comments.begin(), _comments.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&Comment::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&CommentPtr::get)));
 	std::for_each(_auxStreams.begin(), _auxStreams.end(),
 	              std::compose1(std::bind2nd(std::mem_fun(&AuxStream::setParent),
 	                                         (PublicObject*)NULL),
@@ -450,6 +455,16 @@ Object* SensorLocation::clone() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SensorLocation::updateChild(Object* child) {
+	Comment* commentChild = Comment::Cast(child);
+	if ( commentChild != NULL ) {
+		Comment* commentElement = comment(commentChild->index());
+		if ( commentElement != NULL ) {
+			*commentElement = *commentChild;
+			return true;
+		}
+		return false;
+	}
+
 	AuxStream* auxStreamChild = AuxStream::Cast(child);
 	if ( auxStreamChild != NULL ) {
 		AuxStream* auxStreamElement = auxStream(auxStreamChild->index());
@@ -483,6 +498,8 @@ void SensorLocation::accept(Visitor* visitor) {
 		if ( !visitor->visit(this) )
 			return;
 
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it )
+		(*it)->accept(visitor);
 	for ( std::vector<AuxStreamPtr>::iterator it = _auxStreams.begin(); it != _auxStreams.end(); ++it )
 		(*it)->accept(visitor);
 	for ( std::vector<StreamPtr>::iterator it = _streams.begin(); it != _streams.end(); ++it )
@@ -492,6 +509,147 @@ void SensorLocation::accept(Visitor* visitor) {
 		visitor->visit(this);
 	else
 		visitor->finished();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t SensorLocation::commentCount() const {
+	return _comments.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* SensorLocation::comment(size_t i) const {
+	return _comments[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* SensorLocation::comment(const CommentIndex& i) const {
+	for ( std::vector<CommentPtr>::const_iterator it = _comments.begin(); it != _comments.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SensorLocation::add(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( comment->parent() != NULL ) {
+		SEISCOMP_ERROR("SensorLocation::add(Comment*) -> element has already a parent");
+		return false;
+	}
+
+	// Duplicate index check
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it ) {
+		if ( (*it)->index() == comment->index() ) {
+			SEISCOMP_ERROR("SensorLocation::add(Comment*) -> an element with the same index has been added already");
+			return false;
+		}
+	}
+
+	// Add the element
+	_comments.push_back(comment);
+	comment->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		comment->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(comment);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SensorLocation::remove(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	if ( comment->parent() != this ) {
+		SEISCOMP_ERROR("SensorLocation::remove(Comment*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<CommentPtr>::iterator it;
+	it = std::find(_comments.begin(), _comments.end(), comment);
+	// Element has not been found
+	if ( it == _comments.end() ) {
+		SEISCOMP_ERROR("SensorLocation::remove(Comment*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_comments.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SensorLocation::removeComment(size_t i) {
+	// index out of bounds
+	if ( i >= _comments.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_comments[i]->accept(&nc);
+	}
+
+	_comments[i]->setParent(NULL);
+	childRemoved(_comments[i].get());
+	
+	_comments.erase(_comments.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SensorLocation::removeComment(const CommentIndex& i) {
+	Comment* object = comment(i);
+	if ( object == NULL ) return false;
+	return remove(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -807,6 +965,11 @@ void SensorLocation::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("longitude", _longitude, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("elevation", _elevation, Archive::XML_ELEMENT);
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("comment",
+		                       Seiscomp::Core::Generic::containerMember(_comments,
+		                       Seiscomp::Core::Generic::bindMemberFunction<Comment>(static_cast<bool (SensorLocation::*)(Comment*)>(&SensorLocation::add), this)),
+		                       Archive::STATIC_TYPE);
 	ar & NAMED_OBJECT_HINT("auxStream",
 	                       Seiscomp::Core::Generic::containerMember(_auxStreams,
 	                       Seiscomp::Core::Generic::bindMemberFunction<AuxStream>(static_cast<bool (SensorLocation::*)(AuxStream*)>(&SensorLocation::add), this)),

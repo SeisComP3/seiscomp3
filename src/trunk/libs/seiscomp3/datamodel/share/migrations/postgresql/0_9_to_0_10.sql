@@ -27,6 +27,11 @@ CREATE TABLE ResponseIIR (
 CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
 CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
+ALTER TABLE Comment ADD m_start TIMESTAMP;
+ALTER TABLE Comment ADD m_start_ms INTEGER;
+ALTER TABLE Comment ADD m_end TIMESTAMP;
+ALTER TABLE Comment ADD m_end_ms INTEGER;
+
 ALTER TABLE StationGroup ADD m_start_ms INTEGER;
 ALTER TABLE StationGroup ADD m_end_ms INTEGER;
 ALTER TABLE DataloggerCalibration ADD m_start_ms INTEGER;

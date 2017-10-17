@@ -43,6 +43,7 @@ Network::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaOb
 	addProperty(Core::simpleProperty("restricted", "boolean", false, false, false, false, true, false, NULL, &Network::setRestricted, &Network::restricted));
 	addProperty(Core::simpleProperty("shared", "boolean", false, false, false, false, true, false, NULL, &Network::setShared, &Network::shared));
 	addProperty(objectProperty<Blob>("remark", "Blob", false, false, true, &Network::setRemark, &Network::remark));
+	addProperty(arrayClassProperty<Comment>("comment", "Comment", &Network::commentCount, &Network::comment, static_cast<bool (Network::*)(Comment*)>(&Network::add), &Network::removeComment, static_cast<bool (Network::*)(Comment*)>(&Network::remove)));
 	addProperty(arrayObjectProperty("station", "Station", &Network::stationCount, &Network::station, static_cast<bool (Network::*)(Station*)>(&Network::add), &Network::removeStation, static_cast<bool (Network::*)(Station*)>(&Network::remove)));
 }
 
@@ -126,6 +127,10 @@ Network::Network(const std::string& publicID)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Network::~Network() {
+	std::for_each(_comments.begin(), _comments.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&Comment::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&CommentPtr::get)));
 	std::for_each(_stations.begin(), _stations.end(),
 	              std::compose1(std::bind2nd(std::mem_fun(&Station::setParent),
 	                                         (PublicObject*)NULL),
@@ -582,6 +587,16 @@ Object* Network::clone() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Network::updateChild(Object* child) {
+	Comment* commentChild = Comment::Cast(child);
+	if ( commentChild != NULL ) {
+		Comment* commentElement = comment(commentChild->index());
+		if ( commentElement != NULL ) {
+			*commentElement = *commentChild;
+			return true;
+		}
+		return false;
+	}
+
 	Station* stationChild = Station::Cast(child);
 	if ( stationChild != NULL ) {
 		Station* stationElement
@@ -606,6 +621,8 @@ void Network::accept(Visitor* visitor) {
 		if ( !visitor->visit(this) )
 			return;
 
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it )
+		(*it)->accept(visitor);
 	for ( std::vector<StationPtr>::iterator it = _stations.begin(); it != _stations.end(); ++it )
 		(*it)->accept(visitor);
 
@@ -613,6 +630,147 @@ void Network::accept(Visitor* visitor) {
 		visitor->visit(this);
 	else
 		visitor->finished();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Network::commentCount() const {
+	return _comments.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Network::comment(size_t i) const {
+	return _comments[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Network::comment(const CommentIndex& i) const {
+	for ( std::vector<CommentPtr>::const_iterator it = _comments.begin(); it != _comments.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::add(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( comment->parent() != NULL ) {
+		SEISCOMP_ERROR("Network::add(Comment*) -> element has already a parent");
+		return false;
+	}
+
+	// Duplicate index check
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it ) {
+		if ( (*it)->index() == comment->index() ) {
+			SEISCOMP_ERROR("Network::add(Comment*) -> an element with the same index has been added already");
+			return false;
+		}
+	}
+
+	// Add the element
+	_comments.push_back(comment);
+	comment->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		comment->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(comment);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::remove(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	if ( comment->parent() != this ) {
+		SEISCOMP_ERROR("Network::remove(Comment*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<CommentPtr>::iterator it;
+	it = std::find(_comments.begin(), _comments.end(), comment);
+	// Element has not been found
+	if ( it == _comments.end() ) {
+		SEISCOMP_ERROR("Network::remove(Comment*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_comments.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::removeComment(size_t i) {
+	// index out of bounds
+	if ( i >= _comments.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_comments[i]->accept(&nc);
+	}
+
+	_comments[i]->setParent(NULL);
+	childRemoved(_comments[i].get());
+	
+	_comments.erase(_comments.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Network::removeComment(const CommentIndex& i) {
+	Comment* object = comment(i);
+	if ( object == NULL ) return false;
+	return remove(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -813,6 +971,11 @@ void Network::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("shared", _shared, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("remark", _remark, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
 	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("comment",
+		                       Seiscomp::Core::Generic::containerMember(_comments,
+		                       Seiscomp::Core::Generic::bindMemberFunction<Comment>(static_cast<bool (Network::*)(Comment*)>(&Network::add), this)),
+		                       Archive::STATIC_TYPE);
 	ar & NAMED_OBJECT_HINT("station",
 	                       Seiscomp::Core::Generic::containerMember(_stations,
 	                       Seiscomp::Core::Generic::bindMemberFunction<Station>(static_cast<bool (Network::*)(Station*)>(&Network::add), this)),

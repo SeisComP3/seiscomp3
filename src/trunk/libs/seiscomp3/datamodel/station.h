@@ -23,6 +23,7 @@
 #include <seiscomp3/core/datetime.h>
 #include <vector>
 #include <string>
+#include <seiscomp3/datamodel/comment.h>
 #include <seiscomp3/datamodel/sensorlocation.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/publicobject.h>
@@ -34,6 +35,7 @@ namespace DataModel {
 
 
 DEFINE_SMARTPOINTER(Station);
+DEFINE_SMARTPOINTER(Comment);
 DEFINE_SMARTPOINTER(SensorLocation);
 
 class Network;
@@ -220,6 +222,7 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
+		bool add(Comment* obj);
 		bool add(SensorLocation* obj);
 
 		/**
@@ -229,6 +232,7 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
+		bool remove(Comment* obj);
 		bool remove(SensorLocation* obj);
 
 		/**
@@ -237,14 +241,20 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
+		bool removeComment(size_t i);
+		bool removeComment(const CommentIndex& i);
 		bool removeSensorLocation(size_t i);
 		bool removeSensorLocation(const SensorLocationIndex& i);
 
 		//! Retrieve the number of objects of a particular class
+		size_t commentCount() const;
 		size_t sensorLocationCount() const;
 
 		//! Index access
 		//! @return The object at index i
+		Comment* comment(size_t i) const;
+		Comment* comment(const CommentIndex& i) const;
+
 		SensorLocation* sensorLocation(size_t i) const;
 		SensorLocation* sensorLocation(const SensorLocationIndex& i) const;
 
@@ -292,6 +302,7 @@ class SC_SYSTEM_CORE_API Station : public PublicObject {
 		OPT(Blob) _remark;
 
 		// Aggregations
+		std::vector<CommentPtr> _comments;
 		std::vector<SensorLocationPtr> _sensorLocations;
 
 	DECLARE_SC_CLASSFACTORY_FRIEND(Station);

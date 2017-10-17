@@ -25,6 +25,10 @@ CREATE TABLE ResponseIIR (
 	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
+ALTER TABLE Comment ADD start DATETIME AFTER id;
+ALTER TABLE Comment ADD start_ms INTEGER AFTER start;
+ALTER TABLE Comment ADD end DATETIME AFTER start_ms;
+ALTER TABLE Comment ADD end_ms INTEGER AFTER end;
 
 ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
 ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;

@@ -36,6 +36,10 @@ CREATE TABLE ResponseIIR (
 	UNIQUE KEY composite_index (_parent_oid,name)
 ) ENGINE=INNODB;
 
+ALTER TABLE Comment ADD start DATETIME AFTER id;
+ALTER TABLE Comment ADD start_ms INTEGER AFTER start;
+ALTER TABLE Comment ADD end DATETIME AFTER start_ms;
+ALTER TABLE Comment ADD end_ms INTEGER AFTER end;
 
 ALTER TABLE StationGroup ADD start_ms INTEGER AFTER start;
 ALTER TABLE StationGroup ADD end_ms INTEGER AFTER end;
@@ -124,6 +128,11 @@ CREATE TABLE ResponseIIR (
 
 CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
 CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+ALTER TABLE Comment ADD m_start TIMESTAMP;
+ALTER TABLE Comment ADD m_start_ms INTEGER;
+ALTER TABLE Comment ADD m_end TIMESTAMP;
+ALTER TABLE Comment ADD m_end_ms INTEGER;
 
 ALTER TABLE StationGroup ADD m_start_ms INTEGER;
 ALTER TABLE StationGroup ADD m_end_ms INTEGER;
