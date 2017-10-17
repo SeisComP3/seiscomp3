@@ -392,6 +392,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		virtual void read(std::vector<float>& value);
 		virtual void read(std::vector<double>& value);
 		virtual void read(std::vector<std::string>& value);
+		virtual void read(std::vector<Core::Time>& value);
 
 		//! Reads a vector of complex doubles
 		virtual void read(std::vector<std::complex<double> >& value);
@@ -427,6 +428,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		virtual void write(std::vector<float>& value);
 		virtual void write(std::vector<double>& value);
 		virtual void write(std::vector<std::string>& value);
+		virtual void write(std::vector<Core::Time>& value);
 
 		//! Writes a vector of complex doubles
 		virtual void write(std::vector<std::complex<double> >& value);

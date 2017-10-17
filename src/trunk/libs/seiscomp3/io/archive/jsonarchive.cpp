@@ -687,6 +687,38 @@ void JSONArchive::read(std::vector<std::string> &value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void JSONArchive::read(std::vector<Core::Time> &value) {
+	if ( !_objectLocation->IsArray() ) {
+		SEISCOMP_ERROR("expected string array");
+		setValidity(false);
+		return;
+	}
+
+	Size l = _objectLocation->Size();
+	for ( Size i = 0; i < l; ++i ) {
+		if ( !(*_objectLocation)[i].IsString() ) {
+			SEISCOMP_ERROR("string expected");
+			setValidity(false);
+			return;
+		}
+
+		Core::Time t;
+		if ( !Core::fromString(t, (*_objectLocation)[i].GetString()) ) {
+			SEISCOMP_ERROR("invalid time at index %d: %s",
+			               i, (*_objectLocation)[i].GetString());
+			setValidity(false);
+			return;
+		}
+
+		value.push_back(t);
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void JSONArchive::read(std::complex<float> &value) {
 	if ( !_objectLocation->IsArray() ) {
 		SEISCOMP_ERROR("invalid complex number, expected array notation");
@@ -1002,6 +1034,23 @@ void JSONArchive::write(std::vector<std::string> &value) {
 	for ( size_t i = 0; i < value.size(); ++i ) {
 		if ( i ) *_os << ",";
 		*_os << "\"" << jsonstring(value[i]) << "\"";
+	}
+	*_os << "]";
+	postAttrib();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void JSONArchive::write(std::vector<Core::Time> &value) {
+	if ( !_buf ) return;
+	preAttrib();
+	*_os << "[";
+	for ( size_t i = 0; i < value.size(); ++i ) {
+		if ( i ) *_os << ",";
+		*_os << "\"" << Core::toString(value[i]) << "\"";
 	}
 	*_os << "]";
 	postAttrib();

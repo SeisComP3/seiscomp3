@@ -547,6 +547,11 @@ void XMLArchive::read(std::vector<std::string>& value) {
 }
 
 
+void XMLArchive::read(std::vector<Core::Time>& value) {
+	setValidity(Seiscomp::Core::fromString(value, _property));
+}
+
+
 void XMLArchive::read(std::complex<float>& value) {
 	setValidity(Seiscomp::Core::fromString(value, _property));
 }
@@ -619,6 +624,11 @@ void XMLArchive::write(std::vector<double>& value) {
 
 
 void XMLArchive::write(std::vector<std::string>& value) {
+	writeAttrib(Seiscomp::Core::toString(value));
+}
+
+
+void XMLArchive::write(std::vector<Core::Time>& value) {
 	writeAttrib(Seiscomp::Core::toString(value));
 }
 

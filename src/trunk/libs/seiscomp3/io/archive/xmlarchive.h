@@ -118,6 +118,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		virtual void read(std::vector<float>& value);
 		virtual void read(std::vector<double>& value);
 		virtual void read(std::vector<std::string>& value);
+		virtual void read(std::vector<Core::Time>& value);
 
 		//! Reads a complex float
 		virtual void read(std::complex<float>& value);
@@ -154,6 +155,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		virtual void write(std::vector<float>& value);
 		virtual void write(std::vector<double>& value);
 		virtual void write(std::vector<std::string>& value);
+		virtual void write(std::vector<Core::Time>& value);
 
 		//! Writes a complex float
 		virtual void write(std::complex<float>& value);

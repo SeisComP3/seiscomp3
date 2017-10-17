@@ -400,6 +400,32 @@ void BinaryArchive::read(std::vector<std::string>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void BinaryArchive::read(std::vector<Core::Time>& value) {
+	if ( !_buf ) {
+		setValidity(false);
+		return;
+	}
+
+	int vsize;
+	int size = _buf->sgetn((char*)&vsize, sizeof(int));
+	if ( size != sizeof(int) ) {
+		SEISCOMP_ERROR("read(array.len): expected %d bytes from stream, got %d", (int)sizeof(int), size);
+		setValidity(false);
+		return;
+	}
+
+	value.resize(vsize);
+	for ( size_t i = 0; i < value.size(); ++i ) {
+		read(value[i]);
+		if ( !success() ) return;
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::read(std::complex<float>& value) {
 	int size = _buf?_buf->sgetn((char*)&value, sizeof(std::complex<float>)):0;
 	if ( size != sizeof(std::complex<float>) ) {
@@ -630,6 +656,20 @@ void BinaryArchive::write(std::vector<double>& value) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void BinaryArchive::write(std::vector<std::string>& value) {
+	if ( !_buf ) return;
+
+	int vsize = value.size();
+	writeBytes(&vsize, sizeof(int));
+	for ( size_t i = 0; i < value.size(); ++i )
+		write(value[i]);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void BinaryArchive::write(std::vector<Core::Time>& value) {
 	if ( !_buf ) return;
 
 	int vsize = value.size();
