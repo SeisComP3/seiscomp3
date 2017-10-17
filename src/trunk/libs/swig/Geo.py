@@ -225,6 +225,10 @@ class Category(_object):
     __swig_getmethods__["parent"] = _Geo.Category_parent_get
     if _newclass:
         parent = _swig_property(_Geo.Category_parent_get, _Geo.Category_parent_set)
+    __swig_setmethods__["dataDir"] = _Geo.Category_dataDir_set
+    __swig_getmethods__["dataDir"] = _Geo.Category_dataDir_get
+    if _newclass:
+        dataDir = _swig_property(_Geo.Category_dataDir_get, _Geo.Category_dataDir_set)
 
     def __init__(self, *args):
         """

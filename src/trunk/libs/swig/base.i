@@ -26,6 +26,7 @@
 %include "seiscomp3/core/io.h"
 %include "seiscomp3/core/rtti.h"
 %include "seiscomp3/core/defs.h"
+%include "seiscomp3/core/datetime.h"
 %include "seiscomp3/core/optional.h"
 %include "seiscomp3/core/enumeration.h"
 %include "seiscomp3/core/exceptions.h"

@@ -7047,6 +7047,65 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Category_dataDir_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Geo::Category *arg1 = (Seiscomp::Geo::Category *) 0 ;
+  std::string *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Category_dataDir_set",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Geo__Category, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Category_dataDir_set" "', argument " "1"" of type '" "Seiscomp::Geo::Category *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Geo::Category * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Category_dataDir_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Category_dataDir_set" "', argument " "2"" of type '" "std::string const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  if (arg1) (arg1)->dataDir = *arg2;
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Category_dataDir_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Seiscomp::Geo::Category *arg1 = (Seiscomp::Geo::Category *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  std::string *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Category_dataDir_get",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Seiscomp__Geo__Category, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Category_dataDir_get" "', argument " "1"" of type '" "Seiscomp::Geo::Category *""'"); 
+  }
+  arg1 = reinterpret_cast< Seiscomp::Geo::Category * >(argp1);
+  result = (std::string *) & ((arg1)->dataDir);
+  resultobj = SWIG_From_std_string(static_cast< std::string >(*result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_Category__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   unsigned int arg1 ;
@@ -18703,6 +18762,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Category_name_get", _wrap_Category_name_get, METH_VARARGS, (char *)"Category_name_get(Category self) -> std::string const &"},
 	 { (char *)"Category_parent_set", _wrap_Category_parent_set, METH_VARARGS, (char *)"Category_parent_set(Category self, Category parent)"},
 	 { (char *)"Category_parent_get", _wrap_Category_parent_get, METH_VARARGS, (char *)"Category_parent_get(Category self) -> Category"},
+	 { (char *)"Category_dataDir_set", _wrap_Category_dataDir_set, METH_VARARGS, (char *)"Category_dataDir_set(Category self, std::string const & dataDir)"},
+	 { (char *)"Category_dataDir_get", _wrap_Category_dataDir_get, METH_VARARGS, (char *)"Category_dataDir_get(Category self) -> std::string const &"},
 	 { (char *)"new_Category", _wrap_new_Category, METH_VARARGS, (char *)"\n"
 		"Category(unsigned int id, std::string name, Category parent=None)\n"
 		"Category(unsigned int id, std::string name)\n"

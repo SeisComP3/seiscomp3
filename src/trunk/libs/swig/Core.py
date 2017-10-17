@@ -131,6 +131,203 @@ class RTTI(_object):
 RTTI_swigregister = _Core.RTTI_swigregister
 RTTI_swigregister(RTTI)
 
+class TimeSpan(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, TimeSpan, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, TimeSpan, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _Core.new_TimeSpan(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __eq__(self, arg2):
+        return _Core.TimeSpan___eq__(self, arg2)
+
+    def __ne__(self, arg2):
+        return _Core.TimeSpan___ne__(self, arg2)
+
+    def __lt__(self, arg2):
+        return _Core.TimeSpan___lt__(self, arg2)
+
+    def __le__(self, arg2):
+        return _Core.TimeSpan___le__(self, arg2)
+
+    def __gt__(self, arg2):
+        return _Core.TimeSpan___gt__(self, arg2)
+
+    def __ge__(self, arg2):
+        return _Core.TimeSpan___ge__(self, arg2)
+
+    def __add__(self, arg2):
+        return _Core.TimeSpan___add__(self, arg2)
+
+    def __sub__(self, arg2):
+        return _Core.TimeSpan___sub__(self, arg2)
+
+    def __iadd__(self, arg2):
+        return _Core.TimeSpan___iadd__(self, arg2)
+
+    def __isub__(self, arg2):
+        return _Core.TimeSpan___isub__(self, arg2)
+
+    def abs(self):
+        return _Core.TimeSpan_abs(self)
+
+    def seconds(self):
+        return _Core.TimeSpan_seconds(self)
+
+    def microseconds(self):
+        return _Core.TimeSpan_microseconds(self)
+
+    def length(self):
+        return _Core.TimeSpan_length(self)
+
+    def set(self, seconds):
+        return _Core.TimeSpan_set(self, seconds)
+
+    def setUSecs(self, arg2):
+        return _Core.TimeSpan_setUSecs(self, arg2)
+
+    def elapsedTime(self, days, hours=None, minutes=None, seconds=None):
+        return _Core.TimeSpan_elapsedTime(self, days, hours, minutes, seconds)
+
+    def toDouble(self):
+        return _Core.TimeSpan_toDouble(self)
+
+    def __float__(self):
+            return self.length()
+
+    __swig_destroy__ = _Core.delete_TimeSpan
+    __del__ = lambda self: None
+TimeSpan_swigregister = _Core.TimeSpan_swigregister
+TimeSpan_swigregister(TimeSpan)
+cvar = _Core.cvar
+TimeSpan.MinTime = _Core.cvar.TimeSpan_MinTime
+TimeSpan.MaxTime = _Core.cvar.TimeSpan_MaxTime
+
+class Time(TimeSpan):
+    __swig_setmethods__ = {}
+    for _s in [TimeSpan]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Time, name, value)
+    __swig_getmethods__ = {}
+    for _s in [TimeSpan]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Time, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        this = _Core.new_Time(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def __nonzero__(self):
+        return _Core.Time___nonzero__(self)
+    __bool__ = __nonzero__
+
+
+
+    def __add__(self, arg2):
+        return _Core.Time___add__(self, arg2)
+
+    def __sub__(self, *args):
+        return _Core.Time___sub__(self, *args)
+
+    def __iadd__(self, arg2):
+        return _Core.Time___iadd__(self, arg2)
+
+    def __isub__(self, arg2):
+        return _Core.Time___isub__(self, arg2)
+
+    def set(self, year, month, day, hour, min, sec, usec):
+        return _Core.Time_set(self, year, month, day, hour, min, sec, usec)
+
+    def get(self, year, month=None, day=None, hour=None, min=None, sec=None, usec=None):
+        return _Core.Time_get(self, year, month, day, hour, min, sec, usec)
+
+    def get2(self, year, yday=None, hour=None, min=None, sec=None, usec=None):
+        return _Core.Time_get2(self, year, yday, hour, min, sec, usec)
+    if _newclass:
+        LocalTime = staticmethod(_Core.Time_LocalTime)
+    else:
+        LocalTime = _Core.Time_LocalTime
+    if _newclass:
+        LocalTimeZone = staticmethod(_Core.Time_LocalTimeZone)
+    else:
+        LocalTimeZone = _Core.Time_LocalTimeZone
+    if _newclass:
+        GMT = staticmethod(_Core.Time_GMT)
+    else:
+        GMT = _Core.Time_GMT
+    if _newclass:
+        FromYearDay = staticmethod(_Core.Time_FromYearDay)
+    else:
+        FromYearDay = _Core.Time_FromYearDay
+
+    def localtime(self):
+        return _Core.Time_localtime(self)
+
+    def gmt(self):
+        return _Core.Time_gmt(self)
+
+    def toLocalTime(self):
+        return _Core.Time_toLocalTime(self)
+
+    def toGMT(self):
+        return _Core.Time_toGMT(self)
+
+    def valid(self):
+        return _Core.Time_valid(self)
+
+    def toString(self, fmt):
+        return _Core.Time_toString(self, fmt)
+
+    def iso(self):
+        return _Core.Time_iso(self)
+
+    def fromString(self, str, fmt):
+        return _Core.Time_fromString(self, str, fmt)
+    if _newclass:
+        FromString = staticmethod(_Core.Time_FromString)
+    else:
+        FromString = _Core.Time_FromString
+
+    def __str__(self):
+            return self.toString("%Y-%m-%d %H:%M:%S.%f000000")[:23]
+
+    __swig_destroy__ = _Core.delete_Time
+    __del__ = lambda self: None
+Time_swigregister = _Core.Time_swigregister
+Time_swigregister(Time)
+Time.Null = _Core.cvar.Time_Null
+
+def Time_LocalTime():
+    return _Core.Time_LocalTime()
+Time_LocalTime = _Core.Time_LocalTime
+
+def Time_LocalTimeZone():
+    return _Core.Time_LocalTimeZone()
+Time_LocalTimeZone = _Core.Time_LocalTimeZone
+
+def Time_GMT():
+    return _Core.Time_GMT()
+Time_GMT = _Core.Time_GMT
+
+def Time_FromYearDay(year, year_day):
+    return _Core.Time_FromYearDay(year, year_day)
+Time_FromYearDay = _Core.Time_FromYearDay
+
+def Time_FromString(str, fmt):
+    return _Core.Time_FromString(str, fmt)
+Time_FromString = _Core.Time_FromString
+
 class ValueError(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ValueError, name, value)
@@ -151,7 +348,6 @@ class ValueError(_object):
         return _Core.ValueError_what(self)
 ValueError_swigregister = _Core.ValueError_swigregister
 ValueError_swigregister(ValueError)
-cvar = _Core.cvar
 Unset = cvar.Unset
 
 class Enumeration(_object):
@@ -803,202 +999,6 @@ GenericArchive_swigregister(GenericArchive)
 def GenericArchive_PackVersion(major, minor):
     return _Core.GenericArchive_PackVersion(major, minor)
 GenericArchive_PackVersion = _Core.GenericArchive_PackVersion
-
-class TimeSpan(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, TimeSpan, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, TimeSpan, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        this = _Core.new_TimeSpan(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __eq__(self, arg2):
-        return _Core.TimeSpan___eq__(self, arg2)
-
-    def __ne__(self, arg2):
-        return _Core.TimeSpan___ne__(self, arg2)
-
-    def __lt__(self, arg2):
-        return _Core.TimeSpan___lt__(self, arg2)
-
-    def __le__(self, arg2):
-        return _Core.TimeSpan___le__(self, arg2)
-
-    def __gt__(self, arg2):
-        return _Core.TimeSpan___gt__(self, arg2)
-
-    def __ge__(self, arg2):
-        return _Core.TimeSpan___ge__(self, arg2)
-
-    def __add__(self, arg2):
-        return _Core.TimeSpan___add__(self, arg2)
-
-    def __sub__(self, arg2):
-        return _Core.TimeSpan___sub__(self, arg2)
-
-    def __iadd__(self, arg2):
-        return _Core.TimeSpan___iadd__(self, arg2)
-
-    def __isub__(self, arg2):
-        return _Core.TimeSpan___isub__(self, arg2)
-
-    def abs(self):
-        return _Core.TimeSpan_abs(self)
-
-    def seconds(self):
-        return _Core.TimeSpan_seconds(self)
-
-    def microseconds(self):
-        return _Core.TimeSpan_microseconds(self)
-
-    def length(self):
-        return _Core.TimeSpan_length(self)
-
-    def set(self, seconds):
-        return _Core.TimeSpan_set(self, seconds)
-
-    def setUSecs(self, arg2):
-        return _Core.TimeSpan_setUSecs(self, arg2)
-
-    def elapsedTime(self, days, hours=None, minutes=None, seconds=None):
-        return _Core.TimeSpan_elapsedTime(self, days, hours, minutes, seconds)
-
-    def toDouble(self):
-        return _Core.TimeSpan_toDouble(self)
-
-    def __float__(self):
-            return self.length()
-
-    __swig_destroy__ = _Core.delete_TimeSpan
-    __del__ = lambda self: None
-TimeSpan_swigregister = _Core.TimeSpan_swigregister
-TimeSpan_swigregister(TimeSpan)
-TimeSpan.MinTime = _Core.cvar.TimeSpan_MinTime
-TimeSpan.MaxTime = _Core.cvar.TimeSpan_MaxTime
-
-class Time(TimeSpan):
-    __swig_setmethods__ = {}
-    for _s in [TimeSpan]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Time, name, value)
-    __swig_getmethods__ = {}
-    for _s in [TimeSpan]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Time, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        this = _Core.new_Time(*args)
-        try:
-            self.this.append(this)
-        except __builtin__.Exception:
-            self.this = this
-
-    def __nonzero__(self):
-        return _Core.Time___nonzero__(self)
-    __bool__ = __nonzero__
-
-
-
-    def __add__(self, arg2):
-        return _Core.Time___add__(self, arg2)
-
-    def __sub__(self, *args):
-        return _Core.Time___sub__(self, *args)
-
-    def __iadd__(self, arg2):
-        return _Core.Time___iadd__(self, arg2)
-
-    def __isub__(self, arg2):
-        return _Core.Time___isub__(self, arg2)
-
-    def set(self, year, month, day, hour, min, sec, usec):
-        return _Core.Time_set(self, year, month, day, hour, min, sec, usec)
-
-    def get(self):
-        return _Core.Time_get(self)
-
-    def get2(self, yday=None):
-        return _Core.Time_get2(self, yday)
-    if _newclass:
-        LocalTime = staticmethod(_Core.Time_LocalTime)
-    else:
-        LocalTime = _Core.Time_LocalTime
-    if _newclass:
-        LocalTimeZone = staticmethod(_Core.Time_LocalTimeZone)
-    else:
-        LocalTimeZone = _Core.Time_LocalTimeZone
-    if _newclass:
-        GMT = staticmethod(_Core.Time_GMT)
-    else:
-        GMT = _Core.Time_GMT
-    if _newclass:
-        FromYearDay = staticmethod(_Core.Time_FromYearDay)
-    else:
-        FromYearDay = _Core.Time_FromYearDay
-
-    def localtime(self):
-        return _Core.Time_localtime(self)
-
-    def gmt(self):
-        return _Core.Time_gmt(self)
-
-    def toLocalTime(self):
-        return _Core.Time_toLocalTime(self)
-
-    def toGMT(self):
-        return _Core.Time_toGMT(self)
-
-    def valid(self):
-        return _Core.Time_valid(self)
-
-    def toString(self, fmt):
-        return _Core.Time_toString(self, fmt)
-
-    def iso(self):
-        return _Core.Time_iso(self)
-
-    def fromString(self, str, fmt):
-        return _Core.Time_fromString(self, str, fmt)
-    if _newclass:
-        FromString = staticmethod(_Core.Time_FromString)
-    else:
-        FromString = _Core.Time_FromString
-
-    def __str__(self):
-            return self.toString("%Y-%m-%d %H:%M:%S.%f000000")[:23]
-
-    __swig_destroy__ = _Core.delete_Time
-    __del__ = lambda self: None
-Time_swigregister = _Core.Time_swigregister
-Time_swigregister(Time)
-Time.Null = _Core.cvar.Time_Null
-
-def Time_LocalTime():
-    return _Core.Time_LocalTime()
-Time_LocalTime = _Core.Time_LocalTime
-
-def Time_LocalTimeZone():
-    return _Core.Time_LocalTimeZone()
-Time_LocalTimeZone = _Core.Time_LocalTimeZone
-
-def Time_GMT():
-    return _Core.Time_GMT()
-Time_GMT = _Core.Time_GMT
-
-def Time_FromYearDay(year, year_day):
-    return _Core.Time_FromYearDay(year, year_day)
-Time_FromYearDay = _Core.Time_FromYearDay
-
-def Time_FromString(str, fmt):
-    return _Core.Time_FromString(str, fmt)
-Time_FromString = _Core.Time_FromString
 
 class Status(_object):
     __swig_setmethods__ = {}
