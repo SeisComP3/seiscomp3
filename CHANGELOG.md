@@ -498,6 +498,11 @@ the magnitude processing: ```EpicenterOutOfRegions```.
   * Add option to configure the default checkstate of the event association button and
     fix origin button of the popup for committing with additional options: ```olv.commit.forceEventAssociation```
     and ```olv.commit.fixOrigin```. Either default value is true.
+  * Add system tray icon which shows a notification if a new event
+    has been detected. This can be disabled with
+    ```
+    olv.systemTray = false
+    ```
 
 * scqc
 
