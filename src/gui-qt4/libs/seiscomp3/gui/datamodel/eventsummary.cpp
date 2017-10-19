@@ -28,6 +28,7 @@
 #include <seiscomp3/seismology/regions.h>
 
 using namespace Seiscomp::DataModel;
+using namespace Seiscomp::Core;
 
 namespace Seiscomp {
 namespace Gui {
@@ -338,6 +339,22 @@ void EventSummary::init() {
 	try { _showComment = SCApp->configGetBool("eventsummary.showComment"); }
 	catch ( ... ) {}
 
+
+	// set alert settings
+	_alertActive = false;
+	try { _alertSettings.commentId = SCApp->configGetString("eventsummary.alertTimer.commentId"); }
+	catch ( ... ) {}
+
+	try { _alertSettings.commentBlacklist = SCApp->configGetStrings("eventsummary.alertTimer.commentBlacklist"); }
+	catch ( ... ) {}
+
+	try { _alertSettings.gradient = SCApp->configGetColorGradient("eventsummary.alertTimer.alertGradient", Gradient()); }
+	catch ( ... ) {}
+
+	try { _alertSettings.textSize = SCApp->configGetInt("eventsummary.alertTimer.textSize"); }
+	catch ( ... ) {}
+
+
 	_ui.azimuthalGapText->setVisible(false); _ui.azimuthalGap->setVisible(false);
 	_ui.firstLocationText->setVisible(false); _ui.firstLocation->setVisible(false);
 	_ui.thisLocationText->setVisible(false);
@@ -449,6 +466,16 @@ void EventSummary::updateTimeAgo() {
 
 	if ( text != _ui.timeAgo->text() )
 		_ui.timeAgo->setText(text);
+
+	if ( _alertActive && _alertSettings.gradient.size() != 0 ) {
+		// update color only on change
+		QPalette pal = _ui.timeAgo->palette();
+		const QColor &c =  _alertSettings.gradient.colorAt(sec, true);
+		if ( pal.color(QPalette::WindowText) != c ) {
+			pal.setColor(QPalette::WindowText, c);
+			_ui.timeAgo->setPalette(pal);
+		}
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -489,9 +516,12 @@ void EventSummary::addObject(const QString& parentID,
 
 	Comment *comment = Comment::Cast(obj);
 	if ( comment ) {
-		if ( _currentEvent && parentID == _currentEvent->publicID().c_str() &&
-		     comment->id() == "Operator" )
-			updateOrigin(_currentOrigin.get());
+		if ( _currentEvent && parentID == _currentEvent->publicID().c_str() ) {
+			if ( comment->id() == "Operator" )
+				updateOrigin(_currentOrigin.get());
+			else
+				updateAlert();
+		}
 		return;
 	}
 }
@@ -517,9 +547,12 @@ void EventSummary::updateObject(const QString& parentID, Object* obj) {
 
 	Comment *comment = Comment::Cast(obj);
 	if ( comment ) {
-		if ( _currentEvent && parentID == _currentEvent->publicID().c_str() &&
-		     comment->id() == "Operator" )
-			updateOrigin(_currentOrigin.get());
+		if ( _currentEvent && parentID == _currentEvent->publicID().c_str() ) {
+			if ( comment->id() == "Operator" )
+				updateOrigin(_currentOrigin.get());
+			else
+				updateAlert();
+		}
 		return;
 	}
 
@@ -779,6 +812,9 @@ void EventSummary::updateOrigin() {
 		}
 	}
 
+
+	updateAlert();
+
 	// Origin information
 	try { setText(_ui.latitude, latitudeToString(_currentOrigin->latitude(), true, true, SCScheme.precision.location)); }
 	catch ( Core::ValueException& ) { _ui.latitude->setText("-"); }
@@ -835,6 +871,8 @@ void EventSummary::updateOrigin() {
 		}
 		catch (...) {}
 	}
+
+	updateTimeAgo();
 //	setText(_ui.thisLocation, str);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -843,7 +881,42 @@ void EventSummary::updateOrigin() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EventSummary::updateAlert() {
+	if ( !_currentEvent || _alertSettings.empty() ) return;
 
+	// reset
+	_alertActive = false;
+	setupFont(_ui.timeAgo, SCScheme.fonts.base);
+	setupColor(_ui.timeAgo, palette().color(QPalette::WindowText));
+
+	for ( size_t i = 0; i < _currentEvent->commentCount(); ++i ) {
+		if ( _currentEvent->comment(i)->text().empty() ) continue;
+
+		if ( wildcmp(_alertSettings.commentId, _currentEvent->comment(i)->id())
+		     && std::find(_alertSettings.commentBlacklist.begin(),
+		                  _alertSettings.commentBlacklist.end(),
+		                  _currentEvent->comment(i)->text())
+		     == _alertSettings.commentBlacklist.end() ) {
+			_alertActive = true;
+
+			if ( _alertSettings.textSize > 0 ) {
+				QFont font = _ui.timeAgo->font();
+				font.setPointSize(_alertSettings.textSize);
+
+				setupFont(_ui.timeAgo, font);
+			}
+
+			break;
+		}
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void EventSummary::setFocalMechanism(FocalMechanism* fm) {
 	if ( fm == NULL ) return;
 

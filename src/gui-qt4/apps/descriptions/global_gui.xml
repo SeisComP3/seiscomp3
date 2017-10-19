@@ -1133,6 +1133,32 @@
 					</group>
 				</group>
 			</group>
+			<group name="eventsummary">
+				<group name="alertTimer">
+					<parameter name="commentId" type="string">
+						<description>
+						Set an alert for every comment that id matches
+						the specified regular expression, e.g. "alert_.*".
+						</description>
+					</parameter>
+					<parameter name="commentBlacklist" type="list:string">
+						<description>
+						List of comments to ignore, e.g. "nil".
+						</description>
+					</parameter>
+					<parameter name="alertGradient" type="list:string">
+						<description>
+						Discrete mapping of time values in seconds to colors used as
+						text color in case of an active alert. E.g. "0:00FF00,900:FF0000".
+						</description>
+					</parameter>
+					<parameter name="textSize" type="int">
+						<description>
+						The text size of the time ago label in case of an active alert.
+						</description>
+					</parameter>
+				</group>
+			</group>
 		</configuration>
 	</plugin>
 </seiscomp>
