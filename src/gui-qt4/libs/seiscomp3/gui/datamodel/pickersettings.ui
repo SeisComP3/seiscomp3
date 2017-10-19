@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>614</width>
-    <height>724</height>
+    <width>571</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -43,8 +43,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>596</width>
-        <height>496</height>
+        <width>553</width>
+        <height>543</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -299,7 +299,7 @@
         <x>0</x>
         <y>0</y>
         <width>596</width>
-        <height>608</height>
+        <height>565</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -986,8 +986,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>96</width>
-        <height>26</height>
+        <width>596</width>
+        <height>565</height>
        </rect>
       </property>
       <property name="autoFillBackground" >
@@ -1144,8 +1144,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>96</width>
-        <height>26</height>
+        <width>596</width>
+        <height>565</height>
        </rect>
       </property>
       <attribute name="label" >
@@ -1316,8 +1316,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>96</width>
-        <height>26</height>
+        <width>596</width>
+        <height>565</height>
        </rect>
       </property>
       <attribute name="label" >
@@ -1511,10 +1511,19 @@
  <tabstops>
   <tabstop>spinPVel</tabstop>
   <tabstop>cbComputeMagnitudesAfterRelocate</tabstop>
+  <tabstop>cbComputeMagnitudesSilently</tabstop>
+  <tabstop>cbAskForMagnitudeTypes</tabstop>
+  <tabstop>cbComputeMissingTakeOffAngles</tabstop>
+  <tabstop>cbMaplines</tabstop>
   <tabstop>cbPlotGridlines</tabstop>
+  <tabstop>editRecordSource</tabstop>
   <tabstop>spinAddStationsDistance</tabstop>
+  <tabstop>cbHideStationsWithoutData</tabstop>
+  <tabstop>cbHideDisabledStations</tabstop>
   <tabstop>cbShowCrossHair</tabstop>
+  <tabstop>listPickUncertainties</tabstop>
   <tabstop>cbAllComponents</tabstop>
+  <tabstop>cbIgnoreUnconfiguredStations</tabstop>
   <tabstop>cbLoadAllPicks</tabstop>
   <tabstop>cbStrongMotion</tabstop>
   <tabstop>cbLimitStationCount</tabstop>
@@ -1523,6 +1532,10 @@
   <tabstop>maximumDistanceEdit</tabstop>
   <tabstop>cbRemoveAllAutomaticStationPicks</tabstop>
   <tabstop>cbRemoveAllAutomaticPicks</tabstop>
+  <tabstop>cbRepickerStart</tabstop>
+  <tabstop>editRepickerStart</tabstop>
+  <tabstop>cbRepickerEnd</tabstop>
+  <tabstop>editRepickerEnd</tabstop>
   <tabstop>cbUsePerStreamTimeWindow</tabstop>
   <tabstop>slPreOffset</tabstop>
   <tabstop>preTimeEdit</tabstop>
@@ -1530,11 +1543,22 @@
   <tabstop>postTimeEdit</tabstop>
   <tabstop>slMinimumLength</tabstop>
   <tabstop>minimumLengthTimeEdit</tabstop>
+  <tabstop>slWaveformAlignment</tabstop>
+  <tabstop>waveformAlignmentEdit</tabstop>
   <tabstop>tableFilter</tabstop>
   <tabstop>btnAddPickFilter</tabstop>
   <tabstop>btnRemovePickFilter</tabstop>
   <tabstop>btnMovePickFilterUp</tabstop>
   <tabstop>btnMovePickFilterDown</tabstop>
+  <tabstop>slAmplitudePreOffset</tabstop>
+  <tabstop>preAmplitudeTimeEdit</tabstop>
+  <tabstop>slAmplitudePostOffset</tabstop>
+  <tabstop>postAmplitudeTimeEdit</tabstop>
+  <tabstop>tableAFilter</tabstop>
+  <tabstop>btnAddAmplitudeFilter</tabstop>
+  <tabstop>btnRemoveAmplitudeFilter</tabstop>
+  <tabstop>btnMoveAmplitudeFilterUp</tabstop>
+  <tabstop>btnMoveAmplitudeFilterDown</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
