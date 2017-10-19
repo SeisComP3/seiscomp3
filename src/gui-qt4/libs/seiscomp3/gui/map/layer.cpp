@@ -309,13 +309,13 @@ Layer& Layer::operator =(const Layer &other) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Layer::addLegend(Seiscomp::Gui::Map::Legend *legend) {
-	if ( _legends.contains(legend) ) return false;
+	if ( _legends.contains(legend) ) return true;
 
-	connect(legend, SIGNAL(destroyed(QObject*)),
-	        this, SLOT(onObjectDestroyed(QObject*)));
-
-	_legends.append(legend);
+	legend->setParent(this);
 	legend->setLayer(this);
+	_legends.append(legend);
+
+	emit legendAdded(legend);
 
 	return true;
 }
@@ -328,22 +328,14 @@ bool Layer::addLegend(Seiscomp::Gui::Map::Legend *legend) {
 bool Layer::removeLegend(Seiscomp::Gui::Map::Legend *legend) {
 	if ( !_legends.contains(legend) ) return false;
 
-	disconnect(legend, SIGNAL(destroyed(QObject*)),
-	           this, SLOT(onObjectDestroyed(QObject*)));
-
 	_legends.removeAll(legend);
+	emit legendRemoved(legend);
+
+	delete legend;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Layer::onObjectDestroyed(QObject *object) {
-	_legends.removeAll(static_cast<Seiscomp::Gui::Map::Legend*>(object));
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 

@@ -66,11 +66,9 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 		typedef QList<Legend*> Legends;
 
-
 	public:
 		Layer(QObject* parent = NULL);
 		virtual ~Layer();
-
 
 	public:
 		virtual void setConfig(const std::string &/*config*/) {}
@@ -80,13 +78,17 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		virtual Layer &operator =(const Layer &other);
 		virtual Layer *clone() const { return NULL; }
 
+	signals:
+		/// This signal is emitted when a legend was added to layer
+		void legendAdded(Legend *legend);
+		/// This signal is emitted when a legend was removed from layer
+		void legendRemoved(Legend *legend);
 
 	public slots:
 		void setAntiAliasingEnabled(bool);
 		virtual void setVisible(bool);
 		virtual void show();
 		virtual void hide();
-
 
 	public:
 		void setName(const QString&);
@@ -95,7 +97,19 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		void setDescription(const QString&);
 		const QString &description() const;
 
+		/**
+		 * @brief Adds the legend to the layer. The ownership of the object
+		 *        goes to the layer.
+		 * @param legend The legend
+		 * @return True, if the legend was added
+		 */
 		bool addLegend(Legend *legend);
+
+		/**
+		 * @brief Removes the legend from the layer and deletes the object.
+		 * @param legend The legend
+		 * @return True, if the legend was removed
+		 */
 		bool removeLegend(Legend *legend);
 
 		int legendCount() const { return _legends.count(); }
@@ -107,7 +121,6 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		bool isAntiAliasingEnabled() const;
 
 		Canvas *canvas() const { return _canvas; }
-
 
 	public:
 		/**
@@ -136,14 +149,8 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 
 		virtual QMenu *menu(QMenu*) const;
 
-
 	signals:
 		void updateRequested(const Layer::UpdateHints& = UpdateHints());
-
-
-	private slots:
-		void onObjectDestroyed(QObject *object);
-
 
 	private:
 		Canvas  *_canvas;
@@ -152,7 +159,6 @@ class SC_GUI_API Layer : public QObject, public Seiscomp::Core::BaseObject {
 		bool     _visible;
 		bool     _antiAliasing;
 		Legends  _legends;
-
 
 	friend class Canvas;
 };

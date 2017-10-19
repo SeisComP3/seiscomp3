@@ -1576,8 +1576,31 @@ void Canvas::translate(const QPointF &delta) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::onObjectDestroyed(QObject *object) {
-	Legend *legend = static_cast<Legend*>(object);
+void Canvas::onLegendAdded(Legend *legend) {
+	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
+	if ( it == _legendAreas.end() )
+		it = _legendAreas.insert(legend->alignment(), LegendArea());
+
+	LegendArea &area = *it;
+	area.append(legend);
+	if ( legend->layer() && legend->layer()->isVisible() &&
+	     legend->isEnabled() && area.currentIndex == -1 )
+		area.currentIndex = area.findNext();
+
+	connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
+	        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
+	connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
+	        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
+
+	legend->contextResizeEvent(_buffer.size());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::onLegendRemoved(Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it != _legendAreas.end() ) {
 		int index = it->indexOf(legend);
@@ -1608,28 +1631,15 @@ void Canvas::setupLayer(Layer *layer) {
 		layer->init(SCApp->configuration());
 	}
 
+	connect(layer, SIGNAL(legendAdded(Legend*)), this, SLOT(onLegendAdded(Legend*)));
+	connect(layer, SIGNAL(legendRemoved(Legend*)), this, SLOT(onLegendRemoved(Legend*)));
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
+
 	foreach ( Legend *legend, layer->legends() ) {
 		if ( legend != NULL ) {
-			LegendAreas::iterator it = _legendAreas.find(legend->alignment());
-			if ( it == _legendAreas.end() )
-				it = _legendAreas.insert(legend->alignment(), LegendArea());
-
-			LegendArea &area = *it;
-			area.append(legend);
-			if ( layer->isVisible() && legend->isEnabled() && area.currentIndex == -1 )
-				area.currentIndex = area.findNext();
-
-			connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
-			        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
-			connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
-			        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
-			connect(legend, SIGNAL(destroyed(QObject*)),
-			        this, SLOT(onObjectDestroyed(QObject*)));
-
-			legend->contextResizeEvent(_buffer.size());
+			onLegendAdded(legend);
 		}
 	}
 
