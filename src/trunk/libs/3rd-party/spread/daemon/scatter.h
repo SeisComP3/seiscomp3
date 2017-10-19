@@ -40,7 +40,7 @@
 #include <stddef.h>
 #include "arch.h"
 
-#define	MAX_SCATTER_ELEMENTS	100
+#define	MAX_SCATTER_ELEMENTS	10000
 
 /* scat_element is EXACTLY as defined in iovec */
 
