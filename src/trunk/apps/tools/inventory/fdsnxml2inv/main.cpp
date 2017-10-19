@@ -129,7 +129,6 @@ class SyncStationXML : public Client::Application {
 			}
 
 			Convert2SC3 cnv(inv.get());
-			Convert2SC3::StationSet touchedStations;
 
 			_activeConverter = &cnv;
 
