@@ -18,6 +18,7 @@
 #include <fdsnxml/network.h>
 #include <fdsnxml/station.h>
 #include <fdsnxml/channel.h>
+#include <fdsnxml/comment.h>
 #include <fdsnxml/response.h>
 #include <fdsnxml/responsestage.h>
 #include <fdsnxml/coefficients.h>
@@ -1576,6 +1577,20 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 		)
 	);
 
+	for ( size_t c = 0; c < sta->commentCount(); ++c ) {
+		FDSNXML::Comment *comment = sta->comment(c);
+		DataModel::CommentPtr sc_comment = new DataModel::Comment;
+		try { sc_comment->setId(Core::toString(comment->id())); }
+		catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
+
+		sc_comment->setText(comment->value());
+		try { sc_comment->setStart(comment->beginEffectiveTime()); }
+		catch ( ... ) {}
+		try { sc_comment->setEnd(comment->endEffectiveTime()); }
+		catch ( ... ) {}
+		sc_sta->add(sc_comment.get());
+	}
+
 	EpochCodeMap epochMap;
 
 	for ( size_t c = 0; c < sta->channelCount(); ++c ) {
@@ -1830,10 +1845,23 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	DataModel::StreamPtr sc_stream;
 	sc_stream = sc_loc->stream(DataModel::StreamIndex(chaCode, start));
 	if ( !sc_stream ) {
-		sc_stream = new DataModel::Stream;
+		sc_stream = DataModel::Stream::Create();
 		sc_stream->setCode(chaCode);
 		sc_stream->setStart(start);
 		newInstance = true;
+	}
+
+	for ( size_t c = 0; c < cha->commentCount(); ++c ) {
+		FDSNXML::Comment *comment = cha->comment(c);
+		DataModel::CommentPtr sc_comment = new DataModel::Comment;
+		try { sc_comment->setId(Core::toString(comment->id())); }
+		catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
+		sc_comment->setText(comment->value());
+		try { sc_comment->setStart(comment->beginEffectiveTime()); }
+		catch ( ... ) {}
+		try { sc_comment->setEnd(comment->endEffectiveTime()); }
+		catch ( ... ) {}
+		sc_stream->add(sc_comment.get());
 	}
 
 #if LOG_STAGES
