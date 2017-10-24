@@ -39,7 +39,7 @@ SensorLocation::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core:
 	addProperty(Core::simpleProperty("elevation", "float", false, false, false, false, true, false, NULL, &SensorLocation::setElevation, &SensorLocation::elevation));
 	addProperty(arrayClassProperty<Comment>("comment", "Comment", &SensorLocation::commentCount, &SensorLocation::comment, static_cast<bool (SensorLocation::*)(Comment*)>(&SensorLocation::add), &SensorLocation::removeComment, static_cast<bool (SensorLocation::*)(Comment*)>(&SensorLocation::remove)));
 	addProperty(arrayClassProperty<AuxStream>("auxStream", "AuxStream", &SensorLocation::auxStreamCount, &SensorLocation::auxStream, static_cast<bool (SensorLocation::*)(AuxStream*)>(&SensorLocation::add), &SensorLocation::removeAuxStream, static_cast<bool (SensorLocation::*)(AuxStream*)>(&SensorLocation::remove)));
-	addProperty(arrayClassProperty<Stream>("stream", "Stream", &SensorLocation::streamCount, &SensorLocation::stream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::add), &SensorLocation::removeStream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::remove)));
+	addProperty(arrayObjectProperty("stream", "Stream", &SensorLocation::streamCount, &SensorLocation::stream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::add), &SensorLocation::removeStream, static_cast<bool (SensorLocation::*)(Stream*)>(&SensorLocation::remove)));
 }
 
 
@@ -477,8 +477,9 @@ bool SensorLocation::updateChild(Object* child) {
 
 	Stream* streamChild = Stream::Cast(child);
 	if ( streamChild != NULL ) {
-		Stream* streamElement = stream(streamChild->index());
-		if ( streamElement != NULL ) {
+		Stream* streamElement
+			= Stream::Cast(PublicObject::Find(streamChild->publicID()));
+		if ( streamElement && streamElement->parent() == this ) {
 			*streamElement = *streamChild;
 			return true;
 		}
@@ -829,6 +830,19 @@ Stream* SensorLocation::stream(const StreamIndex& i) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream* SensorLocation::findStream(const std::string& publicID) const {
+	for ( std::vector<StreamPtr>::const_iterator it = _streams.begin(); it != _streams.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SensorLocation::add(Stream* stream) {
 	if ( stream == NULL )
 		return false;
@@ -839,11 +853,18 @@ bool SensorLocation::add(Stream* stream) {
 		return false;
 	}
 
-	// Duplicate index check
-	for ( std::vector<StreamPtr>::iterator it = _streams.begin(); it != _streams.end(); ++it ) {
-		if ( (*it)->index() == stream->index() ) {
-			SEISCOMP_ERROR("SensorLocation::add(Stream*) -> an element with the same index has been added already");
-			return false;
+	if ( PublicObject::IsRegistrationEnabled() ) {
+		Stream* streamCached = Stream::Find(stream->publicID());
+		if ( streamCached ) {
+			if ( streamCached->parent() ) {
+				if ( streamCached->parent() == this )
+					SEISCOMP_ERROR("SensorLocation::add(Stream*) -> element with same publicID has been added already");
+				else
+					SEISCOMP_ERROR("SensorLocation::add(Stream*) -> element with same publicID has been added already to another object");
+				return false;
+			}
+			else
+				stream = streamCached;
 		}
 	}
 

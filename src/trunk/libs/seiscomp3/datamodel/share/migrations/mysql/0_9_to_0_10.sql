@@ -212,4 +212,7 @@ ALTER TABLE Origin ADD depth_pdf_variable_content BLOB;
 ALTER TABLE Origin ADD depth_pdf_probability_content BLOB;
 ALTER TABLE Origin ADD depth_pdf_used TINYINT(1) NOT NULL DEFAULT '0';
 
+# Convert Stream type to type that inherits from PublicObject
+INSERT INTO PublicObject(_oid, publicID) SELECT _oid, concat("Stream/", DATE_FORMAT(_last_modified, '%Y%m%d%H%i%s'), ".", _oid) FROM Stream;
+
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';

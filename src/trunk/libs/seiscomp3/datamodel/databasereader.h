@@ -220,6 +220,8 @@ class SC_SYSTEM_CORE_API DatabaseReader : public DatabaseArchive {
 		int loadComments(SensorLocation*);
 		int loadAuxStreams(SensorLocation*);
 		int loadStreams(SensorLocation*);
+		int load(Stream*);
+		int loadComments(Stream*);
 		
 		Routing* loadRouting();
 		int load(Routing*);

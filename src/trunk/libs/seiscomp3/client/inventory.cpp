@@ -257,12 +257,23 @@ void Inventory::load(DataModel::DatabaseReader* reader) {
 	it.close();
 
 	// Read FAP responses
-	if ( reader->version() >= Core::Version(0,8) ) {
+	if ( reader->supportsVersion<0,8>() ) {
 		it = reader->getObjects(_inventory.get(), DataModel::ResponseFAP::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::ResponseFAPPtr fap = DataModel::ResponseFAP::Cast(obj);
 			if ( fap )
 				_inventory->add(fap.get());
+		}
+		it.close();
+	}
+
+	// Read IIR responses
+	if ( reader->supportsVersion<0,10>() ) {
+		it = reader->getObjects(_inventory.get(), DataModel::ResponseIIR::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::ResponseIIRPtr iir = DataModel::ResponseIIR::Cast(obj);
+			if ( iir )
+				_inventory->add(iir.get());
 		}
 		it.close();
 	}
@@ -328,7 +339,9 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	it.close();
 
 	// Read streams
-	it = reader->getObjects(NULL, DataModel::Stream::TypeInfo());
+	// Note, prior to version 0.10 the stream type was not a PublicObject and
+	// therefore we must not join with table PublicObject
+	it = reader->getObjects(NULL, DataModel::Stream::TypeInfo(), reader->isLowerVersion<0,10>());
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::StreamPtr stream = DataModel::Stream::Cast(obj);
 		if ( stream ) {

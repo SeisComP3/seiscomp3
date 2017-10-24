@@ -227,6 +227,7 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		Stream* stream(const StreamIndex& i) const;
 
 		//! Find an object by its unique attribute(s)
+		Stream* findStream(const std::string& publicID) const;
 
 		Station* station() const;
 
