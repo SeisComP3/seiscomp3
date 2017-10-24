@@ -288,6 +288,10 @@ the magnitude processing: ```EpicenterOutOfRegions```.
 
   * Added ps2400_eth plugin configuration
 
+* sh2proc
+
+  * New Python tool to convert SeismicHandler event files to SC3XML
+
 
 ## Release 2016.333
 
