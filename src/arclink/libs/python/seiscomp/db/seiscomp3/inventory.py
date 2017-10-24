@@ -1064,11 +1064,12 @@ class Inventory(_sc3wrap.base_inventory):
 							continue
 						if not _sensortype(stream, sensortype, self.object):
 							continue
-						L._link_stream(_Stream(stream.obj))
+						s = _Stream(stream.obj)
+						L._link_stream(s)
 						streamFound = True
 						
-						for comment in stream._comments:
-							stream._link_comment(comment.obj)
+						for comment in stream._comment:
+							s._link_comment(_Comment(comment.obj))
 
 					for auxStream in location._auxStream:
 						if not _modifiedAfter(auxStream, modified_after):
@@ -1088,8 +1089,8 @@ class Inventory(_sc3wrap.base_inventory):
 						S._link_sensorLocation(L)
 						locationFound = True
 				
-						for comment in L._comments:
-							L._link_comment(comment.obj)
+						for comment in L._comment:
+							L._link_comment(_Comment(comment.obj))
 
 				if locationFound:
 					N._link_station(S)
@@ -1102,15 +1103,15 @@ class Inventory(_sc3wrap.base_inventory):
 					except KeyError:
 						pass
 					
-					for comment in S._comments:
-						S._link_comment(comment.obj)
+					for comment in S._comment:
+						S._link_comment(_Comment(comment.obj))
 
 			if stationFound:
 				self._link_network(N)
 				ret = True
 
-				for comment in N._comments:
-					N._link_comment(comment.obj)
+				for comment in N._comment:
+					N._link_comment(_Comment(comment.obj))
 
 		return ret
 
