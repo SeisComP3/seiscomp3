@@ -435,6 +435,7 @@ def Regions_polyRegions():
     """Regions_polyRegions() -> Seiscomp::Geo::PolyRegions &"""
     return _Seismology.Regions_polyRegions()
 
+SC3_LOCATOR_INTERFACE_VERSION = _Seismology.SC3_LOCATOR_INTERFACE_VERSION
 class SensorLocationDelegate(Core.BaseObject):
     """Proxy of C++ Seiscomp::Seismology::SensorLocationDelegate class."""
 
@@ -475,6 +476,12 @@ class LocatorInterface(Core.BaseObject):
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
+    F_NONE = _Seismology.LocatorInterface_F_NONE
+    F_BACKAZIMUTH = _Seismology.LocatorInterface_F_BACKAZIMUTH
+    F_SLOWNESS = _Seismology.LocatorInterface_F_SLOWNESS
+    F_TIME = _Seismology.LocatorInterface_F_TIME
+    F_ALL = _Seismology.LocatorInterface_F_ALL
+    EFlagsQuantity = _Seismology.LocatorInterface_EFlagsQuantity
     NoCapability = _Seismology.LocatorInterface_NoCapability
     InitialLocation = _Seismology.LocatorInterface_InitialLocation
     FixedDepth = _Seismology.LocatorInterface_FixedDepth
@@ -706,6 +713,14 @@ class StationNotFoundException(Core.GeneralException):
 StationNotFoundException_swigregister = _Seismology.StationNotFoundException_swigregister
 StationNotFoundException_swigregister(StationNotFoundException)
 
+
+def arrivalToFlags(arrival):
+    """arrivalToFlags(Arrival arrival) -> int"""
+    return _Seismology.arrivalToFlags(arrival)
+
+def flagsToArrival(arrival, flags):
+    """flagsToArrival(Arrival arrival, int flags)"""
+    return _Seismology.flagsToArrival(arrival, flags)
 ARRIVAL_TIME_ERROR = _Seismology.ARRIVAL_TIME_ERROR
 LP_NUM_DEG_FREEDOM = _Seismology.LP_NUM_DEG_FREEDOM
 LP_EST_STD_ERROR = _Seismology.LP_EST_STD_ERROR
