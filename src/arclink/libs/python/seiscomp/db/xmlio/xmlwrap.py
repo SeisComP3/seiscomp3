@@ -181,6 +181,91 @@ def _set_quantity(e, name, value):
 
 
 
+# Inventory::Comment
+class xml_Comment(object):
+    _xmlns = "{http://geofon.gfz-potsdam.de/ns/Inventory/1.0/}"
+    def __init__(self, e = None):
+        if e is None:
+            self._element = ET.Element(xml_Comment._xmlns + "comment")
+        else:
+            self._element = e
+
+    def _append_child(self, obj):
+        self._element.append(obj._element)
+
+    def _copy_from(self, src):
+        self.text = src.text
+        self.id = src.id
+        self.start = src.start
+        self.end = src.end
+        self.creationInfo = src.creationInfo
+
+    def _copy_to(self, dest):
+        if self._element.get("text") is not None:
+            dest.text = self.text
+        if self._element.get("id") is not None:
+            dest.id = self.id
+        if self._element.get("start") is not None:
+            dest.start = self.start
+        if self._element.get("end") is not None:
+            dest.end = self.end
+        if self._element.get("creationInfo") is not None:
+            dest.creationInfo = self.creationInfo
+
+    @Property
+    def action():
+        def fget(self):
+            return _string_fromxml(self._element.get("action"))
+        def fset(self, value):
+            self._element.set("action", _string_toxml(value))
+        return locals()
+
+    @Property
+    def text():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("text"))
+        def fset(self, value):
+            self._element.set("text", _string_toxml(value))
+        return locals()
+
+    @Property
+    def id():
+    # type: string
+        def fget(self):
+            return _string_fromxml(self._element.get("id"))
+        def fset(self, value):
+            self._element.set("id", _string_toxml(value))
+        return locals()
+
+    @Property
+    def start():
+    # type: datetime
+        def fget(self):
+            return _datetime_fromxml(self._element.get("start"))
+        def fset(self, value):
+            self._element.set("start", _datetime_toxml(value))
+        return locals()
+
+    @Property
+    def end():
+    # type: datetime
+        def fget(self):
+            return _datetime_fromxml(self._element.get("end"))
+        def fset(self, value):
+            self._element.set("end", _datetime_toxml(value))
+        return locals()
+
+    @Property
+    def creationInfo():
+    # type: CreationInfo
+        def fget(self):
+            return _CreationInfo_fromxml(self._element.get("creationInfo"))
+        def fset(self, value):
+            self._element.set("creationInfo", _CreationInfo_toxml(value))
+        return locals()
+
+
 # QualityControl::QCLog
 class xml_QCLog(object):
     _xmlns = "{http://geofon.gfz-potsdam.de/ns/QualityControl/1.0/}"
@@ -2724,6 +2809,7 @@ class xml_Stream(object):
         self.flags = src.flags
         self.restricted = src.restricted
         self.shared = src.shared
+        self.publicID = src.publicID
 
     def _copy_to(self, dest):
         if self._element.get("code") is not None:
@@ -2770,6 +2856,16 @@ class xml_Stream(object):
             dest.restricted = self.restricted
         if self._element.get("shared") is not None:
             dest.shared = self.shared
+        if self._element.get("publicID") is not None:
+            dest.publicID = self.publicID
+
+    @Property
+    def publicID():
+        def fget(self):
+            return _string_fromxml(self._element.get("publicID"))
+        def fset(self, value):
+            self._element.set("publicID", _string_toxml(value))
+        return locals()
 
     @Property
     def action():
@@ -2977,6 +3073,14 @@ class xml_Stream(object):
             self._element.set("shared", _boolean_toxml(value))
         return locals()
 
+    # Aggregation: Comment
+    def _new_comment(self):
+        return xml_Comment(ET.Element(xml_Comment._xmlns + "comment"))
+    @property
+    def comment(self):
+        for e1 in self._element.findall(xml_Comment._xmlns + "comment"):
+            yield xml_Comment(e1)
+
 
 # Inventory::SensorLocation
 class xml_SensorLocation(object):
@@ -3084,6 +3188,14 @@ class xml_SensorLocation(object):
         def fset(self, value):
             self._element.set("elevation", _float_toxml(value))
         return locals()
+
+    # Aggregation: Comment
+    def _new_comment(self):
+        return xml_Comment(ET.Element(xml_Comment._xmlns + "comment"))
+    @property
+    def comment(self):
+        for e1 in self._element.findall(xml_Comment._xmlns + "comment"):
+            yield xml_Comment(e1)
 
     # Aggregation: AuxStream
     def _new_auxStream(self):
@@ -3329,6 +3441,14 @@ class xml_Station(object):
             _set_blob(self._element, xml_Station._xmlns + "remark", value)
         return locals()
 
+    # Aggregation: Comment
+    def _new_comment(self):
+        return xml_Comment(ET.Element(xml_Comment._xmlns + "comment"))
+    @property
+    def comment(self):
+        for e1 in self._element.findall(xml_Comment._xmlns + "comment"):
+            yield xml_Comment(e1)
+
     # Aggregation: SensorLocation
     def _new_sensorLocation(self):
         return xml_SensorLocation(ET.Element(xml_SensorLocation._xmlns + "sensorLocation"))
@@ -3516,6 +3636,14 @@ class xml_Network(object):
         def fset(self, value):
             _set_blob(self._element, xml_Network._xmlns + "remark", value)
         return locals()
+
+    # Aggregation: Comment
+    def _new_comment(self):
+        return xml_Comment(ET.Element(xml_Comment._xmlns + "comment"))
+    @property
+    def comment(self):
+        for e1 in self._element.findall(xml_Comment._xmlns + "comment"):
+            yield xml_Comment(e1)
 
     # Aggregation: Station
     def _new_station(self):
