@@ -71,12 +71,6 @@ class SC_SYSTEM_CORE_API DatabaseQuery : public DatabaseReader {
 	//  Query interface
 	// ----------------------------------------------------------------------
 	public:
-		OPT(double) getComponentGain(const std::string& network_code,
-		                             const std::string& station_code,
-		                             const std::string& location_code,
-		                             const std::string& stream_code,
-		                             Seiscomp::Core::Time time);
-
 		Station* getStation(const std::string& network_code,
 		                    const std::string& station_code,
 		                    Seiscomp::Core::Time time);

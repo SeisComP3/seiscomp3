@@ -398,7 +398,7 @@ bool Sync::process(SensorLocation *loc, const Stream *cha) {
 	Stream tmpStream(*cha);
 
 	if ( !sc_cha ) {
-		sc_cha = new Stream();
+		sc_cha = Stream::Create();
 		newInstance = true;
 	}
 

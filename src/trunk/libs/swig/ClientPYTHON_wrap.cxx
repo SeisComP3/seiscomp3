@@ -28378,7 +28378,7 @@ static void *_p_Seiscomp__DataModel__ParameterTo_p_Seiscomp__DataModel__Object(v
     return (void *)((Seiscomp::DataModel::Object *) (Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::Parameter *) x));
 }
 static void *_p_Seiscomp__DataModel__StreamTo_p_Seiscomp__DataModel__Object(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::DataModel::Object *)  ((Seiscomp::DataModel::Stream *) x));
+    return (void *)((Seiscomp::DataModel::Object *) (Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::Stream *) x));
 }
 static void *_p_Seiscomp__DataModel__AuxStreamTo_p_Seiscomp__DataModel__Object(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::DataModel::Object *)  ((Seiscomp::DataModel::AuxStream *) x));
@@ -28747,7 +28747,7 @@ static void *_p_Seiscomp__DataModel__ArclinkUserTo_p_Seiscomp__Core__BaseObject(
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *)(Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::ArclinkUser *) x));
 }
 static void *_p_Seiscomp__DataModel__StreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::Stream *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *)(Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::Stream *) x));
 }
 static void *_p_Seiscomp__DataModel__AuxStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::AuxStream *) x));

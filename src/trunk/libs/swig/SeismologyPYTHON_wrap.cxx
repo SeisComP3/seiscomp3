@@ -18401,7 +18401,7 @@ static void *_p_Seiscomp__DataModel__ArclinkUserTo_p_Seiscomp__Core__BaseObject(
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *)(Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::ArclinkUser *) x));
 }
 static void *_p_Seiscomp__DataModel__StreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::Stream *) x));
+    return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *)(Seiscomp::DataModel::PublicObject *) ((Seiscomp::DataModel::Stream *) x));
 }
 static void *_p_Seiscomp__DataModel__AuxStreamTo_p_Seiscomp__Core__BaseObject(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Seiscomp::Core::BaseObject *) (Seiscomp::DataModel::Object *) ((Seiscomp::DataModel::AuxStream *) x));

@@ -42,8 +42,7 @@ namespace Core {
    - Remove dynamic type throw declarations from all methods as this is
      deprecated in current C++ standard
    - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
-   - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent
-     canvas
+   - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent canvas
    - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
    - Added Seiscomp::Gui::Map::Canvas::size
    - Changed Seiscomp::Gui::Map::Canvas::menu parent parameter type from QWidget to QMenu
@@ -88,6 +87,7 @@ namespace Core {
    - Added Seiscomp::Client::Application::reloadBindings
    - Increased datamodel version to 0.10
    - Added class Seiscomp::DataModel::ResponseIIR
+   - Inherit class Seiscomp::DataModel::Stream from Seiscomp::DataModel::PublicObject
    - Added hypocenter and receiver to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
    - Add SC3_LOCATOR_INTERFACE_VERSION define and initialize with version 2

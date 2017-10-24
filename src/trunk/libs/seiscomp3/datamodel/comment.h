@@ -42,6 +42,7 @@ class Event;
 class Origin;
 class Parameter;
 class ParameterSet;
+class Stream;
 class SensorLocation;
 class Station;
 class Network;
@@ -170,6 +171,7 @@ class SC_SYSTEM_CORE_API Comment : public Object {
 		Origin* origin() const;
 		Parameter* parameter() const;
 		ParameterSet* parameterSet() const;
+		Stream* stream() const;
 		SensorLocation* sensorLocation() const;
 		Station* station() const;
 		Network* network() const;

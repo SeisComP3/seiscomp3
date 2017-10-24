@@ -1025,7 +1025,9 @@ class DatabaseArchive(Observer):
 
     def getObjects(self, *args):
         """
+        getObjects(DatabaseArchive self, std::string const & parentID, RTTI classType, bool ignorePublicObject=False) -> DatabaseIterator
         getObjects(DatabaseArchive self, std::string const & parentID, RTTI classType) -> DatabaseIterator
+        getObjects(DatabaseArchive self, PublicObject parent, RTTI classType, bool ignorePublicObject=False) -> DatabaseIterator
         getObjects(DatabaseArchive self, PublicObject parent, RTTI classType) -> DatabaseIterator
         """
         return _DataModel.DatabaseArchive_getObjects(self, *args)
@@ -3587,6 +3589,11 @@ class Comment(Object):
     def parameterSet(self):
         """parameterSet(Comment self) -> ParameterSet"""
         return _DataModel.Comment_parameterSet(self)
+
+
+    def stream(self):
+        """stream(Comment self) -> Stream"""
+        return _DataModel.Comment_stream(self)
 
 
     def sensorLocation(self):
@@ -13931,15 +13938,15 @@ class StreamIndex(_object):
 StreamIndex_swigregister = _DataModel.StreamIndex_swigregister
 StreamIndex_swigregister(StreamIndex)
 
-class Stream(Object):
+class Stream(PublicObject):
     """Proxy of C++ Seiscomp::DataModel::Stream class."""
 
     __swig_setmethods__ = {}
-    for _s in [Object]:
+    for _s in [PublicObject]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Stream, name, value)
     __swig_getmethods__ = {}
-    for _s in [Object]:
+    for _s in [PublicObject]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Stream, name)
     __repr__ = _swig_repr
@@ -13991,8 +13998,8 @@ class Stream(Object):
 
     def __init__(self, *args):
         """
-        __init__(Seiscomp::DataModel::Stream self) -> Stream
         __init__(Seiscomp::DataModel::Stream self, Stream other) -> Stream
+        __init__(Seiscomp::DataModel::Stream self, std::string const & publicID) -> Stream
         """
         this = _DataModel.new_Stream(*args)
         try:
@@ -14001,6 +14008,21 @@ class Stream(Object):
             self.this = this
     __swig_destroy__ = _DataModel.delete_Stream
     __del__ = lambda self: None
+
+    def Create(*args):
+        """
+        Create() -> Stream
+        Create(std::string const & publicID) -> Stream
+        """
+        return _DataModel.Stream_Create(*args)
+
+    Create = staticmethod(Create)
+
+    def Find(publicID):
+        """Find(std::string const & publicID) -> Stream"""
+        return _DataModel.Stream_Find(publicID)
+
+    Find = staticmethod(Find)
 
     def __eq__(self, other):
         """__eq__(Stream self, Stream other) -> bool"""
@@ -14247,6 +14269,37 @@ class Stream(Object):
         return _DataModel.Stream_equalIndex(self, lhs)
 
 
+    def add(self, obj):
+        """add(Stream self, Comment obj) -> bool"""
+        return _DataModel.Stream_add(self, obj)
+
+
+    def remove(self, obj):
+        """remove(Stream self, Comment obj) -> bool"""
+        return _DataModel.Stream_remove(self, obj)
+
+
+    def removeComment(self, *args):
+        """
+        removeComment(Stream self, size_t i) -> bool
+        removeComment(Stream self, CommentIndex i) -> bool
+        """
+        return _DataModel.Stream_removeComment(self, *args)
+
+
+    def commentCount(self):
+        """commentCount(Stream self) -> size_t"""
+        return _DataModel.Stream_commentCount(self)
+
+
+    def comment(self, *args):
+        """
+        comment(Stream self, size_t i) -> Comment
+        comment(Stream self, CommentIndex i) -> Comment
+        """
+        return _DataModel.Stream_comment(self, *args)
+
+
     def sensorLocation(self):
         """sensorLocation(Stream self) -> SensorLocation"""
         return _DataModel.Stream_sensorLocation(self)
@@ -14277,6 +14330,11 @@ class Stream(Object):
         return _DataModel.Stream_clone(self)
 
 
+    def updateChild(self, child):
+        """updateChild(Stream self, Object child) -> bool"""
+        return _DataModel.Stream_updateChild(self, child)
+
+
     def accept(self, arg2):
         """accept(Stream self, Visitor arg2)"""
         return _DataModel.Stream_accept(self, arg2)
@@ -14305,6 +14363,17 @@ def Stream_ConstCast(*args):
     Stream_ConstCast(Seiscomp::Core::BaseObjectCPtr o) -> Stream
     """
     return _DataModel.Stream_ConstCast(*args)
+
+def Stream_Create(*args):
+    """
+    Create() -> Stream
+    Stream_Create(std::string const & publicID) -> Stream
+    """
+    return _DataModel.Stream_Create(*args)
+
+def Stream_Find(publicID):
+    """Stream_Find(std::string const & publicID) -> Stream"""
+    return _DataModel.Stream_Find(publicID)
 
 class SensorLocationIndex(_object):
     """Proxy of C++ Seiscomp::DataModel::SensorLocationIndex class."""
@@ -14599,6 +14668,11 @@ class SensorLocation(PublicObject):
         stream(SensorLocation self, StreamIndex i) -> Stream
         """
         return _DataModel.SensorLocation_stream(self, *args)
+
+
+    def findStream(self, publicID):
+        """findStream(SensorLocation self, std::string const & publicID) -> Stream"""
+        return _DataModel.SensorLocation_findStream(self, publicID)
 
 
     def station(self):
@@ -25309,6 +25383,16 @@ class DatabaseReader(DatabaseArchive):
         return _DataModel.DatabaseReader_loadSensorLocations(self, arg2)
 
 
+    def loadAuxStreams(self, arg2):
+        """loadAuxStreams(DatabaseReader self, SensorLocation arg2) -> int"""
+        return _DataModel.DatabaseReader_loadAuxStreams(self, arg2)
+
+
+    def loadStreams(self, arg2):
+        """loadStreams(DatabaseReader self, SensorLocation arg2) -> int"""
+        return _DataModel.DatabaseReader_loadStreams(self, arg2)
+
+
     def loadComments(self, *args):
         """
         loadComments(DatabaseReader self, Pick arg2) -> int
@@ -25324,18 +25408,9 @@ class DatabaseReader(DatabaseArchive):
         loadComments(DatabaseReader self, Network arg2) -> int
         loadComments(DatabaseReader self, Station arg2) -> int
         loadComments(DatabaseReader self, SensorLocation arg2) -> int
+        loadComments(DatabaseReader self, Stream arg2) -> int
         """
         return _DataModel.DatabaseReader_loadComments(self, *args)
-
-
-    def loadAuxStreams(self, arg2):
-        """loadAuxStreams(DatabaseReader self, SensorLocation arg2) -> int"""
-        return _DataModel.DatabaseReader_loadAuxStreams(self, arg2)
-
-
-    def loadStreams(self, arg2):
-        """loadStreams(DatabaseReader self, SensorLocation arg2) -> int"""
-        return _DataModel.DatabaseReader_loadStreams(self, arg2)
 
 
     def loadRouting(self):
@@ -25415,6 +25490,7 @@ class DatabaseReader(DatabaseArchive):
         load(DatabaseReader self, Network arg2) -> int
         load(DatabaseReader self, Station arg2) -> int
         load(DatabaseReader self, SensorLocation arg2) -> int
+        load(DatabaseReader self, Stream arg2) -> int
         load(DatabaseReader self, Routing arg2) -> int
         load(DatabaseReader self, Route arg2) -> int
         load(DatabaseReader self, Journaling arg2) -> int
@@ -25458,11 +25534,6 @@ class DatabaseQuery(DatabaseReader):
             self.this = this
     __swig_destroy__ = _DataModel.delete_DatabaseQuery
     __del__ = lambda self: None
-
-    def getComponentGain(self, network_code, station_code, location_code, stream_code, time):
-        """getComponentGain(DatabaseQuery self, std::string const & network_code, std::string const & station_code, std::string const & location_code, std::string const & stream_code, Time time) -> Seiscomp::Core::Optional< double >::Impl"""
-        return _DataModel.DatabaseQuery_getComponentGain(self, network_code, station_code, location_code, stream_code, time)
-
 
     def getStation(self, network_code, station_code, time):
         """getStation(DatabaseQuery self, std::string const & network_code, std::string const & station_code, Time time) -> Station"""

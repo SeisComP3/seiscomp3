@@ -438,7 +438,7 @@ bool Merge::process(SensorLocation *loc, const Stream *stream) {
 
 	bool newInstance = false;
 	if ( !sc_cha ) {
-		sc_cha = new Stream();
+		sc_cha = Stream::Create();
 		_sources[sc_cha.get()] = _sources[stream];
 		newInstance = true;
 
