@@ -22,8 +22,7 @@
 #include "mystring.h"
 #include "seed.h"
 
-class Inventory
-{
+class Inventory {
 	public:
 		typedef OPT(size_t) SequenceNumber;
 
@@ -98,9 +97,8 @@ class Inventory
 		SequenceNumber response_index;
 		void ProcessStation();
 		void CleanupDatabase();
-		void GetComment(StationIdentifier&);
-		void GetStationComment(Comment&, Seiscomp::DataModel::WaveformStreamID *);
-		void GetChannelComment(ChannelIdentifier&, Seiscomp::DataModel::WaveformStreamID *);
+		void GetComments(StationIdentifier &si, Seiscomp::DataModel::Station *sta);
+		void GetComments(ChannelIdentifier &ci, Seiscomp::DataModel::Stream *stream);
 		OPT(Seiscomp::Core::Time) GetOptTime(std::string);
 		Seiscomp::Core::Time GetTime(std::string, bool *ok = NULL);
 		void ProcessStream(StationIdentifier&, Seiscomp::DataModel::StationPtr);
