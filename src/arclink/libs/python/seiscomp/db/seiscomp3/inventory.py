@@ -225,13 +225,39 @@ class _AuxilliaryDevice(_sc3wrap.base_auxdevice):
 		for i in self.source.itervalues():
 			i.flush()
 
+class _Comment(_sc3wrap.base_comment):
+	def __init__(self, so):
+		_sc3wrap.base_comment.__init__(self, so)
+
+	def flush(self):
+		self._sync_update()
+
 class _Stream(_sc3wrap.base_stream):
 	def __init__(self, so):
 		_sc3wrap.base_stream.__init__(self, so)
 		self.mySensorLocation = None
+		self.comment = {}
+
+	def _link_comment(self, obj):
+		self.comment[obj.id] = obj
+
+	def insert_comment(self, id, **args):
+		obj = _Comment(self._new_comment(id=id, **args))
+		self._link_comment(obj)
+		return obj
+
+	def remove_comment(self, id):
+		try:
+			self.comment[id]._delete()
+			del self.comment[id]
+
+		except KeyError:
+			raise DBError, "comment [%s] not found" % (id,)
 
 	def flush(self):
 		self._sync_update()
+		for i in self.comment.itervalues():
+			i.flush()
 
 class _AuxilliaryStream(_sc3wrap.base_auxstream):
 	def __init__(self, so):
@@ -247,6 +273,7 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 		self.myStation = None
 		self.stream = {}
 		self.auxStream = {}
+		self.comment = {}
 
 	def _link_stream(self, obj):
 		if obj.code not in self.stream:
@@ -262,6 +289,9 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 		self.auxStream[obj.code][obj.start] = obj
 		obj.mySensorLocation = self
 	
+	def _link_comment(self, obj):
+		self.comment[obj.id] = obj
+
 	def insert_stream(self, code, start, **args):
 		obj = _Stream(self._new_stream(code=code, start=start, **args))
 		self._link_stream(obj)
@@ -270,6 +300,11 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 	def insert_auxStream(self, code, start, **args):
 		obj = _AuxilliaryStream(self._new_auxstream(code=code, start=start, **args))
 		self._link_auxStream(obj)
+		return obj
+
+	def insert_comment(self, id, **args):
+		obj = _Comment(self._new_comment(id=id, **args))
+		self._link_comment(obj)
 		return obj
 
 	def remove_stream(self, code, start):
@@ -292,6 +327,14 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 		except KeyError:
 			raise DBError, "stream [%s,%s][%s] not found" % (code, loc, start)
 
+	def remove_comment(self, id):
+		try:
+			self.comment[id]._delete()
+			del self.comment[id]
+
+		except KeyError:
+			raise DBError, "comment [%s] not found" % (id,)
+
 	def flush(self):
 		self._sync_update()
 		for i in self.stream.itervalues():
@@ -300,12 +343,15 @@ class _SensorLocation(_sc3wrap.base_sensorlocation):
 		for i in self.auxStream.itervalues():
 			for j in i.itervalues():
 				j.flush()
+		for i in self.comment.itervalues():
+			i.flush()
 
 class _Station(_sc3wrap.base_station):
 	def __init__(self, so):
 		_sc3wrap.base_station.__init__(self, so)
 		self.myNetwork = None
 		self.sensorLocation = {}
+		self.comment = {}
 
 	def _link_sensorLocation(self, obj):
 		if obj.code not in self.sensorLocation:
@@ -314,9 +360,17 @@ class _Station(_sc3wrap.base_station):
 		self.sensorLocation[obj.code][obj.start] = obj
 		obj.myStation = self
 	
+	def _link_comment(self, obj):
+		self.comment[obj.id] = obj
+
 	def insert_sensorLocation(self, code, start, **args):
 		obj = _SensorLocation(self._new_sensorlocation(code=code, start=start, **args))
 		self._link_sensorLocation(obj)
+		return obj
+
+	def insert_comment(self, id, **args):
+		obj = _Comment(self._new_comment(id=id, **args))
+		self._link_comment(obj)
 		return obj
 
 	def remove_sensorLocation(self, code, start):
@@ -329,16 +383,27 @@ class _Station(_sc3wrap.base_station):
 		except KeyError:
 			raise DBError, "sensor location [%s][%s] not found" % (code, start)
 
+	def remove_comment(self, id):
+		try:
+			self.comment[id]._delete()
+			del self.comment[id]
+
+		except KeyError:
+			raise DBError, "comment [%s] not found" % (id,)
+
 	def flush(self):
 		self._sync_update()
 		for i in self.sensorLocation.itervalues():
 			for j in i.itervalues():
 				j.flush()
+		for i in self.comment.itervalues():
+			i.flush()
 
 class _Network(_sc3wrap.base_network):
 	def __init__(self, so):
 		_sc3wrap.base_network.__init__(self, so)
 		self.station = {}
+		self.comment = {}
 
 	def _link_station(self, obj):
 		if obj.code not in self.station:
@@ -347,9 +412,17 @@ class _Network(_sc3wrap.base_network):
 		self.station[obj.code][obj.start] = obj
 		obj.myNetwork = self
 	
+	def _link_comment(self, obj):
+		self.comment[obj.id] = obj
+
 	def insert_station(self, code, start, **args):
 		obj = _Station(self._new_station(code=code, start=start, **args))
 		self._link_station(obj)
+		return obj
+
+	def insert_comment(self, id, **args):
+		obj = _Comment(self._new_comment(id=id, **args))
+		self._link_comment(obj)
 		return obj
 
 	def remove_station(self, code, start):
@@ -362,11 +435,21 @@ class _Network(_sc3wrap.base_network):
 		except KeyError:
 			raise DBError, "station [%s][%s] not found" % (code, start)
 
+	def remove_comment(self, id):
+		try:
+			self.comment[id]._delete()
+			del self.comment[id]
+
+		except KeyError:
+			raise DBError, "comment [%s] not found" % (id,)
+
 	def flush(self):
 		self._sync_update()
 		for i in self.station.itervalues():
 			for j in i.itervalues():
 				j.flush()
+		for i in self.comment.itervalues():
+			i.flush()
 		
 class _StationReference(_sc3wrap.base_stationreference):
 	def __init__(self, so):
@@ -984,6 +1067,9 @@ class Inventory(_sc3wrap.base_inventory):
 						L._link_stream(_Stream(stream.obj))
 						streamFound = True
 						
+						for comment in stream._comments:
+							stream._link_comment(comment.obj)
+
 					for auxStream in location._auxStream:
 						if not _modifiedAfter(auxStream, modified_after):
 							continue
@@ -1002,6 +1088,9 @@ class Inventory(_sc3wrap.base_inventory):
 						S._link_sensorLocation(L)
 						locationFound = True
 				
+						for comment in L._comments:
+							L._link_comment(comment.obj)
+
 				if locationFound:
 					N._link_station(S)
 					stationFound = True
@@ -1013,9 +1102,15 @@ class Inventory(_sc3wrap.base_inventory):
 					except KeyError:
 						pass
 					
+					for comment in S._comments:
+						S._link_comment(comment.obj)
+
 			if stationFound:
 				self._link_network(N)
 				ret = True
+
+				for comment in N._comments:
+					N._link_comment(comment.obj)
 
 		return ret
 

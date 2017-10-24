@@ -324,10 +324,24 @@ def _auxDevice_in(xauxDevice, inventory):
 # XML IN (stations)
 #***************************************************************************** 
 
+def _Comment_in(xcom, elem):
+    if xcom.action == "delete":
+        try:
+            elem.remove_comment(xcom.id)
+        except KeyError:
+            pass
+        return
+    try:
+        com = elem.comment[xcom.id]
+    except KeyError:
+        com = elem.insert_comment(xcom.id)
+    xcom._copy_to(com)
+
+
 def _AuxStream_in(xaux, sl):
     if xaux.action == "delete":
         try:
-            sta.remove_auxStream(xaux.code, xaux.start)
+            sl.remove_auxStream(xaux.code, xaux.start)
         except KeyError:
             pass
         return
@@ -336,7 +350,6 @@ def _AuxStream_in(xaux, sl):
     except KeyError:
         aux = sl.insert_auxStream(xaux.code, xaux.start)
     xaux._copy_to(aux)
-
 
 
 def _Stream_in(xstrm, sta):
@@ -352,7 +365,8 @@ def _Stream_in(xstrm, sta):
         strm = sta.insert_stream(xstrm.code, xstrm.start)
     xstrm._copy_to(strm)
 
-
+    for xcom in xstrm.comment:
+        _Comment_in(xcom, strm)
 
 
 def _SensorLocation_in(xsl, sta):
@@ -376,7 +390,8 @@ def _SensorLocation_in(xsl, sta):
     for xAuxStream in xsl.auxStream:
         _AuxStream_in(xAuxStream, sl)
 
-
+    for xcom in xsl.comment:
+        _Comment_in(xcom, sl)
 
 
 def _Station_in(xsta, net):
@@ -399,7 +414,8 @@ def _Station_in(xsta, net):
     for xsensorLocation in xsta.sensorLocation:
         _SensorLocation_in(xsensorLocation, sta)
 
-
+    for xcom in xsta.comment:
+        _Comment_in(xcom, sta)
 
 
 def _Network_in(xnet, inventory):
@@ -420,6 +436,9 @@ def _Network_in(xnet, inventory):
     xnet._copy_to(net)
     for xsta in xnet.station:
         _Station_in(xsta, net)
+
+    for xcom in xnet.comment:
+        _Comment_in(xcom, net)
 
 
 def _StationReference_in(xsref, gr):
@@ -680,6 +699,16 @@ def _auxDevice_out(xinventory, auxDevice, modified_after, used):
 #***************************************************************************** 
 
 
+def _Comment_out(xelem, com, modified_after, used_instr):
+    if modified_after is None or com.last_modified >= modified_after:
+        xcom = xsl._new_comment()
+        xcom._copy_from(com)
+        xelem._append_child(xcom)
+        return True
+    return False
+
+
+
 def _Stream_out(xsl, strm, modified_after, used_instr):
     if used_instr is not None:
         used_sensor = used_instr.reg_sensor(strm.sensor)
@@ -692,9 +721,17 @@ def _Stream_out(xsl, strm, modified_after, used_instr):
     if modified_after is None or strm.last_modified >= modified_after:
         xstrm = xsl._new_stream()
         xstrm._copy_from(strm)
+        retval = True
+    else:
+        xstrm.code = strm.code
+        xstrm.start = strm.start
+        retval = False
+    for i in strm.comment.itervalues():
+        for j in i.itervalues():
+            retval |= _Comment_out(xstrm, j, modified_after, used_instr)
+    if retval:
         xsl._append_child(xstrm)
-        return True
-    return False
+    return retval
 
 
 
@@ -727,6 +764,9 @@ def _SensorLocation_out(xsta, sl, modified_after, used_instr):
     for i in sl.auxStream.itervalues():
         for j in i.itervalues():
             retval |= _AuxStream_out(xsl, j, modified_after, used_instr)
+    for i in sl.comment.itervalues():
+        for j in i.itervalues():
+            retval |= _Comment_out(xsl, j, modified_after, used_instr)
     if retval:
         xsta._append_child(xsl)
     return retval
@@ -746,6 +786,9 @@ def _Station_out(xnet, sta, modified_after, used_instr):
     for i in sta.sensorLocation.itervalues():
         for j in i.itervalues():
             retval |= _SensorLocation_out(xsta, j, modified_after, used_instr)
+    for i in sta.comment.itervalues():
+        for j in i.itervalues():
+            retval |= _Comment_out(xsta, j, modified_after, used_instr)
     if retval:
         xnet._append_child(xsta)
     return retval
@@ -765,6 +808,9 @@ def _Network_out(xinventory, net, modified_after, used_instr):
     for i in net.station.itervalues():
         for j in i.itervalues():
             retval |= _Station_out(xnet, j, modified_after, used_instr)
+    for i in net.comment.itervalues():
+        for j in i.itervalues():
+            retval |= _Comment_out(xnet, j, modified_after, used_instr)
     if retval:
         xinventory._append_child(xnet)
     return retval
