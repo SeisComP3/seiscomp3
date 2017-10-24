@@ -324,6 +324,7 @@ struct ResponseFIRHandler : public IO::XML::TypedClassHandler<ResponseFIR> {
 		addMember("publicID", "", Mandatory, Attribute, new PublicIDSetter<ResponseFIR>());
 		addProperty("name", "", Optional, Attribute, "name");
 		addProperty("gain", "", Optional, Attribute, "gain");
+		addProperty("gainFrequency", "", Optional, Attribute, "gainFrequency");
 		addProperty("decimationFactor", "", Optional, Attribute, "decimationFactor");
 		addProperty("delay", "", Optional, Attribute, "delay");
 		addProperty("correction", "", Optional, Attribute, "correction");
