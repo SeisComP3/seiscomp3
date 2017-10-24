@@ -18,6 +18,7 @@
 #include <fdsnxml/network.h>
 #include <fdsnxml/station.h>
 #include <fdsnxml/channel.h>
+#include <fdsnxml/comment.h>
 #include <fdsnxml/response.h>
 #include <fdsnxml/responsestage.h>
 #include <fdsnxml/coefficients.h>
@@ -594,6 +595,22 @@ bool Convert2FDSNStaXML::process(FDSNXML::Network *sx_net,
 		site.setName(sta->description());
 	sx_sta->setSite(site);
 
+	for ( size_t c = 0; c < sta->commentCount(); ++c ) {
+		DataModel::Comment *comment = sta->comment(c);
+		FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
+		int id;
+		if ( Core::fromString(id, comment->id()) )
+			sx_comment->setId(id);
+		else
+			sx_comment->setId(c+1);
+		sx_comment->setValue(comment->text());
+		try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
+		catch ( ... ) {}
+		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
+		catch ( ... ) {}
+		sx_sta->addComment(sx_comment.get());
+	}
+
 	for ( size_t l = 0; l < sta->sensorLocationCount(); ++l ) {
 		if ( _interrupted ) break;
 		DataModel::SensorLocation *loc = sta->sensorLocation(l);
@@ -821,6 +838,22 @@ bool Convert2FDSNStaXML::process(FDSNXML::Station *sx_sta,
 		}
 	}
 	catch ( ... ) {}
+
+	for ( size_t c = 0; c < stream->commentCount(); ++c ) {
+		DataModel::Comment *comment = stream->comment(c);
+		FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
+		int id;
+		if ( Core::fromString(id, comment->id()) )
+			sx_comment->setId(id);
+		else
+			sx_comment->setId(c+1);
+		sx_comment->setValue(comment->text());
+		try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
+		catch ( ... ) {}
+		try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
+		catch ( ... ) {}
+		sx_chan->addComment(sx_comment.get());
+	}
 
 	return true;
 }
