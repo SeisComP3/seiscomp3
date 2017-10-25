@@ -1957,11 +1957,14 @@ void ArrivalModel::setUseArrival(int row, DataModel::Arrival *arrival) {
 	}
 
 	// TODO check if this is really required for backward compatibility
-	if ( !used  && arrival->weight() < 0.5 ) {
-		setBackazimuthUsed(row, false);
-		setHorizontalSlownessUsed(row, false);
-		setTimeUsed(row, false);
+	try {
+		if ( !used && arrival->weight() < 0.5 ) {
+			setBackazimuthUsed(row, false);
+			setHorizontalSlownessUsed(row, false);
+			setTimeUsed(row, false);
+		}
 	}
+	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3773,7 +3776,9 @@ void OriginLocatorView::updateContent() {
 		radius = _config.defaultEventRadius;
 	else {
 		radius = 20;
-		try { radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1); }
+		try {
+			radius = std::min(radius, _currentOrigin->quality().maximumDistance()+0.1);
+		}
 		catch ( ... ) {}
 	}
 
