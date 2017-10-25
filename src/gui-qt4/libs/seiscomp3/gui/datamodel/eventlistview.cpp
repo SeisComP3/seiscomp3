@@ -722,18 +722,18 @@ class SchemeTreeItem : public TreeItem {
 
 	public:
 		void init() {
-			setTextAlignment(config.columnMap[COL_ID], Qt::AlignLeft);
-			setTextAlignment(config.columnMap[COL_OTIME], Qt::AlignRight);
+			setTextAlignment(config.columnMap[COL_ID], Qt::AlignLeft | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_OTIME], Qt::AlignRight | Qt::AlignVCenter);
 			setTextAlignment(config.columnMap[COL_TYPE], Qt::AlignCenter);
 			setTextAlignment(config.columnMap[COL_FM], Qt::AlignCenter);
 			setTextAlignment(config.columnMap[COL_PHASES], Qt::AlignCenter);
 			setTextAlignment(config.columnMap[COL_M], Qt::AlignCenter);
-			setTextAlignment(config.columnMap[COL_MTYPE], Qt::AlignLeft);
+			setTextAlignment(config.columnMap[COL_MTYPE], Qt::AlignLeft | Qt::AlignVCenter);
 			//setTextAlignment(MCOUNT, Qt::AlignCenter);
-			setTextAlignment(config.columnMap[COL_LAT], Qt::AlignRight);
-			setTextAlignment(config.columnMap[COL_LON], Qt::AlignRight);
-			setTextAlignment(config.columnMap[COL_DEPTH], Qt::AlignRight);
-			setTextAlignment(config.columnMap[COL_REGION], Qt::AlignLeft);
+			setTextAlignment(config.columnMap[COL_LAT], Qt::AlignRight | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_LON], Qt::AlignRight | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_DEPTH], Qt::AlignRight | Qt::AlignVCenter);
+			setTextAlignment(config.columnMap[COL_REGION], Qt::AlignLeft | Qt::AlignVCenter);
 
 			if ( config.customColumn != -1 )
 				setTextAlignment(config.customColumn, Qt::AlignCenter);
