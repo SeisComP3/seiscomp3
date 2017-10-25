@@ -2829,19 +2829,6 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 						}
 					}
 
-					if ( !stream->id.isEmpty() && _drawRecordID ) {
-						painter.setPen(fg);
-						font.setBold(true);
-						painter.setFont(font);
-						QRect br = painter.fontMetrics().boundingRect(stream->id);
-						br.adjust(0,0,4,4);
-						//br.moveCenter(QPoint(br.center().x(), streamHeight/2+streamYOffset));
-						br.moveTopLeft(QPoint(0,0));
-						painter.fillRect(br, bg);
-						painter.drawRect(br);
-						painter.drawText(br, Qt::AlignCenter, stream->id);
-					}
-
 					/*
 					// Draw timing quality
 					if ( stream->traces[Stream::Raw].timingQuality > 0 ) {
@@ -2849,6 +2836,19 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 						painter.drawText(0,0, w,streamHeight, Qt::TextSingleLine | Qt::AlignRight | Qt::AlignTop, str);
 					}
 					*/
+				}
+
+				if ( !stream->id.isEmpty() && _drawRecordID ) {
+					painter.setPen(fg);
+					font.setBold(true);
+					painter.setFont(font);
+					QRect br = painter.fontMetrics().boundingRect(stream->id);
+					br.adjust(0,0,4,4);
+					//br.moveCenter(QPoint(br.center().x(), streamHeight/2+streamYOffset));
+					br.moveTopLeft(QPoint(0,0));
+					painter.fillRect(br, bg);
+					painter.drawRect(br);
+					painter.drawText(br, Qt::AlignCenter, stream->id);
 				}
 			}
 			break;
