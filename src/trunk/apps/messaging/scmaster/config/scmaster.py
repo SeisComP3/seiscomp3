@@ -23,8 +23,6 @@ def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schem
 		sys.stdout.write("  %s\n"\
 		                 "  Could not determine MYSQL server version. Is the root password correct\n"\
 		                 "  and MYSQL is running and the client installed on this machine?\n" % err.strip())
-	return False
-
 	sys.stdout.write("  + Found MYSQL server version %s\n" % version)
 
 	if drop:
@@ -36,7 +34,7 @@ def createMYSQLDB(db, rwuser, rwpwd, rouser, ropwd, rwhost, rootpwd, drop, schem
 		if out[2]:
 			if not out[1]:
 				sys.stdout.write("  Returned with error: %d\n" % out[2])
-		return False
+			return False
 
 	sys.stdout.write("  + Create database %s\n" % db)
 	q = "CREATE DATABASE %s CHARACTER SET utf8 COLLATE utf8_bin;" % db
