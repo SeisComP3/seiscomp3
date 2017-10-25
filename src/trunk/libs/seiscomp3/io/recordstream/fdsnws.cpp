@@ -70,7 +70,7 @@ bool FDSNWSConnectionBase::setSource(std::string serverloc) {
 		_host = serverloc.substr(0, pos);
 	}
 	else {
-		_url = "/";
+		_url = "/fdsnws/dataselect/1/query";
 		_host = serverloc;
 	}
 

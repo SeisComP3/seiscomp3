@@ -89,6 +89,8 @@ the magnitude processing: ```EpicenterOutOfRegions```.
   * Changed default publicID pattern from "@classname@#@time/%Y%m%d%H%M%S.%f@.@id@"
     to "@classname@/@time/%Y%m%d%H%M%S.%f@.@id@". The hash was removed due to
     possible conflicts with QuakeML publicID constraints.
+  * FDSNWS recordstream sets default URL path to /fdsnws/dataselect/1/query which
+    makes it more easy to use e.g. fdsnws://geofon.gfz-potsdam.de
 
 * GUI
 
