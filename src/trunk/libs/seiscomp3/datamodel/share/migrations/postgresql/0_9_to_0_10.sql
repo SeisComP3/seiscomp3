@@ -96,7 +96,6 @@ ALTER TABLE Network ALTER COLUMN m_description TYPE VARCHAR(255);
 ALTER TABLE CompositeTime ADD m_second_pdf_variable_content BYTEA;
 ALTER TABLE CompositeTime ADD m_second_pdf_probability_content BYTEA;
 ALTER TABLE CompositeTime ADD m_second_pdf_used BOOLEAN NOT NULL DEFAULT '0';
-ALTER TABLE CompositeTime ADD m_second_used BOOLEAN NOT NULL DEFAULT '0';
 
 ALTER TABLE MomentTensor ADD m_scalarMoment_pdf_variable_content BYTEA;
 ALTER TABLE MomentTensor ADD m_scalarMoment_pdf_probability_content BYTEA;
