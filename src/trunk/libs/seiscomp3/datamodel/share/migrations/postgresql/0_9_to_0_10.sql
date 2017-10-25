@@ -206,7 +206,7 @@ ALTER TABLE Origin ADD m_depth_pdf_variable_content BYTEA;
 ALTER TABLE Origin ADD m_depth_pdf_probability_content BYTEA;
 ALTER TABLE Origin ADD m_depth_pdf_used BOOLEAN NOT NULL DEFAULT '0';
 
-# Convert Stream type to type that inherits from PublicObject
+/* Convert Stream type to type that inherits from PublicObject */
 INSERT INTO PublicObject(_oid, m_publicID) SELECT _oid, 'Stream/' || to_char(_last_modified, 'YYYYmmddHHMISS') || '.' || _oid FROM Stream;
 
 UPDATE Meta SET value='0.10' WHERE name='Schema-Version';
