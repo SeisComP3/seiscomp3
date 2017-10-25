@@ -5444,6 +5444,9 @@ RecordViewItem* PickerView::addRawStream(const DataModel::SensorLocation *loc,
 		label->longitude = 999;
 		label->orientationZRT.identity();
 		allComponents = false;
+		comps[0] = COMP_NO_METADATA;
+		comps[1] = COMP_NO_METADATA;
+		comps[2] = COMP_NO_METADATA;
 	}
 
 	if ( !allComponents )
