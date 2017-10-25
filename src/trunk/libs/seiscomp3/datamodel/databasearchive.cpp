@@ -955,7 +955,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
 	}
 
 	if ( parentID > 0 ) {
-		if ( classType.isTypeOf(PublicObject::TypeInfo()) )
+		if ( classType.isTypeOf(PublicObject::TypeInfo()) && !ignorePublicObject )
 			query += " and ";
 		else
 			query += " where ";
