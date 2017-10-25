@@ -653,7 +653,7 @@ DataModel::Origin* LocSAT::loc2Origin(Internal::Loc* loc){
 		// the index. They become set correctly later on.
 		arrival->setPickID(Core::toString(i));
 
-		if ( loc->locator_errors[i].arid != 0 || !arrival->timeUsed() ) {
+		if ( (loc->locator_errors[i].arid != 0) || !isUsed ) {
 			arrival->setWeight(0.0);
 		}
 		else {
