@@ -74,7 +74,8 @@ application.
                self.doSomethingWithEvent(event)
 
        def run(self):
-           # needs not be re-implemented
+           # does not need to be reimplemented. it is just done to illustrate
+           # how to override methods
            print "Hi! The EventListener is now running."
            return seiscomp3.Client.Application.run(self)
 
