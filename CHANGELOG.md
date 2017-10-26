@@ -111,6 +111,10 @@ the magnitude processing: ```EpicenterOutOfRegions```.
   * Added support for event summary to listen to alert comments and adapt size and color
     of time ago label accordingly.
 
+* scmm
+
+  * Added the module documentation.
+
 * scmv
 
   * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
