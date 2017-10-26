@@ -356,6 +356,7 @@ Scheme::Map::Map() :
 	showGrid(true),
 	showLayers(true),
 	showCities(true),
+	showLegends(false),
 	cityPopulationWeight(150),
 	toBGR(false),
 	projection("")
@@ -606,6 +607,7 @@ void Scheme::fetch() {
 	READ_BOOL(map.showGrid);
 	READ_BOOL(map.showLayers);
 	READ_BOOL(map.showCities);
+	READ_BOOL(map.showLegends);
 	READ_INT(map.cityPopulationWeight);
 	READ_BOOL(map.toBGR);
 	READ_STRING(map.projection);

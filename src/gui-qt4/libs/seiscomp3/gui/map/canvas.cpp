@@ -437,6 +437,7 @@ void Canvas::init() {
 		_maxZoom = MAX_ZOOM;
 
 	setDrawLayers(SCScheme.map.showLayers);
+	setDrawLegends(SCScheme.map.showLegends);
 
 	// Read custom layers
 	try {

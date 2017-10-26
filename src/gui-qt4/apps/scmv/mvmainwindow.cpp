@@ -540,9 +540,13 @@ bool MvMainWindow::init() {
 
 	// Overwrite default menu settings
 	try {
-		_ui.showMapLegendAction->setChecked(SCApp->configGetBool("legend"));
+		bool showLegends = SCApp->configGetBool("legend");
+		_ui.showMapLegendAction->setChecked(showLegends);
+		SCScheme.map.showLegends = showLegends;
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		_ui.showMapLegendAction->setChecked(SCScheme.map.showLegends);
+	}
 
 	try {
 		_ui.showStationIdAction->setChecked(SCApp->configGetBool("annotations"));
@@ -786,7 +790,7 @@ void MvMainWindow::setupStandardUi() {
 
 void MvMainWindow::modifyUiSetupForDisplayMode() {
 	// Overwrite default menu settings
-	bool showLegend = false;
+	bool showLegend = SCScheme.map.showLegends;
 
 	try { showLegend = SCApp->configGetBool("legend"); } catch ( ... ) {}
 	if ( SCApp->commandline().hasOption("with-legend") ) showLegend = true;

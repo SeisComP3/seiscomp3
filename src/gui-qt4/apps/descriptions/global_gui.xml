@@ -793,10 +793,17 @@
 							Should the map display the custom layers?
 						</description>
 					</parameter>
+					<parameter name="showLegends" type="boolean" default="false">
+						<description>
+							Show map legends initially. Some applications provide
+							controls to toggle the visibility in addition to this
+							option.
+						</description>
+					</parameter>
 					<parameter name="projection" type="string" default="Rectangular">
 						<description>
-							SeisComP ships with the rectangular projection build in.
-							Other projections may be provided through plug-ins.
+							SeisComP ships with the rectangular projection built-in.
+							Other projections may be provided through plugins.
 						</description>
 					</parameter>
 					<parameter name="toBGR" type="boolean" default="false">

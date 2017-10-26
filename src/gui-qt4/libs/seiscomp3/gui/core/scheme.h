@@ -233,6 +233,7 @@ class SC_GUI_API Scheme {
 			bool showGrid;
 			bool showLayers;
 			bool showCities;
+			bool showLegends;
 			int cityPopulationWeight;
 			bool toBGR;
 			std::string projection;
