@@ -533,6 +533,22 @@ bool Convert2FDSNStaXML::push(const DataModel::Inventory *inv) {
 		// SelectedNumberOfStations is updated at the end to reflect the
 		// numbers of stations added to this network in this run
 
+		for ( size_t c = 0; c < net->commentCount(); ++c ) {
+			DataModel::Comment *comment = net->comment(c);
+			FDSNXML::CommentPtr sx_comment = new FDSNXML::Comment;
+			int id;
+			if ( Core::fromString(id, comment->id()) )
+				sx_comment->setId(id);
+			else
+				sx_comment->setId(c+1);
+			sx_comment->setValue(comment->text());
+			try { sx_comment->setBeginEffectiveTime(FDSNXML::DateTime(comment->start())); }
+			catch ( ... ) {}
+			try { sx_comment->setEndEffectiveTime(FDSNXML::DateTime(comment->end())); }
+			catch ( ... ) {}
+			sx_net->addComment(sx_comment.get());
+		}
+
 		for ( size_t s = 0; s < net->stationCount(); ++s ) {
 			DataModel::Station *sta = net->station(s);
 			process(sx_net.get(), sta);

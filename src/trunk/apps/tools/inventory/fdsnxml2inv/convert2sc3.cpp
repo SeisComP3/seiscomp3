@@ -1262,6 +1262,20 @@ bool Convert2SC3::push(const FDSNXML::FDSNStationXML *msg) {
 			sc_net->update();
 		}
 
+		for ( size_t c = 0; c < net->commentCount(); ++c ) {
+			FDSNXML::Comment *comment = net->comment(c);
+			DataModel::CommentPtr sc_comment = new DataModel::Comment;
+			try { sc_comment->setId(Core::toString(comment->id())); }
+			catch ( ... ) { sc_comment->setId(Core::toString(c+1)); }
+
+			sc_comment->setText(comment->value());
+			try { sc_comment->setStart(comment->beginEffectiveTime()); }
+			catch ( ... ) {}
+			try { sc_comment->setEnd(comment->endEffectiveTime()); }
+			catch ( ... ) {}
+			sc_net->add(sc_comment.get());
+		}
+
 		_touchedNetworks.insert(NetworkIndex(sc_net->code(), sc_net->start()));
 
 		for ( size_t s = 0; s < net->stationCount(); ++s ) {
