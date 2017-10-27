@@ -1,0 +1,10 @@
+----------------------------------------------------
+SeisComP3 plugin for the Kelunji EchoPro digitizer.
+----------------------------------------------------
+
+This plugin supports the Echo/EchoPro digitisers. 
+Plugin supports one station per digitizer.
+All sample rates are supported. Up to 12 channels are supported. 
+Plugin will automatically determine the sample rate and number of channles.
+Note: Digitizer must be configured with a baud rate of 57600bps. 
+

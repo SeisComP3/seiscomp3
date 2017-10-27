@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<binding module="seedlink" name="echopro_3ch100hz" category="sources">
+		<description>Kelunji Echo/EchoPro serial plugin (3 Ch, 200 Hz)</description>
+		<configuration>
+			<parameter name="station" type="string" default="BER">
+				<description>Station code.</description>
+			</parameter>
+
+			<parameter name="comport" type="string" default="/dev/ttyS0">
+				<description>Serial Port.</description>
+			</parameter>
+                        <parameter name="proc" type="string" default="echopro_100">
+                                <description>Name of stream processing scheme.</description>
+                        </parameter>
+		</configuration>
+	</binding>
+</seiscomp>

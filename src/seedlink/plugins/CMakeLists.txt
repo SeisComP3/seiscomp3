@@ -24,6 +24,7 @@ IF ( NOT MACOSX )
 		mseedscan_plugin
 		fs_plugin
 		win_plugin
+		echopro_plugin
 	) 
 ENDIF ( NOT MACOSX )
 
