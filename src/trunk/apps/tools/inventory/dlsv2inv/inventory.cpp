@@ -555,10 +555,10 @@ void Inventory::CleanupDatabase() {
 void Inventory::GetComments(StationIdentifier &si, DataModel::Station *sta) {
 	while ( sta->commentCount() ) sta->removeComment(0);
 
+	int idx = 1;
 	for ( unsigned int c = 0; c < si.sc.size(); ++c ) {
 		Comment &sc = *si.sc[c];
 		int code_key = sc.GetCommentCodeKey();
-		int idx = 1;
 
 		for ( unsigned int j=0; j < adc->cd.size(); ++j ) {
 			CommentDescription &comm = *adc->cd[j];
@@ -593,10 +593,10 @@ void Inventory::GetComments(StationIdentifier &si, DataModel::Station *sta) {
 void Inventory::GetComments(ChannelIdentifier &ci, DataModel::Stream *stream) {
 	while ( stream->commentCount() ) stream->removeComment(0);
 
+	int idx = 1;
 	for ( unsigned int c = 0; c < ci.cc.size(); ++c ) {
 		Comment &sc = *ci.cc[c];
 		int code_key = sc.GetCommentCodeKey();
-		int idx = 1;
 
 		for ( unsigned int j = 0; j < adc->cd.size(); ++j ) {
 			CommentDescription &comm = *adc->cd[j];
