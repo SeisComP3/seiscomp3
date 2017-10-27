@@ -334,10 +334,49 @@ bool Merge::process(const Network *net) {
 
 	if ( newInstance ) _inv->add(sc_net.get());
 
+	for ( size_t i = 0; i < net->commentCount(); ++i ) {
+		if ( _interrupted ) return false;
+		process(sc_net.get(), net->comment(i));
+	}
+
 	for ( size_t i = 0; i < net->stationCount(); ++i ) {
 		if ( _interrupted ) return false;
 		process(sc_net.get(), net->station(i));
 	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Merge::process(Seiscomp::DataModel::Network *net,
+                    const Seiscomp::DataModel::Comment *comment) {
+	CommentPtr sc_comment;
+	sc_comment = net->comment(comment->index());
+
+	bool newInstance = false;
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		_sources[sc_comment.get()] = _sources[comment];
+		newInstance = true;
+	}
+	else {
+		if ( !sc_comment->equal(*comment) ) {
+			stringstream ss;
+			ss << "Conflicting definitions for network comment " << net->code() << "." << comment->id();
+			log(LogHandler::Conflict, ss.str().c_str(), sc_comment.get(), comment);
+		}
+	}
+
+	// Assign values
+	*sc_comment = *comment;
+
+	// Remember the new publicID of the existing station to map
+	// StationReferences later correctly
+	if ( newInstance ) net->add(sc_comment.get());
 
 	return true;
 }
@@ -376,10 +415,49 @@ bool Merge::process(Network *net, const Station *sta) {
 
 	if ( newInstance ) net->add(sc_sta.get());
 
+	for ( size_t i = 0; i < sta->commentCount(); ++i ) {
+		if ( _interrupted ) return false;
+		process(sc_sta.get(), sta->comment(i));
+	}
+
 	for ( size_t i = 0; i < sta->sensorLocationCount(); ++i ) {
 		if ( _interrupted ) return false;
 		process(sc_sta.get(), sta->sensorLocation(i));
 	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Merge::process(Seiscomp::DataModel::Station *sta,
+                    const Seiscomp::DataModel::Comment *comment) {
+	CommentPtr sc_comment;
+	sc_comment = sta->comment(comment->index());
+
+	bool newInstance = false;
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		_sources[sc_comment.get()] = _sources[comment];
+		newInstance = true;
+	}
+	else {
+		if ( !sc_comment->equal(*comment) ) {
+			stringstream ss;
+			ss << "Conflicting definitions for station comment " << sta->code() << "." << comment->id();
+			log(LogHandler::Conflict, ss.str().c_str(), sc_comment.get(), comment);
+		}
+	}
+
+	// Assign values
+	*sc_comment = *comment;
+
+	// Remember the new publicID of the existing station to map
+	// StationReferences later correctly
+	if ( newInstance ) sta->add(sc_comment.get());
 
 	return true;
 }
@@ -414,6 +492,11 @@ bool Merge::process(Station *sta, const SensorLocation *loc) {
 
 	if ( newInstance ) sta->add(sc_loc.get());
 
+	for ( size_t i = 0; i < loc->commentCount(); ++i ) {
+		if ( _interrupted ) return false;
+		process(sc_loc.get(), loc->comment(i));
+	}
+
 	for ( size_t i = 0; i < loc->streamCount(); ++i ) {
 		if ( _interrupted ) return false;
 		process(sc_loc.get(), loc->stream(i));
@@ -432,13 +515,47 @@ bool Merge::process(Station *sta, const SensorLocation *loc) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Merge::process(Seiscomp::DataModel::SensorLocation *loc,
+                    const Seiscomp::DataModel::Comment *comment) {
+	CommentPtr sc_comment;
+	sc_comment = loc->comment(comment->index());
+
+	bool newInstance = false;
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		_sources[sc_comment.get()] = _sources[comment];
+		newInstance = true;
+	}
+	else {
+		if ( !sc_comment->equal(*comment) ) {
+			stringstream ss;
+			ss << "Conflicting definitions for sensor location comment " << loc->code() << "." << comment->id();
+			log(LogHandler::Conflict, ss.str().c_str(), sc_comment.get(), comment);
+		}
+	}
+
+	// Assign values
+	*sc_comment = *comment;
+
+	// Remember the new publicID of the existing station to map
+	// StationReferences later correctly
+	if ( newInstance ) loc->add(sc_comment.get());
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Merge::process(SensorLocation *loc, const Stream *stream) {
 	StreamPtr sc_cha;
 	sc_cha = loc->stream(stream->index());
 
 	bool newInstance = false;
 	if ( !sc_cha ) {
-		sc_cha = Stream::Create();
+		sc_cha = create<Stream>(stream->publicID());
 		_sources[sc_cha.get()] = _sources[stream];
 		newInstance = true;
 
@@ -485,6 +602,10 @@ bool Merge::process(SensorLocation *loc, const Stream *stream) {
 		sc_cha->setSensor(sensorID);
 	}
 
+	for ( size_t i = 0; i < stream->commentCount(); ++i ) {
+		if ( _interrupted ) return false;
+		process(sc_cha.get(), stream->comment(i));
+	}
 
 	if ( !sc_cha->datalogger().empty() ) {
 		const Datalogger *dl = findDatalogger(sc_cha->datalogger());
@@ -560,6 +681,40 @@ bool Merge::process(SensorLocation *loc, const AuxStream *aux) {
 	}
 
 	if ( newInstance ) loc->add(sc_aux.get());
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Merge::process(Seiscomp::DataModel::Stream *stream,
+                    const Seiscomp::DataModel::Comment *comment) {
+	CommentPtr sc_comment;
+	sc_comment = stream->comment(comment->index());
+
+	bool newInstance = false;
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		_sources[sc_comment.get()] = _sources[comment];
+		newInstance = true;
+	}
+	else {
+		if ( !sc_comment->equal(*comment) ) {
+			stringstream ss;
+			ss << "Conflicting definitions for stream comment " << stream->code() << "." << comment->id();
+			log(LogHandler::Conflict, ss.str().c_str(), sc_comment.get(), comment);
+		}
+	}
+
+	// Assign values
+	*sc_comment = *comment;
+
+	// Remember the new publicID of the existing station to map
+	// StationReferences later correctly
+	if ( newInstance ) stream->add(sc_comment.get());
 
 	return true;
 }

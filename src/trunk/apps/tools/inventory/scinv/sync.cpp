@@ -276,10 +276,53 @@ bool Sync::process(const Network *net) {
 
 	_touchedObjects.insert(sc_net.get());
 
-	for ( size_t s = 0; s < net->stationCount(); ++s ) {
+	for ( size_t i = 0; i < net->commentCount(); ++i ) {
 		if ( _interrupted ) break;
-		process(sc_net.get(), net->station(s));
+		process(sc_net.get(), net->comment(i));
 	}
+
+	for ( size_t i = 0; i < net->stationCount(); ++i ) {
+		if ( _interrupted ) break;
+		process(sc_net.get(), net->station(i));
+	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Sync::process(Seiscomp::DataModel::Network *net,
+                   const Seiscomp::DataModel::Comment *comment) {
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	DataModel::CommentPtr sc_comment;
+	sc_comment = net->comment(comment->index());
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		newInstance = true;
+	}
+	else
+		// Check equality and set update flag
+		needUpdate = !sc_comment->equal(*comment);
+
+	// Assign values
+	*sc_comment = *comment;
+
+	if ( newInstance ) {
+		net->add(sc_comment.get());
+		SEISCOMP_DEBUG("Added new network comment: %s", sc_comment->text().c_str());
+	}
+	else if ( needUpdate ) {
+		sc_comment->update();
+		SEISCOMP_DEBUG("Updated network comment: %s", sc_comment->text().c_str());
+	}
+
+	// Register station
+	_touchedObjects.insert(sc_comment.get());
 
 	return true;
 }
@@ -326,10 +369,53 @@ bool Sync::process(Seiscomp::DataModel::Network *net,
 	// Register station
 	_touchedObjects.insert(sc_sta.get());
 
+	for ( size_t i = 0; i < sta->commentCount(); ++i ) {
+		if ( _interrupted ) break;
+		process(sc_sta.get(), sta->comment(i));
+	}
+
 	for ( size_t i = 0; i < sta->sensorLocationCount(); ++i ) {
 		if ( _interrupted ) return false;
 		process(sc_sta.get(), sta->sensorLocation(i));
 	}
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Sync::process(Seiscomp::DataModel::Station *sta,
+                   const Seiscomp::DataModel::Comment *comment) {
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	DataModel::CommentPtr sc_comment;
+	sc_comment = sta->comment(comment->index());
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		newInstance = true;
+	}
+	else
+		// Check equality and set update flag
+		needUpdate = !sc_comment->equal(*comment);
+
+	// Assign values
+	*sc_comment = *comment;
+
+	if ( newInstance ) {
+		sta->add(sc_comment.get());
+		SEISCOMP_DEBUG("Added new station comment: %s", sc_comment->text().c_str());
+	}
+	else if ( needUpdate ) {
+		sc_comment->update();
+		SEISCOMP_DEBUG("Updated station comment: %s", sc_comment->text().c_str());
+	}
+
+	// Register station
+	_touchedObjects.insert(sc_comment.get());
 
 	return true;
 }
@@ -371,6 +457,11 @@ bool Sync::process(Station *sta, const SensorLocation *loc) {
 	// Register sensor location
 	_touchedObjects.insert(sc_loc.get());
 
+	for ( size_t i = 0; i < loc->commentCount(); ++i ) {
+		if ( _interrupted ) break;
+		process(sc_loc.get(), loc->comment(i));
+	}
+
 	for ( size_t i = 0; i < loc->streamCount(); ++i ) {
 		if ( _interrupted ) return false;
 		process(sc_loc.get(), loc->stream(i));
@@ -389,6 +480,44 @@ bool Sync::process(Station *sta, const SensorLocation *loc) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Sync::process(Seiscomp::DataModel::SensorLocation *loc,
+                   const Seiscomp::DataModel::Comment *comment) {
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	DataModel::CommentPtr sc_comment;
+	sc_comment = loc->comment(comment->index());
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		newInstance = true;
+	}
+	else
+		// Check equality and set update flag
+		needUpdate = !sc_comment->equal(*comment);
+
+	// Assign values
+	*sc_comment = *comment;
+
+	if ( newInstance ) {
+		loc->add(sc_comment.get());
+		SEISCOMP_DEBUG("Added new sensor location comment: %s", sc_comment->text().c_str());
+	}
+	else if ( needUpdate ) {
+		sc_comment->update();
+		SEISCOMP_DEBUG("Updated sensor location comment: %s", sc_comment->text().c_str());
+	}
+
+	// Register station
+	_touchedObjects.insert(sc_comment.get());
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Sync::process(SensorLocation *loc, const Stream *cha) {
 	StreamPtr sc_cha;
 	sc_cha = loc->stream(cha->index());
@@ -398,7 +527,7 @@ bool Sync::process(SensorLocation *loc, const Stream *cha) {
 	Stream tmpStream(*cha);
 
 	if ( !sc_cha ) {
-		sc_cha = Stream::Create();
+		sc_cha = create<Stream>(cha->publicID());
 		newInstance = true;
 	}
 
@@ -446,6 +575,11 @@ bool Sync::process(SensorLocation *loc, const Stream *cha) {
 		sc_cha->update();
 		SEISCOMP_DEBUG("Updated stream epoch: %s (%s)",
 		               sc_cha->code().c_str(), sc_cha->start().iso().c_str());
+	}
+
+	for ( size_t i = 0; i < cha->commentCount(); ++i ) {
+		if ( _interrupted ) break;
+		process(sc_cha.get(), cha->comment(i));
 	}
 
 	return true;
@@ -506,6 +640,44 @@ bool Sync::process(SensorLocation *loc, const AuxStream *aux) {
 
 	// Register stream
 	_touchedObjects.insert(sc_aux.get());
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Sync::process(Seiscomp::DataModel::Stream *cha,
+                   const Seiscomp::DataModel::Comment *comment) {
+	bool newInstance = false;
+	bool needUpdate = false;
+
+	DataModel::CommentPtr sc_comment;
+	sc_comment = cha->comment(comment->index());
+	if ( !sc_comment ) {
+		sc_comment = new Comment();
+		newInstance = true;
+	}
+	else
+		// Check equality and set update flag
+		needUpdate = !sc_comment->equal(*comment);
+
+	// Assign values
+	*sc_comment = *comment;
+
+	if ( newInstance ) {
+		cha->add(sc_comment.get());
+		SEISCOMP_DEBUG("Added new stream comment: %s", sc_comment->text().c_str());
+	}
+	else if ( needUpdate ) {
+		sc_comment->update();
+		SEISCOMP_DEBUG("Updated stream comment: %s", sc_comment->text().c_str());
+	}
+
+	// Register station
+	_touchedObjects.insert(sc_comment.get());
 
 	return true;
 }
