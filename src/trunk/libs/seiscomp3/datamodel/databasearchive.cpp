@@ -950,7 +950,7 @@ DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
 		query = std::string("select * from ") + classType.className();
 
 	if ( parentID > 0 ) {
-		if ( classType.isTypeOf(PublicObject::TypeInfo()) && !ignorePublicObject )
+		if ( classType.isTypeOf(PublicObject::TypeInfo()) )
 			query += " and ";
 		else
 			query += " where ";
