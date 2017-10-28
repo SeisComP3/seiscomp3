@@ -336,6 +336,10 @@ class FDSNStation(resource.Resource):
 			if skipRestricted and utils.isRestricted(net): continue
 			newNet = DataModel.Network(net)
 
+			# Copy comments
+			for i in xrange(net.commentCount()):
+				newNet.add(DataModel.Comment(net.comment(i)))
+
 			# iterate over inventory stations of current network
 			for sta in ro.stationIter(net, levelSta):
 				if req._disconnected: return False
@@ -354,7 +358,11 @@ class FDSNStation(resource.Resource):
 						sensors |= s
 				elif self._matchStation(net, sta, ro):
 					if ro.includeSta:
-						newNet.add(DataModel.Station(sta))
+						newSta = DataModel.Station(sta)
+						# Copy comments
+						for i in xrange(sta.commentCount()):
+							newSta.add(DataModel.Comment(sta.comment(i)))
+						newNet.add(newSta)
 					else:
 						# no station output requested: one matching station
 						# is sufficient to include the network
@@ -580,11 +588,24 @@ class FDSNStation(resource.Resource):
 		chaCount = 0
 		dataloggers, sensors = set(), set()
 		newSta = DataModel.Station(sta)
+
+		# Copy comments
+		for i in xrange(sta.commentCount()):
+			newSta.add(DataModel.Comment(sta.comment(i)))
+
 		for loc in ro.locationIter(net, sta, True):
 			newLoc = DataModel.SensorLocation(loc)
+			# Copy comments
+			for i in xrange(loc.commentCount()):
+				newLoc.add(DataModel.Comment(loc.comment(i)))
+
 			for stream in ro.streamIter(net, sta, loc, True):
 				if skipRestricted and utils.isRestricted(stream): continue
-				newLoc.add(DataModel.Stream(stream))
+				newCha = DataModel.Stream(stream)
+				# Copy comments
+				for i in xrange(stream.commentCount()):
+					newCha.add(DataModel.Comment(stream.comment(i)))
+				newLoc.add(newCha)
 				dataloggers.add(stream.datalogger())
 				sensors.add(stream.sensor())
 
