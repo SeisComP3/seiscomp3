@@ -230,7 +230,8 @@ class FDSNStation(resource.Resource):
 
 		# additional object count dependent on detail level
 		self._resLevelCount = inv.responsePAZCount() + inv.responseFIRCount() \
-		                      + inv.responsePolynomialCount()
+		                      + inv.responsePolynomialCount() + inv.responseIIRCount() \
+		                      + inv.responseFAPCount()
 		for i in xrange(inv.dataloggerCount()):
 			self._resLevelCount += inv.datalogger(i).decimationCount()
 
@@ -393,7 +394,9 @@ class FDSNStation(resource.Resource):
 			else:
 				resCount = newInv.responsePAZCount() + \
 				           newInv.responseFIRCount() + \
-				           newInv.responsePolynomialCount()
+				           newInv.responsePolynomialCount() + \
+				           newInv.responseFAPCount() + \
+				           newInv.responseIIRCount()
 				objCount += resCount + decCount + newInv.dataloggerCount() + \
 				            newInv.sensorCount()
 
@@ -698,5 +701,15 @@ class FDSNStation(resource.Resource):
 				resp = inv.responsePolynomial(i)
 				if resp.publicID() in responses:
 					newInv.add(DataModel.ResponsePolynomial(resp))
+			if req._disconnected: return None
+			for i in xrange(inv.responseFAPCount()):
+				resp = inv.responseFAP(i)
+				if resp.publicID() in responses:
+					newInv.add(DataModel.ResponseFAP(resp))
+			if req._disconnected: return None
+			for i in xrange(inv.responseIIRCount()):
+				resp = inv.responseIIR(i)
+				if resp.publicID() in responses:
+					newInv.add(DataModel.ResponseIIR(resp))
 
 		return decCount
