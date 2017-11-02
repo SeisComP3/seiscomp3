@@ -306,7 +306,7 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	if ( reader->supportsVersion<0,10>() ) {
 		// Read network comments
-		it = reader->getObjectIterator("select Comment.* from Comment, Network where comment._parent_oid = Network._oid", DataModel::Comment::TypeInfo());
+		it = reader->getObjectIterator("select Comment.* from Comment, Network where Comment._parent_oid = Network._oid", DataModel::Comment::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
 			if ( comment ) {
@@ -340,7 +340,7 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	if ( reader->supportsVersion<0,10>() ) {
 		// Read station comments
-		it = reader->getObjectIterator("select Comment.* from Comment, Station where comment._parent_oid = Station._oid", DataModel::Comment::TypeInfo());
+		it = reader->getObjectIterator("select Comment.* from Comment, Station where Comment._parent_oid = Station._oid", DataModel::Comment::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
 			if ( comment ) {
@@ -374,7 +374,7 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	if ( reader->supportsVersion<0,10>() ) {
 		// Read sensor location comments
-		it = reader->getObjectIterator("select Comment.* from Comment, SensorLocation where comment._parent_oid = SensorLocation._oid", DataModel::Comment::TypeInfo());
+		it = reader->getObjectIterator("select Comment.* from Comment, SensorLocation where Comment._parent_oid = SensorLocation._oid", DataModel::Comment::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
 			if ( comment ) {
@@ -410,7 +410,7 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	if ( reader->supportsVersion<0,10>() ) {
 		// Read stream comments
-		it = reader->getObjectIterator("select Comment.* from Comment, Stream where comment._parent_oid = Stream._oid", DataModel::Comment::TypeInfo());
+		it = reader->getObjectIterator("select Comment.* from Comment, Stream where Comment._parent_oid = Stream._oid", DataModel::Comment::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
 			if ( comment ) {
