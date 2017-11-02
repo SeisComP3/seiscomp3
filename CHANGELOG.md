@@ -205,6 +205,10 @@ port their code.
 
   * Add description and documentation
 
+* scbulletin
+
+  * Add option -e for enhanced output at higher precision.
+
 * seedlink
 
   * Removed option -C from nmxptool plugin template. This should go into the

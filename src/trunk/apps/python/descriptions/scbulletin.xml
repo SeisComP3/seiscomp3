@@ -70,6 +70,12 @@
 					in combination with the autoloc3-flag.
 					</description>
 				</option>
+				<option flag="e" long-flag="enhanced">
+					<description>
+					Enhanced output with higher precision. Times: milliseconds,
+					distances: meter. Use for bulletins of local earthquakes.
+					</description>
+				</option>
 			</group>
 
 			<group name="Input">
