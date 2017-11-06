@@ -374,6 +374,10 @@ istream &FDSNWSConnectionBase::stream() {
 					_stream.str(data);
 				}
 			}
+			else {
+				_sock->close();
+				_stream.clear(std::ios::eofbit);
+			}
 		}
 		else
 			_error += readBinary(_chunkMode?512:_remainingBytes);
