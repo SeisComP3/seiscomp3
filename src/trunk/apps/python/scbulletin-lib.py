@@ -768,6 +768,7 @@ class BulletinApp(seiscomp3.Client.Application):
                 self.commandline().addOption("Dump", "extra,x", "extra detailed autoloc3 format")
                 self.commandline().addOption("Dump", "enhanced,e", "enhanced output precision for local earthquakes")
                 self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
+                self.commandline().addOption("Dump", "first-only", "dump only the first event/origin")
 
                 self.commandline().addGroup("Input")
                 self.commandline().addStringOption("Input", "format,f", "input format to use (xml [default], zxml (zipped xml), binary)")
@@ -878,14 +879,26 @@ class BulletinApp(seiscomp3.Client.Application):
                         if ep.originCount() <= 0:
                             raise TypeError, inputFile + ": no origin and no event in eventparameters found"
                         else:
-                            org = ep.origin(0)
-                            txt = bulletin.printOrigin(org)
+                            if self.commandline().hasOption("first-only"):
+                                org = ep.origin(0)
+                                txt = bulletin.printOrigin(org)
+                            else:
+                                txt = ""
+                                for i in xrange(ep.originCount()):
+                                    org = ep.origin(i)
+                                    txt += bulletin.printOrigin(org)
                     else:
-                        ev = ep.event(0)
-                        if ev is None:
-                            raise TypeError, inputFile + ": invalid event"
+                        if self.commandline().hasOption("first-only"):
+                            ev = ep.event(0)
+                            if ev is None:
+                               raise TypeError, inputFile + ": invalid event"
 
-                        txt = bulletin.printEvent(ev)
+                            txt = bulletin.printEvent(ev)
+                        else:
+                            txt = ""
+                            for i in xrange(ep.eventCount()):
+                                ev = ep.event(i)
+                                txt += bulletin.printEvent(ev)
 
             except Exception, exc:
                 sys.stderr.write("ERROR: " + str(exc) + "\n")
