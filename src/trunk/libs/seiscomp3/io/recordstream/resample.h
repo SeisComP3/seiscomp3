@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
+ *   Author: Jan Becker, gempa GmbH                                        *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -11,8 +12,8 @@
  ***************************************************************************/
 
 
-#ifndef __SEISCOMP_SERVICES_RECORDSTREAM_RESAMPLE_H__
-#define __SEISCOMP_SERVICES_RECORDSTREAM_RESAMPLE_H__
+#ifndef __SEISCOMP_RECORDSTREAM_RESAMPLE_H__
+#define __SEISCOMP_RECORDSTREAM_RESAMPLE_H__
 
 #include <sstream>
 #include <map>
@@ -41,25 +42,30 @@ class SC_SYSTEM_CORE_API Resample : public Seiscomp::IO::RecordStream {
 	//  Public Interface
 	// ----------------------------------------------------------------------
 	public:
-		bool setSource(std::string);
-		bool setRecordType(const char*);
+		virtual bool setSource(const std::string &source);
+		virtual bool setRecordType(const char *type);
 
-		//! The following five methods are not implemented yet
-		//! and return always 'false'.
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-			const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-		bool setStartTime(const Seiscomp::Core::Time &stime);
-		bool setEndTime(const Seiscomp::Core::Time &etime);
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-		bool setTimeout(int seconds);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
 
-		Record* createRecord(Array::DataType, Record::Hint);
-		void recordStored(Record*);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
 
-		void close();
+		virtual bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &etime);
+		virtual bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
 
-		std::istream& stream();
+		virtual bool setTimeout(int seconds);
+
+		virtual void close();
+
+		virtual Record *next();
 
 
 	// ----------------------------------------------------------------------
@@ -77,7 +83,6 @@ class SC_SYSTEM_CORE_API Resample : public Seiscomp::IO::RecordStream {
 		typedef std::deque<GenericRecord*> OutputQueue;
 
 		IO::RecordStreamPtr   _source;
-		std::stringstream     _stream;
 		bool                  _debug;
 		IO::RecordDemuxFilter _demuxer;
 		OutputQueue           _queue;

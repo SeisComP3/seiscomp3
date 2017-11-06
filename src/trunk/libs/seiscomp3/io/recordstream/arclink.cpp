@@ -27,6 +27,7 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/io/records/mseedrecord.h>
 #include "arclink.h"
 // HACK to retrieve the record length
 #include <libmseed.h>
@@ -60,21 +61,25 @@ IMPLEMENT_SC_CLASS_DERIVED(ArclinkConnection,
 REGISTER_RECORDSTREAM(ArclinkConnection, "arclink");
 
 ArclinkConnection::ArclinkConnection()
-    : RecordStream(), _stream(std::istringstream::in|std::istringstream::binary),
-     _user("guest@anywhere"), _readingData(false), _chunkMode(false),
-     _remainingBytes(0) {}
+: RecordStream()
+, _user("guest@anywhere")
+, _readingData(false)
+, _chunkMode(false)
+, _remainingBytes(0) {}
 
-ArclinkConnection::ArclinkConnection(std::string serverloc)
-    : RecordStream(), _stream(std::istringstream::in|std::istringstream::binary),
-     _user("guest@anywhere"), _readingData(false), _chunkMode(false),
-     _remainingBytes(0){
-    setSource(serverloc);
+ArclinkConnection::ArclinkConnection(std::string source)
+: RecordStream()
+, _user("guest@anywhere")
+, _readingData(false)
+, _chunkMode(false)
+, _remainingBytes(0) {
+	setSource(source);
 }
 
 ArclinkConnection::~ArclinkConnection() {
 }
 
-bool ArclinkConnection::setSource(std::string serverloc) {
+bool ArclinkConnection::setSource(const string &serverloc) {
 	size_t pos = serverloc.find('?');
 	if ( pos != std::string::npos ) {
 		_serverloc = serverloc.substr(0, pos);
@@ -135,40 +140,21 @@ bool ArclinkConnection::setUser(std::string name, std::string password) {
 	return true;
 }
 
-bool ArclinkConnection::addStream(std::string net, std::string sta, std::string loc, std::string cha) {
+bool ArclinkConnection::addStream(const std::string &net, const std::string &sta,
+                                  const std::string &loc, const std::string &cha) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha));
 	if ( result.second ) _ordered.push_back(*result.first);
 	return result.second;
 }
 
-bool ArclinkConnection::addStream(std::string net, std::string sta, std::string loc, std::string cha,
+bool ArclinkConnection::addStream(const std::string &net, const std::string &sta,
+                                  const std::string &loc, const std::string &cha,
 	const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha, stime, etime));
 	if ( result.second ) _ordered.push_back(*result.first);
 	return result.second;
-}
-
-bool ArclinkConnection::removeStream(std::string net, std::string sta, std::string loc, std::string cha) {
-	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
-
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-		     it->station()  == sta &&
-		     it->location() == loc &&
-		     it->channel()  == cha ) {
-			std::list<StreamIdx>::iterator lit = std::find(_ordered.begin(), _ordered.end(), *it);
-			if ( lit != _ordered.end() ) _ordered.erase(lit);
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
-
-	return deletedSomething;
 }
 
 bool ArclinkConnection::setStartTime(const Seiscomp::Core::Time &stime) {
@@ -179,10 +165,6 @@ bool ArclinkConnection::setStartTime(const Seiscomp::Core::Time &stime) {
 bool ArclinkConnection::setEndTime(const Seiscomp::Core::Time &etime) {
 	_etime = etime;
 	return true;
-}
-
-bool ArclinkConnection::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
 }
 
 bool ArclinkConnection::setTimeout(int seconds) {
@@ -280,10 +262,9 @@ void ArclinkConnection::cleanup() {
 	_sock.sendRequest("PURGE " + _reqID, true);
 }
 
-std::istream& ArclinkConnection::stream() {
+Record *ArclinkConnection::next() {
 	if ( _readingData && !_sock.isOpen() ) {
-		_stream.clear(std::ios::eofbit);
-		return _stream;
+		return NULL;
 	}
 
 	_sock.startTimer();
@@ -295,62 +276,77 @@ std::istream& ArclinkConnection::stream() {
 		}
 		catch ( GeneralException ) {
 			_sock.close();
-			throw;
+			return NULL;
 		}
 
 		_readingData = true;
 		if ( _remainingBytes <= 0 ) {
 			_sock.close();
-			_stream.clear(std::ios::eofbit);
-			return _stream;
+			return NULL;
 		}
 	}
 
 	try {
-		// HACK to retrieve the record length
-		string data = _sock.read(RECSIZE);
-		int reclen = ms_detect(data.c_str(), RECSIZE);
-		if (reclen > RECSIZE)
-			data += _sock.read(reclen - RECSIZE);
-		else {
-			if (reclen <= 0) SEISCOMP_ERROR("Retrieving the record length failed (try 512 Byte)!");
-			reclen = RECSIZE;
-		}
-
-		_stream.str(data);
-
-		if ( _dump ) _dump << data;
-
-		/////////////////////////////////////
-		_remainingBytes -= reclen;
-
-		// Read next chunk size
-		if ( _chunkMode && _remainingBytes <= 0 ) {
-			string r = _sock.readline();
-			if ( r.compare(0, 6, "CHUNK ") == 0 ) {
-				char *tail;
-				_remainingBytes = strtoul(r.c_str() + 6, &tail, 10);
-				if ( *tail ) {
-					SEISCOMP_ERROR("Invalid ArcLink response: %s", r.c_str());
-					throw ArclinkException("invalid response");
-				}
+		while ( _sock.isOpen() ) {
+			std::istringstream stream(std::istringstream::in|std::istringstream::binary);
+			// HACK to retrieve the record length
+			string data = _sock.read(RECSIZE);
+			int reclen = ms_detect(data.c_str(), RECSIZE);
+			if (reclen > RECSIZE)
+				data += _sock.read(reclen - RECSIZE);
+			else {
+				if (reclen <= 0) SEISCOMP_ERROR("Retrieving the record length failed (try 512 Byte)!");
+				reclen = RECSIZE;
 			}
-			else
-				SEISCOMP_DEBUG("Received status: %s", r.c_str());
-		}
 
-		if ( _remainingBytes <= 0 ) {
-			cleanup();
-			_sock.close();
+			stream.str(data);
+
+			IO::MSeedRecord *rec = new IO::MSeedRecord();
+			setupRecord(rec);
+			try {
+				rec->read(stream);
+			}
+			catch ( ... ) {
+				delete rec;
+				rec = NULL;
+			}
+
+			if ( _dump ) _dump << data;
+
+			/////////////////////////////////////
+			_remainingBytes -= reclen;
+
+			// Read next chunk size
+			if ( _chunkMode && _remainingBytes <= 0 ) {
+				string r = _sock.readline();
+				if ( r.compare(0, 6, "CHUNK ") == 0 ) {
+					char *tail;
+					_remainingBytes = strtoul(r.c_str() + 6, &tail, 10);
+					if ( *tail ) {
+						SEISCOMP_ERROR("Invalid ArcLink response: %s", r.c_str());
+						_sock.close();
+					}
+				}
+				else
+					SEISCOMP_DEBUG("Received status: %s", r.c_str());
+			}
+
+			if ( _remainingBytes <= 0 ) {
+				cleanup();
+				_sock.close();
+			}
+
+			if ( rec != NULL )
+				return rec;
 		}
 	}
 	catch ( GeneralException ) {
 		_sock.close();
-		throw;
 	}
 
-	return _stream;
+	return NULL;
 }
+
 
 } // namespace _private
 } // namespace Arclink

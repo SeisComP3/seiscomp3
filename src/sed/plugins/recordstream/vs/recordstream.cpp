@@ -34,7 +34,7 @@ REGISTER_RECORDSTREAM(VSConnection, "vs");
 ADD_SC_PLUGIN(
 	"VS (Virtual Seismologist) record stream interface to acquire envelope values",
 	"Jan Becker, gempa GmbH",
-	0, 1, 0
+	0, 2, 0
 )
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -43,19 +43,8 @@ ADD_SC_PLUGIN(
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 VSConnection::VSConnection()
-: RecordStream(), _stream(std::stringstream::in|std::stringstream::binary),
-  _queue(NULL) {}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-VSConnection::VSConnection(std::string serverloc)
-: RecordStream(), _stream(std::stringstream::in|std::stringstream::binary),
-  _queue(NULL) {
-    setSource(serverloc);
-}
+: RecordStream()
+, _queue(NULL) {}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -75,16 +64,15 @@ VSConnection::~VSConnection() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::setSource(std::string serverloc) {
+bool VSConnection::setSource(const string &source) {
 	close();
 	_group = "VS";
 	_host = "localhost";
 
-	size_t pos = serverloc.find('/');
+	size_t pos = source.find('/');
 	if ( pos != string::npos ) {
-		_host = serverloc.substr(0, pos);
-		_group = serverloc.substr(pos+1);
-		serverloc.erase(pos);
+		_host = source.substr(0, pos);
+		_group = source.substr(pos+1);
 	}
 
 	return true;
@@ -188,30 +176,8 @@ bool VSConnection::handle(Seiscomp::DataModel::VS::Envelope *e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::setRecordType(const char* type) {
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Record* VSConnection::createRecord(Array::DataType, Record::Hint) {
-	if ( _queue == NULL ) return NULL;
-	VSRecord *rec = _queue;
-	_queue = _queue->next;
-	rec->next = NULL;
-	return rec;
-}
-
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::addStream(std::string net, std::string sta, std::string loc, std::string cha) {
+bool VSConnection::addStream(const string &net, const string &sta,
+                             const string &loc, const string &cha) {
 	std::pair<Node::List::iterator,bool> itp = _streams.insert(Node(net));
 
 	Node::List &stas = itp.first->childs;
@@ -231,44 +197,11 @@ bool VSConnection::addStream(std::string net, std::string sta, std::string loc, 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::addStream(std::string net, std::string sta, std::string loc, std::string cha,
-	const Seiscomp::Core::Time &, const Seiscomp::Core::Time &) {
+bool VSConnection::addStream(const string &net, const string &sta,
+                             const string &loc, const string &cha,
+                             const Seiscomp::Core::Time &,
+                             const Seiscomp::Core::Time &) {
 	return addStream(net, sta, loc, cha);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::removeStream(std::string net, std::string sta, std::string loc, std::string cha) {
-	Node::List::iterator nit = _streams.find(Node(net));
-	if ( nit == _streams.end() ) return false;
-
-	Node::List &stas = nit->childs;
-	Node::List::iterator sit = stas.find(Node(sta));
-	if ( sit == stas.end() ) return false;
-
-	Node::List &locs = sit->childs;
-	Node::List::iterator lit = locs.find(Node(loc));
-	if ( lit == locs.end() ) return false;
-
-	Node::List &chas = lit->childs;
-	Node::List::iterator cit = chas.find(Node(cha));
-	if ( cit == chas.end() ) return false;
-
-	chas.erase(cit);
-
-	if ( !chas.empty() ) return true;
-
-	locs.erase(lit);
-	if ( !locs.empty() ) return true;
-
-	stas.erase(sit);
-	if ( !stas.empty() ) return true;
-
-	_streams.erase(nit);
-	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -294,32 +227,12 @@ bool VSConnection::setEndTime(const Seiscomp::Core::Time &) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::setTimeout(int seconds) {
-	return true;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool VSConnection::clear() {
 	if ( _connection ) {
 		_connection->disconnect();
 		_connection = NULL;
 	}
 	_streams.clear();
-	_stream.clear();
-	_stream.str(string());
 	_closeRequested = false;
 
 	return true;
@@ -330,8 +243,8 @@ bool VSConnection::clear() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool VSConnection::isRequested(const std::string &net, const std::string &sta,
-                               const std::string &loc, const std::string &cha) const {
+bool VSConnection::isRequested(const string &net, const string &sta,
+                               const string &loc, const string &cha) const {
 	Node::List::iterator it = Node::findMatch(_streams, net);
 	if ( it == _streams.end() ) return false;
 
@@ -366,14 +279,13 @@ void VSConnection::close() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-istream &VSConnection::stream() {
-	if ( _queue != NULL ) return _stream;
+Record *VSConnection::next() {
+	if ( _queue != NULL ) return NULL;
 
 	if ( !_connection ) {
 		if ( !connect() ) {
 			SEISCOMP_ERROR("Connection failed");
-			_stream.clear(ios::eofbit);
-			return _stream;
+			return NULL;
 		}
 		_closeRequested = false;
 	}
@@ -385,9 +297,20 @@ istream &VSConnection::stream() {
 		if ( msg == NULL ) continue;
 		if ( error == Core::Status::SEISCOMP_SUCCESS ) {
 			for ( MessageIterator it = msg->iter(); *it; ++it ) {
-				DataModel::VS::Envelope* e = DataModel::VS::Envelope::Cast(*it);
+				DataModel::VS::Envelope *e = DataModel::VS::Envelope::Cast(*it);
 				if ( e != NULL ) {
-					if ( handle(e) ) return _stream;
+					if ( handle(e) ) {
+						VSRecord *rec = _queue;
+						_queue = _queue->next;
+						rec->next = NULL;
+
+						setupRecord(rec);
+
+						if ( rec->data()->dataType() != rec->dataType() )
+							rec->setData(rec->data()->copy(rec->dataType()));
+
+						return rec;
+					}
 				}
 			}
 		}
@@ -416,11 +339,9 @@ istream &VSConnection::stream() {
 			if ( _closeRequested )
 				break;
 		}
-		else {
-			_stream.clear(ios::eofbit);
+		else
 			break;
-		}
 	}
 
-	return _stream;
+	return NULL;
 }

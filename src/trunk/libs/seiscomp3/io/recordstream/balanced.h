@@ -48,37 +48,43 @@ class SC_SYSTEM_CORE_API BalancedConnection : public Seiscomp::IO::RecordStream 
 		//! Destructor
 		virtual ~BalancedConnection();
 
+	public:
 		virtual bool setRecordType(const char*);
 
 		//! Initialize the combined connection.
-		bool setSource(std::string serverloc);
+		virtual bool setSource(const std::string &serverloc);
 
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
 
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-		               const Core::Time &stime, const Core::Time &etime);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
 
 		//! Adds the given start time to the server connection description
-		bool setStartTime(const Core::Time &stime);
+		virtual bool setStartTime(const Core::Time &stime);
 
 		//! Adds the given end time to the server connection description
-		bool setEndTime(const Core::Time &etime);
+		virtual bool setEndTime(const Core::Time &etime);
 
 		//! Adds the given end time window to the server connection description
-		bool setTimeWindow(const Core::TimeWindow &w);
+		virtual bool setTimeWindow(const Core::TimeWindow &w);
 
 		//! Sets timeout
-		bool setTimeout(int seconds);
+		virtual bool setTimeout(int seconds);
 
 		//! Terminates the combined connection.
-		void close();
+		virtual void close();
 
-		//! Returns the data stream
-		std::istream& stream();
+		virtual Record *next();
 
-		Record* createRecord(Array::DataType, Record::Hint);
 
 	private:
 		int streamHash(const std::string &sta);

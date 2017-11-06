@@ -92,6 +92,7 @@ namespace Core {
    - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
    - Add SC3_LOCATOR_INTERFACE_VERSION define and initialize with version 2
    - Replace LocatorInterface WeightedPick with PickItem
+   - Refactored Seiscomp::IO::RecordStream interface
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()

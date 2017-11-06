@@ -14,8 +14,7 @@
 #ifndef __SEISCOMP_IO_RECORDSTREAM_SDSARCHIVE_H__
 #define __SEISCOMP_IO_RECORDSTREAM_SDSARCHIVE_H__
 
-#include <iostream>
-#include <sstream>
+#include <fstream>
 #include <queue>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/io/recordstream/archive.h>
@@ -57,17 +56,27 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Public Interface
 	// ----------------------------------------------------------------------
 	public:
-		bool setSource(std::string src);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-		               const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-		bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
-		bool setStartTime(const Seiscomp::Core::Time &stime);
-		bool setEndTime(const Seiscomp::Core::Time &etime);
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-		bool setTimeout(int seconds);
-		std::istream& stream();
-		void close();
+		virtual bool setSource(const std::string &src);
+
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
+
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
+
+		virtual bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &etime);
+
+		virtual void close();
+
+		virtual Record *next();
+
 		std::string archiveRoot() const;
 
 
@@ -75,6 +84,7 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Protected interface
 	// ----------------------------------------------------------------------
 	protected:
+		bool stepStream();
 		Seiscomp::Core::Time getStartTime(const std::string &file);
 		int getDoy(const Seiscomp::Core::Time &time);
 		virtual std::string filename(int doy, int year);
@@ -87,14 +97,14 @@ class SC_SYSTEM_CORE_API SDSArchive:  public Seiscomp::IO::RecordStream {
 	//  Protected members
 	// ----------------------------------------------------------------------
 	protected:
-		std::string                         _arcroot;
-		Seiscomp::Core::Time                _stime;
-		Seiscomp::Core::Time                _etime;
-		std::set<StreamIdx>                 _streams;
-		std::set<StreamIdx>::const_iterator _curiter;
-		StreamIdx const                    *_curidx;
-		std::queue<std::string>             _fnames;
-		Seiscomp::IO::RecordStreamPtr       _recstream;
+		std::string                          _arcroot;
+		Seiscomp::Core::Time                 _stime;
+		Seiscomp::Core::Time                 _etime;
+		std::set<StreamIdx>                  _streams;
+		std::set<StreamIdx>::const_iterator  _curiter;
+		StreamIdx const                     *_curidx;
+		std::queue<std::string>              _fnames;
+		std::fstream                         _recstream;
 
 	friend class IsoFile;
 };

@@ -23,72 +23,85 @@
 
 namespace Seiscomp {
 namespace IO {
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(RecordStream, Seiscomp::Core::InterruptibleObject, "RecordStream");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-RecordStream::RecordStream() {
-	setRecordType("mseed");
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordStream::RecordStream()
+: _dataType(Array::DOUBLE), _hint(Record::SAVE_RAW) {
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool RecordStream::setRecordType(const char* type) {
-	_factory = RecordFactory::Find(type);
-	if ( !_factory ) {
-		SEISCOMP_ERROR("Unknown record type '%s'", type);
-	}
-	return _factory != NULL;
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordStream::setTimeWindow(const Seiscomp::Core::TimeWindow &tw) {
+	return setStartTime(tw.startTime()) && setEndTime(tw.endTime());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Record* RecordStream::createRecord(Array::DataType dt, Record::Hint h) {
-	if ( _factory == NULL ) return NULL;
-	Record* record = _factory->create();
-	if ( record ) {
-		record->setDataType(dt);
-		record->setHint(h);
-	}
-
-	return record;
-}
 
 
-void RecordStream::recordStored(Record *) {
-}
-
-
-bool RecordStream::filterRecord(Record *) {
-	// No filtering by default because the underlying acquisition systems do
-	// it usually. In case of a file it can be useful.
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordStream::setTimeout(int seconds) {
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-RecordStream* RecordStream::Create(const char* service) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool RecordStream::setRecordType(const char *type) {
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordStream::setDataType(Array::DataType dataType) {
+	_dataType = dataType;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordStream::setDataHint(Record::Hint hint) {
+	_hint = hint;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordStream *RecordStream::Create(const char *service) {
 	if ( service == NULL ) return NULL;
-	
 	return RecordStreamFactory::Create(service);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-RecordStream* RecordStream::Create(const char* service, const char* recordType) {
-	RecordStream* stream = Create(service);
-	if ( stream == NULL ) return NULL;
-
-	if ( recordType && !stream->setRecordType(recordType) ) {
-		SEISCOMP_ERROR("Stream service '%s' does not support the record type '%s'",
-		               service, recordType);
-		delete stream;
-		stream = NULL;
-	}
-
-	return stream;
-}
 
 
-RecordStream* RecordStream::Open(const char* url) {
-	const char* tmp;
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+RecordStream* RecordStream::Open(const char *url) {
+	const char *tmp;
 	std::string service;
 	std::string source;
 	std::string type;
@@ -139,7 +152,11 @@ RecordStream* RecordStream::Open(const char* url) {
 
 	return stream;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
 }

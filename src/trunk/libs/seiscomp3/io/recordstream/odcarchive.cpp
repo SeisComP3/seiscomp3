@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <iomanip>
+#include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/odcarchive.h>
 #include <seiscomp3/logging/log.h>
 #include <libmseed.h>
@@ -35,94 +36,137 @@ using namespace Seiscomp::RecordStream;
 using namespace Seiscomp::IO;
 using namespace Seiscomp::Core;
 using namespace std;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IMPLEMENT_SC_CLASS_DERIVED(ODCArchive,
                            Seiscomp::IO::RecordStream,
                            "odcarchive");
 
 REGISTER_RECORDSTREAM(ODCArchive, "odcarchive");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ODCArchive::ODCArchive() : RecordStream() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ODCArchive::ODCArchive(const string arcroot)
 : RecordStream(), _arcroot(arcroot) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ODCArchive::ODCArchive(const ODCArchive &mem) : RecordStream() {
 	setSource(mem.archiveRoot());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ODCArchive::~ODCArchive() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ODCArchive& ODCArchive::operator=(const ODCArchive &mem) {
-	if (this != &mem) {
+	if ( this != &mem )
 		_arcroot = mem.archiveRoot();
-	}
 
 	return *this;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool ODCArchive::setSource(string src) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ODCArchive::setSource(const string &src) {
 	_arcroot = src;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool ODCArchive::addStream(string net, string sta, string loc, string cha) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ODCArchive::addStream(const string &net, const string &sta,
+                           const string &loc, const string &cha) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net,sta,loc,cha));
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool ODCArchive::addStream(string net, string sta, string loc, string cha, const Time &stime, const Time &etime) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ODCArchive::addStream(const string &net, const string &sta,
+                           const string &loc, const string &cha,
+                           const Time &stime, const Time &etime) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net,sta,loc,cha,stime,etime));
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool ODCArchive::removeStream(std::string net, std::string sta, std::string loc, std::string cha) {
-	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
 
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-			 it->station()  == sta &&
-			 it->location() == loc &&
-			 it->channel()  == cha ) {
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
 
-	return deletedSomething;
-}
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ODCArchive::setStartTime(const Time &stime) {
 	_stime = stime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ODCArchive::setEndTime(const Time &etime) {
 	_etime = etime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool ODCArchive::setTimeWindow(const TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
 
-bool ODCArchive::setTimeout(int seconds) {
-	return false;
-}
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void ODCArchive::close() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string ODCArchive::archiveRoot() const {
 	return _arcroot;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int ODCArchive::getDoy(const Time &time) {
 	int year;
 
@@ -131,7 +175,12 @@ int ODCArchive::getDoy(const Time &time) {
 	return (366-((int)(Time(year,12,31,23,59,59)-time)/86400));
 	return (365-((int)(Time(year,12,31,23,59,59)-time)/86400));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string ODCArchive::ODCfilename(int doy, int year) {
 	string net = _curidx->network();
 	string sta = _curidx->station();
@@ -149,7 +198,12 @@ string ODCArchive::ODCfilename(int doy, int year) {
 
 	return path;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void ODCArchive::setFilenames() {
 	Time stime = (_curidx->startTime() == Time())?_stime:_curidx->startTime();
 	Time etime = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
@@ -167,7 +221,12 @@ void ODCArchive::setFilenames() {
 		sdoy = 1;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ODCArchive::setStart(const string &fname) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
@@ -179,8 +238,8 @@ bool ODCArchive::setStart(const string &fname) {
 	long int size;
 	bool result = true;
 
-	_recstream->stream().seekg(0, ios::end);
-	size = _recstream->stream().tellg();
+	_recstream.seekg(0, ios::end);
+	size = _recstream.tellg();
 
 	while ((retcode = ms_readmsr_r(&pfp,&prec,const_cast<char *>(fname.c_str()),-1,NULL,NULL,1,0,0)) == MS_NOERROR) {
 		samprate = prec->samprate;
@@ -209,18 +268,23 @@ bool ODCArchive::setStart(const string &fname) {
 	/* Cleanup memory and close file */
 	ms_readmsr_r(&pfp,&prec,NULL,0,NULL,NULL,0,0,0);
 
-	_recstream->stream().seekg(offset,ios::beg);
+	_recstream.seekg(offset,ios::beg);
 	if (offset == size)
-		_recstream->stream().clear(ios::eofbit);
+		_recstream.clear(ios::eofbit);
 
 	return result;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool ODCArchive::isEnd() {
 	if (!_fnames.empty())
 		return false;
 
-	istream &istr = _recstream->stream();
+	istream &istr = _recstream;
 	streampos strpos = istr.tellg();
 	char buffer[sizeof(struct fsdh_s)];
 	struct fsdh_s *fsdh = (struct fsdh_s *)buffer;
@@ -250,26 +314,29 @@ bool ODCArchive::isEnd() {
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-istream& ODCArchive::stream() {
-	if (_recstream) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ODCArchive::stepStream() {
+	if ( _recstream.is_open() ) {
 		/* eof check: try to read from stream */
-		istream &tmpstream = _recstream->stream();
-		tmpstream.peek();
+		_recstream.peek();
 		/* go on at the file's stream */
-		if (tmpstream.good() && !isEnd())
-			return tmpstream;
+		if ( _recstream.good() && !isEnd() )
+			return true;
 	}
 	else
 		_curiter = _streams.begin();
 
 	bool first = false;
-	while (!_fnames.empty() || _curiter != _streams.end()) {
-		while (_fnames.empty() && _curiter != _streams.end()) {
+	while ( !_fnames.empty() || _curiter != _streams.end() ) {
+		while ( _fnames.empty() && _curiter != _streams.end() ) {
 			SEISCOMP_DEBUG("SDS request: %s", _curiter->str(_stime, _etime).c_str());
-			if (_etime == Time())
-				_etime = Time::GMT();
-			if ((_curiter->startTime() == Time() && _stime == Time())) {
+			if ( _etime == Time() ) _etime = Time::GMT();
+			if ( (_curiter->startTime() == Time() && _stime == Time()) ) {
 				SEISCOMP_WARNING("... has invalid time window -> ignore this request above");
 				++_curiter;
 			}
@@ -282,28 +349,23 @@ istream& ODCArchive::stream() {
 			}
 		}
 
-		if (!_fnames.empty()) {
-			_recstream = RecordStream::Create("file");
-			if (!_recstream) {
-				SEISCOMP_ERROR("Could not create file stream");
-				throw ArchiveException("Could not create file stream");
-			}
-
-			while (!_fnames.empty()) {
+		if ( !_fnames.empty() ) {
+			while ( !_fnames.empty() ) {
 				string fname = _fnames.front();
 				_fnames.pop();
-				if (!_recstream->setSource(fname.c_str())) {
-					SEISCOMP_DEBUG("file %s not found",fname.c_str());
-					_recstream->stream().clear();
+				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
+				if ( !_recstream.is_open() ) {
+					SEISCOMP_DEBUG("file %s not found", fname.c_str());
+					_recstream.clear();
 				}
 				else {
-					if (first) {
-						if (!setStart(fname))
+					if ( first ) {
+						if ( !setStart(fname) )
 							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
 					}
 
-					if (!isEnd() && !_recstream->stream().eof())
-						return _recstream->stream();
+					if ( !_recstream.eof() && !isEnd() )
+						return true;
 				}
 
 				first = false;
@@ -311,10 +373,52 @@ istream& ODCArchive::stream() {
 		}
 	}
 
-	if (!_recstream) {
+	if ( !_recstream ) {
 		SEISCOMP_DEBUG("no data found in ODC archive");
-		throw ArchiveException("no data found in ODC archive");
+		return false;
 	}
 
-	return _recstream->stream();
+	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Seiscomp::Record *ODCArchive::next() {
+	while ( true ) {
+		if ( !stepStream() )
+			return NULL;
+
+		MSeedRecord *rec = new MSeedRecord();
+		if ( rec == NULL )
+			return NULL;
+
+		setupRecord(rec);
+
+		try {
+			rec->read(_recstream);
+		}
+		catch ( Core::EndOfStreamException & ) {
+			_recstream.close();
+			delete rec;
+			continue;
+		}
+		catch ( std::exception &e ) {
+			SEISCOMP_ERROR("file read exception: %s", e.what());
+			delete rec;
+			continue;
+		}
+
+		return rec;
+	}
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

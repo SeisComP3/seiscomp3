@@ -52,37 +52,42 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 	//  Operators
 	// ----------------------------------------------------------------------
 	public:
-		File& operator=(const File &f);
+		File &operator=(const File &f);
 
 
 	// ----------------------------------------------------------------------
 	//  Public RecordStream interface
 	// ----------------------------------------------------------------------
 	public:
-		bool setSource(std::string);
+		virtual bool setSource(const std::string &filename);
 
-		//! The following five methods are not implemented yet
-		//! and return always 'false'.
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-			const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-		bool setStartTime(const Seiscomp::Core::Time &stime);
-		bool setEndTime(const Seiscomp::Core::Time &etime);
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-		bool setTimeout(int seconds);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
 
-		void close();
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
 
-		std::string name() const;
-		std::istream& stream();
+		virtual bool setStartTime(const Seiscomp::Core::Time &startTime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &endTime);
 
-		bool filterRecord(Record*);
+		virtual void close();
+
+		virtual bool setRecordType(const char *type);
+
+		virtual Record *next();
 
 
 	// ----------------------------------------------------------------------
 	//  Public file specific interface
 	// ----------------------------------------------------------------------
 	public:
+		std::string name() const;
 		size_t tell();
 
 		File &seek(size_t pos);
@@ -104,6 +109,7 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 
 		typedef std::map<std::string, TimeWindowFilter> FilterMap;
 
+		RecordFactory  *_factory;
 		std::string     _name;
 		bool            _closeRequested;
 		std::fstream    _fstream;
@@ -112,6 +118,7 @@ class SC_SYSTEM_CORE_API File : public Seiscomp::IO::RecordStream {
 		Core::Time      _startTime;
 		Core::Time      _endTime;
 };
+
 
 }
 }

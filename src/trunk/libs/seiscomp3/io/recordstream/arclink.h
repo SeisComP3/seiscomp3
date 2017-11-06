@@ -60,52 +60,53 @@ class SC_SYSTEM_CORE_API ArclinkConnection : public Seiscomp::IO::RecordStream {
 		//! Destructor
 		virtual ~ArclinkConnection();
 
+	public:
 		//! The recordtype cannot be selected when using an arclink
 		//! connection. It will always create MiniSeed records
-		bool setRecordType(const char*);
+		virtual bool setRecordType(const char*);
 
 		//! Initialize the arclink connection.
-		bool setSource(std::string serverloc);
+		virtual bool setSource(const std::string &serverloc);
 		
 		//! Supply user credentials
 		bool setUser(std::string name, std::string password);
 		
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
 
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-			const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-
-		//! Removes the given stream from the connection description. Returns true on success; false otherwise.
-		bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &stime,
+		                       const Seiscomp::Core::Time &etime);
   
 		//! Adds the given start time to the server connection description
-		bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setStartTime(const Seiscomp::Core::Time &stime);
 		
 		//! Adds the given end time to the server connection description
-		bool setEndTime(const Seiscomp::Core::Time &etime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &etime);
 
-		//! Adds the given end time window to the server connection description
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-		
 		//! Sets timeout
-		bool setTimeout(int seconds);
+		virtual bool setTimeout(int seconds);
+
+		//! Terminates the arclink connection.
+		virtual void close();
+
+		virtual Record *next();
 
 		//! Removes all stream list, time window, etc. -entries from the connection description object.
 		bool clear();
 
-		//! Terminates the arclink connection.
-		void close();
-
 		//! Reconnects a terminated arclink connection.
 		bool reconnect();
 
-		//! Returns the data stream
-		std::istream& stream();
 
 	private:
-		std::istringstream _stream;
 		Seiscomp::IO::Socket _sock;
 		std::string _serverloc;
 		std::string _user;

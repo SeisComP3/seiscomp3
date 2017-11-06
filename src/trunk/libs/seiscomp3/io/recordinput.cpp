@@ -145,7 +145,12 @@ Seiscomp::Record* RecordIterator::current() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 RecordInput::RecordInput(RecordStream *in, Array::DataType dt, Record::Hint h)
-: _in(in), _datatype(dt), _hint(h) {}
+: _in(in) {
+	if ( _in != NULL ) {
+		_in->setDataType(dt);
+		_in->setDataHint(h);
+	}
+}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -170,50 +175,6 @@ RecordIterator RecordInput::end() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Record* RecordInput::next() {
-	Record *pms = 0;
-	while ( true ) {
-		std::istream &istr = _in->stream();
-
-		if ( istr.good() ) {
-			pms = _in->createRecord(_datatype, _hint);
-
-			if ( pms ) {
-				try {
-					pms->read(istr);
-				}
-				catch ( Core::EndOfStreamException & ) {
-					SEISCOMP_INFO("End of stream detected");
-					delete pms;
-					break;
-				}
-				catch ( Core::StreamException &e ) {
-					SEISCOMP_ERROR("RecordStream read exception: %s", e.what());
-					delete pms;
-					pms = 0;
-					continue;
-				}
-			}
-
-			// If the record should be filtered out ignore it.
-			if ( _in->filterRecord(pms) ) {
-				delete pms;
-				pms = NULL;
-				continue;
-			}
-
-			// Notify the stream about the read record
-			_in->recordStored(pms);
-			return pms;
-		}
-		else {
-			if ( istr.eof() )
-				SEISCOMP_DEBUG("RecordStream's end reached");
-			else
-				SEISCOMP_DEBUG("RecordStream is not 'good'");
-			break;
-		}
-	}
-
-	return NULL;
+Record *RecordInput::next() {
+	return _in->next();
 }

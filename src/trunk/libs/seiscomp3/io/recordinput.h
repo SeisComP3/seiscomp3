@@ -104,9 +104,7 @@ class SC_SYSTEM_CORE_API RecordInput : public Seiscomp::Core::BaseObject {
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
-		RecordStream    *_in;
-		Array::DataType  _datatype;
-		Record::Hint     _hint;
+		RecordStream *_in;
 };
 
 

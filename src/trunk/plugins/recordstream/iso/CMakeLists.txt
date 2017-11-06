@@ -5,6 +5,7 @@ IF (CDIO_FOUND)
 		ISO_SOURCES
 			isoarchive.cpp
 			isofile.cpp
+			plugin.cpp
 	)
 
 	SC_ADD_PLUGIN_LIBRARY(ISO iso "")

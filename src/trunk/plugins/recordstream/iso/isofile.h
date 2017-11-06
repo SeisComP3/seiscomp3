@@ -18,73 +18,93 @@
 #include <map>
 #include <cdio++/iso9660.hpp>
 #include <seiscomp3/io/recordstream.h>
-#include <seiscomp3/io/recordstream/archive.h>
+#include <seiscomp3/io/recordstream/sdsarchive.h>
 
 
 namespace Seiscomp {
 namespace RecordStream {
 
 
-    DEFINE_SMARTPOINTER(IsoFile);
+DEFINE_SMARTPOINTER(IsoFile);
 
 
 /* This class allows the access to an ISO9660 image file given by the 
    file name and stream time windows (wildcarding not supported!!!) 
    The image contains compressed files in SeisComP Data Structure (SDS) */
 class IsoFile:  public Seiscomp::IO::RecordStream {
-    DECLARE_SC_CLASS(IsoFile);
+	DECLARE_SC_CLASS(IsoFile);
 
-	
-public:
-    // ----------------------------------------------------------------------
-    //  Xstruction
-    // ----------------------------------------------------------------------
-    IsoFile();
-    IsoFile(const std::string name);
-    IsoFile(const IsoFile &iso);
-    virtual ~IsoFile();
-    
-    // ----------------------------------------------------------------------
-    //  Operators
-    // ----------------------------------------------------------------------
-    IsoFile& operator=(const IsoFile &iso);
 
-    // ----------------------------------------------------------------------
-    //  Public Interface
-    // ----------------------------------------------------------------------
-    bool setSource(std::string src);
-    bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-    bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-		   const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-    bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
-    bool setStartTime(const Seiscomp::Core::Time &stime);
-    bool setEndTime(const Seiscomp::Core::Time &etime);
-    bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-    bool setTimeout(int seconds);
-    std::istream& stream();
-    void close();
-    void clean();
-    std::string name() const;
-		
-private:
-    // ----------------------------------------------------------------------
-    //  Implementation
-    // ----------------------------------------------------------------------
-    std::string _name;
-    std::string _extrDir;
-    bool _readingData;
-    ISO9660::IFS _ifs;
-    Seiscomp::IO::RecordStreamPtr _recstream;
-    std::map<std::string,std::string> _dnames;
-    std::set<std::string> _fnames;
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		IsoFile();
+		IsoFile(const std::string name);
+		IsoFile(const IsoFile &iso);
+		virtual ~IsoFile();
 
-    void uncompress(ifstream &isofile, ofstream &outfile, 
-                    unsigned long long offset, unsigned long filesize);
-    void createSDS(const std::string sdspath);
-    void extractFiles();
+
+	// ----------------------------------------------------------------------
+	//  Operators
+	// ----------------------------------------------------------------------
+	public:
+		IsoFile& operator=(const IsoFile &iso);
+
+
+	// ----------------------------------------------------------------------
+	//  RecordStream Interface
+	// ----------------------------------------------------------------------
+	public:
+		virtual bool setSource(const std::string &src);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
+
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
+
+		virtual bool setStartTime(const Seiscomp::Core::Time &startTime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &endTime);
+		virtual bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
+		virtual void close();
+		virtual Record *next();
+
+		void clean();
+		std::string name() const;
+
+
+	// ----------------------------------------------------------------------
+	//  Private interface
+	// ----------------------------------------------------------------------
+	private:
+		void uncompress(std::ifstream &isofile, std::ofstream &outfile,
+		                unsigned long long offset, unsigned long filesize);
+		void createSDS(const std::string &sdspath);
+		void extractFiles();
+
+
+	// ----------------------------------------------------------------------
+	//  Implementation
+	// ----------------------------------------------------------------------
+	private:
+		std::string _name;
+		std::string _extrDir;
+		bool _readingData;
+		ISO9660::IFS _ifs;
+		SDSArchivePtr _recstream;
+		std::map<std::string,std::string> _dnames;
+		std::set<std::string> _fnames;
 };
 
+
 }
 }
+
 
 #endif

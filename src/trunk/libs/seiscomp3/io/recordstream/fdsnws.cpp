@@ -28,6 +28,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/strings.h>
 #include <seiscomp3/core/plugin.h>
+#include <seiscomp3/io/records/mseedrecord.h>
 #include <libmseed.h>
 #include "fdsnws.h"
 
@@ -50,28 +51,35 @@ using namespace Seiscomp::RecordStream;
 
 REGISTER_RECORDSTREAM(FDSNWSConnection, "fdsnws");
 REGISTER_RECORDSTREAM(FDSNWSSSLConnection, "fdsnwss");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FDSNWSConnectionBase::FDSNWSConnectionBase(const char *protocol, IO::Socket *socket, int defaultPort)
-: _stream(std::istringstream::in|std::istringstream::binary)
-, _protocol(protocol)
+: _protocol(protocol)
 , _sock(socket)
 , _defaultPort(defaultPort)
 , _readingData(false)
 , _chunkMode(false)
 , _remainingBytes(0)
 {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool FDSNWSConnectionBase::setSource(std::string serverloc) {
-	size_t pos = serverloc.find('/');
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool FDSNWSConnectionBase::setSource(const std::string &source) {
+	size_t pos = source.find('/');
 	if ( pos != string::npos ) {
-		_url = serverloc.substr(pos);
-		_host = serverloc.substr(0, pos);
+		_url = source.substr(pos);
+		_host = source.substr(0, pos);
 	}
 	else {
 		_url = "/fdsnws/dataselect/1/query";
-		_host = serverloc;
+		_host = source;
 	}
 
 	if ( _host.find(':') == string::npos ) {
@@ -81,85 +89,99 @@ bool FDSNWSConnectionBase::setSource(std::string serverloc) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::setRecordType(const char* type) {
 	return !strcmp(type, "mseed");
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool FDSNWSConnectionBase::addStream(std::string net, std::string sta, std::string loc, std::string cha) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool FDSNWSConnectionBase::addStream(const string &net, const string &sta,
+                                     const string &loc, const string &cha) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha));
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool FDSNWSConnectionBase::addStream(std::string net, std::string sta, std::string loc, std::string cha,
-	const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool FDSNWSConnectionBase::addStream(const string &net, const string &sta,
+                                     const string &loc, const string &cha,
+                                     const Seiscomp::Core::Time &stime,
+                                     const Seiscomp::Core::Time &etime) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha, stime, etime));
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool FDSNWSConnectionBase::removeStream(std::string net, std::string sta, std::string loc, std::string cha) {
-	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
-
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-		     it->station()  == sta &&
-		     it->location() == loc &&
-		     it->channel()  == cha ) {
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
-
-	return deletedSomething;
-}
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::setStartTime(const Seiscomp::Core::Time &stime) {
 	_stime = stime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::setEndTime(const Seiscomp::Core::Time &etime) {
 	_etime = etime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool FDSNWSConnectionBase::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
 
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::setTimeout(int seconds) {
 	_sock->setTimeout(seconds);
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::clear() {
 	this->~FDSNWSConnectionBase();
 	new(this) FDSNWSConnectionBase(_protocol, _sock.get(), _defaultPort);
 	setSource(_host + _url);
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Hopefully safe to be called from another thread
 void FDSNWSConnectionBase::close() {
 	_sock->interrupt();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool FDSNWSConnectionBase::reconnect() {
 	if ( _sock->isOpen() )
 		_sock->close();
@@ -167,7 +189,12 @@ bool FDSNWSConnectionBase::reconnect() {
 	_readingData = false;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void FDSNWSConnectionBase::handshake() {
 	string request;
 
@@ -331,13 +358,15 @@ void FDSNWSConnectionBase::handshake() {
 		}
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-istream &FDSNWSConnectionBase::stream() {
-	if ( _readingData && !_sock->isOpen() ) {
-		_stream.clear(std::ios::eofbit);
-		return _stream;
-	}
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Record *FDSNWSConnectionBase::next() {
+	if ( _readingData && !_sock->isOpen() )
+		return NULL;
 
 	_sock->startTimer();
 
@@ -346,56 +375,78 @@ istream &FDSNWSConnectionBase::stream() {
 		try {
 			handshake();
 		}
-		catch ( GeneralException& ) {
+		catch ( const GeneralException &e ) {
+			SEISCOMP_ERROR("fdsnws: %s", e.what());
 			_sock->close();
-			throw;
+			return NULL;
 		}
 
 		_readingData = true;
 		if ( !_chunkMode && _remainingBytes <= 0 ) {
 			SEISCOMP_DEBUG("Content length is 0, nothing to read");
 			_sock->close();
-			_stream.clear(std::ios::eofbit);
-			return _stream;
+			return NULL;
 		}
 	}
 
 	try {
-		if ( _error.empty() ) {
-			// HACK to retrieve the record length
-			string data = readBinary(RECSIZE);
-			if ( !data.empty() ) {
-				int reclen = ms_detect(data.c_str(), RECSIZE);
-				if (reclen > RECSIZE)
-					_stream.str(data + readBinary(reclen - RECSIZE));
+		while ( true ) {
+			_sock->startTimer();
+
+			if ( _error.empty() ) {
+				// HACK to retrieve the record length
+				string data = readBinary(RECSIZE);
+				if ( !data.empty() ) {
+					int reclen = ms_detect(data.c_str(), RECSIZE);
+					std::istringstream stream(std::istringstream::in|std::istringstream::binary);
+					if ( reclen > RECSIZE )
+						stream.str(data + readBinary(reclen - RECSIZE));
+					else {
+						if ( reclen <= 0 )
+							SEISCOMP_ERROR("Retrieving the record length failed (try 512 Byte)!");
+						reclen = RECSIZE;
+						stream.str(data);
+					}
+
+					IO::MSeedRecord *rec = new IO::MSeedRecord;
+					setupRecord(rec);
+					try {
+						rec->read(stream);
+					}
+					catch ( ... ) {
+						delete rec;
+						continue;
+					}
+
+					return rec;
+				}
 				else {
-					if (reclen <= 0) SEISCOMP_ERROR("Retrieving the record length failed (try 512 Byte)!");
-					reclen = RECSIZE;
-					_stream.str(data);
+					_sock->close();
+					break;
 				}
 			}
-			else {
-				_sock->close();
-				_stream.clear(std::ios::eofbit);
+			else
+				_error += readBinary(_chunkMode?512:_remainingBytes);
+
+			if ( !_sock->isOpen() ) {
+				if ( _error.size() )
+					throw GeneralException(_error.c_str());
 			}
 		}
-		else
-			_error += readBinary(_chunkMode?512:_remainingBytes);
-
-		if ( !_sock->isOpen() ) {
-			if ( _error.size() )
-				throw GeneralException(_error.c_str());
-		}
 	}
-	catch ( GeneralException ) {
+	catch ( const GeneralException &e ) {
+		SEISCOMP_ERROR("fdsnws: %s", e.what());
 		_sock->close();
-		throw;
 	}
 
-	return _stream;
+	return NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 std::string FDSNWSConnectionBase::readBinary(int size) {
 	if ( size <= 0 ) return "";
 
@@ -448,11 +499,25 @@ std::string FDSNWSConnectionBase::readBinary(int size) {
 
 	return data;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FDSNWSConnection::FDSNWSConnection()
 : FDSNWSConnectionBase("http", new IO::Socket, 80) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 FDSNWSSSLConnection::FDSNWSSSLConnection()
 : FDSNWSConnectionBase("https", new IO::SSLSocket, 443) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
