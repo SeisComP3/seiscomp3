@@ -51,6 +51,8 @@ to the RealQuantity and TimeQuantity type.
 
 **Important API changes**
 
+***MagnitudeProcessor***
+
 The MagnitudeProcessor interface has changed to support regionalized
 magnitude computations. The method ```computeMagnitude``` receives additionally
 two parameters, the origin and the sensor location object.
@@ -75,6 +77,31 @@ Status computeMagnitude(double amplitude, double period,
 
 Furthermore a new enumeration has been added to return the status of
 the magnitude processing: ```EpicenterOutOfRegions```.
+
+***RecordStream***
+
+The RecordStream interface has changed considerably. All ```std::string```
+parameters that were passed by value have changed to be passed by const
+reference. Due to the rather complicated structure of the RecordStream
+interface and its usage in RecordInput, the following methods were removed:
+
+* std::istream& stream()
+* Record *createRecord(Array::DataType, Record::Hint)
+* void recordStored(Record*)
+* bool filterRecord(Record*)
+
+The new interface does deal directly with records and therefore only provides
+the single method ```Record *next()```. Iteration stops when a NULL record will
+be returned. The advantage is, that an implementation which would route requests
+to several backends in parallel such as the balanced recordstream do not need
+to deserialize and serialize a record additionally to the application
+deserialization. This improves performance and makes it easier to develop more
+complex implementations such as a router (which is available as extension from
+gempa).
+
+The Python API with respect to RecordInput did not change. You can still use
+your old code. Anyone with custom recordstream implementations will have to
+port their code.
 
 ----
 
