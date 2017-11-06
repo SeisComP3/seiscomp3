@@ -355,10 +355,11 @@ bool ODCArchive::stepStream() {
 				_fnames.pop();
 				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
 				if ( !_recstream.is_open() ) {
-					SEISCOMP_DEBUG("file %s not found", fname.c_str());
+					SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
 					_recstream.clear();
 				}
 				else {
+					SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
 					if ( first ) {
 						if ( !setStart(fname) )
 							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
@@ -373,12 +374,7 @@ bool ODCArchive::stepStream() {
 		}
 	}
 
-	if ( !_recstream ) {
-		SEISCOMP_DEBUG("no data found in ODC archive");
-		return false;
-	}
-
-	return true;
+	return _recstream.good();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -387,10 +383,7 @@ bool ODCArchive::stepStream() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::Record *ODCArchive::next() {
-	while ( true ) {
-		if ( !stepStream() )
-			return NULL;
-
+	while ( stepStream() ) {
 		MSeedRecord *rec = new MSeedRecord();
 		if ( rec == NULL )
 			return NULL;

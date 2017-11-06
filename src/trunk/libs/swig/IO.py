@@ -818,14 +818,9 @@ class RecordStream(Core.InterruptibleObject):
     __swig_destroy__ = _IO.delete_RecordStream
     __del__ = lambda self: None
 
-    def setRecordType(self, arg2):
-        """setRecordType(RecordStream self, char const * arg2) -> bool"""
-        return _IO.RecordStream_setRecordType(self, arg2)
-
-
-    def setSource(self, arg2):
-        """setSource(RecordStream self, string arg2) -> bool"""
-        return _IO.RecordStream_setSource(self, arg2)
+    def setSource(self, source):
+        """setSource(RecordStream self, string source) -> bool"""
+        return _IO.RecordStream_setSource(self, source)
 
 
     def close(self):
@@ -835,25 +830,25 @@ class RecordStream(Core.InterruptibleObject):
 
     def addStream(self, *args):
         """
-        addStream(RecordStream self, string net, string sta, string loc, string cha) -> bool
-        addStream(RecordStream self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        addStream(RecordStream self, string networkCode, string stationCode, string locationCode, string channelCode) -> bool
+        addStream(RecordStream self, string networkCode, string stationCode, string locationCode, string channelCode, Time startTime, Time endTime) -> bool
         """
         return _IO.RecordStream_addStream(self, *args)
 
 
-    def setStartTime(self, stime):
-        """setStartTime(RecordStream self, Time stime) -> bool"""
-        return _IO.RecordStream_setStartTime(self, stime)
+    def setStartTime(self, startTime):
+        """setStartTime(RecordStream self, Time startTime) -> bool"""
+        return _IO.RecordStream_setStartTime(self, startTime)
 
 
-    def setEndTime(self, etime):
-        """setEndTime(RecordStream self, Time etime) -> bool"""
-        return _IO.RecordStream_setEndTime(self, etime)
+    def setEndTime(self, endTime):
+        """setEndTime(RecordStream self, Time endTime) -> bool"""
+        return _IO.RecordStream_setEndTime(self, endTime)
 
 
-    def setTimeWindow(self, w):
-        """setTimeWindow(RecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"""
-        return _IO.RecordStream_setTimeWindow(self, w)
+    def setTimeWindow(self, timeWindow):
+        """setTimeWindow(RecordStream self, Seiscomp::Core::TimeWindow const & timeWindow) -> bool"""
+        return _IO.RecordStream_setTimeWindow(self, timeWindow)
 
 
     def setTimeout(self, seconds):
@@ -861,32 +856,29 @@ class RecordStream(Core.InterruptibleObject):
         return _IO.RecordStream_setTimeout(self, seconds)
 
 
-    def stream(self):
-        """stream(RecordStream self) -> std::istream &"""
-        return _IO.RecordStream_stream(self)
+    def setRecordType(self, type):
+        """setRecordType(RecordStream self, char const * type) -> bool"""
+        return _IO.RecordStream_setRecordType(self, type)
 
 
-    def createRecord(self, arg2, arg3):
-        """createRecord(RecordStream self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"""
-        return _IO.RecordStream_createRecord(self, arg2, arg3)
+    def setDataType(self, dataType):
+        """setDataType(RecordStream self, Seiscomp::Array::DataType dataType)"""
+        return _IO.RecordStream_setDataType(self, dataType)
 
 
-    def recordStored(self, arg2):
-        """recordStored(RecordStream self, Record arg2)"""
-        return _IO.RecordStream_recordStored(self, arg2)
+    def setDataHint(self, hint):
+        """setDataHint(RecordStream self, Seiscomp::Record::Hint hint)"""
+        return _IO.RecordStream_setDataHint(self, hint)
 
 
-    def filterRecord(self, arg2):
-        """filterRecord(RecordStream self, Record arg2) -> bool"""
-        return _IO.RecordStream_filterRecord(self, arg2)
+    def next(self):
+        """next(RecordStream self) -> Record"""
+        return _IO.RecordStream_next(self)
 
 
-    def Create(*args):
-        """
-        Create(char const * service) -> RecordStream
-        Create(char const * service, char const * recordType) -> RecordStream
-        """
-        return _IO.RecordStream_Create(*args)
+    def Create(service):
+        """Create(char const * service) -> RecordStream"""
+        return _IO.RecordStream_Create(service)
 
     Create = staticmethod(Create)
 
@@ -920,12 +912,9 @@ def RecordStream_ConstCast(*args):
     """
     return _IO.RecordStream_ConstCast(*args)
 
-def RecordStream_Create(*args):
-    """
-    Create(char const * service) -> RecordStream
-    RecordStream_Create(char const * service, char const * recordType) -> RecordStream
-    """
-    return _IO.RecordStream_Create(*args)
+def RecordStream_Create(service):
+    """RecordStream_Create(char const * service) -> RecordStream"""
+    return _IO.RecordStream_Create(service)
 
 def RecordStream_Open(url):
     """RecordStream_Open(char const * url) -> RecordStream"""
@@ -2330,37 +2319,27 @@ class FileRecordStream(RecordStream):
     __swig_destroy__ = _IO.delete_FileRecordStream
     __del__ = lambda self: None
 
-    def setSource(self, arg2):
-        """setSource(FileRecordStream self, string arg2) -> bool"""
-        return _IO.FileRecordStream_setSource(self, arg2)
+    def setSource(self, filename):
+        """setSource(FileRecordStream self, string filename) -> bool"""
+        return _IO.FileRecordStream_setSource(self, filename)
 
 
     def addStream(self, *args):
         """
-        addStream(FileRecordStream self, string net, string sta, string loc, string cha) -> bool
-        addStream(FileRecordStream self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        addStream(FileRecordStream self, string networkCode, string stationCode, string locationCode, string channelCode) -> bool
+        addStream(FileRecordStream self, string networkCode, string stationCode, string locationCode, string channelCode, Time startTime, Time endTime) -> bool
         """
         return _IO.FileRecordStream_addStream(self, *args)
 
 
-    def setStartTime(self, stime):
-        """setStartTime(FileRecordStream self, Time stime) -> bool"""
-        return _IO.FileRecordStream_setStartTime(self, stime)
+    def setStartTime(self, startTime):
+        """setStartTime(FileRecordStream self, Time startTime) -> bool"""
+        return _IO.FileRecordStream_setStartTime(self, startTime)
 
 
-    def setEndTime(self, etime):
-        """setEndTime(FileRecordStream self, Time etime) -> bool"""
-        return _IO.FileRecordStream_setEndTime(self, etime)
-
-
-    def setTimeWindow(self, w):
-        """setTimeWindow(FileRecordStream self, Seiscomp::Core::TimeWindow const & w) -> bool"""
-        return _IO.FileRecordStream_setTimeWindow(self, w)
-
-
-    def setTimeout(self, seconds):
-        """setTimeout(FileRecordStream self, int seconds) -> bool"""
-        return _IO.FileRecordStream_setTimeout(self, seconds)
+    def setEndTime(self, endTime):
+        """setEndTime(FileRecordStream self, Time endTime) -> bool"""
+        return _IO.FileRecordStream_setEndTime(self, endTime)
 
 
     def close(self):
@@ -2368,19 +2347,19 @@ class FileRecordStream(RecordStream):
         return _IO.FileRecordStream_close(self)
 
 
+    def setRecordType(self, type):
+        """setRecordType(FileRecordStream self, char const * type) -> bool"""
+        return _IO.FileRecordStream_setRecordType(self, type)
+
+
+    def next(self):
+        """next(FileRecordStream self) -> Record"""
+        return _IO.FileRecordStream_next(self)
+
+
     def name(self):
         """name(FileRecordStream self) -> string"""
         return _IO.FileRecordStream_name(self)
-
-
-    def stream(self):
-        """stream(FileRecordStream self) -> std::istream &"""
-        return _IO.FileRecordStream_stream(self)
-
-
-    def filterRecord(self, arg2):
-        """filterRecord(FileRecordStream self, Record arg2) -> bool"""
-        return _IO.FileRecordStream_filterRecord(self, arg2)
 
 
     def tell(self):
@@ -2605,37 +2584,27 @@ class SLConnection(RecordStream):
         return _IO.SLConnection_setRecordType(self, arg2)
 
 
-    def setSource(self, serverloc):
-        """setSource(SLConnection self, string serverloc) -> bool"""
-        return _IO.SLConnection_setSource(self, serverloc)
+    def setSource(self, source):
+        """setSource(SLConnection self, string source) -> bool"""
+        return _IO.SLConnection_setSource(self, source)
 
 
     def addStream(self, *args):
         """
-        addStream(SLConnection self, string net, string sta, string loc, string cha) -> bool
-        addStream(SLConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        addStream(SLConnection self, string networkCode, string stationCode, string locationCode, string channelCode) -> bool
+        addStream(SLConnection self, string networkCode, string stationCode, string locationCode, string channelCode, Time startTime, Time endTime) -> bool
         """
         return _IO.SLConnection_addStream(self, *args)
 
 
-    def removeStream(self, net, sta, loc, cha):
-        """removeStream(SLConnection self, string net, string sta, string loc, string cha) -> bool"""
-        return _IO.SLConnection_removeStream(self, net, sta, loc, cha)
+    def setStartTime(self, startTime):
+        """setStartTime(SLConnection self, Time startTime) -> bool"""
+        return _IO.SLConnection_setStartTime(self, startTime)
 
 
-    def setStartTime(self, stime):
-        """setStartTime(SLConnection self, Time stime) -> bool"""
-        return _IO.SLConnection_setStartTime(self, stime)
-
-
-    def setEndTime(self, etime):
-        """setEndTime(SLConnection self, Time etime) -> bool"""
-        return _IO.SLConnection_setEndTime(self, etime)
-
-
-    def setTimeWindow(self, w):
-        """setTimeWindow(SLConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
-        return _IO.SLConnection_setTimeWindow(self, w)
+    def setEndTime(self, endTime):
+        """setEndTime(SLConnection self, Time endTime) -> bool"""
+        return _IO.SLConnection_setEndTime(self, endTime)
 
 
     def setTimeout(self, seconds):
@@ -2643,24 +2612,24 @@ class SLConnection(RecordStream):
         return _IO.SLConnection_setTimeout(self, seconds)
 
 
-    def clear(self):
-        """clear(SLConnection self) -> bool"""
-        return _IO.SLConnection_clear(self)
-
-
     def close(self):
         """close(SLConnection self)"""
         return _IO.SLConnection_close(self)
 
 
+    def next(self):
+        """next(SLConnection self) -> Record"""
+        return _IO.SLConnection_next(self)
+
+
+    def clear(self):
+        """clear(SLConnection self) -> bool"""
+        return _IO.SLConnection_clear(self)
+
+
     def reconnect(self):
         """reconnect(SLConnection self) -> bool"""
         return _IO.SLConnection_reconnect(self)
-
-
-    def stream(self):
-        """stream(SLConnection self) -> std::istream &"""
-        return _IO.SLConnection_stream(self)
 
 SLConnection_swigregister = _IO.SLConnection_swigregister
 SLConnection_swigregister(SLConnection)
@@ -2826,15 +2795,10 @@ class ArclinkConnection(RecordStream):
 
     def addStream(self, *args):
         """
-        addStream(ArclinkConnection self, string net, string sta, string loc, string cha) -> bool
-        addStream(ArclinkConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        addStream(ArclinkConnection self, string networkCode, string stationCode, string locationCode, string channelCode) -> bool
+        addStream(ArclinkConnection self, string networkCode, string stationCode, string locationCode, string channelCode, Time stime, Time etime) -> bool
         """
         return _IO.ArclinkConnection_addStream(self, *args)
-
-
-    def removeStream(self, net, sta, loc, cha):
-        """removeStream(ArclinkConnection self, string net, string sta, string loc, string cha) -> bool"""
-        return _IO.ArclinkConnection_removeStream(self, net, sta, loc, cha)
 
 
     def setStartTime(self, stime):
@@ -2847,19 +2811,9 @@ class ArclinkConnection(RecordStream):
         return _IO.ArclinkConnection_setEndTime(self, etime)
 
 
-    def setTimeWindow(self, w):
-        """setTimeWindow(ArclinkConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
-        return _IO.ArclinkConnection_setTimeWindow(self, w)
-
-
     def setTimeout(self, seconds):
         """setTimeout(ArclinkConnection self, int seconds) -> bool"""
         return _IO.ArclinkConnection_setTimeout(self, seconds)
-
-
-    def clear(self):
-        """clear(ArclinkConnection self) -> bool"""
-        return _IO.ArclinkConnection_clear(self)
 
 
     def close(self):
@@ -2867,14 +2821,19 @@ class ArclinkConnection(RecordStream):
         return _IO.ArclinkConnection_close(self)
 
 
+    def next(self):
+        """next(ArclinkConnection self) -> Record"""
+        return _IO.ArclinkConnection_next(self)
+
+
+    def clear(self):
+        """clear(ArclinkConnection self) -> bool"""
+        return _IO.ArclinkConnection_clear(self)
+
+
     def reconnect(self):
         """reconnect(ArclinkConnection self) -> bool"""
         return _IO.ArclinkConnection_reconnect(self)
-
-
-    def stream(self):
-        """stream(ArclinkConnection self) -> std::istream &"""
-        return _IO.ArclinkConnection_stream(self)
 
 ArclinkConnection_swigregister = _IO.ArclinkConnection_swigregister
 ArclinkConnection_swigregister(ArclinkConnection)
@@ -2979,8 +2938,8 @@ class CombinedConnection(RecordStream):
 
     def addStream(self, *args):
         """
-        addStream(CombinedConnection self, string net, string sta, string loc, string cha) -> bool
-        addStream(CombinedConnection self, string net, string sta, string loc, string cha, Time stime, Time etime) -> bool
+        addStream(CombinedConnection self, string networkCode, string stationCode, string locationCode, string channelCode) -> bool
+        addStream(CombinedConnection self, string networkCode, string stationCode, string locationCode, string channelCode, Time startTime, Time endTime) -> bool
         """
         return _IO.CombinedConnection_addStream(self, *args)
 
@@ -2995,11 +2954,6 @@ class CombinedConnection(RecordStream):
         return _IO.CombinedConnection_setEndTime(self, etime)
 
 
-    def setTimeWindow(self, w):
-        """setTimeWindow(CombinedConnection self, Seiscomp::Core::TimeWindow const & w) -> bool"""
-        return _IO.CombinedConnection_setTimeWindow(self, w)
-
-
     def setTimeout(self, seconds):
         """setTimeout(CombinedConnection self, int seconds) -> bool"""
         return _IO.CombinedConnection_setTimeout(self, seconds)
@@ -3010,14 +2964,9 @@ class CombinedConnection(RecordStream):
         return _IO.CombinedConnection_close(self)
 
 
-    def stream(self):
-        """stream(CombinedConnection self) -> std::istream &"""
-        return _IO.CombinedConnection_stream(self)
-
-
-    def createRecord(self, arg2, arg3):
-        """createRecord(CombinedConnection self, Seiscomp::Array::DataType arg2, Seiscomp::Record::Hint arg3) -> Record"""
-        return _IO.CombinedConnection_createRecord(self, arg2, arg3)
+    def next(self):
+        """next(CombinedConnection self) -> Record"""
+        return _IO.CombinedConnection_next(self)
 
 CombinedConnection_swigregister = _IO.CombinedConnection_swigregister
 CombinedConnection_swigregister(CombinedConnection)

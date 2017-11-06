@@ -391,8 +391,7 @@ bool SDSArchive::setStart(const string &fname) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::isEnd() {
-	if (!_fnames.empty())
-		return false;
+	if ( !_fnames.empty() ) return false;
 
 	istream &istr = _recstream;
 	streampos strpos = istr.tellg();
@@ -403,6 +402,7 @@ bool SDSArchive::isEnd() {
 	Time etime = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
 
 	if ( !istr.read(buffer, sizeof(struct fsdh_s)) ) {
+		SEISCOMP_DEBUG("- eof");
 		istr.clear(ios::eofbit);
 		return true;
 	}
@@ -422,6 +422,7 @@ bool SDSArchive::isEnd() {
 	            (int)fsdh->start_time.sec,(int)fsdh->start_time.fract);
 
 	if (rectime > etime) {
+		SEISCOMP_DEBUG("- after endtime");
 		istr.clear(ios::eofbit);
 		return true;
 	}
@@ -441,6 +442,8 @@ bool SDSArchive::stepStream() {
 		/* go on at the file's stream */
 		if ( _recstream.good() && !isEnd() )
 			return true;
+
+		_recstream.close();
 	}
 	else
 		_curiter = _streams.begin();
@@ -469,10 +472,11 @@ bool SDSArchive::stepStream() {
 				_fnames.pop();
 				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
 				if ( !_recstream.is_open() ) {
-					SEISCOMP_DEBUG("file %s not found", fname.c_str());
+					SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
 					_recstream.clear();
 				}
 				else {
+					SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
 					if ( first ) {
 						if ( !setStart(fname) )
 							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
@@ -487,12 +491,7 @@ bool SDSArchive::stepStream() {
 		}
 	}
 
-	if ( !_recstream ) {
-		SEISCOMP_DEBUG("no data found in SDS archive");
-		return false;
-	}
-
-	return true;
+	return _recstream.good();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -501,10 +500,7 @@ bool SDSArchive::stepStream() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Seiscomp::Record *SDSArchive::next() {
-	while ( true ) {
-		if ( !stepStream() )
-			return NULL;
-
+	while ( stepStream() ) {
 		MSeedRecord *rec = new MSeedRecord();
 		if ( rec == NULL )
 			return NULL;
@@ -536,4 +532,3 @@ Seiscomp::Record *SDSArchive::next() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
