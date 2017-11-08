@@ -932,7 +932,7 @@ TraceView* MainWindow::createTraceView() {
 	//connect(_ui.actionFilter, SIGNAL(triggered()), _traceView, SLOT(openFilterDialog()));
 	//connect(_ui.actionDisplay, SIGNAL(triggered()), _traceView, SLOT(openDisplayDialog()));
 
-	connect(_ui.actionNormalizeVisibleAmplitudes, SIGNAL(triggered()), traceView, SLOT(scaleVisibleAmplitudes()));
+	connect(_ui.actionNormalizeVisibleAmplitudes, SIGNAL(toggled(bool)), this, SLOT(scaleVisibleAmplitudes(bool)));
 
 	connect(traceView, SIGNAL(selectedTime(Seiscomp::Gui::RecordWidget*, Seiscomp::Core::Time)),
 	        this, SLOT(selectedTime(Seiscomp::Gui::RecordWidget*, Seiscomp::Core::Time)));
@@ -946,6 +946,15 @@ TraceView* MainWindow::createTraceView() {
 	_traceViews.append(traceView);
 
 	return traceView;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MainWindow::scaleVisibleAmplitudes(bool enable) {
+	TRACEVIEWS(setAutoMaxScale(enable));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

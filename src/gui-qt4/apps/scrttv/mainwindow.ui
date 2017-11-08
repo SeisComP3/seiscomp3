@@ -31,7 +31,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>29</height>
+     <height>32</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Inventory" >
@@ -99,9 +99,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>578</y>
+     <y>575</y>
      <width>800</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="sizeGripEnabled" >
@@ -507,6 +507,9 @@
    </property>
   </action>
   <action name="actionNormalizeVisibleAmplitudes" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="text" >
     <string>Normalize visible amplitudes</string>
    </property>
@@ -636,7 +639,7 @@
     <string>Cycle through filters (reverse)</string>
    </property>
    <property name="shortcut" >
-    <string>shift+f</string>
+    <string>Shift+F</string>
    </property>
   </action>
  </widget>

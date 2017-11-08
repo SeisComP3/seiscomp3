@@ -169,6 +169,13 @@ port their code.
     backazimuth used and horizontal slowness used which can also be toggled
     separately
 
+* scrttv
+
+  * Normalize visible amplitudes (S) now toggles between normalizing amplitudes
+    of the currently visible time window (true) or the entire trace (false). The
+    old behaviour caused traces to degenerate into a straight line if the data buffer
+    runs out the time window which was used to normalize amplitudes.
+
 * scqc
 
   * Added configuration option ```use3Components``` that allows to use all

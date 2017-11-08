@@ -195,6 +195,7 @@ class MainWindow : public Seiscomp::Gui::MainWindow {
 		void step();
 		void switchToNormalState();
 
+		void scaleVisibleAmplitudes(bool);
 		void listHiddenStreams();
 
 		void removeTab(int);
