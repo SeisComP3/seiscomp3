@@ -104,7 +104,7 @@ class SC_SYSTEM_CORE_API ParameterSet : public PublicObject {
 		const std::string& moduleID() const;
 
 		void setCreated(const OPT(Seiscomp::Core::Time)& created);
-		Seiscomp::Core::Time created() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time created() const;
 
 	
 	// ------------------------------------------------------------------

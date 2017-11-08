@@ -14,11 +14,14 @@
 ############################################################################
 #
 # 2010/09/23 Marco Olivieri
-# minimum weight is now configurable and not fixed to 0.5 that remains the default value. 
-# If assigning --weight 0.0, scbulletin will count and print out all the picks that where 
-# associated to the corresponding location 
+# minimum weight is now configurable and not fixed to 0.5 that remains the default value.
+# If assigning --weight 0.0, scbulletin will count and print out all the picks that where
+# associated to the corresponding location
 # By default minweight = 0.5 and scbulletin reports only picks with small residuals.
 #
+# 2017/11/02 Dirk Roessler
+# enhanced option: High-precision output for bulletins with precisions given in
+# meter or milliseconds. Considered useful for bulletins of local earthquakes.
 
 import sys, traceback
 import seiscomp3.Client, seiscomp3.Seismology
@@ -33,15 +36,21 @@ def time2str(time):
     return time.toString("%Y-%m-%d %H:%M:%S.%f000000")[:23]
 
 
-def lat2str(lat):
-    s = "%.2f " % abs(lat)
+def lat2str(lat, enhanced = False):
+    if enhanced:
+        s = "%.4f " % abs(lat)
+    else:
+        s = "%.2f " % abs(lat)
     if lat>=0: s+="N"
     else: s+="S"
     return s
 
 
-def lon2str(lon):
-    s = "%.2f " % abs(lon)
+def lon2str(lon, enhanced = False):
+    if enhanced:
+        s = "%.4f " % abs(lon)
+    else:
+        s = "%.2f " % abs(lon)
     if lon>=0: s+="E"
     else: s+="W"
     return s
@@ -65,6 +74,7 @@ class Bulletin(object):
         self._long = long
         self._evt = None
         self.format = "autoloc1"
+        self.enhanced = False
         self.polarities = False
 
     def _getDistancesArrivalsSorted(self, org):
@@ -105,6 +115,8 @@ class Bulletin(object):
         dist_arr = self._getDistancesArrivalsSorted(org)
         pick = self._getPicks(org)
         ampl = self._getAmplitudes(org)
+        enhanced = self.enhanced
+
 
         try:
             depthPhaseCount = org.quality().depthPhaseCount()
@@ -179,27 +191,55 @@ class Bulletin(object):
             txt += "    Public ID              %s\n" % org.publicID()
         txt += "    Date                   %s\n" % tstr[:10]
         if timerr:
-            txt += "    Time                   %s  +/- %4.1f s\n" % (tstr[11:-2], timerr)
+            if enhanced:
+                txt += "    Time                   %s  +/- %6.3f s\n" % (tstr[11:], timerr)
+            else:
+                txt += "    Time                   %s  +/- %6.1f s\n" % (tstr[11:-2], timerr)
         else:
-            txt += "    Time                   %s\n" % tstr[11:-2]
+            if enhanced:
+                txt += "    Time                   %s\n" % tstr[11:]
+            else:
+                txt += "    Time                   %s\n" % tstr[11:-2]
+
         if laterr:
-            txt += "    Latitude              %7.2f deg  +/- %4.0f km\n" % (lat, laterr)
+            if enhanced:
+                txt += "    Latitude              %11.6f deg  +/- %7.3f km\n" % (lat, laterr)
+            else:
+                txt += "    Latitude              %7.2f deg  +/- %4.0f km\n" % (lat, laterr)
         else:
-            txt += "    Latitude              %7.2f deg\n" % lat
+            if enhanced:
+                txt += "    Latitude              %11.6f deg\n" % lat
+            else:
+                txt += "    Latitude              %7.2f deg\n" % lat
         if lonerr:
-            txt += "    Longitude             %7.2f deg  +/- %4.0f km\n" % (lon, lonerr)
+            if enhanced:
+                txt += "    Longitude             %11.6f deg  +/- %7.3f km\n" % (lon, lonerr)
+            else:
+                txt += "    Longitude             %7.2f deg  +/- %4.0f km\n" % (lon, lonerr)
         else:
-            txt += "    Longitude             %7.2f deg\n" % lon
-        txt += "    Depth                 %7.0f km" % dep
+            if enhanced:
+                txt += "    Longitude             %11.6f deg\n" % lon
+            else:
+                txt += "    Longitude             %7.2f deg\n" % lon
+        if enhanced:
+            txt += "    Depth                 %11.3f km" % dep
+        else:
+            txt += "    Depth                 %7.0f km" % dep
         if not deperr:
             txt += "\n"
         elif deperr==0:
             txt +="   (fixed)\n"
         else:
             if depthPhaseCount >= minDepthPhaseCount:
-                txt += "   +/- %4.0f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
+                if enhanced:
+                    txt += "   +/- %7.3f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
+                else:
+                    txt += "   +/- %4.0f km  (%d depth phases)\n" % (deperr, depthPhaseCount)
             else:
-                txt += "   +/- %4.0f km\n" % deperr
+                if enhanced:
+                    txt += "   +/- %7.3f km\n" % deperr
+                else:
+                    txt += "   +/- %4.0f km\n" % deperr
 
         agencyID = ""
         try: agencyID = org.creationInfo().agencyID()
@@ -208,7 +248,7 @@ class Bulletin(object):
         if extra:
             try:    authorID = org.creationInfo().author()
             except: authorID = "NOT SET"
-            txt += "    Author                 %s\n" % authorID 
+            txt += "    Author                 %s\n" % authorID
         txt += "    Mode                   "
         try:    txt += "%s\n" % seiscomp3.DataModel.EEvaluationModeNames.name(org.evaluationMode())
         except: txt += "NOT SET\n"
@@ -221,10 +261,18 @@ class Bulletin(object):
             try:    txt += "%s\n" % org.creationInfo().creationTime().toString("%Y-%m-%d %H:%M:%S")
             except: txt += "NOT SET\n"
 
-        try:    txt += "    Residual RMS            %6.2f s\n" % org.quality().standardError()
+        try:
+            if enhanced:
+                txt += "    Residual RMS            %7.3f s\n" % org.quality().standardError()
+            else:
+                txt += "    Residual RMS            %6.2f s\n" % org.quality().standardError()
         except: pass
 
-        try:    txt += "    Azimuthal gap           %5.0f deg\n" % org.quality().azimuthalGap()
+        try:
+            if enhanced:
+                txt += "    Azimuthal gap           %6.1f deg\n" % org.quality().azimuthalGap()
+            else:
+                txt += "    Azimuthal gap           %5.0f deg\n" % org.quality().azimuthalGap()
         except: pass
 
         txt += "\n"
@@ -253,7 +301,7 @@ class Bulletin(object):
                     m = mag.magnitude()
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
-                except seiscomp3.Core.ValueException:
+                except ValueError:
                     pass # just don't print any error, that's it
                 except Exception, e:
                     sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
@@ -285,7 +333,7 @@ class Bulletin(object):
                     m = mag.magnitude()
                     try: err = "+/- %.2f" % (0.5*(m.lowerUncertainty()+m.upperUncertainty()))
                     except: err = "+/- %.2f" % m.uncertainty()
-                except seiscomp3.Core.ValueException:
+                except ValueError:
                     pass # just don't print any error, that's it
                 except Exception, e:
                     sys.stderr.write("_printOriginAutoloc3: caught unknown exception, type='%s', text='%s'\n" % (type(e),str(e)))
@@ -316,12 +364,23 @@ class Bulletin(object):
             wfid = p.waveformID()
             net = wfid.networkCode()
             sta = wfid.stationCode()
-            try:    azi = "%3.0f" % arr.azimuth()
+            try:
+                if enhanced:
+                    azi = "%5.1f" % arr.azimuth()
+                else:
+                    azi = "%3.0f" % arr.azimuth()
             except: azi = "N/A"
             dist_azi[net+"_"+sta] = (dist, azi)
             wt  = arr.weight()
-            tstr = time2str(p.time().value())[11:-2]
-            try:    res = "%5.1f" % arr.timeResidual()
+            if enhanced:
+                tstr = time2str(p.time().value())[11:]
+            else:
+                tstr = time2str(p.time().value())[11:-2]
+            try:
+                if enhanced:
+                    res = "%7.3f" % arr.timeResidual()
+                else:
+                    res = "%5.1f" % arr.timeResidual()
             except: res = "  N/A"
             pha = arr.phase().code()
             flag = "X "[wt>0.1]
@@ -340,11 +399,19 @@ class Bulletin(object):
                     elif pol=="undecidable": pol="x"
                     else: pol="."
                 else: pol="."
-                line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %s %-5s\n" \
-                    % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
+                if enhanced:
+                    line = "    %-5s %-2s  %10.6f %s  %-7s %s %s %1s%1s %5.3f  %s %-5s\n" \
+                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
+                else:
+                    line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %s %-5s\n" \
+                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, pol, sta)
             else:
-                line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %-5s\n" \
-                    % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
+                if enhanced:
+                    line = "    %-5s %-2s  %10.6f %s  %-7s %s %s %1s%1s %3.1f  %-5s\n" \
+                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
+                else:
+                    line = "    %-5s %-2s  %5.1f %s  %-7s %s %s %1s%1s %3.1f  %-5s\n" \
+                        % (sta, net, dist, azi, pha, tstr, res, status, flag, wt, sta)
             lines.append( (dist, line) )
 
         lines.sort()
@@ -430,6 +497,8 @@ class Bulletin(object):
 
     def _printOriginAutoloc1(self, org):
         evt = self._evt
+        enhanced = self.enhanced
+
         if not evt and self._dbq:
             evt = self._dbq.getEvent(org.publicID())
         if evt:
@@ -445,21 +514,28 @@ class Bulletin(object):
         txt = ""
 
         reg = seiscomp3.Seismology.Regions()
+        if enhanced:
+            depth = org.depth().value()
+            sTime = org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f")[:24]
+        else:
+            depth = int(org.depth().value()+0.5)
+            sTime = org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f")[:22]
 
         tmp = {
             "evid":evid,
             "nsta":stationCount(org),
-            "time":org.time().value().toString("%Y/%m/%d  %H:%M:%S.%f00")[:22],
-            "lat":lat2str(org.latitude().value()),
-            "lon":lon2str(org.longitude().value()),
-            "dep":int(org.depth().value()+0.5),
+            "time":sTime,
+            "lat":lat2str(org.latitude().value(),enhanced),
+            "lon":lon2str(org.longitude().value(),enhanced),
+            "dep":depth,
             "reg":reg.getRegionName(org.latitude().value(), org.longitude().value()),
-            # changed to properly report location method. (Marco Olivieri 21/06/2010)     
+            # changed to properly report location method. (Marco Olivieri 21/06/2010)
             "method":org.methodID(),
             "model":org.earthModelID(),
             # end (MO)
             "stat":"A"
         }
+
         try:
             if org.evaluationMode() == seiscomp3.DataModel.MANUAL:
                 tmp["stat"] = "M"
@@ -490,7 +566,7 @@ class Bulletin(object):
                 tmp["mtyp"] = mag.type()
                 tmp["mval"] = mag.magnitude().value()
 
-# changed to properly report location method. (Marco Olivieri 21/06/2010)     
+# changed to properly report location method. (Marco Olivieri 21/06/2010)
 #        txt += """
 # Autoloc alert %(evid)s: determined by %(nsta)d stations, type %(stat)s
 #
@@ -500,7 +576,18 @@ class Bulletin(object):
 #
 #  Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
 #""" % tmp
-        txt += """
+        if enhanced:
+            txt += """
+  Alert %(evid)s: determined by %(nsta)d stations, type %(stat)s
+
+ %(method)s solution with earthmodel %(model)s (with start solution, %(nsta)d stations used, weight %(nsta)d):
+
+  %(reg)s  %(mtyp)s=%(mval).1f  %(time)s  %(lat)s  %(lon)s   %(dep).3f km
+
+  Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
+""" % tmp
+        else:
+            txt += """
   Alert %(evid)s: determined by %(nsta)d stations, type %(stat)s
 
  %(method)s solution with earthmodel %(model)s (with start solution, %(nsta)d stations used, weight %(nsta)d):
@@ -509,6 +596,7 @@ class Bulletin(object):
 
   Stat  Net   Date       Time          Amp    Per   Res  Dist  Az mb  ML  mB
 """ % tmp
+
 # end (MO)
         dist_arr = self._getDistancesArrivalsSorted(org)
         pick = self._getPicks(org)
@@ -527,7 +615,7 @@ class Bulletin(object):
             mags[typ][sta] = mag
 
         for dist, arr in dist_arr:
-            if arr.weight() < minweight : 
+            if arr.weight() < minweight :
                 continue
 
             p = seiscomp3.DataModel.Pick.Find(arr.pickID())
@@ -538,10 +626,21 @@ class Bulletin(object):
             wfid = p.waveformID()
             net = wfid.networkCode()
             sta = wfid.stationCode()
-            tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f00")[:20]
-            try:    res = "%5.1f" % arr.timeResidual()
+            if enhanced:
+                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f")[:22]
+            else:
+                tstr = p.time().value().toString("%y/%m/%d  %H:%M:%S.%f00")[:20]
+            try:
+                if enhance:
+                    res = "%7.3f" % arr.timeResidual()
+                else:
+                    res = "%5.1f" % arr.timeResidual()
             except: res = "  N/A"
-            try:    azi = "%3.0f" % arr.azimuth()
+            try:
+                if enhance:
+                    azi = "%5.1f" % arr.azimuth()
+                else:
+                    azi = "%3.0f" % arr.azimuth()
             except: azi = "N/A"
             pha = arr.phase().code()
             mstr = ""
@@ -567,15 +666,24 @@ class Bulletin(object):
             txt += "  %-5s %-2s  %s  %10.1f %4.1f %s %5.1f %s%s\n" \
                 % (sta, net, tstr, amp, per, res, dist, azi, mstr)
 
-        txt += "\n RMS-ERR:         %.2f\n\n" % org.quality().standardError()
+        if enhanced:
+            txt += "\n RMS-ERR:         %.3f\n\n" % org.quality().standardError()
+        else:
+            txt += "\n RMS-ERR:         %.2f\n\n" % org.quality().standardError()
 
         try:
-            tm = evt.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
+            if enhanced:
+                tm = evt.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S.%f")
+            else:
+                tm = evt.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
             txt += " First location:  %s\n" % tm
         except: pass
 
         try:
-            tm = org.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
+            if enhanced:
+                tm = org.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S.%f")
+            else:
+                tm = org.creationInfo().creationTime().toString("%Y/%m/%d %H:%M:%S")
             txt += " This location:   %s\n" % tm
         except: pass
 
@@ -658,7 +766,9 @@ class BulletinApp(seiscomp3.Client.Application):
                 self.commandline().addOption("Dump", "autoloc1,1", "autoloc1 format")
                 self.commandline().addOption("Dump", "autoloc3,3", "autoloc3 format")
                 self.commandline().addOption("Dump", "extra,x", "extra detailed autoloc3 format")
+                self.commandline().addOption("Dump", "enhanced,e", "enhanced output precision for local earthquakes")
                 self.commandline().addOption("Dump", "polarities,p", "dump onset polarities")
+                self.commandline().addOption("Dump", "first-only", "dump only the first event/origin")
 
                 self.commandline().addGroup("Input")
                 self.commandline().addStringOption("Input", "format,f", "input format to use (xml [default], zxml (zipped xml), binary)")
@@ -723,6 +833,9 @@ class BulletinApp(seiscomp3.Client.Application):
                 else:
                     bulletin.format = "autoloc3"
 
+            if self.commandline().hasOption("enhanced"):
+                    bulletin.enhanced = True
+
             if self.commandline().hasOption("polarities"):
                 bulletin.polarities = True
 
@@ -766,14 +879,26 @@ class BulletinApp(seiscomp3.Client.Application):
                         if ep.originCount() <= 0:
                             raise TypeError, inputFile + ": no origin and no event in eventparameters found"
                         else:
-                            org = ep.origin(0)
-                            txt = bulletin.printOrigin(org)
+                            if self.commandline().hasOption("first-only"):
+                                org = ep.origin(0)
+                                txt = bulletin.printOrigin(org)
+                            else:
+                                txt = ""
+                                for i in xrange(ep.originCount()):
+                                    org = ep.origin(i)
+                                    txt += bulletin.printOrigin(org)
                     else:
-                        ev = ep.event(0)
-                        if ev is None:
-                            raise TypeError, inputFile + ": invalid event"
+                        if self.commandline().hasOption("first-only"):
+                            ev = ep.event(0)
+                            if ev is None:
+                               raise TypeError, inputFile + ": invalid event"
 
-                        txt = bulletin.printEvent(ev)
+                            txt = bulletin.printEvent(ev)
+                        else:
+                            txt = ""
+                            for i in xrange(ep.eventCount()):
+                                ev = ep.event(i)
+                                txt += bulletin.printEvent(ev)
 
             except Exception, exc:
                 sys.stderr.write("ERROR: " + str(exc) + "\n")

@@ -14,7 +14,7 @@ an input format such as
 +-------------------+-------------------------------------------------------------------+
 | dlsv              | `dataless SEED <http://www.iris.edu/data/dataless.htm>`_          |
 +-------------------+-------------------------------------------------------------------+
-| staxml            | `StationXML <http://www.data.scec.org/station/xml.html>`_         |
+| fdsnxml           | `FDSN StationXML <http://www.fdsn.org/xml/station/>`_             |
 +-------------------+-------------------------------------------------------------------+
 
 to SeisComP3 inventory XML which is the read by the trunk config module to

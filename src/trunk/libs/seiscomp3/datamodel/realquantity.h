@@ -19,6 +19,7 @@
 #define __SEISCOMP_DATAMODEL_REALQUANTITY_H__
 
 
+#include <seiscomp3/datamodel/realpdf1d.h>
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core.h>
 #include <seiscomp3/core/exceptions.h>
@@ -66,12 +67,12 @@ class SC_SYSTEM_CORE_API RealQuantity : public Core::BaseObject {
 		RealQuantity(const RealQuantity& other);
 
 		//! Custom constructor
-		RealQuantity(double value);
 		RealQuantity(double value,
-		             const OPT(double)& uncertainty,
-		             const OPT(double)& lowerUncertainty,
-		             const OPT(double)& upperUncertainty,
-		             const OPT(double)& confidenceLevel);
+		             const OPT(double)& uncertainty = Seiscomp::Core::None,
+		             const OPT(double)& lowerUncertainty = Seiscomp::Core::None,
+		             const OPT(double)& upperUncertainty = Seiscomp::Core::None,
+		             const OPT(double)& confidenceLevel = Seiscomp::Core::None,
+		             const OPT(RealPDF1D)& pdf = Seiscomp::Core::None);
 
 		//! Destructor
 		~RealQuantity();
@@ -107,21 +108,26 @@ class SC_SYSTEM_CORE_API RealQuantity : public Core::BaseObject {
 		//! Uncertainty as the absolute value of symmetric deviation
 		//! from the main value.
 		void setUncertainty(const OPT(double)& uncertainty);
-		double uncertainty() const throw(Seiscomp::Core::ValueException);
+		double uncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards smaller values.
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards larger values.
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		//! Confidence level of the uncertainty, given in percent.
 		void setConfidenceLevel(const OPT(double)& confidenceLevel);
-		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+		double confidenceLevel() const;
+
+		//! Probability density function of the quantity.
+		void setPdf(const OPT(RealPDF1D)& pdf);
+		RealPDF1D& pdf();
+		const RealPDF1D& pdf() const;
 
 
 	// ------------------------------------------------------------------
@@ -134,6 +140,7 @@ class SC_SYSTEM_CORE_API RealQuantity : public Core::BaseObject {
 		OPT(double) _lowerUncertainty;
 		OPT(double) _upperUncertainty;
 		OPT(double) _confidenceLevel;
+		OPT(RealPDF1D) _pdf;
 };
 
 

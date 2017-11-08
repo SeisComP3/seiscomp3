@@ -96,7 +96,7 @@ EventDescription::EventDescription() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventDescription::EventDescription(const EventDescription& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -106,7 +106,7 @@ EventDescription::EventDescription(const EventDescription& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventDescription::EventDescription(const std::string& text)
- : _text(text) {
+: _text(text) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -116,8 +116,8 @@ EventDescription::EventDescription(const std::string& text)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventDescription::EventDescription(const std::string& text,
                                    EventDescriptionType type)
- : _text(text) {
-	_index.type = type;
+: _text(text)
+{	_index.type = type;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -335,7 +335,7 @@ void EventDescription::accept(Visitor* visitor) {
 void EventDescription::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: EventDescription skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

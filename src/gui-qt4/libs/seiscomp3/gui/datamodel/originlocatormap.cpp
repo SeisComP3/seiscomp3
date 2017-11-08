@@ -85,9 +85,10 @@ OriginLocatorMap::OriginLocatorMap(Map::ImageTree* mapTree,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
-	QPainter &p(*painter);
-
 	if ( _origin ) {
+		QPainter &p(*painter);
+		p.save();
+
 		QPointF originLocationF(_origin->longitude(), _origin->latitude());
 
 		try {
@@ -242,6 +243,8 @@ void OriginLocatorMap::drawCustomLayer(QPainter *painter) {
 		#undef STAR_POINTS
 		#undef STAR_RADIUS
 		*/
+
+		p.restore();
 	}
 
 	/* --- DEBUG OUTPUT ---
@@ -409,7 +412,7 @@ void OriginLocatorMap::setOrigin(DataModel::Origin* o) {
 
 	if ( !_origin ) return;
 
-	TTDecorator *ttd = new TTDecorator(&canvas());
+	TTDecorator *ttd = new TTDecorator();
 	ttd->setLatitude(o->latitude());
 	ttd->setLongitude(o->longitude());
 	ttd->setOriginTime(o->time());

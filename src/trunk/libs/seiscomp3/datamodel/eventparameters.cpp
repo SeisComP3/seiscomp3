@@ -48,7 +48,7 @@ EventParameters::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core
 IMPLEMENT_METAOBJECT(EventParameters)
 
 
-EventParameters::EventParameters() : PublicObject("EventParameters") {
+EventParameters::EventParameters(): PublicObject("EventParameters") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -57,7 +57,7 @@ EventParameters::EventParameters() : PublicObject("EventParameters") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 EventParameters::EventParameters(const EventParameters& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1108,7 +1108,7 @@ bool EventParameters::removeEvent(size_t i) {
 void EventParameters::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: EventParameters skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

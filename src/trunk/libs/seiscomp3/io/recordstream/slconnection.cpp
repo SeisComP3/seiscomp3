@@ -18,6 +18,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/core/strings.h>
+#include <seiscomp3/io/records/mseedrecord.h>
 #include "slconnection.h"
 
 #include <libmseed.h>
@@ -153,7 +154,7 @@ streambuf *SLConnection::StreamBuffer::setbuf(char *s, streamsize n) {
 }
 
 SLConnection::SLConnection()
-: RecordStream(), _stream(&_streambuf) {
+: RecordStream() {
 	_readingData = false;
 	_sock.setTimeout(300); // default
 	_maxRetries = -1; // default
@@ -162,7 +163,7 @@ SLConnection::SLConnection()
 }
 
 SLConnection::SLConnection(string serverloc)
-: RecordStream(), _stream(&_streambuf) {
+: RecordStream() {
 	_readingData = false;
 	_sock.setTimeout(300); // default
 	_maxRetries = -1; // default
@@ -172,13 +173,13 @@ SLConnection::SLConnection(string serverloc)
 
 SLConnection::~SLConnection() {}
 
-bool SLConnection::setSource(string serverloc) {
+bool SLConnection::setSource(const string &source) {
 	_useBatch = true;
 
-	size_t pos = serverloc.find('?');
+	size_t pos = source.find('?');
 	if ( pos != std::string::npos ) {
-		_serverloc = serverloc.substr(0, pos);
-		std::string params = serverloc.substr(pos+1);
+		_serverloc = source.substr(0, pos);
+		std::string params = source.substr(pos+1);
 		std::vector<std::string> toks;
 		split(toks, params.c_str(), "&");
 		if ( !toks.empty() ) {
@@ -213,7 +214,7 @@ bool SLConnection::setSource(string serverloc) {
 		}
 	}
 	else
-		_serverloc = serverloc;
+		_serverloc = source;
 
 	// set address defaults if necessary
 	if ( _serverloc.empty() || _serverloc == ":" )
@@ -256,38 +257,21 @@ bool SLConnection::setRecordType(const char* type) {
 	return !strcmp(type, "mseed");
 }
 
-bool SLConnection::addStream(string net, string sta, string loc, string cha) {
+bool SLConnection::addStream(const string &net, const string &sta,
+                             const string &loc, const string &cha) {
 	pair<set<SLStreamIdx>::iterator, bool> result;
 	result = _streams.insert(SLStreamIdx(net, sta, loc, cha));
 	return result.second;
 }
 
-bool SLConnection::addStream(string net, string sta, string loc, string cha,
-                             const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime) {
+bool SLConnection::addStream(const string &net, const string &sta,
+                             const string &loc, const string &cha,
+                             const Seiscomp::Core::Time &stime,
+                             const Seiscomp::Core::Time &etime) {
 	pair<set<SLStreamIdx>::iterator, bool> result;
 	result = _streams.insert(SLStreamIdx(net, sta, loc, cha, stime, etime));
 	return result.second;
 }
-
-bool SLConnection::removeStream(string net, string sta, string loc, string cha) {
-	bool deletedSomething = false;
-	std::set<SLStreamIdx>::iterator it = _streams.begin();
-
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-		     it->station()  == sta &&
-		     it->location() == loc &&
-		     it->channel()  == cha ) {
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
-
-	return deletedSomething;
-}
-
 
 bool SLConnection::setStartTime(const Seiscomp::Core::Time &stime) {
 	_stime = stime;
@@ -297,10 +281,6 @@ bool SLConnection::setStartTime(const Seiscomp::Core::Time &stime) {
 bool SLConnection::setEndTime(const Seiscomp::Core::Time &etime) {
 	_etime = etime;
 	return true;
-}
-
-bool SLConnection::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
 }
 
 bool SLConnection::setTimeout(int seconds) {
@@ -412,23 +392,20 @@ void updateStreams(std::set<SLStreamIdx> &streams, MSRecord *prec) {
 }
 
 
-istream& SLConnection::stream() {
+Record *SLConnection::next() {
 	if (_readingData && !_sock.isOpen()) {
 		SEISCOMP_DEBUG("Socket is closed -> set stream's eofbit");
-		_stream.clear(ios::eofbit);
-		return _stream;
+		return NULL;
 	}
 
 	// _sock.startTimer();
 	bool trials = false;
 
-	while (!_sock.isInterrupted()) {
+	while ( !_sock.isInterrupted() ) {
 		try {
-			if (!_readingData) {
-				if (_streams.empty()) {
-					_stream.clear(std::ios::eofbit);
+			if ( !_readingData ) {
+				if ( _streams.empty() )
 					break;
-				}
 
 				try {
 					if ( _retriesLeft < 0 ) _retriesLeft = _maxRetries;
@@ -443,10 +420,10 @@ istream& SLConnection::stream() {
 					Core::msleep(500);
 					if (_sock.isInterrupted()) {
 						_sock.close();
-						throw OperationInterrupted();
+						break;
 					}
 					reconnect();
-					if ( _retriesLeft < 0 && _maxRetries >= 0 ) throw;
+					if ( _retriesLeft < 0 && _maxRetries >= 0 ) break;
 					trials = true;
 					continue;
 				}
@@ -454,10 +431,10 @@ istream& SLConnection::stream() {
 					Core::msleep(500);
 					if (_sock.isInterrupted()) {
 						_sock.close();
-						throw OperationInterrupted();
+						break;
 					}
 					reconnect();
-					if ( _retriesLeft < 0 && _maxRetries >= 0 ) throw;
+					if ( _retriesLeft < 0 && _maxRetries >= 0 ) break;
 					trials = true;
 					continue;
 				}
@@ -466,22 +443,20 @@ istream& SLConnection::stream() {
 			_sock.startTimer();
 			/*** termination? ***/
 			_slrecord = _sock.read(strlen(TERMTOKEN));
-			if (!_slrecord.compare(TERMTOKEN)) {
+			if ( !_slrecord.compare(TERMTOKEN) ) {
 				_sock.close();
-				_stream.clear(std::ios::eofbit);
 				break;
 			}
 
 			_slrecord += _sock.read(strlen(ERRTOKEN)-strlen(TERMTOKEN));
-			if (!_slrecord.compare(ERRTOKEN)) {
+			if ( !_slrecord.compare(ERRTOKEN) ) {
 				_sock.close();
-				_stream.clear(std::ios::eofbit);
 				break;
 			}
 			/********************/
 
 			_slrecord += _sock.read(HEADSIZE+RECSIZE-strlen(ERRTOKEN));
-			char * data = const_cast<char *>(_slrecord.c_str());
+			char *data = const_cast<char *>(_slrecord.c_str());
 			if ( !MS_ISVALIDHEADER(data+HEADSIZE) ) {
 				SEISCOMP_WARNING("Invalid MSEED record received (MS_ISVALIDHEADER failed)");
 				continue;
@@ -497,10 +472,22 @@ istream& SLConnection::stream() {
 				msr_free(&prec);
 
 				/* Test for a so-called end-of-detection-record */
-				if (!(samprate_fact == 0 && numsamples == 0)) {
-					_stream.clear();
-					_stream.rdbuf()->pubsetbuf(data+HEADSIZE,RECSIZE);
-					break;
+				if ( !(samprate_fact == 0 && numsamples == 0) ) {
+					istream stream(&_streambuf);
+					stream.clear();
+					stream.rdbuf()->pubsetbuf(data+HEADSIZE,RECSIZE);
+
+					IO::MSeedRecord *rec = new IO::MSeedRecord();
+					setupRecord(rec);
+					try {
+						rec->read(stream);
+					}
+					catch ( ... ) {
+						delete rec;
+						continue;
+					}
+
+					return rec;
 				}
 			}
 			else
@@ -515,25 +502,25 @@ istream& SLConnection::stream() {
 				/**************************/
 				if (_sock.isInterrupted()) {
 					_sock.close();
-					throw OperationInterrupted();
+					break;
 				}
 				reconnect();
-				if ( _retriesLeft < 0 && _maxRetries >= 0 ) throw;
+				if ( _retriesLeft < 0 && _maxRetries >= 0 ) break;
 				trials = true;
 				continue;
 			}
 			else {
 				_sock.close();
-				throw;
+				break;
 			}
 		}
 		catch ( GeneralException & ) {
 			_sock.close();
-			throw;
+			break;
 		}
 	}
 
-	return _stream;
+	return NULL;
 }
 
 

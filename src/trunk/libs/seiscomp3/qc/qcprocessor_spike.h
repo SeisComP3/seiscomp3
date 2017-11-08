@@ -25,22 +25,22 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorSpike);
 
 class SC_SYSTEM_CLIENT_API QcProcessorSpike : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorSpike);
+	DECLARE_SC_CLASS(QcProcessorSpike);
 
-public:
-    QcProcessorSpike();
-    ~QcProcessorSpike();
+	public:
+		QcProcessorSpike();
+		~QcProcessorSpike();
 
-    typedef std::map<Core::Time, double> Spikes;
-    Spikes getSpikes() throw (Core::ValueException);
-    
-    bool feed(const Record *record);
-    void _setFilter(double fsamp);
-    
-    bool setState(const Record* record, const DoubleArray& data);
+		typedef std::map<Core::Time, double> Spikes;
+		Spikes getSpikes();
 
-private:
-    bool _initFilter;
+		bool feed(const Record *record);
+		void _setFilter(double fsamp);
+
+		bool setState(const Record* record, const DoubleArray& data);
+
+	private:
+		bool _initFilter;
 };
 
 

@@ -18,6 +18,7 @@
 #define SEISCOMP_COMPONENT DataModel
 #include <seiscomp3/datamodel/stream.h>
 #include <seiscomp3/datamodel/sensorlocation.h>
+#include <algorithm>
 #include <seiscomp3/datamodel/metadata.h>
 #include <seiscomp3/logging/log.h>
 
@@ -26,7 +27,7 @@ namespace Seiscomp {
 namespace DataModel {
 
 
-IMPLEMENT_SC_CLASS_DERIVED(Stream, Object, "Stream");
+IMPLEMENT_SC_CLASS_DERIVED(Stream, PublicObject, "Stream");
 
 
 Stream::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObject(rtti) {
@@ -52,6 +53,7 @@ Stream::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObj
 	addProperty(Core::simpleProperty("flags", "string", false, false, false, false, false, false, NULL, &Stream::setFlags, &Stream::flags));
 	addProperty(Core::simpleProperty("restricted", "boolean", false, false, false, false, true, false, NULL, &Stream::setRestricted, &Stream::restricted));
 	addProperty(Core::simpleProperty("shared", "boolean", false, false, false, false, true, false, NULL, &Stream::setShared, &Stream::shared));
+	addProperty(arrayClassProperty<Comment>("comment", "Comment", &Stream::commentCount, &Stream::comment, static_cast<bool (Stream::*)(Comment*)>(&Stream::add), &Stream::removeComment, static_cast<bool (Stream::*)(Comment*)>(&Stream::remove)));
 }
 
 
@@ -115,7 +117,7 @@ Stream::Stream() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Stream::Stream(const Stream& other)
- : Object() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -124,7 +126,56 @@ Stream::Stream(const Stream& other)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream::Stream(const std::string& publicID)
+: PublicObject(publicID) {
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Stream::~Stream() {
+	std::for_each(_comments.begin(), _comments.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&Comment::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&CommentPtr::get)));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream* Stream::Create() {
+	Stream* object = new Stream();
+	return static_cast<Stream*>(GenerateId(object));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream* Stream::Create(const std::string& publicID) {
+	if ( PublicObject::IsRegistrationEnabled() && Find(publicID) != NULL ) {
+		SEISCOMP_ERROR(
+			"There exists already a PublicObject with Id '%s'",
+			publicID.c_str()
+		);
+		return NULL;
+	}
+
+	return new Stream(publicID);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream* Stream::Find(const std::string& publicID) {
+	return Stream::Cast(PublicObject::Find(publicID));
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -225,7 +276,7 @@ void Stream::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Stream::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Stream::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Stream.end is not set");
@@ -281,7 +332,7 @@ void Stream::setDataloggerChannel(const OPT(int)& dataloggerChannel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::dataloggerChannel() const throw(Seiscomp::Core::ValueException) {
+int Stream::dataloggerChannel() const {
 	if ( _dataloggerChannel )
 		return *_dataloggerChannel;
 	throw Seiscomp::Core::ValueException("Stream.dataloggerChannel is not set");
@@ -337,7 +388,7 @@ void Stream::setSensorChannel(const OPT(int)& sensorChannel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sensorChannel() const throw(Seiscomp::Core::ValueException) {
+int Stream::sensorChannel() const {
 	if ( _sensorChannel )
 		return *_sensorChannel;
 	throw Seiscomp::Core::ValueException("Stream.sensorChannel is not set");
@@ -375,7 +426,7 @@ void Stream::setSampleRateNumerator(const OPT(int)& sampleRateNumerator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sampleRateNumerator() const throw(Seiscomp::Core::ValueException) {
+int Stream::sampleRateNumerator() const {
 	if ( _sampleRateNumerator )
 		return *_sampleRateNumerator;
 	throw Seiscomp::Core::ValueException("Stream.sampleRateNumerator is not set");
@@ -395,7 +446,7 @@ void Stream::setSampleRateDenominator(const OPT(int)& sampleRateDenominator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int Stream::sampleRateDenominator() const throw(Seiscomp::Core::ValueException) {
+int Stream::sampleRateDenominator() const {
 	if ( _sampleRateDenominator )
 		return *_sampleRateDenominator;
 	throw Seiscomp::Core::ValueException("Stream.sampleRateDenominator is not set");
@@ -415,7 +466,7 @@ void Stream::setDepth(const OPT(double)& depth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::depth() const throw(Seiscomp::Core::ValueException) {
+double Stream::depth() const {
 	if ( _depth )
 		return *_depth;
 	throw Seiscomp::Core::ValueException("Stream.depth is not set");
@@ -435,7 +486,7 @@ void Stream::setAzimuth(const OPT(double)& azimuth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::azimuth() const throw(Seiscomp::Core::ValueException) {
+double Stream::azimuth() const {
 	if ( _azimuth )
 		return *_azimuth;
 	throw Seiscomp::Core::ValueException("Stream.azimuth is not set");
@@ -455,7 +506,7 @@ void Stream::setDip(const OPT(double)& dip) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::dip() const throw(Seiscomp::Core::ValueException) {
+double Stream::dip() const {
 	if ( _dip )
 		return *_dip;
 	throw Seiscomp::Core::ValueException("Stream.dip is not set");
@@ -475,7 +526,7 @@ void Stream::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::gain() const throw(Seiscomp::Core::ValueException) {
+double Stream::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("Stream.gain is not set");
@@ -495,7 +546,7 @@ void Stream::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Stream::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double Stream::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("Stream.gainFrequency is not set");
@@ -569,7 +620,7 @@ void Stream::setRestricted(const OPT(bool)& restricted) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Stream::restricted() const throw(Seiscomp::Core::ValueException) {
+bool Stream::restricted() const {
 	if ( _restricted )
 		return *_restricted;
 	throw Seiscomp::Core::ValueException("Stream.restricted is not set");
@@ -589,7 +640,7 @@ void Stream::setShared(const OPT(bool)& shared) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Stream::shared() const throw(Seiscomp::Core::ValueException) {
+bool Stream::shared() const {
 	if ( _shared )
 		return *_shared;
 	throw Seiscomp::Core::ValueException("Stream.shared is not set");
@@ -629,6 +680,7 @@ SensorLocation* Stream::sensorLocation() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Stream& Stream::operator=(const Stream& other) {
+	PublicObject::operator=(other);
 	_index = other._index;
 	_end = other._end;
 	_datalogger = other._datalogger;
@@ -702,7 +754,7 @@ bool Stream::detachFrom(PublicObject* object) {
 			return sensorLocation->remove(this);
 		// The object has not been added locally so it must be looked up
 		else {
-			Stream* child = sensorLocation->stream(index());
+			Stream* child = sensorLocation->findStream(publicID());
 			if ( child != NULL )
 				return sensorLocation->remove(child);
 			else {
@@ -744,8 +796,178 @@ Object* Stream::clone() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Stream::updateChild(Object* child) {
+	Comment* commentChild = Comment::Cast(child);
+	if ( commentChild != NULL ) {
+		Comment* commentElement = comment(commentChild->index());
+		if ( commentElement != NULL ) {
+			*commentElement = *commentChild;
+			return true;
+		}
+		return false;
+	}
+
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Stream::accept(Visitor* visitor) {
-	visitor->visit(this);
+	if ( visitor->traversal() == Visitor::TM_TOPDOWN )
+		if ( !visitor->visit(this) )
+			return;
+
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it )
+		(*it)->accept(visitor);
+
+	if ( visitor->traversal() == Visitor::TM_BOTTOMUP )
+		visitor->visit(this);
+	else
+		visitor->finished();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Stream::commentCount() const {
+	return _comments.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Stream::comment(size_t i) const {
+	return _comments[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Comment* Stream::comment(const CommentIndex& i) const {
+	for ( std::vector<CommentPtr>::const_iterator it = _comments.begin(); it != _comments.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Stream::add(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( comment->parent() != NULL ) {
+		SEISCOMP_ERROR("Stream::add(Comment*) -> element has already a parent");
+		return false;
+	}
+
+	// Duplicate index check
+	for ( std::vector<CommentPtr>::iterator it = _comments.begin(); it != _comments.end(); ++it ) {
+		if ( (*it)->index() == comment->index() ) {
+			SEISCOMP_ERROR("Stream::add(Comment*) -> an element with the same index has been added already");
+			return false;
+		}
+	}
+
+	// Add the element
+	_comments.push_back(comment);
+	comment->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		comment->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(comment);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Stream::remove(Comment* comment) {
+	if ( comment == NULL )
+		return false;
+
+	if ( comment->parent() != this ) {
+		SEISCOMP_ERROR("Stream::remove(Comment*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<CommentPtr>::iterator it;
+	it = std::find(_comments.begin(), _comments.end(), comment);
+	// Element has not been found
+	if ( it == _comments.end() ) {
+		SEISCOMP_ERROR("Stream::remove(Comment*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_comments.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Stream::removeComment(size_t i) {
+	// index out of bounds
+	if ( i >= _comments.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_comments[i]->accept(&nc);
+	}
+
+	_comments[i]->setParent(NULL);
+	childRemoved(_comments[i].get());
+	
+	_comments.erase(_comments.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Stream::removeComment(const CommentIndex& i) {
+	Comment* object = comment(i);
+	if ( object == NULL ) return false;
+	return remove(object);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -756,16 +978,30 @@ void Stream::accept(Visitor* visitor) {
 void Stream::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Stream skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
 		return;
 	}
 
+	if ( ar.supportsVersion<0,10>() ) {
+		PublicObject::serialize(ar);
+		if ( !ar.success() ) return;
+	}
+	else if ( ar.isReading() ) {
+		GenerateId(this);
+	}
+
 	ar & NAMED_OBJECT_HINT("code", _index.code, Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
-	ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::SPLIT_TIME | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	else
+		ar & NAMED_OBJECT_HINT("start", _index.start, Archive::XML_ELEMENT | Archive::XML_MANDATORY | Archive::INDEX_ATTRIBUTE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT | Archive::SPLIT_TIME);
+	else
+		ar & NAMED_OBJECT_HINT("end", _end, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT("datalogger", _datalogger);
 	ar & NAMED_OBJECT_HINT("dataloggerSerialNumber", _dataloggerSerialNumber, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("dataloggerChannel", _dataloggerChannel, Archive::XML_ELEMENT);
@@ -785,6 +1021,12 @@ void Stream::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("flags", _flags, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("restricted", _restricted, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("shared", _shared, Archive::XML_ELEMENT);
+	if ( ar.hint() & Archive::IGNORE_CHILDS ) return;
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("comment",
+		                       Seiscomp::Core::Generic::containerMember(_comments,
+		                       Seiscomp::Core::Generic::bindMemberFunction<Comment>(static_cast<bool (Stream::*)(Comment*)>(&Stream::add), this)),
+		                       Archive::STATIC_TYPE);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

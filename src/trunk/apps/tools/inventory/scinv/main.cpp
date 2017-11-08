@@ -16,6 +16,7 @@
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/client/application.h>
 #include <seiscomp3/client/inventory.h>
+#include <seiscomp3/datamodel/messages.h>
 #include <seiscomp3/datamodel/utils.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/utils/files.h>
@@ -124,6 +125,12 @@ Out2<R,T> tabular(const R *reg, const T *src, int indentation) {
 
 ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
 	const DataModel::ResponsePAZ *paz = out.obj;
+	os << Fill(out.indent) << "type         ";
+	if ( paz->type().empty() )
+		os << "-";
+	else
+		os << paz->type();
+	os << endl;
 	os << Fill(out.indent) << "gain         ";
 	try { os << paz->gain(); }
 	catch (...) { os << "-"; }
@@ -132,6 +139,31 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponsePAZ> &out) {
 	try { os << paz->gainFrequency(); }
 	catch (...) { os << "-"; }
 	os << endl;
+
+	try {
+		paz->decimationFactor();
+		os << Fill(out.indent) << "dec factor   "
+		   << paz->decimationFactor()
+		   << endl;
+	}
+	catch (...) {}
+
+	try {
+		paz->delay();
+		os << Fill(out.indent) << "delay        "
+		   << paz->delay()
+		   << endl;
+	}
+	catch (...) {}
+
+	try {
+		paz->correction();
+		os << Fill(out.indent) << "correction   "
+		   << paz->correction()
+		   << endl;
+	}
+	catch (...) {}
+
 	os << Fill(out.indent) << "norm freq    ";
 	try { os << paz->normalizationFrequency() << "Hz"; }
 	catch (...) { os << "-"; }
@@ -227,8 +259,66 @@ ostream &operator<<(ostream &os, const Out<DataModel::ResponseFIR> &out) {
 }
 
 
+ostream &operator<<(ostream &os, const Out<DataModel::ResponseIIR> &out) {
+	const DataModel::ResponseIIR *iir = out.obj;
+
+	os << Fill(out.indent) << "type         ";
+	if ( iir->type().empty() )
+		os << "-";
+	else
+		os << iir->type();
+	os << endl;
+
+	os << Fill(out.indent) << "gain         ";
+	try { os << iir->gain(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "factor       ";
+	try { os << iir->decimationFactor(); }
+	catch ( ... ) { os << "-"; }
+	os << endl;
+
+	os << Fill(out.indent) << "numerators   ";
+	try {
+		const vector<double> &nums = iir->numerators().content();
+		for ( size_t i = 0; i < nums.size(); ++i ) {
+			if ( i ) {
+				if ( i % 5 == 0 ) os << endl << Fill(out.indent+13);
+				else os << " ";
+			}
+			os << showpos << scientific << nums[i];
+		}
+		os << noshowpos;
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	os << Fill(out.indent) << "denominators ";
+	try {
+		const vector<double> &denoms = iir->denominators().content();
+		for ( size_t i = 0; i < denoms.size(); ++i ) {
+			if ( i ) {
+				if ( i % 5 == 0 ) os << endl << Fill(out.indent+13);
+				else os << " ";
+			}
+			os << showpos << scientific << denoms[i];
+		}
+		os << noshowpos;
+	}
+	catch ( ... ) {
+		os << "-";
+	}
+
+	return os;
+}
+
+
 template <typename R>
 ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
+	bool hasAnalogStages = false;
+
 	try {
 		vector<string> ids;
 		Core::split(ids, out.obj->analogueFilterChain().content().c_str(), " ");
@@ -236,7 +326,11 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 			os << endl << Fill(out.indent) << "[analogue stage #" << (i+1) << "]" << endl;
 
 			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
-			if ( paz == NULL ) {
+			if ( paz ) {
+				os << Fill(out.indent) << "PAZ" << endl;
+				os << tabular(paz, out.indent);
+			}
+			else {
 				const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
 				if ( poly ) {
 					os << Fill(out.indent) << "POLY" << endl;
@@ -244,19 +338,30 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 				}
 				else {
 					const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
-					if ( fap == NULL )
-						os << Fill(out.indent) << "UNKNOWN" << endl;
-					else {
+					if ( fap ) {
 						os << Fill(out.indent) << "FAP" << endl;
 						os << tabular(fap, out.indent);
 					}
+					else {
+						const DataModel::ResponseIIR *iir = out.registry->findIIR(ids[i]);
+						if ( iir ) {
+							os << Fill(out.indent) << "IIR" << endl;
+							os << tabular(iir, out.indent);
+						}
+						else {
+							const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
+							if ( fir ) {
+								os << Fill(out.indent) << "FIR" << endl;
+								os << tabular(fir, out.indent);
+							}
+							else
+								os << Fill(out.indent) << "UNKNOWN" << endl;
+						}
+					}
 				}
 			}
-			else {
-				os << Fill(out.indent) << "PAZ" << endl;
-				os << tabular(paz, out.indent);
-			}
 
+			hasAnalogStages = true;
 			if ( i < ids.size()-1 ) os << endl;
 		}
 	}
@@ -266,35 +371,43 @@ ostream &operator<<(ostream &os, const Out2<R, DataModel::Decimation> &out) {
 		vector<string> ids;
 		Core::split(ids, out.obj->digitalFilterChain().content().c_str(), " ");
 		for ( size_t i = 0; i < ids.size(); ++i ) {
+			if ( !i && hasAnalogStages ) os << endl;
 			os << endl << Fill(out.indent) << "[digital stage #" << (i+1) << "]" << endl;
 
-			const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
-			if ( fir == NULL ) {
-				const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
-				if ( paz == NULL ) {
-					const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
-					if ( poly ) {
-						os << Fill(out.indent) << "POLY" << endl;
-						os << tabular(poly, out.indent);
+			const DataModel::ResponsePAZ *paz = out.registry->findPAZ(ids[i]);
+			if ( paz ) {
+				os << Fill(out.indent) << "PAZ" << endl;
+				os << tabular(paz, out.indent);
+			}
+			else {
+				const DataModel::ResponsePolynomial *poly = out.registry->findPoly(ids[i]);
+				if ( poly ) {
+					os << Fill(out.indent) << "POLY" << endl;
+					os << tabular(poly, out.indent);
+				}
+				else {
+					const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
+					if ( fap ) {
+						os << Fill(out.indent) << "FAP" << endl;
+						os << tabular(fap, out.indent);
 					}
 					else {
-						const DataModel::ResponseFAP *fap = out.registry->findFAP(ids[i]);
-						if ( fap == NULL )
-							os << Fill(out.indent) << "UNKNOWN" << endl;
+						const DataModel::ResponseIIR *iir = out.registry->findIIR(ids[i]);
+						if ( iir ) {
+							os << Fill(out.indent) << "IIR" << endl;
+							os << tabular(iir, out.indent);
+						}
 						else {
-							os << Fill(out.indent) << "FAP" << endl;
-							os << tabular(fap, out.indent);
+							const DataModel::ResponseFIR *fir = out.registry->findFIR(ids[i]);
+							if ( fir ) {
+								os << Fill(out.indent) << "FIR" << endl;
+								os << tabular(fir, out.indent);
+							}
+							else
+								os << Fill(out.indent) << "UNKNOWN" << endl;
 						}
 					}
 				}
-				else {
-					os << Fill(out.indent) << "PAZ" << endl;
-					os << tabular(paz, out.indent);
-				}
-			}
-			else {
-				os << Fill(out.indent) << "FIR" << endl;
-				os << tabular(fir, out.indent);
 			}
 
 			if ( i < ids.size()-1 ) os << endl;
@@ -574,6 +687,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -670,6 +785,8 @@ class InventoryManager : public Client::Application,
 					cerr << "No inventory found (ignored): " << files[i] << endl;
 					continue;
 				}
+
+				_inventorySources[inv.get()] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
@@ -803,6 +920,14 @@ class InventoryManager : public Client::Application,
 						cerr << "done" << endl;
 					}
 					else if ( !testMode ) {
+						// Notify about start of synchronization
+						DataModel::InventorySyncMessagePtr ismsg = new DataModel::InventorySyncMessage(false);
+						ismsg->creationInfo = DataModel::CreationInfo();
+						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
+						ismsg->creationInfo->setAuthor(author());
+						ismsg->creationInfo->setAgencyID(agencyID());
+						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
+
 						// Send an inital sync command to also wake-up the messaging
 						sync();
 
@@ -849,6 +974,11 @@ class InventoryManager : public Client::Application,
 
 						cerr << endl;
 						sync();
+
+						// Notify about end of synchronization
+						ismsg->creationInfo->setCreationTime(Core::Time::GMT());
+						ismsg->isFinished = true;
+						connection()->send(Communication::Protocol::STATUS_GROUP, ismsg.get());
 
 						doSyncKeys = true;
 					}
@@ -963,6 +1093,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -1043,6 +1175,8 @@ class InventoryManager : public Client::Application,
 					cerr << "No inventory found (ignored): " << files[i] << endl;
 					continue;
 				}
+
+				_inventorySources[inv.get()] = files[i];
 
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs goes to
@@ -1385,6 +1519,8 @@ class InventoryManager : public Client::Application,
 					continue;
 				}
 
+				_inventorySources[inv.get()] = files[i];
+
 				// Pushing the inventory into the merger cleans it
 				// completely. The ownership of all childs went to
 				// the merger
@@ -1511,6 +1647,7 @@ class InventoryManager : public Client::Application,
 								const DataModel::ResponsePAZ *paz;
 								const DataModel::ResponsePolynomial *poly;
 								const DataModel::ResponseFAP *fap;
+								const DataModel::ResponseIIR *iir;
 
 								try {
 									int sr_num = str->sampleRateNumerator();
@@ -1553,6 +1690,13 @@ class InventoryManager : public Client::Application,
 												cout << "          resp  fap" << endl;
 												cout << tabular(fap, 16) << endl;
 											}
+											else {
+												iir = merger.findIIR(sens->response());
+												if ( iir ) {
+													cout << "          resp  iir" << endl;
+													cout << tabular(iir, 16) << endl;
+												}
+											}
 										}
 									}
 								}
@@ -1591,7 +1735,9 @@ class InventoryManager : public Client::Application,
 
 		void publish(LogHandler::Level level, const char *message,
 		             const DataModel::Object *obj1,
-		             const DataModel::Object *obj2) {
+		             const Seiscomp::DataModel::Inventory *source1,
+		             const DataModel::Object *obj2,
+		             const Seiscomp::DataModel::Inventory *source2) {
 			if ( level == LogHandler::Conflict ) ++_conflicts;
 			else if ( level == LogHandler::Error ) ++_errors;
 			else if ( level == LogHandler::Warning ) ++_warnings;
@@ -1599,6 +1745,17 @@ class InventoryManager : public Client::Application,
 
 			if ( level == LogHandler::Conflict ) {
 				_logs << "C " << message << endl;
+
+				std::string file1 = _inventorySources[source1];
+				std::string file2 = _inventorySources[source2];
+
+				_logs << "  Defined in ";
+				if ( file1.empty() ) _logs << "<unknown>"; else _logs << file1;
+				_logs << " and " << endl;
+				_logs << "             ";
+				if ( file2.empty() ) _logs << "<unknown>"; else _logs << file2;
+				_logs << endl;
+
 				_continueOperation = false;
 
 				if ( obj1 != NULL && obj2 != NULL )
@@ -1635,19 +1792,21 @@ class InventoryManager : public Client::Application,
 
 
 	private:
-		Task   *_currentTask;
-		string  _operation;
-		string  _filebase;
-		string  _rcdir;
-		string  _keydir;
-		string  _output;
-		string  _level;
-		bool    _continueOperation;
+		typedef std::map<const DataModel::Inventory*, string> SourceMap;
+		Task     *_currentTask;
+		string    _operation;
+		string    _filebase;
+		string    _rcdir;
+		string    _keydir;
+		string    _output;
+		string    _level;
+		bool      _continueOperation;
 		std::stringstream  _logs;
-		int     _conflicts;
-		int     _errors;
-		int     _warnings;
-		int     _unresolved;
+		int       _conflicts;
+		int       _errors;
+		int       _warnings;
+		int       _unresolved;
+		SourceMap _inventorySources;
 };
 
 

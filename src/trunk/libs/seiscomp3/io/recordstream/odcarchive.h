@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <queue>
 #include <seiscomp3/io/recordstream.h>
 #include <seiscomp3/io/recordstream/archive.h>
@@ -45,58 +46,73 @@ DEFINE_SMARTPOINTER(ODCArchive);
    archive structure: 
    <root>/<year>/<doy>/<sta>.<cha>[_<loc>].<net>.<year>.<doy> */
 class SC_SYSTEM_CORE_API ODCArchive:  public Seiscomp::IO::RecordStream {
-    DECLARE_SC_CLASS(ODCArchive);
+	DECLARE_SC_CLASS(ODCArchive);
 
-    friend class IsoFile;
-		
-public:
-    // ----------------------------------------------------------------------
-    //  Xstruction
-    // ----------------------------------------------------------------------
-    ODCArchive();
-    ODCArchive(const std::string arcroot);
-    ODCArchive(const ODCArchive &arc);
-    virtual ~ODCArchive();
-    
-    // ----------------------------------------------------------------------
-    //  Operators
-    // ----------------------------------------------------------------------
-    ODCArchive& operator=(const ODCArchive &arc);
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		ODCArchive();
+		ODCArchive(const std::string arcroot);
+		ODCArchive(const ODCArchive &arc);
+		virtual ~ODCArchive();
 
-    // ----------------------------------------------------------------------
-    //  Public Interface
-    // ----------------------------------------------------------------------
-    bool setSource(std::string src);
-    bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-    bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-		   const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-    bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
-    bool setStartTime(const Seiscomp::Core::Time &stime);
-    bool setEndTime(const Seiscomp::Core::Time &etime);
-    bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-    bool setTimeout(int seconds);
-    std::istream& stream() throw(ArchiveException);
-    void close();
-    std::string archiveRoot() const;
-		
-private:
-    // ----------------------------------------------------------------------
-    //  Implementation
-    // ----------------------------------------------------------------------
-    std::string _arcroot;
-    Seiscomp::Core::Time _stime;
-    Seiscomp::Core::Time _etime;
-    std::set<StreamIdx> _streams;
-    std::set<StreamIdx>::const_iterator _curiter;
-    StreamIdx const *_curidx;
-    std::queue<std::string> _fnames;    
-    Seiscomp::IO::RecordStreamPtr _recstream;
 
-    int getDoy(const Seiscomp::Core::Time &time);
-    std::string ODCfilename(int doy, int year);
-    void setFilenames();
-    bool setStart(const std::string &fname);
-    bool isEnd();
+	// ----------------------------------------------------------------------
+	//  Operators
+	// ----------------------------------------------------------------------
+	public:
+		ODCArchive &operator=(const ODCArchive &arc);
+
+
+	// ----------------------------------------------------------------------
+	//  Public Interface
+	// ----------------------------------------------------------------------
+	public:
+		virtual bool setSource(const std::string &src);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
+
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &stime,
+		                       const Seiscomp::Core::Time &etime);
+
+		virtual bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &etime);
+		virtual void close();
+
+		virtual Record *next();
+
+		std::string archiveRoot() const;
+
+
+	// ----------------------------------------------------------------------
+	//  Implementation
+	// ----------------------------------------------------------------------
+	private:
+		bool stepStream();
+
+		int getDoy(const Seiscomp::Core::Time &time);
+		std::string ODCfilename(int doy, int year);
+		void setFilenames();
+		bool setStart(const std::string &fname);
+		bool isEnd();
+
+
+	private:
+		std::string _arcroot;
+		Seiscomp::Core::Time _stime;
+		Seiscomp::Core::Time _etime;
+		std::set<StreamIdx> _streams;
+		std::set<StreamIdx>::const_iterator _curiter;
+		StreamIdx const *_curidx;
+		std::queue<std::string> _fnames;
+		std::fstream _recstream;
 };
 
 }

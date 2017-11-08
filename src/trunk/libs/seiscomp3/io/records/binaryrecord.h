@@ -30,8 +30,8 @@ class SC_SYSTEM_CORE_API BinaryRecord : public GenericRecord {
 		BinaryRecord();
 
 	public:
-		void read(std::istream &in) throw(Core::StreamException);
-		void write(std::ostream &out) throw(Core::StreamException);
+		void read(std::istream &in);
+		void write(std::ostream &out);
 };
 
 }

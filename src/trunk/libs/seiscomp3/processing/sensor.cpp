@@ -112,7 +112,7 @@ void Sensor::setLowFrequency(const OPT(double) &lowFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensor::lowFrequency() const throw(Core::ValueException) {
+double Sensor::lowFrequency() const {
 	if ( !_lowFrequency )
 		throw Core::ValueException("low frequency not set");
 
@@ -133,7 +133,7 @@ void Sensor::setHighFrequency(const OPT(double) &highFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double Sensor::highFrequency() const throw(Core::ValueException) {
+double Sensor::highFrequency() const {
 	if ( !_highFrequency )
 		throw Core::ValueException("high frequency not set");
 

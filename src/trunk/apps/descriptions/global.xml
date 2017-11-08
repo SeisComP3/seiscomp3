@@ -33,7 +33,33 @@
 			</parameter>
 			<parameter name="cityXML" type="string">
 				<description>
-					The path to the city.xml file. This overrides the default paths.
+					Path to the cities.xml file. If undefined the data is read from
+					@CONFIGDIR@/cities.xml@ or @DATADIR@/cities.xml@.
+				</description>
+			</parameter>
+			<parameter name="loadCities" type="boolean" default="false">
+				<description>
+					Enables loading of cities from file configured by cityXML parameter.
+				</description>
+			</parameter>
+			<parameter name="loadRegions" type="boolean" default="false">
+				<description>
+					Enables loading of custom fep regions from @CONFIGDIR@/fep or @DATADIR@/fep.
+				</description>
+			</parameter>
+			<parameter name="publicIDPattern" type="string">
+				<description>
+					Defines a custom pattern for generation of public object ids. The following
+					variables are resolved:
+					@classname@ (class name of object),
+					@id@ (public object count),
+					@globalid@ (general object count),
+					@time@ (current time, use '/' to supply custom format, e.g. @time/%FT%T.%fZ@
+				</description>
+			</parameter>
+			<parameter name="configModule" type="string" default="trunk">
+				<description>
+					Name of the configuration module.
 				</description>
 			</parameter>
 			<group name="logging">
@@ -76,7 +102,11 @@
 					</description>
 				</parameter>
 				<group name="file">
-					<parameter name="rotator" type="boolean" default="true"/>
+					<parameter name="rotator" type="boolean" default="true">
+						<description>
+						Enables rotation of log files.
+						</description>
+					</parameter>
 					<group name="rotator">
 						<parameter name="timeSpan" type="int" unit="s" default="86400">
 							<description>
@@ -97,6 +127,13 @@
 							</description>
 						</parameter>
 					</group>
+				</group>
+				<group name="objects">
+					<parameter name="timeSpan" type="int" unit="s" default="60">
+						<description>
+							Timespan for counting input/output of objects.
+						</description>
+					</parameter>
 				</group>
 				<group name="syslog">
 					<parameter name="facility" type="string" default="local0">
@@ -180,12 +217,16 @@
 					</description>
 				</parameter>
 				<parameter name="inventory" type="string">
+					<description>
 					Load the inventory database from a given XML file if set. This
 					overrides the inventory definitions loaded from the database backend.
+					</description>
 				</parameter>
 				<parameter name="config" type="string">
+					<description>
 					Load the configuration database from a given XML file if set. This
 					overrides the configuration definitions loaded from the database backend.
+					</description>
 				</parameter>
 			</group>
 			<group name="processing">
@@ -204,18 +245,84 @@
 					</parameter>
 				</group>
 			</group>
+			<group name="inventory">
+				<group name="whitelist">
+					<parameter name="nettype" type="list:string">
+						<description>
+						List of network types to include when loading the inventory.
+						</description>
+					</parameter>
+					<parameter name="statype" type="list:string">
+						<description>
+						List of station types to include when loading the inventory.
+						</description>
+					</parameter>
+				</group>
+				<group name="blacklist">
+					<parameter name="nettype" type="list:string">
+						<description>
+						List of network types to exclude when loading the inventory.
+						</description>
+					</parameter>
+					<parameter name="statype" type="list:string">
+						<description>
+						List of station types to exclude when loading the inventory.
+						</description>
+					</parameter>
+				</group>
+			</group>
 			<group name="recordstream">
-				<parameter name="service" type="string" default="slink"/>
-				<parameter name="source" type="string" default="localhost:18000"/>
+				<description>
+				SeisComP3 applications access waveform data through the RecordStream
+				interface. Please consult the SeisComP3 documentation for a list of
+				supported services and their configuration.
+				</description>
+				<parameter name="service" type="string" default="slink">
+					<description>
+					Name of the recordstream service implementation.
+					</description>
+				</parameter>
+				<parameter name="source" type="string" default="localhost:18000">
+					<description>
+					Service specific parameters like a IP address or a file name to use.
+					</description>
+				</parameter>
+			</group>
+			<group name="scripts">
+				<parameter name="crashHandler" type="path">
+					<description>
+						Path to crash handler script
+					</description>
+				</parameter>
 			</group>
 			<group name="core">
-				<parameter name="plugins" type="list:string" default="dbmysql"/>
+				<parameter name="plugins" type="list:string" default="dbmysql">
+					<description>
+					Defines a list of core modules loaded at startup.
+					</description>
+				</parameter>
 			</group>
 			<group name="client">
-				<parameter name="startStopMessage" type="boolean" default="false"/>
-				<parameter name="autoShutdown" type="boolean" default="false"/>
-				<parameter name="shutdownMasterModule" type="string"/>
-				<parameter name="shutdownMasterUsername" type="string"/>
+				<parameter name="startStopMessage" type="boolean" default="false">
+					<description>
+					Enables sending of an application start- and stop message to the STATUS_GROUP.
+					</description>
+				</parameter>
+				<parameter name="autoShutdown" type="boolean" default="false">
+					<description>
+					Enablgs automatic application shutdown triggered by a status message.
+					</description>
+				</parameter>
+				<parameter name="shutdownMasterModule" type="string">
+					<description>
+					Triggers shutdown if the module name of the received messages match
+					</description>
+				</parameter>
+				<parameter name="shutdownMasterUsername" type="string">
+					<description>
+					Triggers shutdown if the user name of the received messages match
+					</description>
+				</parameter>
 			</group>
 			<group name="commands">
 				<parameter name="target" type="string">

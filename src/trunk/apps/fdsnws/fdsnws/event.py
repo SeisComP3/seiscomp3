@@ -31,7 +31,6 @@ from twisted.web import http, resource, server
 
 from seiscomp3 import DataModel, Logging
 from seiscomp3.Client import Application
-from seiscomp3.Core import ValueException
 from seiscomp3.IO import DatabaseInterface, Exporter
 
 from http import HTTP
@@ -206,11 +205,22 @@ class FDSNEvent(resource.Resource):
 
 	#---------------------------------------------------------------------------
 	def __init__(self, hideAuthor = False, evaluationMode = None,
-	             eventTypeWhitelist = None, eventTypeBlacklist = None):
+	             eventTypeWhitelist = None, eventTypeBlacklist = None,
+	             formatList = None):
 		self._hideAuthor = hideAuthor
 		self._evaluationMode = evaluationMode
 		self._eventTypeWhitelist = eventTypeWhitelist
 		self._eventTypeBlacklist = eventTypeBlacklist
+		self._formatList = formatList
+
+
+	#---------------------------------------------------------------------------
+	def render_OPTIONS(self, req):
+		req.setHeader('Access-Control-Allow-Origin', '*')
+		req.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+		req.setHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, X-Requested-With, Origin')
+		req.setHeader('Content-Type', 'text/plain')
+		return ""
 
 
 	#---------------------------------------------------------------------------
@@ -233,6 +243,10 @@ class FDSNEvent(resource.Resource):
 			msg = "filtering based on update time not supported"
 			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
+		if self._formatList is not None and ro.format not in self._formatList:
+			msg = "output format '%s' not available" % ro.format
+			return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
+
 		# Exporter, 'None' is used for text output
 		if ro.format in ro.VText:
 			exp = None
@@ -241,7 +255,7 @@ class FDSNEvent(resource.Resource):
 			if exp:
 				exp.setFormattedOutput(bool(ro.formatted))
 			else:
-				msg = "output format '%s' no available, export module '%s' could " \
+				msg = "output format '%s' not available, export module '%s' could " \
 				      "not be loaded." % (ro.format, ro.Exporters[ro.format])
 				return HTTP.renderErrorPage(req, http.SERVICE_UNAVAILABLE, msg, ro)
 
@@ -268,7 +282,7 @@ class FDSNEvent(resource.Resource):
 			ci = obj.creationInfo()
 			ci.setAuthor("")
 			ci.setAuthorURI("")
-		except ValueException: pass
+		except ValueError: pass
 
 
 	#---------------------------------------------------------------------------
@@ -445,18 +459,18 @@ class FDSNEvent(resource.Resource):
 
 			# depth
 			try: depth = str(o.depth().value())
-			except ValueException: depth = ''
+			except ValueError: depth = ''
 
 			# author
 			if self._hideAuthor:
 				author = ''
 			else:
 				try: author = o.creationInfo().author()
-				except ValueException: author = ''
+				except ValueError: author = ''
 
 			# contributor
 			try: contrib = e.creationInfo().agencyID()
-			except ValueException: contrib = ''
+			except ValueError: contrib = ''
 
 			# query for preferred magnitude (if any)
 			mType, mVal, mAuthor = '', '', ''
@@ -471,7 +485,7 @@ class FDSNEvent(resource.Resource):
 						mAuthor = ''
 					else:
 						try: mAuthor = m.creationInfo().author()
-						except ValueException: pass
+						except ValueError: pass
 
 			# event description
 			dbq.loadEventDescriptions(e)
@@ -518,7 +532,7 @@ class FDSNEvent(resource.Resource):
 				if self._eventTypeWhitelist or self._eventTypeBlacklist:
 					eType = None
 					try: eType = DataModel.EEventTypeNames_name(e.type())
-					except ValueException: pass
+					except ValueError: pass
 					if self._eventTypeWhitelist and \
 					   not eType in self._eventTypeWhitelist: continue
 					if self._eventTypeBlacklist and \
@@ -532,7 +546,7 @@ class FDSNEvent(resource.Resource):
 						if o is None or \
 						   o.evaluationMode() != self._evaluationMode:
 							continue
-					except ValueException:
+					except ValueError:
 						continue
 
 				ep.add(e)
@@ -730,5 +744,3 @@ class FDSNEvent(resource.Resource):
 
 		for e in dbq.getObjectIterator(q, DataModel.Event.TypeInfo()):
 			ep.add(DataModel.Event.Cast(e))
-
-

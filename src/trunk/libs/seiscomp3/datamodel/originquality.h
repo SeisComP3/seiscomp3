@@ -79,46 +79,46 @@ class SC_SYSTEM_CORE_API OriginQuality : public Core::BaseObject {
 		//! Number of associated phases, regardless of their use for
 		//! origin computation.
 		void setAssociatedPhaseCount(const OPT(int)& associatedPhaseCount);
-		int associatedPhaseCount() const throw(Seiscomp::Core::ValueException);
+		int associatedPhaseCount() const;
 
 		//! Number of defining phases, i. e., phase observations that
 		//! were actually used for computing
 		//! the origin. Note that there may be more than one defining
 		//! phase per station.
 		void setUsedPhaseCount(const OPT(int)& usedPhaseCount);
-		int usedPhaseCount() const throw(Seiscomp::Core::ValueException);
+		int usedPhaseCount() const;
 
 		//! Number of stations at which the event was observed.
 		void setAssociatedStationCount(const OPT(int)& associatedStationCount);
-		int associatedStationCount() const throw(Seiscomp::Core::ValueException);
+		int associatedStationCount() const;
 
 		//! Number of stations from which data was used for origin
 		//! computation.
 		void setUsedStationCount(const OPT(int)& usedStationCount);
-		int usedStationCount() const throw(Seiscomp::Core::ValueException);
+		int usedStationCount() const;
 
 		//! Number of depth phases (typically pP, sometimes sP) used in
 		//! depth computation.
 		void setDepthPhaseCount(const OPT(int)& depthPhaseCount);
-		int depthPhaseCount() const throw(Seiscomp::Core::ValueException);
+		int depthPhaseCount() const;
 
 		//! RMS of the travel time residuals of the arrivals used for
 		//! the origin computation
 		//! in seconds.
 		void setStandardError(const OPT(double)& standardError);
-		double standardError() const throw(Seiscomp::Core::ValueException);
+		double standardError() const;
 
 		//! Largest azimuthal gap in station distribution as seen from
 		//! epicenter
 		//! in degrees.
 		void setAzimuthalGap(const OPT(double)& azimuthalGap);
-		double azimuthalGap() const throw(Seiscomp::Core::ValueException);
+		double azimuthalGap() const;
 
 		//! Secondary azimuthal gap in station distribution, i. e., the
 		//! largest
 		//! azimuthal gap a station closes in degrees.
 		void setSecondaryAzimuthalGap(const OPT(double)& secondaryAzimuthalGap);
-		double secondaryAzimuthalGap() const throw(Seiscomp::Core::ValueException);
+		double secondaryAzimuthalGap() const;
 
 		//! String describing ground-truth level, e. g. GT0, GT5, etc.
 		//! It has a maximum length of 16
@@ -129,16 +129,16 @@ class SC_SYSTEM_CORE_API OriginQuality : public Core::BaseObject {
 		//! Epicentral distance of station farthest from the epicenter
 		//! in degrees.
 		void setMaximumDistance(const OPT(double)& maximumDistance);
-		double maximumDistance() const throw(Seiscomp::Core::ValueException);
+		double maximumDistance() const;
 
 		//! Epicentral distance of station closest to the epicenter in
 		//! degrees.
 		void setMinimumDistance(const OPT(double)& minimumDistance);
-		double minimumDistance() const throw(Seiscomp::Core::ValueException);
+		double minimumDistance() const;
 
 		//! Median epicentral distance of used stations in degrees.
 		void setMedianDistance(const OPT(double)& medianDistance);
-		double medianDistance() const throw(Seiscomp::Core::ValueException);
+		double medianDistance() const;
 
 
 	// ------------------------------------------------------------------

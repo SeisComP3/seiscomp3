@@ -27,4 +27,18 @@ typedef struct origin {
 	char   auth[16];
 } Origin;
 
+
+#define Na_Origin_Init \
+{ \
+	-999.0, /*      lat     */ \
+	-999.0, /*      lon     */ \
+	-999.0, /*      depth   */ \
+	-9999999999.999,        /*      time    */ \
+	-1,     /*      nass    */ \
+	-1,     /*      ndef    */ \
+	-1,     /*      ndp     */ \
+	"-"     /*      auth    */ \
+}
+
+
 #endif /* DB_ORIGIN_H */

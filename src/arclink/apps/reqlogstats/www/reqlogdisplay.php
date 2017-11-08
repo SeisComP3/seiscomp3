@@ -72,7 +72,7 @@ function render_availability_table($db, $start_str, $today_str, $end_str)
 
   $me="reqlogdisplay.php";
   for (; $day <= $finish; $day = offset($day, 1)) {
-    $day_list[] = tag('a', substr($day,8,3), Array('href' => "$me?date=$day"));
+    $day_list[] = tag('a', substr($day, 8, 3), Array('href' => "$me?date=$day"));
   }
 
   $num_dcids = 0;
@@ -153,15 +153,15 @@ $next_str = offset($date, 1);
 
 $last_day = Array(1 => 31, 29, 31,  30, 31, 30,  31, 31, 30,  31, 30, 31);
 $month = intval(substr($date, 5, 2));
-$month_start = substr($date,0,7) . '-01';
+$month_start = substr($date, 0, 7) . '-01';
 $month_start_str = $month_start;
-$month_end_str = substr($date,0,7) . '-' . $last_day[$month];   // 31
+$month_end_str = substr($date, 0, 7) . '-' . $last_day[$month];   // 31
 unset($month_start);
 
 #echo "open connection to sqlite file: dba/__construct";
-$year = substr($date,0,4);
-$month = substr($date,5,2);
-$day = substr($date,8,2);
+$year = substr($date, 0, 4);
+$month = substr($date, 5, 2);
+$day = substr($date, 8, 2);
 
 $db_filename = $reqlogstats_db_dir . "/reqlogstats-$year.db";
 $db = new ReqLogSQ3($db_filename);
@@ -173,7 +173,7 @@ $img2 = "$img_base_url/sources-$year-$month.svg";
 echo tag('h1', 'Arclink Request Statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year))) . PHP_EOL;
 
 if (file_exists($img1)) {
-        print tag("p", '<a href="' . $img1 .'"><img src="' . $img1 . '" alt="Monthly chart total bytes" width="480" /></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
+	print tag('p', '<a href="' . $img1 .'"><img src="' . $img1 . '" alt="Monthly chart total bytes" width="480" /></a>  <a href="' . $img2 . '">Total_size by DCID</a>...');
 } else {
 	print tag("p", '[No graph for this month is available]');
 }
@@ -216,15 +216,15 @@ $prev_month_str = month_prev($year, $month, $day);
 $next_month_str = month_next($year, $month, $day);
 
 $items = Array( tag('a', "&lt;&lt; Prev month", Array('href' => 'reqlogdisplay.php?date=' . $prev_month_str)) . ' |',
-                tag('a', "&lt;&lt; Prev day", Array('href' => 'reqlogdisplay.php?date=' . $prev_str)) . ' |',
+		tag('a', "&lt;&lt; Prev day", Array('href' => 'reqlogdisplay.php?date=' . $prev_str)) . ' |',
 		"Summary statistics for ". $start_day,
 		'| ' . tag('a', "Next day &gt;&gt;", Array('href' => 'reqlogdisplay.php?date=' . $next_str)),
-                '| ' . tag('a', "Next month &gt;&gt;", Array('href' => 'reqlogdisplay.php?date=' . $next_month_str))
+		'| ' . tag('a', "Next month &gt;&gt;", Array('href' => 'reqlogdisplay.php?date=' . $next_month_str))
 );
 echo tag('table', tr(tag_list('td', $items)));
  
 
-$marked_table_list=Array();
+$marked_table_list = Array();
 foreach ($table_list as $item) {
   $marked_table_list[] = tag("a", $item, Array('href' => "#Table$item"));
 }
@@ -278,9 +278,9 @@ foreach ($table_list as $table) {
 
     foreach ($selected_node_ids as $node_id) {
       if ($node_id == 0) {
-        $source_constr = "";
+		$source_constr = '';
       } else {
-	$source_constr = "AND `src` = $node_id";
+		$source_constr = "AND `src` = $node_id";
       }
 
       $order_col = $table_heads[$table][2];
@@ -289,7 +289,7 @@ foreach ($table_list as $table) {
 	$q = "SELECT * FROM `{table}` JOIN `ArcStatsSource` WHERE src = id AND `start_day` = '?' $source_constr ORDER BY `$order_col`";
 
       } else {
-        $q = "SELECT * FROM `{table}` WHERE `start_day` = '?' $source_constr ORDER BY `$order_col`";
+	$q = "SELECT * FROM `{table}` WHERE `start_day` = '?' $source_constr ORDER BY `$order_col`";
       }
       print "[ORDERED BY: " . $order_col . "]" . PHP_EOL;
       $q_2 = str_replace('?', $start_day, $q);

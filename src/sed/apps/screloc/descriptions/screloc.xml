@@ -24,6 +24,15 @@
 					Triggers processing also on origins with status PRELIMINARY.
 					</description>
 				</parameter>
+				<parameter name="useWeight" type="boolean" default="false">
+					<description>
+					Whether to use the weight of the picks associated with the
+					input origin as defined in the input origin as input for
+					the locator or not. If false then all picks associated with
+					the input origin will be forwarded to the locator with full
+					weight.
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 		<command-line>

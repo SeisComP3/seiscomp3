@@ -34,7 +34,17 @@ SC_GUI_API extern QChar degrees;
 
 SC_GUI_API extern std::string colorConvertError;
 
-SC_GUI_API bool fromString(QColor& value, const std::string& str);
+SC_GUI_API bool fromString(QColor &value, const std::string &str);
+SC_GUI_API QColor readColor(const std::string &query, const std::string &str,
+                            const QColor &base, bool *ok = NULL);
+
+SC_GUI_API Qt::PenStyle stringToPenStyle(const std::string &str);
+SC_GUI_API Qt::PenStyle readPenStyle(const std::string &query, const std::string &str,
+                                     Qt::PenStyle base, bool *ok = NULL);
+
+SC_GUI_API Qt::BrushStyle stringToBrushStyle(const std::string &str);
+SC_GUI_API Qt::BrushStyle readBrushStyle(const std::string &query, const std::string &str,
+                                         Qt::BrushStyle base, bool *ok = NULL);
 
 SC_GUI_API QString latitudeToString(double lat, bool withValue = true, bool withUnit = true, int precision = 2);
 SC_GUI_API QString longitudeToString(double lon, bool withValue = true, bool withUnit = true, int precision = 2);

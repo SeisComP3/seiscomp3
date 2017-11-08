@@ -20,29 +20,31 @@ namespace Processing {
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorOverlap, QcProcessor, "QcProcessorOverlap");
 
 
-QcProcessorOverlap::QcProcessorOverlap() 
-    : QcProcessor() {}
+QcProcessorOverlap::QcProcessorOverlap() : QcProcessor() {}
 
 bool QcProcessorOverlap::setState(const Record *record, const DoubleArray &data) {
-    if (_stream.lastRecord && record->samplingFrequency() > 0) {
-        try {
-            double diff = (double)(record->startTime() - _stream.lastRecord->endTime());
+	if (_stream.lastRecord && record->samplingFrequency() > 0) {
+		try {
+			double diff = (double)(record->startTime() - _stream.lastRecord->endTime());
 
-            if (diff < (-0.5 / record->samplingFrequency())) {
-                _qcp->parameter = -1.0*diff;
-                return true;
-            }
-        } catch (Core::ValueException) {}
-    }
-    return false;
+			if (diff < (-0.5 / record->samplingFrequency())) {
+				_qcp->parameter = -1.0*diff;
+				return true;
+			}
+		}
+		catch (Core::ValueException) {}
+	}
+
+	return false;
 }
 
-double QcProcessorOverlap::getOverlap() throw(Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+double QcProcessorOverlap::getOverlap() {
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch (const boost::bad_any_cast &) {
+		throw Core::ValueException("no data");
+	}
 }
 
 }

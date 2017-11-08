@@ -104,6 +104,9 @@ size_t PolyRegions::read(const std::string& location) {
 	// Sort the features according to their rank
  	std::sort(_regions.begin(), _regions.end(), compareByRank);
 
+	// store directory path the data was read from
+	_dataDir = directory.string();
+
 	return regionCount();
 }
 

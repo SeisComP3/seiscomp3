@@ -69,8 +69,8 @@ class SC_SYSTEM_CORE_API MetaEnum {
 		//! Returns the key name at a given index
 		virtual const char *key(int index) const = 0;
 
-		virtual const char *valueToKey(int value) const throw(ValueException) = 0;
-		virtual int keyToValue(const char *key) const throw(ValueException) = 0;
+		virtual const char *valueToKey(int value) const = 0;
+		virtual int keyToValue(const char *key) const = 0;
 };
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -161,14 +161,14 @@ class SC_SYSTEM_CORE_API MetaProperty {
 		//! Throws:
 		//!  PropertyNotFoundException: The property does not exist
 		//!  TypeException: The type of the property is not compatible with value
-		virtual bool write(BaseObject *object, MetaValue value) const throw(GeneralException);
+		virtual bool write(BaseObject *object, MetaValue value) const;
 
 		//! Writes a value (as string representation) to an objects property.
 		//! Returns true when the value has been written, false otherwise
 		//! Throws:
 		//!  PropertyNotFoundException: The property does not exist
 		//!  TypeException: The type of the property is not compatible with value
-		virtual bool writeString(BaseObject *object, const std::string &value) const throw(GeneralException);
+		virtual bool writeString(BaseObject *object, const std::string &value) const;
 
 		//! Reads a value from an objects property.
 		//! The returned value can be empty (empty()) if the object
@@ -176,7 +176,7 @@ class SC_SYSTEM_CORE_API MetaProperty {
 		//! is not set.
 		//! Throws:
 		//!  PropertyNotFoundException: The property does not exist
-		virtual MetaValue read(const BaseObject *object) const throw(GeneralException);
+		virtual MetaValue read(const BaseObject *object) const;
 
 		//! Reads a value from an objects property as string representation.
 		//! The returned value can be empty (empty()) if the object
@@ -184,7 +184,7 @@ class SC_SYSTEM_CORE_API MetaProperty {
 		//! is not set or the datatype does not support string conversion
 		//! Throws:
 		//!  PropertyNotFoundException: The property does not exist
-		virtual std::string readString(const BaseObject *object) const throw(GeneralException);
+		virtual std::string readString(const BaseObject *object) const;
 
 
 	// ------------------------------------------------------------------

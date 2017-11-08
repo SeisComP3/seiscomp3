@@ -41,6 +41,34 @@ Graph::Graph(Axis *keyAxis, Axis *valueAxis, QObject *parent)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Graph::Graph(const QString &name, Axis *keyAxis, Axis *valueAxis, QObject *parent)
+: QObject(parent)
+, _name(name)
+, _keyAxis(keyAxis)
+, _valueAxis(valueAxis)
+, _data(NULL)
+{
+	_visible = true;
+	_pen.setColor(Qt::black);
+	_pen.setWidth(1);
+	_dropShadow = false;
+	_antiAliasing = true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Graph::setName(const QString &name) {
+	_name = name;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Graph::setVisible(bool visible) {
 	_visible = visible;
 }
@@ -166,6 +194,39 @@ void Graph::unproject(QPolygonF &poly) const {
 		return;
 
 	_data->unproject(poly, _keyAxis, _valueAxis);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Graph::draw(QPainter &p) {
+	QPolygonF poly;
+	unproject(poly);
+
+	p.setRenderHint(QPainter::Antialiasing, antiAliasing());
+
+	if ( dropShadow() ) {
+		p.translate(2,2);
+		p.setPen(QPen(QColor(128,128,128,128), lineWidth()));
+		p.drawPolyline(poly);
+		p.translate(-2,-2);
+	}
+
+	p.setPen(pen());
+	p.drawPolyline(poly);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Graph::drawSymbol(QPainter &p, const QRect &r) {
+	p.setPen(pen());
+	int halfHeight = (r.top() + r.bottom()) / 2;
+	p.drawLine(r.left(), halfHeight, r.right(), halfHeight);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

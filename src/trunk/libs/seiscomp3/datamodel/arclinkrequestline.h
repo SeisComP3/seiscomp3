@@ -118,10 +118,10 @@ class SC_SYSTEM_CORE_API ArclinkRequestLine : public Object {
 		const WaveformStreamID& streamID() const;
 
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 		void setNetClass(const std::string& netClass);
 		const std::string& netClass() const;

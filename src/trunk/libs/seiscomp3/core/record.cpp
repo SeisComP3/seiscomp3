@@ -181,7 +181,7 @@ void Record::setStartTime(const Core::Time &time) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Core::Time Record::endTime() const throw(Seiscomp::Core::ValueException) {
+Core::Time Record::endTime() const {
 	double span = 0;
 
 	if (_fsamp > 0.)

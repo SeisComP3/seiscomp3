@@ -114,9 +114,27 @@
 						If enabled then all traces without data are hidden in the picker.
 					</description>
 				</parameter>
+				<parameter name="hideDisabledStations" type="boolean" default="true">
+					<description>
+						If enabled then all traces of disabled stations are hidden if
+						they are not picked.
+					</description>
+				</parameter>
 				<parameter name="defaultDepth" type="double" unit="km" default="10">
 					<description>
 						When creating an artificial origin this is the default depth used.
+					</description>
+				</parameter>
+				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
+					<description>
+						Adds advanced input parameters in artificial origin dialog.
+					</description>
+				</parameter>
+				<parameter name="systemTray" type="boolean" default="true">
+					<description>
+						Adds an icon to the system tray and displays a message
+						when a new event was received. Note that this feature
+						requires libQt4 version 4.3 or higher.
 					</description>
 				</parameter>
 				<group name="map">
@@ -148,11 +166,9 @@
 					</parameter>
 				</group>
 				<group name="locator">
-					<parameter name="minimumDepth" type="double" unit="km">
+					<parameter name="interface" type="string" default="LOCSAT">
 						<description>
-							Minimum depth which is set if the locator used supports fixing
-							the depth. If the depth is lower than this value the depth is then
-							fixed to this configured value and the origin is relocated again.
+							The default locator interface to use.
 						</description>
 					</parameter>
 					<parameter name="defaultProfile" type="string">
@@ -160,17 +176,30 @@
 							The default locator profile to use.
 						</description>
 					</parameter>
+					<parameter name="minimumDepth" type="double" unit="km">
+						<description>
+							Minimum depth which is set if the locator used supports fixing
+							the depth. If the depth is lower than this value the depth is then
+							fixed to this configured value and the origin is relocated again.
+						</description>
+					</parameter>
 				</group>
-				<parameter name="locator" type="string">
-					<description>
-						The default locator interface to use.
-					</description>
-				</parameter>
-				<parameter name="artificialOriginAdvanced" type="boolean" default="false">
-					<description>
-						Adds advanced input parameters in artificial origin dialog.
-					</description>
-				</parameter>
+				<group name="commit">
+					<parameter name="forceEventAssociation" type="boolean" default="true">
+						<description>
+						Activates the button &quot;Force association with event&quot; when
+						committing with additional options. This is just the default
+						setting and can be changed manually when the dialog pops up.
+						</description>
+					</parameter>
+					<parameter name="fixOrigin" type="boolean" default="true">
+						<description>
+						Activates the button &quot;Fix this origin as preferred solution&quot; when
+						committing with additional options. This is just the default
+						setting and can be changed manually when the dialog pops up.
+						</description>
+					</parameter>
+				</group>
 			</group>
 			<group name="picker">
 				<parameter name="showCrossHairCursor" type="boolean" default="false">

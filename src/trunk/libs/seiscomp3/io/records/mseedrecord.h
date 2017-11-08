@@ -126,7 +126,7 @@ public:
 
 	//! Returns a nonmutable pointer to the data samples if the data is available; otherwise 0
 	//! (the data type is independent from the original one and was given by the DataType flag in the constructor)
-	const Array* data() const throw(LibmseedException);
+	const Array* data() const;
 
 	const Array* raw() const;
 
@@ -145,10 +145,10 @@ public:
 	void setOutputRecordLength(int reclen);
 
 	//! Extract the packed MSeedRecord attributes from the given stream
-	void read(std::istream &in) throw(Core::StreamException);
+	void read(std::istream &in);
 
 	//! Encode the record into the given stream
-	void write(std::ostream& out) throw(Core::StreamException);
+	void write(std::ostream& out);
 
 private:
 	CharArray _raw;
@@ -165,15 +165,14 @@ private:
 	int _nframes;
 	int _leap;
 	Seiscomp::Core::Time _etime;
-        bool _encodingFlag;
+	bool _encodingFlag;
 
-	void _setDataAttributes(int reclen, char *data) const
-	     throw(Seiscomp::IO::LibmseedException);
+	void _setDataAttributes(int reclen, char *data) const;
 
 	/* callback function for libmseed-function msr_pack(...) */
 	static void _Record_Handler(char *record, int reclen, void *packed) {
-	    /* to make the data available to the overloaded operator<< */
-            reinterpret_cast<CharArray *>(packed)->append(reclen, record);
+		/* to make the data available to the overloaded operator<< */
+		reinterpret_cast<CharArray *>(packed)->append(reclen, record);
 	}
 	
 };

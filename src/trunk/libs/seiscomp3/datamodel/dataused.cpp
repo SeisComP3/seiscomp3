@@ -56,7 +56,7 @@ DataUsed::DataUsed() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DataUsed::DataUsed(const DataUsed& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -171,7 +171,7 @@ void DataUsed::setShortestPeriod(const OPT(double)& shortestPeriod) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double DataUsed::shortestPeriod() const throw(Seiscomp::Core::ValueException) {
+double DataUsed::shortestPeriod() const {
 	if ( _shortestPeriod )
 		return *_shortestPeriod;
 	throw Seiscomp::Core::ValueException("DataUsed.shortestPeriod is not set");
@@ -302,7 +302,7 @@ void DataUsed::accept(Visitor* visitor) {
 void DataUsed::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: DataUsed skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -15,6 +15,43 @@ from seiscomp.db import DBError
 
 
 # ---------------------------------------------------------------------------------------
+class _Comment(object):
+	__slots__ = (
+		"myStream",
+		"object",
+		"text",
+		"id",
+		"start",
+		"end",
+		"creationInfo",
+		"last_modified",
+	)
+
+	def __init__(self, myStream, id, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.text = ""
+		self.id = ""
+		self.start = None
+		self.end = None
+		self.creationInfo = None
+		self.myStream = myStream
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.id = id
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
 class _StationReference(object):
 	__slots__ = (
 		"myStationGroup",
@@ -330,6 +367,9 @@ class _ResponsePAZ(object):
 		"zeros",
 		"poles",
 		"remark",
+		"decimationFactor",
+		"delay",
+		"correction",
 		"last_modified",
 	)
 
@@ -347,6 +387,9 @@ class _ResponsePAZ(object):
 		self.zeros = ""
 		self.poles = ""
 		self.remark = ""
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
 		self.my = my
 		self.object = {}
 
@@ -438,6 +481,108 @@ class _ResponseFAP(object):
 		self.gainFrequency = None
 		self.numberOfTuples = None
 		self.tuples = ""
+		self.remark = ""
+		self.my = my
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.name = name
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
+class _ResponseFIR(object):
+	__slots__ = (
+		"my",
+		"object",
+		"publicID",
+		"name",
+		"gain",
+		"gainFrequency",
+		"decimationFactor",
+		"delay",
+		"correction",
+		"numberOfCoefficients",
+		"symmetry",
+		"coefficients",
+		"remark",
+		"last_modified",
+	)
+
+	def __init__(self, my, name, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
+		self.name = ""
+		self.gain = None
+		self.gainFrequency = None
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
+		self.numberOfCoefficients = None
+		self.symmetry = ""
+		self.coefficients = ""
+		self.remark = ""
+		self.my = my
+		self.object = {}
+
+		for (a, v) in args.iteritems():
+			self.__setattr__(a, v)
+
+		self.name = name
+
+
+	def __setattr__(self, name, value):
+		object.__setattr__(self, name, value)
+		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+# ---------------------------------------------------------------------------------------
+
+
+
+
+# ---------------------------------------------------------------------------------------
+class _ResponseIIR(object):
+	__slots__ = (
+		"my",
+		"object",
+		"publicID",
+		"name",
+		"type",
+		"gain",
+		"gainFrequency",
+		"decimationFactor",
+		"delay",
+		"correction",
+		"numberOfNumerators",
+		"numberOfDenominators",
+		"numerators",
+		"denominators",
+		"remark",
+		"last_modified",
+	)
+
+	def __init__(self, my, name, args):
+		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
+		self.name = ""
+		self.type = ""
+		self.gain = None
+		self.gainFrequency = None
+		self.decimationFactor = None
+		self.delay = None
+		self.correction = None
+		self.numberOfNumerators = None
+		self.numberOfDenominators = None
+		self.numerators = ""
+		self.denominators = ""
 		self.remark = ""
 		self.my = my
 		self.object = {}
@@ -631,53 +776,6 @@ class _Datalogger(object):
 
 
 # ---------------------------------------------------------------------------------------
-class _ResponseFIR(object):
-	__slots__ = (
-		"my",
-		"object",
-		"publicID",
-		"name",
-		"gain",
-		"decimationFactor",
-		"delay",
-		"correction",
-		"numberOfCoefficients",
-		"symmetry",
-		"coefficients",
-		"remark",
-		"last_modified",
-	)
-
-	def __init__(self, my, name, args):
-		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
-		self.publicID = ""
-		self.name = ""
-		self.gain = None
-		self.decimationFactor = None
-		self.delay = None
-		self.correction = None
-		self.numberOfCoefficients = None
-		self.symmetry = ""
-		self.coefficients = ""
-		self.remark = ""
-		self.my = my
-		self.object = {}
-
-		for (a, v) in args.iteritems():
-			self.__setattr__(a, v)
-
-		self.name = name
-
-
-	def __setattr__(self, name, value):
-		object.__setattr__(self, name, value)
-		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
-# ---------------------------------------------------------------------------------------
-
-
-
-
-# ---------------------------------------------------------------------------------------
 class _AuxStream(object):
 	__slots__ = (
 		"mySensorLocation",
@@ -691,6 +789,7 @@ class _AuxStream(object):
 		"format",
 		"flags",
 		"restricted",
+		"shared",
 		"last_modified",
 	)
 
@@ -705,6 +804,7 @@ class _AuxStream(object):
 		self.format = ""
 		self.flags = ""
 		self.restricted = None
+		self.shared = None
 		self.mySensorLocation = mySensorLocation
 		self.object = {}
 
@@ -728,6 +828,7 @@ class _Stream(object):
 	__slots__ = (
 		"mySensorLocation",
 		"object",
+		"publicID",
 		"code",
 		"start",
 		"end",
@@ -751,10 +852,12 @@ class _Stream(object):
 		"restricted",
 		"shared",
 		"last_modified",
+		"comment",
 	)
 
 	def __init__(self, mySensorLocation, code, start, args):
 		self.last_modified = datetime.datetime(1970, 1, 1, 0, 0, 0)
+		self.publicID = ""
 		self.code = ""
 		self.start = None
 		self.end = None
@@ -786,10 +889,24 @@ class _Stream(object):
 		self.code = code
 		self.start = start
 
+		self.comment = {}
 
 	def __setattr__(self, name, value):
 		object.__setattr__(self, name, value)
 		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+
+	def insert_comment(self, id, **args):
+		if id in self.comment:
+			raise DBError, "Comment %s already defined" % id
+		obj = _Comment(self, id, args)
+		self.comment[id] = obj
+		return obj
+
+	def remove_comment(self, id):
+		try:
+			del self.comment[id]
+		except KeyError:
+			raise DBError, "Comment [%s] not found" % (id)
 # ---------------------------------------------------------------------------------------
 
 
@@ -808,6 +925,7 @@ class _SensorLocation(object):
 		"longitude",
 		"elevation",
 		"last_modified",
+		"comment",
 		"auxStream",
 		"stream",
 	)
@@ -830,12 +948,26 @@ class _SensorLocation(object):
 		self.code = code
 		self.start = start
 
+		self.comment = {}
 		self.auxStream = {}
 		self.stream = {}
 
 	def __setattr__(self, name, value):
 		object.__setattr__(self, name, value)
 		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+
+	def insert_comment(self, id, **args):
+		if id in self.comment:
+			raise DBError, "Comment %s already defined" % id
+		obj = _Comment(self, id, args)
+		self.comment[id] = obj
+		return obj
+
+	def remove_comment(self, id):
+		try:
+			del self.comment[id]
+		except KeyError:
+			raise DBError, "Comment [%s] not found" % (id)
 
 	def insert_auxStream(self, code, start, **args):
 		if code not in self.auxStream:
@@ -861,6 +993,7 @@ class _SensorLocation(object):
 			raise DBError, "Stream [%s][%s] already defined" % (code, start)
 		obj = _Stream(self, code, start, args)
 		self.stream[code][start] = obj
+		self.object[obj.publicID] = obj
 		return obj
 
 	def remove_stream(self, code, start):
@@ -898,6 +1031,7 @@ class _Station(object):
 		"shared",
 		"remark",
 		"last_modified",
+		"comment",
 		"sensorLocation",
 	)
 
@@ -929,11 +1063,25 @@ class _Station(object):
 		self.code = code
 		self.start = start
 
+		self.comment = {}
 		self.sensorLocation = {}
 
 	def __setattr__(self, name, value):
 		object.__setattr__(self, name, value)
 		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+
+	def insert_comment(self, id, **args):
+		if id in self.comment:
+			raise DBError, "Comment %s already defined" % id
+		obj = _Comment(self, id, args)
+		self.comment[id] = obj
+		return obj
+
+	def remove_comment(self, id):
+		try:
+			del self.comment[id]
+		except KeyError:
+			raise DBError, "Comment [%s] not found" % (id)
 
 	def insert_sensorLocation(self, code, start, **args):
 		if code not in self.sensorLocation:
@@ -976,6 +1124,7 @@ class _Network(object):
 		"shared",
 		"remark",
 		"last_modified",
+		"comment",
 		"station",
 	)
 
@@ -1003,11 +1152,25 @@ class _Network(object):
 		self.code = code
 		self.start = start
 
+		self.comment = {}
 		self.station = {}
 
 	def __setattr__(self, name, value):
 		object.__setattr__(self, name, value)
 		object.__setattr__(self, "last_modified", datetime.datetime.utcnow())
+
+	def insert_comment(self, id, **args):
+		if id in self.comment:
+			raise DBError, "Comment %s already defined" % id
+		obj = _Comment(self, id, args)
+		self.comment[id] = obj
+		return obj
+
+	def remove_comment(self, id):
+		try:
+			del self.comment[id]
+		except KeyError:
+			raise DBError, "Comment [%s] not found" % (id)
 
 	def insert_station(self, code, start, **args):
 		if code not in self.station:
@@ -1043,6 +1206,7 @@ class Inventory(object):
 		"datalogger",
 		"responsePAZ",
 		"responseFIR",
+		"responseIIR",
 		"responsePolynomial",
 		"responseFAP",
 		"network",
@@ -1060,6 +1224,7 @@ class Inventory(object):
 		self.datalogger = {}
 		self.responsePAZ = {}
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePolynomial = {}
 		self.responseFAP = {}
 		self.network = {}
@@ -1152,6 +1317,20 @@ class Inventory(object):
 		except KeyError:
 			raise DBError, "ResponseFIR [%s] not found" % (name)
 
+	def insert_responseIIR(self, name, **args):
+		if name in self.responseIIR:
+			raise DBError, "ResponseIIR %s already defined" % name
+		obj = _ResponseIIR(self, name, args)
+		self.responseIIR[name] = obj
+		self.object[obj.publicID] = obj
+		return obj
+
+	def remove_responseIIR(self, name):
+		try:
+			del self.responseIIR[name]
+		except KeyError:
+			raise DBError, "ResponseIIR [%s] not found" % (name)
+
 	def insert_responsePolynomial(self, name, **args):
 		if name in self.responsePolynomial:
 			raise DBError, "ResponsePolynomial %s already defined" % name
@@ -1205,6 +1384,7 @@ class Inventory(object):
 		self.datalogger = {}
 		self.responsePAZ = {}
 		self.responseFIR = {}
+		self.responseIIR = {}
 		self.responsePolynomial = {}
 		self.responseFAP = {}
 

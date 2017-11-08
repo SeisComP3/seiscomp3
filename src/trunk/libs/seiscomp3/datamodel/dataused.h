@@ -91,7 +91,7 @@ class SC_SYSTEM_CORE_API DataUsed : public Object {
 
 		//! Shortest period present in data in seconds.
 		void setShortestPeriod(const OPT(double)& shortestPeriod);
-		double shortestPeriod() const throw(Seiscomp::Core::ValueException);
+		double shortestPeriod() const;
 
 	
 	// ------------------------------------------------------------------

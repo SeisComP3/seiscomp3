@@ -42,6 +42,8 @@ MagnitudeProcessor::Status MagnitudeProcessor_Mwp::computeMagnitude(
 	double,           // period is unused
 	double delta,     // in degrees
 	double depth,     // in kilometers
+	const DataModel::Origin *hypocenter,
+	const DataModel::SensorLocation *receiver,
 	double &value)
 {
 	if ( amplitude <= 0 )

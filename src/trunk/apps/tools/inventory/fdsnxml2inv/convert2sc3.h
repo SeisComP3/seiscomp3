@@ -17,6 +17,7 @@
 
 #include "converter.h"
 
+#include <seiscomp3/core/enumeration.h>
 #include <list>
 #include <set>
 
@@ -29,6 +30,7 @@ class FDSNStationXML;
 class Station;
 class Channel;
 class ResponseStage;
+class BaseFilter;
 
 }
 
@@ -48,6 +50,26 @@ class DataloggerCalibration;
 class Decimation;
 
 }
+
+
+MAKEENUM(ResponseType,
+	EVALUES(
+		RT_None,
+		RT_FIR,
+		RT_RC,
+		RT_PAZ,
+		RT_Poly,
+		RT_FAP
+	),
+	ENAMES(
+		"None",
+		"FIR",
+		"RC",
+		"PAZ",
+		"Poly",
+		"FAP"
+	)
+);
 
 
 //! \brief Converter class for FDSNXML -> SC3 that works on an
@@ -118,34 +140,20 @@ class Convert2SC3 : public Converter {
 		DataModel::Datalogger *
 		updateDatalogger(const std::string &name, const FDSNXML::Channel *);
 
-		DataModel::Decimation *
-		updateDecimation(DataModel::Datalogger *, DataModel::Stream *,
-		                 const FDSNXML::Channel *);
-
 		DataModel::DataloggerCalibration *
 		updateDataloggerCalibration(DataModel::Datalogger *, DataModel::Stream *,
 		                            const FDSNXML::Channel *);
 
-		void
-		updateDataloggerDigital(DataModel::Datalogger *, DataModel::Decimation *,
-		                        const FDSNXML::Channel *);
-
-		void
-		updateDataloggerAnalogue(DataModel::Datalogger *, DataModel::Decimation *,
-		                         const FDSNXML::Channel *);
-
 		DataModel::Sensor *
-		updateSensor(const std::string &name,
-		             const FDSNXML::Channel *,
-		             const FDSNXML::ResponseStage *resp);
+		updateSensor(const std::string &name, const FDSNXML::Channel *,
+		             const FDSNXML::ResponseStage *resp,
+		             ResponseType stageType, const FDSNXML::BaseFilter *filter);
 
 		DataModel::SensorCalibration *
 		updateSensorCalibration(DataModel::Sensor *, DataModel::Stream *,
 		                        const FDSNXML::Channel *,
 		                        const FDSNXML::ResponseStage *resp);
 
-
-		const FDSNXML::ResponseStage *findDataloggerResponse() const;
 
 		DataModel::Datalogger *pushDatalogger(DataModel::Datalogger *);
 		DataModel::Sensor *pushSensor(DataModel::Sensor *);
@@ -158,7 +166,7 @@ class Convert2SC3 : public Converter {
 	// ------------------------------------------------------------------
 	private:
 		typedef std::map<std::string, const DataModel::Object*> ObjectLookup;
-		typedef std::list<const FDSNXML::ResponseStage*> Responses;
+		typedef std::list<const FDSNXML::ResponseStage*> Stages;
 		typedef std::set<std::string> StringSet;
 
 		DataModel::Inventory *_inv;
@@ -180,9 +188,7 @@ class Convert2SC3 : public Converter {
 		ObjectLookup          _respFAPLookup;
 		ObjectLookup          _respPolyLookup;
 		ObjectLookup          _respFIRLookup;
-
-		// List of responses of a certain channel epoch
-		Responses             _responses;
+		ObjectLookup          _respIIRLookup;
 };
 
 

@@ -33,13 +33,12 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorObserver);
 
 class QcProcessorObserver: public Core::BaseObject {
-    DECLARE_SC_CLASS(QcProcessorObserver);
+	DECLARE_SC_CLASS(QcProcessorObserver);
 
-public:
-    QcProcessorObserver();
-    virtual void update() = 0;
+	public:
+		QcProcessorObserver();
+		virtual void update() = 0;
 };
-
 
 
 
@@ -47,61 +46,61 @@ DEFINE_SMARTPOINTER(QcParameter);
 
 //! This class represents the QC processing result.
 class SC_SYSTEM_CLIENT_API QcParameter : public Core::BaseObject {
-    DECLARE_SC_CLASS(QcParameter);
+	DECLARE_SC_CLASS(QcParameter);
 
-public:
-    QcParameter() {};
-    
-    Core::Time recordStartTime, recordEndTime;
-    float recordSamplingFrequency;
-    boost::any parameter;
+	public:
+		QcParameter() {}
+
+		Core::Time recordStartTime, recordEndTime;
+		float recordSamplingFrequency;
+		boost::any parameter;
 };
-
 
 
 
 DEFINE_SMARTPOINTER(QcProcessor);
 
 class SC_SYSTEM_CLIENT_API QcProcessor : public WaveformProcessor {
-    DECLARE_SC_CLASS(QcProcessor);
+	DECLARE_SC_CLASS(QcProcessor);
 
-public:
-    //! Constructor
-    QcProcessor(const Core::TimeSpan& deadTime=0.0, const Core::TimeSpan &gapThreshold=300.0);
+	public:
+		//! Constructor
+		QcProcessor(const Core::TimeSpan& deadTime=0.0, const Core::TimeSpan &gapThreshold=300.0);
 
-    //! Destructor
-    virtual ~QcProcessor();
+		//! Destructor
+		virtual ~QcProcessor();
 
-    //! To register in QC processing interested observers
-    bool subscribe(QcProcessorObserver *obs);
+		//! To register in QC processing interested observers
+		bool subscribe(QcProcessorObserver *obs);
 
-    //! To unregister in QC processing uninterested observers
-    bool unsubscribe(QcProcessorObserver *obs);
+		//! To unregister in QC processing uninterested observers
+		bool unsubscribe(QcProcessorObserver *obs);
 
-    //! Returns the result of QC processing
-    QcParameter* getState() const;
+		//! Returns the result of QC processing
+		QcParameter* getState() const;
 
-    //! Calculates the specific result in derived classes
-    virtual bool setState(const Record* record, const DoubleArray& data) = 0;
+		//! Calculates the specific result in derived classes
+		virtual bool setState(const Record* record, const DoubleArray& data) = 0;
 
-    //! Returns true if QC processing result is successfully initialized; false otherwise
-    bool isSet() const;
+		//! Returns true if QC processing result is successfully initialized; false otherwise
+		bool isSet() const;
 
-    //! Returns true in case of a valid value in QC processing result; false otherwise
-    bool isValid() const;
+		//! Returns true in case of a valid value in QC processing result; false otherwise
+		bool isValid() const;
 
-protected:
-    //! Implements the inherited method
-    //! Notifies registered observers
-    virtual void process(const Record* record, const DoubleArray& data);
+	protected:
+		//! Implements the inherited method
+		//! Notifies registered observers
+		virtual void process(const Record* record, const DoubleArray& data);
 
-    QcParameterPtr _qcp;
+		QcParameterPtr _qcp;
     
-private:
-    std::deque<QcProcessorObserver *> _observers;
-    bool _setFlag;
-    bool _validFlag;
+	private:
+		std::deque<QcProcessorObserver *> _observers;
+		bool _setFlag;
+		bool _validFlag;
 };
+
 
 }
 }

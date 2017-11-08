@@ -47,6 +47,9 @@ class MainFrame : public Gui::MainWindow {
 
 		Gui::EventSummaryView* eventSummaryView() const;
 
+		void loadEvents(float days);
+
+
 	protected slots:
 		void toggleDock();
 		void showLocator();

@@ -55,15 +55,12 @@ REGISTER_RECORD(SHRecord, "sh");
 SHRecord::SHRecord(string net, string sta, string loc, string cha,
                    Core::Time stime, double fsamp, int tqual,
                    Array::DataType dt, Hint h)
-    : Record(dt,h,net,sta,loc,cha,stime,0,fsamp,tqual), _data(0)
-{
-}
+    : Record(dt,h,net,sta,loc,cha,stime,0,fsamp,tqual), _data(0) {}
 
 
 
 SHRecord::SHRecord(const SHRecord& rec)
-	: Record(rec)
-{
+: Record(rec) {
 	_data = rec._data ? rec._data->clone() : NULL;
 }
 
@@ -71,8 +68,7 @@ SHRecord::SHRecord(const SHRecord& rec)
 
 
 SHRecord::SHRecord(const Record& rec)
-	: Record(rec), _data(0)
-{
+: Record(rec), _data(0) {
 	_data = rec.data() ? rec.data()->clone() : NULL;
 }
 
@@ -84,8 +80,7 @@ SHRecord::~SHRecord() {}
 
 
 
-SHRecord& SHRecord::operator=(const SHRecord& rec)
-{
+SHRecord& SHRecord::operator=(const SHRecord& rec) {
 	std::cerr << "incomplete SHRecord::operator= called" << std::endl;
 
 	if (this != &rec) {
@@ -102,32 +97,27 @@ SHRecord& SHRecord::operator=(const SHRecord& rec)
 
 
 
-Array* SHRecord::data()
-{
+Array* SHRecord::data() {
 	return _data.get();
 }
 
 
 
 
-const Array* SHRecord::raw() const
-{
+const Array* SHRecord::raw() const {
 	return NULL;
 }
 
 
 
 
-const Array* SHRecord::data() const
-{
+const Array* SHRecord::data() const {
 	return _data.get();
 }
 
 
 
-void SHRecord::setData(Array* data)
-	throw (Core::TypeException)
-{
+void SHRecord::setData(Array* data) {
 	switch (data->dataType()) {
 	case Array::INT: // XXX will be serialized as float
 	case Array::FLOAT:
@@ -145,10 +135,7 @@ void SHRecord::setData(Array* data)
 
 
 
-void SHRecord::setData(int size, const void *data,
-			Array::DataType dataType)
-	throw (Core::TypeException)
-{
+void SHRecord::setData(int size, const void *data, Array::DataType dataType) {
 	switch (dataType) {
 	case Array::INT: // XXX will be serialized as float
 	case Array::FLOAT:
@@ -173,15 +160,13 @@ SHRecord* SHRecord::copy() const
 
 
 
-void SHRecord::read(istream &in) throw(Core::StreamException)
-{
+void SHRecord::read(istream &in) {
 }
 
 
 
 
-void SHRecord::write(ostream &out) throw(Core::StreamException)
-{
+void SHRecord::write(ostream &out) {
 	if (sh_put(out, *this) != SH_SUCCESS)
 		throw Core::StreamException();
 }

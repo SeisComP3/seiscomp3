@@ -23,7 +23,7 @@ IMPLEMENT_SC_CLASS_DERIVED(QcProcessorAvailability, QcProcessor, "QcProcessorAva
 QcProcessorAvailability::QcProcessorAvailability() 
 : QcProcessor() {}
 
-double QcProcessorAvailability::getAvailability() throw (Core::ValueException) {
+double QcProcessorAvailability::getAvailability() {
 	try {
 		return boost::any_cast<double>(_qcp->parameter);
 	}

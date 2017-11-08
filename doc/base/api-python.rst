@@ -46,11 +46,15 @@ Classes
   * :ref:`PickReference <api-python-datamodel-pickreference>`
   * :ref:`PrincipalAxes <api-python-datamodel-principalaxes>`
   * :ref:`Reading <api-python-datamodel-reading>`
+  * :ref:`RealArray <api-python-datamodel-realarray>`
+  * :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
   * :ref:`RealQuantity <api-python-datamodel-realquantity>`
   * :ref:`SourceTimeFunction <api-python-datamodel-sourcetimefunction>`
   * :ref:`StationMagnitude <api-python-datamodel-stationmagnitude>`
   * :ref:`StationMagnitudeContribution <api-python-datamodel-stationmagnitudecontribution>`
   * :ref:`Tensor <api-python-datamodel-tensor>`
+  * :ref:`TimeArray <api-python-datamodel-timearray>`
+  * :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
   * :ref:`TimeQuantity <api-python-datamodel-timequantity>`
   * :ref:`TimeWindow <api-python-datamodel-timewindow>`
   * :ref:`WaveformStreamID <api-python-datamodel-waveformstreamid>`
@@ -69,7 +73,7 @@ Classes
         edge [color="#000000"]
         layout="dot"
         Pick [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Pick</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="time"><font color="#8b0000">+ time: TimeQuantity</font></td></tr><tr><td align="left" port="waveformID"><font color="#8b0000">+ waveformID: WaveformStreamID</font></td></tr><tr><td align="left" port="filterID"><font color="#8b0000">+ filterID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="horizontalSlowness"><font color="#8b0000">+ horizontalSlowness: RealQuantity  [0..1]</font></td></tr><tr><td align="left" port="backazimuth"><font color="#8b0000">+ backazimuth: RealQuantity  [0..1]</font></td></tr><tr><td align="left" port="slownessMethodID"><font color="#8b0000">+ slownessMethodID: string</font></td></tr><tr><td align="left" port="onset"><font color="#8b0000">+ onset: PickOnset  [0..1]</font></td></tr><tr><td align="left" port="phaseHint"><font color="#8b0000">+ phaseHint: Phase  [0..1]</font></td></tr><tr><td align="left" port="polarity"><font color="#8b0000">+ polarity: PickPolarity  [0..1]</font></td></tr><tr><td align="left" port="evaluationMode"><font color="#8b0000">+ evaluationMode: EvaluationMode  [0..1]</font></td></tr><tr><td align="left" port="evaluationStatus"><font color="#8b0000">+ evaluationStatus: EvaluationStatus  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
-        Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
+        Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime  [0..1]</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
         Amplitude [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Amplitude</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="amplitude"><font color="#8b0000">+ amplitude: RealQuantity  [0..1]</font></td></tr><tr><td align="left" port="timeWindow"><font color="#8b0000">+ timeWindow: TimeWindow  [0..1]</font></td></tr><tr><td align="left" port="period"><font color="#8b0000">+ period: RealQuantity  [0..1]</font></td></tr><tr><td align="left" port="snr"><font color="#8b0000">+ snr: float  [0..1]</font></td></tr><tr><td align="left" port="unit"><font color="#8b0000">+ unit: string</font></td></tr><tr><td align="left" port="pickID"><font color="#8b0000">+ pickID: string</font></td></tr><tr><td align="left" port="waveformID"><font color="#8b0000">+ waveformID: WaveformStreamID  [0..1]</font></td></tr><tr><td align="left" port="filterID"><font color="#8b0000">+ filterID: string</font></td></tr><tr><td align="left" port="methodID"><font color="#8b0000">+ methodID: string</font></td></tr><tr><td align="left" port="scalingTime"><font color="#8b0000">+ scalingTime: TimeQuantity  [0..1]</font></td></tr><tr><td align="left" port="magnitudeHint"><font color="#8b0000">+ magnitudeHint: string</font></td></tr><tr><td align="left" port="evaluationMode"><font color="#8b0000">+ evaluationMode: EvaluationMode  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Reading [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Reading</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left"><font color="#8b0000">+ pickReference: PickReference [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ amplitudeReference: AmplitudeReference [0..*]</font></td></tr></table>>]
         PickReference [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>PickReference</td></tr><tr><td align="left" port="pickID"><font color="#8b0000">+ pickID: string</font></td></tr></table>>]
@@ -146,7 +150,7 @@ Classes
         layout="dot"
         ParameterSet [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ParameterSet</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="baseID"><font color="#8b0000">+ baseID: string</font></td></tr><tr><td align="left" port="moduleID"><font color="#8b0000">+ moduleID: string</font></td></tr><tr><td align="left" port="created"><font color="#8b0000">+ created: datetime  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ parameter: Parameter [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Parameter [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Parameter</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="value"><font color="#8b0000">+ value: string</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
-        Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
+        Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime  [0..1]</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
         ConfigModule [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigModule</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left"><font color="#8b0000">+ configStation: ConfigStation [0..*]</font></td></tr></table>>]
         ConfigStation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ConfigStation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="networkCode"><font color="#8b0000">+ networkCode: string</font></td></tr><tr><td align="left" port="stationCode"><font color="#8b0000">+ stationCode: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ setup: Setup [0..*]</font></td></tr></table>>]
         Setup [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Setup</td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="parameterSetID"><font color="#8b0000">+ parameterSetID: string</font></td></tr><tr><td align="left" port="enabled"><font color="#8b0000">+ enabled: boolean</font></td></tr></table>>]
@@ -193,7 +197,9 @@ Classes
   * :ref:`AuxSource <api-python-datamodel-auxsource>`
   * :ref:`AuxStream <api-python-datamodel-auxstream>`
   * :ref:`Blob <api-python-datamodel-blob>`
+  * :ref:`Comment <api-python-datamodel-comment>`
   * :ref:`ComplexArray <api-python-datamodel-complexarray>`
+  * :ref:`CreationInfo <api-python-datamodel-creationinfo>`
   * :ref:`Datalogger <api-python-datamodel-datalogger>`
   * :ref:`DataloggerCalibration <api-python-datamodel-dataloggercalibration>`
   * :ref:`Decimation <api-python-datamodel-decimation>`
@@ -201,6 +207,7 @@ Classes
   * :ref:`RealArray <api-python-datamodel-realarray>`
   * :ref:`ResponseFAP <api-python-datamodel-responsefap>`
   * :ref:`ResponseFIR <api-python-datamodel-responsefir>`
+  * :ref:`ResponseIIR <api-python-datamodel-responseiir>`
   * :ref:`ResponsePAZ <api-python-datamodel-responsepaz>`
   * :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
   * :ref:`Sensor <api-python-datamodel-sensor>`
@@ -233,15 +240,17 @@ Classes
         Datalogger [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Datalogger</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="digitizerModel"><font color="#8b0000">+ digitizerModel: string</font></td></tr><tr><td align="left" port="digitizerManufacturer"><font color="#8b0000">+ digitizerManufacturer: string</font></td></tr><tr><td align="left" port="recorderModel"><font color="#8b0000">+ recorderModel: string</font></td></tr><tr><td align="left" port="recorderManufacturer"><font color="#8b0000">+ recorderManufacturer: string</font></td></tr><tr><td align="left" port="clockModel"><font color="#8b0000">+ clockModel: string</font></td></tr><tr><td align="left" port="clockManufacturer"><font color="#8b0000">+ clockManufacturer: string</font></td></tr><tr><td align="left" port="clockType"><font color="#8b0000">+ clockType: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="maxClockDrift"><font color="#8b0000">+ maxClockDrift: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ dataloggerCalibration: DataloggerCalibration [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ decimation: Decimation [0..*]</font></td></tr></table>>]
         DataloggerCalibration [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>DataloggerCalibration</td></tr><tr><td align="left" port="serialNumber"><font color="#8b0000">+ serialNumber: string</font></td></tr><tr><td align="left" port="channel"><font color="#8b0000">+ channel: int</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         Decimation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Decimation</td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int</font></td></tr><tr><td align="left" port="analogueFilterChain"><font color="#8b0000">+ analogueFilterChain: Blob  [0..1]</font></td></tr><tr><td align="left" port="digitalFilterChain"><font color="#8b0000">+ digitalFilterChain: Blob  [0..1]</font></td></tr></table>>]
-        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
-        ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponsePAZ [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePAZ</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFactor"><font color="#8b0000">+ normalizationFactor: float  [0..1]</font></td></tr><tr><td align="left" port="normalizationFrequency"><font color="#8b0000">+ normalizationFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfZeros"><font color="#8b0000">+ numberOfZeros: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfPoles"><font color="#8b0000">+ numberOfPoles: int  [0..1]</font></td></tr><tr><td align="left" port="zeros"><font color="#8b0000">+ zeros: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="poles"><font color="#8b0000">+ poles: ComplexArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr></table>>]
+        ResponseFIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="symmetry"><font color="#8b0000">+ symmetry: string</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
+        ResponseIIR [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseIIR</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="decimationFactor"><font color="#8b0000">+ decimationFactor: int  [0..1]</font></td></tr><tr><td align="left" port="delay"><font color="#8b0000">+ delay: float  [0..1]</font></td></tr><tr><td align="left" port="correction"><font color="#8b0000">+ correction: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfNumerators"><font color="#8b0000">+ numberOfNumerators: int  [0..1]</font></td></tr><tr><td align="left" port="numberOfDenominators"><font color="#8b0000">+ numberOfDenominators: int  [0..1]</font></td></tr><tr><td align="left" port="numerators"><font color="#8b0000">+ numerators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="denominators"><font color="#8b0000">+ denominators: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponsePolynomial [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponsePolynomial</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="frequencyUnit"><font color="#8b0000">+ frequencyUnit: string</font></td></tr><tr><td align="left" port="approximationType"><font color="#8b0000">+ approximationType: string</font></td></tr><tr><td align="left" port="approximationLowerBound"><font color="#8b0000">+ approximationLowerBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationUpperBound"><font color="#8b0000">+ approximationUpperBound: float  [0..1]</font></td></tr><tr><td align="left" port="approximationError"><font color="#8b0000">+ approximationError: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfCoefficients"><font color="#8b0000">+ numberOfCoefficients: int  [0..1]</font></td></tr><tr><td align="left" port="coefficients"><font color="#8b0000">+ coefficients: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
         ResponseFAP [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>ResponseFAP</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="name"><font color="#8b0000">+ name: string</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="numberOfTuples"><font color="#8b0000">+ numberOfTuples: int  [0..1]</font></td></tr><tr><td align="left" port="tuples"><font color="#8b0000">+ tuples: RealArray  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr></table>>]
-        Network [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Network</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="institutions"><font color="#8b0000">+ institutions: string</font></td></tr><tr><td align="left" port="region"><font color="#8b0000">+ region: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="netClass"><font color="#8b0000">+ netClass: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ station: Station [0..*]</font></td></tr></table>>]
-        Station [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Station</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left" port="place"><font color="#8b0000">+ place: string</font></td></tr><tr><td align="left" port="country"><font color="#8b0000">+ country: string</font></td></tr><tr><td align="left" port="affiliation"><font color="#8b0000">+ affiliation: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="archiveNetworkCode"><font color="#8b0000">+ archiveNetworkCode: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ sensorLocation: SensorLocation [0..*]</font></td></tr></table>>]
-        SensorLocation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>SensorLocation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ auxStream: AuxStream [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stream: Stream [0..*]</font></td></tr></table>>]
+        Network [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Network</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="institutions"><font color="#8b0000">+ institutions: string</font></td></tr><tr><td align="left" port="region"><font color="#8b0000">+ region: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="netClass"><font color="#8b0000">+ netClass: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ station: Station [0..*]</font></td></tr></table>>]
+        Comment [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Comment</td></tr><tr><td align="left" port="text"><font color="#8b0000">+ text: string</font></td></tr><tr><td align="left" port="id"><font color="#8b0000">+ id: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime  [0..1]</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="creationInfo"><font color="#8b0000">+ creationInfo: CreationInfo  [0..1]</font></td></tr></table>>]
+        Station [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Station</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left" port="place"><font color="#8b0000">+ place: string</font></td></tr><tr><td align="left" port="country"><font color="#8b0000">+ country: string</font></td></tr><tr><td align="left" port="affiliation"><font color="#8b0000">+ affiliation: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="archiveNetworkCode"><font color="#8b0000">+ archiveNetworkCode: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ sensorLocation: SensorLocation [0..*]</font></td></tr></table>>]
+        SensorLocation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>SensorLocation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ auxStream: AuxStream [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stream: Stream [0..*]</font></td></tr></table>>]
         AuxStream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>AuxStream</td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="device"><font color="#8b0000">+ device: string</font></td></tr><tr><td align="left" port="deviceSerialNumber"><font color="#8b0000">+ deviceSerialNumber: string</font></td></tr><tr><td align="left" port="source"><font color="#8b0000">+ source: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr></table>>]
-        Stream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Stream</td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="datalogger"><font color="#8b0000">+ datalogger: string</font></td></tr><tr><td align="left" port="dataloggerSerialNumber"><font color="#8b0000">+ dataloggerSerialNumber: string</font></td></tr><tr><td align="left" port="dataloggerChannel"><font color="#8b0000">+ dataloggerChannel: int  [0..1]</font></td></tr><tr><td align="left" port="sensor"><font color="#8b0000">+ sensor: string</font></td></tr><tr><td align="left" port="sensorSerialNumber"><font color="#8b0000">+ sensorSerialNumber: string</font></td></tr><tr><td align="left" port="sensorChannel"><font color="#8b0000">+ sensorChannel: int  [0..1]</font></td></tr><tr><td align="left" port="clockSerialNumber"><font color="#8b0000">+ clockSerialNumber: string</font></td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int  [0..1]</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int  [0..1]</font></td></tr><tr><td align="left" port="depth"><font color="#8b0000">+ depth: float  [0..1]</font></td></tr><tr><td align="left" port="azimuth"><font color="#8b0000">+ azimuth: float  [0..1]</font></td></tr><tr><td align="left" port="dip"><font color="#8b0000">+ dip: float  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="gainUnit"><font color="#8b0000">+ gainUnit: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr></table>>]
+        Stream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Stream</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="datalogger"><font color="#8b0000">+ datalogger: string</font></td></tr><tr><td align="left" port="dataloggerSerialNumber"><font color="#8b0000">+ dataloggerSerialNumber: string</font></td></tr><tr><td align="left" port="dataloggerChannel"><font color="#8b0000">+ dataloggerChannel: int  [0..1]</font></td></tr><tr><td align="left" port="sensor"><font color="#8b0000">+ sensor: string</font></td></tr><tr><td align="left" port="sensorSerialNumber"><font color="#8b0000">+ sensorSerialNumber: string</font></td></tr><tr><td align="left" port="sensorChannel"><font color="#8b0000">+ sensorChannel: int  [0..1]</font></td></tr><tr><td align="left" port="clockSerialNumber"><font color="#8b0000">+ clockSerialNumber: string</font></td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int  [0..1]</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int  [0..1]</font></td></tr><tr><td align="left" port="depth"><font color="#8b0000">+ depth: float  [0..1]</font></td></tr><tr><td align="left" port="azimuth"><font color="#8b0000">+ azimuth: float  [0..1]</font></td></tr><tr><td align="left" port="dip"><font color="#8b0000">+ dip: float  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="gainUnit"><font color="#8b0000">+ gainUnit: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Inventory -> StationGroup
         StationGroup -> StationReference
         Inventory -> AuxDevice
@@ -253,9 +262,14 @@ Classes
         Datalogger -> Decimation
         Inventory -> ResponsePAZ
         Inventory -> ResponseFIR
+        Inventory -> ResponseIIR
         Inventory -> ResponsePolynomial
         Inventory -> ResponseFAP
         Inventory -> Network
+        Stream -> Comment
+        SensorLocation -> Comment
+        Station -> Comment
+        Network -> Comment
         Network -> Station
         Station -> SensorLocation
         SensorLocation -> AuxStream
@@ -642,27 +656,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: routing()
@@ -787,7 +801,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeWindow(timeWindow)
@@ -803,7 +817,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPeriod(period)
@@ -819,7 +833,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -835,7 +849,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUnit(unit)
@@ -872,7 +886,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFilterID(filterID)
@@ -906,7 +920,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMagnitudeHint(magnitudeHint)
@@ -933,7 +947,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -948,7 +962,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -1426,11 +1440,11 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStatus(status)
 
@@ -1474,7 +1488,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(arclinkStatusLine)
@@ -1668,19 +1682,19 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStreamID(streamID)
 
@@ -1700,7 +1714,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -1713,7 +1727,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNetClass(netClass)
@@ -1899,7 +1913,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMessage(message)
@@ -2173,7 +2187,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -2188,7 +2202,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDistance(distance)
@@ -2203,7 +2217,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTakeOffAngle(takeOffAngle)
@@ -2219,7 +2233,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeResidual(timeResidual)
@@ -2236,7 +2250,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessResidual(horizontalSlownessResidual)
@@ -2253,7 +2267,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthResidual(backazimuthResidual)
@@ -2269,7 +2283,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeUsed(timeUsed)
@@ -2282,7 +2296,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHorizontalSlownessUsed(horizontalSlownessUsed)
@@ -2298,7 +2312,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuthUsed(backazimuthUsed)
@@ -2311,7 +2325,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -2327,7 +2341,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEarthModelID(earthModelID)
@@ -2354,7 +2368,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -2369,7 +2383,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -2517,7 +2531,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(auxSource)
@@ -2715,7 +2729,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -2731,7 +2745,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -2744,7 +2758,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: auxDevice()
@@ -2840,27 +2854,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format \(52.22\)
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(52.23\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDevice(device)
@@ -2926,7 +2940,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -2941,7 +2955,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensorLocation()
@@ -3149,6 +3163,36 @@ Reference
 
       :rtype: string
 
+   .. py:method:: setStart(start)
+
+      :param start: seiscomp3.Core.Time
+
+      Start of epoch in ISO datetime format
+
+   .. py:method:: start()
+
+      :rtype: seiscomp3.Core.Time
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setEnd(end)
+
+      :param end: seiscomp3.Core.Time
+
+      End of epoch \(empty if the comment epoch is open\)
+
+   .. py:method:: end()
+
+      :rtype: seiscomp3.Core.Time
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
    .. py:method:: setCreationInfo(creationInfo)
 
       :param creationInfo: :ref:`CreationInfo <api-python-datamodel-creationinfo>`
@@ -3161,7 +3205,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -3244,6 +3288,38 @@ Reference
       if the parent is not a ParameterSet. This is a convenience wrapper
       for parent().
 
+   .. py:method:: stream()
+
+      :rtype: Stream
+
+      Returns the parent Stream if available. Returns None
+      if the parent is not a Stream. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: sensorLocation()
+
+      :rtype: SensorLocation
+
+      Returns the parent SensorLocation if available. Returns None
+      if the parent is not a SensorLocation. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: station()
+
+      :rtype: Station
+
+      Returns the parent Station if available. Returns None
+      if the parent is not a Station. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: network()
+
+      :rtype: Network
+
+      Returns the parent Network if available. Returns None
+      if the parent is not a Network. This is a convenience wrapper
+      for parent().
+
    .. py:method:: assign(other)
 
       This method implements the :ref:`Object <api-python-datamodel-object>` interface.
@@ -3313,7 +3389,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-compositetime:
@@ -3373,7 +3449,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMonth(month)
@@ -3388,7 +3464,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDay(day)
@@ -3403,7 +3479,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHour(hour)
@@ -3418,7 +3494,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinute(minute)
@@ -3433,7 +3509,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecond(second)
@@ -3449,7 +3525,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: origin()
@@ -4038,7 +4114,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(setup)
@@ -4215,34 +4291,34 @@ Reference
 
    .. py:method:: setCreationTime(creationTime)
 
-      :param creationTime: datetime
+      :param creationTime: seiscomp3.Core.Time
 
       Time of creation of a resource, in ISO 8601 format. It has to be given in
       UTC.
 
    .. py:method:: creationTime()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setModificationTime(modificationTime)
 
-      :param modificationTime: datetime
+      :param modificationTime: seiscomp3.Core.Time
 
       Time of last modification of a resource, in ISO 8601 format. It has to be
       given in UTC.
 
    .. py:method:: modificationTime()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVersion(version)
@@ -4328,7 +4404,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -4430,7 +4506,7 @@ Reference
 
       :param name: string
 
-      Unique Datalogger name
+      Unique datalogger name
 
    .. py:method:: name()
 
@@ -4528,7 +4604,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxClockDrift(maxClockDrift)
@@ -4544,7 +4620,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4557,7 +4633,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(dataloggerCalibration)
@@ -4772,27 +4848,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -4807,7 +4883,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -4822,7 +4898,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -4835,7 +4911,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -4954,7 +5030,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDigitalFilterChain(digitalFilterChain)
@@ -4971,7 +5047,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: datalogger()
@@ -5105,7 +5181,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTypeCertainty(typeCertainty)
@@ -5121,7 +5197,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -5136,7 +5212,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(eventDescription)
@@ -5874,7 +5950,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPrincipalAxes(principalAxes)
@@ -5889,7 +5965,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -5905,7 +5981,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationPolarityCount(stationPolarityCount)
@@ -5920,7 +5996,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMisfit(misfit)
@@ -5937,7 +6013,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStationDistributionRatio(stationDistributionRatio)
@@ -5954,7 +6030,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -5980,7 +6056,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -5995,7 +6071,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -6008,7 +6084,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -6301,7 +6377,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -6317,7 +6393,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -6333,7 +6409,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -6348,7 +6424,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-inventory:
@@ -6434,6 +6510,15 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: add(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a ResponseIIR object to Inventory. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
    .. py:method:: add(responsePolynomial)
 
       :param responsePolynomial: Object of type :ref:`ResponsePolynomial <api-python-datamodel-responsepolynomial>`
@@ -6502,6 +6587,13 @@ Reference
       :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added ResponseFIR object from Inventory.
+
+   .. py:method:: remove(responseIIR)
+
+      :param responseIIR: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added ResponseIIR object from Inventory.
 
    .. py:method:: remove(responsePolynomial)
 
@@ -6584,6 +6676,16 @@ Reference
       :param responseFIRIndex: The index of the object to be removed of type ResponseFIRIndex.
       :rtype: A Boolean value indicating success with True, False otherwise.
 
+   .. py:method:: removeResponseIIR(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeResponseIIR(responseIIRIndex);
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
    .. py:method:: removeResponsePolynomial(idx)
 
       :param idx: An integer index of the object to be removed.
@@ -6649,6 +6751,12 @@ Reference
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of ResponseFIR child objects.
+
+   .. py:method:: responseIIRCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of ResponseIIR child objects.
 
    .. py:method:: responsePolynomialCount()
 
@@ -6764,6 +6872,22 @@ Reference
       are compared by value which makes this function slower than the direct
       integer index look-up.
 
+   .. py:method:: responseIIR(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at index idx.
+
+   .. py:method:: responseIIR(responseIIRIndex)
+
+      :param responseIIRIndex: The index of the object to be removed of type ResponseIIRIndex.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
+
+      Returns the ResponseIIR at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
    .. py:method:: responsePolynomial(idx)
 
       :param idx: An integer index of the object to be returned.
@@ -6851,6 +6975,13 @@ Reference
 
       :param publicID: The publicID of the object to find.
       :rtype: Object of type :ref:`ResponseFIR <api-python-datamodel-responsefir>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
+   .. py:method:: findResponseIIR(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`ResponseIIR <api-python-datamodel-responseiir>`.
 
       Returns the child object with a certain publicID, None otherwise.
 
@@ -6949,15 +7080,15 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setObjectID(objectID)
@@ -7250,7 +7381,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -7265,7 +7396,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -7280,7 +7411,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -7295,7 +7426,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -7524,7 +7655,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTensor(tensor)
@@ -7539,7 +7670,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVariance(variance)
@@ -7554,7 +7685,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setVarianceReduction(varianceReduction)
@@ -7571,7 +7702,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDoubleCouple(doubleCouple)
@@ -7588,7 +7719,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClvd(clvd)
@@ -7605,7 +7736,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setIso(iso)
@@ -7621,7 +7752,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGreensFunctionID(greensFunctionID)
@@ -7656,7 +7787,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMethodID(methodID)
@@ -7681,7 +7812,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStatus(status)
@@ -7696,7 +7827,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCmtName(cmtName)
@@ -7727,7 +7858,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -8059,7 +8190,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSnr(snr)
@@ -8072,7 +8203,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensorStationContribution()
@@ -8189,7 +8320,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaximumTimeShift(maximumTimeShift)
@@ -8202,7 +8333,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: momentTensor()
@@ -8304,7 +8435,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -8317,7 +8448,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeShift(timeShift)
@@ -8330,7 +8461,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(momentTensorComponentContribution)
@@ -8501,28 +8632,28 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of network epoch in ISO datetime format. Needed primarily to
       identifytemorary networks that re\-use network codes
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of station epoch. Empty string if the station is open
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -8597,7 +8728,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -8612,7 +8743,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -8627,8 +8758,17 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+   .. py:method:: add(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a Comment object to Network. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
 
    .. py:method:: add(station)
 
@@ -8639,12 +8779,29 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: remove(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added Comment object from Network.
+
    .. py:method:: remove(station)
 
       :param station: Object of type :ref:`Station <api-python-datamodel-station>`
       :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Station object from Network.
+
+   .. py:method:: removeComment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeComment(commentIndex);
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeStation(idx)
 
@@ -8656,11 +8813,33 @@ Reference
       :param stationIndex: The index of the object to be removed of type StationIndex.
       :rtype: A Boolean value indicating success with True, False otherwise.
 
+   .. py:method:: commentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of Comment child objects.
+
    .. py:method:: stationCount()
 
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of Station child objects.
+
+   .. py:method:: comment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at index idx.
+
+   .. py:method:: comment(commentIndex)
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: station(idx)
 
@@ -8841,7 +9020,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNodalPlane2(nodalPlane2)
@@ -8856,7 +9035,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredPlane(preferredPlane)
@@ -8872,7 +9051,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-origin:
@@ -8969,7 +9148,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthType(depthType)
@@ -8984,7 +9163,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTimeFixed(timeFixed)
@@ -9000,7 +9179,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEpicenterFixed(epicenterFixed)
@@ -9015,7 +9194,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setReferenceSystemID(referenceSystemID)
@@ -9064,7 +9243,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUncertainty(uncertainty)
@@ -9079,7 +9258,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -9094,7 +9273,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -9109,7 +9288,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -9124,7 +9303,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -9139,7 +9318,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -9457,7 +9636,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedPhaseCount(usedPhaseCount)
@@ -9474,7 +9653,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAssociatedStationCount(associatedStationCount)
@@ -9489,7 +9668,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUsedStationCount(usedStationCount)
@@ -9504,7 +9683,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepthPhaseCount(depthPhaseCount)
@@ -9520,7 +9699,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setStandardError(standardError)
@@ -9537,7 +9716,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthalGap(azimuthalGap)
@@ -9553,7 +9732,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSecondaryAzimuthalGap(secondaryAzimuthalGap)
@@ -9569,7 +9748,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGroundTruthLevel(groundTruthLevel)
@@ -9596,7 +9775,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinimumDistance(minimumDistance)
@@ -9611,7 +9790,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMedianDistance(medianDistance)
@@ -9626,7 +9805,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-originreference:
@@ -9764,7 +9943,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMinHorizontalUncertainty(minHorizontalUncertainty)
@@ -9779,7 +9958,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setMaxHorizontalUncertainty(maxHorizontalUncertainty)
@@ -9794,7 +9973,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuthMaxHorizontalUncertainty(azimuthMaxHorizontalUncertainty)
@@ -9810,7 +9989,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceEllipsoid(confidenceEllipsoid)
@@ -9825,7 +10004,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPreferredDescription(preferredDescription)
@@ -9840,7 +10019,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-outage:
@@ -9903,31 +10082,31 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()
@@ -10187,15 +10366,15 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(parameter)
@@ -10481,7 +10660,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setBackazimuth(backazimuth)
@@ -10497,7 +10676,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSlownessMethodID(slownessMethodID)
@@ -10522,7 +10701,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPhaseHint(phaseHint)
@@ -10537,7 +10716,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPolarity(polarity)
@@ -10552,7 +10731,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationMode(evaluationMode)
@@ -10567,7 +10746,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEvaluationStatus(evaluationStatus)
@@ -10582,7 +10761,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -10597,7 +10776,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -10851,7 +11030,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-qclog:
@@ -10928,27 +11107,27 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setMessage(message)
 
@@ -11463,8 +11642,75 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+.. _api-python-datamodel-realpdf1d:
+
+.. py:class:: RealPDF1D
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+   A probability density function description. It can be used in three
+   different modes:
+   
+   1\) \"raw samples mode\"
+   
+   variable is a list of M values, no probability. The values represent
+   samples, no binning\/probabilities made.
+   
+   2\) \"implicitly binned PDF\"
+   
+   variable and probabilty arrays have length N. variable values to be
+   interpreted as \"bin centers\" \(or representative values\),
+   no bin edges given.
+   
+   3\) \"explicitly binned PDF\"
+   
+   variable has length N+1, probability has length N. variable values
+   describe bin edges \(upper bin edge is lower edge of next bin\).
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type RealPDF1D if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to RealPDF1D if the internal wrapped
+      representation is an RealPDF1D object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setVariable(variable)
+
+      :param variable: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of values
+
+   .. py:method:: variable()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+   .. py:method:: setProbability(probability)
+
+      :param probability: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of probabilities
+
+   .. py:method:: probability()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
 
 .. _api-python-datamodel-realquantity:
 
@@ -11528,7 +11774,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -11544,7 +11790,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -11560,7 +11806,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -11575,7 +11821,22 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setPdf(pdf)
+
+      :param pdf: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
+
+      Probability density function of the quantity.
+
+   .. py:method:: pdf()
+
+      :rtype: :ref:`RealPDF1D <api-python-datamodel-realpdf1d>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-responsefap:
@@ -11659,7 +11920,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -11674,7 +11935,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfTuples(numberOfTuples)
@@ -11689,7 +11950,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setTuples(tuples)
@@ -11706,7 +11967,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11721,7 +11982,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -11854,7 +12115,22 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecimationFactor(decimationFactor)
@@ -11869,7 +12145,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDelay(delay)
@@ -11884,7 +12160,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCorrection(correction)
@@ -11899,7 +12175,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -11914,7 +12190,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSymmetry(symmetry)
@@ -11939,7 +12215,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -11952,7 +12228,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -11982,6 +12258,284 @@ Reference
    .. py:method:: clone()
 
       :rtype: A cloned ResponseFIR.
+
+      Returns a new instance that is a clone of the current instance. Child
+      objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+
+   .. py:method:: accept(visitor)
+
+      :param visitor: A visitor.
+
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
+
+.. _api-python-datamodel-responseiir:
+
+.. py:class:: ResponseIIR
+
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
+
+   This type describes a infinite impulse response filter
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type ResponseIIR if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to ResponseIIR if the internal wrapped
+      representation is an ResponseIIR object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type ResponseIIR.
+
+      Creates and registers (if enabled) a ResponseIIR instance with
+      passed publicID.
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: index()
+
+      :rtype: The objects index of type ResponseIIRIndex.
+
+       Returns the objects index which is also used for the database as unique
+       constraint.
+
+   .. py:method:: equalIndex(lhs)
+
+      :param lhs: :ref:`ResponseIIR <api-python-datamodel-responseiir>`
+      :rtype: A Boolean value indicating True if both indexes are equal or
+              False otherwise.
+
+   .. py:method:: setName(name)
+
+      :param name: string
+
+      Unique response name
+
+   .. py:method:: name()
+
+      :rtype: string
+
+   .. py:method:: setType(type)
+
+      :param type: string
+
+      Response type \(43.05\/53.03\/54.03\): A \- Laplace transform analog
+      response in rad\/sec, B \- Analog response in Hz, C \- Composite \(currently
+      undefined\), D \- Digital \(Z \- transform\)
+
+   .. py:method:: type()
+
+      :rtype: string
+
+   .. py:method:: setGain(gain)
+
+      :param gain: float
+
+      Gain of response \(48.05\/58.04\)
+
+   .. py:method:: gain()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setGainFrequency(gainFrequency)
+
+      :param gainFrequency: float
+
+      Gain frequency \(48.06\/58.05\)
+
+   .. py:method:: gainFrequency()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfNumerators(numberOfNumerators)
+
+      :param numberOfNumerators: int
+
+      Number of numerators \(54.07\)
+
+   .. py:method:: numberOfNumerators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumberOfDenominators(numberOfDenominators)
+
+      :param numberOfDenominators: int
+
+      Number of denominators \(54.10\)
+
+   .. py:method:: numberOfDenominators()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setNumerators(numerators)
+
+      :param numerators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Numerators \(54.08\-09\)
+
+   .. py:method:: numerators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDenominators(denominators)
+
+      :param denominators: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      Denominators \(54.11\-12\)
+
+   .. py:method:: denominators()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setRemark(remark)
+
+      :param remark: :ref:`Blob <api-python-datamodel-blob>`
+
+   .. py:method:: remark()
+
+      :rtype: :ref:`Blob <api-python-datamodel-blob>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: inventory()
+
+      :rtype: Inventory
+
+      Returns the parent Inventory if available. Returns None
+      if the parent is not a Inventory. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: assign(other)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: attachTo(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detachFrom(parent)
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: detach()
+
+      This method implements the :ref:`Object <api-python-datamodel-object>` interface.
+
+   .. py:method:: clone()
+
+      :rtype: A cloned ResponseIIR.
 
       Returns a new instance that is a clone of the current instance. Child
       objects are being ignored.
@@ -12097,7 +12651,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -12112,7 +12666,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFactor(normalizationFactor)
@@ -12127,7 +12681,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNormalizationFrequency(normalizationFrequency)
@@ -12142,7 +12696,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfZeros(numberOfZeros)
@@ -12157,7 +12711,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfPoles(numberOfPoles)
@@ -12172,7 +12726,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setZeros(zeros)
@@ -12187,7 +12741,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPoles(poles)
@@ -12202,7 +12756,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -12215,7 +12769,52 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDecimationFactor(decimationFactor)
+
+      :param decimationFactor: int
+
+      Decimation factor \(47.06\/57.05\)
+
+   .. py:method:: decimationFactor()
+
+      :rtype: int
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setDelay(delay)
+
+      :param delay: float
+
+      Estimated delay \(47.08\/57.07\)
+
+   .. py:method:: delay()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setCorrection(correction)
+
+      :param correction: float
+
+      Applied correction \(47.09\/57.08\)
+
+   .. py:method:: correction()
+
+      :rtype: float
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12348,7 +12947,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -12363,7 +12962,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setFrequencyUnit(frequencyUnit)
@@ -12400,7 +12999,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationUpperBound(approximationUpperBound)
@@ -12415,7 +13014,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setApproximationError(approximationError)
@@ -12431,7 +13030,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setNumberOfCoefficients(numberOfCoefficients)
@@ -12447,7 +13046,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCoefficients(coefficients)
@@ -12462,7 +13061,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -12475,7 +13074,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: inventory()
@@ -12829,27 +13428,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of data
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of data
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPriority(priority)
@@ -12864,7 +13463,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -12970,7 +13569,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: route()
@@ -13247,7 +13846,7 @@ Reference
 
       :param name: string
 
-      Unique response name
+      Unique sensor name
 
    .. py:method:: name()
 
@@ -13315,7 +13914,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setHighFrequency(highFrequency)
@@ -13330,7 +13929,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setResponse(response)
@@ -13354,7 +13953,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(sensorCalibration)
@@ -13521,27 +14120,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of validity
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of validity
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -13556,7 +14155,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -13571,7 +14170,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -13584,7 +14183,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: sensor()
@@ -13694,27 +14293,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLatitude(latitude)
@@ -13729,7 +14328,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -13744,7 +14343,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -13759,8 +14358,17 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+   .. py:method:: add(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a Comment object to SensorLocation. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
 
    .. py:method:: add(auxStream)
 
@@ -13780,6 +14388,13 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: remove(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added Comment object from SensorLocation.
+
    .. py:method:: remove(auxStream)
 
       :param auxStream: Object of type :ref:`AuxStream <api-python-datamodel-auxstream>`
@@ -13793,6 +14408,16 @@ Reference
       :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added Stream object from SensorLocation.
+
+   .. py:method:: removeComment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeComment(commentIndex);
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeAuxStream(idx)
 
@@ -13814,6 +14439,12 @@ Reference
       :param streamIndex: The index of the object to be removed of type StreamIndex.
       :rtype: A Boolean value indicating success with True, False otherwise.
 
+   .. py:method:: commentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of Comment child objects.
+
    .. py:method:: auxStreamCount()
 
       :rtype: integer value indicating the number of child objects.
@@ -13825,6 +14456,22 @@ Reference
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of Stream child objects.
+
+   .. py:method:: comment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at index idx.
+
+   .. py:method:: comment(commentIndex)
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: auxStream(idx)
 
@@ -13857,6 +14504,13 @@ Reference
       Returns the Stream at given index. The indexes of all child objects
       are compared by value which makes this function slower than the direct
       integer index look-up.
+
+   .. py:method:: findStream(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`Stream <api-python-datamodel-stream>`.
+
+      Returns the child object with a certain publicID, None otherwise.
 
    .. py:method:: station()
 
@@ -14076,7 +14730,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDecayTime(decayTime)
@@ -14091,7 +14745,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-station:
@@ -14163,27 +14817,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of station epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of station epoch. Empty string if the station is open
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -14208,7 +14862,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -14223,7 +14877,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -14238,7 +14892,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setPlace(place)
@@ -14313,7 +14967,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -14328,7 +14982,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setRemark(remark)
@@ -14343,8 +14997,17 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+   .. py:method:: add(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a Comment object to Station. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
 
    .. py:method:: add(sensorLocation)
 
@@ -14355,12 +15018,29 @@ Reference
       copied but managed by this instance. Any change to the passed object
       will also change the child.
 
+   .. py:method:: remove(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added Comment object from Station.
+
    .. py:method:: remove(sensorLocation)
 
       :param sensorLocation: Object of type :ref:`SensorLocation <api-python-datamodel-sensorlocation>`
       :rtype: A Boolean value indicating success with True, False otherwise.
 
       Removes a previously added SensorLocation object from Station.
+
+   .. py:method:: removeComment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeComment(commentIndex);
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
 
    .. py:method:: removeSensorLocation(idx)
 
@@ -14372,11 +15052,33 @@ Reference
       :param sensorLocationIndex: The index of the object to be removed of type SensorLocationIndex.
       :rtype: A Boolean value indicating success with True, False otherwise.
 
+   .. py:method:: commentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of Comment child objects.
+
    .. py:method:: sensorLocationCount()
 
       :rtype: integer value indicating the number of child objects.
 
       Returns the number of SensorLocation child objects.
+
+   .. py:method:: comment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at index idx.
+
+   .. py:method:: comment(commentIndex)
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: sensorLocation(idx)
 
@@ -14521,14 +15223,14 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCode(code)
 
       :param code: string
 
-      Virtual network code \(up to 10 characters\)
+      Virtual network code \(up to 20 characters\)
 
    .. py:method:: code()
 
@@ -14536,32 +15238,32 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(empty string if the station is open\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDescription(description)
@@ -14586,7 +15288,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLongitude(longitude)
@@ -14601,7 +15303,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setElevation(elevation)
@@ -14616,7 +15318,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(stationReference)
@@ -14831,7 +15533,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setCreationInfo(creationInfo)
@@ -14846,7 +15548,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: add(comment)
@@ -15015,7 +15717,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWeight(weight)
@@ -15034,7 +15736,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: magnitude()
@@ -15170,7 +15872,7 @@ Reference
 
 .. py:class:: Stream
 
-   Inherits :ref:`Object <api-python-datamodel-object>`.
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
 
    This type describes a stream \(channel\) with defined frequency response
 
@@ -15186,6 +15888,20 @@ Reference
       are passed to methods which need access to the real type.
 
 
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type Stream.
+
+      Creates and registers (if enabled) a Stream instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type Stream.
+
+      Creates and registers (if enabled) a Stream instance with
+      passed publicID.
 
    .. py:method:: equal(other)
 
@@ -15221,27 +15937,27 @@ Reference
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
       Start of epoch in ISO datetime format \(52.22\)
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
       End of epoch \(52.23\)
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDatalogger(datalogger)
@@ -15276,7 +15992,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSensor(sensor)
@@ -15311,7 +16027,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setClockSerialNumber(clockSerialNumber)
@@ -15336,7 +16052,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setSampleRateDenominator(sampleRateDenominator)
@@ -15351,7 +16067,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDepth(depth)
@@ -15366,7 +16082,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setAzimuth(azimuth)
@@ -15381,7 +16097,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setDip(dip)
@@ -15396,7 +16112,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGain(gain)
@@ -15411,7 +16127,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainFrequency(gainFrequency)
@@ -15426,7 +16142,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setGainUnit(gainUnit)
@@ -15472,7 +16188,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setShared(shared)
@@ -15487,8 +16203,56 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
+
+   .. py:method:: add(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a Comment object to Stream. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: remove(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added Comment object from Stream.
+
+   .. py:method:: removeComment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeComment(commentIndex);
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: commentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of Comment child objects.
+
+   .. py:method:: comment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at index idx.
+
+   .. py:method:: comment(commentIndex)
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
 
    .. py:method:: sensorLocation()
 
@@ -15520,6 +16284,19 @@ Reference
 
       Returns a new instance that is a clone of the current instance. Child
       objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
    .. py:method:: accept(visitor)
@@ -15621,6 +16398,115 @@ Reference
 
       :rtype: :ref:`RealQuantity <api-python-datamodel-realquantity>`
 
+.. _api-python-datamodel-timearray:
+
+.. py:class:: TimeArray
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type TimeArray if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to TimeArray if the internal wrapped
+      representation is an TimeArray object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`TimeArray <api-python-datamodel-timearray>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setContent(content)
+
+      :param content: seiscomp3.Core.Time
+
+   .. py:method:: content()
+
+      :rtype: seiscomp3.Core.Time
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+.. _api-python-datamodel-timepdf1d:
+
+.. py:class:: TimePDF1D
+
+   Inherits :ref:`Object <api-python-datamodel-object>`.
+
+   A probability density function description. It can be used in three
+   different modes:
+   
+   1\) \"raw samples mode\"
+   
+   variable is a list of M values, no probability. The values represent
+   samples, no binning\/probabilities made.
+   
+   2\) \"implicitly binned PDF\"
+   
+   variable and probabilty arrays have length N. variable values to be
+   interpreted as \"bin centers\" \(or representative values\),
+   no bin edges given.
+   
+   3\) \"explicitly binned PDF\"
+   
+   variable has length N+1, probability has length N. variable values
+   describe bin edges \(upper bin edge is lower edge of next bin\).
+
+   .. py:staticmethod:: Cast(obj)
+
+      :param obj: The object to be casted.
+      :rtype: An object of type TimePDF1D if the cast was successful,
+              None otherwise.
+
+      Cast an arbitrary object to TimePDF1D if the internal wrapped
+      representation is an TimePDF1D object. The cast is important if
+      instances of type :ref:`Object <api-python-datamodel-object>`
+      are passed to methods which need access to the real type.
+
+
+
+   .. py:method:: equal(other)
+
+      :param other: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
+      :rtype: A Boolean value indicating True if both objects are equal or
+              False otherwise.
+
+      Compares two objects without its child objects. Both objects are compared
+      by value.
+
+   .. py:method:: setVariable(variable)
+
+      :param variable: :ref:`TimeArray <api-python-datamodel-timearray>`
+
+      List of datetimes
+
+   .. py:method:: variable()
+
+      :rtype: :ref:`TimeArray <api-python-datamodel-timearray>`
+
+   .. py:method:: setProbability(probability)
+
+      :param probability: :ref:`RealArray <api-python-datamodel-realarray>`
+
+      List of probabilities
+
+   .. py:method:: probability()
+
+      :rtype: :ref:`RealArray <api-python-datamodel-realarray>`
+
 .. _api-python-datamodel-timequantity:
 
 .. py:class:: TimeQuantity
@@ -15655,13 +16541,13 @@ Reference
 
    .. py:method:: setValue(value)
 
-      :param value: datetime
+      :param value: seiscomp3.Core.Time
 
       Point in time \(UTC\), given in ISO 8601 format.
 
    .. py:method:: value()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setUncertainty(uncertainty)
 
@@ -15675,7 +16561,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setLowerUncertainty(lowerUncertainty)
@@ -15690,7 +16576,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15705,7 +16591,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setConfidenceLevel(confidenceLevel)
@@ -15720,7 +16606,22 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
+         the value of the attribute is not set.
+
+   .. py:method:: setPdf(pdf)
+
+      :param pdf: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
+
+      Probability density function of the quantity.
+
+   .. py:method:: pdf()
+
+      :rtype: :ref:`TimePDF1D <api-python-datamodel-timepdf1d>`
+
+      .. note::
+
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
 .. _api-python-datamodel-timewindow:
@@ -15758,14 +16659,14 @@ Reference
 
    .. py:method:: setReference(reference)
 
-      :param reference: datetime
+      :param reference: seiscomp3.Core.Time
 
       Reference point in time \(\"central\" point\), in ISO 8601 format. It
       has to be given in UTC.
 
    .. py:method:: reference()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setBegin(begin)
 
@@ -15849,31 +16750,31 @@ Reference
 
    .. py:method:: setCreated(created)
 
-      :param created: datetime
+      :param created: seiscomp3.Core.Time
 
    .. py:method:: created()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setStart(start)
 
-      :param start: datetime
+      :param start: seiscomp3.Core.Time
 
    .. py:method:: start()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
    .. py:method:: setEnd(end)
 
-      :param end: datetime
+      :param end: seiscomp3.Core.Time
 
    .. py:method:: end()
 
-      :rtype: datetime
+      :rtype: seiscomp3.Core.Time
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setType(type)
@@ -15910,7 +16811,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setUpperUncertainty(upperUncertainty)
@@ -15923,7 +16824,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: setWindowLength(windowLength)
@@ -15936,7 +16837,7 @@ Reference
 
       .. note::
 
-         As this attribute is optional this method throws a ValueException if
+         As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
    .. py:method:: qualityControl()

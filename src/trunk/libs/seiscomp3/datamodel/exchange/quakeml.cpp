@@ -24,7 +24,7 @@
 #define NS_QML_RT        "http://quakeml.org/xmlns/quakeml-rt/1.2"
 #define NS_QML_BED       "http://quakeml.org/xmlns/bed/1.2"
 #define NS_QML_BED_RT    "http://quakeml.org/xmlns/bed-rt/1.2"
-#define RES_REF_PREFIX   "smi:scs/0.7/"
+#define RES_REF_PREFIX   "smi:org.gfz-potsdam.de/geofon/"
 
 using namespace Seiscomp::DataModel;
 
@@ -75,6 +75,13 @@ struct RTTypeMap : TypeMapCommon {
 TypeMap __typeMap;
 RTTypeMap __rtTypeMap;
 
+inline std::string& replaceIDChars(std::string &id) {
+	std::string::iterator it;
+	for ( it = id.begin(); it != id.end(); ++it )
+		if ( *it == ' ' || *it == ':' ) *it = '_';
+	return id;
+}
+
 struct ResRefFormatter : Formatter {
 	bool mandatory;
 	ResRefFormatter(bool mandatory = false) : mandatory(mandatory) {}
@@ -89,9 +96,7 @@ struct ResRefFormatter : Formatter {
 			// If it does not yet start with "smi:" and thus seems
 			// to be a valid smi
 			if ( v.compare(0, 4, "smi:") != 0 && v.compare(0, 8, "quakeml:") ) {
-				std::string::iterator it;
-				for ( it = v.begin(); it != v.end(); ++it )
-					if ( *it == ' ' || *it == ':' ) *it = '_';
+				replaceIDChars(v);
 				v.insert(0, RES_REF_PREFIX);
 			}
 		}
@@ -115,6 +120,15 @@ MaxLenFormatter __maxLen8(8);
 MaxLenFormatter __maxLen32(32);
 MaxLenFormatter __maxLen64(64);
 MaxLenFormatter __maxLen128(128);
+
+struct AmplitudeUnitFormatter : Formatter {
+	void to(std::string &v) {
+		if ( v != "m" && v != "s" && v != "m/s" && v != "m/(s*s)" &&
+		     v != "m*s" && v != "dimensionless" )
+			v = "other";
+	}
+};
+static AmplitudeUnitFormatter __amplitudeUnit;
 
 struct EvaluationStatusFormatter : Formatter {
 	void to(std::string& v) {
@@ -206,12 +220,16 @@ struct OriginConnector : IO::XML::MemberHandler {
 			if ( orgRefs.find(origin->publicID()) != orgRefs.end() ) {
 				for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
 					magnitude = origin->magnitude(mi);
+					if ( magnitude->originID().empty() )
+						magnitude->setOriginID(origin->publicID());
 					if ( event->preferredMagnitudeID() == magnitude->publicID() )
 						foundPreferredMagnitude = true;
 					output->handle(origin->magnitude(mi), "magnitude", "");
 				}
 				for ( size_t si = 0; si < origin->stationMagnitudeCount(); ++si ) {
 					staMag = origin->stationMagnitude(si);
+					if ( staMag->originID().empty() )
+						staMag->setOriginID(origin->publicID());
 					amplitude = findAmplitude(ep, staMag->amplitudeID());
 					if ( amplitude != NULL) {
 						output->handle(amplitude, "amplitude", "");
@@ -260,10 +278,16 @@ struct RTMagnitudeConnector : IO::XML::MemberHandler {
 		for ( size_t oi = 0; oi < ep->originCount(); ++oi ) {
 			origin = ep->origin(oi);
 			for ( size_t mi = 0; mi < origin->magnitudeCount(); ++mi ) {
-				output->handle(origin->magnitude(mi), tag, ns);
+				Magnitude *magnitude = origin->magnitude(mi);
+				if ( magnitude->originID().empty() )
+					magnitude->setOriginID(origin->publicID());
+				output->handle(magnitude, tag, ns);
 			}
 			for ( size_t si = 0; si < origin->stationMagnitudeCount(); ++si ) {
-				output->handle(origin->stationMagnitude(si), "stationMagnitude", "");
+				StationMagnitude *staMag = origin->stationMagnitude(si);
+				if ( staMag->originID().empty() )
+					staMag->setOriginID(origin->publicID());
+				output->handle(staMag, "stationMagnitude", "");
 			}
 		}
 		return true;
@@ -335,9 +359,11 @@ struct StaticHandler : IO::XML::MemberHandler {
 struct ArrivalPublicIDHandler : IO::XML::MemberHandler {
 	std::string value(Core::BaseObject *obj) {
 		Arrival *arrival = Arrival::Cast(obj);
-		return arrival && arrival->origin() ?
-			   RES_REF_PREFIX + arrival->pickID() + "#" + arrival->origin()->publicID() :
-		       RES_REF_PREFIX"NA";
+		if ( arrival && arrival->origin() ) {
+			std::string oid = arrival->origin()->publicID();
+			return RES_REF_PREFIX + arrival->pickID() + "_" + replaceIDChars(oid);
+		}
+		return RES_REF_PREFIX"NA";
 	}
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
@@ -522,9 +548,84 @@ struct OriginDepthHandler : IO::XML::MemberHandler {
 
 			return true;
 		}
-		catch ( Core::ValueException ) {
-			return false;
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
+struct TakeOffAngleHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Arrival *arrival = Arrival::Cast(object);
+		if ( arrival == NULL ) return false;
+		try {
+			std::string v = Core::toString(arrival->takeOffAngle());
+			const char *tagTA = "takeoffAngle";
+			const char *tagV = "value";
+			if ( !output->openElement(tagTA, ns) ||
+			     !output->openElement(tagV, ns)) {
+				SEISCOMP_WARNING("could not open takeoffAngle element");
+				return false;
+			}
+			output->put(v.c_str());
+			output->closeElement(tagV, ns);
+			output->closeElement(tagTA, ns);
+			return true;
 		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
+struct ArrivalWeightHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Arrival *arrival = Arrival::Cast(object);
+		if ( arrival == NULL ) return false;
+
+		bool weightSet = false;
+		std::string weight = "1";
+		try {
+			weight = Core::toString(arrival->weight());
+			weightSet = true;
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *twTag = "timeWeight";
+			if ( (weightSet || arrival->timeUsed()) &&
+			     output->openElement(twTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(twTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *hzwTag = "horizontalSlownessWeight";
+			if ( arrival->horizontalSlownessUsed() &&
+			     output->openElement(hzwTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(hzwTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		try {
+			const char *bawTag = "backazimuthWeight";
+			if ( arrival->backazimuthUsed() &&
+			     output->openElement(bawTag, "") ) {
+				output->put(weight.c_str());
+				output->closeElement(bawTag, "");
+			}
+		}
+		catch ( Core::ValueException ) {}
+
+		return true;
 	}
 	std::string value(Core::BaseObject *obj) { return ""; }
 	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
@@ -537,15 +638,21 @@ struct ArrivalHandler : TypedClassHandler<Arrival> {
 		                                 IO::XML::ClassHandler::Mandatory,
 		                                 IO::XML::ClassHandler::Attribute,
 		                                 new ArrivalPublicIDHandler());
-		// NA: comment, backazimuthWeight, horizontalSlownessWeight
+		// NA: comment
 		addList("timeCorrection, azimuth, distance, timeResidual, "
 		        "horizontalSlownessResidual, backazimuthResidual, "
 		        "creationInfo");
 		add("pickID", &__resRefMan, Mandatory);
 		add("phase", NULL, Mandatory);
-		add("takeOffAngle", "takeoffAngle");
-		add("weight", "timeWeight");
+		addChild("takeOffAngle", "", new TakeOffAngleHandler());
 		add("earthModelID", &__resRef);
+
+		// weight, timeUsed,horizontalSlownessUsed and backazimuthUsed is
+		// converted to timeWeight, horizontalSlownessWeight backazimuthWeight
+		IO::XML::ClassHandler::addMember("", "",
+		                                 IO::XML::ClassHandler::Mandatory,
+		                                 IO::XML::ClassHandler::Element,
+		                                 new ArrivalWeightHandler());
 	}
 };
 
@@ -562,13 +669,48 @@ struct ConfidenceEllipsoidHandler : TypedClassHandler<ConfidenceEllipsoid> {
 		        "majorAxisAzimuth, majorAxisRotation", Mandatory); }
 };
 
-struct OriginUncertaintyHandler : TypedClassHandler<OriginUncertainty> {
-	OriginUncertaintyHandler() {
+
+struct OriginUncertaintySecondaryHandler : TypedClassHandler<OriginUncertainty> {
+	OriginUncertaintySecondaryHandler() {
 		addList("horizontalUncertainty, minHorizontalUncertainty, "
 		        "maxHorizontalUncertainty, azimuthMaxHorizontalUncertainty, "
 		        "confidenceEllipsoid");
 		add("preferredDescription", &__originUncertaintyDescription);
 	}
+};
+static OriginUncertaintySecondaryHandler __originUncertaintySecondaryHandler;
+
+
+// QuakeML requires some uncertainty values in meter (not kilometer)
+struct OriginUncertaintyHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		Origin *o = Origin::Cast(object);
+		if ( o == NULL ) return false;
+		try {
+			OriginUncertainty &ou = o->uncertainty();
+			try { ou.setHorizontalUncertainty(ou.horizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try { ou.setMinHorizontalUncertainty(ou.minHorizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try { ou.setMaxHorizontalUncertainty(ou.maxHorizontalUncertainty() * 1000); }
+			catch ( Core::ValueException ) {}
+			try {
+				ConfidenceEllipsoid &ce = ou.confidenceEllipsoid();
+				ce.setSemiMajorAxisLength(ce.semiMajorAxisLength() * 1000);
+				ce.setSemiMinorAxisLength(ce.semiMinorAxisLength() * 1000);
+				ce.setSemiIntermediateAxisLength(ce.semiIntermediateAxisLength() * 1000);
+			}
+			catch ( Core::ValueException ) {}
+
+			output->handle(&ou, "originUncertainty", ns, &__originUncertaintySecondaryHandler);
+			return true;
+		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
 };
 
 struct CompositeTimeHandler : TypedClassHandler<CompositeTime> {
@@ -585,7 +727,7 @@ struct OriginHandler : TypedClassHandler<Origin> {
 		        "depthType, timeFixed, epicenterFixed, quality, type, "
 		        "evaluationMode, creationInfo");
 		addChild("depth", "", new OriginDepthHandler());
-		add("uncertainty", "originUncertainty");
+		addChild("uncertainty", "", new OriginUncertaintyHandler());
 		add("referenceSystemID", &__resRef);
 		add("methodID", &__resRef);
 		add("earthModelID", &__resRef);
@@ -598,7 +740,7 @@ struct StationMagnitudeHandler : TypedClassHandler<StationMagnitude> {
 		addPID();
 		addList("comment, waveformID, creationInfo");
 		add("magnitude", "mag", NULL, Mandatory);
-		add("originID", &__resRef);//, Mandatory);
+		add("originID", &__resRef);
 		add("type", &__maxLen32);
 		add("amplitudeID", &__resRef);
 		add("methodID", &__resRef);
@@ -636,14 +778,33 @@ struct AmplitudeHandler : TypedClassHandler<Amplitude> {
 	AmplitudeHandler() {
 		addPID();
 		// NA: category, evaluationStatus
-		addList("comment, period, snr, unit, timeWindow, waveformID, "
+		addList("comment, period, snr, timeWindow, waveformID, "
 		        "scalingTime, evaluationMode, creationInfo");
 		add("amplitude", "genericAmplitude");
 		add("type", &__maxLen32);
+		add("unit", &__amplitudeUnit);
 		add("methodID", &__resRef);
 		add("pickID", &__resRef);
 		add("filterID", &__resRef);
 		add("magnitudeHint", &__maxLen32);
+	}
+
+	// remove amplitude if amplitude value is not set since genericAmplitude
+	// is mandatory in QuakeML
+	bool put(Core::BaseObject *obj, const char *tag, const char *ns,
+	         IO::XML::OutputHandler *output) {
+		Amplitude *amplitude = Amplitude::Cast(obj);
+		if ( amplitude == NULL ) return false;
+
+		try {
+			amplitude->amplitude();
+		}
+		catch ( Core::ValueException ) {
+			SEISCOMP_WARNING("skipping amplitude %s: amplitude value not set",
+			                 amplitude->publicID().c_str());
+			return false;
+		}
+		return TypedClassHandler<Amplitude>::put(obj, tag, ns, output);
 	}
 };
 
@@ -681,16 +842,16 @@ struct TensorHandler : TypedClassHandler<Tensor> {
 
 struct DataUsedHandler : TypedClassHandler<DataUsed> {
 	struct DataUsedWaveFormatter : Formatter {
-			void to(std::string &v) {
-				if ( v == "P body waves" )
-					v = "P waves";
-				else if ( v == "long-period body waves" )
-					v = "body waves";
-				else if ( v == "intermediate-period surface waves")
-					v = "surface waves";
-				else if ( v == "long-period mantle waves" )
-					v = "mantle waves";
-			}
+		void to(std::string &v) {
+			if ( v == "P body waves" )
+				v = "P waves";
+			else if ( v == "long-period body waves" )
+				v = "body waves";
+			else if ( v == "intermediate-period surface waves")
+				v = "surface waves";
+			else if ( v == "long-period mantle waves" )
+				v = "mantle waves";
+		}
 	};
 
 	DataUsedHandler() {
@@ -701,18 +862,41 @@ struct DataUsedHandler : TypedClassHandler<DataUsed> {
 	}
 };
 
+struct MomentTensorMethodHandler : IO::XML::MemberHandler {
+	bool put(Core::BaseObject *object, const char *tag, const char *ns,
+	         bool opt, IO::XML::OutputHandler *output, IO::XML::NodeHandler *h) {
+		MomentTensor *mt = MomentTensor::Cast(object);
+		try {
+			MomentTensorMethod method = mt->method();
+			const char *tagCategory = "category";
+			if ( (method == TELESEISMIC || method == REGIONAL) &&
+			     output->openElement(tagCategory, "") ) {
+				output->put(EMomentTensorMethodNames::name(method));
+				output->closeElement(tagCategory, "");
+				return true;
+			}
+		}
+		catch ( Core::ValueException ) {}
+		return false;
+	}
+	std::string value(Core::BaseObject *obj) { return ""; }
+	bool get(Core::BaseObject *object, void *node, IO::XML::NodeHandler *h) { return false; }
+};
+
 struct MomentTensorHandler : TypedClassHandler<MomentTensor> {
 	MomentTensorHandler() {
 		addPID();
-		// NA: category, inversionType
+		//NA: inversionType
 		addList("dataUsed, comment, scalarMoment, tensor, variance, "
 		    "varianceReduction, doubleCouple, clvd, iso, sourceTimeFunction, "
 		    "creationInfo");
+
 		add("derivedOriginID", &__resRef);
 		add("momentMagnitudeID", &__resRef);
 		add("greensFunctionID", &__resRef);
 		add("filterID", &__resRef);
 		add("methodID", &__resRef);
+		addChild("method", "", new MomentTensorMethodHandler());
 	}
 };
 
@@ -891,14 +1075,12 @@ TypeMapCommon::TypeMapCommon() {
 	// Origin
 	static OriginHandler originHandler;
 	static CompositeTimeHandler compositeTimeHandler;
-	static OriginUncertaintyHandler originUncertaintyHandler;
 	static ConfidenceEllipsoidHandler confidenceEllipsoidHandler;
 	static ArrivalHandler arrivalHandler;
 	static OriginQualityHandler originQualityHandler;
 	static PhaseHandler phaseHandler;
 	registerMapping("origin", "", "Origin", &originHandler);
 	registerMapping<CompositeTime>("compositeTime", "", &compositeTimeHandler);
-	registerMapping<OriginUncertainty>("originUncertainty", "", &originUncertaintyHandler);
 	registerMapping<ConfidenceEllipsoid>("confidenceEllipsoid", "", &confidenceEllipsoidHandler);
 	registerMapping<Arrival>("arrival", "", &arrivalHandler);
 	registerMapping<OriginQuality>("quality", "", &originQualityHandler);

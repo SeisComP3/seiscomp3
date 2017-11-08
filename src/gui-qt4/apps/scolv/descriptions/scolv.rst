@@ -45,7 +45,7 @@ shows the current solution (location and magnitudes).
 Plots
 =====
 
-Some tabs in scolv are for plotting data (e.g. arrival residuals). Each plot 
+Some tabs in scolv are for plotting data (e.g. arrival residuals). Each plot
 is also interactive to select a subset of data or to zoom into a region.
 
 
@@ -184,6 +184,34 @@ from a context menu which pops up after a right click on the table header.
 
 .. figure:: media/scolv/arrivals-header-context.png
 
+The checkbox in the first column indicates if the arrival was used for locating the
+origin. The overall usage state of arrival contains three flags: arrival time used,
+backazimuth used and slowness used. If any of these flags is active then the
+overall usage state is active as well. The arrival table shows those flags indicated
+by **T** for pick time, **S** for horizontal slowness and **B** for backazimuth.
+A flag is rendered with a dash if the referred pick does not contain the
+corresponding feature. For example, if a pick does not carry a backazimuth
+measure then the backazimuth flag is disabled. It would not make sense to
+activate backazimuth usage without a corresponding measure.
+
+In most cases, only the time flag, indicated by the capital **T**, will be active.
+The other two flags are rendered with dashes, meaning that they are inactive.
+Background: an arrival refers to a pick which can hold several features. The basic
+feature a pick must hold is the pick time. Some modules such as for array processing
+might compute additional pick features. Such features can be the backazimuth and
+the horizontal slowness. Locators like LocSAT were developed to use those features
+to increase the precision of a location. Special applictions are locations based
+borehole networks with poor azimuthal coverage or locations with very few stations.
+
+There may be cases where a backazimuth measure of a pick should not be used by
+the locator. In contrast, if a backazimuth is available but the timing is bad,
+disabling the use of the pick time but including the backazimuth may be advantageous.
+For that a simple weight value is not enough. With a weight one cannot separate
+whether or not to use a particular feature. So the arrival does not only refer
+to a pick but holds flags indicating which features of that pick should be used
+for locating.
+
+.. figure:: media/scolv/arrival-flags.png
 
 Single or multiple rows can be selected in the table. The selection of multiple
 rows works either with Ctrl+LeftMouse (add single row) or
@@ -195,14 +223,14 @@ row below the mouse is selected.
 
 The context menu allows to:
 * select arrivals based on a certain criterion
-* activate/deactivate selected arrivals
+* activate/deactivate selected pick features
 * delete selected arrivals
 * rename phases of selected arrivals
 
 .. figure:: media/scolv/arrivals-context.png
 
 If arrivals are deleted, they are removed physically from this solution in
-contrast to deactivate an arrival where only the weight is set to zero.
+contrast to deactivate an arrival where only the used flags are set to zero.
 
 Waveform review (Picker)
 ------------------------
@@ -398,8 +426,8 @@ event list is activated after pressing OK to select another event quickly.
 Magnitudes tab
 ==============
 
-The Magnitude tab shows all available magnitude information for the chosen
-origin. For each of the different magnitude types (e.g. mb, mB, MLv, Mw(mB))
+The Magnitude tab shows all available magnitude information for the current
+origin. For each of the different magnitude types (e.g. mb, mB, MLv, Mw(mB)),
 the station magnitudes are shown in the magnitude residual plot and the table.
 The residual plot visualizes the difference between the station magnitude and
 the network magnitude for the different station distances. After relocation the
@@ -436,6 +464,13 @@ the result against a few outliers.
    database. To review magnitudes, create a new origin (relocate), recompute
    magnitudes and then change into this tab to open either the waveform
    review window or to just remove outliers.
+
+Magnitudes that were not computed due to missing data or low signa-to-noise
+ratios have a cross button rendered in their tab headers and their value is
+nan (not a number). Furthermore was the status of the magnitude set to
+rejected. To manually review the waveforms and to fine tune the
+parameters, open the waveforms and add at least one station magnitude. Otherwise
+the rejected magnitude will be removed from the origin prio to committing it.
 
 
 Waveform review
@@ -622,6 +657,17 @@ Information about origin time, preferred ("best") magnitude, preferred magnitude
 type, number of phases, epicenter and depth, origin status, region, agency and
 event/origin ID are similar to the event list in :ref:`scesv`. Additionally,
 all origins associated with one event are displayed an event item is expanded.
+
+.. note::
+
+   The region name of an event is read from the database or received via the
+   messaging bus. It is an integral part of the event description and set based
+   on the data set available at the time of the event creation. The region name
+   of the origins is not part of the origin description and resolved dynamically
+   when the information is required. That can lead to confusion if the dataset
+   of the computer where the event has been created and the local dataset
+   differs. Therefor the region names resolved locally are rendered with italic
+   font style.
 
 .. _fig-scolv-events:
 
@@ -1012,6 +1058,12 @@ actions in scolv.
 +----------------------+-------------------------------------------------------------+
 | **Picker**                                                                         |
 +----------------------+-------------------------------------------------------------+
+| 1 .. 9               | Activate configured phase picking                           |
++----------------------+-------------------------------------------------------------+
+| Space                | If phase picking is enabled, set pick                       |
++----------------------+-------------------------------------------------------------+
+| Esc                  | Leaving picking mode                                        |
++----------------------+-------------------------------------------------------------+
 | F3                   | Add station                                                 |
 +----------------------+-------------------------------------------------------------+
 | F5                   | Relocate                                                    |
@@ -1022,7 +1074,15 @@ actions in scolv.
 +----------------------+-------------------------------------------------------------+
 | S                    | Maximize visible amplitudes                                 |
 +----------------------+-------------------------------------------------------------+
+| Shift+S              | Toggle spectrogram of selected trace                        |
++----------------------+-------------------------------------------------------------+
+| Ctrl+S               | Show Fourier spectrum of selected trace                     |
++----------------------+-------------------------------------------------------------+
 | F                    | Toggle filter                                               |
++----------------------+-------------------------------------------------------------+
+| Shift+F              | Toggle filter but limits to the selected trace              |
++----------------------+-------------------------------------------------------------+
+| Ctrl+F               | Show spectrum of current trace                              |
 +----------------------+-------------------------------------------------------------+
 | Z                    | Switch to Z-component                                       |
 +----------------------+-------------------------------------------------------------+
@@ -1053,7 +1113,13 @@ actions in scolv.
 +----------------------+-------------------------------------------------------------+
 | Ctrl+0               | Align by origin time                                        |
 +----------------------+-------------------------------------------------------------+
-| Ctrl+[1..9]          | Align by 1st-9th favourite phase                            |
+| Ctrl+F1              | Align on P arrival                                          |
++----------------------+-------------------------------------------------------------+
+| Ctrl+F2              | Align on S arrival                                          |
++----------------------+-------------------------------------------------------------+
+| Ctrl+[1..9]          | Align on 1st-9th favourite phase                            |
++----------------------+-------------------------------------------------------------+
+| Ctrl+Shift+[1..9]    | Align on theoretical arrival of 1st-9th favourite phase     |
 +----------------------+-------------------------------------------------------------+
 | Ctrl+WheelUp         | Amplitude zoom in                                           |
 +----------------------+-------------------------------------------------------------+
@@ -1082,8 +1148,6 @@ actions in scolv.
 | Alt+Right            | Jump to next marker (picking mode)                          |
 +----------------------+-------------------------------------------------------------+
 | Alt+Left             | Jump to previous marker (picking mode)                      |
-+----------------------+-------------------------------------------------------------+
-| Esc                  | Leaving picking mode                                        |
 +----------------------+-------------------------------------------------------------+
 | Alt+D                | Sort by distance                                            |
 +----------------------+-------------------------------------------------------------+

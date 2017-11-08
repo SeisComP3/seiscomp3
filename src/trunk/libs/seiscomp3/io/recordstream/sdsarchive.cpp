@@ -16,6 +16,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <iomanip>
+#include <seiscomp3/system/environment.h>
+#include <seiscomp3/io/records/mseedrecord.h>
 #include <seiscomp3/io/recordstream/sdsarchive.h>
 #include <seiscomp3/logging/log.h>
 #include <libmseed.h>
@@ -24,40 +26,86 @@ using namespace Seiscomp::RecordStream;
 using namespace Seiscomp::IO;
 using namespace Seiscomp::Core;
 using namespace std;
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IMPLEMENT_SC_CLASS_DERIVED(SDSArchive,
                            Seiscomp::IO::RecordStream,
                            "sdsarchive");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 REGISTER_RECORDSTREAM(SDSArchive, "sdsarchive");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::SDSArchive() : RecordStream() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-SDSArchive::SDSArchive(const string arcroot) 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+SDSArchive::SDSArchive(const string arcroot)
 : RecordStream(), _arcroot(arcroot) {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::SDSArchive(const SDSArchive &mem) : RecordStream() {
 	setSource(mem.archiveRoot());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive::~SDSArchive() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SDSArchive& SDSArchive::operator=(const SDSArchive &mem) {
 	if (this != &mem)
 		_arcroot = mem.archiveRoot();
 
 	return *this;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool SDSArchive::setSource(string src) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SDSArchive::setSource(const string &src) {
 	_arcroot = src;
+	if ( _arcroot.empty() )
+		_arcroot = Seiscomp::Environment::Instance()->installDir() + "/var/lib/archive";
+
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool SDSArchive::addStream(string net, string sta, string loc, string cha) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SDSArchive::addStream(const std::string &net, const std::string &sta,
+	                       const std::string &loc, const std::string &cha) {
 	pair<set<StreamIdx>::iterator, bool> result;
 	try {
 		if (cha.at(2) == '?' || cha.at(2) == '*') {
@@ -73,8 +121,15 @@ bool SDSArchive::addStream(string net, string sta, string loc, string cha) {
 	}
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool SDSArchive::addStream(string net, string sta, string loc, string cha, const Time &stime, const Time &etime) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SDSArchive::addStream(const std::string &net, const std::string &sta,
+                           const std::string &loc, const std::string &cha,
+                           const Time &stime, const Time &etime) {
 	pair<set<StreamIdx>::iterator, bool> result;
 
 	try {
@@ -92,50 +147,48 @@ bool SDSArchive::addStream(string net, string sta, string loc, string cha, const
 
 	return result.second;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool SDSArchive::removeStream(std::string net, std::string sta, std::string loc, std::string cha) {
-	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
 
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-		     it->station()  == sta &&
-		     it->location() == loc &&
-		     it->channel()  == cha ) {
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
 
-	return deletedSomething;
-}
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::setStartTime(const Time &stime) {
 	_stime = stime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::setEndTime(const Time &etime) {
 	_etime = etime;
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool SDSArchive::setTimeWindow(const TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
 
-bool SDSArchive::setTimeout(int seconds) {
-	return false;
-}
 
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SDSArchive::close() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string SDSArchive::archiveRoot() const {
 	return _arcroot;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Time SDSArchive::getStartTime(const string &file) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
@@ -150,7 +203,12 @@ Time SDSArchive::getStartTime(const string &file) {
 	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
 	return Time();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int SDSArchive::getDoy(const Time &time) {
 	int year;
 
@@ -159,7 +217,12 @@ int SDSArchive::getDoy(const Time &time) {
 		return (366-((int)(Time(year,12,31,23,59,59)-time)/86400));
 	return (365-((int)(Time(year,12,31,23,59,59)-time)/86400));
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 string SDSArchive::filename(int doy, int year) {
 	string net = _curidx->network();
 	string sta = _curidx->station();
@@ -176,7 +239,12 @@ string SDSArchive::filename(int doy, int year) {
 
 	return path;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void SDSArchive::setFilenames() {
 	Time stime = (_curidx->startTime() == Time())?_stime:_curidx->startTime();
 	Time etime = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
@@ -207,7 +275,12 @@ void SDSArchive::setFilenames() {
 		sdoy = 1;
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::setStart(const string &fname) {
 	MSRecord *prec = NULL;
 	MSFileParam *pfp = NULL;
@@ -220,8 +293,8 @@ bool SDSArchive::setStart(const string &fname) {
 	long int size;
 	bool result = true;
 
-	_recstream->stream().seekg(0, ios::end);
-	size = (long int)_recstream->stream().tellg();
+	_recstream.seekg(0, ios::end);
+	size = (long int)_recstream.tellg();
 
 #define SDSARCHIVE_BINSEARCH
 #ifdef SDSARCHIVE_BINSEARCH
@@ -305,18 +378,22 @@ bool SDSArchive::setStart(const string &fname) {
 	/* Cleanup memory and close file */
 	ms_readmsr_r(&pfp,&prec,NULL,-1,NULL,NULL,0,0,0);
 
-	_recstream->stream().seekg(offset,ios::beg);
+	_recstream.seekg(offset,ios::beg);
 	if ( offset >= size )
-		_recstream->stream().clear(ios::eofbit);
+		_recstream.clear(ios::eofbit);
 
 	return result;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool SDSArchive::isEnd() {
-	if (!_fnames.empty())
-		return false;
+	if ( !_fnames.empty() ) return false;
 
-	istream &istr = _recstream->stream();
+	istream &istr = _recstream;
 	streampos strpos = istr.tellg();
 	char buffer[sizeof(struct fsdh_s)];
 	struct fsdh_s *fsdh = (struct fsdh_s *)buffer;
@@ -325,6 +402,7 @@ bool SDSArchive::isEnd() {
 	Time etime = (_curidx->endTime() == Time())?_etime:_curidx->endTime();
 
 	if ( !istr.read(buffer, sizeof(struct fsdh_s)) ) {
+		SEISCOMP_DEBUG("- eof");
 		istr.clear(ios::eofbit);
 		return true;
 	}
@@ -344,35 +422,42 @@ bool SDSArchive::isEnd() {
 	            (int)fsdh->start_time.sec,(int)fsdh->start_time.fract);
 
 	if (rectime > etime) {
+		SEISCOMP_DEBUG("- after endtime");
 		istr.clear(ios::eofbit);
 		return true;
 	}
 
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-istream& SDSArchive::stream() throw(ArchiveException) {  
-	if ( _recstream ) {
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool SDSArchive::stepStream() {
+	if ( _recstream.is_open() ) {
 		/* eof check: try to read from stream */
-		istream &tmpstream = _recstream->stream();
-		tmpstream.peek();
+		_recstream.peek();
 		/* go on at the file's stream */
-		if (tmpstream.good() && !isEnd())
-			return tmpstream;
+		if ( _recstream.good() && !isEnd() )
+			return true;
+
+		_recstream.close();
 	}
 	else
 		_curiter = _streams.begin();
 
 	bool first = false;
-	while (!_fnames.empty() || _curiter != _streams.end()) {
-		while (_fnames.empty() && _curiter != _streams.end()) {
+	while ( !_fnames.empty() || _curiter != _streams.end() ) {
+		while ( _fnames.empty() && _curiter != _streams.end() ) {
 			SEISCOMP_DEBUG("SDS request: %s", _curiter->str(_stime, _etime).c_str());
-			if (_etime == Time())
-				_etime = Time::GMT();
-			if ((_curiter->startTime() == Time() && _stime == Time())) {
+			if ( _etime == Time() ) _etime = Time::GMT();
+			if ( (_curiter->startTime() == Time() && _stime == Time()) ) {
 				SEISCOMP_WARNING("... has invalid time window -> ignore this request above");
 				++_curiter;
-			} else {
+			}
+			else {
 				_curidx = &*_curiter;
 				++_curiter;
 				setFilenames();
@@ -381,28 +466,24 @@ istream& SDSArchive::stream() throw(ArchiveException) {
 			}
 		}
 
-		if (!_fnames.empty()) {
-			_recstream = RecordStream::Create("file");
-			if (!_recstream) {
-				SEISCOMP_ERROR("Could not create file stream");
-				throw ArchiveException("Could not create file stream");
-			}
-
+		if ( !_fnames.empty() ) {
 			while ( !_fnames.empty() ) {
 				string fname = _fnames.front();
 				_fnames.pop();
-				if ( !_recstream->setSource(fname.c_str()) ) {
-					SEISCOMP_DEBUG("file %s not found", fname.c_str());
-					_recstream->stream().clear();
+				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
+				if ( !_recstream.is_open() ) {
+					SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
+					_recstream.clear();
 				}
 				else {
+					SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
 					if ( first ) {
 						if ( !setStart(fname) )
 							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
 					}
 
-					if ( !_recstream->stream().eof() && !isEnd() )
-						return _recstream->stream();
+					if ( !_recstream.eof() && !isEnd() )
+						return true;
 				}
 
 				first = false;
@@ -410,10 +491,44 @@ istream& SDSArchive::stream() throw(ArchiveException) {
 		}
 	}
 
-	if (!_recstream) {
-		SEISCOMP_DEBUG("no data found in SDS archive");
-		throw ArchiveException("no data found in SDS archive");
+	return _recstream.good();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Seiscomp::Record *SDSArchive::next() {
+	while ( stepStream() ) {
+		MSeedRecord *rec = new MSeedRecord();
+		if ( rec == NULL )
+			return NULL;
+
+		setupRecord(rec);
+
+		try {
+			rec->read(_recstream);
+		}
+		catch ( Core::EndOfStreamException & ) {
+			_recstream.close();
+			delete rec;
+			continue;
+		}
+		catch ( std::exception &e ) {
+			SEISCOMP_ERROR("file read exception: %s", e.what());
+			delete rec;
+			continue;
+		}
+
+		return rec;
 	}
 
-	return _recstream->stream();
+	return NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

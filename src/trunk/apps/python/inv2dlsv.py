@@ -21,6 +21,9 @@ from seiscomp3 import DataModel, IO
 
 ORGANIZATION = "EIDA"
 
+def iterinv(obj):
+    return (j for i in obj.itervalues() for j in i.itervalues())
+
 def main():
     if len(sys.argv) < 1 or len(sys.argv) > 3:
         print "Usage inv2dlsv [in_xml [out_dataless]]"
@@ -56,10 +59,10 @@ def main():
 
     vol = SEEDVolume(inv, ORGANIZATION, "", resp_dict=False)
 
-    for net in sum([i.values() for i in inv.network.itervalues()], []):
-        for sta in sum([i.values() for i in net.station.itervalues()], []):
-            for loc in sum([i.values() for i in sta.sensorLocation.itervalues()], []):
-                for strm in sum([i.values() for i in loc.stream.itervalues()], []):
+    for net in iterinv(inv.network):
+        for sta in iterinv(net.station):
+            for loc in iterinv(sta.sensorLocation):
+                for strm in iterinv(loc.stream):
                     try:
                         vol.add_chan(net.code, sta.code, loc.code, strm.code, strm.start, strm.end)
 

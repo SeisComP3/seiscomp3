@@ -194,6 +194,9 @@ struct ResponsePAZHandler : public IO::XML::TypedClassHandler<ResponsePAZ> {
 		addProperty("zeros", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "zeros");
 		addProperty("poles", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "poles");
 		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
+		addProperty("decimationFactor", "", Optional, Attribute, "decimationFactor");
+		addProperty("delay", "", Optional, Attribute, "delay");
+		addProperty("correction", "", Optional, Attribute, "correction");
 	}
 };
 
@@ -210,7 +213,39 @@ struct ResponsePolynomialHandler : public IO::XML::TypedClassHandler<ResponsePol
 		addProperty("approximationUpperBound", "", Optional, Attribute, "approximationUpperBound");
 		addProperty("approximationError", "", Optional, Attribute, "approximationError");
 		addProperty("numberOfCoefficients", "", Optional, Attribute, "numberOfCoefficients");
-		addProperty("coefficients", "", Optional, Attribute, "coefficients");
+		addProperty("coefficients", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "coefficients");
+		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
+	}
+};
+
+
+struct ResponseIIRHandler : public IO::XML::TypedClassHandler<ResponseIIR> {
+	ResponseIIRHandler() {
+		addMember("publicID", "", Mandatory, Attribute, new PublicIDSetter<ResponseIIR>());
+		addProperty("name", "", Optional, Attribute, "name");
+		addProperty("type", "", Optional, Attribute, "type");
+		addProperty("gain", "", Optional, Attribute, "gain");
+		addProperty("gainFrequency", "", Optional, Attribute, "gainFrequency");
+		addProperty("decimationFactor", "", Optional, Attribute, "decimationFactor");
+		addProperty("delay", "", Optional, Attribute, "delay");
+		addProperty("correction", "", Optional, Attribute, "correction");
+		addProperty("numberOfNumerators", "", Optional, Attribute, "numberOfNumerators");
+		addProperty("numberOfDenominators", "", Optional, Attribute, "numberOfDenominators");
+		addProperty("numerators", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "numerators");
+		addProperty("denominators", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "denominators");
+		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
+	}
+};
+
+
+struct ResponseFAPHandler : public IO::XML::TypedClassHandler<ResponseFAP> {
+	ResponseFAPHandler() {
+		addMember("publicID", "", Mandatory, Attribute, new PublicIDSetter<ResponseFAP>());
+		addProperty("name", "", Optional, Attribute, "name");
+		addProperty("gain", "", Optional, Attribute, "gain");
+		addProperty("gainFrequency", "", Optional, Attribute, "gainFrequency");
+		addProperty("numberOfTuples", "", Optional, Attribute, "numberOfTuples");
+		addProperty("tuples", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "tuples");
 		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
 	}
 };
@@ -260,11 +295,36 @@ struct DataloggerHandler : public IO::XML::TypedClassHandler<Datalogger> {
 };
 
 
+struct CreationInfoHandler : public IO::XML::TypedClassHandler<CreationInfo> {
+	CreationInfoHandler() {
+		addProperty("agencyID", "", Optional, Attribute, "agencyID");
+		addProperty("agencyURI", "", Optional, Attribute, "agencyURI");
+		addProperty("author", "", Optional, Attribute, "author");
+		addProperty("authorURI", "", Optional, Attribute, "authorURI");
+		addProperty("creationTime", "", Optional, Attribute, "creationTime");
+		addProperty("modificationTime", "", Optional, Attribute, "modificationTime");
+		addProperty("version", "", Optional, Attribute, "version");
+	}
+};
+
+
+struct CommentHandler : public IO::XML::TypedClassHandler<Comment> {
+	CommentHandler() {
+		addProperty("text", "", Mandatory, Attribute, "text");
+		addProperty("id", "", Mandatory, Attribute, "id");
+		addProperty("start", "", Optional, Attribute, "start");
+		addProperty("end", "", Optional, Attribute, "end");
+		addProperty("creationInfo", "", Optional, Element, "creationInfo");
+	}
+};
+
+
 struct ResponseFIRHandler : public IO::XML::TypedClassHandler<ResponseFIR> {
 	ResponseFIRHandler() {
 		addMember("publicID", "", Mandatory, Attribute, new PublicIDSetter<ResponseFIR>());
 		addProperty("name", "", Optional, Attribute, "name");
 		addProperty("gain", "", Optional, Attribute, "gain");
+		addProperty("gainFrequency", "", Optional, Attribute, "gainFrequency");
 		addProperty("decimationFactor", "", Optional, Attribute, "decimationFactor");
 		addProperty("delay", "", Optional, Attribute, "delay");
 		addProperty("correction", "", Optional, Attribute, "correction");
@@ -294,6 +354,7 @@ struct AuxStreamHandler : public IO::XML::TypedClassHandler<AuxStream> {
 
 struct StreamHandler : public IO::XML::TypedClassHandler<Stream> {
 	StreamHandler() {
+		addMember("publicID", "", Mandatory, Attribute, new PublicIDSetter<Stream>());
 		addProperty("code", "", Mandatory, Attribute, "code");
 		addProperty("start", "", Mandatory, Attribute, "start");
 		addProperty("end", "", Optional, Attribute, "end");
@@ -316,6 +377,7 @@ struct StreamHandler : public IO::XML::TypedClassHandler<Stream> {
 		addProperty("flags", "", Optional, Attribute, "flags");
 		addProperty("restricted", "", Optional, Attribute, "restricted");
 		addProperty("shared", "", Optional, Attribute, "shared");
+		addChildProperty("comment", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "comment");
 	}
 };
 
@@ -329,6 +391,7 @@ struct SensorLocationHandler : public IO::XML::TypedClassHandler<SensorLocation>
 		addProperty("latitude", "", Optional, Attribute, "latitude");
 		addProperty("longitude", "", Optional, Attribute, "longitude");
 		addProperty("elevation", "", Optional, Attribute, "elevation");
+		addChildProperty("comment", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "comment");
 		addChildProperty("auxStream", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "auxStream");
 		addChildProperty("stream", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "stream");
 	}
@@ -354,6 +417,7 @@ struct StationHandler : public IO::XML::TypedClassHandler<Station> {
 		addProperty("restricted", "", Optional, Attribute, "restricted");
 		addProperty("shared", "", Optional, Attribute, "shared");
 		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
+		addChildProperty("comment", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "comment");
 		addChildProperty("sensorLocation", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "sensorLocation");
 	}
 };
@@ -374,6 +438,7 @@ struct NetworkHandler : public IO::XML::TypedClassHandler<Network> {
 		addProperty("restricted", "", Optional, Attribute, "restricted");
 		addProperty("shared", "", Optional, Attribute, "shared");
 		addProperty("remark", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", Optional, Element, "remark");
+		addChildProperty("comment", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "comment");
 		addChildProperty("station", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "station");
 	}
 };
@@ -388,7 +453,9 @@ struct InventoryHandler : public IO::XML::TypedClassHandler<Inventory> {
 		addChildProperty("sensor", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "sensor");
 		addChildProperty("responsePAZ", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "responsePAZ");
 		addChildProperty("responseFIR", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "responseFIR");
+		addChildProperty("responseIIR", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "responseIIR");
 		addChildProperty("responsePolynomial", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "responsePolynomial");
+		addChildProperty("responseFAP", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "responseFAP");
 	}
 };
 
@@ -530,12 +597,16 @@ TypeMap::TypeMap() {
 	static AuxDeviceHandler _AuxDeviceHandler;
 	static SensorCalibrationHandler _SensorCalibrationHandler;
 	static SensorHandler _SensorHandler;
+	static ResponseFIRHandler _ResponseFIRHandler;
+	static ResponseIIRHandler _ResponseIIRHandler;
 	static ResponsePAZHandler _ResponsePAZHandler;
+	static ResponseFAPHandler _ResponseFAPHandler;
 	static ResponsePolynomialHandler _ResponsePolynomialHandler;
 	static DataloggerCalibrationHandler _DataloggerCalibrationHandler;
 	static DecimationHandler _DecimationHandler;
 	static DataloggerHandler _DataloggerHandler;
-	static ResponseFIRHandler _ResponseFIRHandler;
+	static CreationInfoHandler _CreationInfoHandler;
+	static CommentHandler _CommentHandler;
 	static AuxStreamHandler _AuxStreamHandler;
 	static StreamHandler _StreamHandler;
 	static SensorLocationHandler _SensorLocationHandler;
@@ -563,14 +634,18 @@ TypeMap::TypeMap() {
 	registerMapping("auxDevice", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "AuxDevice", &_AuxDeviceHandler);
 	registerMapping<SensorCalibration>("SensorCalibration", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_SensorCalibrationHandler);
 	registerMapping("sensor", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "Sensor", &_SensorHandler);
+	registerMapping("responseFIR", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponseFIR", &_ResponseFIRHandler);
+	registerMapping("responseIIR", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponseIIR", &_ResponseIIRHandler);
 	registerMapping("responsePAZ", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponsePAZ", &_ResponsePAZHandler);
+	registerMapping("responseFAP", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponseFAP", &_ResponseFAPHandler);
 	registerMapping("responsePolynomial", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponsePolynomial", &_ResponsePolynomialHandler);
 	registerMapping<DataloggerCalibration>("dataloggerCalibration", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_DataloggerCalibrationHandler);
 	registerMapping<Decimation>("decimation", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_DecimationHandler);
 	registerMapping("datalogger", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "Datalogger", &_DataloggerHandler);
-	registerMapping("responseFIR", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "ResponseFIR", &_ResponseFIRHandler);
 	registerMapping<AuxStream>("auxStream", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_AuxStreamHandler);
-	registerMapping<Stream>("stream", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_StreamHandler);
+	registerMapping<CreationInfo>("creationInfo", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_CreationInfoHandler);
+	registerMapping<Comment>("comment", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", &_CommentHandler);
+	registerMapping("stream", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "Stream", &_StreamHandler);
 	registerMapping("sensorLocation", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "SensorLocation", &_SensorLocationHandler);
 	registerMapping("station", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "Station", &_StationHandler);
 	registerMapping("network", "http://geofon.gfz-potsdam.de/ns/Inventory/1.0/", "Network", &_NetworkHandler);

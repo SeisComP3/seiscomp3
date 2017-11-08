@@ -37,10 +37,11 @@ DROP TABLE IF EXISTS Sensor;
 DROP TABLE IF EXISTS ResponsePAZ;
 DROP TABLE IF EXISTS ResponsePolynomial;
 DROP TABLE IF EXISTS ResponseFAP;
+DROP TABLE IF EXISTS ResponseFIR;
+DROP TABLE IF EXISTS ResponseIIR;
 DROP TABLE IF EXISTS DataloggerCalibration;
 DROP TABLE IF EXISTS Decimation;
 DROP TABLE IF EXISTS Datalogger;
-DROP TABLE IF EXISTS ResponseFIR;
 DROP TABLE IF EXISTS AuxStream;
 DROP TABLE IF EXISTS Stream;
 DROP TABLE IF EXISTS SensorLocation;
@@ -81,7 +82,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (NULL);
@@ -125,6 +126,10 @@ CREATE TABLE Comment (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	text BLOB NOT NULL,
 	id VARCHAR,
+	start DATETIME,
+	start_ms INTEGER,
+	end DATETIME,
+	end_ms INTEGER,
 	creationInfo_agencyID VARCHAR,
 	creationInfo_agencyURI VARCHAR,
 	creationInfo_author VARCHAR,
@@ -209,6 +214,9 @@ CREATE TABLE CompositeTime (
 	second_lowerUncertainty DOUBLE UNSIGNED,
 	second_upperUncertainty DOUBLE UNSIGNED,
 	second_confidenceLevel DOUBLE UNSIGNED,
+	second_pdf_variable_content BLOB,
+	second_pdf_probability_content BLOB,
+	second_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	second_used INTEGER(1) NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
@@ -365,37 +373,58 @@ CREATE TABLE MomentTensor (
 	scalarMoment_lowerUncertainty DOUBLE UNSIGNED,
 	scalarMoment_upperUncertainty DOUBLE UNSIGNED,
 	scalarMoment_confidenceLevel DOUBLE UNSIGNED,
+	scalarMoment_pdf_variable_content BLOB,
+	scalarMoment_pdf_probability_content BLOB,
+	scalarMoment_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	scalarMoment_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mrr_value DOUBLE,
 	tensor_Mrr_uncertainty DOUBLE UNSIGNED,
 	tensor_Mrr_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mrr_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mrr_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mrr_pdf_variable_content BLOB,
+	tensor_Mrr_pdf_probability_content BLOB,
+	tensor_Mrr_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mtt_value DOUBLE,
 	tensor_Mtt_uncertainty DOUBLE UNSIGNED,
 	tensor_Mtt_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mtt_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mtt_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mtt_pdf_variable_content BLOB,
+	tensor_Mtt_pdf_probability_content BLOB,
+	tensor_Mtt_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mpp_value DOUBLE,
 	tensor_Mpp_uncertainty DOUBLE UNSIGNED,
 	tensor_Mpp_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mpp_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mpp_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mpp_pdf_variable_content BLOB,
+	tensor_Mpp_pdf_probability_content BLOB,
+	tensor_Mpp_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mrt_value DOUBLE,
 	tensor_Mrt_uncertainty DOUBLE UNSIGNED,
 	tensor_Mrt_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mrt_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mrt_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mrt_pdf_variable_content BLOB,
+	tensor_Mrt_pdf_probability_content BLOB,
+	tensor_Mrt_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mrp_value DOUBLE,
 	tensor_Mrp_uncertainty DOUBLE UNSIGNED,
 	tensor_Mrp_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mrp_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mrp_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mrp_pdf_variable_content BLOB,
+	tensor_Mrp_pdf_probability_content BLOB,
+	tensor_Mrp_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_Mtp_value DOUBLE,
 	tensor_Mtp_uncertainty DOUBLE UNSIGNED,
 	tensor_Mtp_lowerUncertainty DOUBLE UNSIGNED,
 	tensor_Mtp_upperUncertainty DOUBLE UNSIGNED,
 	tensor_Mtp_confidenceLevel DOUBLE UNSIGNED,
+	tensor_Mtp_pdf_variable_content BLOB,
+	tensor_Mtp_pdf_probability_content BLOB,
+	tensor_Mtp_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	tensor_used INTEGER(1) NOT NULL DEFAULT '0',
 	variance DOUBLE,
 	varianceReduction DOUBLE,
@@ -448,32 +477,50 @@ CREATE TABLE FocalMechanism (
 	nodalPlanes_nodalPlane1_strike_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_strike_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_strike_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane1_strike_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane1_strike_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane1_strike_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane1_dip_value DOUBLE,
 	nodalPlanes_nodalPlane1_dip_uncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_dip_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_dip_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_dip_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane1_dip_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane1_dip_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane1_dip_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane1_rake_value DOUBLE,
 	nodalPlanes_nodalPlane1_rake_uncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_rake_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_rake_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane1_rake_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane1_rake_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane1_rake_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane1_rake_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane1_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane2_strike_value DOUBLE,
 	nodalPlanes_nodalPlane2_strike_uncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_strike_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_strike_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_strike_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane2_strike_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane2_strike_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane2_strike_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane2_dip_value DOUBLE,
 	nodalPlanes_nodalPlane2_dip_uncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_dip_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_dip_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_dip_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane2_dip_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane2_dip_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane2_dip_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane2_rake_value DOUBLE,
 	nodalPlanes_nodalPlane2_rake_uncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_rake_lowerUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_rake_upperUncertainty DOUBLE UNSIGNED,
 	nodalPlanes_nodalPlane2_rake_confidenceLevel DOUBLE UNSIGNED,
+	nodalPlanes_nodalPlane2_rake_pdf_variable_content BLOB,
+	nodalPlanes_nodalPlane2_rake_pdf_probability_content BLOB,
+	nodalPlanes_nodalPlane2_rake_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_nodalPlane2_used INTEGER(1) NOT NULL DEFAULT '0',
 	nodalPlanes_preferredPlane INT,
 	nodalPlanes_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -482,46 +529,73 @@ CREATE TABLE FocalMechanism (
 	principalAxes_tAxis_azimuth_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_azimuth_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_azimuth_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_tAxis_azimuth_pdf_variable_content BLOB,
+	principalAxes_tAxis_azimuth_pdf_probability_content BLOB,
+	principalAxes_tAxis_azimuth_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_tAxis_plunge_value DOUBLE,
 	principalAxes_tAxis_plunge_uncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_plunge_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_plunge_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_plunge_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_tAxis_plunge_pdf_variable_content BLOB,
+	principalAxes_tAxis_plunge_pdf_probability_content BLOB,
+	principalAxes_tAxis_plunge_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_tAxis_length_value DOUBLE,
 	principalAxes_tAxis_length_uncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_length_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_length_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_tAxis_length_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_tAxis_length_pdf_variable_content BLOB,
+	principalAxes_tAxis_length_pdf_probability_content BLOB,
+	principalAxes_tAxis_length_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_pAxis_azimuth_value DOUBLE,
 	principalAxes_pAxis_azimuth_uncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_azimuth_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_azimuth_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_azimuth_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_pAxis_azimuth_pdf_variable_content BLOB,
+	principalAxes_pAxis_azimuth_pdf_probability_content BLOB,
+	principalAxes_pAxis_azimuth_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_pAxis_plunge_value DOUBLE,
 	principalAxes_pAxis_plunge_uncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_plunge_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_plunge_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_plunge_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_pAxis_plunge_pdf_variable_content BLOB,
+	principalAxes_pAxis_plunge_pdf_probability_content BLOB,
+	principalAxes_pAxis_plunge_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_pAxis_length_value DOUBLE,
 	principalAxes_pAxis_length_uncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_length_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_length_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_pAxis_length_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_pAxis_length_pdf_variable_content BLOB,
+	principalAxes_pAxis_length_pdf_probability_content BLOB,
+	principalAxes_pAxis_length_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_nAxis_azimuth_value DOUBLE,
 	principalAxes_nAxis_azimuth_uncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_azimuth_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_azimuth_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_azimuth_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_nAxis_azimuth_pdf_variable_content BLOB,
+	principalAxes_nAxis_azimuth_pdf_probability_content BLOB,
+	principalAxes_nAxis_azimuth_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_nAxis_plunge_value DOUBLE,
 	principalAxes_nAxis_plunge_uncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_plunge_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_plunge_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_plunge_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_nAxis_plunge_pdf_variable_content BLOB,
+	principalAxes_nAxis_plunge_pdf_probability_content BLOB,
+	principalAxes_nAxis_plunge_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_nAxis_length_value DOUBLE,
 	principalAxes_nAxis_length_uncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_length_lowerUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_length_upperUncertainty DOUBLE UNSIGNED,
 	principalAxes_nAxis_length_confidenceLevel DOUBLE UNSIGNED,
+	principalAxes_nAxis_length_pdf_variable_content BLOB,
+	principalAxes_nAxis_length_pdf_probability_content BLOB,
+	principalAxes_nAxis_length_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_nAxis_used INTEGER(1) NOT NULL DEFAULT '0',
 	principalAxes_used INTEGER(1) NOT NULL DEFAULT '0',
 	azimuthalGap DOUBLE UNSIGNED,
@@ -565,6 +639,9 @@ CREATE TABLE Amplitude (
 	amplitude_lowerUncertainty DOUBLE UNSIGNED,
 	amplitude_upperUncertainty DOUBLE UNSIGNED,
 	amplitude_confidenceLevel DOUBLE UNSIGNED,
+	amplitude_pdf_variable_content BLOB,
+	amplitude_pdf_probability_content BLOB,
+	amplitude_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	amplitude_used INTEGER(1) NOT NULL DEFAULT '0',
 	timeWindow_reference DATETIME,
 	timeWindow_reference_ms INTEGER,
@@ -576,6 +653,9 @@ CREATE TABLE Amplitude (
 	period_lowerUncertainty DOUBLE UNSIGNED,
 	period_upperUncertainty DOUBLE UNSIGNED,
 	period_confidenceLevel DOUBLE UNSIGNED,
+	period_pdf_variable_content BLOB,
+	period_pdf_probability_content BLOB,
+	period_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	period_used INTEGER(1) NOT NULL DEFAULT '0',
 	snr DOUBLE,
 	unit VARCHAR,
@@ -594,6 +674,9 @@ CREATE TABLE Amplitude (
 	scalingTime_lowerUncertainty DOUBLE UNSIGNED,
 	scalingTime_upperUncertainty DOUBLE UNSIGNED,
 	scalingTime_confidenceLevel DOUBLE UNSIGNED,
+	scalingTime_pdf_variable_content BLOB,
+	scalingTime_pdf_probability_content BLOB,
+	scalingTime_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	scalingTime_used INTEGER(1) NOT NULL DEFAULT '0',
 	magnitudeHint CHAR,
 	evaluationMode VARCHAR(64),
@@ -654,6 +737,9 @@ CREATE TABLE Magnitude (
 	magnitude_lowerUncertainty DOUBLE UNSIGNED,
 	magnitude_upperUncertainty DOUBLE UNSIGNED,
 	magnitude_confidenceLevel DOUBLE UNSIGNED,
+	magnitude_pdf_variable_content BLOB,
+	magnitude_pdf_probability_content BLOB,
+	magnitude_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	type CHAR COLLATE BINARY,
 	originID VARCHAR,
 	methodID VARCHAR,
@@ -693,6 +779,9 @@ CREATE TABLE StationMagnitude (
 	magnitude_lowerUncertainty DOUBLE UNSIGNED,
 	magnitude_upperUncertainty DOUBLE UNSIGNED,
 	magnitude_confidenceLevel DOUBLE UNSIGNED,
+	magnitude_pdf_variable_content BLOB,
+	magnitude_pdf_probability_content BLOB,
+	magnitude_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	type CHAR COLLATE BINARY,
 	amplitudeID VARCHAR,
 	methodID VARCHAR,
@@ -736,6 +825,9 @@ CREATE TABLE Pick (
 	time_lowerUncertainty DOUBLE UNSIGNED,
 	time_upperUncertainty DOUBLE UNSIGNED,
 	time_confidenceLevel DOUBLE UNSIGNED,
+	time_pdf_variable_content BLOB,
+	time_pdf_probability_content BLOB,
+	time_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	waveformID_networkCode CHAR NOT NULL,
 	waveformID_stationCode CHAR NOT NULL,
 	waveformID_locationCode CHAR,
@@ -748,12 +840,18 @@ CREATE TABLE Pick (
 	horizontalSlowness_lowerUncertainty DOUBLE UNSIGNED,
 	horizontalSlowness_upperUncertainty DOUBLE UNSIGNED,
 	horizontalSlowness_confidenceLevel DOUBLE UNSIGNED,
+	horizontalSlowness_pdf_variable_content BLOB,
+	horizontalSlowness_pdf_probability_content BLOB,
+	horizontalSlowness_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	horizontalSlowness_used INTEGER(1) NOT NULL DEFAULT '0',
 	backazimuth_value DOUBLE,
 	backazimuth_uncertainty DOUBLE UNSIGNED,
 	backazimuth_lowerUncertainty DOUBLE UNSIGNED,
 	backazimuth_upperUncertainty DOUBLE UNSIGNED,
 	backazimuth_confidenceLevel DOUBLE UNSIGNED,
+	backazimuth_pdf_variable_content BLOB,
+	backazimuth_pdf_probability_content BLOB,
+	backazimuth_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	backazimuth_used INTEGER(1) NOT NULL DEFAULT '0',
 	slownessMethodID VARCHAR,
 	onset VARCHAR(64),
@@ -916,21 +1014,33 @@ CREATE TABLE Origin (
 	time_lowerUncertainty DOUBLE UNSIGNED,
 	time_upperUncertainty DOUBLE UNSIGNED,
 	time_confidenceLevel DOUBLE UNSIGNED,
+	time_pdf_variable_content BLOB,
+	time_pdf_probability_content BLOB,
+	time_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	latitude_value DOUBLE NOT NULL,
 	latitude_uncertainty DOUBLE UNSIGNED,
 	latitude_lowerUncertainty DOUBLE UNSIGNED,
 	latitude_upperUncertainty DOUBLE UNSIGNED,
 	latitude_confidenceLevel DOUBLE UNSIGNED,
+	latitude_pdf_variable_content BLOB,
+	latitude_pdf_probability_content BLOB,
+	latitude_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	longitude_value DOUBLE NOT NULL,
 	longitude_uncertainty DOUBLE UNSIGNED,
 	longitude_lowerUncertainty DOUBLE UNSIGNED,
 	longitude_upperUncertainty DOUBLE UNSIGNED,
 	longitude_confidenceLevel DOUBLE UNSIGNED,
+	longitude_pdf_variable_content BLOB,
+	longitude_pdf_probability_content BLOB,
+	longitude_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	depth_value DOUBLE,
 	depth_uncertainty DOUBLE UNSIGNED,
 	depth_lowerUncertainty DOUBLE UNSIGNED,
 	depth_upperUncertainty DOUBLE UNSIGNED,
 	depth_confidenceLevel DOUBLE UNSIGNED,
+	depth_pdf_variable_content BLOB,
+	depth_pdf_probability_content BLOB,
+	depth_pdf_used INTEGER(1) NOT NULL DEFAULT '0',
 	depth_used INTEGER(1) NOT NULL DEFAULT '0',
 	depthType VARCHAR(64),
 	timeFixed INTEGER(1),
@@ -1235,7 +1345,9 @@ CREATE TABLE StationGroup (
 	type VARCHAR(64),
 	code CHAR,
 	start DATETIME,
+	start_ms INTEGER,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1311,8 +1423,10 @@ CREATE TABLE SensorCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1320,7 +1434,7 @@ CREATE TABLE SensorCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
@@ -1365,7 +1479,7 @@ CREATE TABLE ResponsePAZ (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
 	type CHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	normalizationFactor DOUBLE UNSIGNED,
 	normalizationFrequency DOUBLE UNSIGNED,
@@ -1377,6 +1491,9 @@ CREATE TABLE ResponsePAZ (
 	poles_used INTEGER(1) NOT NULL DEFAULT '0',
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
@@ -1396,12 +1513,12 @@ CREATE TABLE ResponsePolynomial (
 	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	frequencyUnit CHAR,
 	approximationType CHAR,
-	approximationLowerBound DOUBLE UNSIGNED,
-	approximationUpperBound DOUBLE UNSIGNED,
+	approximationLowerBound DOUBLE,
+	approximationUpperBound DOUBLE,
 	approximationError DOUBLE UNSIGNED,
 	numberOfCoefficients SMALLINT UNSIGNED,
 	coefficients_content BLOB,
@@ -1427,7 +1544,7 @@ CREATE TABLE ResponseFAP (
 	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name VARCHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	numberOfTuples SMALLINT UNSIGNED,
 	tuples_content BLOB,
@@ -1448,6 +1565,69 @@ BEGIN
   UPDATE ResponseFAP SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
+CREATE TABLE ResponseFIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfCoefficients SMALLINT UNSIGNED,
+	symmetry CHAR,
+	coefficients_content BLOB,
+	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
+
+CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
+BEGIN
+  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
+CREATE TABLE ResponseIIR (
+	_oid INTEGER NOT NULL,
+	_parent_oid INTEGER NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	name VARCHAR,
+	type CHAR,
+	gain DOUBLE,
+	gainFrequency DOUBLE UNSIGNED,
+	decimationFactor SMALLINT UNSIGNED,
+	delay DOUBLE UNSIGNED,
+	correction DOUBLE,
+	numberOfNumerators TINYINT UNSIGNED,
+	numberOfDenominators TINYINT UNSIGNED,
+	numerators_content BLOB,
+	numerators_used INTEGER(1) NOT NULL DEFAULT '0',
+	denominators_content BLOB,
+	denominators_used INTEGER(1) NOT NULL DEFAULT '0',
+	remark_content BLOB,
+	remark_used INTEGER(1) NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	UNIQUE(_parent_oid,name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+
+CREATE TRIGGER ResponseIIRUpdate UPDATE ON ResponseIIR
+BEGIN
+  UPDATE ResponseIIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
+END;
+
 CREATE TABLE DataloggerCalibration (
 	_oid INTEGER NOT NULL,
 	_parent_oid INTEGER NOT NULL,
@@ -1455,8 +1635,10 @@ CREATE TABLE DataloggerCalibration (
 	serialNumber VARCHAR NOT NULL,
 	channel INT UNSIGNED NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
-	gain DOUBLE UNSIGNED,
+	end_ms INTEGER,
+	gain DOUBLE,
 	gainFrequency DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1464,7 +1646,7 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,serialNumber,channel,start)
+	UNIQUE(_parent_oid,serialNumber,channel,start,start_ms)
 );
 
 CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
@@ -1511,7 +1693,7 @@ CREATE TABLE Datalogger (
 	clockModel VARCHAR,
 	clockManufacturer VARCHAR,
 	clockType VARCHAR,
-	gain DOUBLE UNSIGNED,
+	gain DOUBLE,
 	maxClockDrift DOUBLE UNSIGNED,
 	remark_content BLOB,
 	remark_used INTEGER(1) NOT NULL DEFAULT '0',
@@ -1529,42 +1711,15 @@ BEGIN
   UPDATE Datalogger SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
 END;
 
-CREATE TABLE ResponseFIR (
-	_oid INTEGER NOT NULL,
-	_parent_oid INTEGER NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	name VARCHAR,
-	gain DOUBLE UNSIGNED,
-	decimationFactor SMALLINT UNSIGNED,
-	delay DOUBLE UNSIGNED,
-	correction DOUBLE,
-	numberOfCoefficients SMALLINT UNSIGNED,
-	symmetry CHAR,
-	coefficients_content BLOB,
-	coefficients_used INTEGER(1) NOT NULL DEFAULT '0',
-	remark_content BLOB,
-	remark_used INTEGER(1) NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,name)
-);
-
-CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
-
-CREATE TRIGGER ResponseFIRUpdate UPDATE ON ResponseFIR
-BEGIN
-  UPDATE ResponseFIR SET _last_modified=CURRENT_TIMESTAMP WHERE _oid=old._oid;
-END;
-
 CREATE TABLE AuxStream (
 	_oid INTEGER NOT NULL,
 	_parent_oid INTEGER NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	device VARCHAR,
 	deviceSerialNumber VARCHAR,
 	source VARCHAR,
@@ -1576,7 +1731,7 @@ CREATE TABLE AuxStream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
@@ -1592,7 +1747,9 @@ CREATE TABLE Stream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	datalogger VARCHAR,
 	dataloggerSerialNumber VARCHAR,
 	dataloggerChannel INT UNSIGNED,
@@ -1616,7 +1773,7 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
@@ -1632,7 +1789,9 @@ CREATE TABLE SensorLocation (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	latitude DOUBLE,
 	longitude DOUBLE,
 	elevation DOUBLE,
@@ -1640,7 +1799,7 @@ CREATE TABLE SensorLocation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
@@ -1656,7 +1815,9 @@ CREATE TABLE Station (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	latitude DOUBLE,
 	longitude DOUBLE,
@@ -1675,7 +1836,7 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Station__parent_oid ON Station(_parent_oid);
@@ -1691,7 +1852,9 @@ CREATE TABLE Network (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	code CHAR NOT NULL,
 	start DATETIME NOT NULL,
+	start_ms INTEGER NOT NULL,
 	end DATETIME,
+	end_ms INTEGER,
 	description VARCHAR,
 	institutions VARCHAR,
 	region VARCHAR,
@@ -1706,7 +1869,7 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,code,start)
+	UNIQUE(_parent_oid,code,start,start_ms)
 );
 
 CREATE INDEX Network__parent_oid ON Network(_parent_oid);

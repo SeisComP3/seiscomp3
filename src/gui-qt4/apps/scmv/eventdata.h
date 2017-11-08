@@ -32,9 +32,10 @@ template <typename T>
 class Data {
 	public:
 		Data(T* object)
-		 : _objectPtr(object),
-		   _containerCreationTime(Seiscomp::Core::Time::GMT()) {
+		: _objectPtr(object)
+		, _containerCreationTime(Seiscomp::Core::Time::GMT()) {
 		}
+
 		virtual ~Data() {}
 
 	public:

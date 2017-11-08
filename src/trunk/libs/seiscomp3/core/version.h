@@ -23,12 +23,12 @@ namespace Seiscomp {
 namespace Core {
 
 
-/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(10, 0, 0)) */
+/* #if (SC_API_VERSION >= SC_API_VERSION_CHECK(11, 0, 0)) */
 #define SC_API_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 
 /* SC_API_VERSION is (major << 16) + (minor << 8) + patch. */
-#define SC_API_VERSION 0x0A0000
+#define SC_API_VERSION 0x0B0000
 
 #define SC_API_VERSION_MAJOR(v) (v >> 16)
 #define SC_API_VERSION_MINOR(v) ((v >> 8) & 0xff)
@@ -38,6 +38,62 @@ namespace Core {
 /******************************************************************************
  API Changelog
  ******************************************************************************
+ "11.0.0"   0x0B0000
+   - Remove dynamic type throw declarations from all methods as this is
+     deprecated in current C++ standard
+   - Added Seiscomp::Gui::Axis::setPen/setGridPen/setSubGridPen
+   - Added Seiscomp::Gui::Map::Layer::canvas method to access the parent canvas
+   - Added Seiscomp::Gui::Map::Canvas::filterMouseReleaseEvent
+   - Added Seiscomp::Gui::Map::Canvas::size
+   - Changed Seiscomp::Gui::Map::Canvas::menu parent parameter type from QWidget to QMenu
+   - Changed Seiscomp::Gui::Map::Layer::menu parent parameter type from QWidget to QMenu
+   - Removed Seiscomp::Gui::Map::Layer RTTI interface
+   - Added Seiscomp::Gui::Map::Layer::baseBufferUpdated
+   - Added Seiscomp::Gui::Map::Layer::size
+   - Added Seiscomp::Gui::Map::Layer::isInside
+   - Added Seiscomp::Gui::Map::Layer::handleEnterEvent
+   - Added Seiscomp::Gui::Map::Layer::handleLeaveEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseMoveEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseDoubleClickEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMousePressEvent
+   - Added Seiscomp::Gui::Map::Layer::filterMouseReleaseEvent
+   - Added Seiscomp::Gui::Map::Legend::contextResizeEvent
+   - Removed virtual declaration of Seiscomp::Gui::Map::Legend::size
+   - Removed class Seiscomp::Gui::Map::CanvasDelegate
+   - Added class Seiscomp::Gui::EventLayer
+   - Added Seiscomp::Gui::OriginSymbol::setColor
+   - Added Seiscomp::Gui::OriginSymbol::color
+   - Added Seiscomp::Gui::OriginSymbol::setFillColor
+   - Added Seiscomp::Gui::OriginSymbol::fillColor
+   - Added Seiscomp::Gui::MapWidget::setDrawLegends
+   - Added Seiscomp::Gui::RecordView::setMaximumRowHeight
+   - Added Seiscomp::Gui::RecordView::setRelativeRowHeight
+   - Added Seiscomp::Gui::Application::messageGroups
+   - Added Seiscomp::Gui::Application::initLicense
+   - Added Seiscomp::Gui::LUT::operator[]
+   - Added class Seiscomp::Math::Filtering::Min<T>
+   - Added class Seiscomp::Math::Filtering::Max<T>
+   - Added Seiscomp::Gui::RecordWidget::setGridVSpacing
+   - Added Seiscomp::Gui::RecordWidget::setGridVRange
+   - Added Seiscomp::Gui::RecordWidget::setGridVScale
+   - Added Seiscomp::Gui::AbstractLegend
+   - Added Seiscomp::Gui::Plot::addGraph(graph)
+   - Added Seiscomp::Gui::Plot::setLegend
+   - Added Seiscomp::Gui::Plot::isInsidePlot
+   - Added Seiscomp::Gui::Plot::plotRect
+   - Added virtual Seiscomp::Gui::Graph::draw
+   - Added virtual Seiscomp::Gui::Graph::drawSymbol
+   - Added Seiscomp::Gui::Graph::setName/name
+   - Added Seiscomp::Client::Application::reloadBindings
+   - Increased datamodel version to 0.10
+   - Added class Seiscomp::DataModel::ResponseIIR
+   - Inherit class Seiscomp::DataModel::Stream from Seiscomp::DataModel::PublicObject
+   - Added hypocenter and receiver to Seiscomp::Processing::MagnitudeProcessor::computeMagnitude
+   - Added Seiscomp::Processing::MagnitudeProcessor::Status enumeration EpicenterOutOfRegions
+   - Add SC3_LOCATOR_INTERFACE_VERSION define and initialize with version 2
+   - Replace LocatorInterface WeightedPick with PickItem
+   - Refactored Seiscomp::IO::RecordStream interface
+
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()
    - Added Seiscomp::IO::GFArchive::getTravelTime(...)

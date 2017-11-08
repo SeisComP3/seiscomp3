@@ -26,6 +26,7 @@
 #include <seiscomp3/client.h>
 #include <seiscomp3/config/config.h>
 #include <seiscomp3/system/environment.h>
+#include <seiscomp3/system/schema.h>
 #include <seiscomp3/communication/connection.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #include <seiscomp3/datamodel/notifier.h>
@@ -524,6 +525,18 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 */
 		bool reloadInventory();
 
+		/**
+		 * Reloads the application configuration (bindings) from either an
+		 * XML file or the database.
+		 */
+		bool reloadBindings();
+
+		/**
+		 * @brief Routes a notifier to either add/update or removeObject.
+		 * @param notifier The notifier pointer which must not be NULL
+		 */
+		void handleNotifier(DataModel::Notifier *notifier);
+
 
 	// ----------------------------------------------------------------------
 	//  Static public members
@@ -604,6 +617,24 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * Prints the version information to stdout
 		 */
 		virtual void printVersion();
+
+		/**
+		 * Prints all available configuration variables
+		 */
+		virtual void printConfigVariables();
+
+		/**
+		 * Returns lists of schema modules and plugins to validate in
+		 * method validateSchemaParameters
+		 */
+		virtual void schemaValidationNames(std::vector<std::string> &modules,
+		                                   std::vector<std::string> &plugins) const;
+
+		/**
+		 * Validates configuration variables use by application against
+		 * description xml file
+		*/
+		virtual bool validateSchemaParameters();
 
 		//! Handles the interrupt request from outside
 		void handleInterrupt(int) throw();
@@ -750,10 +781,10 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * @param query The query
 		 * @return The requested value
 		 */
-		bool configGetBool(const std::string& query) const throw(Config::Exception);
-		int configGetInt(const std::string& query) const throw(Config::Exception);
-		double configGetDouble(const std::string& query) const throw(Config::Exception);
-		std::string configGetString(const std::string& query) const throw(Config::Exception);
+		bool configGetBool(const std::string& query) const;
+		int configGetInt(const std::string& query) const;
+		double configGetDouble(const std::string& query) const;
+		std::string configGetString(const std::string& query) const;
 
 		/**
 		 * @brief Convenience method that calls configGetString and resolves
@@ -762,12 +793,12 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		 * @param query The query
 		 * @return The path
 		 */
-		std::string configGetPath(const std::string& query) const throw(Config::Exception);
+		std::string configGetPath(const std::string& query) const;
 
-		std::vector<bool> configGetBools(const std::string& query) const throw(Config::Exception);
-		std::vector<int> configGetInts(const std::string& query) const throw(Config::Exception);
-		std::vector<double> configGetDoubles(const std::string& query) const throw(Config::Exception);
-		std::vector<std::string> configGetStrings(const std::string& query) const throw(Config::Exception);
+		std::vector<bool> configGetBools(const std::string& query) const;
+		std::vector<int> configGetInts(const std::string& query) const;
+		std::vector<double> configGetDoubles(const std::string& query) const;
+		std::vector<std::string> configGetStrings(const std::string& query) const;
 
 		/**
 		 * Write a singel value to the local section of the clients
@@ -810,8 +841,6 @@ class SC_SYSTEM_CLIENT_API Application : public Seiscomp::Core::InterruptibleObj
 		void runMessageThread();
 
 		bool processEvent();
-
-		void handleNotifier(DataModel::Notifier*);
 
 		void timeout();
 

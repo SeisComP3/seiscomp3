@@ -386,7 +386,7 @@ NetworkMessage* NetworkMessage::copy() const
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Protocol::MSG_TYPES NetworkMessage::messageType() const throw(Core::GeneralException) {
+Protocol::MSG_TYPES NetworkMessage::messageType() const {
 	if ( _type < 0 ) throw Core::GeneralException("ServiceMessages has no MSG_TYPES entry");
 	return static_cast<Protocol::MSG_TYPES>(_type & 0x7F);
 }
@@ -405,7 +405,7 @@ void NetworkMessage::setMessageType(Protocol::MSG_TYPES type) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Protocol::MSG_CONTENT_TYPES NetworkMessage::contentType() const throw(Core::GeneralException) {
+Protocol::MSG_CONTENT_TYPES NetworkMessage::contentType() const {
 	if ( _type < 0 ) throw Core::GeneralException("ServiceMessages have no content type");
 	return static_cast<Protocol::MSG_CONTENT_TYPES>(_type >> 0x08);
 }
@@ -415,7 +415,7 @@ Protocol::MSG_CONTENT_TYPES NetworkMessage::contentType() const throw(Core::Gene
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void NetworkMessage::setContentType(Protocol::MSG_CONTENT_TYPES type) throw(Core::GeneralException) {
+void NetworkMessage::setContentType(Protocol::MSG_CONTENT_TYPES type) {
 	if ( _type < 0 ) throw Core::GeneralException("ServiceMessages cannot have a content type");
 	_type = (_type & 0x7F) | (type << 0x08);
 }

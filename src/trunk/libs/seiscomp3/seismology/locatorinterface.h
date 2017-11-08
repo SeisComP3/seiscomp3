@@ -30,6 +30,17 @@
 #include <seiscomp3/core.h>
 
 
+#define SC3_LOCATOR_INTERFACE_VERSION 2
+
+/******************************************************************************
+ API Changelog
+ ******************************************************************************
+ 2
+   - First defined version
+   - Replaced WeightedPick with PickItem which allows not to only use a binary
+     weight but flags to enable/disable the time, backazimuth and/or slowness
+ */
+
 namespace Seiscomp{
 namespace Seismology{
 
@@ -54,10 +65,23 @@ DEFINE_SMARTPOINTER(LocatorInterface);
 
 class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 	public:
-		typedef std::pair<DataModel::PickPtr,double> WeightedPick;
-		typedef std::vector<WeightedPick> PickList;
-		typedef std::vector<std::string> IDList;
-		typedef std::map<std::string, std::string> ParameterMap;
+		MAKEENUM(
+			Flags,
+			EVALUES(
+				F_NONE        = 0x00,
+				F_BACKAZIMUTH = 0x01,
+				F_SLOWNESS    = 0x02,
+				F_TIME        = 0x04,
+				F_ALL         = F_BACKAZIMUTH | F_SLOWNESS | F_TIME
+			),
+			ENAMES(
+				"None",
+				"Backazimuth",
+				"Horizontal slowness",
+				"Time",
+				"All"
+			)
+		);
 
 		enum Capability {
 			NoCapability          = 0x0000,
@@ -72,6 +96,20 @@ class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 			Log,
 			Warning
 		};
+
+		struct PickItem {
+			PickItem(DataModel::Pick *pick = NULL, int f = F_ALL)
+			: pick(pick), flags(f) {}
+			PickItem(DataModel::PickPtr pick, int f = F_ALL)
+			: pick(pick), flags(f) {}
+
+			DataModel::PickPtr    pick;
+			int                   flags;
+		};
+
+		typedef std::vector<PickItem> PickList;
+		typedef std::vector<std::string> IDList;
+		typedef std::map<std::string, std::string> ParameterMap;
 
 
 	public:
@@ -116,11 +154,11 @@ class SC_SYSTEM_CORE_API LocatorInterface : public Core::BaseObject {
 		virtual int capabilities() const = 0;
 
 		//! the following all return NULL if (re)location failed
-		virtual DataModel::Origin *locate(PickList& pickList) throw(Core::GeneralException) = 0;
+		virtual DataModel::Origin *locate(PickList& pickList) = 0;
 		virtual DataModel::Origin *locate(PickList& pickList,
 		                                  double initLat, double initLon, double initDepth,
-		                                  const Core::Time &initTime) throw(Core::GeneralException) = 0;
-		virtual DataModel::Origin *relocate(const DataModel::Origin *origin) throw(Core::GeneralException) = 0;
+		                                  const Core::Time &initTime) = 0;
+		virtual DataModel::Origin *relocate(const DataModel::Origin *origin) = 0;
 
 		//! Returns a string (optional) valid for the last
 		//! (re)locate call. Supported are log and warning
@@ -185,6 +223,25 @@ class SC_SYSTEM_CORE_API StationNotFoundException : public Core::GeneralExceptio
 		StationNotFoundException();
 		StationNotFoundException(const std::string& str);
 };
+
+
+/**
+ * @brief Extracts arrival information to create the usage flags. In particular
+ *        Arrival.timeUsed, Arrival.horizontalSlownessUsed and
+ *        Arrival.backazimuthUsed are evaluated. An unset value means 'used'.
+ *        Furthermore the final flags are update according to the arrival
+ *        weight. So a weight of 0 will unset all flags.
+ * @param arrival The arrival to extract the flags from
+ * @return Flags
+ */
+int arrivalToFlags(const DataModel::Arrival *arrival);
+
+/**
+ * @brief Applies locator flags to an arrival.
+ * @param arrival The arrival to be updated
+ * @param flags The usage flags
+ */
+void flagsToArrival(DataModel::Arrival *arrival, int flags);
 
 
 DEFINE_INTERFACE_FACTORY(LocatorInterface);

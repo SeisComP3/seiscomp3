@@ -40,7 +40,7 @@ Config::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaObj
 IMPLEMENT_METAOBJECT(Config)
 
 
-Config::Config() : PublicObject("Config") {
+Config::Config(): PublicObject("Config") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -49,7 +49,7 @@ Config::Config() : PublicObject("Config") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Config::Config(const Config& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -484,7 +484,7 @@ bool Config::removeConfigModule(size_t i) {
 void Config::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Config skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

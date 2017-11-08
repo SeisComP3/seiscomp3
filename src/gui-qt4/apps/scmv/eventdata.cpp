@@ -31,55 +31,25 @@ bool idObjectComparison(std::string id, DataType object) {
 
 
 
-template <typename DataType,
-          typename CollectionType
->
+template <typename DataType, typename CollectionType>
 void addObject(DataType& data, CollectionType& collection) {
 	collection.push_back(data);
 }
 
 
 
-
-template <typename DataType>
-bool timeObjectComparison(Core::TimeSpan timeSpan, DataType object) {
-	if ( object.containerCreationTime() < Core::Time::GMT() - timeSpan )
-		return true;
-	return false;
-}
-
-
-
-
-template <typename DataType,
-		  typename CollectionType
->
+template <typename DataType, typename CollectionType>
 DataType* findObjectWithId(const std::string& id, CollectionType& collection) {
-		typename CollectionType::iterator it = std::find_if(collection.begin(),
-															collection.end(),
-															std::bind1st(
-																	std::ptr_fun(idObjectComparison<DataType>), id));
-		if ( it != collection.end() )
-				return &(*it);
-		return NULL;
-}
+	typename CollectionType::iterator it;
+	it = std::find_if(collection.begin(),
+	                  collection.end(),
+	                  std::bind1st(std::ptr_fun(idObjectComparison<DataType>), id));
 
-
-
-
-template <typename DataType,
-		  typename CollectionType
->
-DataType* findObjectOlderThan(const Core::TimeSpan& timeSpan, CollectionType& collection) {
-	typename CollectionType::iterator it = std::find_if(collection.begin(),
-	                                                    collection.end(),
-	                                                    std::bind1st(
-	                                                    std::ptr_fun(timeObjectComparison<DataType>), timeSpan));
 	if ( it != collection.end() )
 		return &(*it);
+
 	return NULL;
 }
-
 
 
 
@@ -242,8 +212,20 @@ EventData* EventDataRepository::findEvent(const std::string& id) {
 
 
 
-EventData* EventDataRepository::findNextExpiredEvent() {
-	return findObjectOlderThan<EventData>(_eventDataObjectLifeSpan, _eventDataCollection);
+EventData *EventDataRepository::findNextExpiredEvent() {
+	Core::Time maxTime = Core::Time::GMT() - _eventDataObjectLifeSpan;
+
+	EventDataCollection::iterator it;
+	for ( it = _eventDataCollection.begin(); it != _eventDataCollection.end(); ++it ) {
+		DataModel::Origin *origin = findOrigin(it->object()->preferredOriginID());
+		if ( origin == NULL )
+			return &*it;
+
+		if ( origin->time().value() < maxTime )
+			return &*it;
+	}
+
+	return NULL;
 }
 
 
@@ -290,10 +272,11 @@ DataModel::Magnitude* EventDataRepository::findMagnitude(const std::string& id) 
 
 
 void EventDataRepository::removeEvent(const std::string& id) {
-	EventDataCollection::iterator it = std::find_if(_eventDataCollection.begin(),
-	                                               _eventDataCollection.end(),
-	                                               std::bind1st(
-	                                            		   std::ptr_fun(idObjectComparison<EventData>), id));
+	EventDataCollection::iterator it;
+	it = std::find_if(_eventDataCollection.begin(),
+	                  _eventDataCollection.end(),
+	                  std::bind1st(std::ptr_fun(idObjectComparison<EventData>), id));
+
 	if ( it != _eventDataCollection.end() )
 		_eventDataCollection.erase(it);
 }

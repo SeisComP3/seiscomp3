@@ -184,8 +184,7 @@ class ArclinkSynchronizer(Client.Application):
 
         try:
             self.dcid = self.configGetString("datacenterID")
-
-        except Config.Exception:
+        except Exception:
             pass
 
         return True

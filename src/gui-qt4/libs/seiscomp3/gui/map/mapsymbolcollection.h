@@ -86,6 +86,8 @@ class DefaultSymbolCollection : public SymbolCollection {
 		Symbols  _mapSymbols;
 		Symbol  *_topSymbol;
 		bool     _dirty;
+
+	friend class Canvas;
 };
 
 

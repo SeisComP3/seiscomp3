@@ -3,6 +3,11 @@
 	<module name="scesv" category="GUI">
 		<description>Event summary view.</description>
 		<configuration>
+			<parameter name="loadEventDB" type="double" unit="days" default="1">
+				<description>
+					Number of days to preload if scesv is started.
+				</description>
+			</parameter>
 			<group name="scripts">
 				<parameter name="script0" type="string">
 					<description>

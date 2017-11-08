@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam and gempa GmbH                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -9,8 +9,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
-
-
 
 
 #include "util.h"
@@ -265,6 +263,48 @@ int stationCount(const DataModel::Magnitude *mag) {
 	catch ( ... ) {
 		return -1;
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int modePriority(const DataModel::Origin *origin) {
+	try {
+		switch ( origin->evaluationMode() ) {
+			case AUTOMATIC:
+				return 1;
+			case MANUAL:
+				return 2;
+			default:
+				break;
+		}
+	}
+	catch ( ValueException & ) {}
+
+	return 0;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int modePriority(const DataModel::FocalMechanism *fm) {
+	try {
+		switch ( fm->evaluationMode() ) {
+			case AUTOMATIC:
+				return 1;
+			case MANUAL:
+				return 2;
+			default:
+				break;
+		}
+	}
+	catch ( ValueException & ) {}
+
+	return 0;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

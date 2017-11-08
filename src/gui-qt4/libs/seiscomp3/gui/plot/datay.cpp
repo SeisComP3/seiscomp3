@@ -91,13 +91,22 @@ void DataY::unproject(QPolygonF &poly, const Axis *keyAxis,
 
 	// Find first "visible" data sample
 	while ( i < y.count() ) {
-		if ( px >= keyAxis->range().lower ) break;
+		if ( px >= keyAxis->range().lower ) {
+			if ( i ) --i;
+			break;
+		}
+
 		px += dx;
 		++i;
 	}
 
+	bool lastVisible = true;
 	for ( ; i < y.count(); ++i, px += dx ) {
-		if ( px > keyAxis->range().upper ) break;
+		if ( px > keyAxis->range().upper ) {
+			if ( !lastVisible ) break;
+			lastVisible = false;
+		}
+
 		double x0 = keyAxis->unproject(px);
 		double y0 = -valueAxis->unproject(y[i]);
 		poly.append(QPointF(x0, y0));

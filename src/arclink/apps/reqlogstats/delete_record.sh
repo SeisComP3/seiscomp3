@@ -64,8 +64,8 @@ EOF
 		done
 		echo "## DELETE FROM ArcStatsReport WHERE start_day = '${day}';"
 		echo "SELECT * FROM ArcStatsReport where start_day = '${day}';"
-		echo "SELECT * FROM ArcStatsSummary where start_day = '${day}';"
-		echo "## (the offending report should be gone from the summary table)"
+		echo "## (The offending report should now be gone from the summary table below:)"
+		echo "SELECT * FROM ArcStatsSummary where start_day = '${day}' ORDER BY id;"
 	fi
 }
 
@@ -87,10 +87,17 @@ if [[ "$src" =~ ^[0-9]*$ ]] ; then
     echo "Removing record for id=$src"
 else
     echo "Looking up source DCID..."
+    # Fails where several sources share the DCID - RESIF, ODC
     id=$(echo "SELECT id FROM ArcStatsSource WHERE dcid='$src';" | sqlite3 $db)
     src=$id
 fi
-echo "Found source:"
+
+if [ -z "$src" ] ; then
+	echo "Oops, src is empty."
+	exit 1
+fi
+
+echo "Found source: $src"
 echo "SELECT * FROM ArcStatsSource WHERE id='$src';" | sqlite3 $db
 
 if [[ "${day}" =~ ^[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$ ]] ; then

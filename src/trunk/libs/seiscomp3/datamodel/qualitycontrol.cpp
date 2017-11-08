@@ -39,7 +39,7 @@ QualityControl::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core:
 IMPLEMENT_METAOBJECT(QualityControl)
 
 
-QualityControl::QualityControl() : PublicObject("QualityControl") {
+QualityControl::QualityControl(): PublicObject("QualityControl") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,7 +48,7 @@ QualityControl::QualityControl() : PublicObject("QualityControl") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 QualityControl::QualityControl(const QualityControl& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -667,7 +667,7 @@ bool QualityControl::removeOutage(const OutageIndex& i) {
 void QualityControl::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: QualityControl skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

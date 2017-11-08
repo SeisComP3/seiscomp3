@@ -37,10 +37,11 @@ DROP TABLE Sensor;
 DROP TABLE ResponsePAZ;
 DROP TABLE ResponsePolynomial;
 DROP TABLE ResponseFAP;
+DROP TABLE ResponseFIR;
+DROP TABLE ResponseIIR;
 DROP TABLE DataloggerCalibration;
 DROP TABLE Decimation;
 DROP TABLE Datalogger;
-DROP TABLE ResponseFIR;
 DROP TABLE AuxStream;
 DROP TABLE Stream;
 DROP TABLE SensorLocation;
@@ -88,7 +89,7 @@ CREATE TABLE PublicObject (
 	  ON DELETE CASCADE
 );
 
-INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.9');
+INSERT INTO Meta(name,value) VALUES ('Schema-Version', '0.10');
 INSERT INTO Meta(name,value) VALUES ('Creation-Time', CURRENT_TIMESTAMP);
 
 INSERT INTO Object(_oid) VALUES (DEFAULT);
@@ -116,7 +117,7 @@ CREATE TABLE EventDescription (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_type)
+	CONSTRAINT eventdescription_composite_index UNIQUE(_parent_oid,m_type)
 );
 
 CREATE INDEX EventDescription__parent_oid ON EventDescription(_parent_oid);
@@ -130,6 +131,10 @@ CREATE TABLE Comment (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_text BYTEA NOT NULL,
 	m_id VARCHAR(255),
+	m_start TIMESTAMP,
+	m_start_ms INTEGER,
+	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_creationInfo_agencyID VARCHAR(64),
 	m_creationInfo_agencyURI VARCHAR(255),
 	m_creationInfo_author VARCHAR(128),
@@ -144,7 +149,7 @@ CREATE TABLE Comment (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_id)
+	CONSTRAINT comment_composite_index UNIQUE(_parent_oid,m_id)
 );
 
 CREATE INDEX Comment__parent_oid ON Comment(_parent_oid);
@@ -210,6 +215,9 @@ CREATE TABLE CompositeTime (
 	m_second_lowerUncertainty DOUBLE PRECISION,
 	m_second_upperUncertainty DOUBLE PRECISION,
 	m_second_confidenceLevel DOUBLE PRECISION,
+	m_second_pdf_variable_content BYTEA,
+	m_second_pdf_probability_content BYTEA,
+	m_second_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_second_used BOOLEAN NOT NULL DEFAULT '0',
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
@@ -231,7 +239,7 @@ CREATE TABLE PickReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_pickID)
+	CONSTRAINT pickreference_composite_index UNIQUE(_parent_oid,m_pickID)
 );
 
 CREATE INDEX PickReference__parent_oid ON PickReference(_parent_oid);
@@ -249,7 +257,7 @@ CREATE TABLE AmplitudeReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_amplitudeID)
+	CONSTRAINT amplitudereference_composite_index UNIQUE(_parent_oid,m_amplitudeID)
 );
 
 CREATE INDEX AmplitudeReference__parent_oid ON AmplitudeReference(_parent_oid);
@@ -287,7 +295,7 @@ CREATE TABLE MomentTensorComponentContribution (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_phaseCode,m_component)
+	CONSTRAINT momenttensorcomponentcontribution_composite_index UNIQUE(_parent_oid,m_phaseCode,m_component)
 );
 
 CREATE INDEX MomentTensorComponentContribution__parent_oid ON MomentTensorComponentContribution(_parent_oid);
@@ -332,7 +340,7 @@ CREATE TABLE MomentTensorPhaseSetting (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code)
+	CONSTRAINT momenttensorphasesetting_composite_index UNIQUE(_parent_oid,m_code)
 );
 
 CREATE INDEX MomentTensorPhaseSetting__parent_oid ON MomentTensorPhaseSetting(_parent_oid);
@@ -351,37 +359,58 @@ CREATE TABLE MomentTensor (
 	m_scalarMoment_lowerUncertainty DOUBLE PRECISION,
 	m_scalarMoment_upperUncertainty DOUBLE PRECISION,
 	m_scalarMoment_confidenceLevel DOUBLE PRECISION,
+	m_scalarMoment_pdf_variable_content BYTEA,
+	m_scalarMoment_pdf_probability_content BYTEA,
+	m_scalarMoment_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_scalarMoment_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mrr_value DOUBLE PRECISION,
 	m_tensor_Mrr_uncertainty DOUBLE PRECISION,
 	m_tensor_Mrr_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mrr_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mrr_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mrr_pdf_variable_content BYTEA,
+	m_tensor_Mrr_pdf_probability_content BYTEA,
+	m_tensor_Mrr_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mtt_value DOUBLE PRECISION,
 	m_tensor_Mtt_uncertainty DOUBLE PRECISION,
 	m_tensor_Mtt_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mtt_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mtt_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mtt_pdf_variable_content BYTEA,
+	m_tensor_Mtt_pdf_probability_content BYTEA,
+	m_tensor_Mtt_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mpp_value DOUBLE PRECISION,
 	m_tensor_Mpp_uncertainty DOUBLE PRECISION,
 	m_tensor_Mpp_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mpp_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mpp_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mpp_pdf_variable_content BYTEA,
+	m_tensor_Mpp_pdf_probability_content BYTEA,
+	m_tensor_Mpp_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mrt_value DOUBLE PRECISION,
 	m_tensor_Mrt_uncertainty DOUBLE PRECISION,
 	m_tensor_Mrt_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mrt_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mrt_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mrt_pdf_variable_content BYTEA,
+	m_tensor_Mrt_pdf_probability_content BYTEA,
+	m_tensor_Mrt_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mrp_value DOUBLE PRECISION,
 	m_tensor_Mrp_uncertainty DOUBLE PRECISION,
 	m_tensor_Mrp_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mrp_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mrp_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mrp_pdf_variable_content BYTEA,
+	m_tensor_Mrp_pdf_probability_content BYTEA,
+	m_tensor_Mrp_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_Mtp_value DOUBLE PRECISION,
 	m_tensor_Mtp_uncertainty DOUBLE PRECISION,
 	m_tensor_Mtp_lowerUncertainty DOUBLE PRECISION,
 	m_tensor_Mtp_upperUncertainty DOUBLE PRECISION,
 	m_tensor_Mtp_confidenceLevel DOUBLE PRECISION,
+	m_tensor_Mtp_pdf_variable_content BYTEA,
+	m_tensor_Mtp_pdf_probability_content BYTEA,
+	m_tensor_Mtp_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_tensor_used BOOLEAN NOT NULL DEFAULT '0',
 	m_variance DOUBLE PRECISION,
 	m_varianceReduction DOUBLE PRECISION,
@@ -432,32 +461,50 @@ CREATE TABLE FocalMechanism (
 	m_nodalPlanes_nodalPlane1_strike_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_strike_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_strike_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane1_strike_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane1_strike_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane1_strike_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane1_dip_value DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_dip_uncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_dip_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_dip_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_dip_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane1_dip_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane1_dip_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane1_dip_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane1_rake_value DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_rake_uncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_rake_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_rake_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane1_rake_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane1_rake_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane1_rake_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane1_rake_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane1_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane2_strike_value DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_strike_uncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_strike_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_strike_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_strike_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane2_strike_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane2_strike_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane2_strike_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane2_dip_value DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_dip_uncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_dip_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_dip_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_dip_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane2_dip_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane2_dip_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane2_dip_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane2_rake_value DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_rake_uncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_rake_lowerUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_rake_upperUncertainty DOUBLE PRECISION,
 	m_nodalPlanes_nodalPlane2_rake_confidenceLevel DOUBLE PRECISION,
+	m_nodalPlanes_nodalPlane2_rake_pdf_variable_content BYTEA,
+	m_nodalPlanes_nodalPlane2_rake_pdf_probability_content BYTEA,
+	m_nodalPlanes_nodalPlane2_rake_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_nodalPlane2_used BOOLEAN NOT NULL DEFAULT '0',
 	m_nodalPlanes_preferredPlane INT,
 	m_nodalPlanes_used BOOLEAN NOT NULL DEFAULT '0',
@@ -466,46 +513,73 @@ CREATE TABLE FocalMechanism (
 	m_principalAxes_tAxis_azimuth_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_azimuth_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_azimuth_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_tAxis_azimuth_pdf_variable_content BYTEA,
+	m_principalAxes_tAxis_azimuth_pdf_probability_content BYTEA,
+	m_principalAxes_tAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_tAxis_plunge_value DOUBLE PRECISION,
 	m_principalAxes_tAxis_plunge_uncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_plunge_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_plunge_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_plunge_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_tAxis_plunge_pdf_variable_content BYTEA,
+	m_principalAxes_tAxis_plunge_pdf_probability_content BYTEA,
+	m_principalAxes_tAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_tAxis_length_value DOUBLE PRECISION,
 	m_principalAxes_tAxis_length_uncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_length_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_length_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_tAxis_length_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_tAxis_length_pdf_variable_content BYTEA,
+	m_principalAxes_tAxis_length_pdf_probability_content BYTEA,
+	m_principalAxes_tAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_pAxis_azimuth_value DOUBLE PRECISION,
 	m_principalAxes_pAxis_azimuth_uncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_azimuth_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_azimuth_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_azimuth_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_pAxis_azimuth_pdf_variable_content BYTEA,
+	m_principalAxes_pAxis_azimuth_pdf_probability_content BYTEA,
+	m_principalAxes_pAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_pAxis_plunge_value DOUBLE PRECISION,
 	m_principalAxes_pAxis_plunge_uncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_plunge_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_plunge_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_plunge_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_pAxis_plunge_pdf_variable_content BYTEA,
+	m_principalAxes_pAxis_plunge_pdf_probability_content BYTEA,
+	m_principalAxes_pAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_pAxis_length_value DOUBLE PRECISION,
 	m_principalAxes_pAxis_length_uncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_length_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_length_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_pAxis_length_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_pAxis_length_pdf_variable_content BYTEA,
+	m_principalAxes_pAxis_length_pdf_probability_content BYTEA,
+	m_principalAxes_pAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_nAxis_azimuth_value DOUBLE PRECISION,
 	m_principalAxes_nAxis_azimuth_uncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_azimuth_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_azimuth_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_azimuth_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_nAxis_azimuth_pdf_variable_content BYTEA,
+	m_principalAxes_nAxis_azimuth_pdf_probability_content BYTEA,
+	m_principalAxes_nAxis_azimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_nAxis_plunge_value DOUBLE PRECISION,
 	m_principalAxes_nAxis_plunge_uncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_plunge_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_plunge_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_plunge_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_nAxis_plunge_pdf_variable_content BYTEA,
+	m_principalAxes_nAxis_plunge_pdf_probability_content BYTEA,
+	m_principalAxes_nAxis_plunge_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_nAxis_length_value DOUBLE PRECISION,
 	m_principalAxes_nAxis_length_uncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_length_lowerUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_length_upperUncertainty DOUBLE PRECISION,
 	m_principalAxes_nAxis_length_confidenceLevel DOUBLE PRECISION,
+	m_principalAxes_nAxis_length_pdf_variable_content BYTEA,
+	m_principalAxes_nAxis_length_pdf_probability_content BYTEA,
+	m_principalAxes_nAxis_length_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_nAxis_used BOOLEAN NOT NULL DEFAULT '0',
 	m_principalAxes_used BOOLEAN NOT NULL DEFAULT '0',
 	m_azimuthalGap DOUBLE PRECISION,
@@ -547,6 +621,9 @@ CREATE TABLE Amplitude (
 	m_amplitude_lowerUncertainty DOUBLE PRECISION,
 	m_amplitude_upperUncertainty DOUBLE PRECISION,
 	m_amplitude_confidenceLevel DOUBLE PRECISION,
+	m_amplitude_pdf_variable_content BYTEA,
+	m_amplitude_pdf_probability_content BYTEA,
+	m_amplitude_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_amplitude_used BOOLEAN NOT NULL DEFAULT '0',
 	m_timeWindow_reference TIMESTAMP,
 	m_timeWindow_reference_ms INTEGER,
@@ -558,6 +635,9 @@ CREATE TABLE Amplitude (
 	m_period_lowerUncertainty DOUBLE PRECISION,
 	m_period_upperUncertainty DOUBLE PRECISION,
 	m_period_confidenceLevel DOUBLE PRECISION,
+	m_period_pdf_variable_content BYTEA,
+	m_period_pdf_probability_content BYTEA,
+	m_period_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_period_used BOOLEAN NOT NULL DEFAULT '0',
 	m_snr DOUBLE PRECISION,
 	m_unit VARCHAR(255),
@@ -576,6 +656,9 @@ CREATE TABLE Amplitude (
 	m_scalingTime_lowerUncertainty DOUBLE PRECISION,
 	m_scalingTime_upperUncertainty DOUBLE PRECISION,
 	m_scalingTime_confidenceLevel DOUBLE PRECISION,
+	m_scalingTime_pdf_variable_content BYTEA,
+	m_scalingTime_pdf_probability_content BYTEA,
+	m_scalingTime_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_scalingTime_used BOOLEAN NOT NULL DEFAULT '0',
 	m_magnitudeHint VARCHAR(16),
 	m_evaluationMode VARCHAR(64),
@@ -614,7 +697,7 @@ CREATE TABLE StationMagnitudeContribution (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_stationMagnitudeID)
+	CONSTRAINT stationmagnitudecontribution_composite_index UNIQUE(_parent_oid,m_stationMagnitudeID)
 );
 
 CREATE INDEX StationMagnitudeContribution__parent_oid ON StationMagnitudeContribution(_parent_oid);
@@ -632,6 +715,9 @@ CREATE TABLE Magnitude (
 	m_magnitude_lowerUncertainty DOUBLE PRECISION,
 	m_magnitude_upperUncertainty DOUBLE PRECISION,
 	m_magnitude_confidenceLevel DOUBLE PRECISION,
+	m_magnitude_pdf_variable_content BYTEA,
+	m_magnitude_pdf_probability_content BYTEA,
+	m_magnitude_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_type VARCHAR(16),
 	m_originID VARCHAR(255),
 	m_methodID VARCHAR(255),
@@ -669,6 +755,9 @@ CREATE TABLE StationMagnitude (
 	m_magnitude_lowerUncertainty DOUBLE PRECISION,
 	m_magnitude_upperUncertainty DOUBLE PRECISION,
 	m_magnitude_confidenceLevel DOUBLE PRECISION,
+	m_magnitude_pdf_variable_content BYTEA,
+	m_magnitude_pdf_probability_content BYTEA,
+	m_magnitude_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_type VARCHAR(16),
 	m_amplitudeID VARCHAR(255),
 	m_methodID VARCHAR(255),
@@ -710,6 +799,9 @@ CREATE TABLE Pick (
 	m_time_lowerUncertainty DOUBLE PRECISION,
 	m_time_upperUncertainty DOUBLE PRECISION,
 	m_time_confidenceLevel DOUBLE PRECISION,
+	m_time_pdf_variable_content BYTEA,
+	m_time_pdf_probability_content BYTEA,
+	m_time_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_waveformID_networkCode VARCHAR(8) NOT NULL,
 	m_waveformID_stationCode VARCHAR(8) NOT NULL,
 	m_waveformID_locationCode VARCHAR(8),
@@ -722,12 +814,18 @@ CREATE TABLE Pick (
 	m_horizontalSlowness_lowerUncertainty DOUBLE PRECISION,
 	m_horizontalSlowness_upperUncertainty DOUBLE PRECISION,
 	m_horizontalSlowness_confidenceLevel DOUBLE PRECISION,
+	m_horizontalSlowness_pdf_variable_content BYTEA,
+	m_horizontalSlowness_pdf_probability_content BYTEA,
+	m_horizontalSlowness_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_horizontalSlowness_used BOOLEAN NOT NULL DEFAULT '0',
 	m_backazimuth_value DOUBLE PRECISION,
 	m_backazimuth_uncertainty DOUBLE PRECISION,
 	m_backazimuth_lowerUncertainty DOUBLE PRECISION,
 	m_backazimuth_upperUncertainty DOUBLE PRECISION,
 	m_backazimuth_confidenceLevel DOUBLE PRECISION,
+	m_backazimuth_pdf_variable_content BYTEA,
+	m_backazimuth_pdf_probability_content BYTEA,
+	m_backazimuth_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_backazimuth_used BOOLEAN NOT NULL DEFAULT '0',
 	m_slownessMethodID VARCHAR(255),
 	m_onset VARCHAR(64),
@@ -768,7 +866,7 @@ CREATE TABLE OriginReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_originID)
+	CONSTRAINT originreference_composite_index UNIQUE(_parent_oid,m_originID)
 );
 
 CREATE INDEX OriginReference__parent_oid ON OriginReference(_parent_oid);
@@ -786,7 +884,7 @@ CREATE TABLE FocalMechanismReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_focalMechanismID)
+	CONSTRAINT focalmechanismreference_composite_index UNIQUE(_parent_oid,m_focalMechanismID)
 );
 
 CREATE INDEX FocalMechanismReference__parent_oid ON FocalMechanismReference(_parent_oid);
@@ -861,7 +959,7 @@ CREATE TABLE Arrival (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_pickID)
+	CONSTRAINT arrival_composite_index UNIQUE(_parent_oid,m_pickID)
 );
 
 CREATE INDEX Arrival__parent_oid ON Arrival(_parent_oid);
@@ -880,21 +978,33 @@ CREATE TABLE Origin (
 	m_time_lowerUncertainty DOUBLE PRECISION,
 	m_time_upperUncertainty DOUBLE PRECISION,
 	m_time_confidenceLevel DOUBLE PRECISION,
+	m_time_pdf_variable_content BYTEA,
+	m_time_pdf_probability_content BYTEA,
+	m_time_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_latitude_value DOUBLE PRECISION NOT NULL,
 	m_latitude_uncertainty DOUBLE PRECISION,
 	m_latitude_lowerUncertainty DOUBLE PRECISION,
 	m_latitude_upperUncertainty DOUBLE PRECISION,
 	m_latitude_confidenceLevel DOUBLE PRECISION,
+	m_latitude_pdf_variable_content BYTEA,
+	m_latitude_pdf_probability_content BYTEA,
+	m_latitude_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_longitude_value DOUBLE PRECISION NOT NULL,
 	m_longitude_uncertainty DOUBLE PRECISION,
 	m_longitude_lowerUncertainty DOUBLE PRECISION,
 	m_longitude_upperUncertainty DOUBLE PRECISION,
 	m_longitude_confidenceLevel DOUBLE PRECISION,
+	m_longitude_pdf_variable_content BYTEA,
+	m_longitude_pdf_probability_content BYTEA,
+	m_longitude_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_depth_value DOUBLE PRECISION,
 	m_depth_uncertainty DOUBLE PRECISION,
 	m_depth_lowerUncertainty DOUBLE PRECISION,
 	m_depth_upperUncertainty DOUBLE PRECISION,
 	m_depth_confidenceLevel DOUBLE PRECISION,
+	m_depth_pdf_variable_content BYTEA,
+	m_depth_pdf_probability_content BYTEA,
+	m_depth_pdf_used BOOLEAN NOT NULL DEFAULT '0',
 	m_depth_used BOOLEAN NOT NULL DEFAULT '0',
 	m_depthType VARCHAR(64),
 	m_timeFixed BOOLEAN,
@@ -1002,7 +1112,7 @@ CREATE TABLE Setup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT setup_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX Setup__parent_oid ON Setup(_parent_oid);
@@ -1032,7 +1142,7 @@ CREATE TABLE ConfigStation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_networkCode,m_stationCode)
+	CONSTRAINT configstation_composite_index UNIQUE(_parent_oid,m_networkCode,m_stationCode)
 );
 
 CREATE INDEX ConfigStation__parent_oid ON ConfigStation(_parent_oid);
@@ -1080,7 +1190,7 @@ CREATE TABLE QCLog (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI)
+	CONSTRAINT qclog_composite_index UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI)
 );
 
 CREATE INDEX QCLog__parent_oid ON QCLog(_parent_oid);
@@ -1114,7 +1224,7 @@ CREATE TABLE WaveformQuality (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_type,m_parameter)
+	CONSTRAINT waveformquality_composite_index UNIQUE(_parent_oid,m_start,m_start_ms,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_type,m_parameter)
 );
 
 CREATE INDEX WaveformQuality__parent_oid ON WaveformQuality(_parent_oid);
@@ -1146,7 +1256,7 @@ CREATE TABLE Outage (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_start,m_start_ms)
+	CONSTRAINT outage_composite_index UNIQUE(_parent_oid,m_waveformID_networkCode,m_waveformID_stationCode,m_waveformID_locationCode,m_waveformID_channelCode,m_waveformID_resourceURI,m_start,m_start_ms)
 );
 
 CREATE INDEX Outage__parent_oid ON Outage(_parent_oid);
@@ -1163,7 +1273,7 @@ CREATE TABLE StationReference (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_stationID)
+	CONSTRAINT stationreference_composite_index UNIQUE(_parent_oid,m_stationID)
 );
 
 CREATE INDEX StationReference__parent_oid ON StationReference(_parent_oid);
@@ -1177,10 +1287,12 @@ CREATE TABLE StationGroup (
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_type VARCHAR(64),
-	m_code VARCHAR(10),
+	m_code VARCHAR(20),
 	m_start TIMESTAMP,
+	m_start_ms INTEGER,
 	m_end TIMESTAMP,
-	m_description VARCHAR(80),
+	m_end_ms INTEGER,
+	m_description VARCHAR(255),
 	m_latitude DOUBLE PRECISION,
 	m_longitude DOUBLE PRECISION,
 	m_elevation DOUBLE PRECISION,
@@ -1188,7 +1300,7 @@ CREATE TABLE StationGroup (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code)
+	CONSTRAINT stationgroup_composite_index UNIQUE(_parent_oid,m_code)
 );
 
 CREATE INDEX StationGroup__parent_oid ON StationGroup(_parent_oid);
@@ -1200,8 +1312,8 @@ CREATE TABLE AuxSource (
 	_oid BIGINT NOT NULL,
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	m_name VARCHAR(80) NOT NULL,
-	m_description VARCHAR(80),
+	m_name VARCHAR(255) NOT NULL,
+	m_description VARCHAR(255),
 	m_unit VARCHAR(20),
 	m_conversion VARCHAR(80),
 	m_sampleRateNumerator INT,
@@ -1212,7 +1324,7 @@ CREATE TABLE AuxSource (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT auxsource_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX AuxSource__parent_oid ON AuxSource(_parent_oid);
@@ -1224,8 +1336,8 @@ CREATE TABLE AuxDevice (
 	_oid BIGINT NOT NULL,
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	m_name VARCHAR(80) NOT NULL,
-	m_description VARCHAR(80),
+	m_name VARCHAR(255) NOT NULL,
+	m_description VARCHAR(255),
 	m_model VARCHAR(80),
 	m_manufacturer VARCHAR(50),
 	m_remark_content BYTEA,
@@ -1234,7 +1346,7 @@ CREATE TABLE AuxDevice (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT auxdevice_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX AuxDevice__parent_oid ON AuxDevice(_parent_oid);
@@ -1249,7 +1361,9 @@ CREATE TABLE SensorCalibration (
 	m_serialNumber VARCHAR(80) NOT NULL,
 	m_channel INT NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_gain DOUBLE PRECISION,
 	m_gainFrequency DOUBLE PRECISION,
 	m_remark_content BYTEA,
@@ -1258,7 +1372,7 @@ CREATE TABLE SensorCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
+	CONSTRAINT sensorcalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms)
 );
 
 CREATE INDEX SensorCalibration__parent_oid ON SensorCalibration(_parent_oid);
@@ -1270,7 +1384,7 @@ CREATE TABLE Sensor (
 	_oid BIGINT NOT NULL,
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	m_name VARCHAR(80) NOT NULL,
+	m_name VARCHAR(255) NOT NULL,
 	m_description VARCHAR(255),
 	m_model VARCHAR(80),
 	m_manufacturer VARCHAR(50),
@@ -1285,7 +1399,7 @@ CREATE TABLE Sensor (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT sensor_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX Sensor__parent_oid ON Sensor(_parent_oid);
@@ -1311,11 +1425,14 @@ CREATE TABLE ResponsePAZ (
 	m_poles_used BOOLEAN NOT NULL DEFAULT '0',
 	m_remark_content BYTEA,
 	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
 	PRIMARY KEY(_oid),
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT responsepaz_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX ResponsePAZ__parent_oid ON ResponsePAZ(_parent_oid);
@@ -1344,7 +1461,7 @@ CREATE TABLE ResponsePolynomial (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT responsepolynomial_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX ResponsePolynomial__parent_oid ON ResponsePolynomial(_parent_oid);
@@ -1368,12 +1485,71 @@ CREATE TABLE ResponseFAP (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT responsefap_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX ResponseFAP__parent_oid ON ResponseFAP(_parent_oid);
 
 CREATE TRIGGER ResponseFAP_update BEFORE UPDATE ON ResponseFAP FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
+CREATE TABLE ResponseFIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfCoefficients SMALLINT,
+	m_symmetry VARCHAR(1),
+	m_coefficients_content BYTEA,
+	m_coefficients_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	CONSTRAINT responsefir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
+
+CREATE TRIGGER ResponseFIR_update BEFORE UPDATE ON ResponseFIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
+
+
+CREATE TABLE ResponseIIR (
+	_oid BIGINT NOT NULL,
+	_parent_oid BIGINT NOT NULL,
+	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	m_name VARCHAR(255),
+	m_type VARCHAR(1),
+	m_gain DOUBLE PRECISION,
+	m_gainFrequency DOUBLE PRECISION,
+	m_decimationFactor SMALLINT,
+	m_delay DOUBLE PRECISION,
+	m_correction DOUBLE PRECISION,
+	m_numberOfNumerators SMALLINT,
+	m_numberOfDenominators SMALLINT,
+	m_numerators_content BYTEA,
+	m_numerators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_denominators_content BYTEA,
+	m_denominators_used BOOLEAN NOT NULL DEFAULT '0',
+	m_remark_content BYTEA,
+	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
+	PRIMARY KEY(_oid),
+	FOREIGN KEY(_oid)
+	  REFERENCES Object(_oid)
+	  ON DELETE CASCADE,
+	CONSTRAINT responseiir_composite_index UNIQUE(_parent_oid,m_name)
+);
+
+CREATE INDEX ResponseIIR__parent_oid ON ResponseIIR(_parent_oid);
+
+CREATE TRIGGER ResponseIIR_update BEFORE UPDATE ON ResponseIIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
 CREATE TABLE DataloggerCalibration (
@@ -1383,7 +1559,9 @@ CREATE TABLE DataloggerCalibration (
 	m_serialNumber VARCHAR(80) NOT NULL,
 	m_channel INT NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_gain DOUBLE PRECISION,
 	m_gainFrequency DOUBLE PRECISION,
 	m_remark_content BYTEA,
@@ -1392,7 +1570,7 @@ CREATE TABLE DataloggerCalibration (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start)
+	CONSTRAINT dataloggercalibration_composite_index UNIQUE(_parent_oid,m_serialNumber,m_channel,m_start,m_start_ms)
 );
 
 CREATE INDEX DataloggerCalibration__parent_oid ON DataloggerCalibration(_parent_oid);
@@ -1414,7 +1592,7 @@ CREATE TABLE Decimation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_sampleRateNumerator,m_sampleRateDenominator)
+	CONSTRAINT decimation_composite_index UNIQUE(_parent_oid,m_sampleRateNumerator,m_sampleRateDenominator)
 );
 
 CREATE INDEX Decimation__parent_oid ON Decimation(_parent_oid);
@@ -1427,7 +1605,7 @@ CREATE TABLE Datalogger (
 	_parent_oid BIGINT NOT NULL,
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_name VARCHAR(255),
-	m_description VARCHAR(80),
+	m_description VARCHAR(255),
 	m_digitizerModel VARCHAR(80),
 	m_digitizerManufacturer VARCHAR(50),
 	m_recorderModel VARCHAR(80),
@@ -1443,39 +1621,12 @@ CREATE TABLE Datalogger (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
+	CONSTRAINT datalogger_composite_index UNIQUE(_parent_oid,m_name)
 );
 
 CREATE INDEX Datalogger__parent_oid ON Datalogger(_parent_oid);
 
 CREATE TRIGGER Datalogger_update BEFORE UPDATE ON Datalogger FOR EACH ROW EXECUTE PROCEDURE update_modified();
-
-
-CREATE TABLE ResponseFIR (
-	_oid BIGINT NOT NULL,
-	_parent_oid BIGINT NOT NULL,
-	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	m_name VARCHAR(255),
-	m_gain DOUBLE PRECISION,
-	m_decimationFactor SMALLINT,
-	m_delay DOUBLE PRECISION,
-	m_correction DOUBLE PRECISION,
-	m_numberOfCoefficients SMALLINT,
-	m_symmetry VARCHAR(1),
-	m_coefficients_content BYTEA,
-	m_coefficients_used BOOLEAN NOT NULL DEFAULT '0',
-	m_remark_content BYTEA,
-	m_remark_used BOOLEAN NOT NULL DEFAULT '0',
-	PRIMARY KEY(_oid),
-	FOREIGN KEY(_oid)
-	  REFERENCES Object(_oid)
-	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name)
-);
-
-CREATE INDEX ResponseFIR__parent_oid ON ResponseFIR(_parent_oid);
-
-CREATE TRIGGER ResponseFIR_update BEFORE UPDATE ON ResponseFIR FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
 
 CREATE TABLE AuxStream (
@@ -1484,7 +1635,9 @@ CREATE TABLE AuxStream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_code VARCHAR(3) NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_device VARCHAR(255),
 	m_deviceSerialNumber VARCHAR(80),
 	m_source VARCHAR(80),
@@ -1496,7 +1649,7 @@ CREATE TABLE AuxStream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code,m_start)
+	CONSTRAINT auxstream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms)
 );
 
 CREATE INDEX AuxStream__parent_oid ON AuxStream(_parent_oid);
@@ -1510,7 +1663,9 @@ CREATE TABLE Stream (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_code VARCHAR(3) NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_datalogger VARCHAR(255),
 	m_dataloggerSerialNumber VARCHAR(80),
 	m_dataloggerChannel INT,
@@ -1534,7 +1689,7 @@ CREATE TABLE Stream (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code,m_start)
+	CONSTRAINT stream_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms)
 );
 
 CREATE INDEX Stream__parent_oid ON Stream(_parent_oid);
@@ -1548,7 +1703,9 @@ CREATE TABLE SensorLocation (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_code VARCHAR(8) NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
+	m_end_ms INTEGER,
 	m_latitude DOUBLE PRECISION,
 	m_longitude DOUBLE PRECISION,
 	m_elevation DOUBLE PRECISION,
@@ -1556,7 +1713,7 @@ CREATE TABLE SensorLocation (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code,m_start)
+	CONSTRAINT sensorlocation_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms)
 );
 
 CREATE INDEX SensorLocation__parent_oid ON SensorLocation(_parent_oid);
@@ -1570,8 +1727,10 @@ CREATE TABLE Station (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_code VARCHAR(8) NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
-	m_description VARCHAR(80),
+	m_end_ms INTEGER,
+	m_description VARCHAR(255),
 	m_latitude DOUBLE PRECISION,
 	m_longitude DOUBLE PRECISION,
 	m_elevation DOUBLE PRECISION,
@@ -1589,7 +1748,7 @@ CREATE TABLE Station (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code,m_start)
+	CONSTRAINT station_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms)
 );
 
 CREATE INDEX Station__parent_oid ON Station(_parent_oid);
@@ -1603,8 +1762,10 @@ CREATE TABLE Network (
 	_last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	m_code VARCHAR(8) NOT NULL,
 	m_start TIMESTAMP NOT NULL,
+	m_start_ms INTEGER NOT NULL,
 	m_end TIMESTAMP,
-	m_description VARCHAR(80),
+	m_end_ms INTEGER,
+	m_description VARCHAR(255),
 	m_institutions VARCHAR(100),
 	m_region VARCHAR(100),
 	m_type VARCHAR(50),
@@ -1618,7 +1779,7 @@ CREATE TABLE Network (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_code,m_start)
+	CONSTRAINT network_composite_index UNIQUE(_parent_oid,m_code,m_start,m_start_ms)
 );
 
 CREATE INDEX Network__parent_oid ON Network(_parent_oid);
@@ -1638,7 +1799,7 @@ CREATE TABLE RouteArclink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_address,m_start)
+	CONSTRAINT routearclink_composite_index UNIQUE(_parent_oid,m_address,m_start)
 );
 
 CREATE INDEX RouteArclink__parent_oid ON RouteArclink(_parent_oid);
@@ -1656,7 +1817,7 @@ CREATE TABLE RouteSeedlink (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_address)
+	CONSTRAINT routeseedlink_composite_index UNIQUE(_parent_oid,m_address)
 );
 
 CREATE INDEX RouteSeedlink__parent_oid ON RouteSeedlink(_parent_oid);
@@ -1676,7 +1837,7 @@ CREATE TABLE Route (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode)
+	CONSTRAINT route_composite_index UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode)
 );
 
 CREATE INDEX Route__parent_oid ON Route(_parent_oid);
@@ -1699,7 +1860,7 @@ CREATE TABLE Access (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode,m_user,m_start)
+	CONSTRAINT access_composite_index UNIQUE(_parent_oid,m_networkCode,m_stationCode,m_locationCode,m_streamCode,m_user,m_start)
 );
 
 CREATE INDEX Access__parent_oid ON Access(_parent_oid);
@@ -1740,7 +1901,7 @@ CREATE TABLE ArclinkUser (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_name,m_email)
+	CONSTRAINT arclinkuser_composite_index UNIQUE(_parent_oid,m_name,m_email)
 );
 
 CREATE INDEX ArclinkUser__parent_oid ON ArclinkUser(_parent_oid);
@@ -1761,7 +1922,7 @@ CREATE TABLE ArclinkStatusLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_volumeID,m_type,m_status)
+	CONSTRAINT arclinkstatusline_composite_index UNIQUE(_parent_oid,m_volumeID,m_type,m_status)
 );
 
 CREATE INDEX ArclinkStatusLine__parent_oid ON ArclinkStatusLine(_parent_oid);
@@ -1795,7 +1956,7 @@ CREATE TABLE ArclinkRequestLine (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_start,m_start_ms,m_end,m_end_ms,m_streamID_networkCode,m_streamID_stationCode,m_streamID_locationCode,m_streamID_channelCode,m_streamID_resourceURI)
+	CONSTRAINT arclinkrequestline_composite_index UNIQUE(_parent_oid,m_start,m_start_ms,m_end,m_end_ms,m_streamID_networkCode,m_streamID_stationCode,m_streamID_locationCode,m_streamID_channelCode,m_streamID_resourceURI)
 );
 
 CREATE INDEX ArclinkRequestLine__parent_oid ON ArclinkRequestLine(_parent_oid);
@@ -1827,10 +1988,16 @@ CREATE TABLE ArclinkRequest (
 	FOREIGN KEY(_oid)
 	  REFERENCES Object(_oid)
 	  ON DELETE CASCADE,
-	UNIQUE(_parent_oid,m_created,m_created_ms,m_requestID,m_userID)
+	CONSTRAINT arclinkrequest_composite_index UNIQUE(_parent_oid,m_created,m_created_ms,m_requestID,m_userID)
 );
 
 CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 
 CREATE TRIGGER ArclinkRequest_update BEFORE UPDATE ON ArclinkRequest FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
+DO $$
+BEGIN
+        IF (SELECT current_setting('server_version_num'))::int >= 90000 THEN
+                EXECUTE('ALTER DATABASE ' || current_database() || ' SET bytea_output TO escape');
+        END IF;
+END$$;

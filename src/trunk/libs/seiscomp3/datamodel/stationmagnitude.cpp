@@ -54,7 +54,7 @@ StationMagnitude::StationMagnitude() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationMagnitude::StationMagnitude(const StationMagnitude& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -64,7 +64,7 @@ StationMagnitude::StationMagnitude(const StationMagnitude& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StationMagnitude::StationMagnitude(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -262,7 +262,7 @@ void StationMagnitude::setWaveformID(const OPT(WaveformStreamID)& waveformID) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-WaveformStreamID& StationMagnitude::waveformID() throw(Seiscomp::Core::ValueException) {
+WaveformStreamID& StationMagnitude::waveformID() {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("StationMagnitude.waveformID is not set");
@@ -273,7 +273,7 @@ WaveformStreamID& StationMagnitude::waveformID() throw(Seiscomp::Core::ValueExce
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const WaveformStreamID& StationMagnitude::waveformID() const throw(Seiscomp::Core::ValueException) {
+const WaveformStreamID& StationMagnitude::waveformID() const {
 	if ( _waveformID )
 		return *_waveformID;
 	throw Seiscomp::Core::ValueException("StationMagnitude.waveformID is not set");
@@ -293,7 +293,7 @@ void StationMagnitude::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& StationMagnitude::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& StationMagnitude::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("StationMagnitude.creationInfo is not set");
@@ -304,7 +304,7 @@ CreationInfo& StationMagnitude::creationInfo() throw(Seiscomp::Core::ValueExcept
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& StationMagnitude::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& StationMagnitude::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("StationMagnitude.creationInfo is not set");
@@ -609,7 +609,7 @@ bool StationMagnitude::removeComment(const CommentIndex& i) {
 void StationMagnitude::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: StationMagnitude skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

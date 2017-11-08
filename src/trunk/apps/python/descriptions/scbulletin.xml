@@ -70,6 +70,19 @@
 					in combination with the autoloc3-flag.
 					</description>
 				</option>
+				<option flag="e" long-flag="enhanced">
+					<description>
+					Enhanced output with higher precision. Times: milliseconds,
+					distances: meter. Use for bulletins of local earthquakes.
+					</description>
+				</option>
+				<option long-flag="first-only">
+					<description>
+					Convert only the first event/origin to bulletin. Otherwise
+					all events or origins will be converted to single bulletins
+					which will be concatenated.
+					</description>
+				</option>
 			</group>
 
 			<group name="Input">

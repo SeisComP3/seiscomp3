@@ -44,10 +44,11 @@ struct SC_SYSTEM_CORE_API Category {
 	unsigned int id;
 	std::string name;
 	const Category* parent;
+	std::string dataDir;
 
 	Category(unsigned int id, std::string name = "",
-	         const Category* parent = NULL) : id(id), name(name),
-	         parent(parent) {}
+	         const Category* parent = NULL) :
+	    id(id), name(name), parent(parent) {}
 };
 
 

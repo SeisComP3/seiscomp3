@@ -51,7 +51,7 @@ CompositeTime::CompositeTime() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CompositeTime::CompositeTime(const CompositeTime& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -116,7 +116,7 @@ void CompositeTime::setYear(const OPT(IntegerQuantity)& year) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity& CompositeTime::year() throw(Seiscomp::Core::ValueException) {
+IntegerQuantity& CompositeTime::year() {
 	if ( _year )
 		return *_year;
 	throw Seiscomp::Core::ValueException("CompositeTime.year is not set");
@@ -127,7 +127,7 @@ IntegerQuantity& CompositeTime::year() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const IntegerQuantity& CompositeTime::year() const throw(Seiscomp::Core::ValueException) {
+const IntegerQuantity& CompositeTime::year() const {
 	if ( _year )
 		return *_year;
 	throw Seiscomp::Core::ValueException("CompositeTime.year is not set");
@@ -147,7 +147,7 @@ void CompositeTime::setMonth(const OPT(IntegerQuantity)& month) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity& CompositeTime::month() throw(Seiscomp::Core::ValueException) {
+IntegerQuantity& CompositeTime::month() {
 	if ( _month )
 		return *_month;
 	throw Seiscomp::Core::ValueException("CompositeTime.month is not set");
@@ -158,7 +158,7 @@ IntegerQuantity& CompositeTime::month() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const IntegerQuantity& CompositeTime::month() const throw(Seiscomp::Core::ValueException) {
+const IntegerQuantity& CompositeTime::month() const {
 	if ( _month )
 		return *_month;
 	throw Seiscomp::Core::ValueException("CompositeTime.month is not set");
@@ -178,7 +178,7 @@ void CompositeTime::setDay(const OPT(IntegerQuantity)& day) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity& CompositeTime::day() throw(Seiscomp::Core::ValueException) {
+IntegerQuantity& CompositeTime::day() {
 	if ( _day )
 		return *_day;
 	throw Seiscomp::Core::ValueException("CompositeTime.day is not set");
@@ -189,7 +189,7 @@ IntegerQuantity& CompositeTime::day() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const IntegerQuantity& CompositeTime::day() const throw(Seiscomp::Core::ValueException) {
+const IntegerQuantity& CompositeTime::day() const {
 	if ( _day )
 		return *_day;
 	throw Seiscomp::Core::ValueException("CompositeTime.day is not set");
@@ -209,7 +209,7 @@ void CompositeTime::setHour(const OPT(IntegerQuantity)& hour) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity& CompositeTime::hour() throw(Seiscomp::Core::ValueException) {
+IntegerQuantity& CompositeTime::hour() {
 	if ( _hour )
 		return *_hour;
 	throw Seiscomp::Core::ValueException("CompositeTime.hour is not set");
@@ -220,7 +220,7 @@ IntegerQuantity& CompositeTime::hour() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const IntegerQuantity& CompositeTime::hour() const throw(Seiscomp::Core::ValueException) {
+const IntegerQuantity& CompositeTime::hour() const {
 	if ( _hour )
 		return *_hour;
 	throw Seiscomp::Core::ValueException("CompositeTime.hour is not set");
@@ -240,7 +240,7 @@ void CompositeTime::setMinute(const OPT(IntegerQuantity)& minute) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity& CompositeTime::minute() throw(Seiscomp::Core::ValueException) {
+IntegerQuantity& CompositeTime::minute() {
 	if ( _minute )
 		return *_minute;
 	throw Seiscomp::Core::ValueException("CompositeTime.minute is not set");
@@ -251,7 +251,7 @@ IntegerQuantity& CompositeTime::minute() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const IntegerQuantity& CompositeTime::minute() const throw(Seiscomp::Core::ValueException) {
+const IntegerQuantity& CompositeTime::minute() const {
 	if ( _minute )
 		return *_minute;
 	throw Seiscomp::Core::ValueException("CompositeTime.minute is not set");
@@ -271,7 +271,7 @@ void CompositeTime::setSecond(const OPT(RealQuantity)& second) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& CompositeTime::second() throw(Seiscomp::Core::ValueException) {
+RealQuantity& CompositeTime::second() {
 	if ( _second )
 		return *_second;
 	throw Seiscomp::Core::ValueException("CompositeTime.second is not set");
@@ -282,7 +282,7 @@ RealQuantity& CompositeTime::second() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& CompositeTime::second() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& CompositeTime::second() const {
 	if ( _second )
 		return *_second;
 	throw Seiscomp::Core::ValueException("CompositeTime.second is not set");
@@ -415,7 +415,7 @@ void CompositeTime::accept(Visitor* visitor) {
 void CompositeTime::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: CompositeTime skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

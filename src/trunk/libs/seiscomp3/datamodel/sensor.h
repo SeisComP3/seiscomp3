@@ -128,7 +128,7 @@ class SC_SYSTEM_CORE_API Sensor : public PublicObject {
 	//  Setters/Getters
 	// ------------------------------------------------------------------
 	public:
-		//! Unique response name
+		//! Unique sensor name
 		void setName(const std::string& name);
 		const std::string& name() const;
 
@@ -154,11 +154,11 @@ class SC_SYSTEM_CORE_API Sensor : public PublicObject {
 
 		//! Lower corner frequency (optional)
 		void setLowFrequency(const OPT(double)& lowFrequency);
-		double lowFrequency() const throw(Seiscomp::Core::ValueException);
+		double lowFrequency() const;
 
 		//! Higher corner frequency (optional)
 		void setHighFrequency(const OPT(double)& highFrequency);
-		double highFrequency() const throw(Seiscomp::Core::ValueException);
+		double highFrequency() const;
 
 		//! Reference to responsePAZ/@publicID or
 		//! responsePolynomial/@publicID or responseFAP/@publicID
@@ -166,8 +166,8 @@ class SC_SYSTEM_CORE_API Sensor : public PublicObject {
 		const std::string& response() const;
 
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

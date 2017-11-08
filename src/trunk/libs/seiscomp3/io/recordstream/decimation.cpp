@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
+ *   Author: Jan Becker, gempa GmbH                                        *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -15,7 +16,6 @@
 
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/typedarray.h>
-#include <seiscomp3/core/genericrecord.h>
 #include <seiscomp3/core/strings.h>
 
 #include <string.h>
@@ -31,43 +31,30 @@ using namespace Seiscomp::RecordStream;
 
 
 REGISTER_RECORDSTREAM(Decimation, "dec");
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 namespace {
 
 
-template <typename INPUTTYPE>
-class DecimatedRecord : public GenericRecord {
-	public:
-		DecimatedRecord(std::string net, std::string sta,
-		                std::string loc, std::string cha,
-		                Core::Time stime, double fsamp)
-		: GenericRecord(net, sta, loc ,cha, stime, fsamp) {}
-
-
-		// Read is just a converter. Nothing is actually read from a stream
-		// because nothing is written to a stream
-		void read(std::istream &in) throw(Core::StreamException) {
-			if ( data()->dataType() == _datatype ) return;
-			setData(data()->copy(_datatype));
-		}
-};
-
-
-template <typename T>
 GenericRecord *createDecimatedRecord(Record *rec) {
-	return new DecimatedRecord<T>(rec->networkCode(), rec->stationCode(),
-	                              rec->locationCode(), rec->channelCode(),
-	                              rec->startTime(), rec->samplingFrequency());
+	return new GenericRecord(rec->networkCode(), rec->stationCode(),
+	                         rec->locationCode(), rec->channelCode(),
+	                         rec->startTime(), rec->samplingFrequency());
 }
 
 
-
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Decimation::Decimation()
-: _stream(stringstream::in|stringstream::out|stringstream::binary) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Decimation::Decimation() {
 	// Default target rate is 1Hz
 	_targetRate = 1;
 	_fp = 0.7;
@@ -75,26 +62,35 @@ Decimation::Decimation()
 	_coeffScale = 10;
 	_nextRecord = NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Decimation::~Decimation() {
 	close();
 	cleanup();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool Decimation::setSource(string name) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Decimation::setSource(const string &source) {
 	size_t pos;
 
 	close();
 	cleanup();
 
-	pos = name.find('/');
+	pos = source.find('/');
 	if ( pos == string::npos ) {
 		SEISCOMP_ERROR("Invalid address, expected '/'");
 		return false;
 	}
 
+	string name = source;
 	string addr = name.substr(pos+1);
 	name.erase(pos);
 
@@ -202,6 +198,9 @@ bool Decimation::setSource(string name) {
 	if ( !_source->setSource(addr) )
 		return false;
 
+	_source->setDataType(Array::DOUBLE);
+	_source->setDataHint(Record::DATA_ONLY);
+
 	_maxN = 500/_coeffScale;
 	if ( _maxN < 2 ) {
 		SEISCOMP_ERROR("Unable to compute filter stages with given cs");
@@ -210,55 +209,92 @@ bool Decimation::setSource(string name) {
 
 	return true;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::setRecordType(const char *type) {
 	if ( _source ) return _source->setRecordType(type);
 	return false;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-bool Decimation::addStream(string net, string sta,
-                           string loc, string cha) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Decimation::addStream(const string &net, const string &sta,
+                           const string &loc, const string &cha) {
 	return _source->addStream(net, sta, loc, cha);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-bool Decimation::addStream(string net, string sta,
-                           string loc, string cha,
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Decimation::addStream(const string &net, const string &sta,
+                           const string &loc, const string &cha,
                            const Seiscomp::Core::Time &stime,
                            const Seiscomp::Core::Time &etime) {
 	return _source->addStream(net, sta, loc, cha, stime, etime);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::setStartTime(const Seiscomp::Core::Time &stime) {
 	return _source->setStartTime(stime);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::setEndTime(const Seiscomp::Core::Time &etime) {
 	return _source->setEndTime(etime);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
 	return _source->setTimeWindow(w);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::setTimeout(int seconds) {
 	return _source->setTimeout(seconds);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Decimation::close() {
 	if ( _source ) {
 		SEISCOMP_DEBUG("Closing proxy source");
 		_source->close();
 	}
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Decimation::cleanup() {
 	// Clean stream stages
 	{
@@ -276,66 +312,47 @@ void Decimation::cleanup() {
 	}
 
 	_source = NULL;
-	_stream.clear(ios::eofbit);
 
 	if ( _nextRecord != NULL ) delete _nextRecord;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Record *Decimation::createRecord(Array::DataType dt, Record::Hint hint) {
-	Record *r = _nextRecord;
-	_nextRecord = NULL;
-	r->setDataType(dt);
-	r->setHint(hint);
-	return r;
-}
 
 
-void Decimation::recordStored(Record *rec) {}
-
-
-istream &Decimation::stream() {
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Record *Decimation::next() {
 	if ( !_source ) {
 		SEISCOMP_ERROR("[dec] no source defined");
-		_stream.clear(ios::eofbit);
-		return _stream;
+		return NULL;
 	}
 
 	while ( true ) {
-		std::istream &istr = _source->stream();
-		if ( istr.good() ) {
-			RecordPtr pms = _source->createRecord(Array::DOUBLE, Record::DATA_ONLY);
-			if ( pms ) {
-				try {
-					pms->read(istr);
-				}
-				catch ( Core::EndOfStreamException & ) {
-					SEISCOMP_INFO("End of stream detected");
-					_stream.clear(ios::eofbit);
-					break;
-				}
-				catch ( Core::StreamException &e ) {
-					SEISCOMP_ERROR("RecordStream read exception: %s", e.what());
-					pms = NULL;
-					continue;
-				}
+		RecordPtr rec = _source->next();
+		if ( rec ) {
+			// If new data has been pushed to stream, return
+			if ( push(rec.get()) ) {
+				GenericRecord *rec = _nextRecord;
+				_nextRecord = NULL;
 
-				_source->recordStored(pms.get());
+				if ( rec->data()->dataType() != _dataType )
+					rec->setData(rec->data()->copy(_dataType));
 
-				// If new data has been pushed to stream, return
-				if ( push(pms.get()) ) break;
+				return rec;
 			}
 		}
-		else {
-			_stream.clear(ios::eofbit);
+		else
 			break;
-		}
 	}
 
-	return _stream;
+	return NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 int Decimation::checkSR(Record *rec) const {
 	if ( rec->samplingFrequency() <= _targetRate ) {
 		SEISCOMP_DEBUG("[dec] %s: sr of %.1f <= %.1f -> pass through",
@@ -354,8 +371,12 @@ int Decimation::checkSR(Record *rec) const {
 
 	return int(N+0.5);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Decimation::initCoefficients(ResampleStage *stage) {
 	CoefficientMap::iterator it = _coefficients.find(stage->N);
 	if ( it != _coefficients.end() )
@@ -415,8 +436,12 @@ void Decimation::initCoefficients(ResampleStage *stage) {
 	stage->buffer.resize(stage->coefficients->size());
 	stage->reset();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Decimation::init(ResampleStage *stage, Record *rec) {
 	stage->N = checkSR(rec);
 	stage->passThrough = stage->N <= 0;
@@ -426,8 +451,12 @@ void Decimation::init(ResampleStage *stage, Record *rec) {
 	if ( !stage->passThrough ) initCoefficients(stage);
 	else stage->coefficients = NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Decimation::push(Record *rec) {
 	// Delete next record if still active which should never be the case
 	if ( _nextRecord != NULL ) {
@@ -467,44 +496,41 @@ bool Decimation::push(Record *rec) {
 	else
 		_nextRecord = resample(stage, rec);
 
-	if ( _nextRecord != NULL ) {
-		_stream.clear();
-		return true;
-	}
-
-	return false;
+	return _nextRecord != NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Record *Decimation::convert(Record *rec) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GenericRecord *Decimation::convert(Record *rec) {
 	if ( rec->data() == NULL ) return NULL;
 
 	GenericRecord *out;
 	switch ( rec->dataType() ) {
 		case Array::CHAR:
-			out = createDecimatedRecord<char>(rec);
-			break;
 		case Array::INT:
-			out = createDecimatedRecord<int>(rec);
-			break;
 		case Array::FLOAT:
-			out = createDecimatedRecord<float>(rec);
-			break;
 		case Array::DOUBLE:
-			out = createDecimatedRecord<double>(rec);
+			out = createDecimatedRecord(rec);
 			break;
 		default:
 			return NULL;
 	}
 
-	ArrayPtr data = rec->data()->clone();
+	ArrayPtr data = rec->data()->copy(_dataType);
 	out->setData(data.get());
 
 	return out;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-Record *Decimation::resample(ResampleStage *stage, Record *rec) {
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+GenericRecord *Decimation::resample(ResampleStage *stage, Record *rec) {
 	Core::Time endTime;
 	try {
 		endTime = rec->endTime();
@@ -619,21 +645,25 @@ Record *Decimation::resample(ResampleStage *stage, Record *rec) {
 	// Create the record and push it
 	if ( resampled_data ) {
 		GenericRecord *grec;
-		grec = new DecimatedRecord<double>(rec->networkCode(), rec->stationCode(),
-		                                   rec->locationCode(), rec->channelCode(),
-		                                   startTime, stage->targetRate);
+		grec = new GenericRecord(rec->networkCode(), rec->stationCode(),
+		                         rec->locationCode(), rec->channelCode(),
+		                         startTime, stage->targetRate);
 		grec->setData(resampled_data.get());
 
 		if ( stage->nextStage ) {
-			Record *nrec = resample(stage->nextStage, grec);
+			GenericRecord *nrec = resample(stage->nextStage, grec);
 			delete grec;
-			rec = nrec;
+			grec = nrec;
 		}
-		else
-			rec = grec;
 
-		return rec;
+		return grec;
 	}
 
 	return NULL;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

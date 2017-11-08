@@ -25,17 +25,17 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorOutage);
 
 class SC_SYSTEM_CLIENT_API QcProcessorOutage : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorOutage);
+	DECLARE_SC_CLASS(QcProcessorOutage);
 
-public:
-    QcProcessorOutage();
-    void setThreshold(int threshold);
-    bool setState(const Record* record, const DoubleArray& data);
-    double getOutage() throw (Core::ValueException);
+	public:
+		QcProcessorOutage();
+		void setThreshold(int threshold);
+		bool setState(const Record* record, const DoubleArray& data);
+		double getOutage();
 
-private:
-    int _threshold;
-    Core::Time _recent;
+	private:
+		int _threshold;
+		Core::Time _recent;
 };
 
 

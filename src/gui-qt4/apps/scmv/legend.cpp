@@ -14,8 +14,16 @@
 #include "legend.h"
 
 #include <seiscomp3/gui/core/application.h>
+#include <seiscomp3/gui/datamodel/originsymbol.h>
 
 #include "mvstationsymbol.h"
+
+
+#define HMARGIN (textHeight/2)
+#define VMARGIN (textHeight/2)
+#define SPACING (textHeight/2)
+#define VSPACING (textHeight*3/4)
+
 
 using namespace Seiscomp;
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -78,19 +86,17 @@ void Legend::customDraw(const Seiscomp::Gui::Map::Canvas *canvas, QPainter& pain
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Legend::init() {
-
 	setPriority(Gui::Map::Symbol::HIGH);
 	setVisible(true);
 
 	_legendPos.setX(10);
-	_legendPos.setY(20);
+	_legendPos.setY(10);
 
 	_mode = ApplicationStatus::GROUND_MOTION;
 
 	_stationSize = 12;
 
 	_offset = 30;
-	_headingOffset = 10;
 
 	_event.addItem("Station is disabled", StationGlyphs::DISABLED, SCScheme.colors.stations.disabled);
 	_event.addItem("Is in idle mode", SCScheme.colors.stations.idle);
@@ -257,66 +263,234 @@ void Legend::handleQcStatus(const Seiscomp::Gui::Map::Canvas* canvas, QPainter& 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Legend::Content::draw(const Seiscomp::Gui::Map::Canvas* canvas, const Legend& legend,
-                           const QString& header,
-                           QPainter& painter, const QPoint& pos) {
+void Legend::Content::draw(const Seiscomp::Gui::Map::Canvas *canvas,
+                           const Legend &legend, const QString &header,
+                           QPainter &p, const QPoint &pos) {
 	QPoint currentPos(pos);
+	int textHeight = p.fontMetrics().height();
 
 	int width = 0;
 	for ( int i = 0; i < count(); ++i )
-		width = std::max(width, painter.fontMetrics().width((*this)[i].first.first));
+		width = qMax(width, p.fontMetrics().width((*this)[i].first.first));
 
 	int stationHeight = int(1.5*legend._stationSize);
-	int rectHeight = 2*6 + stationHeight + (count()-1) * legend._offset;
+	int rectHeight = 2*VMARGIN + stationHeight + (count()-1) * legend._offset;
 
-	QPainter::RenderHints h = painter.renderHints();
-	painter.setRenderHint(QPainter::Antialiasing, false);
+	QPainter::RenderHints h = p.renderHints();
+	p.setRenderHint(QPainter::Antialiasing, false);
 
 	if ( !header.isEmpty() ) {
-		QFont f = painter.font();
-		QFont newFont(f);
-		newFont.setBold(true);
-		painter.setFont(newFont);
-		QRect bbHeader = painter.fontMetrics().boundingRect(header);
+		QFont f = p.font();
+		QFont bold(f);
+		bold.setBold(true);
+		p.setFont(bold);
+		QRect bbHeader = p.fontMetrics().boundingRect(header);
 
-		int headerHeight = bbHeader.height() + 2*6;
+		int headerHeight = bbHeader.height() + VSPACING;
 
-		width = std::max(width, bbHeader.width());
+		width = qMax(width, bbHeader.width());
 
-		painter.setPen(SCScheme.colors.legend.border);
-		painter.setBrush(SCScheme.colors.legend.background);
-		painter.drawRect(currentPos.x(), pos.y() - legend._stationSize,
-		                 width + int(0.876*2*legend._stationSize) + 3*6,
+		p.setPen(SCScheme.colors.legend.border);
+		p.setBrush(SCScheme.colors.legend.background);
+		p.drawRect(currentPos.x(), currentPos.y(),
+		                 width + int(0.876*2*legend._stationSize) + HMARGIN*2 + 6,
 		                 rectHeight + headerHeight);
 
+		currentPos.setY(currentPos.y() + VMARGIN);
 
-		painter.setPen(SCScheme.colors.legend.headerText);
-		painter.drawText(QRect(currentPos.x(), currentPos.y() - legend._stationSize,
+		p.setPen(SCScheme.colors.legend.headerText);
+		p.drawText(QRect(currentPos.x(), currentPos.y(),
 		                       width + int(0.876*2*legend._stationSize) + 3*6,
 		                       headerHeight),
-		                 Qt::AlignHCenter | Qt::AlignVCenter, header);
+		                 Qt::AlignHCenter | Qt::AlignTop, header);
 		currentPos.setY(currentPos.y() + headerHeight);
 
-		painter.setFont(f);
+		p.setFont(f);
 	}
-	else {
-		painter.setPen(SCScheme.colors.legend.border);
-		painter.setBrush(SCScheme.colors.legend.background);
-		painter.drawRect(currentPos.x(), pos.y() - legend._stationSize,
-		                 width + int(0.876*2*legend._stationSize) + 3*6,
+	else{
+		p.setPen(SCScheme.colors.legend.border);
+		p.setBrush(SCScheme.colors.legend.background);
+		p.drawRect(currentPos.x(), currentPos.y(),
+		                 width + int(0.876*2*legend._stationSize) + HMARGIN*2 + 6,
 		                 rectHeight);
+		currentPos.setY(currentPos.y() + VMARGIN);
 	}
-	// Draw stations
-	currentPos.setX(currentPos.x() + int(0.876*legend._stationSize) + 6);
-	currentPos.setY(currentPos.y() + 6);
 
-	painter.setRenderHints(h);
+	// Draw stations
+	currentPos.setX(currentPos.x() + int(0.876*legend._stationSize) + HMARGIN);
+	currentPos.setY(currentPos.y() + VSPACING);
+
+	p.setRenderHints(h);
 
 	for ( int i = 0; i < count(); ++i ) {
-		legend.drawStation(canvas, painter, currentPos, (*this)[i].second,
+		legend.drawStation(canvas, p, currentPos, (*this)[i].second,
 		                   (*this)[i].first.second, (*this)[i].first.first);
 		currentPos.setY(currentPos.y() + legend._offset);
 	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+EQSymbolLegend::EQSymbolLegend() {
+	setRelativePosition(QPoint(10,10));
+
+	Gui::Gradient::iterator it = SCScheme.colors.originSymbol.depth.gradient.begin();
+	QColor currentColor = it.value().first;
+	qreal lastValue = it.key();
+	++it;
+
+	for ( ; it != SCScheme.colors.originSymbol.depth.gradient.end(); ++it ) {
+		lastValue = it.key();
+		_depthItems.append(DepthItem(currentColor, StringWithWidth(QString("<= %1").arg(lastValue),-1)));
+		currentColor = it.value().first;
+	}
+
+	_depthItems.append(DepthItem(currentColor, StringWithWidth(QString("> %1").arg(lastValue),-1)));
+
+	for ( int i = 1; i <= 8; ++i )
+		_magItems.append(MagItem(Gui::OriginSymbol::getSize(i), StringWithWidth(QString::number(i), -1)));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EQSymbolLegend::setRelativePosition(const QPoint &pos) {
+	_position = pos;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void EQSymbolLegend::customDraw(const Seiscomp::Gui::Map::Canvas *canvas,
+                                QPainter& p) {
+	if ( !isVisible() ) return;
+
+	p.save();
+
+	QFont f(p.font());
+	QFont bold(f);
+	bold.setBold(true);
+
+	int textHeight = p.fontMetrics().height();
+
+	int width = 0;
+	int height = textHeight*3 + 3*VSPACING;
+
+	QString depthHeader = SCApp->tr("Depth in km");
+	QString magHeader = SCApp->tr("Magnitudes");
+
+	width = qMax(width, p.fontMetrics().boundingRect(depthHeader).width());
+	width = qMax(width, p.fontMetrics().boundingRect(magHeader).width());
+
+	int cnt = _depthItems.count();
+	int minDepthWidth = 0;
+	for ( int i = 0; i < cnt; ++i ) {
+		_depthItems[i].second.second = p.fontMetrics().boundingRect(_depthItems[i].second.first).width();
+		minDepthWidth += _depthItems[i].second.second + SPACING/2 + textHeight;
+	}
+
+	minDepthWidth += SPACING * (cnt-1);
+
+	width = qMax(width, minDepthWidth);
+
+	cnt = _magItems.count();
+	int minMagWidth = 0;
+	int minMagHeight = 0;
+	for ( int i = 0; i < cnt; ++i ) {
+		_magItems[i].second.second = p.fontMetrics().boundingRect(_magItems[i].second.first).width();
+		minMagWidth += _magItems[i].first + SPACING/2 + _magItems[i].second.second;
+		minMagHeight = qMax(minMagHeight, _magItems[i].first);
+	}
+
+	minMagWidth += SPACING * (cnt-1);
+
+	width = qMax(width, minMagWidth);
+	height += minMagHeight;
+
+	width += HMARGIN*2;
+	height += VMARGIN*2;
+
+	int x = pos().x();
+	int y = p.window().height()-pos().y()-height;
+
+	p.setRenderHint(QPainter::Antialiasing, false);
+
+	p.setPen(SCScheme.colors.legend.border);
+	p.setBrush(SCScheme.colors.legend.background);
+	p.drawRect(x, y, width, height);
+
+	y += VMARGIN;
+
+	p.setFont(bold);
+	p.setPen(SCScheme.colors.legend.headerText);
+	p.drawText(QRect(x, y, width, textHeight),
+	           Qt::AlignHCenter | Qt::AlignTop, depthHeader);
+
+	y += textHeight+VSPACING;
+
+	// Render depth items
+	cnt = _depthItems.count();
+
+	qreal additionalItemSpacing = 0;
+	if ( cnt > 1 )
+		additionalItemSpacing = qreal(width - HMARGIN*2 - minDepthWidth) / qreal(cnt-1);
+
+	p.setPen(SCScheme.colors.legend.text);
+	p.setFont(f);
+
+	qreal fX = x + HMARGIN;
+	for ( int i = 0; i < cnt; ++i ) {
+		p.setBrush(_depthItems[i].first);
+		p.drawRect((int)fX, y, textHeight, textHeight);
+		fX += textHeight + SPACING/2;
+
+		p.drawText(QRect((int)fX, y, _depthItems[i].second.second, textHeight),
+		           Qt::AlignLeft | Qt::AlignTop, _depthItems[i].second.first);
+		fX += _depthItems[i].second.second + SPACING + additionalItemSpacing;
+	}
+
+	y += textHeight + VSPACING;
+
+	// Render magnitude items
+
+	p.setFont(bold);
+	p.setPen(SCScheme.colors.legend.headerText);
+	p.drawText(QRect(x, y, width, textHeight),
+	           Qt::AlignHCenter | Qt::AlignTop, magHeader);
+
+	y += textHeight + VSPACING;
+
+	cnt = _magItems.count();
+
+	additionalItemSpacing = 0;
+	if ( cnt > 1 )
+		additionalItemSpacing = qreal(width - HMARGIN*2 - minMagWidth) / qreal(cnt-1);
+
+	p.setPen(QPen(SCScheme.colors.legend.text,2));
+	p.setBrush(Qt::gray);
+	p.setFont(f);
+
+	fX = x + HMARGIN;
+
+	p.setRenderHint(QPainter::Antialiasing, true);
+
+	for ( int i = 0; i < cnt; ++i ) {
+		p.drawEllipse((int)fX, y + (minMagHeight-_magItems[i].first)/2, _magItems[i].first, _magItems[i].first);
+		fX += _magItems[i].first + SPACING/2;
+
+		p.drawText(QRect((int)fX, y, _magItems[i].second.second, minMagHeight),
+		           Qt::AlignLeft | Qt::AlignVCenter, _magItems[i].second.first);
+		fX += _magItems[i].second.second + SPACING + additionalItemSpacing;
+	}
+
+	p.restore();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

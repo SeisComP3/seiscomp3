@@ -26,6 +26,12 @@ namespace IO {
 /** \brief An archive using XML streams
  */
 class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
+	public:
+		enum CompressionMethod {
+			ZIP,
+			GZIP
+		};
+
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------
@@ -77,6 +83,12 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		 */
 		void setCompression(bool enable);
 
+		/**
+		 * Sets the compression method if compression is enabled
+		 * @param method The method to be used
+		 */
+		void setCompressionMethod(CompressionMethod method);
+
 		//! Returns the used namesspace. If no namespace has been used,
 		//! an empty string will be returned
 		const std::string& rootNamespace() const;
@@ -106,6 +118,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		virtual void read(std::vector<float>& value);
 		virtual void read(std::vector<double>& value);
 		virtual void read(std::vector<std::string>& value);
+		virtual void read(std::vector<Core::Time>& value);
 
 		//! Reads a complex float
 		virtual void read(std::complex<float>& value);
@@ -142,6 +155,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 		virtual void write(std::vector<float>& value);
 		virtual void write(std::vector<double>& value);
 		virtual void write(std::vector<std::string>& value);
+		virtual void write(std::vector<Core::Time>& value);
 
 		//! Writes a complex float
 		virtual void write(std::complex<float>& value);
@@ -211,6 +225,7 @@ class SC_SYSTEM_CORE_API XMLArchive : public Seiscomp::Core::Archive {
 
 		bool _formattedOutput;
 		bool _compression;
+		CompressionMethod _compressionMethod;
 
 		std::pair<std::string, std::string> _namespace;
 };

@@ -66,12 +66,11 @@ class SC_SYSTEM_CORE_API IntegerQuantity : public Core::BaseObject {
 		IntegerQuantity(const IntegerQuantity& other);
 
 		//! Custom constructor
-		IntegerQuantity(int value);
 		IntegerQuantity(int value,
-		                const OPT(int)& uncertainty,
-		                const OPT(int)& lowerUncertainty,
-		                const OPT(int)& upperUncertainty,
-		                const OPT(double)& confidenceLevel);
+		                const OPT(int)& uncertainty = Seiscomp::Core::None,
+		                const OPT(int)& lowerUncertainty = Seiscomp::Core::None,
+		                const OPT(int)& upperUncertainty = Seiscomp::Core::None,
+		                const OPT(double)& confidenceLevel = Seiscomp::Core::None);
 
 		//! Destructor
 		~IntegerQuantity();
@@ -107,21 +106,21 @@ class SC_SYSTEM_CORE_API IntegerQuantity : public Core::BaseObject {
 		//! Uncertainty as the absolute value of symmetric deviation
 		//! from the main value.
 		void setUncertainty(const OPT(int)& uncertainty);
-		int uncertainty() const throw(Seiscomp::Core::ValueException);
+		int uncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards smaller values.
 		void setLowerUncertainty(const OPT(int)& lowerUncertainty);
-		int lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		int lowerUncertainty() const;
 
 		//! Uncertainty as the absolute value of deviation from the
 		//! main value towards larger values.
 		void setUpperUncertainty(const OPT(int)& upperUncertainty);
-		int upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		int upperUncertainty() const;
 
 		//! Confidence level of the uncertainty, given in percent.
 		void setConfidenceLevel(const OPT(double)& confidenceLevel);
-		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+		double confidenceLevel() const;
 
 
 	// ------------------------------------------------------------------

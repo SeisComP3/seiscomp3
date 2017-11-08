@@ -29,12 +29,13 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorDelay);
 
 class SC_SYSTEM_CLIENT_API QcProcessorDelay : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorDelay);
+	DECLARE_SC_CLASS(QcProcessorDelay);
 
-public:
-    QcProcessorDelay();
-    double getDelay() throw (Core::ValueException);    
-    bool setState(const Record* record, const DoubleArray& data);		
+	public:
+		QcProcessorDelay();
+
+		double getDelay();
+		bool setState(const Record* record, const DoubleArray& data);
 };
 
 

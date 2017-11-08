@@ -39,7 +39,7 @@ class SC_GUI_API TTDecorator : public Map::Decorator {
 	// X'struction
 	// ------------------------------------------------------------------
 	public:
-		TTDecorator(Map::Canvas *canvas, Map::Decorator *decorator = NULL);
+		TTDecorator(Map::Decorator *decorator = NULL);
 
 		void setPreferredMagnitudeValue(double val);
 
@@ -73,15 +73,16 @@ class SC_GUI_API TTDecorator : public Map::Decorator {
 		double computeTTTPolygon(const std::vector<double>& travelTimes,
 		                         std::vector<QPointF>& polygon);
 
-		void drawPolygon(QPainter& painter, const std::vector<QPointF>& polygon);
+		void drawPolygon(const Map::Canvas *canvas, QPainter& painter,
+		                 const std::vector<QPointF>& polygon);
 
-		void annotatePropagation(QPainter& painter, double distance, Direction direction);
+		void annotatePropagation(const Map::Canvas *canvas, QPainter& painter,
+		                         double distance, Direction direction);
 
 	// ----------------------------------------------------------------------
 	// Private data members
 	// ----------------------------------------------------------------------
 	private:
-		Map::Canvas*         _canvas;
 		std::vector<QPointF> _polygonP;
 		std::vector<QPointF> _polygonS;
 		TravelTimeTable      _ttTable;

@@ -24,7 +24,7 @@
 #include <seiscomp3/core/timewindow.h>
 #endif
 #include <seiscomp3/gui/datamodel/ui_eventlistview.h>
-#include <seiscomp3/gui/datamodel/ui_eventlistviewfilterdialog.h>
+#include <seiscomp3/gui/datamodel/ui_eventlistviewregionfilterdialog.h>
 
 namespace Seiscomp {
 
@@ -115,6 +115,8 @@ class SC_GUI_API EventListView : public QWidget {
 		QTreeWidget *eventTree() { return _treeWidget; }
 		Seiscomp::DataModel::Event *eventFromTreeItem(QTreeWidgetItem *item) const;
 
+		int eventCount() const;
+
 
 	signals:
 		void originAdded();
@@ -131,6 +133,15 @@ class SC_GUI_API EventListView : public QWidget {
 		void eventSelected(Seiscomp::DataModel::Event*);
 		void eventFMSelected(Seiscomp::DataModel::Event*);
 		void originReferenceAdded(const std::string &, Seiscomp::DataModel::OriginReference*);
+
+		//! Emitted when the event list is cleared
+		void reset();
+		void eventAddedToList(Seiscomp::DataModel::Event*, bool fromNotification);
+		void eventUpdatedInList(Seiscomp::DataModel::Event*);
+		void eventRemovedFromList(Seiscomp::DataModel::Event*);
+		//! Emitted when a bigger update process has finished, such as show/hide
+		//! of a subset of events.
+		void eventsUpdated();
 
 
 	public slots:
@@ -184,6 +195,7 @@ class SC_GUI_API EventListView : public QWidget {
 		void regionSelectionChanged(int index);
 		void changeRegion();
 
+		void itemEntered(QTreeWidgetItem *item, int);
 		void itemExpanded(QTreeWidgetItem * item);
 		void currentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
 		void indicatorResized(const QSize &size);
@@ -205,7 +217,7 @@ class SC_GUI_API EventListView : public QWidget {
 	private:
 		void initTree();
 
-		Private::EventTreeItem* addEvent(Seiscomp::DataModel::Event*);
+		Private::EventTreeItem* addEvent(Seiscomp::DataModel::Event*, bool fromNotification);
 		Private::OriginTreeItem* addOrigin(Seiscomp::DataModel::Origin*, QTreeWidgetItem* parent, bool highPriority);
 		Private::FocalMechanismTreeItem* addFocalMechanism(Seiscomp::DataModel::FocalMechanism*, QTreeWidgetItem* parent);
 
@@ -215,7 +227,7 @@ class SC_GUI_API EventListView : public QWidget {
 
 		void removeExpiredEvents();
 		void updateHideState();
-		void updateHideState(QTreeWidgetItem *item);
+		bool updateHideState(QTreeWidgetItem *item);
 
 		void updateOriginProcessColumns(QTreeWidgetItem *item, bool highPriority);
 		void updateEventProcessColumns(QTreeWidgetItem *item, bool highPriority);
@@ -277,6 +289,7 @@ class SC_GUI_API EventListView : public QWidget {
 		//StationMap                        _associatedStations;
 		Seiscomp::DataModel::DatabaseQuery *_reader;
 		Seiscomp::Core::TimeSpan            _timeAgo;
+		Filter                              _filter;
 		bool                                _autoSelect;
 		bool                                _withOrigins;
 		bool                                _withFocalMechanisms;
@@ -293,15 +306,15 @@ class SC_GUI_API EventListView : public QWidget {
 };
 
 
-class SC_GUI_API EventListViewFilterDialog : public QDialog {
+class SC_GUI_API EventListViewRegionFilterDialog : public QDialog {
 	Q_OBJECT
 
 	// ------------------------------------------------------------------
 	//  X'truction
 	// ------------------------------------------------------------------
 	public:
-		EventListViewFilterDialog(QWidget *parent, EventListView::Region *target,
-		                          EventListView::FilterRegions *regionList);
+		EventListViewRegionFilterDialog(QWidget *parent, EventListView::Region *target,
+		                                EventListView::FilterRegions *regionList);
 
 
 	// ------------------------------------------------------------------
@@ -323,11 +336,10 @@ class SC_GUI_API EventListViewFilterDialog : public QDialog {
 	//  Private members
 	// ------------------------------------------------------------------
 	private:
-		::Ui::EventListViewFilterDialog  _ui;
-		EventListView::Region           *_target;
-		EventListView::FilterRegions    *_regionList;
+		::Ui::EventListViewRegionFilterDialog  _ui;
+		EventListView::Region                 *_target;
+		EventListView::FilterRegions          *_regionList;
 };
-
 
 
 }

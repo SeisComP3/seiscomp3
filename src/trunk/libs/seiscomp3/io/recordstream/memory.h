@@ -28,28 +28,49 @@ DEFINE_SMARTPOINTER(Memory);
 
 class SC_SYSTEM_CORE_API Memory:  public Seiscomp::IO::RecordStream {
 	DECLARE_SC_CLASS(Memory);
-		
+
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	public:
 		Memory();
 		Memory(const char *data, int size);
 		Memory(const Memory &mem);
 		virtual ~Memory();
 
+
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
 	public:
-		Memory& operator=(const Memory &mem);
-		bool setSource(std::string);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-		               const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-		bool setStartTime(const Seiscomp::Core::Time &stime);
-		bool setEndTime(const Seiscomp::Core::Time &etime);
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
-		bool setTimeout(int seconds);
-		std::istream& stream();
-		void close();
-		
+		Memory &operator=(const Memory &mem);
+
+		virtual bool setSource(const std::string &);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
+
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Seiscomp::Core::Time &startTime,
+		                       const Seiscomp::Core::Time &endTime);
+
+		virtual bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setEndTime(const Seiscomp::Core::Time &etime);
+
+		virtual void close();
+
+		virtual bool setRecordType(const char *type);
+
+		Record *next();
+
+
 	private:
-		std::istringstream _stream;
+		RecordFactory      *_factory;
+		std::istringstream  _stream;
 };
 
 }

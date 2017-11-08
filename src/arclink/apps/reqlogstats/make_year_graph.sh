@@ -11,6 +11,10 @@
 #         PNG plot - break-out by source.
 #         text total  
 #
+# Copyright (C) 2017 Helmholtz-Zentrum Potsdam - Deutsches GeoForschungsZentrum GFZ
+#
+# This software is free software and comes with ABSOLUTELY NO WARRANTY.
+#
 # ----------------------------------------------------------------------
 set -u
 
@@ -21,16 +25,16 @@ today=`date +%F`
 start_year=`date +%Y`
 start_month=`date +%m`
 img_dir='/srv/www/webdc/eida/data'
-db_dir='/home/sysop/reqlogstats/var'
+db_dir="${HOME}/reqlogstats/var"
 
 if [ ! -d ${img_dir} ] ; then
-    echo "${progname}: Images directory ${img_dir} does not exist. Bye."
-    exit 1
+    echo "${progname}: Images directory ${img_dir} does not exist. Using local var."
+    img_dir=var
 fi
 
 if [ ! -d ${db_dir} ] ; then
-    echo "${progname}: SQLite DB directory ${db_dir} does not exist. Bye."
-    exit 1
+    echo "${progname}: SQLite DB directory ${db_dir} does not exist. Using local var."
+    db_dir=var
 fi
 
 show_usage() {
@@ -70,8 +74,8 @@ else
     dbfile="${db_dir}/reqlogstats-${start_year}.db"
 fi
 echo "Looking in ${dbfile} for ${start_year} month ${start_month}" 
-if [ ! -s ${dbfile} ] ; then
-    echo "Error: ${dbfile} not found. Bye"
+if [ ! -s "${dbfile}" ] ; then
+    echo "Error: ${dbfile} not found or is empty. Bye"
     exit 1
 fi
 
@@ -100,29 +104,9 @@ tail -5 days3.dat
 start_month_name=$(date +%B -d "$start_year-$start_month-01")
 
 xtic_density=14
-gnuplot <<EOF
-set xdata time
-set timefmt "%Y-%m-%d"
-set xlabel 'Day in $start_year'
-set xrange ['$start_year-01-01':]
-set xtics ${xtic_density}*24*3600
-set xtics format "%j"
-set ylabel 'total_size, MiB'
-set logscale y
-
-set key top left
-set grid x
-set style data linespoints
-
-set terminal svg font "arial,14" size 960,480   # even "giant" is not enough font.
-set output 'out.svg'
-
-plot 'days3.dat' using 1:2 title 'All EIDA nodes'
-
-#set terminal dumb
-#set output
-#replot
-EOF
+sed -e "s/\#year\#/${start_year}/g" \
+    -e "s/\#xtic_density\#/${xtic_density}/g" \
+    total.gnu | gnuplot
 
 if [ -z "${code}" ] ; then
     out_dir="${img_dir}"
@@ -146,50 +130,8 @@ fi
 
 # ----------------------------------------------------------------------
 
-gnuplot <<EOF
-set xlabel 'Day in $start_year'
-set xrange [0:366]
-set xtics out nomirror
-set xtics 0,7,366 format ""
-set mxtics 7
-set xtics add ("Jan" 1, "Feb" 32, "Mar" 60, "Apr" 91, "May" 121, "Jun" 152, "Jul" 182, "Aug" 213, "Sep" 244, "Oct" 274, "Nov" 305, "Dec" 335)
-
-set ylabel 'total_size, MiB'
-set yrange [0:]
-
-set key top left
-set nogrid
-
-set style data histograms
-set style histogram rowstacked
-set boxwidth 0.7 relative
-set style fill solid 1.0 border 0
-
-set terminal svg font "arial,14" size 960,480
-set output 'out.svg'
-
-# Default for ls 6 is dark blue, too close to pure blue for GFZ:
-set style line 3 linecolor rgb "#00589C"
-set style line 5 linecolor rgb "skyblue"
-set style line 6 linecolor rgb "violet"
-set style line 10 linecolor rgb "magenta"
-
-plot '<cut -c9- days3.dat' using 3 title 'BGR' ls 2, \
-     '' using  4 title 'ETHZ' ls 1, \
-     '' using  5 title 'GFZ' ls 3, \
-     '' using  6 title 'INGV' ls 4, \
-     '' using  7 title 'IPGP' ls 6, \
-     '' using  8 title 'KOERI' ls 1, \
-     '' using  9 title 'LMU' ls 7, \
-     '' using 10 title 'NIEP' ls 10, \
-     '' using 11 title 'NOA' ls 5, \
-     '' using 12 title 'ODC' ls 9, \
-     '' using 13 title 'RESIF' ls 8
-
-#set terminal dumb
-#set output
-#replot
-EOF
+sed -e "s/\#year\#/$start_year/" \
+    sources_year.gnu | gnuplot
 
 if [ -z "${code}" ] ; then
     out_dir="${img_dir}"

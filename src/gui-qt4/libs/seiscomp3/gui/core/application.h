@@ -81,6 +81,16 @@ namespace Gui {
 class ConnectionDialog;
 
 
+struct MessageGroups {
+	std::string pick;
+	std::string amplitude;
+	std::string magnitude;
+	std::string location;
+	std::string focalMechanism;
+	std::string event;
+};
+
+
 class SC_GUI_API Application : public QApplication,
                                public Client::Application {
 	Q_OBJECT
@@ -128,7 +138,7 @@ class SC_GUI_API Application : public QApplication,
 
 	public:
 		//! Returns the pointer to the application's instance.
-		static Application* Instance();
+		static Application *Instance();
 
 		//! Checks if the installed Qt version is at least the
 		//! one passed in 'ver'
@@ -140,7 +150,7 @@ class SC_GUI_API Application : public QApplication,
 
 		void setDatabaseSOHInterval(int secs);
 
-		Scheme& scheme();
+		Scheme &scheme();
 
 		QSettings &settings();
 		const QSettings &settings() const;
@@ -148,7 +158,10 @@ class SC_GUI_API Application : public QApplication,
 		bool startFullScreen() const;
 		bool nonInteractive() const;
 
+		bool isReadOnlyMessaging() const { return _readOnlyMessaging; }
+
 		const MapsDesc &mapsDesc() const;
+		const MessageGroups &messageGroups() const;
 
 		Core::TimeSpan maxEventAge() const;
 
@@ -160,7 +173,7 @@ class SC_GUI_API Application : public QApplication,
 
 		void setFilterCommandsEnabled(bool);
 
-		const std::string& commandTarget() const;
+		const std::string &commandTarget() const;
 
 		void sendCommand(Command command, const std::string& parameter);
 		void sendCommand(Command command, const std::string& parameter, Core::BaseObject*);
@@ -182,21 +195,25 @@ class SC_GUI_API Application : public QApplication,
 		void emitNotifier(Seiscomp::DataModel::Notifier* n);
 
 	protected:
-		bool init();
-		bool run();
-		void done();
+		virtual bool init();
+		virtual bool run();
+		virtual void done();
 
-		void exit(int returnCode);
+		virtual void exit(int returnCode);
 
-		void createCommandLineDescription();
+		virtual void createCommandLineDescription();
 
-		bool initConfiguration();
-		bool initSubscriptions();
+		virtual bool initLicense();
+		virtual bool initConfiguration();
+		virtual bool initSubscriptions();
 
-		bool validateParameters();
+		virtual void schemaValidationNames(std::vector<std::string> &modules,
+		                                   std::vector<std::string> &plugins) const;
 
-		bool handleInitializationError(Stage);
-		void handleInterrupt(int) throw();
+		virtual bool validateParameters();
+
+		virtual bool handleInitializationError(Stage);
+		virtual void handleInterrupt(int) throw();
 
 		virtual QString splashImagePath() const;
 
@@ -263,8 +280,10 @@ class SC_GUI_API Application : public QApplication,
 
 		bool                _startFullScreen;
 		bool                _nonInteractive;
+		bool                _readOnlyMessaging;
 		Core::TimeSpan      _eventTimeAgo;
 		MapsDesc            _mapsDesc;
+		MessageGroups       _messageGroups;
 		std::string         _guiGroup;
 		std::string         _commandTargetClient;
 

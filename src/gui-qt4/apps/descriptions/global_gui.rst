@@ -142,15 +142,21 @@ subcategories.
 E.g. the directory tree :file:`bna/coastline/europe/germany` will generate
 the categories coastline, coastline.europe and coastline.europe.germany which
 all may be configured individually. Every undefined property is inherited from
-the parent category. Due to its recursive structure the configuration options
-have not been added to the description xml file.
+the parent category.
 
-The general configuration parameter format is *prefix.category.param*.
-If global layer properties are configured then just *prefix.param*.
+Each data set directory and subdirectory is scanned for an optional
+:file:`map.cfg` configuration file defining default drawing options. Available
+configuration parameters are described further below. This allows easy
+distribution of data sets and drawing properties without the need to change
+application configuration files.
 
-The prefix for layer configuration is *map.layers*.
+The default drawing options may be overridden in the global or application
+configuration file using the format *prefix.category.param*. If global layer
+properties are configured then just *prefix.param*. The prefix for layer
+configuration is *map.layers*. Due to its recursive structure the configuration
+options are not available through scconfig.
 
-Available configuration options per category are:
+Available configuration parameters are:
 
 .. confval:: visible
 

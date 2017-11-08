@@ -133,6 +133,12 @@
 					<description>List of disabled event types</description>
 				</parameter>
 			</group>
+			<parameter name="eventFormats" type="list:string">
+				<description>
+				List of enabled event formats. If unspecified all supported
+				formats are enabled.
+				</description>
+			</parameter>
 			<parameter name="serveDataSelect" type="boolean" default="true">
 				<description>
 				Enables/disables the DataSelect service.
@@ -191,6 +197,11 @@
 				<parameter name="gnupgHome" type="string" default="@ROOTDIR@/var/lib/gpg">
 					<description>
 					GnuPG home directory.
+					</description>
+				</parameter>
+				<parameter name="blacklist" type="list:string">
+					<description>
+					List of revoked token IDs.
 					</description>
 				</parameter>
 			</group>

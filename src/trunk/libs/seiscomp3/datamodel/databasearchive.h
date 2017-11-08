@@ -93,7 +93,7 @@ class SC_SYSTEM_CORE_API DatabaseIterator : public Seiscomp::Core::BaseObject {
 		//! Returns the number of elements read
 		size_t count() const;
 
-		Core::Time lastModified() const throw(Core::ValueException) {
+		Core::Time lastModified() const {
 			if ( _lastModified ) return *_lastModified;
 			throw Core::ValueException("DatabaseIterator.lastModified is not set");
 		}
@@ -189,7 +189,7 @@ class SC_SYSTEM_CORE_API DatabaseObjectWriter : protected Visitor {
  * \brief schema objects from and to a database.
  */
 class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
-                                              public Observer {
+                                           public Observer {
 	// ----------------------------------------------------------------------
 	//  Xstruction
 	// ----------------------------------------------------------------------
@@ -212,6 +212,10 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		using Seiscomp::Core::Archive::version;
 		using Seiscomp::Core::Archive::versionMajor;
 		using Seiscomp::Core::Archive::versionMinor;
+		using Seiscomp::Core::Archive::isVersion;
+		using Seiscomp::Core::Archive::isLowerVersion;
+		using Seiscomp::Core::Archive::isHigherVersion;
+		using Seiscomp::Core::Archive::supportsVersion;
 
 
 		//! Implements derived  method
@@ -256,10 +260,16 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		 *                 an iterator for all objects with type 'classType'
 		 *                 is returned.
 		 * @param classType The type of the objects to iterate over.
+		 * @param ignorePublicObject If true then the PublicObject table will
+		 *                           not be joined. That might be important if
+		 *                           during a schema evolution an objects turned
+		 *                           into a PublicObject but an old version
+		 *                           should be read.
 		 * @return The database iterator
 		 */
 		DatabaseIterator getObjects(const std::string& parentID,
-		                            const Seiscomp::Core::RTTI& classType);
+		                            const Seiscomp::Core::RTTI& classType,
+		                            bool ignorePublicObject = false);
 
 		/**
 		 * Returns an iterator over all objects of a given type for a parent
@@ -267,10 +277,16 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		 * @param parent The parent object. When NULL, an iterator for all
 		 *               objects with type 'classType' is returned.
 		 * @param classType The type of the objects to iterate over.
+		 * @param ignorePublicObject If true then the PublicObject table will
+		 *                           not be joined. That might be important if
+		 *                           during a schema evolution an objects turned
+		 *                           into a PublicObject but an old version
+		 *                           should be read.
 		 * @return The database iterator
 		 */
 		DatabaseIterator getObjects(const PublicObject* parent,
-		                            const Seiscomp::Core::RTTI& classType);
+		                            const Seiscomp::Core::RTTI& classType,
+		                            bool ignorePublicObject = false);
 
 		/**
 		 * Returns the number of objects of a given type.
@@ -392,6 +408,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		virtual void read(std::vector<float>& value);
 		virtual void read(std::vector<double>& value);
 		virtual void read(std::vector<std::string>& value);
+		virtual void read(std::vector<Core::Time>& value);
 
 		//! Reads a vector of complex doubles
 		virtual void read(std::vector<std::complex<double> >& value);
@@ -427,6 +444,7 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 		virtual void write(std::vector<float>& value);
 		virtual void write(std::vector<double>& value);
 		virtual void write(std::vector<std::string>& value);
+		virtual void write(std::vector<Core::Time>& value);
 
 		//! Writes a vector of complex doubles
 		virtual void write(std::vector<std::complex<double> >& value);
@@ -549,7 +567,8 @@ class SC_SYSTEM_CORE_API DatabaseArchive : protected Seiscomp::Core::Archive,
 
 		//! Returns an iterator for objects of a given type.
 		DatabaseIterator getObjectIterator(unsigned long parentID,
-		                                   const Seiscomp::Core::RTTI& classType);
+		                                   const Seiscomp::Core::RTTI& classType,
+		                                   bool ignorePublicObject = false);
 
 		//! Queries for the database id of a PublicObject for
 		//! a given publicID

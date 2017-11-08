@@ -21,20 +21,20 @@ namespace Processing {
 IMPLEMENT_SC_CLASS_DERIVED(QcProcessorMean, QcProcessor, "QcProcessorMean");
 
 
-QcProcessorMean::QcProcessorMean() 
-    : QcProcessor() {}
+QcProcessorMean::QcProcessorMean() : QcProcessor() {}
 
 bool QcProcessorMean::setState(const Record *record, const DoubleArray &data) {
-    _qcp->parameter = data.mean();
-    return true;
+	_qcp->parameter = data.mean();
+	return true;
 }
 
-double QcProcessorMean::getMean() throw (Core::ValueException) {
-    try {
-        return boost::any_cast<double>(_qcp->parameter);
-    } catch (const boost::bad_any_cast &) {
-        throw Core::ValueException("no data");
-    }
+double QcProcessorMean::getMean() {
+	try {
+		return boost::any_cast<double>(_qcp->parameter);
+	}
+	catch (const boost::bad_any_cast &) {
+		throw Core::ValueException("no data");
+	}
 }
 
 

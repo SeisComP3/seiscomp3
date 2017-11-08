@@ -56,7 +56,7 @@ OriginQuality::OriginQuality() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 OriginQuality::OriginQuality(const OriginQuality& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -133,7 +133,7 @@ void OriginQuality::setAssociatedPhaseCount(const OPT(int)& associatedPhaseCount
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginQuality::associatedPhaseCount() const throw(Seiscomp::Core::ValueException) {
+int OriginQuality::associatedPhaseCount() const {
 	if ( _associatedPhaseCount )
 		return *_associatedPhaseCount;
 	throw Seiscomp::Core::ValueException("OriginQuality.associatedPhaseCount is not set");
@@ -153,7 +153,7 @@ void OriginQuality::setUsedPhaseCount(const OPT(int)& usedPhaseCount) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginQuality::usedPhaseCount() const throw(Seiscomp::Core::ValueException) {
+int OriginQuality::usedPhaseCount() const {
 	if ( _usedPhaseCount )
 		return *_usedPhaseCount;
 	throw Seiscomp::Core::ValueException("OriginQuality.usedPhaseCount is not set");
@@ -173,7 +173,7 @@ void OriginQuality::setAssociatedStationCount(const OPT(int)& associatedStationC
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginQuality::associatedStationCount() const throw(Seiscomp::Core::ValueException) {
+int OriginQuality::associatedStationCount() const {
 	if ( _associatedStationCount )
 		return *_associatedStationCount;
 	throw Seiscomp::Core::ValueException("OriginQuality.associatedStationCount is not set");
@@ -193,7 +193,7 @@ void OriginQuality::setUsedStationCount(const OPT(int)& usedStationCount) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginQuality::usedStationCount() const throw(Seiscomp::Core::ValueException) {
+int OriginQuality::usedStationCount() const {
 	if ( _usedStationCount )
 		return *_usedStationCount;
 	throw Seiscomp::Core::ValueException("OriginQuality.usedStationCount is not set");
@@ -213,7 +213,7 @@ void OriginQuality::setDepthPhaseCount(const OPT(int)& depthPhaseCount) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int OriginQuality::depthPhaseCount() const throw(Seiscomp::Core::ValueException) {
+int OriginQuality::depthPhaseCount() const {
 	if ( _depthPhaseCount )
 		return *_depthPhaseCount;
 	throw Seiscomp::Core::ValueException("OriginQuality.depthPhaseCount is not set");
@@ -233,7 +233,7 @@ void OriginQuality::setStandardError(const OPT(double)& standardError) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::standardError() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::standardError() const {
 	if ( _standardError )
 		return *_standardError;
 	throw Seiscomp::Core::ValueException("OriginQuality.standardError is not set");
@@ -253,7 +253,7 @@ void OriginQuality::setAzimuthalGap(const OPT(double)& azimuthalGap) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::azimuthalGap() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::azimuthalGap() const {
 	if ( _azimuthalGap )
 		return *_azimuthalGap;
 	throw Seiscomp::Core::ValueException("OriginQuality.azimuthalGap is not set");
@@ -273,7 +273,7 @@ void OriginQuality::setSecondaryAzimuthalGap(const OPT(double)& secondaryAzimuth
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::secondaryAzimuthalGap() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::secondaryAzimuthalGap() const {
 	if ( _secondaryAzimuthalGap )
 		return *_secondaryAzimuthalGap;
 	throw Seiscomp::Core::ValueException("OriginQuality.secondaryAzimuthalGap is not set");
@@ -311,7 +311,7 @@ void OriginQuality::setMaximumDistance(const OPT(double)& maximumDistance) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::maximumDistance() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::maximumDistance() const {
 	if ( _maximumDistance )
 		return *_maximumDistance;
 	throw Seiscomp::Core::ValueException("OriginQuality.maximumDistance is not set");
@@ -331,7 +331,7 @@ void OriginQuality::setMinimumDistance(const OPT(double)& minimumDistance) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::minimumDistance() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::minimumDistance() const {
 	if ( _minimumDistance )
 		return *_minimumDistance;
 	throw Seiscomp::Core::ValueException("OriginQuality.minimumDistance is not set");
@@ -351,7 +351,7 @@ void OriginQuality::setMedianDistance(const OPT(double)& medianDistance) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double OriginQuality::medianDistance() const throw(Seiscomp::Core::ValueException) {
+double OriginQuality::medianDistance() const {
 	if ( _medianDistance )
 		return *_medianDistance;
 	throw Seiscomp::Core::ValueException("OriginQuality.medianDistance is not set");
@@ -386,7 +386,7 @@ OriginQuality& OriginQuality::operator=(const OriginQuality& other) {
 void OriginQuality::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: OriginQuality skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

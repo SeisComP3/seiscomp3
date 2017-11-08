@@ -731,7 +731,11 @@ void RecordWidget::init() {
 	_tmax = 0;
 	_smin = _smax = 0;
 	_active = false;
-	_gridSpacing[0] = _gridSpacing[1] = 0;
+	_gridHSpacing[0] = _gridHSpacing[1] = 0;
+	_gridVSpacing[0] = _gridVSpacing[1] = 0;
+	_gridHOffset = _gridVOffset = 0;
+	_gridVRange[0] = _gridVRange[1] = 0;
+	_gridVScale = 0;
 
 	_tracePaintOffset = 0;
 	_scrollBar = NULL;
@@ -1661,6 +1665,7 @@ void RecordWidget::setAmplAutoScaleEnabled(bool enabled) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordWidget::showTimeRange(double t1, double t2) {
+	if ( t1 >= t2 ) t2 = t1 + 1;
 	setTimeRange(t1, t2);
 	setScale(width()/(t2-t1));
 }
@@ -2080,7 +2085,7 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QRect rect = event->rect();
 	QColor fg;
-	QColor bg = palette().color(backgroundRole());
+	QColor bg = SCScheme.colors.records.background;
 	QColor alignColor;
 
 	/*
@@ -2421,20 +2426,38 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 
 	QColor gridColor[2] = {QColor(192,192,255), QColor(224,225,255)};
 
-	if ( _gridSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_pixelPerSecond) && !Math::isNaN(_tmin) ) {
-		double left = _tmin + _gridOffset;
+	if ( _gridHSpacing[0] > 0 && !(_pixelPerSecond <= 0) && !Math::isNaN(_pixelPerSecond) && !Math::isNaN(_tmin) ) {
+		double left = _tmin + _gridHOffset;
 
 		//for ( int k = 1; k >= 0; --k ) {
 		for ( int k = 0; k < 1; ++k ) {
 			painter.setPen(gridColor[k]);
 
-			double correctedLeft = left - fmod(left, (double)_gridSpacing[k]);
+			double correctedLeft = left - fmod(left, (double)_gridHSpacing[k]);
 
 			int x = (int)((correctedLeft-left)*_pixelPerSecond);
 			while ( x < width() ) {
 				painter.drawLine(x,0,x,h);
-				correctedLeft += _gridSpacing[k];
+				correctedLeft += _gridHSpacing[k];
 				x = (int)((correctedLeft-left)*_pixelPerSecond);
+			}
+		}
+	}
+
+	if ( (_gridVSpacing[0] > 0) && (h > 0) && (_gridVScale > 0) ) {
+		double bottom = _gridVRange[0] + _gridVOffset;
+
+		//for ( int k = 1; k >= 0; --k ) {
+		for ( int k = 0; k < 1; ++k ) {
+			painter.setPen(gridColor[k]);
+
+			double correctedBottom = bottom - fmod(bottom, (double)_gridVSpacing[k]);
+
+			int y = h-1-(int)((correctedBottom-bottom)*_gridVScale);
+			while ( y >= 0 ) {
+				painter.drawLine(0,y,w,y);
+				correctedBottom += _gridVSpacing[k];
+				y = h-1-(int)((correctedBottom-bottom)*_gridVScale);
 			}
 		}
 	}
@@ -2806,19 +2829,6 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 						}
 					}
 
-					if ( !stream->id.isEmpty() && _drawRecordID ) {
-						painter.setPen(fg);
-						font.setBold(true);
-						painter.setFont(font);
-						QRect br = painter.fontMetrics().boundingRect(stream->id);
-						br.adjust(0,0,4,4);
-						//br.moveCenter(QPoint(br.center().x(), streamHeight/2+streamYOffset));
-						br.moveTopLeft(QPoint(0,0));
-						painter.fillRect(br, bg);
-						painter.drawRect(br);
-						painter.drawText(br, Qt::AlignCenter, stream->id);
-					}
-
 					/*
 					// Draw timing quality
 					if ( stream->traces[Stream::Raw].timingQuality > 0 ) {
@@ -2826,6 +2836,19 @@ void RecordWidget::paintEvent(QPaintEvent *event) {
 						painter.drawText(0,0, w,streamHeight, Qt::TextSingleLine | Qt::AlignRight | Qt::AlignTop, str);
 					}
 					*/
+				}
+
+				if ( !stream->id.isEmpty() && _drawRecordID ) {
+					painter.setPen(fg);
+					font.setBold(true);
+					painter.setFont(font);
+					QRect br = painter.fontMetrics().boundingRect(stream->id);
+					br.adjust(0,0,4,4);
+					//br.moveCenter(QPoint(br.center().x(), streamHeight/2+streamYOffset));
+					br.moveTopLeft(QPoint(0,0));
+					painter.fillRect(br, bg);
+					painter.drawRect(br);
+					painter.drawText(br, Qt::AlignCenter, stream->id);
 				}
 			}
 			break;
@@ -3315,9 +3338,39 @@ bool RecordWidget::isRecordFilteringEnabled(int slot) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void RecordWidget::setGridSpacing(double large, double _small, double ofs) {
-	_gridSpacing[0] = large;
-	_gridSpacing[1] = _small;
-	_gridOffset = ofs;
+	_gridHSpacing[0] = large;
+	_gridHSpacing[1] = _small;
+	_gridHOffset = ofs;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordWidget::setGridVSpacing(double large, double _small, double ofs) {
+	_gridVSpacing[0] = large;
+	_gridVSpacing[1] = _small;
+	_gridVOffset = ofs;
+	update();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordWidget::setGridVRange(double min, double max) {
+	_gridVRange[0] = min; _gridVRange[1] = max;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void RecordWidget::setGridVScale(double scale) {
+	_gridVScale = scale;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -3572,13 +3625,13 @@ QPair<float,float> RecordWidget::amplitudeDataRange(int slot) const {
 	if ( slot >= _streams.size() || slot < 0 ) return QPair<float,float>(0,0);
 	if ( _showScaledValues )
 		return QPair<float,float>(
-			_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].amplMin * _streams[slot]->scale,
-			_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].amplMax * _streams[slot]->scale
+			_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].amplMin * _streams[slot]->scale,
+			_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].amplMax * _streams[slot]->scale
 		);
 	else
 		return QPair<float,float>(
-			_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].amplMin,
-			_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].amplMax
+			_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].amplMin,
+			_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].amplMax
 		);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -3590,8 +3643,8 @@ QPair<float,float> RecordWidget::amplitudeDataRange(int slot) const {
 QPair<float,float> RecordWidget::amplitudeRange(int slot) const {
 	if ( slot >= _streams.size() || slot < 0 ) return QPair<float,float>(-1,1);
 	return QPair<float,float>(
-		_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].fyMin,
-		_streams[slot]->traces[_filtering?Stream::Filtered:Stream::Raw].fyMax
+		_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].fyMin,
+		_streams[slot]->traces[_streams[slot]->filtering?Stream::Filtered:Stream::Raw].fyMax
 	);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

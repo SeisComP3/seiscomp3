@@ -63,9 +63,9 @@ $date_str = clean_date($date_str);
 
 $code_str = clean_code($code_str);
 if ($code_str == False) {
-        echo tag('h1', 'EIDA Arclink Request Statistics');
+	echo tag('h1', 'EIDA Arclink Request Statistics');
 	echo tag('div', 'Invalid or empty network code.', Array('class' => 'error_box'));
-        $invalid_inputs = True;
+	$invalid_inputs = True;
 }
 
 
@@ -78,15 +78,15 @@ $start_day = $date;
 $prev_str = offset($date, -1); 
 $next_str = offset($date, 1);
 
-$month_start = substr($date,0,7) . '-01';
+$month_start = substr($date, 0, 7) . '-01';
 $month_start_str = $month_start;
-$month_end_str = substr($date,0,7) . '-31';
+$month_end_str = substr($date, 0, 7) . '-31';
 unset($month_start);
 
 #echo "open connection to sqlite file: dba/__construct";
-$year = substr($date,0,4);
-$month = substr($date,5,2);
-$day = substr($date,8,2);
+$year = substr($date, 0, 4);
+$month = substr($date, 5, 2);
+$day = substr($date, 8, 2);
 
 $db = new ReqLogSQ3($reqlogstats_db_dir . "/reqlogstats-$year.db");
 echo tag('h1', 'EIDA Arclink Request Statistics for network ' . $code_str . ' in ' . date('F Y', mktime(0, 0, 0, $month, $day, $year)));
@@ -111,13 +111,13 @@ $next_month_str = month_next($year, $month, $day);
 $bk_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $prev_month_str, 'code' => $code_str), '', '&amp;');
 $fd_link = 'reqlognetwork.php?' . http_build_query(array('date' =>  $next_month_str, 'code' => $code_str), '', '&amp;');
 $items = Array( tag('a', "&lt;&lt; Prev month", Array('href' => $bk_link)) . ' |',
-                "Monthly summary statistics for " . date('F Y', mktime(0, 0, 0, $month, $day, $year)),
-                '| ' . tag('a', "Next month &gt;&gt;", Array('href' => $fd_link))
+		'Monthly summary statistics for ' . date('F Y', mktime(0, 0, 0, $month, $day, $year)),
+		'| ' . tag('a', 'Next month &gt;&gt;', Array('href' => $fd_link))
 );
 echo tag('table', tr(tag_list('td', $items)));
  
 
-$marked_table_list=Array();
+$marked_table_list = Array();
 foreach ($table_list as $item) {
   $marked_table_list[] = tag("a", $item, Array('href' => "#Table$item"));
 }

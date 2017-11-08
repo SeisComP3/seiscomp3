@@ -20,6 +20,7 @@
 
 
 #include <seiscomp3/core/datetime.h>
+#include <seiscomp3/datamodel/timepdf1d.h>
 #include <seiscomp3/core/baseobject.h>
 #include <seiscomp3/core.h>
 #include <seiscomp3/core/exceptions.h>
@@ -55,12 +56,12 @@ class SC_SYSTEM_CORE_API TimeQuantity : public Core::BaseObject {
 		TimeQuantity(const TimeQuantity& other);
 
 		//! Custom constructor
-		TimeQuantity(Seiscomp::Core::Time value);
 		TimeQuantity(Seiscomp::Core::Time value,
-		             const OPT(double)& uncertainty,
-		             const OPT(double)& lowerUncertainty,
-		             const OPT(double)& upperUncertainty,
-		             const OPT(double)& confidenceLevel);
+		             const OPT(double)& uncertainty = Seiscomp::Core::None,
+		             const OPT(double)& lowerUncertainty = Seiscomp::Core::None,
+		             const OPT(double)& upperUncertainty = Seiscomp::Core::None,
+		             const OPT(double)& confidenceLevel = Seiscomp::Core::None,
+		             const OPT(TimePDF1D)& pdf = Seiscomp::Core::None);
 
 		//! Destructor
 		~TimeQuantity();
@@ -94,19 +95,24 @@ class SC_SYSTEM_CORE_API TimeQuantity : public Core::BaseObject {
 
 		//! Symmetric uncertainty of point in time in seconds.
 		void setUncertainty(const OPT(double)& uncertainty);
-		double uncertainty() const throw(Seiscomp::Core::ValueException);
+		double uncertainty() const;
 
 		//! Lower uncertainty of point in time in seconds.
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 		//! Upper uncertainty of point in time in seconds.
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		//! Confidence level of the uncertainty, given in percent.
 		void setConfidenceLevel(const OPT(double)& confidenceLevel);
-		double confidenceLevel() const throw(Seiscomp::Core::ValueException);
+		double confidenceLevel() const;
+
+		//! Probability density function of the quantity.
+		void setPdf(const OPT(TimePDF1D)& pdf);
+		TimePDF1D& pdf();
+		const TimePDF1D& pdf() const;
 
 
 	// ------------------------------------------------------------------
@@ -119,6 +125,7 @@ class SC_SYSTEM_CORE_API TimeQuantity : public Core::BaseObject {
 		OPT(double) _lowerUncertainty;
 		OPT(double) _upperUncertainty;
 		OPT(double) _confidenceLevel;
+		OPT(TimePDF1D) _pdf;
 };
 
 

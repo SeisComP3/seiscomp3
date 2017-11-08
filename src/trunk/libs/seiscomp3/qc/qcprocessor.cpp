@@ -24,16 +24,6 @@ QcProcessorObserver::QcProcessorObserver() {}
 IMPLEMENT_SC_CLASS(QcParameter, "QcParameter");
 IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(QcProcessor, WaveformProcessor, "QcProcessor");
 
-// QcParameter::QcParameter() 
-//     : recordSampleCount(0), recordSamplingFrequency(0) {}
-
-// Core::Time QcParameter::recordEndTime() throw (Core::ValueException) {
-//     if (recordStartTime != Core::Time() && recordSampleCount && recordSamplingFrequency > 0.0) {
-//         return(recordStartTime + Core::Time(recordSampleCount / recordSamplingFrequency));
-//     }
-
-//     throw (Core::ValueException);
-// }
 
 QcProcessor::QcProcessor(const Core::TimeSpan &deadTime,
 						const Core::TimeSpan &gapThreshold) 

@@ -1,7 +1,7 @@
 import os
 
 '''
-Plugin handler for the NRTS plugin.
+Plugin handler for the nmxptool plugin.
 '''
 class SeedlinkPluginHandler:
   # Create defaults
@@ -27,7 +27,7 @@ class SeedlinkPluginHandler:
     except: seedlink.setParam('sources.nmxp.short_term_completion', short_term_completion)
 
     try: seedlink.param('sources.nmxp.proc')
-    except: seedlink.setParam('sources.nmxp.proc', 'nmxp_bb40_sm100')
+    except: seedlink.setParam('sources.nmxp.proc', 'naqs_bb40_sm100')
 
     additional_options = ""
     try: additional_options = " " + seedlink.param('sources.nmxp.additional_options')

@@ -117,7 +117,7 @@ class SC_SYSTEM_CORE_API AuxStream : public Object {
 
 		//! End of epoch (52.23)
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Reference to auxDevice/@publicID
 		void setDevice(const std::string& device);
@@ -142,11 +142,11 @@ class SC_SYSTEM_CORE_API AuxStream : public Object {
 
 		//! Whether the stream is "restricted"
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		//! Whether the metadata is synchronized with other datacenters
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 
 	// ------------------------------------------------------------------

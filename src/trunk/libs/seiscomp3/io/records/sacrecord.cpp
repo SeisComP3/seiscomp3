@@ -181,7 +181,7 @@ void SACRecord::saveSpace() const {
 }
 
 
-void SACRecord::read(std::istream &in) throw(Core::StreamException) {
+void SACRecord::read(std::istream &in) {
 	std::streamsize header_size = sizeof(struct sac);
 	struct sac header = sac_null;
 	// 632 byte
@@ -270,7 +270,7 @@ void SACRecord::read(std::istream &in) throw(Core::StreamException) {
 }
 
 
-void SACRecord::write(std::ostream &out) throw(Core::StreamException) {
+void SACRecord::write(std::ostream &out) {
 	if ( _data == NULL ) return;
 
 	FloatArrayPtr ar = FloatArray::Cast(_data);

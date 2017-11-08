@@ -266,8 +266,12 @@ void MainWindow::toggleFullScreen() {
 void MainWindow::setTitle(QString t) {
 	_title = t;
 
-	if ( SCApp->connection() )
-		setWindowTitle((_title.toStdString() + "@" + SCApp->messagingHost()).c_str());
+	if ( SCApp->connection() ) {
+		QString title = _title + "@" + SCApp->messagingHost().c_str();
+		if ( SCApp->isReadOnlyMessaging() )
+			title += " (read-only)";
+		setWindowTitle(title);
+	}
 	else
 		setWindowTitle(_title);
 }
@@ -287,7 +291,10 @@ QString MainWindow::title() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MainWindow::connectionEstablished() {
-	setWindowTitle((_title.toStdString() + "@" + SCApp->messagingHost()).c_str());
+	QString title = _title + "@" + SCApp->messagingHost().c_str();
+	if ( SCApp->isReadOnlyMessaging() )
+		title += " (read-only)";
+	setWindowTitle(title);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -308,8 +315,12 @@ void MainWindow::onChangedConnection() {
 	else
 		_connectionState->stop();
 
-	if ( SCApp->connection() )
-		setWindowTitle((_title.toStdString() + "@" + SCApp->messagingHost()).c_str());
+	if ( SCApp->connection() ) {
+		QString title = _title + "@" + SCApp->messagingHost().c_str();
+		if ( SCApp->isReadOnlyMessaging() )
+			title += " (read-only)";
+		setWindowTitle(title);
+	}
 	else
 		setWindowTitle(_title);
 }

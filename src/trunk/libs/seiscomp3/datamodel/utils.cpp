@@ -209,8 +209,8 @@ SensorLocation* getSensorLocation(const Inventory *inventory,
 
 			ERR(SENSOR_CODE_NOT_FOUND);
 
-			for ( size_t i = 0; i < sta->sensorLocationCount(); ++i ) {
-				DataModel::SensorLocation* loc = sta->sensorLocation(i);
+			for ( size_t k = 0; k < sta->sensorLocationCount(); ++k ) {
+				DataModel::SensorLocation* loc = sta->sensorLocation(k);
 				if ( loc->code() != locationCode ) continue;
 
 				ERR(SENSOR_EPOCH_NOT_FOUND);

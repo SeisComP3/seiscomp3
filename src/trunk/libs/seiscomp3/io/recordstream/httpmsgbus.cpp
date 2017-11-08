@@ -22,9 +22,11 @@
 #include <seiscomp3/io/socket.h>
 #include <seiscomp3/io/httpsocket.h>
 #include <seiscomp3/io/httpsocket.ipp>
+#include <seiscomp3/io/records/mseedrecord.h>
 
 #include "httpmsgbus.h"
 
+using namespace std;
 
 namespace Seiscomp {
 namespace RecordStream {
@@ -135,10 +137,10 @@ bson_t* HMBQueue::toBSON() const
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-HMBConnection<SocketType>::HMBConnection(): RecordStream(),
-	_stream(std::istringstream::in|std::istringstream::binary), _readingData(false)
-{
-}
+HMBConnection<SocketType>::HMBConnection()
+: RecordStream()
+, _readingData(false)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -146,9 +148,9 @@ HMBConnection<SocketType>::HMBConnection(): RecordStream(),
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-HMBConnection<SocketType>::HMBConnection(std::string serverloc): RecordStream(),
-	_stream(std::istringstream::in|std::istringstream::binary), _readingData(false)
-{
+HMBConnection<SocketType>::HMBConnection(std::string serverloc)
+: RecordStream()
+, _readingData(false) {
 	setSource(serverloc);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -167,14 +169,14 @@ HMBConnection<SocketType>::~HMBConnection() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::setSource(std::string serverloc)
+bool HMBConnection<SocketType>::setSource(const string &source)
 {
 	std::string host;
-	size_t pos = serverloc.find('@');
+	size_t pos = source.find('@');
 
 	if ( pos != std::string::npos ) {
-		std::string login = serverloc.substr(0, pos);
-		host = serverloc.substr(pos);
+		std::string login = source.substr(0, pos);
+		host = source.substr(pos);
 		pos = login.find(':');
 
 		if ( pos != std::string::npos ) {
@@ -187,7 +189,7 @@ bool HMBConnection<SocketType>::setSource(std::string serverloc)
 		}
 	}
 	else {
-		host = serverloc;
+		host = source;
 		_user = "";
 		_password = "";
 	}
@@ -215,8 +217,7 @@ bool HMBConnection<SocketType>::setSource(std::string serverloc)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::setRecordType(const char* type)
-{
+bool HMBConnection<SocketType>::setRecordType(const char* type) {
 	return !strcmp(type, "mseed");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -226,8 +227,8 @@ bool HMBConnection<SocketType>::setRecordType(const char* type)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::addStream(std::string net, std::string sta, std::string loc, std::string cha)
-{
+bool HMBConnection<SocketType>::addStream(const string &net, const string &sta,
+                                          const string &loc, const string &cha) {
 	std::pair<std::set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha));
 	return result.second;
@@ -239,9 +240,10 @@ bool HMBConnection<SocketType>::addStream(std::string net, std::string sta, std:
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::addStream(std::string net, std::string sta, std::string loc, std::string cha,
-	const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime)
-{
+bool HMBConnection<SocketType>::addStream(const string &net, const string &sta,
+                                          const string &loc, const string &cha,
+                                          const Seiscomp::Core::Time &stime,
+                                          const Seiscomp::Core::Time &etime) {
 	std::pair<std::set<StreamIdx>::iterator, bool> result;
 	result = _streams.insert(StreamIdx(net, sta, loc, cha, stime, etime));
 	return result.second;
@@ -253,34 +255,7 @@ bool HMBConnection<SocketType>::addStream(std::string net, std::string sta, std:
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::removeStream(std::string net, std::string sta, std::string loc, std::string cha)
-{
-	bool deletedSomething = false;
-	std::set<StreamIdx>::iterator it = _streams.begin();
-
-	for ( ; it != _streams.end(); ) {
-		if ( it->network()  == net &&
-		     it->station()  == sta &&
-		     it->location() == loc &&
-		     it->channel()  == cha ) {
-			_streams.erase(it++);
-			deletedSomething = true;
-		}
-		else
-			++it;
-	}
-
-	return deletedSomething;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-template <typename SocketType>
-bool HMBConnection<SocketType>::setStartTime(const Seiscomp::Core::Time &stime)
-{
+bool HMBConnection<SocketType>::setStartTime(const Seiscomp::Core::Time &stime) {
 	_stime = stime;
 	return true;
 }
@@ -291,8 +266,7 @@ bool HMBConnection<SocketType>::setStartTime(const Seiscomp::Core::Time &stime)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::setEndTime(const Seiscomp::Core::Time &etime)
-{
+bool HMBConnection<SocketType>::setEndTime(const Seiscomp::Core::Time &etime) {
 	_etime = etime;
 	return true;
 }
@@ -303,19 +277,7 @@ bool HMBConnection<SocketType>::setEndTime(const Seiscomp::Core::Time &etime)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::setTimeWindow(const Seiscomp::Core::TimeWindow &w)
-{
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-template <typename SocketType>
-bool HMBConnection<SocketType>::setTimeout(int seconds)
-{
+bool HMBConnection<SocketType>::setTimeout(int seconds) {
 	_sock.setTimeout(seconds);
 	return true;
 }
@@ -326,8 +288,7 @@ bool HMBConnection<SocketType>::setTimeout(int seconds)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-bool HMBConnection<SocketType>::clear()
-{
+bool HMBConnection<SocketType>::clear() {
 	this->~HMBConnection();
 	new(this) HMBConnection(_serverHost + _serverPath);
 	return true;
@@ -340,8 +301,7 @@ bool HMBConnection<SocketType>::clear()
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Hopefully safe to be called from another thread
 template <typename SocketType>
-void HMBConnection<SocketType>::close()
-{
+void HMBConnection<SocketType>::close() {
 	_sock.interrupt();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -565,8 +525,7 @@ void HMBConnection<SocketType>::initSession()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-std::string HMBConnection<SocketType>::receive()
-{
+std::string HMBConnection<SocketType>::receive() {
 	while (true) {
 		std::string data;
 
@@ -654,8 +613,7 @@ std::string HMBConnection<SocketType>::receive()
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 template <typename SocketType>
-std::istream &HMBConnection<SocketType>::stream()
-{
+Record *HMBConnection<SocketType>::next() {
 	if ( !_readingData ) {
 		_queues.clear();
 
@@ -669,21 +627,32 @@ std::istream &HMBConnection<SocketType>::stream()
 
 			Core::Time stime = it->startTime().valid() ? it->startTime() : _stime;
 			Core::Time etime = it->endTime().valid() ? it->endTime() : _etime;
-			HMBQueue& q = _queues["WAVE_" + it->network() + "_" + it->station()];
+			HMBQueue &q = _queues["WAVE_" + it->network() + "_" + it->station()];
 			q.addStream(it->location(), it->channel(), stime, etime);
 		}
 
 		_readingData = true;
 	}
 
-	std::string data = receive();
+	while ( true ) {
+		std::string data = receive();
+		if ( data.empty() ) break;
 
-	if ( data.empty() )
-		_stream.clear(std::ios::eofbit);
-	else
-		_stream.str(data);
+		std::istringstream stream(std::istringstream::in|std::istringstream::binary);
+		stream.str(data);
 
-	return _stream;
+		IO::MSeedRecord *rec = new IO::MSeedRecord();
+		setupRecord(rec);
+		try {
+			rec->read(stream);
+			return rec;
+		}
+		catch ( ... ) {
+			delete rec;
+		}
+	}
+
+	return NULL;
 }
 
 

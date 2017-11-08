@@ -111,8 +111,8 @@ class SC_SYSTEM_CORE_API GenericRecord : public Record {
 		//! Returns a deep copy of the calling object.
 		Record* copy() const;
 
-		void read(std::istream &in) throw(Core::StreamException);
-		void write(std::ostream &out) throw(Core::StreamException);
+		void read(std::istream &in);
+		void write(std::ostream &out);
 	
 
 	// ----------------------------------------------------------------------

@@ -11,13 +11,13 @@ function offset($date, $offset) {
 	$now = date("Ymd");
 
 	## There is no diff/add/sub on php 5.2
-	$month = substr($date,5,2);
-	$day = substr($date,8,2);
-	$year = substr($date,0,4);
+	$month = substr($date, 5, 2);
+	$day = substr($date, 8, 2);
+	$year = substr($date, 0, 4);
 	$offset_sec = $offset*60*60*24;
-	$n = date("Ymd", mktime(00,00,00,$month,$day,$year) + $offset_sec);
+	$n = date('Ymd', mktime(0, 0, 0, $month, $day, $year) + $offset_sec);
 
-	return date("Y-m-d", mktime(00,00,00,$month,$day,$year) + $offset_sec);
+	return date('Y-m-d', mktime(0, 0, 0, $month, $day, $year) + $offset_sec);
 }
 
 function clean_date($text) {
@@ -68,16 +68,18 @@ class ReqLogSQ3 {
 
        private function result2table($result, $key = "") {
 	 //echo "Fetch[$key]:".$result->rowCount();
-	  $rows=array();
+	  $rows = array();
 	  if (empty($result)) return $rows;
 	  if (!empty($key))
 	    while ($r = $result->fetch()) {
 	     $k = $r[$key];
 	     unset($r[$key]);
-	     $rows[$k]=$r;
+	     $rows[$k] = $r;
 	    }
 	  else
-	    while ($r = $result->fetch()) $rows[] = $r;
+	    while ($r = $result->fetch()) {
+		$rows[] = $r;
+	    }
 	  return $rows;
 	}
 
@@ -157,8 +159,8 @@ function tag_list($tag, $a, $attrs_all = "", $attrs_some = Array()) {
     $s = "";
     $index = 0;
     foreach ($a as $item) {
-        $index += 1;
-        if (array_key_exists($index, $attrs_some)) {
+	$index += 1;
+	if (array_key_exists($index, $attrs_some)) {
 	    $attrs = $attrs_all;
 	    list($k, $v) = explode("=", $attrs_some[$index], 2);
 	    $attrs[$k] = trim($v, '"');
@@ -235,7 +237,7 @@ function sum_cols($data, $cols) {
     }
 
     foreach ($cols as $c => $v) {
-        if ($rounded[$c]) {
+	if ($rounded[$c]) {
 	    $result[$c] = bytes_rounded($result[$c]);
 	}
     }
@@ -261,7 +263,7 @@ function render_table($format, $sources, $data, $options) {
 	echo '  <tbody>' . PHP_EOL;
 
 	$rows = $data[1]; // Second object
-	//for($i = 1, $size = count($data); $i < $size; ++$i) {
+	//for ($i = 1, $size = count($data); $i < $size; ++$i) {
 	//  $row = $data[$i];
 	foreach ($rows as $row) {
 	  $selected = Array();
@@ -281,11 +283,11 @@ function render_table($format, $sources, $data, $options) {
 	    }
 	  };
 
-          if (array_key_exists("networkCode", $row) && array_key_exists("linkcodes", $options) && $options["linkcodes"]) {
-            $code = $selected["networkCode"];
-            $hcode = str_replace("/", "_", $code);
-            $selected["networkCode"] = tag("a", $code, Array('href' => "reqlognetwork.php?code=$hcode"));
-          }
+	  if (array_key_exists("networkCode", $row) && array_key_exists("linkcodes", $options) && $options["linkcodes"]) {
+		$code = $selected['networkCode'];
+		$hcode = str_replace('/', '_', $code);
+		$selected['networkCode'] = tag('a', $code, Array('href' => "reqlognetwork.php?code=$hcode"));
+	  }
 
 	  echo '  ' . tr(tag_list("td", $selected)) . PHP_EOL;
 	}
@@ -306,7 +308,7 @@ function render_table($format, $sources, $data, $options) {
 	  $col_sums[0] = "Column sums";
 	  echo '  ' . tr(tag_list("td", $col_sums)) . PHP_EOL;
 	}
-        echo '  <tr><td>Rows: ' . count($rows) . '</td></tr>' . PHP_EOL;
+	echo '  <tr><td>Rows: ' . count($rows) . '</td></tr>' . PHP_EOL;
 	echo '  </tbody>' . PHP_EOL;
 	echo '</table>';
     } else {

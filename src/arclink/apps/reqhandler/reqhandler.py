@@ -390,26 +390,26 @@ class RequestHandlerApp(Client.Application):
         ## Those are necessary.
         try:
             self.organization = self.configGetString("organization")
-        except Config.Exception:
+        except Exception:
             logs.error("organization name not specified")
             return False
 
         try:
             self.reqdir = e.absolutePath(self.configGetString("request_dir"))
-        except Config.Exception:
+        except Exception:
             logs.error("request data directory not specified")
             return False
 
         try:
             self.dcid = self.configGetString("datacenterID")
-        except Config.Exception:
+        except Exception:
             logs.error("datacenter/archive ID not specified")
             return False
 
         ## From those we can supply a default
         try:
             self.trackdir = e.absolutePath(self.configGetString("reqhandler.trackdir"))
-        except Config.Exception:
+        except Exception:
             self.trackdir = None
 
         try:
@@ -418,37 +418,37 @@ class RequestHandlerApp(Client.Application):
                 self.trackdb = True
             else:
                 self.trackdb = False
-        except Config.Exception:
+        except Exception:
             self.trackdb = False
 
         try:
             self.nrtdir = e.absolutePath(self.configGetString("reqhandler.nrtdir"))
-        except Config.Exception:
+        except Exception:
             self.nrtdir = e.absolutePath("@ROOTDIR@/var/lib/archive")
 
         try:
             self.archdir = e.absolutePath(self.configGetString("reqhandler.archdir"))
-        except Config.Exception:
+        except Exception:
             self.archdir = "/iso_sds"
 
         try:
             self.isodir = e.absolutePath(self.configGetString("reqhandler.isodir"))
-        except Config.Exception:
+        except Exception:
             self.isodir = "/iso_arc"
 
         try:
             self.gfaurl = self.configGetString("reqhandler.gfaurl")
-        except Config.Exception:
+        except Exception:
             self.gfaurl = None
 
         try:
             self.filedb = e.absolutePath(self.configGetString("reqhandler.filedb"))
-        except Config.Exception:
+        except Exception:
             self.filedb = None
 
         try:
             self.subnodelist = e.absolutePath(self.configGetString("reqhandler.subnodelist"))
-        except Config.Exception:
+        except Exception:
             self.subnodelist = None
 
         try:
@@ -456,7 +456,7 @@ class RequestHandlerApp(Client.Application):
         except Core.TypeConversionException:
             logs.error("invalid maximum request size")
             return False
-        except Config.Exception:
+        except Exception:
             self.maxsize = 500
 
         return True

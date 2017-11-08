@@ -249,12 +249,31 @@ or contact the SeisComP3 developpers to add support for your distribution.
 SQL configuration
 -----------------
 
-* For better performance with a MySQL database, adjust the following parameters:
+* For better performance with a MySQL database, adjust the memory pool size. Test
+  the default of the **buffer\_pool_size** before making the change:
 
-  * "innodb_buffer_pool_size = 64M"
-  * "innodb_flush_log_at_trx_commit = 2"
+  .. code-block:: sh
 
-  The location of the configuration can differ between distributions.
+    mysql -u sysop -p
+    show variables like 'innodb_buffer_pool_size';
+
+  The optimum **buffer\_pool_size** depends on your system (RAM size) and only needs
+  to be set if required. Choose your preferred value:
+
+  * Recommended value: 512M
+  * Minimum value: 64M
+
+  Additionally, reduce the database hard drive synchronization and make both adjustments
+  in the section [mysqld]:
+
+  .. code-block:: sh
+
+    [mysqld]
+    innodb_buffer_pool_size = <your value>
+    innodb_flush_log_at_trx_commit = 2
+
+  **Note:** The location of the configuration can differ between distributions.
+  The locations are given below for different Linux distribution.
 
   :program:`OpenSUSE`
 

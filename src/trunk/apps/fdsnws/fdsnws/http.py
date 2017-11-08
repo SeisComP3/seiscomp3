@@ -26,7 +26,7 @@ try:
 except ImportError, e:
 	sys.exit("%s\nIs python-dateutil installed?" % str(e))
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 
 ################################################################################
 class HTTP:
@@ -201,12 +201,14 @@ class AuthResource(resource.Resource):
 			verified = self.__gpg.decrypt(request.content.getvalue())
 
 		except Exception, e:
-			req.setResponseCode(400)
-			return str(e)
+			msg = "invalid token"
+			Logging.warning("%s: %s" % (msg, str(e)))
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
 
 		if verified.trust_level is None or verified.trust_level < verified.TRUST_FULLY:
-			request.setResponseCode(400)
-			return "invalid signature"
+			msg = "token has invalid signature"
+			Logging.warning(msg)
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
 
 		try:
 			attributes = json.loads(verified.data)
@@ -215,16 +217,18 @@ class AuthResource(resource.Resource):
 			lifetime = td.seconds + td.days * 24 * 3600
 
 		except Exception, e:
-			request.setResponseCode(400)
-			return str(e)
+			msg = "token has invalid validity"
+			Logging.warning("%s: %s" % (msg, str(e)))
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
 
 		if lifetime <= 0:
-			request.setResponseCode(400)
-			return "token expired"
+			msg = "token is expired"
+			Logging.warning(msg)
+			return HTTP.renderErrorPage(request, http.BAD_REQUEST, msg, None)
 
 		userid = base64.urlsafe_b64encode(hashlib.sha256(verified.data).digest()[:18])
-		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600))
-
+		password = self.__userdb.addUser(userid, attributes, time.time() + min(lifetime, 24 * 3600), verified.data)
+		utils.accessLog(request, None, http.OK, len(userid)+len(password)+1, None)
 		return '%s:%s' % (userid, password)
 
 
@@ -241,3 +245,4 @@ class Site(server.Site):
 		request.setHeader('Access-Control-Allow-Headers', 'Authorization')
 		request.setHeader('Access-Control-Expose-Headers', 'WWW-Authenticate')
 		return server.Site.getResourceFor(self, request)
+

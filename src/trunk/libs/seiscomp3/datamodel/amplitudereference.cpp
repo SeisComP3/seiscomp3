@@ -90,7 +90,7 @@ AmplitudeReference::AmplitudeReference() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeReference::AmplitudeReference(const AmplitudeReference& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -101,7 +101,7 @@ AmplitudeReference::AmplitudeReference(const AmplitudeReference& other)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AmplitudeReference::AmplitudeReference(const std::string& amplitudeID)
 {
-	 _index.amplitudeID = amplitudeID;
+	_index.amplitudeID = amplitudeID;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -299,7 +299,7 @@ void AmplitudeReference::accept(Visitor* visitor) {
 void AmplitudeReference::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: AmplitudeReference skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -96,7 +96,7 @@ AuxSource::AuxSource() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxSource::AuxSource(const AuxSource& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -107,7 +107,7 @@ AuxSource::AuxSource(const AuxSource& other)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 AuxSource::AuxSource(const std::string& name)
 {
-	 _index.name = name;
+	_index.name = name;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -122,13 +122,13 @@ AuxSource::AuxSource(const std::string& name,
                      const OPT(int)& sampleRateNumerator,
                      const OPT(int)& sampleRateDenominator,
                      const OPT(Blob)& remark)
- : _description(description),
-   _unit(unit),
-   _conversion(conversion),
-   _sampleRateNumerator(sampleRateNumerator),
-   _sampleRateDenominator(sampleRateDenominator),
-   _remark(remark) {
-	_index.name = name;
+: _description(description)
+, _unit(unit)
+, _conversion(conversion)
+, _sampleRateNumerator(sampleRateNumerator)
+, _sampleRateDenominator(sampleRateDenominator)
+, _remark(remark)
+{	_index.name = name;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -259,7 +259,7 @@ void AuxSource::setSampleRateNumerator(const OPT(int)& sampleRateNumerator) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int AuxSource::sampleRateNumerator() const throw(Seiscomp::Core::ValueException) {
+int AuxSource::sampleRateNumerator() const {
 	if ( _sampleRateNumerator )
 		return *_sampleRateNumerator;
 	throw Seiscomp::Core::ValueException("AuxSource.sampleRateNumerator is not set");
@@ -279,7 +279,7 @@ void AuxSource::setSampleRateDenominator(const OPT(int)& sampleRateDenominator) 
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int AuxSource::sampleRateDenominator() const throw(Seiscomp::Core::ValueException) {
+int AuxSource::sampleRateDenominator() const {
 	if ( _sampleRateDenominator )
 		return *_sampleRateDenominator;
 	throw Seiscomp::Core::ValueException("AuxSource.sampleRateDenominator is not set");
@@ -299,7 +299,7 @@ void AuxSource::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& AuxSource::remark() throw(Seiscomp::Core::ValueException) {
+Blob& AuxSource::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxSource.remark is not set");
@@ -310,7 +310,7 @@ Blob& AuxSource::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& AuxSource::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& AuxSource::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("AuxSource.remark is not set");
@@ -463,7 +463,7 @@ void AuxSource::accept(Visitor* visitor) {
 void AuxSource::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: AuxSource skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

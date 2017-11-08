@@ -207,12 +207,15 @@ class Archive {
 		//! Reads a vector of strings
 		virtual void read(std::vector<std::string>& value) = 0;
 
+		//! Reads a vector of time
+		virtual void read(std::vector<Time>& value) = 0;
+
 		//! Reads a string
 		virtual void read(std::string& value) = 0;
 
 		//! Reads a time
 		virtual void read(time_t& value) = 0;
-		virtual void read(Seiscomp::Core::Time& value) = 0;
+		virtual void read(Time& value) = 0;
 
 		template <typename T>
 		void read(T& object);
@@ -271,6 +274,9 @@ class Archive {
 
 		//! Writes a string
 		virtual void write(std::string& value) = 0;
+
+		//! Reads a vector of time
+		virtual void write(std::vector<Time>& value) = 0;
 
 		//! Writes a time
 		virtual void write(time_t value) = 0;

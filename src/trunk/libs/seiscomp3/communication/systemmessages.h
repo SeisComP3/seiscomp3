@@ -71,16 +71,16 @@ public:
 	void setType(int type);
 
 	//! Returns the message type
-	Protocol::MSG_TYPES messageType() const throw(Core::GeneralException);
+	Protocol::MSG_TYPES messageType() const;
 
 	//! Sets the message type of the message
 	void setMessageType(Protocol::MSG_TYPES type);
 
 	//! Returns the content type
-	Protocol::MSG_CONTENT_TYPES contentType() const throw(Core::GeneralException);
+	Protocol::MSG_CONTENT_TYPES contentType() const;
 
 	//! Sets the content type of the message
-	void setContentType(Protocol::MSG_CONTENT_TYPES type) throw(Core::GeneralException);
+	void setContentType(Protocol::MSG_CONTENT_TYPES type);
 
 	//! Returns the group this message will be sent to.
 	const std::string& destination() const;

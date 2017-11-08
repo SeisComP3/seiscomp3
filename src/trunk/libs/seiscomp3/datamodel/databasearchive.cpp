@@ -15,6 +15,7 @@
 #include <seiscomp3/core/exceptions.h>
 #include <seiscomp3/datamodel/databasearchive.h>
 #include <seiscomp3/datamodel/version.h>
+#include <seiscomp3/datamodel/stream.h>
 #include <seiscomp3/logging/log.h>
 
 #include <iostream>
@@ -777,7 +778,8 @@ PublicObject* DatabaseArchive::getObject(const RTTI& classType,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator DatabaseArchive::getObjects(const std::string& parentID,
-                                             const RTTI& classType) {
+                                             const RTTI& classType,
+                                             bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return DatabaseIterator();
@@ -790,10 +792,10 @@ DatabaseIterator DatabaseArchive::getObjects(const std::string& parentID,
 			return DatabaseIterator();
 		}
 
-		return getObjectIterator(parentID_, classType);
+		return getObjectIterator(parentID_, classType, ignorePublicObject);
 	}
 
-	return getObjectIterator(0, classType);
+	return getObjectIterator(0, classType, ignorePublicObject);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -802,7 +804,8 @@ DatabaseIterator DatabaseArchive::getObjects(const std::string& parentID,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator DatabaseArchive::getObjects(const PublicObject* parent,
-                                             const Seiscomp::Core::RTTI& classType) {
+                                             const Seiscomp::Core::RTTI& classType,
+                                             bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return DatabaseIterator();
@@ -818,7 +821,7 @@ DatabaseIterator DatabaseArchive::getObjects(const PublicObject* parent,
 		registerId(parent, parentID);
 	}
 
-	return getObjectIterator(parentID, classType);
+	return getObjectIterator(parentID, classType, ignorePublicObject);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -929,14 +932,18 @@ size_t DatabaseArchive::getObjectCount(const PublicObject* parent,
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
-                                                    const RTTI& classType) {
+                                                    const RTTI& classType,
+                                                    bool ignorePublicObject) {
 	if ( !validInterface() ) {
 		SEISCOMP_ERROR("no valid database interface");
 		return DatabaseIterator();
 	}
 
 	std::string query;
-	if ( classType.isTypeOf(PublicObject::TypeInfo()) ) {
+
+	if ( ignorePublicObject || !classType.isTypeOf(PublicObject::TypeInfo()) )
+		query = std::string("select * from ") + classType.className();
+	else {
 		std::stringstream ss;
 		ss << "select " << PublicObject::ClassName() << "." << _publicIDColumn << ","
 		   << classType.className() << ".* from "
@@ -946,11 +953,9 @@ DatabaseIterator DatabaseArchive::getObjectIterator(unsigned long parentID,
 
 		query = ss.str();
 	}
-	else
-		query = std::string("select * from ") + classType.className();
 
 	if ( parentID > 0 ) {
-		if ( classType.isTypeOf(PublicObject::TypeInfo()) )
+		if ( classType.isTypeOf(PublicObject::TypeInfo()) && !ignorePublicObject )
 			query += " and ";
 		else
 			query += " where ";
@@ -1127,6 +1132,15 @@ void DatabaseArchive::read(std::vector<std::string>& value) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void DatabaseArchive::read(std::vector<Core::Time>& value) {
+	fromString(value, field());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::read(std::vector<std::complex<double> >& value) {
 	fromString(value, field());
 }
@@ -1265,6 +1279,15 @@ void DatabaseArchive::write(std::vector<double>& value) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void DatabaseArchive::write(std::vector<std::string>& value) {
 	writeAttrib("'" + toString(value) + "'");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void DatabaseArchive::write(std::vector<Core::Time>& value) {
+	writeAttrib("'" + Core::toString(value) + "'");
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1756,6 +1779,11 @@ bool DatabaseArchive::update(Object* object, const std::string& parentID) {
 	if ( !_validObject ) {
 		SEISCOMP_ERROR("serializing updated object with type '%s' failed", object->className());
 		return false;
+	}
+
+	if ( _objectAttributes->empty() ) {
+		SEISCOMP_DEBUG("no update for object type '%s' possible, empty list of non-index attributes", object->className());
+		return true;
 	}
 
 	if ( iPublicID )

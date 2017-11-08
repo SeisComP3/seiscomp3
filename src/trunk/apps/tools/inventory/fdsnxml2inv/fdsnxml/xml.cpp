@@ -391,8 +391,8 @@ struct PolesAndZerosHandler : public IO::XML::TypedClassHandler<PolesAndZeros> {
 		addProperty("NormalizationFactor", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "NormalizationFactor");
 		// Element
 		addProperty("NormalizationFrequency", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "NormalizationFrequency");
-		addChildProperty("Pole", "http://www.fdsn.org/xml/station/1", "Pole");
 		addChildProperty("Zero", "http://www.fdsn.org/xml/station/1", "Zero");
+		addChildProperty("Pole", "http://www.fdsn.org/xml/station/1", "Pole");
 	}
 };
 
@@ -442,7 +442,7 @@ struct ResponseListHandler : public IO::XML::TypedClassHandler<ResponseList> {
 struct NumeratorCoefficientHandler : public IO::XML::TypedClassHandler<NumeratorCoefficient> {
 	NumeratorCoefficientHandler() {
 		addProperty("value", "http://www.fdsn.org/xml/station/1", Mandatory, CDATA, "value");
-		addProperty("i", "", Mandatory, Attribute, "i");
+		addProperty("i", "", Optional, Attribute, "i");
 	}
 };
 
@@ -509,7 +509,7 @@ struct ResponseStageHandler : public IO::XML::TypedClassHandler<ResponseStage> {
 		// Element
 		addProperty("Decimation", "http://www.fdsn.org/xml/station/1", Optional, Element, "Decimation");
 		// Element
-		addProperty("StageGain", "http://www.fdsn.org/xml/station/1", Mandatory, Element, "StageGain");
+		addProperty("StageGain", "http://www.fdsn.org/xml/station/1", Optional, Element, "StageGain");
 		addProperty("number", "", Mandatory, Attribute, "number");
 		addProperty("resourceId", "", Optional, Attribute, "resourceId");
 	}

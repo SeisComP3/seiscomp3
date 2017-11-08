@@ -133,7 +133,7 @@ void ResponsePAZ::setNormalizationFactor(const OPT(double)& normalizationFactor)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFactor() const throw(Core::ValueException) {
+double ResponsePAZ::normalizationFactor() const {
 	if ( !_normalizationFactor )
 		throw Core::ValueException("normalization factor not set");
 	return *_normalizationFactor;
@@ -153,7 +153,7 @@ void ResponsePAZ::setNormalizationFrequency(const OPT(double)& normalizationFreq
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponsePAZ::normalizationFrequency() const throw(Core::ValueException) {
+double ResponsePAZ::normalizationFrequency() const {
 	if ( !_normalizationFrequency )
 		throw Core::ValueException("normalization frequency not set");
 	return *_normalizationFrequency;

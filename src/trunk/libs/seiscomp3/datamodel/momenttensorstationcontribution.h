@@ -99,14 +99,14 @@ class SC_SYSTEM_CORE_API MomentTensorStationContribution : public PublicObject {
 		bool active() const;
 
 		void setWaveformID(const OPT(WaveformStreamID)& waveformID);
-		WaveformStreamID& waveformID() throw(Seiscomp::Core::ValueException);
-		const WaveformStreamID& waveformID() const throw(Seiscomp::Core::ValueException);
+		WaveformStreamID& waveformID();
+		const WaveformStreamID& waveformID() const;
 
 		void setWeight(const OPT(double)& weight);
-		double weight() const throw(Seiscomp::Core::ValueException);
+		double weight() const;
 
 		void setTimeShift(const OPT(double)& timeShift);
-		double timeShift() const throw(Seiscomp::Core::ValueException);
+		double timeShift() const;
 
 	
 	// ------------------------------------------------------------------

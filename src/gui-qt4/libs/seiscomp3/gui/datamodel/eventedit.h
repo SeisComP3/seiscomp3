@@ -11,7 +11,6 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_GUI_EVENTEDIT_H__
 #define __SEISCOMP_GUI_EVENTEDIT_H__
 

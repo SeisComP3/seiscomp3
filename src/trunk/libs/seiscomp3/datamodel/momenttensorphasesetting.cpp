@@ -96,7 +96,7 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorPhaseSetting::MomentTensorPhaseSetting(const MomentTensorPhaseSetting& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -107,7 +107,7 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting(const MomentTensorPhaseSettin
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MomentTensorPhaseSetting::MomentTensorPhaseSetting(const std::string& code)
 {
-	 _index.code = code;
+	_index.code = code;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -120,11 +120,11 @@ MomentTensorPhaseSetting::MomentTensorPhaseSetting(const std::string& code,
                                                    double upperPeriod,
                                                    const OPT(double)& minimumSNR,
                                                    const OPT(double)& maximumTimeShift)
- : _lowerPeriod(lowerPeriod),
-   _upperPeriod(upperPeriod),
-   _minimumSNR(minimumSNR),
-   _maximumTimeShift(maximumTimeShift) {
-	_index.code = code;
+: _lowerPeriod(lowerPeriod)
+, _upperPeriod(upperPeriod)
+, _minimumSNR(minimumSNR)
+, _maximumTimeShift(maximumTimeShift)
+{	_index.code = code;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -235,7 +235,7 @@ void MomentTensorPhaseSetting::setMinimumSNR(const OPT(double)& minimumSNR) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorPhaseSetting::minimumSNR() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorPhaseSetting::minimumSNR() const {
 	if ( _minimumSNR )
 		return *_minimumSNR;
 	throw Seiscomp::Core::ValueException("MomentTensorPhaseSetting.minimumSNR is not set");
@@ -255,7 +255,7 @@ void MomentTensorPhaseSetting::setMaximumTimeShift(const OPT(double)& maximumTim
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MomentTensorPhaseSetting::maximumTimeShift() const throw(Seiscomp::Core::ValueException) {
+double MomentTensorPhaseSetting::maximumTimeShift() const {
 	if ( _maximumTimeShift )
 		return *_maximumTimeShift;
 	throw Seiscomp::Core::ValueException("MomentTensorPhaseSetting.maximumTimeShift is not set");
@@ -406,7 +406,7 @@ void MomentTensorPhaseSetting::accept(Visitor* visitor) {
 void MomentTensorPhaseSetting::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: MomentTensorPhaseSetting skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

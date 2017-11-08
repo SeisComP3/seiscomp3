@@ -82,8 +82,8 @@ class MetaEnumImpl : public MetaEnum {
 		//! Returns the key name at a given index
 		const char *key(int index) const;
 
-		const char *valueToKey(int value) const throw(ValueException);
-		int keyToValue(const char *key) const throw(ValueException);
+		const char *valueToKey(int value) const;
+		int keyToValue(const char *key) const;
 };
 
 #define DECLARE_METAENUM(CLASS, var) Seiscomp::Core::MetaEnumImpl<CLASS> var
@@ -100,7 +100,7 @@ inline const char *MetaEnumImpl<T>::key(int index) const {
 }
 
 template <typename T>
-inline const char *MetaEnumImpl<T>::valueToKey(int value) const throw(ValueException) {
+inline const char *MetaEnumImpl<T>::valueToKey(int value) const {
 	T tmp;
 	if ( !tmp.fromInt(value) )
 		throw ValueException("value out of bounds");
@@ -109,7 +109,7 @@ inline const char *MetaEnumImpl<T>::valueToKey(int value) const throw(ValueExcep
 }
 
 template <typename T>
-inline int MetaEnumImpl<T>::keyToValue(const char *key) const throw(ValueException) {
+inline int MetaEnumImpl<T>::keyToValue(const char *key) const {
 	T tmp;
 	if ( !tmp.fromString(key) )
 		throw ValueException("invalid key");
@@ -228,14 +228,14 @@ class SimplePropertyHelper<T,U,F1,F2,0> : public MetaProperty {
 		SimplePropertyHelper(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(BaseObject *object, MetaValue value) const throw(GeneralException) {
+		bool write(BaseObject *object, MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 			(target->*_setter)(boost::any_cast<U>(value));
 			return true;
 		}
 
-		bool writeString(BaseObject *object, const std::string &value) const throw(GeneralException) {
+		bool writeString(BaseObject *object, const std::string &value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -247,13 +247,13 @@ class SimplePropertyHelper<T,U,F1,F2,0> : public MetaProperty {
 			return true;
 		}
 
-		MetaValue read(const BaseObject *object) const throw(GeneralException) {
+		MetaValue read(const BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw GeneralException("invalid object");
 			return (target->*_getter)();
 		}
 
-		std::string readString(const BaseObject *object) const throw(GeneralException) {
+		std::string readString(const BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw GeneralException("invalid object");
 			return toString((target->*_getter)());
@@ -270,7 +270,7 @@ class SimplePropertyHelper<T,U,F1,F2,1> : public MetaProperty {
 		SimplePropertyHelper(F1 setter, F2 getter)
 		 : _setter(setter), _getter(getter) {}
 
-		bool write(BaseObject *object, MetaValue value) const throw(GeneralException) {
+		bool write(BaseObject *object, MetaValue value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -281,7 +281,7 @@ class SimplePropertyHelper<T,U,F1,F2,1> : public MetaProperty {
 			return true;
 		}
 
-		bool writeString(BaseObject *object, const std::string &value) const throw(GeneralException) {
+		bool writeString(BaseObject *object, const std::string &value) const {
 			T *target = T::Cast(object);
 			if ( !target ) return false;
 
@@ -297,13 +297,13 @@ class SimplePropertyHelper<T,U,F1,F2,1> : public MetaProperty {
 			return true;
 		}
 
-		MetaValue read(const BaseObject *object) const throw(GeneralException) {
+		MetaValue read(const BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw GeneralException("invalid object");
 			return (target->*_getter)();
 		}
 
-		std::string readString(const BaseObject *object) const throw(GeneralException) {
+		std::string readString(const BaseObject *object) const {
 			const T *target = T::ConstCast(object);
 			if ( !target ) throw GeneralException("invalid object");
 			return toString((target->*_getter)());

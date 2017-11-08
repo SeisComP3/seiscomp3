@@ -33,30 +33,33 @@
 namespace Seiscomp {
 namespace IO {
 
+
 class SC_SYSTEM_CORE_API SocketException: public Seiscomp::IO::RecordStreamException {
-    public:
-    SocketException(): RecordStreamException("Socket exception") {}
-    SocketException(const std::string& what): RecordStreamException(what) {}
+	public:
+		SocketException(): RecordStreamException("Socket exception") {}
+		SocketException(const std::string& what): RecordStreamException(what) {}
 };
 
 class SC_SYSTEM_CORE_API SocketCommandException: public SocketException {
-    public:
-    SocketCommandException(): SocketException("command not accepted") {}
-    SocketCommandException(const std::string& what): SocketException(what) {}
+	public:
+		SocketCommandException(): SocketException("command not accepted") {}
+		SocketCommandException(const std::string& what): SocketException(what) {}
 };
 
 class SC_SYSTEM_CORE_API SocketTimeout: public SocketException {
-    public:
-    SocketTimeout(): SocketException("timeout") {}
-    SocketTimeout(const std::string& what): SocketException(what) {}
+	public:
+		SocketTimeout(): SocketException("timeout") {}
+		SocketTimeout(const std::string& what): SocketException(what) {}
 };
 
 class SC_SYSTEM_CORE_API SocketResolveError: public SocketException {
-    public:
-    SocketResolveError(): SocketException("cannot resolve hostname") {}
-    SocketResolveError(const std::string& what): SocketException(what) {}
+	public:
+		SocketResolveError(): SocketException("cannot resolve hostname") {}
+		SocketResolveError(const std::string& what): SocketException(what) {}
 };
 
+
+DEFINE_SMARTPOINTER(Socket);
 class SC_SYSTEM_CORE_API Socket: public Seiscomp::Core::InterruptibleObject {
 	public:
 		Socket();
@@ -106,6 +109,8 @@ class SC_SYSTEM_CORE_API Socket: public Seiscomp::Core::InterruptibleObject {
 		std::string _eol;
 };
 
+
+DEFINE_SMARTPOINTER(SSLSocket);
 class SC_SYSTEM_CORE_API SSLSocket: public Socket {
 	public:
 		SSLSocket();
@@ -127,6 +132,7 @@ class SC_SYSTEM_CORE_API SSLSocket: public Socket {
 		SSL_CTX  *_ctx;
 		char      _errBuf[120];
 };
+
 
 } // namespace IO
 } // namespace Seiscomp

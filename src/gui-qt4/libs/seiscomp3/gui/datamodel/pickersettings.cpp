@@ -234,6 +234,7 @@ PickerSettings::PickerSettings(const OriginLocatorView::Config &c1,
 	_ui.cbComputeMissingTakeOffAngles->setChecked(_locatorConfig.computeMissingTakeOffAngles);
 	_ui.spinAddStationsDistance->setValue(_pickerConfig.defaultAddStationsDistance);
 	_ui.cbHideStationsWithoutData->setChecked(_pickerConfig.hideStationsWithoutData);
+	_ui.cbHideDisabledStations->setChecked(_pickerConfig.hideDisabledStations);
 
 	_ui.cbShowCrossHair->setChecked(_pickerConfig.showCrossHair);
 	_ui.cbIgnoreUnconfiguredStations->setChecked(_pickerConfig.ignoreUnconfiguredStations);
@@ -516,6 +517,7 @@ PickerView::Config PickerSettings::pickerConfig() const {
 
 	_pickerConfig.defaultAddStationsDistance = _ui.spinAddStationsDistance->value();
 	_pickerConfig.hideStationsWithoutData = _ui.cbHideStationsWithoutData->isChecked();
+	_pickerConfig.hideDisabledStations = _ui.cbHideDisabledStations->isChecked();
 
 	_pickerConfig.uncertaintyProfile = _ui.listPickUncertainties->currentText();
 

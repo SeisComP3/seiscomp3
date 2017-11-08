@@ -1,6 +1,6 @@
 <application xmlns="http://wadl.dev.java.net/2009/02"
 		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<resources base="http://localhost:8080/fdsnws/dataselect/1">
+	<resources base="/fdsnws/dataselect/1">
 		<resource path="query">
 			<method href="#queryGET"/>
 			<method href="#queryPOST"/>

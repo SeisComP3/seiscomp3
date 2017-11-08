@@ -27,9 +27,8 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-TTDecorator::TTDecorator(Map::Canvas *canvas, Decorator *decorator)
+TTDecorator::TTDecorator(Decorator *decorator)
  : Decorator(decorator),
-   _canvas(canvas),
    _deltaDepth(50),
    _maxPDistance(110),
    _maxSDistance(15),
@@ -143,7 +142,7 @@ void TTDecorator::setOriginTime(const DataModel::TimeQuantity& time) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
+void TTDecorator::customDraw(const Map::Canvas *canvas, QPainter& painter) {
 	// It is important to separate the examination of isVisible and IsWaveformPropagationVisible
 	// at separate Points. This is to make sure that the waveformpropagation is still calculated
 	// even when the display is globally switched off.
@@ -173,8 +172,8 @@ void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
 	painter.setPen(pen);
 
 	if ( (distanceP > 0) && alpha ) {
-		drawPolygon(painter, _polygonP);
-		annotatePropagation(painter, distanceP, EAST_WEST);
+		drawPolygon(canvas, painter, _polygonP);
+		annotatePropagation(canvas, painter, distanceP, EAST_WEST);
 	}
 
 	color = Qt::blue;
@@ -184,8 +183,8 @@ void TTDecorator::customDraw(const Map::Canvas*, QPainter& painter) {
 	painter.setPen(pen);
 
 	if ( distanceS > 0 ) {
-		drawPolygon(painter, _polygonS);
-		annotatePropagation(painter, distanceS, NORTH_SOUTH);
+		drawPolygon(canvas, painter, _polygonS);
+		annotatePropagation(canvas, painter, distanceS, NORTH_SOUTH);
 	}
 
 	painter.restore();
@@ -267,12 +266,13 @@ double TTDecorator::computeTTTPolygon(const std::vector<double>& travelTimes,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void TTDecorator::drawPolygon(QPainter& painter, const std::vector<QPointF>& polygon)
+void TTDecorator::drawPolygon(const Map::Canvas *canvas, QPainter& painter,
+                              const std::vector<QPointF>& polygon)
 {
 	for ( size_t i = 1; i < polygon.size(); ++i )
-		_canvas->projection()->drawLine(painter, polygon[i-1], polygon[i]);
+		canvas->projection()->drawLine(painter, polygon[i-1], polygon[i]);
 	if ( polygon.size() > 2 )
-		_canvas->projection()->drawLine(painter, polygon.back(), polygon.front());
+		canvas->projection()->drawLine(painter, polygon.back(), polygon.front());
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -280,8 +280,8 @@ void TTDecorator::drawPolygon(QPainter& painter, const std::vector<QPointF>& pol
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void TTDecorator::annotatePropagation(QPainter& painter, double distance,
-                                      Direction direction) {
+void TTDecorator::annotatePropagation(const Map::Canvas *canvas, QPainter& painter,
+                                      double distance, Direction direction) {
 	painter.save();
 	painter.setRenderHint(QPainter::Antialiasing, false);
 
@@ -308,7 +308,7 @@ void TTDecorator::annotatePropagation(QPainter& painter, double distance,
 
 	if ( direction == NORTH_SOUTH ) {
 		Math::Geo::delandaz2coord(distance, 0, _latitude, _longitude, &outLat, &outLon);
-		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+		if ( canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
 			box0.moveCenter(p);
 			box0.moveBottom(p.y()-4);
 		}
@@ -316,7 +316,7 @@ void TTDecorator::annotatePropagation(QPainter& painter, double distance,
 			p0Ok = false;
 
 		Math::Geo::delandaz2coord(distance, 180, _latitude, _longitude, &outLat, &outLon);
-		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+		if ( canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
 			box1.moveCenter(p);
 			box1.moveTop(p.y()+4);
 		}
@@ -325,7 +325,7 @@ void TTDecorator::annotatePropagation(QPainter& painter, double distance,
 	}
 	else if ( direction == EAST_WEST ) {
 		Math::Geo::delandaz2coord(distance, 90, _latitude, _longitude, &outLat, &outLon);
-		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+		if ( canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
 			box0.moveCenter(p);
 			box0.moveLeft(p.x()+4);
 		}
@@ -333,7 +333,7 @@ void TTDecorator::annotatePropagation(QPainter& painter, double distance,
 			p0Ok = false;
 
 		Math::Geo::delandaz2coord(distance, 270, _latitude, _longitude, &outLat, &outLon);
-		if ( _canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
+		if ( canvas->projection()->project(p, QPointF(outLon, outLat)) ) {
 			box1.moveCenter(p);
 			box1.moveRight(p.x()-4);
 		}

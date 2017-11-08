@@ -44,17 +44,13 @@ struct SC_SYSTEM_CLIENT_API Settings {
 	//! If it is not found it tries to lookup the value in
 	//! keyParameters. If no value is found an exception
 	//! is thrown otherwise the value is returned.
-	std::string getString(const std::string &parameter) const
-	throw(Config::Exception);
+	std::string getString(const std::string &parameter) const;
 
-	int getInt(const std::string &parameter) const
-	throw(Config::Exception);
+	int getInt(const std::string &parameter) const;
 
-	double getDouble(const std::string &parameter) const
-	throw(Config::Exception);
+	double getDouble(const std::string &parameter) const;
 
-	bool getBool(const std::string &parameter) const
-	throw(Config::Exception);
+	bool getBool(const std::string &parameter) const;
 
 	//! Set the parameter value for a station. The first
 	//! lookup is in the global application configuration

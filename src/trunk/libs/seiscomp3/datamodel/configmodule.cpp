@@ -51,7 +51,7 @@ ConfigModule::ConfigModule() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ConfigModule::ConfigModule(const ConfigModule& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -61,7 +61,7 @@ ConfigModule::ConfigModule(const ConfigModule& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ConfigModule::ConfigModule(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 	_enabled = false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -513,7 +513,7 @@ bool ConfigModule::removeConfigStation(const ConfigStationIndex& i) {
 void ConfigModule::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ConfigModule skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

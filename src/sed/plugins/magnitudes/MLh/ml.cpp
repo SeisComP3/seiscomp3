@@ -315,7 +315,7 @@ class AmplitudeProcessor_ML : public AmplitudeProcessor {
 		}
 
 
-		void setTrigger(const Core::Time &trigger) throw(Core::ValueException) {
+		void setTrigger(const Core::Time &trigger) {
 			// Set the trigger in 'this' as well to be able to query it
 			// correctly from outside.
 			AmplitudeProcessor::setTrigger(trigger);
@@ -552,6 +552,7 @@ class MagnitudeProcessor_ML : public MagnitudeProcessor {
 			double period,      // in seconds
 			double delta,       // in degrees
 			double depth,       // in kilometers
+			const DataModel::Origin *, const DataModel::SensorLocation *,
 			double &value) {
 			if ( delta < DELTA_MIN || delta > DELTA_MAX )
 				return DistanceOutOfRange;

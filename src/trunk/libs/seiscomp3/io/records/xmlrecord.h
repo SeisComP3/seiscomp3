@@ -30,8 +30,8 @@ class SC_SYSTEM_CORE_API XMLRecord : public GenericRecord {
 		XMLRecord();
 
 	public:
-		void read(std::istream &in) throw(Core::StreamException);
-		void write(std::ostream &out) throw(Core::StreamException);
+		void read(std::istream &in);
+		void write(std::ostream &out);
 };
 
 }

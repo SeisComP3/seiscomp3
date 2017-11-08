@@ -112,7 +112,7 @@ ArclinkRequest::ArclinkRequest() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkRequest::ArclinkRequest(const ArclinkRequest& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -122,7 +122,7 @@ ArclinkRequest::ArclinkRequest(const ArclinkRequest& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkRequest::ArclinkRequest(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -426,7 +426,7 @@ void ArclinkRequest::setSummary(const OPT(ArclinkRequestSummary)& summary) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-ArclinkRequestSummary& ArclinkRequest::summary() throw(Seiscomp::Core::ValueException) {
+ArclinkRequestSummary& ArclinkRequest::summary() {
 	if ( _summary )
 		return *_summary;
 	throw Seiscomp::Core::ValueException("ArclinkRequest.summary is not set");
@@ -437,7 +437,7 @@ ArclinkRequestSummary& ArclinkRequest::summary() throw(Seiscomp::Core::ValueExce
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const ArclinkRequestSummary& ArclinkRequest::summary() const throw(Seiscomp::Core::ValueException) {
+const ArclinkRequestSummary& ArclinkRequest::summary() const {
 	if ( _summary )
 		return *_summary;
 	throw Seiscomp::Core::ValueException("ArclinkRequest.summary is not set");
@@ -917,7 +917,7 @@ bool ArclinkRequest::removeArclinkRequestLine(const ArclinkRequestLineIndex& i) 
 void ArclinkRequest::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ArclinkRequest skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

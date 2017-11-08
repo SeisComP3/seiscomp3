@@ -51,12 +51,12 @@ class RecordStreamThread;
 
 class SC_GUI_API ArrivalModel : public QAbstractTableModel {
 	Q_OBJECT
+
 	public:
 		struct Filter {
 			virtual ~Filter() {}
 			virtual bool accepts(int row, int idx, DataModel::Arrival *) const = 0;
 		};
-
 
 	public:
 		ArrivalModel(DataModel::Origin* origin = NULL, QObject *parent = 0);
@@ -75,7 +75,7 @@ class SC_GUI_API ArrivalModel : public QAbstractTableModel {
 
 		Qt::ItemFlags flags(const QModelIndex &index) const;
 		bool setData(const QModelIndex &index, const QVariant &value,
-                     int role = Qt::EditRole);
+		             int role = Qt::EditRole);
 
 		void setRowEnabled(int row, bool enabled);
 		bool isRowEnabled(int row) const;
@@ -83,18 +83,60 @@ class SC_GUI_API ArrivalModel : public QAbstractTableModel {
 		void setTakeOffAngle(int row, const QVariant &val);
 
 		bool useNoArrivals() const;
-		bool useAllArrivals() const;
 		bool useArrival(int row) const;
+		void setUseArrival(int row, DataModel::Arrival *arrival);
+
+		bool backazimuthUsed(int row) const;
+		void setBackazimuthUsed(int row, bool enabled);
+
+		bool horizontalSlownessUsed(int row) const;
+		void setHorizontalSlownessUsed(int row, bool enabled);
+
+		bool timeUsed(int row) const;
+		void setTimeUsed(int row, bool enabled);
 
 	private:
 		DataModel::Origin* _origin;
-		QVector<Qt::CheckState> _used;
+		QVector<int> _used;
+		QVector<int>  _hoverState;
 		QVector<QVariant> _takeOffs;
 		QVector<bool> _enableState;
 		QVector<QVariant> _backgroundColors;
 		QColor _disabledForeground;
 		QStringList _header;
 		std::string _pickTimeFormat;
+};
+
+
+class SC_GUI_API ArrivalDelegate : public QStyledItemDelegate {
+	Q_OBJECT
+
+	public:
+		ArrivalDelegate(QWidget *parent);
+
+	public:
+		void paint(QPainter * painter, const QStyleOptionViewItem & option,
+		           const QModelIndex & index) const;
+
+		bool editorEvent(QEvent *event, QAbstractItemModel *model,
+		                 const QStyleOptionViewItem &option,
+		                 const QModelIndex &index);
+
+		QSize sizeHint(const QStyleOptionViewItem &option,
+		               const QModelIndex &index) const;
+
+	public slots:
+		bool helpEvent(QHelpEvent *event, QAbstractItemView *view,
+		               const QStyleOptionViewItem &option,
+		               const QModelIndex &index);
+
+	private:
+		int                    _flags[3];
+		QString                _labels[3];
+		int                    _margin;
+		int                    _spacing;
+		int                    _statusRectWidth;
+		mutable int            _labelWidth;
 };
 
 
@@ -216,6 +258,7 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 
 		void setMagnitudeCalculationEnabled(bool);
 		void computeMagnitudes();
+		void magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*);
 
 		void mergeOrigins(QList<Seiscomp::DataModel::Origin*>);
 		void setLocalAmplitudes(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*);
@@ -304,10 +347,6 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		void runScript0();
 		void runScript1();
 
-		void deleteSelectedArrivals();
-		void activateSelectedArrivals(bool);
-		void renameArrivals();
-
 		void evalResultAvailable(const QString &originID,
 		                         const QString &className,
 		                         const QString &script,
@@ -323,10 +362,10 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		                    bool localOrigin, bool relocated);
 
 	private:
-		struct PhasePickWithWeight {
+		struct PhasePickWithFlags {
 			DataModel::PickPtr pick;
 			std::string        phase;
-			double             weight;
+			int                flags;
 		};
 
 		void init();
@@ -340,12 +379,12 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 		bool merge(void *sourcePhases, void *targetPhases, bool checkDuplicates,
 		           bool associateOnly, bool failOnNoNewPhases);
 
-		void relocate(std::vector<PhasePickWithWeight>* additionalPicks,
+		void relocate(std::vector<PhasePickWithFlags>* additionalPicks,
 		              bool associateOnly = false,
 		              bool replaceExistingPhases = false);
 
 		void relocate(DataModel::Origin *org,
-		              std::vector<PhasePickWithWeight>* additionalPicks,
+		              std::vector<PhasePickWithFlags>* additionalPicks,
 		              bool associateOnly = false,
 		              bool replaceExistingPhases = false,
 		              bool useArrivalTable = true);
@@ -371,6 +410,11 @@ class SC_GUI_API OriginLocatorView : public QWidget {
 
 		void setBaseEvent(DataModel::Event *e);
 		void resetCustomLabels();
+
+		void deleteSelectedArrivals();
+		void activateSelectedArrivals(Seiscomp::Seismology::LocatorInterface::Flags flags,
+		                              bool activate);
+		void renameArrivals();
 
 	private:
 		typedef QPair<QLabel*,QLabel*> ScriptLabel;

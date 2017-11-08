@@ -75,6 +75,7 @@ void DefaultSymbolCollection::clear() {
 	for ( Symbols::iterator it = _mapSymbols.begin(); it != _mapSymbols.end(); ++it )
 		delete *it;
 	_mapSymbols.clear();
+	_dirty = true;
 	setTop(NULL);
 }
 

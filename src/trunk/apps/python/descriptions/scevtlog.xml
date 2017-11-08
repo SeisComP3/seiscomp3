@@ -3,18 +3,25 @@
 	<module name="scevtlog" category="Utilities">
 		<description>Event log preserving the history of updates.</description>
 		<configuration>
-			<parameter name="directory" type="string">
+			<parameter name="directory" type="string" default="@LOGDIR@/events">
 				<description>
 				Specify the output directory. Within this directory the logging
 				directory structure and the event files are stored.
 				</description>
 			</parameter>
-			<parameter name="format" type="string" default="autoloc3">
+			<parameter name="format" type="string" default="xml">
 				<description>
 				Specify output event format (default is autoloc3). For completeness
 				it is recommended to switch to xml as storage format. The autoloc3
 				format can be easily reconstructed with scbulletin but not the other
 				way around.
+				</description>
+			</parameter>
+			<parameter name="gzip" type="boolean" default="false">
+				<description>
+				If format is xml then all XML files will be compressed with gzip
+				and stored with file extension &quot;.xml.gz&quot;. They are also
+				valid gzip files and can be used as input to e.g. zgrep.
 				</description>
 			</parameter>
 		</configuration>

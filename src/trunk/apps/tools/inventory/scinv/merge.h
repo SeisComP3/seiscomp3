@@ -47,11 +47,19 @@ class Merge : public InventoryTask {
 		             const Seiscomp::DataModel::StationReference *);
 		bool process(const Seiscomp::DataModel::Network *);
 		bool process(Seiscomp::DataModel::Network *,
+		             const Seiscomp::DataModel::Comment *);
+		bool process(Seiscomp::DataModel::Network *,
 		             const Seiscomp::DataModel::Station *);
+		bool process(Seiscomp::DataModel::Station *,
+		             const Seiscomp::DataModel::Comment *);
 		bool process(Seiscomp::DataModel::Station *,
 		             const Seiscomp::DataModel::SensorLocation *);
 		bool process(Seiscomp::DataModel::SensorLocation *,
+		             const Seiscomp::DataModel::Comment *);
+		bool process(Seiscomp::DataModel::SensorLocation *,
 		             const Seiscomp::DataModel::Stream *);
+		bool process(Seiscomp::DataModel::Stream *,
+		             const Seiscomp::DataModel::Comment *);
 		bool process(Seiscomp::DataModel::Stream *,
 		             const Seiscomp::DataModel::Datalogger *);
 		bool process(Seiscomp::DataModel::Datalogger *,
@@ -77,6 +85,8 @@ class Merge : public InventoryTask {
 		process(const Seiscomp::DataModel::ResponsePolynomial *);
 		Seiscomp::DataModel::ResponseFAP *
 		process(const Seiscomp::DataModel::ResponseFAP *);
+		Seiscomp::DataModel::ResponseIIR *
+		process(const Seiscomp::DataModel::ResponseIIR *);
 
 		bool compareDatalogger(std::string &finalID,
 		                       const std::string &id1,

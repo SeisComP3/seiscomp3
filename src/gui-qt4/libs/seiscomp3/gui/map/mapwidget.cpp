@@ -40,11 +40,6 @@ const static char *cmStrProjection = "Projection";
 const static char *cmStrFilter = "Filter";
 const static char *cmStrNearest = "Nearest";
 const static char *cmStrBilinear = "Bilinear";
-const static char *cmStrReload = "Reload";
-const static char *cmStrGrid = "Show Grid";
-const static char *cmStrCities = "Show Cities";
-const static char *cmStrLayers = "Show Layers";
-const static char *cmStrHideAll = "Hide All";
 
 
 inline QString lat2String(double lat, int precision) {
@@ -197,6 +192,7 @@ void MapWidget::init() {
 	_filterMap = SCScheme.map.bilinearFilter;
 	_canvas.setBilinearFilter(_filterMap);
 
+	setMouseTracking(true);
 	setFocusPolicy(Qt::StrongFocus);
 	//setAttribute(Qt::WA_PaintOnScreen);
 
@@ -259,6 +255,12 @@ void MapWidget::setDrawLayers(bool e) {
 
 void MapWidget::setDrawCities(bool e) {
 	_canvas.setDrawCities(e);
+	update();
+}
+
+
+void MapWidget::setDrawLegends(bool e) {
+	_canvas.setDrawLegends(e);
 	update();
 }
 
@@ -390,7 +392,6 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 
 	_contextProjectionMenu = NULL;
 	_contextFilterMenu = NULL;
-	_contextLayerMenu = NULL;
 
 	// Copy Measurements
 	if ( !_measureText.isEmpty() ) {
@@ -423,51 +424,7 @@ void MapWidget::updateContextMenu(QMenu *menu) {
 	action = _contextFilterMenu->addAction(cmStrBilinear);
 	action->setEnabled(!_filterMap);
 
-	// Layers (if any)
-
-	QMenu* subMenu = _canvas.menu(this);
-	if ( subMenu )
-		menu->addMenu(subMenu);
-	// Refresh
-	action = menu->addAction(cmStrReload);
-
-	// Grid
-	action = menu->addAction(cmStrGrid);
-	action->setCheckable(true);
-	action->setChecked(_canvas.isDrawGridEnabled());
-
-	// Cities
-	action = menu->addAction(cmStrCities);
-	action->setCheckable(true);
-	action->setChecked(_canvas.isDrawCitiesEnabled());
-
-	// Layers (if any)
-
-	if ( !_canvas.layerProperties().empty() ) {
-		// No sub categories available or all layers disabled: 1 enabled main menu entry
-		if ( _canvas.layerProperties().size() == 1 || !_canvas.isDrawLayersEnabled() ) {
-			action = menu->addAction(cmStrLayers);
-			action->setCheckable(true);
-			action->setChecked(_canvas.isDrawLayersEnabled());
-		}
-		// Subcategories available: create layer sub menu
-		else {
-			_contextLayerMenu = menu->addMenu(cmStrLayers);
-			action = _contextLayerMenu->addAction(cmStrHideAll);
-			action->setCheckable(true);
-			_contextLayerMenu->addSeparator();
-
-			std::vector<Map::LayerProperties*>::const_iterator it =
-					_canvas.layerProperties().begin();
-			const Map::LayerProperties *root = *it++;
-			for ( ; it != _canvas.layerProperties().end(); ++it ) {
-				if ( (*it)->parent != root ) continue;
-				action = _contextLayerMenu->addAction((*it)->name.c_str());
-				action->setCheckable(true);
-				action->setChecked((*it)->visible);
-			}
-		}
-	}
+	_canvas.menu(menu);
 }
 
 
@@ -475,15 +432,12 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 	if ( action == NULL ) {
 		_contextProjectionMenu = NULL;
 		_contextFilterMenu = NULL;
-		_contextLayerMenu = NULL;
 		return;
 	}
 
-	if ( _contextProjectionMenu &&
-	     action->parent() == _contextProjectionMenu )
+	if ( _contextProjectionMenu && action->parent() == _contextProjectionMenu )
 		_canvas.setProjectionByName(action->text().toStdString().c_str());
-	else if ( _contextFilterMenu &&
-	          action->parent() == _contextFilterMenu ) {
+	else if ( _contextFilterMenu && action->parent() == _contextFilterMenu ) {
 		_filterMap = action->text() == cmStrBilinear;
 		_canvas.setBilinearFilter(_filterMap);
 	}
@@ -547,52 +501,13 @@ void MapWidget::executeContextMenuAction(QAction *action) {
 			break;
 		}
 	}
-	else if ( action->text() == cmStrReload )
-		_canvas.reload();
-	else if ( action->text() == cmStrCities )
-		_canvas.setDrawCities(action->isChecked());
-	else if ( action->text() == cmStrLayers )
-		_canvas.setDrawLayers(action->isChecked());
-	else if ( action->text() == cmStrGrid )
-		_canvas.setDrawGrid(action->isChecked());
-	else if ( action->text() == cmStrLayers )
-		_canvas.setDrawLayers(action->isChecked());
-	else if ( _contextLayerMenu &&
-			  action->parent() == _contextLayerMenu ) {
-		if ( action->text() == cmStrHideAll )
-			_canvas.setDrawLayers(false);
-		else {
-			// Find the LayerProperties which belongs to the action
-			std::vector<Map::LayerProperties*>::const_iterator it =
-				_canvas.layerProperties().begin();
-			const Map::LayerProperties *root = *it++;
-			Map::LayerProperties *prop = NULL;
-			for ( ; it != _canvas.layerProperties().end(); ++it ) {
-				if ( (*it)->parent != root ||
-					 action->text() != (*it)->name.c_str() ) continue;
-				prop = *it;
-				break;
-			}
-			// If found set the visibility property of this
-			// LayerProperties object and all children
-			if ( prop ) {
-				prop->visible = action->isChecked();
-				it = _canvas.layerProperties().begin();
-				for ( ; it != _canvas.layerProperties().end(); ++it ) {
-					if ( !prop->isChild(*it) ) continue;
-					(*it)->visible = action->isChecked();
-				}
-				_canvas.updateBuffer();
-			}
-		}
-	}
 
 	_contextProjectionMenu = NULL;
 	_contextFilterMenu = NULL;
-	_contextLayerMenu = NULL;
 
 	update();
 }
+
 
 void MapWidget::contextMenuEvent(QContextMenuEvent *event) {
 	if ( _canvas.filterContextMenuEvent(event, this) ) return;
@@ -609,20 +524,11 @@ void MapWidget::contextMenuEvent(QContextMenuEvent *event) {
 void MapWidget::mousePressEvent(QMouseEvent* event) {
 	_isMeasureDragging = false;
 
-	if ( _canvas.filterMousePressEvent(event) ) return;
-
 	if ( event->button() == Qt::LeftButton ) {
 		_lastDraggingPosition = event->pos();
 		_firstDrag = true;
 
-		if ( event->modifiers() == Qt::NoModifier ) {
-			_isDragging = true;
-			_isMeasuring = false;
-			_isMeasureDragging = false;
-			_measurePoints.clear();
-			_measureText.clear();
-		}
-		else if ( event->modifiers() == Qt::ControlModifier ) {
+		if ( event->modifiers() == Qt::ControlModifier ) {
 			QPointF p;
 			_canvas.projection()->unproject(p, _lastDraggingPosition);
 			if ( !_isMeasuring ) {
@@ -631,18 +537,35 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 			}
 			_measurePoints.push_back(p);
 			update();
+			return;
+		}
+
+		if ( !_isMeasuring ) {
+			if ( _canvas.filterMousePressEvent(event) ) return;
+		}
+
+		if ( event->modifiers() == Qt::NoModifier ) {
+			_isDragging = true;
+			_isMeasuring = false;
+			_isMeasureDragging = false;
+			_measurePoints.clear();
+			_measureText.clear();
 		}
 	}
+	else if ( _canvas.filterMousePressEvent(event) )
+		event->ignore();
 }
 
 
 void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
 	_isMeasureDragging = false;
 
-	if ( event->button() == Qt::LeftButton ) {
+	if ( _isDragging && (event->button() == Qt::LeftButton) ) {
 		_isDragging = false;
 		update();
 	}
+
+	_canvas.filterMouseReleaseEvent(event);
 }
 
 
@@ -669,12 +592,19 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
 void MapWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 	if ( event->button() == Qt::LeftButton &&
-	     !_canvas.filterMouseDoubleClickEvent(event) )
+	     !_canvas.filterMouseDoubleClickEvent(event) ) {
 		_canvas.centerMap(event->pos());
+		update();
+	}
 }
 
 
 void MapWidget::keyPressEvent(QKeyEvent* e) {
+	if ( _canvas.filterKeyPressEvent(e) ) {
+		e->accept();
+		return;
+	}
+
 	e->accept();
 
 	int key = e->key();
@@ -713,9 +643,18 @@ void MapWidget::keyPressEvent(QKeyEvent* e) {
 			_canvas.setDrawCities(!_canvas.isDrawCitiesEnabled());
 			break;
 		default:
+			e->ignore();
 			emit keyPressed(e);
 			break;
 	};
+}
+
+
+void MapWidget::keyReleaseEvent(QKeyEvent *e) {
+	if ( _canvas.filterKeyReleaseEvent(e) ) {
+		e->accept();
+		return;
+	}
 }
 
 

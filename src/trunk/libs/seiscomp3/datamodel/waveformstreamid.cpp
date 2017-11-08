@@ -49,7 +49,7 @@ WaveformStreamID::WaveformStreamID() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WaveformStreamID::WaveformStreamID(const WaveformStreamID& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -59,7 +59,7 @@ WaveformStreamID::WaveformStreamID(const WaveformStreamID& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WaveformStreamID::WaveformStreamID(const std::string& resourceURI)
- : _resourceURI(resourceURI) {
+: _resourceURI(resourceURI) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -72,12 +72,12 @@ WaveformStreamID::WaveformStreamID(const std::string& networkCode,
                                    const std::string& locationCode,
                                    const std::string& channelCode,
                                    const std::string& resourceURI)
- : _networkCode(networkCode),
-   _stationCode(stationCode),
-   _locationCode(locationCode),
-   _channelCode(channelCode),
-   _resourceURI(resourceURI) {
-}
+: _networkCode(networkCode)
+, _stationCode(stationCode)
+, _locationCode(locationCode)
+, _channelCode(channelCode)
+, _resourceURI(resourceURI)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -254,7 +254,7 @@ WaveformStreamID& WaveformStreamID::operator=(const WaveformStreamID& other) {
 void WaveformStreamID::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: WaveformStreamID skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

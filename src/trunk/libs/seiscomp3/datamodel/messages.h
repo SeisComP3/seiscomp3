@@ -18,10 +18,41 @@
 
 #include <seiscomp3/core/genericmessage.h>
 #include <seiscomp3/datamodel/origin.h>
+#include <seiscomp3/datamodel/creationinfo.h>
 
 
 namespace Seiscomp {
 namespace DataModel {
+
+
+DEFINE_SMARTPOINTER(InventorySyncMessage);
+
+class SC_SYSTEM_CORE_API InventorySyncMessage : public Seiscomp::Core::Message {
+	DECLARE_SC_CLASS(InventorySyncMessage);
+	DECLARE_SERIALIZATION;
+
+	// ------------------------------------------------------------------
+	//  Xstruction
+	// ------------------------------------------------------------------
+	public:
+		InventorySyncMessage();
+		InventorySyncMessage(bool finished);
+
+
+	// ------------------------------------------------------------------
+	//  Message interface
+	// ------------------------------------------------------------------
+	public:
+		bool empty() const;
+
+
+	// ------------------------------------------------------------------
+	//  Public members
+	// ------------------------------------------------------------------
+	public:
+		bool isFinished;
+		OPT(CreationInfo) creationInfo;
+};
 
 
 DEFINE_SMARTPOINTER(ArtificialOriginMessage);

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by gempa GmbH                                           *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -29,80 +29,92 @@
 namespace Seiscomp {
 namespace RecordStream {
 
-class SC_SYSTEM_CORE_API FDSNWSConnection : public Seiscomp::IO::RecordStream {
-	DECLARE_SC_CLASS(FDSNWSConnection);
+
+class SC_SYSTEM_CORE_API FDSNWSConnectionBase : public IO::RecordStream {
+	protected:
+		//! C'tor
+		FDSNWSConnectionBase(const char *protocol, IO::Socket *socket, int defaultPort);
+
 
 	public:
-		//! C'tor
-		FDSNWSConnection();
-
-		//! Initializing Constructor
-		FDSNWSConnection(std::string serverloc);
-
-		//! Destructor
-		virtual ~FDSNWSConnection();
-
 		//! The recordtype cannot be selected when using an arclink
 		//! connection. It will always create MiniSeed records
-		bool setRecordType(const char*);
+		virtual bool setRecordType(const char *type);
 
 		//! Initialize the arclink connection.
-		bool setSource(std::string serverloc);
+		virtual bool setSource(const std::string &source);
 
 		//! Supply user credentials
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode);
 
 		//! Adds the given stream to the server connection description
-		bool addStream(std::string net, std::string sta, std::string loc, std::string cha,
-			const Seiscomp::Core::Time &stime, const Seiscomp::Core::Time &etime);
-
-		//! Removes the given stream from the connection description. Returns true on success; false otherwise.
-		bool removeStream(std::string net, std::string sta, std::string loc, std::string cha);
+		virtual bool addStream(const std::string &networkCode,
+		                       const std::string &stationCode,
+		                       const std::string &locationCode,
+		                       const std::string &channelCode,
+		                       const Core::Time &startTime,
+		                       const Core::Time &endTime);
 
 		//! Adds the given start time to the server connection description
-		bool setStartTime(const Seiscomp::Core::Time &stime);
+		virtual bool setStartTime(const Core::Time &startTime);
 
 		//! Adds the given end time to the server connection description
-		bool setEndTime(const Seiscomp::Core::Time &etime);
-
-		//! Adds the given end time window to the server connection description
-		bool setTimeWindow(const Seiscomp::Core::TimeWindow &w);
+		virtual bool setEndTime(const Core::Time &endTime);
 
 		//! Sets timeout
-		bool setTimeout(int seconds);
-
-		//! Removes all stream list, time window, etc. -entries from the connection description object.
-		bool clear();
+		virtual bool setTimeout(int seconds);
 
 		//! Terminates the arclink connection.
-		void close();
+		virtual void close();
+
+		virtual Record *next();
 
 		//! Reconnects a terminated arclink connection.
 		bool reconnect();
 
-		//! Returns the data stream
-		std::istream& stream();
+		//! Removes all stream list, time window, etc. -entries from the connection description object.
+		bool clear();
+
 
 	private:
 		//! Blocking read from socket
 		std::string readBinary(int size);
+		void handshake();
+
 
 	private:
-		std::istringstream _stream;
-		Seiscomp::IO::Socket _sock;
+		const char *_protocol;
+		IO::SocketPtr _sock;
 		std::string _host;
 		std::string _url;
+		int _defaultPort;
 		std::set<Seiscomp::RecordStream::StreamIdx> _streams;
-		Seiscomp::Core::Time _stime;
-		Seiscomp::Core::Time _etime;
+		Core::Time _stime;
+		Core::Time _etime;
 		std::string _reqID;
 		bool _readingData;
 		bool _chunkMode;
 		int _remainingBytes;
 		std::string _error;
-		void handshake();
 };
+
+
+class SC_SYSTEM_CORE_API FDSNWSConnection : public FDSNWSConnectionBase {
+	public:
+		FDSNWSConnection();
+};
+
+
+class SC_SYSTEM_CORE_API FDSNWSSSLConnection : public FDSNWSConnectionBase {
+	public:
+		FDSNWSSSLConnection();
+};
+
+
 
 }
 }

@@ -29,7 +29,9 @@ class ESVApp : public Kicker {
 		  Kicker(argc, argv, flags) {
 			setRecordStreamEnabled(false);
 			setLoadRegionsEnabled(true);
+			_preloadDays = 1;
 		}
+
 
 	protected:
 		void createCommandLineDescription() {
@@ -46,10 +48,18 @@ class ESVApp : public Kicker {
 				"path to the script called when configurable button1 is pressed; "
 				"EventID, arrival count, magnitude and the additional location information string are passed as parameters $1, $2, $3 and $4",
 				&_script1);
+
+			commandline().addOption(
+				"Generic", "load-event-db",
+				"Number of days to load from database",
+				&_preloadDays);
 		}
 
 		bool initConfiguration() {
 			if ( !Kicker::initConfiguration() ) return false;
+
+			try { _preloadDays = configGetDouble("loadEventDB"); }
+			catch ( ... ) {}
 
 			try {
 				_script0 = Seiscomp::Environment::Instance()->absolutePath(configGetString("scripts.script0"));
@@ -79,11 +89,14 @@ class ESVApp : public Kicker {
 		}
 
 		void setupUi(MainWindow *mw) {
+			mw->loadEvents(_preloadDays);
 			mw->eventSummaryView()->setScript0(_script0, _scriptStyle0);
 			mw->eventSummaryView()->setScript1(_script1, _scriptStyle1);
 		}
 
+
 	public:
+		float       _preloadDays;
 		std::string _script0;
 		std::string _script1;
 		bool        _scriptStyle0;

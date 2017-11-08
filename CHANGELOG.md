@@ -1,5 +1,226 @@
 # Jakarta
 
+## Release YYYY.DDD
+
+The database schema has changed since the previous version. To upgrade your
+database from version 0.9 to 0.10, please run ```seiscomp update-config scmaster```.
+If a database plugin is configured, then it will check the current database
+schema version and suggest migration scripts to be run. The output should
+look as follows:
+
+```
+* starting kernel modules
+spread is already running
+starting scmaster
+* configure scmaster
+  * check database write access ... OK
+  * database schema version is 0.9
+  * last migration version is 0.10
+  * migration to the current version is required. apply the following
+    scripts in exactly the given order:
+    * /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql
+error: updating configuration for scmaster failed
+```
+
+To apply the given script, log into your database server and execute the script.
+In mysql it can be done with
+
+```
+mysql> source /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
+```
+
+and in psql with
+
+```
+seiscomp3=> \i /home/sysop/seiscomp3/share/db/migrations/mysql/0_9_to_0_10.sql;
+```
+
+**Rationale**
+
+Most of the inventory objects are valid for certain epochs defined with start
+and end time. The database schema did not support microsecond storage of those
+times although the structures in the source code do. This schema revision closes
+the gap. Furthermore a ResponsePAZ filter could be part of the decimation filter
+chain. Therefore the decimation attributes decimationFactor, delay and correction
+have been added. Furthermore the ResponseIIR type has been added to correctly
+store SEED response coefficients (blockette 54) without the need to convert IIR
+filters to poles and zeros.
+
+Furthermore a description of a pdf (probability density function) has been added
+to the RealQuantity and TimeQuantity type.
+
+**Important API changes**
+
+***MagnitudeProcessor***
+
+The MagnitudeProcessor interface has changed to support regionalized
+magnitude computations. The method ```computeMagnitude``` receives additionally
+two parameters, the origin and the sensor location object.
+All external magnitude plugins need to be adapted. Change from
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth, double &value);
+```
+
+to
+
+```c++
+Status computeMagnitude(double amplitude, double period,
+                        double delta, double depth,
+#ifdef SC_API_VERSION >= SC_API_VERSION_CHECK(11,0,0)
+                        const DataModel::Origin *hypocenter,
+                        const DataModel::SensorLocation *receiver,
+#endif
+                        double &value);
+```
+
+Furthermore a new enumeration has been added to return the status of
+the magnitude processing: ```EpicenterOutOfRegions```.
+
+***RecordStream***
+
+The RecordStream interface has changed considerably. All ```std::string```
+parameters that were passed by value have changed to be passed by const
+reference. Due to the rather complicated structure of the RecordStream
+interface and its usage in RecordInput, the following methods were removed:
+
+* std::istream& stream()
+* Record *createRecord(Array::DataType, Record::Hint)
+* void recordStored(Record*)
+* bool filterRecord(Record*)
+
+The new interface does deal directly with records and therefore only provides
+the single method ```Record *next()```. Iteration stops when a NULL record will
+be returned. The advantage is, that an implementation which would route requests
+to several backends in parallel such as the balanced recordstream do not need
+to deserialize and serialize a record additionally to the application
+deserialization. This improves performance and makes it easier to develop more
+complex implementations such as a router (which is available as extension from
+gempa).
+
+The Python API with respect to RecordInput did not change. You can still use
+your old code. Anyone with custom recordstream implementations will have to
+port their code.
+
+----
+
+* trunk
+
+  * Set seiscomp3 database bytea encoding to 'escape' for PostgreSQL database
+    servers with version >= 9 in postgres.sql script.
+  * Add InventorySyncMessage which is used to enclose an inventory synchronization
+    process. An application can listen to that message and trigger processing of
+    the updated inventory. The InventorySyncMessage is currently sent by
+    scinv (seiscomp update inventory) to STATUS_GROUP.
+  * Changed default publicID pattern from "@classname@#@time/%Y%m%d%H%M%S.%f@.@id@"
+    to "@classname@/@time/%Y%m%d%H%M%S.%f@.@id@". The hash was removed due to
+    possible conflicts with QuakeML publicID constraints.
+  * FDSNWS recordstream sets default URL path to /fdsnws/dataselect/1/query which
+    makes it more easy to use e.g. fdsnws://geofon.gfz-potsdam.de
+
+* GUI
+
+  * The event list shows status REVIEWED as V, FINAL as F and REPORTED as R
+  * Added option to allow map layer visibilities and order
+  * Allow to add custom map layers via plugins to the map
+  * Refactored Map API (Canvas, Layer, Legend)
+  * All GUI applications support an author and/or user blacklist to prevent sending
+    messages to scmaster. This is not a proper secure access control implementation
+    but helps to setup read-only applications to avoid accidental commits.
+    ```
+    blacklist.users = sysop1, sysop2
+    blacklist.authors = sysop1@host, sysop2@host
+    ```
+  * Map layer drawing properties may be additionally defined in a "map.cfg" file
+    located in the data set folder and subfolder, e.g. @~/.seiscomp3/fep/map.cfg@,
+    @~/.seiscomp3/bna/map.cfg@, @~/.seiscomp3/bna/category/map.cfg@
+  * Added support for event summary to listen to alert comments and adapt size and color
+    of time ago label accordingly.
+
+* scmm
+
+  * Added the module documentation.
+
+* scmv
+
+  * Added option ```expiredEventsInterval``` which controls the interval to check for expired events.
+    The default value is 0 and does disable the interval check.
+  * Added option to show the event table initially and to configure visible columns
+    ```
+    eventTable.visible = true
+    eventTable.columns = Event, Depth
+    ```
+  * Add legend for event symbols
+
+* scolv
+
+  * ```locator.minimumDepth``` is now deprecated in favour of ```olv.locator.minimumDepth```
+  * ```olv.locator``` is now deprecated in favour of ```olv.locator.interface```
+  * Add option to configure the default checkstate of the event association button and
+    fix origin button of the popup for committing with additional options: ```olv.commit.forceEventAssociation```
+    and ```olv.commit.fixOrigin```. Either default value is true.
+  * Add system tray icon which shows a notification if a new event
+    has been detected. This can be disabled with
+    ```
+    olv.systemTray = false
+    ```
+  * Replace single arrival usage flag with three separate usage flags: time used,
+    backazimuth used and horizontal slowness used which can also be toggled
+    separately
+
+* scrttv
+
+  * Normalize visible amplitudes (S) now toggles between normalizing amplitudes
+    of the currently visible time window (true) or the entire trace (false). The
+    old behaviour caused traces to degenerate into a straight line if the data buffer
+    runs out the time window which was used to normalize amplitudes.
+
+* scqc
+
+  * Added configuration option ```use3Components``` that allows to use all
+    3 components of a configured station. This only applies if ```useConfiguredStreams```
+    is active (default).
+
+* scinv
+
+  * Print file source of conflicting definitions
+
+* seiscomp
+
+  * An init script can not forward its configuration to another module. This is
+    especially useful if e.g. ```seiscomp update-config scautopick``` is ran
+    which did not do anything. Now it forwards its configuration to module
+    *trunk* and will update the bindings database. The old behaviour has always
+    confused users.
+
+* dlsv2inv
+
+  * Improve conversion to SC3. Many thanks to Arnaud Lemarchand from IPGP France
+    for his exhaustive tests and valuable advises.
+
+* fdsnxml2inv
+
+  * Improve conversion to SC3. Many thanks to Arnaud Lemarchand from IPGP France
+    for his exhaustive tests and valuable advises.
+  * Declare NumeratorCoefficient.i as optional according to the official schema. Before
+    that change, a lot of responses failed to convert.
+  * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
+    bloating the XML.
+
+* scsohlog
+
+  * Add description and documentation
+
+* scbulletin
+
+  * Add option -e for enhanced output at higher precision.
+
+* seedlink
+
+  * Removed option -C from nmxptool plugin template. This should go into the
+    additional options parameter.
+
 ## Release 2017.124
 
 * seiscomp
@@ -29,6 +250,13 @@
     Prior to that fix the structure was not deleted.
   * Added documentation section which allows to browse changelogs and
     documentations of installed modules
+
+* scautopick
+
+  * Added the option ```killPendingSPickers``` to configure whether to
+    terminate pending secondary processors if a new detection has been
+    found or not. The downside of disabling that is that two picks will
+    be possibly sent: a P and an S pick.
 
 * GUI
 
@@ -103,6 +331,10 @@
 * seedlink
 
   * Added ps2400_eth plugin configuration
+
+* sh2proc
+
+  * New Python tool to convert SeismicHandler event files to SC3XML
 
 
 ## Release 2016.333

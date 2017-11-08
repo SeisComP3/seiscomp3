@@ -74,16 +74,14 @@ void CombinedConnection::init() {
 	_started = false;
 	_nStream = _nArchive = _nRealtime = 0;
 	_realtimeAvailability = DefaultRealtimeAvailability;
-
-	_realtime = new SLConnection();
-	_archive = new Arclink::ArclinkConnection();
+	_realtime = _archive = NULL;
 }
 
 bool CombinedConnection::setRecordType(const char* type) {
 	return _realtime->setRecordType(type) && _archive->setRecordType(type);
 }
 
-bool CombinedConnection::setSource(std::string serverloc) {
+bool CombinedConnection::setSource(const std::string &serverloc) {
 	size_t p1,p2;
 
 	/*
@@ -307,8 +305,8 @@ bool CombinedConnection::setSource(std::string serverloc) {
 	return true;
 }
 
-bool CombinedConnection::addStream(std::string net, std::string sta,
-                                   std::string loc, std::string cha) {
+bool CombinedConnection::addStream(const string &net, const string &sta,
+                                   const string &loc, const string &cha) {
 	SEISCOMP_DEBUG("add stream %lu %s.%s.%s.%s", (unsigned long) _nStream, net.c_str(),
 	               sta.c_str(), loc.c_str(), cha.c_str());
 	// Streams without a time span are inserted into a temporary list
@@ -318,8 +316,8 @@ bool CombinedConnection::addStream(std::string net, std::string sta,
 	return result.second;
 }
 
-bool CombinedConnection::addStream(std::string net, std::string sta,
-                                   std::string loc, std::string cha,
+bool CombinedConnection::addStream(const string &net, const string &sta,
+                                   const string &loc, const string &cha,
                                    const Seiscomp::Core::Time &stime,
                                    const Seiscomp::Core::Time &etime) {
 	SEISCOMP_DEBUG("add stream %lu %s.%s.%s.%s", (unsigned long) _nStream, net.c_str(),
@@ -356,10 +354,6 @@ bool CombinedConnection::setEndTime(const Seiscomp::Core::Time &etime) {
 	return true;
 }
 
-bool CombinedConnection::setTimeWindow(const Seiscomp::Core::TimeWindow &w) {
-	return setStartTime(w.startTime()) && setEndTime(w.endTime());
-}
-
 bool CombinedConnection::setTimeout(int seconds) {
 	_realtime->setTimeout(seconds);
 	_archive->setTimeout(seconds);
@@ -372,9 +366,15 @@ void CombinedConnection::close() {
 	_nArchive = 0;
 }
 
-std::istream& CombinedConnection::stream() {
+Record *CombinedConnection::next() {
 	if ( !_started ) {
 		_started = true;
+
+		_archive->setDataType(_dataType);
+		_archive->setDataHint(_hint);
+
+		_realtime->setDataType(_dataType);
+		_realtime->setDataHint(_hint);
 
 		// add the temporary streams (added without a time span) now and split
 		// them correctly
@@ -391,27 +391,20 @@ std::istream& CombinedConnection::stream() {
 	}
 
 	if ( _nArchive > 0 ) {
-		std::istream &is = _archive->stream();
-		if ( !is.eof() )
-			return is;
-		else {
-			_archive->close();
-			_nArchive = 0;
-			SEISCOMP_DEBUG("start %lu realtime requests", (unsigned long) _nRealtime);
-		}
+		Record *rec =  _archive->next();
+		if ( rec != NULL )
+			return rec;
 
-		return _realtime->stream();
+		_archive->close();
+		_nArchive = 0;
+		SEISCOMP_DEBUG("start %lu realtime requests", (unsigned long) _nRealtime);
+
+		return _realtime->next();
 	}
 	else
-		return _realtime->stream();
+		return _realtime->next();
 }
 
-Record* CombinedConnection::createRecord(Array::DataType dt, Record::Hint h) {
-	if ( _nArchive > 0 )
-		return _archive->createRecord(dt, h);
-	else
-		return _realtime->createRecord(dt, h);
-}
 
 } // namesapce Combined
 } // namespace _private

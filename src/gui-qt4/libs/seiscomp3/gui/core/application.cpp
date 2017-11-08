@@ -14,6 +14,7 @@
 
 #define SEISCOMP_COMPONENT Application
 
+#include <seiscomp3/core/system.h>
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/core/connectiondialog.h>
 #include <seiscomp3/gui/core/aboutwidget.h>
@@ -26,7 +27,6 @@
 #include <license.h>
 #include <seiscomp3/utils/files.h>
 
-#include <boost/assign.hpp>
 #include <QSplashScreen>
 #include <QMessageBox>
 #include <set>
@@ -225,15 +225,16 @@ Application* Application::_instance = NULL;
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Application::Application(int& argc, char **argv, int flags, Type type)
- : QApplication(argc, argv, type),
-   Client::Application(argc, argv),
-   _settings(NULL),
-   _intervalSOH(60),
-   _mainWidget(NULL),
-   _splash(NULL),
-   _dlgConnection(NULL),
-   _settingsOpened(false),
-   _flags(flags) {
+: QApplication(argc, argv, type)
+, Client::Application(argc, argv)
+, _settings(NULL)
+, _intervalSOH(60)
+, _readOnlyMessaging(false)
+, _mainWidget(NULL)
+, _splash(NULL)
+, _dlgConnection(NULL)
+, _settingsOpened(false)
+, _flags(flags) {
 
 	if ( type == QApplication::Tty )
 		_flags &= ~SHOW_SPLASH;
@@ -580,6 +581,15 @@ const MapsDesc &Application::mapsDesc() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const MessageGroups &Application::messageGroups() const {
+	return _messageGroups;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Core::TimeSpan Application::maxEventAge() const {
 	return _eventTimeAgo;
 }
@@ -589,25 +599,6 @@ Core::TimeSpan Application::maxEventAge() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-namespace {
-
-QColor readColor(const std::string &query, const std::string &str, const QColor &base, bool *ok = NULL) {
-	QColor r(base);
-
-	if ( !fromString(r, str) ) {
-		SEISCOMP_ERROR("%s: %s", query.c_str(), colorConvertError.c_str());
-		if ( ok ) *ok = false;
-	}
-	else {
-		if ( ok ) *ok = true;
-	}
-
-	return r;
-}
-
-}
-
-
 QColor Application::configGetColor(const std::string& query,
                                    const QColor& base) const {
 	try {
@@ -722,18 +713,8 @@ QPen Application::configGetPen(const std::string& query, const QPen& base) const
 
 	// Style
 	try {
-		static const std::map<std::string, Qt::PenStyle> styleNameMap =
-			boost::assign::map_list_of<std::string, Qt::PenStyle>
-			("customdashline", Qt::CustomDashLine)
-			("dashdotdotline", Qt::DashDotDotLine)
-			("dashdotline", Qt::DashDotLine)
-			("dashline", Qt::DashLine)
-			("dotline", Qt::DotLine)
-			("nopen", Qt::NoPen)
-			("solidline", Qt::SolidLine);
-		std::string value = configGetString(query + ".style");
-		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-		p.setStyle(styleNameMap.at(value));
+		const std::string& styleQuery = query + ".style";
+		p.setStyle(readPenStyle(styleQuery, configGetString(styleQuery), base.style()));
 	}
 	catch ( ... ) {}
 
@@ -763,26 +744,8 @@ QBrush Application::configGetBrush(const std::string& query, const QBrush& base)
 
 	// Style
 	try {
-		static const std::map<std::string, Qt::BrushStyle> styleNameMap =
-			boost::assign::map_list_of<std::string, Qt::BrushStyle>
-			("solid", Qt::SolidPattern)
-			("dense1", Qt::Dense1Pattern)
-			("dense2", Qt::Dense2Pattern)
-			("dense3", Qt::Dense3Pattern)
-			("dense4", Qt::Dense4Pattern)
-			("dense5", Qt::Dense5Pattern)
-			("dense6", Qt::Dense6Pattern)
-			("dense7", Qt::Dense7Pattern)
-			("nobrush", Qt::NoBrush)
-			("horizontal", Qt::HorPattern)
-			("vertical", Qt::VerPattern)
-			("cross", Qt::CrossPattern)
-			("bdiag", Qt::BDiagPattern)
-			("fdiag", Qt::FDiagPattern)
-			("diagcross", Qt::DiagCrossPattern);
-		std::string value = configGetString(query + ".pattern");
-		std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-		b.setStyle(styleNameMap.at(value));
+		const std::string& styleQuery = query + ".style";
+		b.setStyle(readBrushStyle(styleQuery, configGetString(styleQuery), base.style()));
 	}
 	catch ( ... ) {}
 
@@ -978,21 +941,84 @@ bool Application::initSubscriptions() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Application::init() {
+void Application::schemaValidationNames(std::vector<std::string> &modules,
+                                        std::vector<std::string> &plugins) const {
+	Client::Application::schemaValidationNames(modules, plugins);
+	plugins.push_back("GUI");
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::initLicense() {
 	if ( !License::isValid() ) {
 		std::cout << std::endl;
 		std::cout << "<WARNING>" << std::endl << std::endl;
 		License::printWarning(std::cout);
 		std::cout << std::endl << "Exiting..." << std::endl;
 
-		std::stringstream ss;
-		License::printWarning(ss);
-		QMessageBox::critical(NULL, "License error",
-		                      ss.str().c_str());
+		if ( type() != QApplication::Tty ) {
+			std::stringstream ss;
+			License::printWarning(ss);
+			QMessageBox::critical(NULL, "License error",
+			                      ss.str().c_str());
+		}
+
 		return false;
 	}
 
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Application::init() {
+	if ( !initLicense() ) return false;
+
 	bool result = Client::Application::init();
+
+	// Check author read-only
+	try {
+		vector<string> blacklistedAuthors = configGetStrings("blacklist.authors");
+		if ( find(blacklistedAuthors.begin(), blacklistedAuthors.end(), author()) != blacklistedAuthors.end() )
+			_readOnlyMessaging = true;
+	}
+	catch ( ... ) {}
+
+	try {
+		vector<string> blacklistedUsers = configGetStrings("blacklist.users");
+		SEISCOMP_DEBUG("Check if user %s is blacklisted", Seiscomp::Core::getLogin().c_str());
+		if ( find(blacklistedUsers.begin(), blacklistedUsers.end(), Seiscomp::Core::getLogin()) != blacklistedUsers.end() ) {
+			SEISCOMP_DEBUG("User %s is blacklisted, setup read-only connection", Seiscomp::Core::getLogin().c_str());
+			_readOnlyMessaging = true;
+		}
+	}
+	catch ( ... ) {}
+
+	_messageGroups.pick = "PICK";
+	_messageGroups.amplitude = "AMPLITUDE";
+	_messageGroups.magnitude = "MAGNITUDE";
+	_messageGroups.location = "LOCATION";
+	_messageGroups.focalMechanism = "FOCMECH";
+	_messageGroups.event = "EVENT";
+
+	try { _messageGroups.pick = configGetString("groups.pick"); }
+	catch ( ... ) {}
+	try { _messageGroups.amplitude = configGetString("groups.amplitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.magnitude = configGetString("groups.magnitude"); }
+	catch ( ... ) {}
+	try { _messageGroups.location = configGetString("groups.location"); }
+	catch ( ... ) {}
+	try { _messageGroups.focalMechanism = configGetString("groups.focalMechanism"); }
+	catch ( ... ) {}
+	try { _messageGroups.event = configGetString("groups.event"); }
+	catch ( ... ) {}
 
 	try { _intervalSOH = configGetInt("IntervalSOH"); }
 	catch ( ... ) {}
@@ -1240,6 +1266,12 @@ bool Application::sendMessage(Seiscomp::Core::Message* msg) {
 bool Application::sendMessage(const char* group, Seiscomp::Core::Message* msg) {
 	bool result = false;
 
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return false;
+	}
+
 	if ( SCApp->connection() )
 		result =
 			group?
@@ -1321,7 +1353,7 @@ void Application::createConnection(QString host, QString user,
 	               timeout);
 
 	_connection = Connection::Create(host.toStdString(), user.toStdString(), group.toStdString(),
-                                     Protocol::PRIORITY_DEFAULT, timeout, &status);
+	                                 Protocol::PRIORITY_DEFAULT, timeout, &status);
 
 	if ( _connection == NULL ) {
 		QMessageBox::warning(NULL, "ConnectionError",
@@ -1628,6 +1660,12 @@ void Application::sendCommand(Command command, const std::string& parameter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Application::sendCommand(Command command, const std::string& parameter, Core::BaseObject *obj) {
+	if ( _readOnlyMessaging ) {
+		QMessageBox::critical(activeWindow(), tr("Read-only connection"),
+		                      tr("This is a read-only session. No message has been sent."));
+		return;
+	}
+
 	if ( commandTarget().empty() ) {
 		QMessageBox::critical(NULL,
 		            "Commands",

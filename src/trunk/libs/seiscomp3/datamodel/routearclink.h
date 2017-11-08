@@ -116,11 +116,11 @@ class SC_SYSTEM_CORE_API RouteArclink : public Object {
 
 		//! End of data
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! priority (1 is highest)
 		void setPriority(const OPT(int)& priority);
-		int priority() const throw(Seiscomp::Core::ValueException);
+		int priority() const;
 
 
 	// ------------------------------------------------------------------

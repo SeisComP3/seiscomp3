@@ -68,7 +68,7 @@ Pick::Pick() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Pick::Pick(const Pick& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -78,7 +78,7 @@ Pick::Pick(const Pick& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Pick::Pick(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -273,7 +273,7 @@ void Pick::setHorizontalSlowness(const OPT(RealQuantity)& horizontalSlowness) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Pick::horizontalSlowness() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Pick::horizontalSlowness() {
 	if ( _horizontalSlowness )
 		return *_horizontalSlowness;
 	throw Seiscomp::Core::ValueException("Pick.horizontalSlowness is not set");
@@ -284,7 +284,7 @@ RealQuantity& Pick::horizontalSlowness() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Pick::horizontalSlowness() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Pick::horizontalSlowness() const {
 	if ( _horizontalSlowness )
 		return *_horizontalSlowness;
 	throw Seiscomp::Core::ValueException("Pick.horizontalSlowness is not set");
@@ -304,7 +304,7 @@ void Pick::setBackazimuth(const OPT(RealQuantity)& backazimuth) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealQuantity& Pick::backazimuth() throw(Seiscomp::Core::ValueException) {
+RealQuantity& Pick::backazimuth() {
 	if ( _backazimuth )
 		return *_backazimuth;
 	throw Seiscomp::Core::ValueException("Pick.backazimuth is not set");
@@ -315,7 +315,7 @@ RealQuantity& Pick::backazimuth() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealQuantity& Pick::backazimuth() const throw(Seiscomp::Core::ValueException) {
+const RealQuantity& Pick::backazimuth() const {
 	if ( _backazimuth )
 		return *_backazimuth;
 	throw Seiscomp::Core::ValueException("Pick.backazimuth is not set");
@@ -353,7 +353,7 @@ void Pick::setOnset(const OPT(PickOnset)& onset) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PickOnset Pick::onset() const throw(Seiscomp::Core::ValueException) {
+PickOnset Pick::onset() const {
 	if ( _onset )
 		return *_onset;
 	throw Seiscomp::Core::ValueException("Pick.onset is not set");
@@ -373,7 +373,7 @@ void Pick::setPhaseHint(const OPT(Phase)& phaseHint) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Phase& Pick::phaseHint() throw(Seiscomp::Core::ValueException) {
+Phase& Pick::phaseHint() {
 	if ( _phaseHint )
 		return *_phaseHint;
 	throw Seiscomp::Core::ValueException("Pick.phaseHint is not set");
@@ -384,7 +384,7 @@ Phase& Pick::phaseHint() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Phase& Pick::phaseHint() const throw(Seiscomp::Core::ValueException) {
+const Phase& Pick::phaseHint() const {
 	if ( _phaseHint )
 		return *_phaseHint;
 	throw Seiscomp::Core::ValueException("Pick.phaseHint is not set");
@@ -404,7 +404,7 @@ void Pick::setPolarity(const OPT(PickPolarity)& polarity) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-PickPolarity Pick::polarity() const throw(Seiscomp::Core::ValueException) {
+PickPolarity Pick::polarity() const {
 	if ( _polarity )
 		return *_polarity;
 	throw Seiscomp::Core::ValueException("Pick.polarity is not set");
@@ -424,7 +424,7 @@ void Pick::setEvaluationMode(const OPT(EvaluationMode)& evaluationMode) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationMode Pick::evaluationMode() const throw(Seiscomp::Core::ValueException) {
+EvaluationMode Pick::evaluationMode() const {
 	if ( _evaluationMode )
 		return *_evaluationMode;
 	throw Seiscomp::Core::ValueException("Pick.evaluationMode is not set");
@@ -444,7 +444,7 @@ void Pick::setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-EvaluationStatus Pick::evaluationStatus() const throw(Seiscomp::Core::ValueException) {
+EvaluationStatus Pick::evaluationStatus() const {
 	if ( _evaluationStatus )
 		return *_evaluationStatus;
 	throw Seiscomp::Core::ValueException("Pick.evaluationStatus is not set");
@@ -464,7 +464,7 @@ void Pick::setCreationInfo(const OPT(CreationInfo)& creationInfo) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-CreationInfo& Pick::creationInfo() throw(Seiscomp::Core::ValueException) {
+CreationInfo& Pick::creationInfo() {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Pick.creationInfo is not set");
@@ -475,7 +475,7 @@ CreationInfo& Pick::creationInfo() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const CreationInfo& Pick::creationInfo() const throw(Seiscomp::Core::ValueException) {
+const CreationInfo& Pick::creationInfo() const {
 	if ( _creationInfo )
 		return *_creationInfo;
 	throw Seiscomp::Core::ValueException("Pick.creationInfo is not set");
@@ -786,7 +786,7 @@ bool Pick::removeComment(const CommentIndex& i) {
 void Pick::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Pick skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

@@ -104,7 +104,7 @@ class EventList(Client.Application):
                 try:
                     if evt.creationInfo().modificationTime() < self._modifiedAfterTime:
                         continue
-                except Core.ValueException:
+                except ValueError:
                     continue
 
             out.append(evt.publicID())

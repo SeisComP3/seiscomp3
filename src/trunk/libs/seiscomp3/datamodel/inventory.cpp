@@ -36,6 +36,7 @@ Inventory::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Meta
 	addProperty(arrayObjectProperty("datalogger", "Datalogger", &Inventory::dataloggerCount, &Inventory::datalogger, static_cast<bool (Inventory::*)(Datalogger*)>(&Inventory::add), &Inventory::removeDatalogger, static_cast<bool (Inventory::*)(Datalogger*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responsePAZ", "ResponsePAZ", &Inventory::responsePAZCount, &Inventory::responsePAZ, static_cast<bool (Inventory::*)(ResponsePAZ*)>(&Inventory::add), &Inventory::removeResponsePAZ, static_cast<bool (Inventory::*)(ResponsePAZ*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responseFIR", "ResponseFIR", &Inventory::responseFIRCount, &Inventory::responseFIR, static_cast<bool (Inventory::*)(ResponseFIR*)>(&Inventory::add), &Inventory::removeResponseFIR, static_cast<bool (Inventory::*)(ResponseFIR*)>(&Inventory::remove)));
+	addProperty(arrayObjectProperty("responseIIR", "ResponseIIR", &Inventory::responseIIRCount, &Inventory::responseIIR, static_cast<bool (Inventory::*)(ResponseIIR*)>(&Inventory::add), &Inventory::removeResponseIIR, static_cast<bool (Inventory::*)(ResponseIIR*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responsePolynomial", "ResponsePolynomial", &Inventory::responsePolynomialCount, &Inventory::responsePolynomial, static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::add), &Inventory::removeResponsePolynomial, static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("responseFAP", "ResponseFAP", &Inventory::responseFAPCount, &Inventory::responseFAP, static_cast<bool (Inventory::*)(ResponseFAP*)>(&Inventory::add), &Inventory::removeResponseFAP, static_cast<bool (Inventory::*)(ResponseFAP*)>(&Inventory::remove)));
 	addProperty(arrayObjectProperty("network", "Network", &Inventory::networkCount, &Inventory::network, static_cast<bool (Inventory::*)(Network*)>(&Inventory::add), &Inventory::removeNetwork, static_cast<bool (Inventory::*)(Network*)>(&Inventory::remove)));
@@ -45,7 +46,7 @@ Inventory::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Meta
 IMPLEMENT_METAOBJECT(Inventory)
 
 
-Inventory::Inventory() : PublicObject("Inventory") {
+Inventory::Inventory(): PublicObject("Inventory") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -54,7 +55,7 @@ Inventory::Inventory() : PublicObject("Inventory") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Inventory::Inventory(const Inventory& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -88,6 +89,10 @@ Inventory::~Inventory() {
 	              std::compose1(std::bind2nd(std::mem_fun(&ResponseFIR::setParent),
 	                                         (PublicObject*)NULL),
 	                            std::mem_fun_ref(&ResponseFIRPtr::get)));
+	std::for_each(_responseIIRs.begin(), _responseIIRs.end(),
+	              std::compose1(std::bind2nd(std::mem_fun(&ResponseIIR::setParent),
+	                                         (PublicObject*)NULL),
+	                            std::mem_fun_ref(&ResponseIIRPtr::get)));
 	std::for_each(_responsePolynomials.begin(), _responsePolynomials.end(),
 	              std::compose1(std::bind2nd(std::mem_fun(&ResponsePolynomial::setParent),
 	                                         (PublicObject*)NULL),
@@ -264,6 +269,17 @@ bool Inventory::updateChild(Object* child) {
 		return false;
 	}
 
+	ResponseIIR* responseIIRChild = ResponseIIR::Cast(child);
+	if ( responseIIRChild != NULL ) {
+		ResponseIIR* responseIIRElement
+			= ResponseIIR::Cast(PublicObject::Find(responseIIRChild->publicID()));
+		if ( responseIIRElement && responseIIRElement->parent() == this ) {
+			*responseIIRElement = *responseIIRChild;
+			return true;
+		}
+		return false;
+	}
+
 	ResponsePolynomial* responsePolynomialChild = ResponsePolynomial::Cast(child);
 	if ( responsePolynomialChild != NULL ) {
 		ResponsePolynomial* responsePolynomialElement
@@ -317,6 +333,8 @@ void Inventory::accept(Visitor* visitor) {
 	for ( std::vector<ResponsePAZPtr>::iterator it = _responsePAZs.begin(); it != _responsePAZs.end(); ++it )
 		(*it)->accept(visitor);
 	for ( std::vector<ResponseFIRPtr>::iterator it = _responseFIRs.begin(); it != _responseFIRs.end(); ++it )
+		(*it)->accept(visitor);
+	for ( std::vector<ResponseIIRPtr>::iterator it = _responseIIRs.begin(); it != _responseIIRs.end(); ++it )
 		(*it)->accept(visitor);
 	for ( std::vector<ResponsePolynomialPtr>::iterator it = _responsePolynomials.begin(); it != _responsePolynomials.end(); ++it )
 		(*it)->accept(visitor);
@@ -1297,6 +1315,167 @@ bool Inventory::removeResponseFIR(const ResponseFIRIndex& i) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+size_t Inventory::responseIIRCount() const {
+	return _responseIIRs.size();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR* Inventory::responseIIR(size_t i) const {
+	return _responseIIRs[i].get();
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR* Inventory::responseIIR(const ResponseIIRIndex& i) const {
+	for ( std::vector<ResponseIIRPtr>::const_iterator it = _responseIIRs.begin(); it != _responseIIRs.end(); ++it )
+		if ( i == (*it)->index() )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ResponseIIR* Inventory::findResponseIIR(const std::string& publicID) const {
+	for ( std::vector<ResponseIIRPtr>::const_iterator it = _responseIIRs.begin(); it != _responseIIRs.end(); ++it )
+		if ( (*it)->publicID() == publicID )
+			return (*it).get();
+
+	return NULL;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::add(ResponseIIR* responseIIR) {
+	if ( responseIIR == NULL )
+		return false;
+
+	// Element has already a parent
+	if ( responseIIR->parent() != NULL ) {
+		SEISCOMP_ERROR("Inventory::add(ResponseIIR*) -> element has already a parent");
+		return false;
+	}
+
+	if ( PublicObject::IsRegistrationEnabled() ) {
+		ResponseIIR* responseIIRCached = ResponseIIR::Find(responseIIR->publicID());
+		if ( responseIIRCached ) {
+			if ( responseIIRCached->parent() ) {
+				if ( responseIIRCached->parent() == this )
+					SEISCOMP_ERROR("Inventory::add(ResponseIIR*) -> element with same publicID has been added already");
+				else
+					SEISCOMP_ERROR("Inventory::add(ResponseIIR*) -> element with same publicID has been added already to another object");
+				return false;
+			}
+			else
+				responseIIR = responseIIRCached;
+		}
+	}
+
+	// Add the element
+	_responseIIRs.push_back(responseIIR);
+	responseIIR->setParent(this);
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_ADD);
+		responseIIR->accept(&nc);
+	}
+
+	// Notify registered observers
+	childAdded(responseIIR);
+	
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::remove(ResponseIIR* responseIIR) {
+	if ( responseIIR == NULL )
+		return false;
+
+	if ( responseIIR->parent() != this ) {
+		SEISCOMP_ERROR("Inventory::remove(ResponseIIR*) -> element has another parent");
+		return false;
+	}
+
+	std::vector<ResponseIIRPtr>::iterator it;
+	it = std::find(_responseIIRs.begin(), _responseIIRs.end(), responseIIR);
+	// Element has not been found
+	if ( it == _responseIIRs.end() ) {
+		SEISCOMP_ERROR("Inventory::remove(ResponseIIR*) -> child object has not been found although the parent pointer matches???");
+		return false;
+	}
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		(*it)->accept(&nc);
+	}
+
+	(*it)->setParent(NULL);
+	childRemoved((*it).get());
+	
+	_responseIIRs.erase(it);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::removeResponseIIR(size_t i) {
+	// index out of bounds
+	if ( i >= _responseIIRs.size() )
+		return false;
+
+	// Create the notifiers
+	if ( Notifier::IsEnabled() ) {
+		NotifierCreator nc(OP_REMOVE);
+		_responseIIRs[i]->accept(&nc);
+	}
+
+	_responseIIRs[i]->setParent(NULL);
+	childRemoved(_responseIIRs[i].get());
+	
+	_responseIIRs.erase(_responseIIRs.begin() + i);
+
+	return true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Inventory::removeResponseIIR(const ResponseIIRIndex& i) {
+	ResponseIIR* object = responseIIR(i);
+	if ( object == NULL ) return false;
+	return remove(object);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 size_t Inventory::responsePolynomialCount() const {
 	return _responsePolynomials.size();
 }
@@ -1783,7 +1962,7 @@ bool Inventory::removeNetwork(const NetworkIndex& i) {
 void Inventory::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Inventory skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -1815,6 +1994,11 @@ void Inventory::serialize(Archive& ar) {
 	                       Seiscomp::Core::Generic::containerMember(_responseFIRs,
 	                       Seiscomp::Core::Generic::bindMemberFunction<ResponseFIR>(static_cast<bool (Inventory::*)(ResponseFIR*)>(&Inventory::add), this)),
 	                       Archive::STATIC_TYPE);
+	if ( ar.supportsVersion<0,10>() )
+		ar & NAMED_OBJECT_HINT("responseIIR",
+		                       Seiscomp::Core::Generic::containerMember(_responseIIRs,
+		                       Seiscomp::Core::Generic::bindMemberFunction<ResponseIIR>(static_cast<bool (Inventory::*)(ResponseIIR*)>(&Inventory::add), this)),
+		                       Archive::STATIC_TYPE);
 	ar & NAMED_OBJECT_HINT("responsePolynomial",
 	                       Seiscomp::Core::Generic::containerMember(_responsePolynomials,
 	                       Seiscomp::Core::Generic::bindMemberFunction<ResponsePolynomial>(static_cast<bool (Inventory::*)(ResponsePolynomial*)>(&Inventory::add), this)),

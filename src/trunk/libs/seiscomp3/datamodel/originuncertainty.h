@@ -85,30 +85,30 @@ class SC_SYSTEM_CORE_API OriginUncertainty : public Core::BaseObject {
 		//! Circular confidence region, given by single value of
 		//! horizontal uncertainty in km.
 		void setHorizontalUncertainty(const OPT(double)& horizontalUncertainty);
-		double horizontalUncertainty() const throw(Seiscomp::Core::ValueException);
+		double horizontalUncertainty() const;
 
 		//! Semi-minor axis of confidence ellipse in km.
 		void setMinHorizontalUncertainty(const OPT(double)& minHorizontalUncertainty);
-		double minHorizontalUncertainty() const throw(Seiscomp::Core::ValueException);
+		double minHorizontalUncertainty() const;
 
 		//! Semi-major axis of confidence ellipse in km.
 		void setMaxHorizontalUncertainty(const OPT(double)& maxHorizontalUncertainty);
-		double maxHorizontalUncertainty() const throw(Seiscomp::Core::ValueException);
+		double maxHorizontalUncertainty() const;
 
 		//! Azimuth of major axis of confidence ellipse. Measured
 		//! clockwise from
 		//! South-North direction at epicenter in degrees.
 		void setAzimuthMaxHorizontalUncertainty(const OPT(double)& azimuthMaxHorizontalUncertainty);
-		double azimuthMaxHorizontalUncertainty() const throw(Seiscomp::Core::ValueException);
+		double azimuthMaxHorizontalUncertainty() const;
 
 		//! Confidence ellipsoid.
 		void setConfidenceEllipsoid(const OPT(ConfidenceEllipsoid)& confidenceEllipsoid);
-		ConfidenceEllipsoid& confidenceEllipsoid() throw(Seiscomp::Core::ValueException);
-		const ConfidenceEllipsoid& confidenceEllipsoid() const throw(Seiscomp::Core::ValueException);
+		ConfidenceEllipsoid& confidenceEllipsoid();
+		const ConfidenceEllipsoid& confidenceEllipsoid() const;
 
 		//! Preferred uncertainty description.
 		void setPreferredDescription(const OPT(OriginUncertaintyDescription)& preferredDescription);
-		OriginUncertaintyDescription preferredDescription() const throw(Seiscomp::Core::ValueException);
+		OriginUncertaintyDescription preferredDescription() const;
 
 
 	// ------------------------------------------------------------------

@@ -83,7 +83,7 @@ bool MagnitudeProcessor_ML::setup(const Settings &settings) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double MagnitudeProcessor_ML::logA0(double dist_km) const throw(Core::ValueException) {
+double MagnitudeProcessor_ML::logA0(double dist_km) const {
 	for ( size_t i = 1; i < logA0_dist.size(); ++i ) {
 		if ( logA0_dist[i-1] <= dist_km && dist_km <= logA0_dist[i] ) {
 			double q = (dist_km-logA0_dist[i-1])/(logA0_dist[i]-logA0_dist[i-1]);
@@ -104,6 +104,7 @@ MagnitudeProcessor::Status MagnitudeProcessor_ML::computeMagnitude(
 	double,             // in seconds
 	double delta,       // in degrees
 	double depth,       // in kilometers
+	const DataModel::Origin *, const DataModel::SensorLocation *,
 	double &value)
 {
 	if ( amplitude <= 0 )

@@ -99,7 +99,7 @@ Decimation::Decimation() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Decimation::Decimation(const Decimation& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -191,7 +191,7 @@ void Decimation::setAnalogueFilterChain(const OPT(Blob)& analogueFilterChain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& Decimation::analogueFilterChain() throw(Seiscomp::Core::ValueException) {
+Blob& Decimation::analogueFilterChain() {
 	if ( _analogueFilterChain )
 		return *_analogueFilterChain;
 	throw Seiscomp::Core::ValueException("Decimation.analogueFilterChain is not set");
@@ -202,7 +202,7 @@ Blob& Decimation::analogueFilterChain() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& Decimation::analogueFilterChain() const throw(Seiscomp::Core::ValueException) {
+const Blob& Decimation::analogueFilterChain() const {
 	if ( _analogueFilterChain )
 		return *_analogueFilterChain;
 	throw Seiscomp::Core::ValueException("Decimation.analogueFilterChain is not set");
@@ -222,7 +222,7 @@ void Decimation::setDigitalFilterChain(const OPT(Blob)& digitalFilterChain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& Decimation::digitalFilterChain() throw(Seiscomp::Core::ValueException) {
+Blob& Decimation::digitalFilterChain() {
 	if ( _digitalFilterChain )
 		return *_digitalFilterChain;
 	throw Seiscomp::Core::ValueException("Decimation.digitalFilterChain is not set");
@@ -233,7 +233,7 @@ Blob& Decimation::digitalFilterChain() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& Decimation::digitalFilterChain() const throw(Seiscomp::Core::ValueException) {
+const Blob& Decimation::digitalFilterChain() const {
 	if ( _digitalFilterChain )
 		return *_digitalFilterChain;
 	throw Seiscomp::Core::ValueException("Decimation.digitalFilterChain is not set");
@@ -382,7 +382,7 @@ void Decimation::accept(Visitor* visitor) {
 void Decimation::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Decimation skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

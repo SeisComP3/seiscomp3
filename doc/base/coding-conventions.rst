@@ -178,8 +178,6 @@ While designing methods or functions these rules about return values should be k
 - Functions returning a pointer, NULL ( or 0 ) means an error and of course an
   invalid pointer
 - Functions returning a class object can throw an exception in case of an error.
-  This is not obligatory and should be used with care. When using exceptions,
-  the definition and the implementation should contain the exceptions in their
-  signature.
+  This is not obligatory and should be used with care.
 
-  **Example**: std::string myMethod() throw(MyException);
+  **Example**: std::string myMethod();

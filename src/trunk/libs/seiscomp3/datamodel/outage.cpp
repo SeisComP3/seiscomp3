@@ -98,7 +98,7 @@ Outage::Outage() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Outage::Outage(const Outage& other)
- : Object() {
+: Object() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -236,7 +236,7 @@ void Outage::setEnd(const OPT(Seiscomp::Core::Time)& end) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time Outage::end() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time Outage::end() const {
 	if ( _end )
 		return *_end;
 	throw Seiscomp::Core::ValueException("Outage.end is not set");
@@ -386,7 +386,7 @@ void Outage::accept(Visitor* visitor) {
 void Outage::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Outage skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

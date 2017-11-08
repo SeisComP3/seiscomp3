@@ -52,15 +52,13 @@ bool QcProcessorLatency::setState(const Record *record, const DoubleArray &data)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double QcProcessorLatency::getLatency() throw(Core::ValueException) {
-
+double QcProcessorLatency::getLatency() {
 	try {
 		return boost::any_cast<double>(_qcp->parameter);
 	}
 	catch (const boost::bad_any_cast &) {
 		throw Core::ValueException("no data");
 	}
-
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

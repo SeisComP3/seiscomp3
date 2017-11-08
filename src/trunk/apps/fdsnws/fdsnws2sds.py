@@ -20,7 +20,7 @@ import dateutil.parser
 
 from seiscomp import mseedlite, logs
 
-VERSION = "2017.065"
+VERSION = "2017.272"
 
 
 class Error(Exception):
@@ -34,17 +34,20 @@ class Timespan(object):
         self.end = end
 
 
-def exec_fetch(param, data, verbose):
+def exec_fetch(param, data, verbose, no_check):
     cmd = [sys.path[0] + "/fdsnws_fetch"]
 
     if verbose:
         cmd += ["-v"]
 
+    if no_check:
+        cmd += ["-Z"]
+
     if data is not None:
         cmd += ["-p", "/dev/stdin"]
 
     cmd += ["-o", "/dev/stdout"]
-    cmd += param
+    cmd += map(str, param)
 
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
@@ -88,6 +91,7 @@ def scan_sds(d, timespan, nets):
 
                 if ts.start < rec.end_time < ts.end:
                     ts.start = rec.end_time
+                    ts.current = rec.end_time
 
                 elif rec.end_time >= ts.end:
                     del timespan[nslc]
@@ -121,7 +125,7 @@ def get_citation(nets, param, verbose):
         postdata = postdata.encode('utf-8')
 
     try:
-        proc = exec_fetch(param, postdata, verbose)
+        proc = exec_fetch(param, postdata, verbose, True)
 
     except OSError as e:
         logs.error(str(e))
@@ -146,8 +150,8 @@ def get_citation(nets, param, verbose):
             logs.error("error parsing text format: %s" % str(e))
             continue
 
-        if code[0] in '0123456789XYZ':
-            net_desc['%s_%d' % (code, year)] = desc
+        if code[0] in "0123456789XYZ":
+            net_desc["%s_%d" % (code, year)] = desc
 
         else:
             net_desc[code] = desc
@@ -168,11 +172,15 @@ def get_citation(nets, param, verbose):
 
 
 def main():
-    param0 = ['-y', 'station', '-q', 'format=text', '-q', 'level=network']
-    param1 = ['-y', 'station', '-q', 'format=text', '-q', 'level=channel']
-    param2 = ['-y', 'dataselect', '-z']
-    times = {'starttime': datetime.datetime(1900, 1, 1), 'endtime': datetime.datetime(2100, 1, 1)}
+    param0 = ["-y", "station", "-q", "format=text", "-q", "level=network"]
+    param1 = ["-y", "station", "-q", "format=text", "-q", "level=channel"]
+    param2 = ["-y", "dataselect", "-z"]
+    times = {"starttime": datetime.datetime(1900, 1, 1), "endtime": datetime.datetime(2100, 1, 1)}
     nets = set()
+
+    def add_param0(option, opt_str, value, parser):
+        param0.append(opt_str)
+        param0.append(value)
 
     def add_param1(option, opt_str, value, parser):
         param1.append(opt_str)
@@ -183,8 +191,7 @@ def main():
         param2.append(value)
 
     def add_param(option, opt_str, value, parser):
-        param0.append(opt_str)
-        param0.append(value)
+        add_param0(option, opt_str, value, parser)
         add_param1(option, opt_str, value, parser)
         add_param2(option, opt_str, value, parser)
 
@@ -203,7 +210,7 @@ def main():
         times[option.dest] = t
 
     parser = optparse.OptionParser(
-            usage="Usage: %prog [-h|--help] [OPTIONS] -o file",
+            usage="Usage: %prog [-h|--help] [OPTIONS] -o directory",
             version="%prog " + VERSION)
 
     parser.set_defaults(
@@ -282,11 +289,28 @@ def main():
     parser.add_option("-z", "--no-citation", action="store_true", default=False,
                       help="suppress network citation info")
 
+    parser.add_option("-Z", "--no-check", action="store_true", default=False,
+                      help="suppress checking received routes and data")
+
     (options, args) = parser.parse_args()
 
     if args or not options.output_dir:
-        parser.print_usage()
+        parser.print_usage(sys.stderr)
         return 1
+
+    def log_alert(s):
+        if sys.stderr.isatty():
+            s = "\033[31m" + s + "\033[m"
+
+        sys.stderr.write(s + '\n')
+        sys.stderr.flush()
+
+    def log_notice(s):
+        if sys.stderr.isatty():
+            s = "\033[32m" + s + "\033[m"
+
+        sys.stderr.write(s + '\n')
+        sys.stderr.flush()
 
     def log_verbose(s):
         sys.stderr.write(s + '\n')
@@ -295,15 +319,15 @@ def main():
     def log_silent(s):
         pass
 
-    logs.error = log_verbose
-    logs.warning = log_verbose
-    logs.notice = log_verbose
+    logs.error = log_alert
+    logs.warning = log_alert
+    logs.notice = log_notice
     logs.info = (log_silent, log_verbose)[options.verbose]
     logs.debug = log_silent
 
     try:
         try:
-            proc = exec_fetch(param1, None, options.verbose)
+            proc = exec_fetch(param1, None, options.verbose, options.no_check)
 
         except OSError as e:
             logs.error(str(e))
@@ -369,38 +393,45 @@ def main():
                 postdata = postdata.encode('utf-8')
 
             try:
-                proc = exec_fetch(param2, postdata, options.verbose)
+                proc = exec_fetch(param2, postdata, options.verbose, options.no_check)
 
             except OSError as e:
                 logs.error(str(e))
                 logs.error("error running fdsnws_fetch")
                 return 1
 
-            for rec in mseedlite.Input(proc.stdout):
-                try:
-                    ts = timespan[(rec.net, rec.sta, rec.loc, rec.cha)]
+            got_data = False
 
-                except KeyError:
-                    logs.warning("unexpected data: %s.%s.%s.%s" % (rec.net, rec.sta, rec.loc, rec.cha))
-                    continue
+            try:
+                for rec in mseedlite.Input(proc.stdout):
+                    try:
+                        ts = timespan[(rec.net, rec.sta, rec.loc, rec.cha)]
 
-                if rec.end_time <= ts.current:
-                    continue
+                    except KeyError:
+                        logs.warning("unexpected data: %s.%s.%s.%s" % (rec.net, rec.sta, rec.loc, rec.cha))
+                        continue
 
-                sds_dir = "%s/%d/%s/%s/%s.D" \
-                          % (options.output_dir, rec.begin_time.year, rec.net, rec.sta, rec.cha)
+                    if rec.end_time <= ts.current:
+                        continue
 
-                sds_file = "%s.%s.%s.%s.D.%s" \
-                          % (rec.net, rec.sta, rec.loc, rec.cha, rec.begin_time.strftime('%Y.%j'))
+                    sds_dir = "%s/%d/%s/%s/%s.D" \
+                              % (options.output_dir, rec.begin_time.year, rec.net, rec.sta, rec.cha)
 
-                if not os.path.exists(sds_dir):
-                    os.makedirs(sds_dir)
+                    sds_file = "%s.%s.%s.%s.D.%s" \
+                              % (rec.net, rec.sta, rec.loc, rec.cha, rec.begin_time.strftime('%Y.%j'))
 
-                with open(sds_dir + '/' + sds_file, 'ab') as fd:
-                    fd.write(rec.header + rec.data)
+                    if not os.path.exists(sds_dir):
+                        os.makedirs(sds_dir)
 
-                ts.current = rec.end_time
-                nets.add((rec.net, rec.begin_time.year))
+                    with open(sds_dir + '/' + sds_file, 'ab') as fd:
+                        fd.write(rec.header + rec.data)
+
+                    ts.current = rec.end_time
+                    nets.add((rec.net, rec.begin_time.year))
+                    got_data = True
+
+            except mseedlite.MSeedError as e:
+                logs.error(str(e))
 
             proc.stdout.close()
             proc.wait()
@@ -410,14 +441,17 @@ def main():
                 return 1
 
             for ((net, sta, loc, cha), ts) in ts_used:
-                te = min(ts.end, ts.start + datetime.timedelta(minutes=options.max_timespan))
-                ts.start = ts.current
+                if not got_data:
+                    # no progress, skip to next segment
+                    ts.start += datetime.timedelta(minutes=options.max_timespan)
 
-                if te >= ts.end:
+                else:
+                    # continue from current position
+                    ts.start = ts.current
+
+                if ts.start >= ts.end:
+                    # timespan completed
                     del timespan[(net, sta, loc, cha)]
-
-                elif ts.start < te:
-                    ts.start = te
 
         if nets and not options.no_citation:
             logs.info("retrieving network citation info")

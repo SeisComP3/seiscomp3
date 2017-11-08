@@ -52,7 +52,7 @@ ParameterSet::ParameterSet() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ParameterSet::ParameterSet(const ParameterSet& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -62,7 +62,7 @@ ParameterSet::ParameterSet(const ParameterSet& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ParameterSet::ParameterSet(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -197,7 +197,7 @@ void ParameterSet::setCreated(const OPT(Seiscomp::Core::Time)& created) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Seiscomp::Core::Time ParameterSet::created() const throw(Seiscomp::Core::ValueException) {
+Seiscomp::Core::Time ParameterSet::created() const {
 	if ( _created )
 		return *_created;
 	throw Seiscomp::Core::ValueException("ParameterSet.created is not set");
@@ -648,7 +648,7 @@ bool ParameterSet::removeComment(const CommentIndex& i) {
 void ParameterSet::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ParameterSet skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

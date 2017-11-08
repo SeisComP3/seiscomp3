@@ -49,9 +49,11 @@ char objectStatusToChar(const T *o) {
 			case PRELIMINARY:
 				return 'P';
 			case CONFIRMED:
-			case REVIEWED:
-			case FINAL:
 				return 'C';
+			case REVIEWED:
+				return 'V';
+			case FINAL:
+				return 'F';
 			case REJECTED:
 				return 'X';
 			case REPORTED:

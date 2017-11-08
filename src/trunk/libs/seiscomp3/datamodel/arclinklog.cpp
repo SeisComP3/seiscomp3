@@ -38,7 +38,7 @@ ArclinkLog::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::Met
 IMPLEMENT_METAOBJECT(ArclinkLog)
 
 
-ArclinkLog::ArclinkLog() : PublicObject("ArclinkLog") {
+ArclinkLog::ArclinkLog(): PublicObject("ArclinkLog") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +47,7 @@ ArclinkLog::ArclinkLog() : PublicObject("ArclinkLog") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ArclinkLog::ArclinkLog(const ArclinkLog& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -530,7 +530,7 @@ bool ArclinkLog::removeArclinkUser(const ArclinkUserIndex& i) {
 void ArclinkLog::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ArclinkLog skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

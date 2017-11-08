@@ -187,8 +187,14 @@ TimeSpan::TimeSpan() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeSpan::TimeSpan(struct timeval* t) {
-	_timeval.tv_sec = t->tv_sec;
-	_timeval.tv_usec = t->tv_usec;
+	if ( t != NULL ) {
+		_timeval.tv_sec = t->tv_sec;
+		_timeval.tv_usec = t->tv_usec;
+	}
+	else {
+		_timeval.tv_sec = 0;
+		_timeval.tv_usec = 0;
+	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

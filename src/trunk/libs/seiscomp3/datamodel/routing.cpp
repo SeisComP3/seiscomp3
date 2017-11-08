@@ -38,7 +38,7 @@ Routing::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaOb
 IMPLEMENT_METAOBJECT(Routing)
 
 
-Routing::Routing() : PublicObject("Routing") {
+Routing::Routing(): PublicObject("Routing") {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -47,7 +47,7 @@ Routing::Routing() : PublicObject("Routing") {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Routing::Routing(const Routing& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -509,7 +509,7 @@ bool Routing::removeAccess(const AccessIndex& i) {
 void Routing::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Routing skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

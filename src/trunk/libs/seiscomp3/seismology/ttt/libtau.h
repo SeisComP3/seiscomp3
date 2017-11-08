@@ -95,13 +95,12 @@ class SC_SYSTEM_CORE_API LibTau : public TravelTimeTableInterface {
 		 */
 		TravelTime computeFirst(double lat1, double lon1, double dep1,
 		                        double lat2, double lon2, double alt2=0.,
-		                        int ellc = 0 /* for the time being, always */ )
-		                        throw(std::exception);
+		                        int ellc = 0 /* for the time being, always */ );
 
 
 	private:
 		TravelTimeList *compute(double delta, double depth);
-		TravelTime computeFirst(double delta, double depth) throw(std::exception);
+		TravelTime computeFirst(double delta, double depth);
 
 		/**
 		 * Sets the source depth.

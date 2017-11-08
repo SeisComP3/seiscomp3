@@ -17,6 +17,17 @@ AC_ARG_ENABLE(optimizations,
     ])
 AC_MSG_RESULT([$enable_optimizations])
 
+AC_MSG_CHECKING([whether to enable extra alignment of types])
+AC_ARG_ENABLE(extra_align,
+    AC_HELP_STRING([--enable-extra-align], [turn on extra alignment of types.  This is required for the 1.0 ABI [default=yes]]),
+    [enable_extra_align=$enableval],
+    [enable_extra_align="yes"])
+AC_MSG_RESULT([$enable_extra_align])
+
+AS_IF([test "$enable_extra_align" = "yes"],
+      [AC_SUBST(BSON_EXTRA_ALIGN, 1)],
+      [AC_SUBST(BSON_EXTRA_ALIGN, 0)])
+
 AC_ARG_ENABLE(lto,
               AC_HELP_STRING([--enable-lto], [turn on link time optimizations [default=no]]),
               [enable_lto=$enableval],
@@ -49,7 +60,7 @@ AC_ARG_ENABLE(debug_symbols,
 AC_MSG_RESULT([$enable_debug_symbols])
 
 # use strict compiler flags only on development releases
-m4_define([maintainer_flags_default], [m4_if(m4_eval(bson_minor_version % 2), [1], [yes], [no])])
+m4_define([maintainer_flags_default], [m4_ifset([BSON_PRERELEASE_VERSION], [yes], [no])])
 AC_ARG_ENABLE([maintainer-flags],
               [AS_HELP_STRING([--enable-maintainer-flags=@<:@no/yes@:>@],
                               [Use strict compiler flags @<:@default=]maintainer_flags_default[@:>@])],
@@ -68,8 +79,14 @@ AC_ARG_ENABLE([man-pages],
               [],
               [enable_man_pages=no])
 
-AC_ARG_ENABLE([yelp],
-              [AS_HELP_STRING([--enable-yelp=@<:@yes/no@:>@],
-                              [Install yelp manuals.])],
+AC_ARG_ENABLE([examples],
+              [AS_HELP_STRING([--enable-examples=@<:@yes/no@:>@],
+                              [Build libbson examples.])],
               [],
-              [enable_yelp=no])
+              [enable_examples=yes])
+
+AC_ARG_ENABLE([tests],
+              [AS_HELP_STRING([--enable-tests=@<:@yes/no@:>@],
+                              [Build libbson tests.])],
+              [],
+              [enable_tests=yes])

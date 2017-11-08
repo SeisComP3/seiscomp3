@@ -48,16 +48,14 @@
 							Region in which scevent is allowed to create events.
 						</description>
 					</parameter>
-				</group>
 
-				<group name="depths">
-					<parameter name="minimum" type = "double" >
+					<parameter name="minDepth" type="double" >
 						<description>
 							Minimum depth for which scevent is allowed to create events.
 						</description>
 					</parameter>
 
-					<parameter name="maximum" type = "double" >
+					<parameter name="maxDepth" type="double" >
 						<description>
 							Maximum depth for which scevent is allowed to create events.
 						</description>
@@ -78,7 +76,7 @@
 					</description>
 				</parameter>
 
-				<parameter name="maximumMatchingArrivalTimeDiff" type="float" unit="s" default="-1">
+				<parameter name="maximumMatchingArrivalTimeDiff" type="double" unit="s" default="-1">
 					<description>
 						Negative time window: compare only pickIDs to find
 						matching arrivals. A non negative
@@ -112,21 +110,21 @@
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeBefore" type="int" unit="s" default="1800">
+				<parameter name="eventTimeBefore" type="double" unit="s" default="1800">
 					<description>
 						Time range before the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="eventTimeAfter" type="int" unit="s" default="1800">
+				<parameter name="eventTimeAfter" type="double" unit="s" default="1800">
 					<description>
 						Time range after the origin time of an incoming origin to search for
 						matching events.
 					</description>
 				</parameter>
 
-				<parameter name="maximumTimeSpan" type="int" unit="s" default="60">
+				<parameter name="maximumTimeSpan" type="double" unit="s" default="60">
 					<description>
 					Associates an origin with an existing event  if the origin
 					time differs not more than 60 seconds unless the
@@ -155,7 +153,7 @@
 					</description>
 				</parameter>
 
-				<parameter name="mbOverMwValue" type="int" default="6">
+				<parameter name="mbOverMwValue" type="double" default="6">
 					<description>
 						Average between mb and Mw(mB) which must be exceeded to become Mw(mB)
 						preferred.
@@ -224,15 +222,17 @@
 				<parameter name="priorities" type="list:string">
 					<description>
 						The general priority list to decide if an origin becomes preferred.
+						The priority decreases in the order of the parameters.
 						This list is not used unless this parameter is activated.
-						This example list replicates the default hard wired behaviour:
+
+						Empty priority list: scevent replicates the default hard wired behaviour:
 							AGENCY, STATUS, PHASES_AUTOMATIC, TIME_AUTOMATIC
 
 						Each item in the list corresponds to a check that is performed.
 						Each check computes a score of the incoming origin (s1) and the
 						current preferred origin (s2). If the s1 is lower than s2,
-						the incoming origin is rejected and does not become preferred. All
-						subsequent checks are ignored.
+						the incoming origin is rejected and does not become preferred.
+						All subsequent checks are ignored.
 						If s1 is equal to s2, the next check in the list is performed.
 						If s1 is larger than s2, the origin becomes preferred and
 						all subsequent checks are ignored.
@@ -243,7 +243,13 @@
 
 						AUTHOR: check based on author priorities
 
-						STATUS: manual origins rule out automatic ones
+						MODE: evaluation mode priority: 0 = unset, 1 = automatic, 2 = manual, manual over-rules automatic
+
+						STATUS: priority combined from evaluation status and evaluation mode:
+						-100 = status is rejected, -1 = status is reported,
+						0 = status is preliminary or status is unset and mode is automatic,
+						1 = status is confirmed or status is unset and mode is manual,
+						2 = status is reviewed, 3 = status is final,
 
 						METHOD: check based on the method priorities
 

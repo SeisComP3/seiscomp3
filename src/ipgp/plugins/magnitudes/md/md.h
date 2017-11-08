@@ -110,7 +110,10 @@ class SC_SYSTEM_CLIENT_API MagnitudeProcessor_Md : public MagnitudeProcessor {
 		// ------------------------------------------------------------------
 		bool setup(const Settings& settings);
 		Status computeMagnitude(double amplitude, double period,
-		                        double delta, double depth, double& value);
+		                        double delta, double depth,
+		                        const DataModel::Origin *hypocenter,
+                                const DataModel::SensorLocation *receiver,
+		                        double& value);
 
 	private:
 		// ------------------------------------------------------------------

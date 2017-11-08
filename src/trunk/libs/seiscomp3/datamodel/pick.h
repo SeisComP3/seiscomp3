@@ -133,15 +133,15 @@ class SC_SYSTEM_CORE_API Pick : public PublicObject {
 		//! in array measurements
 		//! in s/deg.
 		void setHorizontalSlowness(const OPT(RealQuantity)& horizontalSlowness);
-		RealQuantity& horizontalSlowness() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& horizontalSlowness() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& horizontalSlowness();
+		const RealQuantity& horizontalSlowness() const;
 
 		//! Observed backazimuth of the signal. Most relevant in array
 		//! measurements
 		//! in degrees.
 		void setBackazimuth(const OPT(RealQuantity)& backazimuth);
-		RealQuantity& backazimuth() throw(Seiscomp::Core::ValueException);
-		const RealQuantity& backazimuth() const throw(Seiscomp::Core::ValueException);
+		RealQuantity& backazimuth();
+		const RealQuantity& backazimuth() const;
 
 		//! Identifies the method that was used to determine the
 		//! slowness.
@@ -150,30 +150,30 @@ class SC_SYSTEM_CORE_API Pick : public PublicObject {
 
 		//! Flag that roughly categorizes the sharpness of the onset.
 		void setOnset(const OPT(PickOnset)& onset);
-		PickOnset onset() const throw(Seiscomp::Core::ValueException);
+		PickOnset onset() const;
 
 		//! Tentative phase identification as specified by the picker.
 		void setPhaseHint(const OPT(Phase)& phaseHint);
-		Phase& phaseHint() throw(Seiscomp::Core::ValueException);
-		const Phase& phaseHint() const throw(Seiscomp::Core::ValueException);
+		Phase& phaseHint();
+		const Phase& phaseHint() const;
 
 		//! Indicates the polarity of first motion, usually from
 		//! impulsive onsets.
 		void setPolarity(const OPT(PickPolarity)& polarity);
-		PickPolarity polarity() const throw(Seiscomp::Core::ValueException);
+		PickPolarity polarity() const;
 
 		//! Evaluation mode of Pick.
 		void setEvaluationMode(const OPT(EvaluationMode)& evaluationMode);
-		EvaluationMode evaluationMode() const throw(Seiscomp::Core::ValueException);
+		EvaluationMode evaluationMode() const;
 
 		//! Evaluation status of Pick.
 		void setEvaluationStatus(const OPT(EvaluationStatus)& evaluationStatus);
-		EvaluationStatus evaluationStatus() const throw(Seiscomp::Core::ValueException);
+		EvaluationStatus evaluationStatus() const;
 
 		//! CreationInfo for the Pick object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 	
 	// ------------------------------------------------------------------

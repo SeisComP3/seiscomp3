@@ -44,11 +44,14 @@ class SC_SYSTEM_CORE_API PolyRegions {
 
 		size_t read(const std::string& location);
 
+		const std::string& dataDir() const { return _dataDir; }
+
 	private:
 		bool readFepBoundaries(const std::string& filename);
 
 	private:
 		std::vector<GeoFeature*> _regions;
+		std::string _dataDir;
 };
 
 

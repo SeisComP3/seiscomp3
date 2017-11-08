@@ -376,13 +376,13 @@ void ExtTensorSymbol::customDraw(const Map::Canvas *c, QPainter &p) {
 		symbolPos += _offset;
 		QColor color = _selected ? Qt::black : QColor(64, 64, 64);
 		p.setPen(QPen(color, 1, _selected ? Qt::SolidLine : Qt::DashLine));
-		p.drawLine(_mapPosition, symbolPos);
+		p.drawLine(pos(), symbolPos);
 		p.setPen(color);
 		p.setBrush(QBrush(color));
-		p.drawEllipse(QRect(_mapPosition.x()-2, _mapPosition.y()-2, 4, 4));
+		p.drawEllipse(QRect(pos().x()-2, pos().y()-2, 4, 4));
 	}
 	else
-		symbolPos = _mapPosition;
+		symbolPos = pos();
 
 	p.drawImage(symbolPos - QPoint(_size.width()/2, _size.height()/2), _buffer);
 
@@ -2265,7 +2265,7 @@ bool EventEdit::sendJournal(const std::string &action,
 		NotifierPtr n = new Notifier("Journaling", OP_ADD, entry.get());
 		NotifierMessagePtr nm = new NotifierMessage;
 		nm->attach(n.get());
-		if ( SCApp->sendMessage("EVENT", nm.get()) ) {
+		if ( SCApp->sendMessage(SCApp->messageGroups().event.c_str(), nm.get()) ) {
 			addJournal(entry.get());
 			return true;
 		}

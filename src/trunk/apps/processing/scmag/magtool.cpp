@@ -303,7 +303,7 @@ DataModel::StationMagnitude *MagTool::getStationMagnitude(
 		if ( SCCoreApp->hasCustomPublicIDPattern() )
 			mag = StaMag::Create();
 		else {
-			string id = origin->publicID() + "#staMag." + type + "#" +
+			string id = origin->publicID() + "/staMag/" + type + "/" +
 			            wfid.networkCode() + "." + wfid.stationCode();
 
 			mag = StaMag::Create(id);
@@ -382,7 +382,7 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin* origin,
 		if ( SCCoreApp->hasCustomPublicIDPattern() )
 			mag = NetMag::Create();
 		else {
-			std::string id = origin->publicID() + "#netMag." + type;
+			std::string id = origin->publicID() + "/netMag/" + type;
 			mag = NetMag::Create(id);
 		}
 
@@ -448,6 +448,7 @@ DataModel::Magnitude *MagTool::getMagnitude(DataModel::Origin *origin,
 
 bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
                                       const DataModel::Origin *origin,
+                                      const DataModel::SensorLocation *loc,
                                       double distance, double depth,
                                       MagnitudeList& mags) {
 	const string &atype = ampl->type();
@@ -510,7 +511,8 @@ bool MagTool::computeStationMagnitude(const DataModel::Amplitude *ampl,
 		double mag;
 		MagnitudeProcessor::Status status =
 			it->second->computeMagnitude(ampl->amplitude().value(),
-			                             period, distance, depth, mag);
+			                             period, distance, depth,
+			                             origin, loc, mag);
 
 		if ( status != MagnitudeProcessor::OK )
 			continue;
@@ -616,6 +618,9 @@ bool MagTool::computeNetworkMagnitude(DataModel::Origin *origin, const std::stri
 			stdev = sqrt(stdev/(cumw-1));
 		else
 			stdev = 0;
+
+		break;
+
 	default:
 		return false;
 	}
@@ -701,15 +706,26 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 	for ( size_t i = 0; i < origin->magnitudeCount(); ++i ) {
 		NetMag *nmag = origin->magnitude(i);
 		const std::string &type = nmag->type();
+		int n = 0;
+
 		if ( type == _summaryMagnitudeType )
 			continue;
 
+		try {
+			// Ignore rejected magnitudes
+			if ( nmag->evaluationStatus() == DataModel::REJECTED )
+				continue;
+		}
+		catch ( ... ) {}
+
 		if ( !isTypeEnabledForSummaryMagnitude(type) ) continue;
 
-		int n = nmag->stationCount();
+		try { n = nmag->stationCount(); }
+		catch ( ... ) {}
+
 		if ( n < _summaryMagnitudeMinStationCount ) continue;
 
-		double a=*_defaultCoefficients.a, b=*_defaultCoefficients.b; // defaults
+		double a = *_defaultCoefficients.a, b=*_defaultCoefficients.b; // defaults
 
 		Coefficients::iterator it = _magnitudeCoefficients.find(type);
 		if ( it != _magnitudeCoefficients.end() ) {
@@ -718,14 +734,14 @@ bool MagTool::computeSummaryMagnitude(DataModel::Origin *origin) {
 		}
 
 		double weight = a*n+b;
-		if (weight<=0)
+		if ( weight <= 0 )
 			continue;
 
 		totalWeight += weight;
 		value += weight*nmag->magnitude().value();
 		// The total count is currently the maximum count for any individual magnitude.
 		// FIXME: Something better is needed here.
-		count  = nmag->stationCount() > count ? nmag->stationCount() : count;
+		count  = n > count ? n : count;
 	}
 
 	// No magnitudes available
@@ -910,7 +926,8 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 	}
 
 	set<string> magTypes;
-	typedef pair<DataModel::PickCPtr, double> PickStreamEntry;
+	typedef pair<DataModel::SensorLocation*, double> LocationAndDistance;
+	typedef pair<DataModel::PickCPtr, LocationAndDistance> PickStreamEntry;
 	typedef map<string, PickStreamEntry> PickStreamMap;
 	PickStreamMap pickStreamMap;
 
@@ -943,7 +960,7 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 
 		SEISCOMP_DEBUG("arrival #%3d  pick='%s'", i, pickID.c_str());
 
-		const DataModel::WaveformStreamID& wfid = pick->waveformID();
+		const DataModel::WaveformStreamID &wfid = pick->waveformID();
 		const string &net = wfid.networkCode();
 		const string &sta = wfid.stationCode();
 		const string &loc = wfid.locationCode();
@@ -958,13 +975,24 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 			continue;
 		}
 
+		DataModel::SensorLocation *sloc = NULL;
+
+		try {
+			sloc = Client::Inventory::Instance()->getSensorLocation(pick.get());
+		}
+		catch ( ... ) {
+			SEISCOMP_WARNING("No sensor location meta data for pick %s",
+			                 pick->publicID().c_str());
+		}
+
 		e.first = pick;
-		e.second = arr->distance();
+		e.second = LocationAndDistance(sloc, arr->distance());
 	}
 
 	for ( PickStreamMap::iterator it = pickStreamMap.begin(); it != pickStreamMap.end(); ++it ) {
 		const string &pickID = it->second.first->publicID();
-		double distance = it->second.second;
+		DataModel::SensorLocation *loc = it->second.second.first;
+		double distance = it->second.second.second;
 
 		SEISCOMP_DEBUG("using pick %s", pickID.c_str());
 
@@ -1001,7 +1029,7 @@ bool MagTool::processOrigin(DataModel::Origin* origin) {
 
 			MagnitudeList mags;
 
-			if ( !computeStationMagnitude(ampl, origin, distance, depth, mags) )
+			if ( !computeStationMagnitude(ampl, origin, loc, distance, depth, mags) )
 				continue;
 
 			for ( MagnitudeList::const_iterator it = mags.begin(); it != mags.end(); ++it ) {
@@ -1133,6 +1161,20 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 		return true;
 	}
 
+	DataModel::SensorLocation *loc = NULL;
+
+	try {
+		loc = Client::Inventory::Instance()->getSensorLocation(
+			ampl->waveformID().networkCode(),
+			ampl->waveformID().stationCode(),
+			ampl->waveformID().locationCode(),
+			ampl->timeWindow().reference());
+	}
+	catch ( ... ) {
+		SEISCOMP_WARNING("No sensor location meta data for amplitude %s",
+		                 ampl->publicID().c_str());
+	}
+
 	for ( OriginList::iterator it = origins->begin(); it != origins->end(); ++it ) {
 		DataModel::Origin *origin = it->get();
 
@@ -1218,7 +1260,7 @@ bool MagTool::feed(DataModel::Amplitude* ampl, bool update) {
 
 		MagnitudeList mags;
 
-		if ( !computeStationMagnitude(ampl, origin, del, dep, mags) )
+		if ( !computeStationMagnitude(ampl, origin, loc, del, dep, mags) )
 			continue;
 
 		bool updateSummary = false;

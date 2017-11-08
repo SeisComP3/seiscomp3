@@ -6,9 +6,19 @@
 			<parameter name="CreatorId" type="string" default="smi://de.gfz-potsdam/QcTool_0.3.1">
 				<description>ID of QC message creator</description>
 			</parameter>
-			<parameter name="useConfiguredStreams" type="boolean" default="false">
+			<parameter name="useConfiguredStreams" type="boolean" default="true">
 				<description>
-					Limit QC determination to processed data streams.
+					Limit QC determination to processed data streams which are
+					defined in global bindings with detecLocid and detecStream.
+				</description>
+			</parameter>
+			<parameter name="use3Components" type="boolean" default="false">
+				<description>
+					If useConfiguredStreams is true then this parameter decides whether
+					to use only the vertical component (default) or all three
+					components. The 3 components are collected from the inventory
+					according to channel orientation. If that is not possible
+					then the fixed components N and E will be used.
 				</description>
 			</parameter>
 			<parameter name="streamMask" type="string">

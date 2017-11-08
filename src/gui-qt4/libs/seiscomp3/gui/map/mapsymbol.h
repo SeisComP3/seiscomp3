@@ -136,11 +136,16 @@ class SC_GUI_API Symbol {
 		//! Return the current map position
 		const QPoint &pos() const;
 
+		//! Returns whether the map position is valid or not
+		bool hasValidPosition() const;
+
 		//! Returns the screen x position
 		int x() const;
 
 		//! Returns the screen y position
 		int y() const;
+
+		void setDecorator(Decorator *);
 
 		//! Returns the attached decorator
 		Decorator *decorator() const;
@@ -255,6 +260,10 @@ inline int Symbol::x() const {
 
 inline int Symbol::y() const {
 	return _position.y();
+}
+
+inline bool Symbol::hasValidPosition() const {
+	return _position.x() >= 0 || _position.y() >= 0;
 }
 
 inline Decorator *Symbol::decorator() const {

@@ -513,15 +513,16 @@ DisplayMode selectDisplayModeFromString(const std::string& mode) {
 
 
 MvMainWindow::MvMainWindow(QWidget* parent, Qt::WFlags flags)
- : Gui::MainWindow(parent, flags),
-   _mapWidget(NULL),
-   _displayMode(NONE),
-   _mapUpdateInterval(1E3),
-   _configStationPickCacheLifeSpan(15 * 60),
-   _configEventActivityLifeSpan(15 * 60),
-   _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600)),
-   _configReadEventsNotOlderThanTimeSpan(0.0),
-   _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
+: Gui::MainWindow(parent, flags)
+, _mapWidget(NULL)
+, _displayMode(NONE)
+, _mapUpdateInterval(1000)
+, _expiredEventsInterval(0)
+, _configStationPickCacheLifeSpan(15 * 60)
+, _configEventActivityLifeSpan(15 * 60)
+, _configRemoveEventDataOlderThanTimeSpan(static_cast<double>(12 * 3600))
+, _configReadEventsNotOlderThanTimeSpan(0.0)
+, _configStationRecordFilterStr("RMHP(50)->ITAPER(20)->BW(2,0.04,2)") {
 
 	setupStandardUi();
 }
@@ -539,9 +540,13 @@ bool MvMainWindow::init() {
 
 	// Overwrite default menu settings
 	try {
-		_ui.showMapLegendAction->setChecked(SCApp->configGetBool("legend"));
+		bool showLegends = SCApp->configGetBool("legend");
+		_ui.showMapLegendAction->setChecked(showLegends);
+		SCScheme.map.showLegends = showLegends;
 	}
-	catch ( ... ) {}
+	catch ( ... ) {
+		_ui.showMapLegendAction->setChecked(SCScheme.map.showLegends);
+	}
 
 	try {
 		_ui.showStationIdAction->setChecked(SCApp->configGetBool("annotations"));
@@ -682,7 +687,13 @@ void MvMainWindow::setupStandardUi() {
 	_ui.splitter->setStretchFactor(0, 1);
 
 	// Setup menu
-	_ui.showEventTableWidgetAction->setChecked(false);
+	try {
+		_ui.showEventTableWidgetAction->setChecked(SCApp->configGetBool("eventTable.visible"));
+	}
+	catch ( ... ) {
+		_ui.showEventTableWidgetAction->setChecked(false);
+	}
+
 	_ui.showWaveformPropagationAction->setChecked(true);
 	_ui.showMapLegendAction->setChecked(true);
 	_ui.showHistoricOriginsAction->setChecked(true);
@@ -761,6 +772,14 @@ void MvMainWindow::setupStandardUi() {
 	connect(SCApp, SIGNAL(messageAvailable(Seiscomp::Core::Message*, Seiscomp::Communication::NetworkMessage*)),
 	        this, SLOT(handleNewMessage(Seiscomp::Core::Message*)));
 
+	try { _expiredEventsInterval = (int)SCApp->configGetDouble("expiredEventsInterval")*1000; }
+	catch ( ... ) {}
+
+	if ( _expiredEventsInterval > 0 ) {
+		connect(&_expiredEventsTimer, SIGNAL(timeout()), this, SLOT(removeExpiredEvents()));
+		_expiredEventsTimer.start(_expiredEventsInterval);
+	}
+
 	connect(&_mapUpdateTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
 
 	_mapUpdateTimer.start(_mapUpdateInterval);
@@ -771,7 +790,7 @@ void MvMainWindow::setupStandardUi() {
 
 void MvMainWindow::modifyUiSetupForDisplayMode() {
 	// Overwrite default menu settings
-	bool showLegend = false;
+	bool showLegend = SCScheme.map.showLegends;
 
 	try { showLegend = SCApp->configGetBool("legend"); } catch ( ... ) {}
 	if ( SCApp->commandline().hasOption("with-legend") ) showLegend = true;
@@ -1523,8 +1542,9 @@ void MvMainWindow::showOriginSymbols(bool val) {
 
 
 void MvMainWindow::removeExpiredEvents() {
+	SEISCOMP_DEBUG("Check for expired events");
 	while ( true ) {
-		EventData* expiredEvent = _eventDataRepository.findNextExpiredEvent();
+		EventData *expiredEvent = _eventDataRepository.findNextExpiredEvent();
 		if ( !expiredEvent ) break;
 		removeEventData(expiredEvent);
 	}
@@ -1674,7 +1694,7 @@ Gui::OriginSymbol* MvMainWindow::createOriginSymbolFromEvent(DataModel::Event* e
 		return NULL;
 	}
 
-	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator(&_mapWidget->canvas());
+	Gui::TTDecorator *ttDecorator = new Gui::TTDecorator();
 	ttDecorator->setDepth(origin->depth());
 	ttDecorator->setOriginTime(origin->time());
 	ttDecorator->setLatitude(origin->latitude());

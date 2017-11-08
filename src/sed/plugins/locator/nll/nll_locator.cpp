@@ -615,7 +615,7 @@ int NLLocator::capabilities() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
+Origin* NLLocator::locate(PickList &pickList) {
 	_lastWarning = "";
 
 	if ( pickList.empty() )
@@ -660,7 +660,8 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 	for ( PickList::iterator it = pickList.begin();
 	      it != pickList.end(); ++it )
 	{
-		Pick *pick = it->first.get();
+		Pick *pick = it->pick.get();
+		double weight = it->flags & F_TIME?1.0:0.0;
 
 		SensorLocation *sloc = getSensorLocation(pick);
 		if ( sloc == NULL ) {
@@ -731,7 +732,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 		   // period
 		   << -1.0 << " "
 		   // priorWt
-		   << it->second << endl;
+		   << weight << endl;
 
 		// NOTE: The weight must be the last value otherwise the method "replaceWeight"
 		//       needs to be changed.
@@ -857,7 +858,7 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 				// greater that the cut-off
 				for ( PickList::iterator it = usedPicks.begin();
 				      it != usedPicks.end(); ++it ) {
-					Pick *pick = it->first.get();
+					Pick *pick = it->pick.get();
 
 					SensorLocation *sloc = getSensorLocation(pick);
 					if ( sloc == NULL ) continue;
@@ -998,9 +999,9 @@ Origin* NLLocator::locate(PickList &pickList) throw(Core::GeneralException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::locate(PickList& pickList,
+Origin* NLLocator::locate(PickList &pickList,
                            double initLat, double initLon, double initDepth,
-                           const Time &initTime) throw(Core::GeneralException) {
+                           const Time &initTime) {
 	return locate(pickList);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1009,7 +1010,7 @@ Origin* NLLocator::locate(PickList& pickList,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) {
+Origin* NLLocator::relocate(const Origin *origin) {
 	_lastWarning = "";
 
 	if ( origin == NULL ) return NULL;
@@ -1047,10 +1048,19 @@ Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) 
 	PickList picks;
 
 	for ( size_t i = 0; i < origin->arrivalCount(); ++i ) {
-		double weight = 1.0;
+		int flags = F_NONE;
+
 		try {
-			if ( origin->arrival(i)->weight() <= 0 )
-				weight = 0.0;
+			if ( origin->arrival(i)->timeUsed() )
+				flags |= F_TIME;
+		}
+		catch ( ... ) {
+			flags |= F_TIME;
+		}
+
+		try {
+			if ( origin->arrival(i)->weight() == 0 )
+				flags &= ~F_TIME;
 		}
 		catch ( ... ) {}
 
@@ -1071,7 +1081,7 @@ Origin* NLLocator::relocate(const Origin* origin) throw(Core::GeneralException) 
 				pick = np;
 			}
 
-			picks.push_back(WeightedPick(pick,weight));
+			picks.push_back(PickItem(pick.get(), flags));
 
 		}
 		else {
@@ -1304,7 +1314,7 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 			continue;
 		}
 
-		PickPtr pick = picks[parr->original_obs_index].first;
+		PickPtr pick = picks[parr->original_obs_index].pick;
 		associatedPicks.insert(pick.get());
 
 		DataModel::ArrivalPtr arr = new DataModel::Arrival;
@@ -1314,6 +1324,9 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 		if ( parr->ray_dip >= 0 && parr->ray_qual > iAngleQualityMin )
 			arr->setTakeOffAngle(parr->ray_dip);
 		arr->setWeight(parr->weight);
+		arr->setTimeUsed(parr->weight > 0);
+		arr->setHorizontalSlownessUsed(false);
+		arr->setBackazimuthUsed(false);
 		arr->setDistance(Math::Geo::km2deg(parr->dist));
 		arr->setAzimuth(normalizeAz(rect2latlonAngle(0,parr->azim)));
 		arr->setTimeCorrection(parr->delay);
@@ -1323,10 +1336,10 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 
 	// Associate all remaining picks with unknown residual and weight 0
 	for ( size_t i = 0; i < picks.size(); ++i ) {
-		if ( associatedPicks.find(picks[i].first.get()) != associatedPicks.end() )
+		if ( associatedPicks.find(picks[i].pick.get()) != associatedPicks.end() )
 			continue;
 
-		PickPtr pick = picks[i].first;
+		PickPtr pick = picks[i].pick;
 
 		// Skip unknown station
 		SensorLocation *sloc = getSensorLocation(pick.get());
@@ -1338,14 +1351,13 @@ bool NLLocator::NLL2SC3(Origin *origin, string &locComment, const void *vnode,
 		                  sloc->latitude(), sloc->longitude(),
 		                  &dist, &az, &baz);
 
-		std::cout << "delazi: " << origin->latitude() << "," << origin->longitude()
-		          << " - " << sloc->latitude() << "," << sloc->longitude()
-		          << " = " << az << std::endl;
-
 		DataModel::ArrivalPtr arr = new DataModel::Arrival;
 		arr->setPickID(pick->publicID());
 		arr->setPhase(Phase(pick->phaseHint()));
 		arr->setWeight(0.0);
+		arr->setTimeUsed(false);
+		arr->setHorizontalSlownessUsed(false);
+		arr->setBackazimuthUsed(false);
 		arr->setDistance(dist);
 		arr->setAzimuth(normalizeAz(az));
 

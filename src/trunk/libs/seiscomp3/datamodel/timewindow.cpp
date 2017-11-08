@@ -49,7 +49,7 @@ TimeWindow::TimeWindow() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeWindow::TimeWindow(const TimeWindow& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -59,7 +59,7 @@ TimeWindow::TimeWindow(const TimeWindow& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 TimeWindow::TimeWindow(Seiscomp::Core::Time reference)
- : _reference(reference) {
+: _reference(reference) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -70,10 +70,10 @@ TimeWindow::TimeWindow(Seiscomp::Core::Time reference)
 TimeWindow::TimeWindow(Seiscomp::Core::Time reference,
                        double begin,
                        double end)
- : _reference(reference),
-   _begin(begin),
-   _end(end) {
-}
+: _reference(reference)
+, _begin(begin)
+, _end(end)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -208,7 +208,7 @@ TimeWindow& TimeWindow::operator=(const TimeWindow& other) {
 void TimeWindow::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: TimeWindow skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

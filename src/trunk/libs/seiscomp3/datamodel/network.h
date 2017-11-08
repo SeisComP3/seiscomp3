@@ -23,6 +23,7 @@
 #include <seiscomp3/core/datetime.h>
 #include <vector>
 #include <string>
+#include <seiscomp3/datamodel/comment.h>
 #include <seiscomp3/datamodel/station.h>
 #include <seiscomp3/datamodel/notifier.h>
 #include <seiscomp3/datamodel/publicobject.h>
@@ -34,6 +35,7 @@ namespace DataModel {
 
 
 DEFINE_SMARTPOINTER(Network);
+DEFINE_SMARTPOINTER(Comment);
 DEFINE_SMARTPOINTER(Station);
 
 class Inventory;
@@ -143,7 +145,7 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 
 		//! End of station epoch. Empty string if the station is open
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Network description (50.10)
 		void setDescription(const std::string& description);
@@ -171,16 +173,16 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 
 		//! Whether the network is "restricted"
 		void setRestricted(const OPT(bool)& restricted);
-		bool restricted() const throw(Seiscomp::Core::ValueException);
+		bool restricted() const;
 
 		//! Whether the metadata is synchronized with other datacenters
 		void setShared(const OPT(bool)& shared);
-		bool shared() const throw(Seiscomp::Core::ValueException);
+		bool shared() const;
 
 		//! Any notes
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------
@@ -206,6 +208,7 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
+		bool add(Comment* obj);
 		bool add(Station* obj);
 
 		/**
@@ -215,6 +218,7 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
+		bool remove(Comment* obj);
 		bool remove(Station* obj);
 
 		/**
@@ -223,14 +227,20 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
+		bool removeComment(size_t i);
+		bool removeComment(const CommentIndex& i);
 		bool removeStation(size_t i);
 		bool removeStation(const StationIndex& i);
 
 		//! Retrieve the number of objects of a particular class
+		size_t commentCount() const;
 		size_t stationCount() const;
 
 		//! Index access
 		//! @return The object at index i
+		Comment* comment(size_t i) const;
+		Comment* comment(const CommentIndex& i) const;
+
 		Station* station(size_t i) const;
 		Station* station(const StationIndex& i) const;
 
@@ -274,6 +284,7 @@ class SC_SYSTEM_CORE_API Network : public PublicObject {
 		OPT(Blob) _remark;
 
 		// Aggregations
+		std::vector<CommentPtr> _comments;
 		std::vector<StationPtr> _stations;
 
 	DECLARE_SC_CLASSFACTORY_FRIEND(Network);

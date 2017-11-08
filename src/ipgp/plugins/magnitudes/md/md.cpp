@@ -857,6 +857,8 @@ bool MagnitudeProcessor_Md::setup(const Settings& settings) {
 MagnitudeProcessor::Status
 MagnitudeProcessor_Md::computeMagnitude(double amplitude, double period,
                                         double delta, double depth,
+                                        const DataModel::Origin *hypocenter,
+                                        const DataModel::SensorLocation *receiver,
                                         double& value) {
 
 	double epdistkm;

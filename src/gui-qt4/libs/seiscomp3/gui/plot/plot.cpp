@@ -15,6 +15,7 @@
 #include <seiscomp3/gui/plot/axis.h>
 #include <seiscomp3/gui/plot/graph.h>
 #include <seiscomp3/gui/plot/plot.h>
+#include <seiscomp3/gui/plot/abstractlegend.h>
 
 #include <QPainter>
 #include <iostream>
@@ -28,7 +29,7 @@ namespace Gui {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Plot::Plot(QObject *parent) : QObject(parent) {
+Plot::Plot(QObject *parent) : QObject(parent), _legend(NULL) {
 	xAxis = new Axis(this);
 	xAxis->setPosition(Axis::Bottom);
 	xAxis->setGrid(true);
@@ -64,6 +65,33 @@ Graph *Plot::addGraph(Axis *keyAxis, Axis *valueAxis) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Plot::addGraph(Graph *graph) {
+	graph->setParent(this);
+	_graphs.append(graph);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Plot::setLegend(AbstractLegend *legend) {
+	if ( _legend == legend ) return;
+
+	if ( _legend != NULL )
+		delete _legend;
+
+	_legend = legend;
+
+	if ( _legend != NULL )
+		_legend->setParent(this);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Plot::updateRanges() {
 	// Reset ranges
 	xAxis->setRange(Range());
@@ -91,75 +119,65 @@ void Plot::draw(QPainter &p, const QRect &rect) {
 	int xAxisHeight = xAxis->isVisible() ? xAxis->sizeHint(p) : 0;
 	int xAxis2Height = xAxis2->isVisible() ? xAxis2->sizeHint(p) : 0;
 
-	QRect plotRect(rect);
-	plotRect.adjust(0,xAxis2Height,0,-xAxisHeight);
+	_plotRect = rect;
+	_plotRect.adjust(0,xAxis2Height,0,-xAxisHeight);
+
+	p.save();
 
 	// Draw axis
 	if ( yAxis->isVisible() ) {
-		QRect yAxisRect(plotRect.left(),plotRect.top(),0,plotRect.height());
+		QRect yAxisRect(_plotRect.left(),_plotRect.top(),0,_plotRect.height());
 		yAxis->updateLayout(p, yAxisRect);
 		yAxis->draw(p, yAxisRect);
-		plotRect.adjust(yAxisRect.width()-1,0,0,0);
+		_plotRect.adjust(yAxisRect.width()-1,0,0,0);
 	}
 
 	if ( yAxis2->isVisible() ) {
-		QRect yAxis2Rect(plotRect.right(),plotRect.top(),0,plotRect.height());
+		QRect yAxis2Rect(_plotRect.right(),_plotRect.top(),0,_plotRect.height());
 		yAxis2->updateLayout(p, yAxis2Rect);
 		yAxis2->draw(p, yAxis2Rect);
-		plotRect.adjust(0,0,-(yAxis2Rect.width()+1),0);
+		_plotRect.adjust(0,0,-(yAxis2Rect.width()+1),0);
 	}
 
 	if ( xAxis->isVisible() ) {
-		QRect xAxisRect(plotRect.left(),rect.bottom(),plotRect.width(),0);
+		QRect xAxisRect(_plotRect.left(),rect.bottom(),_plotRect.width(),0);
 		xAxis->updateLayout(p, xAxisRect);
 		xAxis->draw(p, xAxisRect);
 	}
 
 	if ( xAxis2->isVisible() ) {
-		QRect xAxis2Rect(plotRect.left(),rect.top(),plotRect.width(),0);
+		QRect xAxis2Rect(_plotRect.left(),rect.top(),_plotRect.width(),0);
 		xAxis2->updateLayout(p, xAxis2Rect);
 		xAxis2->draw(p, xAxis2Rect);
 	}
 
 	// Setup clipping
-	if ( yAxis->isVisible() )  plotRect.adjust( 1, 0, 0, 0);
-	if ( xAxis2->isVisible() ) plotRect.adjust( 0, 1, 0, 0);
-	if ( yAxis2->isVisible() ) plotRect.adjust( 0, 0,-1, 0);
-	if ( xAxis->isVisible() )  plotRect.adjust( 0, 0, 0,-1);
+	if ( yAxis->isVisible() ) _plotRect.adjust( yAxis->pen().width(), 0, 0, 0);
+	if ( xAxis2->isVisible() ) _plotRect.adjust( 0, xAxis2->pen().width(), 0, 0);
+	if ( yAxis2->isVisible() ) _plotRect.adjust( 0, 0,-yAxis2->pen().width(), 0);
+	if ( xAxis->isVisible() ) _plotRect.adjust( 0, 0, 0, -xAxis->pen().width());
 
-	p.save();
-	p.setClipRect(plotRect);
+	p.setClipRect(_plotRect);
 
-	p.setPen(QColor(192,192,192));
-	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, plotRect, true, false);
-	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, plotRect, true, false);
-	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, plotRect, true, false);
-	if ( yAxis2->hasGrid() ) yAxis2->drawGrid(p, plotRect, true, false);
+	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, _plotRect, true, false);
+	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, _plotRect, true, false);
+	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, _plotRect, true, false);
+	if ( yAxis2->hasGrid() ) yAxis2->drawGrid(p, _plotRect, true, false);
 
-	p.setPen(QColor(224,224,224));
-	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, plotRect, false, true);
-	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, plotRect, false, true);
-	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, plotRect, false, true);
-	if ( yAxis2->hasGrid() ) yAxis2->drawGrid(p, plotRect, false, true);
+	if ( xAxis->hasGrid() ) xAxis->drawGrid(p, _plotRect, false, true);
+	if ( yAxis->hasGrid() ) yAxis->drawGrid(p, _plotRect, false, true);
+	if ( xAxis2->hasGrid() ) xAxis2->drawGrid(p, _plotRect, false, true);
+	if ( yAxis2->hasGrid() ) yAxis2->drawGrid(p, _plotRect, false, true);
 
-	p.translate(plotRect.left(), plotRect.bottom()+1);
+	p.translate(_plotRect.left(), _plotRect.bottom()+1);
 	foreach ( Graph *graph, _graphs ) {
 		if ( graph->isEmpty() || !graph->isVisible() ) continue;
+		graph->draw(p);
+	}
 
-		QPolygonF poly;
-		graph->unproject(poly);
-
-		p.setRenderHint(QPainter::Antialiasing, graph->antiAliasing());
-
-		if ( graph->dropShadow() ) {
-			p.translate(2,2);
-			p.setPen(QPen(QColor(128,128,128,128), graph->lineWidth()));
-			p.drawPolyline(poly);
-			p.translate(-2,-2);
-		}
-
-		p.setPen(graph->pen());
-		p.drawPolyline(poly);
+	if ( (_legend != NULL) && _legend->isVisible() ) {
+		p.translate(-_plotRect.left(), -_plotRect.bottom()-1);
+		_legend->draw(p, _plotRect, _graphs);
 	}
 
 	p.restore();

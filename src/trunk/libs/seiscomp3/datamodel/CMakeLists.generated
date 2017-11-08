@@ -1,11 +1,16 @@
 SET(
 	CORE_DATAMODEL_GENERATED_HEADERS
 		types.h
+		realarray.h
+		timearray.h
+		timepdf1d.h
 		timequantity.h
 		creationinfo.h
 		eventdescription.h
 		phase.h
 		comment.h
+		complexarray.h
+		realpdf1d.h
 		realquantity.h
 		integerquantity.h
 		axis.h
@@ -51,8 +56,6 @@ SET(
 		outage.h
 		qualitycontrol.h
 		blob.h
-		realarray.h
-		complexarray.h
 		stationreference.h
 		stationgroup.h
 		auxsource.h
@@ -62,10 +65,11 @@ SET(
 		responsepaz.h
 		responsepolynomial.h
 		responsefap.h
+		responsefir.h
+		responseiir.h
 		dataloggercalibration.h
 		decimation.h
 		datalogger.h
-		responsefir.h
 		auxstream.h
 		stream.h
 		sensorlocation.h
@@ -100,11 +104,16 @@ SET(
 SET(
 	CORE_DATAMODEL_GENERATED_SOURCES
 		types.cpp
+		realarray.cpp
+		timearray.cpp
+		timepdf1d.cpp
 		timequantity.cpp
 		creationinfo.cpp
 		eventdescription.cpp
 		phase.cpp
 		comment.cpp
+		complexarray.cpp
+		realpdf1d.cpp
 		realquantity.cpp
 		integerquantity.cpp
 		axis.cpp
@@ -150,8 +159,6 @@ SET(
 		outage.cpp
 		qualitycontrol.cpp
 		blob.cpp
-		realarray.cpp
-		complexarray.cpp
 		stationreference.cpp
 		stationgroup.cpp
 		auxsource.cpp
@@ -161,10 +168,11 @@ SET(
 		responsepaz.cpp
 		responsepolynomial.cpp
 		responsefap.cpp
+		responsefir.cpp
+		responseiir.cpp
 		dataloggercalibration.cpp
 		decimation.cpp
 		datalogger.cpp
-		responsefir.cpp
 		auxstream.cpp
 		stream.cpp
 		sensorlocation.cpp

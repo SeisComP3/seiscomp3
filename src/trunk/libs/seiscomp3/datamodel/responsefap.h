@@ -134,27 +134,27 @@ class SC_SYSTEM_CORE_API ResponseFAP : public PublicObject {
 
 		//! Gain of response (48.05/58.04)
 		void setGain(const OPT(double)& gain);
-		double gain() const throw(Seiscomp::Core::ValueException);
+		double gain() const;
 
 		//! Gain frequency (48.06/58.05)
 		void setGainFrequency(const OPT(double)& gainFrequency);
-		double gainFrequency() const throw(Seiscomp::Core::ValueException);
+		double gainFrequency() const;
 
 		//! The number of fap tuples in the response
 		void setNumberOfTuples(const OPT(int)& numberOfTuples);
-		int numberOfTuples() const throw(Seiscomp::Core::ValueException);
+		int numberOfTuples() const;
 
 		//! The tuples organized as linear array. The array size must
 		//! be numberOfTuples * 3. Each tuple consists of frequency (in
 		//! Hz), amplitude and phase angle (in degree).
 		void setTuples(const OPT(RealArray)& tuples);
-		RealArray& tuples() throw(Seiscomp::Core::ValueException);
-		const RealArray& tuples() const throw(Seiscomp::Core::ValueException);
+		RealArray& tuples();
+		const RealArray& tuples() const;
 
 		//! Optional remark
 		void setRemark(const OPT(Blob)& remark);
-		Blob& remark() throw(Seiscomp::Core::ValueException);
-		const Blob& remark() const throw(Seiscomp::Core::ValueException);
+		Blob& remark();
+		const Blob& remark() const;
 
 
 	// ------------------------------------------------------------------

@@ -48,7 +48,7 @@ FOREACH (wrapper_module ${WRAPPER_MODULES})
         ADD_CUSTOM_COMMAND(
                 TARGET _${wrapper_module}
                 POST_BUILD
-                COMMAND ${CMAKE_SOURCE_DIR}/py-compile ARGS --destdir ${CMAKE_CURRENT_BINARY_DIR} ${wrapper_module}.py
+                COMMAND ${CMAKE_SOURCE_DIR}/py-compile ARGS --python \"${PYTHON_EXECUTABLE}\" --destdir ${CMAKE_CURRENT_BINARY_DIR} ${wrapper_module}.py
         )
 ENDFOREACH (wrapper_module)
 

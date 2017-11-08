@@ -122,7 +122,7 @@ class SC_SYSTEM_CORE_API WaveformQuality : public Object {
 		Seiscomp::Core::Time start() const;
 
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		void setType(const std::string& type);
 		const std::string& type() const;
@@ -134,13 +134,13 @@ class SC_SYSTEM_CORE_API WaveformQuality : public Object {
 		double value() const;
 
 		void setLowerUncertainty(const OPT(double)& lowerUncertainty);
-		double lowerUncertainty() const throw(Seiscomp::Core::ValueException);
+		double lowerUncertainty() const;
 
 		void setUpperUncertainty(const OPT(double)& upperUncertainty);
-		double upperUncertainty() const throw(Seiscomp::Core::ValueException);
+		double upperUncertainty() const;
 
 		void setWindowLength(const OPT(double)& windowLength);
-		double windowLength() const throw(Seiscomp::Core::ValueException);
+		double windowLength() const;
 
 
 	// ------------------------------------------------------------------

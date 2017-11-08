@@ -20,7 +20,6 @@
 #include <seiscomp3/gui/map/layer.h>
 #include <seiscomp3/gui/map/projection.h>
 #include <seiscomp3/gui/map/texturecache.h>
-#include <seiscomp3/gui/map/layers/citieslayer.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/math/geo.h>
 
@@ -68,6 +67,7 @@ QPoint alignmentToPos(Qt::Alignment area, int w, int h,
 	int tmpMargin = 2 * margin,
 	    height = rect.height() - tmpMargin,
 	    width = rect.width() - tmpMargin;
+
 	if ( area & Qt::AlignHCenter ) {
 		int x = std::max(width / 2 - w / 2, 0);
 		pos += QPoint(x, 0);
@@ -126,33 +126,6 @@ QImage getDecorationSymbol(const QSize& size) {
 }
 
 
-void readLayerProperties(LayerProperties *props) {
-	const static std::string cfgVisible = ".visible";
-	const static std::string cfgPen = ".pen";
-	const static std::string cfgBrush = ".brush";
-	const static std::string cfgFont = ".font";
-	const static std::string cfgDrawName = ".drawName";
-	const static std::string cfgDebug = ".debug";
-	const static std::string cfgRank = ".rank";
-	const static std::string cfgRoughness = ".roughness";
-
-	// Query properties from config
-	std::string query = CFG_LAYER_PREFIX;
-	if ( !props->name.empty() ) query += "." + props->name;
-
-	try { props->visible = SCApp->configGetBool(query + cfgVisible); } catch( ... ) {}
-	props->pen = SCApp->configGetPen(query + cfgPen, props->pen);
-	props->brush = SCApp->configGetBrush(query + cfgBrush, props->brush);
-	props->font = SCApp->configGetFont(query + cfgFont, props->font);
-	try { props->drawName = SCApp->configGetBool(query + cfgDrawName); } catch( ... ) {}
-	try { props->debug = SCApp->configGetBool(query + cfgDebug); } catch( ... ) {}
-	try { props->rank = SCApp->configGetInt(query + cfgRank); } catch( ... ) {}
-	try { props->roughness = SCApp->configGetInt(query + cfgRoughness); } catch( ... ) {}
-
-	props->filled = props->brush.style() != Qt::NoBrush;
-}
-
-
 } // ns anonymous
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -176,20 +149,80 @@ bool LayerProperties::isChild(const LayerProperties* child) const {
 #define MAX_ZOOM (1 << 24)
 
 bool Canvas::LegendArea::mousePressEvent(QMouseEvent *e) {
+	if ( e->button() != Qt::LeftButton ) return false;
+	return header.contains(e->pos());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::LegendArea::mouseReleaseEvent(QMouseEvent *e) {
+	if ( e->button() != Qt::LeftButton ) return false;
+
 	QPoint pos = e->pos();
 	if ( header.contains(pos) ) {
 		if ( currentIndex == -1 ) return true;
 
-		if ( decorationRects[0].contains(pos) ) {
+		int newIndex = currentIndex;
+
+		if ( decorationRects[0].contains(pos) )
+			newIndex = findNext(false);
+		else if ( decorationRects[1].contains(pos) )
+			newIndex = findNext(true);
+
+		if ( newIndex != currentIndex ) {
 			at(currentIndex)->setVisible(false);
-			currentIndex = findNext(false);
-		} else if ( decorationRects[1].contains(pos) ) {
-			at(currentIndex)->setVisible(false);
-			currentIndex = findNext(true);
+			currentIndex = newIndex;
+			if ( currentIndex != -1 )
+				at(currentIndex)->setVisible(true);
 		}
+
 		return true;
 	}
+
 	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int Canvas::LegendArea::findNext(bool forward) const {
+	int numberOfLegends = count(),
+	    index = currentIndex,
+	    tmp = forward ? 1 : -1;
+
+	if ( currentIndex >= 0 ) {
+		index = currentIndex;
+
+		for ( int i = 0; i < numberOfLegends-1; ++i ) {
+			index += tmp;
+			if ( index < 0 || index >= numberOfLegends ) {
+				if ( forward )
+					index = 0;
+				else
+					index = numberOfLegends-1;
+			}
+
+			Legend *legend = at(index);
+			if ( legend->isEnabled() &&
+				(legend->layer() == NULL || legend->layer()->isVisible()) )
+				return index;
+		}
+	}
+	else {
+		for ( int i = 0; i < numberOfLegends; ++i ) {
+			Legend *legend = at(i);
+			if ( legend->isEnabled() &&
+				(legend->layer() == NULL || legend->layer()->isVisible()) )
+				return i;
+		}
+	}
+
+	return -1;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -201,9 +234,9 @@ Canvas::Canvas(const MapsDesc &meta)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
 , _dirtyImage(true)
 , _dirtyLayers(true)
+, _hoverLayer(NULL)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
-, _delegate(NULL)
 , _polyCache(10) {
 	_maptree = new ImageTree(meta);
 	if ( !_maptree->valid() )
@@ -221,9 +254,9 @@ Canvas::Canvas(ImageTree *mapTree)
 : _geoReference(-180.0, -90.0, 360.0, 180.0)
 , _dirtyImage(true)
 , _dirtyLayers(true)
+, _hoverLayer(NULL)
 , _margin(10)
 , _isDrawLegendsEnabled(true)
-, _delegate(NULL)
 , _polyCache(10) {
 	_maptree = mapTree;
 
@@ -240,15 +273,19 @@ Canvas::Canvas(ImageTree *mapTree)
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 Canvas::~Canvas() {
 	delete _projection;
-	symbolCollection()->clear();
+	_mapSymbolCollection.clear();
 
-	// Delete all LayerProperties
-	for ( size_t i = 0; i < _layerProperties.size(); ++i ) {
-		delete _layerProperties[i];
+	for ( CustomLayers::const_iterator it = _customLayers.begin();
+	      it != _customLayers.end(); ++it ) {
+		Layer *layer = it->get();
+		for ( int i = 0; i < layer->legendCount(); ++i ) {
+			layer->legend(i)->disconnect();
+		}
 	}
-	_layerProperties.clear();
 
-	if ( _delegate ) delete _delegate;
+	// Remove this from Layers parent
+	for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
+		(*it)->_canvas = NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -321,9 +358,22 @@ void Canvas::setFont(QFont f) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSize(int w, int h) {
 	_buffer = QImage(w, h, (_projection && !_projection->isRectangular())?QImage::Format_ARGB32:QImage::Format_RGB32);
+
 	updateBuffer();
 
-	updateLayout();
+	foreach ( const LegendArea &area, _legendAreas ) {
+		foreach ( Seiscomp::Gui::Map::Legend *legend, area )
+			legend->contextResizeEvent(_buffer.size());
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::setLegendMargin(int margin) {
+	_margin = margin;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -357,22 +407,26 @@ void Canvas::init() {
 		connect(_maptree.get(), SIGNAL(tilesUpdated()), this, SLOT(updatedTiles()));
 	}
 
-	_mapSymbolCollection = boost::shared_ptr<SymbolCollection>(new DefaultSymbolCollection);
-
+	_citiesLayer._canvas = this;
 	_citiesLayer.setVisible(SCScheme.map.showCities);
 
+	_gridLayer._canvas = this;
 	_gridLayer.setGridDistance(QPointF(15.0, 15.0));
 	_gridLayer.setVisible(SCScheme.map.showGrid);
+
+	setupLayer(&_geoFeatureLayer);
+	_geoFeatureLayer.setVisible(SCScheme.map.showLayers);
 
 	_layers.clear();
 	_layers.append(&_gridLayer);
 	_layers.append(&_citiesLayer);
+	_layers.append(&_geoFeatureLayer);
 
 	_center = QPointF(0.0, 0.0);
 	_zoomLevel = 1;
 
 	_grayScale = false;
-	_drawLayers = false;
+	_stackLegends = true;
 
 	_projection->setView(_center, _zoomLevel);
 
@@ -383,6 +437,56 @@ void Canvas::init() {
 		_maxZoom = MAX_ZOOM;
 
 	setDrawLayers(SCScheme.map.showLayers);
+	setDrawLegends(SCScheme.map.showLegends);
+
+	// Read custom layers
+	try {
+		std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
+		for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
+			LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
+			if ( !customLayer ) {
+				SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
+				continue;
+			}
+
+			customLayer->setName(customLayerInterfaces[i].c_str());
+			_customLayers.append(customLayer);
+			prependLayer(customLayer.get());
+		}
+	}
+	catch ( ... ) {}
+
+	// Read layer order
+	try {
+		std::vector<std::string> layerOrder;
+
+		layerOrder = SCApp->configGetStrings(CFG_LAYER_PREFIX);
+		if ( !layerOrder.empty() ) {
+			QMap<std::string, Layer*> layerNameMap;
+
+			// Create layer lookup
+			foreach ( Layer *layer, _layers )
+				layerNameMap[layer->name().toStdString()] = layer;
+
+			Layers orderedLayers;
+			for ( size_t i = 0; i < layerOrder.size(); ++i ) {
+				Layer *layer = layerNameMap.value(layerOrder[i]);
+				if ( layer == NULL )
+					SEISCOMP_WARNING("Layer '%s' in layer list not found", layerOrder[i].c_str());
+				else
+					orderedLayers.append(layer);
+			}
+
+			// Append layers that are not already in ordered list
+			foreach ( Layer *layer, _layers )
+				if ( !orderedLayers.contains(layer) )
+					orderedLayers.append(layer);
+
+			// Finally copy the ordered layer list to the current layer list
+			_layers = orderedLayers;
+		}
+	}
+	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -428,14 +532,7 @@ bool Canvas::isDrawGridEnabled() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLayers(bool e) {
-	if ( e != _drawLayers ) {
-		_drawLayers = e;
-		updateBuffer();
-	}
-
-	if ( _drawLayers && _layerProperties.empty() )
-		// Load all layers and initialize the layer property vector
-		initLayerProperites();
+	_geoFeatureLayer.setVisible(e);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -444,7 +541,7 @@ void Canvas::setDrawLayers(bool e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::isDrawLayersEnabled() const {
-	return _drawLayers;
+	return _geoFeatureLayer.isVisible();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -471,17 +568,23 @@ bool Canvas::isDrawCitiesEnabled() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setDrawLegends(bool e) {
+	if ( _isDrawLegendsEnabled == e ) return;
+
 	_isDrawLegendsEnabled = e;
+
 	foreach ( const LegendArea& area, _legendAreas ) {
-		if ( e == false ) {
+		if ( !e ) {
 			foreach (Seiscomp::Gui::Map::Legend* legend, area) {
 				legend->setVisible(false);
 			}
-		} else {
+		}
+		else {
 			if ( area.currentIndex != -1 )
 				area[area.currentIndex]->setVisible(true);
 		}
 	}
+
+	emit legendVisibilityChanged(_isDrawLegendsEnabled);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -498,7 +601,34 @@ bool Canvas::isDrawLegendsEnabled() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const QRectF& Canvas::geoRect() const {
+void Canvas::showLegends() {
+	setDrawLegends(true);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::hideLegends() {
+	setDrawLegends(false);
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::setLegendStacking(bool enable) {
+	_stackLegends = enable;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const QRectF &Canvas::geoRect() const {
 	return _geoReference;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -872,8 +1002,8 @@ bool Canvas::isVisible(double lon, double lat) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-SymbolCollection* Canvas::symbolCollection() const {
-	return _mapSymbolCollection.get();
+const SymbolCollection *Canvas::symbolCollection() const {
+	return &_mapSymbolCollection;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -881,8 +1011,8 @@ SymbolCollection* Canvas::symbolCollection() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::setSymbolCollection(SymbolCollection *collection) {
-	_mapSymbolCollection = boost::shared_ptr<SymbolCollection>(collection);
+SymbolCollection *Canvas::symbolCollection() {
+	return &_mapSymbolCollection;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -892,96 +1022,6 @@ void Canvas::setSymbolCollection(SymbolCollection *collection) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setSelectedCity(const Math::Geo::CityD *c) {
 	_citiesLayer.setSelectedCity(c);
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/**
- * Initializes the layer property vector with properties read
- * from the symbol collection.
- */
-void Canvas::initLayerProperites() {
-	// Create a layer properties from BNA geo features
-	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
-	std::vector<Geo::Category*>::const_iterator itc = featureSet.categories().begin();
-	for ( ; itc != featureSet.categories().end(); ++itc ) {
-		// Initialize the base pen with the parent pen if available,
-		// else use the default constructor
-		Geo::Category *cat = *itc;
-		LayerProperties *props = cat->parent == 0 ?
-			new LayerProperties(cat->name.c_str()) :
-			new LayerProperties(cat->name.c_str(), _layerProperties.at(cat->parent->id));
-		_layerProperties.push_back(props);
-		readLayerProperties(props);
-	}
-
-	const Geo::PolyRegions &fepRegions = Regions::polyRegions();
-	if ( fepRegions.regionCount() > 0 ) {
-		// Add empty root property if not exists yet
-		if ( _layerProperties.empty() ) {
-			_layerProperties.push_back(new LayerProperties(""));
-			readLayerProperties(_layerProperties.front());
-		}
-		// Add fep properties
-		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
-		readLayerProperties(_layerProperties.back());
-	}
-
-	// Read custom layers
-	try {
-		std::vector<std::string> customLayerInterfaces = SCApp->configGetStrings(CFG_LAYER_INTERFACES_PREFIX);
-		for ( size_t i = 0; i < customLayerInterfaces.size(); ++i ) {
-			LayerPtr customLayer = LayerFactory::Create(customLayerInterfaces[i].c_str());
-			if ( !customLayer ) {
-				SEISCOMP_WARNING("Could not create custom layer '%s'", customLayerInterfaces[i].c_str());
-				continue;
-			}
-
-			customLayer->setName(customLayerInterfaces[i].c_str());
-			customLayer->init(SCApp->configuration());
-
-			_customLayers.append(customLayer);
-			prependLayer(customLayer.get());
-		}
-	}
-	catch ( ... ) {}
-
-	// Read layer order
-	try {
-		std::vector<std::string> layerOrder;
-
-		layerOrder = SCApp->configGetStrings(CFG_LAYER_PREFIX);
-		if ( !layerOrder.empty() ) {
-			QMap<std::string, Layer*> layerNameMap;
-
-			// Create layer lookup
-			foreach ( Layer *layer, _layers )
-				layerNameMap[layer->name().toStdString()] = layer;
-
-			Layers orderedLayers;
-			for ( size_t i = 0; i < layerOrder.size(); ++i ) {
-				Layer *layer = layerNameMap.value(layerOrder[i]);
-				if ( layer == NULL )
-					SEISCOMP_WARNING("Layer '%s' in layer list not found", layerOrder[i].c_str());
-				else
-					orderedLayers.append(layer);
-			}
-
-			// Append layers that are not already in ordered list
-			foreach ( Layer *layer, _layers )
-				if ( !orderedLayers.contains(layer) )
-					orderedLayers.append(layer);
-
-			// Finally copy the ordered layer list to the current layer list
-			_layers = orderedLayers;
-		}
-
-
-	}
-	catch ( ... ) {}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1016,14 +1056,15 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 	// Draw the name if requested and if there is enough space
 	if ( layProp->drawName ) {
 		QPoint p1, p2;
-		_projection->project(p1, QPointF(bbox.lonMin, bbox.latMax));
-		_projection->project(p2, QPointF(bbox.lonMax, bbox.latMin));
-		QRect bboxRect = QRect(p1, p2);
-		QString name = f->name().c_str();
-		QRect textRect = painter.fontMetrics().boundingRect(name);
-		if ( textRect.width()*100 < bboxRect.width()*80 &&
-		     textRect.height()*100 < bboxRect.height()*80 )
-			painter.drawText(bboxRect, Qt::AlignCenter, name);
+		if ( _projection->project(p1, QPointF(bbox.lonMin, bbox.latMax))
+		  && _projection->project(p2, QPointF(bbox.lonMax, bbox.latMin)) ) {
+			QRect bboxRect = QRect(p1, p2);
+			QString name = f->name().c_str();
+			QRect textRect = painter.fontMetrics().boundingRect(name);
+			if ( textRect.width()*100 < bboxRect.width()*80 &&
+			     textRect.height()*100 < bboxRect.height()*80 )
+				painter.drawText(bboxRect, Qt::AlignCenter, name);
+		}
 	}
 
 	// Debug: Print the segment name and draw the bounding box
@@ -1033,21 +1074,23 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 		// project the center of the bounding box
 		float bboxWidth = bbox.lonMax - bbox.lonMin;
 		float bboxHeight = bbox.latMax - bbox.latMin;
-		_projection->project(debugPoint, QPointF(
-		                     bbox.lonMin + bboxWidth/2,
-		                     bbox.latMin + bboxHeight/2));
-		QFont font;
-		float maxBBoxEdge = bboxWidth > bboxHeight ? bboxWidth : bboxHeight;
-		int pixelSize = (int)(_projection->pixelPerDegree() * maxBBoxEdge / 10.0);
-		font.setPixelSize(pixelSize < 1 ? 1 : pixelSize > 30 ? 30 : pixelSize);
-		QFontMetrics metrics(font);
-		QRect labelRect(metrics.boundingRect(f->name().c_str()));
-		labelRect.moveTo(debugPoint.x() - labelRect.width()/2,
-		                 debugPoint.y() - labelRect.height()/2);
 
-		painter.setFont(font);
-		painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop,
-		                 f->name().c_str());
+		if ( _projection->project(debugPoint, QPointF(
+		                          bbox.lonMin + bboxWidth/2,
+		                          bbox.latMin + bboxHeight/2)) ) {
+			QFont font;
+			float maxBBoxEdge = bboxWidth > bboxHeight ? bboxWidth : bboxHeight;
+			int pixelSize = (int)(_projection->pixelPerDegree() * maxBBoxEdge / 10.0);
+			font.setPixelSize(pixelSize < 1 ? 1 : pixelSize > 30 ? 30 : pixelSize);
+			QFontMetrics metrics(font);
+			QRect labelRect(metrics.boundingRect(f->name().c_str()));
+			labelRect.moveTo(debugPoint.x() - labelRect.width()/2,
+			                 debugPoint.y() - labelRect.height()/2);
+
+			painter.setFont(font);
+			painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop,
+			                 f->name().c_str());
+		}
 
 		_projection->moveTo(QPointF(bbox.lonMin, bbox.latMin));
 		_projection->lineTo(painter, QPointF(bbox.lonMax, bbox.latMin));
@@ -1067,75 +1110,8 @@ bool Canvas::drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::drawGeoFeatures(QPainter& painter) {
-	if ( !_drawLayers ) return;
-
-	const Geo::GeoFeatureSet &featureSet = Geo::GeoFeatureSetSingleton::getInstance();
-
-	size_t linesPlotted = 0;
-	size_t polygonsPlotted = 0;
-
-	size_t categoryId = 0;
-	LayerProperties* layProp = NULL;
-
-	// Debug pen and label point
-	QPen debugPen;
-	debugPen.setColor(Qt::black);
-	debugPen.setWidth(1);
-	debugPen.setStyle(Qt::SolidLine);
-
-	bool filled = false;
-
-	// Iterate over all features
-	std::vector<Geo::GeoFeature*>::const_iterator itf = featureSet.features().begin();
-	for ( ; itf != featureSet.features().end(); ++itf ) {
-		// Update painter settings if necessary
-		if ( layProp == NULL || categoryId != (*itf)->category()->id ) {
-			categoryId = (*itf)->category()->id;
-			layProp = _layerProperties.at(categoryId);
-			filled = _projection->isRectangular()?layProp->filled:false;
-			painter.setFont(layProp->font);
-			painter.setPen(layProp->pen);
-			if ( filled ) painter.setBrush(layProp->brush);
-		}
-
-		if ( !drawGeoFeature(painter, *itf, layProp, debugPen, linesPlotted,
-		                     polygonsPlotted, filled) ) break;
-	}
-
-	// Last property is for "fep"
-	const Geo::PolyRegions &fepRegions = Regions().polyRegions();
-	layProp = fepRegions.regionCount() > 0 ? _layerProperties.back() : NULL;
-
-	// Skip, if the layer was disabled
-	if ( layProp && layProp->visible && layProp->rank <= _zoomLevel ) {
-		painter.setFont(layProp->font);
-		painter.setPen(layProp->pen);
-		filled = _projection->isRectangular()?layProp->filled:false;
-		if ( filled ) painter.setBrush(layProp->brush);
-		for ( size_t i = 0; i < fepRegions.regionCount(); ++i ) {
-			Geo::GeoFeature *reg = fepRegions.region(i);
-			if ( !drawGeoFeature(painter, reg, layProp, debugPen, linesPlotted,
-			                     polygonsPlotted, filled) ) break;
-		}
-	}
-
-	/*
-	if ( polygonsPlotted > 0 ) {
-		SEISCOMP_DEBUG("zoom: %f, pixelPerDegree: %f -- %i polygons with %i lines plotted",
-		               _zoomLevel, _projection->pixelPerDegree(),
-		               (uint)polygonsPlotted, (uint)linesPlotted);
-	}
-	*/
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLayers(QPainter& painter) {
-	foreach ( Layer* layer, _layers ) {
+	foreach ( Layer *layer, _layers ) {
 		if ( !layer->isVisible() ) continue;
 
 		layer->draw(this, painter);
@@ -1148,8 +1124,12 @@ void Canvas::drawLayers(QPainter& painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawDrawables(QPainter& painter, Symbol::Priority priority) {
-	for ( SymbolCollection::const_iterator it = symbolCollection()->begin(); it != symbolCollection()->end(); ++it ) {
+	for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
+	      it != _mapSymbolCollection.end(); ++it ) {
 		Symbol* mapSymbol = *it;
+
+		if ( !mapSymbol->hasValidPosition() )
+			mapSymbol->calculateMapPosition(this);
 
 		bool isConsidered = !mapSymbol->isClipped() &&
 		                    mapSymbol->isVisible() &&
@@ -1173,7 +1153,7 @@ void Canvas::drawDrawables(QPainter& painter) {
 	drawDrawables(painter, Symbol::MEDIUM);
 	drawDrawables(painter, Symbol::HIGH);
 
-	Symbol* tmp = symbolCollection()->top();
+	Symbol* tmp = _mapSymbolCollection.top();
 	if ( tmp ) tmp->draw(this, painter);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1233,6 +1213,12 @@ void Canvas::drawImageLayer(QPainter &painter) {
 		else
 			_buffer.fill(Qt::lightGray);
 
+		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+			if ( (*it)->isVisible() )
+				(*it)->baseBufferUpdated(this);
+		}
+
+		/*
 		if ( painter.device() == &_buffer )
 			drawGeoFeatures(painter);
 		else {
@@ -1241,9 +1227,12 @@ void Canvas::drawImageLayer(QPainter &painter) {
 			                !_previewMode && SCScheme.map.vectorLayerAntiAlias);
 			drawGeoFeatures(p);
 		}
+		*/
 
-		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it )
-			(*it)->bufferUpdated(this);
+		for ( Layers::const_iterator it = _layers.begin(); it != _layers.end(); ++it ) {
+			if ( (*it)->isVisible() )
+				(*it)->bufferUpdated(this);
+		}
 
 		bufferUpdated();
 		_dirtyImage = false;
@@ -1263,8 +1252,21 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 		                                  _filterMap && !_previewMode);
 	}
 
-	if ( _dirtyLayers ) {
-		updateDrawablePositions();
+	if ( _buffer.width() > 0 && _buffer.height() > 0 ) {
+		if ( _dirtyLayers || _mapSymbolCollection._dirty ) {
+			for ( SymbolCollection::const_iterator it = _mapSymbolCollection.begin();
+			      it != _mapSymbolCollection.end(); ++it )
+				(*it)->calculateMapPosition(this);
+			_mapSymbolCollection._dirty = false;
+		}
+
+		if ( _dirtyLayers ) {
+			for ( Layers::const_iterator it = _layers.begin();
+			      it != _layers.end(); ++it ) {
+				(*it)->calculateMapPosition(this);
+			}
+		}
+
 		_dirtyLayers = false;
 	}
 
@@ -1286,116 +1288,233 @@ void Canvas::drawVectorLayer(QPainter &painter) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::drawLegends(QPainter& painter) {
-	if ( _delegate ) {
-		delegate()->drawLegends(painter);
-		return;
-	}
-
 	QFontMetrics fm(painter.font());
-	int margin = 9;
 
 	QPainter::RenderHints hints = painter.renderHints();
 	painter.setRenderHint(QPainter::Antialiasing, false);
 
+	int innerMargin = 9;
+
 	for ( LegendAreas::iterator it = _legendAreas.begin();
 	      it != _legendAreas.end(); ++it ) {
+		LegendArea &area = it.value();
+		Legend *legend;
 
-		LegendArea& area = it.value();
-		if ( area.currentIndex == -1 ) continue;
+		if ( _stackLegends ) {
 
-		Legend* legend = area[area.currentIndex];
-		if ( !legend->isVisible() ) legend->setVisible(true);
+			if ( area.currentIndex == -1 ) {
+				area.currentIndex = area.findNext();
+				if ( area.currentIndex == -1 ) continue;
+			}
+			else {
+				legend = area[area.currentIndex];
+				if ( !legend->isEnabled() || ((legend->layer() != NULL) && !legend->layer()->isVisible()) ) {
+					if ( legend->isVisible() ) legend->setVisible(false);
+					area.currentIndex = area.findNext();
+					if ( area.currentIndex == -1 ) continue;
+				}
+			}
 
-		QRect decorationRect(0, 0, 52, 22);
-		const QString& title = legend->title();
-		QRect textRect(0, 0, fm.width(title) + 2 * margin, fm.height());
-		QSize contentSize = legend->size();
-		int contentHeight = contentSize.height(),
-		    contentWidth = contentSize.width(),
-		    headerHeight = std::max(textRect.height(), decorationRect.height());
+			legend = area[area.currentIndex];
 
-		if ( area.findNext() == -1 )
-			decorationRect.setSize(QSize(0, 0));
+			if ( !legend->isVisible() ) legend->setVisible(true);
 
-		int height = headerHeight + contentHeight,
-		    width = textRect.width() + decorationRect.width();
+			QRect decorationRect(0, 0, 52, 22);
+			const QString &title = legend->title();
+			QRect textRect(0, 0, fm.width(title) + 2 * innerMargin, fm.height());
+			QSize contentSize = legend->size();
+			int contentHeight = contentSize.height(),
+			    contentWidth = contentSize.width(),
+			    headerHeight = std::max(textRect.height(), decorationRect.height());
 
-		if ( contentWidth > width) {
-			textRect.setWidth(textRect.width() + contentWidth - width);
-			width = contentWidth;
-		} else {
-			contentWidth = width;
-			contentSize.setWidth(contentWidth);
+			if ( area.findNext() == -1 ) {
+				decorationRect.setSize(QSize(0, 0));
+
+				// No title and just one legend -> no header
+				if ( title.isEmpty() ) headerHeight = 0;
+			}
+
+			int height = headerHeight + contentHeight,
+			    width = textRect.width() + decorationRect.width();
+
+			if ( contentWidth > width) {
+				textRect.setWidth(textRect.width() + contentWidth - width);
+				width = contentWidth;
+			}
+			else {
+				contentWidth = width;
+				contentSize.setWidth(contentWidth);
+			}
+
+			if ( headerHeight > textRect.height() )
+				textRect.setHeight(headerHeight);
+
+			QPoint pos = alignmentToPos(legend->alignment(), width, height,
+			                            painter.viewport(), _margin);
+
+			int x = pos.x(), y = pos.y();
+
+			QRect headerRect(x, y, width, headerHeight);
+			if ( legend->alignment() & Qt::AlignBottom )
+				headerRect.translate(0, contentHeight);
+
+			QLinearGradient gradient(headerRect.topLeft(), headerRect.bottomLeft());
+			gradient.setColorAt(0, QColor(125, 125, 125 , 192));
+			gradient.setColorAt(1, QColor(76, 76, 76, 192));
+
+			QPen pen;
+			pen.setBrush(gradient);
+
+			painter.setPen(pen);
+			painter.setBrush(gradient);
+			painter.drawRect(headerRect);
+
+			if ( legend->alignment() & Qt::AlignRight ) {
+				textRect.moveTopLeft(headerRect.topLeft());
+				decorationRect.moveTopLeft(textRect.topRight());
+			}
+			else {
+				decorationRect.moveTopLeft(headerRect.topLeft());
+				textRect.moveTopLeft(decorationRect.topRight());
+			}
+
+			QFont font = painter.font();
+
+			painter.setFont(legend->titleFont());
+			painter.setPen(Qt::white);
+			painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignVCenter, title);
+
+			painter.setFont(font);
+
+			if ( !decorationRect.isNull() ) {
+				QSize size(26, 22);
+				QImage image = getDecorationSymbol(size);
+				painter.drawImage(decorationRect.topLeft(), image);
+
+				QRect rect(decorationRect.topLeft(), size);
+				it->decorationRects[0] = rect;
+				rect.translate(26, 0);
+
+				image = image.mirrored(true, false);
+				painter.drawImage(rect.topLeft(), image);
+
+				it->decorationRects[1] = rect;
+			}
+			else {
+				it->decorationRects[0] = QRect();
+				it->decorationRects[1] = QRect();
+			}
+
+			it->header = headerRect;
+
+			QRect contentRect (headerRect.bottomLeft(), contentSize);
+			if ( legend->alignment() & Qt::AlignBottom )
+				contentRect.moveTopLeft(QPoint(x,y));
+
+			painter.setPen(SCScheme.colors.legend.border);
+			painter.setBrush(SCScheme.colors.legend.background);
+			painter.drawRect(contentRect);
+
+			legend->draw(contentRect, painter);
 		}
+		else {
+			Qt::Alignment align = it.key();
+			int tx = 0, ty = 0;
 
-		if ( headerHeight > textRect.height() )
-			textRect.setHeight(headerHeight);
+			if ( align & Qt::AlignHCenter ) {
+				if ( align & Qt::AlignTop )
+					ty = 1;
+				else if ( align & Qt::AlignBottom )
+					ty = -1;
+			}
+			else if ( align & Qt::AlignRight )
+				tx = -1;
+			else
+				tx = 1;
 
-		QPoint pos = alignmentToPos(legend->alignment(), width, height,
-		                            painter.viewport(), _margin);
+			int cx = 0, cy = 0;
 
-		int x = pos.x(),
-		    y = pos.y();
-		QRect headerRect(x, y, width, headerHeight);
-		if ( legend->alignment() & Qt::AlignBottom )
-			headerRect.translate(0, contentHeight);
-
-		QLinearGradient gradient(headerRect.topLeft(), headerRect.bottomLeft());
-		gradient.setColorAt(0, QColor(125, 125, 125 , 192));
-		gradient.setColorAt(1, QColor(76, 76, 76, 192));
-
-		QPen pen;
-		pen.setBrush(gradient);
-
-		painter.setPen(pen);
-		painter.setBrush(gradient);
-		painter.drawRect(headerRect);
-
-		if ( legend->alignment() & Qt::AlignRight ) {
-			textRect.moveTopLeft(headerRect.topLeft());
-			decorationRect.moveTopLeft(textRect.topRight());
-		} else {
-			decorationRect.moveTopLeft(headerRect.topLeft());
-			textRect.moveTopLeft(decorationRect.topRight());
-		}
-
-		QFont font = painter.font();
-
-		painter.setFont(legend->titleFont());
-		painter.setPen(Qt::white);
-		painter.drawText(textRect, Qt::AlignHCenter | Qt::AlignVCenter, title);
-
-		painter.setFont(font);
-
-		if ( !decorationRect.isNull() ) {
-			QSize size(26, 22);
-			QImage image = getDecorationSymbol(size);
-			painter.drawImage(decorationRect.topLeft(), image);
-
-			QRect rect(decorationRect.topLeft(), size);
-			it->decorationRects[0] = rect;
-			rect.translate(26, 0);
-
-			image = image.mirrored(true, false);
-			painter.drawImage(rect.topLeft(), image);
-
-			it->decorationRects[1] = rect;
-		} else {
 			it->decorationRects[0] = QRect();
 			it->decorationRects[1] = QRect();
+
+			for ( LegendArea::iterator lit = area.begin(); lit != area.end(); ++lit ) {
+				legend = *lit;
+
+				if ( !legend->isEnabled() ) continue;
+				if ( !legend->isVisible() ) legend->setVisible(true);
+
+				QRect decorationRect(0, 0, 52, 22);
+				const QString &title = legend->title();
+				QRect textRect(0, 0, fm.width(title) + 2 * innerMargin, fm.height());
+				QSize contentSize = legend->size();
+				int contentHeight = contentSize.height(),
+				    contentWidth = contentSize.width(),
+				    headerHeight = std::max(textRect.height(), decorationRect.height());
+
+				// No title and just one legend -> no header
+				if ( title.isEmpty() ) headerHeight = 0;
+
+				int height = headerHeight + contentHeight,
+				    width = textRect.width() + decorationRect.width();
+
+				if ( contentWidth > width) {
+					textRect.setWidth(textRect.width() + contentWidth - width);
+					width = contentWidth;
+				}
+				else {
+					contentWidth = width;
+					contentSize.setWidth(contentWidth);
+				}
+
+				if ( headerHeight > textRect.height() )
+					textRect.setHeight(headerHeight);
+
+				QPoint pos = alignmentToPos(legend->alignment(), width, height,
+				                            painter.viewport(), _margin);
+
+				int x = cx + pos.x(), y = cy + pos.y();
+				QRect headerRect(x, y, width, headerHeight);
+
+				if ( headerHeight > 0 ) {
+					if ( legend->alignment() & Qt::AlignBottom )
+						headerRect.translate(0, contentHeight);
+
+					QLinearGradient gradient(headerRect.topLeft(), headerRect.bottomLeft());
+					gradient.setColorAt(0, QColor(125, 125, 125 , 192));
+					gradient.setColorAt(1, QColor(76, 76, 76, 192));
+
+					QPen pen;
+					pen.setBrush(gradient);
+
+					painter.setPen(pen);
+					painter.setBrush(gradient);
+					painter.drawRect(headerRect);
+
+					QFont font = painter.font();
+
+					painter.setFont(legend->titleFont());
+					painter.setPen(Qt::white);
+					painter.drawText(headerRect, Qt::AlignHCenter | Qt::AlignVCenter, title);
+
+					painter.setFont(font);
+				}
+
+				it->header = headerRect;
+
+				QRect contentRect(headerRect.bottomLeft(), contentSize);
+				if ( legend->alignment() & Qt::AlignBottom )
+					contentRect.moveTopLeft(QPoint(x,y));
+
+				painter.setPen(SCScheme.colors.legend.border);
+				painter.setBrush(SCScheme.colors.legend.background);
+				painter.drawRect(contentRect);
+
+				legend->draw(contentRect, painter);
+
+				cx += tx * (contentRect.width() + _margin);
+				cy += ty * (contentRect.height() + _margin);
+			}
 		}
-
-		it->header = headerRect;
-
-		QRect contentRect (headerRect.bottomLeft(), contentSize);
-		if ( legend->alignment() & Qt::AlignBottom )
-			contentRect.moveTopLeft(QPoint(x,y));
-
-		painter.setPen(SCScheme.colors.legend.border);
-		painter.setBrush(SCScheme.colors.legend.background);
-		painter.drawRect(contentRect);
-
-		legend->draw(contentRect, painter);
 	}
 
 	painter.setRenderHints(hints);
@@ -1406,30 +1525,12 @@ void Canvas::drawLegends(QPainter& painter) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::draw(QPainter& painter) {
+void Canvas::draw(QPainter &painter) {
 	drawImageLayer(painter);
 	drawVectorLayer(painter);
 
 	if ( !_maptree || !_maptree->hasPendingRequests() )
 		renderingCompleted();
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateDrawablePositions() const {
-	if ( _buffer.width() <= 0 || _buffer.height() <= 0 ) return;
-
-	for ( SymbolCollection::const_iterator it = symbolCollection()->begin();
-	      it != symbolCollection()->end(); ++it )
-		(*it)->calculateMapPosition(this);
-
-	for ( Layers::const_iterator it = _layers.begin();
-	      it != _layers.end(); ++it ) {
-		(*it)->calculateMapPosition(this);
-	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1476,8 +1577,31 @@ void Canvas::translate(const QPointF &delta) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::onObjectDestroyed(QObject *object) {
-	Legend *legend = static_cast<Legend*>(object);
+void Canvas::onLegendAdded(Legend *legend) {
+	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
+	if ( it == _legendAreas.end() )
+		it = _legendAreas.insert(legend->alignment(), LegendArea());
+
+	LegendArea &area = *it;
+	area.append(legend);
+	if ( legend->layer() && legend->layer()->isVisible() &&
+	     legend->isEnabled() && area.currentIndex == -1 )
+		area.currentIndex = area.findNext();
+
+	connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
+	        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
+	connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
+	        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
+
+	legend->contextResizeEvent(_buffer.size());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Canvas::onLegendRemoved(Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it != _legendAreas.end() ) {
 		int index = it->indexOf(legend);
@@ -1492,29 +1616,36 @@ void Canvas::onObjectDestroyed(QObject *object) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void Canvas::setupLayer(Layer *layer) {
+	layer->_canvas = this;
+
+	if ( SCApp ) {
+		if ( !layer->name().isEmpty() ) {
+			std::string cfgVisible = CFG_LAYER_PREFIX ".";
+			cfgVisible += layer->name().toStdString();
+			cfgVisible += ".visible";
+			try {
+				layer->setVisible(SCApp->configGetBool(cfgVisible));
+			}
+			catch ( ... ) {}
+		}
+
+		layer->init(SCApp->configuration());
+	}
+
+	connect(layer, SIGNAL(legendAdded(Legend*)), this, SLOT(onLegendAdded(Legend*)));
+	connect(layer, SIGNAL(legendRemoved(Legend*)), this, SLOT(onLegendRemoved(Legend*)));
 	connect(layer, SIGNAL(updateRequested(const Layer::UpdateHints&)),
 	        this, SLOT(updateLayer(const Layer::UpdateHints&)));
 
-	foreach ( Legend* legend, layer->legends() ) {
-		if ( legend != NULL ) {
-			LegendAreas::iterator it = _legendAreas.find(legend->alignment());
-			if ( it == _legendAreas.end() )
-				it = _legendAreas.insert(legend->alignment(), LegendArea());
 
-			LegendArea& area = *it;
-			area.append(legend);
-			if ( legend->isEnabled() && area.currentIndex == -1 ) {
-				area.currentIndex = area.count() - 1;
-				area.lastIndex = area.currentIndex;
-			}
-			connect(legend, SIGNAL(enabled(Seiscomp::Gui::Map::Legend*, bool)),
-			        this, SLOT(setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool)));
-			connect(legend, SIGNAL(bringToFrontRequested(Seiscomp::Gui::Map::Legend*)),
-			        this, SLOT(bringToFront(Seiscomp::Gui::Map::Legend*)));
-			connect(legend, SIGNAL(destroyed(QObject*)),
-			        this, SLOT(onObjectDestroyed(QObject*)));
+	foreach ( Legend *legend, layer->legends() ) {
+		if ( legend != NULL ) {
+			onLegendAdded(legend);
 		}
 	}
+
+	if ( _buffer.width() > 0 && _buffer.height() > 0 )
+		layer->calculateMapPosition(this);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1522,9 +1653,15 @@ void Canvas::setupLayer(Layer *layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::prependLayer(Layer* layer) {
+bool Canvas::prependLayer(Layer* layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	_layers.prepend(layer);
 	setupLayer(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1532,9 +1669,15 @@ void Canvas::prependLayer(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::addLayer(Layer* layer) {
+bool Canvas::addLayer(Layer* layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	_layers.append(layer);
 	setupLayer(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1542,12 +1685,18 @@ void Canvas::addLayer(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::insertLayerBefore(const Layer *referenceLayer, Layer *layer) {
+bool Canvas::insertLayerBefore(const Layer *referenceLayer, Layer *layer) {
+	if ( layer->canvas() != NULL ) {
+		qWarning("Layer is already part of another canvas");
+		return false;
+	}
+
 	int index = _layers.indexOf(const_cast<Layer*>(referenceLayer));
 	if ( index >= 0 )
 		_layers.insert(index, layer);
 	else
 		_layers.append(layer);
+	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1559,18 +1708,20 @@ void Canvas::removeLayer(Layer* layer) {
 	_layers.removeAll(layer);
 	disconnect(layer, SIGNAL(updateRequested()));
 
+	if ( layer == _hoverLayer )
+		_hoverLayer = NULL;
+
 	LegendAreas::iterator it = _legendAreas.begin();
 	while ( it != _legendAreas.end() ) {
-		Legends& legends = it.value();
+		Legends &legends = it.value();
 		bool changed = false;
 		Legends::iterator tmpIt = legends.begin();
 		while ( tmpIt != legends.end() ) {
 			if ( layer == (*tmpIt)->layer() ) {
 				tmpIt = legends.erase(tmpIt);
-				if ( it->lastIndex != -1 ) it->lastIndex = -1;
-
 				changed = true;
-			} else
+			}
+			else
 				++tmpIt;
 		}
 
@@ -1581,6 +1732,8 @@ void Canvas::removeLayer(Layer* layer) {
 			++it;
 		}
 	}
+
+	layer->_canvas = NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1618,8 +1771,11 @@ void Canvas::lower(Layer* layer) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
-	return false;
+bool Canvas::filterKeyPressEvent(QKeyEvent *event) {
+	if ( _hoverLayer )
+		return _hoverLayer->filterKeyPressEvent(event);
+	else
+		return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1627,12 +1783,61 @@ bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
-	if ( !_isDrawLegendsEnabled ) return false;
+bool Canvas::filterKeyReleaseEvent(QKeyEvent *event) {
+	if ( _hoverLayer )
+		return _hoverLayer->filterKeyReleaseEvent(event);
+	else
+		return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	for ( LegendAreas::iterator it = _legendAreas.begin();
-	      it != _legendAreas.end(); ++it ) {
-		if ( it->mousePressEvent(e) ) return true;
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterMouseMoveEvent(QMouseEvent* e) {
+	SymbolCollection::iterator it = _mapSymbolCollection.end();
+
+	// TODO: Check legend hit that will eat the event
+
+	QPointF geoPos;
+	if ( !_projection->unproject(geoPos, e->pos()) )
+		return false;
+
+	while ( it != _mapSymbolCollection.begin() ) {
+		--it;
+		if ( (*it)->isInside(geoPos.y(), geoPos.x()) ) {
+			if ( _hoverLayer ) {
+				_hoverLayer->handleLeaveEvent();
+				_hoverLayer = NULL;
+			}
+
+			return false;
+		}
+	}
+
+	Layers::iterator lit = _layers.end();
+	Layer *hoverLayer = NULL;
+
+	while ( lit != _layers.begin() ) {
+		--lit;
+		if ( (*lit)->isVisible() && (*lit)->isInside(e->pos().x(), e->pos().y()) ) {
+			hoverLayer = *lit;
+			break;
+		}
+	}
+
+	if ( _hoverLayer != hoverLayer ) {
+		if ( _hoverLayer )
+			_hoverLayer->handleLeaveEvent();
+		if ( hoverLayer )
+			hoverLayer->handleEnterEvent();
+		_hoverLayer = hoverLayer;
+	}
+
+	if ( _hoverLayer ) {
+		if ( _hoverLayer->filterMouseMoveEvent(e, geoPos) )
+			return true;
 	}
 
 	return false;
@@ -1643,12 +1848,68 @@ bool Canvas::filterMouseDoubleClickEvent(QMouseEvent* e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool Canvas::filterMousePressEvent(QMouseEvent* e) {
-	if ( !_isDrawLegendsEnabled ) return false;
+bool Canvas::filterMouseDoubleClickEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mousePressEvent(e) ) return true;
+		}
+	}
 
-	for ( LegendAreas::iterator it = _legendAreas.begin();
-	      it != _legendAreas.end(); ++it ) {
-		if ( it->mousePressEvent(e) ) return true;
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMouseDoubleClickEvent(e, geoPos);
+	}
+
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterMousePressEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mousePressEvent(e) ) {
+				updateRequested();
+				return true;
+			}
+		}
+	}
+
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMousePressEvent(e, geoPos);
+	}
+
+	return false;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool Canvas::filterMouseReleaseEvent(QMouseEvent *e) {
+	if ( _isDrawLegendsEnabled ) {
+		for ( LegendAreas::iterator it = _legendAreas.begin();
+		      it != _legendAreas.end(); ++it ) {
+			if ( it->mouseReleaseEvent(e) ) {
+				updateRequested();
+				return true;
+			}
+		}
+	}
+
+	if ( _hoverLayer ) {
+		QPointF geoPos;
+		if ( _projection->unproject(geoPos, e->pos()) )
+			return _hoverLayer->filterMouseReleaseEvent(e, geoPos);
 	}
 
 	return false;
@@ -1660,7 +1921,7 @@ bool Canvas::filterMousePressEvent(QMouseEvent* e) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
-	foreach ( Layer* layer, _layers ) {
+	foreach ( Layer *layer, _layers ) {
 		if ( layer->filterContextMenuEvent(e, parent) )
 			return true;
 	}
@@ -1673,14 +1934,70 @@ bool Canvas::filterContextMenuEvent(QContextMenuEvent* e, QWidget* parent) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-QMenu* Canvas::menu(QWidget* parent) const {
-	QMenu* menu = new QMenu("Layers", parent);
-	foreach ( Layer* layer, _layers ) {
-		QMenu* subMenu = layer->menu(parent);
-		if ( subMenu )
-			menu->addMenu(subMenu);
+QMenu* Canvas::menu(QMenu *parent) const {
+	QAction *action;
+
+	QMenu *menu = new QMenu(tr("Layers"), parent);
+	foreach ( Layer *layer, _layers ) {
+		if ( layer->name().isEmpty() ) continue;
+
+		if ( !layer->isVisible() ) {
+			action = menu->addAction(layer->name());
+			action->setCheckable(true);
+			action->setChecked(false);
+			connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+		}
+		else {
+			QMenu *subMenu = layer->menu(menu);
+
+			if ( subMenu ) {
+				if ( subMenu->isEmpty() ) {
+					delete subMenu;
+					subMenu = NULL;
+				}
+				else {
+					// Add "Hide layer" option as first option
+					QAction *firstAction = subMenu->actions().first();
+
+					subMenu->setTitle(layer->name());
+					QAction *separator = subMenu->insertSeparator(firstAction);
+					QAction *toggleAction = new QAction(tr("Hide layer"), subMenu);
+					connect(toggleAction, SIGNAL(triggered()), layer, SLOT(hide()));
+
+					subMenu->insertAction(separator, toggleAction);
+					menu->addMenu(subMenu);
+				}
+			}
+
+			if ( !subMenu ) {
+				QAction *action = menu->addAction(layer->name());
+				action->setCheckable(true);
+				action->setChecked(true);
+				connect(action, SIGNAL(toggled(bool)), layer, SLOT(setVisible(bool)));
+			}
+		}
 	}
-	return menu->isEmpty() ? NULL : menu;
+
+	if ( menu->isEmpty() ) {
+		delete menu;
+		menu = NULL;
+	}
+	else
+		parent->addMenu(menu);
+
+	action = parent->addAction(tr("Reload"));
+	connect(action, SIGNAL(triggered()), this, SLOT(reload()));
+
+	if ( isDrawLegendsEnabled() ) {
+		action = parent->addAction(tr("Hide legend(s)"));
+		connect(action, SIGNAL(triggered()), this, SLOT(hideLegends()));
+	}
+	else {
+		action = parent->addAction(tr("Show legend(s)"));
+		connect(action, SIGNAL(triggered()), this, SLOT(showLegends()));
+	}
+
+	return NULL;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1688,11 +2005,14 @@ QMenu* Canvas::menu(QWidget* parent) const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateLayer(const Layer::UpdateHints& hints) {
+void Canvas::updateLayer(const Layer::UpdateHints &hints) {
 	if ( hints.testFlag(Layer::Position) ) {
-		Layer* layer = static_cast<Layer*>(sender());
+		Layer *layer = static_cast<Layer*>(sender());
 		layer->calculateMapPosition(this);
 	}
+
+	if ( hints.testFlag(Layer::RasterLayer) )
+		updateBuffer();
 
 	updateRequested();
 }
@@ -1724,7 +2044,7 @@ void Canvas::reload() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
+void Canvas::bringToFront(Seiscomp::Gui::Map::Legend *legend) {
 	LegendAreas::iterator it = _legendAreas.find(legend->alignment());
 	if ( it == _legendAreas.end() ) return;
 
@@ -1736,7 +2056,6 @@ void Canvas::bringToFront(Seiscomp::Gui::Map::Legend* legend) {
 	if ( it->currentIndex > 0 && legends.count() > it->currentIndex )
 		legends[it->currentIndex]->setVisible(false);
 
-	it->lastIndex = it->currentIndex;
 	it->currentIndex = index;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -1752,41 +2071,7 @@ void Canvas::setLegendEnabled(Seiscomp::Gui::Map::Legend* legend, bool enabled) 
 	int index = it->indexOf(legend);
 	if ( index == -1 ) return;
 
-	if ( enabled ) {
-		if ( it->currentIndex == -1 ) it->currentIndex = index;
-	} else  {
-		if ( it->currentIndex == index ) {
-			if ( it->lastIndex != index && it->lastIndex != -1) {
-				const Legends& legends = *it;
-				if ( legends.count() > it->lastIndex &&
-				     legends[it->lastIndex]->isEnabled())
-					it->currentIndex = it->lastIndex;
-				else
-					it->currentIndex = it->findNext();
-			} else
-				it->currentIndex = it->findNext();
-		}
-	}
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::setDelegate(CanvasDelegate *delegate) {
-	if ( _delegate ) delete _delegate;
-
-	_delegate = delegate;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-void Canvas::updateLayout() {
-	if ( _delegate ) _delegate->doLayout();
+	it->currentIndex = -1;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

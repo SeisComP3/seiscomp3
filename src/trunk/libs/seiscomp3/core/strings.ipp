@@ -109,7 +109,7 @@ inline bool fromString(std::vector<T>& vec, const std::string& str) {
 		if ( !fromString(v, tokens[i]) )
 			return false;
 		vec.push_back(v);
-    }
+	}
 
 	return true;
 }

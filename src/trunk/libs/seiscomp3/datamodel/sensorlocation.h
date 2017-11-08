@@ -22,6 +22,7 @@
 #include <seiscomp3/core/datetime.h>
 #include <vector>
 #include <string>
+#include <seiscomp3/datamodel/comment.h>
 #include <seiscomp3/datamodel/auxstream.h>
 #include <seiscomp3/datamodel/stream.h>
 #include <seiscomp3/datamodel/notifier.h>
@@ -34,6 +35,7 @@ namespace DataModel {
 
 
 DEFINE_SMARTPOINTER(SensorLocation);
+DEFINE_SMARTPOINTER(Comment);
 DEFINE_SMARTPOINTER(AuxStream);
 DEFINE_SMARTPOINTER(Stream);
 
@@ -142,19 +144,19 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 
 		//! End of epoch
 		void setEnd(const OPT(Seiscomp::Core::Time)& end);
-		Seiscomp::Core::Time end() const throw(Seiscomp::Core::ValueException);
+		Seiscomp::Core::Time end() const;
 
 		//! Sensor latitude (52.10)
 		void setLatitude(const OPT(double)& latitude);
-		double latitude() const throw(Seiscomp::Core::ValueException);
+		double latitude() const;
 
 		//! Sensor longitude (52.11)
 		void setLongitude(const OPT(double)& longitude);
-		double longitude() const throw(Seiscomp::Core::ValueException);
+		double longitude() const;
 
 		//! Sensor elevation (52.12)
 		void setElevation(const OPT(double)& elevation);
-		double elevation() const throw(Seiscomp::Core::ValueException);
+		double elevation() const;
 
 
 	// ------------------------------------------------------------------
@@ -180,6 +182,7 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		 *               because it already exists in the list
 		 *               or it already has another parent
 		 */
+		bool add(Comment* obj);
 		bool add(AuxStream* obj);
 		bool add(Stream* obj);
 
@@ -190,6 +193,7 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		 * @return false The object has not been removed
 		 *               because it does not exist in the list
 		 */
+		bool remove(Comment* obj);
 		bool remove(AuxStream* obj);
 		bool remove(Stream* obj);
 
@@ -199,17 +203,23 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		 * @return true The object has been removed
 		 * @return false The index is out of bounds
 		 */
+		bool removeComment(size_t i);
+		bool removeComment(const CommentIndex& i);
 		bool removeAuxStream(size_t i);
 		bool removeAuxStream(const AuxStreamIndex& i);
 		bool removeStream(size_t i);
 		bool removeStream(const StreamIndex& i);
 
 		//! Retrieve the number of objects of a particular class
+		size_t commentCount() const;
 		size_t auxStreamCount() const;
 		size_t streamCount() const;
 
 		//! Index access
 		//! @return The object at index i
+		Comment* comment(size_t i) const;
+		Comment* comment(const CommentIndex& i) const;
+
 		AuxStream* auxStream(size_t i) const;
 		AuxStream* auxStream(const AuxStreamIndex& i) const;
 
@@ -217,6 +227,7 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		Stream* stream(const StreamIndex& i) const;
 
 		//! Find an object by its unique attribute(s)
+		Stream* findStream(const std::string& publicID) const;
 
 		Station* station() const;
 
@@ -249,6 +260,7 @@ class SC_SYSTEM_CORE_API SensorLocation : public PublicObject {
 		OPT(double) _elevation;
 
 		// Aggregations
+		std::vector<CommentPtr> _comments;
 		std::vector<AuxStreamPtr> _auxStreams;
 		std::vector<StreamPtr> _streams;
 

@@ -50,17 +50,8 @@ IntegerQuantity::IntegerQuantity() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 IntegerQuantity::IntegerQuantity(const IntegerQuantity& other)
- : Core::BaseObject() {
+: Core::BaseObject() {
 	*this = other;
-}
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-IntegerQuantity::IntegerQuantity(int value)
- : _value(value) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -73,12 +64,12 @@ IntegerQuantity::IntegerQuantity(int value,
                                  const OPT(int)& lowerUncertainty,
                                  const OPT(int)& upperUncertainty,
                                  const OPT(double)& confidenceLevel)
- : _value(value),
-   _uncertainty(uncertainty),
-   _lowerUncertainty(lowerUncertainty),
-   _upperUncertainty(upperUncertainty),
-   _confidenceLevel(confidenceLevel) {
-}
+: _value(value)
+, _uncertainty(uncertainty)
+, _lowerUncertainty(lowerUncertainty)
+, _upperUncertainty(upperUncertainty)
+, _confidenceLevel(confidenceLevel)
+{}
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -175,7 +166,7 @@ void IntegerQuantity::setUncertainty(const OPT(int)& uncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int IntegerQuantity::uncertainty() const throw(Seiscomp::Core::ValueException) {
+int IntegerQuantity::uncertainty() const {
 	if ( _uncertainty )
 		return *_uncertainty;
 	throw Seiscomp::Core::ValueException("IntegerQuantity.uncertainty is not set");
@@ -195,7 +186,7 @@ void IntegerQuantity::setLowerUncertainty(const OPT(int)& lowerUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int IntegerQuantity::lowerUncertainty() const throw(Seiscomp::Core::ValueException) {
+int IntegerQuantity::lowerUncertainty() const {
 	if ( _lowerUncertainty )
 		return *_lowerUncertainty;
 	throw Seiscomp::Core::ValueException("IntegerQuantity.lowerUncertainty is not set");
@@ -215,7 +206,7 @@ void IntegerQuantity::setUpperUncertainty(const OPT(int)& upperUncertainty) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int IntegerQuantity::upperUncertainty() const throw(Seiscomp::Core::ValueException) {
+int IntegerQuantity::upperUncertainty() const {
 	if ( _upperUncertainty )
 		return *_upperUncertainty;
 	throw Seiscomp::Core::ValueException("IntegerQuantity.upperUncertainty is not set");
@@ -235,7 +226,7 @@ void IntegerQuantity::setConfidenceLevel(const OPT(double)& confidenceLevel) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double IntegerQuantity::confidenceLevel() const throw(Seiscomp::Core::ValueException) {
+double IntegerQuantity::confidenceLevel() const {
 	if ( _confidenceLevel )
 		return *_confidenceLevel;
 	throw Seiscomp::Core::ValueException("IntegerQuantity.confidenceLevel is not set");
@@ -263,7 +254,7 @@ IntegerQuantity& IntegerQuantity::operator=(const IntegerQuantity& other) {
 void IntegerQuantity::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: IntegerQuantity skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

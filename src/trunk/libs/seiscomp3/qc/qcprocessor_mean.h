@@ -25,12 +25,13 @@ namespace Processing {
 DEFINE_SMARTPOINTER(QcProcessorMean);
 
 class SC_SYSTEM_CLIENT_API QcProcessorMean : public QcProcessor {
-    DECLARE_SC_CLASS(QcProcessorMean);
+	DECLARE_SC_CLASS(QcProcessorMean);
 
-public:
-    QcProcessorMean();
-    double getMean() throw (Core::ValueException);
-    bool setState(const Record* record, const DoubleArray& data);
+	public:
+		QcProcessorMean();
+
+		double getMean();
+		bool setState(const Record* record, const DoubleArray& data);
 };
 
 

@@ -45,9 +45,11 @@ MagnitudeProcessor_msbb::MagnitudeProcessor_msbb()
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MagnitudeProcessor::Status MagnitudeProcessor_msbb::computeMagnitude(
 	double amplitude, // in micrometers per second
-	double period,      // in seconds
+	double period,    // in seconds
 	double delta,     // in degrees
 	double depth,     // in kilometers
+	const DataModel::Origin *hypocenter,
+	const DataModel::SensorLocation *receiver,
 	double &value)
 {
 	if ( amplitude <= 0 )

@@ -329,6 +329,24 @@ class EventDump : public Seiscomp::Client::Application {
 						else
 							++i;
 					}
+
+					for ( size_t i = 0; i < inv->responseFAPCount(); ) {
+						ResponseFAP *resp = inv->responseFAP(i);
+						// Response not used -> remove it
+						if ( usedResponses.find(resp->publicID()) == usedResponses.end() )
+							inv->removeResponseFAP(i);
+						else
+							++i;
+					}
+
+					for ( size_t i = 0; i < inv->responseIIRCount(); ) {
+						ResponseIIR *resp = inv->responseIIR(i);
+						// Response not used -> remove it
+						if ( usedResponses.find(resp->publicID()) == usedResponses.end() )
+							inv->removeResponseIIR(i);
+						else
+							++i;
+					}
 				}
 
 				if ( commandline().hasOption("without-station-groups") ) {

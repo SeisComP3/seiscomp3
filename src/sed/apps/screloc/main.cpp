@@ -94,6 +94,9 @@ class Reloc : public Client::Application {
 			try { _allowPreliminary = configGetBool("reloc.allowPreliminaryOrigins"); }
 			catch ( ... ) {}
 
+			try { _useWeight = configGetBool("reloc.useWeight"); }
+			catch ( ... ) {}
+
 			if ( !_epFile.empty() )
 				setMessagingEnabled(false);
 
@@ -205,7 +208,14 @@ class Reloc : public Client::Application {
 				for ( int i = 0; i < numberOfOrigins; ++i ) {
 					OriginPtr org = ep->origin(i);
 					SEISCOMP_INFO("Processing origin %s", org->publicID().c_str());
-					org = process(org.get());
+					try {
+						org = process(org.get());
+					}
+					catch ( std::exception &e ) {
+						std::cerr << "ERROR: " << e.what() << std::endl;
+						continue;
+					}
+
 					if ( org ) {
 						if ( replace ) {
 							ep->removeOrigin(i);
@@ -339,10 +349,12 @@ class Reloc : public Client::Application {
 				if ( !_useWeight ) {
 					// Set weight to 1
 					ar->setWeight(1.0);
+					ar->setTimeUsed(true);
+					ar->setBackazimuthUsed(true);
+					ar->setHorizontalSlownessUsed(true);
 				}
 
-				// Use all picks regardless of weight
-				picks.push_back(LocatorInterface::WeightedPick(pick,1));
+				picks.push_back(pick.get());
 			}
 
 			OriginPtr newOrg = _locator->relocate(org);
@@ -373,7 +385,7 @@ class Reloc : public Client::Application {
 
 				for ( LocatorInterface::PickList::iterator it = picks.begin();
 				      it != picks.end(); ++it ) {
-					ep->add(it->first.get());
+					ep->add(it->pick.get());
 				}
 
 				IO::XMLArchive ar;

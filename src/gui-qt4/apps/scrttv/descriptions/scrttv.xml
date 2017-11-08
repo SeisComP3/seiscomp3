@@ -46,6 +46,12 @@
 					Defines the buffer size in seconds of the ring bu of each trace.
 				</description>
 			</parameter>
+			<parameter name="allTracesInitiallyVisible" type="boolean" default="false">
+				<description>
+					If set to true all traces will be visible on application startup
+					independent of data availability.
+				</description>
+			</parameter>
 			<group name="streams">
 				<group name="sort">
 					<description>
@@ -148,6 +154,44 @@
 				<optionReference>records#record-url</optionReference>
 				<optionReference>records#record-file</optionReference>
 				<optionReference>records#record-type</optionReference>
+			</group>
+
+			<group name="Mode">
+				<option long-flag="filter" argument="arg" publicID="mode#filter" param-ref="filter"/>
+				<option long-flag="offline" argument="" publicID="mode#offline">
+					<description>
+					Do not connect to a messaging server and do not use the database.
+					</description>
+				</option>
+				<option long-flag="no-inventory" argument="" publicID="mode#no-inventory">
+					<description>
+					Do not read streams from inventory but display all streams available from
+					the specified record source. This option may be combined with the streams.codes
+					parameter to filter the available streams.
+					</description>
+				</option>
+				<option long-flag="end-time" argument="arg" publicID="mode#end-time">
+					<description>
+					Set the acquisition end time, e.g. '2017-09-08 13:30:00', default: 'gmt'
+					</description>
+				</option>
+				<option long-flag="buffer-size" argument="arg" publicID="mode#buffer-size">
+					<description>
+					Sets the size of the waveform buffer in seconds, default: 1800
+					</description>
+				</option>
+				<option long-flag="max-delay" argument="arg" publicID="mode#max-delay">
+					<description>
+					The maximum delay in seconds to keep a trace visible (0 to disable)
+					</description>
+				</option>
+				<option long-flag="initially-visible-all" argument="" publicID="mode#initially-visible-all" param-ref="allTracesInitiallyVisible"/>
+				<option long-flag="rt" argument="" publicID="mode#rt">
+					<description>
+					Don't ask for time window at data server. This might be important if
+					e.g. Seedlink does not allow time window extraction.
+					</description>
+				</option>
 			</group>
 		</command-line>
 	</module>

@@ -75,7 +75,7 @@ IMPLEMENT_SC_ABSTRACT_CLASS_DERIVED(PublicObject,
 
 PublicObject::PublicObjectMap PublicObject::_publicObjects;
 bool PublicObject::_generateIds = false;
-std::string PublicObject::_idPattern = "@classname@#@time/%Y%m%d%H%M%S.%f@.@id@";
+std::string PublicObject::_idPattern = "@classname@/@time/%Y%m%d%H%M%S.%f@.@id@";
 unsigned long PublicObject::_publicObjectId = 0;
 boost::thread_specific_ptr<bool> PublicObject::_registerObjects;
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

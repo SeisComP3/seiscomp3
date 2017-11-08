@@ -95,7 +95,7 @@ ResponseFAP::ResponseFAP() {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponseFAP::ResponseFAP(const ResponseFAP& other)
- : PublicObject() {
+: PublicObject() {
 	*this = other;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -105,7 +105,7 @@ ResponseFAP::ResponseFAP(const ResponseFAP& other)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ResponseFAP::ResponseFAP(const std::string& publicID)
- : PublicObject(publicID) {
+: PublicObject(publicID) {
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -217,7 +217,7 @@ void ResponseFAP::setGain(const OPT(double)& gain) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponseFAP::gain() const throw(Seiscomp::Core::ValueException) {
+double ResponseFAP::gain() const {
 	if ( _gain )
 		return *_gain;
 	throw Seiscomp::Core::ValueException("ResponseFAP.gain is not set");
@@ -237,7 +237,7 @@ void ResponseFAP::setGainFrequency(const OPT(double)& gainFrequency) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-double ResponseFAP::gainFrequency() const throw(Seiscomp::Core::ValueException) {
+double ResponseFAP::gainFrequency() const {
 	if ( _gainFrequency )
 		return *_gainFrequency;
 	throw Seiscomp::Core::ValueException("ResponseFAP.gainFrequency is not set");
@@ -257,7 +257,7 @@ void ResponseFAP::setNumberOfTuples(const OPT(int)& numberOfTuples) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-int ResponseFAP::numberOfTuples() const throw(Seiscomp::Core::ValueException) {
+int ResponseFAP::numberOfTuples() const {
 	if ( _numberOfTuples )
 		return *_numberOfTuples;
 	throw Seiscomp::Core::ValueException("ResponseFAP.numberOfTuples is not set");
@@ -277,7 +277,7 @@ void ResponseFAP::setTuples(const OPT(RealArray)& tuples) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-RealArray& ResponseFAP::tuples() throw(Seiscomp::Core::ValueException) {
+RealArray& ResponseFAP::tuples() {
 	if ( _tuples )
 		return *_tuples;
 	throw Seiscomp::Core::ValueException("ResponseFAP.tuples is not set");
@@ -288,7 +288,7 @@ RealArray& ResponseFAP::tuples() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const RealArray& ResponseFAP::tuples() const throw(Seiscomp::Core::ValueException) {
+const RealArray& ResponseFAP::tuples() const {
 	if ( _tuples )
 		return *_tuples;
 	throw Seiscomp::Core::ValueException("ResponseFAP.tuples is not set");
@@ -308,7 +308,7 @@ void ResponseFAP::setRemark(const OPT(Blob)& remark) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Blob& ResponseFAP::remark() throw(Seiscomp::Core::ValueException) {
+Blob& ResponseFAP::remark() {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponseFAP.remark is not set");
@@ -319,7 +319,7 @@ Blob& ResponseFAP::remark() throw(Seiscomp::Core::ValueException) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const Blob& ResponseFAP::remark() const throw(Seiscomp::Core::ValueException) {
+const Blob& ResponseFAP::remark() const {
 	if ( _remark )
 		return *_remark;
 	throw Seiscomp::Core::ValueException("ResponseFAP.remark is not set");
@@ -489,7 +489,7 @@ void ResponseFAP::accept(Visitor* visitor) {
 void ResponseFAP::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: ResponseFAP skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

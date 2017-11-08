@@ -988,6 +988,27 @@ void MagnitudeView::closeEvent(QCloseEvent *e) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void MagnitudeView::closeTab(int idx) {
+	std::string magID = _tabMagnitudes->tabData(idx).toString().toStdString();
+	MagnitudePtr mag = Magnitude::Find(magID);
+
+	if ( mag != NULL ) {
+		if ( mag->detach() ) {
+			emit magnitudeRemoved(_origin->publicID().c_str(), mag.get());
+			_tabMagnitudes->removeTab(idx);
+		}
+		else
+			QMessageBox::critical(this, "Error", tr("An error occured while removing magnitude %1").arg(magID.c_str()));
+	}
+	else
+		QMessageBox::critical(this, "Error", tr("Did not find magnitude %1").arg(magID.c_str()));
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void MagnitudeView::debugCreateMagRef() {
 	StationMagnitudePtr staMag = StationMagnitude::Create();
 	staMag->setMagnitude(10.0);
@@ -1101,6 +1122,10 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	_tabMagnitudes->setShape(QTabBar::RoundedNorth);
 	_tabMagnitudes->setUsesScrollButtons(true);
 
+#if QT_VERSION >= 0x040500
+	connect(_tabMagnitudes, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+#endif
+
 	hboxLayout->addWidget(_tabMagnitudes);
 
 	// reset GUI to default
@@ -1174,6 +1199,8 @@ void MagnitudeView::init(Seiscomp::DataModel::DatabaseQuery* reader) {
 	}
 
 	_currentMagnitudeTypes = _magnitudeTypes;
+
+	setReadOnly(true);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1253,6 +1280,11 @@ void MagnitudeView::recalculateMagnitude() {
 		}
 	}
 
+	if ( mags.empty() ) {
+		QMessageBox::critical(this, "Error", "At least one station magnitude must be selected");
+		return;
+	}
+
 	double netmag, stdev;
 
 	if ( _ui.btnMean->isChecked() ) {
@@ -1295,13 +1327,17 @@ void MagnitudeView::recalculateMagnitude() {
 	_netMag->setMagnitude(DataModel::RealQuantity(netmag, stdev, Core::None, Core::None, Core::None));
 	_netMag->setEvaluationStatus(EvaluationStatus(CONFIRMED));
 
+	int idx = findType(_tabMagnitudes, _netMag->type().c_str());
+	_tabMagnitudes->setTabTextColor(idx, QColor());
+	_tabMagnitudes->setTabIcon(idx, QIcon());
+
 	// Update corresponding Mw estimation
 	Processing::MagnitudeProcessorPtr proc = Processing::MagnitudeProcessorFactory::Create(_netMag->type().c_str());
 	if ( proc ) {
 		double Mw, MwError;
 		if ( proc->estimateMw(netmag, Mw, MwError) == Processing::MagnitudeProcessor::OK ) {
 			string type = proc->typeMw();
-			int idx = findType(_tabMagnitudes, type.c_str());
+			idx = findType(_tabMagnitudes, type.c_str());
 			//int idx = _ui.comboMagType->findText(type.c_str());
 			if ( idx != -1 ) {
 				MagnitudePtr magMw =
@@ -1327,7 +1363,7 @@ void MagnitudeView::recalculateMagnitude() {
 
 	QVariant data;
 	data.setValue(QString(_netMag->publicID().c_str()));
-	int idx = findData(_tabMagnitudes, data);
+	idx = findData(_tabMagnitudes, data);
 	if ( idx != -1 )
 		_tabMagnitudes->setTabText(idx, QString("%1 %2").arg(_netMag->type().c_str()).arg(_netMag->magnitude().value(), 0, 'f', 2));
 
@@ -1681,6 +1717,24 @@ void MagnitudeView::computeMagnitudes() {
 					_origin->add(MagMw.get());
 				}
 			}
+		}
+		else {
+			MagnitudePtr mag = Magnitude::Create();
+			mag->setType(magnitudeTypes[i]);
+			mag->setEvaluationStatus(EvaluationStatus(REJECTED));
+			if ( numeric_limits<double>::has_quiet_NaN )
+				mag->setMagnitude(RealQuantity(numeric_limits<double>::quiet_NaN()));
+			else
+				mag->setMagnitude(RealQuantity(-999));
+
+			CreationInfo ci;
+			ci.setAgencyID(SCApp->agencyID());
+			ci.setAuthor(SCApp->author());
+			ci.setCreationTime(Core::Time::GMT());
+
+			mag->setCreationInfo(ci);
+
+			_origin->add(mag.get());
 		}
 	}
 
@@ -2061,13 +2115,26 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			double dist, az;
 
 			// Compute station distance
+			SensorLocation *loc =  Client::Inventory::Instance()->getSensorLocation(
+				amp->waveformID().networkCode(), amp->waveformID().stationCode(),
+				amp->waveformID().locationCode(), amp->timeWindow().reference());
+
+			if ( loc == NULL ) {
+				SEISCOMP_ERROR("Failed to get meta data for %s.%s.%s",
+				               amp->waveformID().networkCode().c_str(),
+				               amp->waveformID().stationCode().c_str(),
+				               amp->waveformID().locationCode().empty() ? "--" : amp->waveformID().locationCode().c_str());
+				continue;
+			}
+
 			try {
-				Client::StationLocation loc;
 				double baz;
-				loc = Client::Inventory::Instance()->stationLocation(amp->waveformID().networkCode(), amp->waveformID().stationCode(), amp->timeWindow().reference());
-				Math::Geo::delazi(loc.latitude, loc.longitude, _origin->latitude(), _origin->longitude(), &dist, &az, &baz);
+				Math::Geo::delazi(loc->latitude(), loc->longitude(),
+				                  _origin->latitude(), _origin->longitude(),
+				                  &dist, &az, &baz);
 			}
 			catch ( Core::GeneralException &e ) {
+				SEISCOMP_ERROR("Magnitude distance computation: %s", e.what());
 				continue;
 			}
 
@@ -2079,7 +2146,7 @@ MagnitudeView::computeStationMagnitudes(const string &magType,
 			Processing::MagnitudeProcessor::Status stat =
 				magProc->computeMagnitude(
 					amp->amplitude().value(), period,
-					dist, _origin->depth(), magValue
+					dist, _origin->depth(), _origin.get(), loc, magValue
 				);
 
 			if ( stat != Processing::MagnitudeProcessor::OK ) {
@@ -2591,6 +2658,10 @@ void MagnitudeView::updateObject(const QString &parentID, Seiscomp::DataModel::O
 void MagnitudeView::setReadOnly(bool e) {
 	_ui.groupReview->setVisible(!e);
 
+#if QT_VERSION >= 0x040500
+	_tabMagnitudes->setTabsClosable(!e);
+#endif
+
 	if ( _amplitudeView && e )
 		_amplitudeView->close();
 }
@@ -2625,6 +2696,16 @@ int MagnitudeView::addMagnitude(Seiscomp::DataModel::Magnitude* netMag) {
 	//_ui.comboMagType->addItem(QString("%1").arg(netMag->type().c_str()), data);
 	int tabIndex = _tabMagnitudes->addTab(QString("%1 %2").arg(netMag->type().c_str()).arg(netMag->magnitude().value(), 0, 'f', 2));
 	_tabMagnitudes->setTabData(tabIndex, data);
+
+	if ( std::isnan(netMag->magnitude().value()) ) {
+		_tabMagnitudes->setTabTextColor(tabIndex, palette().color(QPalette::Disabled, QPalette::WindowText));
+	}
+
+	try {
+		if ( netMag->evaluationStatus() == REJECTED )
+			_tabMagnitudes->setTabIcon(tabIndex, QIcon(":icons/icons/disabled.png"));
+	}
+	catch ( ... ) {}
 
 	if ( tabIndex == _tabMagnitudes->currentIndex() )
 		updateContent();
@@ -2857,8 +2938,16 @@ void MagnitudeView::updateContent() {
 	_ui.tableStationMagnitudes->resizeRowsToContents();
 	_ui.tableStationMagnitudes->sortByColumn(_ui.tableStationMagnitudes->horizontalHeader()->sortIndicatorSection());
 
-	if ( _netMag->stationMagnitudeContributionCount() == 0 )
+	if ( _netMag->stationMagnitudeContributionCount() == 0 ) {
 		_ui.groupReview->setEnabled(false);
+		updateMinMaxMagnitude();
+
+		try {
+			if ( _netMag->evaluationStatus() == REJECTED )
+				_ui.groupReview->setEnabled(true);
+		}
+		catch ( ... ) {}
+	}
 	else
 		_ui.groupReview->setEnabled(true);
 }
@@ -3044,24 +3133,30 @@ void MagnitudeView::addStationMagnitude(Seiscomp::DataModel::StationMagnitude* s
 double MagnitudeView::addStationMagnitude(DataModel::Magnitude* magnitude,
                                           DataModel::StationMagnitude* stationMagnitude,
                                           double weight) {
-	double distance;
+	double distance = -999;
 
 	try {
-		StationLocation loc = Client::Inventory::Instance()->stationLocation(
-			stationMagnitude->waveformID().networkCode(),
-			stationMagnitude->waveformID().stationCode(),
-			_origin->time().value()
-		);
+		const WaveformStreamID &wfsID = stationMagnitude->waveformID();
 
-		double azi1, azi2;
+		try {
+			StationLocation loc = Client::Inventory::Instance()->stationLocation(
+				wfsID.networkCode(), wfsID.stationCode(), _origin->time().value());
 
-		Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
-		                  loc.latitude, loc.longitude,
-		                  &distance, &azi1, &azi2);
+			double azi1, azi2;
+			Math::Geo::delazi(_origin->latitude(), _origin->longitude(),
+			                  loc.latitude, loc.longitude,
+			                  &distance, &azi1, &azi2);
+		}
+		catch ( ValueException& ) {
+			SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: Station %s.%s "
+			               "not found. Not added.", wfsID.networkCode().c_str(),
+			               wfsID.stationCode().c_str());
+		}
 	}
 	catch ( ValueException& ) {
-		SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: Station %s not found. Not added.", stationMagnitude->waveformID().stationCode().c_str());
-		distance = -999;
+		SEISCOMP_ERROR("MagnitudeView::addStationMagnitude: WaveformID in "
+		               "magnitude '%s' not set",
+		               stationMagnitude->publicID().c_str());
 	}
 
 	double residual = stationMagnitude->magnitude().value() - magnitude->magnitude().value();

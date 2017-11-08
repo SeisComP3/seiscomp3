@@ -10,7 +10,7 @@ set -u
 
 progname=`basename $0`
 
-function show_usage() {
+show_usage() {
   echo "Usage: ${progname} {db} {DCID | id} {date}"
   cat <<EOF
 Remove a record from all tables for the report.
@@ -23,7 +23,7 @@ EOF
 }
 
 
-function examine() {
+examine() {
         echo "Looking into DB for relevant records..."
 
 	echo "Don't remove this one:"

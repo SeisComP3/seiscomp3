@@ -25,6 +25,7 @@
 #include <seiscomp3/gui/datamodel/eventedit.h>
 #include <seiscomp3/gui/datamodel/pickersettings.h>
 #include <seiscomp3/gui/datamodel/origindialog.h>
+#include <seiscomp3/gui/datamodel/eventlayer.h>
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/core/system.h>
 #include <seiscomp3/config/config.h>
@@ -48,12 +49,16 @@
 #include <seiscomp3/core/datamessage.h>
 
 #include <QFileDialog>
+#include <QSystemTrayIcon>
 
 #include <sstream>
 #include <iomanip>
 //#include <unistd.h>
 
 #define WITH_SMALL_SUMMARY
+
+
+Q_DECLARE_METATYPE(std::string)
 
 
 using namespace std;
@@ -130,6 +135,8 @@ string trim(const std::string &str) {
 
 
 MainFrame::MainFrame(){
+	qRegisterMetaType<std::string>("std::string");
+
 	_ui.setupUi(this);
 
 	SCApp->settings().beginGroup(objectName());
@@ -157,6 +164,26 @@ MainFrame::MainFrame(){
 
 	_ui.menuSettings->addAction(_actionConfigureAcquisition);
 
+#if QT_VERSION >= 0x040300
+	// Setup system tray
+	bool addSystemTray = true;
+	try { addSystemTray = SCApp->configGetBool("olv.systemTray"); }
+	catch ( ... ) {}
+
+	if ( addSystemTray ) {
+		_trayIcon = new QSystemTrayIcon(this);
+		_trayIcon->setIcon(QIcon(":/icons/icons/locate.png"));
+		_trayIcon->setToolTip(tr("%1").arg(SCApp->name().c_str()));
+		_trayIcon->show();
+	}
+	else
+		_trayIcon = NULL;
+
+	connect(_trayIcon, SIGNAL(messageClicked()), this, SLOT(trayIconMessageClicked()));
+	connect(_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+	        this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+#endif
+
 	Map::ImageTreePtr mapTree = new Map::ImageTree(SCApp->mapsDesc());
 
 	_eventSmallSummary = NULL;
@@ -165,12 +192,11 @@ MainFrame::MainFrame(){
 	try { _expertMode = SCApp->configGetBool("mode.expert"); }
 	catch ( ... ) { _expertMode = true; }
 
-	try { _exportScript = SCApp->configGetString("scripts.export"); }
+	try { _exportScript = Seiscomp::Environment::Instance()->absolutePath(SCApp->configGetString("scripts.export")); }
 	catch ( ... ) { _exportScript = ""; }
 
 	try { _exportScriptTerminate = SCApp->configGetString("scripts.export.silentTerminate") == "true"; }
 	catch ( ... ) { _exportScriptTerminate = false; }
-
 
 #ifdef WITH_SMALL_SUMMARY
 	_ui.frameSummary->setFrameShape(QFrame::NoFrame);
@@ -506,6 +532,9 @@ MainFrame::MainFrame(){
 	try { pickerConfig.hideStationsWithoutData = SCApp->configGetBool("olv.hideStationsWithoutData"); }
 	catch ( ... ) { pickerConfig.hideStationsWithoutData = false; }
 
+	try { pickerConfig.hideDisabledStations = SCApp->configGetBool("olv.hideDisabledStations"); }
+	catch ( ... ) { pickerConfig.hideDisabledStations = true; }
+
 	try { pickerConfig.defaultDepth = SCApp->configGetDouble("olv.defaultDepth"); }
 	catch ( ... ) { pickerConfig.defaultDepth = 10; }
 
@@ -565,6 +594,9 @@ MainFrame::MainFrame(){
 	connect(_magnitudes, SIGNAL(localAmplitudesAvailable(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*)),
 	        _originLocator, SLOT(setLocalAmplitudes(Seiscomp::DataModel::Origin*, AmplitudeSet*, StringSet*)));
 
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _originLocator, SLOT(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)));
+
 	connect(_originLocator, SIGNAL(magnitudesAdded(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)),
 	        _magnitudes, SLOT(reload()));
 
@@ -611,6 +643,26 @@ MainFrame::MainFrame(){
 	_eventList->setRelativeMinimumEventTime(Application::Instance()->maxEventAge());
 	_eventList->setEventModificationsEnabled(true);
 	_eventList->setFMLinkEnabled(true);
+
+	// Connect events layer with map
+	EventLayer *eventMapLayer = new EventLayer(_originLocator->map());
+	connect(_eventList, SIGNAL(reset()), eventMapLayer, SLOT(clear()));
+	connect(_eventList, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*,bool)),
+	        eventMapLayer, SLOT(addEvent(Seiscomp::DataModel::Event*,bool)));
+	connect(_eventList, SIGNAL(eventUpdatedInList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(updateEvent(Seiscomp::DataModel::Event*)));
+	connect(_eventList, SIGNAL(eventRemovedFromList(Seiscomp::DataModel::Event*)),
+	        eventMapLayer, SLOT(removeEvent(Seiscomp::DataModel::Event*)));
+	connect(eventMapLayer, SIGNAL(eventHovered(std::string)),
+	        this, SLOT(hoverEvent(std::string)));
+	connect(eventMapLayer, SIGNAL(eventSelected(std::string)),
+	        this, SLOT(selectEvent(std::string)),
+	        Qt::QueuedConnection);
+
+	connect(_eventList, SIGNAL(eventAddedToList(Seiscomp::DataModel::Event*,bool)),
+	        this, SLOT(eventAdded(Seiscomp::DataModel::Event*,bool)));
+
+	_originLocator->map()->canvas().addLayer(eventMapLayer);
 
 	QLayout* layoutEventList = new QVBoxLayout(_ui.tabEventList);
 	layoutEventList->addWidget(_eventList);
@@ -753,13 +805,19 @@ MainFrame::MainFrame(){
 	connect(_magnitudes, SIGNAL(magnitudeUpdated(const QString&, Seiscomp::DataModel::Object*)),
 	        _eventSmallSummary, SLOT(updateObject(const QString&, Seiscomp::DataModel::Object*)));
 
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _eventSmallSummary, SLOT(removeObject(const QString &, Seiscomp::DataModel::Object*)));
+
 	connect(_magnitudes, SIGNAL(magnitudeUpdated(const QString&, Seiscomp::DataModel::Object*)),
 	        _eventSmallSummaryCurrent, SLOT(updateObject(const QString&, Seiscomp::DataModel::Object*)));
+
+	connect(_magnitudes, SIGNAL(magnitudeRemoved(const QString &, Seiscomp::DataModel::Object*)),
+	        _eventSmallSummaryCurrent, SLOT(removeObject(const QString &, Seiscomp::DataModel::Object*)));
 
 	connect(_originLocator, SIGNAL(committedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*,
 	                                               const Seiscomp::Gui::ObjectChangeList<Seiscomp::DataModel::Pick>&,
 	                                               const std::vector<Seiscomp::DataModel::AmplitudePtr>&)),
-	        this, SLOT(releaseFixedOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));
+	        this, SLOT(committedNewOrigin(Seiscomp::DataModel::Origin*, Seiscomp::DataModel::Event*)));
 #endif
 
 	/*
@@ -856,6 +914,14 @@ void MainFrame::loadEvents(float days) {
 	_eventList->setInterval(tw);
 	_eventList->readFromDatabase();
 	_eventList->selectFirstEnabledEvent();
+#if QT_VERSION >= 0x040300
+	if ( _trayIcon && _eventList->eventCount() > 0 ) {
+		_trayIcon->showMessage(tr("Finished"),
+		                       tr("%1 has loaded %2 events")
+		                       .arg(SCApp->name().c_str())
+		                       .arg(_eventList->eventCount()));
+	}
+#endif
 }
 
 
@@ -872,6 +938,24 @@ void MainFrame::setEventID(const std::string &eventID) {
 
 	_eventList->add(e.get(), NULL);
 	_eventList->selectEventID(e->publicID());
+}
+
+
+void MainFrame::hoverEvent(const std::string &eventID) {
+	if ( !_eventID.empty() && (_eventID == eventID) )
+		_originLocator->map()->setToolTip(tr("%1\nCurrently loaded").arg(eventID.c_str()));
+	else
+		_originLocator->map()->setToolTip(eventID.c_str());
+
+	if ( eventID.empty() )
+		_originLocator->map()->unsetCursor();
+	else
+		_originLocator->map()->setCursor(Qt::PointingHandCursor);
+}
+
+
+void MainFrame::selectEvent(const std::string &eventID) {
+	_eventList->selectEventID(eventID);
 }
 
 
@@ -947,6 +1031,7 @@ void MainFrame::configureAcquisition() {
 		SCApp->configSetBool("olv.computeMissingTakeOffAngles", lc.computeMissingTakeOffAngles);
 		SCApp->configSetDouble("olv.defaultAddStationsDistance", pc.defaultAddStationsDistance);
 		SCApp->configSetBool("olv.hideStationsWithoutData", pc.hideStationsWithoutData);
+		SCApp->configSetBool("olv.hideDisabledStations", pc.hideDisabledStations);
 
 		SCApp->configSetBool("picker.showCrossHairCursor", pc.showCrossHair);
 		SCApp->configSetBool("picker.ignoreUnconfiguredStations", pc.ignoreUnconfiguredStations);
@@ -1133,7 +1218,8 @@ void MainFrame::updateOrigin(Seiscomp::DataModel::Origin *o, Seiscomp::DataModel
 }
 
 
-void MainFrame::releaseFixedOrigin(Seiscomp::DataModel::Origin *, Seiscomp::DataModel::Event *e) {
+void MainFrame::committedNewOrigin(Seiscomp::DataModel::Origin *, Seiscomp::DataModel::Event *e) {
+	_magnitudes->reload();
 }
 
 
@@ -1609,6 +1695,47 @@ void MainFrame::tabChanged(int tab) {
 
 	if ( source && target )
 		target->canvas().setView(source->canvas().mapCenter(), source->canvas().zoomLevel());
+}
+
+
+void MainFrame::eventAdded(Seiscomp::DataModel::Event *e, bool fromNotification) {
+#if QT_VERSION >= 0x040300
+	if ( fromNotification ) {
+		_trayMessageEventID = e->publicID();
+
+		QString msg = tr("[%1] %2")
+		              .arg(windowTitle())
+		              .arg(e->publicID().c_str());
+
+		for ( size_t i = 0; i < e->eventDescriptionCount(); ++i ) {
+			if ( e->eventDescription(i)->type() == REGION_NAME ) {
+				msg += "\n";
+				msg += e->eventDescription(i)->text().c_str();
+			}
+		}
+
+		_trayIcon->showMessage(tr("New event"), msg);
+	}
+#endif
+}
+#if QT_VERSION >= 0x040300
+
+
+void MainFrame::trayIconActivated(QSystemTrayIcon::ActivationReason reason) {
+	if ( reason == QSystemTrayIcon::Trigger ||
+	     reason == QSystemTrayIcon::DoubleClick )
+		setVisible(!isVisible());
+}
+#endif
+
+
+void MainFrame::trayIconMessageClicked() {
+	setVisible(true);
+
+	if ( !_trayMessageEventID.empty() )
+		_eventList->selectEventID(_trayMessageEventID);
+
+	_trayMessageEventID.clear();
 }
 
 

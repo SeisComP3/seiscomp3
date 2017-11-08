@@ -26,7 +26,7 @@ REGISTER_RECORD(XMLRecord, "xml");
 
 XMLRecord::XMLRecord() {}
 
-void XMLRecord::read(std::istream &in) throw(Core::StreamException) {
+void XMLRecord::read(std::istream &in) {
 	XMLArchive ar(in.rdbuf(), true);
 	ar & NAMED_OBJECT("GenericRecord", *this);
 	// Setting the eof bit causes the input to abort the reading
@@ -34,7 +34,7 @@ void XMLRecord::read(std::istream &in) throw(Core::StreamException) {
 		in.setstate(std::ios_base::eofbit);
 }
 
-void XMLRecord::write(std::ostream &out) throw(Core::StreamException) {
+void XMLRecord::write(std::ostream &out) {
 	XMLArchive ar(out.rdbuf(), false);
 	ar & NAMED_OBJECT("GenericRecord", *this);
 }

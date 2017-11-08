@@ -370,25 +370,12 @@ class Record(object):
 
         fd.write(buf)
 
-class _Iter(object):
-    def __init__(self, fd):
-        self.__fd = fd
-
-    def next(self):
-        while True:
-            try:
-                return Record(self.__fd)
-
-            except MSeedNoData:
-                pass
-
-            except MSeedError, e:
-                logs.error(str(e))
-
 class Input(object):
     def __init__(self, fd):
         self.__fd = fd
 
     def __iter__(self):
-        return _Iter(self.__fd)
+        while True:
+            # Record() raises StopIteration!
+            yield Record(self.__fd)
 

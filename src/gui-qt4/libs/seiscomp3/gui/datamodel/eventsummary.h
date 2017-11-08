@@ -26,6 +26,7 @@
 #include <seiscomp3/datamodel/magnitude.h>
 #include <seiscomp3/datamodel/databasequery.h>
 #endif
+#include <seiscomp3/gui/core/gradient.h>
 #include <seiscomp3/gui/map/mapwidget.h>
 #include <seiscomp3/gui/qt4.h>
 
@@ -132,8 +133,20 @@ class SC_GUI_API EventSummary : public QWidget {
 		void updateContent();
 		void updateMagnitude();
 		void updateOrigin();
+		void updateAlert();
 
+	private:
+		struct AlertSettings {
+			AlertSettings() : textSize(-1) {}
 
+			bool empty() { return commentId.empty(); }
+
+			std::string                 commentId;
+			std::vector<std::string >   commentBlacklist;
+
+			int                         textSize;
+			Gui::Gradient               gradient;
+		};
 
 	private:
 		Ui::EventSummary _ui;
@@ -158,7 +171,9 @@ class SC_GUI_API EventSummary : public QWidget {
 
 		MagnitudeTypes                   _visibleMagnitudes;
 		MagnitudeList                    _magnitudes;
+		AlertSettings                    _alertSettings;
 
+		bool                             _alertActive;
 		bool                             _fixedView;
 		bool                             _showComment;
 

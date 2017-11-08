@@ -48,17 +48,25 @@ class Sync : public InventoryTask {
 		             const Seiscomp::DataModel::StationReference *);
 		bool process(const Seiscomp::DataModel::Network *);
 		bool process(Seiscomp::DataModel::Network *,
+		             const Seiscomp::DataModel::Comment *);
+		bool process(Seiscomp::DataModel::Network *,
 		             const Seiscomp::DataModel::Station *);
+		bool process(Seiscomp::DataModel::Station *,
+		             const Seiscomp::DataModel::Comment *);
 		bool process(Seiscomp::DataModel::Station *,
 		             const Seiscomp::DataModel::SensorLocation *);
 		bool process(Seiscomp::DataModel::SensorLocation *,
+		             const Seiscomp::DataModel::Comment *);
+		bool process(Seiscomp::DataModel::SensorLocation *,
 		             const Seiscomp::DataModel::Stream *);
+		bool process(Seiscomp::DataModel::Stream *,
+		             const Seiscomp::DataModel::Comment *);
 		bool process(Seiscomp::DataModel::Stream *,
 		             const Seiscomp::DataModel::Datalogger *);
 		bool process(Seiscomp::DataModel::Datalogger *,
-	                 const Seiscomp::DataModel::Decimation *);
+		             const Seiscomp::DataModel::Decimation *);
 		bool process(Seiscomp::DataModel::Datalogger *,
-	                 const Seiscomp::DataModel::DataloggerCalibration *);
+		             const Seiscomp::DataModel::DataloggerCalibration *);
 		bool process(Seiscomp::DataModel::Stream *,
 		             const Seiscomp::DataModel::Sensor *);
 		bool process(Seiscomp::DataModel::Sensor *,
@@ -72,6 +80,8 @@ class Sync : public InventoryTask {
 
 		Seiscomp::DataModel::ResponseFIR *
 		process(const Seiscomp::DataModel::ResponseFIR *);
+		Seiscomp::DataModel::ResponseIIR *
+		process(const Seiscomp::DataModel::ResponseIIR *);
 		Seiscomp::DataModel::ResponsePAZ *
 		process(const Seiscomp::DataModel::ResponsePAZ *);
 		Seiscomp::DataModel::ResponsePolynomial *

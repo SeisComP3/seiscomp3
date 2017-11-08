@@ -25,7 +25,7 @@ REGISTER_RECORD(BinaryRecord, "binary");
 
 BinaryRecord::BinaryRecord() {}
 
-void BinaryRecord::read(std::istream &in) throw(Core::StreamException) {
+void BinaryRecord::read(std::istream &in) {
 	BinaryArchive ar(in.rdbuf(), true);
 	ar & NAMED_OBJECT("GenericRecord", *this);
 	// Setting the eof bit causes the input to abort the reading
@@ -33,7 +33,7 @@ void BinaryRecord::read(std::istream &in) throw(Core::StreamException) {
 		in.setstate(std::ios_base::eofbit);
 }
 
-void BinaryRecord::write(std::ostream &out) throw(Core::StreamException) {
+void BinaryRecord::write(std::ostream &out) {
 	BinaryArchive ar(out.rdbuf(), false);
 	ar & NAMED_OBJECT("GenericRecord", *this);
 }

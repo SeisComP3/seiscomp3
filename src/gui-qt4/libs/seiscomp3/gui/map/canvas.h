@@ -11,9 +11,9 @@
  ***************************************************************************/
 
 
-
 #ifndef __SEISCOMP_GUI_MAP_CANVAS_H__
 #define __SEISCOMP_GUI_MAP_CANVAS_H__
+
 
 #ifndef Q_MOC_RUN
 #include <seiscomp3/gui/core/maps.h>
@@ -23,6 +23,7 @@
 #include <seiscomp3/gui/map/mapsymbolcollection.h>
 #include <seiscomp3/gui/map/layers/citieslayer.h>
 #include <seiscomp3/gui/map/layers/gridlayer.h>
+#include <seiscomp3/gui/map/layers/geofeaturelayer.h>
 #include <seiscomp3/math/coord.h>
 #include <seiscomp3/geo/geofeature.h>
 #endif
@@ -32,10 +33,13 @@
 #include <QPolygon>
 
 class QMouseEvent;
+class QMenu;
+
 
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
+
 
 class Layer;
 
@@ -43,40 +47,42 @@ DEFINE_SMARTPOINTER(TextureCache);
 
 
 struct SC_GUI_API LayerProperties {
-	std::string name;
 	const LayerProperties *parent;
-	bool visible;
-	QPen pen;
-	QBrush brush;
-	QFont font;
-	bool drawName;
-	bool debug;
-	int  rank;
-	int  roughness;
-	bool filled;
+	std::string            name;
+	bool                   visible;
+	QPen                   pen;
+	QBrush                 brush;
+	QFont                  font;
+	bool                   drawName;
+	bool                   debug;
+	int                    rank;
+	int                    roughness;
+	bool                   filled;
 
-	LayerProperties(const std::string &name) :
-	                name(name), parent(NULL), visible(true),
-	                drawName(false), debug(false), rank(-1), roughness(3),
-	                filled(false) {}
-	LayerProperties(const std::string &name, const LayerProperties* parent) :
-	                name(name), parent(parent), visible(parent->visible),
-	                pen(parent->pen), brush(parent->brush), font(parent->font),
-	                drawName(parent->drawName), debug(parent->debug), rank(-1),
-	                roughness(parent->roughness), filled(parent->filled) {}
+	LayerProperties(const std::string &name)
+	: parent(NULL), name(name)
+	, visible(true), drawName(false)
+	, debug(false), rank(-1), roughness(3)
+	, filled(false) {}
+
+	LayerProperties(const std::string &name, const LayerProperties* parent)
+	: parent(parent), name(name)
+	, visible(parent->visible), pen(parent->pen)
+	, brush(parent->brush), font(parent->font)
+	, drawName(parent->drawName), debug(parent->debug)
+	, rank(-1), roughness(parent->roughness)
+	, filled(parent->filled) {}
 
 	bool isChild(const LayerProperties* child) const;
 };
 
-
-class CanvasDelegate;
 
 class SC_GUI_API Canvas : public QObject {
 	Q_OBJECT
 
 	public:
 		Canvas(const MapsDesc &);
-		Canvas(ImageTree* mapTree);
+		Canvas(ImageTree *mapTree);
 		~Canvas();
 
 		void setFont(QFont f);
@@ -86,15 +92,51 @@ class SC_GUI_API Canvas : public QObject {
 		bool setProjectionByName(const char *name);
 		const std::string &projectionName() const { return _projectionName; }
 
-		void setPreviewMode(bool);
-		void setBilinearFilter(bool);
-
 		void setSize(int w, int h);
+		QSize size() const { return _buffer.size(); }
+
 		int width() const { return _buffer.width(); }
 		int height() const { return _buffer.height(); }
 
+		/**
+		 * @brief Sets the margin of the legend area with respect to the
+		 *        canvas border. The default value is 10 pixels. This methods
+		 *        was added with API 11.
+		 * @param margin The margin in pixels.
+		 */
+		void setLegendMargin(int margin);
+
+		/**
+		 * @brief Returns the margin of the legend area with respect to the
+		 *        canvas border. This methods was added with API 11.
+		 * @return The margin in pixels
+		 */
+		int legendMargin() const { return _margin; }
+
 		void setGrayScale(bool);
 		bool isGrayScale() const;
+
+		/**
+		 * @brief Sets bilinear filtering for map tile interpolation. This is
+		 *        only used if not in preview mode.
+		 * @param enable Boolean flag
+		 */
+		void setBilinearFilter(bool enable);
+
+		/**
+		 * @brief Enables the preview mode. The preview mode is meant to be
+		 *        used for fast rendering the map, e.g. with antialiasing
+		 *        switched of. This is mainly used while dragging the map.
+		 * @param enable Boolean flag
+		 */
+		void setPreviewMode(bool enable);
+
+		/**
+		 * @brief Returns whether the canvas rendering is currently in preview
+		 *        mode or not.
+		 * @return A boolean flag
+		 */
+		bool previewMode() const;
 
 		void setDrawGrid(bool);
 		bool isDrawGridEnabled() const;
@@ -105,7 +147,6 @@ class SC_GUI_API Canvas : public QObject {
 		void setDrawCities(bool);
 		bool isDrawCitiesEnabled() const;
 
-		void setDrawLegends(bool);
 		bool isDrawLegendsEnabled() const;
 
 		void setImageFilter(bool);
@@ -130,14 +171,14 @@ class SC_GUI_API Canvas : public QObject {
 		bool isInside(double lon, double lat) const;
 		bool isVisible(double lon, double lat) const;
 
-		SymbolCollection *symbolCollection() const;
-		void setSymbolCollection(SymbolCollection *collection);
+		const SymbolCollection *symbolCollection() const;
+		SymbolCollection *symbolCollection();
 
 		void setSelectedCity(const Math::Geo::CityD*);
 
 		//! Draws a geometric line (great circle) given in geographical coordinates (lon, lat)
 		//! Returns the distance in degree of the line
-		double drawGeoLine(QPainter& p, const QPointF& start, const QPointF& end) const;
+		double drawGeoLine(QPainter& painter, const QPointF& start, const QPointF& end) const;
 
 		//! Draws a geofeature with layer properties.
 		bool drawGeoFeature(QPainter &painter, const Geo::GeoFeature *f,
@@ -148,15 +189,15 @@ class SC_GUI_API Canvas : public QObject {
 		//! Draws a polyline in geographical coordinates (lon, lat).
 		//! Returns number of line segments drawn.
 		//! Does not check for clipping
-		size_t drawGeoPolyline(QPainter& p, size_t n, const Math::Geo::CoordF *line,
+		size_t drawGeoPolyline(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
 		                       bool isClosedPolygon, uint minPixelDist = 3,
 		                       bool interpolate = false) const;
 		//! Does not check for clipping
-		size_t drawGeoPolygon(QPainter& p, size_t n, const Math::Geo::CoordF *line,
+		size_t drawGeoPolygon(QPainter &painter, size_t n, const Math::Geo::CoordF *line,
 		                      uint minPixelDist = 3) const;
 		//! Draws a GeoFeature as either polyline or filled polygon and
 		//! checks for clipping
-		size_t drawGeoFeature(QPainter& p, const Geo::GeoFeature *feature,
+		size_t drawGeoFeature(QPainter &painter, const Geo::GeoFeature *feature,
 		                      uint minPixelDist = 3, bool interpolate = false,
 		                      bool filled = false) const;
 
@@ -166,17 +207,11 @@ class SC_GUI_API Canvas : public QObject {
 		void translate(const QPoint &delta);
 		void translate(const QPointF &delta);
 
-		//! Returns a reference to the layerproperties vector
-		const std::vector<LayerProperties*> &layerProperties() {
-			return _layerProperties;
-		}
+		void drawImageLayer(QPainter &painter);
+		void drawVectorLayer(QPainter &painter);
 
-		void drawImageLayer(QPainter&);
-		void drawVectorLayer(QPainter&);
-
-		void drawGeoFeatures(QPainter& p);
-		void drawLayers(QPainter& p);
-		void drawDrawables(QPainter& p);
+		void drawLayers(QPainter &painter);
+		void drawDrawables(QPainter &painter);
 		void drawImage(const QRectF &geoReference, const QImage &image,
 		               CompositionMode compositionMode = CompositionMode_Default);
 
@@ -184,10 +219,6 @@ class SC_GUI_API Canvas : public QObject {
 
 		void setBuffer(QImage buffer) { _buffer = buffer; }
 		QImage &buffer() { return _buffer; }
-
-
-		CanvasDelegate* delegate() const { return _delegate; }
-		void setDelegate(CanvasDelegate *delegate);
 
 		//! Returns the number of layers
 		int layerCount() const { return _layers.count(); }
@@ -200,24 +231,24 @@ class SC_GUI_API Canvas : public QObject {
 		}
 
 		//! Canvas does not take ownership of layer.
-		void prependLayer(Layer*);
-		void addLayer(Layer*);
-		void insertLayerBefore(const Layer*, Layer*);
+		bool prependLayer(Layer*);
+		bool addLayer(Layer*);
+		bool insertLayerBefore(const Layer*, Layer*);
+
 		void removeLayer(Layer*);
 
 		void lower(Layer*);
 		void raise(Layer*);
 
 		bool filterContextMenuEvent(QContextMenuEvent*, QWidget*);
+		bool filterKeyPressEvent(QKeyEvent *event);
+		bool filterKeyReleaseEvent(QKeyEvent *event);
 		bool filterMouseMoveEvent(QMouseEvent*);
-		bool filterMouseDoubleClickEvent(QMouseEvent*);
 		bool filterMousePressEvent(QMouseEvent*);
+		bool filterMouseReleaseEvent(QMouseEvent*);
+		bool filterMouseDoubleClickEvent(QMouseEvent*);
 
-		QMenu* menu(QWidget*) const;
-
-		void setMargin(int);
-
-		void setVisible(Legend*);
+		QMenu* menu(QMenu*) const;
 
 		//! Returns whether the rendering is complete or if there are
 		//! still some updates in the pipeline that updated later. If this
@@ -232,9 +263,43 @@ class SC_GUI_API Canvas : public QObject {
 		//! This slot was introduced in API 1.1.
 		void reload();
 
+		//! This slot was added in API 11
+		void setDrawLegends(bool);
+
+		//! This slot was added in API 11
+		void showLegends();
+
+		//! This slot was added in API 11
+		void hideLegends();
+
+		/**
+		 * @brief Enables/disables legend stacking.
+		 *
+		 * If legend stacking is enabled then two toggle buttons will be
+		 * rendered in the legends title bar to swap the visible legend. If
+		 * stacking is disabled then all legends of a particular edge will
+		 * be rendered next to each other. This slot was added in API 11.
+		 */
+		void setLegendStacking(bool);
+
 		void bringToFront(Seiscomp::Gui::Map::Legend*);
-		void onObjectDestroyed(QObject *object);
 		void setLegendEnabled(Seiscomp::Gui::Map::Legend*, bool);
+
+		/**
+		 * @brief This handler is called when a new legend is
+		 * added to a layer.
+		 * This slot was introduced with API XX
+		 * @param legend The legend
+		 */
+		void onLegendAdded(Legend *legend);
+
+		/**
+		 * @brief This handler is called when a legend is removed
+		 * from a layer.
+		 * This slot was introduced with API XX
+		 * @param legend
+		 */
+		void onLegendRemoved(Legend *legend);
 
 	signals:
 		//! This signal is emitted if draw() caused asynchronous data requests
@@ -244,13 +309,13 @@ class SC_GUI_API Canvas : public QObject {
 
 		void bufferUpdated();
 		void projectionChanged(Seiscomp::Gui::Map::Projection*);
+		void legendVisibilityChanged(bool);
 		void updateRequested();
 		void customLayer(QPainter*);
 
+
 	private:
 		void init();
-
-		void updateDrawablePositions() const;
 
 		void drawCity(QPainter &painter, const Math::Geo::CityD &,
 		              QVector< QList<QRect> > &grid,
@@ -258,17 +323,9 @@ class SC_GUI_API Canvas : public QObject {
 		              int rowHeight,
 		              bool &lastUnderline, bool &lastBold);
 
-		void drawDrawables(QPainter& painter, Symbol::Priority priority);
+		void drawDrawables(QPainter &painter, Symbol::Priority priority);
 
-		void drawLegends(QPainter&);
-
-		void updateLayout();
-
-		/**
-		 * Initializes the layer property vector with properties read
-		 * from the symbol collection.
-		 */
-		void initLayerProperites();
+		void drawLegends(QPainter &painter);
 
 		int polyToCache(size_t n, const Math::Geo::CoordF *points,
 		                uint minPixelDist) const;
@@ -280,49 +337,29 @@ class SC_GUI_API Canvas : public QObject {
 		void updatedTiles();
 		void updateLayer(const Layer::UpdateHints&);
 
+
 	private:
 		typedef QVector<Legend*> Legends;
 		struct LegendArea : public Legends {
-			LegendArea() : currentIndex(-1), lastIndex(-1) {}
+			LegendArea() : currentIndex(-1) {}
 
 			bool hasIndex(int index) {
 				return ( index >= 0 && index < count() );
 			}
 
-			bool mousePressEvent(QMouseEvent *e );
-
-			int findNext(bool forward = true) const {
-				int count = this->count(),
-				    index = currentIndex,
-				    tmp = forward ? 1 : -1;
-
-				index = currentIndex;
-				for ( int i = 0; i < count - 1; ++i ) {
-					index += tmp;
-					if ( index < 0 || index >= count ) {
-						if ( forward )
-							index = 0;
-						else
-							index = count -1;
-					}
-
-					if ( this->at(index)->isEnabled() ) return index;
-				}
-
-				return -1;
-			}
+			bool mousePressEvent(QMouseEvent *e);
+			bool mouseReleaseEvent(QMouseEvent *e);
+			int findNext(bool forward = true) const;
 
 			QRect      header;
 			QRect      decorationRects[2];
 			int        currentIndex;
-			int        lastIndex;
 		};
 
 		typedef QHash<Qt::Alignment, LegendArea> LegendAreas;
 
 		typedef QList<Layer*> Layers;
 		typedef QList<LayerPtr> CustomLayers;
-		typedef boost::shared_ptr<SymbolCollection> SymbolCollectionPtr;
 
 	private:
 		QFont                         _font;
@@ -340,77 +377,37 @@ class SC_GUI_API Canvas : public QObject {
 		QPointF                       _center;
 		float                         _zoomLevel;
 		bool                          _grayScale;
-		bool                          _drawLayers;
 		bool                          _filterMap;
 		bool                          _dirtyImage;
 		bool                          _dirtyLayers;
 		bool                          _previewMode;
+		bool                          _stackLegends;
 
-		SymbolCollectionPtr           _mapSymbolCollection;
-		std::vector<LayerProperties*> _layerProperties;
+		DefaultSymbolCollection       _mapSymbolCollection;
 
 		Layers                        _layers;
+		Layer                        *_hoverLayer;
 		CustomLayers                  _customLayers;
 		CitiesLayer                   _citiesLayer;
 		GridLayer                     _gridLayer;
+		GeoFeatureLayer               _geoFeatureLayer;
 
 		LegendAreas                   _legendAreas;
 		int                           _margin;
 		bool                          _isDrawLegendsEnabled;
-		CanvasDelegate               *_delegate;
 
 		mutable QPolygon              _polyCache;
 };
 
-class CanvasDelegate : public QObject {
-	public:
-		struct Margins {
-			int left;
-			int top;
-			int right;
-			int bottom;
-		};
 
-	public:
-		CanvasDelegate(Canvas *canvas, QObject *parent = NULL)
-		    : QObject(parent), _canvas(canvas), _spacing(6) {
-			int margin = 9;
-			setContentsMargins(margin, margin, margin, margin);
-		}
+inline bool Canvas::previewMode() const {
+	return _previewMode;
+}
 
-		Canvas* canvas() { return _canvas; }
-		void setCanas(Canvas* canvas) { _canvas = canvas; }
-
-		virtual void doLayout() = 0;
-		virtual void drawLegends(QPainter &painter) {}
-
-		virtual bool filterMouseDoubleClickEvent(QMouseEvent *mouseEvent) {
-			return false;
-		}
-
-		virtual bool filterMousePressEvent(QMouseEvent *mouseEvent) {
-			return false;
-		}
-
-		Margins margins() const { return _margins; }
-		void setContentsMargins(int left, int top, int right, int bottom) {
-			_margins.left = left;
-			_margins.top = top;
-			_margins.right = right;
-			_margins.bottom = bottom;
-		}
-
-		int spacing() const { return _spacing; }
-		void setSpacing(int spacing) { _spacing = spacing; }
-
-	protected:
-		Canvas        *_canvas;
-		Margins        _margins;
-		int            _spacing;
-};
 
 }
 }
 }
+
 
 #endif

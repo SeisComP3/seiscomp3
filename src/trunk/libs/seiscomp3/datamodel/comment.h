@@ -19,6 +19,7 @@
 #define __SEISCOMP_DATAMODEL_COMMENT_H__
 
 
+#include <seiscomp3/core/datetime.h>
 #include <seiscomp3/datamodel/creationinfo.h>
 #include <string>
 #include <seiscomp3/datamodel/object.h>
@@ -41,6 +42,10 @@ class Event;
 class Origin;
 class Parameter;
 class ParameterSet;
+class Stream;
+class SensorLocation;
+class Station;
+class Network;
 
 
 class SC_SYSTEM_CORE_API CommentIndex {
@@ -122,10 +127,18 @@ class SC_SYSTEM_CORE_API Comment : public Object {
 		void setId(const std::string& id);
 		const std::string& id() const;
 
+		//! Start of epoch in ISO datetime format
+		void setStart(const OPT(Seiscomp::Core::Time)& start);
+		Seiscomp::Core::Time start() const;
+
+		//! End of epoch (empty if the comment epoch is open)
+		void setEnd(const OPT(Seiscomp::Core::Time)& end);
+		Seiscomp::Core::Time end() const;
+
 		//! CreationInfo for the Comment object.
 		void setCreationInfo(const OPT(CreationInfo)& creationInfo);
-		CreationInfo& creationInfo() throw(Seiscomp::Core::ValueException);
-		const CreationInfo& creationInfo() const throw(Seiscomp::Core::ValueException);
+		CreationInfo& creationInfo();
+		const CreationInfo& creationInfo() const;
 
 
 	// ------------------------------------------------------------------
@@ -158,6 +171,10 @@ class SC_SYSTEM_CORE_API Comment : public Object {
 		Origin* origin() const;
 		Parameter* parameter() const;
 		ParameterSet* parameterSet() const;
+		Stream* stream() const;
+		SensorLocation* sensorLocation() const;
+		Station* station() const;
+		Network* network() const;
 
 		//! Implement Object interface
 		bool assign(Object* other);
@@ -180,6 +197,8 @@ class SC_SYSTEM_CORE_API Comment : public Object {
 
 		// Attributes
 		std::string _text;
+		OPT(Seiscomp::Core::Time) _start;
+		OPT(Seiscomp::Core::Time) _end;
 		OPT(CreationInfo) _creationInfo;
 };
 

@@ -261,7 +261,12 @@ inline Archive<ROOT_TYPE>& Archive<ROOT_TYPE>::operator<<(const ObjectNamer<std:
 					boost::is_same<std::string,T>::value?
 					0
 					:
-					1
+					(
+						boost::is_same<Seiscomp::Core::Time,T>::value?
+						0
+						:
+						1
+					)
 				)
 			)
 			:
@@ -313,7 +318,28 @@ inline Archive<ROOT_TYPE>& Archive<ROOT_TYPE>::operator<<(const ObjectNamer<std:
 
 	typedef typename boost::remove_pointer<T>::type RAW_T;
 
-	ListWriter<ROOT_TYPE,T,boost::is_class<RAW_T>::value?(boost::is_same<std::complex<double>,T>::value?0:1):0> writer;
+	ListWriter<ROOT_TYPE,T,
+		boost::is_class<RAW_T>::value?
+		(
+			boost::is_same<std::complex<double>,T>::value
+			?
+			0
+			:
+			(
+				boost::is_same<std::string,T>::value?
+				0
+				:
+				(
+					boost::is_same<Time,T>::value?
+					0
+					:
+					1
+				)
+			)
+		)
+		:
+		0
+	> writer;
 	writer(*this, namedObject);
 
 	setHint(h);
@@ -494,7 +520,12 @@ inline Archive<ROOT_TYPE>& Archive<ROOT_TYPE>::operator>>(const ObjectNamer<std:
 					boost::is_same<std::string,T>::value?
 					0
 					:
-					1
+					(
+						boost::is_same<Seiscomp::Core::Time,T>::value?
+						0
+						:
+						1
+					)
 				)
 			)
 			:
@@ -561,11 +592,27 @@ inline Archive<ROOT_TYPE>& Archive<ROOT_TYPE>::operator>>(const ObjectNamer<std:
 	typedef typename boost::remove_pointer<T>::type RAW_T;
 	
 	//_validObject = true;
-	typename boost::mpl::if_c<boost::is_class<RAW_T>::value,
-	                          typename boost::mpl::if_c<boost::is_same<std::complex<double>, T>::value,
-	                                                    ListReader<ROOT_TYPE,T,0>,
-	                                                    ListReader<ROOT_TYPE,T,1> >::type,
-	                          ListReader<ROOT_TYPE,T,0> >::type reader;
+	ListReader<ROOT_TYPE,T,
+		boost::is_class<RAW_T>::value?
+			(
+				boost::is_same<std::complex<double>,T>::value?
+				0
+				:
+				(
+					boost::is_same<std::string,T>::value?
+					0
+					:
+					(
+						boost::is_same<Seiscomp::Core::Time,T>::value?
+						0
+						:
+						1
+					)
+				)
+			)
+			:
+			0
+	> reader;
 	reader(*this, namedObject);
 
 	setHint(h);
