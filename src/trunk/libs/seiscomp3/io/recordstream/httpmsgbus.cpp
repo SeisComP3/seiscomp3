@@ -642,6 +642,7 @@ Record *HMBConnection<SocketType>::next() {
 		stream.str(data);
 
 		IO::MSeedRecord *rec = new IO::MSeedRecord();
+		setupRecord(rec);
 		try {
 			rec->read(stream);
 			return rec;

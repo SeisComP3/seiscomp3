@@ -478,7 +478,7 @@ Record *SLConnection::next() {
 					stream.rdbuf()->pubsetbuf(data+HEADSIZE,RECSIZE);
 
 					IO::MSeedRecord *rec = new IO::MSeedRecord();
-
+					setupRecord(rec);
 					try {
 						rec->read(stream);
 					}
