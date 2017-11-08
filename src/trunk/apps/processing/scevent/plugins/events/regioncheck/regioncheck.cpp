@@ -26,7 +26,7 @@
 
 
 ADD_SC_PLUGIN("Region check for events that sets the event type to \"outside of network interest\" "
-              "if the location is inside preconfigured regions",
+              "if the location is outside preconfigured regions",
               "Jan Becker, gempa GmbH <jabe@gempa.de>", 0, 1, 0)
 
 
