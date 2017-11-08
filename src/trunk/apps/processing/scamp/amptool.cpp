@@ -90,6 +90,9 @@ AmpTool::AmpTool(int argc, char **argv) : StreamApplication(argc, argv) {
 
 	setAutoAcquisitionStart(false);
 
+	_initialAcquisitionTimeout = 30;
+	_runningAcquisitionTimeout = 2;
+
 	_amplitudeTypes.insert("MLv");
 	_amplitudeTypes.insert("mb");
 	_amplitudeTypes.insert("mB");
@@ -172,6 +175,12 @@ bool AmpTool::initConfiguration() {
 	catch (...) {}
 
 	try { _minWeight = configGetDouble("amptool.minimumPickWeight"); }
+	catch ( ... ) {}
+
+	try { _initialAcquisitionTimeout = configGetDouble("amptool.initialAcquisitionTimeout"); }
+	catch ( ... ) {}
+
+	try { _runningAcquisitionTimeout = configGetDouble("amptool.runningAcquisitionTimeout"); }
 	catch ( ... ) {}
 
 	_dumpRecords = commandline().hasOption("dump-records");
@@ -751,7 +760,7 @@ void AmpTool::process(Origin *origin) {
 	}
 
 	SEISCOMP_INFO("set stream timeout to 30 seconds");
-	_acquisitionTimeout = 30;
+	_acquisitionTimeout = _initialAcquisitionTimeout;
 	_firstRecord = true;
 
 	_result << " + Processing" << std::endl;
@@ -1240,7 +1249,7 @@ bool AmpTool::storeRecord(Record *rec) {
 	if ( _firstRecord ) {
 		SEISCOMP_INFO("Data request: got first record, set timeout to 2 seconds");
 		_noDataTimer.restart();
-		_acquisitionTimeout = 2;
+		_acquisitionTimeout = _runningAcquisitionTimeout;
 		_firstRecord = false;
 	}
 
