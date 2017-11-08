@@ -273,8 +273,8 @@ Record *ArclinkConnection::next() {
 	_sock.startTimer();
 
 	if ( ! _readingData ) {
-		_sock.open(_serverloc);
 		try {
+			_sock.open(_serverloc);
 			handshake();
 		}
 		catch ( GeneralException ) {
