@@ -1,7 +1,7 @@
-**scmm** is the message monitor, the graphical interface to :ref:`scm`. It allows to
+**scmm** is the messaging monitor, the graphical interface to :ref:`scm`. It allows to
 view the messages from all modules sent around by the SeisComP3 messaging system.
 Therefore, **scmm** can be used to debug configured message groups and module
-connections, e.g. in a system with several processing pipelines with with specific
+connections, e.g. in a system with several processing pipelines and specific
 message groups.
 
 In addition, **scmm** allows to view the content of single messges
