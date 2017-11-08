@@ -214,15 +214,18 @@ void ArclinkConnection::handshake() {
 
 	_sock.sendRequest("REQUEST WAVEFORM format=MSEED", true);
 
+	Core::Time endTime = _etime;
+	if ( !endTime.valid() ) endTime = Core::Time::GMT();
+
 	for ( list<StreamIdx>::iterator it = _ordered.begin(); it != _ordered.end(); ++it ) {
-		SEISCOMP_DEBUG("Arclink request: %s", it->str(_stime, _etime).c_str());
+		SEISCOMP_DEBUG("Arclink request: %s", it->str(_stime, endTime).c_str());
 		if ((it->startTime() == Time() && _stime == Time()) ||
-			(it->endTime() == Time() && _etime == Time())) {
+			(it->endTime() == Time() && endTime == Time())) {
 			/* invalid time window ignore stream */
 			SEISCOMP_WARNING("... has invalid time window -> ignore this request above");
 		}
 		else
-			_sock.sendRequest(it->str(_stime, _etime), false);
+			_sock.sendRequest(it->str(_stime, endTime), false);
 	}
 
 	_reqID = _sock.sendRequest("END", true);
