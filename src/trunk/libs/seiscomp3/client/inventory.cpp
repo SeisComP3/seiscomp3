@@ -257,12 +257,23 @@ void Inventory::load(DataModel::DatabaseReader* reader) {
 	it.close();
 
 	// Read FAP responses
-	if ( reader->version() >= Core::Version(0,8) ) {
+	if ( reader->supportsVersion<0,8>() ) {
 		it = reader->getObjects(_inventory.get(), DataModel::ResponseFAP::TypeInfo());
 		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 			DataModel::ResponseFAPPtr fap = DataModel::ResponseFAP::Cast(obj);
 			if ( fap )
 				_inventory->add(fap.get());
+		}
+		it.close();
+	}
+
+	// Read IIR responses
+	if ( reader->supportsVersion<0,10>() ) {
+		it = reader->getObjects(_inventory.get(), DataModel::ResponseIIR::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::ResponseIIRPtr iir = DataModel::ResponseIIR::Cast(obj);
+			if ( iir )
+				_inventory->add(iir.get());
 		}
 		it.close();
 	}
@@ -293,6 +304,23 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	it.close();
 
+	if ( reader->supportsVersion<0,10>() ) {
+		// Read network comments
+		it = reader->getObjectIterator("select Comment.* from Comment, Network where Comment._parent_oid = Network._oid", DataModel::Comment::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
+			if ( comment ) {
+				std::map<int, DataModel::NetworkPtr>::iterator p = networks.find(it.parentOid());
+				if ( p != networks.end() )
+					p->second->add(comment.get());
+				else
+					std::cerr << "cannot find Comment parent Network with id " << it.parentOid() << std::endl;
+			}
+		}
+
+		it.close();
+	}
+
 	// Read stations
 	std::map<int, DataModel::StationPtr> stations;
 	it = reader->getObjects(NULL, DataModel::Station::TypeInfo());
@@ -309,6 +337,23 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 	}
 
 	it.close();
+
+	if ( reader->supportsVersion<0,10>() ) {
+		// Read station comments
+		it = reader->getObjectIterator("select Comment.* from Comment, Station where Comment._parent_oid = Station._oid", DataModel::Comment::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
+			if ( comment ) {
+				std::map<int, DataModel::StationPtr>::iterator p = stations.find(it.parentOid());
+				if ( p != stations.end() )
+					p->second->add(comment.get());
+				else
+					std::cerr << "cannot find Comment parent Station with id " << it.parentOid() << std::endl;
+			}
+		}
+
+		it.close();
+	}
 
 	// Read sensor locations
 	std::map<int, DataModel::SensorLocationPtr> sensorLocations;
@@ -327,11 +372,32 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	it.close();
 
+	if ( reader->supportsVersion<0,10>() ) {
+		// Read sensor location comments
+		it = reader->getObjectIterator("select Comment.* from Comment, SensorLocation where Comment._parent_oid = SensorLocation._oid", DataModel::Comment::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
+			if ( comment ) {
+				std::map<int, DataModel::SensorLocationPtr>::iterator p = sensorLocations.find(it.parentOid());
+				if ( p != sensorLocations.end() )
+					p->second->add(comment.get());
+				else
+					std::cerr << "cannot find Comment parent SensorLocation with id " << it.parentOid() << std::endl;
+			}
+		}
+
+		it.close();
+	}
+
 	// Read streams
-	it = reader->getObjects(NULL, DataModel::Stream::TypeInfo());
+	// Note, prior to version 0.10 the stream type was not a PublicObject and
+	// therefore we must not join with table PublicObject
+	std::map<int, DataModel::StreamPtr> streams;
+	it = reader->getObjects(NULL, DataModel::Stream::TypeInfo(), reader->isLowerVersion<0,10>());
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::StreamPtr stream = DataModel::Stream::Cast(obj);
 		if ( stream ) {
+			streams.insert(std::make_pair(it.oid(), stream));
 			std::map<int, DataModel::SensorLocationPtr>::iterator p = sensorLocations.find(it.parentOid());
 			if ( p != sensorLocations.end() )
 				p->second->add(stream.get());
@@ -342,12 +408,28 @@ void Inventory::loadStations(DataModel::DatabaseReader* reader) {
 
 	it.close();
 
+	if ( reader->supportsVersion<0,10>() ) {
+		// Read stream comments
+		it = reader->getObjectIterator("select Comment.* from Comment, Stream where Comment._parent_oid = Stream._oid", DataModel::Comment::TypeInfo());
+		for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
+			DataModel::CommentPtr comment = DataModel::Comment::Cast(obj);
+			if ( comment ) {
+				std::map<int, DataModel::StreamPtr>::iterator p = streams.find(it.parentOid());
+				if ( p != streams.end() )
+					p->second->add(comment.get());
+				else
+					std::cerr << "cannot find Comment parent Stream with id " << it.parentOid() << std::endl;
+			}
+		}
+
+		it.close();
+	}
+
 	// Read auxStreams
 	it = reader->getObjects(NULL, DataModel::AuxStream::TypeInfo());
 	for ( DataModel::ObjectPtr obj; (obj = *it); ++it ) {
 		DataModel::AuxStreamPtr auxStream = DataModel::AuxStream::Cast(obj);
 		if ( auxStream ) {
-//			std::cout << "_oid=" << it.oid() << ", _parent_oid=" << it.parentOid() << ", " << seisStream->code() << std::endl;
 			std::map<int, DataModel::SensorLocationPtr>::iterator p = sensorLocations.find(it.parentOid());
 			if ( p != sensorLocations.end() )
 				p->second->add(auxStream.get());

@@ -230,7 +230,8 @@ class FDSNStation(resource.Resource):
 
 		# additional object count dependent on detail level
 		self._resLevelCount = inv.responsePAZCount() + inv.responseFIRCount() \
-		                      + inv.responsePolynomialCount()
+		                      + inv.responsePolynomialCount() + inv.responseIIRCount() \
+		                      + inv.responseFAPCount()
 		for i in xrange(inv.dataloggerCount()):
 			self._resLevelCount += inv.datalogger(i).decimationCount()
 
@@ -336,6 +337,10 @@ class FDSNStation(resource.Resource):
 			if skipRestricted and utils.isRestricted(net): continue
 			newNet = DataModel.Network(net)
 
+			# Copy comments
+			for i in xrange(net.commentCount()):
+				newNet.add(DataModel.Comment(net.comment(i)))
+
 			# iterate over inventory stations of current network
 			for sta in ro.stationIter(net, levelSta):
 				if req._disconnected: return False
@@ -354,7 +359,11 @@ class FDSNStation(resource.Resource):
 						sensors |= s
 				elif self._matchStation(net, sta, ro):
 					if ro.includeSta:
-						newNet.add(DataModel.Station(sta))
+						newSta = DataModel.Station(sta)
+						# Copy comments
+						for i in xrange(sta.commentCount()):
+							newSta.add(DataModel.Comment(sta.comment(i)))
+						newNet.add(newSta)
 					else:
 						# no station output requested: one matching station
 						# is sufficient to include the network
@@ -385,7 +394,9 @@ class FDSNStation(resource.Resource):
 			else:
 				resCount = newInv.responsePAZCount() + \
 				           newInv.responseFIRCount() + \
-				           newInv.responsePolynomialCount()
+				           newInv.responsePolynomialCount() + \
+				           newInv.responseFAPCount() + \
+				           newInv.responseIIRCount()
 				objCount += resCount + decCount + newInv.dataloggerCount() + \
 				            newInv.sensorCount()
 
@@ -580,11 +591,24 @@ class FDSNStation(resource.Resource):
 		chaCount = 0
 		dataloggers, sensors = set(), set()
 		newSta = DataModel.Station(sta)
+
+		# Copy comments
+		for i in xrange(sta.commentCount()):
+			newSta.add(DataModel.Comment(sta.comment(i)))
+
 		for loc in ro.locationIter(net, sta, True):
 			newLoc = DataModel.SensorLocation(loc)
+			# Copy comments
+			for i in xrange(loc.commentCount()):
+				newLoc.add(DataModel.Comment(loc.comment(i)))
+
 			for stream in ro.streamIter(net, sta, loc, True):
 				if skipRestricted and utils.isRestricted(stream): continue
-				newLoc.add(DataModel.Stream(stream))
+				newCha = DataModel.Stream(stream)
+				# Copy comments
+				for i in xrange(stream.commentCount()):
+					newCha.add(DataModel.Comment(stream.comment(i)))
+				newLoc.add(newCha)
 				dataloggers.add(stream.datalogger())
 				sensors.add(stream.sensor())
 
@@ -677,5 +701,15 @@ class FDSNStation(resource.Resource):
 				resp = inv.responsePolynomial(i)
 				if resp.publicID() in responses:
 					newInv.add(DataModel.ResponsePolynomial(resp))
+			if req._disconnected: return None
+			for i in xrange(inv.responseFAPCount()):
+				resp = inv.responseFAP(i)
+				if resp.publicID() in responses:
+					newInv.add(DataModel.ResponseFAP(resp))
+			if req._disconnected: return None
+			for i in xrange(inv.responseIIRCount()):
+				resp = inv.responseIIR(i)
+				if resp.publicID() in responses:
+					newInv.add(DataModel.ResponseIIR(resp))
 
 		return decCount

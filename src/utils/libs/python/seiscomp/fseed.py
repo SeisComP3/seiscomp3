@@ -398,13 +398,19 @@ class _Blockette30(object):
         f.write_blk(blk)
 
 class _Blockette31(object):
-    def __init__(self, key, comment):
+    def __init__(self, key, cclass, comment):
         self.__key = key
+        self.__cclass = cclass
         self.__comment = _mkseedstring(31, 5, comment, 1, 70, "UNLPS")
         self.__len = 15 + len(self.__comment)
 
     def output(self, f):
-        blk = "031%4d%4dX%s  0" % (self.__len, self.__key, self.__comment)
+        blk = "031%4d%4d%s%s  0" % (self.__len, self.__key, self.__cclass, self.__comment)
+
+        if len(blk) != self.__len:
+            raise SEEDError, "blockette 31 has invalid length: %d instead of %d" % (len(blk), self.__len)
+
+        f.write_blk(blk)
 
 class _Blockette33(object):
     def __init__(self, key, desc):
@@ -912,6 +918,22 @@ class _Blockette58(object):
 
         f.write_blk(blk)
 
+class _Blockette59(object):
+    def __init__(self, start_time, end_time, comment_key):
+        self.__start_time = _mkseedtime(51, 3, start_time)
+        self.__end_time = _mkseedtime(51, 4, end_time)
+        self.__comment_key = comment_key
+        self.__len = 17 + len(self.__start_time) + len(self.__end_time)
+
+    def output(self, f):
+        blk = "059%4d%s%s%4d     0" % (self.__len, self.__start_time,
+            self.__end_time, self.__comment_key)
+
+        if len(blk) != self.__len:
+            raise SEEDError, "blockette 59 has invalid length: %d instead of %d" % (len(blk), self.__len)
+
+        f.write_blk(blk)
+
 class _Blockette60(object):
     def __init__(self, start_stage):
         self.__start_stage = start_stage
@@ -1239,16 +1261,16 @@ class _CommentDict(object):
         self.__used = {}
         self.__blk = []
 
-    def lookup(self, comment):
-        k = self.__used.get(comment)
+    def lookup(self, cclass, comment):
+        k = self.__used.get((cclass, comment))
         if k is not None:
             return k
 
         self.__num += 1
         k = self.__num
-        self.__used[comment] = k
+        self.__used[(cclass, comment)] = k
 
-        b = _Blockette31(key = k, comment = comment)
+        b = _Blockette31(key = k, cclass = cclass, comment = comment)
         self.__blk.append(b)
         return k
 
@@ -2259,7 +2281,7 @@ class _Response5xFactory(object):
 
 class _Channel(object):
     def __init__(self, inventory, strmcfg, format_dict, unit_dict,
-        gen_dict, resp_container):
+        comment_dict, gen_dict, resp_container):
 
         loccfg = strmcfg.mySensorLocation
         statcfg = loccfg.myStation
@@ -2267,6 +2289,8 @@ class _Channel(object):
 
         self.__id = (loccfg.code, strmcfg.code, strmcfg.start)
         self.__resp_container = resp_container
+        self.__comment_dict = comment_dict
+        self.__comment_blk = []
 
         sensor = inventory.object.get(strmcfg.sensor)
         if sensor is None:
@@ -2420,11 +2444,19 @@ class _Channel(object):
 
         return 0
 
+    def add_comment(self, com):
+        self.__comment_blk.append(_Blockette59(start_time = com.start,
+            end_time = com.end,
+            comment_key = self.__comment_dict.lookup('C', com.text)))
+
     def output(self, f, vol_start, vol_end):
         self.__chan_blk.set_vol_span(vol_start, vol_end)
         self.__chan_blk.output(f)
         self.__resp_container.output(f)
         self.__stage0_blk.output(f)
+
+        for b in self.__comment_blk:
+            b.output(f)
 
 class _Station(object):
     def __init__(self, inventory, statcfg, format_dict, unit_dict,
@@ -2460,6 +2492,11 @@ class _Station(object):
             start_date = statcfg.start,
             end_date = statcfg.end)
 
+        for com in statcfg.comment.itervalues():
+            self.__comment_blk.append(_Blockette51(start_time = com.start,
+                end_time = com.end,
+                comment_key = self.__comment_dict.lookup('S', com.text)))
+
     def __cmp__(self, other):
         if(self.__id < other.__id):
             return -1
@@ -2472,18 +2509,17 @@ class _Station(object):
     def add_chan(self, strmcfg):
         loccfg = strmcfg.mySensorLocation
 
-        if (loccfg.code, strmcfg.code, strmcfg.start) in \
-            self.__channel:
+        if (loccfg.code, strmcfg.code, strmcfg.start) in self.__channel:
             return
 
-        self.__channel[(loccfg.code, strmcfg.code, strmcfg.start)] = \
-            _Channel(self.__inventory, strmcfg, self.__format_dict,
-            self.__unit_dict, self.__gen_dict, self.__resp_fac.new_response())
+        cha = _Channel(self.__inventory, strmcfg, self.__format_dict,
+            self.__unit_dict, self.__comment_dict, self.__gen_dict,
+            self.__resp_fac.new_response())
 
-    def add_comment(self, qccfg):
-        self.__comment_blk.append(_Blockette51(start_time = qccfg.start,
-            end_time = qccfg.end,
-            comment = self.__comment_dict.lookup(qccfg.message)))
+        self.__channel[(loccfg.code, strmcfg.code, strmcfg.start)] = cha
+
+        for com in strmcfg.comment.itervalues():
+            cha.add_comment(com)
 
     def get_id(self):
         return self.__id
@@ -2813,37 +2849,6 @@ class SEEDVolume(object):
                 logs.warning("cannot find %s %s %s %s %s %s" %
                     (net_code, stat_code, loc_id, chan_id, start_time, end_time))
 
-    def add_station_comment(self, net_code, stat_code, start_time, end_time, comment, strict=False):
-        found = False
-        net_tp = self.__inventory.network.get(net_code)
-        if net_tp is not None:
-            for netcfg in net_tp.itervalues():
-#               if _cmptime(start_time, netcfg.end) <= 0 and \
-#                   _cmptime(end_time, netcfg.start) >= 0:
-
-                    sta_tp = netcfg.station.get(stat_code)
-                    if sta_tp is not None:
-                        for statcfg in sta_tp.itervalues():
-#                           if _cmptime(start_time, statcfg.end) <= 0 and \
-#                               _cmptime(end_time, statcfg.start) >= 0:
-
-                                sta = self.__station.get((net_code, netcfg.start, stat_code, statcfg.start))
-                                if sta is None:
-                                    sta = _Station(self.__inventory, statcfg, self.__format_dict,
-                                        self.__unit_dict, self.__gen_dict, self.__resp_fac)
-                                    self.__station[(net_code, netcfg.start, stat_code, statcfg.start)] = sta
-
-                                sta.add_comment(start_time, end_time, comment)
-                                found = True
-
-        if not found:
-            if strict:
-                raise SEEDError, "cannot find %s %s %s %s %s %s" % \
-                    (net_code, stat_code, loc_id, chan_id, start_time, end_time)
-            else:
-                logs.warning("cannot find %s %s %s %s %s %s" %
-                    (net_code, stat_code, loc_id, chan_id, start_time, end_time))
-
     def add_data(self, rec):
         if self.__waveform_data is None:
             self.__waveform_data = _WaveformData()
@@ -2909,6 +2914,7 @@ class SEEDVolume(object):
 
         rb.reset("A", fd)
         self.__format_dict.output(rb)
+        self.__comment_dict.output(rb)
         self.__gen_dict.output(rb)
         self.__unit_dict.output(rb)
         self.__resp_fac.output(rb)

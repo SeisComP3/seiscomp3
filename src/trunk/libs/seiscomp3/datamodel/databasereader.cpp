@@ -186,6 +186,12 @@ PublicObject* DatabaseReader::loadObject(const Seiscomp::Core::RTTI& classType,
 		return sensorLocation;
 	}
 
+	Stream* stream = Stream::Cast(publicObject);
+	if ( stream ) {
+		load(stream);
+		return stream;
+	}
+
 	Route* route = Route::Cast(publicObject);
 	if ( route ) {
 		load(route);
@@ -2512,6 +2518,11 @@ int DatabaseReader::load(SensorLocation* sensorLocation) {
 	count += loadAuxStreams(sensorLocation);
 
 	count += loadStreams(sensorLocation);
+	{
+		size_t elementCount = sensorLocation->streamCount();
+		for ( size_t i = 0; i < elementCount; ++i )
+			load(sensorLocation->stream(i));
+	}
 
 	return count;
 }
@@ -2589,7 +2600,7 @@ int DatabaseReader::loadStreams(SensorLocation* sensorLocation) {
 
 	DatabaseIterator it;
 	size_t count = 0;
-	it = getObjects(sensorLocation, Stream::TypeInfo());
+	it = getObjects(sensorLocation, Stream::TypeInfo(), isLowerVersion<0,10>());
 	while ( *it ) {
 		if ( (*it)->parent() == NULL ) {
 			sensorLocation->add(Stream::Cast(*it));
@@ -2597,6 +2608,50 @@ int DatabaseReader::loadStreams(SensorLocation* sensorLocation) {
 		}
 		else
 			SEISCOMP_INFO("SensorLocation::add(Stream) -> Stream has already another parent");
+		++it;
+	}
+	it.close();
+
+	Notifier::SetEnabled(saveState);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::load(Stream* stream) {
+	size_t count = 0;
+
+	if ( supportsVersion<0,10>() )
+		count += loadComments(stream);
+
+	return count;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+int DatabaseReader::loadComments(Stream* stream) {
+	if ( !validInterface() || stream == NULL ) return 0;
+
+	bool saveState = Notifier::IsEnabled();
+	Notifier::Disable();
+
+	DatabaseIterator it;
+	size_t count = 0;
+	it = getObjects(stream, Comment::TypeInfo());
+	while ( *it ) {
+		if ( (*it)->parent() == NULL ) {
+			stream->add(Comment::Cast(*it));
+			++count;
+		}
+		else
+			SEISCOMP_INFO("Stream::add(Comment) -> Comment has already another parent");
 		++it;
 	}
 	it.close();

@@ -20,8 +20,11 @@
 
 
 #include <seiscomp3/core/datetime.h>
+#include <vector>
 #include <string>
-#include <seiscomp3/datamodel/object.h>
+#include <seiscomp3/datamodel/comment.h>
+#include <seiscomp3/datamodel/notifier.h>
+#include <seiscomp3/datamodel/publicobject.h>
 #include <seiscomp3/core/exceptions.h>
 
 
@@ -30,6 +33,7 @@ namespace DataModel {
 
 
 DEFINE_SMARTPOINTER(Stream);
+DEFINE_SMARTPOINTER(Comment);
 
 class SensorLocation;
 
@@ -69,7 +73,7 @@ class SC_SYSTEM_CORE_API StreamIndex {
  * \brief This type describes a stream (channel) with defined
  * \brief frequency response
  */
-class SC_SYSTEM_CORE_API Stream : public Object {
+class SC_SYSTEM_CORE_API Stream : public PublicObject {
 	DECLARE_SC_CLASS(Stream);
 	DECLARE_SERIALIZATION;
 	DECLARE_METAOBJECT;
@@ -77,22 +81,42 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 	// ------------------------------------------------------------------
 	//  Xstruction
 	// ------------------------------------------------------------------
-	public:
-		//! Constructor
+	protected:
+		//! Protected constructor
 		Stream();
 
+	public:
 		//! Copy constructor
 		Stream(const Stream& other);
+
+		//! Constructor with publicID
+		Stream(const std::string& publicID);
 
 		//! Destructor
 		~Stream();
 	
 
 	// ------------------------------------------------------------------
+	//  Creators
+	// ------------------------------------------------------------------
+	public:
+		static Stream* Create();
+		static Stream* Create(const std::string& publicID);
+
+
+	// ------------------------------------------------------------------
+	//  Lookup
+	// ------------------------------------------------------------------
+	public:
+		static Stream* Find(const std::string& publicID);
+
+
+	// ------------------------------------------------------------------
 	//  Operators
 	// ------------------------------------------------------------------
 	public:
 		//! Copies the metadata of other to this
+		//! No changes regarding child objects are made
 		Stream& operator=(const Stream& other);
 		//! Checks for equality of two objects. Childs objects
 		//! are not part of the check.
@@ -214,6 +238,44 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 	//  Public interface
 	// ------------------------------------------------------------------
 	public:
+		/**
+		 * Add an object.
+		 * @param obj The object pointer
+		 * @return true The object has been added
+		 * @return false The object has not been added
+		 *               because it already exists in the list
+		 *               or it already has another parent
+		 */
+		bool add(Comment* obj);
+
+		/**
+		 * Removes an object.
+		 * @param obj The object pointer
+		 * @return true The object has been removed
+		 * @return false The object has not been removed
+		 *               because it does not exist in the list
+		 */
+		bool remove(Comment* obj);
+
+		/**
+		 * Removes an object of a particular class.
+		 * @param i The object index
+		 * @return true The object has been removed
+		 * @return false The index is out of bounds
+		 */
+		bool removeComment(size_t i);
+		bool removeComment(const CommentIndex& i);
+
+		//! Retrieve the number of objects of a particular class
+		size_t commentCount() const;
+
+		//! Index access
+		//! @return The object at index i
+		Comment* comment(size_t i) const;
+		Comment* comment(const CommentIndex& i) const;
+
+		//! Find an object by its unique attribute(s)
+
 		SensorLocation* sensorLocation() const;
 
 		//! Implement Object interface
@@ -224,6 +286,9 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 
 		//! Creates a clone
 		Object* clone() const;
+
+		//! Implement PublicObject interface
+		bool updateChild(Object* child);
 
 		void accept(Visitor*);
 
@@ -256,6 +321,11 @@ class SC_SYSTEM_CORE_API Stream : public Object {
 		std::string _flags;
 		OPT(bool) _restricted;
 		OPT(bool) _shared;
+
+		// Aggregations
+		std::vector<CommentPtr> _comments;
+
+	DECLARE_SC_CLASSFACTORY_FRIEND(Stream);
 };
 
 

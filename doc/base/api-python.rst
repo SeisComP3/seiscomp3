@@ -250,7 +250,7 @@ Classes
         Station [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Station</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="description"><font color="#8b0000">+ description: string</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left" port="place"><font color="#8b0000">+ place: string</font></td></tr><tr><td align="left" port="country"><font color="#8b0000">+ country: string</font></td></tr><tr><td align="left" port="affiliation"><font color="#8b0000">+ affiliation: string</font></td></tr><tr><td align="left" port="type"><font color="#8b0000">+ type: string</font></td></tr><tr><td align="left" port="archive"><font color="#8b0000">+ archive: string</font></td></tr><tr><td align="left" port="archiveNetworkCode"><font color="#8b0000">+ archiveNetworkCode: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left" port="remark"><font color="#8b0000">+ remark: Blob  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ sensorLocation: SensorLocation [0..*]</font></td></tr></table>>]
         SensorLocation [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>SensorLocation</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="latitude"><font color="#8b0000">+ latitude: float  [0..1]</font></td></tr><tr><td align="left" port="longitude"><font color="#8b0000">+ longitude: float  [0..1]</font></td></tr><tr><td align="left" port="elevation"><font color="#8b0000">+ elevation: float  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ auxStream: AuxStream [0..*]</font></td></tr><tr><td align="left"><font color="#8b0000">+ stream: Stream [0..*]</font></td></tr></table>>]
         AuxStream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>AuxStream</td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="device"><font color="#8b0000">+ device: string</font></td></tr><tr><td align="left" port="deviceSerialNumber"><font color="#8b0000">+ deviceSerialNumber: string</font></td></tr><tr><td align="left" port="source"><font color="#8b0000">+ source: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr></table>>]
-        Stream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Stream</td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="datalogger"><font color="#8b0000">+ datalogger: string</font></td></tr><tr><td align="left" port="dataloggerSerialNumber"><font color="#8b0000">+ dataloggerSerialNumber: string</font></td></tr><tr><td align="left" port="dataloggerChannel"><font color="#8b0000">+ dataloggerChannel: int  [0..1]</font></td></tr><tr><td align="left" port="sensor"><font color="#8b0000">+ sensor: string</font></td></tr><tr><td align="left" port="sensorSerialNumber"><font color="#8b0000">+ sensorSerialNumber: string</font></td></tr><tr><td align="left" port="sensorChannel"><font color="#8b0000">+ sensorChannel: int  [0..1]</font></td></tr><tr><td align="left" port="clockSerialNumber"><font color="#8b0000">+ clockSerialNumber: string</font></td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int  [0..1]</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int  [0..1]</font></td></tr><tr><td align="left" port="depth"><font color="#8b0000">+ depth: float  [0..1]</font></td></tr><tr><td align="left" port="azimuth"><font color="#8b0000">+ azimuth: float  [0..1]</font></td></tr><tr><td align="left" port="dip"><font color="#8b0000">+ dip: float  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="gainUnit"><font color="#8b0000">+ gainUnit: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr></table>>]
+        Stream [label = <<table border="0" cellpadding="0" cellspacing="2"><tr><td>Stream</td></tr><tr><td align="left" port="publicID"><font color="#8b0000">+ publicID: string</font></td></tr><tr><td align="left" port="code"><font color="#8b0000">+ code: string</font></td></tr><tr><td align="left" port="start"><font color="#8b0000">+ start: datetime</font></td></tr><tr><td align="left" port="end"><font color="#8b0000">+ end: datetime  [0..1]</font></td></tr><tr><td align="left" port="datalogger"><font color="#8b0000">+ datalogger: string</font></td></tr><tr><td align="left" port="dataloggerSerialNumber"><font color="#8b0000">+ dataloggerSerialNumber: string</font></td></tr><tr><td align="left" port="dataloggerChannel"><font color="#8b0000">+ dataloggerChannel: int  [0..1]</font></td></tr><tr><td align="left" port="sensor"><font color="#8b0000">+ sensor: string</font></td></tr><tr><td align="left" port="sensorSerialNumber"><font color="#8b0000">+ sensorSerialNumber: string</font></td></tr><tr><td align="left" port="sensorChannel"><font color="#8b0000">+ sensorChannel: int  [0..1]</font></td></tr><tr><td align="left" port="clockSerialNumber"><font color="#8b0000">+ clockSerialNumber: string</font></td></tr><tr><td align="left" port="sampleRateNumerator"><font color="#8b0000">+ sampleRateNumerator: int  [0..1]</font></td></tr><tr><td align="left" port="sampleRateDenominator"><font color="#8b0000">+ sampleRateDenominator: int  [0..1]</font></td></tr><tr><td align="left" port="depth"><font color="#8b0000">+ depth: float  [0..1]</font></td></tr><tr><td align="left" port="azimuth"><font color="#8b0000">+ azimuth: float  [0..1]</font></td></tr><tr><td align="left" port="dip"><font color="#8b0000">+ dip: float  [0..1]</font></td></tr><tr><td align="left" port="gain"><font color="#8b0000">+ gain: float  [0..1]</font></td></tr><tr><td align="left" port="gainFrequency"><font color="#8b0000">+ gainFrequency: float  [0..1]</font></td></tr><tr><td align="left" port="gainUnit"><font color="#8b0000">+ gainUnit: string</font></td></tr><tr><td align="left" port="format"><font color="#8b0000">+ format: string</font></td></tr><tr><td align="left" port="flags"><font color="#8b0000">+ flags: string</font></td></tr><tr><td align="left" port="restricted"><font color="#8b0000">+ restricted: boolean  [0..1]</font></td></tr><tr><td align="left" port="shared"><font color="#8b0000">+ shared: boolean  [0..1]</font></td></tr><tr><td align="left"><font color="#8b0000">+ comment: Comment [0..*]</font></td></tr></table>>]
         Inventory -> StationGroup
         StationGroup -> StationReference
         Inventory -> AuxDevice
@@ -266,6 +266,7 @@ Classes
         Inventory -> ResponsePolynomial
         Inventory -> ResponseFAP
         Inventory -> Network
+        Stream -> Comment
         SensorLocation -> Comment
         Station -> Comment
         Network -> Comment
@@ -3285,6 +3286,14 @@ Reference
 
       Returns the parent ParameterSet if available. Returns None
       if the parent is not a ParameterSet. This is a convenience wrapper
+      for parent().
+
+   .. py:method:: stream()
+
+      :rtype: Stream
+
+      Returns the parent Stream if available. Returns None
+      if the parent is not a Stream. This is a convenience wrapper
       for parent().
 
    .. py:method:: sensorLocation()
@@ -14496,6 +14505,13 @@ Reference
       are compared by value which makes this function slower than the direct
       integer index look-up.
 
+   .. py:method:: findStream(publicID)
+
+      :param publicID: The publicID of the object to find.
+      :rtype: Object of type :ref:`Stream <api-python-datamodel-stream>`.
+
+      Returns the child object with a certain publicID, None otherwise.
+
    .. py:method:: station()
 
       :rtype: Station
@@ -15856,7 +15872,7 @@ Reference
 
 .. py:class:: Stream
 
-   Inherits :ref:`Object <api-python-datamodel-object>`.
+   Inherits :ref:`PublicObject <api-python-datamodel-publicobject>`.
 
    This type describes a stream \(channel\) with defined frequency response
 
@@ -15872,6 +15888,20 @@ Reference
       are passed to methods which need access to the real type.
 
 
+
+   .. py:staticmethod:: Create()
+
+      :rtype: a new object of type Stream.
+
+      Creates and registers (if enabled) a Stream instance. The
+      publicID is auto-generated.
+
+   .. py:staticmethod:: Create(publicID)
+
+      :rtype: a new object of type Stream.
+
+      Creates and registers (if enabled) a Stream instance with
+      passed publicID.
 
    .. py:method:: equal(other)
 
@@ -16176,6 +16206,54 @@ Reference
          As this attribute is optional, this method throws a ValueError if
          the value of the attribute is not set.
 
+   .. py:method:: add(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Adds a Comment object to Stream. The object is not
+      copied but managed by this instance. Any change to the passed object
+      will also change the child.
+
+   .. py:method:: remove(comment)
+
+      :param comment: Object of type :ref:`Comment <api-python-datamodel-comment>`
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+      Removes a previously added Comment object from Stream.
+
+   .. py:method:: removeComment(idx)
+
+      :param idx: An integer index of the object to be removed.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: removeComment(commentIndex);
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: A Boolean value indicating success with True, False otherwise.
+
+   .. py:method:: commentCount()
+
+      :rtype: integer value indicating the number of child objects.
+
+      Returns the number of Comment child objects.
+
+   .. py:method:: comment(idx)
+
+      :param idx: An integer index of the object to be returned.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at index idx.
+
+   .. py:method:: comment(commentIndex)
+
+      :param commentIndex: The index of the object to be removed of type CommentIndex.
+      :rtype: Object of type :ref:`Comment <api-python-datamodel-comment>`.
+
+      Returns the Comment at given index. The indexes of all child objects
+      are compared by value which makes this function slower than the direct
+      integer index look-up.
+
    .. py:method:: sensorLocation()
 
       :rtype: SensorLocation
@@ -16206,6 +16284,19 @@ Reference
 
       Returns a new instance that is a clone of the current instance. Child
       objects are being ignored.
+
+
+   .. py:method:: updateChild(ref)
+
+      :param ref: A child object derived from class Object.
+      :rtype: A Boolean flag indicating success with True, False otherwise
+
+      This method takes the passed reference object and searches for a child
+      with the same publicID (if derived from :ref:`PublicObject <api-python-datamodel-publicobject>`)
+      or the same index (if derived from :ref:`Object <api-python-datamodel-object>`).
+      The the child was found the reference objects attributes are copied to
+      the child object. Children of child are being ignored during this operation.
+      This method implements the :ref:`PublicObject <api-python-datamodel-publicobject>` interface.
 
 
    .. py:method:: accept(visitor)

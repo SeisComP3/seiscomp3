@@ -27,6 +27,7 @@
 #include <seiscomp3/datamodel/origin.h>
 #include <seiscomp3/datamodel/parameter.h>
 #include <seiscomp3/datamodel/parameterset.h>
+#include <seiscomp3/datamodel/stream.h>
 #include <seiscomp3/datamodel/sensorlocation.h>
 #include <seiscomp3/datamodel/station.h>
 #include <seiscomp3/datamodel/network.h>
@@ -371,6 +372,15 @@ ParameterSet* Comment::parameterSet() const {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Stream* Comment::stream() const {
+	return Stream::Cast(parent());
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 SensorLocation* Comment::sensorLocation() const {
 	return SensorLocation::Cast(parent());
 }
@@ -461,6 +471,9 @@ bool Comment::attachTo(PublicObject* parent) {
 	ParameterSet* parameterSet = ParameterSet::Cast(parent);
 	if ( parameterSet != NULL )
 		return parameterSet->add(this);
+	Stream* stream = Stream::Cast(parent);
+	if ( stream != NULL )
+		return stream->add(this);
 	SensorLocation* sensorLocation = SensorLocation::Cast(parent);
 	if ( sensorLocation != NULL )
 		return sensorLocation->add(this);
@@ -650,6 +663,23 @@ bool Comment::detachFrom(PublicObject* object) {
 				return parameterSet->remove(child);
 			else {
 				SEISCOMP_DEBUG("Comment::detachFrom(ParameterSet): comment has not been found");
+				return false;
+			}
+		}
+	}
+	Stream* stream = Stream::Cast(object);
+	if ( stream != NULL ) {
+		// If the object has been added already to the parent locally
+		// just remove it by pointer
+		if ( object == parent() )
+			return stream->remove(this);
+		// The object has not been added locally so it must be looked up
+		else {
+			Comment* child = stream->comment(index());
+			if ( child != NULL )
+				return stream->remove(child);
+			else {
+				SEISCOMP_DEBUG("Comment::detachFrom(Stream): comment has not been found");
 				return false;
 			}
 		}

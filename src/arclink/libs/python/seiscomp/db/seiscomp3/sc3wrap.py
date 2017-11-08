@@ -48,6 +48,125 @@ def ComplexArray2str(arg):
 #
 
 
+# package: Inventory
+class base_comment(object):
+    def __init__(self, obj):
+        self.obj = obj
+        self._needsUpdate = False
+
+    def _sync_update(self):
+        if self._needsUpdate:
+            self.obj.lastModified = Core.Time.GMT()
+            self.obj.update()
+            self._needsUpdate = False
+
+    def _delete(self):
+        self.obj.detach()
+
+    def __get_last_modified(self):
+        return datetime.datetime(
+            *(time.strptime(
+                self.obj.lastModified.toString("%Y-%m-%dT%H:%M:%SZ"),
+                "%Y-%m-%dT%H:%M:%SZ")[0:6]
+            )
+        )    
+    last_modified = property(__get_last_modified)
+
+    def __get_text(self):
+        try: # @return: const std::string&
+            return self.obj.text()
+        except ValueError:
+            return None
+    def __set_text(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_text() != value:
+            self._needsUpdate = True
+        self.obj.setText(value)
+    text = property(__get_text, __set_text)
+
+    def __get_id(self):
+        try: # @return: const std::string&
+            return self.obj.id()
+        except ValueError:
+            return None
+    def __set_id(self, arg):
+        try:
+            if isinstance(arg, unicode):
+                value = arg.encode("utf-8", "replace")
+            else:
+                value = str(arg)
+        except Exception, e:
+            logs.error(str(e))
+            return
+        if self.__get_id() != value:
+            self._needsUpdate = True
+        self.obj.setId(value)
+    id = property(__get_id, __set_id)
+
+    def __get_start(self):
+        # optional Attribute
+        try: # @return: Seiscomp::Core::Time
+            return datetime.datetime(
+                *(time.strptime(
+                    self.obj.start().toString("%Y-%m-%dT%H:%M:%SZ"), 
+                    "%Y-%m-%dT%H:%M:%SZ")[0:6]
+                 )
+            )
+                
+        except ValueError:
+            return None
+    def __set_start(self, arg):
+        value = None
+        if arg is not None:
+            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            except: pass
+        if str(self.__get_start()) != str(arg):
+            self._needsUpdate = True
+        self.obj.setStart(value)
+    start = property(__get_start, __set_start)
+
+    def __get_end(self):
+        # optional Attribute
+        try: # @return: Seiscomp::Core::Time
+            return datetime.datetime(
+                *(time.strptime(
+                    self.obj.end().toString("%Y-%m-%dT%H:%M:%SZ"), 
+                    "%Y-%m-%dT%H:%M:%SZ")[0:6]
+                 )
+            )
+                
+        except ValueError:
+            return None
+    def __set_end(self, arg):
+        value = None
+        if arg is not None:
+            try: value = Core.Time.FromString(str(arg), "%Y-%m-%d %H:%M:%S")
+            except: pass
+        if str(self.__get_end()) != str(arg):
+            self._needsUpdate = True
+        self.obj.setEnd(value)
+    end = property(__get_end, __set_end)
+
+    def __get_creationInfo(self):
+        # optional Attribute
+        try: # @return: CreationInfo
+            return self.obj.creationInfo()
+        except ValueError:
+            return None
+    def __set_creationInfo(self, arg):
+        if self.__get_creationInfo() != arg:
+            self._needsUpdate = True
+        self.obj.setCreationInfo(arg)
+    creationInfo = property(__get_creationInfo, __set_creationInfo)
+
+
 # package: QualityControl
 class base_qclog(object):
     def __init__(self, obj):
@@ -3678,6 +3797,15 @@ class base_stream(object):
         )    
     last_modified = property(__get_last_modified)
 
+    def __get_publicID(self):
+        return self.obj.publicID()
+
+    def __set_publicID(self, arg):
+        if self.__get_publicID() != arg:
+            self._needsUpdate = True
+        self.obj.setPublicID(arg)
+    publicID = property(__get_publicID,__set_publicID)
+
     def __get_code(self):
         try: # @return: const std::string&
             return self.obj.code()
@@ -4039,6 +4167,63 @@ class base_stream(object):
     shared = property(__get_shared, __set_shared)
 
 
+    def _new_comment(self, **args):
+        try: obj = DataModel.Comment()
+        except KeyError: pass
+        try: obj.setText(args["text"])
+        except KeyError: pass
+        try: obj.setId(args["id"])
+        except KeyError: pass
+        try:
+            if args["start"] is None:
+                obj.setStart(None)
+            else:
+                obj.setStart(Core.Time.FromString(str(args["start"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try:
+            if args["end"] is None:
+                obj.setEnd(None)
+            else:
+                obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try: obj.setCreationInfo(args["creationInfo"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.Stream: error adding Comment"
+        return obj
+    def __get_comment(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.commentCount()):
+                for i in xrange(self.obj.commentCount()):
+                    obj = self.obj.comment(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_comment(obj))
+        else:
+            # HACK to make last_modified usable ...
+            i = 0
+            objects_left = self.obj.commentCount()
+            while objects_left > 0:
+                try:
+                    obj = self.obj.comment(i)
+                    try:
+                        obj.lastModified = self.obj.lastModified
+                        list.append(base_comment(obj))
+                        objects_left -= 1
+                    except AttributeError:
+                        try:
+                            obj.lastModified = Core.Time.GMT()
+                            list.append(base_comment(obj))
+                            objects_left -= 1
+                        except:
+                            logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
+                    i += 1
+                except ValueError, e:
+                    print str(e)
+        return list
+    _comment = property(__get_comment)
+
+
 # package: Inventory
 class base_sensorlocation(object):
     def __init__(self, obj):
@@ -4177,6 +4362,62 @@ class base_sensorlocation(object):
     elevation = property(__get_elevation, __set_elevation)
 
 
+    def _new_comment(self, **args):
+        try: obj = DataModel.Comment()
+        except KeyError: pass
+        try: obj.setText(args["text"])
+        except KeyError: pass
+        try: obj.setId(args["id"])
+        except KeyError: pass
+        try:
+            if args["start"] is None:
+                obj.setStart(None)
+            else:
+                obj.setStart(Core.Time.FromString(str(args["start"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try:
+            if args["end"] is None:
+                obj.setEnd(None)
+            else:
+                obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try: obj.setCreationInfo(args["creationInfo"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.SensorLocation: error adding Comment"
+        return obj
+    def __get_comment(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.commentCount()):
+                for i in xrange(self.obj.commentCount()):
+                    obj = self.obj.comment(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_comment(obj))
+        else:
+            # HACK to make last_modified usable ...
+            i = 0
+            objects_left = self.obj.commentCount()
+            while objects_left > 0:
+                try:
+                    obj = self.obj.comment(i)
+                    try:
+                        obj.lastModified = self.obj.lastModified
+                        list.append(base_comment(obj))
+                        objects_left -= 1
+                    except AttributeError:
+                        try:
+                            obj.lastModified = Core.Time.GMT()
+                            list.append(base_comment(obj))
+                            objects_left -= 1
+                        except:
+                            logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
+                    i += 1
+                except ValueError, e:
+                    print str(e)
+        return list
+    _comment = property(__get_comment)
+
     def _new_auxstream(self, **args):
         try: obj = DataModel.AuxStream()
         except KeyError: pass
@@ -4240,8 +4481,10 @@ class base_sensorlocation(object):
     _auxStream = property(__get_auxstream)
 
     def _new_stream(self, **args):
-        try: obj = DataModel.Stream()
-        except KeyError: pass
+        publicID = args.get("publicID")
+        if publicID and DataModel.Stream.Find(publicID): publicID = None
+        if publicID: obj = DataModel.Stream.Create(publicID)
+        else: obj = DataModel.Stream.Create()
         try: obj.setCode(args["code"])
         except KeyError: pass
         try: obj.setStart(Core.Time.FromString(str(args["start"]), "%Y-%m-%d %H:%M:%S"))
@@ -4303,25 +4546,15 @@ class base_sensorlocation(object):
                     list.append(base_stream(obj))
         else:
             # HACK to make last_modified usable ...
-            i = 0
-            objects_left = self.obj.streamCount()
-            while objects_left > 0:
+            it = dbQuery.getObjects(self.obj, DataModel.Stream.TypeInfo())
+            while it.get():
                 try:
-                    obj = self.obj.stream(i)
-                    try:
-                        obj.lastModified = self.obj.lastModified
-                        list.append(base_stream(obj))
-                        objects_left -= 1
-                    except AttributeError:
-                        try:
-                            obj.lastModified = Core.Time.GMT()
-                            list.append(base_stream(obj))
-                            objects_left -= 1
-                        except:
-                            logs.debug("got " + repr(obj) + " in __get_stream(), objects_left=" + str(objects_left))
-                    i += 1
+                    obj = DataModel.Stream.Cast(it.get())
+                    obj.lastModified = it.lastModified()
+                    list.append(base_stream(obj))
                 except ValueError, e:
                     print str(e)
+                it.step()
         return list
     _stream = property(__get_stream)
 
@@ -4649,6 +4882,62 @@ class base_station(object):
     remark = property(__get_remark, __set_remark)
 
 
+    def _new_comment(self, **args):
+        try: obj = DataModel.Comment()
+        except KeyError: pass
+        try: obj.setText(args["text"])
+        except KeyError: pass
+        try: obj.setId(args["id"])
+        except KeyError: pass
+        try:
+            if args["start"] is None:
+                obj.setStart(None)
+            else:
+                obj.setStart(Core.Time.FromString(str(args["start"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try:
+            if args["end"] is None:
+                obj.setEnd(None)
+            else:
+                obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try: obj.setCreationInfo(args["creationInfo"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.Station: error adding Comment"
+        return obj
+    def __get_comment(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.commentCount()):
+                for i in xrange(self.obj.commentCount()):
+                    obj = self.obj.comment(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_comment(obj))
+        else:
+            # HACK to make last_modified usable ...
+            i = 0
+            objects_left = self.obj.commentCount()
+            while objects_left > 0:
+                try:
+                    obj = self.obj.comment(i)
+                    try:
+                        obj.lastModified = self.obj.lastModified
+                        list.append(base_comment(obj))
+                        objects_left -= 1
+                    except AttributeError:
+                        try:
+                            obj.lastModified = Core.Time.GMT()
+                            list.append(base_comment(obj))
+                            objects_left -= 1
+                        except:
+                            logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
+                    i += 1
+                except ValueError, e:
+                    print str(e)
+        return list
+    _comment = property(__get_comment)
+
     def _new_sensorlocation(self, **args):
         publicID = args.get("publicID")
         if publicID and DataModel.SensorLocation.Find(publicID): publicID = None
@@ -4957,6 +5246,62 @@ class base_network(object):
         self.obj.setRemark(blob)
     remark = property(__get_remark, __set_remark)
 
+
+    def _new_comment(self, **args):
+        try: obj = DataModel.Comment()
+        except KeyError: pass
+        try: obj.setText(args["text"])
+        except KeyError: pass
+        try: obj.setId(args["id"])
+        except KeyError: pass
+        try:
+            if args["start"] is None:
+                obj.setStart(None)
+            else:
+                obj.setStart(Core.Time.FromString(str(args["start"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try:
+            if args["end"] is None:
+                obj.setEnd(None)
+            else:
+                obj.setEnd(Core.Time.FromString(str(args["end"]), "%Y-%m-%d %H:%M:%S"))
+        except KeyError: pass
+        try: obj.setCreationInfo(args["creationInfo"])
+        except KeyError: pass
+        if not self.obj.add(obj):
+            print "seiscomp3.DataModel.Network: error adding Comment"
+        return obj
+    def __get_comment(self):
+        list = []
+        if dbQuery is None:
+            if (self.obj.commentCount()):
+                for i in xrange(self.obj.commentCount()):
+                    obj = self.obj.comment(i)
+                    obj.lastModified = Core.Time.GMT()
+                    list.append(base_comment(obj))
+        else:
+            # HACK to make last_modified usable ...
+            i = 0
+            objects_left = self.obj.commentCount()
+            while objects_left > 0:
+                try:
+                    obj = self.obj.comment(i)
+                    try:
+                        obj.lastModified = self.obj.lastModified
+                        list.append(base_comment(obj))
+                        objects_left -= 1
+                    except AttributeError:
+                        try:
+                            obj.lastModified = Core.Time.GMT()
+                            list.append(base_comment(obj))
+                            objects_left -= 1
+                        except:
+                            logs.debug("got " + repr(obj) + " in __get_comment(), objects_left=" + str(objects_left))
+                    i += 1
+                except ValueError, e:
+                    print str(e)
+        return list
+    _comment = property(__get_comment)
 
     def _new_station(self, **args):
         publicID = args.get("publicID")
