@@ -688,12 +688,8 @@ T *create(const FDSNXML::BaseFilter *n) {
 	T *o;
 	if ( n->resourceId().empty() )
 		o = T::Create();
-	else if ( DataModel::PublicObject::Find(n->resourceId()) != NULL ) {
+	else if ( DataModel::PublicObject::Find(n->resourceId()) != NULL )
 		o = T::Create();
-		cerr << "W  ambiguous resourceId '" << n->resourceId() << "' for "
-		     << T::ClassName() << endl;
-		cerr << "   generated new resourceId '" << o->publicID() << "'" << endl;
-	}
 	else
 		o = T::Create(n->resourceId());
 
@@ -703,6 +699,16 @@ T *create(const FDSNXML::BaseFilter *n) {
 		o->setName(n->name());
 
 	return o;
+}
+
+
+template <typename T>
+void checkAmbigiousID(const T &obj, const FDSNXML::BaseFilter *n) {
+	if ( obj->publicID() != n->resourceId() ) {
+		cerr << "W  ambiguous resourceId '" << n->resourceId() << "' for "
+		     << obj->className() << endl;
+		cerr << "   generated new resourceId '" << obj->publicID() << "'" << endl;
+	}
 }
 
 
@@ -2239,6 +2245,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newFIR ) {
+					checkAmbigiousID(rf, fir);
 					addRespToInv(rf.get());
 					//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
 				}
@@ -2278,6 +2285,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 					}
 
 					if ( newIIR ) {
+						checkAmbigiousID(iir, coeff);
 						addRespToInv(iir.get());
 						//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 					}
@@ -2310,6 +2318,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 					}
 
 					if ( newFIR ) {
+						checkAmbigiousID(rf, coeff);
 						addRespToInv(rf.get());
 						//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
 					}
@@ -2341,6 +2350,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newPAZ ) {
+					checkAmbigiousID(rp, paz);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 				}
@@ -2369,6 +2379,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newPoly ) {
+					checkAmbigiousID(rp, poly);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 				}
@@ -2398,6 +2409,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newFAP ) {
+					checkAmbigiousID(rp, rl);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 				}
@@ -2724,6 +2736,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newPAZ ) {
+				checkAmbigiousID(rp, &resp->polesZeros());
 				addRespToInv(rp.get());
 				SEISCOMP_DEBUG("Added new Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
 			}
@@ -2755,6 +2768,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newFAP ) {
+				checkAmbigiousID(rp, &resp->responseList());
 				addRespToInv(rp.get());
 				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 			}
@@ -2784,6 +2798,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newPoly ) {
+				checkAmbigiousID(rp, &resp->polynomial());
 				addRespToInv(rp.get());
 				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 			}
