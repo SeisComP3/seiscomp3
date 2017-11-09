@@ -107,6 +107,8 @@ class Convert2SC3 : public Converter {
 	//  Public interface
 	// ------------------------------------------------------------------
 	public:
+		void setLogStages(bool state);
+
 		//! Enables logging of changed stations. The caller must
 		//! provide an instance to a station set which is filled
 		//! by the converter.
@@ -170,6 +172,8 @@ class Convert2SC3 : public Converter {
 		typedef std::set<std::string> StringSet;
 
 		DataModel::Inventory *_inv;
+
+		bool                  _logStages;
 
 		// Tracks all network/station codes of visited stations.
 		// An empty station code referes to a network.
