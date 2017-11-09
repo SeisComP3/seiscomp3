@@ -1803,6 +1803,7 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 					else if ( newInstance ) {
 						for ( size_t l = 0; l < sc_sta->sensorLocationCount(); ++l ) {
 							DataModel::SensorLocation *ref_loc = sc_sta->sensorLocation(l);
+							if ( ref_loc->code() != sc_loc->code() ) continue;
 							if ( ref_loc->latitude() != sc_loc->latitude() ||
 							     ref_loc->longitude() != sc_loc->longitude() ||
 							     ref_loc->elevation() != sc_loc->elevation() ) {
