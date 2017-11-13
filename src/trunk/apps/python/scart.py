@@ -15,7 +15,7 @@
 import glob, re, time, sys, os
 import seiscomp3.IO, seiscomp3.Logging
 from   getopt import getopt, GetoptError
-
+import bisect
 
 class Archive:
   def __init__(self, archiveDirectory):
@@ -271,33 +271,24 @@ class ArchiveIterator:
     its = self.archive.iterators(beginTime, endTime, net, sta, loc, cha)
     for it in its:
       it.compareEndTime = self.sortByEndTime
-      self.streams.append(it)
+      bisect.insort(self.streams, it)
 
   def appendStation(self, beginTime, endTime, net, sta):
     self.append(beginTime, endTime, net, sta, "*", "*")
-
-  def sort(self):
-    self.streams.sort()
 
   def nextSort(self):
     if len(self.streams) == 0:
       return None
 
-    stream = self.streams[0]
-    del self.streams[0]
+    stream = self.streams.pop(0)
 
     rec = stream.record
 
     stream.next()
 
-    if not stream.record is None:
+    if stream.record is not None:
       # Put the stream back on the right (sorted) position
-      for i in range(0, len(self.streams)):
-        if stream < self.streams[i]:
-          self.streams.insert(i, stream)
-          return rec
-
-      self.streams.append(stream)
+      bisect.insort(self.streams, stream)
 
     return rec
 
@@ -321,7 +312,6 @@ class Sorter:
     self.iterator = it
 
   def __iter__(self):
-    self.iterator.sort()
     while 1:
       rec = self.iterator.nextSort()
       if not rec:

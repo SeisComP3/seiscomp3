@@ -26,6 +26,15 @@
 %include "seiscomp3/core/io.h"
 %include "seiscomp3/core/rtti.h"
 %include "seiscomp3/core/defs.h"
+
+%apply int *OUTPUT { int *year, int *month, int *day,
+                     int *hour, int *min, int *sec,
+                     int *usec };
+
+%apply int *OUTPUT { int *year, int *yday,
+                     int *hour, int *min, int *sec,
+                     int *usec };
+
 %include "seiscomp3/core/datetime.h"
 %include "seiscomp3/core/optional.h"
 %include "seiscomp3/core/enumeration.h"
@@ -67,11 +76,6 @@
     *self << obj;
   }
 };
-
-
-%apply int *OUTPUT { int *year, int *month, int *day,
-                     int *hour, int *min, int *sec,
-                     int *usec };
 
 /*
 %ignore Seiscomp::Core::Time::get(int *year, int *month = NULL, int *day = NULL,
@@ -387,8 +391,6 @@ optional(Seiscomp::Core::Time);
 };
 
 %ignore Seiscomp::Core::None;
-
-%include "seiscomp3/core/datetime.h"
 
 
 %extend Seiscomp::Core::TimeSpan {

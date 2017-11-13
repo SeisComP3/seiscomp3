@@ -81,9 +81,12 @@ class SyncStationXML : public Client::Application {
 			                        "accept also tags within a different namespace than "
 			                        "defined in the supported schema.");
 			commandline().addOption("Convert", "to-staxml",
-			                        "Enables conversion mode (SC3->staxml).");
+			                        "Converts from SC3 XML to StationXML and expects SC3 XML as input");
 			commandline().addOption("Convert", "formatted,f",
 			                        "Enables formatted output");
+			commandline().addOption("Convert", "log-stages",
+			                        "Adds more output to stderr for all channel response stages when converting "
+			                        "from StationXML");
 		}
 
 		bool validateParameters() {
@@ -129,6 +132,7 @@ class SyncStationXML : public Client::Application {
 			}
 
 			Convert2SC3 cnv(inv.get());
+			cnv.setLogStages(commandline().hasOption("log-stages"));
 
 			_activeConverter = &cnv;
 

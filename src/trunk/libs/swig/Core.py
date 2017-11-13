@@ -249,11 +249,11 @@ class Time(TimeSpan):
     def set(self, year, month, day, hour, min, sec, usec):
         return _Core.Time_set(self, year, month, day, hour, min, sec, usec)
 
-    def get(self, year, month=None, day=None, hour=None, min=None, sec=None, usec=None):
-        return _Core.Time_get(self, year, month, day, hour, min, sec, usec)
+    def get(self):
+        return _Core.Time_get(self)
 
-    def get2(self, year, yday=None, hour=None, min=None, sec=None, usec=None):
-        return _Core.Time_get2(self, year, yday, hour, min, sec, usec)
+    def get2(self):
+        return _Core.Time_get2(self)
     if _newclass:
         LocalTime = staticmethod(_Core.Time_LocalTime)
     else:

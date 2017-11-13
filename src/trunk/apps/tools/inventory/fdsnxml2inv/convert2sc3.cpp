@@ -50,8 +50,6 @@
 
 using namespace std;
 
-#define LOG_STAGES 1
-
 
 namespace Seiscomp {
 
@@ -688,12 +686,8 @@ T *create(const FDSNXML::BaseFilter *n) {
 	T *o;
 	if ( n->resourceId().empty() )
 		o = T::Create();
-	else if ( DataModel::PublicObject::Find(n->resourceId()) != NULL ) {
+	else if ( DataModel::PublicObject::Find(n->resourceId()) != NULL )
 		o = T::Create();
-		cerr << "W  ambiguous resourceId '" << n->resourceId() << "' for "
-		     << T::ClassName() << endl;
-		cerr << "   generated new resourceId '" << o->publicID() << "'" << endl;
-	}
 	else
 		o = T::Create(n->resourceId());
 
@@ -703,6 +697,16 @@ T *create(const FDSNXML::BaseFilter *n) {
 		o->setName(n->name());
 
 	return o;
+}
+
+
+template <typename T>
+void checkAmbigiousID(const T &obj, const FDSNXML::BaseFilter *n) {
+	if ( obj->publicID() != n->resourceId() ) {
+		cerr << "W  ambiguous resourceId '" << n->resourceId() << "' for "
+		     << obj->className() << endl;
+		cerr << "   generated new resourceId '" << obj->publicID() << "'" << endl;
+	}
 }
 
 
@@ -1042,7 +1046,9 @@ createSensorLocation(const string &net, const string &sta, const string &code)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-Convert2SC3::Convert2SC3(DataModel::Inventory *inv) : _inv(inv) {
+Convert2SC3::Convert2SC3(DataModel::Inventory *inv)
+: _inv(inv)
+, _logStages(false) {
 	if ( !_inv ) return;
 
 	for ( size_t i = 0; i < _inv->dataloggerCount(); ++i ) {
@@ -1176,6 +1182,15 @@ const Convert2SC3::NetworkSet &Convert2SC3::touchedNetworks() const {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Convert2SC3::StationSet &Convert2SC3::touchedStations() const {
 	return _touchedStations;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Convert2SC3::setLogStages(bool state) {
+	_logStages = state;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -1788,6 +1803,7 @@ bool Convert2SC3::process(DataModel::Network *sc_net,
 					else if ( newInstance ) {
 						for ( size_t l = 0; l < sc_sta->sensorLocationCount(); ++l ) {
 							DataModel::SensorLocation *ref_loc = sc_sta->sensorLocation(l);
+							if ( ref_loc->code() != sc_loc->code() ) continue;
 							if ( ref_loc->latitude() != sc_loc->latitude() ||
 							     ref_loc->longitude() != sc_loc->longitude() ||
 							     ref_loc->elevation() != sc_loc->elevation() ) {
@@ -1878,10 +1894,10 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		sc_stream->add(sc_comment.get());
 	}
 
-#if LOG_STAGES
-	cerr << "[" << sc_loc->code() << chaCode << "]" << endl;
-	cerr << " + Start " << start.iso() << endl;
-#endif
+	if ( _logStages ) {
+		cerr << "[" << sc_loc->code() << chaCode << "]" << endl;
+		cerr << " + Start " << start.iso() << endl;
+	}
 
 	BCK(oldEnd, Core::Time, sc_stream->end());
 	BCK(oldDep, double, sc_stream->depth());
@@ -1979,18 +1995,16 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 	if ( resp0 != NULL ) {
 		try {
 			sc_stream->setGain(resp0->instrumentSensitivity().value());
-#if LOG_STAGES
-			cerr << " + Gain " << sc_stream->gain() << endl;
-#endif
+			if ( _logStages )
+				cerr << " + Gain " << sc_stream->gain() << endl;
 		}
 		catch ( ... ) { sc_stream->setGain(Core::None); }
 		try { sc_stream->setGainFrequency(resp0->instrumentSensitivity().frequency()); }
 		catch ( ... ) { sc_stream->setGainFrequency(Core::None); }
 		try {
 			sc_stream->setGainUnit(resp0->instrumentSensitivity().inputUnits().name());
-#if LOG_STAGES
-			cerr << " + Unit " << sc_stream->gainUnit() << endl;
-#endif
+			if ( _logStages )
+				cerr << " + Unit " << sc_stream->gainUnit() << endl;
 		}
 		catch ( ... ) { sc_stream->setGainUnit(""); }
 	}
@@ -2094,10 +2108,9 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		const FDSNXML::BaseFilter *filter = getFilter(stage, stageType);
 		if ( filter == NULL ) {
 			if ( stageGain ) {
-#if LOG_STAGES
-				cerr << " + D#" << stage->number() << " GAIN "
-				     << *stageGain << endl;
-#endif
+				if ( _logStages )
+					cerr << " + D#" << stage->number() << " GAIN "
+					     << *stageGain << endl;
 				dataloggerGainScale *= *stageGain;
 				continue;
 			}
@@ -2118,10 +2131,10 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				return false;
 			}
 
-#if LOG_STAGES
-			cerr << " + S#" << stage->number() << " " << stageType.toString() << " "
-			     << inputUnit << " " << outputUnit << endl;
-#endif
+			if ( _logStages )
+				cerr << " + S#" << stage->number() << " " << stageType.toString() << " "
+				     << inputUnit << " " << outputUnit << endl;
+
 			if ( inputUnit != sc_stream->gainUnit() ) {
 				SEISCOMP_WARNING("%s: sensor input unit does not match channel instrument unit: %s != %s",
 				                 chaCode.c_str(), inputUnit.c_str(), sc_stream->gainUnit().c_str());
@@ -2157,40 +2170,39 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 			return false;
 		}
 
-#if LOG_STAGES
-		cerr << " + D#" << stage->number() << " " << stageType.toString() << " "
-		     << inputUnit << " " << outputUnit << " ";
-		if ( stageGain )
-			cerr << *stageGain;
-		else
-			cerr << "-";
-#endif
+		if ( _logStages ) {
+			cerr << " + D#" << stage->number() << " " << stageType.toString() << " "
+			     << inputUnit << " " << outputUnit << " ";
+			if ( stageGain )
+				cerr << *stageGain;
+			else
+				cerr << "-";
+		}
 
 		if ( IsDummy(stage, stageType) ) {
 			bool ignoreStage = false;
 
 			// Ignore dummy stages without a defining gain
 			if ( stageGain == 1.0 ) {
-#if LOG_STAGES
-				cerr << " (dummy)";
-				ignoreStage = true;
-#endif
+				if ( _logStages ) {
+					cerr << " (dummy)";
+					ignoreStage = true;
+				}
 			}
 
 			// Potential preamplifier gain
 			if ( !hasDigitizerGain && isADCStage(inputUnit, outputUnit) ) {
 				hasDigitizerGain = true;
 				sc_dl->setGain(stageGain);
-#if LOG_STAGES
-				cerr << " (digitizer gain)";
-				ignoreStage = true;
-#endif
+				if ( _logStages ) {
+					cerr << " (digitizer gain)";
+					ignoreStage = true;
+				}
 			}
 
 			if ( ignoreStage ) {
-#if LOG_STAGES
-				cerr << endl;
-#endif
+				if ( _logStages )
+					cerr << endl;
 				continue;
 			}
 		}
@@ -2199,16 +2211,14 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 			if ( !hasDigitizerGain && isADCStage(inputUnit, outputUnit) ) {
 				hasDigitizerGain = true;
 				sc_dl->setGain(stageGain);
-#if LOG_STAGES
-				cerr << " (digitizer gain. forward filter with gain 1)";
-#endif
+				if ( _logStages )
+					cerr << " (digitizer gain. forward filter with gain 1)";
 				stageGain = 1.0;
 			}
 		}
 
-#if LOG_STAGES
-		cerr << endl;
-#endif
+		if ( _logStages )
+			cerr << endl;
 
 		DataModel::PublicObject *abstractResponse = NULL;
 
@@ -2239,6 +2249,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newFIR ) {
+					checkAmbigiousID(rf, fir);
 					addRespToInv(rf.get());
 					//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
 				}
@@ -2278,6 +2289,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 					}
 
 					if ( newIIR ) {
+						checkAmbigiousID(iir, coeff);
 						addRespToInv(iir.get());
 						//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 					}
@@ -2310,6 +2322,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 					}
 
 					if ( newFIR ) {
+						checkAmbigiousID(rf, coeff);
 						addRespToInv(rf.get());
 						//SEISCOMP_DEBUG("Added new FIR filter from coefficients: %s", rf->publicID().c_str());
 					}
@@ -2341,6 +2354,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newPAZ ) {
+					checkAmbigiousID(rp, paz);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 				}
@@ -2369,6 +2383,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newPoly ) {
+					checkAmbigiousID(rp, poly);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 				}
@@ -2398,6 +2413,7 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 				}
 
 				if ( newFAP ) {
+					checkAmbigiousID(rp, rl);
 					addRespToInv(rp.get());
 					//SEISCOMP_DEBUG("Added new PAZ response from paz: %s", rp->publicID().c_str());
 				}
@@ -2461,9 +2477,8 @@ bool Convert2SC3::process(DataModel::SensorLocation *sc_loc,
 		sc_stream->setSensorSerialNumber("yyyy");
 
 	if ( dataloggerGainScale != 1.0 ) {
-#if LOG_STAGES
-		cerr << "+ Scale datalogger gain by " << dataloggerGainScale << endl;
-#endif
+		if ( _logStages )
+			cerr << "+ Scale datalogger gain by " << dataloggerGainScale << endl;
 		sc_dl->setGain(sc_dl->gain()*dataloggerGainScale);
 	}
 
@@ -2724,6 +2739,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newPAZ ) {
+				checkAmbigiousID(rp, &resp->polesZeros());
 				addRespToInv(rp.get());
 				SEISCOMP_DEBUG("Added new Sensor.ResponsePAZ from paz: %s", rp->publicID().c_str());
 			}
@@ -2755,6 +2771,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newFAP ) {
+				checkAmbigiousID(rp, &resp->responseList());
 				addRespToInv(rp.get());
 				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 			}
@@ -2784,6 +2801,7 @@ Convert2SC3::updateSensor(const std::string &name,
 			}
 
 			if ( newPoly ) {
+				checkAmbigiousID(rp, &resp->polynomial());
 				addRespToInv(rp.get());
 				//SEISCOMP_DEBUG("Added new polynomial response from poly: %s", rp->publicID().c_str());
 			}

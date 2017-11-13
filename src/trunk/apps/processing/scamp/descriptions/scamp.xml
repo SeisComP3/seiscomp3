@@ -6,6 +6,14 @@
 			<parameter name="amplitudes" type="list:string" default="MLv, mb, mB, Mwp">
 				<description>Definition of magnitude types for which amplitudes are to be calculated.</description>
 			</parameter>
+			<group name="amptool">
+				<parameter name="initialAcquisitionTimeout" type="double" default="30" unit="s">
+					<description>Timeout in seconds of the first data packet of waveform data acquisition.</description>
+				</parameter>
+				<parameter name="runningAcquisitionTimeout" type="double" default="2" unit="s">
+					<description>Timeout in seconds of any subsequent data packet of waveform data acquisition.</description>
+				</parameter>
+			</group>
 		</configuration>
 		<command-line>
 			<group name="Generic">
