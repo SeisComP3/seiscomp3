@@ -927,6 +927,10 @@ void VsMagnitude::process(VsEvent *evt, Event *event) {
 
 		for ( size_t i = 0; i < inputs.size(); ++i ) {
 			const VsInput &input = inputs[i];
+			
+			if ( Math::isNaN(input.mest)  ) {
+                                continue ;
+                        }
 
 			// Likelihood
 			vs.setmag(mag);
