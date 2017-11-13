@@ -26,6 +26,8 @@
 #include <boost/filesystem/operations.hpp>
 #include <fstream>
 #include <sstream>
+#include <errno.h>
+
 
 using namespace Seiscomp::Geo;
 namespace fs = boost::filesystem;
