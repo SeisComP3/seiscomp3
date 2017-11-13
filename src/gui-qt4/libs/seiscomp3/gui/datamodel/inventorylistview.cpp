@@ -350,13 +350,12 @@ void InventoryListView::updateChildSelection(QTreeWidgetItem *item) {
 			QTreeWidgetItem* child = item->child(i);
 			if ( !(child->flags() & Qt::ItemIsSelectable) ) continue;
 
-			if ( child->checkState(0) != item->checkState(0) )
+			if ( child->checkState(0) != item->checkState(0) ) {
 				child->setCheckState(0, item->checkState(0));
 
 				if ( !child->data(0, Qt::UserRole).isNull() &&
-			         item->data(0, Qt::UserRole).isNull() ) {
+				     item->data(0, Qt::UserRole).isNull() )
 					notifyAboutStateChange(child->data(0, Qt::UserRole).toString(), child->checkState(0) == Qt::Checked);
-
 			}
 
 			updateChildSelection(child);
