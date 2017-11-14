@@ -107,6 +107,7 @@ port their code.
 
 * trunk
 
+  * The API version (```SC_API_VERSION```) is now 11.0.0
   * Set seiscomp3 database bytea encoding to 'escape' for PostgreSQL database
     servers with version >= 9 in postgres.sql script.
   * Add InventorySyncMessage which is used to enclose an inventory synchronization
