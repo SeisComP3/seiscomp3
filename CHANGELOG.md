@@ -1,6 +1,8 @@
 # Jakarta
 
-## Release YYYY.DDD
+## Release 2017.318
+
+```SC_API_VERSION 11.0.0```
 
 The database schema has changed since the previous version. To upgrade your
 database from version 0.9 to 0.10, please run ```seiscomp update-config scmaster```.
