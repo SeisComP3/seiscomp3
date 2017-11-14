@@ -1,1 +1,1 @@
-SUBDIRS(database recordstream)
+SUBDIRS(database)

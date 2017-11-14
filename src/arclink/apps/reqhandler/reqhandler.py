@@ -437,11 +437,6 @@ class RequestHandlerApp(Client.Application):
             self.isodir = "/iso_arc"
 
         try:
-            self.gfaurl = self.configGetString("reqhandler.gfaurl")
-        except Exception:
-            self.gfaurl = None
-
-        try:
             self.filedb = e.absolutePath(self.configGetString("reqhandler.filedb"))
         except Exception:
             self.filedb = None
@@ -461,15 +456,6 @@ class RequestHandlerApp(Client.Application):
 
         return True
 
-    def init(self):
-        if not Client.Application.init(self):
-            return False
-
-        Client.PluginRegistry.Instance().addPluginName("iso")
-        Client.PluginRegistry.Instance().loadPlugins()
-
-        return True
-
     def run(self):
         try:
             logs.info("ArcLink request handler v" + VERSION + " started")
@@ -481,7 +467,6 @@ class RequestHandlerApp(Client.Application):
             logs.info("ISO Dir: %s" % self.isodir)
             logs.info("NRT Dir: %s" % self.nrtdir)
             logs.info("Trackdb is %s @ %s" % (self.trackdb, self.trackdir))
-            logs.info("GFAurl: %s" % self.gfaurl)
             logs.info("Subnodelist: %s" % self.subnodelist)
             logs.info("File Database: %s" % self.filedb)
 
@@ -513,14 +498,7 @@ class RequestHandlerApp(Client.Application):
             wf = WiggleFetcher(self.nrtdir, self.archdir, self.isodir, self.filedb,
                 1024*1024*self.maxsize, self.dcid, subnode_addr, dcid_override)
 
-            if self.gfaurl:
-                gfa = IO.GFArchive.Open(self.gfaurl)
-                if gfa is None:
-                    logs.error("Invalid GFArchive URL: " + self.gfaurl)
-            else:
-                gfa = None
-
-            rh = RequestHandler(inv, rtn, wf, gfa, self.reqdir, (self.trackdir, self.trackdb),
+            rh = RequestHandler(inv, rtn, wf, self.reqdir, (self.trackdir, self.trackdb),
                 5, self.organization, DEFAULT_LABEL)
 
             mt = MessageThread(self.connection(), rh)

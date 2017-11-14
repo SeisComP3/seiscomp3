@@ -1375,108 +1375,13 @@ class _QCRequest(_Request):
         finally:
             self.__qc = None
 
-class _GreensfuncRequest(_Request):
-    def __init__(self, resp, logs, req_dir, req_id, req_args, tracker, gfa):
-        _Request.__init__(self, resp, logs)
-        self.__req_dir = req_dir
-        self.__req_id = req_id
-        self.__tracker = tracker
-        self.__gfa = gfa
-
-        self.__compression = req_args.get("compression", "none")
-        if self.__compression != "bzip2" and self.__compression != "none":
-            resp.req_message("compression '%s' is unknown, defaulting to none" %
-                (self.__compression,))
-            self.__compression = "none"
-
-    def add_line(self, start_time, end_time, network, station, channel,
-        location, constraints):
-
-        if network is not None or station is not None or \
-            channel is not None or location is not None:
-            raise ArclinkHandlerError, "incorrectly formulated request"
-
-        try:
-            id = constraints["id"]
-            model = constraints["model"]
-            distance = float(constraints["distance"])
-            depth = float(constraints["depth"])
-            
-            if "span" in constraints:
-                span = Core.TimeSpan(float(constraints["span"]))
-            
-            else:
-                t1 = Core.Time.FromString(str(start_time), "%Y-%m-%d %H:%M:%S")
-                t2 = Core.Time.FromString(str(end_time), "%Y-%m-%d %H:%M:%S")
-                span = t2 - t1
-
-        except (KeyError, TypeError, ValueError):
-            raise ArclinkHandlerError, "incorrectly formulated request"
-
-        self._resp.processing(self._line, "gf")
-
-        self.__gfa.addRequest(id, model, distance, depth, span)
-
-        self._resp.set_status(Arclink_OK, ref=self._line)
-        self._line += 1
-
-        self.__tracker.line_status(start_time, end_time, network,
-            station, channel, location, "", "", "", constraints, "gf",
-            "OK", 0, "")
-
-    def execute(self):
-        try:
-            if self._line == self._errors:
-                return
-
-            try:
-                tmpfd = NamedTemporaryFile()
-                
-                try:
-                    gf = self.__gfa.get()
-                    if gf:
-                        output = IO.BinaryArchive()
-                        output.create(tmpfd.name)
-                        while gf:
-                            output.writeObject(gf)
-                            gf = self.__gfa.get()
-                        output.close()
-
-                    filename = self.__req_dir + "/" + str(self.__req_id) + ".gf"
-                    if self.__compression == "bzip2":
-                        fd = bz2.BZ2File(filename, "w")
-                    else:
-                        fd = file(filename, "w")
-                            
-                    try:
-                        tmpfd.seek(0)
-                        copyfileobj(tmpfd, fd)
-
-                    finally:
-                        fd.close()
-
-                finally:
-                    tmpfd.close()
-
-                size = os.stat(filename).st_size
-                self._resp.set_status(Arclink_OK, size, ref="gf")
-                self.__tracker.volume_status("gf", "OK", size, "")
-                
-            except (OSError, IOError), e:
-                self._resp.set_status(Arclink_ERROR, msg=str(e), ref="gf")
-                self.__tracker.volume_status("gf", "ERROR", 0, str(e))
-
-        finally:
-            self.__gfa = None
-
 class RequestHandler(object):
     dataLock = threading.RLock()
-    def __init__(self, inv, rtn, wf, gfa, rqdir, track, verbosity,
+    def __init__(self, inv, rtn, wf, rqdir, track, verbosity,
         organization, label):
         self.__inv = inv
         self.__rtn = rtn
         self.__wf = wf
-        self.__gfa = gfa
         self.__rqdir = rqdir
         self.__track = track
         self.__org = organization
@@ -1568,10 +1473,6 @@ class RequestHandler(object):
                 elif req_type == "QC":
                     self.__req = _QCRequest(self.__resp, self.__logs,
                         self.__rqdir, req_id, req_args, self.__tracker)
-                elif req_type == "GREENSFUNC" and self.__gfa is not None:
-                    self.__req = _GreensfuncRequest(self.__resp, self.__logs,
-                        self.__rqdir, req_id, req_args, self.__tracker,
-                        self.__gfa)
                 else:
                     raise ArclinkHandlerError, "unknown request type"
                     
