@@ -118,6 +118,8 @@ port their code.
     possible conflicts with QuakeML publicID constraints.
   * FDSNWS recordstream sets default URL path to /fdsnws/dataselect/1/query which
     makes it more easy to use e.g. fdsnws://geofon.gfz-potsdam.de
+  * Removed obsolete recordstream **isoarchive**.
+  * Removed obsolete Greens function access via Arclink.
 
 * GUI
 
@@ -198,6 +200,7 @@ port their code.
 
   * Improve conversion to SC3. Many thanks to Arnaud Lemarchand from IPGP France
     for his exhaustive tests and valuable advises.
+  * Add station and channel comment support
 
 * fdsnxml2inv
 
@@ -207,6 +210,7 @@ port their code.
     that change, a lot of responses failed to convert.
   * Do not populate NumeratorCoefficient.i when converting to FDSNXML to avoid
     bloating the XML.
+  * Add station and channel comment support
 
 * scsohlog
 
@@ -220,6 +224,11 @@ port their code.
 
   * Removed option -C from nmxptool plugin template. This should go into the
     additional options parameter.
+
+* arclink *
+
+  * Removed ```isodir``` option
+  * Removed obsolete GREENSFUNC request type
 
 ## Release 2017.124
 
