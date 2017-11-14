@@ -26,14 +26,6 @@
 					<description>Root directory of SDS archive.</description>
 				</parameter>
 
-				<parameter name="isodir" type="string" default="/iso_arc">
-					<description>Root directory of ISO archive.</description>
-				</parameter>
-
-				<parameter name="gfaurl" type="string" default="helmberger:///path/to/helmberger/archive">
-					<description>Location of Green's functions archive.</description>
-				</parameter>
-
 				<parameter name="subnodelist" type="dir"  default="None">
 					<description>Path to the subnode routing table.</description>
 				</parameter>
