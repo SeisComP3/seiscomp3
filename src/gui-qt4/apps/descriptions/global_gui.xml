@@ -1141,10 +1141,13 @@
 				</group>
 			</group>
 			<group name="eventsummary">
+				<description>
+				Parameters controlling the event summary view used e.g. in scolv.
+				</description>
 				<group name="alertTimer">
 					<parameter name="commentId" type="string">
 						<description>
-						Set an alert for every comment that id matches
+						Set an alert for every event comment that ID matches
 						the specified regular expression, e.g. "alert_.*".
 						</description>
 					</parameter>
@@ -1153,13 +1156,13 @@
 						List of comments to ignore, e.g. "nil".
 						</description>
 					</parameter>
-					<parameter name="alertGradient" type="list:string">
+					<parameter name="alertGradient" type="list:string" unit="s:color">
 						<description>
 						Discrete mapping of time values in seconds to colors used as
 						text color in case of an active alert. E.g. "0:00FF00,900:FF0000".
 						</description>
 					</parameter>
-					<parameter name="textSize" type="int">
+					<parameter name="textSize" type="int" unit="pt">
 						<description>
 						The text size of the time ago label in case of an active alert.
 						</description>
