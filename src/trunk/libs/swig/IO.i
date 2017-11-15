@@ -58,6 +58,7 @@
 %newobject Seiscomp::IO::DatabaseInterface::Open;
 %newobject Seiscomp::IO::RecordStream::Create;
 %newobject Seiscomp::IO::RecordStream::Open;
+%newobject Seiscomp::IO::RecordStream::next;
 %newobject Seiscomp::IO::RecordInput::next;
 %newobject Seiscomp::IO::RecordIterator::current;
 %newobject Seiscomp::IO::Importer::read;
