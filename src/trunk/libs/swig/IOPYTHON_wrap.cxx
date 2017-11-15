@@ -13103,7 +13103,8 @@ SWIGINTERN PyObject *_wrap_RecordStream_next(PyObject *SWIGUNUSEDPARM(self), PyO
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -29052,7 +29053,8 @@ SWIGINTERN PyObject *_wrap_FileRecordStream_next(PyObject *SWIGUNUSEDPARM(self),
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -31430,7 +31432,8 @@ SWIGINTERN PyObject *_wrap_SLConnection_next(PyObject *SWIGUNUSEDPARM(self), PyO
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -32945,7 +32948,8 @@ SWIGINTERN PyObject *_wrap_ArclinkConnection_next(PyObject *SWIGUNUSEDPARM(self)
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
@@ -34119,7 +34123,8 @@ SWIGINTERN PyObject *_wrap_CombinedConnection_next(PyObject *SWIGUNUSEDPARM(self
       SWIG_exception(SWIG_UnknownError, "C++ anonymous exception");
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Seiscomp__Record, SWIG_POINTER_OWN |  0 );
+  if (result) result->incrementReferenceCount();
   return resultobj;
 fail:
   return NULL;
