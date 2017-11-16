@@ -470,10 +470,10 @@ bool SDSArchive::stepStream() {
 			while ( !_fnames.empty() ) {
 				string fname = _fnames.front();
 				_fnames.pop();
+				_recstream.clear();
 				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
 				if ( !_recstream.is_open() ) {
 					SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
-					_recstream.clear();
 				}
 				else {
 					SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
