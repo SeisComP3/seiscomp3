@@ -53,6 +53,7 @@ Rupture::MetaObject::MetaObject(const Core::RTTI* rtti) : Seiscomp::Core::MetaOb
 	addProperty(Core::simpleProperty("ruptureGeometryWKT", "string", false, false, false, true, false, false, NULL, &Rupture::setRuptureGeometryWKT, &Rupture::ruptureGeometryWKT));
 	addProperty(Core::simpleProperty("faultID", "string", false, false, false, false, false, false, NULL, &Rupture::setFaultID, &Rupture::faultID));
 	addProperty(objectProperty<SurfaceRupture>("surfaceRupture", "SurfaceRupture", false, false, true, &Rupture::setSurfaceRupture, &Rupture::surfaceRupture));
+	addProperty(Core::simpleProperty("centroidReference", "string", false, false, false, false, false, false, NULL, &Rupture::setCentroidReference, &Rupture::centroidReference));
 }
 
 
@@ -148,6 +149,7 @@ bool Rupture::operator==(const Rupture& rhs) const {
 	if ( _ruptureGeometryWKT != rhs._ruptureGeometryWKT ) return false;
 	if ( _faultID != rhs._faultID ) return false;
 	if ( _surfaceRupture != rhs._surfaceRupture ) return false;
+	if ( _centroidReference != rhs._centroidReference ) return false;
 	return true;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -653,6 +655,24 @@ const SurfaceRupture& Rupture::surfaceRupture() const throw(Seiscomp::Core::Valu
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void Rupture::setCentroidReference(const std::string& centroidReference) {
+	_centroidReference = centroidReference;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const std::string& Rupture::centroidReference() const {
+	return _centroidReference;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StrongOriginDescription* Rupture::strongOriginDescription() const {
 	return static_cast<StrongOriginDescription*>(parent());
 }
@@ -681,6 +701,7 @@ Rupture& Rupture::operator=(const Rupture& other) {
 	_ruptureGeometryWKT = other._ruptureGeometryWKT;
 	_faultID = other._faultID;
 	_surfaceRupture = other._surfaceRupture;
+	_centroidReference = other._centroidReference;
 	return *this;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -804,7 +825,7 @@ void Rupture::accept(Visitor* visitor) {
 void Rupture::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: Rupture skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);
@@ -831,6 +852,7 @@ void Rupture::serialize(Archive& ar) {
 	ar & NAMED_OBJECT_HINT("ruptureGeometryWKT", _ruptureGeometryWKT, Archive::XML_ELEMENT);
 	ar & NAMED_OBJECT_HINT("faultID", _faultID, Archive::XML_ELEMENT | Archive::XML_MANDATORY);
 	ar & NAMED_OBJECT_HINT("surfaceRupture", _surfaceRupture, Archive::STATIC_TYPE | Archive::XML_ELEMENT);
+	ar & NAMED_OBJECT_HINT("centroidReference", _centroidReference, Archive::XML_ELEMENT);
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

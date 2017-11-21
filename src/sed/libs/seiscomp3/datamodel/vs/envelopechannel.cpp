@@ -455,7 +455,7 @@ bool EnvelopeChannel::removeEnvelopeValue(size_t i) {
 void EnvelopeChannel::serialize(Archive& ar) {
 	// Do not read/write if the archive's version is higher than
 	// currently supported
-	if ( ar.isHigherVersion<0,9>() ) {
+	if ( ar.isHigherVersion<0,10>() ) {
 		SEISCOMP_ERROR("Archive version %d.%d too high: EnvelopeChannel skipped",
 		               ar.versionMajor(), ar.versionMinor());
 		ar.setValidity(false);

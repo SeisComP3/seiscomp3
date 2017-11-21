@@ -1,6 +1,6 @@
 # Jakarta
 
-## Release 2017.320
+## Release 2017.325
 
 ```SC_API_VERSION 11.0.0```
 
@@ -228,10 +228,22 @@ port their code.
   * Removed option -C from nmxptool plugin template. This should go into the
     additional options parameter.
 
-* arclink *
+* arclink
 
   * Removed ```isodir``` option
   * Removed obsolete GREENSFUNC request type
+
+* VS
+
+  * StrongMotion data model has changed. It introduces pdf descriptions for all
+    RealQuantities and TimeQuantities and adds centroidReference to Rupture
+    table. Either recreate the database from scratch with the new schema or
+    diff the new sql with the old and apply the changes manually.
+
+**PostgreSQL**
+
+```sql
+ALTER TABLE ConfigStation ADD m_creationInfo_agencyID VARCHAR(64);
 
 ## Release 2017.124
 
