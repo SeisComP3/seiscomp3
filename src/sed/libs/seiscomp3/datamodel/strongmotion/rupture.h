@@ -161,6 +161,9 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		SurfaceRupture& surfaceRupture() throw(Seiscomp::Core::ValueException);
 		const SurfaceRupture& surfaceRupture() const throw(Seiscomp::Core::ValueException);
 
+		void setCentroidReference(const std::string& centroidReference);
+		const std::string& centroidReference() const;
+
 	
 	// ------------------------------------------------------------------
 	//  Public interface
@@ -205,6 +208,7 @@ class SC_STRONGMOTION_API Rupture : public PublicObject {
 		std::string _ruptureGeometryWKT;
 		std::string _faultID;
 		OPT(SurfaceRupture) _surfaceRupture;
+		std::string _centroidReference;
 
 	DECLARE_SC_CLASSFACTORY_FRIEND(Rupture);
 };
