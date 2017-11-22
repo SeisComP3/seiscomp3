@@ -414,13 +414,33 @@ class FDSNStation(resource.Resource):
 
 
 	#---------------------------------------------------------------------------
+	def _formatEpoch(self, obj):
+		df = "%FT%T"
+		dfMS = "%FT%T.%f"
+
+		if obj.start().microseconds() > 0:
+			start = obj.start().toString(dfMS)
+		else:
+			start = obj.start().toString(df)
+
+		try:
+			if obj.end().microseconds() > 0:
+				end = obj.end().toString(dfMS)
+			else:
+				end = obj.end().toString(df)
+		except ValueError:
+			end = ''
+
+		return start, end
+
+
+	#---------------------------------------------------------------------------
 	def _processRequestText(self, req, ro):
 		if req._disconnected: return False
 
 		skipRestricted = not self._allowRestricted or \
 		                 (ro.restricted is not None and not ro.restricted)
 
-		df = "%FT%T"
 		data = ""
 		lines = []
 
@@ -441,14 +461,10 @@ class FDSNStation(resource.Resource):
 						break
 				if not stationFound: continue
 
-				try: end = net.end().toString(df)
-				except ValueError: end = ''
-
-				lines.append(("%s %s" % (
-				                  net.code(), net.start().iso()),
+				start, end = self._formatEpoch(net)
+				lines.append(("%s %s" % (net.code(), start),
 				              "%s|%s|%s|%s|%i\n" % (
-				                  net.code(), net.description(),
-				                  net.start().toString(df), end,
+				                  net.code(), net.description(), start, end,
 				                  net.stationCount())))
 
 		# level = station
@@ -472,14 +488,12 @@ class FDSNStation(resource.Resource):
 					except ValueError: elev = ''
 					try: desc = sta.description()
 					except ValueError: desc = ''
-					try: end = sta.end().toString(df)
-					except ValueError: end = ''
 
-					lines.append(("%s.%s %s" % (net.code(), sta.code(),
-					                  sta.start().iso()),
+					start, end = self._formatEpoch(sta)
+					lines.append(("%s.%s %s" % (net.code(), sta.code(), start),
 					              "%s|%s|%s|%s|%s|%s|%s|%s\n" % (
 					                  net.code(), sta.code(), lat, lon, elev,
-					                  desc, sta.start().toString(df), end)))
+					                  desc, start, end)))
 
 		# level = channel|response
 		else:
@@ -528,21 +542,18 @@ class FDSNStation(resource.Resource):
 								     float(stream.sampleRateDenominator()))
 							except ValueError, ZeroDevisionError:
 								sr = ''
-							try: end = stream.end().toString(df)
-							except ValueError: end = ''
 
+							start, end = self._formatEpoch(stream)
 							lines.append(("%s.%s.%s.%s %s" % (
 							                  net.code(), sta.code(),
-							                  loc.code(), stream.code(),
-							                  stream.start().iso()),
+							                  loc.code(), stream.code(), start),
 							              "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|" \
 							              "%s|%s|%s|%s|%s|%s\n" % (
 							                  net.code(), sta.code(),
 							                  loc.code(), stream.code(), lat,
 							                  lon, elev, depth, azi, dip, desc,
 							                  scale, scaleFreq, scaleUnit, sr,
-							                  stream.start().toString(df),
-							                  end)))
+							                  start, end)))
 
 		# sort lines and append to final data string
 		lines.sort(key = lambda line: line[0])
