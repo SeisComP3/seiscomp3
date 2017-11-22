@@ -240,10 +240,6 @@ port their code.
     table. Either recreate the database from scratch with the new schema or
     diff the new sql with the old and apply the changes manually.
 
-**PostgreSQL**
-
-```sql
-ALTER TABLE ConfigStation ADD m_creationInfo_agencyID VARCHAR(64);
 
 ## Release 2017.124
 
