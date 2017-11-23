@@ -488,6 +488,13 @@
 				<optionReference>database#db-disable</optionReference>
 			</group>
 
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+
 			<group name="Mode">
 				--dump-records        Dumps all received records (binary) to recs.in
 				--dump-config         Dump the configuration and exit
