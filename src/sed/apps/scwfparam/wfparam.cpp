@@ -2417,6 +2417,9 @@ void WFParam::collectResults() {
 		mag = _cache.get<Magnitude>(evt->preferredMagnitudeID());
 	}
 
+	if ( !newResultsAvailable )
+		SEISCOMP_DEBUG("There aren't any new station results, skip further processing (messaging, shakemap, ...)");
+
 	if ( _config.enableMessagingOutput && newResultsAvailable ) {
 		if ( !sendMessages(connection(), evt.get(), org.get(),
 		                   mag.get(), stationMap) )
@@ -2508,7 +2511,6 @@ void WFParam::collectResults() {
 		*os << "<?xml version=\"1.0\" encoding=\"" << _config.shakeMapXMLEncoding << "\" standalone=\"yes\"?>" << endl;
 		*os << "<!DOCTYPE earthquake SYSTEM \"stationlist.dtd\">" << endl;
 		*os << "<stationlist created=\"\" xmlns=\"ch.ethz.sed.shakemap.usgs.xml\">" << endl;
-
 
 		for ( sit = stationMap.begin(); sit != stationMap.end(); ++sit ) {
 			bool openStationTag = false;
