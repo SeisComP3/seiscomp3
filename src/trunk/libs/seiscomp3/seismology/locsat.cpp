@@ -40,6 +40,9 @@ using namespace Seiscomp::DataModel;
 using namespace Seiscomp::Seismology;
 
 
+#define ARRIVAL_TIME_ERROR 1.0
+
+
 namespace Seiscomp{
 
 
@@ -79,6 +82,8 @@ LocSAT::LocSAT() {
 
 
 bool LocSAT::init(const Config::Config &config) {
+	setDefaultLocatorParams();
+
 	try {
 		_profiles = config.getStrings("LOCSAT.profiles");
 	}
@@ -90,6 +95,11 @@ bool LocSAT::init(const Config::Config &config) {
 
 	try {
 		_computeConfidenceEllipsoid = config.getBool("LOCSAT.enableConfidenceEllipsoid");
+	}
+	catch ( ... ) {}
+
+	try {
+		_locator_params->depth_init = config.getDouble("LOCSAT.depthInit");
 	}
 	catch ( ... ) {}
 
