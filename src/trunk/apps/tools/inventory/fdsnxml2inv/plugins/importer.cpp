@@ -11,43 +11,44 @@
  ***************************************************************************/
 
 
-#include <seiscomp3/io/exporter.h>
+#include <seiscomp3/io/importer.h>
+#include <seiscomp3/io/archive/xmlarchive.h>
 #include <seiscomp3/datamodel/inventory.h>
-#include <seiscomp3/client/application.h>
 #include <fdsnxml/xml.h>
 #include <fdsnxml/fdsnstationxml.h>
-#include "convert2fdsnxml.h"
+#include "convert2sc3.h"
 
 
 using namespace Seiscomp;
 using namespace Seiscomp::IO;
 
 
-class ExporterFDSNStaXML : public Exporter {
+class ImporterFDSNStaXML : public Importer {
 	public:
-		ExporterFDSNStaXML() {}
+		ImporterFDSNStaXML() {}
 
-		bool put(std::streambuf* buf, Core::BaseObject *obj) {
-			DataModel::Inventory *inv = DataModel::Inventory::Cast(obj);
-			if ( inv == NULL ) return false;
+		virtual Core::BaseObject *get(std::streambuf* buf) {
+			FDSNXML::Importer imp;
+			Core::BaseObjectPtr obj = imp.read(buf);
 
-			FDSNXML::FDSNStationXML msg;
+			// Nothing has been read
+			if ( !obj ) return NULL;
 
-			if ( SCCoreApp )
-				msg.setSender(SCCoreApp->agencyID());
+			FDSNXML::FDSNStationXMLPtr msg = FDSNXML::FDSNStationXML::Cast(obj);
+			// It is not a FDSNXML message
+			if ( !msg ) return NULL;
 
-			msg.setCreated(Core::Time::GMT());
-			msg.setSource("SeisComP3");
-			Convert2FDSNStaXML cnv(&msg);
-			cnv.push(inv);
+			DataModel::Inventory *inv = new DataModel::Inventory;
 
-			FDSNXML::Exporter out;
-			out.setFormattedOutput(_prettyPrint);
-			out.setIndent(_indentation);
+			Convert2SC3 cnv(inv);
+			cnv.push(msg.get());
 
-			return out.write(buf, &msg);
+			// Clean up the inventory after pushing all messages
+			cnv.cleanUp();
+
+			return inv;
 		}
 };
 
 
-REGISTER_EXPORTER_INTERFACE(ExporterFDSNStaXML, "fdsnxml");
+REGISTER_IMPORTER_INTERFACE(ImporterFDSNStaXML, "fdsnxml");

@@ -2,7 +2,14 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 AUX_SOURCE_DIRECTORY(../fdsnxml LIBSTAXML_SOURCES)
 
-SET(EXPORTER_STAXML_SOURCES exporter.cpp ../convert2fdsnxml.cpp ${LIBSTAXML_SOURCES})
+SET(EXPORTER_STAXML_SOURCES
+	plugin.cpp
+	importer.cpp
+	exporter.cpp
+	../convert2fdsnxml.cpp
+	../convert2sc3.cpp
+	${LIBSTAXML_SOURCES}
+)
 
 SC_ADD_PLUGIN_LIBRARY(EXPORTER_STAXML fdsnxml "")
 
