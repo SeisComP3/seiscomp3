@@ -106,7 +106,7 @@ PublicObject::PublicObject(const std::string& publicID)
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PublicObject::~PublicObject() {
-	unregisterMe();
+	deregisterMe();
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -160,13 +160,8 @@ bool PublicObject::registerMe() {
 		return true;
 	}
 
-	/*
-	SEISCOMP_ERROR("object with publicID '%s' exists already => "
-                   "setting publicID to ''", _publicID.c_str());
-	_publicID = "";
-	*/
 	SEISCOMP_DEBUG("another object with publicID '%s' exists already",
-                   _publicID.c_str());
+	               _publicID.c_str());
 
 	return false;
 }
@@ -176,7 +171,7 @@ bool PublicObject::registerMe() {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-bool PublicObject::unregisterMe() {
+bool PublicObject::deregisterMe() {
 	if ( _publicID.empty() || !_registered )
 		return false;
 
@@ -216,7 +211,7 @@ const std::string& PublicObject::publicID() const {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 bool PublicObject::setPublicID(const std::string &id) {
-	unregisterMe();
+	deregisterMe();
 	_publicID = id;
 	return registerMe();
 }
@@ -293,7 +288,7 @@ void PublicObject::SetIdPattern(const std::string& pattern) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 PublicObject* PublicObject::GenerateId(PublicObject* object) {
 	if ( object == NULL ) return NULL;
-	object->unregisterMe();
+	object->deregisterMe();
 	object->generateId(_idPattern);
 	object->registerMe();
 	return object;
@@ -307,7 +302,7 @@ PublicObject* PublicObject::GenerateId(PublicObject* object) {
 PublicObject* PublicObject::GenerateId(PublicObject* object,
                                        const std::string &pattern) {
 	if ( object == NULL ) return NULL;
-	object->unregisterMe();
+	object->deregisterMe();
 	object->generateId(pattern);
 	object->registerMe();
 	return object;
@@ -359,7 +354,7 @@ void PublicObject::serialize(Archive& ar) {
 	Object::serialize(ar);
 
 	if ( ar.isReading() )
-		unregisterMe();
+		deregisterMe();
 
 	ar & NAMED_OBJECT("publicID", _publicID);
 

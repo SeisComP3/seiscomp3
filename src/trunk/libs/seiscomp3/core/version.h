@@ -93,6 +93,8 @@ namespace Core {
    - Add SC3_LOCATOR_INTERFACE_VERSION define and initialize with version 2
    - Replace LocatorInterface WeightedPick with PickItem
    - Refactored Seiscomp::IO::RecordStream interface
+   - Expose PublicObject::registerMe and PublicObject::deregisterMe as public
+     methods
 
  "10.0.0"   0x0A0000
    - Added Seiscomp::Core::Time::LocalTimeZone()
