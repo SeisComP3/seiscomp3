@@ -29,7 +29,7 @@
 				disk.
 				</description>
 			</parameter>
-			<parameter name="delay" type="int" default="30">
+			<parameter name="delay" type="int" default="30" unit="s">
 				<description>
 				The network reconnect delay (in seconds) for the connection
 				to the SeedLink server. If the connection breaks for any
@@ -37,7 +37,7 @@
 				attempted. The default value is 30 seconds.
 				</description>
 			</parameter>
-			<parameter name="networkTimeout" type="int" default="900">
+			<parameter name="networkTimeout" type="int" default="900" unit="s">
 				<description>
 				The network timeout (in seconds) for the connection to the
 				SeedLink server. If no data [or keep alive packets?] are received
@@ -46,7 +46,7 @@
 				600 seconds. A value of 0 disables the timeout.
 				</description>
 			</parameter>
-			<parameter name="idleTimeout" type="int" default="300">
+			<parameter name="idleTimeout" type="int" default="300" unit="s">
 				<description>
 				Timeout for closing idle data stream files in seconds. The idle
 				time of the data streams is only checked when some packets has
@@ -56,7 +56,7 @@
 				file number limit. Default is 300 seconds.
 				</description>
 			</parameter>
-			<parameter name="keepalive" type="int" default="0">
+			<parameter name="keepalive" type="int" default="0" unit="s">
 				<description>
 				Interval (in seconds) at which keepalive (heartbeat) packets
 				are sent to the server. Keepalive packets are only sent if
@@ -264,7 +264,7 @@
 				more information.
 				</description>
 			</parameter>
-			<parameter name="keep" type="int" default="30">
+			<parameter name="keep" type="int" default="30" unit="day">
 				<description>
 				Number of days the data is kept in the archive. This
 				requires purge_datafile to be run as cronjob.
