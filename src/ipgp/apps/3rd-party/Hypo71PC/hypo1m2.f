@@ -4,7 +4,7 @@
      &  MHRMN,NR,MJUMP)                                                 
          include 'H_param.f'
 C------- INPUT PHASE LIST ----------------------------------------------
-      CHARACTER*1 IW(N_s),SYM(N_d),QRMK(N_d)                            
+      CHARACTER*1 IW(N_s),SYM(N_d),QRMK(N_d) 
       CHARACTER*3 RMK(N_d)                                              
       CHARACTER*4 AS,IPRO,NSTA(N_s),ISW                                 
       CHARACTER*48 AHEAD                                                
@@ -124,6 +124,7 @@ C------- CALIBRATION CHANGE IN STATION LIST ----------------------------
 C------- OUTPUT HYPOCENTER ---------------------------------------------
       CHARACTER*1 RMKO,RMK2,RMK3,RMK4,Q,QS,QD,SYM3                      
       CHARACTER*1 CLASS(4),SYMBOL(5),QRMK(N_d),IW(N_s),INS(N_s),IEW(N_s)
+      CHARACTER*1 insc,iewc
       CHARACTER*3 RMK(N_d)                                              
       CHARACTER*4 ISW,XMAGOU,FMAGOU,SWTOUT,FMPOUT,RMK5,IPRO             
       CHARACTER*4 MSTA(N_d),PRMK(N_d),WRK(N_d),AZRES(N_d),SRMK(N_d)     
@@ -152,7 +153,7 @@ C------- OUTPUT HYPOCENTER ---------------------------------------------
       COMMON/C5/ PMIN,XFN                                               
       COMMON/O1/ NI,INST,KNST,IPH,JPH,NDEC,JMAX,JAV,NR,NRP,KF,KP,KZ,KKF 
       COMMON/O2/ AVRPS,DMIN,RMSSQ,ADJSQ,LATEP,LONEP,Z,ZSQ,AVR,AAR,ORG   
-      COMMON/O3/ SUCARD                                                 
+      COMMON/O3/ SUCARD,insc,iewc                                       
       common/stdio/lui,luo,lua1,lua2
       DATA CLASS/'A','B','C','D'/                                       
       DATA SYMBOL/' ','1','2','Q','*'/                                  
@@ -193,7 +194,26 @@ C---- KZ=1 FOR FIXED DEPTH; ONF=0 FOR ORIGIN TIME BASED ON SMP'S
       JI=KDX(I)                                                         
       IF (INS(JI) .EQ. 'S') DYI=-DYI                                    
       IF (IEW(JI) .EQ. 'W') DXI=-DXI                                    
-      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 + 360., 360.)                  
+c     AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 + 360., 360.)                  
+c     IF (IEW(JI) .EQ. 'E') DXI=-DXI
+      IF (IEW(1).EQ.'E') THEN 
+      IF (IEW(JI) .EQ. 'W') THEN 
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 - 360., 360.)
+      AZ(I)=-AZ(I)
+      ELSE 
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 + 360., 360.)
+      GOTO 7
+      ENDIF
+      ENDIF
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578, 360.)
+      IF (IEW(JI) .EQ. 'W') THEN 
+      IF (AZ(I).LT.0) THEN 
+      AZ(I)=-AZ(I)
+      ELSE 
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 - 360., 360.)
+      AZ(I)=-AZ(I)
+      ENDIF
+      ENDIF
       GO TO 7                                                           
     6 AZ(I)= 999.                                                       
     7 CONTINUE                                                          
@@ -218,6 +238,7 @@ C---- KZ=1 FOR FIXED DEPTH; ONF=0 FOR ORIGIN TIME BASED ON SMP'S
       DO 25 I=1,NRP                                                     
    25 DEMP(I)=DELTA(I)                                                  
       CALL SORT(DEMP,KEY,NRP)                                           
+
       DO 27 I=1,NRP                                                     
       K=KEY(I)                                                          
       SWT=0.                                                            
@@ -267,7 +288,7 @@ C---- KZ=1 FOR FIXED DEPTH; ONF=0 FOR ORIGIN TIME BASED ON SMP'S
    54 FORMAT(' ***** FOLLOWING EVENT IS OUT OF ORDER *****')            
    60 IF ((KP.EQ.1) .AND. (IPRN.EQ.0)) GO TO 67                         
       IF (IPH .EQ. 1) GO TO 62                                          
-      WRITE(8,61) INS(1),IEW(1)                                         
+      WRITE(8,61) INS(1),IEW(1)                                        
    61 FORMAT(/,59X,'  ADJUSTMENTS (KM)  PARTIAL F-VALUES  STANDARD '
      +,'ERRORS  ADJUSTMENTS TAKEN',/
      +,'  I  ORIG  LAT ',A1                      
@@ -278,7 +299,7 @@ C---- KZ=1 FOR FIXED DEPTH; ONF=0 FOR ORIGIN TIME BASED ON SMP'S
    62 WRITE(8,63) NI,SEC,LAT1,LAT2,LON1,LON2,Z,RMK2,IDMIN,RMS,AVRPS,    
      1 QS,KF,QD,FLIM,B(2),B(1),B(3),AF(2),AF(1),AF(3),SE(2),SE(1),      
      2 SE(3),Y(2),Y(1),Y(3)                                             
-   63 FORMAT(I3,F6.2,I3,'-',F5.2,I4,'-',F5.2,F6.2,A1,I3,F5.2,F6.2,      
+   63 FORMAT(I3,F6.2,I3,'-',F5.2,I4,'-',F6.2,F6.2,A1,I3,F5.2,F6.2,      
      1 1X,A1,I1,A1,13F6.2)                                              
       IF (KP .EQ. 0) GO TO 100                                          
    67 JNST=KNST*10+INST                                                 
@@ -292,7 +313,17 @@ C---- KZ=1 FOR FIXED DEPTH; ONF=0 FOR ORIGIN TIME BASED ON SMP'S
    70 FORMAT(F5.1)                                                      
       ERHOUT = '     '                                                  
       IF (ERH .NE. 0.) WRITE(ERHOUT,70) ERH                             
-      WRITE(8,75) INS(1),IEW(1)                                         
+        insc='N'
+        iewc='E'
+        lat1=abs(lat1)
+        lat2=abs(lat2)
+        lon1=abs(lon1)
+        lon2=abs(lon2)
+        if (latep.ge.0) goto 73 
+        insc='S'
+73      if (lonep.ge.0) goto 74 
+        iewc='W'
+74    WRITE(8,75) insc,iewc                                             
    75 FORMAT(//,'  DATE    ORIGIN    LAT ',A1,'    LONG ',A1,'    DEPTH'
      1,'    MAG NO DM GAP M  RMS  ERH  ERZ Q SQD  ADJ IN NR  AVR  AAR'
      2,' NM AVXM SDXM NF AVFM SDFM I')
@@ -354,10 +385,6 @@ C
               ENDIF
           ENDIF
       ENDIF
-c      IF(No_Systeme_Final.NE.1)THEN
-          IF(iew(1).EQ.'W')LonEp=-LonEp
-          IF(ins(1).EQ.'S')LatEp=-LatEp
-c      ENDIF
       CALL TRANSF(DBLE(LonEp/60.),DBLE(LatEp/60.),
      *    xut8,yut8,3,No_Systeme_Final,1,No_Ref_Final)
          X_Cartes=xut8
@@ -365,8 +392,8 @@ c      ENDIF
       IF(No_Systeme_Final.EQ.1)THEN
           WRITE(Coord_Cartes(10:11),'(I2)')No_Ref_Final
       ELSE
-          IF(iew(1).EQ.'W')LonEp=-LonEp
-          IF(ins(1).EQ.'S')LatEp=-LatEp
+          IF(iewc.EQ.'W')LonEp=-LonEp
+          IF(insc.EQ.'S')LatEp=-LatEp
       ENDIF
       if(lua1.ne.0)then
 c------- Cartes hyp.tri
@@ -404,8 +431,8 @@ cTAG    0.9 198 149IPD0  943 15.60  0.94  0.01 1.29 S 4 15.90  1.25 -0.44  0.0
 
            WRITE(*   ,601,ERR=80)
      *        KDATE,KHR,kmin,sec,NI,Lat1,
-     *        Lat2,ins(1),Coord_Cartes,X_Cartes,SE(1),
-     *        Lon1, Lon2,iew(1),Coord_Cartes,Y_Cartes,
+     *        Lat2,insc,Coord_Cartes,X_Cartes,SE(1),
+     *        Lon1, Lon2,iewc,Coord_Cartes,Y_Cartes,
      *        SE(2),Z,Altitude,SE(3),RMS,magout,Q
 C
       nobsp = 0

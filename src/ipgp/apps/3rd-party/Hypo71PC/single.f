@@ -11,6 +11,7 @@ c******** besoin de iheter pour refroidir le calcul de trvhet si iheter=
 C-------- SOLUTION FOR A SINGLE EARTHQUAKE ----------------------------
       CHARACTER*1 SYM(N_d),QRMK(N_d)
       CHARACTER*1 IW(N_s),INS(N_s),IEW(N_s)
+      CHARACTER*1 insc,iewc                
       CHARACTER*3 RMK(N_d)
       CHARACTER*4 ISW,IPRO,CHECK,NSTA(N_s)
       CHARACTER*4 MSTA(N_d),PRMK(N_d),SRMK(N_d),WRK(N_d),AZRES(N_d)
@@ -41,7 +42,7 @@ C-------- SOLUTION FOR A SINGLE EARTHQUAKE ----------------------------
       COMMON/C5/ PMIN,XFN
       COMMON/O1/ NI,INST,KNST,IPH,JPH,NDEC,JMAX,JAV,NR,NRP,KF,KP,KZ,KKF
       COMMON/O2/ AVRPS,DMIN,RMSSQ,ADJSQ,LATEP,LONEP,Z,ZSQ,AVR,AAR,ORG
-      COMMON/O3/ SUCARD
+      COMMON/O3/ SUCARD,insc,iewc
       COMMON/O4/ delta
       DATA WF/.95,0.95,0.95,0.95,0.95,0.95,0.94,0.94,0.94,0.93,
      1       0.92,0.92,0.91,0.90,0.88,0.87,0.85,0.83,0.80,0.77,

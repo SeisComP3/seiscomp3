@@ -4,6 +4,7 @@ C*** MODIFICATIONS BY W. H. K. LEE AND C. M. VALDES, NOV. 29, 1985.
 C-----------------------------------------------------------------------
 	include 'H_param.f'
       CHARACTER*1 SYM(N_d),QRMK(N_d),IW(N_s),INS(N_s),IEW(N_s)
+      CHARACTER*1 insc,iewc
       CHARACTER*3 RMK(N_d)
       character*6 magout
       character*1 rmk2
@@ -36,7 +37,7 @@ C-----------------------------------------------------------------------
       COMMON/C5/ PMIN,XFN
       COMMON/O1/ NI,INST,KNST,IPH,JPH,NDEC,JMAX,JAV,NR,NRP,KF,KP,KZ,KKF
       COMMON/O2/ AVRPS,DMIN,RMSSQ,ADJSQ,LATEP,LONEP,Z,ZSQ,AVR,AAR,ORG
-      COMMON/O3/ SUCARD
+      COMMON/O3/ SUCARD,insc,iewc
       COMMON/O4/ delta
 c************************************ common pour iflag
       common/provi/epsob,iflag,elev(N_s)
@@ -54,40 +55,40 @@ C
       FPRINT = BLANKS
       FPUNCH = BLANKS
       fresum = blanks
-c     write(luo,11)
+C      write(luo,11)
    11 FORMAT(/,' Enter FILENAME for HYPO71PC input data ',
      &      '(CR = HYPO71PC.INP)?',/)
       READ(lui,12,END=13) FINPUT
    12 FORMAT(A14)
    13 continue
-c	write(luo,14)
+C 	write(luo,14)
    14 FORMAT(/,' Enter FILENAME for HYPO71PC printed output ',
      &      '(CR = HYPO71PC.PRT)?',/)
       read(lui,12,END=15) FPRINT
    15 continue
-c	write(luo,16)
+C 	write(luo,16)
    16 FORMAT(/,' Enter FILENAME for HYPO71PC punched output ',
      &      '(CR = HYPO71PC.PUN)?',/)
       read(lui,12,END=17) FPUNCH
    17 continue
-c	write(luo,18)
+C 	write(luo,18)
    18 FORMAT(/,' Enter FILENAME for HYPO71PC resumed output ',
      &      '(CR = HYPO71PC.RES)?',/)
       read(lui,12,end=19) fresum
    19 continue
-c	write(luo,20)
+C 	write(luo,20)
    20 FORMAT(/,' Enter FILENAME for HYPO71PC milieu input ',
      &      '(CR = no input    )?',/)
       read(lui,12,end=27) fbull1
    27 continue
-c	write(luo,28)
+C 	write(luo,28)
    28 FORMAT(/,' Enter FILENAME for HYPO71PC reloc output ',
      &      '(CR = no output   )?',/)
       read(lui,12,end=21) ftri
-   21 IF (FINPUT .EQ. BLANKS) FINPUT = 'HYPO71PC.INP'
-      IF (FPRINT .EQ. BLANKS) FPRINT = 'HYPO71PC.PRT'
-      IF (FPUNCH .EQ. BLANKS) FPUNCH = 'HYPO71PC.PUN'
-      IF (fresum .EQ. BLANKS) fresum = 'HYPO71PC.RES'
+   21 IF (FINPUT .EQ. BLANKS) FINPUT = 'HYPO71.INP'
+      IF (FPRINT .EQ. BLANKS) FPRINT = 'HYPO71.PRT'
+      IF (FPUNCH .EQ. BLANKS) FPUNCH = 'HYPO71.PUN'
+      IF (fresum .EQ. BLANKS) fresum = 'HYPO71.RES'
       IF (fbull1 .EQ. BLANKS) lua2=0
       IF (ftri   .EQ. BLANKS) lua1=0
 C
