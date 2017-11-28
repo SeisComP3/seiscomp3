@@ -49,7 +49,26 @@ C-----------------------------------------------------------------------
       JI=KDX(I)                                                         
       IF (INS(JI) .EQ. 'S') DYI=-DYI                                    
       IF (IEW(JI) .EQ. 'W') DXI=-DXI                                    
-      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 + 360., 360.)                  
+      IF (IEW(1).EQ.'E') THEN
+      IF (IEW(JI) .EQ. 'W') THEN
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 - 360., 360.)
+      AZ(I)=-AZ(I)
+      ELSE
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 + 360., 360.)
+      GOTO 7
+      ENDIF
+      ENDIF
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578, 360.)
+      IF (IEW(JI) .EQ. 'W') THEN
+      IF (AZ(I).LT.0) THEN
+      AZ(I)=-AZ(I)
+      ELSE
+      AZ(I)=AMOD(ATAN2(DXI,DYI)*57.29578 - 360., 360.)
+      AZ(I)=-AZ(I)
+      ENDIF
+      ENDIF
+      GO TO 7
+
       GO TO 7                                                           
     6 AZ(I)=999.                                                        
     7 J=J+1                                                             
