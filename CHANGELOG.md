@@ -277,6 +277,11 @@ except Exception e:
     table. Either recreate the database from scratch with the new schema or
     diff the new sql with the old and apply the changes manually.
 
+* Hypo71
+
+  * Fix a bug when all arrivals uncertainties where not set
+  * Fix a bug in Hypo71PC for earthquakes near longitude 0 and longitude 180
+    Thanks to M. Sylvander from IRAP/OMP France for finding and fixing this.
 
 ## Release 2017.124
 
