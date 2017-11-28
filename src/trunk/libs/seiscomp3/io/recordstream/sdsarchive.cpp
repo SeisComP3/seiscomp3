@@ -466,32 +466,32 @@ bool SDSArchive::stepStream() {
 			}
 		}
 
-		if ( !_fnames.empty() ) {
-			while ( !_fnames.empty() ) {
-				string fname = _fnames.front();
-				_fnames.pop();
-				_recstream.clear();
-				_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
-				if ( !_recstream.is_open() ) {
-					SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
-				}
-				else {
-					SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
-					if ( first ) {
-						if ( !setStart(fname) )
-							SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
-					}
-
-					if ( !_recstream.eof() && !isEnd() )
-						return true;
-				}
-
-				first = false;
+		while ( !_fnames.empty() ) {
+			string fname = _fnames.front();
+			_fnames.pop();
+			_recstream.clear();
+			_recstream.open(fname.c_str(), ios_base::in | ios_base::binary);
+			if ( !_recstream.is_open() ) {
+				SEISCOMP_DEBUG("+ %s (not found)", fname.c_str());
 			}
+			else {
+				SEISCOMP_DEBUG("+ %s (init:%d)", fname.c_str(), first?1:0);
+				if ( first ) {
+					if ( !setStart(fname) ) {
+						SEISCOMP_WARNING("Error reading file %s; start of time window maybe incorrect",fname.c_str());
+						continue;
+					}
+				}
+
+				if ( !_recstream.eof() && !isEnd() )
+					return true;
+			}
+
+			first = false;
 		}
 	}
 
-	return _recstream.good();
+	return false;
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
