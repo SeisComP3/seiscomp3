@@ -136,6 +136,7 @@ class WFParam : public Application {
 			std::map<double,FilterFreqs> magnitudeFilterTable;
 			std::vector<std::string> vecMagnitudeFilterTable;
 
+			std::string processingLogfile;
 			double      saturationThreshold;
 			double      STAlength;
 			double      LTAlength;

@@ -4,6 +4,11 @@
 		<description>Waveform parametrization module.</description>
 		<configuration>
 			<group name="wfparam">
+				<parameter name="logfile" type="path" default="@LOGDIR@/scwfparam-processing-info.log">
+					<description>
+					The path to the processing info logfile.
+					</description>
+				</parameter>
 				<group name="streams">
 					<description>
 					Defines the white- and blacklist of data streams to be used. The

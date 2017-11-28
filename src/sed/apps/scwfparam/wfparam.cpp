@@ -209,6 +209,8 @@ pid_t startExternalProcess(const vector<string> &cmdparams) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WFParam::Config::Config() {
+	processingLogfile = "@LOGDIR@/scwfparam-processing-info";
+
 	totalTimeWindowLength = 360;
 	preEventWindowLength = 60;
 
@@ -365,6 +367,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 
 	_acquisitionTimeout = 0;
 
+	NEW_OPT(_config.processingLogfile, "wfparam.logfile");
 	NEW_OPT(_config.streamsWhiteList, "wfparam.streams.whitelist");
 	NEW_OPT(_config.streamsBlackList, "wfparam.streams.blacklist");
 	NEW_OPT(_config.totalTimeWindowLength, "wfparam.totalTimeWindowLength");
@@ -645,6 +648,7 @@ bool WFParam::validateParameters() {
 	}
 
 	// Resolve placeholders
+	_config.processingLogfile = Environment::Instance()->absolutePath(_config.processingLogfile);
 	_config.shakeMapOutputScript = Environment::Instance()->absolutePath(_config.shakeMapOutputScript);
 	_config.shakeMapOutputPath = Environment::Instance()->absolutePath(_config.shakeMapOutputPath);
 	if ( !_config.shakeMapOutputPath.empty() && *_config.shakeMapOutputPath.rbegin() != '/' )
@@ -764,7 +768,7 @@ bool WFParam::init() {
 
 	// Log into processing/info to avoid logging the same information into the global info channel
 	_processingInfoChannel = SEISCOMP_DEF_LOGCHANNEL("processing/info", Logging::LL_INFO);
-	_processingInfoOutput = new Logging::FileRotatorOutput(Environment::Instance()->logFile("scwfparam-processing-info").c_str(),
+	_processingInfoOutput = new Logging::FileRotatorOutput(_config.processingLogfile.c_str(),
 	                                                       60*60*24, 30);
 
 	_processingInfoOutput->subscribe(_processingInfoChannel);
@@ -775,6 +779,8 @@ bool WFParam::init() {
 	// Check each 10 seconds if a new job needs to be started
 	enableTimer(1);
 	_cronCounter = _config.wakeupInterval;
+
+	SEISCOMP_INFO("Processing log: %s", _config.processingLogfile.c_str());
 
 	return true;
 }
