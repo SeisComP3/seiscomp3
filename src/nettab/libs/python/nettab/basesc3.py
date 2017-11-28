@@ -90,7 +90,7 @@ class sc3(object):
 			}
 		},
 		'channel': {
-			'creator': DataModel.Stream,
+			'creator': DataModel.Stream_Create,
 			'attributes': {
 				'Code':					{ 'validator': sc3.getString },
 				'Start':				{ 'validator': sc3.getDate },
