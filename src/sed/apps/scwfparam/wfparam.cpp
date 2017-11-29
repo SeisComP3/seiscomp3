@@ -277,6 +277,7 @@ WFParam::Config::Config() {
 	testMode = false;
 	offline = false;
 	force = false;
+	forceShakemap = false;
 	logCrontab = true;
 	saveProcessedWaveforms = false;
 	saveSpectraFiles = false;
@@ -441,6 +442,9 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	            false, true);
 	NEW_OPT_CLI(_config.force, "Mode", "force",
 	            "Force event processing even if a journal entry exists that processing has completed",
+	            false, true);
+	NEW_OPT_CLI(_config.forceShakemap, "Mode", "force-shakemap",
+	            "Force ShakeMap script to be run even if no station has contributed data",
 	            false, true);
 	NEW_OPT_CLI(_config.testMode, "Messaging", "test",
 	            "Test mode, no messages are sent", false, true);
@@ -2423,7 +2427,7 @@ void WFParam::collectResults() {
 		mag = _cache.get<Magnitude>(evt->preferredMagnitudeID());
 	}
 
-	if ( !newResultsAvailable )
+	if ( !newResultsAvailable && !_config.forceShakemap )
 		SEISCOMP_DEBUG("There aren't any new station results, skip further processing (messaging, shakemap, ...)");
 
 	if ( _config.enableMessagingOutput && newResultsAvailable ) {
@@ -2432,7 +2436,7 @@ void WFParam::collectResults() {
 			SEISCOMP_ERROR("Sending result messages failed");
 	}
 
-	if ( _config.enableShakeMapXMLOutput && newResultsAvailable ) {
+	if ( _config.enableShakeMapXMLOutput && (newResultsAvailable || _config.forceShakemap) ) {
 		ofstream of;
 		Core::Time timestamp = Core::Time::GMT();
 		string eventPath, path;
@@ -2450,7 +2454,7 @@ void WFParam::collectResults() {
 
 		if ( _config.shakeMapOutputRegionName ) {
 			// Load event descriptions if not already there
-			if ( query() && evt->eventDescriptionCount() == 0 )
+			if ( query() && (evt->eventDescriptionCount() == 0) && !_eventParameters )
 				query()->loadEventDescriptions(evt.get());
 
 			EventDescriptionPtr ed = evt->eventDescription(EventDescriptionIndex(REGION_NAME));

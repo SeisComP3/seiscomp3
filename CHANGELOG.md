@@ -270,6 +270,12 @@ except Exception e:
   * Removed ```isodir``` option
   * Removed obsolete GREENSFUNC request type
 
+* scwfparam
+
+  * Add configuration option for the path to the processing log file
+  * Add commandline option ```--force-shakemap``` to run the ShakeMap
+    script even if no station has contributed any data
+
 * VS
 
   * StrongMotion data model has changed. It introduces pdf descriptions for all

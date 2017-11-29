@@ -193,6 +193,7 @@ class WFParam : public Application {
 			bool        useMaximumOfHorizontals;
 			bool        offline;
 			bool        force;
+			bool        forceShakemap;
 			bool        testMode;
 			bool        logCrontab;
 			bool        saveProcessedWaveforms;
