@@ -116,7 +116,7 @@ Hypo71::Hypo71() {
 		_allowedParameters.push_back("XFAR");
 		_allowedParameters.push_back("POS");
 		_allowedParameters.push_back("KAZ");
-		_allowedParameters.push_back("DISABLE_LAST_LOC");
+		_allowedParameters.push_back("USE_TRIAL_POSITION");
 		_allowedParameters.push_back("KNST");
 		_allowedParameters.push_back("INST");
 	}
@@ -988,7 +988,7 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 	// Available only on custom configuration file...
 	// Should we use the position obtained from the best ZTR value ?
-	if ( pConfig.read("USE_TRIAL_POSITION", true) ) {
+	if ( pConfig.read("USE_TRIAL_POSITION", false) ) {
 		cCC.lat1 = _trialLatDeg;
 		cCC.lat2 = _trialLatMin;
 		cCC.lon1 = _trialLonDeg;
@@ -3332,7 +3332,7 @@ void Hypo71::updateProfile(const string& name) {
 		setParameter("CRUSTAL_DEPTH_MODEL", cdm);
 
 		// Control card parameters
-		string ztr, xnear, xfar, pos, kms, kfm, imag, kaz, disableLastLoc;
+		string ztr, xnear, xfar, pos, kms, kfm, imag, kaz, useTrialPosition;
 		config.readInto(ztr, "ZTR", blank);
 		setParameter("ZTR", ztr);
 		config.readInto(xnear, "XNEAR", blank);
@@ -3349,8 +3349,8 @@ void Hypo71::updateProfile(const string& name) {
 		setParameter("IMAG", imag);
 		config.readInto(kaz, "KAZ", blank);
 		setParameter("KAZ", kaz);
-		config.readInto(disableLastLoc, "DISABLE_LAST_LOC", blank);
-		setParameter("DISABLE_LAST_LOC", disableLastLoc);
+		config.readInto(useTrialPosition, "USE_TRIAL_POSITION", blank);
+		setParameter("USE_TRIAL_POSITION", useTrialPosition);
 
 		// Instruction card parameters
 		string knst, inst;
