@@ -15,6 +15,11 @@
 					Compute the confidence ellipsoid.
 					</description>
 				</parameter>
+				<parameter name="depthInit" type="double" default="20.0">
+					<description>
+					The initial depth estimate for LocSAT.
+					</description>
+				</parameter>
 			</group>
 		</configuration>
 	</plugin>

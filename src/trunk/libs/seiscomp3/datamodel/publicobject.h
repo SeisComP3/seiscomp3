@@ -98,6 +98,20 @@ class SC_SYSTEM_CORE_API PublicObject : public Object {
 		//!     registered already
 		bool registered() const;
 
+		/**
+		 * @brief Registers this instances publicID and links it with
+		 *        this instance that it can be found with Find(publicID).
+		 * @return success flag
+		 */
+		bool registerMe();
+
+		/**
+		 * @brief Deregisters this instances publicID and unlinks it with
+		 *        this instance that it cannot be found with Find(publicID).
+		 * @return success flag
+		 */
+		bool deregisterMe();
+
 
 	// ------------------------------------------------------------------
 	//  Public interface
@@ -202,9 +216,6 @@ class SC_SYSTEM_CORE_API PublicObject : public Object {
 	//  Implementation
 	// ------------------------------------------------------------------
 	private:
-		bool registerMe();
-		bool unregisterMe();
-
 		void generateId(const std::string &pattern);
 
 

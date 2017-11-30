@@ -128,9 +128,9 @@ C------- INPUT STATION LIST --------------------------------------------
      1,4F6.2,1X,I1,F6.2,1X,I1,2X,I6,I4,f6.2)                            
       PRR(L)=0.                                                         
    40 LAT(L)=60.*LAT1+LAT2                                              
-c	if(ins(l).eq.'S') lat(l)=-lat(l)
+  	if(ins(l).eq.'S') lat(l)=-lat(l)
       LON(L)=60.*LON1+LON2                                              
-c	if(iew(l).eq.'W') lon(l)=-lon(l)
+  	if(iew(l).eq.'W') lon(l)=-lon(l)
       MDATE(L)=NDATE(L)                                                 
       MHRMN(L)=NHRMN(L)                                                 
       KLSS(L)=KLAS(L)                                                   
@@ -228,6 +228,7 @@ C------- INPUT CONTROL CARD --------------------------------------------
       read(12,215) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,IPRN
      1,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2                  
   215 FORMAT(I1,F4.0,2F5.0,F5.2,7I5,5I1,2(I4,F6.2))                     
+c 215 FORMAT(I1,F5.0,2F6.0,F5.2,7I5,5I1,2(I4,F6.2))                     
        WRITE(8,218) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,IPRN
      1,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2                  
   218 FORMAT(1X,I1,F4.0,2F5.0,F5.2,7I5,5I1,2(I4,F6.2))                  

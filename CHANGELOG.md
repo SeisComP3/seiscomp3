@@ -105,7 +105,44 @@ The Python API with respect to RecordInput did not change. You can still use
 your old code. Anyone with custom recordstream implementations will have to
 port their code.
 
-----
+***Python***
+
+The API changed with respect to exceptions. Rather than throwing wrapped
+SC3 exceptions either the Python *ValueError* exception which corresponds to
+the C++ *Seiscomp::Core::ValueException* and replaces the old Python
+*seiscomp3.Core.ValueException* or the Python *RuntimeError*, which corresponds
+to all other C++ exceptions, is raised. See the following example:
+
+```python
+# Old code
+try:
+    print station.latitude()
+except seiscomp3.Core.ValueException e:
+    print >> sys.stderr, "Station latitude is not set"
+
+# New code
+try:
+    print station.latitude()
+except ValueError e:
+    print >> sys.stderr, "Station latitude is not set"
+```
+
+Furthermore the *seiscomp3.Config.Exception* was replaced with the Python
+*Exception*. See the code below:
+
+```python
+# Old code
+try:
+    param = self.configGetString("param")
+except seiscomp3.Config.Exception e:
+    print >> sys.stderr, "param is not set"
+
+# New code
+try:
+    param = self.configGetString("param")
+except Exception e:
+    print >> sys.stderr, "param is not set"
+```
 
 * trunk
 
@@ -233,6 +270,12 @@ port their code.
   * Removed ```isodir``` option
   * Removed obsolete GREENSFUNC request type
 
+* scwfparam
+
+  * Add configuration option for the path to the processing log file
+  * Add commandline option ```--force-shakemap``` to run the ShakeMap
+    script even if no station has contributed any data
+
 * VS
 
   * StrongMotion data model has changed. It introduces pdf descriptions for all
@@ -240,10 +283,11 @@ port their code.
     table. Either recreate the database from scratch with the new schema or
     diff the new sql with the old and apply the changes manually.
 
-**PostgreSQL**
+* Hypo71
 
-```sql
-ALTER TABLE ConfigStation ADD m_creationInfo_agencyID VARCHAR(64);
+  * Fix a bug when all arrivals uncertainties where not set
+  * Fix a bug in Hypo71PC for earthquakes near longitude 0 and longitude 180
+    Thanks to M. Sylvander from IRAP/OMP France for finding and fixing this.
 
 ## Release 2017.124
 

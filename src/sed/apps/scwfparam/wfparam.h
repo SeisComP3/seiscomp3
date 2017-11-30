@@ -136,6 +136,7 @@ class WFParam : public Application {
 			std::map<double,FilterFreqs> magnitudeFilterTable;
 			std::vector<std::string> vecMagnitudeFilterTable;
 
+			std::string processingLogfile;
 			double      saturationThreshold;
 			double      STAlength;
 			double      LTAlength;
@@ -192,6 +193,7 @@ class WFParam : public Application {
 			bool        useMaximumOfHorizontals;
 			bool        offline;
 			bool        force;
+			bool        forceShakemap;
 			bool        testMode;
 			bool        logCrontab;
 			bool        saveProcessedWaveforms;

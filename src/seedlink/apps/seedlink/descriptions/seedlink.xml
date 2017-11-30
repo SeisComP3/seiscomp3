@@ -95,7 +95,7 @@
 					Whether requests should be logged.
 				</description>
 			</parameter>
-			<parameter name="proc_gap_warn" type="int" default="10">
+			<parameter name="proc_gap_warn" type="int" default="10" unit="microseconds">
 				<description>
 					Give warning if an input channel has time gap larger than this (microseconds).
 				</description>
@@ -134,7 +134,7 @@
 					Maximum number of TCP/IP connections per IP.
 				</description>
 			</parameter>
-			<parameter name="bytespersec" type="int" default="0">
+			<parameter name="bytespersec" type="int" default="0" unit="B/s">
 				<description>
 					Maximum speed per connection (0: throttle disabled).
 				</description>

@@ -16,6 +16,7 @@
 
 #include <seiscomp3/system/environment.h>
 #include <seiscomp3/io/archive/xmlarchive.h>
+#include <locale.h>
 
 #include <QtGui>
 
@@ -697,6 +698,7 @@ void InventoryPanel::inspectFile() {
 		return;
 	}
 
+	setlocale(LC_ALL, "C");
 	Seiscomp::Core::BaseObjectPtr obj;
 	ar >> obj;
 	ar.close();

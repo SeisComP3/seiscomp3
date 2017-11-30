@@ -108,7 +108,7 @@
 						set accordingly.
 					</description>
 				</parameter>
-				<parameter name="uptime" type="int" default="600">
+				<parameter name="uptime" type="int" default="600" unit="s">
 					<description>
 						Dialup uptime in seconds.
 					</description>

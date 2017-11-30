@@ -32,19 +32,13 @@
 #include <map>
 
 
-#define ARRIVAL_TIME_ERROR 1.0
-
-
-struct Loc;
-struct Locator_params;
-
 namespace Seiscomp{
 
 
 namespace Internal {
 
+struct Locator_params;
 class LocSAT;
-class Locator_params;
 class Loc;
 
 }
@@ -153,21 +147,21 @@ class SC_SYSTEM_CORE_API LocSAT : public Seismology::LocatorInterface {
 		typedef std::map<std::string, double> PhaseCorrectionMap;
 		typedef std::map<std::string, PhaseCorrectionMap> StationCorrectionMap;
 
-		static std::string   _defaultTablePrefix;
-		static IDList        _allowedParameters;
+		static std::string        _defaultTablePrefix;
+		static IDList             _allowedParameters;
 
-		StationCorrectionMap _stationCorrection;
-		std::string          _newOriginID;
-		std::string          _tablePrefix;
-		bool                 _computeConfidenceEllipsoid;
-		Internal::LocSAT*    _locateEvent;
-		Internal::Locator_params* _locator_params;
-		double               _minArrivalWeight;
-		bool                 _useArrivalRMSAsTimeError;
+		StationCorrectionMap      _stationCorrection;
+		std::string               _newOriginID;
+		std::string               _tablePrefix;
+		bool                      _computeConfidenceEllipsoid;
+		Internal::LocSAT         *_locateEvent;
+		Internal::Locator_params *_locator_params;
+		double                    _minArrivalWeight;
+		bool                      _useArrivalRMSAsTimeError;
 
-		IDList               _profiles;
+		IDList                    _profiles;
 
-		LocSATErrorEllipsoid _errorEllipsoid;
+		LocSATErrorEllipsoid      _errorEllipsoid;
 };
 
 

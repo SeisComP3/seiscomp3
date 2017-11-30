@@ -209,6 +209,8 @@ pid_t startExternalProcess(const vector<string> &cmdparams) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 WFParam::Config::Config() {
+	processingLogfile = "@LOGDIR@/scwfparam-processing-info";
+
 	totalTimeWindowLength = 360;
 	preEventWindowLength = 60;
 
@@ -275,6 +277,7 @@ WFParam::Config::Config() {
 	testMode = false;
 	offline = false;
 	force = false;
+	forceShakemap = false;
 	logCrontab = true;
 	saveProcessedWaveforms = false;
 	saveSpectraFiles = false;
@@ -365,6 +368,7 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 
 	_acquisitionTimeout = 0;
 
+	NEW_OPT(_config.processingLogfile, "wfparam.logfile");
 	NEW_OPT(_config.streamsWhiteList, "wfparam.streams.whitelist");
 	NEW_OPT(_config.streamsBlackList, "wfparam.streams.blacklist");
 	NEW_OPT(_config.totalTimeWindowLength, "wfparam.totalTimeWindowLength");
@@ -438,6 +442,9 @@ WFParam::WFParam(int argc, char **argv) : Application(argc, argv) {
 	            false, true);
 	NEW_OPT_CLI(_config.force, "Mode", "force",
 	            "Force event processing even if a journal entry exists that processing has completed",
+	            false, true);
+	NEW_OPT_CLI(_config.forceShakemap, "Mode", "force-shakemap",
+	            "Force ShakeMap script to be run even if no station has contributed data",
 	            false, true);
 	NEW_OPT_CLI(_config.testMode, "Messaging", "test",
 	            "Test mode, no messages are sent", false, true);
@@ -645,6 +652,7 @@ bool WFParam::validateParameters() {
 	}
 
 	// Resolve placeholders
+	_config.processingLogfile = Environment::Instance()->absolutePath(_config.processingLogfile);
 	_config.shakeMapOutputScript = Environment::Instance()->absolutePath(_config.shakeMapOutputScript);
 	_config.shakeMapOutputPath = Environment::Instance()->absolutePath(_config.shakeMapOutputPath);
 	if ( !_config.shakeMapOutputPath.empty() && *_config.shakeMapOutputPath.rbegin() != '/' )
@@ -764,7 +772,7 @@ bool WFParam::init() {
 
 	// Log into processing/info to avoid logging the same information into the global info channel
 	_processingInfoChannel = SEISCOMP_DEF_LOGCHANNEL("processing/info", Logging::LL_INFO);
-	_processingInfoOutput = new Logging::FileRotatorOutput(Environment::Instance()->logFile("scwfparam-processing-info").c_str(),
+	_processingInfoOutput = new Logging::FileRotatorOutput(_config.processingLogfile.c_str(),
 	                                                       60*60*24, 30);
 
 	_processingInfoOutput->subscribe(_processingInfoChannel);
@@ -775,6 +783,8 @@ bool WFParam::init() {
 	// Check each 10 seconds if a new job needs to be started
 	enableTimer(1);
 	_cronCounter = _config.wakeupInterval;
+
+	SEISCOMP_INFO("Processing log: %s", _config.processingLogfile.c_str());
 
 	return true;
 }
@@ -2417,13 +2427,16 @@ void WFParam::collectResults() {
 		mag = _cache.get<Magnitude>(evt->preferredMagnitudeID());
 	}
 
+	if ( !newResultsAvailable && !_config.forceShakemap )
+		SEISCOMP_DEBUG("There aren't any new station results, skip further processing (messaging, shakemap, ...)");
+
 	if ( _config.enableMessagingOutput && newResultsAvailable ) {
 		if ( !sendMessages(connection(), evt.get(), org.get(),
 		                   mag.get(), stationMap) )
 			SEISCOMP_ERROR("Sending result messages failed");
 	}
 
-	if ( _config.enableShakeMapXMLOutput && newResultsAvailable ) {
+	if ( _config.enableShakeMapXMLOutput && (newResultsAvailable || _config.forceShakemap) ) {
 		ofstream of;
 		Core::Time timestamp = Core::Time::GMT();
 		string eventPath, path;
@@ -2441,7 +2454,7 @@ void WFParam::collectResults() {
 
 		if ( _config.shakeMapOutputRegionName ) {
 			// Load event descriptions if not already there
-			if ( query() && evt->eventDescriptionCount() == 0 )
+			if ( query() && (evt->eventDescriptionCount() == 0) && !_eventParameters )
 				query()->loadEventDescriptions(evt.get());
 
 			EventDescriptionPtr ed = evt->eventDescription(EventDescriptionIndex(REGION_NAME));
@@ -2508,7 +2521,6 @@ void WFParam::collectResults() {
 		*os << "<?xml version=\"1.0\" encoding=\"" << _config.shakeMapXMLEncoding << "\" standalone=\"yes\"?>" << endl;
 		*os << "<!DOCTYPE earthquake SYSTEM \"stationlist.dtd\">" << endl;
 		*os << "<stationlist created=\"\" xmlns=\"ch.ethz.sed.shakemap.usgs.xml\">" << endl;
-
 
 		for ( sit = stationMap.begin(); sit != stationMap.end(); ++sit ) {
 			bool openStationTag = false;

@@ -4,6 +4,11 @@
 		<description>Waveform parametrization module.</description>
 		<configuration>
 			<group name="wfparam">
+				<parameter name="logfile" type="path" default="@LOGDIR@/scwfparam-processing-info.log">
+					<description>
+					The path to the processing info logfile.
+					</description>
+				</parameter>
 				<group name="streams">
 					<description>
 					Defines the white- and blacklist of data streams to be used. The
@@ -488,6 +493,13 @@
 				<optionReference>database#db-disable</optionReference>
 			</group>
 
+			<group name="Records">
+				<optionReference>records#record-driver-list</optionReference>
+				<optionReference>records#record-url</optionReference>
+				<optionReference>records#record-file</optionReference>
+				<optionReference>records#record-type</optionReference>
+			</group>
+
 			<group name="Mode">
 				--dump-records        Dumps all received records (binary) to recs.in
 				--dump-config         Dump the configuration and exit
@@ -514,6 +526,9 @@
 				</option>
 				<option long-flag="force">
 					<description>Force event processing even if a journal entry exists that processing has completed</description>
+				</option>
+				<option long-flag="force-shakemap">
+					<description>Force ShakeMap script to be run even if no station has contributed data</description>
 				</option>
 				<option long-flag="dump-config">
 					<description>Dump the configuration and exit</description>

@@ -116,7 +116,7 @@ Hypo71::Hypo71() {
 		_allowedParameters.push_back("XFAR");
 		_allowedParameters.push_back("POS");
 		_allowedParameters.push_back("KAZ");
-		_allowedParameters.push_back("DISABLE_LAST_LOC");
+		_allowedParameters.push_back("USE_TRIAL_POSITION");
 		_allowedParameters.push_back("KNST");
 		_allowedParameters.push_back("INST");
 	}
@@ -738,8 +738,8 @@ const int Hypo71::getH71Weight(const PickList& pickList,
 		break;
 	}
 
-	if ( useTime) {
-		weight = (int) round((3 / max) * (uncertainty));
+	if ( useTime ) {
+		weight = (int) round((3 / (max + 0.0001)) * (uncertainty));
 	}
 
 	return weight;
@@ -988,7 +988,7 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 	// Available only on custom configuration file...
 	// Should we use the position obtained from the best ZTR value ?
-	if ( pConfig.read("USE_TRIAL_POSITION", true) ) {
+	if ( pConfig.read("USE_TRIAL_POSITION", false) ) {
 		cCC.lat1 = _trialLatDeg;
 		cCC.lat2 = _trialLatMin;
 		cCC.lon1 = _trialLonDeg;
@@ -1317,7 +1317,7 @@ Origin* Hypo71::locate(PickList& pickList) {
 	       prevRefTimeHour, prevRefStation, prevRefNetwork;
 
 	// Uncertainty values
-	double maxUncertainty = -1, minUncertainty = 100;
+	double maxUncertainty = -1;
 	string maxWeight = "0";
 	string uncertaintyList = "";
 
@@ -1361,17 +1361,27 @@ Origin* Hypo71::locate(PickList& pickList) {
 
 		double upper = .0;
 		double lower = .0;
+		double uncertainty = .0;
+
 		try {
-			if ( p->time().upperUncertainty() != .0 ) {
+			uncertainty = 2 * p->time().uncertainty();
+		}
+		catch ( ... ) {
+			try {
 				upper = p->time().upperUncertainty();
 			}
-			if ( p->time().lowerUncertainty() != .0 ) {
+			catch ( ... ) {}
+			try {
 				lower = p->time().lowerUncertainty();
 			}
-			if ( (lower + upper) > maxUncertainty )
-				maxUncertainty = lower + upper;
-			if ( (lower + upper) < minUncertainty )
-				minUncertainty = lower + upper;
+			catch ( ... ) {}
+			uncertainty = lower + upper;
+		}
+
+
+		try {
+			if ( uncertainty > maxUncertainty )
+				maxUncertainty = uncertainty;
 		} catch ( ... ) {}
 	}
 
@@ -2617,7 +2627,7 @@ Hypo71::getZTR(const PickList& pickList) {
 		        prevRefTimeHour, prevRefStation, prevRefNetwork;
 
 		// Uncertainty values
-		double maxUncertainty = -1, minUncertainty = 100;
+		double maxUncertainty = -1;
 		string maxWeight = "0";
 		string minWeight = "4";
 		string uncertaintyList = "";
@@ -2656,17 +2666,26 @@ Hypo71::getZTR(const PickList& pickList) {
 
 			double upper = .0;
 			double lower = .0;
+			double uncertainty = .0;
 			try {
-				if ( p->time().upperUncertainty() != .0 )
-					upper = p->time().upperUncertainty();
-				if ( p->time().lowerUncertainty() != .0 )
-					lower = p->time().lowerUncertainty();
-				if ( (lower + upper) > maxUncertainty )
-					maxUncertainty = lower + upper;
-				if ( (lower + upper) < minUncertainty )
-					minUncertainty = lower + upper;
+				uncertainty = 2 * p->time().uncertainty();
 			}
-			catch ( ... ) {}
+			catch ( ... ) {
+				try {
+					upper = p->time().upperUncertainty();
+				}
+				catch ( ... ) {}
+				try {
+					lower = p->time().lowerUncertainty();
+				}
+				catch ( ... ) {}
+				uncertainty = lower + upper;
+			}
+
+			try {
+				if ( uncertainty > maxUncertainty )
+					maxUncertainty = uncertainty;
+			} catch ( ... ) {}
 		}
 
 		if ( !foundFAS ) {
@@ -3313,7 +3332,7 @@ void Hypo71::updateProfile(const string& name) {
 		setParameter("CRUSTAL_DEPTH_MODEL", cdm);
 
 		// Control card parameters
-		string ztr, xnear, xfar, pos, kms, kfm, imag, kaz, disableLastLoc;
+		string ztr, xnear, xfar, pos, kms, kfm, imag, kaz, useTrialPosition;
 		config.readInto(ztr, "ZTR", blank);
 		setParameter("ZTR", ztr);
 		config.readInto(xnear, "XNEAR", blank);
@@ -3330,8 +3349,8 @@ void Hypo71::updateProfile(const string& name) {
 		setParameter("IMAG", imag);
 		config.readInto(kaz, "KAZ", blank);
 		setParameter("KAZ", kaz);
-		config.readInto(disableLastLoc, "DISABLE_LAST_LOC", blank);
-		setParameter("DISABLE_LAST_LOC", disableLastLoc);
+		config.readInto(useTrialPosition, "USE_TRIAL_POSITION", blank);
+		setParameter("USE_TRIAL_POSITION", useTrialPosition);
 
 		// Instruction card parameters
 		string knst, inst;

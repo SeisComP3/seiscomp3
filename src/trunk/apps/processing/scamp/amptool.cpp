@@ -645,6 +645,9 @@ void AmpTool::process(Origin *origin) {
 
 	_report << " + Arrivals" << endl;
 
+	if ( (origin->arrivalCount() == 0) && query() )
+		query()->loadArrivals(origin);
+
 	for ( size_t i = 0; i < origin->arrivalCount(); ++i ) {
 		Arrival *arr = origin->arrival(i);
 		const string &pickID = arr->pickID();

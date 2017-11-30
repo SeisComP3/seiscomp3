@@ -16,3 +16,10 @@ Added Test values from original Hypo71PC :
 RESET TEST(15)=-2	-> no earthquakes are expected above 2km above sea level.
 RESET TEST(20)=1	-> altitude readings are in meters.
 RESET TEST(20)=10	-> altitude readings are in 10'th of meters. This allow to have sea bottom station (altitude of -245 is a seismometer at 2450m below sea level).
+
+
+******************************************************************************************
+2017.11 : new modifications to ensure a safe crossing of the Greenwich Meridian (lon = 0°)
+          (bug present in the original version of Hypo71, revealed in the Pyrenees where
+          the pathological case "lon(closest station) x lon(epicenter) < 0 is not uncommon)
+          M. Sylvander (Toulouse, France)
