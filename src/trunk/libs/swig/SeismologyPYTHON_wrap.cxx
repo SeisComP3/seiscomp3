@@ -6268,9 +6268,6 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 
-  #define SWIG_From_double   PyFloat_FromDouble 
-
-
 /* Getting isfinite working pre C99 across multiple platforms is non-trivial. Users can provide SWIG_isfinite on older platforms. */
 #ifndef SWIG_isfinite
 /* isfinite() is a macro for C99 */
@@ -6323,6 +6320,9 @@ SWIG_AsVal_float (PyObject * obj, float *val)
   }  
   return res;
 }
+
+
+  #define SWIG_From_double   PyFloat_FromDouble 
 
 
 SWIGINTERNINLINE PyObject *
@@ -21847,7 +21847,6 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "LocatorInterface_CapQuantity",SWIG_From_int(static_cast< int >(Seiscomp::Seismology::LocatorInterface::CapQuantity)));
   SWIG_Python_SetConstant(d, "LocatorInterface_Log",SWIG_From_int(static_cast< int >(Seiscomp::Seismology::LocatorInterface::Log)));
   SWIG_Python_SetConstant(d, "LocatorInterface_Warning",SWIG_From_int(static_cast< int >(Seiscomp::Seismology::LocatorInterface::Warning)));
-  SWIG_Python_SetConstant(d, "ARRIVAL_TIME_ERROR",SWIG_From_double(static_cast< double >(1.0)));
   SWIG_Python_SetConstant(d, "LP_NUM_DEG_FREEDOM",SWIG_From_int(static_cast< int >(Seiscomp::LP_NUM_DEG_FREEDOM)));
   SWIG_Python_SetConstant(d, "LP_EST_STD_ERROR",SWIG_From_int(static_cast< int >(Seiscomp::LP_EST_STD_ERROR)));
   SWIG_Python_SetConstant(d, "LP_CONF_LEVEL",SWIG_From_int(static_cast< int >(Seiscomp::LP_CONF_LEVEL)));

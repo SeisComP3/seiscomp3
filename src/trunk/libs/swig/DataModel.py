@@ -667,6 +667,16 @@ class PublicObject(Object):
         return _DataModel.PublicObject_registered(self)
 
 
+    def registerMe(self):
+        """registerMe(PublicObject self) -> bool"""
+        return _DataModel.PublicObject_registerMe(self)
+
+
+    def deregisterMe(self):
+        """deregisterMe(PublicObject self) -> bool"""
+        return _DataModel.PublicObject_deregisterMe(self)
+
+
     def validId(self):
         """validId(PublicObject self) -> bool"""
         return _DataModel.PublicObject_validId(self)
