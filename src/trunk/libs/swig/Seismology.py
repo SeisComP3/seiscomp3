@@ -721,7 +721,6 @@ def arrivalToFlags(arrival):
 def flagsToArrival(arrival, flags):
     """flagsToArrival(Arrival arrival, int flags)"""
     return _Seismology.flagsToArrival(arrival, flags)
-ARRIVAL_TIME_ERROR = _Seismology.ARRIVAL_TIME_ERROR
 LP_NUM_DEG_FREEDOM = _Seismology.LP_NUM_DEG_FREEDOM
 LP_EST_STD_ERROR = _Seismology.LP_EST_STD_ERROR
 LP_CONF_LEVEL = _Seismology.LP_CONF_LEVEL
