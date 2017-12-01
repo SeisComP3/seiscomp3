@@ -4,7 +4,7 @@
 
 * trunk
 
-  * fix crash in FDSNWS recordstream if server cannot be reached
+  * Fix crash in FDSNWS recordstream if server cannot be reached
   * Updated sc3ml_0.10.xsd
   * Use correct name in connection info for Python scripts
 
