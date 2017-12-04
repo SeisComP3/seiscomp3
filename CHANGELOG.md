@@ -1,11 +1,12 @@
 # Jakarta
 
-## Release YYYY.ddd
+## Release 2017.334 patch1
 
 * trunk
 
   * fix crash in FDSNWS recordstream if server cannot be reached
   * Updated sc3ml_0.10.xsd
+  * Use correct name in connection info for Python scripts
 
 * scamp
 
