@@ -606,6 +606,38 @@ void AmpTool::updateObject(const std::string &parentID, Object* object) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void AmpTool::removeObject(const std::string &parentID, Object* object) {
+	Pick *pick = Pick::Cast(object);
+	if ( pick ) {
+		logObject(_inputPicks, Time::GMT());
+		Pick *cachedPick = Pick::Find(pick->publicID());
+		if ( cachedPick )
+			_cache.remove(cachedPick);
+		return;
+	}
+
+	Amplitude *amp = Amplitude::Cast(object);
+	if ( amp && !amp->pickID().empty() ) {
+		logObject(_inputAmps, Time::GMT());
+		Amplitude *cachedAmplitude = Amplitude::Find(amp->publicID());
+		if ( cachedAmplitude ) {
+			AmplitudeRange range = _pickAmplitudes.equal_range(cachedAmplitude->pickID());
+			for ( AmplitudeMap::iterator it = range.first; it != range.second; ) {
+				if ( it->second == cachedAmplitude )
+					_pickAmplitudes.erase(it++);
+				else
+					++it;
+			}
+		}
+		return;
+	}
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void AmpTool::process(Origin *origin) {
 	if ( !origin ) return;
 
