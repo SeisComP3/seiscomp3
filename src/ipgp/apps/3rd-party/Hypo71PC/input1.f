@@ -225,12 +225,12 @@ C------- INPUT CONTROL CARD --------------------------------------------
   200 WRITE(8,205)                                                      
   205 FORMAT(///,1x,'KS Z XNEAR XFAR  POS   IQ  KMS  KFM IPUN IMAG   IR'   
      1,' IPRN CODE   LATR      LONR')                                   
-      read(12,215) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,IPRN
-     1,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2                  
+      read(12,215) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,
+     1 IPRN,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2             
   215 FORMAT(I1,F4.0,2F5.0,F5.2,7I5,5I1,2(I4,F6.2))                     
 c 215 FORMAT(I1,F5.0,2F6.0,F5.2,7I5,5I1,2(I4,F6.2))                     
-       WRITE(8,218) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,IPRN
-     1,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2                  
+       WRITE(8,218) KSING,ZTR,XNEAR,XFAR,POS,IQ,KMS,KFM,IPUN,IMAG,IR,
+     1 IPRN,KPAPER,KTEST,KAZ,KSORT,KSEL,LAT1,LAT2,LON1,LON2           
   218 FORMAT(1X,I1,F4.0,2F5.0,F5.2,7I5,5I1,2(I4,F6.2))                  
       LATR=60.*LAT1+LAT2                                                
       LONR=60.*LON1+LON2                                                
