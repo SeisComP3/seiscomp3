@@ -35,8 +35,8 @@ REGISTER_AMPLITUDEPROCESSOR(AmplitudeProcessor_MLv, "MLv");
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_MLv::AmplitudeProcessor_MLv()
-	: AmplitudeProcessor("MLv") {
+AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const std::string& type)
+	: AmplitudeProcessor(type) {
 	setSignalEnd(150.);
 	setMinSNR(0);
 	setMaxDist(8);
@@ -48,8 +48,8 @@ AmplitudeProcessor_MLv::AmplitudeProcessor_MLv()
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const Core::Time& trigger)
-	: AmplitudeProcessor(trigger, "MLv") {
+AmplitudeProcessor_MLv::AmplitudeProcessor_MLv(const Core::Time& trigger, const std::string& type)
+	: AmplitudeProcessor(trigger, type) {
 	setSignalEnd(150.);
 	setMinSNR(0);
 	setMaxDist(8);

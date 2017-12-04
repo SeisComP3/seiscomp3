@@ -27,8 +27,8 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_MLv : public AmplitudeProcessor {
 	DECLARE_SC_CLASS(AmplitudeProcessor_MLv);
 
 	public:
-		AmplitudeProcessor_MLv();
-		AmplitudeProcessor_MLv(const Core::Time& trigger);
+		explicit AmplitudeProcessor_MLv(const std::string& type="MLv");
+		AmplitudeProcessor_MLv(const Core::Time& trigger, const std::string& type="MLv");
 
 	public:
 		virtual void initFilter(double fsamp);
