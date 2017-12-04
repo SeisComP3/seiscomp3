@@ -1,5 +1,22 @@
 # Jakarta
 
+## Release YYYY.ddd
+
+* trunk
+
+  * fix crash in FDSNWS recordstream if server cannot be reached
+  * Updated sc3ml_0.10.xsd
+
+* scamp
+
+  * Update internal cache if picks and/or amplitudes were removed via
+    messaging
+
+* GUI
+
+  * Event list shows only the full summary tooltip if the mouse hovers
+    the ID column (last column)
+
 ## Release 2017.334
 
 ```SC_API_VERSION 11.0.0```
