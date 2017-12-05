@@ -124,10 +124,14 @@ c     endif
       IF(LATRT.EQ.0.) GO TO 102
       LATEP=LATRT
       LONEP=LONRT
+      IF(iew(1).EQ.'W')LonEp=-LonEp
+      IF(ins(1).EQ.'S')LatEp=-LatEp
       GO TO 105
   102 IF (LATR .EQ. 0.) GO TO 104
       LATEP=LATR
       LONEP=LONR
+      IF(iEW(1).EQ.'W')LonEp=-LonEp
+      IF(ins(1).EQ.'S')LatEp=-LatEp
       GO TO 105
   104 LATEP=LAT(K)+0.1
       LONEP=LON(K)+0.1
