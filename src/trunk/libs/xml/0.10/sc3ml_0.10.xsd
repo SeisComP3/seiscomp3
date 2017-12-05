@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!-- Generated from Seiscomp Schema, do not edit -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qml="http://quakeml.org/xmlns/quakeml/1.0" xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" targetNamespace="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <xs:import namespace="http://quakeml.org/xmlns/quakeml/1.0" schemaLocation="quakeml_types.xsd"/>
@@ -171,6 +171,12 @@
       <xs:enumeration value="array"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:complexType name="TimePDF1D">
+    <xs:sequence>
+      <xs:element name="variable" type="scs:TimeArray" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="probability" type="scs:RealArray" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="TimeQuantity">
     <xs:sequence>
       <xs:element name="value" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
@@ -178,6 +184,7 @@
       <xs:element name="lowerUncertainty" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="upperUncertainty" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="confidenceLevel" type="xs:double" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="pdf" type="scs:TimePDF1D" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="CreationInfo">
@@ -206,7 +213,30 @@
     <xs:sequence>
       <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="id" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="start" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="end" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RealArray">
+    <xs:simpleContent>
+      <xs:extension base="qml:FloatArray"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ComplexArray">
+    <xs:simpleContent>
+      <xs:extension base="qml:ComplexArray"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="TimeArray">
+    <xs:simpleContent>
+      <xs:extension base="qml:TimeArray"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="RealPDF1D">
+    <xs:sequence>
+      <xs:element name="variable" type="scs:RealArray" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="probability" type="scs:RealArray" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="RealQuantity">
@@ -216,6 +246,7 @@
       <xs:element name="lowerUncertainty" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="upperUncertainty" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="confidenceLevel" type="xs:double" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="pdf" type="scs:RealPDF1D" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="IntegerQuantity">
@@ -689,16 +720,6 @@
       <xs:extension base="xs:string"/>
     </xs:simpleContent>
   </xs:complexType>
-  <xs:complexType name="RealArray">
-    <xs:simpleContent>
-      <xs:extension base="qml:FloatArray"/>
-    </xs:simpleContent>
-  </xs:complexType>
-  <xs:complexType name="ComplexArray">
-    <xs:simpleContent>
-      <xs:extension base="qml:ComplexArray"/>
-    </xs:simpleContent>
-  </xs:complexType>
   <xs:complexType name="StationReference">
     <xs:simpleContent>
       <xs:extension base="qml:ResourceIdentifier"/>
@@ -918,7 +939,9 @@
       <xs:element name="flags" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="restricted" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shared" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string" use="required"/>
     <xs:attribute name="datalogger" type="qml:ResourceIdentifier"/>
     <xs:attribute name="sensor" type="qml:ResourceIdentifier"/>
@@ -930,6 +953,7 @@
       <xs:element name="latitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="longitude" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="elevation" type="xs:double" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="auxStream" type="scs:AuxStream" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="stream" type="scs:Stream" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -952,6 +976,7 @@
       <xs:element name="restricted" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shared" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="sensorLocation" type="scs:SensorLocation" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
@@ -971,6 +996,7 @@
       <xs:element name="restricted" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="shared" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="station" type="scs:Station" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>

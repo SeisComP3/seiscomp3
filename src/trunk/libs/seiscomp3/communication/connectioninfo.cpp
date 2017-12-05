@@ -56,6 +56,7 @@
 #include <seiscomp3/logging/log.h>
 #include <seiscomp3/communication/systemconnection.h>
 #include <seiscomp3/communication/connectioninfo.h>
+#include <seiscomp3/utils/files.h>
 
 
 #ifdef sun
@@ -376,6 +377,7 @@ const std::string& ConnectionInfo::programName()
 	_programName.clear();
 
 #ifdef LINUX
+	/*
 	std::string firstLine = getLineFromFile("/proc/self/status", "Name");
 
 	std::vector<std::string> tokens;
@@ -386,6 +388,28 @@ const std::string& ConnectionInfo::programName()
 	Core::trim(tokens[1]);
 
 	_programName.assign(tokens[1]);
+	*/
+	std::ifstream file("/proc/self/cmdline");
+	if ( file.is_open() )
+		getline(file, _programName);
+
+	while ( true ) {
+		size_t p;
+		p = _programName.find('\0');
+		if ( p != std::string::npos ) {
+			if ( _programName.compare(0, p, "python") == 0 )
+				_programName.erase(0, p+1);
+			else {
+				_programName.erase(p);
+				break;
+			}
+		}
+		else
+			break;
+	}
+
+	_programName = Util::basename(_programName);
+
 #endif
 
 #ifdef MACOSX

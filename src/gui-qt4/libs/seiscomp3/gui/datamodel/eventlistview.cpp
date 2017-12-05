@@ -1502,8 +1502,7 @@ class EventTreeItem : public SchemeTreeItem {
 					summary += QString("%1: %2").arg(config.header[i]).arg(text(i));
 				}
 
-				for ( int i = 0; i < EventListColumns::Quantity; ++i )
-					setToolTip(config.columnMap[i], summary);
+				setToolTip(config.columnMap[COL_ID], summary);
 			}
 			else {
 				setText(config.columnMap[COL_ID], "<>");
