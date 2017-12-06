@@ -328,7 +328,7 @@ class MagToolApp : public Seiscomp::Client::Application {
 			_magtool.inputPickLog = addInputObjectLog("pick");
 			_magtool.inputAmpLog = addInputObjectLog("amplitude");
 			_magtool.inputOrgLog = addInputObjectLog("origin");
-			_magtool.outputMagLog = addOutputObjectLog("magnitude");
+			_magtool.outputMagLog = addOutputObjectLog("magnitude", primaryMessagingGroup());
 
 			_expiry = _fExpiry * 3600.;
 			_cleanupCounter = 0;

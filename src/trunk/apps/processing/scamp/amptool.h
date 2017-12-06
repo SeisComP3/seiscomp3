@@ -68,6 +68,7 @@ class AmpTool : public Seiscomp::Client::StreamApplication {
 
 		void addObject(const std::string&, Seiscomp::DataModel::Object* object);
 		void updateObject(const std::string&, Seiscomp::DataModel::Object* object);
+		void removeObject(const std::string&, Seiscomp::DataModel::Object* object);
 
 
 	private:

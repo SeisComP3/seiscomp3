@@ -271,7 +271,11 @@ NetworkMessage* SpreadDriver::receive(int* error)
 			{
 				message = new ServiceMessage(Protocol::LEAVE_GROUP_MSG);
 				message->setPrivateSenderGroup(membInfo.changed_member);
-				message->setData(membInfo.changed_member);
+				message->data() = "?";
+				message->data() += _spSender;
+				message->data() += "&";
+				message->data() += membInfo.changed_member;
+				message->data() += "?";
 			}
 		}
 	}

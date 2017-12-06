@@ -288,7 +288,7 @@ c     IF (IEW(JI) .EQ. 'E') DXI=-DXI
    54 FORMAT(' ***** FOLLOWING EVENT IS OUT OF ORDER *****')            
    60 IF ((KP.EQ.1) .AND. (IPRN.EQ.0)) GO TO 67                         
       IF (IPH .EQ. 1) GO TO 62                                          
-      WRITE(8,61) INS(1),IEW(1)                                        
+      WRITE(8,61) INS(1),IEW(1)
    61 FORMAT(/,59X,'  ADJUSTMENTS (KM)  PARTIAL F-VALUES  STANDARD '
      +,'ERRORS  ADJUSTMENTS TAKEN',/
      +,'  I  ORIG  LAT ',A1                      
