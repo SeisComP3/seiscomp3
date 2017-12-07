@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seiscomp>
+	<module name="scmapcut" category="Utilities">
+		<description>Create image files containing maps of specific regions.</description>
+		<command-line>
+			<group name="Generic">
+				<optionReference>generic#help</optionReference>
+				<optionReference>generic#version</optionReference>
+				<optionReference>generic#config-file</optionReference>
+				<optionReference>generic#plugins</optionReference>
+				<optionReference>generic#daemon</optionReference>
+				<optionReference>generic#auto-shutdown</optionReference>
+				<optionReference>generic#shutdown-master-module</optionReference>
+				<optionReference>generic#shutdown-master-username</optionReference>
+			</group>
+
+			<group name="Verbosity">
+				<optionReference>verbosity#verbosity</optionReference>
+				<optionReference>verbosity#v</optionReference>
+				<optionReference>verbosity#quiet</optionReference>
+				<optionReference>verbosity#component</optionReference>
+				<optionReference>verbosity#syslog</optionReference>
+				<optionReference>verbosity#lockfile</optionReference>
+				<optionReference>verbosity#console</optionReference>
+				<optionReference>verbosity#debug</optionReference>
+				<optionReference>verbosity#log-file</optionReference>
+			</group>
+
+			<group name="Cities">
+				<option flag="" long-flag="city-xml" argument="arg" type="string">
+					<description>
+ 						Path to the cities.xml file. If undefined the data is read from
+						@CONFIGDIR@/cities.xml@ or @DATADIR@/cities.xml@.
+					</description>
+				</option>
+			</group>
+
+			<group name="Options">
+				<option flag="r" long-flag="region" argument="arg" type="string" unit="degree">
+					<description>
+						Cut region ([lat_dim]x[lon_dim]+lat0+lon0 or +lat0+lon+lat1+lon1)
+					</description>
+				</option>
+				<option flag="m" long-flag="margin" argument="arg" type="string" unit="degree">
+					<description>
+						Margin in degrees around origin (margin|margin_latxmargin_lon)
+					</description>
+				</option>
+				<option flag="d" long-flag="dimension" argument="arg" type="string" unit="px">
+					<description>
+						Output image dimension (wxh)
+					</description>
+				</option>
+				<option flag="o" long-flag="output" argument="arg" type="string" unit="">
+					<description>
+						Output image, file name
+					</description>
+				</option>
+				<option flag="" long-flag="lat" argument="arg" type="float" unit="degree">
+					<description>
+						Latitude of symbol
+					</description>
+				</option>
+				<option flag="" long-flag="long" argument="arg" unit="degree">
+					<description>
+						Longitude of symbol
+					</description>
+				</option>
+				<option flag="" long-flag="depth" argument="arg" unit="km">
+					<description>
+						Depth of event
+					</description>
+				</option>
+				<option flag="" long-flag="mag" argument="arg" unit="">
+					<description>
+						Magnitude of event
+					</description>
+				</option>
+				<option flag="" long-flag="layers" argument="arg" unit="">
+					<description>
+						Draw polygonal layers
+					</description>
+				</option>
+				<option flag="" long-flag="ep" argument="arg" unit="">
+					<description>
+						Name of XML file containing the event parameters to load
+					</description>
+				</option>
+				<option flag="E" long-flag="event-id" argument="arg" unit="">
+					<description>
+						EventID of the event to plot on map
+					</description>
+				</option>
+				<option flag="" long-flag="html-area" argument="arg" unit="">
+					<description>
+						Print html/area section
+					</description>
+				</option>
+			</group>
+		</command-line>
+	</module>
+</seiscomp>

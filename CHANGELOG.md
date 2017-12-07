@@ -18,6 +18,12 @@
   * Event list shows only the full summary tooltip if the mouse hovers
     the ID column (last column)
 
+
+* scmapcut
+
+  * Add new module documentation
+  * Allow float values for the region parameter
+
 ## Release 2017.334
 
 ```SC_API_VERSION 11.0.0```
