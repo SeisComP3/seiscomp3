@@ -4,7 +4,7 @@
 
 * trunk
 
-  * fix crash in FDSNWS recordstream if server cannot be reached
+  * Fix crash in FDSNWS recordstream if server cannot be reached
   * Updated sc3ml_0.10.xsd
   * Use correct name in connection info for Python scripts
 
@@ -17,6 +17,12 @@
 
   * Event list shows only the full summary tooltip if the mouse hovers
     the ID column (last column)
+
+
+* scmapcut
+
+  * Add new module documentation
+  * Allow float values for the region parameter
 
 ## Release 2017.334
 

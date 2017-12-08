@@ -56,12 +56,12 @@ bool parseMargin(const string &str, QSizeF *size) {
 
 	size_t pos = str.find('x');
 
-	if ( size ) *size = QSize(0,0);
+	if ( size ) *size = QSizeF(0,0);
 
 	if ( pos == string::npos )
 		symmetric = true;
 
-	int w,h;
+	qreal w,h;
 
 	if ( !Core::fromString(h, str.substr(0,pos)) )
 		return false;
@@ -71,7 +71,7 @@ bool parseMargin(const string &str, QSizeF *size) {
 	else if ( !Core::fromString(w, str.substr(pos+1)) )
 		return false;
 
-	if ( size ) *size = QSize(w,h);
+	if ( size ) *size = QSizeF(w,h);
 	return true;
 }
 
