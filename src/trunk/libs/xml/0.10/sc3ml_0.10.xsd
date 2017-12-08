@@ -1,7 +1,20 @@
 <?xml version="1.0"?>
 <!-- Generated from Seiscomp Schema, do not edit -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qml="http://quakeml.org/xmlns/quakeml/1.0" xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" targetNamespace="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" elementFormDefault="qualified" attributeFormDefault="unqualified">
-  <xs:import namespace="http://quakeml.org/xmlns/quakeml/1.0" schemaLocation="quakeml_types.xsd"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:scs="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" targetNamespace="http://geofon.gfz-potsdam.de/ns/seiscomp3-schema/0.10" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:simpleType name="ResourceIdentifier">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="FloatArrayType">
+    <xs:list itemType="xs:double"/>
+  </xs:simpleType>
+  <xs:simpleType name="ComplexArrayType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\s*\(\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*,\s*[+\-]?[0-9]+(\.[0-9]+)?([Ee][+\-][0-9]+)?\s*\)\s*)*"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TimeArrayType">
+    <xs:list itemType="xs:dateTime"/>
+  </xs:simpleType>
   <xs:simpleType name="OriginUncertaintyDescription">
     <xs:restriction base="xs:string">
       <xs:enumeration value="horizontal uncertainty"/>
@@ -190,9 +203,9 @@
   <xs:complexType name="CreationInfo">
     <xs:sequence>
       <xs:element name="agencyID" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="agencyURI" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="agencyURI" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="author" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="authorURI" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="authorURI" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
       <xs:element name="modificationTime" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
       <xs:element name="version" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -212,7 +225,7 @@
   <xs:complexType name="Comment">
     <xs:sequence>
       <xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="id" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="id" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="start" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
       <xs:element name="end" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
@@ -220,17 +233,17 @@
   </xs:complexType>
   <xs:complexType name="RealArray">
     <xs:simpleContent>
-      <xs:extension base="qml:FloatArray"/>
+      <xs:extension base="scs:FloatArrayType"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="ComplexArray">
     <xs:simpleContent>
-      <xs:extension base="qml:ComplexArray"/>
+      <xs:extension base="scs:ComplexArrayType"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="TimeArray">
     <xs:simpleContent>
-      <xs:extension base="qml:TimeArray"/>
+      <xs:extension base="scs:TimeArrayType"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="RealPDF1D">
@@ -332,7 +345,7 @@
   </xs:complexType>
   <xs:complexType name="WaveformStreamID">
     <xs:sequence>
-      <xs:element name="resourceURI" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="resourceURI" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="networkCode" type="xs:string" use="required"/>
     <xs:attribute name="stationCode" type="xs:string" use="required"/>
@@ -366,12 +379,12 @@
   </xs:complexType>
   <xs:complexType name="PickReference">
     <xs:simpleContent>
-      <xs:extension base="qml:ResourceIdentifier"/>
+      <xs:extension base="scs:ResourceIdentifier"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="AmplitudeReference">
     <xs:simpleContent>
-      <xs:extension base="qml:ResourceIdentifier"/>
+      <xs:extension base="scs:ResourceIdentifier"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="Reading">
@@ -379,13 +392,13 @@
       <xs:element name="pickReference" type="scs:PickReference" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="amplitudeReference" type="scs:AmplitudeReference" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="MomentTensorComponentContribution">
     <xs:sequence>
       <xs:element name="weight" type="xs:double" minOccurs="1" maxOccurs="1"/>
       <xs:element name="timeShift" type="xs:double" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="dataTimeWindow" type="qml:FloatArray" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="dataTimeWindow" type="scs:FloatArrayType" minOccurs="1" maxOccurs="1"/>
       <xs:element name="misfit" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="snr" type="xs:double" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
@@ -398,7 +411,7 @@
       <xs:element name="waveformID" type="scs:WaveformStreamID" minOccurs="0" maxOccurs="1"/>
       <xs:element name="component" type="scs:MomentTensorComponentContribution" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="active" type="xs:boolean" use="required"/>
     <xs:attribute name="weight" type="xs:double"/>
     <xs:attribute name="timeShift" type="xs:double"/>
@@ -412,8 +425,8 @@
   </xs:complexType>
   <xs:complexType name="MomentTensor">
     <xs:sequence>
-      <xs:element name="derivedOriginID" type="qml:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="momentMagnitudeID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="derivedOriginID" type="scs:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="momentMagnitudeID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="scalarMoment" type="scs:RealQuantity" minOccurs="0" maxOccurs="1"/>
       <xs:element name="tensor" type="scs:Tensor" minOccurs="0" maxOccurs="1"/>
       <xs:element name="variance" type="xs:double" minOccurs="0" maxOccurs="1"/>
@@ -421,10 +434,10 @@
       <xs:element name="doubleCouple" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="clvd" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="iso" type="xs:double" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="greensFunctionID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="filterID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="greensFunctionID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="filterID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="sourceTimeFunction" type="scs:SourceTimeFunction" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="method" type="scs:MomentTensorMethod" minOccurs="0" maxOccurs="1"/>
       <xs:element name="status" type="scs:MomentTensorStatus" minOccurs="0" maxOccurs="1"/>
       <xs:element name="cmtName" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -435,25 +448,25 @@
       <xs:element name="phaseSetting" type="scs:MomentTensorPhaseSetting" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="stationMomentTensorContribution" type="scs:MomentTensorStationContribution" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="FocalMechanism">
     <xs:sequence>
-      <xs:element name="triggeringOriginID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="triggeringOriginID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="nodalPlanes" type="scs:NodalPlanes" minOccurs="0" maxOccurs="1"/>
       <xs:element name="principalAxes" type="scs:PrincipalAxes" minOccurs="0" maxOccurs="1"/>
       <xs:element name="azimuthalGap" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="stationPolarityCount" type="xs:int" minOccurs="0" maxOccurs="1"/>
       <xs:element name="misfit" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="stationDistributionRatio" type="xs:double" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="evaluationMode" type="scs:EvaluationMode" minOccurs="0" maxOccurs="1"/>
       <xs:element name="evaluationStatus" type="scs:EvaluationStatus" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="momentTensor" type="scs:MomentTensor" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="Amplitude">
     <xs:sequence>
@@ -463,21 +476,21 @@
       <xs:element name="period" type="scs:RealQuantity" minOccurs="0" maxOccurs="1"/>
       <xs:element name="snr" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="unit" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="pickID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="pickID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="waveformID" type="scs:WaveformStreamID" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="filterID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="filterID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="scalingTime" type="scs:TimeQuantity" minOccurs="0" maxOccurs="1"/>
       <xs:element name="magnitudeHint" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="evaluationMode" type="scs:EvaluationMode" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="StationMagnitudeContribution">
     <xs:sequence>
-      <xs:element name="stationMagnitudeID" type="qml:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="stationMagnitudeID" type="scs:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
       <xs:element name="residual" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="weight" type="xs:double" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
@@ -486,8 +499,8 @@
     <xs:sequence>
       <xs:element name="magnitude" type="scs:RealQuantity" minOccurs="1" maxOccurs="1"/>
       <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="originID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="originID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="stationCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
       <xs:element name="azimuthalGap" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="evaluationStatus" type="scs:EvaluationStatus" minOccurs="0" maxOccurs="1"/>
@@ -495,30 +508,30 @@
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="stationMagnitudeContribution" type="scs:StationMagnitudeContribution" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="StationMagnitude">
     <xs:sequence>
-      <xs:element name="originID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="originID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="magnitude" type="scs:RealQuantity" minOccurs="1" maxOccurs="1"/>
       <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="amplitudeID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="amplitudeID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="waveformID" type="scs:WaveformStreamID" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="Pick">
     <xs:sequence>
       <xs:element name="time" type="scs:TimeQuantity" minOccurs="1" maxOccurs="1"/>
       <xs:element name="waveformID" type="scs:WaveformStreamID" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="filterID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="filterID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="horizontalSlowness" type="scs:RealQuantity" minOccurs="0" maxOccurs="1"/>
       <xs:element name="backazimuth" type="scs:RealQuantity" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="slownessMethodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="slownessMethodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="onset" type="scs:PickOnset" minOccurs="0" maxOccurs="1"/>
       <xs:element name="phaseHint" type="scs:Phase" minOccurs="0" maxOccurs="1"/>
       <xs:element name="polarity" type="scs:PickPolarity" minOccurs="0" maxOccurs="1"/>
@@ -527,23 +540,23 @@
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="OriginReference">
     <xs:simpleContent>
-      <xs:extension base="qml:ResourceIdentifier"/>
+      <xs:extension base="scs:ResourceIdentifier"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="FocalMechanismReference">
     <xs:simpleContent>
-      <xs:extension base="qml:ResourceIdentifier"/>
+      <xs:extension base="scs:ResourceIdentifier"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="Event">
     <xs:sequence>
-      <xs:element name="preferredOriginID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="preferredMagnitudeID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="preferredFocalMechanismID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="preferredOriginID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="preferredMagnitudeID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="preferredFocalMechanismID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="type" type="scs:EventType" minOccurs="0" maxOccurs="1"/>
       <xs:element name="typeCertainty" type="scs:EventTypeCertainty" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
@@ -552,7 +565,7 @@
       <xs:element name="originReference" type="scs:OriginReference" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="focalMechanismReference" type="scs:FocalMechanismReference" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="OriginUncertainty">
     <xs:sequence>
@@ -566,7 +579,7 @@
   </xs:complexType>
   <xs:complexType name="Arrival">
     <xs:sequence>
-      <xs:element name="pickID" type="qml:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="pickID" type="scs:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
       <xs:element name="phase" type="scs:Phase" minOccurs="1" maxOccurs="1"/>
       <xs:element name="timeCorrection" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="azimuth" type="xs:double" minOccurs="0" maxOccurs="1"/>
@@ -579,7 +592,7 @@
       <xs:element name="horizontalSlownessUsed" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="backazimuthUsed" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="weight" type="xs:double" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="earthModelID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="earthModelID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="preliminary" type="xs:boolean"/>
@@ -593,9 +606,9 @@
       <xs:element name="depthType" type="scs:OriginDepthType" minOccurs="0" maxOccurs="1"/>
       <xs:element name="timeFixed" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="epicenterFixed" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="referenceSystemID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="methodID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="earthModelID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="referenceSystemID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="methodID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="earthModelID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="quality" type="scs:OriginQuality" minOccurs="0" maxOccurs="1"/>
       <xs:element name="uncertainty" type="scs:OriginUncertainty" minOccurs="0" maxOccurs="1"/>
       <xs:element name="type" type="scs:OriginType" minOccurs="0" maxOccurs="1"/>
@@ -608,7 +621,7 @@
       <xs:element name="stationMagnitude" type="scs:StationMagnitude" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="magnitude" type="scs:Magnitude" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="EventParameters">
     <xs:sequence>
@@ -619,7 +632,7 @@
       <xs:element name="focalMechanism" type="scs:FocalMechanism" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="event" type="scs:Event" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="Parameter">
     <xs:sequence>
@@ -627,21 +640,21 @@
       <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="ParameterSet">
     <xs:sequence>
-      <xs:element name="baseID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="moduleID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="baseID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="moduleID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="parameter" type="scs:Parameter" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="created" type="xs:dateTime"/>
   </xs:complexType>
   <xs:complexType name="Setup">
     <xs:sequence>
-      <xs:element name="parameterSetID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="parameterSetID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="enabled" type="xs:boolean" use="required"/>
@@ -651,17 +664,17 @@
       <xs:element name="creationInfo" type="scs:CreationInfo" minOccurs="0" maxOccurs="1"/>
       <xs:element name="setup" type="scs:Setup" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="networkCode" type="xs:string" use="required"/>
     <xs:attribute name="stationCode" type="xs:string" use="required"/>
     <xs:attribute name="enabled" type="xs:boolean" use="required"/>
   </xs:complexType>
   <xs:complexType name="ConfigModule">
     <xs:sequence>
-      <xs:element name="parameterSetID" type="qml:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="parameterSetID" type="scs:ResourceIdentifier" minOccurs="0" maxOccurs="1"/>
       <xs:element name="station" type="scs:ConfigStation" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="enabled" type="xs:boolean" use="required"/>
   </xs:complexType>
@@ -670,7 +683,7 @@
       <xs:element name="parameterSet" type="scs:ParameterSet" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="module" type="scs:ConfigModule" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="QCLog">
     <xs:sequence>
@@ -679,8 +692,8 @@
       <xs:element name="end" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
       <xs:element name="message" type="xs:string" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
-    <xs:attribute name="creatorID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
+    <xs:attribute name="creatorID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="created" type="xs:dateTime" use="required"/>
   </xs:complexType>
   <xs:complexType name="WaveformQuality">
@@ -704,7 +717,7 @@
       <xs:element name="start" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
       <xs:element name="end" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="creatorID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="creatorID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="created" type="xs:dateTime" use="required"/>
   </xs:complexType>
   <xs:complexType name="QualityControl">
@@ -713,7 +726,7 @@
       <xs:element name="waveformQuality" type="scs:WaveformQuality" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="outage" type="scs:Outage" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="Blob">
     <xs:simpleContent>
@@ -722,7 +735,7 @@
   </xs:complexType>
   <xs:complexType name="StationReference">
     <xs:simpleContent>
-      <xs:extension base="qml:ResourceIdentifier"/>
+      <xs:extension base="scs:ResourceIdentifier"/>
     </xs:simpleContent>
   </xs:complexType>
   <xs:complexType name="StationGroup">
@@ -736,7 +749,7 @@
       <xs:element name="elevation" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="stationReference" type="scs:StationReference" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="AuxSource">
@@ -758,7 +771,7 @@
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
       <xs:element name="source" type="scs:AuxSource" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
   <xs:complexType name="SensorCalibration">
@@ -784,9 +797,9 @@
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
       <xs:element name="calibration" type="scs:SensorCalibration" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="response" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="response" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="ResponsePAZ">
     <xs:sequence>
@@ -804,7 +817,7 @@
       <xs:element name="delay" type="xs:double" minOccurs="0" maxOccurs="1"/>
       <xs:element name="correction" type="xs:double" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="ResponsePolynomial">
@@ -820,7 +833,7 @@
       <xs:element name="coefficients" type="scs:RealArray" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="ResponseFAP">
@@ -831,7 +844,7 @@
       <xs:element name="tuples" type="scs:RealArray" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="ResponseFIR">
@@ -846,7 +859,7 @@
       <xs:element name="coefficients" type="scs:RealArray" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="ResponseIIR">
@@ -863,7 +876,7 @@
       <xs:element name="denominators" type="scs:RealArray" minOccurs="0" maxOccurs="1"/>
       <xs:element name="remark" type="scs:Blob" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="DataloggerCalibration">
@@ -901,7 +914,7 @@
       <xs:element name="calibration" type="scs:DataloggerCalibration" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="decimation" type="scs:Decimation" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
   <xs:complexType name="AuxStream">
@@ -916,7 +929,7 @@
       <xs:element name="shared" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="code" type="xs:string" use="required"/>
-    <xs:attribute name="device" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="device" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="Stream">
     <xs:sequence>
@@ -941,10 +954,10 @@
       <xs:element name="shared" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string" use="required"/>
-    <xs:attribute name="datalogger" type="qml:ResourceIdentifier"/>
-    <xs:attribute name="sensor" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="datalogger" type="scs:ResourceIdentifier"/>
+    <xs:attribute name="sensor" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="SensorLocation">
     <xs:sequence>
@@ -957,7 +970,7 @@
       <xs:element name="auxStream" type="scs:AuxStream" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="stream" type="scs:Stream" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string" use="required"/>
   </xs:complexType>
   <xs:complexType name="Station">
@@ -979,7 +992,7 @@
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="sensorLocation" type="scs:SensorLocation" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string" use="required"/>
     <xs:attribute name="archiveNetworkCode" type="xs:string"/>
   </xs:complexType>
@@ -999,7 +1012,7 @@
       <xs:element name="comment" type="scs:Comment" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="station" type="scs:Station" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="code" type="xs:string" use="required"/>
   </xs:complexType>
   <xs:complexType name="Inventory">
@@ -1015,7 +1028,7 @@
       <xs:element name="responseFAP" type="scs:ResponseFAP" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="network" type="scs:Network" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="RouteArclink">
     <xs:sequence>
@@ -1036,7 +1049,7 @@
       <xs:element name="arclink" type="scs:RouteArclink" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="seedlink" type="scs:RouteSeedlink" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
     <xs:attribute name="networkCode" type="xs:string" use="required"/>
     <xs:attribute name="stationCode" type="xs:string" use="required"/>
     <xs:attribute name="locationCode" type="xs:string" use="required"/>
@@ -1058,11 +1071,11 @@
       <xs:element name="route" type="scs:Route" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="access" type="scs:Access" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="JournalEntry">
     <xs:sequence>
-      <xs:element name="objectID" type="qml:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="objectID" type="scs:ResourceIdentifier" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="created" type="xs:dateTime"/>
     <xs:attribute name="sender" type="xs:string" use="required"/>
@@ -1073,7 +1086,7 @@
     <xs:sequence>
       <xs:element name="entry" type="scs:JournalEntry" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:complexType name="ArclinkUser">
     <xs:sequence>
@@ -1081,7 +1094,7 @@
       <xs:element name="email" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="password" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="ArclinkStatusLine">
     <xs:sequence>
@@ -1128,14 +1141,14 @@
       <xs:element name="statusLine" type="scs:ArclinkStatusLine" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="requestLine" type="scs:ArclinkRequestLine" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier" use="required"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier" use="required"/>
   </xs:complexType>
   <xs:complexType name="ArclinkLog">
     <xs:sequence>
       <xs:element name="arclinkRequest" type="scs:ArclinkRequest" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="arclinkUser" type="scs:ArclinkUser" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="publicID" type="qml:ResourceIdentifier"/>
+    <xs:attribute name="publicID" type="scs:ResourceIdentifier"/>
   </xs:complexType>
   <xs:element name="seiscomp">
     <xs:complexType>
