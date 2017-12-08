@@ -108,10 +108,10 @@ const std::string& toSQL(const std::string& str) {
 	if ( pos == std::string::npos )
 		return str;
 
-	if ( pos > 0 ) {
-		converted.clear();
+	converted.clear();
+
+	if ( pos > 0 )
 		converted.append(str, 0, pos);
-	}
 
 	++pos;
 	converted.append("''");
