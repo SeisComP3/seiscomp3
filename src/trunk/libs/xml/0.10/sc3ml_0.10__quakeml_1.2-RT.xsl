@@ -18,7 +18,7 @@
  * SC3ML 0.10 to QuakeML 1.2 RT stylesheet converter
  * Author  : Stephan Herrnkind
  * Email   : stephan.herrnkind@gempa.de
- * Version : 2017.270.01
+ * Version : 2017.342.01
  *
  * ================
  * Usage
@@ -110,6 +110,10 @@
  *                    cmtVersion
  *                    phaseSetting
  *    eventParameters reading
+ *    comment         start
+ *    comment         end
+ *    RealQuantity    pdf
+ *    TimeQuality     pdf
  *
  *  - Mandatory nodes: The following nodes is mandatory in QuakeML but not in
  *    SC3ML:
@@ -164,6 +168,10 @@
  *    - Map SC3 arrival weight to timeWeight, horizontalSlownessWeight and
  *      backazimuthWeight depending on timeUsed, horizontalUsed and
  *      backzimuthUsed values
+ *
+ *  * 08.12.2017:
+ *    - Remove unmapped nodes
+ *    - Fix arrival weight mapping
  *
  ********************************************************************** -->
 <xsl:stylesheet version="1.0"
@@ -224,6 +232,8 @@
     <!-- Delete elements -->
     <xsl:template match="scs:creationInfo/scs:modificationTime"/>
     <xsl:template match="scs:comment/scs:id"/>
+    <xsl:template match="scs:comment/scs:start"/>
+    <xsl:template match="scs:comment/scs:end"/>
     <xsl:template match="scs:arrival/scs:weight"/>
     <xsl:template match="scs:arrival/scs:timeUsed"/>
     <xsl:template match="scs:arrival/scs:horizontalSlownessUsed"/>
@@ -236,6 +246,7 @@
     <xsl:template match="scs:momentTensor/scs:cmtName"/>
     <xsl:template match="scs:momentTensor/scs:cmtVersion"/>
     <xsl:template match="scs:momentTensor/scs:phaseSetting"/>
+    <xsl:template match="scs:pdf"/>
 
 
     <!-- event -->
@@ -384,7 +395,8 @@
                  depending on timeUsed, horizontalSlownessUsed and backazimuthUsed values -->
             <xsl:choose>
                 <xsl:when test="scs:weight">
-                    <xsl:if test="((not(scs:timeUsed)) or (scs:timeUsed='true') or (scs:timeUsed='1'))">
+                    <xsl:if test="((scs:timeUsed='true') or (scs:timeUsed='1'))
+                                  or (not(scs:timeUsed|scs:horizontalSlownessUsed|scs:backazimuthUsed))">
                         <xsl:element name="timeWeight">
                             <xsl:value-of select="scs:weight"/>
                         </xsl:element>
