@@ -26,7 +26,7 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_mBc : public AmplitudeProcessor_mB
 	DECLARE_SC_CLASS(AmplitudeProcessor_mBc);
 
 	public:
-                AmplitudeProcessor_mBc();
+		AmplitudeProcessor_mBc();
 		AmplitudeProcessor_mBc(const Core::Time& trigger);
 
 	protected:

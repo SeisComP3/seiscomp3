@@ -29,8 +29,6 @@ class SC_SYSTEM_CLIENT_API AmplitudeProcessor_mB : public AmplitudeProcessor {
 	public:
 		AmplitudeProcessor_mB();
 		AmplitudeProcessor_mB(const Core::Time& trigger);
-		AmplitudeProcessor_mB(const std::string& type);
-		AmplitudeProcessor_mB(const Core::Time& trigger, const std::string& type);
 
 	protected:
 		double timeWindowLength(double distance) const;
