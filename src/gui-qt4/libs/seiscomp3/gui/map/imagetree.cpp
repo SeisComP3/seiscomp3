@@ -18,6 +18,7 @@
 #include <seiscomp3/logging/log.h>
 
 #include <cstdio>
+#include <clocale>
 
 
 IMPLEMENT_INTERFACE_FACTORY(Seiscomp::Gui::Map::TileStore, SC_GUI_API);
@@ -203,6 +204,8 @@ ImageTree::ImageTree(const MapsDesc &meta) {
 
 		MapsDesc desc(meta);
 
+		const char *oldLocale = setlocale(LC_ALL, NULL);
+
 		if ( !_store->open(desc) ) {
 			SEISCOMP_ERROR("Failed to open tile store at %s",
 			               (const char*)desc.location.toAscii());
@@ -212,6 +215,8 @@ ImageTree::ImageTree(const MapsDesc &meta) {
 			_isMercatorProjected = desc.isMercatorProjected;
 			_cacheSize = desc.cacheSize;
 		}
+
+		setlocale(LC_ALL, oldLocale);
 	}
 	else {
 		SEISCOMP_ERROR("Could not create tile store: %s",

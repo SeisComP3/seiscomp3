@@ -56,12 +56,12 @@ bool parseMargin(const string &str, QSizeF *size) {
 
 	size_t pos = str.find('x');
 
-	if ( size ) *size = QSize(0,0);
+	if ( size ) *size = QSizeF(0,0);
 
 	if ( pos == string::npos )
 		symmetric = true;
 
-	int w,h;
+	qreal w,h;
 
 	if ( !Core::fromString(h, str.substr(0,pos)) )
 		return false;
@@ -71,7 +71,7 @@ bool parseMargin(const string &str, QSizeF *size) {
 	else if ( !Core::fromString(w, str.substr(pos+1)) )
 		return false;
 
-	if ( size ) *size = QSize(w,h);
+	if ( size ) *size = QSizeF(w,h);
 	return true;
 }
 
@@ -326,12 +326,13 @@ bool MapCut::run() {
 		              _margins.width()*2, _margins.height()*2);
 	}
 
-
 	Map::ImageTreePtr mapTree = new Map::ImageTree(mapsDesc());
 
 	_canvas = new Map::Canvas(mapTree.get());
 	_canvas->setParent(this);
 	_canvas->setSize(_dim.width(), _dim.height());
+
+	_image = QImage(_canvas->size(), QImage::Format_ARGB32);
 
 	setupView(_canvas, QRectF(_reg.left(),_reg.top(),_reg.width(),_reg.height()));
 
@@ -361,7 +362,7 @@ bool MapCut::run() {
 		return Application::run();
 	}
 
-	if ( !_canvas->buffer().save(_output.c_str(), NULL, 100) ) {
+	if ( !_image.save(_output.c_str(), NULL, 100) ) {
 		cerr << "Saving the image failed" << endl;
 		return false;
 	}
@@ -371,7 +372,7 @@ bool MapCut::run() {
 
 
 void MapCut::renderCanvas() {
-	QPainter p(&_canvas->buffer());
+	QPainter p(&_image);
 	_canvas->draw(p);
 }
 

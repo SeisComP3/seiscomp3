@@ -371,8 +371,8 @@ Record *FDSNWSConnectionBase::next() {
 	_sock->startTimer();
 
 	if ( !_readingData ) {
-		_sock->open(_host);
 		try {
+			_sock->open(_host);
 			handshake();
 		}
 		catch ( const GeneralException &e ) {
