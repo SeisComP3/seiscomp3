@@ -1025,16 +1025,16 @@ TypeMapCommon::TypeMapCommon() {
 	static CreationInfoHandler creationInfoHandler;
 	static CommentHandler commentHandler;
 	static WaveformStreamIDHandler waveformStreamIDHandler;
-	registerMapping<RealQuantity>("", "", &__realQuantityHandler);
-	registerMapping<IntegerQuantity>("", "", &__integerQuantityHandler);
-	registerMapping<TimeQuantity>("", "", &__timeQuantityHandler);
-	registerMapping<CreationInfo>("creationInfo", "", &creationInfoHandler);
-	registerMapping<Comment>("comment", "", &commentHandler);
-	registerMapping<WaveformStreamID>("waveformID", "", &waveformStreamIDHandler);
+	registerMapping<RealQuantity>("RealQuantity", "", &__realQuantityHandler);
+	registerMapping<IntegerQuantity>("IntegerQuantity", "", &__integerQuantityHandler);
+	registerMapping<TimeQuantity>("TimeQuantity", "", &__timeQuantityHandler);
+	registerMapping<CreationInfo>("CreationInfo", "", &creationInfoHandler);
+	registerMapping<Comment>("Comment", "", &commentHandler);
+	registerMapping<WaveformStreamID>("WaveformStreamID", "", &waveformStreamIDHandler);
 
 	// EventDescription
 	static EventDescriptionHandler eventDescriptionHandler;
-	registerMapping<EventDescription>("description", "", &eventDescriptionHandler);
+	registerMapping<EventDescription>("EventDescription", "", &eventDescriptionHandler);
 
 	// FocalMechanism
 	static FocalMechanismHandler focalMechanismHandler;
@@ -1046,31 +1046,31 @@ TypeMapCommon::TypeMapCommon() {
 	static NodalPlaneHandler nodalPlaneHandler;
 	static PrincipalAxesHandler principalAxesHandler;
 	static AxisHandler axisHandler;
-	registerMapping("focalMechanism", "", "FocalMechanism", &focalMechanismHandler);
-	registerMapping("momentTensor", "", "MomentTensor", &momentTensorHandler);
-	registerMapping<DataUsed>("dataUsed", "", &dataUsedHandler);
-	registerMapping<Tensor>("tensor", "", &tensorHandler);
-	registerMapping<SourceTimeFunction>("sourceTimeFunction", "", &sourceTimeFunctionHandler);
-	registerMapping<NodalPlanes>("nodalPlanes", "", &nodalPlanesHandler);
-	registerMapping<NodalPlane>("", "", &nodalPlaneHandler);
-	registerMapping<PrincipalAxes>("pricipalAxes", "", &principalAxesHandler);
-	registerMapping<Axis>("", "", &axisHandler);
+	registerMapping("FocalMechanism", "", "FocalMechanism", &focalMechanismHandler);
+	registerMapping("MomentTensor", "", "MomentTensor", &momentTensorHandler);
+	registerMapping<DataUsed>("DataUsed", "", &dataUsedHandler);
+	registerMapping<Tensor>("Tensor", "", &tensorHandler);
+	registerMapping<SourceTimeFunction>("SourceTimeFunction", "", &sourceTimeFunctionHandler);
+	registerMapping<NodalPlanes>("NodalPlanes", "", &nodalPlanesHandler);
+	registerMapping<NodalPlane>("NodalPlane", "", &nodalPlaneHandler);
+	registerMapping<PrincipalAxes>("PrincipalAxes", "", &principalAxesHandler);
+	registerMapping<Axis>("Axis", "", &axisHandler);
 
 	// Amplitude
 	static AmplitudeHandler amplitudeHandler;
 	static TimeWindowHandler timeWindowHandler;
-	registerMapping("amplitude", "", "Amplitude", &amplitudeHandler);
-	registerMapping<TimeWindow>("timeWindow", "", &timeWindowHandler);
+	registerMapping("Amplitude", "", "Amplitude", &amplitudeHandler);
+	registerMapping<TimeWindow>("TimeWindow", "", &timeWindowHandler);
 
 	// Magnitude
 	static MagnitudeHandler magnitudeHandler;
 	static StationMagnitudeContributionHandler stationMagniutdeContributionHandler;
-	registerMapping("magnitude", "", "Magnitude", &magnitudeHandler);
-	registerMapping<StationMagnitudeContribution>("stationMagniutdeContribution", "", &stationMagniutdeContributionHandler);
+	registerMapping("Magnitude", "", "Magnitude", &magnitudeHandler);
+	registerMapping<StationMagnitudeContribution>("StationMagniutdeContribution", "", &stationMagniutdeContributionHandler);
 
 	// StationMagnitude
 	static StationMagnitudeHandler stationMagnitudeHandler;
-	registerMapping("stationMagnitude", "", "StationMagnitude", &stationMagnitudeHandler);
+	registerMapping("StationMagnitude", "", "StationMagnitude", &stationMagnitudeHandler);
 
 	// Origin
 	static OriginHandler originHandler;
@@ -1079,24 +1079,23 @@ TypeMapCommon::TypeMapCommon() {
 	static ArrivalHandler arrivalHandler;
 	static OriginQualityHandler originQualityHandler;
 	static PhaseHandler phaseHandler;
-	registerMapping("origin", "", "Origin", &originHandler);
-	registerMapping<CompositeTime>("compositeTime", "", &compositeTimeHandler);
-	registerMapping<ConfidenceEllipsoid>("confidenceEllipsoid", "", &confidenceEllipsoidHandler);
-	registerMapping<Arrival>("arrival", "", &arrivalHandler);
-	registerMapping<OriginQuality>("quality", "", &originQualityHandler);
-	registerMapping<Phase>("phase", "", &phaseHandler);
+	registerMapping("Origin", "", "Origin", &originHandler);
+	registerMapping<CompositeTime>("CompositeTime", "", &compositeTimeHandler);
+	registerMapping<ConfidenceEllipsoid>("ConfidenceEllipsoid", "", &confidenceEllipsoidHandler);
+	registerMapping<Arrival>("Arrival", "", &arrivalHandler);
+	registerMapping<OriginQuality>("Quality", "", &originQualityHandler);
+	registerMapping<Phase>("Phase", "", &phaseHandler);
 
 	// Pick
 	static PickHandler pickHandler;
-	registerMapping("pick", "", "Pick", &pickHandler);
-	registerMapping<Phase>("phaseHint", "", &phaseHandler);
+	registerMapping("Pick", "", "Pick", &pickHandler);
 }
 
 TypeMap::TypeMap() : TypeMapCommon() {
 	static QuakeMLHandler quakeMLHandler;
 	static EventHandler eventHandler;
 	registerMapping<EventParameters>("quakeml", NS_QML, &quakeMLHandler);
-	registerMapping("event", "", "Event", &eventHandler);
+	registerMapping("Event", "", "Event", &eventHandler);
 }
 
 RTTypeMap::RTTypeMap() : TypeMapCommon() {
@@ -1108,12 +1107,12 @@ RTTypeMap::RTTypeMap() : TypeMapCommon() {
 	static RTPickReferenceHandler rtPickReferenceHandler;
 	static RTAmplitudeReferenceHandler rtAmplitudeReferenceHandler;
 	registerMapping<EventParameters>("quakeml", NS_QML_RT, &rtQuakeMLHandler);
-	registerMapping("event", "", "Event", &rtEventHandler);
-	registerMapping("originReference", "", "OriginReference", &rtOriginReferenceHandler);
-	registerMapping("focalMechanismReferece", "", "FocalMechanismReference", &rtFocalMechanismReferenceHandler);
-	registerMapping("reading", "", "Reading", &rtReadingHandler);
-	registerMapping("pickReference", "", "PickReference", &rtPickReferenceHandler);
-	registerMapping("amplitudeReference", "", "AmplitudeReference", &rtAmplitudeReferenceHandler);
+	registerMapping("Event", "", "Event", &rtEventHandler);
+	registerMapping("OriginReference", "", "OriginReference", &rtOriginReferenceHandler);
+	registerMapping("FocalMechanismReference", "", "FocalMechanismReference", &rtFocalMechanismReferenceHandler);
+	registerMapping("Reading", "", "Reading", &rtReadingHandler);
+	registerMapping("PickReference", "", "PickReference", &rtPickReferenceHandler);
+	registerMapping("AmplitudeReference", "", "AmplitudeReference", &rtAmplitudeReferenceHandler);
 }
 
 Exporter::Exporter() {
