@@ -40,6 +40,7 @@ namespace Core {
  ******************************************************************************
  "11.1.0"   0x0B0100
    - Added Seiscomp::DataModel::StrongMotion::Rupture::_strike
+   - Added Seiscomp::Gui::Map::StandardLegend
 
  "11.0.0"   0x0B0000
    - Remove dynamic type throw declarations from all methods as this is

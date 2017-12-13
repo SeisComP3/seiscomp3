@@ -49,6 +49,10 @@ DEFINE_SMARTPOINTER(TextureCache);
 struct SC_GUI_API LayerProperties {
 	const LayerProperties *parent;
 	std::string            name;
+	std::string            title;
+	Qt::Alignment          legendArea;
+	std::string            label;
+	int                    index;
 	bool                   visible;
 	QPen                   pen;
 	QBrush                 brush;
@@ -60,14 +64,14 @@ struct SC_GUI_API LayerProperties {
 	bool                   filled;
 
 	LayerProperties(const std::string &name)
-	: parent(NULL), name(name)
-	, visible(true), drawName(false)
+	: parent(NULL), name(name), legendArea(Qt::AlignTop | Qt::AlignLeft)
+	, index(0), visible(true), drawName(false)
 	, debug(false), rank(-1), roughness(3)
 	, filled(false) {}
 
 	LayerProperties(const std::string &name, const LayerProperties* parent)
-	: parent(parent), name(name)
-	, visible(parent->visible), pen(parent->pen)
+	: parent(parent), name(name), legendArea(Qt::AlignTop | Qt::AlignLeft)
+	, index(0), visible(parent->visible), pen(parent->pen)
 	, brush(parent->brush), font(parent->font)
 	, drawName(parent->drawName), debug(parent->debug)
 	, rank(-1), roughness(parent->roughness)

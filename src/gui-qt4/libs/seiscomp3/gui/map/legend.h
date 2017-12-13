@@ -24,6 +24,7 @@
 #include <QSize>
 #include <QString>
 #include <QObject>
+#include <QColor>
 
 class QPainter;
 
@@ -112,6 +113,59 @@ class SC_GUI_API Legend : public QObject {
 
 
 	friend class Canvas;
+};
+
+
+class SC_GUI_API StandardLegend : public Legend {
+	// ----------------------------------------------------------------------
+	//  X'truction
+	// ----------------------------------------------------------------------
+	public:
+		//! C'tor
+		StandardLegend(QObject *parent);
+
+
+	// ----------------------------------------------------------------------
+	//  Public interface
+	// ----------------------------------------------------------------------
+	public:
+		void addItem(const QColor &c, const QString &l);
+		void setMaximumColumns(int columns);
+
+
+	// ----------------------------------------------------------------------
+	//  Legend interface
+	// ----------------------------------------------------------------------
+	public:
+		virtual void contextResizeEvent(const QSize &size);
+		virtual void draw(const QRect &r, QPainter &p);
+
+
+	// ----------------------------------------------------------------------
+	//  Private interface
+	// ----------------------------------------------------------------------
+	private:
+		void updateLayout(const QSize &size);
+
+
+	// ----------------------------------------------------------------------
+	//  Private members
+	// ----------------------------------------------------------------------
+	private:
+		struct Item {
+			Item() {}
+			Item(const QColor &c, const QString &l) : color(c), label(l) {}
+
+			QColor  color;
+			QString label;
+		};
+
+		QList<Item> _items;
+		int         _columns;
+		int         _columnWidth;
+		int         _maxColumns;
+		bool        _layoutDirty;
+
 };
 
 
