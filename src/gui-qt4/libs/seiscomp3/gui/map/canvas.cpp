@@ -1415,6 +1415,7 @@ void Canvas::drawLegends(QPainter& painter) {
 			painter.setBrush(SCScheme.colors.legend.background);
 			painter.drawRect(contentRect);
 
+			painter.setPen(SCScheme.colors.legend.text);
 			legend->draw(contentRect, painter);
 		}
 		else {
