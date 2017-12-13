@@ -130,7 +130,9 @@ class SC_GUI_API StandardLegend : public Legend {
 	// ----------------------------------------------------------------------
 	public:
 		void addItem(const QColor &c, const QString &l);
+
 		void setMaximumColumns(int columns);
+		void setOrientation(Qt::Orientation orientation);
 
 
 	// ----------------------------------------------------------------------
@@ -160,11 +162,12 @@ class SC_GUI_API StandardLegend : public Legend {
 			QString label;
 		};
 
-		QList<Item> _items;
-		int         _columns;
-		int         _columnWidth;
-		int         _maxColumns;
-		bool        _layoutDirty;
+		Qt:: Orientation _orientation;
+		QList<Item>      _items;
+		int              _columns;
+		int              _columnWidth;
+		int              _maxColumns;
+		bool             _layoutDirty;
 
 };
 

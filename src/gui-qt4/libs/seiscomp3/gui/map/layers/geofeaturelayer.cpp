@@ -112,6 +112,15 @@ bool compareByIndex(const LayerProperties *p1, const LayerProperties *p2) {
 	return p1->index < p2->index;
 }
 
+Qt::Orientation getOrientation(const std::string &name) {
+	if ( name == "horizontal" )
+		return Qt::Horizontal;
+	else if ( name == "vertical" )
+		return Qt::Vertical;
+	else
+		return Qt::Vertical;
+}
+
 Qt::Alignment getAlignment(const std::string &name) {
 	if ( name == "topleft" )
 		return Qt::Alignment(Qt::AlignTop | Qt::AlignLeft);
@@ -138,6 +147,7 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 	const static string cfgLabel = "label";
 	const static string cfgIndex = "index";
 	const static string cfgLegendArea = "legendArea";
+	const static string cfgLegendOrientation = "orientation";
 
 	// Read additional configuration file (e.g. map.cfg in BNA folder)
 	if ( !dataDir.empty() ) {
@@ -154,6 +164,7 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 			try { props->title = cfg.getString(cfgTitle); } catch( ... ) {}
 			try { props->label = cfg.getString(cfgLabel); } catch( ... ) {}
 			try { props->index = cfg.getInt(cfgIndex); } catch( ... ) {}
+			try { props->orientation = getOrientation(cfg.getString(cfgLegendOrientation)); } catch( ... ) {}
 			try { props->legendArea = getAlignment(cfg.getString(cfgLegendArea)); } catch( ... ) {}
 		}
 	}
@@ -174,6 +185,7 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 		try { props->title = SCApp->configGetString(query + cfgTitle); } catch( ... ) {}
 		try { props->label = SCApp->configGetString(query + cfgLabel); } catch( ... ) {}
 		try { props->index = SCApp->configGetInt(query + cfgIndex); } catch( ... ) {}
+		try { props->orientation = getOrientation(SCApp->configGetString(query + cfgLegendOrientation)); } catch( ... ) {}
 		try { props->legendArea = getAlignment(SCApp->configGetString(query + cfgLegendArea)); } catch( ... ) {}
 	}
 
@@ -420,6 +432,7 @@ void GeoFeatureLayer::initLayerProperites() {
 			StandardLegend *legend = new StandardLegend(this);
 			legend->setTitle(prop->title.c_str());
 			legend->setArea(prop->legendArea);
+			legend->setOrientation(prop->orientation);
 
 			QVector<LayerProperties*> items;
 

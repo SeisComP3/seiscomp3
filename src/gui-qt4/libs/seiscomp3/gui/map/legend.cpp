@@ -106,6 +106,7 @@ Legend &Legend::operator =(const Legend &other) {
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 StandardLegend::StandardLegend(QObject *parent) : Legend(parent) {
+	_orientation = Qt::Vertical;
 	_maxColumns = -1;
 	_layoutDirty = true;
 }
@@ -136,14 +137,25 @@ void StandardLegend::setMaximumColumns(int columns) {
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+void StandardLegend::setOrientation(Qt::Orientation orientation) {
+	if ( _orientation == orientation ) return;
+	_orientation = orientation;
+	_layoutDirty = true;
+}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void StandardLegend::updateLayout(const QSize &size) {
 	if ( !size.isValid() ) return;
 
 	QFontMetrics fm(font());
 	int ch = size.height();
 	int fontHeight = fm.height();
+	int rows;
 
-	_columns = 1;
 	_columnWidth = 0;
 
 	for ( int i = 0; i < _items.count(); ++i ) {
@@ -152,17 +164,48 @@ void StandardLegend::updateLayout(const QSize &size) {
 			_columnWidth = itemWidth;
 	}
 
-	_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-	_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+	switch ( _orientation ) {
+		case Qt::Vertical:
+			_columns = 1;
 
-	if ( ch <= 0 ) return;
+			_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
 
-	while ( (_size.width() < size.width()) && (_size.height() > ch - 30)
-	    && ((_maxColumns <= 0) || (_columns < _maxColumns))
-	    && (_columns < _items.size()) ) {
-		++_columns;
-		_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
-		_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+			if ( ch <= 0 ) return;
+
+			while ( (_size.width() < size.width()) && (_size.height() > ch-30)
+			     && ((_maxColumns <= 0) || (_columns < _maxColumns))
+			     && (_columns < _items.size()) ) {
+				++_columns;
+				_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+			}
+
+			break;
+
+		case Qt::Horizontal:
+			_columns = _items.count();
+
+			_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+			_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+
+			if ( ch <= 0 ) return;
+
+			rows = 1;
+
+			while ( (_size.width() > size.width()-2*_margin) && (_size.height() < ch-30)
+			     && ((_maxColumns <= 0) || (rows < _maxColumns))
+			     && (_columns > 1) ) {
+				++rows;
+				_columns = (_items.count()+rows-1) / rows;
+				_size.setWidth((_columnWidth + fontHeight*3/2)*_columns + fontHeight + fontHeight/2*(_columns-1));
+				_size.setHeight(qMax(((_items.count()+_columns-1)/_columns)*fontHeight*3/2+fontHeight/2, 0));
+			}
+
+			break;
+
+		default:
+			break;
 	}
 
 	_layoutDirty = false;
@@ -188,27 +231,64 @@ void StandardLegend::draw(const QRect &rect, QPainter &painter) {
 
 	QFontMetrics fm(font());
 	int fontHeight = fm.height();
-	int w = rect.width();
-	int x = rect.left() + fontHeight/2;
-	int idx = 0;
 
-	for ( int c = 0; c < _columns; ++c ) {
-		int y = rect.top() + fontHeight/2;
-		int textOffset = fontHeight*3/2;
-		int textWidth = w - fontHeight - textOffset;
+	switch ( _orientation ) {
+		case Qt::Vertical:
+		{
+			int w = rect.width();
+			int x = rect.left() + fontHeight/2;
+			int idx = 0;
 
-		int itemsPerColumn = (_items.count() + _columns - 1) / _columns;
-		int cnt = _items.count() - itemsPerColumn * c;
-		if ( cnt > itemsPerColumn ) cnt = itemsPerColumn;
+			for ( int c = 0; c < _columns; ++c ) {
+				int y = rect.top() + fontHeight/2;
+				int textOffset = fontHeight*3/2;
+				int textWidth = w - fontHeight - textOffset;
 
-		for ( int i = 0; i < cnt; ++i, ++idx ) {
-			painter.fillRect(x, y, fontHeight, fontHeight, _items[idx].color);
-			painter.drawText(x + textOffset, y, textWidth, fontHeight,
-			                 Qt::AlignLeft | Qt::AlignVCenter, _items[idx].label);
-			y += fontHeight*3/2;
+				int itemsPerColumn = (_items.count() + _columns-1) / _columns;
+				int cnt = _items.count() - itemsPerColumn * c;
+				if ( cnt > itemsPerColumn ) cnt = itemsPerColumn;
+
+				for ( int i = 0; i < cnt; ++i, ++idx ) {
+					painter.fillRect(x, y, fontHeight, fontHeight, _items[idx].color);
+					painter.drawText(x + textOffset, y, textWidth, fontHeight,
+					                 Qt::AlignLeft | Qt::AlignVCenter, _items[idx].label);
+					y += fontHeight*3/2;
+				}
+
+				x += _columnWidth + fontHeight*4/2;
+			}
+			break;
 		}
 
-		x += _columnWidth + fontHeight*4/2;
+		case Qt::Horizontal:
+		{
+			int w = rect.width();
+			int x = rect.left() + fontHeight/2;
+
+			for ( int c = 0; c < _columns; ++c ) {
+				int y = rect.top() + fontHeight/2;
+				int textOffset = fontHeight*3/2;
+				int textWidth = w - fontHeight - textOffset;
+
+				int itemsPerColumn = (_items.count() + _columns-1) / _columns;
+				int cnt = _items.count() - itemsPerColumn * c;
+				if ( cnt > itemsPerColumn ) cnt = itemsPerColumn;
+
+				for ( int i = 0; i < cnt; ++i ) {
+					int idx = i*_columns+c;
+					painter.fillRect(x, y, fontHeight, fontHeight, _items[idx].color);
+					painter.drawText(x + textOffset, y, textWidth, fontHeight,
+					                 Qt::AlignLeft | Qt::AlignVCenter, _items[idx].label);
+					y += fontHeight*3/2;
+				}
+
+				x += _columnWidth + fontHeight*4/2;
+			}
+			break;
+		}
+
+		default:
+			break;
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
