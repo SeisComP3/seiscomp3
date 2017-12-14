@@ -14,7 +14,7 @@
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/map/layers/geofeaturelayer.h>
 #include <seiscomp3/gui/map/canvas.h>
-#include <seiscomp3/gui/map/legend.h>
+#include <seiscomp3/gui/map/standardlegend.h>
 #include <seiscomp3/geo/geofeatureset.h>
 #include <seiscomp3/seismology/regions.h>
 
@@ -445,8 +445,15 @@ void GeoFeatureLayer::initLayerProperites() {
 
 			qSort(items.begin(), items.end(), compareByIndex);
 
-			for ( int j = 0; j < items.count(); ++j )
-				legend->addItem(items[j]->pen.color(), items[j]->label.c_str());
+			for ( int j = 0; j < items.count(); ++j ) {
+				if ( items[j]->filled )
+					legend->addItem(new StandardLegendItem(items[j]->pen,
+					                                       items[j]->brush,
+					                                       items[j]->label.c_str()));
+				else
+					legend->addItem(new StandardLegendItem(items[j]->pen,
+					                                       items[j]->label.c_str()));
+			}
 
 			addLegend(legend);
 		}

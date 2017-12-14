@@ -407,10 +407,10 @@ void Canvas::init() {
 		connect(_maptree.get(), SIGNAL(tilesUpdated()), this, SLOT(updatedTiles()));
 	}
 
-	_citiesLayer._canvas = this;
+	setupLayer(&_citiesLayer);
 	_citiesLayer.setVisible(SCScheme.map.showCities);
 
-	_gridLayer._canvas = this;
+	setupLayer(&_gridLayer);
 	_gridLayer.setGridDistance(QPointF(15.0, 15.0));
 	_gridLayer.setVisible(SCScheme.map.showGrid);
 
