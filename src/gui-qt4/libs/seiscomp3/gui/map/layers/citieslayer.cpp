@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -10,23 +10,57 @@
  *   SeisComP Public License for more details.                             *
  ***************************************************************************/
 
+
 #include <seiscomp3/gui/map/layers/citieslayer.h>
 
 #include <seiscomp3/gui/core/application.h>
 #include <seiscomp3/gui/map/canvas.h>
 #include <seiscomp3/gui/map/projection.h>
+#include <seiscomp3/gui/map/standardlegend.h>
+
 
 namespace Seiscomp {
 namespace Gui {
 namespace Map {
 
+#define CITY_NORMAL_SYMBOL_SIZE 4
+#define CITY_BIG_SYMBOL_SIZE    6
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 CitiesLayer::CitiesLayer(QObject* parent) : Layer(parent), _selectedCity(NULL) {
 	setName("cities");
-}
 
-CitiesLayer::~CitiesLayer() {
+	StandardLegend *legend = new StandardLegend(this);
+	legend->setTitle(tr("Cities"));
+	legend->setArea(Qt::Alignment(Qt::AlignTop | Qt::AlignRight));
+	legend->addItem(new StandardLegendItem(SCScheme.colors.map.cityOutlines,
+	                                       SCScheme.colors.map.cityNormal, tr("1Mio- inhabitants"),
+	                                       CITY_NORMAL_SYMBOL_SIZE));
+	legend->addItem(new StandardLegendItem(SCScheme.colors.map.cityOutlines,
+	                                       SCScheme.colors.map.cityNormal, tr("1Mio+ inhabitants"),
+	                                       CITY_BIG_SYMBOL_SIZE));
+	legend->addItem(new StandardLegendItem(SCScheme.colors.map.cityOutlines,
+	                                       SCScheme.colors.map.cityCapital, tr("Capital"),
+	                                       CITY_BIG_SYMBOL_SIZE));
+	addLegend(legend);
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CitiesLayer::~CitiesLayer() {}
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
                        QPainter& painter) {
 	if ( !isVisible() ) return;
@@ -71,7 +105,12 @@ void CitiesLayer::draw(const Seiscomp::Gui::Map::Canvas* canvas,
 
 	painter.restore();
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
                            bool &lastUnderline, bool &lastBold,
                            const Projection* projection,
@@ -165,15 +204,30 @@ void CitiesLayer::drawCity(QPainter& painter, Grid &grid, QFont &font,
 	painter.drawText(labelRect, Qt::AlignLeft | Qt::AlignTop |
 	                 Qt::TextSingleLine, city.name().c_str());
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 void CitiesLayer::setSelectedCity(const Math::Geo::CityD* c) {
 	_selectedCity = c;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const Math::Geo::CityD* CitiesLayer::selectedCity() const {
 	return _selectedCity;
 }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 } // namespace Map
 } // namespce Gui
 } // namespace Seiscomp

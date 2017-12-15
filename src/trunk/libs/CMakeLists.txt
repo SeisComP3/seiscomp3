@@ -1,4 +1,4 @@
-SUBDIRS(3rd-party seiscomp3)
+SUBDIRS(3rd-party seiscomp3 xml)
 
 IF(SC_GLOBAL_PYTHON_WRAPPER)
 	SUBDIRS(swig)

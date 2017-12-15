@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) by GFZ Potsdam                                          *
+ *   Copyright (C) by GFZ Potsdam, gempa GmbH                              *
  *                                                                         *
  *   You can redistribute and/or modify this program under the             *
  *   terms of the SeisComP Public License.                                 *
@@ -20,10 +20,11 @@
 #include <seiscomp3/gui/qt4.h>
 
 #include <QFont>
-#include <QRect>
 #include <QSize>
 #include <QString>
 #include <QObject>
+#include <QPoint>
+
 
 class QPainter;
 

@@ -1,6 +1,7 @@
 SET(GUI_MAP_SOURCES
 	layer.cpp
 	legend.cpp
+	standardlegend.cpp
 	mapsymbol.cpp
 	mapsymbolcollection.cpp
 	maptree.cpp
@@ -26,6 +27,7 @@ SET(GUI_MAP_HEADERS
 
 SET(GUI_MAP_MOC_HEADERS
 	legend.h
+	standardlegend.h
 	layer.h
 	imagetree.h
 	canvas.h
