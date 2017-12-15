@@ -121,13 +121,15 @@ class SC_SYSTEM_CORE_API Origin : public PublicObject {
 
 		//! Hypocenter longitude, with respect to the World Geodetic
 		//! System 1984 (WGS84) reference system
-		//! (National Imagery and Mapping Agency 2000) in degrees.
+		//! (National Imagery and Mapping Agency 2000) in degrees. The
+		//! uncertainties are given in kilometers.
 		void setLatitude(const RealQuantity& latitude);
 		RealQuantity& latitude();
 		const RealQuantity& latitude() const;
 
 		//! Hypocenter latitude, with respect to the WGS84 reference
 		//! system in degrees.
+		//! The uncertainties are given in kilometers.
 		void setLongitude(const RealQuantity& longitude);
 		RealQuantity& longitude();
 		const RealQuantity& longitude() const;

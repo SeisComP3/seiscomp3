@@ -61,20 +61,6 @@ AmplitudeProcessor_mB::AmplitudeProcessor_mB(const Core::Time& trigger)
 
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_mB::AmplitudeProcessor_mB(const std::string& type)
-: AmplitudeProcessor(type) { }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-AmplitudeProcessor_mB::AmplitudeProcessor_mB(const Core::Time& trigger, const std::string& type)
-: AmplitudeProcessor(trigger, type) { }
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 double AmplitudeProcessor_mB::timeWindowLength(double distance) const {
 	// make sure the measurement is not contaminated by S energy
 	double tdist = 11.5*distance; // distance-dependent time difference between P and S

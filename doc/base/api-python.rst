@@ -9116,7 +9116,8 @@ Reference
 
       Hypocenter longitude, with respect to the World Geodetic System 1984
       \(WGS84\) reference system
-      \(National Imagery and Mapping Agency 2000\) in degrees.
+      \(National Imagery and Mapping Agency 2000\) in degrees. The uncertainties
+      are given in kilometers.
 
    .. py:method:: latitude()
 
@@ -9127,6 +9128,7 @@ Reference
       :param longitude: :ref:`RealQuantity <api-python-datamodel-realquantity>`
 
       Hypocenter latitude, with respect to the WGS84 reference system in degrees.
+      The uncertainties are given in kilometers.
 
    .. py:method:: longitude()
 

@@ -330,6 +330,8 @@ is taken from Modern Global Seismology.
       In SeisComP3 a modified local magnitude Mlv is determined by simulation of a Wood-Anderson instrument and then measuring
       the amplitude in a 150 s time window on the vertical component of station with distances smaller than 8°.
 
+      The amplitude unit in SeisComP3 is **millimeter** (mm).
+
    magnitude, body-wave (mb)
       Magnitude developed for teleseismic body waves. mb is defined on the amplitude of the first few cycles of the P-wave,
       typically a time window of 20 s - 30 s. Only the first few cycles are used to minimize the effects of radiation pattern
@@ -352,6 +354,8 @@ is taken from Modern Global Seismology.
       In SeisComP3 mb is determined by simulation of a WWSSN short-period seismometer and then measuring the amplitudes in
       a 30 s time window at stations in the distance range of 5° to 105°.
 
+      The amplitude unit in SeisComP3 is **nanometer** (nm).
+
    magnitude, broadband body-wave (mB)   
       mB is a magnitude based on body waves like mb, but the amplitude is measured in a broad
       frequency range and longer time windows. Instead of amplitude measurements on displacement
@@ -370,7 +374,9 @@ is taken from Modern Global Seismology.
 
          l = min(11.5 \Delta, 60)
 
-   magnitude, surface wave (Ms)   
+      The amplitude unit in SeisComP3 is **nanometer per second** (nm/s).
+
+   magnitude, surface wave (Ms)
       Ms is a magnitude scale based on teleseismic surface waves. Ms is based on measurements of
       the maximum horizontal true ground motion displacement amplitudes
 
@@ -391,6 +397,8 @@ is taken from Modern Global Seismology.
       allow a broader spectrum of dominant periods. This formula is valid for distances of
       2° to 160° and source depth smaller than 50 km.
 
+      The amplitude unit in SeisComP3 is **meter per second** (m/s).
+
    magnitude, JMA (M_JMA)   
       M(JMA) is a magnitude similar to the Ms, but the formula is calibrated for instruments
       with 5 s period at local distances. The data set for the calibration was gained by the
@@ -402,6 +410,8 @@ is taken from Modern Global Seismology.
 
       This equation is valid for local (< 2000 km) and shallow (< 80 km) earthquakes. For
       deeper earthquakes additional correction functions have to be applied (Katsumata, 1996).
+
+      The amplitude unit in SeisComP3 is **micrometer** (um).
 
    magnitude, moment (Mw)   
       The moment magnitude is a magnitude scale related to the seismic moment M\ :sub:`0` and
@@ -422,6 +432,8 @@ is taken from Modern Global Seismology.
       is estimated for each station by integrating the displacement records. The combination
       of multiple records results in an estimation of the moment magnitude without correction
       for the source mechanism (Tsuboi et al., 1995).
+
+      The amplitude unit in SeisComP3 is **nanometer times second** (nm*s).
 
    mainshock   
       The largest earthquake in a sequence, sometimes preceded by one or more foreshocks, 

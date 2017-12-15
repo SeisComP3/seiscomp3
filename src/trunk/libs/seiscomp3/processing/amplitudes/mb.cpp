@@ -230,7 +230,7 @@ bool AmplitudeProcessor_mb::computeAmplitude(
 		return false;
 	}
 
-	// Convert m/s to nm/s
+	// Convert m to nm
 	amplitude->value *= 1.E9;
 
 	return true;

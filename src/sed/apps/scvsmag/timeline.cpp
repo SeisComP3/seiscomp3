@@ -174,8 +174,10 @@ bool Timeline::feed(const DataModel::VS::Envelope *env) {
 		}
 
 		int component;
-		if ( cha->name() == "Z" )
+		if ( cha->name() == "Z" || cha->name() == "V"  )
 			component = Z;
+		else if ( cha->name() == "H" )
+			component = H;
 		else if ( cha->name() == "H1" )
 			component = H1;
 		else if ( cha->name() == "H2" )

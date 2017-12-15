@@ -14,6 +14,7 @@
 #include <seiscomp3/gui/core/utils.h>
 #include <seiscomp3/gui/map/layers/geofeaturelayer.h>
 #include <seiscomp3/gui/map/canvas.h>
+#include <seiscomp3/gui/map/standardlegend.h>
 #include <seiscomp3/geo/geofeatureset.h>
 #include <seiscomp3/seismology/regions.h>
 
@@ -107,6 +108,32 @@ QFont readFont(const Config::Config &cfg, const string& query, const QFont &base
 	return f;
 }
 
+bool compareByIndex(const LayerProperties *p1, const LayerProperties *p2) {
+	return p1->index < p2->index;
+}
+
+Qt::Orientation getOrientation(const std::string &name) {
+	if ( name == "horizontal" )
+		return Qt::Horizontal;
+	else if ( name == "vertical" )
+		return Qt::Vertical;
+	else
+		return Qt::Vertical;
+}
+
+Qt::Alignment getAlignment(const std::string &name) {
+	if ( name == "topleft" )
+		return Qt::Alignment(Qt::AlignTop | Qt::AlignLeft);
+	else if ( name == "topright" )
+		return Qt::Alignment(Qt::AlignTop | Qt::AlignRight);
+	else if ( name == "bottomleft" )
+		return Qt::Alignment(Qt::AlignBottom | Qt::AlignLeft);
+	else if ( name == "bottomright" )
+		return Qt::Alignment(Qt::AlignBottom | Qt::AlignRight);
+	else
+		return Qt::Alignment(Qt::AlignTop | Qt::AlignLeft);
+}
+
 void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 	const static string cfgVisible = "visible";
 	const static string cfgPen = "pen";
@@ -116,6 +143,11 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 	const static string cfgDebug = "debug";
 	const static string cfgRank = "rank";
 	const static string cfgRoughness = "roughness";
+	const static string cfgTitle = "title";
+	const static string cfgLabel = "label";
+	const static string cfgIndex = "index";
+	const static string cfgLegendArea = "legendArea";
+	const static string cfgLegendOrientation = "orientation";
 
 	// Read additional configuration file (e.g. map.cfg in BNA folder)
 	if ( !dataDir.empty() ) {
@@ -129,6 +161,11 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 			try { props->debug = cfg.getBool(cfgDebug); } catch( ... ) {}
 			try { props->rank = cfg.getInt(cfgRank); } catch( ... ) {}
 			try { props->roughness = cfg.getInt(cfgRoughness); } catch( ... ) {}
+			try { props->title = cfg.getString(cfgTitle); } catch( ... ) {}
+			try { props->label = cfg.getString(cfgLabel); } catch( ... ) {}
+			try { props->index = cfg.getInt(cfgIndex); } catch( ... ) {}
+			try { props->orientation = getOrientation(cfg.getString(cfgLegendOrientation)); } catch( ... ) {}
+			try { props->legendArea = getAlignment(cfg.getString(cfgLegendArea)); } catch( ... ) {}
 		}
 	}
 
@@ -145,6 +182,11 @@ void readLayerProperties(LayerProperties *props, const string &dataDir = "") {
 		try { props->debug = SCApp->configGetBool(query + cfgDebug); } catch( ... ) {}
 		try { props->rank = SCApp->configGetInt(query + cfgRank); } catch( ... ) {}
 		try { props->roughness = SCApp->configGetInt(query + cfgRoughness); } catch( ... ) {}
+		try { props->title = SCApp->configGetString(query + cfgTitle); } catch( ... ) {}
+		try { props->label = SCApp->configGetString(query + cfgLabel); } catch( ... ) {}
+		try { props->index = SCApp->configGetInt(query + cfgIndex); } catch( ... ) {}
+		try { props->orientation = getOrientation(SCApp->configGetString(query + cfgLegendOrientation)); } catch( ... ) {}
+		try { props->legendArea = getAlignment(SCApp->configGetString(query + cfgLegendArea)); } catch( ... ) {}
 	}
 
 	props->filled = props->brush.style() != Qt::NoBrush;
@@ -381,6 +423,40 @@ void GeoFeatureLayer::initLayerProperites() {
 		// Add fep properties
 		_layerProperties.push_back(new LayerProperties("fep", _layerProperties.front()));
 		readLayerProperties(_layerProperties.back(), fepRegions.dataDir());
+	}
+
+	// Build legends
+	for ( size_t i = 0; i < _layerProperties.size(); ++i ) {
+		LayerProperties *prop = _layerProperties[i];
+		if ( !prop->title.empty() ) {
+			StandardLegend *legend = new StandardLegend(this);
+			legend->setTitle(prop->title.c_str());
+			legend->setArea(prop->legendArea);
+			legend->setOrientation(prop->orientation);
+
+			QVector<LayerProperties*> items;
+
+			// Find all child labels
+			for ( size_t j = 0; j < _layerProperties.size(); ++j ) {
+				LayerProperties *child = _layerProperties[j];
+				if ( !child->label.empty() && prop->isChild(child) )
+					items.append(child);
+			}
+
+			qSort(items.begin(), items.end(), compareByIndex);
+
+			for ( int j = 0; j < items.count(); ++j ) {
+				if ( items[j]->filled )
+					legend->addItem(new StandardLegendItem(items[j]->pen,
+					                                       items[j]->brush,
+					                                       items[j]->label.c_str()));
+				else
+					legend->addItem(new StandardLegendItem(items[j]->pen,
+					                                       items[j]->label.c_str()));
+			}
+
+			addLegend(legend);
+		}
 	}
 }
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
