@@ -1995,9 +1995,14 @@ CREATE INDEX ArclinkRequest__parent_oid ON ArclinkRequest(_parent_oid);
 
 CREATE TRIGGER ArclinkRequest_update BEFORE UPDATE ON ArclinkRequest FOR EACH ROW EXECUTE PROCEDURE update_modified();
 
-DO $$
+
+CREATE OR REPLACE FUNCTION Fix_bytea_output() RETURNS void
+AS $BODY$
 BEGIN
-        IF (SELECT current_setting('server_version_num'))::int >= 90000 THEN
-                EXECUTE('ALTER DATABASE ' || current_database() || ' SET bytea_output TO escape');
-        END IF;
-END$$;
+	IF (SELECT current_setting('server_version_num'))::int >= 90000 THEN
+		EXECUTE('ALTER DATABASE ' || current_database() || ' SET bytea_output TO ''escape''');
+	END IF;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+SELECT Fix_bytea_output();
