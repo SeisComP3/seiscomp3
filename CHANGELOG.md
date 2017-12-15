@@ -1,5 +1,29 @@
 # Jakarta
 
+## Release 2017.334 patch2
+
+```SC_API_VERSION 11.1.0```
+
+* doc
+
+  * Add amplitude units expected by each magnitude implementation to glossary
+  * Add to data model API documentation for Origin::latitude and Origin::longitude
+    that uncertainties are given in kilometers
+
+* trunk
+
+  * Fix memory leak and type mapping of QuakeML exporter used with sccnv
+  * Ship xsd and xsl files in ```share/xml```
+
+* scwfparam
+
+  * Add Rupture::strike attribute to strong motion data model extension
+
+* GUI
+
+  * Add StandardLegend class to create map legends in an easy way
+  * Add support for map legend descriptions in map layer configuration 
+
 ## Release 2017.334 patch1
 
 * trunk
@@ -7,6 +31,7 @@
   * Fix crash in FDSNWS recordstream if server cannot be reached
   * Updated sc3ml_0.10.xsd
   * Use correct name in connection info for Python scripts
+  * Fix SQL character escape bug for strings starting with a single quote
 
 * scamp
 
