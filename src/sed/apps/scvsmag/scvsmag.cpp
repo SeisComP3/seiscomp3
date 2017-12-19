@@ -681,7 +681,7 @@ void VsMagnitude::handleEvent(Event *event) {
 		vsevent->azGap = org->quality().azimuthalGap();
 	}
 	catch ( ... ) {
-		vsevent->azGap = 360
+		vsevent->azGap = 360;
 		SEISCOMP_INFO("origin has no quality or azimuthalGap, setting azGap to default (360).");
 	}
 }
