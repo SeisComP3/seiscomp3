@@ -13,9 +13,10 @@
 ############################################################################
 
 import glob, re, time, sys, os
-import seiscomp3.IO, seiscomp3.Logging
+import seiscomp3.IO, seiscomp3.Logging, seiscomp3.Client, seiscomp3.System
 from   getopt import getopt, GetoptError
 import bisect
+
 
 class Archive:
   def __init__(self, archiveDirectory):
@@ -609,6 +610,17 @@ if dump:
       sys.stdout.write(rec.raw().str())
 
 else:
+  env = seiscomp3.System.Environment.Instance()
+  cfg = seiscomp3.Config.Config()
+  env.initConfig(cfg, "scart")
+  try:
+    plugins = cfg.getStrings("plugins")
+    registry = seiscomp3.Client.PluginRegistry.Instance()
+    for p in plugins:
+      registry.addPluginName(p)
+    registry.loadPlugins()
+  except Exception,e: pass
+
   rs = seiscomp3.IO.RecordStream.Open(recordURL)
   if rs is None:
     sys.stderr.write("Unable to open recordstream '%s'\n" % recordURL)

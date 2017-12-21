@@ -57,6 +57,10 @@
 
   * Add operation "merge-no-remove" which filters out remove operations
 
+* scart
+
+  * Support loading of plugins via scart.cfg
+
 ## Release 2017.334 patch2
 
 ```SC_API_VERSION 11.1.0```
